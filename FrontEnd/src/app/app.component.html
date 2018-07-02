@@ -1,0 +1,32 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav
+    #Menu
+    class="sidenav"
+    fixedInViewport="true"
+    [attr.role]="'navigation'"
+    [mode]=" 'side'"
+    [(opened)]="estado">
+    <mat-toolbar color="primary"> Menu </mat-toolbar>
+    Imagen
+    <br>
+    <app-menu></app-menu>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+     <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="Menu.toggle()">
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+     </button>
+     <span>Sistema de créditos y cobranzas</span>
+     <span class="espacio"></span>
+     <mat-icon class="icono">chat</mat-icon>
+     <mat-icon class="icono">account_circle</mat-icon>
+    </mat-toolbar>
+    <!-- Add Content Here -->
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
