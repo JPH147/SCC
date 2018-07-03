@@ -19,3 +19,16 @@
 .espacio {
   flex: 1 1 auto;
 }
+
+.imagen{
+	border-radius: 50%;
+	width: 200px;
+	height: 200px;
+	background-image: url("../assets/avatar1.png");
+	background-size: cover;
+	position: relative;
+	margin-right: auto;
+	margin-left: auto;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}

@@ -1,13 +1,17 @@
-<mat-grid-list cols=2>
+<mat-grid-list cols=2 rowHeight="280px">
 	<mat-grid-tile *ngFor="let usuario of usuarios">
 		<mat-card>
 			<mat-card-title>
+				<mat-toolbar color="primary">
 				{{usuario.nombre}}
+				</mat-toolbar>
 			</mat-card-title>
 			<mat-card-content>
-				<mat-icon>person</mat-icon> {{usuario.cargo}}
-				<br>
-				<mat-icon>domain</mat-icon> {{usuario.rol}}
+				<div><mat-icon>person</mat-icon> {{usuario.cargo}}</div>
+				<div><mat-icon>domain</mat-icon> {{usuario.rol}}</div>
+				<div><mat-icon>update</mat-icon> {{usuario.ultimo_login}}</div>
+				<div><mat-icon>email</mat-icon> {{usuario.email}}</div>
+				<div><mat-icon>phone</mat-icon> {{usuario.telefono}}</div>
 			</mat-card-content>	
 		</mat-card>
 	</mat-grid-tile>

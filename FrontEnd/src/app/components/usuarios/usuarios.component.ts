@@ -13,7 +13,7 @@ export class UsuariosComponent implements OnInit {
 
   ngOnInit() {
   	this.usuarios=[
-  	{nombre:"Jean Pierre Rodriguez Farfan", rol:"Administrador", cargo:"Tercero", ultimo_login:"03/08/2018", email:"jeanpierre.rodriguez@genussolucionesti.com", telefono:"996040111"}
+  	{nombre:"Jean Pierre Rodriguez Farfan",rol:"Administrador", cargo:"Tercero", ultimo_login:"03/08/2018", email:"jeanpierre.rodriguez@genussolucionesti.com", telefono:"996040111"}
   	]
   }
 
