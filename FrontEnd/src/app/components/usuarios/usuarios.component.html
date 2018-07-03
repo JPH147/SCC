@@ -1,3 +1,14 @@
-<p>
-  usuarios works!
-</p>
+<mat-grid-list cols=2>
+	<mat-grid-tile *ngFor="let usuario of usuarios">
+		<mat-card>
+			<mat-card-title>
+				{{usuario.nombre}}
+			</mat-card-title>
+			<mat-card-content>
+				<mat-icon>person</mat-icon> {{usuario.cargo}}
+				<br>
+				<mat-icon>domain</mat-icon> {{usuario.rol}}
+			</mat-card-content>	
+		</mat-card>
+	</mat-grid-tile>
+</mat-grid-list>

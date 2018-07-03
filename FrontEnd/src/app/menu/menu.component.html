@@ -5,7 +5,7 @@
      [routerLink]="node.type"
      routerLinkActive
      #rla="routerLinkActive">
-   	 <span>{{node.filename}}</span>
+   	 <span class="hijo">{{node.filename}}</span>
      </a>
   </mat-tree-node>
 
@@ -16,6 +16,6 @@
         {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
       </mat-icon>
     </button>
-    {{node.filename}}
+    <span class="padre">{{node.filename}}</span>
   </mat-tree-node>
 </mat-tree>
