@@ -4,7 +4,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
  
 // home page url
-$home_url="http://localhost:8080/WS_SCC/";
+//$home_url="http://localhost:8080/WS_SCC/";
  
 // page given in URL parameter, default page is one
 $page = isset($_GET['page']) ? $_GET['page'] : 1;

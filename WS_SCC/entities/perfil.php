@@ -13,7 +13,7 @@ Class Perfil{
     }
 
     function read(){
-        $query = "SELECT idperfil,prf_nombre FROM perfil";
+        $query = "CALL sp_listarperfil";
         $result = $this->conn->prepare($query);
         $result->execute();
         return $result;
@@ -26,7 +26,7 @@ Class Perfil{
 
     function create()
     {
-        $query = "INSERT INTO perfil SET prf_nombre=:prf_nombre";
+        $query = "CALL sp_crearperfil (:prf_nombre)";
         $result = $this->conn->prepare($query);
 
         $this->prf_nombre=htmlspecialchars(strip_tags($this->prf_nombre));
@@ -42,7 +42,7 @@ Class Perfil{
     }
     function readxId()
     {
-        $query ="SELECT prf_nombre FROM perfil WHERE idperfil = ?";
+        $query ="CALL sp_listarperfilxId (?)";
         $result = $this->conn->prepare($query);
         $result->bindParam(1, $this->idperfil);
         $result->execute();
