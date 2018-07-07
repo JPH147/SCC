@@ -59,11 +59,11 @@ import { SalidaVendedoresComponent } from './components/salida-vendedores/salida
 import { RetornoVendedoresComponent } from './components/retorno-vendedores/retorno-vendedores.component';
 import { ComisionesComponent } from './components/comisiones/comisiones.component';
 import { ClientesComponent } from './components/clientes/clientes.component';
-import { VentasComponent } from './components/ventas/ventas.component'
+import { VentasComponent } from './components/ventas/ventas.component';
 
 @NgModule({
   imports: [
-  	/* Angular Material */
+/* Angular Material */
     CdkTableModule,
     CdkTreeModule,
     MatAutocompleteModule,
@@ -101,7 +101,7 @@ import { VentasComponent } from './components/ventas/ventas.component'
     MatToolbarModule,
     MatTooltipModule,
     MatTreeModule,
-  	/* Angular Material */
+  /* Angular Material */
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
