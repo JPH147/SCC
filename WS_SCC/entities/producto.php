@@ -19,7 +19,7 @@ Class Producto{
     }
 
     function read(){
-        $query = "SELECT idproducto,id_tipo_producto, id_marca, prd_modelo, prd_descripcion, id_unidad_medida FROM table_name";
+        $query = "SELECT idproducto,id_tipo_producto, id_marca, prd_modelo, prd_descripcion, id_unidad_medida FROM $table_name";
         $result = $this->conn->prepare($query);
         $result->execute();
         return $result;

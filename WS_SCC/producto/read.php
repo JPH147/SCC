@@ -23,13 +23,18 @@ try
 
         while($row = $result->fetch(PDO::FETCH_ASSOC))
         {
+//prd_descripcion, id_unidad_medida
             extract($row);
-            $perfil_item = array (
-                "idperfil"=>$idperfil,
-                "prf_nombre"=>$prf_nombre
+            $lista_productos = array (
+                "idproducto"=>$idproducto,
+                "id_tipo_producto"=>$id_tipo_producto,
+                "id_marca"=>$id_marca,
+                "prd_modelo"=>$prd_modelo,
+                "prd_descripcion"=>$prd_descripcion,
+                "id_unidad_medida"=>$id_unidad_medida
             );
 
-            array_push($productos["productos"],$perfil_item);
+            array_push($productos["productos"],$lista_productos);
         }
         print_json("0000", "OK", $productos);
     }
