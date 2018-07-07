@@ -17,6 +17,14 @@ class Modulo{
         $result->execute();
         return $result;
     }
+
+
+    /* JEAN PAUL */
+    function Print(){
+        echo "Jean Paul no reniegues!"
+    }
+
+    
     function create()
     {
         $query = "CALL sp_crearmodulo (:mdl_nombre)";
