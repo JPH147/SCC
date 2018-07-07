@@ -1,0 +1,73 @@
+/* Structure */
+.example-container {
+  position: relative;
+}
+
+#container-principal{
+  padding: 25px;
+  margin-left: 25px;
+  margin-right: 25px;
+
+}
+
+
+#tituloProd {
+padding: 25px;
+font-size: 30px;
+text-align: center;
+font-family: sans-serif;
+
+}
+.example-table-container {
+  position: relative;
+  max-height: 400px;
+  overflow: auto;
+
+}
+
+table {
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+.example-loading-shade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 56px;
+  right: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.example-rate-limit-reached {
+  color: #980000;
+  max-width: 360px;
+  text-align: center;
+}
+
+/* Column Widths */
+.mat-column-number,
+.mat-column-state {
+  max-width: 64px;
+}
+
+.mat-column-created {
+  max-width: 124px;
+}
+
+mat-card{
+  width: 80%;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+  margin-bottom: 10px
+}
+
+.agregar{
+  float:right
+}
