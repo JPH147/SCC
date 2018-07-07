@@ -4,7 +4,7 @@
     header("Content-Type: application/json; charset=UTF-8");
 
     include_once '../config/database.php';
-    include_once '../entities/perfil.php';
+    include_once '../entities/modulo.php';
     include_once '../shared/utilities.php';
 
     $database = new Database();
@@ -12,30 +12,30 @@
 
 try
 {
-    $perfil = new Perfil($db);
-    $result = $perfil->read();
+    $modulo = new Modulo($db);
+    $result = $modulo->read();
     $num = $result->rowCount();
 
     if($num>0)
     {
-        $perfil_list=array();
-        $perfil_list["perfiles"]=array();
+        $modulo_list=array();
+        $modulo_list["modulos"]=array();
 
         while($row = $result->fetch(PDO::FETCH_ASSOC))
         {
             extract($row);
-            $perfil_item = array (
-                "idperfil"=>$idperfil,
-                "prf_nombre"=>$prf_nombre
+            $modulo_item = array (
+                "idmodulo"=>$idmodulo,
+                "mdl_nombre"=>$mdl_nombre
             );
 
-            array_push($perfil_list["perfiles"],$perfil_item);
+            array_push($modulo_list["modulos"],$modulo_item);
         }
-        print_json("0000", "OK", $perfil_list);
+        print_json("0000", "OK", $modulo_list);
     }
     else
     {
-        print_json("0001", "No existen perfiles registrados", null);
+        print_json("0001", "No existen módulos registrados", null);
 
     }
 }

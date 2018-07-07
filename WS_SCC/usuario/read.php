@@ -24,7 +24,6 @@ try
         while($row = $result->fetch(PDO::FETCH_ASSOC))
         {
             extract($row);
-            http_response_code(200);
             $usuario_item = array (
                 "idusuario"=>$idusuario,
                 "usr_nombre"=>$usr_nombre,

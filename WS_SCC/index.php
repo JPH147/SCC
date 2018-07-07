@@ -100,5 +100,29 @@
         <input type="submit" value="Buscar Perfil">
         </form> 
 
+        <h2>Modulo</h2>
+        <h2><a href ="../WS_SCC/modulo/read.php">Listar Modulos</a></h2>
+        <h2><a href ="#" onclick="javascript:ocultarMostrar('crearModulo')">Crear Modulo</a></h2>
+        <form action= "../WS_SCC/modulo/create.php" id="crearModulo" style="display:none" method="post">
+            <table border = "1">
+                <tr>
+                    <td>Nombre de Modulo:</td>
+                    <td><input type="text" name="mdl_nombre"/></td>
+                </tr>
+            </table>
+        <input type="submit" value="Crear Modulo">
+        </form>
+
+        <h2><a href ="#" onclick="javascript:ocultarMostrar('ListarModuloxId')">Listar Modulo Por ID</a></h2>
+        <form action= "../WS_SCC/modulo/readxId.php" id="ListarModuloxId" style="display:none" method="get">
+            <table border = "1">
+                <tr>
+                    <td>Id de Modulo:</td>
+                    <td><input type="number" name="idmodulo"/></td>
+                </tr>
+            </table>
+        <input type="submit" value="Buscar Modulo">
+        </form> 
+
     </body>
 </html>
