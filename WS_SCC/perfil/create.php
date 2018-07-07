@@ -11,7 +11,7 @@
 
     $database = new Database();
     $db = $database->getConnection();
-
+/* JEAN PAUL */
     try
     {
         $perfil = new Perfil($db);
