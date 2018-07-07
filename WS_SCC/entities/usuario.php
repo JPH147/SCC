@@ -79,13 +79,14 @@ Class Usuario{
     function login($usr_usuario, $usr_clave)
     {
         $usr_clave_hash= password_hash($usr_clave, PASSWORD_DEFAULT);
-        $query = "SELECT usr_nombre,usr_usuario,idperfil,usr_clave FROM usuario WHERE usr_usuario = '$usr_usuario'";
+        $query = "CALL sp_login('$usr_usuario')";
 
         $result = $this->conn->prepare($query);
         $result->execute();
 
         $row = $result->fetch(PDO::FETCH_ASSOC);
         
+        $this->idusuario = $row['idusuario'];
         $this->usr_nombre=$row['usr_nombre'];
         $this->usr_usuario=$row['usr_usuario'];
         $this->usr_clave=$row['usr_clave'];
@@ -94,6 +95,9 @@ Class Usuario{
         if(!(empty($this->usr_nombre)) && !(empty($this->usr_clave)) )
         {
             if(password_verify($usr_clave,$row['usr_clave'])){
+                $query = "CALL sp_actualizafechalogueo($this->idusuario)";
+                $result = $this->conn->prepare($query);
+                $result->execute();
                 return $this;
             }
             else{
