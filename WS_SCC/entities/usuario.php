@@ -20,19 +20,19 @@ Class Usuario{
     }
 
     function read(){
-        $query = "SELECT u.idusuario,u.usr_nombre, u.usr_usuario, u.usr_ultimologueo, 
-                  u.usr_fechacreacion, u.usr_estado, p.prf_nombre
-                  FROM usuario u
-                  INNER JOIN perfil p ON u.idperfil = p.idperfil";
+        $query = "CALL sp_listarusuario";
         $result = $this->conn->prepare($query);
         $result->execute();
         return $result;
     }
     function create()
     {
-        $query = "INSERT INTO usuario SET usr_nombre=:usr_nombre, usr_usuario=:usr_usuario,
+        /*$query = "INSERT INTO usuario SET usr_nombre=:usr_nombre, usr_usuario=:usr_usuario,
          usr_clave=:usr_clave, usr_fechacreacion=:usr_fechacreacion, usr_ultimologueo=:usr_ultimologueo,
-          usr_estado=:usr_estado ,idperfil=:idperfil";
+          usr_estado=:usr_estado ,idperfil=:idperfil";*/
+
+        $query = "CALL sp_crearusuario (:usr_nombre,:usr_usuario,:usr_clave,:usr_fechacreacion,:usr_ultimologueo,:usr_estado,:idperfil)"; 
+
         $result = $this->conn->prepare($query);
 
         $this->usr_nombre=htmlspecialchars(strip_tags($this->usr_nombre));
@@ -60,9 +60,7 @@ Class Usuario{
     }
     function readxId()
     {
-        $query ="SELECT u.idusuario,u.usr_nombre,u.usr_usuario,u.usr_ultimologueo, 
-        u.usr_fechacreacion,u.usr_estado,p.prf_nombre FROM usuario u
-        INNER JOIN perfil p ON u.idperfil = p.idperfil WHERE u.idusuario = ?";
+        $query ="CALL sp_listarusuarioxId (?)";
         $result = $this->conn->prepare($query);
         $result->bindParam(1, $this->idusuario);
         $result->execute();
