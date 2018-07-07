@@ -87,6 +87,17 @@
                 </tr>
             </table>
         <input type="submit" value="Crear Perfil">
+        </form>
+
+        <h2><a href ="#" onclick="javascript:ocultarMostrar('ListarPerfilxId')">Listar Perfil Por ID</a></h2>
+        <form action= "../WS_SCC/perfil/readxId.php" id="ListarPerfilxId" style="display:none" method="get">
+            <table border = "1">
+                <tr>
+                    <td>Id de Perfil:</td>
+                    <td><input type="number" name="idperfil"/></td>
+                </tr>
+            </table>
+        <input type="submit" value="Buscar Perfil">
         </form> 
 
     </body>
