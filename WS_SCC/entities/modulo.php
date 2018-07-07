@@ -35,7 +35,7 @@ class Modulo{
     }
     function readxId()
     {
-        $query ="SELECT mdl_nombre FROM modulo WHERE idmodulo = ?";
+        $query ="CALL sp_listarmoduloxId (?)";
         $result = $this->conn->prepare($query);
         $result->bindParam(1, $this->idmodulo);
         $result->execute();
