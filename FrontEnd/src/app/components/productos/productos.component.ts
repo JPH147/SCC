@@ -80,4 +80,3 @@ export class ExampleHttpDao {
     return this.http.get<GithubApi>(requestUrl);
   }
 }
-}
