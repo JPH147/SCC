@@ -1,13 +1,16 @@
+import { FormControl } from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator, MatSort} from '@angular/material';
 import {merge, Observable, of as observableOf} from 'rxjs';
 import {catchError, map, startWith, switchMap} from 'rxjs/operators';
 
+
 @Component({
   selector: 'app-productos',
   templateUrl: './productos.component.html',
-  styleUrls: ['./productos.component.css']
+  styleUrls: ['./productos.component.css'],
+
 })
 
 export class ProductosComponent implements OnInit {
@@ -35,6 +38,7 @@ export class ProductosComponent implements OnInit {
         startWith({}),
         switchMap(() => {
           this.isLoadingResults = true;
+          // tslint:disable-next-line:no-non-null-assertion
           return this.exampleDatabase!.getRepoIssues(
             this.sort.active, this.sort.direction, this.paginator.pageIndex);
         }),
@@ -53,6 +57,7 @@ export class ProductosComponent implements OnInit {
           return observableOf([]);
         })
       ).subscribe(data => this.data = data);
+
   }
 }
 

@@ -1,3 +1,61 @@
-<p>
-  stock works!
-</p>
+<mat-card>
+    <mat-card-title>
+      <div id = "tituloProd"> Listado de Stock</div>
+    </mat-card-title>
+
+
+
+    <mat-card-header>
+      <mat-icon>search</mat-icon>
+      <mat-form-field>
+        <input matInput placeholder="Buscar Producto" #input>
+      </mat-form-field>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="example-loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
+        <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+        <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
+          GitHub's API rate limit has been reached. It will be reset in one minute.
+        </div>
+      </div>
+
+      <div class="example-container mat-elevation-z8">
+          <!-- <div class = "container-principal" > -->
+            <div class="example-table-container" >
+
+              <mat-table [dataSource]="data" class="example-table"
+                matSort matSortActive="created" matSortDisableClear matSortDirection="asc">
+                <!-- Number Column -->
+                <ng-container matColumnDef="number" class="codigo">
+                  <mat-header-cell *matHeaderCellDef>Codigo</mat-header-cell>
+                  <mat-cell *matCellDef="let row">{{row.number}}</mat-cell>
+                </ng-container>
+
+                <!-- Title Column -->
+                <ng-container matColumnDef="title">
+                  <mat-header-cell *matHeaderCellDef>Articulos</mat-header-cell>
+                  <mat-cell *matCellDef="let row">{{row.title}}</mat-cell>
+                </ng-container>
+
+                <!-- State Column -->
+                <ng-container matColumnDef="state">
+                  <mat-header-cell *matHeaderCellDef>Stock</mat-header-cell>
+                  <mat-cell *matCellDef="let row">{{row.state}}</mat-cell>
+                </ng-container>
+
+                <!-- Created Column -->
+                <ng-container matColumnDef="created">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Creado</mat-header-cell>
+                  <mat-cell *matCellDef="let row">{{row.created_at | date}}</mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+          </div>
+
+            <mat-paginator [length]="resultsLength" [pageSize]="30"></mat-paginator>
+      </div>
+    </mat-card-content>
+  </mat-card>
