@@ -13,30 +13,19 @@
 try
 {
     $usuario = new Usuario($db);
-    $result = $usuario->read();
-    $num = $result->rowCount();
 
-    if($num>0)
+    $usuario->idusuario = !empty($_GET['pidusuario']) ? $_GET['pidusuario'] : null;
+    $usuario->usr_nombre = !empty($_GET['pusr_nombre']) ? $_GET['pusr_nombre'] : null;
+    $usuario->usr_usuario = !empty($_GET['pusr_usuario']) ? $_GET['pusr_usuario'] : null;
+    $usuario->usr_ultimologueo = !empty($_GET['pusr_ultimologueo']) ? $_GET['pusr_ultimologueo'] : null;
+    $usuario->usr_fechacreacion = !empty($_GET['pusr_fechacreacion']) ? $_GET['pusr_fechacreacion'] : null;
+    $usuario->usr_estado = !empty($_GET['pusr_estado']) ? $_GET['pusr_estado'] : null;
+    $usuario->prf_nombre = !empty($_GET['pprf_nombre']) ? $_GET['pprf_nombre'] : null;
+
+    $usuario_list = $usuario->read();
+    if (count(array_filter($usuario_list))>0)
     {
-        $usuarios_list=array();
-        $usuarios_list["usuarios"]=array();
-
-        while($row = $result->fetch(PDO::FETCH_ASSOC))
-        {
-            extract($row);
-            $usuario_item = array (
-                "idusuario"=>$idusuario,
-                "usr_nombre"=>$usr_nombre,
-                "usr_usuario"=>$usr_usuario,
-                "usr_fechacreacion"=>$usr_fechacreacion,
-                "usr_ultimologueo"=>$usr_ultimologueo,
-                "usr_estado"=>$usr_estado,
-                "prf_nombre"=>$prf_nombre
-            );
-
-            array_push($usuarios_list["usuarios"],$usuario_item);
-        }
-        print_json("0000", "OK", $usuarios_list);
+        print_json("0000", count(array_filter($usuario_list)), $usuario_list);
     }
     else
     {

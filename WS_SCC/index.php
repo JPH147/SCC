@@ -14,7 +14,43 @@
     <body>
         <h1>WS_SCC</h1>
         <h2>Usuario</h2>
-        <h2><a href ="../WS_SCC/usuario/read.php">Listar Usuario</a></h2>
+        <h2><a href ="#" onclick="javascript:ocultarMostrar('listarUsuario')">Listar Usuario</a></h2>
+        <form action= "../WS_SCC/usuario/read.php" id="listarUsuario" style="display:none" method="get">
+            <table border = "1">
+                <tr>
+                    <td>Id de Usuario:</td>
+                    <td><input type="number" name="pidusuario"/></td>
+                </tr>
+                <tr>
+                    <td>Nombre de Usuario:</td>
+                    <td><input type="text" name="pusr_nombre"/></td>
+                </tr>
+                <tr>
+                    <td>Usuario:</td>
+                    <td><input type="text" name="pusr_usuario"/></td>
+                </tr>
+                <tr>
+                    <td>Fecha de Creación de Usuario:</td>
+                    <td><input type="date" name="pusr_fechacreacion" /></td>
+                </tr>
+                <tr>
+                    <td>Fecha de Ultimo Logueo:</td>
+                    <td><input type="date" name="pusr_ultimologueo"/></td>
+                </tr>
+                <tr>
+                    <td>Estado de Usuario:</td>
+                    <td><input type="number" name="pusr_estado"/></td>
+                </tr>
+                <tr>
+                    <td>Pefil:</td>
+                    <td><input type="text" name="pprf_nombre"/></td>
+                </tr>
+            </table>
+        <input type="submit" value="Listar Usuario">
+        </form> 
+
+
+
         <h2><a href ="#" onclick="javascript:ocultarMostrar('crearUsuario')">Crear Usuario</a></h2>
         <form action= "../WS_SCC/usuario/create.php" id="crearUsuario" style="display:none" method="post">
             <table border = "1">
