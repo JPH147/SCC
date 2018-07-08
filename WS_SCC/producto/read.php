@@ -23,7 +23,6 @@ try
 
         while($row = $result->fetch(PDO::FETCH_ASSOC))
         {
-//prd_descripcion, id_unidad_medida
             extract($row);
             $lista_productos = array (
                 "idproducto"=>$idproducto,
@@ -31,7 +30,7 @@ try
                 "id_marca"=>$id_marca,
                 "prd_modelo"=>$prd_modelo,
                 "prd_descripcion"=>$prd_descripcion,
-                "id_unidad_medida"=>$id_unidad_medida
+                "und_nombre"=>$und_nombre
             );
 
             array_push($productos["productos"],$lista_productos);

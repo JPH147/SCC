@@ -13,13 +13,15 @@ Class Producto{
     public $prd_modelo;
     public $prd_descripcion;
     public $id_unidad_medida;
+    public $und_nombre;
 
     public function __construct($db){
         $this->conn = $db;
     }
 
     function read(){
-        $query = "SELECT idproducto,id_tipo_producto, id_marca, prd_modelo, prd_descripcion, id_unidad_medida FROM $table_name";
+        $query = "SELECT p.idproducto,p.id_tipo_producto, p.id_marca, p.prd_modelo, p.prd_descripcion, u.und_nombre FROM producto p
+                  INNER JOIN unidad_medida u on p.id_unidad_medida = u.idunidad_medida";
         $result = $this->conn->prepare($query);
         $result->execute();
         return $result;
