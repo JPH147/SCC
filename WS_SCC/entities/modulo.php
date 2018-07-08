@@ -6,20 +6,20 @@ class Modulo{
     public $idmodulo;
     public $mdl_nombre;
 
-
     public function __construct($db){
         $this->conn = $db;
     }
 
     function read(){
-        $query = "SELECT idmodulo,mdl_nombre FROM modulo";
+        $query = "CALL sp_listarmodulo";
         $result = $this->conn->prepare($query);
         $result->execute();
         return $result;
     }
+   
     function create()
     {
-        $query = "INSERT INTO modulo SET mdl_nombre=:mdl_nombre";
+        $query = "CALL sp_crearmodulo (:mdl_nombre)";
         $result = $this->conn->prepare($query);
 
         $this->mdl_nombre=htmlspecialchars(strip_tags($this->mdl_nombre));
@@ -35,7 +35,7 @@ class Modulo{
     }
     function readxId()
     {
-        $query ="SELECT mdl_nombre FROM modulo WHERE idmodulo = ?";
+        $query ="CALL sp_listarmoduloxId (?)";
         $result = $this->conn->prepare($query);
         $result->bindParam(1, $this->idmodulo);
         $result->execute();
