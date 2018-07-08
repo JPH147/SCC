@@ -19,11 +19,6 @@ Class Perfil{
         return $result;
     }
 
-    /* JEAN PAUL */
-    function(){
-        echo "Jean Paul"
-    }
-
     function create()
     {
         $query = "CALL sp_crearperfil (:prf_nombre)";
