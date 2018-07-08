@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatCard, MatInputModule, MatButton } from '@angular/material';
 
 @Component({
   selector: 'app-ventas',
@@ -6,10 +7,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./ventas.component.css']
 })
 export class VentasComponent implements OnInit {
-
-  constructor() { }
-
+  states: string[] = [
+    'Factura', 'Boleta'
+  ];
+  constructor() {
+   }
   ngOnInit() {
   }
-
 }

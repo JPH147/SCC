@@ -1,3 +1,47 @@
-<p>
-  ventas works!
-</p>
+
+<mat-card>
+<p> Ventas</p>
+  <mat-form-field>
+      <mat-label>N° Talonario</mat-label>
+      <mat-select #idTalonario value="001" (selectionChange)="triggerResize()">
+        <mat-option value="001">001</mat-option>
+        <mat-option value="002">002</mat-option>
+        <mat-option value="003">003</mat-option>
+        <mat-option value="004">004</mat-option>
+        <mat-option value="005">005</mat-option>
+        <mat-option value="006">006</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <p></p>
+    <mat-form-field>
+        <input matInput placeholder="N° Contrato">
+    </mat-form-field>
+    <p></p>
+    <mat-form-field>
+        <mat-select placeholder="Tipo de Contrato">
+          <mat-option>--</mat-option>
+          <mat-option *ngFor="let state of states" [value]="state">{{state}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <!--div ng-app="app-ventas" ng-controller="AppCtrl" layout-margin layout-padding >
+      <a mat-raised-button routerLink="." class="ng-hide" id="input-file-id" multiple type="file">Adjuntar</a>
+    </div-->
+
+    
+        <input mat-raised-button id="input-file-id" multiple type="file" />
+    <label for="input-file-id" class="md-button md-raised md-primary">Adjuntar</label>
+       
+    
+
+    <p>Adjuntar</p>
+    <p>Vendedores</p>
+    <p>Fecha de venta</p>
+    <p>Mes y año del inicio de pago</p>
+    <p>Producto</p>
+    <p>IMEI</p>
+    <p>Tipo de pago</p>
+    <p>Monto Total</p>
+    <p>Cuotas</p>
+    <p>Generar cronograma de pagos</p>
+</mat-card>
