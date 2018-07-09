@@ -30,7 +30,7 @@ Class Usuario{
         $result->bindParam(4, $this->usr_ultimologueo);
         $result->bindParam(5, $this->usr_fechacreacion);
         $result->bindParam(6, $this->usr_estado);
-        $result->bindParam(7, $this->prf_nombre);
+        $result->bindParam(7, $this->idperfil);
 
         $result->execute();
     

@@ -20,7 +20,7 @@ try
     $usuario->usr_ultimologueo = !empty($_GET['pusr_ultimologueo']) ? $_GET['pusr_ultimologueo'] : null;
     $usuario->usr_fechacreacion = !empty($_GET['pusr_fechacreacion']) ? $_GET['pusr_fechacreacion'] : null;
     $usuario->usr_estado = !empty($_GET['pusr_estado']) ? $_GET['pusr_estado'] : null;
-    $usuario->prf_nombre = !empty($_GET['pprf_nombre']) ? $_GET['pprf_nombre'] : null;
+    $usuario->idperfil = !empty($_GET['pidperfil']) ? $_GET['pidperfil'] : null;
 
     $usuario_list = $usuario->read();
     if (count(array_filter($usuario_list))>0)
