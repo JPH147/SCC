@@ -38,8 +38,8 @@ try
 
             array_push($productos["productos"],$lista_productos);
         }
-        //print_json("0000", "OK", $productos);
-        echo json_encode($productos, JSON_NUMERIC_CHECK| JSON_PRETTY_PRINT);
+        print_json("0000", "OK", $productos);
+        //echo json_encode($productos, JSON_NUMERIC_CHECK| JSON_PRETTY_PRINT);
     }
     else
     {
