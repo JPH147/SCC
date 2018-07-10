@@ -6,7 +6,6 @@ class Modulo{
     public $idmodulo;
     public $mdl_nombre;
 
-
     public function __construct($db){
         $this->conn = $db;
     }

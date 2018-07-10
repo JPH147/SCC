@@ -60,7 +60,7 @@ import { RetornoVendedoresComponent } from './components/retorno-vendedores/reto
 import { ComisionesComponent } from './components/comisiones/comisiones.component';
 import { ClientesComponent } from './components/clientes/clientes.component';
 import { VentasComponent } from './components/ventas/ventas.component';
-
+import {DialogoComponent} from './components/salida-vendedores/salida-vendedores.component';
 @NgModule({
   imports: [
 /* Angular Material */
@@ -123,10 +123,12 @@ import { VentasComponent } from './components/ventas/ventas.component';
     RetornoVendedoresComponent,
     ComisionesComponent,
     ClientesComponent,
-    VentasComponent
+    VentasComponent,
+    DialogoComponent
    ],
-  entryComponents: [AppComponent],
+  entryComponents: [AppComponent, DialogoComponent],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider]
 })
+
 export class AppModule {}
