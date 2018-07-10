@@ -141,6 +141,18 @@ hr{
 
 }
 
-.Talonario{
+.AlintaDrecha{
 float: right;
+margin-left: 5%
+}
+
+
+.AlintaIzquierda{
+  float: left;
+  margin-right:5%
+  }
+
+.fecha_cabecera{
+  margin: 0 5px;
+  width: 40%;
 }

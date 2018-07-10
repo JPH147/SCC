@@ -14,6 +14,9 @@ export class SalidaVendedoresComponent implements OnInit {
   name: string;
   date = new FormControl(new Date());
   serializedDate = new FormControl((new Date()).toISOString());
+  toppings = new FormControl();
+  toppingList: string[] = ['Jean Pierre', 'Joel Vicuña', 'Carlos Rodriguez', 'Jean Paul', 'Ivan Arones', 'Fernando Martinez'];
+
 
   constructor(public dialog: MatDialog) {}
 
@@ -52,6 +55,7 @@ export class DialogoComponent {
   onNoClick(): void {
     this.dialogRef.close();
   }
+
 
 }
 
