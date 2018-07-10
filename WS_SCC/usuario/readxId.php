@@ -27,7 +27,7 @@ try
         "prf_nombre"=>$usuario->prf_nombre
     );
 
-    if(trim($usuario->usr_nombre)!= null && trim($usuario->usr_usuario)!=null){
+    if(trim($usuario->usr_nombre)!= '' && trim($usuario->usr_usuario)!=''){
         print_json("0000", "OK", $usuario_list);
     }
     else{
