@@ -1,7 +1,10 @@
 <?php
 
-    //header("Access-Control-Allow-Origin: *");
-    header("Content-Type: application/json; charset=UTF-8");
+    header("Access-Control-Allow-Origin: *");
+    header("Content-Type: application/json");
+    header("Access-Control-Allow-Methods: GET");
+    header("Access-Control-Max-Age: 3600");
+    //header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
     include_once '../config/database.php';
     include_once '../entities/producto.php';
@@ -36,6 +39,7 @@ try
             array_push($productos["productos"],$lista_productos);
         }
         print_json("0000", "OK", $productos);
+        //echo json_encode($productos, JSON_NUMERIC_CHECK| JSON_PRETTY_PRINT);
     }
     else
     {
