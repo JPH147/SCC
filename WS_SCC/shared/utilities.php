@@ -7,7 +7,7 @@ function print_json($status, $mensaje, $data) {
     $response['mensaje'] = $mensaje;
     $response['data'] = $data;
   
-    echo json_encode($response, JSON_PRETTY_PRINT);
+    echo json_encode($response, JSON_NUMERIC_CHECK| JSON_PRETTY_PRINT);
    }
    function is_array_empty($arr){
     if(is_array($arr)){     
