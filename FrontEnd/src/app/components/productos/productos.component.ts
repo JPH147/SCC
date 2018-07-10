@@ -4,16 +4,17 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator, MatSort} from '@angular/material';
 import {merge, Observable, of as observableOf} from 'rxjs';
 import {catchError, map, startWith, switchMap} from 'rxjs/operators';
-
+import {ProductoService} from './productos.service';
 
 @Component({
   selector: 'app-productos',
   templateUrl: './productos.component.html',
   styleUrls: ['./productos.component.css'],
-
+  providers:[ProductoService]
 })
 
 export class ProductosComponent implements OnInit {
+
   displayedColumns: string[] = ['created', 'state', 'number', 'title'];
   exampleDatabase: ExampleHttpDao | null;
   data: GithubIssue[] = [];
@@ -25,7 +26,7 @@ export class ProductosComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private Servicio: ProductoService) {}
 
   ngOnInit() {
     this.exampleDatabase = new ExampleHttpDao(this.http);
@@ -58,6 +59,7 @@ export class ProductosComponent implements OnInit {
         })
       ).subscribe(data => this.data = data);
 
+   console.log(this.Servicio.Listado().subscribe(res=>res))
   }
 }
 
