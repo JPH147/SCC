@@ -1,61 +1,47 @@
 <mat-card>
+
+  <!-- Encabezado -->
+
   <mat-card-title>
     <div id = "tituloProd"> Listado de productos</div>
   </mat-card-title>
 
   <button mat-raised-button color="primary" class="agregar">Agregar</button>
 
-  <mat-card-header>
-    <mat-icon>search</mat-icon>
-    <mat-form-field>
-      <input matInput placeholder="Buscar Producto" #input>
-    </mat-form-field>
-  </mat-card-header>
+  <mat-icon>search</mat-icon>
+  <mat-form-field>
+    <input matInput placeholder="Buscar Producto" #input>
+  </mat-form-field>
+
+  <!--  -->
 
   <mat-card-content>
-    <div class="example-loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
-      <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
-      <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
-        GitHub's API rate limit has been reached. It will be reset in one minute.
-      </div>
-    </div>
 
-    <div class="example-container mat-elevation-z8">
-        <!-- <div class = "container-principal" > -->
-          <div class="example-table-container" >
+    <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
-            <mat-table [dataSource]="data" class="example-table"
-              matSort matSortActive="created" matSortDisableClear matSortDirection="asc">
-              <!-- Number Column -->
-              <ng-container matColumnDef="number" class="codigo">
-                <mat-header-cell *matHeaderCellDef>Codigo</mat-header-cell>
-                <mat-cell *matCellDef="let row">{{row.number}}</mat-cell>
-              </ng-container>
+      <ng-container matColumnDef="position">
+        <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.position}} </mat-cell>
+      </ng-container>
 
-              <!-- Title Column -->
-              <ng-container matColumnDef="title">
-                <mat-header-cell *matHeaderCellDef>Articulos</mat-header-cell>
-                <mat-cell *matCellDef="let row">{{row.title}}</mat-cell>
-              </ng-container>
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+      </ng-container>
 
-              <!-- State Column -->
-              <ng-container matColumnDef="state">
-                <mat-header-cell *matHeaderCellDef>Estado</mat-header-cell>
-                <mat-cell *matCellDef="let row">{{row.state}}</mat-cell>
-              </ng-container>
+      <ng-container matColumnDef="weight">
+        <mat-header-cell *matHeaderCellDef> Weight </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.weight}} </mat-cell>
+      </ng-container>
 
-              <!-- Created Column -->
-              <ng-container matColumnDef="created">
-                <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Creado</mat-header-cell>
-                <mat-cell *matCellDef="let row">{{row.created_at | date}}</mat-cell>
-              </ng-container>
+      <ng-container matColumnDef="symbol">
+        <mat-header-cell *matHeaderCellDef> Symbol </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.symbol}} </mat-cell>
+      </ng-container>
 
-              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-              <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-          </mat-table>
-        </div>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
 
-        <mat-paginator [length]="resultsLength" [pageSize]="30"></mat-paginator>
-    </div>
   </mat-card-content>
 </mat-card>

@@ -12,6 +12,6 @@ export class ProductoService {
 
 	Listado(){
 		return this.http.get(this.url+'producto/read.php')
-						.pipe(map(res=>res))
+						.pipe(map(res=>res["data"].productos)
 	}
 }
