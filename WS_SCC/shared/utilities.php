@@ -1,6 +1,6 @@
 <?php
 function print_json($status, $mensaje, $data) {
-    header("HTTP/1.1 $status $mensaje");
+    //header("HTTP/1.1 $status $mensaje");
     header("Content-Type: application/json; charset=UTF-8");
   
     $response['codigo'] = $status;
