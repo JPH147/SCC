@@ -59,7 +59,7 @@ export class ProductosComponent implements OnInit {
         })
       ).subscribe(data => this.data = data);
 
-   console.log(this.Servicio.Listado().subscribe(res=>res))
+   this.Servicio.Listado().subscribe(res=>console.log(res)
   }
 }
 
