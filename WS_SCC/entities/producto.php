@@ -8,7 +8,6 @@ Class Producto{
     public $prf_nombre;
 
     public $idproducto;
-    public $id_tipo_producto;
     public $id_marca;
     public $prd_modelo;
     public $prd_descripcion;
@@ -20,8 +19,7 @@ Class Producto{
     }
 
     function read(){
-        $query = "SELECT p.idproducto,p.id_tipo_producto, p.id_marca, p.prd_modelo, p.prd_descripcion, u.und_nombre FROM producto p
-                  INNER JOIN unidad_medida u on p.id_unidad_medida = u.idunidad_medida";
+        $query = "CALL sp_listarproducto";
         $result = $this->conn->prepare($query);
         $result->execute();
         return $result;

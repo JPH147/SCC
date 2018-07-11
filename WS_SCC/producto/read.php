@@ -29,8 +29,8 @@ try
             extract($row);
             $lista_productos = array (
                 "idproducto"=>$idproducto,
-                "id_tipo_producto"=>$id_tipo_producto,
-                "id_marca"=>$id_marca,
+                "tipo"=>$tprd_nombre,
+                "marca"=>$mrc_nombre,
                 "prd_modelo"=>$prd_modelo,
                 "prd_descripcion"=>$prd_descripcion,
                 "und_nombre"=>$und_nombre
