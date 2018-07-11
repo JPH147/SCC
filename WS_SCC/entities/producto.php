@@ -19,14 +19,37 @@ Class Producto{
     }
 
     function read(){
-        $query = "CALL sp_listarproducto";
+
+        $query = "CALL sp_listarproducto(?)";
+
         $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->idproducto);
+
         $result->execute();
-        return $result;
+    
+        $producto_list=array();
+        $producto_list["productos"]=array();
+
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $producto_item = array (
+                "id"=>$idproducto,
+                "tipo"=>$tprd_nombre,
+                "marca"=>$mrc_nombre,
+                "modelo"=>$prd_modelo,
+                "descripcion"=>$prd_descripcion,
+                "unidad_medida"=>$und_nombre
+            );
+
+            array_push($producto_list["productos"],$producto_item);
+        }
+        return $producto_list;
     }
 
     // function read(){
-    //     $query = "SELECT idperfil,prf_nombre FROM table_name";
+    //     $query = "CALL sp_listarproducto";
     //     $result = $this->conn->prepare($query);
     //     $result->execute();
     //     return $result;

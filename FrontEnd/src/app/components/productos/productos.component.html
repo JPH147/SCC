@@ -17,30 +17,44 @@
 
   <mat-card-content>
 
-    <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <div class="spinner-container" *ngIf="ListadoProductos.Cargando | async">
+      <mat-spinner></mat-spinner>
+    </div>
 
-      <ng-container matColumnDef="position">
-        <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{element.position}} </mat-cell>
+    <mat-table [dataSource]="ListadoProductos" class="mat-elevation-z8">
+
+      <ng-container matColumnDef="numero">
+        <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+        <mat-cell *matCellDef="let producto"> {{producto.id}} </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="name">
-        <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+      <ng-container matColumnDef="tipo">
+        <mat-header-cell *matHeaderCellDef> Tipo </mat-header-cell>
+        <mat-cell *matCellDef="let producto"> {{producto.tipo}} </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="weight">
-        <mat-header-cell *matHeaderCellDef> Weight </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{element.weight}} </mat-cell>
+      <ng-container matColumnDef="marca">
+        <mat-header-cell *matHeaderCellDef> Marca </mat-header-cell>
+        <mat-cell *matCellDef="let producto"> {{producto.marca}} </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="symbol">
-        <mat-header-cell *matHeaderCellDef> Symbol </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{element.symbol}} </mat-cell>
+      <ng-container matColumnDef="modelo">
+        <mat-header-cell *matHeaderCellDef> Modelo </mat-header-cell>
+        <mat-cell *matCellDef="let producto"> {{producto.modelo}} </mat-cell>
       </ng-container>
 
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      <ng-container matColumnDef="descripcion">
+        <mat-header-cell *matHeaderCellDef> Descripcion</mat-header-cell>
+        <mat-cell *matCellDef="let producto"> {{producto.descripcion}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="unidad_medida">
+        <mat-header-cell *matHeaderCellDef> Unidad de medida </mat-header-cell>
+        <mat-cell *matCellDef="let producto"> {{producto.unidad_medida}} </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: Columnas;"></mat-row>
     </mat-table>
 
   </mat-card-content>

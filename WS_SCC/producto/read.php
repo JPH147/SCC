@@ -13,43 +13,56 @@
     $database = new Database();
     $db = $database->getConnection();
 
-try
-{
-    $producto = new Producto($db);
-    $result = $producto->read();
-    $num = $result->rowCount();
+    try{
+        $producto = new Producto($db);
 
-    if($num>0)
-    {
-        $productos=array();
-        $productos["productos"]=array();
+        $producto->idproducto = !empty($_GET['pridproducto']) ? $_GET['pridproducto'] : null;
 
-        while($row = $result->fetch(PDO::FETCH_ASSOC))
-        {
-            extract($row);
-            $lista_productos = array (
-                "idproducto"=>$idproducto,
-                "tipo"=>$tprd_nombre,
-                "marca"=>$mrc_nombre,
-                "prd_modelo"=>$prd_modelo,
-                "prd_descripcion"=>$prd_descripcion,
-                "und_nombre"=>$und_nombre
-            );
+        $producto_list = $producto->read();
 
-            array_push($productos["productos"],$lista_productos);
-        }
-        print_json("0000", "OK", $productos);
-        //echo json_encode($productos, JSON_NUMERIC_CHECK| JSON_PRETTY_PRINT);
+        if (count(array_filter($producto_list))>0)
+        { print_json("0000", count(array_filter($producto_list)), $producto_list); }
+        else
+        { print_json("0001", "No existen usuarios registrados", null); }
     }
-    else
-    {
-        print_json("0001", "No existen productos registrados", null);
 
+    // try{
+    //     $producto = new Producto($db);
+    //     $result = $producto->read();
+    //     $num = $result->rowCount();
+
+    //     if($num>0)
+    //     {
+    //         $productos=array();
+    //         $productos["productos"]=array();
+
+    //         while($row = $result->fetch(PDO::FETCH_ASSOC))
+    //         {
+    //             extract($row);
+    //             $lista_productos = array (
+    //                 "idproducto"=>$idproducto,
+    //                 "tipo"=>$tprd_nombre,
+    //                 "marca"=>$mrc_nombre,
+    //                 "prd_modelo"=>$prd_modelo,
+    //                 "prd_descripcion"=>$prd_descripcion,
+    //                 "und_nombre"=>$und_nombre
+    //             );
+
+    //             array_push($productos["productos"],$lista_productos);
+    //         }
+    //         print_json("0000", "OK", $productos);
+    //         //echo json_encode($productos, JSON_NUMERIC_CHECK| JSON_PRETTY_PRINT);
+    //     }
+    //     else
+    //     {
+    //         print_json("0001", "No existen productos registrados", null);
+
+    //     }
+    // }
+
+    catch(Exception $exception)
+    {
+        print_json("9999", "Ocurrió un error", $exception->getMessage());
     }
-}
-catch(Exception $exception)
-{
-    print_json("9999", "Ocurrió un error", $exception->getMessage());
-}
 
 ?>
