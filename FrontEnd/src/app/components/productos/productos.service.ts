@@ -35,6 +35,7 @@ export class ProductoService {
 }
 
 export interface Producto{
+	numero:number,
 	id:number,
 	nombre: string,
 	tipo: string,

@@ -31,10 +31,14 @@ Class Producto{
         $producto_list=array();
         $producto_list["productos"]=array();
 
+        $contador = 0;
+
         while($row = $result->fetch(PDO::FETCH_ASSOC))
         {
             extract($row);
+            $contador=$contador+1;
             $producto_item = array (
+                "numero"=>$contador,
                 "id"=>$idproducto,
                 "tipo"=>$tprd_nombre,
                 "marca"=>$mrc_nombre,
