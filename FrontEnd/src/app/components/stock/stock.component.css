@@ -69,5 +69,6 @@ mat-card{
 }
 
 .agregar{
-  float:right
+  float:right;
+  margin-left: 10px;
 }

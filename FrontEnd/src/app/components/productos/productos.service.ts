@@ -13,17 +13,13 @@ export class ProductoService {
 	constructor(private http:HttpClient){}
 
 	Listado(
-		idproducto:number
+		tipo:string,
+		marca:string,
+		modelo:string,
+		descripcion:string
 	):Observable<Producto[]>
 	{	
-		let id;
-		if (idproducto==null) {
-			id="";
-		}else{
-			id=idproducto;
-		}
-
-		return this.http.get(this.url+'producto/read.php?pridproducto='+id)
+		return this.http.get(this.url+'producto/read.php?prtipo='+tipo+'&prmarca='+marca+'&prmodelo='+modelo+'&prdescripcion='+descripcion)
 		.pipe(map(res=>{
 			if(res["codigo"]==0){
 				return res["data"].productos

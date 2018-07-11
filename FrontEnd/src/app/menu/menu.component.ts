@@ -30,11 +30,7 @@ const TREE_DATA = JSON.stringify({
   },
   Logística: {
     Productos: 'productos',
-    Almacenes: {
-      Stock: 'stock',
-      'Ingreso de productos': 'ingresoproductos',
-      'Salida de productos': 'salidaproductos',
-    },
+    Stock: 'stock',
     Recursos: {
       'Salida de vendedores': 'salidavendedores',
       'Retorno de vendedores': 'retornovendedores',

@@ -22,11 +22,14 @@ export class ProductoDataSource implements DataSource<Producto>{
 	}
 
 	CargarProductos(
-		id:number
+		tipo:string,
+		marca:string,
+		modelo:string,
+		descripcion:string
 	){
 		this.CargandoInformacion.next(true);
 
-		this.Servicio.Listado(id)
+		this.Servicio.Listado(tipo,marca,modelo,descripcion)
 		.pipe(catchError(()=>of([])),
 		finalize(()=>this.CargandoInformacion.next(false))
 		)

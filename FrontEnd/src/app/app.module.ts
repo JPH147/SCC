@@ -61,6 +61,8 @@ import { ComisionesComponent } from './components/comisiones/comisiones.componen
 import { ClientesComponent } from './components/clientes/clientes.component';
 import { VentasComponent } from './components/ventas/ventas.component';
 import {DialogoComponent} from './components/salida-vendedores/salida-vendedores.component';
+import { ListadoSalidaVendedoresComponent } from './components/listado-salida-vendedores/listado-salida-vendedores.component';
+
 @NgModule({
   imports: [
 /* Angular Material */
@@ -124,7 +126,8 @@ import {DialogoComponent} from './components/salida-vendedores/salida-vendedores
     ComisionesComponent,
     ClientesComponent,
     VentasComponent,
-    DialogoComponent
+    DialogoComponent,
+    ListadoSalidaVendedoresComponent
    ],
   entryComponents: [AppComponent, DialogoComponent],
   bootstrap: [AppComponent],

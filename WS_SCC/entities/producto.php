@@ -8,10 +8,10 @@ Class Producto{
     public $prf_nombre;
 
     public $idproducto;
-    public $id_marca;
+    public $tprd_nombre;
+    public $mrc_nombre;
     public $prd_modelo;
     public $prd_descripcion;
-    public $id_unidad_medida;
     public $und_nombre;
 
     public function __construct($db){
@@ -20,11 +20,14 @@ Class Producto{
 
     function read(){
 
-        $query = "CALL sp_listarproducto(?)";
+        $query = "CALL sp_listarproducto(?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
-        $result->bindParam(1, $this->idproducto);
+        $result->bindParam(1, $this->tprd_nombre);
+        $result->bindParam(2, $this->mrc_nombre);
+        $result->bindParam(3, $this->prd_modelo);
+        $result->bindParam(4, $this->prd_descripcion);
 
         $result->execute();
     

@@ -32,3 +32,13 @@
 	margin-top: 20px;
 	margin-bottom: 20px;
 }
+
+/*Oculta la barra de navegación*/
+
+::-webkit-scrollbar { 
+    display: none; 
+}
+
+.cabecera-menu{
+
+}

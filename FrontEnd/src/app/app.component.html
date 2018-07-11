@@ -6,9 +6,11 @@
     [attr.role]="'navigation'"
     [mode]=" 'side'"
     [(opened)]="estado">
-    <mat-toolbar color="primary"> Menu </mat-toolbar>
-    <div class="imagen"></div>
-    <mat-toolbar color="primary">{{usuarios.nombre}}</mat-toolbar>
+    <div class="cabecera-menu">
+        <mat-toolbar color="primary"> Menu </mat-toolbar>
+        <div class="imagen"></div>
+        <mat-toolbar color="primary">{{usuarios.nombre}}</mat-toolbar>
+    </div>
     <app-menu></app-menu>
   </mat-sidenav>
 

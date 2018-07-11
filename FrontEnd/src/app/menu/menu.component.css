@@ -6,3 +6,8 @@ a {
 mat-tree{
 	background: none
 }
+
+.mat-icon-button {
+	position: absolute;
+	right: 0;
+}

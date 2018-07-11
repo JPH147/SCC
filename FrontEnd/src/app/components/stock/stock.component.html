@@ -3,14 +3,13 @@
       <div id = "tituloProd"> Listado de Stock</div>
     </mat-card-title>
 
+      <button mat-raised-button color="primary" class="agregar" [routerLink]="['ingresoproductos']" >Agregar</button>
+      <button mat-raised-button color="primary" class="agregar" [routerLink]="['salidaproductos']" >Quitar</button>
 
-
-    <mat-card-header>
       <mat-icon>search</mat-icon>
       <mat-form-field>
         <input matInput placeholder="Buscar Producto" #input>
       </mat-form-field>
-    </mat-card-header>
 
     <mat-card-content>
       <div class="example-loading-shade" *ngIf="isLoadingResults || isRateLimitReached">

@@ -16,7 +16,10 @@
     try{
         $producto = new Producto($db);
 
-        $producto->idproducto = !empty($_GET['pridproducto']) ? $_GET['pridproducto'] : null;
+        $producto->tprd_nombre = !empty($_GET['prtipo']) ? $_GET['prtipo'] : null;
+        $producto->mrc_nombre = !empty($_GET['prmarca']) ? $_GET['prmarca'] : null;
+        $producto->prd_modelo = !empty($_GET['prmodelo']) ? $_GET['prmodelo'] : null;
+        $producto->prd_descripcion = !empty($_GET['prdescripcion']) ? $_GET['prdescripcion'] : null;
 
         $producto_list = $producto->read();
 
