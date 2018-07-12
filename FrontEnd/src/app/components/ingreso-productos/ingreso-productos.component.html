@@ -5,62 +5,86 @@
     </mat-card-title>
 
 <mat-card-header>
-  <!-- Seleccionar Almacen -->
-    <mat-form-field>
-        <mat-select [(value)]="selected">
-          <mat-option>None</mat-option>
-          <mat-option value="option1">Almacen 1</mat-option>
-          <mat-option value="option2">Almacen 2</mat-option>
-          <mat-option value="option3">Almacen 3</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <p>Selecciones Alamcen: {{selected}}</p>
-
-</mat-card-header>
-<!--Campo ingresar Tipo de Ingreso a almacen -->
-<mat-radio-group>
-    <mat-radio-button value="1">Tipo Ingreso 1</mat-radio-button>
-    <mat-radio-button value="2">Tipo Ingreso 2</mat-radio-button>
-  </mat-radio-group>
-
-<!--Campo ingresar Fecha de Ingreso almacen -->
-    <mat-form-field class ="IngFecha">
-        <input matInput [matDatepicker]="picker" placeholder="Seleciona Fecha">
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
-
-
-<!--Campo ingresar Proveedor -->
-    <form class="example-form">
-      <mat-form-field class="example-full-width">
-        <input type="text" placeholder="Ingresa Proveedor" aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto">
-        <mat-autocomplete #auto="matAutocomplete">
-          <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-            {{option}}
-          </mat-option>
-        </mat-autocomplete>
-      </mat-form-field>
-    </form>
-
-    <!--Campo ingresar Documento de Referencia -->
-    <form class="example-form">
-        <mat-form-field class="example-full-width">
-          <input type="text" placeholder="Ingresa Documento de Referencia" aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto">
-          <mat-autocomplete #auto="matAutocomplete">
-            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-              {{option}}
+<mat-card class="CabeceraSalidaVendedor">
+    <mat-grid-list cols="2" rowHeight="80px">
+      <mat-grid-tile>
+        <!-- Seleccionar Almacen -->
+        <mat-form-field class="Alma1">
+          <mat-select placeholder="Selecciona Almacen" >
+            <mat-option *ngFor="let food of foods" [value]="food.value">
+              {{food.viewValue}}
             </mat-option>
-          </mat-autocomplete>
+          </mat-select>
         </mat-form-field>
-      </form>
+        <!--Campo ingresar Tipo de Ingreso a almacen -->
+        <mat-form-field class="Alma">
+            <mat-select placeholder="Tipo de  Ingreso" >
+              <mat-option *ngFor="let food of foods" [value]="food.value">
+                {{food.viewValue}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+
+      <mat-grid-tile>
+      <!--Campo ingresar Documento de Referencia -->
+      <form class="example-form">
+          <mat-form-field class="example-full-width">
+            <input type="text" placeholder="Ingresa Documento de Referencia" aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                {{option}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </form>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+      <!--Campo ingresar Proveedor -->
+      <form class="example-form">
+          <mat-form-field class="example-full-width">
+            <input type="text" placeholder="Ingresa Proveedor" aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                {{option}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </form>
+      </mat-grid-tile>
+
+
+    <mat-grid-tile>
+      <!--Campo ingresar Fecha de Ingreso almacen -->
+      <mat-form-field class ="IngFecha" class="Alma1">
+          <input matInput [matDatepicker]="picker" placeholder="Seleciona Fecha">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      </mat-grid-tile>
+
+
+
+
+    </mat-grid-list>
+  </mat-card>
+</mat-card-header>
+
+
+
+
+
+
+
+
 
       <!-- Line de Detalles de  ingreso de Productos -->
 <mat-card-content>
-    <mat-card-title>
+    <mat-card-subtitle>
         <div id = "tituloProd"> Detalle Productos</div>
-      </mat-card-title>
+      </mat-card-subtitle>
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
     <!-- Checkbox Column -->
