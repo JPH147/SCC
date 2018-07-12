@@ -62,6 +62,7 @@ import { ClientesComponent } from './components/clientes/clientes.component';
 import { VentasComponent } from './components/ventas/ventas.component';
 import {DialogoComponent} from './components/salida-vendedores/salida-vendedores.component';
 import { ListadoSalidaVendedoresComponent } from './components/listado-salida-vendedores/listado-salida-vendedores.component';
+import { AgregarproductoComponent } from './components/productos/agregarproducto/agregarproducto.component';
 
 @NgModule({
   imports: [
@@ -127,7 +128,8 @@ import { ListadoSalidaVendedoresComponent } from './components/listado-salida-ve
     ClientesComponent,
     VentasComponent,
     DialogoComponent,
-    ListadoSalidaVendedoresComponent
+    ListadoSalidaVendedoresComponent,
+    AgregarproductoComponent
    ],
   entryComponents: [AppComponent, DialogoComponent],
   bootstrap: [AppComponent],
