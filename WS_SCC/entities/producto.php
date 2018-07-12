@@ -10,7 +10,7 @@ Class Producto{
     public $idproducto;
     public $tprd_nombre;
     public $mrc_nombre;
-    public $prd_modelo;
+    public $mdl_nombre;
     public $prd_descripcion;
     public $und_nombre;
 
@@ -26,7 +26,7 @@ Class Producto{
 
         $result->bindParam(1, $this->tprd_nombre);
         $result->bindParam(2, $this->mrc_nombre);
-        $result->bindParam(3, $this->prd_modelo);
+        $result->bindParam(3, $this->mdl_nombre);
         $result->bindParam(4, $this->prd_descripcion);
 
         $result->execute();
@@ -45,7 +45,7 @@ Class Producto{
                 "id"=>$idproducto,
                 "tipo"=>$tprd_nombre,
                 "marca"=>$mrc_nombre,
-                "modelo"=>$prd_modelo,
+                "modelo"=>$mdl_nombre,
                 "descripcion"=>$prd_descripcion,
                 "unidad_medida"=>$und_nombre
             );
