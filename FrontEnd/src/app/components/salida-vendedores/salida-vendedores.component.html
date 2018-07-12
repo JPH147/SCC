@@ -1,125 +1,105 @@
 <mat-card class="card-principal">
-      <!-- Titulo formulario-->
-      <mat-card-title>
-        <div id = "tituloProd"> Salida de Vendedores</div>
-      </mat-card-title>
+  <!-- Titulo formulario-->
+  <mat-card-title>
+    <div id = "tituloProd"> Salida de Vendedores</div>
+  </mat-card-title>
 
-      <!-- Subtitulo Cabecera  Datos Vendedor-->
-        <mat-card-subtitle id ="CabeceraVendedor ">
-            <div > Datos Generales</div>
-        </mat-card-subtitle>
+  <!-- Subtitulo Cabecera  Datos Vendedor-->
+  <mat-card-subtitle id ="CabeceraVendedor ">
+      <div > Datos Generales</div>
+  </mat-card-subtitle>
 
-      <mat-card-header>
-           <mat-card class="CabeceraSalidaVendedor">
-                <mat-grid-list cols="2" rowHeight="80px">
-                 <!-- <mat-grid-tile>-->
-                 <!--   <div >  -->
-              <!-- Ingreso Pecosa -->
-                    <mat-grid-tile>
-                        <mat-form-field class="example-full-width">
-                          <input matInput #message maxlength="10" placeholder="PECOSA">
-                          <mat-hint align="start"><strong>Ingresar numero de Pecosa</strong> </mat-hint>
-                          <mat-hint align="end">{{message.value.length}} / 10</mat-hint>
-                        </mat-form-field>
-                   </mat-grid-tile>
+  <mat-card-header>
+    <mat-card class="CabeceraSalidaVendedor">
+      <mat-grid-list cols="2" rowHeight="80px">
+          <!-- Ingreso Pecosa -->
+        <mat-grid-tile>
+          <mat-form-field class="example-full-width">
+            <input matInput #message maxlength="10" placeholder="PECOSA">
+            <mat-hint align="start"><strong>Ingresar numero de Pecosa</strong> </mat-hint>
+            <mat-hint align="end">{{message.value.length}} / 10</mat-hint>
+          </mat-form-field>
+        </mat-grid-tile>
 
-                   <mat-grid-tile>
-                    <!--<div> -->
-                      <!-- Fecha Salida - Fecha Salida-->
-                      <mat-form-field class="fecha_cabecera">
-                        <input matInput [matDatepicker]="picker" placeholder="Fecha de Salida" >
-                        <mat-datepicker-toggle matSuffix [for]="picker" ></mat-datepicker-toggle>
-                        <mat-datepicker #picker ></mat-datepicker>
-                      </mat-form-field>
+        <mat-grid-tile>
+           <!-- Fecha Salida - Fecha Salida-->
+          <mat-form-field class="fecha_cabecera">
+            <input matInput [matDatepicker]="picker" placeholder="Fecha de Salida" >
+            <mat-datepicker-toggle matSuffix [for]="picker" ></mat-datepicker-toggle>
+            <mat-datepicker #picker ></mat-datepicker>
+          </mat-form-field>
 
-                      <mat-form-field class="fecha_cabecera">
-                        <input matInput [matDatepicker]="picker2" placeholder="Fecha de Retorno">
-                        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                        <mat-datepicker #picker2></mat-datepicker>
-                      </mat-form-field>
+          <mat-form-field class="fecha_cabecera">
+            <input matInput [matDatepicker]="picker2" placeholder="Fecha de Retorno">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+          </mat-form-field>
 
-                  </mat-grid-tile>
+        </mat-grid-tile>
 
+        <mat-grid-tile>
+            <mat-form-field class="example-full-width">
+                <input matInput #message maxlength="45" placeholder="Destino">
+                <mat-hint align="start"><strong>Ingresar Destino</strong> </mat-hint>
+                <mat-hint align="end">{{message.value.length}} / 45</mat-hint>
+            </mat-form-field>
+        </mat-grid-tile>
 
+        <mat-grid-tile>
+        <!-- Registrar Vendedores asignados-->
+          <mat-form-field>
+            <mat-select placeholder="Selecciona Vendedores" [formControl]="toppings" multiple>
+              <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
 
-                   <mat-grid-tile>
-                        <mat-form-field class="example-full-width">
-                            <input matInput #message maxlength="45" placeholder="Destino">
-                            <mat-hint align="start"><strong>Ingresar Destino</strong> </mat-hint>
-                            <mat-hint align="end">{{message.value.length}} / 45</mat-hint>
-                        </mat-form-field>
-                      </mat-grid-tile>
+        <mat-grid-tile>
+          <mat-form-field class="example-full-width">
+              <input matInput #message maxlength="15" placeholder="Guia">
+              <mat-hint align="start"><strong>Ingresar numero de guia de Remision</strong> </mat-hint>
+              <mat-hint align="end">{{message.value.length}} / 15</mat-hint>
+            </mat-form-field>
+        </mat-grid-tile>
 
-                      <mat-grid-tile>
-
-
-                      <!-- Registrar Vendedores asignados-->
-                      <mat-form-field>
-                          <mat-select placeholder="Selecciona Vendedores" [formControl]="toppings" multiple>
-                            <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
-                          </mat-select>
-                        </mat-form-field>
-                      </mat-grid-tile>
-
-
-
-
-                      <mat-grid-tile>
-                        <mat-form-field class="example-full-width">
-                            <input matInput #message maxlength="15" placeholder="Guia">
-                            <mat-hint align="start"><strong>Ingresar numero de guia de Remision</strong> </mat-hint>
-                            <mat-hint align="end">{{message.value.length}} / 15</mat-hint>
-                          </mat-form-field>
-                      </mat-grid-tile>
-
-                   <!--      </div> -->
-                      <!--   </mat-grid-tile>-->
-
-                        <mat-grid-tile>
-                            <mat-checkbox>Vehiculo de la Empresa</mat-checkbox>
-                        </mat-grid-tile>
-
-
-
-
-
-
-                  </mat-grid-list>
-            </mat-card>
-      </mat-card-header>
+        <mat-grid-tile>
+            <mat-checkbox>Vehiculo de la Empresa</mat-checkbox>
+        </mat-grid-tile>
+          </mat-grid-list>
+    </mat-card>
+</mat-card-header>
 <br>
-      <mat-card-content>
-          <!-- Subtitulo Detalle Productos-->
-          <mat-card-subtitle id ="CabeceraVendedor ">
-              <div > Detalle Transporte</div>
-          </mat-card-subtitle>
+  <mat-card-content>
+    <!-- Subtitulo Detalle Productos-->
+    <mat-card-subtitle id ="CabeceraVendedor ">
+        <div > Detalle Transporte</div>
+    </mat-card-subtitle>
 
+    <mat-card class="CabeceraSalidaVendedor">
+      <mat-grid-list cols="2" rowHeight="80px">
+      <mat-grid-tile>
+        <mat-form-field class="example-full-width">
+            <input matInput #message maxlength="10" placeholder="Placa">
+            <mat-hint align="start"><strong>Ingresar Placa Vehiculo</strong> </mat-hint>
+            <mat-hint align="end">{{message.value.length}} / 10</mat-hint>
+          </mat-form-field>
+    </mat-grid-tile>
 
-          <mat-card class="CabeceraSalidaVendedor">
-              <mat-grid-list cols="2" rowHeight="80px">
-            <mat-grid-tile>
-              <mat-form-field class="example-full-width">
-                  <input matInput #message maxlength="10" placeholder="Placa">
-                  <mat-hint align="start"><strong>Ingresar Placa Vehiculo</strong> </mat-hint>
-                  <mat-hint align="end">{{message.value.length}} / 10</mat-hint>
-                </mat-form-field>
-          </mat-grid-tile>
+    <mat-grid-tile>
+          <mat-form-field class="example-full-width">
+              <input matInput #message maxlength="8" placeholder="DNI">
+              <mat-hint align="start"><strong>Ingresar DNI chofer</strong> </mat-hint>
+              <mat-hint align="end">{{message.value.length}} / 8</mat-hint>
+            </mat-form-field>
+    </mat-grid-tile>
 
-          <mat-grid-tile>
-                <mat-form-field class="example-full-width">
-                    <input matInput #message maxlength="8" placeholder="DNI">
-                    <mat-hint align="start"><strong>Ingresar DNI chofer</strong> </mat-hint>
-                    <mat-hint align="end">{{message.value.length}} / 8</mat-hint>
-                  </mat-form-field>
-          </mat-grid-tile>
-
-          <mat-grid-tile>
-              <mat-form-field class="example-full-width">
-                  <input matInput #message maxlength="45" placeholder="Chofer">
-                  <mat-hint align="start"><strong>Ingresar nombre del Chofer</strong> </mat-hint>
-                  <mat-hint align="end">{{message.value.length}} / 45</mat-hint>
-              </mat-form-field>
-      </mat-grid-tile>
+    <mat-grid-tile>
+        <mat-form-field class="example-full-width">
+            <input matInput #message maxlength="45" placeholder="Chofer">
+            <mat-hint align="start"><strong>Ingresar nombre del Chofer</strong> </mat-hint>
+            <mat-hint align="end">{{message.value.length}} / 45</mat-hint>
+        </mat-form-field>
+     </mat-grid-tile>
         </mat-grid-list>
 
           </mat-card>
@@ -168,32 +148,22 @@
     <div > Observaciones</div>
 </mat-card-subtitle>
 <mat-card class="CabeceraSalidaVendedor">
-
-
-        <mat-form-field class="example-full-width">
-            <input matInput #message maxlength="80" placeholder="Observacion Salida">
-            <mat-hint align="start"><strong>Observaciones Salida Vendedor</strong> </mat-hint>
-            <mat-hint align="end">{{message.value.length}} / 80</mat-hint>
-        </mat-form-field>
+  <mat-form-field class="example-full-width">
+      <input matInput #message maxlength="80" placeholder="Observacion Salida">
+      <mat-hint align="start"><strong>Observaciones Salida Vendedor</strong> </mat-hint>
+      <mat-hint align="end">{{message.value.length}} / 80</mat-hint>
+  </mat-form-field>
 <br>
-
-          <mat-form-field class="example-full-width">
-              <input matInput #message maxlength="80" placeholder="Observacion Retorno">
-              <mat-hint align="start"><strong>Observaciones Retorno Vendedor</strong> </mat-hint>
-              <mat-hint align="end">{{message.value.length}} / 80</mat-hint>
-      </mat-form-field>
-
-
-
-
+  <mat-form-field class="example-full-width">
+    <input matInput #message maxlength="80" placeholder="Observacion Retorno">
+    <mat-hint align="start"><strong>Observaciones Retorno Vendedor</strong> </mat-hint>
+    <mat-hint align="end">{{message.value.length}} / 80</mat-hint>
+  </mat-form-field>
 </mat-card>
-
-
-
-      </mat-card-content>
-        <mat-card-actions>
-          <button mat-raised-button color="primary" class="agregar">Grabar</button>
-        <button mat-raised-button color="accent" class = "Salir"  (click)="openDialog()"> Salir </button>
-      </mat-card-actions>
+  </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" class="agregar">Grabar</button>
+    <button mat-raised-button color="accent" class = "Salir"  (click)="openDialog()"> Salir </button>
+  </mat-card-actions>
 </mat-card>
 
