@@ -12,12 +12,10 @@ import { ComisionesComponent } from './components/comisiones/comisiones.componen
 import { ClientesComponent } from './components/clientes/clientes.component';
 import { VentasComponent } from './components/ventas/ventas.component';
 import { ListadoSalidaVendedoresComponent } from './components/listado-salida-vendedores/listado-salida-vendedores.component';
-import { AgregarproductoComponent } from './components/productos/agregarproducto/agregarproducto.component';
 
 const appRoutes: Routes = [
   {path: 'usuarios', component: UsuariosComponent},
   {path: 'productos', component: ProductosComponent},
-  {path: 'productos/agregar', component: AgregarproductoComponent},
   {path: 'stock', component: StockComponent},
   {path: 'stock/ingresoproductos', component: IngresoProductosComponent},
   {path: 'stock/salidaproductos', component: SalidaProductosComponent},

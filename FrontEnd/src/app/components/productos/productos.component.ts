@@ -17,26 +17,26 @@ import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
 export class ProductosComponent implements OnInit {
 
   ListadoProductos: ProductoDataSource;
-  Columnas: string[] = ['numero', 'descripcion', 'tipo', 'marca', 'modelo','unidad_medida'];
+  Columnas: string[] = ['numero', 'descripcion', 'tipo', 'marca', 'modelo', 'unidad_medida', 'opciones'];
 
-  @ViewChild('InputProducto') FiltroProductos:ElementRef;
-  @ViewChild('InputTipo') FiltroTipo:ElementRef;
-  @ViewChild('InputMarca') FiltroMarca:ElementRef;
-  @ViewChild('InputModelo') FiltroModelo:ElementRef;
+  @ViewChild('InputProducto') FiltroProductos: ElementRef;
+  @ViewChild('InputTipo') FiltroTipo: ElementRef;
+  @ViewChild('InputMarca') FiltroMarca: ElementRef;
+  @ViewChild('InputModelo') FiltroModelo: ElementRef;
 
   constructor(private Servicio: ProductoService) {}
 
   ngOnInit() {
-   this.ListadoProductos=new ProductoDataSource(this.Servicio);
-   this.ListadoProductos.CargarProductos("","","","")
+   this.ListadoProductos = new ProductoDataSource(this.Servicio);
+   this.ListadoProductos.CargarProductos('', '', '', '');
  }
 
- ngAfterViewInit(){
-   fromEvent(this.FiltroProductos.nativeElement,'keyup')
+ ngAfterViewInit() {
+   fromEvent(this.FiltroProductos.nativeElement, 'keyup')
    .pipe(
      debounceTime(200),
      distinctUntilChanged(),
-     tap(()=>{
+     tap(() => {
        this.CargarData();
      })
     ).subscribe();
@@ -45,21 +45,21 @@ export class ProductosComponent implements OnInit {
    .pipe(
      debounceTime(200),
      distinctUntilChanged(),
-     tap(()=>{
+     tap(() => {
        this.CargarData();
      })
     ).subscribe();
 
-    fromEvent(this.FiltroMarca.nativeElement,'keyup')
+    fromEvent(this.FiltroMarca.nativeElement, 'keyup')
    .pipe(
      debounceTime(200),
      distinctUntilChanged(),
-     tap(()=>{
+     tap(() => {
        this.CargarData();
      })
     ).subscribe();
 
-   fromEvent(this.FiltroModelo.nativeElement,'keyup')
+   fromEvent(this.FiltroModelo.nativeElement, 'keyup')
    .pipe(
      debounceTime(200),
      distinctUntilChanged(),
