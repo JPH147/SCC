@@ -1,0 +1,67 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Agrega Producto Nuevo</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-grid-list cols="2" rowHeight="120px">
+      <mat-grid-tile>
+        <form>
+            <mat-form-field>
+              <mat-select placeholder='Selecciona Tipo' name = 'food'>
+                <mat-option [value] = ""> CELULAR </mat-option>
+                <mat-option [value] = ""> LIBRO </mat-option>
+                <mat-option [value] = ""> TELEVISOR </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </form>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+          <form>
+              <mat-form-field>
+                <mat-select placeholder='Selecciona Marca' name = 'food'>
+                  <mat-option *ngFor = "let food of foods" [value] = "food.value">
+                    {{food.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </form>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+          <form>
+              <mat-form-field>
+                <mat-select placeholder='Selecciona Modelo' name = 'food'>
+                  <mat-option *ngFor = "let food of foods" [value] = "food.value">
+                    {{food.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </form>
+      </mat-grid-tile>
+
+
+
+      <mat-grid-tile>
+          <mat-form-field >
+              <input matInput placeholder="Ingresa Precio Minimo">
+              <span matPrefix>S/.</span>
+            </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile [colspan]="2">
+        <mat-form-field class="input-ventana">
+        <input matInput placeholder="Ingresa Descripcion del Producto">
+      </mat-form-field>
+    </mat-grid-tile>
+
+    </mat-grid-list>
+  </mat-card-content>
+
+  <mat-card-actions>
+      <button mat-raised-button color="primary">Grabar</button>
+  <button mat-raised-button color="accent">Salir</button>
+    </mat-card-actions>
+
+
+</mat-card>

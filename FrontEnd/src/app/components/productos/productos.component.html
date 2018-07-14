@@ -4,7 +4,7 @@
     <div id = "tituloProd"> Listado de Productos</div>
   </mat-card-title>
 
-  <button mat-raised-button color="primary" class="agregar" [routerLink]="['agregar']">Agregar</button>
+  <button mat-raised-button color="primary" class="agregar" (click)="Agregar()">Agregar</button>
 
   <mat-grid-list cols=5 rowHeight="70px">
     <mat-grid-tile>
@@ -47,34 +47,34 @@
       </ng-container>
 
       <ng-container matColumnDef="tipo">
-        <mat-header-cell *matHeaderCellDef> TIPO </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef> Tipo </mat-header-cell>
         <mat-cell *matCellDef="let producto"> {{producto.tipo}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="marca">
-        <mat-header-cell *matHeaderCellDef> MARCA </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef> Marca </mat-header-cell>
         <mat-cell *matCellDef="let producto"> {{producto.marca}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="modelo">
-        <mat-header-cell *matHeaderCellDef> MODELO </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef> Modelo </mat-header-cell>
         <mat-cell *matCellDef="let producto"> {{producto.modelo}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="descripcion">
-        <mat-header-cell *matHeaderCellDef> DESCRIPCION</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef> Descripcion</mat-header-cell>
         <mat-cell *matCellDef="let producto"> {{producto.descripcion}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="unidad_medida">
-        <mat-header-cell *matHeaderCellDef> UNIDAD MEDIDA </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef> Unidad Medida </mat-header-cell>
         <mat-cell *matCellDef="let producto"> {{producto.unidad_medida}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="opciones">
-        <mat-header-cell *matHeaderCellDef> OPCIONES </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let producto">
-          <button mat-icon-button color="primary"><mat-icon> visibility </mat-icon></button>
+
           <button mat-icon-button color="primary"><mat-icon> edit </mat-icon></button>
           <button mat-icon-button color="primary"><mat-icon> delete </mat-icon></button>
         </mat-cell>
