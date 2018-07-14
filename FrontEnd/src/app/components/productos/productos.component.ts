@@ -69,8 +69,6 @@ export class ProductosComponent implements OnInit {
     ).subscribe();
  }
 
-
-
  CargarData(){
    this.ListadoProductos.CargarProductos(this.FiltroTipo.nativeElement.value,this.FiltroMarca.nativeElement.value,this.FiltroModelo.nativeElement.value,this.FiltroProductos.nativeElement.value)
  }

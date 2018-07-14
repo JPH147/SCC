@@ -38,12 +38,3 @@
 ::-webkit-scrollbar { 
     display: none; 
 }
-
-.cabecera-menu{
-	position: fixed;
-}
-
-.menu{
-	margin-top: 300px;
-	overflow: scroll;
-}
