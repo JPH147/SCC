@@ -63,7 +63,7 @@ export class ProductosComponent implements OnInit {
    .pipe(
      debounceTime(200),
      distinctUntilChanged(),
-     tap(()=>{
+     tap(()=> {
        this.CargarData();
      })
     ).subscribe();
