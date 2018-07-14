@@ -4,36 +4,37 @@ import {BehaviorSubject, Observable} from 'rxjs';
 import {catchError, finalize} from 'rxjs/operators';
 import {of} from 'rxjs';
 
-export class ProductoDataSource implements DataSource<Producto>{
-	
-	private InformacionProductos = new BehaviorSubject<Producto[]>([]);
-	private CargandoInformacion = new BehaviorSubject<boolean>(false);
-	private Cargando = this.CargandoInformacion.asObservable();
+export class ProductoDataSource implements DataSource<Producto> {
 
-	constructor(private Servicio: ProductoService){ }
+  private InformacionProductos = new BehaviorSubject<Producto[]>([]);
+  private CargandoInformacion = new BehaviorSubject<boolean>(false);
+  public Cargando = this.CargandoInformacion.asObservable();
 
-	connect(collectionViewer: CollectionViewer): Observable<Producto[]>{
-		return this.InformacionProductos.asObservable();
-	}
+constructor(private Servicio: ProductoService) { }
 
-	disconnect(){
-		this.InformacionProductos.complete();
-		this.CargandoInformacion.complete();
-	}
+  connect(collectionViewer: CollectionViewer): Observable<Producto[]> {
+  return this.InformacionProductos.asObservable();
+  }
 
-	CargarProductos(
-		tipo:string,
-		marca:string,
-		modelo:string,
-		descripcion:string
-	){
-		this.CargandoInformacion.next(true);
+disconnect(){
+this.InformacionProductos.complete();
+this.CargandoInformacion.complete();
+  }
 
-		this.Servicio.Listado(tipo,marca,modelo,descripcion)
-		.pipe(catchError(()=>of([])),
-		finalize(()=>this.CargandoInformacion.next(false))
-		)
-		.subscribe(res=>this.InformacionProductos.next(res))
-	}
+  CargarProductos(
+    tipo: string,
+    marca: string,
+    modelo: string,
+    descripcion: string
+  // tslint:disable-next-line:one-line
+  ){
+  this.CargandoInformacion.next(true);
+
+  this.Servicio.Listado(tipo, marca, modelo, descripcion)
+  .pipe(catchError(() => of([])),
+  finalize(() => this.CargandoInformacion.next(false))
+  )
+  .subscribe(res => this.InformacionProductos.next(res));
+  }
 
 }
