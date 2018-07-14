@@ -20,12 +20,23 @@ export class ProductosComponent implements OnInit {
   public contador: number;
   public condicion: boolean = true;
 
+<<<<<<< HEAD
 
   @ViewChild('input') input: ElementRef;
+=======
+  ListadoProductos: ProductoDataSource;
+  Columnas: string[] = ['numero', 'descripcion', 'tipo', 'marca', 'modelo','unidad_medida'];
+
+  @ViewChild('InputProducto') FiltroProductos:ElementRef;
+  @ViewChild('InputTipo') FiltroTipo:ElementRef;
+  @ViewChild('InputMarca') FiltroMarca:ElementRef;
+  @ViewChild('InputModelo') FiltroModelo:ElementRef;
+>>>>>>> ed4489ae82276981c3c82a86b4fdcfe053623578
 
   constructor(private Servicio: ProductoService) {}
 
   ngOnInit() {
+<<<<<<< HEAD
     this.contador = 1;
     this.articulos = [
       {numero: this.contador, nombre: '', cantidad: null, precio: null, condicion: this.condicion}
@@ -55,3 +66,54 @@ cantidad: number;
 precio: number;
 condicion: boolean;
 }
+=======
+   this.ListadoProductos=new ProductoDataSource(this.Servicio);
+   this.ListadoProductos.CargarProductos("","","","")
+ }
+
+ ngAfterViewInit(){
+   fromEvent(this.FiltroProductos.nativeElement,'keyup')
+   .pipe(
+     debounceTime(200),
+     distinctUntilChanged(),
+     tap(()=>{
+       this.CargarData();
+     })
+    ).subscribe();
+
+   fromEvent(this.FiltroTipo.nativeElement,'keyup')
+   .pipe(
+     debounceTime(200),
+     distinctUntilChanged(),
+     tap(()=>{
+       this.CargarData();
+     })
+    ).subscribe();
+
+    fromEvent(this.FiltroMarca.nativeElement,'keyup')
+   .pipe(
+     debounceTime(200),
+     distinctUntilChanged(),
+     tap(()=>{
+       this.CargarData();
+     })
+    ).subscribe();
+
+   fromEvent(this.FiltroModelo.nativeElement,'keyup')
+   .pipe(
+     debounceTime(200),
+     distinctUntilChanged(),
+     tap(()=>{
+       this.CargarData();
+     })
+    ).subscribe();
+ }
+
+
+
+ CargarData(){
+   this.ListadoProductos.CargarProductos(this.FiltroTipo.nativeElement.value,this.FiltroMarca.nativeElement.value,this.FiltroModelo.nativeElement.value,this.FiltroProductos.nativeElement.value)
+ }
+
+}
+>>>>>>> ed4489ae82276981c3c82a86b4fdcfe053623578
