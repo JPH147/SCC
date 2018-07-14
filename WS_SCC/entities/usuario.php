@@ -53,6 +53,7 @@ Class Usuario{
         }
         return $usuario_list;
     }
+    
     function create()
     {
         $query = "CALL sp_crearusuario (:usr_nombre,:usr_usuario,:usr_clave,:usr_fechacreacion,:usr_ultimologueo,:usr_estado,:idperfil)"; 
