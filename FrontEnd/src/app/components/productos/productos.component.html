@@ -8,10 +8,32 @@
 
   <button mat-raised-button color="primary" class="agregar" [routerLink]="['agregar']">Agregar Producto</button>
 
-  <mat-icon>search</mat-icon>
-  <mat-form-field>
-    <input matInput placeholder="Buscar Producto" #input>
-  </mat-form-field>
+  <mat-grid-list cols=5 rowHeight="70px">
+    <mat-grid-tile>
+      <mat-icon>search</mat-icon>
+      <mat-form-field>
+        <input matInput placeholder="Producto" #InputProducto>
+      </mat-form-field>
+    </mat-grid-tile>
+        <mat-grid-tile>
+      <mat-icon>search</mat-icon>
+      <mat-form-field>
+        <input matInput placeholder="Tipo" #InputTipo>
+      </mat-form-field>
+    </mat-grid-tile>
+        <mat-grid-tile>
+      <mat-icon>search</mat-icon>
+      <mat-form-field>
+        <input matInput placeholder="Marca" #InputMarca>
+      </mat-form-field>
+    </mat-grid-tile>
+        <mat-grid-tile>
+      <mat-icon>search</mat-icon>
+      <mat-form-field>
+        <input matInput placeholder="Modelo" #InputModelo>
+      </mat-form-field>
+    </mat-grid-tile>
+  </mat-grid-list>
 
   <mat-card-content>
 

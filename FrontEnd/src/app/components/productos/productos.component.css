@@ -29,3 +29,12 @@ mat-card{
   align-items: center;
   justify-content: center;
 }
+
+.mat-column-numero,
+.mat-column-tipo,
+.mat-column-marca,
+.mat-column-modelo,
+.mat-column-unidad_medida
+{
+  max-width: 10%;
+}

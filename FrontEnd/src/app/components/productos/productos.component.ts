@@ -17,9 +17,12 @@ import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
 export class ProductosComponent implements OnInit {
 
   ListadoProductos: ProductoDataSource;
-  Columnas: string[] = ['numero', 'tipo', 'marca', 'modelo','descripcion','unidad_medida'];
+  Columnas: string[] = ['numero', 'descripcion', 'tipo', 'marca', 'modelo','unidad_medida'];
 
-  @ViewChild('input') input:ElementRef;
+  @ViewChild('InputProducto') FiltroProductos:ElementRef;
+  @ViewChild('InputTipo') FiltroTipo:ElementRef;
+  @ViewChild('InputMarca') FiltroMarca:ElementRef;
+  @ViewChild('InputModelo') FiltroModelo:ElementRef;
 
   constructor(private Servicio: ProductoService) {}
 
@@ -29,19 +32,47 @@ export class ProductosComponent implements OnInit {
  }
 
  ngAfterViewInit(){
-   fromEvent(this.input.nativeElement,'keyup')
+   fromEvent(this.FiltroProductos.nativeElement,'keyup')
    .pipe(
      debounceTime(200),
      distinctUntilChanged(),
      tap(()=>{
        this.CargarData();
-       console.log(this.input.nativeElement.value)
+     })
+    ).subscribe();
+
+   fromEvent(this.FiltroTipo.nativeElement,'keyup')
+   .pipe(
+     debounceTime(200),
+     distinctUntilChanged(),
+     tap(()=>{
+       this.CargarData();
+     })
+    ).subscribe();
+
+    fromEvent(this.FiltroMarca.nativeElement,'keyup')
+   .pipe(
+     debounceTime(200),
+     distinctUntilChanged(),
+     tap(()=>{
+       this.CargarData();
+     })
+    ).subscribe();
+
+   fromEvent(this.FiltroModelo.nativeElement,'keyup')
+   .pipe(
+     debounceTime(200),
+     distinctUntilChanged(),
+     tap(()=>{
+       this.CargarData();
      })
     ).subscribe();
  }
 
+
+
  CargarData(){
-   this.ListadoProductos.CargarProductos("","","",this.input.nativeElement.value)
+   this.ListadoProductos.CargarProductos(this.FiltroTipo.nativeElement.value,this.FiltroMarca.nativeElement.value,this.FiltroModelo.nativeElement.value,this.FiltroProductos.nativeElement.value)
  }
 
 }
