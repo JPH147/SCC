@@ -1,23 +1,65 @@
-<!-- Jean Paul es gay -->
 
 <mat-card>
-
   <!-- Encabezado -->
-
   <mat-card-title>
-    <div id = "tituloProd"> Listado de productos</div>
+    <div id = "tituloProd"> Listado de Productos</div>
   </mat-card-title>
 
-  <button mat-raised-button color="primary" class="agregar" [routerLink]="['agregar']">Agregar Producto</button>
 
-  <mat-icon>search</mat-icon>
-  <mat-form-field>
-    <input matInput placeholder="Buscar Producto" #input>
-  </mat-form-field>
+  <button mat-raised-button color="primary" class="agregar" [routerLink]="['agregar']">Adiconar Producto</button>
+
+  <!-- Buscar con filtros -->
+
+  <mat-accordion class="Acordion">
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Filtros de Busqueda
+        </mat-panel-title>
+
+      </mat-expansion-panel-header>
+
+      <mat-grid-list cols=4 rowHeight="70px">
+        <mat-grid-tile>
+          <mat-icon>search</mat-icon>
+          <mat-form-field>
+            <input matInput placeholder="Descripcion" #input>
+          </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <mat-icon>search</mat-icon>
+        <mat-form-field>
+          <input matInput placeholder="Tipo" #input>
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <mat-icon>search</mat-icon>
+        <mat-form-field>
+          <input matInput placeholder="Marca" #input>
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <mat-icon>search</mat-icon>
+        <mat-form-field>
+          <input matInput placeholder="Modelo" #input>
+        </mat-form-field>
+      </mat-grid-tile>
+
+    </mat-grid-list>
+
+    </mat-expansion-panel>
+
+    <mat-expansion-panel (opened)="panelOpenState = true"
+                         (closed)="panelOpenState = false">
+
+    </mat-expansion-panel>
+  </mat-accordion>
 
   <mat-card-content>
 
-    <div class="spinner-container" *ngIf="ListadoProductos.Cargando| async">
+    <div class = "spinner-container" *ngIf = "ListadoProductos.Cargando| async">
       <mat-spinner></mat-spinner>
     </div>
 
@@ -29,28 +71,37 @@
       </ng-container>
 
       <ng-container matColumnDef="tipo">
-        <mat-header-cell *matHeaderCellDef> Tipo </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef> TIPO </mat-header-cell>
         <mat-cell *matCellDef="let producto"> {{producto.tipo}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="marca">
-        <mat-header-cell *matHeaderCellDef> Marca </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef> MARCA </mat-header-cell>
         <mat-cell *matCellDef="let producto"> {{producto.marca}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="modelo">
-        <mat-header-cell *matHeaderCellDef> Modelo </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef> MODELO </mat-header-cell>
         <mat-cell *matCellDef="let producto"> {{producto.modelo}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="descripcion">
-        <mat-header-cell *matHeaderCellDef> Descripcion</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef> DESCRIPCION</mat-header-cell>
         <mat-cell *matCellDef="let producto"> {{producto.descripcion}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="unidad_medida">
-        <mat-header-cell *matHeaderCellDef> Unidad de medida </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef> UNIDAD MEDIDA </mat-header-cell>
         <mat-cell *matCellDef="let producto"> {{producto.unidad_medida}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="opciones">
+        <mat-header-cell *matHeaderCellDef> OPCIONES </mat-header-cell>
+        <mat-cell *matCellDef="let producto">
+          <button mat-icon-button color="primary"><mat-icon> visibility </mat-icon></button>
+          <button mat-icon-button color="primary"><mat-icon> edit </mat-icon></button>
+          <button mat-icon-button color="primary"><mat-icon> delete </mat-icon></button>
+        </mat-cell>
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>

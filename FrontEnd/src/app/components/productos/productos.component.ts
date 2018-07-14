@@ -11,39 +11,47 @@ import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
   selector: 'app-productos',
   templateUrl: './productos.component.html',
   styleUrls: ['./productos.component.css'],
-  providers:[ProductoService]
+  providers: [ProductoService]
 })
 
 export class ProductosComponent implements OnInit {
+  panelOpenState = false;
+  public articulos: Array<articulo>;
+  public contador: number;
+  public condicion: boolean = true;
 
-  ListadoProductos: ProductoDataSource;
-  Columnas: string[] = ['numero', 'tipo', 'marca', 'modelo','descripcion','unidad_medida'];
 
-  @ViewChild('input') input:ElementRef;
+  @ViewChild('input') input: ElementRef;
 
   constructor(private Servicio: ProductoService) {}
 
   ngOnInit() {
-   this.ListadoProductos=new ProductoDataSource(this.Servicio);
-   this.ListadoProductos.CargarProductos("","","","")
- }
+    this.contador = 1;
+    this.articulos = [
+      {numero: this.contador, nombre: '', cantidad: null, precio: null, condicion: this.condicion}
+    ];
 
- ngAfterViewInit(){
-   fromEvent(this.input.nativeElement,'keyup')
-   .pipe(
-     debounceTime(200),
-     distinctUntilChanged(),
-     tap(()=>{
-       this.CargarData();
-       console.log(this.input.nativeElement.value)
-     })
-    ).subscribe();
- }
+  }
 
- CargarData(){
-   this.ListadoProductos.CargarProductos("","","",this.input.nativeElement.value)
- }
+
+
+
+agregar() {
+  this.contador++;
+  this.condicion  = !this.condicion;
+  this.articulos.push({numero: this.contador, nombre: '', cantidad: null, precio: null, condicion: this.condicion});
+}
+
+Aceptar() {
+  console.log(this.articulos);
+}
 
 }
 
-// Jean Paul es gay
+export interface articulo {
+numero: number;
+nombre: string;
+cantidad: number;
+precio: number;
+condicion: boolean;
+}

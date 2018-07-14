@@ -1,150 +1,129 @@
 <mat-card>
-<!-- Cabecera de Ingreso de Productos -->
-    <mat-card-title>
-      <div id = "tituloProd"> Ingreso de Productos Nro.</div>
-    </mat-card-title>
+  <!-- Cabecera de Ingreso de Productos -->
+  <mat-card-title>
+    <div id = "tituloProd"> Ingreso de Productos Nro.</div>
+  </mat-card-title>
 
-<mat-card-header>
-<mat-card class="CabeceraSalidaVendedor">
-    <mat-grid-list cols="2" rowHeight="80px">
-      <mat-grid-tile>
-        <!-- Seleccionar Almacen -->
-        <mat-form-field class="Alma1">
-          <mat-select placeholder="Selecciona Almacen" >
-            <mat-option *ngFor="let food of foods" [value]="food.value">
-              {{food.viewValue}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <!--Campo ingresar Tipo de Ingreso a almacen -->
-        <mat-form-field class="Alma">
-            <mat-select placeholder="Tipo de  Ingreso" >
+  <mat-card-header>
+
+    <mat-card class="CabeceraSalidaVendedor">
+      <mat-grid-list cols="3" rowHeight="100px">
+        <mat-grid-tile>
+          <!-- Seleccionar Almacen -->
+          <mat-form-field>
+            <mat-select placeholder="Selecciona Almacen" >
               <mat-option *ngFor="let food of foods" [value]="food.value">
                 {{food.viewValue}}
               </mat-option>
             </mat-select>
           </mat-form-field>
         </mat-grid-tile>
+        <mat-grid-tile>
+          <!--Campo ingresar Tipo de Ingreso a almacen -->
+          <mat-form-field>
+              <mat-select placeholder="Tipo de  Ingreso" >
+                <mat-option *ngFor="let food of foods" [value]="food.value">
+                  {{food.viewValue}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+        </mat-grid-tile>
 
-      <mat-grid-tile>
-      <!--Campo ingresar Documento de Referencia -->
-      <form class="example-form">
-          <mat-form-field class="example-full-width">
-            <input type="text" placeholder="Ingresa Documento de Referencia" aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto">
-            <mat-autocomplete #auto="matAutocomplete">
-              <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                {{option}}
-              </mat-option>
-            </mat-autocomplete>
+        <mat-grid-tile>
+        <!--Campo ingresar Documento de Referencia -->
+        <form>
+            <mat-form-field>
+              <input type="text" placeholder="Ingresa Documento de Referencia" aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto">
+              <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                  {{option}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </form>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <!--Campo ingresar Proveedor -->
+          <form>
+              <mat-form-field>
+                <input type="text" placeholder="Ingresa Proveedor" aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto">
+                <mat-autocomplete #auto="matAutocomplete">
+                  <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                    {{option}}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </form>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <!--Campo ingresar Fecha de Ingreso almacen -->
+          <mat-form-field class ="IngFecha" class="Alma1">
+              <input matInput [matDatepicker]="picker" placeholder="Seleciona Fecha">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
-        </form>
-      </mat-grid-tile>
-
-      <mat-grid-tile>
-      <!--Campo ingresar Proveedor -->
-      <form class="example-form">
-          <mat-form-field class="example-full-width">
-            <input type="text" placeholder="Ingresa Proveedor" aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto">
-            <mat-autocomplete #auto="matAutocomplete">
-              <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                {{option}}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
-        </form>
-      </mat-grid-tile>
-
-
-    <mat-grid-tile>
-      <!--Campo ingresar Fecha de Ingreso almacen -->
-      <mat-form-field class ="IngFecha" class="Alma1">
-          <input matInput [matDatepicker]="picker" placeholder="Seleciona Fecha">
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-      </mat-form-field>
-
-      </mat-grid-tile>
-
-
-
-
+        </mat-grid-tile>
     </mat-grid-list>
-  </mat-card>
-</mat-card-header>
+    </mat-card>
+  </mat-card-header>
 
 
+<!-- Line de Detalles de  ingreso de Productos -->
 
-
-
-
-
-
-
-      <!-- Line de Detalles de  ingreso de Productos -->
 <mat-card-content>
-    <mat-card-subtitle>
-        <div id = "tituloProd"> Detalle Productos</div>
-      </mat-card-subtitle>
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
-    <!-- Checkbox Column -->
-    <ng-container matColumnDef="select">
-      <th mat-header-cell *matHeaderCellDef>
-        <mat-checkbox (change)="$event ? masterToggle() : null"
-                      [checked]="selection.hasValue() && isAllSelected()"
-                      [indeterminate]="selection.hasValue() && !isAllSelected()">
-        </mat-checkbox>
-      </th>
-      <td mat-cell *matCellDef="let row">
-        <mat-checkbox (click)="$event.stopPropagation()"
-                      (change)="$event ? selection.toggle(row) : null"
-                      [checked]="selection.isSelected(row)">
-        </mat-checkbox>
-      </td>
-    </ng-container>
+  <mat-card-subtitle>
+    Detalle de Productos
+  <button mat-mini-fab color="primary" class="agregar" (click) = 'agregar()'><mat-icon>add</mat-icon></button>
+  </mat-card-subtitle>
 
-    <!-- Position Column -->
-    <ng-container matColumnDef="position">
-      <th mat-header-cell *matHeaderCellDef> item </th>
-      <td mat-cell *matCellDef="let element"> {{element.position}} </td>
-    </ng-container>
+  <mat-grid-list cols="5" rowHeight="65px" *ngFor="let articulo of articulos">
+    <mat-grid-tile>
+      <mat-form-field>
+        <input matInput placeholder="Código">
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-form-field *ngIf="articulo.condicion">
+        <input matInput placeholder="Nombre" disabled>
+      </mat-form-field>
+      <button mat-icon-button color="accent" *ngIf="!articulo.condicion">
+        <mat-icon>add_circle</mat-icon>
+      </button>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-form-field>
+        <input matInput placeholder="Cantidad">
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-form-field>
+        <input matInput placeholder="Precio unitario">
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <button mat-mini-fab color="accent"><mat-icon>delete</mat-icon></button>
+    </mat-grid-tile>
+  </mat-grid-list>
 
-    <!-- Name Column -->
-    <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef> Nombre Producto </th>
-        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-    </ng-container>
-
-    <!-- Weight Column -->
-    <ng-container matColumnDef="weight">
-        <th mat-header-cell *matHeaderCellDef> unidad Medida </th>
-        <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
-    </ng-container>
-
-    <!-- Symbol Column -->
-    <ng-container matColumnDef="symbol">
-        <th mat-header-cell *matHeaderCellDef> Cantidad </th>
-        <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
-    </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-          (click)="selection.toggle(row)">
-      </tr>
-  </table>
+  <mat-card-actions>
+    <mat-grid-list cols=1 rowHeight=40px>
+      <mat-grid-tile>
+        <button mat-raised-button>Resetear</button>
+        <button mat-raised-button color="primary" (click) = "Aceptar()">Aceptar</button>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-card-actions>
+ </mat-card-content>
 
 
-    <!-- Copyright 2018 Google Inc. All Rights Reserved.
-      Use of this source code is governed by an MIT-style license that
-      can be found in the LICENSE file at http://angular.io/license -->
 
 
-</mat-card-content>
+    <mat-card-actions>
+        <button mat-raised-button color="primary" class="agregar">Grabar</button>
+        <button mat-raised-button color="accent" class="Eliminar">Eliminar Item</button>
+        <button mat-raised-button color="warn" class = "Salir"> Salir </button>
+    </mat-card-actions>
 
-<mat-card-actions>
-    <button mat-raised-button color="primary" class="agregar">Grabar</button>
-    <button mat-raised-button color="accent" class="Eliminar">Eliminar Item</button>
-    <button mat-raised-button color="warn" class = "Salir"> Salir </button>
-</mat-card-actions>
 
-</mat-card>

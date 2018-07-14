@@ -17,8 +17,9 @@ mat-card{
 }
 
 .agregar{
-  float:right
-}
+  float:right;
+ margin-left: 5px
+ }
 
 .spinner-container{
   position: absolute;
@@ -28,4 +29,9 @@ mat-card{
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.Acordion{
+
+padding: 5px
 }
