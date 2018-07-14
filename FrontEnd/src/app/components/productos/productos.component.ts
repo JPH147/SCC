@@ -15,9 +15,6 @@ import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
 })
 
 export class ProductosComponent implements OnInit {
-  panelOpenState = false;
-  public contador: number;
-  public condicion: boolean = true;
 
   ListadoProductos: ProductoDataSource;
   Columnas: string[] = ['numero', 'descripcion', 'tipo', 'marca', 'modelo','unidad_medida'];

@@ -18,7 +18,8 @@ mat-card{
 
 .agregar{
   float:right;
- margin-left: 5px
+  margin-left: 5px;
+  z-index: 1
  }
 
 .spinner-container{
