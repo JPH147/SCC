@@ -1,5 +1,6 @@
+import { VentanaEmergenteProductos } from './ventana-emergente/ventanaemergente';
 import {Component, OnInit, ViewChild, AfterViewInit, ElementRef} from '@angular/core';
-import {MatPaginator, MatSort} from '@angular/material';
+import { MatPaginator, MatSort, MatDialog } from '@angular/material';
 import {merge, Observable, of as observableOf} from 'rxjs';
 import {catchError, map, startWith, switchMap} from 'rxjs/operators';
 import {ProductoService} from './productos.service';
@@ -19,12 +20,16 @@ export class ProductosComponent implements OnInit {
   ListadoProductos: ProductoDataSource;
   Columnas: string[] = ['numero', 'descripcion', 'tipo', 'marca', 'modelo', 'unidad_medida', 'opciones'];
 
+
   @ViewChild('InputProducto') FiltroProductos: ElementRef;
   @ViewChild('InputTipo') FiltroTipo: ElementRef;
   @ViewChild('InputMarca') FiltroMarca: ElementRef;
   @ViewChild('InputModelo') FiltroModelo: ElementRef;
 
-  constructor(private Servicio: ProductoService) {}
+  constructor(
+    private Servicio: ProductoService,
+    public DialogoProductos: MatDialog
+  ) {}
 
   ngOnInit() {
    this.ListadoProductos = new ProductoDataSource(this.Servicio);
@@ -71,6 +76,12 @@ export class ProductosComponent implements OnInit {
 
  CargarData(){
    this.ListadoProductos.CargarProductos(this.FiltroTipo.nativeElement.value,this.FiltroMarca.nativeElement.value,this.FiltroModelo.nativeElement.value,this.FiltroProductos.nativeElement.value)
+ }
+
+ Agregar(){
+   let VentanaProductos = this.DialogoProductos.open(VentanaEmergenteProductos,{
+     width: '800px'
+   })
  }
 
 }

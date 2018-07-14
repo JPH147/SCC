@@ -62,7 +62,7 @@ import { ClientesComponent } from './components/clientes/clientes.component';
 import { VentasComponent } from './components/ventas/ventas.component';
 import {DialogoComponent} from './components/salida-vendedores/salida-vendedores.component';
 import { ListadoSalidaVendedoresComponent } from './components/listado-salida-vendedores/listado-salida-vendedores.component';
-
+import {VentanaEmergenteProductos} from './components/productos/ventana-emergente/ventanaemergente'
 @NgModule({
   imports: [
 /* Angular Material */
@@ -128,8 +128,13 @@ import { ListadoSalidaVendedoresComponent } from './components/listado-salida-ve
     VentasComponent,
     DialogoComponent,
     ListadoSalidaVendedoresComponent,
+    VentanaEmergenteProductos
    ],
-  entryComponents: [AppComponent, DialogoComponent],
+  entryComponents: [
+    AppComponent,
+    DialogoComponent,
+    VentanaEmergenteProductos
+  ],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider]
 })
