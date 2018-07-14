@@ -1,66 +1,11 @@
-<<<<<<< HEAD
-
-=======
->>>>>>> ed4489ae82276981c3c82a86b4fdcfe053623578
 <mat-card>
   <!-- Encabezado -->
   <mat-card-title>
     <div id = "tituloProd"> Listado de Productos</div>
   </mat-card-title>
 
+  <button mat-raised-button color="primary" class="agregar" [routerLink]="['agregar']">Agregar</button>
 
-<<<<<<< HEAD
-  <button mat-raised-button color="primary" class="agregar" [routerLink]="['agregar']">Adiconar Producto</button>
-
-  <!-- Buscar con filtros -->
-
-  <mat-accordion class="Acordion">
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Filtros de Busqueda
-        </mat-panel-title>
-
-      </mat-expansion-panel-header>
-
-      <mat-grid-list cols=4 rowHeight="70px">
-        <mat-grid-tile>
-          <mat-icon>search</mat-icon>
-          <mat-form-field>
-            <input matInput placeholder="Descripcion" #input>
-          </mat-form-field>
-      </mat-grid-tile>
-
-      <mat-grid-tile>
-        <mat-icon>search</mat-icon>
-        <mat-form-field>
-          <input matInput placeholder="Tipo" #input>
-        </mat-form-field>
-      </mat-grid-tile>
-
-      <mat-grid-tile>
-        <mat-icon>search</mat-icon>
-        <mat-form-field>
-          <input matInput placeholder="Marca" #input>
-        </mat-form-field>
-      </mat-grid-tile>
-      <mat-grid-tile>
-        <mat-icon>search</mat-icon>
-        <mat-form-field>
-          <input matInput placeholder="Modelo" #input>
-        </mat-form-field>
-      </mat-grid-tile>
-
-    </mat-grid-list>
-
-    </mat-expansion-panel>
-
-    <mat-expansion-panel (opened)="panelOpenState = true"
-                         (closed)="panelOpenState = false">
-
-    </mat-expansion-panel>
-  </mat-accordion>
-=======
   <mat-grid-list cols=5 rowHeight="70px">
     <mat-grid-tile>
       <mat-icon>search</mat-icon>
@@ -87,7 +32,6 @@
       </mat-form-field>
     </mat-grid-tile>
   </mat-grid-list>
->>>>>>> ed4489ae82276981c3c82a86b4fdcfe053623578
 
   <mat-card-content>
 
