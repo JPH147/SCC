@@ -31,12 +31,6 @@ mat-card{
   justify-content: center;
 }
 
-<<<<<<< HEAD
-.Acordion{
-
-padding: 5px
-}
-=======
 .mat-column-numero,
 .mat-column-tipo,
 .mat-column-marca,
@@ -45,4 +39,3 @@ padding: 5px
 {
   max-width: 10%;
 }
->>>>>>> ed4489ae82276981c3c82a86b4fdcfe053623578
