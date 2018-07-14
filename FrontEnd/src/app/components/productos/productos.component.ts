@@ -36,6 +36,7 @@ export class ProductosComponent implements OnInit {
    this.ListadoProductos.CargarProductos('', '', '', '');
  }
 
+ // tslint:disable-next-line:use-life-cycle-interface
  ngAfterViewInit() {
    fromEvent(this.FiltroProductos.nativeElement, 'keyup')
    .pipe(
@@ -46,7 +47,7 @@ export class ProductosComponent implements OnInit {
      })
     ).subscribe();
 
-   fromEvent(this.FiltroTipo.nativeElement,'keyup')
+   fromEvent(this.FiltroTipo.nativeElement, 'keyup')
    .pipe(
      debounceTime(200),
      distinctUntilChanged(),
@@ -68,20 +69,24 @@ export class ProductosComponent implements OnInit {
    .pipe(
      debounceTime(200),
      distinctUntilChanged(),
-     tap(()=> {
+     tap(() => {
        this.CargarData();
      })
     ).subscribe();
  }
 
- CargarData(){
-   this.ListadoProductos.CargarProductos(this.FiltroTipo.nativeElement.value,this.FiltroMarca.nativeElement.value,this.FiltroModelo.nativeElement.value,this.FiltroProductos.nativeElement.value)
+ CargarData() {
+   this.ListadoProductos.CargarProductos(this.FiltroTipo.nativeElement.value,
+   this.FiltroMarca.nativeElement.value,
+   this.FiltroModelo.nativeElement.value,
+   this.FiltroProductos.nativeElement.value);
  }
 
- Agregar(){
-   let VentanaProductos = this.DialogoProductos.open(VentanaEmergenteProductos,{
+ Agregar() {
+   // tslint:disable-next-line:prefer-const
+   let VentanaProductos = this.DialogoProductos.open(VentanaEmergenteProductos, {
      width: '800px'
-   })
+   });
  }
 
 }
