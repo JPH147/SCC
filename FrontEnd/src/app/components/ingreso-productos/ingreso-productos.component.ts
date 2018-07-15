@@ -16,6 +16,11 @@ export interface Food {
 })
 
   export class IngresoProductosComponent implements OnInit {
+
+    public articulos: Array <articulo>;
+    public contador: number;
+    public almacenes: Array<any>;
+
     selected = 'option2';
     myControl = new FormControl();
     options: string[] = ['One', 'Two', 'Three'];
@@ -32,12 +37,19 @@ export interface Food {
     constructor() { }
 
     ngOnInit() {
-      this.filteredOptions = this.myControl.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => this._filter(value))
-      );
-    }
+        this.filteredOptions = this.myControl.valueChanges
+        .pipe(
+          startWith(''),
+          map(value => this._filter(value))
+        );
+
+      this.contador = 1;
+      this.articulos = [
+        {numero: this.contador, nombre: '', cantidad: null, precio: null}
+      ];
+
+  }
+
     private _filter(value: string): string[] {
         const filterValue = value.toLowerCase();
 
@@ -50,14 +62,29 @@ export interface Food {
 /** Selects all rows if they are not all selected; otherwise clear selection. */
     masterToggle() {
 
-    }
   }
 
-  export interface PeriodicElement {
-    name: string;
-    position: number;
-    weight: number;
-    symbol: string;
+  agregar() {
+    this.contador++;
+    this.articulos.push({numero: this.contador, nombre: '', cantidad: null, precio: null});
   }
 
+  Aceptar() {
+    console.log(this.articulos);
+  }
+}
 
+
+export interface PeriodicElement {
+  name: string;
+  position: number;
+  weight: number;
+  symbol: string;
+
+}
+export interface articulo {
+  numero: number;
+  nombre: string;
+  cantidad: number;
+  precio: number;
+}

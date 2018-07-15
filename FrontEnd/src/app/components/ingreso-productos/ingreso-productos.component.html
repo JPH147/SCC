@@ -7,7 +7,7 @@
   <mat-card-header>
 
     <mat-card class="CabeceraSalidaVendedor">
-      <mat-grid-list cols="3" rowHeight="100px">
+      <mat-grid-list cols="3" rowHeight="80px">
         <mat-grid-tile>
           <!-- Seleccionar Almacen -->
           <mat-form-field>
@@ -29,18 +29,12 @@
             </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile>
+
         <!--Campo ingresar Documento de Referencia -->
-        <form>
-            <mat-form-field>
-              <input type="text" placeholder="Ingresa Documento de Referencia" aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto">
-              <mat-autocomplete #auto="matAutocomplete">
-                <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                  {{option}}
-                </mat-option>
-              </mat-autocomplete>
-            </mat-form-field>
-          </form>
+        <mat-grid-tile >
+            <mat-form-field class="input-ventana">
+            <input matInput placeholder="Ingresar Documento">
+          </mat-form-field>
         </mat-grid-tile>
 
         <mat-grid-tile>
@@ -56,6 +50,7 @@
               </mat-form-field>
             </form>
         </mat-grid-tile>
+
         <mat-grid-tile>
           <!--Campo ingresar Fecha de Ingreso almacen -->
           <mat-form-field class ="IngFecha" class="Alma1">
@@ -70,60 +65,58 @@
 
 
 <!-- Line de Detalles de  ingreso de Productos -->
+<br>
 
 <mat-card-content>
 
-  <mat-card-subtitle>
-    Detalle de Productos
-  <button mat-mini-fab color="primary" class="agregar" (click) = 'agregar()'><mat-icon>add</mat-icon></button>
-  </mat-card-subtitle>
+    <mat-card-subtitle>
+        Detalle de Productos
+      <button mat-mini-fab color="primary" class="agregar" (click) = 'agregar()'><mat-icon>add</mat-icon></button>
+    </mat-card-subtitle>
+<br>
 
-  <mat-grid-list cols="5" rowHeight="65px" *ngFor="let articulo of articulos">
-    <mat-grid-tile>
-      <mat-form-field>
-        <input matInput placeholder="Código">
-      </mat-form-field>
-    </mat-grid-tile>
-    <mat-grid-tile>
-      <mat-form-field *ngIf="articulo.condicion">
-        <input matInput placeholder="Nombre" disabled>
-      </mat-form-field>
-      <button mat-icon-button color="accent" *ngIf="!articulo.condicion">
-        <mat-icon>add_circle</mat-icon>
-      </button>
-    </mat-grid-tile>
-    <mat-grid-tile>
-      <mat-form-field>
-        <input matInput placeholder="Cantidad">
-      </mat-form-field>
-    </mat-grid-tile>
-    <mat-grid-tile>
-      <mat-form-field>
-        <input matInput placeholder="Precio unitario">
-      </mat-form-field>
-    </mat-grid-tile>
-    <mat-grid-tile>
-      <button mat-mini-fab color="accent"><mat-icon>delete</mat-icon></button>
-    </mat-grid-tile>
-  </mat-grid-list>
+    <mat-card class="CabeceraSalidaVendedor">
 
-  <mat-card-actions>
-    <mat-grid-list cols=1 rowHeight=40px>
-      <mat-grid-tile>
-        <button mat-raised-button>Resetear</button>
-        <button mat-raised-button color="primary" (click) = "Aceptar()">Aceptar</button>
-      </mat-grid-tile>
-    </mat-grid-list>
-  </mat-card-actions>
- </mat-card-content>
+      <mat-grid-list cols="5" rowHeight="70px" *ngFor="let articulo of articulos">
 
+        <mat-grid-tile>
+          <mat-form-field>
+            <input matInput placeholder="Código">
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field>
+            <input matInput placeholder="Nombre" disabled>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field>
+            <input matInput placeholder="Cantidad">
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field>
+            <input matInput placeholder="Precio unitario">
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <button mat-mini-fab color="primary"><mat-icon>delete</mat-icon></button>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-card>
+
+  </mat-card-content>
 
 
 
     <mat-card-actions>
+
         <button mat-raised-button color="primary" class="agregar">Grabar</button>
-        <button mat-raised-button color="accent" class="Eliminar">Eliminar Item</button>
-        <button mat-raised-button color="warn" class = "Salir"> Salir </button>
-    </mat-card-actions>
 
+      </mat-card-actions>
 
+</mat-card>
