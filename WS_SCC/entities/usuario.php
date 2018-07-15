@@ -132,5 +132,46 @@ Class Usuario{
             return null;
         }
     }
+    function update()
+    {
+        $query = "CALL sp_actualizarusuario (:idusuario,:usr_nombre,:usr_usuario,:usr_clave,:idperfil)"; 
+
+        $result = $this->conn->prepare($query);
+
+        $this->idusuario=htmlspecialchars(strip_tags($this->idusuario));
+        $this->usr_nombre=htmlspecialchars(strip_tags($this->usr_nombre));
+        $this->usr_usuario=htmlspecialchars(strip_tags($this->usr_usuario));
+        $this->usr_clave=htmlspecialchars(strip_tags($this->usr_clave));
+        $this->idperfil=htmlspecialchars(strip_tags($this->idperfil));
+
+        $result->bindParam(":idusuario", $this->idusuario);
+        $result->bindParam(":usr_nombre", $this->usr_nombre);
+        $result->bindParam(":usr_usuario", $this->usr_usuario);
+        $result->bindParam(":usr_clave", $this->usr_clave);
+        $result->bindParam(":idperfil", $this->idperfil);
+
+        if($result->execute())
+        {
+            return true;
+        }
+        
+        return false;
+    }
+    function delete()
+    {
+        $query = "call sp_eliminarusuario(?)";
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->idusuario);
+
+        if($result->execute())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+    }
 }
 ?>

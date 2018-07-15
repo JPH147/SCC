@@ -25,7 +25,7 @@ try
     $usuario_list = $usuario->read();
     if (count(array_filter($usuario_list))>0)
     {
-        print_json("0000", count(array_filter($usuario_list)), $usuario_list);
+        print_json("0000", "OK", $usuario_list);
     }
     else
     {

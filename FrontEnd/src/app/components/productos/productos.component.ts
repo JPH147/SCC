@@ -32,6 +32,7 @@ export class ProductosComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+   this.Servicio.Agregar(1,"JEAN PIERRE").subscribe(res=>console.log(res));
    this.ListadoProductos = new ProductoDataSource(this.Servicio);
    this.ListadoProductos.CargarProductos('', '', '', '');
  }
@@ -87,6 +88,11 @@ export class ProductosComponent implements OnInit {
    let VentanaProductos = this.DialogoProductos.open(VentanaEmergenteProductos, {
      width: '800px'
    });
+ }
+
+ Eliminar(id){
+   this.Servicio.Eliminar(id).subscribe(res=>console.log(res));
+   this.CargarData()
  }
 
 }

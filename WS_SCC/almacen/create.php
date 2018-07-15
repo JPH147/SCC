@@ -6,7 +6,7 @@
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
  
     include_once '../config/database.php';
-    include_once '../entities/producto.php';
+    include_once '../entities/almacen.php';
     include_once '../shared/utilities.php';
 
     $database = new Database();
@@ -14,21 +14,25 @@
 
     try
     {
-        $producto = new Producto($db);
+        $almacen = new Almacen($db);
+
         $data = json_decode(file_get_contents('php://input'), true);
 
-        if (($_POST["id_modelo"])!=null  && !empty(trim($_POST["prd_descripcion"])))
+        if (!empty(trim($_POST["alm_nombre"])) && !empty(trim($_POST["alm_descripcion"]))
+            && !empty(trim($_POST["alm_estado"])))
         {
-            $producto->id_modelo = trim($_POST["id_modelo"]);
-            $producto->prd_descripcion = trim($_POST["prd_descripcion"]);
+            $almacen->alm_nombre = trim($_POST["alm_nombre"]);
+            $almacen->alm_descripcion = trim($_POST["alm_descripcion"]);
+            $almacen->alm_estado = trim($_POST["alm_estado"]);
 
-            if($producto->create())
+
+            if($almacen->create())
             {
-                print_json("0000", "Se creó el producto satisfactoriamente.", "");
+                print_json("0000", "Se creó el almacen satisfactoriamente.", "");
             }
             else
             {
-                print_json("9999", "Ocurrió un error al crear el producto.", "");
+                print_json("9999", "Ocurrió un error al crear el almacen.", "");
             }
         }
         else
@@ -38,7 +42,7 @@
     }
     catch(Exception $exception)
     {
-        print_json("9999", "Ocurrió un error al crear el producto.", $exception->getMessage());
+        print_json("9999", "Ocurrió un error al crear el almacen.", $exception->getMessage());
     }
 
 ?>

@@ -14,10 +14,14 @@ Class Producto{
     public $prd_descripcion;
     public $und_nombre;
 
+    public $id_modelo;
+    public $id_producto;
+
     public function __construct($db){
         $this->conn = $db;
     }
 
+    /* Listar productos */
     function read(){
 
         $query = "CALL sp_listarproducto(?,?,?,?)";
@@ -55,21 +59,39 @@ Class Producto{
         return $producto_list;
     }
 
-    // function read(){
-    //     $query = "CALL sp_listarproducto";
-    //     $result = $this->conn->prepare($query);
-    //     $result->execute();
-    //     return $result;
-    // }
+    /* Seleccionar producto */
+    function readxId()
+    {
+        $query ="call sp_listarproductoxId(?)";
+        
+        $result = $this->conn->prepare($query);
+        
+        $result->bindParam(1, $this->id_producto);
+        
+        $result->execute();
+    
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+        
+        $this->idproducto=$row['idproducto'];
+        $this->tprd_nombre=$row['tprd_nombre'];
+        $this->mrc_nombre=$row['mrc_nombre'];
+        $this->mdl_nombre=$row['mdl_nombre'];
+        $this->prd_descripcion=$row['prd_descripcion'];
+        $this->und_nombre=$row['und_nombre'];
+    }
 
+    /* Crear producto */
     function create()
     {
-        $query = "INSERT INTO table_name SET prf_nombre=:prf_nombre";
+        $query = "CALL sp_crearproducto(:id_modelo, :prd_descripcion)";
+
         $result = $this->conn->prepare($query);
 
-        $this->prf_nombre=htmlspecialchars(strip_tags($this->prf_nombre));
+        $result->bindParam(":id_modelo", $this->id_modelo);
+        $result->bindParam(":prd_descripcion", $this->prd_descripcion);
 
-        $result->bindParam(":prf_nombre", $this->prf_nombre);
+        $this->id_modelo=htmlspecialchars(strip_tags($this->id_modelo));
+        $this->prd_descripcion=htmlspecialchars(strip_tags($this->prd_descripcion));
 
         if($result->execute())
         {
@@ -78,15 +100,47 @@ Class Producto{
         
         return false;
     }
-    function readxId()
+
+    /* Eliminar producto */
+    function delete()
     {
-        $query ="SELECT prf_nombre FROM table_name WHERE idperfil = ?";
+        $query = "call sp_eliminarproducto(?)";
         $result = $this->conn->prepare($query);
-        $result->bindParam(1, $this->idperfil);
-        $result->execute();
-    
-        $row = $result->fetch(PDO::FETCH_ASSOC);
-        $this->prf_nombre=$row['prf_nombre'];
+
+        $result->bindParam(1, $this->idproducto);
+
+        if($result->execute())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+    }
+
+    /* Actualizar producto */
+    function update()
+    {
+        $query = "call sp_actualizarproducto(:id_producto, :id_modelo, :descripcion)";
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":id_producto", $this->id_producto);
+        $result->bindParam(":id_modelo", $this->id_modelo);
+        $result->bindParam(":descripcion", $this->prd_descripcion);
+
+        $this->id_producto=htmlspecialchars(strip_tags($this->id_producto));
+        $this->id_modelo=htmlspecialchars(strip_tags($this->id_modelo));
+        $this->prd_descripcion=htmlspecialchars(strip_tags($this->prd_descripcion));
+
+        if($result->execute())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
     }
 }
 ?>
