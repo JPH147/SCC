@@ -76,20 +76,18 @@ Class Almacen{
 
     function update()
     {
-        $query = "CALL sp_actualizaralmacen (:pidalmacen,:palm_nombre,:palm_descripcion,:palm_estado)"; 
+        $query = "CALL sp_actualizaralmacen (:pidalmacen,:palm_nombre,:palm_descripcion)"; 
 
         $result = $this->conn->prepare($query);
 
         $this->idalmacen=htmlspecialchars(strip_tags($this->idalmacen));
         $this->alm_nombre=htmlspecialchars(strip_tags($this->alm_nombre));
         $this->alm_descripcion=htmlspecialchars(strip_tags($this->alm_descripcion));
-        $this->alm_estado=htmlspecialchars(strip_tags($this->alm_estado));
 
 
         $result->bindParam(":pidalmacen", $this->idalmacen);
         $result->bindParam(":palm_nombre", $this->alm_nombre);
         $result->bindParam(":palm_descripcion", $this->alm_descripcion);
-        $result->bindParam(":palm_estado", $this->alm_estado);
 
 
         if($result->execute())

@@ -18,13 +18,11 @@
 
         $data = json_decode(file_get_contents('php://input'), true);
 
-        if (($_POST["idalmacen"]) !=null && !empty(trim($_POST["alm_nombre"])) && !empty(trim($_POST["alm_descripcion"]))
-            && ($_POST["alm_estado"])!=null)
+        if (($_POST["idalmacen"]) !=null && !empty(trim($_POST["alm_nombre"])) && !empty(trim($_POST["alm_descripcion"])))
         {
             $almacen->idalmacen = trim($_POST["idalmacen"]);
             $almacen->alm_nombre = trim($_POST["alm_nombre"]);
             $almacen->alm_descripcion = trim($_POST["alm_descripcion"]);
-            $almacen->alm_estado = trim($_POST["alm_estado"]);
 
 
             if($almacen->update())

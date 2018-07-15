@@ -7,27 +7,27 @@
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
  
     include_once '../config/database.php';
-    include_once '../entities/almacen.php';
+    include_once '../entities/usuario.php';
     include_once '../shared/utilities.php';
 
     $database = new Database();
     $db = $database->getConnection();
 
     try{
-    	$almacen = new Almacen($db);
+    	$usuario = new Usuario($db);
     	$data = json_decode(file_get_contents('php://input'),true);
 
-    	if(($_POST["idalmacen"])!=null)
+    	if(($_POST["idusuario"])!=null)
     	{
-    		$almacen->idalmacen = $_POST["idalmacen"];
+    		$usuario->idusuario = $_POST["idusuario"];
 
-	    	if($almacen->delete())
+	    	if($usuario->delete())
 	        {
-	                print_json("0000", "Se eliminó el almacen satisfactoriamente.", "");
+	                print_json("0000", "Se eliminó el usuario satisfactoriamente.", "");
 	        }
 	        else
 	        {
-	                print_json("9999", "Ocurrió un error al eliminar el almacen.", "");
+	                print_json("9999", "Ocurrió un error al eliminar el usuario.", "");
 	        }
 	    }
     	else
@@ -37,7 +37,7 @@
     }
     catch(Exception $exception)
     {
-        print_json("9999", "Ocurrió un error al eliminar el almacen.", $exception->getMessage());
+        print_json("9999", "Ocurrió un error al eliminar el usuario.", $exception->getMessage());
     }
 
 ?>
