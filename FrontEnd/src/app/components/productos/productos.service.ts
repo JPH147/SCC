@@ -42,12 +42,10 @@ export class ProductoService {
 		modelo:number,
 		descripcion:string
 	):Observable<any>{
-		let params = "id_modelo="+modelo+"prd_descripcion="+descripcion;
-		let params2 = "";
+		let params = "id_modelo="+modelo+"&prd_descripcion="+descripcion;
 		let headers = new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded');
-		return this.http.post(this.url+'producto/create.php', params2, {headers: headers});
+		return this.http.post(this.url+'producto/create.php', params, {headers: headers});
 	}
-
 }
 
 export interface Producto {
@@ -59,4 +57,9 @@ export interface Producto {
 	modelo: string;
 	descripcion: string;
 	unidad_medida: string;
+}
+
+export interface Maestro{
+	id_modelo: number;
+	prd_descripcion: string
 }
