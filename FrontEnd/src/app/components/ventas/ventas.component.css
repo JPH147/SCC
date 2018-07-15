@@ -5,10 +5,10 @@ mat-card{
     margin-right: auto;
     margin-top: 20px;
     margin-bottom: 10px;
-    min-height: 300px;
+    min-height: 100px;
   }
 
-.js .inputfile {
+.inputfile {
     width: 0.1px;
     height: 0.1px;
     opacity: 0;
@@ -31,30 +31,19 @@ mat-card{
     /* 10px 20px */
 }
 
-.no-js .inputfile + label {
-    display: none;
-}
-
 .inputfile:focus + label,
 .inputfile.has-focus + label {
     outline: 1px dotted #000;
-    outline: -webkit-focus-ring-color auto 5px;
-}
-
-.inputfile + label * {
-    /* pointer-events: none; */
-    /* in case of FastClick lib use */
+    outline: -webkit-focus-ring-color none;
 }
 
 .inputfile + label svg {
-    width: 1em;
-    height: 1em;
+    width: 1.5em;
+    height: 1.5em;
     vertical-align: middle;
     fill: currentColor;
-    margin-top: -0.25em;
-    /* 4px */
-    margin-right: 0.25em;
-    /* 4px */
+    margin-top: 0.45em;
+    margin-left: 0.45em;
 }
 .inputfile-3 + label {
     color: #8561c5;
@@ -68,7 +57,6 @@ mat-card{
 
 .box {
 	background-color: transparent;
-    float: right;
 }
 .box + .box {
 	margin-top: 2.5rem;
@@ -94,4 +82,7 @@ mat-card{
   .button-row button,
   .button-row a {
     margin-right: 8px;
+  }
+  table {
+    width: 60%;
   }
