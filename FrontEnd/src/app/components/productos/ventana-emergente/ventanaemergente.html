@@ -7,7 +7,7 @@
       <mat-grid-tile>
         <form>
             <mat-form-field>
-              <mat-select placeholder='Selecciona Tipo' name = 'food'>
+              <mat-select placeholder='Selecciona Tipo'>
                 <mat-option [value] = ""> CELULAR </mat-option>
                 <mat-option [value] = ""> LIBRO </mat-option>
                 <mat-option [value] = ""> TELEVISOR </mat-option>
@@ -19,10 +19,10 @@
       <mat-grid-tile>
           <form>
               <mat-form-field>
-                <mat-select placeholder='Selecciona Marca' name = 'food'>
-                  <mat-option *ngFor = "let food of foods" [value] = "food.value">
-                    {{food.viewValue}}
-                  </mat-option>
+                <mat-select placeholder='Selecciona Marca'>
+                <mat-option [value] = ""> CELULAR </mat-option>
+                <mat-option [value] = ""> LIBRO </mat-option>
+                <mat-option [value] = ""> TELEVISOR </mat-option>
                 </mat-select>
               </mat-form-field>
             </form>
@@ -31,16 +31,14 @@
       <mat-grid-tile>
           <form>
               <mat-form-field>
-                <mat-select placeholder='Selecciona Modelo' name = 'food'>
-                  <mat-option *ngFor = "let food of foods" [value] = "food.value">
-                    {{food.viewValue}}
-                  </mat-option>
+                <mat-select placeholder='Selecciona Modelo'>
+                <mat-option [value] = ""> CELULAR </mat-option>
+                <mat-option [value] = ""> LIBRO </mat-option>
+                <mat-option [value] = ""> TELEVISOR </mat-option>
                 </mat-select>
               </mat-form-field>
             </form>
       </mat-grid-tile>
-
-
 
       <mat-grid-tile>
           <mat-form-field >
@@ -59,9 +57,12 @@
   </mat-card-content>
 
   <mat-card-actions>
-      <button mat-raised-button color="primary">Grabar</button>
-  <button mat-raised-button color="accent">Salir</button>
-    </mat-card-actions>
+    <mat-grid-list cols=1 rowHeight="40px">
+      <mat-grid-tile>
+        <button mat-raised-button color="primary">Grabar</button>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-card-actions>
 
 
 </mat-card>
