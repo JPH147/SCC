@@ -38,7 +38,7 @@
     }
     catch(Exception $exception)
     {
-        print_json("9999", "Ocurrió un error al crear el producto.", $exception->getMessage());
+        print_json("9999", "Ocurrió un error al eliminar el producto.", $exception->getMessage());
     }
 
 ?>
