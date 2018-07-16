@@ -9,6 +9,7 @@ import {ErrorStateMatcher} from '@angular/material/core';
   styleUrls: ['./ventanaemergente.css'],
 })
 
+// tslint:disable-next-line:component-class-suffix
 export class VentanaEmergenteProductos {
   selectedValue: string;
 
