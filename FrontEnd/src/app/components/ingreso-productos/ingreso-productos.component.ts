@@ -82,6 +82,7 @@ export interface PeriodicElement {
   symbol: string;
 
 }
+// tslint:disable-next-line:class-name
 export interface articulo {
   numero: number;
   nombre: string;

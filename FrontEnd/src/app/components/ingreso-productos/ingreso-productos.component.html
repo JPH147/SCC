@@ -72,8 +72,9 @@
     <mat-card-subtitle>
         Detalle de Productos
       <button mat-mini-fab color="primary" class="agregar" (click) = 'agregar()'><mat-icon>add</mat-icon></button>
+
     </mat-card-subtitle>
-<br>
+    <br>
 
     <mat-card class="CabeceraSalidaVendedor">
 
@@ -81,15 +82,14 @@
 
         <mat-grid-tile>
           <mat-form-field>
-            <input matInput placeholder="Código">
+            <mat-select placeholder="Selecciona Producto">
+              <mat-option *ngFor="let food of foods" >
+                {{food.viewValue}}
+              </mat-option>
+            </mat-select>
           </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile>
-          <mat-form-field>
-            <input matInput placeholder="Nombre" disabled>
-          </mat-form-field>
-        </mat-grid-tile>
 
         <mat-grid-tile>
           <mat-form-field>
@@ -104,7 +104,10 @@
         </mat-grid-tile>
 
         <mat-grid-tile>
+            <button mat-mini-fab color="primary" [routerLink]="['ventanaseries']"><mat-icon> reorder </mat-icon> </button>
+
           <button mat-mini-fab color="primary"><mat-icon>delete</mat-icon></button>
+
         </mat-grid-tile>
       </mat-grid-list>
     </mat-card>
@@ -115,7 +118,8 @@
 
     <mat-card-actions>
 
-        <button mat-raised-button color="primary" class="agregar">Grabar</button>
+        <button mat-raised-button color="primary">Grabar</button>
+        <button mat-raised-button color="accent">Limpiar</button>
 
       </mat-card-actions>
 

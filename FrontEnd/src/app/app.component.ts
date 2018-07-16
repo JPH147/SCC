@@ -9,10 +9,18 @@ export class AppComponent {
   public estado: boolean;
   public usuarios;
 
-  constructor() { }
+  constructor() {
 
+   }
+
+  // tslint:disable-next-line:use-life-cycle-interface
   ngOnInit() {
-  	this.usuarios={nombre:"Jean Pierre Rodriguez Farfan",rol:"Administrador", cargo:"Tercero", ultimo_login:"03/08/2018", email:"jeanpierre.rodriguez@genussolucionesti.com", telefono:"996040111"}
-  }
-
+    this.usuarios = { nombre: 'Jean Pierre Rodriguez Farfan',
+    rol: 'Administrador',
+    cargo: 'Tercero',
+    ultimo_login: '"03/08/2018',
+    email: 'jeanpierre.rodriguez@genussolucionesti.com',
+    telefono: '996040111',
+  };
+ }
 }
