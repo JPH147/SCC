@@ -1,10 +1,12 @@
+import { ventanaseries } from './ventana-series/ventanaseries';
+import { DialogData } from './../salida-vendedores/salida-vendedores.component';
 import { Component, OnInit } from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
 import {SelectionModel} from '@angular/cdk/collections';
 import {MatTableDataSource} from '@angular/material';
-
+import { MatDialog } from '@angular/material';
 export interface Food {
   value: string;
   viewValue: string;
@@ -20,6 +22,7 @@ export interface Food {
     public articulos: Array <articulo>;
     public contador: number;
     public almacenes: Array<any>;
+    public seriventana: string;
 
     selected = 'option2';
     myControl = new FormControl();
@@ -34,7 +37,9 @@ export interface Food {
       {value: 'tacos-2', viewValue: 'Almacen Tres'}
     ];
 
-    constructor() { }
+    constructor(public DialogoSerie: MatDialog) {
+
+     }
 
     ngOnInit() {
         this.filteredOptions = this.myControl.valueChanges
@@ -72,8 +77,16 @@ export interface Food {
   Aceptar() {
     console.log(this.articulos);
   }
-}
 
+
+AgregarSerie() {
+  const serieventana = this.DialogoSerie.open(ventanaseries, {
+    width: '600px'
+  });
+
+  }
+
+}
 
 export interface PeriodicElement {
   name: string;
@@ -89,3 +102,4 @@ export interface articulo {
   cantidad: number;
   precio: number;
 }
+
