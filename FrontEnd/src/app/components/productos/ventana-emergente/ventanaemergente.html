@@ -5,9 +5,9 @@
   <mat-card-content>
     <mat-grid-list cols="2" rowHeight="120px">
       <mat-grid-tile>
-        <form>
+        <form [formGroup]="ProductosForm">
             <mat-form-field>
-              <mat-select placeholder='Selecciona Tipo'>
+              <mat-select placeholder='Selecciona Tipo' formControlName="tipo">
                 <mat-option [value] = ""> CELULAR </mat-option>
                 <mat-option [value] = ""> LIBRO </mat-option>
                 <mat-option [value] = ""> TELEVISOR </mat-option>
@@ -17,9 +17,9 @@
       </mat-grid-tile>
 
       <mat-grid-tile>
-          <form>
+          <form [formGroup]="ProductosForm">
               <mat-form-field>
-                <mat-select placeholder='Selecciona Marca'>
+                <mat-select placeholder='Selecciona Marca'  formControlName="marca">
                 <mat-option [value] = ""> CELULAR </mat-option>
                 <mat-option [value] = ""> LIBRO </mat-option>
                 <mat-option [value] = ""> TELEVISOR </mat-option>
@@ -29,9 +29,9 @@
       </mat-grid-tile>
 
       <mat-grid-tile>
-          <form>
+          <form [formGroup]="ProductosForm">
               <mat-form-field>
-                <mat-select placeholder='Selecciona Modelo'>
+                <mat-select placeholder='Selecciona Modelo'  formControlName="modelo">
                 <mat-option [value] = ""> CELULAR </mat-option>
                 <mat-option [value] = ""> LIBRO </mat-option>
                 <mat-option [value] = ""> TELEVISOR </mat-option>
@@ -41,16 +41,21 @@
       </mat-grid-tile>
 
       <mat-grid-tile>
-          <mat-form-field >
-              <input matInput placeholder="Ingresa Precio Minimo">
+          <form [formGroup]="ProductosForm">
+            <mat-form-field>
+              <input matInput placeholder="Ingresa Precio Minimo"  formControlName="precio">
+              <mat-error *ngIf="ProductosForm.get('precio').invalid">Debes escribir sólo números</mat-error>
               <span matPrefix>S/.</span>
             </mat-form-field>
+          </form>
       </mat-grid-tile>
 
       <mat-grid-tile [colspan]="2">
-        <mat-form-field class="input-ventana">
-        <input matInput placeholder="Ingresa Descripcion del Producto">
-      </mat-form-field>
+        <form [formGroup]="ProductosForm" class="form-input-ventana">
+          <mat-form-field class="input-ventana">
+            <input matInput placeholder="Ingresa Descripcion del Producto" formControlName="descripcion">
+          </mat-form-field>
+        </form>
     </mat-grid-tile>
 
     </mat-grid-list>
