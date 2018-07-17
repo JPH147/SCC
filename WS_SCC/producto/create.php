@@ -17,10 +17,11 @@
         $producto = new Producto($db);
         $data = json_decode(file_get_contents('php://input'), true);
 
-        if (($_POST["id_modelo"])!=null  && !empty(trim($_POST["prd_descripcion"])))
+        if (($_POST["id_modelo"])!=null  && !empty(trim($_POST["prd_descripcion"])) && ($_POST["id_modelo"])!=null)
         {
             $producto->id_modelo = trim($_POST["id_modelo"]);
             $producto->prd_descripcion = trim($_POST["prd_descripcion"]);
+            $producto->prd_precio = trim($_POST["prd_precio"]);
 
             if($producto->create())
             {

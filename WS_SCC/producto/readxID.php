@@ -22,14 +22,15 @@
 
 	    $producto_list = array(
 	        "id"=>$producto->idproducto,
-            "tipo"=>$producto->tprd_nombre,
-            "marca"=>$producto->mrc_nombre,
-            "modelo"=>$producto->mdl_nombre,
+            "tipo"=>$producto->id_tipo_producto,
+            "marca"=>$producto->id_marca,
+            "modelo"=>$producto->id_modelo,
             "descripcion"=>$producto->prd_descripcion,
-            "unidad_medida"=>$producto->und_nombre
+            "unidad_medida"=>$producto->und_nombre,
+            "precio"=>$producto->prd_precio
 	    );
 
-	    if(trim($producto->tprd_nombre)!= ''){
+	    if(trim($producto->prd_descripcion)!= ''){
 	        print_json("0000", "OK", $producto_list);
 	    }
 	    else{

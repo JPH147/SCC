@@ -21,15 +21,16 @@
     	{
     		$producto->id_producto = $_POST["id_producto"];
             $producto->id_modelo = $_POST["id_modelo"];
-            $producto->prd_descripcion = $_POST["descripcion"];
+            $producto->prd_descripcion = $_POST["prd_descripcion"];
+            $producto->prd_precio = $_POST["prd_precio"];
 
 	    	if($producto->update())
 	        {
-	                print_json("0000", "Se eliminó el producto satisfactoriamente.", "");
+	                print_json("0000", "Se actualizó el producto satisfactoriamente.", "");
 	        }
 	        else
 	        {
-	                print_json("9999", "Ocurrió un error al eliminar el producto.", "");
+	                print_json("9999", "Ocurrió un error al actualizar el producto.", "");
 	        }
 	    }
     	else
@@ -39,7 +40,7 @@
     }
     catch(Exception $exception)
     {
-        print_json("9999", "Ocurrió un error al eliminar el producto.", $exception->getMessage());
+        print_json("9999", "Ocurrió un error al actualizar el producto.", $exception->getMessage());
     }
 
 ?>

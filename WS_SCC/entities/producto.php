@@ -13,9 +13,13 @@ Class Producto{
     public $mdl_nombre;
     public $prd_descripcion;
     public $und_nombre;
+    public $prd_precio;
 
-    public $id_modelo;
     public $id_producto;
+
+    public $id_tipo_producto;
+    public $id_marca;
+    public $id_modelo;
 
     public function __construct($db){
         $this->conn = $db;
@@ -51,7 +55,8 @@ Class Producto{
                 "marca"=>$mrc_nombre,
                 "modelo"=>$mdl_nombre,
                 "descripcion"=>$prd_descripcion,
-                "unidad_medida"=>$und_nombre
+                "unidad_medida"=>$und_nombre,
+                "precio"=>$prd_precio
             );
 
             array_push($producto_list["productos"],$producto_item);
@@ -73,25 +78,28 @@ Class Producto{
         $row = $result->fetch(PDO::FETCH_ASSOC);
         
         $this->idproducto=$row['idproducto'];
-        $this->tprd_nombre=$row['tprd_nombre'];
-        $this->mrc_nombre=$row['mrc_nombre'];
-        $this->mdl_nombre=$row['mdl_nombre'];
+        $this->id_tipo_producto=$row['id_tipo_producto'];
+        $this->id_marca=$row['id_marca'];
+        $this->id_modelo=$row['id_modelo'];
         $this->prd_descripcion=$row['prd_descripcion'];
         $this->und_nombre=$row['und_nombre'];
+        $this->prd_precio=$row['prd_precio'];
     }
 
     /* Crear producto */
     function create()
     {
-        $query = "CALL sp_crearproducto(:id_modelo, :prd_descripcion)";
+        $query = "CALL sp_crearproducto(:id_modelo, :prd_descripcion, :prd_precio)";
 
         $result = $this->conn->prepare($query);
 
         $result->bindParam(":id_modelo", $this->id_modelo);
         $result->bindParam(":prd_descripcion", $this->prd_descripcion);
+        $result->bindParam(":prd_precio", $this->prd_precio);
 
         $this->id_modelo=htmlspecialchars(strip_tags($this->id_modelo));
         $this->prd_descripcion=htmlspecialchars(strip_tags($this->prd_descripcion));
+        $this->prd_precio=htmlspecialchars(strip_tags($this->prd_precio));
 
         if($result->execute())
         {
@@ -122,16 +130,18 @@ Class Producto{
     /* Actualizar producto */
     function update()
     {
-        $query = "call sp_actualizarproducto(:id_producto, :id_modelo, :descripcion)";
+        $query = "call sp_actualizarproducto(:id_producto, :id_modelo, :descripcion, :prd_precio)";
         $result = $this->conn->prepare($query);
 
         $result->bindParam(":id_producto", $this->id_producto);
         $result->bindParam(":id_modelo", $this->id_modelo);
         $result->bindParam(":descripcion", $this->prd_descripcion);
+        $result->bindParam(":prd_precio", $this->prd_precio);
 
         $this->id_producto=htmlspecialchars(strip_tags($this->id_producto));
         $this->id_modelo=htmlspecialchars(strip_tags($this->id_modelo));
         $this->prd_descripcion=htmlspecialchars(strip_tags($this->prd_descripcion));
+        $this->prd_precio=htmlspecialchars(strip_tags($this->prd_precio));
 
         if($result->execute())
             {
