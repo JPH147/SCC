@@ -40,26 +40,49 @@ export class ProductoService {
 
   Agregar(
     modelo: number,
-    descripcion: string
+    descripcion: string,
+    precio:number
     ): Observable<any> {
-    let params = 'id_modelo=' + modelo + '&prd_descripcion=' + descripcion;
+    let params = 'id_modelo=' + modelo + '&prd_descripcion=' + descripcion+'&prd_precio='+precio;
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     return this.http.post(this.url + 'producto/create.php', params, {headers: headers});
   }
+
+
+  Seleccionar(
+    id:number
+  ):Observable<Producto>{
+    return this.http.get(this.url+'producto/readxId.php?id_producto='+id)
+    .pipe(map(res=>{
+      if (res['codigo'] === 0) {
+          return res['data'];
+      }  else {
+          console.log('Error al importar los datos, revisar servicio');
+      }
+    }))
+  }
+
+  Actualizar(
+    id:number,
+    modelo:number,
+    descripcion:string,
+    precio:number
+    ): Observable<any>{
+    let params = 'id_producto='+id+ '&id_modelo='+modelo+ '&prd_descripcion='+descripcion+ '&prd_precio='+precio;
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    return this.http.post(this.url + 'producto/update.php', params, {headers: headers});
+  }
+
 }
 
 export interface Producto {
-  numero: number;
-  id: number;
-  nombre: string;
-  tipo: string;
-  marca: string;
-  modelo: string;
-  descripcion: string;
-  unidad_medida: string;
+  numero: number,
+  id: number,
+  nombre: string,
+  tipo: string,
+  marca: string,
+  modelo: string,
+  descripcion: string,
+  unidad_medida: string,
+  precio:number
 }
-
-export interface Maestro {
-  id_modelo: number;
-  prd_descripcion: string;
-  }

@@ -2,72 +2,54 @@
   <mat-card-header>
     <mat-card-title>Agrega Producto Nuevo</mat-card-title>
   </mat-card-header>
-  <mat-card-content>
-    <mat-grid-list cols="2" rowHeight="120px">
-      <mat-grid-tile>
-        <form [formGroup]="ProductosForm">
-            <mat-form-field>
-              <mat-select placeholder='Selecciona Tipo' formControlName="tipo">
-                <mat-option [value] = ""> CELULAR </mat-option>
-                <mat-option [value] = ""> LIBRO </mat-option>
-                <mat-option [value] = ""> TELEVISOR </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </form>
-      </mat-grid-tile>
+  <form [formGroup]="ProductosForm" (ngSubmit)="Guardar(ProductosForm)">
+    <mat-card-content>
+      <mat-grid-list cols="2" rowHeight="120px">
+        <mat-grid-tile>
+          <mat-form-field>
+            <mat-select placeholder='Selecciona Tipo' formControlName="tipo" (selectionChange)="TipoSeleccionado($event)">
+              <mat-option *ngFor="let tipo of Tipos" [value] = "tipo.id"> {{tipo.nombre}} </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
 
-      <mat-grid-tile>
-          <form [formGroup]="ProductosForm">
-              <mat-form-field>
-                <mat-select placeholder='Selecciona Marca'  formControlName="marca">
-                <mat-option [value] = ""> CELULAR </mat-option>
-                <mat-option [value] = ""> LIBRO </mat-option>
-                <mat-option [value] = ""> TELEVISOR </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </form>
-      </mat-grid-tile>
+        <mat-grid-tile>
+          <mat-form-field>
+            <mat-select placeholder='Selecciona Marca' formControlName="marca" (selectionChange)="MarcaSeleccionada($event)">
+              <mat-option *ngFor="let marca of Marcas" [value] = "marca.id"> {{marca.nombre}} </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
 
-      <mat-grid-tile>
-          <form [formGroup]="ProductosForm">
-              <mat-form-field>
-                <mat-select placeholder='Selecciona Modelo'  formControlName="modelo">
-                <mat-option [value] = ""> CELULAR </mat-option>
-                <mat-option [value] = ""> LIBRO </mat-option>
-                <mat-option [value] = ""> TELEVISOR </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </form>
-      </mat-grid-tile>
+        <mat-grid-tile>
+          <mat-form-field>
+            <mat-select placeholder='Selecciona Modelo'  formControlName="modelo">
+              <mat-option *ngFor="let modelo of Modelos" [value] = "modelo.id"> {{modelo.nombre}} </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
 
-      <mat-grid-tile>
-          <form [formGroup]="ProductosForm">
-            <mat-form-field>
-              <input matInput placeholder="Ingresa Precio Minimo"  formControlName="precio">
-              <mat-error *ngIf="ProductosForm.get('precio').invalid">Debes escribir sólo números</mat-error>
-              <span matPrefix>S/.</span>
-            </mat-form-field>
-          </form>
-      </mat-grid-tile>
+        <mat-grid-tile>
+          <mat-form-field>
+            <input matInput placeholder="Ingresa Precio Minimo"  formControlName="precio">
+            <mat-error *ngIf="ProductosForm.get('precio').invalid">Debes escribir sólo números</mat-error>
+            <span matPrefix>S/.</span>
+          </mat-form-field>
+        </mat-grid-tile>
 
-      <mat-grid-tile [colspan]="2">
-        <form [formGroup]="ProductosForm" class="form-input-ventana">
+        <mat-grid-tile [colspan]="2">
           <mat-form-field class="input-ventana">
             <input matInput placeholder="Ingresa Descripcion del Producto" formControlName="descripcion">
           </mat-form-field>
-        </form>
-    </mat-grid-tile>
-
-    </mat-grid-list>
-  </mat-card-content>
-
-  <mat-card-actions>
-    <mat-grid-list cols=1 rowHeight="40px">
-      <mat-grid-tile>
-        <button mat-raised-button color="primary">Grabar</button>
-      </mat-grid-tile>
-    </mat-grid-list>
-  </mat-card-actions>
-
-
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-card-content>
+    <mat-card-actions>
+      <mat-grid-list cols=1 rowHeight="40px">
+        <mat-grid-tile>
+          <button type="submit" mat-raised-button color="primary" [disabled]="ProductosForm.invalid">Grabar</button>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-card-actions>
+  </form>
 </mat-card>
