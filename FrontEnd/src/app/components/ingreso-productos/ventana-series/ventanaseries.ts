@@ -14,7 +14,8 @@ import { MatCard, MatInputModule, MatButton, MatDatepicker, MatTableModule } fro
 
 // tslint:disable-next-line:component-class-suffix
 export class ventanaseries  implements OnInit {
-  public seriearticulo;
+  public seriearticulo: Array<any> ;
+  public numero: number;
   public series: Array <string>;
   public contador: number;
   public serie: Array<any>;
@@ -27,16 +28,14 @@ export class ventanaseries  implements OnInit {
 
     ngOnInit() {
       this.contador = 1;
-      this.serie = [
-        {numero: this.contador, series: ''}
-      ];
+      this.seriearticulo = [{numero: this.contador, series: ''} ];
     }
 
 
 
-  agregar() {
+  AgregarSerieVS() {
     this.contador++;
-    this.seriearticulo.push({numero: this.contador, serie: ''});
+    this.seriearticulo.push({numero: this.contador, series: ''});
   }
 
   Aceptar() {
