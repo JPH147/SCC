@@ -106,3 +106,46 @@ hr{
 .mat-radio-button ~ .mat-radio-button {
   padding-right: 16px;
 }
+
+
+.CabeceraSalidaVendedor{
+  width: 90%;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+
+}
+
+.Alma{
+  margin-left: 5px
+}
+
+.Alma1{
+  align-content: flex-start;
+  padding: 0px;
+  border: 0px
+
+}
+
+mat-form-field-infix {
+position: relative;
+ margin-left: auto
+}
+
+.agregar{
+  float: right;
+}
+
+
+mat-card-title{
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.CabeceraSalidaVendedor{
+  width: 90%;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+
+}
