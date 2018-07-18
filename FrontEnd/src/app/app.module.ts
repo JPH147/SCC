@@ -1,3 +1,4 @@
+
 import {CdkTableModule} from '@angular/cdk/table';
 import {CdkTreeModule} from '@angular/cdk/tree';
 import {HttpClientModule} from '@angular/common/http';
@@ -64,6 +65,7 @@ import {DialogoComponent} from './components/salida-vendedores/salida-vendedores
 import { ListadoSalidaVendedoresComponent } from './components/listado-salida-vendedores/listado-salida-vendedores.component';
 import {VentanaEmergenteProductos} from './components/productos/ventana-emergente/ventanaemergente';
 import {ventanaseries} from './components/ingreso-productos/ventana-series/ventanaseries';
+import { ventanaseriesalida } from './components/salida-productos/ventana-seriesalida/ventanaseriesalida';
 
 @NgModule({
   imports: [
@@ -131,13 +133,15 @@ import {ventanaseries} from './components/ingreso-productos/ventana-series/venta
     DialogoComponent,
     ListadoSalidaVendedoresComponent,
     VentanaEmergenteProductos,
-    ventanaseries
+    ventanaseries,
+    ventanaseriesalida,
    ],
   entryComponents: [
     AppComponent,
     DialogoComponent,
     VentanaEmergenteProductos,
-    ventanaseries
+    ventanaseries,
+    ventanaseriesalida
   ],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider]

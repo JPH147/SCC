@@ -67,15 +67,15 @@
       </ng-container>
 
       <ng-container matColumnDef="unidad_medida">
-        <mat-header-cell *matHeaderCellDef> Unidad Medida </mat-header-cell>
-        <mat-cell *matCellDef="let producto"> {{producto.unidad_medida}} </mat-cell>
+        <mat-header-cell *matHeaderCellDef> Precio mínimo </mat-header-cell>
+        <mat-cell *matCellDef="let producto"> {{producto.precio | currency:'S/.'}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let producto">
 
-          <button mat-icon-button color="primary"><mat-icon> edit </mat-icon></button>
+          <button mat-icon-button color="primary" (click)="Editar(producto.id)"><mat-icon> edit </mat-icon></button>
           <button mat-icon-button color="primary" (click)="Eliminar(producto.id)"><mat-icon> delete </mat-icon></button>
         </mat-cell>
       </ng-container>

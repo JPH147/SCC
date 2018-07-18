@@ -1,9 +1,17 @@
+import { ventanaseriesalida } from './ventana-seriesalida/ventanaseriesalida';
+import { DialogData } from './../salida-vendedores/salida-vendedores.component';
 import { Component, OnInit } from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
 import {SelectionModel} from '@angular/cdk/collections';
 import {MatTableDataSource} from '@angular/material';
+import { MatDialog } from '@angular/material';
+
+export interface Food {
+  value: string;
+  viewValue: string;
+}
 
 @Component({
   selector: 'app-salida-productos',
@@ -12,58 +20,83 @@ import {MatTableDataSource} from '@angular/material';
 })
 
 export class SalidaProductosComponent implements OnInit {
+  public articulos: Array <articulo>;
+  public contador: number;
+  public almacenes: Array<any>;
+  public serieventana: string;
+
+
   selected = 'option2';
   myControl = new FormControl();
   options: string[] = ['One', 'Two', 'Three'];
   filteredOptions: Observable<string[]>;
-  displayedColumns: string[] = ['select', 'position', 'name', 'weight', 'symbol'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
-  selection = new SelectionModel<PeriodicElement>(true, []);
+  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
 
-  constructor() { }
+  selection = new SelectionModel<PeriodicElement>(true, []);
+  foods: Food[] = [
+    {value: 'steak-0', viewValue: 'Almacen Principal'},
+    {value: 'pizza-1', viewValue: 'Almacen Dos'},
+    {value: 'tacos-2', viewValue: 'Almacen Tres'}
+  ];
+
+  constructor (public DialogoSerie: MatDialog) {
+  }
 
   ngOnInit() {
+
     this.filteredOptions = this.myControl.valueChanges
-    .pipe(
-      startWith(''),
-      map(value => this._filter(value))
-    );
+        .pipe(
+          startWith(''),
+          map(value => this._filter(value))
+        );
+
+      this.contador = 1;
+      this.articulos = [
+        {numero: this.contador, nombre: '', cantidad: null, precio: null}
+      ];
   }
-  private _filter(value: string): string[] {
+     private _filter(value: string): string[] {
       const filterValue = value.toLowerCase();
 
       return this.options.filter(option => option.toLowerCase().includes(filterValue));
   }
   isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
   }
 
 /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
-        this.isAllSelected() ?
-        this.selection.clear() :
-        this.dataSource.data.forEach(row => this.selection.select(row));
+  }
+
+  agregar() {
+    this.contador++;
+    this.articulos.push({numero: this.contador, nombre: '', cantidad: null, precio: null});
+  }
+
+  Aceptar() {
+    console.log(this.articulos);
+  }
+
+
+  AgregarSerieS() {
+    const serieventana = this.DialogoSerie.open(ventanaseriesalida, {
+      width: '600px'
+    });
   }
 }
 
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-];
+  export interface PeriodicElement {
+    name: string;
+    position: number;
+    weight: number;
+    symbol: string;
+
+  }
+  // tslint:disable-next-line:class-name
+  export interface articulo {
+    numero: number;
+    nombre: string;
+    cantidad: number;
+    precio: number;
+  }
+
