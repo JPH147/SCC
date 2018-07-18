@@ -76,7 +76,7 @@ Class Cliente{
     
     function create()
     {
-        $query = "CALL sp_crearcliente (:id_institucion,:clt_codigo,:clt_dni,:clt_nombre,:clt_apellido,:clt_foto,:clt_cip,:clt_email,:clt_casilla,:clt_trabajo,:clt_cargo,:clt_calificacion_crediticia,:clt_calificacion_personal,:clt_aporte,:clt_estado)"; 
+        $query = "CALL sp_crearcliente (:id_institucion,:clt_codigo,:clt_dni,:clt_nombre,:clt_apellido,:clt_foto,:clt_cip,:clt_email,:clt_casilla,:clt_trabajo,:clt_cargo,:clt_calificacion_crediticia,:clt_calificacion_personal,:clt_aporte,:clt_estado,:clt_fecharegistro)"; 
 
         $result = $this->conn->prepare($query);
 
@@ -95,6 +95,7 @@ Class Cliente{
         $this->clt_calificacion_personal=htmlspecialchars(strip_tags($this->clt_calificacion_personal));        
         $this->clt_aporte=htmlspecialchars(strip_tags($this->clt_aporte));
         $this->clt_estado=htmlspecialchars(strip_tags($this->clt_estado));
+        $this->clt_fecharegistro=htmlspecialchars(strip_tags($this->clt_fecharegistro));
 
         $result->bindParam(":id_institucion", $this->id_institucion);
         $result->bindParam(":clt_codigo", $this->clt_codigo);
@@ -111,6 +112,7 @@ Class Cliente{
         $result->bindParam(":clt_calificacion_personal", $this->clt_calificacion_personal);
         $result->bindParam(":clt_aporte", $this->clt_aporte);
         $result->bindParam(":clt_estado", $this->clt_estado);
+        $result->bindParam(":clt_fecharegistro", $this->clt_fecharegistro);
         
 
         if($result->execute())
@@ -139,7 +141,7 @@ Class Cliente{
 
     function update()
     {
-        $query = "CALL sp_actualizarcliente (:idcliente,:id_institucion,:clt_codigo,:clt_dni,:clt_nombre,:clt_apellido,:clt_foto,:clt_cip,:clt_email,:clt_casilla,:clt_trabajo,:clt_cargo,:clt_calificacion_crediticia,:clt_calificacion_personal,:clt_aporte)"; 
+        $query = "CALL sp_actualizarcliente (:idcliente,:id_institucion,:clt_codigo,:clt_dni,:clt_nombre,:clt_apellido,:clt_foto,:clt_cip,:clt_email,:clt_casilla,:clt_trabajo,:clt_cargo,:clt_calificacion_crediticia,:clt_calificacion_personal,:clt_aporte,:clt_fecharegistro)"; 
 
         $result = $this->conn->prepare($query);
 
@@ -158,6 +160,7 @@ Class Cliente{
         $this->clt_calificacion_crediticia=htmlspecialchars(strip_tags($this->clt_calificacion_crediticia));
         $this->clt_calificacion_personal=htmlspecialchars(strip_tags($this->clt_calificacion_personal));        
         $this->clt_aporte=htmlspecialchars(strip_tags($this->clt_aporte));
+        $this->clt_estado=htmlspecialchars(strip_tags($this->clt_fecharegistro));
 
         $result->bindParam(":idcliente", $this->idcliente);
         $result->bindParam(":id_institucion", $this->id_institucion);
@@ -174,6 +177,7 @@ Class Cliente{
         $result->bindParam(":clt_calificacion_crediticia", $this->clt_calificacion_crediticia);
         $result->bindParam(":clt_calificacion_personal", $this->clt_calificacion_personal);
         $result->bindParam(":clt_aporte", $this->clt_aporte);
+        $result->bindParam(":clt_fecharegistro", $this->clt_fecharegistro);
         
 
         if($result->execute())
