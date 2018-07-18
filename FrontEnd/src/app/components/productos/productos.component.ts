@@ -32,11 +32,6 @@ export class ProductosComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-<<<<<<< HEAD
-   this.Servicio.Agregar(2, 'JEAN PIERRE').subscribe(res => console.log(res));
-   // this.Servicio.Agregar(2,"JEAN PIERRE").subscribe(res=>console.log(res));
-=======
->>>>>>> 48f653da0c00308e2a38b7f0453457d6bc1d6465
    this.ListadoProductos = new ProductoDataSource(this.Servicio);
    this.ListadoProductos.CargarProductos('', '', '', '');
  }
