@@ -46,11 +46,14 @@ Class Cliente{
     
         $cliente_list=array();
         $cliente_list["clientes"]=array();
+        $contador = 0;
 
         while($row = $result->fetch(PDO::FETCH_ASSOC))
         {
             extract($row);
+            $contador=$contador+1;
             $cliente_item = array (
+                "numero"=>$contador,
                 "idcliente"=>$row['idcliente'],
                 "inst_nombre"=>$row['inst_nombre'],
                 "clt_codigo"=>$row['clt_codigo'],

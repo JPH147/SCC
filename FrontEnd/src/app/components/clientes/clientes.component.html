@@ -49,40 +49,40 @@
 
   <mat-card-content>
 
-    <div class = "spinner-container" *ngIf = "ListadoClientes.Cargando| async">
+    <div class = "spinner-container" *ngIf = "ListadoCliente.Cargando| async">
       <mat-spinner></mat-spinner>
     </div>
 
-    <mat-table [dataSource]="ListadoClientes" class="mat-elevation-z8">
+    <mat-table [dataSource]="ListadoCliente" class="mat-elevation-z8">
 
       <ng-container matColumnDef="numero">
         <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
-        <mat-cell *matCellDef="let producto"> {{cliente.numero}} </mat-cell>
+        <mat-cell *matCellDef="let cliente"> {{cliente.numero}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="institucion">
         <mat-header-cell *matHeaderCellDef> Institución </mat-header-cell>
-        <mat-cell *matCellDef="let producto"> {{cliente.institucion}} </mat-cell>
+        <mat-cell *matCellDef="let cliente"> {{cliente.inst_nombre}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="codigo">
         <mat-header-cell *matHeaderCellDef> Código </mat-header-cell>
-        <mat-cell *matCellDef="let producto"> {{cliente.codigo}} </mat-cell>
+        <mat-cell *matCellDef="let cliente"> {{cliente.clt_codigo}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="dni">
         <mat-header-cell *matHeaderCellDef> DNI </mat-header-cell>
-        <mat-cell *matCellDef="let producto"> {{cliente.dni}} </mat-cell>
+        <mat-cell *matCellDef="let cliente"> {{cliente.clt_dni}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="nombrecliente">
         <mat-header-cell *matHeaderCellDef> Descripcion</mat-header-cell>
-        <mat-cell *matCellDef="let producto"> {{cliente.nombrecliente}} </mat-cell>
+        <mat-cell *matCellDef="let cliente"> {{cliente.clt_nombre}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="apellidocliente">
         <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
-        <mat-cell *matCellDef="let producto"> {{cliente.apellidocliente}} </mat-cell>
+        <mat-cell *matCellDef="let cliente"> {{cliente.clt_apellido}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="opciones">
