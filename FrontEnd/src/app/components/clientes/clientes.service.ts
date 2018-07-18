@@ -6,23 +6,26 @@ import {URL} from '../global/url';
 
 @Injectable()
 
-export class ProductoService {
+export class ClienteService {
 
   public url: string = URL.url;
 
   constructor(private http: HttpClient) {}
 
   Listado(
-  tipo: string,
-  marca: string,
-  modelo: string,
-  descripcion: string
-  ): Observable<Producto[]>
-  { return this.http.get(this.url + 'producto/read.php?prtipo='
-   + tipo + '&prmarca=' + marca + '&prmodelo=' + modelo + '&prdescripcion = + ' + descripcion)
+  nombreinst: string,
+  dni: string,
+  nombre: string,
+  apellido: string,
+  aporteinicio: number,
+  aportefin: number
+  ): Observable<Cliente[]>
+  { return this.http.get(this.url + 'cliente/read.php?pinst_nombre='
+   + nombreinst + '&clt_dni=' + dni + '&clt_nombre=' + nombre + '&clt_apellido = + ' + apellido + '&clt_aporteinicio = +'
+   + aporteinicio + '&clt_aportefin = + ' + aportefin)
     .pipe(map(res => {
       if (res['codigo'] === 0) {
-          return res['data'].productos;
+          return res['data'].clientes;
       }  else {
           console.log('Error al importar los datos, revisar servicio');
       }
@@ -48,15 +51,23 @@ export class ProductoService {
   }
 }
 
-export interface Producto {
-  numero: number;
+export interface Cliente {
   id: number;
-  nombre: string;
-  tipo: string;
-  marca: string;
-  modelo: string;
-  descripcion: string;
-  unidad_medida: string;
+  numero: number;
+  institucion: string;
+  codigo: string;
+  dni: string;
+  nombrecliente: string;
+  apellidocliente: string;
+  cip: string;
+  email: string;
+  casilla: string;
+  trabajo: string;
+  cargo: string;
+  calificacioncrediticia: string;
+  calificacionpersonal: string;
+  aporte: number;
+  //fecharegistro: date;
 }
 
 export interface Maestro {
