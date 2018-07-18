@@ -76,32 +76,13 @@ export class ClientesComponent implements OnInit {
      })
     ).subscribe();
 
-    fromEvent(this.FiltroAporteMin.nativeElement, 'keyup')
-   .pipe(
-     debounceTime(200),
-     distinctUntilChanged(),
-     tap(() => {
-       this.CargarData();
-     })
-    ).subscribe();
-
-   fromEvent(this.FiltroAporteMax.nativeElement, 'keyup')
-   .pipe(
-     debounceTime(200),
-     distinctUntilChanged(),
-     tap(() => {
-       this.CargarData();
-     })
-    ).subscribe();
  }
 
  CargarData() {
    this.ListadoCliente.CargarClientes(this.FiltroInst.nativeElement.value,
    this.FiltroDni.nativeElement.value,
    this.FiltroNombre.nativeElement.value,
-   this.FiltroApellido.nativeElement.value,
-   this.FiltroAporteMin.nativeElement.value,
-   this.FiltroAporteMax.nativeElement.value);
+   this.FiltroApellido.nativeElement.value);
  }
 
  /*Agregar() {

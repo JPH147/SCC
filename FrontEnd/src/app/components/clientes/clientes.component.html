@@ -5,8 +5,8 @@
   </mat-card-title>
 
   <button mat-raised-button color="primary" class="agregar" (click)="Agregar()">Agregar Cliente</button>
-
-  <mat-grid-list cols=3 rowHeight="80px">
+  <br/><br/>
+  <mat-grid-list cols=4 rowHeight="80px">
     <mat-grid-tile>
       <mat-icon>search</mat-icon>
       <mat-form-field>
@@ -25,26 +25,13 @@
         <input matInput placeholder="Nombre" #InputNombreCliente>
       </mat-form-field>
     </mat-grid-tile>
-  </mat-grid-list>
-  <mat-grid-list cols=3 rowHeight="80px">
       <mat-grid-tile>
         <mat-icon>search</mat-icon>
           <mat-form-field>
         <input matInput placeholder="Apellido" #InputApellido>
       </mat-form-field>
     </mat-grid-tile>
-    <mat-grid-tile>
-      <mat-icon>search</mat-icon>
-        <mat-form-field>
-      <input matInput placeholder="Aporte Min." #InputAporteMin>
-    </mat-form-field>
-  </mat-grid-tile>
-  <mat-grid-tile>
-    <mat-icon>search</mat-icon>
-      <mat-form-field>
-    <input matInput placeholder="Aporte Max." #InputAporteMax>
-  </mat-form-field>
-</mat-grid-tile>
+  
   </mat-grid-list>
 
   <mat-card-content>
