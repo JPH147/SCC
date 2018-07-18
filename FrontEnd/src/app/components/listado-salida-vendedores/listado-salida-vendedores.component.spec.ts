@@ -2,6 +2,9 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ListadoSalidaVendedoresComponent } from './listado-salida-vendedores.component';
 
+
+
+
 describe('ListadoSalidaVendedoresComponent', () => {
   let component: ListadoSalidaVendedoresComponent;
   let fixture: ComponentFixture<ListadoSalidaVendedoresComponent>;
@@ -23,3 +26,8 @@ describe('ListadoSalidaVendedoresComponent', () => {
     expect(component).toBeTruthy();
   });
 });
+
+export interface Food {
+  value: string;
+  viewValue: string;
+}

@@ -32,16 +32,12 @@ export class ProductosComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-<<<<<<< HEAD
-   this.Servicio.Agregar(2, 'JEAN PIERRE').subscribe(res => console.log(res));
-   // this.Servicio.Agregar(2,"JEAN PIERRE").subscribe(res=>console.log(res));
-=======
->>>>>>> 48f653da0c00308e2a38b7f0453457d6bc1d6465
    this.ListadoProductos = new ProductoDataSource(this.Servicio);
    this.ListadoProductos.CargarProductos('', '', '', '');
  }
 
- ngAfterViewInit() {
+// tslint:disable-next-line:use-life-cycle-interface
+ngAfterViewInit () {
    fromEvent(this.FiltroProductos.nativeElement, 'keyup')
    .pipe(
      debounceTime(200),
@@ -94,12 +90,12 @@ export class ProductosComponent implements OnInit {
      width: '800px'
    });
 
-   VentanaProductos.afterClosed().subscribe(res=>{
+   VentanaProductos.afterClosed().subscribe(res => {
      this.CargarData();
-   })
+   });
  }
 
- /* Eliminar productos */ 
+ /* Eliminar productos */
  Eliminar(id) {
    this.Servicio.Eliminar(id).subscribe(res => {
      this.CargarData();
@@ -107,15 +103,17 @@ export class ProductosComponent implements OnInit {
  }
 
  /* Editar productos */
- Editar(id){
-   this.Servicio.Seleccionar(id).subscribe(res=>{
-     let VentanaProductos = this.DialogoProductos.open(VentanaEmergenteProductos,{
+ Editar(id) {
+   this.Servicio.Seleccionar(id).subscribe(res => {
+     // tslint:disable-next-line:prefer-const
+     let VentanaProductos = this.DialogoProductos.open(VentanaEmergenteProductos, {
        width: '800px',
        data: res
      });
-     VentanaProductos.afterClosed().subscribe(res=>{
-       this.CargarData()
-     })
-   })
+     // tslint:disable-next-line:no-shadowed-variable
+     VentanaProductos.afterClosed().subscribe (res => {
+       this.CargarData();
+     });
+   });
  }
 }
