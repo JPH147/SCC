@@ -10,7 +10,7 @@ export class ProductoService {
 
   public url: string = URL.url;
 
-  constructor(private http: HttpClient){}
+  constructor(private http: HttpClient) {}
 
   Listado(
   tipo: string,

@@ -1,3 +1,102 @@
-<p>
-  clientes works!
-</p>
+<mat-card>
+  <!-- Encabezado -->
+  <mat-card-title>
+    <div id = "tituloProd"> Listado de Clientes</div>
+  </mat-card-title>
+
+  <button mat-raised-button color="primary" class="agregar" (click)="Agregar()">Agregar Cliente</button>
+
+  <mat-grid-list cols=3 rowHeight="80px">
+    <mat-grid-tile>
+      <mat-icon>search</mat-icon>
+      <mat-form-field>
+        <input matInput placeholder="Institución" #InputNombreInst>
+      </mat-form-field>
+    </mat-grid-tile>
+        <mat-grid-tile>
+      <mat-icon>search</mat-icon>
+      <mat-form-field>
+        <input matInput placeholder="DNI" #InputDNI>
+      </mat-form-field>
+    </mat-grid-tile>
+        <mat-grid-tile>
+      <mat-icon>search</mat-icon>
+      <mat-form-field>
+        <input matInput placeholder="Nombre" #InputNombreCliente>
+      </mat-form-field>
+    </mat-grid-tile>
+  </mat-grid-list>
+  <mat-grid-list cols=3 rowHeight="80px">
+      <mat-grid-tile>
+        <mat-icon>search</mat-icon>
+          <mat-form-field>
+        <input matInput placeholder="Apellido" #InputApellido>
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-icon>search</mat-icon>
+        <mat-form-field>
+      <input matInput placeholder="Aporte Min." #InputAporteMin>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-icon>search</mat-icon>
+      <mat-form-field>
+    <input matInput placeholder="Aporte Max." #InputAporteMax>
+  </mat-form-field>
+</mat-grid-tile>
+  </mat-grid-list>
+
+  <mat-card-content>
+
+    <div class = "spinner-container" *ngIf = "ListadoClientes.Cargando| async">
+      <mat-spinner></mat-spinner>
+    </div>
+
+    <mat-table [dataSource]="ListadoClientes" class="mat-elevation-z8">
+
+      <ng-container matColumnDef="numero">
+        <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+        <mat-cell *matCellDef="let producto"> {{cliente.numero}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="institucion">
+        <mat-header-cell *matHeaderCellDef> Institución </mat-header-cell>
+        <mat-cell *matCellDef="let producto"> {{cliente.institucion}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="codigo">
+        <mat-header-cell *matHeaderCellDef> Código </mat-header-cell>
+        <mat-cell *matCellDef="let producto"> {{cliente.codigo}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="dni">
+        <mat-header-cell *matHeaderCellDef> DNI </mat-header-cell>
+        <mat-cell *matCellDef="let producto"> {{cliente.dni}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="nombrecliente">
+        <mat-header-cell *matHeaderCellDef> Descripcion</mat-header-cell>
+        <mat-cell *matCellDef="let producto"> {{cliente.nombrecliente}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="apellidocliente">
+        <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+        <mat-cell *matCellDef="let producto"> {{cliente.apellidocliente}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="opciones">
+        <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
+        <mat-cell *matCellDef="let producto">
+
+          <button mat-icon-button color="primary"><mat-icon> edit </mat-icon></button>
+          <button mat-icon-button color="primary" (click)="Eliminar(cliente.idcliente)"><mat-icon> delete </mat-icon></button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: Columnas;"></mat-row>
+    </mat-table>
+
+  </mat-card-content>
+</mat-card>
