@@ -8,6 +8,7 @@
     include_once '../config/database.php';
     include_once '../entities/cliente.php';
     include_once '../shared/utilities.php';
+    //include_once '../file/upload.php';
 
     $database = new Database();
     $db = $database->getConnection();
@@ -18,18 +19,19 @@
         $data = json_decode(file_get_contents('php://input'), true);
 
         if (($_POST["id_institucion"])!=null  && !empty(trim($_POST["clt_codigo"])) && !empty(trim($_POST["clt_dni"]))
-            && !empty(trim($_POST["clt_nombre"])) && !empty(trim($_POST["clt_apellido"])) && !empty(trim($_POST["clt_foto"]))
+            && !empty(trim($_POST["clt_nombre"])) && !empty(trim($_POST["clt_apellido"]))
             && !empty(trim($_POST["clt_cip"])) && !empty(trim($_POST["clt_email"])) && !empty(trim($_POST["clt_casilla"]))
             && !empty(trim($_POST["clt_trabajo"])) && !empty(trim($_POST["clt_cargo"])) && !empty(trim($_POST["clt_calificacion_crediticia"]))
             && !empty(trim($_POST["clt_calificacion_personal"])) && ($_POST["clt_aporte"])!=null && ($_POST["clt_estado"])!=null
-            && ($_POST["clt_fecharegistro"])!=null)
+            && ($_POST["clt_fecharegistro"])!=null && $_FILES["clt_foto"]!=null)
         {
+
             $cliente->id_institucion = trim($_POST["id_institucion"]);
             $cliente->clt_codigo = trim($_POST["clt_codigo"]);
             $cliente->clt_dni = trim($_POST["clt_dni"]);
             $cliente->clt_nombre = trim($_POST["clt_nombre"]);
             $cliente->clt_apellido = trim($_POST["clt_apellido"]);
-            $cliente->clt_foto = trim($_POST["clt_foto"]);
+            $cliente->clt_foto = "-";
             $cliente->clt_cip = trim($_POST["clt_cip"]);
             $cliente->clt_email = trim($_POST["clt_email"]);
             $cliente->clt_casilla = trim($_POST["clt_casilla"]);
@@ -40,10 +42,22 @@
             $cliente->clt_aporte = trim($_POST["clt_aporte"]);
             $cliente->clt_estado = trim($_POST["clt_estado"]);
             $cliente->clt_fecharegistro = $_POST["clt_fecharegistro"];
+            //$clt_foto = uploadfile("FOTO",$cliente->clt_dni,"../files");
 
-            if($cliente->create())
+            if(is_uploaded_file($_FILES["clt_foto"]["tmp_name"]))
             {
-                print_json("0000", "Se creó el producto satisfactoriamente.", "");
+                $tmp_file = $_FILES["clt_foto"]["tmp_name"];
+                $file_nombre_tmp = $_FILES["clt_foto"]["name"];
+                $tmp = explode('.', $file_nombre_tmp);
+                $file_extension = end($tmp);
+                $file_nombre = "FOTO_".trim($cliente->clt_dni).".".$file_extension;
+                $ruta = trim("../files").'/'.$file_nombre;
+                $cliente->clt_foto = $file_nombre;
+            }
+
+            if(move_uploaded_file($tmp_file,$ruta) && $cliente->create())
+            {
+                print_json("0000", "Se creó el cliente satisfactoriamente.", "");
             }
             else
             {
