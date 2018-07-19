@@ -3,9 +3,9 @@
     font-size: 30px;
     text-align: center;
     font-family: sans-serif;
-    
+
     }
-    
+
     mat-card{
       width: 80%;
       position: relative;
@@ -15,13 +15,13 @@
       margin-bottom: 10px;
       min-height: 300px;
     }
-    
+
     .agregar{
       float:right;
       margin-left: 5px;
       z-index: 1
      }
-    
+
     .spinner-container{
       position: absolute;
       top: 200px;
@@ -31,7 +31,7 @@
       align-items: center;
       justify-content: center;
     }
-    
+
     .mat-column-numero,
     .mat-column-tipo,
     .mat-column-marca,
@@ -41,4 +41,10 @@
     {
       max-width: 10%;
     }
-    
+
+    #tituloProd {
+      padding: 15px;
+      font-size: 30px;
+      text-align: center;
+      font-family: sans-serif;
+    }
