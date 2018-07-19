@@ -35,7 +35,7 @@ export class ClientesComponent implements OnInit {
 
   ngOnInit() {
    this.ListadoCliente = new ClienteDataSource(this.Servicio);
-   this.ListadoCliente.CargarClientes('', '', '', '', 0 , 100000);
+   this.ListadoCliente.CargarClientes('', '', '', '');
  }
 
  // tslint:disable-next-line:use-life-cycle-interface
