@@ -20,8 +20,6 @@
         $cliente->clt_dni = !empty($_GET['pclt_dni']) ? $_GET['pclt_dni'] : null;
         $cliente->clt_nombre = !empty($_GET['pclt_nombre']) ? $_GET['pclt_nombre'] : null;
         $cliente->clt_apellido = !empty($_GET['pclt_apellido']) ? $_GET['pclt_apellido'] : null;
-        $cliente->clt_aporteinicio = !empty($_GET['pclt_aporteinicio']) ? $_GET['pclt_aporteinicio'] : null;
-        $cliente->clt_aportefin = !empty($_GET['pclt_aportefin']) ? $_GET['pclt_aportefin'] : null;
 
         $cliente_list = $cliente->read();
 

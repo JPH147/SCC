@@ -16,13 +16,10 @@ export class ClienteService {
   nombreinst: string,
   dni: string,
   nombre: string,
-  apellido: string,
-  aporteinicio: number,
-  aportefin: number
+  apellido: string
   ): Observable<Cliente[]>
   { return this.http.get(this.url + 'cliente/read.php?pinst_nombre='
-   + nombreinst + '&clt_dni=' + dni + '&clt_nombre=' + nombre + '&clt_apellido = + ' + apellido + '&clt_aporteinicio = +'
-   + aporteinicio + '&clt_aportefin = + ' + aportefin)
+   + nombreinst + '&pclt_dni=' + dni + '&pclt_nombre=' + nombre + '&pclt_apellido = + ' + apellido)
     .pipe(map(res => {
       if (res['codigo'] === 0) {
           return res['data'].clientes;
