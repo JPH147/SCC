@@ -31,7 +31,7 @@
             $cliente->clt_dni = trim($_POST["clt_dni"]);
             $cliente->clt_nombre = trim($_POST["clt_nombre"]);
             $cliente->clt_apellido = trim($_POST["clt_apellido"]);
-            $cliente->clt_foto = "-";
+            //$cliente->clt_foto = "-";
             $cliente->clt_cip = trim($_POST["clt_cip"]);
             $cliente->clt_email = trim($_POST["clt_email"]);
             $cliente->clt_casilla = trim($_POST["clt_casilla"]);
@@ -52,7 +52,7 @@
                 $file_extension = end($tmp);
                 $file_nombre = "FOTO_".trim($cliente->clt_dni).".".$file_extension;
                 $ruta = trim("../files").'/'.$file_nombre;
-                $cliente->clt_foto = $file_nombre;
+                //$cliente->clt_foto = $file_nombre;
             }
 
             if(move_uploaded_file($tmp_file,$ruta) && $cliente->create())
