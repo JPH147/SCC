@@ -1,4 +1,4 @@
-//import { VentanaEmergenteProductos } from './ventana-emergente/ventanaemergente';
+import { VentanaEmergenteClientes } from './ventana-emergente/ventanaemergente';
 import {Component, OnInit, ViewChild, AfterViewInit, ElementRef} from '@angular/core';
 import { MatPaginator, MatSort, MatDialog } from '@angular/material';
 import {merge, Observable, of as observableOf} from 'rxjs';
@@ -85,14 +85,14 @@ export class ClientesComponent implements OnInit {
    this.FiltroApellido.nativeElement.value);
  }
 
- /*Agregar() {
+ Agregar() {
    // tslint:disable-next-line:prefer-const
-   let VentanaProductos = this.DialogoProductos.open(VentanaEmergenteProductos, {
+   let VentanaClientes = this.DialogoClientes.open(VentanaEmergenteClientes, {
      width: '800px'
    });
  }
 
- Eliminar(id) {
+ /*Eliminar(id) {
    this.Servicio.Eliminar(id).subscribe(res => {
      this.CargarData();
    });

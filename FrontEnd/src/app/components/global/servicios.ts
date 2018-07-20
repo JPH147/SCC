@@ -61,6 +61,19 @@ export class ServiciosGenerales{
 		}))
 	}
 
+	ListarInstitucion(
+	):Observable<Institucion>
+	{
+		return this.http.get(this.url+'institucion/read.php')
+		.pipe(map(res=>{
+			if(res['codigo']===0){
+				return res['data'].institucion;
+			} else{
+				console.log('Error al importar los datos, revisar servicio')
+			}
+		}))
+	}
+
 
 
 }
@@ -85,4 +98,9 @@ export interface ModeloModelo{
 	tipo:string,
 	marca:string,
 	modelo:string
+}
+export interface Institucion{
+	numero:number,
+	id:string,
+	nombre:string
 }

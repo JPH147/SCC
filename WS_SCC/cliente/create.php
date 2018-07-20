@@ -24,7 +24,7 @@
             && !empty(trim($_POST["clt_cip"])) && !empty(trim($_POST["clt_email"])) && !empty(trim($_POST["clt_casilla"]))
             && !empty(trim($_POST["clt_trabajo"])) && !empty(trim($_POST["clt_cargo"])) && !empty(trim($_POST["clt_calificacion_crediticia"]))
             && !empty(trim($_POST["clt_calificacion_personal"])) && ($_POST["clt_aporte"])!=null && ($_POST["clt_estado"])!=null
-            && ($_POST["clt_fecharegistro"])!=null && ($_POST["clt_foto"])!=null)
+            && ($_POST["clt_fecharegistro"])!=null)
         {
 
             $cliente->id_institucion = trim($_POST["id_institucion"]);

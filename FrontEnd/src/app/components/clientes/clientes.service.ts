@@ -39,12 +39,29 @@ export class ClienteService {
 	}
 
   Agregar(
-    modelo: number,
-    descripcion: string
+    id_institucion: number,
+    clt_codigo: string,
+    clt_dni: string,
+    clt_nombre: string,
+    clt_apellido: string,
+    clt_cip: string,
+    clt_email: string,
+    clt_casilla: string,
+    clt_trabajo: string,
+    clt_cargo: string,
+    clt_calificacion_crediticia: string,
+    clt_calificacion_personal: string,
+    clt_aporte: number,
+    clt_fecharegistro: Date
     ): Observable<any> {
-    let params = 'id_modelo=' + modelo + '&prd_descripcion=' + descripcion;
+    let params = 'id_institucion=' + id_institucion + '&clt_codigo=' + clt_codigo
+    + '&clt_dni=' + clt_dni + '&clt_nombre=' + clt_nombre + '&clt_apellido=' + clt_apellido
+    + '&clt_cip=' + clt_cip + '&clt_email=' + clt_email + '&clt_casilla=' + clt_casilla
+    + '&clt_trabajo=' + clt_trabajo + '&clt_cargo=' + clt_cargo + '&clt_calificacion_crediticia=' + clt_calificacion_crediticia
+    + '&clt_calificacion_personal=' + clt_calificacion_personal + '&clt_aporte=' + clt_aporte + '&clt_estado=1'
+    + '&clt_fecharegistro=' + clt_fecharegistro;
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-    return this.http.post(this.url + 'producto/create.php', params, {headers: headers});
+    return this.http.post(this.url + 'cliente/create.php', params, {headers: headers});
   }
 }
 
@@ -64,7 +81,6 @@ export interface Cliente {
   calificacioncrediticia: string;
   calificacionpersonal: string;
   aporte: number;
-  //fecharegistro: date;
 }
 
 export interface Maestro {
