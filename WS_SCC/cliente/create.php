@@ -1,6 +1,7 @@
 <?php
     header("Access-Control-Allow-Origin: *");
-    header("Content-Type: application/json; charset=UTF-8");
+    header("Content-Type: application/x-www-form-urlencoded; charset=UTF-8");
+    header("Content-Type:multipart/form-data");
     header("Access-Control-Allow-Methods: POST");
     header("Access-Control-Max-Age: 3600");
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
@@ -8,6 +9,7 @@
     include_once '../config/database.php';
     include_once '../entities/cliente.php';
     include_once '../shared/utilities.php';
+    //include_once '../file/upload.php';
 
     $database = new Database();
     $db = $database->getConnection();
@@ -18,18 +20,19 @@
         $data = json_decode(file_get_contents('php://input'), true);
 
         if (($_POST["id_institucion"])!=null  && !empty(trim($_POST["clt_codigo"])) && !empty(trim($_POST["clt_dni"]))
-            && !empty(trim($_POST["clt_nombre"])) && !empty(trim($_POST["clt_apellido"])) && !empty(trim($_POST["clt_foto"]))
+            && !empty(trim($_POST["clt_nombre"])) && !empty(trim($_POST["clt_apellido"]))
             && !empty(trim($_POST["clt_cip"])) && !empty(trim($_POST["clt_email"])) && !empty(trim($_POST["clt_casilla"]))
             && !empty(trim($_POST["clt_trabajo"])) && !empty(trim($_POST["clt_cargo"])) && !empty(trim($_POST["clt_calificacion_crediticia"]))
             && !empty(trim($_POST["clt_calificacion_personal"])) && ($_POST["clt_aporte"])!=null && ($_POST["clt_estado"])!=null
-            && ($_POST["clt_fecharegistro"])!=null)
+            && ($_POST["clt_fecharegistro"])!=null && ($_POST["clt_foto"])!=null)
         {
+
             $cliente->id_institucion = trim($_POST["id_institucion"]);
             $cliente->clt_codigo = trim($_POST["clt_codigo"]);
             $cliente->clt_dni = trim($_POST["clt_dni"]);
             $cliente->clt_nombre = trim($_POST["clt_nombre"]);
             $cliente->clt_apellido = trim($_POST["clt_apellido"]);
-            $cliente->clt_foto = trim($_POST["clt_foto"]);
+            $cliente->clt_foto = "FOTO_".$cliente->clt_dni;
             $cliente->clt_cip = trim($_POST["clt_cip"]);
             $cliente->clt_email = trim($_POST["clt_email"]);
             $cliente->clt_casilla = trim($_POST["clt_casilla"]);
@@ -43,7 +46,7 @@
 
             if($cliente->create())
             {
-                print_json("0000", "Se creó el producto satisfactoriamente.", "");
+                print_json("0000", "Se creó el cliente satisfactoriamente.", "");
             }
             else
             {
