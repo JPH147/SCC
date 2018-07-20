@@ -13,6 +13,8 @@ import { ClientesComponent } from './components/clientes/clientes.component';
 import { VentasComponent } from './components/ventas/ventas.component';
 import { ListadoSalidaVendedoresComponent } from './components/listado-salida-vendedores/listado-salida-vendedores.component';
 import { ventanaseries } from './components/ingreso-productos/ventana-series/ventanaseries';
+import { ventanaseriessv } from './components/salida-vendedores/ventana-seriessv/ventanaseriessv';
+
 
 const appRoutes: Routes = [
   {path: 'usuarios', component: UsuariosComponent},
