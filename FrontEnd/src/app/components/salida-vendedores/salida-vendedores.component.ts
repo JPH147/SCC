@@ -19,7 +19,7 @@ export interface Food {
 })
 
 export class SalidaVendedoresComponent implements OnInit {
-  public articulos: Array <articulo>;
+  public articulos: Array <Articulo>;
   public contador: number;
   public almacenes: Array<any>;
   public seriventana: string;
@@ -112,3 +112,9 @@ export interface PeriodicElement {
 
 
 
+export interface Articulo {
+  numero: number;
+  nombre: string;
+  cantidad: number;
+  precio: number;
+}

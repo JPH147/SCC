@@ -144,7 +144,8 @@ import { ventanaseriessv } from './components/salida-vendedores/ventana-seriessv
     DialogoComponent,
     VentanaEmergenteProductos,
     ventanaseries,
-    ventanaseriesalida
+    ventanaseriesalida,
+    ventanaseriessv
   ],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider]
