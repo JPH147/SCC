@@ -1,5 +1,5 @@
 import { ventanaseriesalida } from './ventana-seriesalida/ventanaseriesalida';
-import { DialogData } from './../salida-vendedores/salida-vendedores.component';
+import { DialogData } from '../salida-vendedores/salida-vendedores.component';
 import { Component, OnInit } from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
@@ -77,7 +77,7 @@ export class SalidaProductosComponent implements OnInit {
   }
 
 
-  AgregarSerieS() {
+  AgregarSerieSalida() {
     const serieventana = this.DialogoSerie.open(ventanaseriesalida, {
       width: '600px'
     });

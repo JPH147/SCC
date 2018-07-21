@@ -66,8 +66,13 @@ import { ListadoSalidaVendedoresComponent } from './components/listado-salida-ve
 import {VentanaEmergenteProductos} from './components/productos/ventana-emergente/ventanaemergente';
 import {ventanaseries} from './components/ingreso-productos/ventana-series/ventanaseries';
 import { ventanaseriesalida } from './components/salida-productos/ventana-seriesalida/ventanaseriesalida';
+<<<<<<< HEAD
 import {VentanaEmergenteClientes} from './components/clientes/ventana-emergente/ventanaemergente';
 import { ProveedoresComponent } from './components/proveedores/proveedores.component'
+=======
+import { ventanaseriessv } from './components/salida-vendedores/ventana-seriessv/ventanaseriessv';
+
+>>>>>>> ea6f261ec7c3fb9df9af2189449fff60130dce3b
 
 @NgModule({
   imports: [
@@ -137,8 +142,12 @@ import { ProveedoresComponent } from './components/proveedores/proveedores.compo
     VentanaEmergenteProductos,
     ventanaseries,
     ventanaseriesalida,
+<<<<<<< HEAD
     VentanaEmergenteClientes,
     ProveedoresComponent
+=======
+    ventanaseriessv,
+>>>>>>> ea6f261ec7c3fb9df9af2189449fff60130dce3b
    ],
   entryComponents: [
     AppComponent,
@@ -146,7 +155,11 @@ import { ProveedoresComponent } from './components/proveedores/proveedores.compo
     VentanaEmergenteProductos,
     ventanaseries,
     ventanaseriesalida,
+<<<<<<< HEAD
     VentanaEmergenteClientes
+=======
+    ventanaseriessv
+>>>>>>> ea6f261ec7c3fb9df9af2189449fff60130dce3b
   ],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider]

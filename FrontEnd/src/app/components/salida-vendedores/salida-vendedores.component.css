@@ -27,18 +27,6 @@
   margin-right: 8px;
 }
 
-.example-button-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-}
-
-.example-form {
-  min-width: 150px;
-  max-width: 500px;
-  width: 100%;
-}
-
 .example-full-width {
   width: 100%;
 
@@ -156,3 +144,34 @@ margin-left: 5%
   margin: 0 5px;
   width: 40%;
 }
+
+.alinchkbox{
+margin-left:570px
+
+}
+
+example-button-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.example-button-row button,
+.example-button-row a {
+  margin-right: 8px;
+}
+
+
+.Alineaobs{
+ margin-left: 50px
+}
+
+
+.agregar{
+  float: right;
+}
+
+.Alintaguia{
+  float: left;
+  margin-right:32%
+  }

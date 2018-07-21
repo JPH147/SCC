@@ -1,0 +1,23 @@
+<mat-card>
+    <button mat-mini-fab color="primary" class = 'boton' (click)="AgregarSerieSV()"><mat-icon>add</mat-icon></button>
+    <mat-card-header>
+      <mat-card-title>Ingresa Series</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div *ngFor="let serie of seriearticulo">
+        <mat-form-field class="example-full-width">
+          <input matInput placeholder="Ingresa Series">
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <mat-grid-list cols=1 rowHeight="40px">
+        <mat-grid-tile>
+          <button mat-raised-button color="primary">Grabar</button>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-card-actions>
+
+
+  </mat-card>

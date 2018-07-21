@@ -1,5 +1,5 @@
 import { ventanaseries } from './ventana-series/ventanaseries';
-import { DialogData } from './../salida-vendedores/salida-vendedores.component';
+import { DialogData } from '../salida-vendedores/salida-vendedores.component';
 import { Component, OnInit } from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
@@ -7,6 +7,7 @@ import {map, startWith} from 'rxjs/operators';
 import {SelectionModel} from '@angular/cdk/collections';
 import {MatTableDataSource} from '@angular/material';
 import { MatDialog } from '@angular/material';
+
 export interface Food {
   value: string;
   viewValue: string;
