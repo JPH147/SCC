@@ -66,6 +66,8 @@ import { ListadoSalidaVendedoresComponent } from './components/listado-salida-ve
 import {VentanaEmergenteProductos} from './components/productos/ventana-emergente/ventanaemergente';
 import {ventanaseries} from './components/ingreso-productos/ventana-series/ventanaseries';
 import { ventanaseriesalida } from './components/salida-productos/ventana-seriesalida/ventanaseriesalida';
+import {VentanaEmergenteClientes} from './components/clientes/ventana-emergente/ventanaemergente';
+import { ProveedoresComponent } from './components/proveedores/proveedores.component'
 
 @NgModule({
   imports: [
@@ -135,13 +137,16 @@ import { ventanaseriesalida } from './components/salida-productos/ventana-series
     VentanaEmergenteProductos,
     ventanaseries,
     ventanaseriesalida,
+    VentanaEmergenteClientes,
+    ProveedoresComponent
    ],
   entryComponents: [
     AppComponent,
     DialogoComponent,
     VentanaEmergenteProductos,
     ventanaseries,
-    ventanaseriesalida
+    ventanaseriesalida,
+    VentanaEmergenteClientes
   ],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider]

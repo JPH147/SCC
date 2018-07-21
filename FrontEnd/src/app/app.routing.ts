@@ -13,6 +13,7 @@ import { ClientesComponent } from './components/clientes/clientes.component';
 import { VentasComponent } from './components/ventas/ventas.component';
 import { ListadoSalidaVendedoresComponent } from './components/listado-salida-vendedores/listado-salida-vendedores.component';
 import { ventanaseries } from './components/ingreso-productos/ventana-series/ventanaseries';
+import { ProveedoresComponent } from './components/proveedores/proveedores.component'
 
 const appRoutes: Routes = [
   {path: 'usuarios', component: UsuariosComponent},
@@ -27,6 +28,7 @@ const appRoutes: Routes = [
   {path: 'clientes', component: ClientesComponent},
   {path: 'ventas', component: VentasComponent},
   {path: 'usuarios', component: UsuariosComponent},
+  {path: 'proveedores', component: ProveedoresComponent},
 ];
 
 export const appRoutingProvider: any[] = [];

@@ -40,7 +40,8 @@ const TREE_DATA = JSON.stringify({
   Cobranzas: '',
   'Administración del sistema': {
     Usuarios: 'usuarios',
-    'Cooperativa': {
+    Proveedores:'proveedores',
+    Cooperativa: {
       'Aportes de socio': '',
       'Cuentas bancarias': ''
     },

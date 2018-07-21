@@ -26,7 +26,7 @@ Class Cronograma{
             $cuota_item = array (
                 "numero" => $i+1,
                 "month"=>date_format($fechainicio,"d-m-Y"),
-                "price"=>$monto
+                "price"=>$monto/$numerocuotas
             );
  
             array_push($cronograma["cuotas"],$cuota_item);
