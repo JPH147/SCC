@@ -70,7 +70,7 @@ export class VentanaEmergenteProductos {
       this.ListarModelos(this.data.marca);
       this.ProductosForm.get('modelo').setValue(this.data.modelo);
       this.ProductosForm.get('descripcion').setValue(this.data.descripcion);
-      this.ProductosForm.get('precio').setValue(this.data.precio)
+      this.ProductosForm.get('precio').setValue(this.data.precio);
       // Se habilitan los formularios
       this.ProductosForm.controls['marca'].enable();
       this.ProductosForm.controls['modelo'].enable();

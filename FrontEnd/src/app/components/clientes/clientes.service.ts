@@ -62,7 +62,6 @@ export class ClienteService {
     + '&clt_calificacion_personal=' + clt_calificacion_personal + '&clt_aporte=' + clt_aporte + '&clt_estado=1'
     + '&clt_fecharegistro=' + date;
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-    //console.log(date);
     return this.http.post(this.url + 'cliente/create.php', params, {headers: headers});
   }
 }
@@ -84,8 +83,3 @@ export interface Cliente {
   calificacionpersonal: string;
   aporte: number;
 }
-
-export interface Maestro {
-  id_modelo: number;
-  prd_descripcion: string;
-  }

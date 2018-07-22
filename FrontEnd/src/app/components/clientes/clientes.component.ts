@@ -90,6 +90,10 @@ export class ClientesComponent implements OnInit {
    let VentanaClientes = this.DialogoClientes.open(VentanaEmergenteClientes, {
      width: '800px'
    });
+
+   VentanaClientes.afterClosed().subscribe(res => {
+    this.CargarData();
+  });
  }
 
  /*Eliminar(id) {
