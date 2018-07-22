@@ -52,7 +52,7 @@ export class ClienteService {
     clt_calificacion_crediticia: string,
     clt_calificacion_personal: string,
     clt_aporte: number,
-    clt_fecharegistro: Date
+    clt_fecharegistro: number
     ): Observable<any> {
     let params = 'id_institucion=' + id_institucion + '&clt_codigo=' + clt_codigo
     + '&clt_dni=' + clt_dni + '&clt_nombre=' + clt_nombre + '&clt_apellido=' + clt_apellido
