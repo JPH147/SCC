@@ -48,6 +48,9 @@ export class VentanaEmergenteClientes {
       'nombre':[null,[
         Validators.required
       ]],
+      'apellido':[null,[
+        Validators.required
+      ]],
       'cip':[null,[
         Validators.required
       ]],
@@ -121,7 +124,7 @@ export class VentanaEmergenteClientes {
         formulario.value.dni, formulario.value.nombre, formulario.value.apellido,
         formulario.value.cip, formulario.value.email, formulario.value.casilla,
         formulario.value.trabajo, formulario.value.cargo, formulario.value.calificacioncrediticia,
-        formulario.value.calificacionpersonal, formulario.value.aporte, Date.now()).subscribe(res => console.log(res));
+        formulario.value.calificacionpersonal, formulario.value.aporte).subscribe(res => console.log(res));
     }
       this.ClientesForm.reset();
       this.ventana.close();

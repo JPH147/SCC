@@ -7,7 +7,7 @@
         <mat-grid-list cols="2" rowHeight="80px">
           <mat-grid-tile>
             <mat-form-field>
-              <mat-select placeholder='Selecciona Institucion' formControlName="institucion" (selectionChange)="InstitucionSeleccionado($event)">
+              <mat-select placeholder='Selecciona Institucion' formControlName="institucion" >
                 <mat-option *ngFor="let institucion of Institucion" [value] = "institucion.id"> {{institucion.nombre}} </mat-option>
               </mat-select>
             </mat-form-field>
@@ -31,7 +31,7 @@
               <input matInput placeholder="Ingresa Nombre del Cliente" formControlName="nombre">
             </mat-form-field>
           </mat-grid-tile>
-
+        
           <mat-grid-tile>
             <mat-form-field class="input-ventana">
               <input matInput placeholder="Ingresa Apellido del Cliente" formControlName="apellido">
