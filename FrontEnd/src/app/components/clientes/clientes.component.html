@@ -5,34 +5,77 @@
   </mat-card-title>
 
   <button mat-raised-button color="primary" class="agregar" (click)="Agregar()">Agregar Cliente</button>
-  <br/><br/>
-  <mat-grid-list cols=4 rowHeight="80px">
-    <mat-grid-tile>
-      <mat-icon>search</mat-icon>
-      <mat-form-field>
-        <input matInput placeholder="Institución" #InputNombreInst>
-      </mat-form-field>
-    </mat-grid-tile>
-        <mat-grid-tile>
-      <mat-icon>search</mat-icon>
-      <mat-form-field>
-        <input matInput placeholder="DNI" #InputDNI>
-      </mat-form-field>
-    </mat-grid-tile>
-        <mat-grid-tile>
-      <mat-icon>search</mat-icon>
-      <mat-form-field>
-        <input matInput placeholder="Nombre" #InputNombreCliente>
-      </mat-form-field>
-    </mat-grid-tile>
-      <mat-grid-tile>
-        <mat-icon>search</mat-icon>
-          <mat-form-field>
-        <input matInput placeholder="Apellido" #InputApellido>
-      </mat-form-field>
-    </mat-grid-tile>
+  <br/><br/><br/>
+
+
+
+  <mat-accordion multi=true>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Filtro Cliente
+        </mat-panel-title>
+      </mat-expansion-panel-header>
   
-  </mat-grid-list>
+      <mat-grid-list cols=3 rowHeight="60px">
+        <mat-grid-tile>
+          <mat-icon>search</mat-icon>
+          <mat-form-field>
+            <input matInput placeholder="DNI" #InputDNI>
+          </mat-form-field>
+        </mat-grid-tile>
+            <mat-grid-tile>
+          <mat-icon>search</mat-icon>
+          <mat-form-field>
+            <input matInput placeholder="Nombre" #InputNombreCliente>
+          </mat-form-field>
+        </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-icon>search</mat-icon>
+              <mat-form-field>
+            <input matInput placeholder="Apellido" #InputApellido>
+          </mat-form-field>
+        </mat-grid-tile>
+      </mat-grid-list>
+
+
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Filtro Institución
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+  
+      <mat-grid-list cols=3 rowHeight="60px">
+        <mat-grid-tile>
+          <mat-icon>search</mat-icon>
+          <mat-form-field>
+            <input matInput placeholder="Institución" #InputNombreInst>
+          </mat-form-field>
+        </mat-grid-tile>
+            <mat-grid-tile>
+          <mat-icon>search</mat-icon>
+          <mat-form-field>
+            <input matInput placeholder="Sede" #InputSede>
+          </mat-form-field>
+        </mat-grid-tile>
+            <mat-grid-tile>
+          <mat-icon>search</mat-icon>
+          <mat-form-field>
+            <input matInput placeholder="Subsede" #InputSubsede>
+          </mat-form-field>
+        </mat-grid-tile>
+      </mat-grid-list>
+
+      
+    </mat-expansion-panel>
+  </mat-accordion>
+
+
+
+  <br/>
+  
 
   <mat-card-content>
 
@@ -47,37 +90,50 @@
         <mat-cell *matCellDef="let cliente"> {{cliente.numero}} </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="institucion">
-        <mat-header-cell *matHeaderCellDef> Institución </mat-header-cell>
-        <mat-cell *matCellDef="let cliente"> {{cliente.inst_nombre}} </mat-cell>
-      </ng-container>
-
       <ng-container matColumnDef="codigo">
         <mat-header-cell *matHeaderCellDef> Código </mat-header-cell>
-        <mat-cell *matCellDef="let cliente"> {{cliente.clt_codigo}} </mat-cell>
+        <mat-cell *matCellDef="let cliente"> {{cliente.codigo}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="dni">
         <mat-header-cell *matHeaderCellDef> DNI </mat-header-cell>
-        <mat-cell *matCellDef="let cliente"> {{cliente.clt_dni}} </mat-cell>
+        <mat-cell *matCellDef="let cliente"> {{cliente.dni}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="nombrecliente">
-        <mat-header-cell *matHeaderCellDef> Descripcion</mat-header-cell>
-        <mat-cell *matCellDef="let cliente"> {{cliente.clt_nombre}} </mat-cell>
+        <mat-header-cell *matHeaderCellDef> Nombre</mat-header-cell>
+        <mat-cell *matCellDef="let cliente"> {{cliente.nombre}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="apellidocliente">
-        <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
-        <mat-cell *matCellDef="let cliente"> {{cliente.clt_apellido}} </mat-cell>
+        <mat-header-cell *matHeaderCellDef> Apellido </mat-header-cell>
+        <mat-cell *matCellDef="let cliente"> {{cliente.apellido}} </mat-cell>
       </ng-container>
+
+      <ng-container matColumnDef="institucion">
+        <mat-header-cell *matHeaderCellDef> Institución </mat-header-cell>
+        <mat-cell *matCellDef="let cliente"> {{cliente.institucion}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="sede">
+        <mat-header-cell *matHeaderCellDef> Sede </mat-header-cell>
+        <mat-cell *matCellDef="let cliente"> {{cliente.sede}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="subsede">
+        <mat-header-cell *matHeaderCellDef> Subsede </mat-header-cell>
+        <mat-cell *matCellDef="let cliente"> {{cliente.subsede}} </mat-cell>
+      </ng-container>
+
+      
+
 
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
-        <mat-cell *matCellDef="let producto">
+        <mat-cell *matCellDef="let cliente">
 
-          <button mat-icon-button color="primary"><mat-icon> edit </mat-icon></button>
-          <button mat-icon-button color="primary" (click)="Eliminar(cliente.idcliente)"><mat-icon> delete </mat-icon></button>
+          <button mat-icon-button color="primary" (click)="Editar(cliente.id)"><mat-icon> edit </mat-icon></button>
+          <button mat-icon-button color="primary" (click)="Eliminar(cliente.id)"><mat-icon> delete </mat-icon></button>
         </mat-cell>
       </ng-container>
 

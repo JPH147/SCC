@@ -6,7 +6,14 @@ class Institucion{
 
 	public $id_institucion;
 	public $inst_nombre;
-	public $idinstitucion_estado;
+	public $isnt_abreviatura;
+	public $isnt_representante_legal;
+	public $dst_nombre;
+	public $inst_direccion;
+	public $inst_telefono;
+	public $inst_codigo_cooperativa;
+	public $inst_estado;
+
 
 	public function __construct($db){
 		$this->conn = $db;
@@ -31,7 +38,12 @@ class Institucion{
 				"numero"=>$contador,
 				"id"=>$id_institucion,
 				"nombre"=>$inst_nombre,
-				"estado"=>$idinstitucion_estado,
+				"abreviatura"=>$isnt_abreviatura,
+				"representante"=>$isnt_representante_legal,
+				"distrito"=>$dst_nombre,
+				"direccion"=>$inst_direccion,
+				"telefono"=>$inst_telefono,
+				"codigo"=>$inst_codigo_cooperativa
 			);
 			array_push($institucion_list["institucion"],$institucion_fila);
 		}

@@ -48,6 +48,9 @@ export class VentanaEmergenteClientes {
       'nombre':[null,[
         Validators.required
       ]],
+      'apellido':[null,[
+        Validators.required
+      ]],
       'cip':[null,[
         Validators.required
       ]],
@@ -96,21 +99,19 @@ export class VentanaEmergenteClientes {
       this.ClientesForm.get('cip').setValue(this.data.cip);
       this.ClientesForm.get('email').setValue(this.data.email);
       this.ClientesForm.get('casilla').setValue(this.data.casilla);
-
       this.ClientesForm.get('trabajo').setValue(this.data.trabajo);
       this.ClientesForm.get('cargo').setValue(this.data.cargo);
       this.ClientesForm.get('calificacioncrediticia').setValue(this.data.calificacioncrediticia);
       this.ClientesForm.get('calificacionpersonal').setValue(this.data.calificacionpersonal);
       this.ClientesForm.get('aporte').setValue(this.data.aporte);
       this.ClientesForm.get('fecharegistro').setValue(this.data.fecharegistro);
-      // Se habilitan los formularios
       this.ClientesForm.controls['institucion'].enable();
     }
 
   }
 
   /* Enviar al formulario */
-  Guardar(formulario){
+  Guardar(formulario) {
     /*if(this.data){
       this.ClienteService.Actualizar(this.data.id,formulario.value.modelo, formulario.value.descripcion, formulario.value.precio).subscribe(res=>console.log(res))
     }*/
@@ -120,15 +121,15 @@ export class VentanaEmergenteClientes {
         formulario.value.dni, formulario.value.nombre, formulario.value.apellido,
         formulario.value.cip, formulario.value.email, formulario.value.casilla,
         formulario.value.trabajo, formulario.value.cargo, formulario.value.calificacioncrediticia,
-        formulario.value.calificacionpersonal, formulario.value.aporte, formulario.value.fecharegistro).subscribe(res => console.log(res));
+        formulario.value.calificacionpersonal, formulario.value.aporte).subscribe(res => console.log(res));
     }
       this.ClientesForm.reset();
       this.ventana.close();
   }
 
-  ListarInstitucion(){
+  ListarInstitucion() {
     this.Servicios.ListarInstitucion().subscribe(res=>{
-      this.Institucion=[];
+      this.Institucion = [];
       for (let i in res){
         this.Institucion.push(res[i])
       }

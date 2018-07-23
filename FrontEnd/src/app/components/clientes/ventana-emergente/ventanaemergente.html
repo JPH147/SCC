@@ -4,44 +4,105 @@
     </mat-card-header>
     <form [formGroup]="ClientesForm" (ngSubmit)="Guardar(ClientesForm)">
       <mat-card-content>
-        <mat-grid-list cols="2" rowHeight="120px">
+        <mat-grid-list cols="2" rowHeight="80px">
           <mat-grid-tile>
             <mat-form-field>
-              <mat-select placeholder='Selecciona Institucion' formControlName="institucion" (selectionChange)="InstitucionSeleccionado($event)">
+              <mat-select placeholder='Selecciona Institucion' formControlName="institucion" >
                 <mat-option *ngFor="let institucion of Institucion" [value] = "institucion.id"> {{institucion.nombre}} </mat-option>
               </mat-select>
             </mat-form-field>
           </mat-grid-tile>
-  
-<!--           <mat-grid-tile>
+
+          <mat-grid-tile>
             <mat-form-field>
-              <mat-select placeholder='Selecciona Marca' formControlName="marca" (selectionChange)="MarcaSeleccionada($event)">
-                <mat-option *ngFor="let marca of Marcas" [value] = "marca.id"> {{marca.nombre}} </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </mat-grid-tile> -->
-  
-<!--           <mat-grid-tile>
-            <mat-form-field>
-              <mat-select placeholder='Selecciona Modelo'  formControlName="modelo">
-                <mat-option *ngFor="let modelo of Modelos" [value] = "modelo.id"> {{modelo.nombre}} </mat-option>
+              <mat-select placeholder='Selecciona Sede' formControlName="sede" >
+                <mat-option *ngFor="let sede of Sedes" [value] = "sede.id"> {{sede.nombre}} </mat-option>
               </mat-select>
             </mat-form-field>
           </mat-grid-tile>
-  
+
           <mat-grid-tile>
             <mat-form-field>
-              <input matInput placeholder="Ingresa Precio Minimo"  formControlName="precio">
-              <mat-error *ngIf="ProductosForm.get('precio').invalid">Debes escribir sólo números</mat-error>
-              <span matPrefix>S/.</span>
+              <mat-select placeholder='Selecciona SubSede' formControlName="subsede" >
+                <mat-option *ngFor="let subsede of SubSede" [value] = "subsede.id"> {{subsede.nombre}} </mat-option>
+              </mat-select>
             </mat-form-field>
-          </mat-grid-tile> -->
-  
-<!--           <mat-grid-tile [colspan]="2">
+          </mat-grid-tile>
+
+          <mat-grid-tile>
             <mat-form-field class="input-ventana">
-              <input matInput placeholder="Ingresa Descripcion del Producto" formControlName="descripcion">
+              <input matInput placeholder="Ingresa Código del Cliente" formControlName="codigo">
             </mat-form-field>
-          </mat-grid-tile> -->
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <mat-form-field>
+              <input matInput placeholder="Ingresa DNI"  formControlName="dni" maxlength="8">
+              <mat-error *ngIf="ClientesForm.get('dni').invalid">Debes escribir sólo números</mat-error>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <mat-form-field class="input-ventana">
+              <input matInput placeholder="Ingresa Nombre del Cliente" formControlName="nombre">
+            </mat-form-field>
+          </mat-grid-tile>
+        
+          <mat-grid-tile>
+            <mat-form-field class="input-ventana">
+              <input matInput placeholder="Ingresa Apellido del Cliente" formControlName="apellido">
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <mat-form-field class="input-ventana">
+              <input matInput placeholder="Ingresa CIP del Cliente" formControlName="cip">
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <mat-form-field class="input-ventana">
+              <input matInput placeholder="Ingresa Email del Cliente" formControlName="email" ngModel email="true">
+              <mat-error>Ingrese Email válido</mat-error>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <mat-form-field class="input-ventana">
+              <input matInput placeholder="Ingresa Casilla" formControlName="casilla">
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <mat-form-field class="input-ventana">
+              <input matInput placeholder="Ingresa Dirección de trabajo" formControlName="trabajo">
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <mat-form-field class="input-ventana">
+              <input matInput placeholder="Ingresa Cargo" formControlName="cargo">
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <mat-form-field class="input-ventana">
+              <input matInput placeholder="Ingresa Calificación Crediticia" formControlName="calificacioncrediticia">
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <mat-form-field class="input-ventana">
+              <input matInput placeholder="Ingresa Calificación Personal" formControlName="calificacionpersonal">
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <mat-form-field>
+              <input matInput placeholder="Ingresa Aporte"  formControlName="aporte">
+              <mat-error *ngIf="ClientesForm.get('aporte').invalid">Debes escribir sólo números</mat-error>
+            </mat-form-field>
+          </mat-grid-tile>
         </mat-grid-list>
       </mat-card-content>
       <mat-card-actions>

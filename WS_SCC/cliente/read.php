@@ -16,7 +16,9 @@
     try{
         $cliente = new Cliente($db);
 
-        $cliente->inst_nombre = !empty($_GET['pinst_nombre']) ? $_GET['pinst_nombre'] : null;
+        $cliente->inst_nombre = !empty($_GET['inst_nombre']) ? $_GET['inst_nombre'] : null;
+        $cliente->sd_nombre = !empty($_GET['sd_nombre']) ? $_GET['sd_nombre'] : null;
+        $cliente->ssd_nombre = !empty($_GET['ssd_nombre']) ? $_GET['ssd_nombre'] : null;
         $cliente->clt_dni = !empty($_GET['pclt_dni']) ? $_GET['pclt_dni'] : null;
         $cliente->clt_nombre = !empty($_GET['pclt_nombre']) ? $_GET['pclt_nombre'] : null;
         $cliente->clt_apellido = !empty($_GET['pclt_apellido']) ? $_GET['pclt_apellido'] : null;
