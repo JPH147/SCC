@@ -72,12 +72,13 @@
         <mat-cell *matCellDef="let cliente"> {{cliente.clt_apellido}} </mat-cell>
       </ng-container>
 
+
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
-        <mat-cell *matCellDef="let producto">
+        <mat-cell *matCellDef="let cliente">
 
-          <button mat-icon-button color="primary"><mat-icon> edit </mat-icon></button>
-          <button mat-icon-button color="primary" (click)="Eliminar(cliente.idcliente)"><mat-icon> delete </mat-icon></button>
+          <button mat-icon-button color="primary" (click)="Editar(cliente.id)"><mat-icon> edit </mat-icon></button>
+          <button mat-icon-button color="primary" (click)="Eliminar(cliente.id)"><mat-icon> delete </mat-icon></button>
         </mat-cell>
       </ng-container>
 

@@ -30,12 +30,12 @@ export class ClienteService {
   }
 
   Eliminar(
-   producto: number
+   idcliente: number
   ): Observable<any>
   {
-    let params = 'idproducto=' + producto;
+    let params = 'idcliente=' + idcliente;
     let headers = new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded');
-    return this.http.post(this.url + 'producto/delete.php', params, {headers: headers});
+    return this.http.post(this.url + 'cliente/delete.php', params, {headers: headers});
 	}
 
   Agregar(

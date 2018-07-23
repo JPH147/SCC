@@ -96,10 +96,10 @@ export class ClientesComponent implements OnInit {
   });
  }
 
- /*Eliminar(id) {
+ Eliminar(id) {
    this.Servicio.Eliminar(id).subscribe(res => {
      this.CargarData();
    });
- }*/
+ }
 
 }

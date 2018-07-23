@@ -52,7 +52,7 @@ Class Cliente{
             $contador=$contador+1;
             $cliente_item = array (
                 "numero"=>$contador,
-                "idcliente"=>$row['idcliente'],
+                "id"=>$row['idcliente'],
                 "inst_nombre"=>$row['inst_nombre'],
                 "clt_codigo"=>$row['clt_codigo'],
                 "clt_dni"=>$row['clt_dni'],
@@ -131,12 +131,22 @@ Class Cliente{
     
         $row = $result->fetch(PDO::FETCH_ASSOC);
         
-        $this->usr_nombre=$row['usr_nombre'];
-        $this->usr_usuario=$row['usr_usuario'];
-        $this->usr_ultimologueo=$row['usr_ultimologueo'];
-        $this->usr_fechacreacion=$row['usr_fechacreacion'];
-        $this->usr_estado=$row['usr_estado'];
-        $this->prf_nombre= $row['prf_nombre'];
+        $this->inst_nombre=$row['inst_nombre'];
+        $this->clt_codigo=$row['clt_codigo'];
+        $this->clt_dni=$row['clt_dni'];
+        $this->clt_nombre=$row['clt_nombre'];
+        $this->clt_foto=$row['clt_foto'];
+        $this->clt_cip= $row['clt_cip'];
+
+        $this->clt_email=$row['clt_email'];
+        $this->clt_casilla=$row['clt_casilla'];
+        $this->clt_trabajo=$row['clt_trabajo'];
+        $this->clt_cargo=$row['clt_cargo'];
+        $this->clt_calificacion_crediticia=$row['clt_calificacion_crediticia'];
+        $this->clt_calificacion_personal= $row['clt_calificacion_personal'];
+    
+        $this->clt_trabajo=$row['clt_aporte'];
+        $this->clt_cargo=$row['clt_fecharegistro'];
     }
 
     function update()
