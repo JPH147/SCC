@@ -13,13 +13,16 @@ export class ClienteService {
   constructor(private http: HttpClient) {}
 
   Listado(
-  nombreinst: string,
+  inst_nombre: string,
+  sd_nombre: string,
+  ssd_nombre: string,
   dni: string,
   nombre: string,
   apellido: string
   ): Observable<Cliente[]>
-  { return this.http.get(this.url + 'cliente/read.php?pinst_nombre='
-   + nombreinst + '&pclt_dni=' + dni + '&pclt_nombre=' + nombre + '&pclt_apellido = + ' + apellido)
+  { return this.http.get(this.url + 'cliente/read.php?inst_nombre='
+   + inst_nombre + '&sd_nombre=' + sd_nombre + '&ssd_nombre='
+   + ssd_nombre + '&pclt_dni=' + dni + '&pclt_nombre=' + nombre + '&pclt_apellido=' + apellido)
     .pipe(map(res => {
       if (res['codigo'] === 0) {
           return res['data'].clientes;

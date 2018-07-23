@@ -23,6 +23,8 @@ this.CargandoInformacion.complete();
 
   CargarClientes(
     nombreinst: string,
+    sede: string,
+    subsede: string,
     dni: string,
     nombre: string,
     apellido: string
@@ -30,7 +32,7 @@ this.CargandoInformacion.complete();
   ){
   this.CargandoInformacion.next(true);
 
-  this.Servicio.Listado(nombreinst, dni, nombre, apellido)
+  this.Servicio.Listado(nombreinst, sede , subsede, dni, nombre, apellido)
   .pipe(catchError(() => of([])),
   finalize(() => this.CargandoInformacion.next(false))
   )

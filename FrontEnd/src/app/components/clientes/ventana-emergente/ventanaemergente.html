@@ -14,6 +14,22 @@
           </mat-grid-tile>
 
           <mat-grid-tile>
+            <mat-form-field>
+              <mat-select placeholder='Selecciona Sede' formControlName="sede" >
+                <mat-option *ngFor="let sede of Sedes" [value] = "sede.id"> {{sede.nombre}} </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <mat-form-field>
+              <mat-select placeholder='Selecciona SubSede' formControlName="subsede" >
+                <mat-option *ngFor="let subsede of SubSede" [value] = "subsede.id"> {{subsede.nombre}} </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
             <mat-form-field class="input-ventana">
               <input matInput placeholder="Ingresa Código del Cliente" formControlName="codigo">
             </mat-form-field>
