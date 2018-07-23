@@ -102,4 +102,18 @@ export class ClientesComponent implements OnInit {
    });
  }
 
+ Editar(id) {
+  this.Servicio.Seleccionar(id).subscribe(res => {
+    // tslint:disable-next-line:prefer-const
+    let VentanaClientes = this.DialogoClientes.open(VentanaEmergenteClientes, {
+      width: '800px',
+      data: res
+    });
+    // tslint:disable-next-line:no-shadowed-variable
+    VentanaClientes.afterClosed().subscribe (res => {
+      this.CargarData();
+    });
+  });
+}
+
 }

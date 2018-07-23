@@ -64,6 +64,20 @@ export class ClienteService {
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     return this.http.post(this.url + 'cliente/create.php', params, {headers: headers});
   }
+
+
+  Seleccionar(
+    id:number
+  ):Observable<Cliente>{
+    return this.http.get(this.url+'cliente/readxId.php?idcliente='+id)
+    .pipe(map(res=>{
+      if (res['codigo'] === 0) {
+          return res['data'];
+      }  else {
+          console.log('Error al importar los datos, revisar servicio');
+      }
+    }))
+  }
 }
 
 export interface Cliente {
