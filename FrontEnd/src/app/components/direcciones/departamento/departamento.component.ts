@@ -65,10 +65,9 @@ ngAfterViewInit () {
  Eliminar(departamento) {
    let VentanaDepartamento = this.DialogoDepartamentos.open(VentanaConfirmarComponent,{
      width: '400px',
-     data: {objeto: 'departamento', valor: departamento.descripcion}
+     data: {objeto: 'el departamento', valor: departamento.descripcion}
    });
    VentanaDepartamento.afterClosed().subscribe(res=>{
-     console.log(res);
      if(res==true){
       this.Servicio.EliminarDepartamento(departamento.id).subscribe(res=>{
         this.CargarData();

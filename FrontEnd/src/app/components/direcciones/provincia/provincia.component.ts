@@ -4,6 +4,7 @@ import {merge, Observable, fromEvent} from 'rxjs';
 import {ProvinciaDataSource} from './provincia.dataservice'
 import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
 import { MatPaginator, MatSort, MatDialog } from '@angular/material';
+import {VentanaConfirmarComponent} from '../../global/ventana-confirmar/ventana-confirmar.component'
 
 @Component({
   selector: 'app-provincia',
@@ -61,34 +62,39 @@ ngAfterViewInit () {
 
  // Agregar() {
 
- //   let VentanaDepartamento = this.DialogoDepartamentos.open(VentanaEmergenteDepartamento, {
+ //   let VentanaProvincia= this.DialogoDepartamentos.open(VentanaEmergenteDepartamento, {
  //     width: '400px'
  //   });
 
- //   VentanaDepartamento.afterClosed().subscribe(res => {
+ //   VentanaProvincia.afterClosed().subscribe(res => {
  //     this.CargarData();
  //   });
  // }
 
- // Eliminar(producto) {
- //   let VentanaDepartamento = this.DialogoDepartamentos.open(VentanaEliminarDepartamento,{
- //     width: '400px',
- //     data: producto
- //   });
- //   VentanaDepartamento.afterClosed().subscribe(res=>{
- //     this.CargarData();
- //   })
- // }
+ Eliminar(provincia) {
+   let VentanaProvincia = this.DialogoDepartamentos.open(VentanaConfirmarComponent,{
+     width: '400px',
+     data: {objeto: 'la provincia', valor: provincia.descripcion}
+   });
+
+   VentanaProvincia.afterClosed().subscribe(res=>{
+     if(res==true){
+      this.Servicio.EliminarProvincia(provincia.id).subscribe(res=>{
+        this.CargarData();
+      })
+     }
+   })
+ }
 
  // Editar(id) {
  //   this.Servicio.SeleccionarDepartamento(id).subscribe(res => {
 
- //     let VentanaDepartamento = this.DialogoDepartamentos.open(VentanaEmergenteDepartamento, {
+ //     let VentanaProvincia = this.DialogoDepartamentos.open(VentanaEmergenteDepartamento, {
  //       width: '480px',
  //       data: res
  //     });
  //     // tslint:disable-next-line:no-shadowed-variable
- //     VentanaDepartamento.afterClosed().subscribe (res => {
+ //     VentanaProvincia.afterClosed().subscribe (res => {
  //       this.CargarData();
  //     });
  //   });
