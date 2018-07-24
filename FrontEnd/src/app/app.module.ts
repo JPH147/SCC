@@ -69,6 +69,14 @@ import { ventanaseriesalida } from './components/salida-productos/ventana-series
 import {VentanaEmergenteClientes} from './components/clientes/ventana-emergente/ventanaemergente';
 import { ProveedoresComponent } from './components/proveedores/proveedores.component'
 import { ventanaseriessv } from './components/salida-vendedores/ventana-seriessv/ventanaseriessv';
+import { VentanaConfirmarComponent } from './components/productos/ventana-confirmar/ventana-confirmar.component';
+import { DireccionesComponent } from './components/direcciones/direcciones.component';
+import { DepartamentoComponent } from './components/direcciones/departamento/departamento.component';
+import { VentanaEmergenteDepartamento} from './components/direcciones/departamento/ventana-emergente/ventanaemergente';
+import {VentanaEliminarDepartamento} from './components/direcciones/departamento/ventana-confirmar/ventana-confirmar.component';
+import { ProvinciaComponent } from './components/direcciones/provincia/provincia.component';
+import { DistritoComponent } from './components/direcciones/distrito/distrito.component';
+
 
 @NgModule({
   imports: [
@@ -140,7 +148,14 @@ import { ventanaseriessv } from './components/salida-vendedores/ventana-seriessv
     ventanaseriesalida,
     VentanaEmergenteClientes,
     ProveedoresComponent,
-    ventanaseriessv
+    ventanaseriessv,
+    VentanaConfirmarComponent,
+    DireccionesComponent,
+    DepartamentoComponent,
+    ProvinciaComponent,
+    DistritoComponent,
+    VentanaEmergenteDepartamento,
+    VentanaEliminarDepartamento
    ],
   entryComponents: [
     AppComponent,
@@ -149,7 +164,10 @@ import { ventanaseriessv } from './components/salida-vendedores/ventana-seriessv
     ventanaseries,
     ventanaseriesalida,
     VentanaEmergenteClientes,
-    ventanaseriessv
+    ventanaseriessv,
+    VentanaConfirmarComponent,
+    VentanaEmergenteDepartamento,
+    VentanaEliminarDepartamento
   ],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider]

@@ -13,7 +13,6 @@ import {ProductoService} from '../productos.service';
   providers:[ServiciosGenerales, ProductoService]
 })
 
-// tslint:disable-next-line:component-class-suffix
 export class VentanaEmergenteProductos {
   
   public selectedValue: string;
@@ -98,11 +97,11 @@ export class VentanaEmergenteProductos {
   /* Enviar al formulario */
   Guardar(formulario){
     if(this.data){
-      this.ProductoServicios.Actualizar(this.data.id,formulario.value.modelo, formulario.value.descripcion, formulario.value.precio).subscribe(res=>console.log(res))
+      this.ProductoServicios.Actualizar(this.data.id,formulario.value.modelo, formulario.value.descripcion, formulario.value.precio).subscribe()
     }
 
     if(!this.data){
-      this.ProductoServicios.Agregar(formulario.value.modelo, formulario.value.descripcion, formulario.value.precio).subscribe(res=>console.log(res));
+      this.ProductoServicios.Agregar(formulario.value.modelo, formulario.value.descripcion, formulario.value.precio).subscribe();
     }
       this.ProductosForm.reset();
       this.ventana.close()

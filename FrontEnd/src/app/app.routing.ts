@@ -15,6 +15,7 @@ import { ListadoSalidaVendedoresComponent } from './components/listado-salida-ve
 import { ventanaseries } from './components/ingreso-productos/ventana-series/ventanaseries';
 import { ProveedoresComponent } from './components/proveedores/proveedores.component'
 import { ventanaseriessv } from './components/salida-vendedores/ventana-seriessv/ventanaseriessv';
+import { DireccionesComponent } from './components/direcciones/direcciones.component';
 
 const appRoutes: Routes = [
   {path: 'usuarios', component: UsuariosComponent},
@@ -30,6 +31,7 @@ const appRoutes: Routes = [
   {path: 'ventas', component: VentasComponent},
   {path: 'usuarios', component: UsuariosComponent},
   {path: 'proveedores', component: ProveedoresComponent},
+  {path: 'direcciones', component: DireccionesComponent},
 ];
 
 export const appRoutingProvider: any[] = [];

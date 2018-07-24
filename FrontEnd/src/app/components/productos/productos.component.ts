@@ -1,12 +1,13 @@
 import { VentanaEmergenteProductos } from './ventana-emergente/ventanaemergente';
 import {Component, OnInit, ViewChild, AfterViewInit, ElementRef} from '@angular/core';
 import { MatPaginator, MatSort, MatDialog } from '@angular/material';
-import {merge, Observable, of as observableOf} from 'rxjs';
+import {merge, Observable} from 'rxjs';
 import {catchError, map, startWith, switchMap} from 'rxjs/operators';
 import {ProductoService} from './productos.service';
 import {ProductoDataSource} from './productos.dataservice';
 import {fromEvent} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
+import {VentanaConfirmarComponent} from './ventana-confirmar/ventana-confirmar.component'
 
 @Component({
   selector: 'app-productos',
@@ -96,10 +97,14 @@ ngAfterViewInit () {
  }
 
  /* Eliminar productos */
- Eliminar(id) {
-   this.Servicio.Eliminar(id).subscribe(res => {
-     this.CargarData();
+ Eliminar(producto) {
+   let VentanaConfirmar = this.DialogoProductos.open(VentanaConfirmarComponent,{
+     width: '400px',
+     data: producto
    });
+   VentanaConfirmar.afterClosed().subscribe(res=>{
+     this.CargarData();
+   })
  }
 
  /* Editar productos */
