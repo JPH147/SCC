@@ -21,7 +21,7 @@ export class VentanaConfirmarComponent implements OnInit {
   }
 
   Aceptar(){
-  	this.ventana.close()
+    return true;
   }
 
 }

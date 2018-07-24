@@ -98,15 +98,17 @@ ngAfterViewInit () {
 
  /* Eliminar productos */
  Eliminar(producto) {
-   let VentanaConfirmar = this.DialogoProductos.open(VentanaConfirmarComponent,{
-     width: '400px',
-     data: producto
-   });
-   VentanaConfirmar.afterClosed().subscribe(res=>{
+  let VentanaConfirmar = this.DialogoProductos.open(VentanaConfirmarComponent,{
+    width: '400px',
+    data: {objeto: 'producto', valor: producto.descripcion}
+  });
+  VentanaConfirmar.afterClosed().subscribe(res=>{
+    if(res==true){
      this.Servicio.Eliminar(producto.id).subscribe(res=>{
        this.CargarData();
      });
-   })
+    }
+  })
  }
 
  /* Editar productos */
