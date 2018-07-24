@@ -120,15 +120,11 @@ export class ClientesComponent implements OnInit {
   });
  }
 
- Eliminar(cliente) {
-  let VentanaConfirmar = this.DialogoClientes.open(VentanaConfirmarComponent,{
-    width: '400px',
-    data: cliente
-  });
-  VentanaConfirmar.afterClosed().subscribe(res=>{
-    this.CargarData();
-  })
-}
+ Eliminar(id) {
+   this.Servicio.Eliminar(id).subscribe(res => {
+     this.CargarData();
+   });
+ }
 
  Editar(id) {
   this.Servicio.Seleccionar(id).subscribe(res => {
