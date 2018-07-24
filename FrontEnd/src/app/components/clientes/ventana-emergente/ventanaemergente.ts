@@ -2,7 +2,7 @@ import {Component, Inject, OnInit, AfterViewInit} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {FormControl, FormGroup, FormBuilder,FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
-import {ServiciosGenerales, Institucion} from '../../global/servicios';
+import {ServiciosGenerales, Institucion, Sede, Subsede} from '../../global/servicios';
 import { NgControl } from '@angular/forms';
 import {ClienteService} from '../clientes.service';
 
@@ -17,9 +17,9 @@ import {ClienteService} from '../clientes.service';
 export class VentanaEmergenteClientes {
   public selectedValue: string;
   public ClientesForm: FormGroup;
+  public Sede: Sede[] = [];
+  public Subsede: Subsede[] = [];
   public Institucion: Institucion[] = [];
-
-
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
     public ventana: MatDialogRef<VentanaEmergenteClientes>,
@@ -33,9 +33,16 @@ export class VentanaEmergenteClientes {
   }
 
   ngOnInit(){
+
     /* Crear formulario */
     this.ClientesForm = this.FormBuilder.group({
       'institucion': [null,[
+        Validators.required
+      ]],
+      'sede': [null,[
+        Validators.required
+      ]],
+      'subsede': [null,[
         Validators.required
       ]],
       'codigo':[null,[
@@ -75,13 +82,9 @@ export class VentanaEmergenteClientes {
       'aporte':[null,[
         Validators.required,
         Validators.pattern("[0-9- ]+")
-      ]],
-      'fecharegistro':[null,[
-        Validators.required
-      ]],
+      ]]
     })
 
-    /*Relación de productos*/
     this.Servicios.ListarInstitucion().subscribe(res=>{
       for(let i in res){
         this.Institucion.push(res[i])
@@ -89,9 +92,11 @@ export class VentanaEmergenteClientes {
     });
 
     if(this.data){
-      // Se traen y asignan los datos
       this.ClientesForm.get('institucion').setValue(this.data.institucion);
-      this.ListarInstitucion();
+      this.ListarSede(this.data.sede);
+      this.ClientesForm.get('sede').setValue(this.data.sede);
+      this.ListarSubsede(this.data.subsede);
+      this.ClientesForm.get('subsede').setValue(this.data.subsede);
       this.ClientesForm.get('codigo').setValue(this.data.codigo);
       this.ClientesForm.get('dni').setValue(this.data.dni);
       this.ClientesForm.get('nombre').setValue(this.data.nombre);
@@ -105,10 +110,28 @@ export class VentanaEmergenteClientes {
       this.ClientesForm.get('calificacionpersonal').setValue(this.data.calificacionpersonal);
       this.ClientesForm.get('aporte').setValue(this.data.aporte);
       this.ClientesForm.get('fecharegistro').setValue(this.data.fecharegistro);
-      this.ClientesForm.controls['institucion'].enable();
+      this.ClientesForm.controls['sede'].enable();
+      this.ClientesForm.controls['subsede'].enable();
     }
 
   }
+
+  InstitucionSeleccionada(event) {
+    this.ListarSede(event.value);
+    this.ClientesForm.get('sede').setValue("");
+    this.ClientesForm.get('subsede').setValue("");
+    this.ClientesForm.controls['sede'].enable();
+    this.ClientesForm.controls['subsede'].disable();
+  }
+
+/* Se muestran los modelos cuando se selecciona una marca */
+SedeSeleccionada(event) {
+  this.ListarSubsede(event.value);
+  this.ClientesForm.get('subsede').setValue("");
+  this.ClientesForm.controls['subsede'].enable();
+ }
+
+
 
   /* Enviar al formulario */
   Guardar(formulario) {
@@ -117,7 +140,7 @@ export class VentanaEmergenteClientes {
     }*/
 
     if (!this.data) {
-      this.ClienteServicios.Agregar(formulario.value.institucion, formulario.value.codigo,
+      this.ClienteServicios.Agregar(formulario.value.subsede , formulario.value.codigo,
         formulario.value.dni, formulario.value.nombre, formulario.value.apellido,
         formulario.value.cip, formulario.value.email, formulario.value.casilla,
         formulario.value.trabajo, formulario.value.cargo, formulario.value.calificacioncrediticia,
@@ -136,4 +159,20 @@ export class VentanaEmergenteClientes {
    })
 
   }
+
+  ListarSede(i){
+    this.Servicios.ListarSede(i,"").subscribe(res=>{
+      this.Sedes=[];
+      for(let i in res){
+        this.Sedes.push(res[i])
+      }
+  })}
+
+  ListarSubsede(i){
+    this.Servicios.ListarSubsede(i,"").subscribe(res=>{
+      this.Subsedes=[];
+      for (let i in res){
+        this.Subsedes.push(res[i])
+      }
+   })
 }

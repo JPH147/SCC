@@ -19,7 +19,7 @@
         $cliente = new Cliente($db);
         $data = json_decode(file_get_contents('php://input'), true);
 
-        if (($_POST["id_institucion"])!=null  && !empty(trim($_POST["clt_codigo"])) && !empty(trim($_POST["clt_dni"]))
+        if (($_POST["id_subsede"])!=null  && !empty(trim($_POST["clt_codigo"])) && !empty(trim($_POST["clt_dni"]))
             && !empty(trim($_POST["clt_nombre"])) && !empty(trim($_POST["clt_apellido"]))
             && !empty(trim($_POST["clt_cip"])) && !empty(trim($_POST["clt_email"])) && !empty(trim($_POST["clt_casilla"]))
             && !empty(trim($_POST["clt_trabajo"])) && !empty(trim($_POST["clt_cargo"])) && !empty(trim($_POST["clt_calificacion_crediticia"]))
@@ -27,7 +27,7 @@
             && ($_POST["clt_fecharegistro"])!=null)
         {
 
-            $cliente->id_institucion = trim($_POST["id_institucion"]);
+            $cliente->id_subsede = trim($_POST["id_subsede"]);
             $cliente->clt_codigo = trim($_POST["clt_codigo"]);
             $cliente->clt_dni = trim($_POST["clt_dni"]);
             $cliente->clt_nombre = trim($_POST["clt_nombre"]);

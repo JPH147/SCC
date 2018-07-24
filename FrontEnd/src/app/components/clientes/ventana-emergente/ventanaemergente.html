@@ -4,27 +4,27 @@
     </mat-card-header>
     <form [formGroup]="ClientesForm" (ngSubmit)="Guardar(ClientesForm)">
       <mat-card-content>
-        <mat-grid-list cols="2" rowHeight="80px">
+        <mat-grid-list cols="3" rowHeight="80px">
           <mat-grid-tile>
-            <mat-form-field>
-              <mat-select placeholder='Selecciona Institucion' formControlName="institucion" >
+            <mat-form-field class="input-ventana"> 
+              <mat-select placeholder='Selecciona Institucion' formControlName="institucion" (selectionChange)="InstitucionSeleccionada($event)">
                 <mat-option *ngFor="let institucion of Institucion" [value] = "institucion.id"> {{institucion.nombre}} </mat-option>
               </mat-select>
             </mat-form-field>
           </mat-grid-tile>
 
           <mat-grid-tile>
-            <mat-form-field>
-              <mat-select placeholder='Selecciona Sede' formControlName="sede" >
+            <mat-form-field class="input-ventana">
+              <mat-select placeholder='Selecciona Sede' formControlName="sede" (selectionChange)="SedeSeleccionada($event)">
                 <mat-option *ngFor="let sede of Sedes" [value] = "sede.id"> {{sede.nombre}} </mat-option>
               </mat-select>
             </mat-form-field>
           </mat-grid-tile>
 
           <mat-grid-tile>
-            <mat-form-field>
-              <mat-select placeholder='Selecciona SubSede' formControlName="subsede" >
-                <mat-option *ngFor="let subsede of SubSede" [value] = "subsede.id"> {{subsede.nombre}} </mat-option>
+            <mat-form-field class="input-ventana">
+              <mat-select placeholder='Selecciona Subsede' formControlName="subsede" >
+                <mat-option *ngFor="let subsede of Subsedes" [value] = "subsede.id"> {{subsede.nombre}} </mat-option>
               </mat-select>
             </mat-form-field>
           </mat-grid-tile>
@@ -36,7 +36,7 @@
           </mat-grid-tile>
 
           <mat-grid-tile>
-            <mat-form-field>
+            <mat-form-field class="input-ventana">
               <input matInput placeholder="Ingresa DNI"  formControlName="dni" maxlength="8">
               <mat-error *ngIf="ClientesForm.get('dni').invalid">Debes escribir sólo números</mat-error>
             </mat-form-field>
@@ -98,9 +98,10 @@
           </mat-grid-tile>
 
           <mat-grid-tile>
-            <mat-form-field>
+            <mat-form-field class="input-ventana">
               <input matInput placeholder="Ingresa Aporte"  formControlName="aporte">
               <mat-error *ngIf="ClientesForm.get('aporte').invalid">Debes escribir sólo números</mat-error>
+              <span matPrefix>S/ </span>
             </mat-form-field>
           </mat-grid-tile>
         </mat-grid-list>

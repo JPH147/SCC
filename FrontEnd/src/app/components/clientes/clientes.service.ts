@@ -42,7 +42,7 @@ export class ClienteService {
 	}
 
   Agregar(
-    id_institucion: number,
+    id_subsede: number,
     clt_codigo: string,
     clt_dni: string,
     clt_nombre: string,
@@ -58,7 +58,7 @@ export class ClienteService {
     ): Observable<any> {
     var today = new Date();
     var date = today.getFullYear() + '-' + (today.getMonth() + 1 ) + '-' + today.getDate();
-    let params = 'id_institucion=' + id_institucion + '&clt_codigo=' + clt_codigo
+    let params = 'id_subsede=' + id_subsede + '&clt_codigo=' + clt_codigo
     + '&clt_dni=' + clt_dni + '&clt_nombre=' + clt_nombre + '&clt_apellido=' + clt_apellido
     + '&clt_cip=' + clt_cip + '&clt_email=' + clt_email + '&clt_casilla=' + clt_casilla
     + '&clt_trabajo=' + clt_trabajo + '&clt_cargo=' + clt_cargo + '&clt_calificacion_crediticia=' + clt_calificacion_crediticia
