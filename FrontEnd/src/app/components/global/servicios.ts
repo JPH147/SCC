@@ -74,6 +74,36 @@ export class ServiciosGenerales{
 		}))
 	}
 
+	ListarSede(
+		id_institucion:number,
+		sd_nombre:string
+	):Observable<Sede>
+	{
+		return this.http.get(this.url+'sede/read.php?id_institucion='+id_institucion+'&sd_nombre'+sd_nombre)
+		.pipe(map(res=>{
+			if(res['codigo']===0){
+				return res['data'].sede;
+			} else{
+				console.log('Error al importar los datos, revisar servicio')
+			}
+		}))
+	}
+
+	ListarSubsede(
+		id_sede:number,
+		ssd_nombre:string
+	):Observable<Sede>
+	{
+		return this.http.get(this.url+'subsede/read.php?id_sede='+id_sede+'&ssd_nombre'+ssd_nombre)
+		.pipe(map(res=>{
+			if(res['codigo']===0){
+				return res['data'].subsede;
+			} else{
+				console.log('Error al importar los datos, revisar servicio')
+			}
+		}))
+	}
+
 
 
 }
@@ -99,8 +129,20 @@ export interface ModeloModelo{
 	marca:string,
 	modelo:string
 }
+
+export interface Subsede{
+	numero:number,
+	id:number,
+	nombre:string
+}
+
+export interface Sede{
+	numero:number,
+	id:number,
+	nombre:string
+}
 export interface Institucion{
 	numero:number,
-	id:string,
+	id:number,
 	nombre:string
 }

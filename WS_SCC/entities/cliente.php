@@ -5,6 +5,7 @@ Class Cliente{
     private $table_name = "cliente";
 
     public $idcliente;
+    public $id_subsede;
     public $ssd_nombre;
     public $sd_nombre;
     public $inst_nombre;
@@ -37,7 +38,7 @@ Class Cliente{
 
         $result = $this->conn->prepare($query);
 
-        $result->bindParam(1, $this->inst_nombre);
+        $result->bindParam(1, $this->id_subsede);
         $result->bindParam(2, $this->sd_nombre);
         $result->bindParam(3, $this->ssd_nombre);
         $result->bindParam(4, $this->clt_dni);
@@ -82,11 +83,11 @@ Class Cliente{
     
     function create()
     {
-        $query = "CALL sp_crearcliente (:id_institucion,:clt_codigo,:clt_dni,:clt_nombre,:clt_apellido,:clt_foto,:clt_cip,:clt_email,:clt_casilla,:clt_trabajo,:clt_cargo,:clt_calificacion_crediticia,:clt_calificacion_personal,:clt_aporte,:clt_estado,:clt_fecharegistro)"; 
+        $query = "CALL sp_crearcliente (:id_subsede,:clt_codigo,:clt_dni,:clt_nombre,:clt_apellido,:clt_foto,:clt_cip,:clt_email,:clt_casilla,:clt_trabajo,:clt_cargo,:clt_calificacion_crediticia,:clt_calificacion_personal,:clt_aporte,:clt_estado,:clt_fecharegistro)"; 
 
         $result = $this->conn->prepare($query);
 
-        $this->id_institucion=htmlspecialchars(strip_tags($this->id_institucion));
+        $this->id_subsede=htmlspecialchars(strip_tags($this->id_subsede));
         $this->clt_codigo=htmlspecialchars(strip_tags($this->clt_codigo));
         $this->clt_dni=htmlspecialchars(strip_tags($this->clt_dni));
         $this->clt_nombre=htmlspecialchars(strip_tags($this->clt_nombre));
@@ -103,7 +104,7 @@ Class Cliente{
         $this->clt_estado=htmlspecialchars(strip_tags($this->clt_estado));
         $this->clt_fecharegistro=htmlspecialchars(strip_tags($this->clt_fecharegistro));
 
-        $result->bindParam(":id_institucion", $this->id_institucion);
+        $result->bindParam(":id_subsede", $this->id_subsede);
         $result->bindParam(":clt_codigo", $this->clt_codigo);
         $result->bindParam(":clt_dni", $this->clt_dni);
         $result->bindParam(":clt_nombre", $this->clt_nombre);
@@ -157,12 +158,12 @@ Class Cliente{
 
     function update()
     {
-        $query = "CALL sp_actualizarcliente (:idcliente,:id_institucion,:clt_codigo,:clt_dni,:clt_nombre,:clt_apellido,:clt_foto,:clt_cip,:clt_email,:clt_casilla,:clt_trabajo,:clt_cargo,:clt_calificacion_crediticia,:clt_calificacion_personal,:clt_aporte,:clt_fecharegistro)"; 
+        $query = "CALL sp_actualizarcliente (:idcliente,:id_subsede,:clt_codigo,:clt_dni,:clt_nombre,:clt_apellido,:clt_foto,:clt_cip,:clt_email,:clt_casilla,:clt_trabajo,:clt_cargo,:clt_calificacion_crediticia,:clt_calificacion_personal,:clt_aporte,:clt_fecharegistro)"; 
 
         $result = $this->conn->prepare($query);
 
         $this->idcliente=htmlspecialchars(strip_tags($this->idcliente));
-        $this->id_institucion=htmlspecialchars(strip_tags($this->id_institucion));
+        $this->id_subsede=htmlspecialchars(strip_tags($this->id_subsede));
         $this->clt_codigo=htmlspecialchars(strip_tags($this->clt_codigo));
         $this->clt_dni=htmlspecialchars(strip_tags($this->clt_dni));
         $this->clt_nombre=htmlspecialchars(strip_tags($this->clt_nombre));
@@ -179,7 +180,7 @@ Class Cliente{
         $this->clt_estado=htmlspecialchars(strip_tags($this->clt_fecharegistro));
 
         $result->bindParam(":idcliente", $this->idcliente);
-        $result->bindParam(":id_institucion", $this->id_institucion);
+        $result->bindParam(":id_subsede", $this->id_subsede);
         $result->bindParam(":clt_codigo", $this->clt_codigo);
         $result->bindParam(":clt_dni", $this->clt_dni);
         $result->bindParam(":clt_nombre", $this->clt_nombre);
