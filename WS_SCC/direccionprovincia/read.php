@@ -16,7 +16,7 @@
     try{
         $provincia = new Provincia($db);
 
-        $provincia->dst_nombre = !empty($_GET['prdepartamento']) ? $_GET['prdepartamento'] : null;
+        $provincia->dpt_nombre = !empty($_GET['prdepartamento']) ? $_GET['prdepartamento'] : null;
         $provincia->prv_nombre = !empty($_GET['prprovincia']) ? $_GET['prprovincia'] : null;
 
         $provincia_list = $provincia->read();

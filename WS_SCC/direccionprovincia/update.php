@@ -13,14 +13,14 @@
     $db = $database->getConnection();
 
     try{
-        $provincia = new provincia($db);
+        $provincia = new Provincia($db);
         $data = json_decode(file_get_contents('php://input'),true);
 
         if(($_POST["prid"])!=null)
         {
             $provincia->id_provincia = $_POST["prid"];
             $provincia->id_departamento = trim($_POST["prdepartamento"]);
-            $provincia->dpt_nombre = trim($_POST["prnombre"]);
+            $provincia->prv_nombre = trim($_POST["prnombre"]);
 
 
             if($provincia->update())

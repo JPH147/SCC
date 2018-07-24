@@ -6,18 +6,18 @@ import {of} from 'rxjs';
 
 export class DepartamentoDataSource implements DataSource<Departamento> {
 
-  private InformacionDirecciones = new BehaviorSubject<Departamento[]>([]);
+  private InformacionDepartamentos = new BehaviorSubject<Departamento[]>([]);
   private CargandoInformacion = new BehaviorSubject<boolean>(false);
   public Cargando = this.CargandoInformacion.asObservable();
 
 constructor(private Servicio: ServiciosDirecciones) { }
 
   connect(collectionViewer: CollectionViewer): Observable<Departamento[]> {
-  return this.InformacionDirecciones.asObservable();
+  return this.InformacionDepartamentos.asObservable();
   }
 
   disconnect(){
-  this.InformacionDirecciones.complete();
+  this.InformacionDepartamentos.complete();
   this.CargandoInformacion.complete();
   }
 
@@ -30,7 +30,7 @@ constructor(private Servicio: ServiciosDirecciones) { }
   .pipe(catchError(() => of([])),
   finalize(() => this.CargandoInformacion.next(false))
   )
-  .subscribe(res => this.InformacionDirecciones.next(res));
+  .subscribe(res => this.InformacionDepartamentos.next(res));
   }
 
 }

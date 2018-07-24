@@ -6,30 +6,30 @@
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
  
     include_once '../config/database.php';
-    include_once '../entities/direccionprovincia.php';
+    include_once '../entities/direcciondistrito.php';
     include_once '../shared/utilities.php';
 
     $database = new Database();
     $db = $database->getConnection();
 
     try{
-        $provincia = new provincia($db);
+        $distrito = new Distrito($db);
         $data = json_decode(file_get_contents('php://input'),true);
 
         if(($_POST["prid"])!=null)
         {
-            $provincia->id_provincia = $_POST["prid"];
-            $provincia->id_departamento = trim($_POST["prdepartamento"]);
-            $provincia->dpt_nombre = trim($_POST["prnombre"]);
+            $distrito->id_distrito = $_POST["prid"];
+            $distrito->id_provincia = trim($_POST["prprovincia"]);
+            $distrito->dst_nombre = trim($_POST["prnombre"]);
 
 
-            if($provincia->update())
+            if($distrito->update())
             {
-                    print_json("0000", "Se actualizó la provincia satisfactoriamente.", "");
+                    print_json("0000", "Se actualizó el distrito satisfactoriamente.", "");
             }
             else
             {
-                    print_json("9999", "Ocurrió un error al actualizar la provincia.", "");
+                    print_json("9999", "Ocurrió un error al actualizar el distrito.", "");
             }
         }
         else
@@ -39,7 +39,7 @@
     }
     catch(Exception $exception)
     {
-        print_json("9999", "Ocurrió un error al actualizar la provincia.", $exception->getMessage());
+        print_json("9999", "Ocurrió un error al actualizar el distrito.", $exception->getMessage());
     }
 
 ?>

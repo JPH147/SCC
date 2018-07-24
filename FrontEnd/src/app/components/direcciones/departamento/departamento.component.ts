@@ -10,7 +10,8 @@ import {VentanaEliminarDepartamento} from './ventana-confirmar/ventana-confirmar
 @Component({
   selector: 'app-departamento',
   templateUrl: './departamento.component.html',
-  styleUrls: ['./departamento.component.css']
+  styleUrls: ['./departamento.component.css'],
+  providers: [ServiciosDirecciones]
 })
 export class DepartamentoComponent implements OnInit {
 
