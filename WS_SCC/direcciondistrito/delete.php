@@ -7,27 +7,27 @@
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
  
     include_once '../config/database.php';
-    include_once '../entities/direccionprovincia.php';
+    include_once '../entities/direcciondistrito.php';
     include_once '../shared/utilities.php';
 
     $database = new Database();
     $db = $database->getConnection();
 
     try{
-    	$provincia = new provincia($db);
+    	$distrito = new Distrito($db);
     	$data = json_decode(file_get_contents('php://input'),true);
 
     	if(($_POST["prid"])!=null)
     	{
-    		$provincia->id_provincia = $_POST["prid"];
+    		$distrito->id_distrito = $_POST["prid"];
 
-	    	if($provincia->delete())
+	    	if($distrito->delete())
 	        {
-	                print_json("0000", "Se eliminó la provincia satisfactoriamente.", "");
+	                print_json("0000", "Se eliminó el distrito satisfactoriamente.", "");
 	        }
 	        else
 	        {
-	                print_json("9999", "Ocurrió un error al eliminar la provincia.", "");
+	                print_json("9999", "Ocurrió un error al eliminar el distrito.", "");
 	        }
 	    }
     	else
@@ -37,7 +37,7 @@
     }
     catch(Exception $exception)
     {
-        print_json("9999", "Ocurrió un error al eliminar la provincia.", $exception->getMessage());
+        print_json("9999", "Ocurrió un error al eliminar el distrito.", $exception->getMessage());
     }
 
 ?>

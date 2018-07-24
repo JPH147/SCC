@@ -162,17 +162,18 @@ SedeSeleccionada(event) {
 
   ListarSede(i){
     this.Servicios.ListarSede(i,"").subscribe(res=>{
-      this.Sedes=[];
+      this.Sede=[];
       for(let i in res){
-        this.Sedes.push(res[i])
+        this.Sede.push(res[i])
       }
   })}
 
   ListarSubsede(i){
     this.Servicios.ListarSubsede(i,"").subscribe(res=>{
-      this.Subsedes=[];
+      this.Subsede=[];
       for (let i in res){
-        this.Subsedes.push(res[i])
+        this.Subsede.push(res[i])
       }
    })
+  }
 }

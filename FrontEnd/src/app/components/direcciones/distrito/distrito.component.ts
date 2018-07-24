@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+import {ServiciosDirecciones, Provincia} from '../../global/direcciones';
 @Component({
   selector: 'app-distrito',
   templateUrl: './distrito.component.html',
@@ -7,9 +7,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DistritoComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+  	private Servicios: ServiciosDirecciones
+  ) { }
 
   ngOnInit() {
+
   }
 
 }

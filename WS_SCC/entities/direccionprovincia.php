@@ -5,7 +5,7 @@ class Provincia{
 
 	public $id_provincia;
 	public $id_departamento;
-	public $dst_nombre;
+	public $dpt_nombre;
 	public $prv_nombre;
 
 	public function __construct($db){
@@ -55,9 +55,9 @@ class Provincia{
     
         $row = $result->fetch(PDO::FETCH_ASSOC);
         
-        $this->id_departamento=$row['id_provincia'];
+        $this->id_distrito=$row['id_provincia'];
         $this->dpt_nombre=$row['dpt_nombre'];
-        $this->dpt_nombre=$row['prv_nombre'];
+        $this->prv_nombre=$row['prv_nombre'];
     }
 
     function delete()
@@ -92,14 +92,16 @@ class Provincia{
         if($result->execute())
         {
             return true;
+        }else{
+			return false;
         }
         
-        return false;
     }
 
     function update()
     {
         $query = "call sp_actualizarprovincia(:prid, :prdepartamento, :prnombre)";
+        
         $result = $this->conn->prepare($query);
 
         $result->bindParam(":prid", $this->id_provincia);

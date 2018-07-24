@@ -7,30 +7,31 @@
 	header('Content-Type: application/json');
 
 	include_once '../config/database.php';
-	include_once '../entities/direccionprovincia.php';
+	include_once '../entities/direcciondistrito.php';
 	include_once '../shared/utilities.php';
 	 
 	$database = new Database();
 	$db = $database->getConnection();
-	$provincia = new Provincia($db);
+	$distrito = new distrito($db);
 
 	try
 	{
-	    $provincia->id_provincia = isset($_GET['prid']) ? $_GET['prid'] : die();
+	    $distrito->id_distrito = isset($_GET['prid']) ? $_GET['prid'] : die();
 	    
-	    $provincia->readxId();
+	    $distrito->readxId();
 
-	    $provincia_list = array(
-	        "id"=>$provincia->id_provincia,
-	        "departamento"=>$provincia->dpt_nombre,
-            "nombre"=>$provincia->prv_nombre
+	    $distrito_list = array(
+	        "id"=>$distrito->id_distrito,
+	        "departamento"=>$distrito->dpt_nombre,
+	        "provincia"=>$distrito->prv_nombre,
+	        "nombre"=>$distrito->dst_nombre
 	    );
 
-	    if(trim($provincia->dpt_nombre)!= ''){
-	        print_json("0000", "OK", $provincia_list);
+	    if(trim($distrito->dst_nombre)!= ''){
+	        print_json("0000", "OK", $distrito_list);
 	    }
 	    else{
-	        print_json("0001", "No se encuentra el provincia registrado con el id " . $provincia->id_provincia , null);
+	        print_json("0001", "No se encuentra el distrito registrado con el id " . $distrito->id_distrito , null);
 
 	    }
 

@@ -18,12 +18,12 @@
 
         if (!empty(trim($_POST["prnombre"])))
         {
-            $provincia->id_departamento = $_POST["id_departamento"];
-            $provincia->dpt_nombre = trim($_POST["prnombre"]);
+            $provincia->id_departamento = trim($_POST["prdepartamento"]);
+            $provincia->prv_nombre = trim($_POST["prnombre"]);
 
             if($provincia->create())
             {
-                print_json("0000", "Se creó la provincia satisfactoriamente.", "");
+                print_json("0000", "Se creó la provincia satisfactoriamente.","");
             }
             else
             {
@@ -37,7 +37,7 @@
     }
     catch(Exception $exception)
     {
-        print_json("9999", "Ocurrió un error al eliminar la provincia.", $exception->getMessage());
+        print_json("9999", "Ocurrió un error al crear la provincia.", $exception->getMessage());
     }
 
 ?>

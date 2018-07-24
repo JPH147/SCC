@@ -5,12 +5,13 @@ import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
 import {ServiciosDirecciones, Departamento} from '../../global/direcciones';
 import { MatPaginator, MatSort, MatDialog } from '@angular/material';
 import {VentanaEmergenteDepartamento} from './ventana-emergente/ventanaemergente';
-import {VentanaEliminarDepartamento} from './ventana-confirmar/ventana-confirmar.component'
+import {VentanaConfirmarComponent} from '../../global/ventana-confirmar/ventana-confirmar.component'
 
 @Component({
   selector: 'app-departamento',
   templateUrl: './departamento.component.html',
-  styleUrls: ['./departamento.component.css']
+  styleUrls: ['./departamento.component.css'],
+  providers: [ServiciosDirecciones]
 })
 export class DepartamentoComponent implements OnInit {
 
@@ -61,13 +62,18 @@ ngAfterViewInit () {
    });
  }
 
- Eliminar(producto) {
-   let VentanaDepartamento = this.DialogoDepartamentos.open(VentanaEliminarDepartamento,{
+ Eliminar(departamento) {
+   let VentanaDepartamento = this.DialogoDepartamentos.open(VentanaConfirmarComponent,{
      width: '400px',
-     data: producto
+     data: {objeto: 'departamento', valor: departamento.descripcion}
    });
    VentanaDepartamento.afterClosed().subscribe(res=>{
-     this.CargarData();
+     console.log(res);
+     if(res==true){
+      this.Servicio.EliminarDepartamento(departamento.id).subscribe(res=>{
+        this.CargarData();
+      })
+     }
    })
  }
 

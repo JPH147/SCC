@@ -7,7 +7,7 @@ import {ProductoService} from './productos.service';
 import {ProductoDataSource} from './productos.dataservice';
 import {fromEvent} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
-import {VentanaConfirmarComponent} from './ventana-confirmar/ventana-confirmar.component'
+import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component'
 
 @Component({
   selector: 'app-productos',
@@ -98,13 +98,17 @@ ngAfterViewInit () {
 
  /* Eliminar productos */
  Eliminar(producto) {
-   let VentanaConfirmar = this.DialogoProductos.open(VentanaConfirmarComponent,{
-     width: '400px',
-     data: producto
-   });
-   VentanaConfirmar.afterClosed().subscribe(res=>{
-     this.CargarData();
-   })
+  let VentanaConfirmar = this.DialogoProductos.open(VentanaConfirmarComponent,{
+    width: '400px',
+    data: {objeto: 'producto', valor: producto.descripcion}
+  });
+  VentanaConfirmar.afterClosed().subscribe(res=>{
+    if(res==true){
+     this.Servicio.Eliminar(producto.id).subscribe(res=>{
+       this.CargarData();
+     });
+    }
+  })
  }
 
  /* Editar productos */
