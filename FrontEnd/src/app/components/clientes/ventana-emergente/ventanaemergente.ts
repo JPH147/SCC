@@ -175,4 +175,5 @@ SedeSeleccionada(event) {
         this.Subsedes.push(res[i])
       }
    })
+  }
 }

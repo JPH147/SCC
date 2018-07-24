@@ -65,7 +65,7 @@ ngAfterViewInit () {
  Eliminar(producto) {
    let VentanaDepartamento = this.DialogoDepartamentos.open(VentanaEliminarDepartamento,{
      width: '400px',
-     data: producto
+     data: {item: producto, valor: producto.descripcion}
    });
    VentanaDepartamento.afterClosed().subscribe(res=>{
      this.CargarData();
