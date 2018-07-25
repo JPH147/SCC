@@ -24,7 +24,7 @@
 
     	if (count(array_filter($distrito_list))>0)
     	{
-    		print_json("0000", count(array_filter($distrito_list)),$distrito_list);
+    		print_json("0000", count(array_filter($distrito_list["distritos"])),$distrito_list);
     	}
     	else
     	{
