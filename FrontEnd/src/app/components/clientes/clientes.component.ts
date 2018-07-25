@@ -19,7 +19,7 @@ import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-con
 export class ClientesComponent implements OnInit {
 
   ListadoCliente: ClienteDataSource;
-  Columnas: string[] = ['numero', 'codigo' , 'dni', 'nombrecliente', 'apellidocliente', 'institucion', 'sede', 'subsede' , 'opciones'];
+  Columnas: string[] = ['numero', 'codigo' , 'dni', 'nombrecliente', 'apellidocliente', 'subsede' , 'opciones'];
   public maestro;
 
 
@@ -118,6 +118,9 @@ export class ClientesComponent implements OnInit {
 
    VentanaClientes.afterClosed().subscribe(res => {
     this.CargarData();
+    this.snackBar.open('Se creó el cliente satisfactoriamente.', '', {
+      duration: 2500
+    });
   });
  }
 
@@ -131,8 +134,8 @@ export class ClientesComponent implements OnInit {
     if(res==true){
      this.Servicio.Eliminar(cliente.id).subscribe(res=>{
        this.CargarData();
-       this.snackBar.open('Se eliminó el cliente', '', {
-        duration: 2000
+       this.snackBar.open('Se eliminó el cliente satisfactoriamente.', '', {
+        duration: 2500, verticalPosition: 'bottom'
       });
      });
     }
