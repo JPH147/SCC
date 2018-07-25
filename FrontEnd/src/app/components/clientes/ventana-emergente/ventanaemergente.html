@@ -16,7 +16,7 @@
           <mat-grid-tile>
             <mat-form-field class="input-ventana">
               <mat-select placeholder='Selecciona Sede' formControlName="sede" (selectionChange)="SedeSeleccionada($event)">
-                <mat-option *ngFor="let sede of Sedes" [value] = "sede.id"> {{sede.nombre}} </mat-option>
+                <mat-option *ngFor="let sede of Sede" [value] = "sede.id"> {{sede.nombre}} </mat-option>
               </mat-select>
             </mat-form-field>
           </mat-grid-tile>
@@ -24,7 +24,7 @@
           <mat-grid-tile>
             <mat-form-field class="input-ventana">
               <mat-select placeholder='Selecciona Subsede' formControlName="subsede" >
-                <mat-option *ngFor="let subsede of Subsedes" [value] = "subsede.id"> {{subsede.nombre}} </mat-option>
+                <mat-option *ngFor="let subsede of Subsede" [value] = "subsede.id"> {{subsede.nombre}} </mat-option>
               </mat-select>
             </mat-form-field>
           </mat-grid-tile>

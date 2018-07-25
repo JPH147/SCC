@@ -1,6 +1,6 @@
 import { VentanaEmergenteClientes } from './ventana-emergente/ventanaemergente';
 import {Component, OnInit, ViewChild, AfterViewInit, ElementRef} from '@angular/core';
-import { MatPaginator, MatSort, MatDialog } from '@angular/material';
+import { MatPaginator, MatSort, MatDialog, MatSnackBar } from '@angular/material';
 import {merge, Observable, of as observableOf} from 'rxjs';
 import {catchError, map, startWith, switchMap} from 'rxjs/operators';
 import {ClienteService} from './clientes.service';
@@ -19,7 +19,7 @@ import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-con
 export class ClientesComponent implements OnInit {
 
   ListadoCliente: ClienteDataSource;
-  Columnas: string[] = ['numero', 'codigo' , 'dni', 'nombrecliente', 'apellidocliente', 'institucion', 'sede', 'subsede' , 'opciones'];
+  Columnas: string[] = ['numero', 'codigo' , 'dni', 'nombrecliente', 'apellidocliente', 'subsede' , 'opciones'];
   public maestro;
 
 
@@ -32,7 +32,8 @@ export class ClientesComponent implements OnInit {
 
   constructor(
     private Servicio: ClienteService,
-    public DialogoClientes: MatDialog
+    public DialogoClientes: MatDialog,
+    public snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -117,14 +118,30 @@ export class ClientesComponent implements OnInit {
 
    VentanaClientes.afterClosed().subscribe(res => {
     this.CargarData();
+    this.snackBar.open('Se creó el cliente satisfactoriamente.', '', {
+      duration: 2500
+    });
   });
  }
 
- Eliminar(id) {
-   this.Servicio.Eliminar(id).subscribe(res => {
-     this.CargarData();
-   });
+
+ Eliminar(cliente) {
+  let VentanaConfirmar = this.DialogoClientes.open(VentanaConfirmarComponent, {
+    width: '400px',
+    data: {objeto: 'cliente', valor: cliente.dni}
+  });
+  VentanaConfirmar.afterClosed().subscribe(res=>{
+    if(res==true){
+     this.Servicio.Eliminar(cliente.id).subscribe(res=>{
+       this.CargarData();
+       this.snackBar.open('Se eliminó el cliente satisfactoriamente.', '', {
+        duration: 2500, verticalPosition: 'bottom'
+      });
+     });
+    }
+  });
  }
+
 
  Editar(id) {
   this.Servicio.Seleccionar(id).subscribe(res => {

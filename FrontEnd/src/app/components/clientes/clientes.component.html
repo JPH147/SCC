@@ -110,7 +110,7 @@
         <mat-cell *matCellDef="let cliente"> {{cliente.apellido}} </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="institucion">
+     <!-- <ng-container matColumnDef="institucion">
         <mat-header-cell *matHeaderCellDef> Institución </mat-header-cell>
         <mat-cell *matCellDef="let cliente"> {{cliente.institucion}} </mat-cell>
       </ng-container>
@@ -118,7 +118,7 @@
       <ng-container matColumnDef="sede">
         <mat-header-cell *matHeaderCellDef> Sede </mat-header-cell>
         <mat-cell *matCellDef="let cliente"> {{cliente.sede}} </mat-cell>
-      </ng-container>
+      </ng-container>-->
 
       <ng-container matColumnDef="subsede">
         <mat-header-cell *matHeaderCellDef> Subsede </mat-header-cell>
@@ -131,9 +131,12 @@
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let cliente">
-
+          <button mat-icon-button matTooltip="Agregar Datos de Contacto" color="primary"><mat-icon> local_phone </mat-icon></button>
+          <button mat-icon-button matTooltip="Subir Foto" color="primary"><mat-icon> cloud_upload </mat-icon></button>
+          <button mat-icon-button matTooltip="Hacer Venta" color="primary"><mat-icon> add_shopping_cart </mat-icon></button>
+          <button mat-icon-button matTooltip="Ver Ventas" color="primary"><mat-icon> attach_money </mat-icon></button>
           <button mat-icon-button matTooltip="Editar Cliente" color="primary" (click)="Editar(cliente.id)"><mat-icon> edit </mat-icon></button>
-          <button mat-icon-button matTooltip="Eliminar Cliente" color="primary" (click)="Eliminar(cliente.id)"><mat-icon> delete </mat-icon></button>
+          <button mat-icon-button matTooltip="Eliminar Cliente" color="primary" (click)="Eliminar(cliente)"><mat-icon> delete </mat-icon></button>
         </mat-cell>
       </ng-container>
 
