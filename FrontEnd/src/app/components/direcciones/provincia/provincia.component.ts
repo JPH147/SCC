@@ -74,7 +74,7 @@ ngAfterViewInit () {
  Eliminar(provincia) {
    let VentanaProvincia = this.DialogoDepartamentos.open(VentanaConfirmarComponent,{
      width: '400px',
-     data: {objeto: 'la provincia', valor: provincia.descripcion}
+     data: {objeto: 'la provincia', valor: provincia.nombre}
    });
 
    VentanaProvincia.afterClosed().subscribe(res=>{

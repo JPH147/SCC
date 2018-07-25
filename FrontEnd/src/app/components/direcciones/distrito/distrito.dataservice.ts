@@ -21,7 +21,7 @@ constructor(private Servicio: ServiciosDirecciones) { }
 	  this.CargandoInformacion.complete();
   }
 
-  Cargardistritos(
+  CargarDistritos(
   	departamento:string,
     provincia:string,
     nombre: string,

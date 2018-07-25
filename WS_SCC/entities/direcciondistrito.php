@@ -7,6 +7,8 @@ class Distrito{
 	public $dst_nombre;
 	public $prv_nombre;
 	public $dpt_nombre;
+    public $item_pagina;
+    public $total_pagina;
 
 	public function __construct($db){
 		$this->conn = $db;
@@ -37,7 +39,7 @@ class Distrito{
 				"id"=>$id_distrito,
 				"departamento"=>$dpt_nombre,
 				"provincia"=>$prv_nombre,
-				"distrito"=>$dst_nombre
+				"nombre"=>$dst_nombre
 			);
 			array_push($distrito_list["distritos"],$distrito_fila);
 		}
