@@ -21,21 +21,23 @@
 		$cliente->readxId();
 
 	    $cliente_list = array(
-                "inst_nombre"=>$cliente->inst_nombre,
-                "clt_codigo"=>$cliente->clt_codigo,
-                "clt_dni"=>$cliente->clt_dni,
-                "clt_nombre"=>$cliente->clt_nombre,
-                "clt_apellido"=>$cliente->clt_apellido,
-                "clt_foto"=>$cliente->clt_foto,
-                "clt_cip"=>$cliente->clt_cip,
-                "clt_email"=>$cliente->clt_email,
-                "clt_casilla"=>$cliente->clt_casilla,
-                "clt_trabajo"=>$cliente->clt_trabajo,
-                "clt_cargo"=>$cliente->clt_cargo,
-                "clt_calificacion_crediticia"=>$cliente->clt_calificacion_crediticia,
-                "clt_calificacion_personal"=>$cliente->clt_calificacion_personal,
-                "clt_aporte"=>$cliente->clt_aporte,
-                "clt_fecharegistro"=>$cliente->clt_fecharegistro
+				"institucion"=>$cliente->id_institucion,
+				"sede"=>$cliente->id_sede,
+                "subsede"=>$cliente->id_subsede,
+                "codigo"=>$cliente->clt_codigo,
+                "dni"=>$cliente->clt_dni,
+                "nombre"=>$cliente->clt_nombre,
+                "apellido"=>$cliente->clt_apellido,
+                "foto"=>$cliente->clt_foto,
+                "cip"=>$cliente->clt_cip,
+                "email"=>$cliente->clt_email,
+                "casilla"=>$cliente->clt_casilla,
+                "trabajo"=>$cliente->clt_trabajo,
+                "cargo"=>$cliente->clt_cargo,
+                "calificacion_crediticia"=>$cliente->clt_calificacion_crediticia,
+                "calificacion_personal"=>$cliente->clt_calificacion_personal,
+                "aporte"=>$cliente->clt_aporte,
+                "fecharegistro"=>$cliente->clt_fecharegistro
 	    );
 
 	    if(trim($cliente->clt_dni)!= ''){

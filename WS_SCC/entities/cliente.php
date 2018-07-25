@@ -5,6 +5,8 @@ Class Cliente{
     private $table_name = "cliente";
 
     public $idcliente;
+    public $id_sede;
+    public $id_institucion;
     public $id_subsede;
     public $ssd_nombre;
     public $sd_nombre;
@@ -138,10 +140,13 @@ Class Cliente{
     
         $row = $result->fetch(PDO::FETCH_ASSOC);
         
-        $this->ssd_nombre=$row['ssd_nombre'];
+        $this->id_institucion=$row['id_institucion'];
+        $this->id_sede=$row['id_sede'];
+        $this->id_subsede=$row['id_subsede'];
         $this->clt_codigo=$row['clt_codigo'];
         $this->clt_dni=$row['clt_dni'];
         $this->clt_nombre=$row['clt_nombre'];
+        $this->clt_apellido=$row['clt_apellido'];
         $this->clt_foto=$row['clt_foto'];
         $this->clt_cip= $row['clt_cip'];
 
@@ -152,8 +157,8 @@ Class Cliente{
         $this->clt_calificacion_crediticia=$row['clt_calificacion_crediticia'];
         $this->clt_calificacion_personal= $row['clt_calificacion_personal'];
     
-        $this->clt_trabajo=$row['clt_aporte'];
-        $this->clt_cargo=$row['clt_fecharegistro'];
+        $this->clt_aporte=$row['clt_aporte'];
+        $this->clt_fecharegistro=$row['clt_fecharegistro'];
     }
 
     function update()
@@ -177,7 +182,6 @@ Class Cliente{
         $this->clt_calificacion_crediticia=htmlspecialchars(strip_tags($this->clt_calificacion_crediticia));
         $this->clt_calificacion_personal=htmlspecialchars(strip_tags($this->clt_calificacion_personal));        
         $this->clt_aporte=htmlspecialchars(strip_tags($this->clt_aporte));
-        $this->clt_estado=htmlspecialchars(strip_tags($this->clt_fecharegistro));
 
         $result->bindParam(":idcliente", $this->idcliente);
         $result->bindParam(":id_subsede", $this->id_subsede);
@@ -194,7 +198,6 @@ Class Cliente{
         $result->bindParam(":clt_calificacion_crediticia", $this->clt_calificacion_crediticia);
         $result->bindParam(":clt_calificacion_personal", $this->clt_calificacion_personal);
         $result->bindParam(":clt_aporte", $this->clt_aporte);
-        $result->bindParam(":clt_fecharegistro", $this->clt_fecharegistro);
         
 
         if($result->execute())
