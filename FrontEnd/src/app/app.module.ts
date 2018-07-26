@@ -67,7 +67,7 @@ import {VentanaEmergenteProductos} from './components/productos/ventana-emergent
 import {ventanaseries} from './components/ingreso-productos/ventana-series/ventanaseries';
 import { ventanaseriesalida } from './components/salida-productos/ventana-seriesalida/ventanaseriesalida';
 import {VentanaEmergenteClientes} from './components/clientes/ventana-emergente/ventanaemergente';
-import { ProveedoresComponent } from './components/proveedores/proveedores.component'
+import { ProveedoresComponent } from './components/proveedores/proveedores.component';
 import { ventanaseriessv } from './components/salida-vendedores/ventana-seriessv/ventanaseriessv';
 import { DireccionesComponent } from './components/direcciones/direcciones.component';
 import { DepartamentoComponent } from './components/direcciones/departamento/departamento.component';
@@ -75,7 +75,7 @@ import { VentanaEmergenteDepartamento} from './components/direcciones/departamen
 import { ProvinciaComponent } from './components/direcciones/provincia/provincia.component';
 import { DistritoComponent } from './components/direcciones/distrito/distrito.component';
 import { VentanaConfirmarComponent } from './components/global/ventana-confirmar/ventana-confirmar.component';
-
+import { ventanaRetorno } from './components/salida-vendedores/ventana-retorno/ventanaRetorno';
 @NgModule({
   imports: [
 /* Angular Material */
@@ -153,6 +153,7 @@ import { VentanaConfirmarComponent } from './components/global/ventana-confirmar
     ProvinciaComponent,
     DistritoComponent,
     VentanaEmergenteDepartamento,
+    ventanaRetorno,
    ],
   entryComponents: [
     AppComponent,
@@ -164,6 +165,7 @@ import { VentanaConfirmarComponent } from './components/global/ventana-confirmar
     ventanaseriessv,
     VentanaConfirmarComponent,
     VentanaEmergenteDepartamento,
+    ventanaRetorno,
   ],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider]

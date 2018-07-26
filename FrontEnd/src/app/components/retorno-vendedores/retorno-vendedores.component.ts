@@ -1,3 +1,4 @@
+import { element } from 'protractor';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -6,10 +7,46 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./retorno-vendedores.component.css']
 })
 export class RetornoVendedoresComponent implements OnInit {
+  talonario: number;
+  pecosa: number;
+  nroContrato: number;
+  fecVenta: Date;
+  montoVenta: number;
+  nroCuota: number;
+  nomCliente: string;
+  position: number;
+  apeCliente: number;
+  dataSource = ELEMENT_DATA;
+  displayedColumns: string[] = ['position', 'nomCliente', 'apeCliente', 'talonario', 'nroContrato', 'fecVenta', 'montoventa', 'nroCuota'];
+
 
   constructor() { }
 
   ngOnInit() {
+
   }
 
 }
+
+const ELEMENT_DATA: RetornoVendedoresComponent [] = [
+   // tslint:disable-next-line:max-line-length
+   {position: 1, nomCliente: 'Fernando', apeCliente: 'Martinez Arevalos', talonario: 101, nroContrato: 5644, fecVenta: '15/06/2018', montoVenta: 1500, nroCuota: 12 },
+  // tslint:disable-next-line:max-line-length
+  {position: 2, nomCliente: 'Jean Pierre', apeCliente: 'Rodriguez Farfan', talonario: 201, nroContrato: 5654, fecVenta: '15/06/2018', montoVenta: 2500, nroCuota: 12 },
+  // tslint:disable-next-line:max-line-length
+  {position: 3, nomCliente: 'Eduardo', apeCliente: 'Rodriguez Garcia', talonario: 501, nroContrato: 5674, fecVenta: '15/06/2018', montoVenta: 1800, nroCuota: 18 },
+  // tslint:disable-next-line:max-line-length
+  {position: 4, nomCliente: 'Ivan', apeCliente: 'Arones Castro', talonario: 801, nroContrato: 5644, fecVenta: '15/06/2018', montoVenta: 3500, nroCuota: 12 },
+  // tslint:disable-next-line:max-line-length
+  {position: 5, nomCliente: 'Fernando', apeCliente: 'Martinez Arevalos', talonario: 101, nroContrato: 5694, fecVenta: '15/06/2018', montoVenta: 1000, nroCuota: 24 },
+  // tslint:disable-next-line:max-line-length
+  {position: 6, nomCliente: 'Fernando', apeCliente: 'Martinez Arevalos', talonario: 651, nroContrato: 5649, fecVenta: '15/06/2018', montoVenta: 2500, nroCuota: 18 },
+  // tslint:disable-next-line:max-line-length
+  {position: 7, nomCliente: 'Fernando', apeCliente: 'Martinez Arevalos', talonario: 301, nroContrato: 5654, fecVenta: '15/06/2018', montoVenta: 3500, nroCuota: 24 },
+  // tslint:disable-next-line:max-line-length
+  {position: 8, nomCliente: 'Fernando', apeCliente: 'Martinez Arevalos', talonario: 451, nroContrato: 5659, fecVenta: '15/06/2018', montoVenta: 1000, nroCuota: 12 },
+  // tslint:disable-next-line:max-line-length
+  {position: 9, nomCliente: 'Fernando', apeCliente: 'Martinez Arevalos', talonario: 751, nroContrato: 5641, fecVenta: '15/06/2018', montoVenta: 2100, nroCuota: 18 },
+  // tslint:disable-next-line:max-line-length
+  {position: 10, nomCliente: 'Fernando', apeCliente: 'Martinez Arevalos', talonario: 901, nroContrato: 5674, fecVenta: '15/06/2018', montoVenta: 2500, nroCuota: 24 },];
+

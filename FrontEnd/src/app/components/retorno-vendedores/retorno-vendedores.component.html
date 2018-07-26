@@ -1,3 +1,132 @@
-<p>
-  retorno-vendedores works!
-</p>
+<mat-card class="card-principal">
+  <!-- Titulo formulario-->
+  <mat-card-title>
+    <div id = "tituloProd"> Rendicion Salida de Vendedores</div>
+  </mat-card-title>
+  <!-- Subtitulo Cabecera  Datos Vendedor         -->
+  <mat-card-subtitle id ="CabeceraVendedor ">
+      <div > Datos Generales</div>
+  </mat-card-subtitle>
+
+<!--  Cabecera de Formulario Salida de Vendedores   -->
+  <mat-card-header>
+    <mat-card class="CabeceraSalidaVendedor">
+      <mat-grid-list cols="3" rowHeight="85px">
+          <!-- Ingreso Pecosa -->
+          <mat-grid-tile>
+
+              <div class="AlinIzq"> Pecosa : 7852421</div>
+
+          </mat-grid-tile>
+
+           <!-- Fecha Salida - Fecha Salida-->
+          <mat-grid-tile>
+
+           <div class="AlinIzq"> Fecha Salida : 10/06/2018 </div>
+
+          </mat-grid-tile>
+
+           <!-- Fecha Retorno-->
+          <mat-grid-tile>
+            <mat-form-field class="fecha_cabecera">
+              <input matInput [matDatepicker]="picker2" placeholder="Fecha de Retorno">
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+          </mat-grid-tile>
+
+           <!-- Informacion del destino -->
+          <mat-grid-tile>
+
+            <div class="AlinIzq"> Destino: Cajamarca</div>
+          </mat-grid-tile>
+
+          <!-- Guia de Reimsion -->
+          <mat-grid-tile>
+
+            <div class="AlinIzq"> Guia :  001-56564</div>
+
+          </mat-grid-tile>
+
+          </mat-grid-list>
+    </mat-card>
+</mat-card-header>
+
+<br>
+
+<!-- Registar Ventas de la Salida    -->
+
+<mat-card-content>
+
+  <mat-card-subtitle>
+      Detalle Boletas de Ventas
+      <button mat-raised-button color="primary" class="agregar" [routerLink]="['ingreso']">Registra Venta</button>
+  </mat-card-subtitle>
+
+<br>
+
+<mat-card class="CabeceraSalidaVendedor">
+    <mat-table [dataSource]="dataSource" class="mat-elevation-z8" class="CabeceraSalidaVendedor">
+
+        <!--- Note that these columns can be defined in any order.
+              The actual rendered columns are set as a property on the row definition" -->
+
+        <!-- Position Column -->
+        <ng-container matColumnDef="position">
+          <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.position}} </mat-cell>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="nomCliente">
+          <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.nomCliente}} </mat-cell>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="apeCliente">
+          <mat-header-cell *matHeaderCellDef> Apellido</mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.apeCliente}} </mat-cell>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="talonario">
+          <mat-header-cell *matHeaderCellDef> Talonario </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.talonario}} </mat-cell>
+        </ng-container>
+
+         <!-- Symbol Column -->
+         <ng-container matColumnDef="nroContrato">
+            <mat-header-cell *matHeaderCellDef> Contrato </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.nroContrato}} </mat-cell>
+         </ng-container>
+
+           <!-- Symbol Column -->
+        <ng-container matColumnDef="fecVenta">
+            <mat-header-cell *matHeaderCellDef>Fecha </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.fecVenta}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="montoventa">
+            <mat-header-cell *matHeaderCellDef>Monto</mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.montoVenta}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="nroCuota">
+            <mat-header-cell *matHeaderCellDef>Nro. Cuotas </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.nroCuota}} </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+  </mat-card>
+
+
+
+
+</mat-card-content>
+
+
+
+</mat-card>
