@@ -118,9 +118,9 @@ export class ClientesComponent implements OnInit {
 
    VentanaClientes.afterClosed().subscribe(res => {
     this.CargarData();
-    this.snackBar.open('Se creó el cliente satisfactoriamente.', '', {
+    /*this.snackBar.open('Se creó el cliente satisfactoriamente.', '', {
       duration: 2500
-    });
+    });*/
   });
  }
 

@@ -72,13 +72,20 @@
               <mat-header-cell *matHeaderCellDef> Sucursal </mat-header-cell>
               <mat-cell *matCellDef="let element"> {{element.sucursal}} </mat-cell>
           </ng-container>
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="estado">
+            <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.estado}} </mat-cell>
+          </ng-container>
+
 
           <ng-container matColumnDef="opciones">
             <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
             <mat-cell *matCellDef="let producto">
-              <button mat-icon-button color="primary"><mat-icon>attach_money </mat-icon></button>
-              <button mat-icon-button color="primary"><mat-icon> edit </mat-icon></button>
-              <button mat-icon-button color="primary"><mat-icon> delete </mat-icon></button>
+              <button  matTooltip="Rendición Salida Vendedor" mat-icon-button color="primary"><mat-icon>assignment_return </mat-icon></button>
+              <button matTooltip="Agegar Viatico Vendedor" mat-icon-button color="primary"><mat-icon>attach_money </mat-icon></button>
+              <button matTooltip="Editar Salida Vendedor" mat-icon-button color="primary"><mat-icon> edit </mat-icon></button>
+              <button matTooltip="Eliminar Salida Vendedor" mat-icon-button color="primary"><mat-icon> delete </mat-icon></button>
             </mat-cell>
           </ng-container>
 
