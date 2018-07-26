@@ -28,12 +28,15 @@ export class ProductoService {
       .set('prdescripcion', descripcion)
       .set('prpagina',pagina.toString())
       .set('prtotalpagina',total_pagina.toString())
+      .set('columna',"8")
+      .set('tipo',"1")
   })
     .pipe(map(res => {
       if (res['codigo'] === 0) {
           return res;
       }  else {
           console.log('Error al importar los datos, revisar servicio');
+          return res;
       }
     }));
   }

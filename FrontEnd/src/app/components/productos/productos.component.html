@@ -39,40 +39,40 @@
       <mat-spinner></mat-spinner>
     </div>
 
-    <mat-table [dataSource]="ListadoProductos" class="mat-elevation-z8">
+    <mat-table [dataSource]="ListadoProductos" class="mat-elevation-z8" matSort matSortActive="descripcion" matSortDirection="asc">
 
       <ng-container matColumnDef="numero">
-        <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef mat-sort-header> N° </mat-header-cell>
         <mat-cell *matCellDef="let producto"> {{producto.numero}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="tipo">
-        <mat-header-cell *matHeaderCellDef> Tipo </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </mat-header-cell>
         <mat-cell *matCellDef="let producto"> {{producto.tipo}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="marca">
-        <mat-header-cell *matHeaderCellDef> Marca </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Marca </mat-header-cell>
         <mat-cell *matCellDef="let producto"> {{producto.marca}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="modelo">
-        <mat-header-cell *matHeaderCellDef> Modelo </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Modelo </mat-header-cell>
         <mat-cell *matCellDef="let producto"> {{producto.modelo}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="descripcion">
-        <mat-header-cell *matHeaderCellDef> Descripcion</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Descripcion</mat-header-cell>
         <mat-cell *matCellDef="let producto"> {{producto.descripcion}} </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="unidad_medida">
-        <mat-header-cell *matHeaderCellDef> Precio mínimo </mat-header-cell>
+      <ng-container matColumnDef="precio">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Precio mínimo </mat-header-cell>
         <mat-cell *matCellDef="let producto"> {{producto.precio | currency:'S/.'}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="opciones">
-        <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let producto">
 
           <button mat-icon-button color="primary" (click)="Editar(producto.id)" matTooltip="Editar"><mat-icon> edit </mat-icon></button>

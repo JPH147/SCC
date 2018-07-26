@@ -47,10 +47,10 @@
                 $i=$i+1;
             }
 
-            print_json(gettype($producto_list["productos"]["0"]["precio"]), $producto_contar, $producto_list);
+            print_json("0000", $producto_contar, $producto_list);
         }
         else
-        { print_json("0001", "No existen usuarios registrados", null); }
+        { print_json("0001", 0, $producto_list); }
     }
 
     catch(Exception $exception)
