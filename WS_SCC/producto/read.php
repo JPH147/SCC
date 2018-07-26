@@ -28,22 +28,24 @@
 
         if (count(array_filter($producto_list))>0)
         { 
-            /*************************************************************/
-
             function cmd($a, $b){
-            $columna =!empty($_GET['columna']) ? $_GET['columna'] -1: null;
+            $columna =!empty($_GET['columna']) ? $_GET['columna']: null;
             $tipo=!empty($_GET['tipo']) ? $_GET['tipo'] : null;
-            $producto_vector= array("numero","id","tipo","marca","modelo","descripcion","unidad_medida","precio");
-
-                if(gettype($a[$producto_vector[$columna]])=="string"){
-                    return $tipo*(strcmp($a[$producto_vector[$columna]], $b[$producto_vector[$columna]]));                    
+                if(gettype($a[$columna])=="string"){
+                    return $tipo*(strcmp($a[$columna], $b[$columna]));                    
                 }else{
-                    return $tipo*(intval($a[$producto_vector[$columna]] - intval($b[$producto_vector[$columna]])));                     
+                    return $tipo*(intval($a[$columna] - intval($b[$columna])));                     
                 }
             }
 
             usort($producto_list["productos"], "cmd");
-            /*************************************************************/
+            $contador = $producto->numero_pagina*$producto->total_pagina;
+            $i=0;
+            foreach( $producto_list["productos"] as $row) {
+                $producto_list["productos"]["$i"]["numero"] = $contador+1;
+                $contador = $contador +1 ;
+                $i=$i+1;
+            }
 
             print_json(gettype($producto_list["productos"]["0"]["precio"]), $producto_contar, $producto_list);
         }
