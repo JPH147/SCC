@@ -19,7 +19,7 @@ import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-con
 export class ProductosComponent implements OnInit {
 
   ListadoProductos: ProductoDataSource;
-  Columnas: string[] = ['numero', 'descripcion', 'tipo', 'marca', 'modelo', 'unidad_medida', 'opciones'];
+  Columnas: string[] = ['numero', 'descripcion', 'tipo', 'marca', 'modelo', 'precio', 'opciones'];
   public TotalResultados:number=0;
 
   @ViewChild('InputProducto') FiltroProductos: ElementRef;
@@ -27,6 +27,7 @@ export class ProductosComponent implements OnInit {
   @ViewChild('InputMarca') FiltroMarca: ElementRef;
   @ViewChild('InputModelo') FiltroModelo: ElementRef;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(
     private Servicio: ProductoService,
@@ -36,6 +37,7 @@ export class ProductosComponent implements OnInit {
   ngOnInit() {
    this.ListadoProductos = new ProductoDataSource(this.Servicio);
    this.ListadoProductos.CargarProductos('', '', '', '',0,10);
+   this.sort.sortChange.subscribe(res=>console.log(res))
  }
 
 // tslint:disable-next-line:use-life-cycle-interface
