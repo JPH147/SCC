@@ -36,14 +36,23 @@ export class ProductosComponent implements OnInit {
 
   ngOnInit() {
    this.ListadoProductos = new ProductoDataSource(this.Servicio);
-   this.ListadoProductos.CargarProductos('', '', '', '',0,10);
-   this.sort.sortChange.subscribe(res=>console.log(res))
+   this.ListadoProductos.CargarProductos('', '', '', '',0,10,"descripcion","asc");
+   this.ListadoProductos.TotalResultados.subscribe(res=>{
+     this.TotalResultados=res;
+   })
  }
 
 // tslint:disable-next-line:use-life-cycle-interface
 ngAfterViewInit () {
 
-  this.paginator.page
+  this.sort.sortChange.subscribe(res=>{
+    this.paginator.pageIndex=0;
+  })
+
+  merge(
+    this.paginator.page,
+    this.sort.sortChange
+  )
   .pipe(
     tap(()=>this.CargarData())
   ).subscribe();
@@ -70,7 +79,9 @@ ngAfterViewInit () {
    this.FiltroModelo.nativeElement.value,
    this.FiltroProductos.nativeElement.value,
    this.paginator.pageIndex,
-   this.paginator.pageSize
+   this.paginator.pageSize,
+   this.sort.active,
+   this.sort.direction
    );
  }
 

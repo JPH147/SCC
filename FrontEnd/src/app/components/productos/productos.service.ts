@@ -18,9 +18,18 @@ export class ProductoService {
   modelo: string,
   descripcion: string,
   pagina:number,
-  total_pagina:number
+  total_pagina:number,
+  columna:string,
+  tipo_orden:string
   ): Observable<any>
-  { return this.http.get(this.url + 'producto/read.php',{
+  { let orden;
+    if (tipo_orden=="asc"){
+      orden=1
+    }else{
+      orden=-1
+    }
+
+    return this.http.get(this.url + 'producto/read.php',{
       params: new HttpParams()
       .set('prtipo', tipo)
       .set('prmarca', marca)
@@ -28,8 +37,8 @@ export class ProductoService {
       .set('prdescripcion', descripcion)
       .set('prpagina',pagina.toString())
       .set('prtotalpagina',total_pagina.toString())
-      .set('columna',"precio")
-      .set('tipo',"1")
+      .set('columna',columna)
+      .set('tipo',orden)
   })
     .pipe(map(res => {
       if (res['codigo'] === 0) {

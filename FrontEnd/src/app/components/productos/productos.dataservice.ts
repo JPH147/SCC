@@ -28,12 +28,13 @@ this.CargandoInformacion.complete();
     modelo: string,
     descripcion: string,
     pagina:number,
-    total_pagina:number
-
+    total_pagina:number,
+    columna:string,
+    tipo_orden:string
   ){
   this.CargandoInformacion.next(true);
 
-  this.Servicio.Listado(tipo, marca, modelo, descripcion,pagina,total_pagina)
+  this.Servicio.Listado(tipo, marca, modelo, descripcion,pagina,total_pagina,columna,tipo_orden)
   .pipe(catchError(() => of([])),
   finalize(() => this.CargandoInformacion.next(false))
   )

@@ -4,9 +4,6 @@ Class Producto{
     private $conn;
     private $table_name = "producto";
 
-    public $idperfil;
-    public $prf_nombre;
-
     public $idproducto;
     public $tprd_nombre;
     public $mrc_nombre;
