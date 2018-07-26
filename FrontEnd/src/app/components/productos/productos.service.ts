@@ -28,7 +28,7 @@ export class ProductoService {
       .set('prdescripcion', descripcion)
       .set('prpagina',pagina.toString())
       .set('prtotalpagina',total_pagina.toString())
-      .set('columna',"8")
+      .set('columna',"precio")
       .set('tipo',"1")
   })
     .pipe(map(res => {

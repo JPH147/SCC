@@ -42,7 +42,7 @@
     <mat-table [dataSource]="ListadoProductos" class="mat-elevation-z8" matSort matSortActive="descripcion" matSortDirection="asc">
 
       <ng-container matColumnDef="numero">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> N° </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
         <mat-cell *matCellDef="let producto"> {{producto.numero}} </mat-cell>
       </ng-container>
 
