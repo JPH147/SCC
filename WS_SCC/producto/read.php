@@ -28,15 +28,24 @@
 
         if (count(array_filter($producto_list))>0)
         { 
+            /*************************************************************/
 
-            function cmp($a, $b)
-            {
-                return -strcmp($a["precio"], $b["precio"]);
+            function cmd($a, $b){
+            $columna =!empty($_GET['columna']) ? $_GET['columna'] -1: null;
+            $tipo=!empty($_GET['tipo']) ? $_GET['tipo'] : null;
+            $producto_vector= array("numero","id","tipo","marca","modelo","descripcion","unidad_medida","precio");
+
+                if(gettype($a[$producto_vector[$columna]])=="string"){
+                    return $tipo*(strcmp($a[$producto_vector[$columna]], $b[$producto_vector[$columna]]));                    
+                }else{
+                    return $tipo*(intval($a[$producto_vector[$columna]] - intval($b[$producto_vector[$columna]])));                     
+                }
             }
 
-            usort($producto_list["productos"], "cmp");
+            usort($producto_list["productos"], "cmd");
+            /*************************************************************/
 
-            print_json("0000", $producto_contar, $producto_list);
+            print_json(gettype($producto_list["productos"]["0"]["precio"]), $producto_contar, $producto_list);
         }
         else
         { print_json("0001", "No existen usuarios registrados", null); }

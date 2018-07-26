@@ -55,13 +55,13 @@ Class Producto{
             $contador=$contador+1;
             $producto_item = array (
                 "numero"=>$contador,
-                "id"=>$idproducto,
+                "id"=>intval($idproducto),
                 "tipo"=>$tprd_nombre,
                 "marca"=>$mrc_nombre,
                 "modelo"=>$mdl_nombre,
                 "descripcion"=>$prd_descripcion,
                 "unidad_medida"=>$und_nombre,
-                "precio"=>$prd_precio
+                "precio"=>floatval($prd_precio)
             );
 
             array_push($producto_list["productos"],$producto_item);
