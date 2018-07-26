@@ -17,10 +17,10 @@ export class DepartamentoComponent implements OnInit {
 
   ListadoDepartamentos: DepartamentoDataSource;
   Columnas: string[] = ['numero', 'nombre', 'opciones'];
-  public maestro;
+  public TotalResultados:number=0;
 
   @ViewChild('InputDepartamento') FiltroDepartamento: ElementRef;
-
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
     private Servicio: ServiciosDirecciones,
@@ -29,16 +29,24 @@ export class DepartamentoComponent implements OnInit {
 
   ngOnInit() {
    this.ListadoDepartamentos = new DepartamentoDataSource(this.Servicio);
-   this.ListadoDepartamentos.CargarDepartamentos('');
+   this.ListadoDepartamentos.CargarDepartamentos('',0,10);
+   this.ListadoDepartamentos.TotalResultados.subscribe(res=>this.TotalResultados=res)
  }
 
 // tslint:disable-next-line:use-life-cycle-interface
 ngAfterViewInit () {
+
+   this.paginator.page
+    .pipe(
+      tap(()=>this.CargarData())
+     ).subscribe();
+
    fromEvent(this.FiltroDepartamento.nativeElement, 'keyup')
    .pipe(
      debounceTime(200),
      distinctUntilChanged(),
      tap(() => {
+       this.paginator.pageIndex=0;
        this.CargarData();
      })
     ).subscribe();
@@ -46,7 +54,9 @@ ngAfterViewInit () {
 
  CargarData() {
    this.ListadoDepartamentos.CargarDepartamentos(
-   	this.FiltroDepartamento.nativeElement.value
+   	this.FiltroDepartamento.nativeElement.value,
+    this.paginator.pageIndex,
+    this.paginator.pageSize,
 	);
  }
 

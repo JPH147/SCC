@@ -72,6 +72,8 @@ import { ventanaseriessv } from './components/salida-vendedores/ventana-seriessv
 import { DireccionesComponent } from './components/direcciones/direcciones.component';
 import { DepartamentoComponent } from './components/direcciones/departamento/departamento.component';
 import { VentanaEmergenteDepartamento} from './components/direcciones/departamento/ventana-emergente/ventanaemergente';
+import {VentanaEmergenteProvincia} from './components/direcciones/provincia/ventana-emergente/ventanaemergente';
+import {VentanaEmergenteDistrito } from './components/direcciones/distrito/ventana-emergente/ventanaemergente';
 import { ProvinciaComponent } from './components/direcciones/provincia/provincia.component';
 import { DistritoComponent } from './components/direcciones/distrito/distrito.component';
 import { VentanaConfirmarComponent } from './components/global/ventana-confirmar/ventana-confirmar.component';
@@ -153,6 +155,8 @@ import { VentanaConfirmarComponent } from './components/global/ventana-confirmar
     ProvinciaComponent,
     DistritoComponent,
     VentanaEmergenteDepartamento,
+    VentanaEmergenteProvincia,
+    VentanaEmergenteDistrito
    ],
   entryComponents: [
     AppComponent,
@@ -164,6 +168,8 @@ import { VentanaConfirmarComponent } from './components/global/ventana-confirmar
     ventanaseriessv,
     VentanaConfirmarComponent,
     VentanaEmergenteDepartamento,
+    VentanaEmergenteProvincia,
+    VentanaEmergenteDistrito
   ],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider]

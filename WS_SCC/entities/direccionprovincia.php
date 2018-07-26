@@ -7,25 +7,29 @@ class Provincia{
 	public $id_departamento;
 	public $dpt_nombre;
 	public $prv_nombre;
+    public $total_pagina;
+    public $total_resultado;
 
 	public function __construct($db){
 		$this->conn = $db;
 	}
 
 	function read(){
-		$query = "CALL sp_listarprovincia(?,?)";
+		$query = "CALL sp_listarprovincia(?,?,?,?)";
 
 		$result = $this->conn->prepare($query);
 
 		$result->bindParam(1, $this->dpt_nombre);
 		$result->bindParam(2, $this->prv_nombre);
+        $result->bindParam(3, $this->numero_pagina);
+        $result->bindParam(4, $this->total_pagina);
 
 		$result->execute();
 
 		$provincia_list=array();
 		$provincia_list["provincias"]=array();
 
-		$contador = 0;
+		$contador = $this->total_pagina*($this->numero_pagina);
 
 		while($row = $result->fetch(PDO::FETCH_ASSOC))
 		{
@@ -43,6 +47,24 @@ class Provincia{
 		return $provincia_list;
 	}
 
+    function contar(){
+
+        $query = "CALL sp_listarprovinciacontar(?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->dpt_nombre);
+        $result->bindParam(2, $this->prv_nombre);
+
+        $result->execute();
+
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        $this->total_resultado=$row['total'];
+
+        return $this->total_resultado;
+    }
+
 	function readxId()
     {
         $query ="call sp_listarprovinciaxId(?)";
@@ -56,7 +78,7 @@ class Provincia{
         $row = $result->fetch(PDO::FETCH_ASSOC);
         
         $this->id_distrito=$row['id_provincia'];
-        $this->dpt_nombre=$row['dpt_nombre'];
+        $this->dpt_nombre=$row['id_departamento'];
         $this->prv_nombre=$row['prv_nombre'];
     }
 

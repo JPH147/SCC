@@ -20,11 +20,24 @@
         $producto->mrc_nombre = !empty($_GET['prmarca']) ? $_GET['prmarca'] : null;
         $producto->mdl_nombre = !empty($_GET['prmodelo']) ? $_GET['prmodelo'] : null;
         $producto->prd_descripcion = !empty($_GET['prdescripcion']) ? $_GET['prdescripcion'] : null;
+        $producto->numero_pagina = !empty($_GET['prpagina']) ? $_GET['prpagina'] : null;
+        $producto->total_pagina = !empty($_GET['prtotalpagina']) ? $_GET['prtotalpagina'] : null;
 
         $producto_list = $producto->read();
+        $producto_contar = $producto->contar();
 
         if (count(array_filter($producto_list))>0)
-        { print_json("0000", count(array_filter($producto_list)), $producto_list); }
+        { 
+
+            function cmp($a, $b)
+            {
+                return -strcmp($a["precio"], $b["precio"]);
+            }
+
+            usort($producto_list["productos"], "cmp");
+
+            print_json("0000", $producto_contar, $producto_list);
+        }
         else
         { print_json("0001", "No existen usuarios registrados", null); }
     }

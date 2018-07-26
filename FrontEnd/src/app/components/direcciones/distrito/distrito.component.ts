@@ -5,57 +5,54 @@ import {DistritoDataSource} from './distrito.dataservice'
 import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
 import { MatPaginator, MatSort, MatDialog } from '@angular/material';
 import {VentanaConfirmarComponent} from '../../global/ventana-confirmar/ventana-confirmar.component'
+import {VentanaEmergenteDistrito} from './ventana-emergente/ventanaemergente'
 
 @Component({
   selector: 'app-distrito',
   templateUrl: './distrito.component.html',
-  styleUrls: ['./distrito.component.css']
+  styleUrls: ['./distrito.component.css'],
+  providers:[ServiciosDirecciones]
 })
 export class DistritoComponent implements OnInit {
 
   ListadoDistritos: DistritoDataSource;
   Columnas: string[] = ['numero', 'departamento', 'provincia','nombre', 'opciones'];
-  public maestro;
+  public TotalResultados:number=0;
 
   @ViewChild('InputDepartamento') FiltroDepartamento: ElementRef;
   @ViewChild('InputProvincia') FiltroProvincia: ElementRef;
   @ViewChild('InputDistrito') FiltroDistrito: ElementRef;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
     private Servicio: ServiciosDirecciones,
-    public DialogoDepartamentos: MatDialog
+    public DialogoDistritos: MatDialog
   ) {}
 
   ngOnInit() {
    this.ListadoDistritos = new DistritoDataSource(this.Servicio);
-   this.ListadoDistritos.CargarDistritos('','','');
+   this.ListadoDistritos.CargarDistritos('','','',0,10);
+   this.ListadoDistritos.TotalResultados.subscribe(res=>this.TotalResultados=res)
  }
 
 // tslint:disable-next-line:use-life-cycle-interface
 ngAfterViewInit () {
-   fromEvent(this.FiltroDepartamento.nativeElement, 'keyup')
-   .pipe(
-     debounceTime(200),
-     distinctUntilChanged(),
-     tap(() => {
-       this.CargarData();
-     })
-    ).subscribe();
 
-    fromEvent(this.FiltroProvincia.nativeElement, 'keyup')
-   .pipe(
-     debounceTime(200),
-     distinctUntilChanged(),
-     tap(() => {
-       this.CargarData();
-     })
-    ).subscribe();
+  this.paginator.page
+    .pipe(
+      tap(()=>this.CargarData())
+     ).subscribe();
 
-    fromEvent(this.FiltroDistrito.nativeElement, 'keyup')
+   merge(
+     fromEvent(this.FiltroDepartamento.nativeElement, 'keyup'),
+     fromEvent(this.FiltroProvincia.nativeElement, 'keyup'),
+     fromEvent(this.FiltroDistrito.nativeElement, 'keyup')
+    )
    .pipe(
      debounceTime(200),
      distinctUntilChanged(),
      tap(() => {
+       this.paginator.pageIndex=0;
        this.CargarData();
      })
     ).subscribe();
@@ -65,24 +62,25 @@ ngAfterViewInit () {
    this.ListadoDistritos.CargarDistritos(
    	this.FiltroDepartamento.nativeElement.value,
    	this.FiltroProvincia.nativeElement.value,
-   	this.FiltroDistrito.nativeElement.value
+   	this.FiltroDistrito.nativeElement.value,
+    this.paginator.pageIndex,
+    this.paginator.pageSize,
 	);
  }
 
 
- // Agregar() {
+ Agregar() {
+   let VentanaDistrito= this.DialogoDistritos.open(VentanaEmergenteDistrito, {
+     width: '400px'
+   });
 
- //   let VentanaProvincia= this.DialogoDepartamentos.open(VentanaEmergenteDepartamento, {
- //     width: '400px'
- //   });
-
- //   VentanaProvincia.afterClosed().subscribe(res => {
- //     this.CargarData();
- //   });
- // }
+   VentanaDistrito.afterClosed().subscribe(res => {
+     this.CargarData();
+   });
+ }
 
  Eliminar(distrito) {
-   let VentanaProvincia = this.DialogoDepartamentos.open(VentanaConfirmarComponent,{
+   let VentanaProvincia = this.DialogoDistritos.open(VentanaConfirmarComponent,{
      width: '400px',
      data: {objeto: 'el distrito', valor: distrito.nombre}
    });
@@ -94,5 +92,19 @@ ngAfterViewInit () {
       })
      }
    })
+ }
+
+ Editar(id) {
+   this.Servicio.SeleccionarDistrito(id).subscribe(res => {
+
+     let VentanaDistrito = this.DialogoDistritos.open(VentanaEmergenteDistrito, {
+       width: '480px',
+       data: res
+     });
+     // tslint:disable-next-line:no-shadowed-variable
+     VentanaDistrito.afterClosed().subscribe (res => {
+       this.CargarData();
+     });
+   });
  }
 }

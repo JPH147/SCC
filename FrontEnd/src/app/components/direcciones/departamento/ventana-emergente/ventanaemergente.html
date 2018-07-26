@@ -4,13 +4,13 @@
     <mat-card-title *ngIf="data">Editar departamento</mat-card-title>
   </mat-card-header>
 
-  <form [formGroup]="DepartamentosForm" (ngSubmit)="Guardar(DepartamentosForm)">
+  <form [formGroup]="DepartamentosForm" (ngSubmit)="Guardar(DepartamentosForm); Notificacion(mensaje,'')">
     
     <mat-card-content>
       <mat-grid-list cols="1" rowHeight="80px">
         <mat-grid-tile>
           <mat-form-field>
-            <input matInput placeholder="Nombre de departamento" formControlName="nombre">
+            <input matInput placeholder="Nombre del departamento" formControlName="nombre">
           </mat-form-field>
         </mat-grid-tile>
       </mat-grid-list>

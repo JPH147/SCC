@@ -17,12 +17,14 @@
     	$departamento = new Departamento($db);
 
         $departamento->dpt_nombre = !empty($_GET['prnombre']) ? $_GET['prnombre'] : null;
-
+        $departamento->numero_pagina = !empty($_GET['prpagina']) ? $_GET['prpagina'] : null;
+        $departamento->total_pagina = !empty($_GET['prtotalpagina']) ? $_GET['prtotalpagina'] : null;
     	$departamento_list = $departamento->read();
+        $departamento_contar = $departamento->contar();
 
     	if (count(array_filter($departamento_list))>0)
     	{
-    		print_json("0000", count(array_filter($departamento_list)),$departamento_list);
+    		print_json("0000", $departamento_contar,$departamento_list);
     	}
     	else
     	{

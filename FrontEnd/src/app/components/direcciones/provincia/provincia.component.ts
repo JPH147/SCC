@@ -4,7 +4,8 @@ import {merge, Observable, fromEvent} from 'rxjs';
 import {ProvinciaDataSource} from './provincia.dataservice'
 import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
 import { MatPaginator, MatSort, MatDialog } from '@angular/material';
-import {VentanaConfirmarComponent} from '../../global/ventana-confirmar/ventana-confirmar.component'
+import {VentanaConfirmarComponent} from '../../global/ventana-confirmar/ventana-confirmar.component';
+import {VentanaEmergenteProvincia} from './ventana-emergente/ventanaemergente'
 
 @Component({
   selector: 'app-provincia',
@@ -16,63 +17,67 @@ export class ProvinciaComponent implements OnInit {
 
   ListadoProvincias: ProvinciaDataSource;
   Columnas: string[] = ['numero', 'departamento', 'nombre', 'opciones'];
-  public maestro;
+  public TotalResultados:number=0;
 
   @ViewChild('InputDepartamento') FiltroDepartamento: ElementRef;
   @ViewChild('InputProvincia') FiltroProvincia: ElementRef;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
     private Servicio: ServiciosDirecciones,
-    public DialogoDepartamentos: MatDialog
+    public DialogoProvincias: MatDialog
   ) {}
 
   ngOnInit() {
    this.ListadoProvincias = new ProvinciaDataSource(this.Servicio);
-   this.ListadoProvincias.CargarProvincias('','');
+   this.ListadoProvincias.CargarProvincias('','',0,10);
+   this.ListadoProvincias.TotalResultados.subscribe(res=>this.TotalResultados=res)
  }
 
 // tslint:disable-next-line:use-life-cycle-interface
 ngAfterViewInit () {
-   fromEvent(this.FiltroDepartamento.nativeElement, 'keyup')
+
+   this.paginator.page
+    .pipe(
+      tap(()=>this.CargarData())
+     ).subscribe();
+
+   merge(
+     fromEvent(this.FiltroDepartamento.nativeElement, 'keyup'),
+     fromEvent(this.FiltroProvincia.nativeElement, 'keyup')
+    )
    .pipe(
      debounceTime(200),
      distinctUntilChanged(),
      tap(() => {
+       this.paginator.pageIndex=0;
        this.CargarData();
      })
     ).subscribe();
 
-    fromEvent(this.FiltroProvincia.nativeElement, 'keyup')
-   .pipe(
-     debounceTime(200),
-     distinctUntilChanged(),
-     tap(() => {
-       this.CargarData();
-     })
-    ).subscribe();
  }
 
  CargarData() {
    this.ListadoProvincias.CargarProvincias(
    	this.FiltroDepartamento.nativeElement.value,
-   	this.FiltroProvincia.nativeElement.value
+   	this.FiltroProvincia.nativeElement.value,
+    this.paginator.pageIndex,
+    this.paginator.pageSize,
 	);
  }
 
 
- // Agregar() {
-
- //   let VentanaProvincia= this.DialogoDepartamentos.open(VentanaEmergenteDepartamento, {
- //     width: '400px'
- //   });
-
- //   VentanaProvincia.afterClosed().subscribe(res => {
- //     this.CargarData();
- //   });
- // }
+ Agregar() {
+   let VentanaProvincia= this.DialogoProvincias.open(VentanaEmergenteProvincia, {
+     width: '400px'
+   });
+   VentanaProvincia.afterClosed().subscribe(res => {
+     this.CargarData();
+   });
+ }
 
  Eliminar(provincia) {
-   let VentanaProvincia = this.DialogoDepartamentos.open(VentanaConfirmarComponent,{
+   let VentanaProvincia = this.DialogoProvincias.open(VentanaConfirmarComponent,{
      width: '400px',
      data: {objeto: 'la provincia', valor: provincia.nombre}
    });
@@ -86,17 +91,17 @@ ngAfterViewInit () {
    })
  }
 
- // Editar(id) {
- //   this.Servicio.SeleccionarDepartamento(id).subscribe(res => {
+ Editar(id) {
+   this.Servicio.SeleccionarProvincia(id).subscribe(res => {
 
- //     let VentanaProvincia = this.DialogoDepartamentos.open(VentanaEmergenteDepartamento, {
- //       width: '480px',
- //       data: res
- //     });
- //     // tslint:disable-next-line:no-shadowed-variable
- //     VentanaProvincia.afterClosed().subscribe (res => {
- //       this.CargarData();
- //     });
- //   });
- // }
+     let VentanaProvincia = this.DialogoProvincias.open(VentanaEmergenteProvincia, {
+       width: '480px',
+       data: res
+     });
+     // tslint:disable-next-line:no-shadowed-variable
+     VentanaProvincia.afterClosed().subscribe (res => {
+       this.CargarData();
+     });
+   });
+ }
 }

@@ -20,6 +20,9 @@ Class Producto{
     public $id_tipo_producto;
     public $id_marca;
     public $id_modelo;
+    public $numero_pagina;
+    public $total_pagina;
+    public $total_resultado;
 
     public function __construct($db){
         $this->conn = $db;
@@ -28,7 +31,7 @@ Class Producto{
     /* Listar productos */
     function read(){
 
-        $query = "CALL sp_listarproducto(?,?,?,?)";
+        $query = "CALL sp_listarproducto(?,?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
@@ -36,13 +39,15 @@ Class Producto{
         $result->bindParam(2, $this->mrc_nombre);
         $result->bindParam(3, $this->mdl_nombre);
         $result->bindParam(4, $this->prd_descripcion);
+        $result->bindParam(5, $this->numero_pagina);
+        $result->bindParam(6, $this->total_pagina);
 
         $result->execute();
     
         $producto_list=array();
         $producto_list["productos"]=array();
 
-        $contador = 0;
+        $contador = $this->total_pagina*($this->numero_pagina);
 
         while($row = $result->fetch(PDO::FETCH_ASSOC))
         {
@@ -63,6 +68,26 @@ Class Producto{
         }
 
         return $producto_list;
+    }
+
+    function contar(){
+
+        $query = "CALL sp_listarproductocontar(?,?,?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->tprd_nombre);
+        $result->bindParam(2, $this->mrc_nombre);
+        $result->bindParam(3, $this->mdl_nombre);
+        $result->bindParam(4, $this->prd_descripcion);
+
+        $result->execute();
+
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        $this->total_resultado=$row['total'];
+
+        return $this->total_resultado;
     }
 
     /* Seleccionar producto */

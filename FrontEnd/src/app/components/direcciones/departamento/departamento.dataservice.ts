@@ -9,6 +9,7 @@ export class DepartamentoDataSource implements DataSource<Departamento> {
   private InformacionDepartamentos = new BehaviorSubject<Departamento[]>([]);
   private CargandoInformacion = new BehaviorSubject<boolean>(false);
   public Cargando = this.CargandoInformacion.asObservable();
+  public TotalResultados= new BehaviorSubject<number>(0);;
 
 constructor(private Servicio: ServiciosDirecciones) { }
 
@@ -23,14 +24,19 @@ constructor(private Servicio: ServiciosDirecciones) { }
 
   CargarDepartamentos(
     nombre: string,
+    pagina:number,
+    total_pagina:number
   ){
   this.CargandoInformacion.next(true);
 
-  this.Servicio.ListarDepartamentos(nombre)
+  this.Servicio.ListarDepartamentos(nombre,pagina,total_pagina)
   .pipe(catchError(() => of([])),
   finalize(() => this.CargandoInformacion.next(false))
   )
-  .subscribe(res => this.InformacionDepartamentos.next(res));
+  .subscribe(res => {
+    this.TotalResultados.next(res['mensaje']);
+    this.InformacionDepartamentos.next(res['data'].departamentos);
+  });
   }
 
 }

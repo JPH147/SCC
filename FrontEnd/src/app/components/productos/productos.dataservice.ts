@@ -9,6 +9,7 @@ export class ProductoDataSource implements DataSource<Producto> {
   private InformacionProductos = new BehaviorSubject<Producto[]>([]);
   private CargandoInformacion = new BehaviorSubject<boolean>(false);
   public Cargando = this.CargandoInformacion.asObservable();
+  public TotalResultados= new BehaviorSubject<number>(0);;
 
 constructor(private Servicio: ProductoService) { }
 
@@ -25,16 +26,21 @@ this.CargandoInformacion.complete();
     tipo: string,
     marca: string,
     modelo: string,
-    descripcion: string
-  // tslint:disable-next-line:one-line
+    descripcion: string,
+    pagina:number,
+    total_pagina:number
+
   ){
   this.CargandoInformacion.next(true);
 
-  this.Servicio.Listado(tipo, marca, modelo, descripcion)
+  this.Servicio.Listado(tipo, marca, modelo, descripcion,pagina,total_pagina)
   .pipe(catchError(() => of([])),
   finalize(() => this.CargandoInformacion.next(false))
   )
-  .subscribe(res => this.InformacionProductos.next(res));
+  .subscribe(res => {
+    this.TotalResultados.next(res['mensaje']);
+    this.InformacionProductos.next(res['data'].productos)
+  });
   }
 
 }
