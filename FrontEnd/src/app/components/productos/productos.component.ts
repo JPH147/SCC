@@ -19,13 +19,15 @@ import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-con
 export class ProductosComponent implements OnInit {
 
   ListadoProductos: ProductoDataSource;
-  Columnas: string[] = ['numero', 'descripcion', 'tipo', 'marca', 'modelo', 'unidad_medida', 'opciones'];
-  public maestro;
+  Columnas: string[] = ['numero', 'descripcion', 'tipo', 'marca', 'modelo', 'precio', 'opciones'];
+  public TotalResultados:number=0;
 
   @ViewChild('InputProducto') FiltroProductos: ElementRef;
   @ViewChild('InputTipo') FiltroTipo: ElementRef;
   @ViewChild('InputMarca') FiltroMarca: ElementRef;
   @ViewChild('InputModelo') FiltroModelo: ElementRef;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(
     private Servicio: ProductoService,
@@ -34,43 +36,29 @@ export class ProductosComponent implements OnInit {
 
   ngOnInit() {
    this.ListadoProductos = new ProductoDataSource(this.Servicio);
-   this.ListadoProductos.CargarProductos('', '', '', '');
+   this.ListadoProductos.CargarProductos('', '', '', '',0,10);
+   this.sort.sortChange.subscribe(res=>console.log(res))
  }
 
 // tslint:disable-next-line:use-life-cycle-interface
 ngAfterViewInit () {
-   fromEvent(this.FiltroProductos.nativeElement, 'keyup')
-   .pipe(
-     debounceTime(200),
-     distinctUntilChanged(),
-     tap(() => {
-       this.CargarData();
-     })
-    ).subscribe();
 
-   fromEvent(this.FiltroTipo.nativeElement, 'keyup')
-   .pipe(
-     debounceTime(200),
-     distinctUntilChanged(),
-     tap(() => {
-       this.CargarData();
-     })
-    ).subscribe();
+  this.paginator.page
+  .pipe(
+    tap(()=>this.CargarData())
+  ).subscribe();
 
-    fromEvent(this.FiltroMarca.nativeElement, 'keyup')
-   .pipe(
-     debounceTime(200),
-     distinctUntilChanged(),
-     tap(() => {
-       this.CargarData();
-     })
-    ).subscribe();
-
+  merge(
+   fromEvent(this.FiltroProductos.nativeElement, 'keyup'),
+   fromEvent(this.FiltroTipo.nativeElement, 'keyup'),
+   fromEvent(this.FiltroMarca.nativeElement, 'keyup'),
    fromEvent(this.FiltroModelo.nativeElement, 'keyup')
-   .pipe(
+  )
+  .pipe(
      debounceTime(200),
      distinctUntilChanged(),
      tap(() => {
+       this.paginator.pageIndex=0;
        this.CargarData();
      })
     ).subscribe();
@@ -80,7 +68,10 @@ ngAfterViewInit () {
    this.ListadoProductos.CargarProductos(this.FiltroTipo.nativeElement.value,
    this.FiltroMarca.nativeElement.value,
    this.FiltroModelo.nativeElement.value,
-   this.FiltroProductos.nativeElement.value);
+   this.FiltroProductos.nativeElement.value,
+   this.paginator.pageIndex,
+   this.paginator.pageSize
+   );
  }
 
 

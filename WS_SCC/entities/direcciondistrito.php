@@ -7,28 +7,32 @@ class Distrito{
 	public $dst_nombre;
 	public $prv_nombre;
 	public $dpt_nombre;
-    public $item_pagina;
+    public $numero_pagina;
     public $total_pagina;
+    public $total_resultado;
 
 	public function __construct($db){
 		$this->conn = $db;
 	}
 
 	function read(){
-		$query = "CALL sp_listardistrito(?,?,?)";
+		$query = "CALL sp_listardistrito(?,?,?,?,?)";
 
 		$result = $this->conn->prepare($query);
 
 		$result->bindParam(1, $this->dpt_nombre);
 		$result->bindParam(2, $this->prv_nombre);
 		$result->bindParam(3, $this->dst_nombre);
+        $result->bindParam(4, $this->numero_pagina);
+        $result->bindParam(5, $this->total_pagina);
 
 		$result->execute();
 
 		$distrito_list=array();
+        //$distrito_list["total"]=array();
 		$distrito_list["distritos"]=array();
 
-		$contador = 0;
+		$contador = $this->total_pagina*($this->numero_pagina);
 
 		while($row = $result->fetch(PDO::FETCH_ASSOC))
 		{
@@ -46,7 +50,26 @@ class Distrito{
 
 		return $distrito_list;
 	}
-	
+
+    function contar(){
+
+        $query = "CALL sp_listardistritocontar(?,?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->dpt_nombre);
+        $result->bindParam(2, $this->prv_nombre);
+        $result->bindParam(3, $this->dst_nombre);
+
+        $result->execute();
+
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        $this->total_resultado=$row['total'];
+
+        return $this->total_resultado;
+    }
+
 	function readxId()
     {
         $query ="call sp_listardistritoxId(?)";
@@ -61,7 +84,7 @@ class Distrito{
         
         $this->id_distrito=$row['id_distrito'];
         $this->dpt_nombre=$row['dpt_nombre'];
-        $this->prv_nombre=$row['prv_nombre'];
+        $this->prv_nombre=$row['id_provincia'];
         $this->dst_nombre=$row['dst_nombre'];
     }
 

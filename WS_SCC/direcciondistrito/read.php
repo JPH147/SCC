@@ -19,12 +19,15 @@
     	$distrito->dpt_nombre = !empty($_GET['prdepartamento']) ? $_GET['prdepartamento'] : null;
         $distrito->prv_nombre = !empty($_GET['prprovincia']) ? $_GET['prprovincia'] : null;
         $distrito->dst_nombre = !empty($_GET['prdistrito']) ? $_GET['prdistrito'] : null;
+        $distrito->numero_pagina = !empty($_GET['prpagina']) ? $_GET['prpagina'] : null;
+        $distrito->total_pagina = !empty($_GET['prtotalpagina']) ? $_GET['prtotalpagina'] : null;
 
     	$distrito_list = $distrito->read();
+        $distrito_contar = $distrito->contar();
 
     	if (count(array_filter($distrito_list))>0)
     	{
-    		print_json("0000", count(array_filter($distrito_list["distritos"])),$distrito_list);
+    		print_json("0000",$distrito_contar,$distrito_list);
     	}
     	else
     	{

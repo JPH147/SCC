@@ -16,16 +16,20 @@ export class ServiciosDirecciones{
 	/************************************************************************************************/
 	/* Departamentos */
 	ListarDepartamentos(
-		nombre:string
-	):Observable<Departamento[]>
+		nombre:string,
+		pagina:number,
+		total_pagina:number,
+	):Observable<any>
 	{
 		return this.http.get(this.url+'direcciondepartamento/read.php',{
 			params: new HttpParams()
 			.set('prnombre', nombre)
+			.set('prpagina',pagina.toString())
+			.set('prtotalpagina',total_pagina.toString())
 		})
 		.pipe(map(res=>{
 			if(res['codigo']===0){
-				return res=res['data'].departamentos
+				return res=res
 			}else{
 				console.log('Error al importar los datos, revisar servicio')
 			}
@@ -81,17 +85,21 @@ export class ServiciosDirecciones{
 
 	ListarProvincias(
 		departamento:string,
-		provincia:string
-	):Observable<Provincia[]>
+		provincia:string,
+		pagina:number,
+		total_pagina:number,
+	):Observable<any>
 	{
 		return this.http.get(this.url+'direccionprovincia/read.php',{
 			params: new HttpParams()
 			.set('prdepartamento', departamento)
 			.set('prprovincia', provincia)
+			.set('prpagina',pagina.toString())
+			.set('prtotalpagina',total_pagina.toString())
 		})
 		.pipe(map(res=>{
 			if(res['codigo']===0){
-				return res=res['data'].provincias
+				return res=res
 			}else{
 				console.log('Error al importar los datos, revisar servicio')
 			}
@@ -152,18 +160,22 @@ export class ServiciosDirecciones{
 	ListarDistritos(
 		departamento:string,
 		provincia:string,
-		distrito:string
-	):Observable<Distrito[]>
+		distrito:string,
+		pagina:number,
+		total_pagina:number,
+	):Observable<any>
 	{
 		return this.http.get(this.url+'direcciondistrito/read.php',{
 			params: new HttpParams()
 			.set('prdepartamento', departamento)
 			.set('prprovincia', provincia)
 			.set('prdistrito',distrito)
+			.set('prpagina',pagina.toString())
+			.set('prtotalpagina',total_pagina.toString())
 		})
 		.pipe(map(res=>{
 			if(res['codigo']===0){
-				return res=res['data'].distritos
+				return res=res
 			}else{
 				console.log('Error al importar los datos, revisar servicio')
 			}

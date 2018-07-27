@@ -91,10 +91,11 @@ export class VentanaEmergenteClientes {
     });
 
     if(this.data){
+      console.log(this.data);
       this.ClientesForm.get('institucion').setValue(this.data.institucion);
-      this.ListarSede(this.data.sede);
+      this.ListarSede(this.data.institucion);
       this.ClientesForm.get('sede').setValue(this.data.sede);
-      this.ListarSubsede(this.data.subsede);
+      this.ListarSubsede(this.data.sede);
       this.ClientesForm.get('subsede').setValue(this.data.subsede);
       this.ClientesForm.get('codigo').setValue(this.data.codigo);
       this.ClientesForm.get('dni').setValue(this.data.dni);
@@ -105,10 +106,10 @@ export class VentanaEmergenteClientes {
       this.ClientesForm.get('casilla').setValue(this.data.casilla);
       this.ClientesForm.get('trabajo').setValue(this.data.trabajo);
       this.ClientesForm.get('cargo').setValue(this.data.cargo);
-      this.ClientesForm.get('calificacioncrediticia').setValue(this.data.calificacioncrediticia);
-      this.ClientesForm.get('calificacionpersonal').setValue(this.data.calificacionpersonal);
+      this.ClientesForm.get('calificacioncrediticia').setValue(this.data.calificacion_crediticia);
+      this.ClientesForm.get('calificacionpersonal').setValue(this.data.calificacion_personal);
       this.ClientesForm.get('aporte').setValue(this.data.aporte);
-      this.ClientesForm.get('fecharegistro').setValue(this.data.fecharegistro);
+      //this.ClientesForm.get('fecharegistro').setValue(this.data.fecharegistro);
       this.ClientesForm.controls['sede'].enable();
       this.ClientesForm.controls['subsede'].enable();
     }

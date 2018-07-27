@@ -16,15 +16,27 @@ export class ProductoService {
   tipo: string,
   marca: string,
   modelo: string,
-  descripcion: string
-  ): Observable<Producto[]>
-  { return this.http.get(this.url + 'producto/read.php?prtipo='
-   + tipo + '&prmarca=' + marca + '&prmodelo=' + modelo + '&prdescripcion=+ ' + descripcion)
+  descripcion: string,
+  pagina:number,
+  total_pagina:number
+  ): Observable<any>
+  { return this.http.get(this.url + 'producto/read.php',{
+      params: new HttpParams()
+      .set('prtipo', tipo)
+      .set('prmarca', marca)
+      .set('prmodelo', modelo)
+      .set('prdescripcion', descripcion)
+      .set('prpagina',pagina.toString())
+      .set('prtotalpagina',total_pagina.toString())
+      .set('columna',"8")
+      .set('tipo',"1")
+  })
     .pipe(map(res => {
       if (res['codigo'] === 0) {
-          return res['data'].productos;
+          return res;
       }  else {
           console.log('Error al importar los datos, revisar servicio');
+          return res;
       }
     }));
   }

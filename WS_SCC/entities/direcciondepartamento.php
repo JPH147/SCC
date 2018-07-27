@@ -12,18 +12,20 @@ class Departamento{
 	}
 
 	function read(){
-		$query = "CALL sp_listardepartamento(?)";
+		$query = "CALL sp_listardepartamento(?,?,?)";
 
 		$result = $this->conn->prepare($query);
 
 		$result->bindParam(1, $this->dpt_nombre);
+        $result->bindParam(2, $this->numero_pagina);
+        $result->bindParam(3, $this->total_pagina);
 
 		$result->execute();
 
 		$departamento_list=array();
 		$departamento_list["departamentos"]=array();
 
-		$contador = 0;
+		$contador = $this->total_pagina*($this->numero_pagina);
 
 		while($row = $result->fetch(PDO::FETCH_ASSOC))
 		{
@@ -39,6 +41,23 @@ class Departamento{
 
 		return $departamento_list;
 	}
+
+    function contar(){
+
+        $query = "CALL sp_listardepartamentocontar(?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->dpt_nombre);
+
+        $result->execute();
+
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        $this->total_resultado=$row['total'];
+
+        return $this->total_resultado;
+    }
 
     function readxId()
     {
