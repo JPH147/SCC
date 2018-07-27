@@ -1,34 +1,21 @@
 import { element } from 'protractor';
 import { Component, OnInit } from '@angular/core';
 
-@Component({
-  selector: 'app-retorno-vendedores',
-  templateUrl: './retorno-vendedores.component.html',
-  styleUrls: ['./retorno-vendedores.component.css']
-})
-export class RetornoVendedoresComponent implements OnInit {
+
+export interface PeriodicElement {
+
+  position: number;
   talonario: number;
-  pecosa: number;
+  //pecosa: number;
   nroContrato: number;
-  fecVenta: Date;
+  fecVenta: string;
   montoVenta: number;
   nroCuota: number;
   nomCliente: string;
-  position: number;
-  apeCliente: number;
-  dataSource = ELEMENT_DATA;
-  displayedColumns: string[] = ['position', 'nomCliente', 'apeCliente', 'talonario', 'nroContrato', 'fecVenta', 'montoventa', 'nroCuota'];
-
-
-  constructor() { }
-
-  ngOnInit() {
-
-  }
-
+  apeCliente: string;
 }
 
-const ELEMENT_DATA: RetornoVendedoresComponent [] = [
+const ELEMENT_DATA: PeriodicElement [] = [
    // tslint:disable-next-line:max-line-length
    {position: 1, nomCliente: 'Fernando', apeCliente: 'Martinez Arevalos', talonario: 101, nroContrato: 5644, fecVenta: '15/06/2018', montoVenta: 1500, nroCuota: 12 },
   // tslint:disable-next-line:max-line-length
@@ -48,5 +35,20 @@ const ELEMENT_DATA: RetornoVendedoresComponent [] = [
   // tslint:disable-next-line:max-line-length
   {position: 9, nomCliente: 'Fernando', apeCliente: 'Martinez Arevalos', talonario: 751, nroContrato: 5641, fecVenta: '15/06/2018', montoVenta: 2100, nroCuota: 18 },
   // tslint:disable-next-line:max-line-length
-  {position: 10, nomCliente: 'Fernando', apeCliente: 'Martinez Arevalos', talonario: 901, nroContrato: 5674, fecVenta: '15/06/2018', montoVenta: 2500, nroCuota: 24 },];
+  {position: 10, nomCliente: 'Fernando', apeCliente: 'Martinez Arevalos', talonario: 901, nroContrato: 5674, fecVenta: '15/06/2018', montoVenta: 2500, nroCuota: 24 }];
 
+  @Component({
+    selector: 'app-retorno-vendedores',
+    templateUrl: './retorno-vendedores.component.html',
+    styleUrls: ['./retorno-vendedores.component.css']
+  })
+  export class RetornoVendedoresComponent implements OnInit {
+    dataSource = ELEMENT_DATA;
+  displayedColumns: string[] = ['position', 'nomCliente', 'apeCliente', 'talonario', 'nroContrato', 'fecVenta', 'montoventa', 'nroCuota'];
+
+    constructor() { }
+
+    ngOnInit() {
+    }
+
+  }

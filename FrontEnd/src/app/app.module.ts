@@ -155,12 +155,8 @@ import { ventanaRetorno } from './components/salida-vendedores/ventana-retorno/v
     ProvinciaComponent,
     DistritoComponent,
     VentanaEmergenteDepartamento,
-<<<<<<< HEAD
-    ventanaRetorno,
-=======
     VentanaEmergenteProvincia,
     VentanaEmergenteDistrito
->>>>>>> 750539df8fe97605d9b1824876d70dea6f41b320
    ],
   entryComponents: [
     AppComponent,
@@ -172,12 +168,8 @@ import { ventanaRetorno } from './components/salida-vendedores/ventana-retorno/v
     ventanaseriessv,
     VentanaConfirmarComponent,
     VentanaEmergenteDepartamento,
-<<<<<<< HEAD
-    ventanaRetorno,
-=======
     VentanaEmergenteProvincia,
     VentanaEmergenteDistrito
->>>>>>> 750539df8fe97605d9b1824876d70dea6f41b320
   ],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider]
