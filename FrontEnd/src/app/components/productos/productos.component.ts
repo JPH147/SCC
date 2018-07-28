@@ -36,7 +36,7 @@ export class ProductosComponent implements OnInit {
 
   ngOnInit() {
    this.ListadoProductos = new ProductoDataSource(this.Servicio);
-   this.ListadoProductos.CargarProductos('', '', '', '',1,10,"precio","asc");
+   this.ListadoProductos.CargarProductos('', '', '', '',1,10,"descripcion","asc");
    this.ListadoProductos.TotalResultados.subscribe(res=>{
      this.TotalResultados=res;
    })
