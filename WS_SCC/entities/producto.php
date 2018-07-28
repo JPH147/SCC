@@ -20,6 +20,7 @@ Class Producto{
     public $numero_pagina;
     public $total_pagina;
     public $total_resultado;
+    public $orden;
 
     public function __construct($db){
         $this->conn = $db;
@@ -28,7 +29,7 @@ Class Producto{
     /* Listar productos */
     function read(){
 
-        $query = "CALL sp_listarproducto(?,?,?,?,?,?)";
+        $query = "CALL gesstuff4(?,?,?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
@@ -38,6 +39,7 @@ Class Producto{
         $result->bindParam(4, $this->prd_descripcion);
         $result->bindParam(5, $this->numero_pagina);
         $result->bindParam(6, $this->total_pagina);
+        $result->bindParam(7, $this->orden);
 
         $result->execute();
     
@@ -52,15 +54,14 @@ Class Producto{
             $contador=$contador+1;
             $producto_item = array (
                 "numero"=>$contador,
-                "id"=>intval($idproducto),
+                "id"=>$idproducto,
                 "tipo"=>$tprd_nombre,
                 "marca"=>$mrc_nombre,
                 "modelo"=>$mdl_nombre,
                 "descripcion"=>$prd_descripcion,
                 "unidad_medida"=>$und_nombre,
-                "precio"=>floatval($prd_precio)
+                "precio"=>$prd_precio
             );
-
             array_push($producto_list["productos"],$producto_item);
         }
 
