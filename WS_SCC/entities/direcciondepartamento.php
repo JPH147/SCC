@@ -12,7 +12,7 @@ class Departamento{
 	}
 
 	function read(){
-		$query = "CALL sp_listardepartamento(?,?,?)";
+		$query = "CALL pruebaa(?,?,?)";
 
 		$result = $this->conn->prepare($query);
 
