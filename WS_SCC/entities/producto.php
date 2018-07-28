@@ -42,15 +42,15 @@ Class Producto{
         $result->bindParam(7, $this->orden);
 
         $result->execute();
-    
+        
         $producto_list=array();
         $producto_list["productos"]=array();
 
         $contador = $this->total_pagina*($this->numero_pagina);
 
         while($row = $result->fetch(PDO::FETCH_ASSOC))
-        {
-            extract($row);
+		{
+			extract($row);
             $contador=$contador+1;
             $producto_item = array (
                 "numero"=>$contador,
