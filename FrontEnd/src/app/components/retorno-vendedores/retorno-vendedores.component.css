@@ -105,7 +105,6 @@ hr{
   width: 100%;
 }
 
-
 /* mat-grid-tile {} */
 
 .CabeceraSalidaVendedor{
@@ -113,20 +112,16 @@ hr{
   position: relative;
   margin-left: auto;
   margin-right: auto;
-
 }
 
 .example-full-width{
   width: 80%
 }
 
-
-
 .Pecosa {
   width: 100%;
   position: relative;
   align-items: left;
-
 }
 
 .AlintaDrecha{
@@ -168,7 +163,9 @@ example-button-row {
 
 
 .agregar{
+
   float: right;
+  margin-right: 30px;
 }
 
 .Alintaguia{
@@ -178,4 +175,8 @@ example-button-row {
 
   .AlinIzq{
 text-align: left
+  }
+
+  .alincentro {
+  margin-left: 20px
   }

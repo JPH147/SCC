@@ -122,11 +122,96 @@
     </mat-table>
   </mat-card>
 
+  <br> <br>
 
 
+<!-- Productos a Devolver de la Salida    -->
 
-</mat-card-content>
+  <mat-card-subtitle>
+      Detalle Productos por Devolver
+  </mat-card-subtitle>
+  <br>
 
+  <mat-card class="CabeceraSalidaVendedor">
+    <mat-table [dataSource]="dataSource1" class="mat-elevation-z8" class="CabeceraSalidaVendedor">
 
+        <ng-container matColumnDef="position1">
+          <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.position1}} </mat-cell>
+        </ng-container>
 
+        <ng-container matColumnDef="producto">
+          <mat-header-cell *matHeaderCellDef> Producto </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.producto}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="cantidad">
+          <mat-header-cell *matHeaderCellDef> Cantidad</mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.cantidad}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="serie">
+          <mat-header-cell *matHeaderCellDef> Serie </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.serie}} </mat-cell>
+        </ng-container>
+
+        <ng-container  matColumnDef="confirma">
+          <mat-header-cell *matHeaderCellDef> Confimar </mat-header-cell>
+          <mat-cell *matCellDef="let element" class = "alincentro">   <mat-checkbox ></mat-checkbox>   </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns1"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns1;"></mat-row>
+    </mat-table>
+  </mat-card>
+  <br> <br>
+
+  <!-- Talonarios a Devolver de la Salida    -->
+
+  <mat-card-subtitle>
+    Detalle Talonarios por Devolver
+</mat-card-subtitle>
+<br>
+
+<mat-card class="CabeceraSalidaVendedor">
+  <mat-table [dataSource]="dataSource2" class="mat-elevation-z8" class="CabeceraSalidaVendedor">
+
+      <ng-container matColumnDef="position2">
+        <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.position2}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="seriet">
+        <mat-header-cell *matHeaderCellDef> Serie </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.seriet}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="inicio">
+        <mat-header-cell *matHeaderCellDef> Desde</mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.inicio}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="fin">
+        <mat-header-cell *matHeaderCellDef> Hasta </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.fin}} </mat-cell>
+      </ng-container>
+
+      <ng-container  matColumnDef="confirmar">
+        <mat-header-cell *matHeaderCellDef> Confimar </mat-header-cell>
+        <mat-cell *matCellDef="let element">   <mat-checkbox></mat-checkbox>   </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns2"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns2;"></mat-row>
+  </mat-table>
 </mat-card>
+
+<br>
+
+  </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="accent" class="agregar">Limpiar</button>
+      <button mat-raised-button color="primary" class="agregar"> Grabar</button>
+  </mat-card-actions>
+  <br>
+ </mat-card>
