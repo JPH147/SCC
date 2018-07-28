@@ -31,6 +31,9 @@ Class Producto{
 
         $query = "CALL gesstuff4(?,?,?,?,?,?,?)";
 
+        $llave="'";
+        $prueba=$llave.$this->prd_descripcion.$llave;
+
         $result = $this->conn->prepare($query);
 
         $result->bindParam(1, $this->tprd_nombre);
@@ -46,7 +49,9 @@ Class Producto{
         $producto_list=array();
         $producto_list["productos"]=array();
 
-        $contador = $this->total_pagina*($this->numero_pagina);
+        $contador = $this->total_pagina*($this->numero_pagina-1);
+
+        echo "$this->prd_descripcion";
 
         while($row = $result->fetch(PDO::FETCH_ASSOC))
         {

@@ -16,13 +16,14 @@
     try{
         $producto = new Producto($db);
 
-        $producto->tprd_nombre = !empty($_GET['prtipo']) ? $_GET['prtipo'] : null;
-        $producto->mrc_nombre = !empty($_GET['prmarca']) ? $_GET['prmarca'] : null;
-        $producto->mdl_nombre = !empty($_GET['prmodelo']) ? $_GET['prmodelo'] : null;
-        $producto->prd_descripcion = !empty($_GET['prdescripcion']) ? $_GET['prdescripcion'] : null;
+        $producto->tprd_nombre = !empty($_GET['prtipo']) ? $_GET['prtipo'] :'';
+        $producto->mrc_nombre = !empty($_GET['prmarca']) ? $_GET['prmarca'] :'';
+        $producto->mdl_nombre = !empty($_GET['prmodelo']) ? $_GET['prmodelo'] : '';
+        $producto->prd_descripcion = !empty($_GET['prdescripcion']) ? $_GET['prdescripcion'] : '';
         $producto->numero_pagina = !empty($_GET['prpagina']) ? $_GET['prpagina'] : null;
         $producto->total_pagina = !empty($_GET['prtotalpagina']) ? $_GET['prtotalpagina'] : null;
-        $producto->orden = !empty($_GET['orden']) ? $_GET['orden'] : null;
+        $producto->orden = !empty($_GET['orden']) ? $_GET['orden'] : '';
+        //$producto->orden = 'prd_precio desc';
 
         $producto_list = $producto->read();
         $producto_contar = $producto->contar();

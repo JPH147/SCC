@@ -19,7 +19,7 @@
         $departamento->dpt_nombre = !empty($_GET['prnombre']) ? $_GET['prnombre'] : null;
         $departamento->numero_pagina = !empty($_GET['prpagina']) ? $_GET['prpagina'] : null;
         $departamento->total_pagina = !empty($_GET['prtotalpagina']) ? $_GET['prtotalpagina'] : null;
-    	$departamento_list = $departamento->read();
+    	$departamento_list = $departamento->read2();
         $departamento_contar = $departamento->contar();
 
     	if (count(array_filter($departamento_list))>0)
