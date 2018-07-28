@@ -163,9 +163,9 @@ example-button-row {
 
 
 .agregar{
-
   float: right;
   margin-right: 30px;
+  margin-left: 30px
 }
 
 .Alintaguia{
@@ -174,9 +174,9 @@ example-button-row {
   }
 
   .AlinIzq{
-text-align: left
+  margin-left: 30px
   }
 
-  .alincentro {
-  margin-left: 20px
-  }
+.centrartxt {
+  text-align: center
+}
