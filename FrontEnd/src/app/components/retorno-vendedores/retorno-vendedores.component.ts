@@ -43,19 +43,20 @@ export interface PeriodicElement1 {
   cantidad: number;
   serie: string;
   confirma: string;
+  obs: string;
 }
 
 const ELEMENT_DATA1: PeriodicElement1 [] = [
-{position1: 1, producto: 'Celular', cantidad: 5, serie: 'ZX121343FG45656', confirma: ' ' },
-{position1: 2, producto: 'Televisor', cantidad: 5, serie: 'ZX121343FG45656', confirma: ' ' },
-{position1: 3, producto: 'Celular', cantidad: 5, serie: 'ZX121343FG45656', confirma: ' ' },
-{position1: 4, producto: 'Computadora', cantidad: 5, serie: 'ZX121343FG45656', confirma: ' ' },
-{position1: 5, producto: 'Celular', cantidad: 5, serie: 'ZX121343FG45656', confirma: ' ' },
-{position1: 6, producto: 'Celuelar', cantidad: 5, serie: 'ZX121343FG45656', confirma: ' ' },
-{position1: 7, producto: 'Celular', cantidad: 5, serie: 'ZX121343FG45656', confirma: ' ' },
-{position1: 8, producto: 'Celular', cantidad: 5, serie: 'ZX121343FG45656', confirma: ' ' },
-{position1: 9, producto: 'Celular', cantidad: 5, serie: 'ZX121343FG45656', confirma: ' ' },
-{position1: 10, producto: 'Libro', cantidad: 5, serie: ' ', confirma: ' ' },
+{position1: 1, producto: 'Celular', cantidad: 5, serie: 'ZX121343FG45656', confirma: ' ', obs: '' },
+{position1: 2, producto: 'Televisor', cantidad: 5, serie: 'ZX121343FG45656', confirma: ' ', obs: '' },
+{position1: 3, producto: 'Celular', cantidad: 5, serie: 'ZX121343FG45656', confirma: ' ', obs: '' },
+{position1: 4, producto: 'Computadora', cantidad: 5, serie: 'ZX121343FG45656', confirma: ' ', obs: '' },
+{position1: 5, producto: 'Celular', cantidad: 5, serie: 'ZX121343FG45656', confirma: ' ', obs: ''},
+{position1: 6, producto: 'Celuelar', cantidad: 5, serie: 'ZX121343FG45656', confirma: ' ', obs: '' },
+{position1: 7, producto: 'Celular', cantidad: 5, serie: 'ZX121343FG45656', confirma: ' ', obs: '' },
+{position1: 8, producto: 'Celular', cantidad: 5, serie: 'ZX121343FG45656', confirma: ' ', obs: '' },
+{position1: 9, producto: 'Celular', cantidad: 5, serie: 'ZX121343FG45656', confirma: ' ', obs: '' },
+{position1: 10, producto: 'Libro', cantidad: 5, serie: ' ', confirma: ' ', obs: '' },
 ];
 
 export interface PeriodicElement2 {
@@ -84,7 +85,7 @@ const ELEMENT_DATA2: PeriodicElement2 [] = [
     displayedColumns: string[] = ['position', 'nomCliente', 'apeCliente', 'talonario', 'nroContrato', 'fecVenta', 'montoventa', 'nroCuota'];
 
     dataSource1 = ELEMENT_DATA1;
-    displayedColumns1: string[] = ['position1', 'producto', 'cantidad', 'serie', 'confirma' ];
+    displayedColumns1: string[] = ['position1', 'producto', 'cantidad', 'serie', 'confirma', 'obs' ];
 
     dataSource2 = ELEMENT_DATA2;
     displayedColumns2: string[] = ['position2', 'seriet', 'inicio', 'fin', 'confirmar'];

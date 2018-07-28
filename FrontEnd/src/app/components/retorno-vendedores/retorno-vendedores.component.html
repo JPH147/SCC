@@ -1,7 +1,7 @@
 <mat-card class="card-principal">
   <!-- Titulo formulario-->
   <mat-card-title>
-    <div id = "tituloProd"> Rendicion Salida de Vendedores</div>
+    <div id = "tituloProd"> Rendicion Salida de Vendedores Nro.</div>
   </mat-card-title>
   <!-- Subtitulo Cabecera  Datos Vendedor         -->
   <mat-card-subtitle id ="CabeceraVendedor ">
@@ -28,7 +28,7 @@
 
            <!-- Fecha Retorno-->
           <mat-grid-tile>
-            <mat-form-field class="fecha_cabecera">
+            <mat-form-field example-full-width>
               <input matInput [matDatepicker]="picker2" placeholder="Fecha de Retorno">
               <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
               <mat-datepicker #picker2></mat-datepicker>
@@ -66,6 +66,10 @@
 <br>
 
 <mat-card class="CabeceraSalidaVendedor">
+
+    <div>
+        <h3 class= "centrartxt"> Ventas Total Salida:   </h3>
+    </div>
     <mat-table [dataSource]="dataSource" class="mat-elevation-z8" class="CabeceraSalidaVendedor">
 
         <!--- Note that these columns can be defined in any order.
@@ -132,6 +136,7 @@
   </mat-card-subtitle>
   <br>
 
+
   <mat-card class="CabeceraSalidaVendedor">
     <mat-table [dataSource]="dataSource1" class="mat-elevation-z8" class="CabeceraSalidaVendedor">
 
@@ -157,8 +162,16 @@
 
         <ng-container  matColumnDef="confirma">
           <mat-header-cell *matHeaderCellDef> Confimar </mat-header-cell>
-          <mat-cell *matCellDef="let element" class = "alincentro">   <mat-checkbox ></mat-checkbox>   </mat-cell>
+          <mat-cell *matCellDef="let element" class = "alincentro"> <mat-checkbox ></mat-checkbox>   </mat-cell>
         </ng-container>
+
+        <ng-container matColumnDef="obs">
+          <mat-header-cell *matHeaderCellDef> Observaciones </mat-header-cell>
+          <mat-cell *matCellDef="let element"> <input matInput placeholder=" " value= {{element.obs}} > </mat-cell>
+
+        </ng-container>
+
+
 
         <mat-header-row *matHeaderRowDef="displayedColumns1"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns1;"></mat-row>
@@ -209,9 +222,9 @@
 <br>
 
   </mat-card-content>
-    <mat-card-actions>
-      <button mat-raised-button color="accent" class="agregar">Limpiar</button>
-      <button mat-raised-button color="primary" class="agregar"> Grabar</button>
+    <mat-card-actions class= "agregar">
+      <button mat-raised-button color="primary" >Grabar</button>
+      <button mat-raised-button color="accent"  >Limpiar</button>
   </mat-card-actions>
-  <br>
+  <br> <br>
  </mat-card>
