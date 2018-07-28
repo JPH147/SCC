@@ -23,11 +23,7 @@ export class ProductoService {
   tipo_orden:string
   ): Observable<any>
   { let orden;
-    if (tipo_orden=="asc"){
-      orden=1
-    }else{
-      orden=-1
-    }
+    orden=columna.concat(" ",tipo_orden);
 
     return this.http.get(this.url + 'producto/read.php',{
       params: new HttpParams()
@@ -37,8 +33,7 @@ export class ProductoService {
       .set('prdescripcion', descripcion)
       .set('prpagina',pagina.toString())
       .set('prtotalpagina',total_pagina.toString())
-      .set('columna',columna)
-      .set('tipo',orden)
+      .set('orden',orden)
   })
     .pipe(map(res => {
       if (res['codigo'] === 0) {

@@ -22,7 +22,7 @@
         $producto->prd_descripcion = !empty($_GET['prdescripcion']) ? $_GET['prdescripcion'] : '';
         $producto->numero_pagina = !empty($_GET['prpagina']) ? $_GET['prpagina'] : null;
         $producto->total_pagina = !empty($_GET['prtotalpagina']) ? $_GET['prtotalpagina'] : null;
-        $producto->orden = !empty($_GET['orden']) ? $_GET['orden'] : '';
+        $producto->orden = !empty($_GET['orden']) ? $_GET['orden'] : 'precio desc';
         //$producto->orden = 'prd_precio desc';
 
         $producto_list = $producto->read();

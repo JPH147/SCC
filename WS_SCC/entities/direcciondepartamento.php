@@ -42,35 +42,6 @@ class Departamento{
 		return $departamento_list;
 	}
 
-    function read2(){
-        $query = "CALL sp_listardepartamento2(?)";
-
-        $result = $this->conn->prepare($query);
-
-        $result->bindParam(1, $this->dpt_nombre);
-
-        $result->execute();
-
-        $departamento_list=array();
-        $departamento_list["departamentos"]=array();
-
-        $contador = $this->total_pagina*($this->numero_pagina);
-
-        while($row = $result->fetch(PDO::FETCH_ASSOC))
-        {
-            extract($row);
-            $contador = $contador+1;
-            $departamento_fila = array(
-                "numero"=>$contador,
-                "id"=>$id_departamento,
-                "nombre"=>$dpt_nombre,
-            );
-            array_push($departamento_list["departamentos"],$departamento_fila);
-        }
-
-        return $departamento_list;
-    }
-
     function contar(){
 
         $query = "CALL sp_listardepartamentocontar(?)";
