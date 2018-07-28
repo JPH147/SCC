@@ -29,7 +29,10 @@ Class Producto{
     /* Listar productos */
     function read(){
 
-        $query = "CALL gesstuff4(?,?,?,?,?,?,?)";
+        $query = "CALL sp_listarproducto(?,?,?,?,?,?,?)";
+
+        $llave="'";
+        $prueba=$llave.$this->prd_descripcion.$llave;
 
         $result = $this->conn->prepare($query);
 
@@ -46,7 +49,7 @@ Class Producto{
         $producto_list=array();
         $producto_list["productos"]=array();
 
-        $contador = $this->total_pagina*($this->numero_pagina);
+        $contador = $this->total_pagina*($this->numero_pagina-1);
 
         while($row = $result->fetch(PDO::FETCH_ASSOC))
 		{
@@ -54,13 +57,13 @@ Class Producto{
             $contador=$contador+1;
             $producto_item = array (
                 "numero"=>$contador,
-                "id"=>$idproducto,
-                "tipo"=>$tprd_nombre,
-                "marca"=>$mrc_nombre,
-                "modelo"=>$mdl_nombre,
-                "descripcion"=>$prd_descripcion,
-                "unidad_medida"=>$und_nombre,
-                "precio"=>$prd_precio
+                "id"=>$id,
+                "tipo"=>$tipo,
+                "marca"=>$marca,
+                "modelo"=>$modelo,
+                "descripcion"=>$descripcion,
+                "unidad_medida"=>$unidad_medida,
+                "precio"=>$precio
             );
             array_push($producto_list["productos"],$producto_item);
         }
