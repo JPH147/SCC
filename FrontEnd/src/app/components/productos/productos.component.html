@@ -39,7 +39,7 @@
       <mat-spinner></mat-spinner>
     </div>
 
-    <mat-table [dataSource]="ListadoProductos" class="mat-elevation-z8" matSort matSortActive="descripcion" matSortDirection="asc">
+    <mat-table [dataSource]="ListadoProductos" class="mat-elevation-z8" matSort matSortActive="descripcion" matSortDirection="asc" matSortDisableClear>
 
       <ng-container matColumnDef="numero">
         <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
@@ -72,7 +72,7 @@
       </ng-container>
 
       <ng-container matColumnDef="opciones">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Opciones </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let producto">
 
           <button mat-icon-button color="primary" (click)="Editar(producto.id)" matTooltip="Editar"><mat-icon> edit </mat-icon></button>

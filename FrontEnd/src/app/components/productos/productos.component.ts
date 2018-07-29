@@ -36,7 +36,7 @@ export class ProductosComponent implements OnInit {
 
   ngOnInit() {
    this.ListadoProductos = new ProductoDataSource(this.Servicio);
-   this.ListadoProductos.CargarProductos('', '', '', '',0,10,"descripcion","asc");
+   this.ListadoProductos.CargarProductos('', '', '', '',1,10,"descripcion","asc");
    this.ListadoProductos.TotalResultados.subscribe(res=>{
      this.TotalResultados=res;
    })
@@ -78,7 +78,7 @@ ngAfterViewInit () {
    this.FiltroMarca.nativeElement.value,
    this.FiltroModelo.nativeElement.value,
    this.FiltroProductos.nativeElement.value,
-   this.paginator.pageIndex,
+   this.paginator.pageIndex+1,
    this.paginator.pageSize,
    this.sort.active,
    this.sort.direction
