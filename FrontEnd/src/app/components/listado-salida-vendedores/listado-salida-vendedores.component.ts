@@ -1,5 +1,6 @@
+import { VentanaEmergenteGastos } from './ventana-emergente/ventanaemergente';
 import { Component, OnInit } from '@angular/core';
-
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 
 
 export interface PeriodicElement {
@@ -33,9 +34,17 @@ export class ListadoSalidaVendedoresComponent implements OnInit {
   displayedColumns: string[] = ['position', 'pecosa', 'sucursal', 'fecha', 'destino', 'estado', 'opciones'];
   dataSource = ELEMENT_DATA;
 
-  constructor() { }
+  constructor(
+  public DialogoGasto: MatDialog
+  ) { }
 
   ngOnInit() {
   }
 
+
+ Cargagasto() {
+  let VentanaGastos = this.DialogoGasto.open(VentanaEmergenteGastos, {
+    width: '800px'
+  });
+  }
 }

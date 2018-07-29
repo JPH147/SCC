@@ -78,6 +78,7 @@ import { ProvinciaComponent } from './components/direcciones/provincia/provincia
 import { DistritoComponent } from './components/direcciones/distrito/distrito.component';
 import { VentanaConfirmarComponent } from './components/global/ventana-confirmar/ventana-confirmar.component';
 import { ventanaRetorno } from './components/salida-vendedores/ventana-retorno/ventanaRetorno';
+import { VentanaEmergenteGastos } from './components/listado-salida-vendedores/ventana-emergente/ventanaemergente';
 @NgModule({
   imports: [
 /* Angular Material */
@@ -156,7 +157,8 @@ import { ventanaRetorno } from './components/salida-vendedores/ventana-retorno/v
     DistritoComponent,
     VentanaEmergenteDepartamento,
     VentanaEmergenteProvincia,
-    VentanaEmergenteDistrito
+    VentanaEmergenteDistrito,
+    VentanaEmergenteGastos
    ],
   entryComponents: [
     AppComponent,
@@ -169,7 +171,8 @@ import { ventanaRetorno } from './components/salida-vendedores/ventana-retorno/v
     VentanaConfirmarComponent,
     VentanaEmergenteDepartamento,
     VentanaEmergenteProvincia,
-    VentanaEmergenteDistrito
+    VentanaEmergenteDistrito,
+    VentanaEmergenteGastos
   ],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider]

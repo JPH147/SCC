@@ -16,7 +16,7 @@
           Filtro Cliente
         </mat-panel-title>
       </mat-expansion-panel-header>
-  
+
       <mat-grid-list cols=3 rowHeight="60px">
         <mat-grid-tile>
           <mat-icon>search</mat-icon>
@@ -46,7 +46,7 @@
             Filtro Institución
           </mat-panel-title>
         </mat-expansion-panel-header>
-  
+
       <mat-grid-list cols=3 rowHeight="60px">
         <mat-grid-tile>
           <mat-icon>search</mat-icon>
@@ -68,14 +68,14 @@
         </mat-grid-tile>
       </mat-grid-list>
 
-      
+
     </mat-expansion-panel>
   </mat-accordion>
 
 
 
   <br/>
-  
+
 
   <mat-card-content>
 
@@ -131,8 +131,9 @@
           <button mat-icon-button matTooltip="Agregar Datos de Contacto" color="primary"><mat-icon> local_phone </mat-icon></button>
           <button mat-icon-button matTooltip="Subir Foto" color="primary"><mat-icon> cloud_upload </mat-icon></button>
           <button mat-icon-button matTooltip="Hacer Venta" color="primary"><mat-icon> add_shopping_cart </mat-icon></button>
-          <button mat-icon-button matTooltip="Ver Ventas" color="primary"><mat-icon> attach_money </mat-icon></button>
+          <button mat-icon-button matTooltip="Ver Ventas" color="primary"><mat-icon> attach_money</mat-icon></button>
           <button mat-icon-button matTooltip="Editar Cliente" color="primary" (click)="Editar(cliente.id)"><mat-icon> edit </mat-icon></button>
+
           <button mat-icon-button matTooltip="Eliminar Cliente" color="primary" (click)="Eliminar(cliente)"><mat-icon> delete </mat-icon></button>
         </mat-cell>
       </ng-container>

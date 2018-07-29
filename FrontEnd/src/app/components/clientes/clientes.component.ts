@@ -7,7 +7,7 @@ import {ClienteService} from './clientes.service';
 import {ClienteDataSource} from './clientes.dataservice';
 import {fromEvent} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
-import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component'
+import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
 
 @Component({
   selector: 'app-clientes',
@@ -130,9 +130,9 @@ export class ClientesComponent implements OnInit {
     width: '400px',
     data: {objeto: 'cliente', valor: cliente.dni}
   });
-  VentanaConfirmar.afterClosed().subscribe(res=>{
-    if(res==true){
-     this.Servicio.Eliminar(cliente.id).subscribe(res=>{
+  VentanaConfirmar.afterClosed().subscribe(res => {
+    if (res === true) {
+     this.Servicio.Eliminar(cliente.id).subscribe(res => {
        this.CargarData();
        this.snackBar.open('Se eliminó el cliente satisfactoriamente.', '', {
         duration: 2500, verticalPosition: 'bottom'
