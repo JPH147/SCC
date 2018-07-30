@@ -8,7 +8,6 @@ import {ClienteDataSource} from './clientes.dataservice';
 import {fromEvent} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
 import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
-
 @Component({
   selector: 'app-clientes',
   templateUrl: './clientes.component.html',

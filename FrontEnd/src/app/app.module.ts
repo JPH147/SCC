@@ -79,6 +79,7 @@ import { DistritoComponent } from './components/direcciones/distrito/distrito.co
 import { VentanaConfirmarComponent } from './components/global/ventana-confirmar/ventana-confirmar.component';
 import { ventanaRetorno } from './components/salida-vendedores/ventana-retorno/ventanaRetorno';
 import { VentanaEmergenteGastos } from './components/listado-salida-vendedores/ventana-emergente/ventanaemergente';
+import { ImageUploadModule } from 'angular2-image-upload';
 @NgModule({
   imports: [
 /* Angular Material */
@@ -128,6 +129,7 @@ import { VentanaEmergenteGastos } from './components/listado-salida-vendedores/v
     ReactiveFormsModule,
     LayoutModule,
     routing,
+    ImageUploadModule.forRoot()
   ],
   declarations: [
     AppComponent,
