@@ -1,5 +1,7 @@
 import { element } from 'protractor';
 import { Component, OnInit } from '@angular/core';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
 
 
 export interface PeriodicElement {
@@ -96,3 +98,4 @@ const ELEMENT_DATA2: PeriodicElement2 [] = [
     }
 
   }
+

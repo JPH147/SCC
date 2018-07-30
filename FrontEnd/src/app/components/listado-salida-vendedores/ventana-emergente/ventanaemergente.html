@@ -1,0 +1,42 @@
+<mat-card>
+    <mat-card-header>
+      <mat-card-title>Agregar Gasto</mat-card-title>
+    </mat-card-header>
+    <form [formGroup]="GastosForm" (ngSubmit)="Guardar(GastosForm)">
+      <mat-card-content>
+        <mat-grid-list cols="3" rowHeight="80px">
+          <mat-grid-tile>
+            <mat-form-field class="input-ventana">
+              <mat-select placeholder='Seleccione Fecha' formControlName="institucion" (selectionChange)="InstitucionSeleccionada($event)">
+                <mat-option *ngFor="let institucion of Institucion" [value] = "institucion.id"> {{institucion.nombre}} </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <mat-form-field class="input-ventana">
+              <mat-select placeholder='Selecciona Sede' formControlName="sede" (selectionChange)="SedeSeleccionada($event)">
+                <mat-option *ngFor="let sede of Sede" [value] = "sede.id"> {{sede.nombre}} </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <mat-form-field class="input-ventana">
+              <mat-select placeholder='Selecciona Subsede' formControlName="subsede" >
+                <mat-option *ngFor="let subsede of Subsede" [value] = "subsede.id"> {{subsede.nombre}} </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-grid-tile>
+
+        </mat-grid-list>
+      </mat-card-content>
+      <mat-card-actions>
+        <mat-grid-list cols=1 rowHeight="40px">
+          <mat-grid-tile>
+            <button type="submit" mat-raised-button color="primary" [disabled]="ClientesForm.invalid">Grabar</button>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </mat-card-actions>
+    </form>
+  </mat-card>
