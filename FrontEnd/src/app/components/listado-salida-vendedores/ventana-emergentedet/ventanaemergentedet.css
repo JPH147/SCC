@@ -1,0 +1,177 @@
+/* Structure */
+.example-container {
+  position: relative;
+}
+
+#container-principal{
+  padding: 25px;
+  margin-left: 25px;
+  margin-right: 25px;
+}
+
+#tituloProd {
+  padding: 15px;
+  font-size: 30px;
+  text-align: center;
+  font-family: sans-serif;
+}
+
+.example-button-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.example-button-row button,
+.example-button-row a {
+  margin-right: 8px;
+}
+
+.example-full-width {
+  width: 100%;
+
+}
+
+.IngFecha{
+  float: right;
+}
+
+.example-table-container {
+  position: relative;
+  max-height: 400px;
+  overflow: auto;
+
+}
+
+table {
+  width: 100%;
+
+}
+
+.example-loading-shade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 56px;
+  right: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.example-rate-limit-reached {
+  color: #980000;
+  max-width: 360px;
+  text-align: center;
+}
+
+/* Column Widths */
+.mat-column-number,
+.mat-column-state {
+  max-width: 64px;
+}
+
+.mat-column-created {
+  max-width: 124px;
+}
+
+.card-principal{
+  width: 80%;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+  margin-bottom: 10px
+}
+
+hr{
+  height: 15;
+  background: Gray;
+}
+
+.mat-radio-button ~ .mat-radio-button {
+  padding-right: 16px;
+}
+
+/* Form */
+.example-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.example-full-width {
+  width: 100%;
+}
+
+
+/* mat-grid-tile {} */
+
+.CabeceraSalidaVendedor{
+  width: 90%;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+
+}
+
+.example-full-width{
+  width: 80%
+}
+
+
+
+.Pecosa {
+  width: 100%;
+  position: relative;
+  align-items: left;
+
+}
+
+.AlintaDrecha{
+float: right;
+margin-left: 5%
+}
+
+
+.AlintaIzquierda{
+  float: left;
+  margin-right:5%
+  }
+
+.fecha_cabecera{
+  margin: 0 5px;
+  width: 40%;
+}
+
+.alinchkbox{
+margin-left:570px
+
+}
+
+example-button-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.example-button-row button,
+.example-button-row a {
+  margin-right: 8px;
+}
+
+
+.Alineaobs{
+ margin-left: 50px
+}
+
+
+.agregar{
+  float: right;
+}
+
+.Alintaguia{
+  float: left;
+  margin-right:32%
+  }

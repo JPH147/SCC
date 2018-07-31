@@ -79,6 +79,7 @@ import { DistritoComponent } from './components/direcciones/distrito/distrito.co
 import { VentanaConfirmarComponent } from './components/global/ventana-confirmar/ventana-confirmar.component';
 import { ventanaRetorno } from './components/salida-vendedores/ventana-retorno/ventanaRetorno';
 import { VentanaEmergenteGastos } from './components/listado-salida-vendedores/ventana-emergente/ventanaemergente';
+import { VentanaEmergenteDet} from './components/listado-salida-vendedores/ventana-emergentedet/ventanaemergentedet';
 import { ImageUploadModule } from 'angular2-image-upload';
 
 @NgModule({
@@ -161,7 +162,8 @@ import { ImageUploadModule } from 'angular2-image-upload';
     VentanaEmergenteDepartamento,
     VentanaEmergenteProvincia,
     VentanaEmergenteDistrito,
-    VentanaEmergenteGastos
+    VentanaEmergenteGastos,
+    VentanaEmergenteDet
    ],
   entryComponents: [
     AppComponent,
@@ -175,7 +177,8 @@ import { ImageUploadModule } from 'angular2-image-upload';
     VentanaEmergenteDepartamento,
     VentanaEmergenteProvincia,
     VentanaEmergenteDistrito,
-    VentanaEmergenteGastos
+    VentanaEmergenteGastos,
+    VentanaEmergenteDet
   ],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider]

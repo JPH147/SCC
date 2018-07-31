@@ -16,8 +16,8 @@ export class VentanaConfirmarComponent implements OnInit {
     public snackBar: MatSnackBar
   	) { }
 
-  ngOnInit() { 
-    this.mensaje=this.data.objeto+" "+"se eliminó satisfactoriamente"
+  ngOnInit() {
+    this.mensaje = this.data.objeto + ' ' + 'se eliminó satisfactoriamente'
   }
 
   onNoClick(): void {

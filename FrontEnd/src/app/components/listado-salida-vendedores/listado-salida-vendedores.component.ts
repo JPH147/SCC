@@ -1,6 +1,8 @@
-import { VentanaEmergenteGastos } from './ventana-emergente/ventanaemergente';
+import { VentanaEmergenteGastos} from './ventana-emergente/ventanaemergente';
+import { VentanaEmergenteDet } from './ventana-emergentedet/ventanaemergentedet';
 import { Component, OnInit } from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
 
 
 export interface PeriodicElement {
@@ -33,9 +35,11 @@ const ELEMENT_DATA: PeriodicElement[] = [
 export class ListadoSalidaVendedoresComponent implements OnInit {
   displayedColumns: string[] = ['position', 'pecosa', 'sucursal', 'fecha', 'destino', 'estado', 'opciones'];
   dataSource = ELEMENT_DATA;
+  Servicio: any;
 
   constructor(
-  public DialogoGasto: MatDialog
+  public DialogoGasto: MatDialog,
+  public Dialogodetalle: MatDialog
   ) { }
 
   ngOnInit() {
@@ -43,8 +47,38 @@ export class ListadoSalidaVendedoresComponent implements OnInit {
 
 
  Cargagasto() {
+  // tslint:disable-next-line:prefer-const
   let VentanaGastos = this.DialogoGasto.open(VentanaEmergenteGastos, {
     width: '800px'
   });
   }
+
+
+  Eliminasalida() {
+    const VentanaConfirmar = this.DialogoGasto.open(VentanaConfirmarComponent, {
+      width: '400px',
+      data: {objeto: 'pecosa', valor: ListadoSalidaVendedoresComponent.pecosa}
+
+    });
+    VentanaConfirmar.afterClosed().subscribe(res => {
+      if (res === true) {
+       // tslint:disable-next-line:no-shadowed-variable
+       this.Servicio.Eliminar().subscribe( res => {
+       //  this.CargarData();
+          this.snackBar.open('Se eliminó salida satisfactoriamente.', '', {
+           duration: 2500, verticalPosition: 'bottom'
+        });
+       });
+      }
+    });
+   }
+
+Detalle() {
+  const VentanaDetalle = this.Dialogodetalle.open(VentanaEmergenteDet, {
+    width: '1200px'
+  });
+
+}
+
+
 }

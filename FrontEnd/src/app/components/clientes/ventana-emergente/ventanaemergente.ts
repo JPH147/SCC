@@ -23,6 +23,7 @@ export class VentanaEmergenteClientes {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
     public ventana: MatDialogRef<VentanaEmergenteClientes>,
+    // tslint:disable-next-line:no-shadowed-variable
     private FormBuilder: FormBuilder,
     private Servicios: ServiciosGenerales,
     private ClienteServicios: ClienteService,
@@ -41,56 +42,57 @@ export class VentanaEmergenteClientes {
       'sede': [null,[
         Validators.required
       ]],
-      'subsede': [null,[
+      'subsede': [null, [
         Validators.required
       ]],
-      'codigo':[null,[
+      'codigo': [null, [
         Validators.required
       ]],
-      'dni':[null,[
+      'dni': [null, [
         Validators.required,
-        Validators.pattern("[0-9- ]+")
+        Validators.pattern('[0-9- ]+')
       ]],
-      'nombre':[null,[
+      'nombre': [null, [
         Validators.required
       ]],
-      'apellido':[null,[
+      'apellido': [null, [
         Validators.required
       ]],
-      'cip':[null,[
+      'cip': [null, [
         Validators.required
       ]],
-      'email':[null,[
+      'email': [null, [
         Validators.required
       ]],
-      'casilla':[null,[
+      'casilla': [null, [
         Validators.required
       ]],
-      'trabajo':[null,[
+      'trabajo': [null, [
         Validators.required
       ]],
-      'cargo':[null,[
+      'cargo': [null, [
         Validators.required
       ]],
-      'calificacioncrediticia':[null,[
+      'calificacioncrediticia': [null, [
         Validators.required
       ]],
-      'calificacionpersonal':[null,[
+      'calificacionpersonal': [null, [
         Validators.required
       ]],
-      'aporte':[null,[
+      'aporte': [null, [
         Validators.required,
-        Validators.pattern("[0-9- ]+")
+        Validators.pattern('[0-9- ]+')
       ]]
-    })
+    });
 
-    this.Servicios.ListarInstitucion().subscribe(res=>{
-      for(let i in res){
+    this.Servicios.ListarInstitucion().subscribe( res => {
+      // tslint:disable-next-line:forin
+      for (let i in res) {
         this.Institucion.push(res[i])
       }
     });
 
-    if(this.data){
+    if (this.data) {
       console.log(this.data);
       this.ClientesForm.get('institucion').setValue(this.data.institucion);
       this.ListarSede(this.data.institucion);
@@ -109,7 +111,7 @@ export class VentanaEmergenteClientes {
       this.ClientesForm.get('calificacioncrediticia').setValue(this.data.calificacion_crediticia);
       this.ClientesForm.get('calificacionpersonal').setValue(this.data.calificacion_personal);
       this.ClientesForm.get('aporte').setValue(this.data.aporte);
-      //this.ClientesForm.get('fecharegistro').setValue(this.data.fecharegistro);
+      // this.ClientesForm.get('fecharegistro').setValue(this.data.fecharegistro);
       this.ClientesForm.controls['sede'].enable();
       this.ClientesForm.controls['subsede'].enable();
     }
@@ -118,8 +120,8 @@ export class VentanaEmergenteClientes {
 
   InstitucionSeleccionada(event) {
     this.ListarSede(event.value);
-    this.ClientesForm.get('sede').setValue("");
-    this.ClientesForm.get('subsede').setValue("");
+    this.ClientesForm.get('sede').setValue ('');
+    this.ClientesForm.get('subsede').setValue ('');
     this.ClientesForm.controls['sede'].enable();
     this.ClientesForm.controls['subsede'].disable();
   }
@@ -127,7 +129,7 @@ export class VentanaEmergenteClientes {
 /* Se muestran los modelos cuando se selecciona una marca */
 SedeSeleccionada(event) {
   this.ListarSubsede(event.value);
-  this.ClientesForm.get('subsede').setValue("");
+  this.ClientesForm.get('subsede').setValue('');
   this.ClientesForm.controls['subsede'].enable();
  }
 
@@ -136,7 +138,9 @@ SedeSeleccionada(event) {
   /* Enviar al formulario */
   Guardar(formulario) {
     /*if(this.data){
-      this.ClienteService.Actualizar(this.data.id,formulario.value.modelo, formulario.value.descripcion, formulario.value.precio).subscribe(res=>console.log(res))
+      // tslint:disable-next-line:max-line-length
+      this.ClienteService.Actualizar(this.data.id,formulario.value.modelo,
+        formulario.value.descripcion, formulario.value.precio).subscribe(res=>console.log(res))
     }*/
 
     if (!this.data) {
@@ -151,29 +155,34 @@ SedeSeleccionada(event) {
   }
 
   ListarInstitucion() {
-    this.Servicios.ListarInstitucion().subscribe(res=>{
+    this.Servicios.ListarInstitucion().subscribe( res => {
       this.Institucion = [];
-      for (let i in res){
-        this.Institucion.push(res[i])
+      // tslint:disable-next-line:forin
+      for (let i in res) {
+        this.Institucion.push ( res[i] );
       }
-   })
+   });
 
   }
 
-  ListarSede(i){
-    this.Servicios.ListarSede(i,"").subscribe(res=>{
-      this.Sede=[];
+  ListarSede(i) {
+    this.Servicios.ListarSede(i, '').subscribe(res => {
+      this.Sede =  [];
+      // tslint:disable-next-line:forin
       for(let i in res){
-        this.Sede.push(res[i])
+        this.Sede.push(res [i] );
       }
+  // tslint:disable-next-line:semicolon
   })}
 
-  ListarSubsede(i){
-    this.Servicios.ListarSubsede(i,"").subscribe(res=>{
-      this.Subsede=[];
-      for (let i in res){
-        this.Subsede.push(res[i])
+  ListarSubsede(i) {
+    this.Servicios.ListarSubsede(i, '').subscribe(res => {
+      this.Subsede = [];
+      // tslint:disable-next-line:forin
+      for (let i in res) {
+        this.Subsede.push(res[i] );
       }
-   })
+   });
   }
+// tslint:disable-next-line:eofline
 }

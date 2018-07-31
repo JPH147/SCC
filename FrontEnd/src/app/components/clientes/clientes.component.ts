@@ -125,12 +125,14 @@ export class ClientesComponent implements OnInit {
 
 
  Eliminar(cliente) {
+  // tslint:disable-next-line:prefer-const
   let VentanaConfirmar = this.DialogoClientes.open(VentanaConfirmarComponent, {
     width: '400px',
     data: {objeto: 'cliente', valor: cliente.dni}
   });
   VentanaConfirmar.afterClosed().subscribe(res => {
     if (res === true) {
+     // tslint:disable-next-line:no-shadowed-variable
      this.Servicio.Eliminar(cliente.id).subscribe(res => {
        this.CargarData();
        this.snackBar.open('Se eliminó el cliente satisfactoriamente.', '', {
