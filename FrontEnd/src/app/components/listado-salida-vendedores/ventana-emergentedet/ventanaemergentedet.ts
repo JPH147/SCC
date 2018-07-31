@@ -24,6 +24,7 @@ export interface Food {
 
 // tslint:disable-next-line:component-class-suffix
 export class VentanaEmergenteDet {
+  [x: string]: any;
   public selectedValue: string;
   public GastosForm: FormGroup;
   public articulos: Array <articulo>;
@@ -97,13 +98,12 @@ Aceptar() {
 
 
  AgregarSerieSalida() {
-  //const serieventana = this.DialogoSerie.open(ventanaseriesalida, {
-  //width: '600px'
-  })
+  // const serieventana = this.DialogoSerie.open(ventanaseriesalida, {
+  // width: '600px'
+  }
+}
 
 
-
- }
 
 
 
