@@ -73,10 +73,10 @@ export class VentanaEmergenteDet {
     {numero: this.contador, nombre: '', cantidad: null, precio: null}
   ];
 
-  // private _filter(value: string): string[] {
-    // const filterValue = value.toLowerCase();
+//  private _filter(value: string): string[] {
+//    const filterValue = value.toLowerCase();
 
-    return this.options.filter(option => option.toLowerCase().includes(filterValue));
+  //  return this.options.filter(option => option.toLowerCase().includes(filterValue));
 }
 
 isAllSelected() {
@@ -96,16 +96,17 @@ Aceptar() {
 }
 
 
-// AgregarSerieSalida() {
- // const serieventana = this.DialogoSerie.open(ventanaseriesalida, {
-   // width: '600px'
-  // });
-// };
+ AgregarSerieSalida() {
+  //const serieventana = this.DialogoSerie.open(ventanaseriesalida, {
+  //width: '600px'
+  })
+
 
 
   }
 
-}
+
+
 
 export interface PeriodicElement {
   name: string;

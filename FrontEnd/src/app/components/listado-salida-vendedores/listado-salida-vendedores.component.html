@@ -84,7 +84,7 @@
             <mat-cell *matCellDef="let producto">
               <button  matTooltip="Rendición Salida Vendedor" mat-icon-button color="primary" [routerLink]="['retorno']"><mat-icon>assignment_return </mat-icon></button>
               <button matTooltip="Agegar Viatico Vendedor" mat-icon-button color="primary" (click)="Cargagasto()"><mat-icon>attach_money </mat-icon></button>
-              <button matTooltip="Ver Salida Vendedor" mat-icon-button color="primary" (click)= "Detalle()"><mat-icon>visibility</mat-icon></button>
+              <button matTooltip="Ver Salida Vendedor" mat-icon-button color="primary" [routerLink]="['ingreso']"><mat-icon>visibility</mat-icon></button>
               <button matTooltip="Eliminar Salida Vendedor" mat-icon-button color="primary" (click)= "Eliminasalida()"><mat-icon> delete </mat-icon></button>
             </mat-cell>
           </ng-container>

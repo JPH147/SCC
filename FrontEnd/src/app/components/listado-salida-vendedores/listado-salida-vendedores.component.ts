@@ -33,6 +33,8 @@ const ELEMENT_DATA: PeriodicElement[] = [
   styleUrls: ['./listado-salida-vendedores.component.css']
 })
 export class ListadoSalidaVendedoresComponent implements OnInit {
+  static pecosa: any;
+  [x: string]: any;
   displayedColumns: string[] = ['position', 'pecosa', 'sucursal', 'fecha', 'destino', 'estado', 'opciones'];
   dataSource = ELEMENT_DATA;
   Servicio: any;
