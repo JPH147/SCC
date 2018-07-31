@@ -36,7 +36,7 @@ mat-card{
 .mat-column-tipo,
 .mat-column-marca,
 .mat-column-modelo,
-.mat-column-unidad_medida,
+.mat-column-precio,
 .mat-column-opciones
 {
   max-width: 10%;
