@@ -31,9 +31,6 @@ Class Producto{
 
         $query = "CALL sp_listarproducto(?,?,?,?,?,?,?)";
 
-        $llave="'";
-        $prueba=$llave.$this->prd_descripcion.$llave;
-
         $result = $this->conn->prepare($query);
 
         $result->bindParam(1, $this->tprd_nombre);
