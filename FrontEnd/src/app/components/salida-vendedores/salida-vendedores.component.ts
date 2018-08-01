@@ -1,9 +1,9 @@
 import { ventanaseriessv } from './ventana-seriessv/ventanaseriessv';
-import { ventanaRetorno } from './ventana-retorno/ventanaRetorno';
+import { ventanaRetorno } from './ventana-retorno/ventanaretorno';
 import { Component, OnInit, Inject } from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {MatGridListModule} from '@angular/material/grid-list';
-import {FormControl} from '@angular/forms';
+import {FormControl, FormGroup} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
 import {SelectionModel} from '@angular/cdk/collections';
@@ -20,10 +20,21 @@ export interface Food {
 })
 
 export class SalidaVendedoresComponent implements OnInit {
+  public talonarioSalidaForm: FormGroup;
+  public talonarioForm: FormGroup;
   public articulos: Array <Articulo>;
   public contador: number;
   public almacenes: Array<any>;
-  public seriventana: string;
+  public serieventana: string;
+  public talonventana: string;
+  public serietalorarios: Array<any>;
+  public Agregatalonarion: any;
+  public selectedValue: string;
+  public serie: Array<any>;
+  public inicio: number;
+  public fin: number;
+  public numero: number;
+
 
   animal: string;
   name: string;
@@ -38,8 +49,12 @@ export class SalidaVendedoresComponent implements OnInit {
       {value: 'pizza-1', viewValue: 'Televisor'},
       {value: 'tacos-2', viewValue: 'Libro'}
     ];
+  serietalonarios: { numero: number; serie: string; inicio: string; fin: string; }[];
 
-  constructor(public dialog: MatDialog, public DialogoSerie: MatDialog )   {}
+  constructor(public dialog: MatDialog, public DialogoSerie: MatDialog, public Dialogotalon: MatDialog )   {
+    this.contador = 1;
+    this.serietalonarios = [{numero: this.contador, serie: '', inicio: '', fin: ''} ];
+  }
 
 openDialog(): void {
   const dialogRef = this.dialog.open(DialogoComponent, {
@@ -79,8 +94,13 @@ const serieventana = this.DialogoSerie.open(ventanaseriessv, {
 
 }
 
-}
+Agregatalonario() {
+  const  serietalorarios = this.Dialogotalon.open(ventanaRetorno, {
+    width: '600px'
+  });
 
+}
+}
 export interface DialogData {
   animal: string;
   name: string;
@@ -119,3 +139,8 @@ export interface Articulo {
   cantidad: number;
   precio: number;
 }
+
+
+
+
+
