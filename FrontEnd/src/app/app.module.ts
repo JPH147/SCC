@@ -81,6 +81,7 @@ import { ventanaRetorno } from './components/salida-vendedores/ventana-retorno/v
 import { VentanaEmergenteGastos } from './components/listado-salida-vendedores/ventana-emergente/ventanaemergente';
 import { VentanaEmergenteDet} from './components/listado-salida-vendedores/ventana-emergentedet/ventanaemergentedet';
 import { ImageUploadModule } from 'angular2-image-upload';
+import {FileUpload} from './components/clientes/file-upload/fileupload';
 
 @NgModule({
   imports: [
@@ -163,7 +164,8 @@ import { ImageUploadModule } from 'angular2-image-upload';
     VentanaEmergenteProvincia,
     VentanaEmergenteDistrito,
     VentanaEmergenteGastos,
-    VentanaEmergenteDet
+    VentanaEmergenteDet,
+    FileUpload
    ],
   entryComponents: [
     AppComponent,
@@ -178,7 +180,8 @@ import { ImageUploadModule } from 'angular2-image-upload';
     VentanaEmergenteProvincia,
     VentanaEmergenteDistrito,
     VentanaEmergenteGastos,
-    VentanaEmergenteDet
+    VentanaEmergenteDet,
+    FileUpload
   ],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider]
