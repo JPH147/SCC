@@ -67,13 +67,14 @@ export interface PeriodicElement2 {
   inicio: number;
   fin: number;
   confirmar: string;
+  obs2: string;
 }
 
 const ELEMENT_DATA2: PeriodicElement2 [] = [
-{position2: 1, seriet: 101, inicio: 501, fin: 550, confirmar: '' },
-{position2: 1, seriet: 101, inicio: 501, fin: 550, confirmar: '' },
-{position2: 1, seriet: 101, inicio: 501, fin: 550, confirmar: '' },
-{position2: 1, seriet: 101, inicio: 501, fin: 550, confirmar: '' },
+{position2: 1, seriet: 101, inicio: 501, fin: 550, confirmar: '', obs2: '' },
+{position2: 1, seriet: 101, inicio: 501, fin: 550, confirmar: '', obs2: '' },
+{position2: 1, seriet: 101, inicio: 501, fin: 550, confirmar: '', obs2: '' },
+{position2: 1, seriet: 101, inicio: 501, fin: 550, confirmar: '', obs2: '' },
 ];
 
 
@@ -90,7 +91,7 @@ const ELEMENT_DATA2: PeriodicElement2 [] = [
     displayedColumns1: string[] = ['position1', 'producto', 'cantidad', 'serie', 'confirma', 'obs' ];
 
     dataSource2 = ELEMENT_DATA2;
-    displayedColumns2: string[] = ['position2', 'seriet', 'inicio', 'fin', 'confirmar'];
+    displayedColumns2: string[] = ['position2', 'seriet', 'inicio', 'fin', 'confirmar', 'obs2'];
 
     constructor() { }
 

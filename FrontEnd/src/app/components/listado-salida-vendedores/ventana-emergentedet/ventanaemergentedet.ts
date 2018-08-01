@@ -45,9 +45,6 @@ export class VentanaEmergenteDet {
     {value: 'tacos-2', viewValue: 'Almacen Tres'}
   ];
 
-
-
-
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
     public ventana: MatDialogRef<VentanaEmergenteDet>,
@@ -102,10 +99,6 @@ Aceptar() {
   // width: '600px'
   }
 }
-
-
-
-
 
 
 export interface PeriodicElement {

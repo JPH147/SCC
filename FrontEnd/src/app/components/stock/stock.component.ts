@@ -11,7 +11,7 @@ import {catchError, map, startWith, switchMap} from 'rxjs/operators';
   styleUrls: ['./stock.component.css']
 })
 export class StockComponent implements OnInit {
-  displayedColumns: string[] = ['created', 'state', 'number', 'title'];
+  displayedColumns: string[] = ['created',  'number', 'title', 'state'];
   exampleDatabase: ExampleHttpDao | null;
   data: GithubIssue[] = [];
 

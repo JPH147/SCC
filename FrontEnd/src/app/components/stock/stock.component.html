@@ -2,14 +2,25 @@
     <mat-card-title>
       <div id = "tituloProd"> Listado de Stock</div>
     </mat-card-title>
-    <button mat-raised-button color="primary" class="agregar" [routerLink]="['salidaproductos']" >Salida Producto</button>
 
-      <button mat-raised-button color="primary" class="agregar" [routerLink]="['ingresoproductos']" >Ingresar Producto</button>
 
-      <mat-icon>search</mat-icon>
-      <mat-form-field>
-        <input matInput placeholder="Buscar Producto" #input>
-      </mat-form-field>
+    <mat-grid-list cols="12"  rowHeight="55px">
+
+       <mat-grid-tile colspan="10">
+          <mat-icon>search</mat-icon>
+          <mat-form-field>
+            <input matInput placeholder="Buscar Producto" #input>
+          </mat-form-field>
+       </mat-grid-tile>
+<!-- Boton Agrega Productos -->
+       <mat-grid-tile colspan="1">
+          <button mat-raised-button color="primary"  [routerLink]="['ingresoproductos']" >Ingresa Producto</button>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="1">
+          <button mat-raised-button color="primary"  [routerLink]="['salidaproductos']" >Salida Producto</button>
+        </mat-grid-tile>
+    </mat-grid-list>
+    <br>
 
     <mat-card-content>
       <div class="example-loading-shade" *ngIf="isLoadingResults || isRateLimitReached">

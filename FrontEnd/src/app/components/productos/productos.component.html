@@ -4,9 +4,11 @@
     <div id = "tituloProd"> Listado de Productos</div>
   </mat-card-title>
 
-  <button mat-raised-button color="primary" class="agregar" (click)="Agregar()">Agregar Producto</button>
 
-  <mat-grid-list cols=5 rowHeight="70px">
+
+
+  <!-- Filtros Productos, tipo  Marca Modelo -->
+  <mat-grid-list cols= "5" rowHeight="90px">"
     <mat-grid-tile>
       <mat-icon>search</mat-icon>
       <mat-form-field>
@@ -30,7 +32,11 @@
       <mat-form-field>
         <input matInput placeholder="Modelo" #InputModelo>
       </mat-form-field>
-    </mat-grid-tile>
+      </mat-grid-tile>
+      <!-- Boton Agrega Productos -->
+      <mat-grid-tile>
+      <button mat-raised-button color="primary" class="agregar" (click)="Agregar()">Agregar Producto</button>
+      </mat-grid-tile>
   </mat-grid-list>
 
   <mat-card-content>
@@ -74,9 +80,8 @@
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let producto">
-
-          <button mat-icon-button color="primary" (click)="Editar(producto.id)" matTooltip="Editar"><mat-icon> edit </mat-icon></button>
-          <button mat-icon-button color="primary" (click)="Eliminar(producto)" matTooltip="Eliminar"><mat-icon> delete </mat-icon></button>
+        <button mat-icon-button color="primary" (click)="Editar(producto.id)" matTooltip="Editar"><mat-icon> edit </mat-icon></button>
+        <button mat-icon-button color="primary" (click)="Eliminar(producto)" matTooltip="Eliminar"><mat-icon> delete </mat-icon></button>
         </mat-cell>
       </ng-container>
 
