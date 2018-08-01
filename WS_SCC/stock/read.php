@@ -26,12 +26,11 @@
         $stock->orden = !empty($_GET['orden']) ? $_GET['orden'] : 'modelo asc';
 
         $stock_list = $stock->read();
-       // $stock_contar = $stock->contar();
+        $stock_contar = $stock->contar();
 
         if (count(array_filter($stock_list))>0)
         { 
-            //print_json("0000", $stock_contar, $stock_list);
-            print_json("0000", "1", $stock_list);
+            print_json("0000", $stock_contar, $stock_list);
         }
         else
         { print_json("0001", "stock_contar", $stock_list); }
