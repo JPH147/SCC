@@ -169,16 +169,9 @@ import {VentanaEmergenteContacto} from './components/clientes/ventana-emergentec
     VentanaEmergenteDistrito,
     VentanaEmergenteGastos,
     VentanaEmergenteDet,
-<<<<<<< HEAD
-=======
     ventanaRetorno,
-<<<<<<< HEAD
     FileUpload,
     VentanaEmergenteContacto
-=======
->>>>>>> 1cea25eb96142488ad3f3cc2994abf82a034fa25
-    FileUpload
->>>>>>> 2e152032437c32312ada231226084082e5e7b7fb
    ],
   entryComponents: [
     AppComponent,
@@ -195,16 +188,9 @@ import {VentanaEmergenteContacto} from './components/clientes/ventana-emergentec
     VentanaEmergenteDistrito,
     VentanaEmergenteGastos,
     VentanaEmergenteDet,
-<<<<<<< HEAD
-=======
     ventanaRetorno,
-<<<<<<< HEAD
     FileUpload,
     VentanaEmergenteContacto
-=======
->>>>>>> 1cea25eb96142488ad3f3cc2994abf82a034fa25
-    FileUpload
->>>>>>> 2e152032437c32312ada231226084082e5e7b7fb
   ],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider]
