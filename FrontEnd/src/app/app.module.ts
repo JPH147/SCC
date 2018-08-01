@@ -64,6 +64,7 @@ import { VentasComponent } from './components/ventas/ventas.component';
 import {DialogoComponent} from './components/salida-vendedores/salida-vendedores.component';
 import { ListadoSalidaVendedoresComponent } from './components/listado-salida-vendedores/listado-salida-vendedores.component';
 import {VentanaEmergenteProductos} from './components/productos/ventana-emergente/ventanaemergente';
+import {VentanaEmergenteArchivos} from './components/ventas/ventana-emergente/ventanaemergente';
 import {ventanaseries} from './components/ingreso-productos/ventana-series/ventanaseries';
 import { ventanaseriesalida } from './components/salida-productos/ventana-seriesalida/ventanaseriesalida';
 import {VentanaEmergenteClientes} from './components/clientes/ventana-emergente/ventanaemergente';
@@ -151,6 +152,7 @@ import {FileUpload} from './components/clientes/file-upload/fileupload';
     DialogoComponent,
     ListadoSalidaVendedoresComponent,
     VentanaEmergenteProductos,
+    VentanaEmergenteArchivos,
     ventanaseries,
     ventanaseriesalida,
     VentanaEmergenteClientes,
@@ -166,16 +168,13 @@ import {FileUpload} from './components/clientes/file-upload/fileupload';
     VentanaEmergenteDistrito,
     VentanaEmergenteGastos,
     VentanaEmergenteDet,
-<<<<<<< HEAD
-    ventanaRetorno
-=======
     FileUpload
->>>>>>> 762bf589138a585f98dffa6c476f1da2222c7de6
    ],
   entryComponents: [
     AppComponent,
     DialogoComponent,
     VentanaEmergenteProductos,
+    VentanaEmergenteArchivos,
     ventanaseries,
     ventanaseriesalida,
     VentanaEmergenteClientes,
@@ -186,11 +185,7 @@ import {FileUpload} from './components/clientes/file-upload/fileupload';
     VentanaEmergenteDistrito,
     VentanaEmergenteGastos,
     VentanaEmergenteDet,
-<<<<<<< HEAD
-    ventanaRetorno
-=======
     FileUpload
->>>>>>> 762bf589138a585f98dffa6c476f1da2222c7de6
   ],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider]
