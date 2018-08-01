@@ -64,6 +64,7 @@ import { VentasComponent } from './components/ventas/ventas.component';
 import {DialogoComponent} from './components/salida-vendedores/salida-vendedores.component';
 import { ListadoSalidaVendedoresComponent } from './components/listado-salida-vendedores/listado-salida-vendedores.component';
 import {VentanaEmergenteProductos} from './components/productos/ventana-emergente/ventanaemergente';
+import {VentanaEmergenteArchivos} from './components/ventas/ventana-emergente/ventanaemergente';
 import {ventanaseries} from './components/ingreso-productos/ventana-series/ventanaseries';
 import { ventanaseriesalida } from './components/salida-productos/ventana-seriesalida/ventanaseriesalida';
 import {VentanaEmergenteClientes} from './components/clientes/ventana-emergente/ventanaemergente';
@@ -152,6 +153,7 @@ import {VentanaEmergenteContacto} from './components/clientes/ventana-emergentec
     DialogoComponent,
     ListadoSalidaVendedoresComponent,
     VentanaEmergenteProductos,
+    VentanaEmergenteArchivos,
     ventanaseries,
     ventanaseriesalida,
     VentanaEmergenteClientes,
@@ -167,14 +169,22 @@ import {VentanaEmergenteContacto} from './components/clientes/ventana-emergentec
     VentanaEmergenteDistrito,
     VentanaEmergenteGastos,
     VentanaEmergenteDet,
+<<<<<<< HEAD
+=======
     ventanaRetorno,
+<<<<<<< HEAD
     FileUpload,
     VentanaEmergenteContacto
+=======
+>>>>>>> 1cea25eb96142488ad3f3cc2994abf82a034fa25
+    FileUpload
+>>>>>>> 2e152032437c32312ada231226084082e5e7b7fb
    ],
   entryComponents: [
     AppComponent,
     DialogoComponent,
     VentanaEmergenteProductos,
+    VentanaEmergenteArchivos,
     ventanaseries,
     ventanaseriesalida,
     VentanaEmergenteClientes,
@@ -185,9 +195,16 @@ import {VentanaEmergenteContacto} from './components/clientes/ventana-emergentec
     VentanaEmergenteDistrito,
     VentanaEmergenteGastos,
     VentanaEmergenteDet,
+<<<<<<< HEAD
+=======
     ventanaRetorno,
+<<<<<<< HEAD
     FileUpload,
     VentanaEmergenteContacto
+=======
+>>>>>>> 1cea25eb96142488ad3f3cc2994abf82a034fa25
+    FileUpload
+>>>>>>> 2e152032437c32312ada231226084082e5e7b7fb
   ],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider]
