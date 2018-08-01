@@ -133,7 +133,8 @@ position: relative;
 }
 
 .agregar{
-  float: right;
+  margin-left: 550px;
+  /* margin-right: 48px */
 }
 
 

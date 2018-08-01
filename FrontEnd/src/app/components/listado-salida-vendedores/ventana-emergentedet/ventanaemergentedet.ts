@@ -22,8 +22,8 @@ export interface Food {
   providers: [ServiciosGenerales]
 })
 
-// tslint:disable-next-line:component-class-suffix
 export class VentanaEmergenteDet {
+  [x: string]: any;
   public selectedValue: string;
   public GastosForm: FormGroup;
   public articulos: Array <articulo>;
@@ -45,13 +45,9 @@ export class VentanaEmergenteDet {
     {value: 'tacos-2', viewValue: 'Almacen Tres'}
   ];
 
-
-
-
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
     public ventana: MatDialogRef<VentanaEmergenteDet>,
-    // tslint:disable-next-line:no-shadowed-variable
     private FormBuilder: FormBuilder,
     private Servicios: ServiciosGenerales
     ) {}
@@ -61,7 +57,6 @@ export class VentanaEmergenteDet {
   }
 
 
-  // tslint:disable-next-line:use-life-cycle-interface
   ngOnInit() {
     this.filteredOptions = this.myControl.valueChanges
     .pipe(
@@ -98,15 +93,11 @@ Aceptar() {
 
 
  AgregarSerieSalida() {
-  //const serieventana = this.DialogoSerie.open(ventanaseriesalida, {
-  //width: '600px'
+
+  // const serieventana = this.DialogoSerie.open(ventanaseriesalida, {
+  // width: '600px'
   }
-
-
-
- }
-
-
+}
 
 
 export interface PeriodicElement {

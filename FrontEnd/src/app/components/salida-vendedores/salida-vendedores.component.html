@@ -1,7 +1,7 @@
 <mat-card class="card-principal">
   <!-- Titulo formulario-->
   <mat-card-title>
-    <div id = "tituloProd"> Salida de Vendedores</div>
+    <div id = "tituloProd"> Salida de Vendedores Nro. </div>
   </mat-card-title>
 
   <!-- Subtitulo Cabecera  Datos Vendedor         -->
@@ -11,7 +11,8 @@
 <!--  Cabecera de Formulario Salida de Vendedores   -->
   <mat-card-header>
     <mat-card class="CabeceraSalidaVendedor">
-      <mat-grid-list cols="2" rowHeight="85px">
+      <mat-grid-list cols="3" rowHeight="85px">
+
           <!-- Ingreso Pecosa -->
         <mat-grid-tile>
           <mat-form-field class="example-full-width">
@@ -23,18 +24,19 @@
 
         <mat-grid-tile>
            <!-- Fecha Salida - Fecha Salida-->
-          <mat-form-field class="fecha_cabecera">
+          <mat-form-field >
             <input matInput [matDatepicker]="picker" placeholder="Fecha de Salida" >
             <mat-datepicker-toggle matSuffix [for]="picker" ></mat-datepicker-toggle>
             <mat-datepicker #picker ></mat-datepicker>
           </mat-form-field>
+        </mat-grid-tile>
 
-          <mat-form-field class="fecha_cabecera">
+        <mat-grid-tile>
+          <mat-form-field>
             <input matInput [matDatepicker]="picker2" placeholder="Fecha de Retorno">
             <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
             <mat-datepicker #picker2></mat-datepicker>
           </mat-form-field>
-
         </mat-grid-tile>
 
         <mat-grid-tile>
@@ -48,20 +50,16 @@
 
         <mat-grid-tile>
           <!-- Guia de Reimsion -->
-            <mat-form-field class="Alintaguia">
-                <input matInput #message maxlength="15" placeholder="Guia">
-                <mat-hint align="start"><strong>Ingresar numero de guia de Remision</strong> </mat-hint>
-                <mat-hint align="end">{{message.value.length}} / 15</mat-hint>
+            <mat-form-field >
+              <input matInput #message maxlength="15" placeholder="Guia">
+              <mat-hint align="start"><strong>Ingresar numero de guia de Remision</strong> </mat-hint>
+              <mat-hint align="end">{{message.value.length}} / 15</mat-hint>
             </mat-form-field>
-
-
-            <button mat-raised-button>Ingresar Talonarios</button>
-
           </mat-grid-tile>
 
-
-
-
+          <mat-grid-tile>
+            <button mat-raised-button>Ingresar Talonarios</button>
+            </mat-grid-tile>
           </mat-grid-list>
     </mat-card>
 </mat-card-header>
@@ -70,23 +68,23 @@
 <!--Detalle Vendedores    -->
 
 <mat-card-content>
+    <mat-card-subtitle>
+        Detalle Vendedores
+    </mat-card-subtitle>
+    <br>
 
-  <mat-card-subtitle>
-      Detalle Venvedores
-
-  </mat-card-subtitle>
-  <br>
-
-  <mat-card class="CabeceraSalidaVendedor">
-      <mat-card-subtitle>
-
-        <button mat-mini-fab color="primary" class="agregar" (click) = 'agregar()'><mat-icon>add</mat-icon></button>
-
-      </mat-card-subtitle>
-
-    <mat-grid-list cols="3" rowHeight="70px" *ngFor="let articulo of articulos">
-
+    <!-- Agrega Vendores -->
+    <mat-card class="CabeceraSalidaVendedor">
+      <!-- Boton Agrega Productos -->
+   <mat-grid-list cols="1"  rowHeight="55px">
       <mat-grid-tile>
+        <button mat-mini-fab color="primary" matTooltip="Agrega Vendedor"><mat-icon>add</mat-icon></button>
+      </mat-grid-tile>
+    </mat-grid-list>
+
+    <mat-grid-list cols="5" rowHeight="70px" *ngFor="let articulo of articulos">
+
+      <mat-grid-tile  colspan="2">
         <mat-form-field>
           <mat-select placeholder="Selecciona Vendedor">
             <mat-option *ngFor="let food of foods" >
@@ -96,42 +94,35 @@
         </mat-form-field>
       </mat-grid-tile>
 
-
-      <mat-grid-tile>
+      <mat-grid-tile  colspan="2">
         <mat-form-field>
           <input matInput placeholder="Comision Efectiva">
         </mat-form-field>
       </mat-grid-tile>
 
-
-
-      <mat-grid-tile>
-
-
+      <!-- Boton elimina Producto -->
+      <mat-grid-tile  colspan="1">
         <button mat-mini-fab color="primary"><mat-icon>delete</mat-icon></button>
-
       </mat-grid-tile>
     </mat-grid-list>
   </mat-card>
 
 </mat-card-content>
 
-
-
  <!-- Subtitulo informacion de Vehiculo en el caso viajen con vehiculo de la empresa-->
-
   <mat-card-content>
-
-    <mat-card-subtitle id ="CabeceraVendedor ">
-        <div > Detalle Transporte
-        <mat-checkbox  class="alinchkbox"> Vehiculo de la Empresa</mat-checkbox>
-      </div>
-    </mat-card-subtitle>
+    <mat-grid-list cols="1"  rowHeight="55px">
+      <mat-grid-tile>
+        <mat-checkbox> Vehiculo de la Empresa</mat-checkbox>
+      </mat-grid-tile>
+    </mat-grid-list>
 
     <mat-card class="CabeceraSalidaVendedor">
+
+
       <mat-grid-list cols="3" rowHeight="60px">
-      <mat-grid-tile>
-        <mat-form-field >
+        <mat-grid-tile>
+          <mat-form-field >
             <input matInput #message maxlength="10" placeholder="Placa">
             <mat-hint align="start"><strong>Ingresar Placa Vehiculo</strong> </mat-hint>
             <mat-hint align="end">{{message.value.length}} / 10</mat-hint>
@@ -163,13 +154,21 @@
 
 <mat-card-content>
 
+
     <mat-card-subtitle>
         Detalle de Productos
-
     </mat-card-subtitle>
     <br>
 
-    <mat-card class="CabeceraSalidaVendedor">
+    <mat-card class = "CabeceraSalidaVendedor">
+
+        <!-- Boton Agrega Productos -->
+        <mat-grid-list cols="1"  rowHeight="55px">
+          <mat-grid-tile>
+            <button mat-mini-fab color="primary" matTooltip="Agrega Producto"><mat-icon>add</mat-icon></button>
+          </mat-grid-tile>
+        </mat-grid-list>
+
         <mat-card-subtitle>
           <!-- Seleccionar Almacen -->
          <mat-form-field>
@@ -179,15 +178,11 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
-
-          <button mat-mini-fab color="primary" class="agregar" (click) = 'agregar()'><mat-icon>add</mat-icon></button>
-
         </mat-card-subtitle>
 
+      <mat-grid-list cols="5" rowHeight="70px" *ngFor="let articulo of articulos">
 
-      <mat-grid-list cols="3" rowHeight="70px" *ngFor="let articulo of articulos">
-
-        <mat-grid-tile>
+        <mat-grid-tile colspan="2">
           <mat-form-field>
             <mat-select placeholder="Selecciona Producto">
               <mat-option *ngFor="let food of foods" >
@@ -198,17 +193,15 @@
         </mat-grid-tile>
 
 
-        <mat-grid-tile>
+        <mat-grid-tile colspan="2">
           <mat-form-field>
             <input matInput placeholder="Cantidad">
           </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile>
-
-          <button mat-mini-fab color="primary" (click) = " AgregarSerieSalidaV() "><mat-icon> reorder </mat-icon> </button>
-          <button mat-mini-fab color="primary"><mat-icon>delete</mat-icon></button>
-
+        <mat-grid-tile colspan="1">
+          <button mat-mini-fab color="primary" (click) = " AgregarSerieSalidaV()" matTooltip="Agrega Series  "><mat-icon> reorder </mat-icon> </button>
+          <button mat-mini-fab color="primary" matTooltip="Elimina Productos"><mat-icon>delete</mat-icon></button>
         </mat-grid-tile>
       </mat-grid-list>
     </mat-card>
@@ -249,8 +242,12 @@
 
 </mat-card-content>
     <mat-card-actions>
-      <button mat-raised-button color="primary" class="agregar">Grabar</button>
-      <button mat-raised-button color="accent" class ="agregar" (click)="openDialog()">Limpiar</button>
-  </mat-card-actions>
+      <mat-grid-list cols="1"  rowHeight="55px">
+        <mat-grid-tile>
+          <button mat-raised-button color="primary" >Grabar</button>
+          <button mat-raised-button color="accent" (click)="openDialog()">Limpiar</button>
+        </mat-grid-tile>
+        </mat-grid-list>
+      </mat-card-actions>
 </mat-card>
 
