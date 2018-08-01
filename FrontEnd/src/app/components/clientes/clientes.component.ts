@@ -8,6 +8,7 @@ import {ClienteDataSource} from './clientes.dataservice';
 import {fromEvent} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
 import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
+import { FileUpload } from './file-upload/fileupload';
 @Component({
   selector: 'app-clientes',
   templateUrl: './clientes.component.html',
@@ -32,6 +33,7 @@ export class ClientesComponent implements OnInit {
   constructor(
     private Servicio: ClienteService,
     public DialogoClientes: MatDialog,
+    public DialogFileUpload: MatDialog,
     public snackBar: MatSnackBar
   ) {}
 
@@ -155,6 +157,13 @@ export class ClientesComponent implements OnInit {
     VentanaClientes.afterClosed().subscribe (res => {
       this.CargarData();
     });
+  });
+}
+
+
+SubirImagen(id) {
+  let VentanaFileUpload = this.DialogFileUpload.open(FileUpload, {
+    width: '800px'
   });
 }
 

@@ -77,10 +77,12 @@ import {VentanaEmergenteDistrito } from './components/direcciones/distrito/venta
 import { ProvinciaComponent } from './components/direcciones/provincia/provincia.component';
 import { DistritoComponent } from './components/direcciones/distrito/distrito.component';
 import { VentanaConfirmarComponent } from './components/global/ventana-confirmar/ventana-confirmar.component';
-import { ventanaRetorno } from './components/salida-vendedores/ventana-retorno/ventanaRetorno';
+import { ventanaRetorno } from './components/salida-vendedores/ventana-retorno/ventanaretorno';
 import { VentanaEmergenteGastos } from './components/listado-salida-vendedores/ventana-emergente/ventanaemergente';
 import { VentanaEmergenteDet} from './components/listado-salida-vendedores/ventana-emergentedet/ventanaemergentedet';
 import { ImageUploadModule } from 'angular2-image-upload';
+import {FileUpload} from './components/clientes/file-upload/fileupload';
+
 
 @NgModule({
   imports: [
@@ -163,7 +165,9 @@ import { ImageUploadModule } from 'angular2-image-upload';
     VentanaEmergenteProvincia,
     VentanaEmergenteDistrito,
     VentanaEmergenteGastos,
-    VentanaEmergenteDet
+    VentanaEmergenteDet,
+    ventanaRetorno,
+    FileUpload
    ],
   entryComponents: [
     AppComponent,
@@ -178,7 +182,9 @@ import { ImageUploadModule } from 'angular2-image-upload';
     VentanaEmergenteProvincia,
     VentanaEmergenteDistrito,
     VentanaEmergenteGastos,
-    VentanaEmergenteDet
+    VentanaEmergenteDet,
+    ventanaRetorno,
+    FileUpload
   ],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider]

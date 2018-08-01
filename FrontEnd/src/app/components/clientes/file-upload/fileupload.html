@@ -1,0 +1,14 @@
+<mat-card>
+    <mat-card-header>
+      <mat-card-title>Subir Foto del Cliente</mat-card-title>
+    </mat-card-header>
+<image-upload
+[max]="1"
+[url]="'http://localhost/SCC/WS_SCC/file/upload.php'"
+[buttonCaption]="'Selecciona la foto del cliente'"
+[dropBoxMessage]="'O ARRASTRALA'"
+[maxFileSize]="1024"
+[extensions]="['jpg','png']"
+[fileTooLargeMessage]="'La foto debe pesar menos de 1MB'">
+</image-upload>
+</mat-card>
