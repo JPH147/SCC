@@ -129,7 +129,7 @@
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let cliente">
           <button mat-icon-button matTooltip="Agregar Datos de Contacto" color="primary"><mat-icon> local_phone </mat-icon></button>
-          <button mat-icon-button matTooltip="Subir Foto" color="primary"><mat-icon> cloud_upload </mat-icon></button>
+          <button mat-icon-button matTooltip="Subir Foto" color="primary"><mat-icon> add_a_photo </mat-icon></button>
           <button mat-icon-button matTooltip="Hacer Venta" color="primary"><mat-icon> add_shopping_cart </mat-icon></button>
           <button mat-icon-button matTooltip="Ver Ventas" color="primary"><mat-icon> attach_money</mat-icon></button>
           <button mat-icon-button matTooltip="Editar Cliente" color="primary" (click)="Editar(cliente.id)"><mat-icon> edit </mat-icon></button>
@@ -141,6 +141,9 @@
       <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>
       <mat-row *matRowDef="let row; columns: Columnas;"></mat-row>
     </mat-table>
-    <image-upload url="http://localhost:8080/SCC/WS_SCC/file/upload.php"></image-upload>
+    <image-upload
+      url="http://localhost:8080/SCC/WS_SCC/file/upload.php"
+    >
+    </image-upload>
   </mat-card-content>
 </mat-card>

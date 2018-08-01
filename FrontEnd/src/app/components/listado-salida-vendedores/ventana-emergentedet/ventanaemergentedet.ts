@@ -30,6 +30,7 @@ export class VentanaEmergenteDet {
   public contador: number;
   public almacenes: Array<any>;
   public serieventana: string;
+  public _filter:any;
 
   selected = 'option2';
   myControl = new FormControl();
@@ -99,7 +100,7 @@ Aceptar() {
  AgregarSerieSalida() {
   //const serieventana = this.DialogoSerie.open(ventanaseriesalida, {
   //width: '600px'
-  })
+  }
 
 
 
