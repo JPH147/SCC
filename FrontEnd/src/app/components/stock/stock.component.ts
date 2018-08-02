@@ -1,3 +1,4 @@
+import { StockService } from './stock.service';
 import { FormControl } from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
 import {Component, OnInit, ViewChild} from '@angular/core';
@@ -8,7 +9,8 @@ import {catchError, map, startWith, switchMap} from 'rxjs/operators';
 @Component({
   selector: 'app-stock',
   templateUrl: './stock.component.html',
-  styleUrls: ['./stock.component.css']
+  styleUrls: ['./stock.component.css'],
+  providers:[StockService]
 })
 export class StockComponent implements OnInit {
   displayedColumns: string[] = ['created',  'number', 'title', 'state'];
@@ -22,9 +24,13 @@ export class StockComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private Servicio:StockService
+  ) { }
 
   ngOnInit() {
+    this.Servicio.ListarStock("","","","","",1,20,"modelo").subscribe(res=>console.log(res));
     this.exampleDatabase = new ExampleHttpDao(this.http);
 
     // If the user changes the sort order, reset back to the first page.

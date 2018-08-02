@@ -166,11 +166,7 @@ import {FileUpload} from './components/clientes/file-upload/fileupload';
     VentanaEmergenteDistrito,
     VentanaEmergenteGastos,
     VentanaEmergenteDet,
-<<<<<<< HEAD
     ventanaRetorno
-=======
-    FileUpload
->>>>>>> 762bf589138a585f98dffa6c476f1da2222c7de6
    ],
   entryComponents: [
     AppComponent,
@@ -186,11 +182,7 @@ import {FileUpload} from './components/clientes/file-upload/fileupload';
     VentanaEmergenteDistrito,
     VentanaEmergenteGastos,
     VentanaEmergenteDet,
-<<<<<<< HEAD
     ventanaRetorno
-=======
-    FileUpload
->>>>>>> 762bf589138a585f98dffa6c476f1da2222c7de6
   ],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider]

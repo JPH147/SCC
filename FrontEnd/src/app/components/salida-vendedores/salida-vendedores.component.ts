@@ -89,7 +89,7 @@ Aceptar() {
 
 AgregarSerieSalidaV() {
 const serieventana = this.DialogoSerie.open(ventanaseriessv, {
-  width: '600px'
+  width: '800px'
 });
 
 }
