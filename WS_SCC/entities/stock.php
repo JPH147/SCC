@@ -60,24 +60,25 @@ Class Stock{
         return $stock_list;
     }
 
-    // function contar(){
+    function contar(){
 
-    //     $query = "CALL sp_listarproductocontar(?,?,?,?)";
+        $query = "CALL sp_listarstockcontar(?,?,?,?,?)";
 
-    //     $result = $this->conn->prepare($query);
+        $result = $this->conn->prepare($query);
 
-    //     $result->bindParam(1, $this->tprd_nombre);
-    //     $result->bindParam(2, $this->mrc_nombre);
-    //     $result->bindParam(3, $this->mdl_nombre);
-    //     $result->bindParam(4, $this->prd_descripcion);
+        $result->bindParam(1, $this->almacen);
+        $result->bindParam(2, $this->tipo);
+        $result->bindParam(3, $this->marca);
+        $result->bindParam(4, $this->modelo);
+        $result->bindParam(5, $this->descripcion);
 
-    //     $result->execute();
+        $result->execute();
 
-    //     $row = $result->fetch(PDO::FETCH_ASSOC);
+        $row = $result->fetch(PDO::FETCH_ASSOC);
 
-    //     $this->total_resultado=$row['total'];
+        $this->total_resultado=$row['total'];
 
-    //     return $this->total_resultado;
-    // }
+        return $this->total_resultado;
+    }
 }
 ?>

@@ -1,7 +1,8 @@
 import { StockService } from './stock.service';
+import {StockDataSource} from './stock.dataservice';
 import { FormControl } from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
-import {Component, OnInit, ViewChild} from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import {MatPaginator, MatSort} from '@angular/material';
 import {merge, Observable, of as observableOf} from 'rxjs';
 import {catchError, map, startWith, switchMap} from 'rxjs/operators';
@@ -13,14 +14,17 @@ import {catchError, map, startWith, switchMap} from 'rxjs/operators';
   providers:[StockService]
 })
 export class StockComponent implements OnInit {
-  displayedColumns: string[] = ['created',  'number', 'title', 'state'];
-  exampleDatabase: ExampleHttpDao | null;
-  data: GithubIssue[] = [];
+  displayedColumns: string[] = ['numero',  'almacen', 'tipo', 'marca', 'modelo', 'descripcion', 'unidad_medida', 'cantidad'];
+  data: StockDataSource;
 
   resultsLength = 0;
   isLoadingResults = true;
   isRateLimitReached = false;
-
+  @ViewChild('InputAlmacen') FiltroAlmacen: ElementRef;
+  @ViewChild('InputTipo') FiltroTipo: ElementRef;
+  @ViewChild('InputMarca') FiltroMarca: ElementRef;
+  @ViewChild('InputModelo') FiltroModelo: ElementRef;
+  @ViewChild('InputDescripcion') FiltroDescripcion: ElementRef;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
@@ -30,63 +34,12 @@ export class StockComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.Servicio.ListarStock("","","","","",1,20,"modelo").subscribe(res=>console.log(res));
-    this.exampleDatabase = new ExampleHttpDao(this.http);
-
-    // If the user changes the sort order, reset back to the first page.
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
-
-    merge(this.sort.sortChange, this.paginator.page)
-      .pipe(
-        startWith({}),
-        switchMap(() => {
-          this.isLoadingResults = true;
-          // tslint:disable-next-line:no-non-null-assertion
-          return this.exampleDatabase!.getRepoIssues(
-            this.sort.active, this.sort.direction, this.paginator.pageIndex);
-        }),
-        map(data => {
-          // Flip flag to show that loading has finished.
-          this.isLoadingResults = false;
-          this.isRateLimitReached = false;
-          this.resultsLength = data.total_count;
-
-          return data.items;
-        }),
-        catchError(() => {
-          this.isLoadingResults = false;
-          // Catch if the GitHub API has reached its rate limit. Return empty data.
-          this.isRateLimitReached = true;
-          return observableOf([]);
-        })
-      ).subscribe(data => this.data = data);
-
+    this.data = new StockDataSource(this.Servicio);
+    this.data.CargarStock('', '', '', '', '', 1, 20, 'almacen asc')
   }
-}
 
-export interface GithubApi {
-  items: GithubIssue[];
-  total_count: number;
-}
 
-export interface GithubIssue {
-  created_at: string;
-  number: string;
-  state: string;
-  title: string;
-}
 
+}
 /** An example database that the data source uses to retrieve data for the table. */
-export class ExampleHttpDao {
-  constructor(private http: HttpClient) {}
-
-  getRepoIssues(sort: string, order: string, page: number): Observable<GithubApi> {
-    const href = 'https://api.github.com/search/issues';
-    const requestUrl =
-        `${href}?q=repo:angular/material2&sort=${sort}&order=${order}&page=${page + 1}`;
-
-    return this.http.get<GithubApi>(requestUrl);
-  }
-
-  }
 

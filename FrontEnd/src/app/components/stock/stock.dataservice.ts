@@ -9,7 +9,7 @@ import { ReturnStatement } from '../../../../node_modules/@angular/compiler';
 export class StockDataSource implements DataSource <stock> {
 private InformacionStock = new BehaviorSubject<stock[]> ([]);
 private CargandoInformacion = new BehaviorSubject<boolean>(false);
-private cargamdo = this.CargandoInformacion.asObservable();
+public cargando = this.CargandoInformacion.asObservable();
 public Totalresultados = new BehaviorSubject<number> (0);
 
 constructor (private Servicio: StockService) {}

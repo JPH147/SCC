@@ -30,7 +30,7 @@ export class StockService{
       .set('prmodelo', modelo)
       .set('prdescripcion', producto)
       .set('prpagina', pagina_inicio.toString())
-      .set('prtotalpagina', total_pagina)
+      .set('prtotalpagina', total_pagina.toString())
       .set('orden', orden)
     }).pipe(map(res => {
       if (res['codigo'] === 0) {
@@ -41,4 +41,16 @@ export class StockService{
     }
     }));
   }
+}
+
+// tslint:disable-next-line:class-name
+export interface stock {
+  numero: number;
+  almacen: string;
+  tipo: string;
+  marca: string;
+  modelo: string;
+  descripcion: string;
+  unidad_medida: string;
+  cantidad: number;
 }

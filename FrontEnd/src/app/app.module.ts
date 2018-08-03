@@ -64,6 +64,7 @@ import { VentasComponent } from './components/ventas/ventas.component';
 import {DialogoComponent} from './components/salida-vendedores/salida-vendedores.component';
 import { ListadoSalidaVendedoresComponent } from './components/listado-salida-vendedores/listado-salida-vendedores.component';
 import {VentanaEmergenteProductos} from './components/productos/ventana-emergente/ventanaemergente';
+import {VentanaEmergenteArchivos} from './components/ventas/ventana-emergente/ventanaemergente';
 import {ventanaseries} from './components/ingreso-productos/ventana-series/ventanaseries';
 import { ventanaseriesalida } from './components/salida-productos/ventana-seriesalida/ventanaseriesalida';
 import {VentanaEmergenteClientes} from './components/clientes/ventana-emergente/ventanaemergente';
@@ -82,6 +83,7 @@ import { VentanaEmergenteGastos } from './components/listado-salida-vendedores/v
 import { VentanaEmergenteDet} from './components/listado-salida-vendedores/ventana-emergentedet/ventanaemergentedet';
 import { ImageUploadModule } from 'angular2-image-upload';
 import {FileUpload} from './components/clientes/file-upload/fileupload';
+import {VentanaEmergenteContacto} from './components/clientes/ventana-emergentecontacto/ventanaemergentecontacto'
 
 
 @NgModule({
@@ -151,6 +153,7 @@ import {FileUpload} from './components/clientes/file-upload/fileupload';
     DialogoComponent,
     ListadoSalidaVendedoresComponent,
     VentanaEmergenteProductos,
+    VentanaEmergenteArchivos,
     ventanaseries,
     ventanaseriesalida,
     VentanaEmergenteClientes,
@@ -166,12 +169,15 @@ import {FileUpload} from './components/clientes/file-upload/fileupload';
     VentanaEmergenteDistrito,
     VentanaEmergenteGastos,
     VentanaEmergenteDet,
-    ventanaRetorno
+    ventanaRetorno,
+    FileUpload,
+    VentanaEmergenteContacto
    ],
   entryComponents: [
     AppComponent,
     DialogoComponent,
     VentanaEmergenteProductos,
+    VentanaEmergenteArchivos,
     ventanaseries,
     ventanaseriesalida,
     VentanaEmergenteClientes,
@@ -182,7 +188,9 @@ import {FileUpload} from './components/clientes/file-upload/fileupload';
     VentanaEmergenteDistrito,
     VentanaEmergenteGastos,
     VentanaEmergenteDet,
-    ventanaRetorno
+    ventanaRetorno,
+    FileUpload,
+    VentanaEmergenteContacto
   ],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider]

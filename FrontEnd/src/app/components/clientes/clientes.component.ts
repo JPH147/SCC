@@ -9,6 +9,7 @@ import {fromEvent} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
 import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
 import { FileUpload } from './file-upload/fileupload';
+import { VentanaEmergenteContacto} from './ventana-emergentecontacto/ventanaemergentecontacto'
 @Component({
   selector: 'app-clientes',
   templateUrl: './clientes.component.html',
@@ -34,6 +35,7 @@ export class ClientesComponent implements OnInit {
     private Servicio: ClienteService,
     public DialogoClientes: MatDialog,
     public DialogFileUpload: MatDialog,
+    public DialogoContacto: MatDialog,
     public snackBar: MatSnackBar
   ) {}
 
@@ -160,11 +162,18 @@ export class ClientesComponent implements OnInit {
   });
 }
 
+AgregarDatoContacto(id){
+  let VentanaContacto = this.DialogoContacto.open(VentanaEmergenteContacto, {
+    width: '800px'
+  });
+}
 
 SubirImagen(id) {
   let VentanaFileUpload = this.DialogFileUpload.open(FileUpload, {
     width: '800px'
   });
 }
+
+
 
 }
