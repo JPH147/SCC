@@ -22,9 +22,10 @@ export class ServiciosTelefonos{
         tlf_relevancia:number
 	):Observable<any>{
         let params = 'id_cliente=' + id_cliente + '&tlf_numero=' + tlf_numero
-        + '&tlf_observacion=' + tlf_observacion + '&tlf_observacion=' + tlf_observacion 
-        + '&id_tipo=' + id_tipo + '&tlf_relevancia=' + tlf_relevancia;
+        + '&tlf_observacion=' + tlf_observacion + '&id_tipo=' + id_tipo 
+        + '&tlf_relevancia=' + tlf_relevancia;
         let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+        console.log(params);
         return this.http.post(this.url+'clientetelefono/create.php',params,{headers:headers});
 	}
 }

@@ -30,8 +30,8 @@ Class ClienteTelefono{
         $this->id_cliente=htmlspecialchars(strip_tags($this->id_cliente));
         $this->tlf_numero=htmlspecialchars(strip_tags($this->tlf_numero));
         $this->tlf_observacion=htmlspecialchars(strip_tags($this->tlf_observacion));
-        $this->tlf_numero=htmlspecialchars(strip_tags($this->id_tipo));
-        $this->tlf_observacion=htmlspecialchars(strip_tags($this->tlf_relevancia));
+        $this->id_tipo=htmlspecialchars(strip_tags($this->id_tipo));
+        $this->tlf_relevancia=htmlspecialchars(strip_tags($this->tlf_relevancia));
 
         if($result->execute())
         {

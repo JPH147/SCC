@@ -1,6 +1,7 @@
 <mat-tab-group>
     <mat-tab label="Telefonos">
       <mat-card>
+          <form [formGroup]="TelefonosForm" (ngSubmit)="Guardar(TelefonosForm)">
             <mat-card-content>
               <mat-grid-list cols="4" rowHeight="80px">
                   <mat-grid-tile>
@@ -13,14 +14,19 @@
                 <mat-grid-tile>
                   <mat-form-field class="input-ventana">
                     <mat-select placeholder='Selecciona Tipo' formControlName="tipo" >
+                        <mat-option *ngFor="let tipo of Tipos" [value]="tipo.id">
+                            {{tipo.viewValue}}
+                        </mat-option>
                     </mat-select>
                   </mat-form-field>
                 </mat-grid-tile>
-      
 
                 <mat-grid-tile>
                     <mat-form-field class="input-ventana">
                       <mat-select placeholder='Selecciona Relevancia' formControlName="relevancia" >
+                          <mat-option *ngFor="let relevancia of Relevancias" [value]="relevancia.id">
+                              {{relevancia.viewValue}}
+                          </mat-option>
                       </mat-select>
                     </mat-form-field>
                   </mat-grid-tile>
@@ -31,7 +37,6 @@
                       </mat-form-field>
                     </mat-grid-tile>
         
-
               </mat-grid-list>
             </mat-card-content>
             <mat-card-actions>
@@ -41,7 +46,7 @@
                 </mat-grid-tile>
               </mat-grid-list>
             </mat-card-actions>
-          
+          </form>
         </mat-card>
     </mat-tab>
     <mat-tab label="Direcciones"><!-- <app-provincia></app-provincia>--> </mat-tab>

@@ -164,13 +164,15 @@ export class ClientesComponent implements OnInit {
 
 AgregarDatoContacto(id){
   let VentanaContacto = this.DialogoContacto.open(VentanaEmergenteContacto, {
-    width: '800px'
+    width: '800px',
+    data: id
   });
 }
 
 SubirImagen(id) {
   let VentanaFileUpload = this.DialogFileUpload.open(FileUpload, {
-    width: '800px'
+    width: '800px',
+    data : id
   });
 }
 

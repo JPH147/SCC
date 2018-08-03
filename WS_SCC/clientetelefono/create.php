@@ -14,20 +14,20 @@
 
     try
     {
-        $producto = new Producto($db);
+        $clientetelefono = new ClienteTelefono($db);
         $data = json_decode(file_get_contents('php://input'), true);
 
         if (($_POST["id_cliente"])!=null  && !empty(trim($_POST["tlf_numero"]))
         && !empty(trim($_POST["tlf_observacion"])) && ($_POST["id_tipo"])!=null 
         && ($_POST["tlf_relevancia"])!=null )
         {
-            $producto->id_cliente = $_POST["id_cliente"];
-            $producto->tlf_numero = trim($_POST["tlf_numero"]);
-            $producto->tlf_observacion =trim($_POST["tlf_observacion"]);
-            $producto->id_tipo = $_POST["id_tipo"];
-            $producto->tlf_relevancia = $_POST["tlf_relevancia"];
+            $clientetelefono->id_cliente = $_POST["id_cliente"];
+            $clientetelefono->tlf_numero = trim($_POST["tlf_numero"]);
+            $clientetelefono->tlf_observacion =trim($_POST["tlf_observacion"]);
+            $clientetelefono->id_tipo = $_POST["id_tipo"];
+            $clientetelefono->tlf_relevancia = $_POST["tlf_relevancia"];
 
-            if($producto->create())
+            if($clientetelefono->create())
             {
                 print_json("0000", "Se creó el telefono satisfactoriamente.", "");
             }
