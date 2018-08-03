@@ -23,49 +23,56 @@
     <br>
 
     <mat-card-content>
-      <div class="example-loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
-        <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
-        <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
-          GitHub's API rate limit has been reached. It will be reset in one minute.
-        </div>
-      </div>
-
-      <div class="example-container mat-elevation-z8">
-          <!-- <div class = "container-principal" > -->
-            <div class="example-table-container" >
+        <mat-spinner *ngIf="this.data.cargando| async"></mat-spinner>
 
               <mat-table [dataSource]="data" class="example-table"
                 matSort matSortActive="created" matSortDisableClear matSortDirection="asc">
                 <!-- Number Column -->
-                <ng-container matColumnDef="number" class="codigo">
-                  <mat-header-cell *matHeaderCellDef>Codigo</mat-header-cell>
-                  <mat-cell *matCellDef="let row">{{row.number}}</mat-cell>
+                <ng-container matColumnDef="numero" class="numero">
+                  <mat-header-cell *matHeaderCellDef>numero</mat-header-cell>
+                  <mat-cell *matCellDef="let row">{{row.numero}}</mat-cell>
                 </ng-container>
 
                 <!-- Title Column -->
-                <ng-container matColumnDef="title">
-                  <mat-header-cell *matHeaderCellDef>Articulos</mat-header-cell>
-                  <mat-cell *matCellDef="let row">{{row.title}}</mat-cell>
+                <ng-container matColumnDef="almacen">
+                  <mat-header-cell *matHeaderCellDef>Almacen</mat-header-cell>
+                  <mat-cell *matCellDef="let row">{{row.almacen}}</mat-cell>
                 </ng-container>
 
                 <!-- State Column -->
-                <ng-container matColumnDef="state">
-                  <mat-header-cell *matHeaderCellDef>Stock</mat-header-cell>
-                  <mat-cell *matCellDef="let row">{{row.state}}</mat-cell>
+                <ng-container matColumnDef="tipo">
+                  <mat-header-cell *matHeaderCellDef>Tipo</mat-header-cell>
+                  <mat-cell *matCellDef="let row">{{row.tipo}}</mat-cell>
                 </ng-container>
 
+                <ng-container matColumnDef="marca">
+                  <mat-header-cell *matHeaderCellDef>Marca</mat-header-cell>
+                  <mat-cell *matCellDef="let row">{{row.marca}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="modelo">
+                  <mat-header-cell *matHeaderCellDef>Modelo</mat-header-cell>
+                  <mat-cell *matCellDef="let row">{{row.modelo}}</mat-cell>
+                </ng-container>
                 <!-- Created Column -->
-                <ng-container matColumnDef="created">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Creado</mat-header-cell>
-                  <mat-cell *matCellDef="let row">{{row.created_at | date}}</mat-cell>
+                <ng-container matColumnDef="descripcion">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Articulos</mat-header-cell>
+                  <mat-cell *matCellDef="let row">{{row.descripcion}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="unidad_medida">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Unidad Medida</mat-header-cell>
+                  <mat-cell *matCellDef="let row">{{row.unidad_medida}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="cantidad">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Stock</mat-header-cell>
+                  <mat-cell *matCellDef="let row">{{row.cantidad}}</mat-cell>
                 </ng-container>
 
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
             </mat-table>
-          </div>
-
             <mat-paginator [length]="resultsLength" [pageSize]="30"></mat-paginator>
-      </div>
     </mat-card-content>
   </mat-card>

@@ -9,7 +9,7 @@ export class ProductoDataSource implements DataSource<Producto> {
   private InformacionProductos = new BehaviorSubject<Producto[]>([]);
   private CargandoInformacion = new BehaviorSubject<boolean>(false);
   public Cargando = this.CargandoInformacion.asObservable();
-  public TotalResultados= new BehaviorSubject<number>(0);;
+  public TotalResultados = new BehaviorSubject<number>(0);
 
 constructor(private Servicio: ProductoService) { }
 
@@ -17,9 +17,9 @@ constructor(private Servicio: ProductoService) { }
   return this.InformacionProductos.asObservable();
   }
 
-disconnect(){
-this.InformacionProductos.complete();
-this.CargandoInformacion.complete();
+  disconnect() {
+  this.InformacionProductos.complete();
+  this.CargandoInformacion.complete();
   }
 
   CargarProductos(
@@ -27,19 +27,20 @@ this.CargandoInformacion.complete();
     marca: string,
     modelo: string,
     descripcion: string,
-    pagina:number,
-    total_pagina:number,
-    columna:string,
-    tipo_orden:string
-  ){
+    pagina: number,
+    total_pagina: number,
+    columna: string,
+    tipo_orden: string
+  ) {
   this.CargandoInformacion.next(true);
 
-  this.Servicio.Listado(tipo, marca, modelo, descripcion,pagina,total_pagina,columna,tipo_orden)
+  this.Servicio.Listado(tipo, marca, modelo, descripcion, pagina, total_pagina, columna, tipo_orden)
   .pipe(catchError(() => of([])),
   finalize(() => this.CargandoInformacion.next(false))
   )
   .subscribe(res => {
     this.TotalResultados.next(res['mensaje']);
+    // tslint:disable-next-line:semicolon
     this.InformacionProductos.next(res['data'].productos)
   });
   }

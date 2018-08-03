@@ -7,7 +7,7 @@ import {ProductoService} from './productos.service';
 import {ProductoDataSource} from './productos.dataservice';
 import {fromEvent} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
-import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component'
+import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
 
 @Component({
   selector: 'app-productos',
@@ -20,7 +20,8 @@ export class ProductosComponent implements OnInit {
 
   ListadoProductos: ProductoDataSource;
   Columnas: string[] = ['numero', 'descripcion', 'tipo', 'marca', 'modelo', 'precio', 'opciones'];
-  public TotalResultados:number=0;
+  // tslint:disable-next-line:no-inferrable-types
+  public TotalResultados: number = 0;
 
   @ViewChild('InputProducto') FiltroProductos: ElementRef;
   @ViewChild('InputTipo') FiltroTipo: ElementRef;
@@ -36,25 +37,26 @@ export class ProductosComponent implements OnInit {
 
   ngOnInit() {
    this.ListadoProductos = new ProductoDataSource(this.Servicio);
-   this.ListadoProductos.CargarProductos('', '', '', '',1,10,"descripcion","asc");
-   this.ListadoProductos.TotalResultados.subscribe(res=>{
-     this.TotalResultados=res;
-   })
+   // tslint:disable-next-line:quotemark
+   this.ListadoProductos.CargarProductos('', '', '', '', 1, 10, "descripcion", "asc");
+   this.ListadoProductos.TotalResultados.subscribe(res => {
+     this.TotalResultados = res;
+   });
  }
 
 // tslint:disable-next-line:use-life-cycle-interface
 ngAfterViewInit () {
 
-  this.sort.sortChange.subscribe(res=>{
-    this.paginator.pageIndex=0;
-  })
+  this.sort.sortChange.subscribe(res => {
+    this.paginator.pageIndex = 0;
+  });
 
   merge(
     this.paginator.page,
     this.sort.sortChange
   )
   .pipe(
-    tap(()=>this.CargarData())
+    tap(() => this.CargarData())
   ).subscribe();
 
   merge(
@@ -67,7 +69,7 @@ ngAfterViewInit () {
      debounceTime(200),
      distinctUntilChanged(),
      tap(() => {
-       this.paginator.pageIndex=0;
+       this.paginator.pageIndex = 0;
        this.CargarData();
      })
     ).subscribe();
@@ -78,7 +80,7 @@ ngAfterViewInit () {
    this.FiltroMarca.nativeElement.value,
    this.FiltroModelo.nativeElement.value,
    this.FiltroProductos.nativeElement.value,
-   this.paginator.pageIndex+1,
+   this.paginator.pageIndex + 1,
    this.paginator.pageSize,
    this.sort.active,
    this.sort.direction
@@ -100,17 +102,18 @@ ngAfterViewInit () {
 
  /* Eliminar productos */
  Eliminar(producto) {
-  let VentanaConfirmar = this.DialogoProductos.open(VentanaConfirmarComponent,{
+  const VentanaConfirmar = this.DialogoProductos.open(VentanaConfirmarComponent, {
     width: '400px',
     data: {objeto: 'el producto', valor: producto.descripcion}
   });
-  VentanaConfirmar.afterClosed().subscribe(res=>{
-    if(res==true){
-     this.Servicio.Eliminar(producto.id).subscribe(res=>{
+  VentanaConfirmar.afterClosed().subscribe(res => {
+    if (res === true) {
+     // tslint:disable-next-line:no-shadowed-variable
+     this.Servicio.Eliminar(producto.id).subscribe(res => {
        this.CargarData();
      });
     }
-  })
+  });
  }
 
  /* Editar productos */

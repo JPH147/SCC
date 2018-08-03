@@ -1,7 +1,7 @@
 import { async } from '@angular/core/testing';
 import {Component, Inject, OnInit, AfterViewInit} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-import {FormControl, FormGroup, FormBuilder,FormGroupDirective, NgForm, Validators} from '@angular/forms';
+import {FormControl, FormGroup, FormBuilder, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 
 
 
@@ -14,6 +14,7 @@ import {FormControl, FormGroup, FormBuilder,FormGroupDirective, NgForm, Validato
 
 
 // tslint:disable-next-line:component-class-suffix
+// tslint:disable-next-line:class-name
 export class ventanaRetorno implements OnInit {
   public serietalorarios: Array<any>;
   public Agregatalonarion: any;

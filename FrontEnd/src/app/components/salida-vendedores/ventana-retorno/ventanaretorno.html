@@ -1,14 +1,27 @@
 <mat-card>
     <button mat-mini-fab color="primary" class="boton" (click)="Agregatalonario()"><mat-icon>add</mat-icon></button>
     <mat-card-header>
-      <mat-card-title>Ingresa Series</mat-card-title>
+      <mat-card-title>Ingresa Talonarios</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <div *ngFor="let talonario of serietalonarios">
+<mat-grid-list cols=3 rowHeight="80px"  *ngFor="let talonario of serietalonarios" >
+
+        <mat-grid-tile>
         <mat-form-field class="example-full-width">
-          <input matInput placeholder="Ingresa Series">
+          <input matInput placeholder="Ingresa Series Talonario">
         </mat-form-field>
-      </div>
+      </mat-grid-tile>
+        <mat-grid-tile >
+        <mat-form-field class="example-full-width">
+            <input matInput placeholder="Numero incio">
+          </mat-form-field>
+        </mat-grid-tile>
+          <mat-grid-tile>
+          <mat-form-field class="example-full-width">
+              <input matInput placeholder="Numero Final">
+            </mat-form-field>
+          </mat-grid-tile>
+    </mat-grid-list>
     </mat-card-content>
 
     <mat-card-actions>
