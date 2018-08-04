@@ -6,7 +6,7 @@ import {URL} from '../global/url';
 
 @Injectable()
 
-export class StockService{
+export class StockService {
   public url: string = URL.url;
 
   constructor(private http: HttpClient) {}
@@ -20,10 +20,9 @@ export class StockService{
     pagina_inicio: number,
     total_pagina: number,
     orden: string
-  ): Observable<any>
-  {
-    return this.http.get(this.url + 'stock/read.php',{
-      params:new HttpParams()
+  ): Observable<any> {
+    return this.http.get(this.url + 'stock/read.php', {
+      params: new HttpParams()
       .set('pralmacen', almacen)
       .set('prtipo', tipo)
       .set('prmarca', marca)
@@ -32,7 +31,7 @@ export class StockService{
       .set('prpagina', pagina_inicio.toString())
       .set('prtotalpagina', total_pagina.toString())
       .set('orden', orden)
-    }).pipe(map(res => {
+    }).pipe(map(res => { console.log(res);
       if (res['codigo'] === 0) {
         return res;
       } else {

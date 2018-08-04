@@ -9,12 +9,12 @@ import { ReturnStatement } from '../../../../node_modules/@angular/compiler';
 export class StockDataSource implements DataSource <stock> {
 private InformacionStock = new BehaviorSubject<stock[]> ([]);
 private CargandoInformacion = new BehaviorSubject<boolean>(false);
-public cargando = this.CargandoInformacion.asObservable();
+public Cargando = this.CargandoInformacion.asObservable();
 public Totalresultados = new BehaviorSubject<number> (0);
 
 constructor (private Servicio: StockService) {}
   // tslint:disable-next-line:no-shadowed-variable
-  connect(CollectionViewer: CollectionViewer): Observable<stock[]>{
+  connect(CollectionViewer: CollectionViewer): Observable<stock[]> {
     return this.InformacionStock.asObservable();
     }
 
@@ -34,7 +34,7 @@ constructor (private Servicio: StockService) {}
     orden: string
     ) {
     this.CargandoInformacion.next(true);
-    this.Servicio.ListarStock(almacen, tipo, marca, modelo, producto, pagina_inicio, total_pagina, orden,)
+    this.Servicio.ListarStock(almacen, tipo, marca, modelo, producto, pagina_inicio, total_pagina, orden, )
     .pipe(catchError(() => of ([])),
     finalize(() => this.CargandoInformacion.next(false))
     )
