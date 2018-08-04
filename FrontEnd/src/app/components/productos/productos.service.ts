@@ -19,7 +19,7 @@ export class ProductoService {
   descripcion: string
   ): Observable<Producto[]>
   { return this.http.get(this.url + 'producto/read.php?prtipo='
-   + tipo + '&prmarca=' + marca + '&prmodelo=' + modelo + '&prdescripcion=+ ' + descripcion)
+   + tipo + '&prmarca=' + marca + '&prmodelo=' + modelo + '&prdescripcion='+ descripcion)
     .pipe(map(res => {
       if (res['codigo'] === 0) {
           return res['data'].productos;
