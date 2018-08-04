@@ -16,6 +16,12 @@ export class ProductoService {
   tipo: string,
   marca: string,
   modelo: string,
+<<<<<<< HEAD
+  descripcion: string
+  ): Observable<Producto[]>
+  { return this.http.get(this.url + 'producto/read.php?prtipo='
+   + tipo + '&prmarca=' + marca + '&prmodelo=' + modelo + '&prdescripcion='+ descripcion)
+=======
   descripcion: string,
   pagina: number,
   total_pagina: number,
@@ -34,6 +40,7 @@ export class ProductoService {
       .set('prtotalpagina', total_pagina.toString())
       .set('orden', orden)
   })
+>>>>>>> c9be6c288668a3311e92483fddb43a8fe3aa78b1
     .pipe(map(res => {
       if (res['codigo'] === 0) {
           return res;
@@ -97,6 +104,17 @@ export class ProductoService {
 }
 
 export interface Producto {
+<<<<<<< HEAD
+  numero: number,
+  id: number,
+  nombre: string,
+  tipo: string,
+  marca: string,
+  modelo: string,
+  descripcion: string,
+  unidad_medida: string,
+  precio:number
+=======
   numero: number;
   id: number;
   nombre: string;
@@ -106,4 +124,5 @@ export interface Producto {
   descripcion: string;
   unidad_medida: string;
   precio: number;
+>>>>>>> c9be6c288668a3311e92483fddb43a8fe3aa78b1
 }
