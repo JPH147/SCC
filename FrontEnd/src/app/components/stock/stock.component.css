@@ -83,15 +83,21 @@ mat-card{
   margin-left: 25px;
 }
 
-
+.mat-column-modelo,
 .mat-column-tipo,
 .mat-column-marca,
-.mat-column-modelo,
 .mat-column-almacen,
-.mat-column-unidad_medida,
-.mat-column-cantidad,
-.mat-column-numero
+.mat-column-unidad_medida
+
 {
   max-width: 10%;
 }
 
+
+
+.mat-column-cantidad,
+.mat-column-numero,
+.mat-column-opciones
+{
+  max-width: 4%;
+}

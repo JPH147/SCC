@@ -4,7 +4,7 @@ import {stock, StockService } from './stock.service';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {catchError, finalize, subscribeOn} from 'rxjs/operators';
 import {of} from 'rxjs';
-import { ReturnStatement } from '../../../../node_modules/@angular/compiler';
+import { ReturnStatement } from '@angular/compiler';
 
 export class StockDataSource implements DataSource <stock> {
 private InformacionStock = new BehaviorSubject<stock[]> ([]);
