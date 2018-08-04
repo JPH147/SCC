@@ -1,8 +1,11 @@
 <mat-card>
     <mat-card-title>
       <div id = "tituloProd"> Listado de Stock</div>
+      <br>
     </mat-card-title>
-
+        <button class="agregar" mat-raised-button color="primary"  [routerLink]="['salidaproductos']" >Salida Producto</button>
+        <button class="agregar" mat-raised-button color="primary"  [routerLink]="['ingresoproductos']" >Ingresa Producto</button>
+        <br> <br>
 
        <mat-grid-list cols= "5" rowHeight="90px">"
         <mat-grid-tile>
@@ -36,19 +39,6 @@
             </mat-form-field>
         </mat-grid-tile>
       </mat-grid-list>
-
-
-      <mat-grid-list cols= "2" rowHeight="90px">"
-       <!-- Boton Agrega Productos -->
-        <mat-grid-tile>
-          <button mat-raised-button color="primary"  [routerLink]="['ingresoproductos']" >Ingresa Producto</button>
-        </mat-grid-tile>
-        <mat-grid-tile>
-          <button mat-raised-button color="primary"  [routerLink]="['salidaproductos']" >Salida Producto</button>
-        </mat-grid-tile>
-      </mat-grid-list>
-    <br>
-
     <mat-card-content>
         <div class = "spinner-container" *ngIf = "Listadodata.Cargando| async">
           <mat-spinner></mat-spinner>

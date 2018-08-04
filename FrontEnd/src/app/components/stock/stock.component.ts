@@ -80,7 +80,7 @@ export class StockComponent implements OnInit {
     this.paginator.pageIndex + 1,
     this.paginator.pageSize,
     this.sort.active + ' ' + this.sort.direction
-    //'descripcion asc'
+    // 'descripcion asc'
   );
   }
 
