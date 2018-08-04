@@ -4,11 +4,15 @@
     <div id = "tituloProd"> Salida de Productos Nro.</div>
   </mat-card-title>
 
+  <mat-card-subtitle>
+      Cabecera Salida Productos
+  </mat-card-subtitle>
   <mat-card-header>
 
     <mat-card class="CabeceraSalidaVendedor">
       <mat-grid-list cols="3" rowHeight="80px">
         <mat-grid-tile>
+
           <!-- Seleccionar Almacen  Origen -->
           <mat-form-field>
             <mat-select placeholder="Almacen Origen" >
@@ -20,7 +24,6 @@
         </mat-grid-tile>
 
         <mat-grid-tile>
-
           <!-- Seleccionar Almacen  Origen -->
           <mat-form-field>
             <mat-select placeholder="Almacen Destino " >
@@ -43,24 +46,28 @@
     </mat-card>
   </mat-card-header>
 
-
 <!-- Line de Detalles de  ingreso de Productos -->
 <br>
 
 <mat-card-content>
 
+  <!-- Boton Agrega Productos -->
+  <mat-grid-list cols="1"  rowHeight="55px">
+      <mat-grid-tile>
+        <button mat-mini-fab color="primary" matTooltip="Agrega  Productos"><mat-icon>add</mat-icon></button>
+      </mat-grid-tile>
+    </mat-grid-list>
+
     <mat-card-subtitle>
         Detalle de Productos
-      <button mat-mini-fab color="primary" class="agregar" (click) = 'agregar()'><mat-icon>add</mat-icon></button>
-
     </mat-card-subtitle>
-    <br>
 
+    <!-- Agrega Productos -->
     <mat-card class="CabeceraSalidaVendedor">
 
       <mat-grid-list cols="5" rowHeight="70px" *ngFor="let articulo of articulos">
 
-        <mat-grid-tile>
+        <mat-grid-tile colspan="2">
           <mat-form-field>
             <mat-select placeholder="Selecciona Producto">
               <mat-option *ngFor="let food of foods" >
@@ -70,18 +77,16 @@
           </mat-form-field>
         </mat-grid-tile>
 
-
-        <mat-grid-tile>
+        <mat-grid-tile colspan="2">
           <mat-form-field>
             <input matInput placeholder="Cantidad">
           </mat-form-field>
         </mat-grid-tile>
 
+        <mat-grid-tile colspan="1">
+            <button mat-mini-fab color="primary" (click) = " AgregarSerieSalida () " matTooltip="Ingresa Serie Producto"><mat-icon> reorder </mat-icon> </button>
 
-        <mat-grid-tile>
-            <button mat-mini-fab color="primary" (click) = " AgregarSerieSalida () "><mat-icon> reorder </mat-icon> </button>
-
-          <button mat-mini-fab color="primary"><mat-icon>delete</mat-icon></button>
+          <button mat-mini-fab color="primary" matTooltip="Elimina  Producto"><mat-icon>delete</mat-icon></button>
 
         </mat-grid-tile>
       </mat-grid-list>
@@ -89,13 +94,15 @@
 
   </mat-card-content>
 
-
+<!-- Botones Grabar Limpiar Formulario -->
 
     <mat-card-actions>
-
-        <button mat-raised-button color="primary">Grabar</button>
-        <button mat-raised-button color="accent">Limpiar</button>
-
+        <mat-grid-list cols="1"  rowHeight="55px">
+            <mat-grid-tile>
+              <button mat-raised-button  color="primary">Grabar</button>
+              <button mat-raised-button  color="accent">Limpiar</button>
+            </mat-grid-tile>
+          </mat-grid-list>
       </mat-card-actions>
 
 </mat-card>

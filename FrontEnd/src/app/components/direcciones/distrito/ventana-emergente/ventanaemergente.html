@@ -1,0 +1,41 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title *ngIf="!data">Agregar nuevo distrito</mat-card-title>
+    <mat-card-title *ngIf="data">Editar distrito</mat-card-title>
+  </mat-card-header>
+
+  <form [formGroup]="DistritosForm" (ngSubmit)="Guardar(DistritosForm); Notificacion(mensaje,'')">
+    
+    <mat-card-content>
+      <mat-grid-list cols="1" rowHeight="80px">
+        <mat-grid-tile>
+          <mat-form-field>
+            <mat-select placeholder="Departamento" formControlName="departamento" (selectionChange)="DepartamentoSeleccionado($event)">
+              <mat-option *ngFor="let departamento of departamentos" [value]="departamento.nombre">{{departamento.nombre}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <mat-form-field>
+            <mat-select placeholder="Provincia" formControlName="provincia">
+              <mat-option *ngFor="let provincia of provincias" [value]="provincia.id">{{provincia.nombre}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <mat-form-field>
+            <input matInput placeholder="Nombre del distrito" formControlName="nombre">
+          </mat-form-field>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <mat-grid-list cols=1 rowHeight="40px">
+        <mat-grid-tile>
+          <button type="submit" mat-raised-button color="primary" [disabled]="DistritosForm.invalid">Guardar</button>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-card-actions>
+  </form>
+</mat-card>

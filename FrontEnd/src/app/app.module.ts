@@ -64,11 +64,27 @@ import { VentasComponent } from './components/ventas/ventas.component';
 import {DialogoComponent} from './components/salida-vendedores/salida-vendedores.component';
 import { ListadoSalidaVendedoresComponent } from './components/listado-salida-vendedores/listado-salida-vendedores.component';
 import {VentanaEmergenteProductos} from './components/productos/ventana-emergente/ventanaemergente';
+import {VentanaEmergenteArchivos} from './components/ventas/ventana-emergente/ventanaemergente';
 import {ventanaseries} from './components/ingreso-productos/ventana-series/ventanaseries';
 import { ventanaseriesalida } from './components/salida-productos/ventana-seriesalida/ventanaseriesalida';
 import {VentanaEmergenteClientes} from './components/clientes/ventana-emergente/ventanaemergente';
-import { ProveedoresComponent } from './components/proveedores/proveedores.component'
+import { ProveedoresComponent } from './components/proveedores/proveedores.component';
 import { ventanaseriessv } from './components/salida-vendedores/ventana-seriessv/ventanaseriessv';
+import { DireccionesComponent } from './components/direcciones/direcciones.component';
+import { DepartamentoComponent } from './components/direcciones/departamento/departamento.component';
+import { VentanaEmergenteDepartamento} from './components/direcciones/departamento/ventana-emergente/ventanaemergente';
+import {VentanaEmergenteProvincia} from './components/direcciones/provincia/ventana-emergente/ventanaemergente';
+import {VentanaEmergenteDistrito } from './components/direcciones/distrito/ventana-emergente/ventanaemergente';
+import { ProvinciaComponent } from './components/direcciones/provincia/provincia.component';
+import { DistritoComponent } from './components/direcciones/distrito/distrito.component';
+import { VentanaConfirmarComponent } from './components/global/ventana-confirmar/ventana-confirmar.component';
+import { ventanaRetorno } from './components/salida-vendedores/ventana-retorno/ventanaretorno';
+import { VentanaEmergenteGastos } from './components/listado-salida-vendedores/ventana-emergente/ventanaemergente';
+import { VentanaEmergenteDet} from './components/listado-salida-vendedores/ventana-emergentedet/ventanaemergentedet';
+import { ImageUploadModule } from 'angular2-image-upload';
+import {FileUpload} from './components/clientes/file-upload/fileupload';
+import {VentanaEmergenteContacto} from './components/clientes/ventana-emergentecontacto/ventanaemergentecontacto'
+
 
 @NgModule({
   imports: [
@@ -119,6 +135,7 @@ import { ventanaseriessv } from './components/salida-vendedores/ventana-seriessv
     ReactiveFormsModule,
     LayoutModule,
     routing,
+    ImageUploadModule.forRoot()
   ],
   declarations: [
     AppComponent,
@@ -136,20 +153,44 @@ import { ventanaseriessv } from './components/salida-vendedores/ventana-seriessv
     DialogoComponent,
     ListadoSalidaVendedoresComponent,
     VentanaEmergenteProductos,
+    VentanaEmergenteArchivos,
     ventanaseries,
     ventanaseriesalida,
     VentanaEmergenteClientes,
     ProveedoresComponent,
-    ventanaseriessv
+    ventanaseriessv,
+    VentanaConfirmarComponent,
+    DireccionesComponent,
+    DepartamentoComponent,
+    ProvinciaComponent,
+    DistritoComponent,
+    VentanaEmergenteDepartamento,
+    VentanaEmergenteProvincia,
+    VentanaEmergenteDistrito,
+    VentanaEmergenteGastos,
+    VentanaEmergenteDet,
+    ventanaRetorno,
+    FileUpload,
+    VentanaEmergenteContacto
    ],
   entryComponents: [
     AppComponent,
     DialogoComponent,
     VentanaEmergenteProductos,
+    VentanaEmergenteArchivos,
     ventanaseries,
     ventanaseriesalida,
     VentanaEmergenteClientes,
-    ventanaseriessv
+    ventanaseriessv,
+    VentanaConfirmarComponent,
+    VentanaEmergenteDepartamento,
+    VentanaEmergenteProvincia,
+    VentanaEmergenteDistrito,
+    VentanaEmergenteGastos,
+    VentanaEmergenteDet,
+    ventanaRetorno,
+    FileUpload,
+    VentanaEmergenteContacto
   ],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider]

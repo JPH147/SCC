@@ -4,9 +4,6 @@ Class Producto{
     private $conn;
     private $table_name = "producto";
 
-    public $idperfil;
-    public $prf_nombre;
-
     public $idproducto;
     public $tprd_nombre;
     public $mrc_nombre;
@@ -20,6 +17,10 @@ Class Producto{
     public $id_tipo_producto;
     public $id_marca;
     public $id_modelo;
+    public $numero_pagina;
+    public $total_pagina;
+    public $total_resultado;
+    public $orden;
 
     public function __construct($db){
         $this->conn = $db;
@@ -28,7 +29,48 @@ Class Producto{
     /* Listar productos */
     function read(){
 
-        $query = "CALL sp_listarproducto(?,?,?,?)";
+        $query = "CALL sp_listarproducto(?,?,?,?,?,?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->tprd_nombre);
+        $result->bindParam(2, $this->mrc_nombre);
+        $result->bindParam(3, $this->mdl_nombre);
+        $result->bindParam(4, $this->prd_descripcion);
+        $result->bindParam(5, $this->numero_pagina);
+        $result->bindParam(6, $this->total_pagina);
+        $result->bindParam(7, $this->orden);
+
+        $result->execute();
+        
+        $producto_list=array();
+        $producto_list["productos"]=array();
+
+        $contador = $this->total_pagina*($this->numero_pagina-1);
+
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+		{
+			extract($row);
+            $contador=$contador+1;
+            $producto_item = array (
+                "numero"=>$contador,
+                "id"=>$id,
+                "tipo"=>$tipo,
+                "marca"=>$marca,
+                "modelo"=>$modelo,
+                "descripcion"=>$descripcion,
+                "unidad_medida"=>$unidad_medida,
+                "precio"=>$precio
+            );
+            array_push($producto_list["productos"],$producto_item);
+        }
+
+        return $producto_list;
+    }
+
+    function contar(){
+
+        $query = "CALL sp_listarproductocontar(?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
@@ -38,30 +80,12 @@ Class Producto{
         $result->bindParam(4, $this->prd_descripcion);
 
         $result->execute();
-    
-        $producto_list=array();
-        $producto_list["productos"]=array();
 
-        $contador = 0;
+        $row = $result->fetch(PDO::FETCH_ASSOC);
 
-        while($row = $result->fetch(PDO::FETCH_ASSOC))
-        {
-            extract($row);
-            $contador=$contador+1;
-            $producto_item = array (
-                "numero"=>$contador,
-                "id"=>$idproducto,
-                "tipo"=>$tprd_nombre,
-                "marca"=>$mrc_nombre,
-                "modelo"=>$mdl_nombre,
-                "descripcion"=>$prd_descripcion,
-                "unidad_medida"=>$und_nombre,
-                "precio"=>$prd_precio
-            );
+        $this->total_resultado=$row['total'];
 
-            array_push($producto_list["productos"],$producto_item);
-        }
-        return $producto_list;
+        return $this->total_resultado;
     }
 
     /* Seleccionar producto */

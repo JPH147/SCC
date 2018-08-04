@@ -10,6 +10,16 @@
 
 }
 
+.spinner-container{
+  position: absolute;
+  top: 200px;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 
 #tituloProd {
 padding: 25px;
@@ -72,3 +82,16 @@ mat-card{
   float:right;
   margin-left: 10px;
 }
+
+
+.mat-column-tipo,
+.mat-column-marca,
+.mat-column-modelo,
+.mat-column-almacen,
+.mat-column-unidad_medida,
+.mat-column-cantidad,
+.mat-column-numero
+{
+  max-width: 10%;
+}
+

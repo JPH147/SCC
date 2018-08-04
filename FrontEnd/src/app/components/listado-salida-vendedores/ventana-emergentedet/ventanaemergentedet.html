@@ -1,0 +1,254 @@
+<mat-card class="card-principal">
+    <!-- Titulo formulario-->
+    <mat-card-title>
+      <div id = "tituloProd"> Salida de Vendedores</div>
+    </mat-card-title>
+
+    <!-- Subtitulo Cabecera  Datos Vendedor         -->
+    <mat-card-subtitle id ="CabeceraVendedor ">
+        <div > Datos Generales</div>
+    </mat-card-subtitle>
+  <!--  Cabecera de Formulario Salida de Vendedores   -->
+    <mat-card-header>
+      <mat-card class="CabeceraSalidaVendedor">
+        <mat-grid-list cols="2" rowHeight="85px">
+            <!-- Ingreso Pecosa -->
+          <mat-grid-tile>
+            <mat-form-field class="example-full-width">
+              <input matInput #message maxlength="10" placeholder="PECOSA">
+              <mat-hint align="start"><strong>Ingresar numero de Pecosa</strong> </mat-hint>
+              <mat-hint align="end">{{message.value.length}} / 10</mat-hint>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+             <!-- Fecha Salida - Fecha Salida-->
+            <mat-form-field class="fecha_cabecera">
+              <input matInput [matDatepicker]="picker" placeholder="Fecha de Salida" >
+              <mat-datepicker-toggle matSuffix [for]="picker" ></mat-datepicker-toggle>
+              <mat-datepicker #picker ></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="fecha_cabecera">
+              <input matInput [matDatepicker]="picker2" placeholder="Fecha de Retorno">
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <!-- Informacion del destino -->
+              <mat-form-field class="example-full-width">
+                  <input matInput #message maxlength="45" placeholder="Destino">
+                  <mat-hint align="start"><strong>Ingresar Destino</strong> </mat-hint>
+                  <mat-hint align="end">{{message.value.length}} / 45</mat-hint>
+              </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <!-- Guia de Reimsion -->
+              <mat-form-field class="Alintaguia">
+                  <input matInput #message maxlength="15" placeholder="Guia">
+                  <mat-hint align="start"><strong>Ingresar numero de guia de Remision</strong> </mat-hint>
+                  <mat-hint align="end">{{message.value.length}} / 15</mat-hint>
+              </mat-form-field>
+
+
+              <button mat-raised-button>Ingresar Talonarios</button>
+
+            </mat-grid-tile>
+
+
+
+
+            </mat-grid-list>
+      </mat-card>
+  </mat-card-header>
+  <br>
+
+  <!--Detalle Vendedores    -->
+
+  <mat-card-content>
+
+    <mat-card-subtitle>
+        Detalle Venvedores
+
+    </mat-card-subtitle>
+    <br>
+
+    <mat-card class="CabeceraSalidaVendedor">
+        <mat-card-subtitle>
+
+          <button mat-mini-fab color="primary" class="agregar" (click) = 'agregar()'><mat-icon>add</mat-icon></button>
+
+        </mat-card-subtitle>
+
+      <mat-grid-list cols="3" rowHeight="70px" *ngFor="let articulo of articulos">
+
+        <mat-grid-tile>
+          <mat-form-field>
+            <mat-select placeholder="Selecciona Vendedor">
+              <mat-option *ngFor="let food of foods" >
+                {{food.viewValue}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+
+
+        <mat-grid-tile>
+          <mat-form-field>
+            <input matInput placeholder="Comision Efectiva">
+          </mat-form-field>
+        </mat-grid-tile>
+
+
+
+        <mat-grid-tile>
+
+
+          <button mat-mini-fab color="primary"><mat-icon>delete</mat-icon></button>
+
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-card>
+
+  </mat-card-content>
+
+
+
+   <!-- Subtitulo informacion de Vehiculo en el caso viajen con vehiculo de la empresa-->
+
+    <mat-card-content>
+
+      <mat-card-subtitle id ="CabeceraVendedor ">
+          <div > Detalle Transporte
+          <mat-checkbox  class="alinchkbox"> Vehiculo de la Empresa</mat-checkbox>
+        </div>
+      </mat-card-subtitle>
+
+      <mat-card class="CabeceraSalidaVendedor">
+        <mat-grid-list cols="3" rowHeight="60px">
+        <mat-grid-tile>
+          <mat-form-field >
+              <input matInput #message maxlength="10" placeholder="Placa">
+              <mat-hint align="start"><strong>Ingresar Placa Vehiculo</strong> </mat-hint>
+              <mat-hint align="end">{{message.value.length}} / 10</mat-hint>
+            </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+            <mat-form-field >
+                <input matInput #message maxlength="8" placeholder="DNI">
+                <mat-hint align="start"><strong>Ingresar DNI chofer</strong> </mat-hint>
+                <mat-hint align="end">{{message.value.length}} / 8</mat-hint>
+              </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+          <mat-form-field class="example-full-width">
+              <input matInput #message maxlength="45" placeholder="Chofer">
+              <mat-hint align="start"><strong>Ingresar nombre del Chofer</strong> </mat-hint>
+              <mat-hint align="end">{{message.value.length}} / 45</mat-hint>
+          </mat-form-field>
+       </mat-grid-tile>
+          </mat-grid-list>
+
+            </mat-card>
+
+  <!--  -->
+  <br>
+  <!-- Subtitulo Detalle Productos -->
+
+  <mat-card-content>
+
+      <mat-card-subtitle>
+          Detalle de Productos
+
+      </mat-card-subtitle>
+      <br>
+
+      <mat-card class="CabeceraSalidaVendedor">
+          <mat-card-subtitle>
+            <!-- Seleccionar Almacen -->
+           <mat-form-field>
+              <mat-select placeholder="Selecciona Almacen" >
+                <mat-option *ngFor="let food of foods" [value]="food.value">
+                  {{food.viewValue}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <button mat-mini-fab color="primary" class="agregar" (click) = 'agregar()'><mat-icon>add</mat-icon></button>
+
+          </mat-card-subtitle>
+
+
+        <mat-grid-list cols="3" rowHeight="70px" *ngFor="let articulo of articulos">
+
+          <mat-grid-tile>
+            <mat-form-field>
+              <mat-select placeholder="Selecciona Producto">
+                <mat-option *ngFor="let food of foods" >
+                  {{food.viewValue}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-grid-tile>
+
+
+          <mat-grid-tile>
+            <mat-form-field>
+              <input matInput placeholder="Cantidad">
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+
+            <button mat-mini-fab color="primary" (click) = " AgregarSerieSalidaV() "><mat-icon> reorder </mat-icon> </button>
+            <button mat-mini-fab color="primary"><mat-icon>delete</mat-icon></button>
+
+          </mat-grid-tile>
+        </mat-grid-list>
+      </mat-card>
+
+    </mat-card-content>
+
+  <br>
+
+
+  <!-- Observacions de Documento Salida Vendedor  -->
+
+  <mat-card-subtitle id ="CabeceraVendedor ">
+      <div > Observaciones</div>
+  </mat-card-subtitle>
+
+  <mat-card class="CabeceraSalidaVendedor">
+    <mat-grid-list cols="2" rowHeight="50px">
+      <mat-grid-tile>
+        <mat-form-field  class="example-full-width" >
+            <input matInput #message maxlength="20" placeholder="Observacion Salida">
+            <mat-hint align="start"><strong>Observaciones Salida Vendedor</strong> </mat-hint>
+            <mat-hint align="end">{{message.value.length}} / 80</mat-hint>
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <mat-form-field  class="example-full-width" >
+          <input matInput #message maxlength="80" placeholder="Observacion Retorno">
+          <mat-hint align="start"><strong>Observaciones Retorno Vendedor</strong> </mat-hint>
+          <mat-hint align="end">{{message.value.length}} / 80</mat-hint>
+        </mat-form-field>
+      </mat-grid-tile>
+    </mat-grid-list>
+
+  </mat-card>
+
+  </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" class="agregar">Grabar</button>
+        <button mat-raised-button color="accent" class = "Limpiar" (click)="openDialog()"> Limpiar </button>
+    </mat-card-actions>
+  </mat-card>
+

@@ -1,0 +1,8 @@
+mat-card-content{
+	text-align: center;
+	margin-bottom: 10px;
+}
+
+mat-card-subtitle{
+	margin-top: 15px !important;
+}

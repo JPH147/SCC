@@ -48,7 +48,7 @@ const TREE_DATA = JSON.stringify({
     'Tipo de cambio': '',
     'Tablas maestras': {
       'Sucursales': '',
-      'Distrito / Provincia / Departamento': '',
+      'Direcciones': 'direcciones',
       'Bancos': '',
       'Instituciones': '',
       'Condición laboral': '',

@@ -32,14 +32,44 @@
       justify-content: center;
     }
 
-    .mat-column-numero,
-    .mat-column-tipo,
-    .mat-column-marca,
-    .mat-column-modelo,
-    .mat-column-unidad_medida,
-    .mat-column-opciones
+    .mat-column-numero
+    {
+      max-width: 2%;
+    }
+
+    .mat-column-institucion
     {
       max-width: 10%;
+    }
+
+    .mat-column-sede,
+    .mat-column-subsede
+    {
+      max-width: 40%;
+    }
+
+    .mat-column-codigo{
+      max-width: 5%;
+    }
+
+    .mat-column-opciones
+    {
+      max-width: 25%;
+    }
+
+    .mat-column-dni
+    {
+      max-width: 8%;
+    }
+    .mat-column-nombrecliente,
+    .mat-column-apellidocliente
+    {
+      max-width: 12%;
+    }
+
+    .mat-expansion-panel-header-title
+    {
+      font-weight: bold;
     }
 
     #tituloProd {

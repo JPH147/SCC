@@ -33,7 +33,7 @@
           <mat-form-field>
             <input matInput placeholder="Ingresa Precio Minimo"  formControlName="precio">
             <mat-error *ngIf="ProductosForm.get('precio').invalid">Debes escribir sólo números</mat-error>
-            <span matPrefix>S/.</span>
+            <span matPrefix>S/ </span>
           </mat-form-field>
         </mat-grid-tile>
 
@@ -47,7 +47,7 @@
     <mat-card-actions>
       <mat-grid-list cols=1 rowHeight="40px">
         <mat-grid-tile>
-          <button type="submit" mat-raised-button color="primary" [disabled]="ProductosForm.invalid">Grabar</button>
+          <button type="submit" mat-raised-button color="primary" [disabled]="ProductosForm.invalid">Guardar</button>
         </mat-grid-tile>
       </mat-grid-list>
     </mat-card-actions>

@@ -1,86 +1,89 @@
+import { StockService } from './stock.service';
+import {StockDataSource} from './stock.dataservice';
 import { FormControl } from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
-import {Component, OnInit, ViewChild} from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import {MatPaginator, MatSort} from '@angular/material';
-import {merge, Observable, of as observableOf} from 'rxjs';
-import {catchError, map, startWith, switchMap} from 'rxjs/operators';
+import {merge, Observable, of as observableOf, from, fromEvent} from 'rxjs';
+import {debounceTime, distinctUntilChanged, tap, delay, catchError, map, startWith, switchMap} from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-stock',
   templateUrl: './stock.component.html',
-  styleUrls: ['./stock.component.css']
+  styleUrls: ['./stock.component.css'],
+  providers: [StockService]
 })
 export class StockComponent implements OnInit {
-  displayedColumns: string[] = ['created', 'state', 'number', 'title'];
-  exampleDatabase: ExampleHttpDao | null;
-  data: GithubIssue[] = [];
+  Listadodata: StockDataSource;
+  displayedColumns: string[] = ['numero',  'almacen', 'tipo', 'marca', 'modelo', 'descripcion', 'unidad_medida', 'cantidad'];
 
-  resultsLength = 0;
-  isLoadingResults = true;
-  isRateLimitReached = false;
+  public TotalResultados = 0;
 
+  @ViewChild('InputAlmacen') FiltroAlmacen: ElementRef;
+  @ViewChild('InputTipo') FiltroTipo: ElementRef;
+  @ViewChild('InputMarca') FiltroMarca: ElementRef;
+  @ViewChild('InputModelo') FiltroModelo: ElementRef;
+  @ViewChild('InputDescripcion') FiltroDescripcion: ElementRef;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private Servicio: StockService
+  ) { }
 
   ngOnInit() {
-    this.exampleDatabase = new ExampleHttpDao(this.http);
-
-    // If the user changes the sort order, reset back to the first page.
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
-
-    merge(this.sort.sortChange, this.paginator.page)
-      .pipe(
-        startWith({}),
-        switchMap(() => {
-          this.isLoadingResults = true;
-          // tslint:disable-next-line:no-non-null-assertion
-          return this.exampleDatabase!.getRepoIssues(
-            this.sort.active, this.sort.direction, this.paginator.pageIndex);
-        }),
-        map(data => {
-          // Flip flag to show that loading has finished.
-          this.isLoadingResults = false;
-          this.isRateLimitReached = false;
-          this.resultsLength = data.total_count;
-
-          return data.items;
-        }),
-        catchError(() => {
-          this.isLoadingResults = false;
-          // Catch if the GitHub API has reached its rate limit. Return empty data.
-          this.isRateLimitReached = true;
-          return observableOf([]);
-        })
-      ).subscribe(data => this.data = data);
-
+    this.Listadodata = new StockDataSource(this.Servicio);
+    this.Listadodata.CargarStock('', '', '', '', '', 1, 20, 'descripcion asc');
+    this.Listadodata.Totalresultados.subscribe(res => {
+    this.TotalResultados = res;
+    });
   }
-}
 
-export interface GithubApi {
-  items: GithubIssue[];
-  total_count: number;
-}
+  // tslint:disable-next-line:use-life-cycle-interface
+  ngAfterViewInit () {
+    this.sort.sortChange.subscribe(res => {
+      this.paginator.pageIndex = 0;
+    });
+    merge(
+      this.paginator.page,
+      this.sort.sortChange
+    )
+    .pipe(
+      tap(() => this.CargarData())
+    ).subscribe();
 
-export interface GithubIssue {
-  created_at: string;
-  number: string;
-  state: string;
-  title: string;
-}
+    merge(
+      fromEvent(this.FiltroAlmacen.nativeElement, 'keyup'),
+      fromEvent(this.FiltroTipo.nativeElement, 'keyup'),
+      fromEvent(this.FiltroMarca.nativeElement, 'keyup'),
+      fromEvent(this.FiltroModelo.nativeElement, 'keyup'),
+      fromEvent(this.FiltroDescripcion.nativeElement, 'keyup')
+    )
+    .pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      tap(() => {
+        this.paginator.pageIndex = 0;
+        this.CargarData();
+      })
+     ).subscribe();
+  }
 
+  CargarData() {
+    this.Listadodata.CargarStock(this.FiltroAlmacen.nativeElement.value,
+    this.FiltroTipo.nativeElement.value,
+    this.FiltroMarca.nativeElement.value,
+    this.FiltroModelo.nativeElement.value,
+    this.FiltroDescripcion.nativeElement.value,
+    this.paginator.pageIndex + 1,
+    this.paginator.pageSize,
+    this.sort.active + ' ' + this.sort.direction
+    //'descripcion asc'
+  );
+  }
+
+
+}
 /** An example database that the data source uses to retrieve data for the table. */
-export class ExampleHttpDao {
-  constructor(private http: HttpClient) {}
-
-  getRepoIssues(sort: string, order: string, page: number): Observable<GithubApi> {
-    const href = 'https://api.github.com/search/issues';
-    const requestUrl =
-        `${href}?q=repo:angular/material2&sort=${sort}&order=${order}&page=${page + 1}`;
-
-    return this.http.get<GithubApi>(requestUrl);
-  }
-
-  }
-
