@@ -7,7 +7,7 @@ import { NgControl } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import {merge, Observable, of as observableOf} from 'rxjs';
 import {catchError, map, startWith, switchMap} from 'rxjs/operators';
-import { SelectionModel } from '../../../../../node_modules/@angular/cdk/collections';
+import { SelectionModel } from '@angular/cdk/collections';
 
 
 export interface Food {
@@ -22,6 +22,7 @@ export interface Food {
   providers: [ServiciosGenerales]
 })
 
+// tslint:disable-next-line:component-class-suffix
 export class VentanaEmergenteDet {
   [x: string]: any;
   public selectedValue: string;
@@ -30,7 +31,7 @@ export class VentanaEmergenteDet {
   public contador: number;
   public almacenes: Array<any>;
   public serieventana: string;
-  public _filter:any;
+  public _filter: any;
 
   selected = 'option2';
   myControl = new FormControl();
@@ -48,6 +49,7 @@ export class VentanaEmergenteDet {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
     public ventana: MatDialogRef<VentanaEmergenteDet>,
+    // tslint:disable-next-line:no-shadowed-variable
     private FormBuilder: FormBuilder,
     private Servicios: ServiciosGenerales
     ) {}
@@ -57,6 +59,7 @@ export class VentanaEmergenteDet {
   }
 
 
+  // tslint:disable-next-line:use-life-cycle-interface
   ngOnInit() {
     this.filteredOptions = this.myControl.valueChanges
     .pipe(
