@@ -10,6 +10,7 @@ Class SalidaCabecera{
     public $id_salida;
     public $pecosa;
     public $id_sucursal;
+    public $sucursal;
     public $fecha;
     public $destino;
     public $id_tipo_movilidad;
@@ -24,8 +25,8 @@ Class SalidaCabecera{
 
     public function __construct($db){
         $this->conn = $db;
-        // include_once '../entities/transacciondetalle.php';
-        // $this->detalle = new TransaccionDetalle($db);
+        include_once 'salidadetalle.php';
+        $this->detalle = new SalidaDetalle($db);
     }
 
 
@@ -41,10 +42,9 @@ Class SalidaCabecera{
         $result->bindParam(4, $this->fecha_fin);
         $result->bindParam(5, $this->destino);
         $result->bindParam(6, $this->id_tipo_movilidad);
-        $result->bindParam(7, $this->documento);
-        $result->bindParam(8, $this->numero_pagina);
-        $result->bindParam(9, $this->total_pagina);
-        $result->bindParam(10, $this->orden);
+        $result->bindParam(7, $this->numero_pagina);
+        $result->bindParam(8, $this->total_pagina);
+        $result->bindParam(9, $this->orden);
 
         $result->execute();
         
@@ -57,22 +57,28 @@ Class SalidaCabecera{
 		{
 			extract($row);
             $contador=$contador+1;
-            $SDetalle=$this->detalle->readxcabecera($id);
+            $SGasto=$this->detalle->read_gasto($id);
+            $SMovilidad=$this->detalle->read_movilidad($id);
+            $SVendedor=$this->detalle->read_vendedor($id);
+            $SProducto=$this->detalle->read_producto($id);
             $salida_item = array (
                 "numero"=>$contador,
                 "id"=>$id,
-                "almacen"=>$almacen,                
-                "tipo"=>$tipo,
-                "referencia"=>$referencia,
-                "referente"=>$referente,
+                "pecosa"=>$pecosa,                
+                "sucursal"=>$sucursal,
                 "fecha"=>$fecha,
-                "documento"=>$documento,
-                "detalle"=>$TDetalle
+                "destino"=>$destino,
+                "tipo_movilidad"=>$tipo_movilidad,
+                "movilidad"=>$SMovilidad,
+                "gasto"=>$SGasto,
+                "productos"=>$SProducto,
+                "vendedor"=>$SVendedor,
+                "estado"=>$estado
             );
-            array_push($Cabecera_list["salidas"],$salida_item);
+            array_push($SCabecera_list["salidas"],$salida_item);
         }
 
-        return $TCabecera_list;
+        return $SCabecera_list;
     }
 
     // function contar(){
