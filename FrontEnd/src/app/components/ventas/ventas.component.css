@@ -61,22 +61,71 @@ mat-card{
 .box + .box {
 	margin-top: 2.5rem;
 }
-.row3col-numerocomprobante {
+.row4col-numerocomprobante {
     display: grid;
     width: 100%;
-    grid-template-columns: 15% 5% 25% 5% 30% 2% 18%;
+    grid-template-columns: 10% 2% 18% 2% 24% 2% 17%;
     margin-bottom: 5px;
+    margin-left : 5%
+  }
+
+  .row4col-pagos {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 22% 2% 24% 2% 23% 2% 10% 17%;
+    margin-bottom: 5px;
+    margin-left : 1%
+  }
+
+  
+.row3col-cliente {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 48% 2% 23% 2% 23%;
+    margin-bottom: 5px;
+    margin-left : 1%
   }
 .row2col-producto {
     display: grid;
     width: 60%;
     grid-template-columns: 45% 10% 45%;
     margin-bottom: 5px;
+    margin-left : 5%
+  }
+  .row2col-comentario {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 98%;
+    margin-bottom: 5px;
+    margin-left : 1%
+  }
+  .row2col-productoventa {
+    display: grid;
+    width: 60%;
+    grid-template-columns: 45% 10% 45%;
+    margin-bottom: 5px;
+    margin-left : 5%
+  }
+  .row5col-producto {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 48% 2% 24% 4% 7% 0% 1%;
+    margin-bottom: 5px;
+    margin-left : 1%
   }
   .button-row {
     display: flex;
     align-items: center;
     justify-content: space-around;
+  }
+  .full-width {
+    width: 100%;
+  }
+  .titulo {
+      display: flex;
+      justify-content: space-around;
+      align-content:space-between;
+      width: 50%;
   }
   
   .button-row button,
@@ -84,5 +133,8 @@ mat-card{
     margin-right: 8px;
   }
   table {
-    width: 60%;
+    width: 100%;
+  }
+  .rows4 {
+    width: 90%;
   }
