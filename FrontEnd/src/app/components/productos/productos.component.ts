@@ -39,9 +39,6 @@ export class ProductosComponent implements OnInit {
    this.ListadoProductos = new ProductoDataSource(this.Servicio);
    // tslint:disable-next-line:quotemark
    this.ListadoProductos.CargarProductos('', '', '', '', 1, 10, "descripcion", "asc");
-   this.ListadoProductos.TotalResultados.subscribe(res => {
-     this.TotalResultados = res;
-   });
  }
 
 // tslint:disable-next-line:use-life-cycle-interface
