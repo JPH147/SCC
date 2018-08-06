@@ -65,11 +65,41 @@ Class ProductoSerie{
 
     function readxId(){
 
-        $query ="call sp_listarproductoseriexId(?)";
+        $query = "CALL sp_listarproductoseriexproducto(?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->producto);
+
+        $result->execute();
+        
+        $producto_serie_list=array();
+        $producto_serie_list["producto_series"]=array();
+
+        $contador = 0;
+
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $contador=$contador+1;
+            $producto_serie_item = array (
+                "numero"=>$contador,
+                "producto"=>$prd_descripcion,
+                "serie"=>$ps_serie
+            );
+            array_push($producto_serie_list["producto_series"],$producto_serie_item);
+        }
+
+        return $producto_serie_list;
+    }
+
+    function readxproducto(){
+
+        $query ="call sp_listarproductoseriexproducto(?)";
         
         $result = $this->conn->prepare($query);
         
-        $result->bindParam(1, $this->id_producto_serie);
+        $result->bindParam(1, $this->id_producto);
         
         $result->execute();
     
@@ -78,7 +108,6 @@ Class ProductoSerie{
         $this->id_producto_serie=$row['id_producto_serie'];
         $this->id_producto=$row['id_producto'];
         $this->serie=$row['ps_serie'];
-        $this->estado=$row['ps_estado'];
     }
 
     /* Crear producto */

@@ -35,6 +35,7 @@ export class VentanaEmergenteProductos {
     this.ventana.close();
   }
 
+  // tslint:disable-next-line:use-life-cycle-interface
   ngOnInit() {
     /* Crear formulario */
     this.ProductosForm = this.FormBuilder.group({
@@ -54,13 +55,13 @@ export class VentanaEmergenteProductos {
       'descripcion': [null, [
         Validators.required
       ]],
-    })
+    });
 
     /*Relación de productos*/
     this.Servicios.ListarTipoProductos('', '').subscribe(res => {
       // tslint:disable-next-line:forin
       for (let i in res) {
-        this.Tipos.push(res[i])
+        this.Tipos.push(res[i]);
       }
     });
 
@@ -90,7 +91,7 @@ export class VentanaEmergenteProductos {
     }
 
   /* Se muestran los modelos cuando se selecciona una marca */
-  MarcaSeleccionada(event){
+  MarcaSeleccionada(event) {
     this.ListarModelos(event.value);
     this.ProductosForm.get('modelo').setValue('');
     this.ProductosForm.controls['modelo'].enable();
@@ -108,15 +109,15 @@ export class VentanaEmergenteProductos {
       this.ProductoServicios.Agregar(formulario.value.modelo, formulario.value.descripcion, formulario.value.precio).subscribe();
     }
       this.ProductosForm.reset();
-      this.ventana.close()
+      this.ventana.close();
   }
 
-  ListarMarcas(i){
+  ListarMarcas(i) {
     this.Servicios.ListarMarca(i, '').subscribe(res => {
       this.Marcas = [];
       // tslint:disable-next-line:forin
       for (let i in res) {
-        this.Marcas.push(res[i])
+        this.Marcas.push(res[i]);
       }
   })}
 

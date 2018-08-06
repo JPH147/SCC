@@ -88,7 +88,7 @@ export class ProductoService {
     // tslint:disable-next-line:prefer-const
     // tslint:disable-next-line:whitespace
     // tslint:disable-next-line:prefer-const
-    let params = 'id_producto='+ id + '&id_modelo= '+modelo+ '&prd_descripcion = '+descripcion+ '&prd_precio='+precio;
+    let params = 'id_producto=' + id + '&id_modelo= ' + modelo + '&prd_descripcion = ' + descripcion + '&prd_precio=' + precio;
     // tslint:disable-next-line:prefer-const
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     return this.http.post(this.url + 'producto/update.php', params, {headers: headers});

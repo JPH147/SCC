@@ -1,12 +1,13 @@
+
 import { StockService } from './stock.service';
 import {StockDataSource} from './stock.dataservice';
 import { FormControl } from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import {MatPaginator, MatSort} from '@angular/material';
+import {MatPaginator, MatSort, MatDialog} from '@angular/material';
 import {merge, Observable, of as observableOf, from, fromEvent} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap, delay, catchError, map, startWith, switchMap} from 'rxjs/operators';
-
+import { VentanaEmergenteStock } from './ventana-emergentestock/ventanaemergentestock';
 
 @Component({
   selector: 'app-stock',
@@ -16,7 +17,7 @@ import {debounceTime, distinctUntilChanged, tap, delay, catchError, map, startWi
 })
 export class StockComponent implements OnInit {
   Listadodata: StockDataSource;
-  displayedColumns: string[] = ['numero',  'almacen', 'tipo', 'marca', 'modelo', 'descripcion', 'unidad_medida', 'cantidad'];
+  displayedColumns: string[] = ['numero',  'almacen', 'tipo', 'marca', 'modelo', 'descripcion', 'unidad_medida', 'cantidad', 'opciones'];
 
   public TotalResultados = 0;
 
@@ -30,7 +31,8 @@ export class StockComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private Servicio: StockService
+    private Servicio: StockService,
+    public DialogoStock: MatDialog,
   ) { }
 
   ngOnInit() {
@@ -80,10 +82,20 @@ export class StockComponent implements OnInit {
     this.paginator.pageIndex + 1,
     this.paginator.pageSize,
     this.sort.active + ' ' + this.sort.direction
-    //'descripcion asc'
+    // 'descripcion asc'
   );
   }
 
+DetalleStock(_descripcion) {
+  const VentanaDetalleStock = this.DialogoStock.open(VentanaEmergenteStock, {
+    width: '600px'
+  });
+
+  VentanaDetalleStock.afterClosed().subscribe(res => {
+    this.CargarData();
+  });
+}
 
 }
+
 /** An example database that the data source uses to retrieve data for the table. */
