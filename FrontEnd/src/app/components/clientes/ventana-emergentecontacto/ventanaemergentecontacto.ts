@@ -24,6 +24,7 @@ export class VentanaEmergenteContacto {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
     public ventana: MatDialogRef<VentanaEmergenteContacto>,
+    // tslint:disable-next-line:no-shadowed-variable
     private FormBuilder: FormBuilder,
     private ServicioTelefono: ServiciosTelefonos,
   ) {
@@ -41,6 +42,7 @@ export class VentanaEmergenteContacto {
     console.log(this.items);
  }
 
+  // tslint:disable-next-line:use-life-cycle-interface
   ngOnInit() {
     this.TelefonosForm = this.FormBuilder.group({
       'telefono': [null, [

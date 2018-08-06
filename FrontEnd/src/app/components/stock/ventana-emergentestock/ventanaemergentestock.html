@@ -3,11 +3,15 @@
     <mat-card-header>
       <mat-card-title> Detalle Serie Productos Stock</mat-card-title>
     </mat-card-header>
-    <ul>
-      <li>Serie1</li>
-      <li>Serie2</li>
-      <li>Serie3</li>
-      <li>Serie4</li>
-    </ul>
+    <mat-list>
+      <mat-list-item *ngFor="let serie of LstSerie">
+         <!--<p matLine>{{serie.numero}}</p>-->
+         <p matline> {{serie.producto}} </p>
+         <p matline> {{serie.serie}} </p>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+   </mat-list>
+
+
 
   </mat-card>

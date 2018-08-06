@@ -31,7 +31,7 @@ export class StockService {
       .set('prpagina', pagina_inicio.toString())
       .set('prtotalpagina', total_pagina.toString())
       .set('orden', orden)
-    }).pipe(map(res => { console.log(res);
+    }).pipe(map(res => {
       if (res['codigo'] === 0) {
         return res;
       } else {
