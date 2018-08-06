@@ -87,7 +87,8 @@ export class StockComponent implements OnInit {
   }
 
 DetalleStock(id) {
-  const VentanaDetalleStock = this.DialogoStock.open(VentanaEmergenteStock, {
+  console.log(id)
+/*  const VentanaDetalleStock = this.DialogoStock.open(VentanaEmergenteStock, {
     width: '600px',
     data: id
   });
@@ -96,7 +97,7 @@ DetalleStock(id) {
 
   VentanaDetalleStock.afterClosed().subscribe(res => {
     this.CargarData();
-  });
+  });*/
 }
 
 }

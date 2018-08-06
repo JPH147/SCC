@@ -1,17 +1,19 @@
 <mat-tab-group>
     <mat-tab label="Telefonos">
+        <button mat-mini-fab color="primary" class="boton" (click)="add()"><mat-icon>add</mat-icon></button>
       <mat-card>
           <form [formGroup]="TelefonosForm" (ngSubmit)="Guardar(TelefonosForm)">
+
             <mat-card-content>
-              <mat-grid-list cols="4" rowHeight="80px">
-                  <mat-grid-tile>
+              <mat-grid-list cols=4 rowHeight="80px" *ngFor="let telefono of items;">
+                  <mat-grid-tile colspan="1">
                       <mat-form-field class="input-ventana">
                         <input matInput placeholder="Número de Teléfono"  formControlName="telefono" maxlength="9">
-                        <!--<mat-error *ngIf="ClientesForm.get('dni').invalid">Debes escribir sólo números</mat-error>-->
+                        <mat-error *ngIf="TelefonosForm.get('telefono').invalid">Debes escribir sólo números</mat-error>
                       </mat-form-field>
                     </mat-grid-tile>
 
-                <mat-grid-tile>
+                <mat-grid-tile colspan="1">
                   <mat-form-field class="input-ventana">
                     <mat-select placeholder='Selecciona Tipo' formControlName="tipo" >
                         <mat-option *ngFor="let tipo of Tipos" [value]="tipo.id">
@@ -21,7 +23,7 @@
                   </mat-form-field>
                 </mat-grid-tile>
 
-                <mat-grid-tile>
+                <mat-grid-tile colspan="1">
                     <mat-form-field class="input-ventana">
                       <mat-select placeholder='Selecciona Relevancia' formControlName="relevancia" >
                           <mat-option *ngFor="let relevancia of Relevancias" [value]="relevancia.id">
@@ -29,23 +31,25 @@
                           </mat-option>
                       </mat-select>
                     </mat-form-field>
-                  </mat-grid-tile>
+                  </mat-grid-tile> 
 
-                  <mat-grid-tile>
+                  <mat-grid-tile colspan="1">
                       <mat-form-field class="input-ventana">
                         <input matInput placeholder="Ingresa Observacion" formControlName="observacion">
                       </mat-form-field>
                     </mat-grid-tile>
-        
               </mat-grid-list>
             </mat-card-content>
+
+
             <mat-card-actions>
               <mat-grid-list cols=1 rowHeight="40px">
                 <mat-grid-tile>
-                  <button type="submit" mat-raised-button color="primary">Grabar</button>
+                  <button type="submit" mat-raised-button [disabled]="TelefonosForm.invalid" color="primary">Grabar</button>
                 </mat-grid-tile>
               </mat-grid-list>
             </mat-card-actions>
+
           </form>
         </mat-card>
     </mat-tab>

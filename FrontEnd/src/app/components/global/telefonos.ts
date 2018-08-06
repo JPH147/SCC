@@ -7,34 +7,36 @@ import {URL} from './url';
 
 @Injectable()
 
-export class ServiciosTelefonos{
-	public url:string = URL.url;
+export class ServiciosTelefonos {
+ public url: string = URL.url;
 
-	constructor(
-		private http:HttpClient,
-	){}
+  constructor(
+        private http: HttpClient,
+  ) {}
 
-	CrearTelefono(
-        id_cliente:number,
-        tlf_numero:string,
-        tlf_observacion:string,
-        id_tipo:number,
-        tlf_relevancia:number
-	):Observable<any>{
+  CrearTelefono(
+        id_cliente: number,
+        tlf_numero: string,
+        tlf_observacion: string,
+        id_tipo: number,
+        tlf_relevancia: number
+): Observable<any> {
+        // tslint:disable-next-line:prefer-const
         let params = 'id_cliente=' + id_cliente + '&tlf_numero=' + tlf_numero
         + '&tlf_observacion=' + tlf_observacion + '&id_tipo=' + id_tipo
         + '&tlf_relevancia=' + tlf_relevancia;
+        // tslint:disable-next-line:prefer-const
         let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
         console.log(params);
-        return this.http.post(this.url+'clientetelefono/create.php',params,{headers:headers});
-	}
+        return this.http.post(this.url + 'clientetelefono/create.php', params, {headers: headers});
+  }
 }
 
-export interface Telefono{
-	numero:number,
-	id:number,
-    nrotelefono:string,
-    observacion: string,
-    id_tipo:number,
-    tlf_relevancia:number
+export interface Telefono {
+    numero: number;
+    id: number;
+    nrotelefono: string;
+    observacion: string;
+    id_tipo: number;
+    tlf_relevancia: number;
 }
