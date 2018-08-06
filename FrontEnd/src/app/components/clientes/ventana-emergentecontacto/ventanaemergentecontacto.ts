@@ -1,4 +1,4 @@
-import { Component,Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {FormControl, FormGroup, FormBuilder,FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
@@ -23,7 +23,7 @@ export class VentanaEmergenteContacto {
     public ventana: MatDialogRef<VentanaEmergenteContacto>,
     private FormBuilder: FormBuilder,
     private ServicioTelefono: ServiciosTelefonos,
-    
+
   ) {}
 
   onNoClick(): void {
@@ -47,7 +47,7 @@ export class VentanaEmergenteContacto {
   });
   this.ListarTipos();
   this.ListarRelevancia();
-  
+
 }
   ListarTipos()
     {
@@ -69,7 +69,7 @@ export class VentanaEmergenteContacto {
   Guardar(formulario) {
     if (this.data!=0) {
       console.log(this.data);
-      this.ServicioTelefono.CrearTelefono(this.data,formulario.value.telefono , 
+      this.ServicioTelefono.CrearTelefono(this.data,formulario.value.telefono ,
         formulario.value.observacion, formulario.value.tipo,
         formulario.value.relevancia).subscribe(res => console.log(res));
     }
