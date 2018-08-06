@@ -1,0 +1,8 @@
+.card-telefono{
+    display: grid;
+/*width: 95%;
+grid-template-columns:22% 4% 22% 4% 22% 4% 22%;*/
+}
+.input-ventana{
+    width: 90%;
+}

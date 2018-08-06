@@ -1,6 +1,6 @@
-import { Component,Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-import {FormControl, FormGroup, FormBuilder,FormGroupDirective, NgForm, Validators} from '@angular/forms';
+import {FormControl, FormGroup, FormBuilder, FormArray , FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {ServiciosTelefonos} from '../../global/telefonos';
 import { NgControl } from '@angular/forms';
@@ -9,7 +9,7 @@ import { NgControl } from '@angular/forms';
   selector: 'app-ventanaemergentecontacto',
   templateUrl: './ventanaemergentecontacto.html',
   styleUrls: ['./ventanaemergentecontacto.css'],
-  providers:[ServiciosTelefonos]
+  providers: [ServiciosTelefonos]
 })
 
 // tslint:disable-next-line:component-class-suffix
@@ -17,25 +17,37 @@ export class VentanaEmergenteContacto {
   public TelefonosForm: FormGroup;
   public Tipos: TipoTelefono[];
   public Relevancias: RelevanciaTelefono[];
+  public contador: number;
+  public ListTelefonos: any;
+  public items: any[] = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
     public ventana: MatDialogRef<VentanaEmergenteContacto>,
     private FormBuilder: FormBuilder,
     private ServicioTelefono: ServiciosTelefonos,
-    
-  ) {}
+  ) {
+    this.contador = 1;
+    this.items = [{telefono: '', tipo: 1 , relevancia: 1, observacion: ''} ];
+
+  }
 
   onNoClick(): void {
     this.ventana.close();
   }
 
+  add() {
+    this.items.push(this.createItem());
+    console.log(this.items);
+ }
+
   ngOnInit() {
     this.TelefonosForm = this.FormBuilder.group({
-      'telefono': [null,[
-        Validators.required
+      'telefono': [null, [
+        Validators.required,
+        Validators.pattern('[0-9- ]+')
       ]],
-      'tipo': [null,[
+      'tipo': [null, [
         Validators.required
       ]],
       'relevancia': [null, [
@@ -43,38 +55,51 @@ export class VentanaEmergenteContacto {
       ]],
       'observacion': [null, [
         Validators.required
-      ]]
+      ]],
+      items : this.FormBuilder.array([this.createItem()])
   });
   this.ListarTipos();
   this.ListarRelevancia();
-  
 }
-  ListarTipos()
-    {
+createItem(): FormGroup {
+  return this.FormBuilder.group({
+    telefono: '',
+    tipo: 2 ,
+    relevancia: 1,
+    observacion: ''
+  });
+}
+
+ /* addItem(): void {
+    //this.items = this.TelefonosForm.get('items') as FormArray;
+    this.items.push(this.createItem());
+  }*/
+
+  ListarTipos() {
       this.Tipos = [
         {id: 1, viewValue: 'Celular'},
         {id: 2, viewValue: 'Casa'},
         {id: 3, viewValue: 'Trabajo'},
         {id: 4, viewValue: 'Otro'}];
-    }
-    ListarRelevancia()
-    {
+  }
+  ListarRelevancia() {
       this.Relevancias = [
-        {id: 0, viewValue: 'Inactivo'},
         {id: 1, viewValue: 'Principal'},
-        {id: 2, viewValue: 'Secundario'}
+        {id: 2, viewValue: 'Secundario'},
+        {id: 0, viewValue: 'Inactivo'},
       ];
     }
 
   Guardar(formulario) {
-    if (this.data!=0) {
+    if (this.data !== 0) {
       console.log(this.data);
-      this.ServicioTelefono.CrearTelefono(this.data,formulario.value.telefono , 
+      this.ServicioTelefono.CrearTelefono(this.data, formulario.value.telefono ,
         formulario.value.observacion, formulario.value.tipo,
         formulario.value.relevancia).subscribe(res => console.log(res));
     }
       this.ventana.close();
   }
+
 }
 
 export interface TipoTelefono {

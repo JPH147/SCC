@@ -31,9 +31,7 @@ export class ventanaRetorno implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
-    public ventana: MatDialogRef<ventanaRetorno>,
-)
- {
+    public ventana: MatDialogRef<ventanaRetorno>) {
   this.contador = 1;
   this.serietalonarios = [{numero: this.contador, serie: '', inicio: '', fin: ''} ];
  }

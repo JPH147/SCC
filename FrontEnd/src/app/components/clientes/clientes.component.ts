@@ -9,7 +9,7 @@ import {fromEvent} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
 import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
 import { FileUpload } from './file-upload/fileupload';
-import { VentanaEmergenteContacto} from './ventana-emergentecontacto/ventanaemergentecontacto'
+import { VentanaEmergenteContacto} from './ventana-emergentecontacto/ventanaemergentecontacto';
 @Component({
   selector: 'app-clientes',
   templateUrl: './clientes.component.html',
