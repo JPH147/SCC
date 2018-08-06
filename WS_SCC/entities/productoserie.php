@@ -103,11 +103,24 @@ Class ProductoSerie{
         
         $result->execute();
     
-        $row = $result->fetch(PDO::FETCH_ASSOC);
-        
-        $this->id_producto_serie=$row['id_producto_serie'];
-        $this->id_producto=$row['id_producto'];
-        $this->serie=$row['ps_serie'];
+        $producto_serie_list=array();
+        $producto_serie_list["producto_series"]=array();
+
+        $contador = 0;
+
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $contador=$contador+1;
+            $producto_serie_item = array (
+                "numero"=>$contador,
+                "producto"=>$id_producto,
+                "serie"=>$ps_serie
+            );
+            array_push($producto_serie_list["producto_series"],$producto_serie_item);
+        }
+
+        return $producto_serie_list;
     }
 
     /* Crear producto */

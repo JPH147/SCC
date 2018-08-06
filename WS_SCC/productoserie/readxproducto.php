@@ -16,9 +16,9 @@
     try{
         $productoserie = new ProductoSerie($db);
 
-        $productoserie->producto = !empty($_GET['prid']) ? $_GET['prid'] :die();
+        $productoserie->id_producto = !empty($_GET['prid']) ? $_GET['prid'] :die();
 
-        $producto_serie_list = $productoserie->read();
+        $producto_serie_list = $productoserie->readxproducto();
 
         if (count(array_filter($producto_serie_list))>0)
         { 
