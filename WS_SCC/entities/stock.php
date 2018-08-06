@@ -50,6 +50,7 @@ Class Stock{
                 "tipo"=>$tipo,
                 "marca"=>$marca,
                 "modelo"=>$modelo,
+                "id_producto"=>$id_producto,
                 "descripcion"=>$descripcion,
                 "unidad_medida"=>$unidad_medida,
                 "cantidad"=>$cantidad
