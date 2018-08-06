@@ -14,20 +14,19 @@
     $db = $database->getConnection();
 
     try{
-        $proveedor = new proveedor($db);
+        $proveedor = new Proveedor($db);
 
         $proveedor->tipo_documento = !empty($_GET['prtipodocumento']) ? $_GET['prtipodocumento'] : null;
-        $proveedor->prv_documento = !empty($_GET['prdocumento']) ? $_GET['prdocumento'] : null;
-        $proveedor->prv_nombre = !empty($_GET['prnombre']) ? $_GET['prnombre'] : null;
-        $proveedor->numero_pagina = !empty($_GET['prpagina']) ? $_GET['prpagina'] : null;
-        $proveedor->total_pagina = !empty($_GET['prtotalpagina']) ? $_GET['prtotalpagina'] : null;
+        $proveedor->prv_documento = !empty($_GET['prdocumento']) ? $_GET['prdocumento'] : '';
+        $proveedor->prv_nombre = !empty($_GET['prnombre']) ? $_GET['prnombre'] : '';
+        $proveedor->numero_pagina = !empty($_GET['prpagina']) ? $_GET['prpagina'] : 1;
+        $proveedor->total_pagina = !empty($_GET['prtotalpagina']) ? $_GET['prtotalpagina'] : 20;
 
         $proveedor_list = $proveedor->read();
-        $proveedor_contar = $proveedor->contar();
 
         if (count(array_filter($proveedor_list))>0)
         { 
-            print_json("0000", $proveedor_contar, $proveedor_list);
+            print_json("0000", 1, $proveedor_list);
         }
         else
         { 
