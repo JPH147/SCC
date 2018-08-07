@@ -1,7 +1,7 @@
 import { ventanaseries } from './ventana-series/ventanaseries';
 import { DialogData } from '../salida-vendedores/salida-vendedores.component';
 import { Component, OnInit } from '@angular/core';
-import {FormControl} from '@angular/forms';
+import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
 import {SelectionModel} from '@angular/cdk/collections';
@@ -19,11 +19,17 @@ export interface Food {
 })
 
   export class IngresoProductosComponent implements OnInit {
-
+    public IngProdCabeceraForm: FormGroup;
     public articulos: Array <articulo>;
     public contador: number;
     public almacenes: Array<any>;
     public seriventana: string;
+    public almacen: string;
+    public tipoingreso: string;      // Tipo de Ingreso Almacen
+    public docreferencia: string; // documento referencia de ingreso almncen
+    public proveedor: string;
+    public fecingreso: Date;      // fecha de ingreso a almcen
+
 
     selected = 'option2';
     myControl = new FormControl();
@@ -38,12 +44,20 @@ export interface Food {
       {value: 'tacos-2', viewValue: 'Almacen Tres'}
     ];
 
-    constructor(public DialogoSerie: MatDialog) {
-
-     }
+    constructor(public DialogoSerie: MatDialog,
+    // tslint:disable-next-line:no-shadowed-variable
+    private FormBuilder: FormBuilder,
+    ) {}
 
     ngOnInit() {
-        this.filteredOptions = this.myControl.valueChanges
+      this.IngProdCabeceraForm = this.FormBuilder.group({
+          'almacen': [null, [Validators.required] ],
+          'tipoingreso': [null, [Validators.required]],
+
+
+      });
+
+      this.filteredOptions = this.myControl.valueChanges
         .pipe(
           startWith(''),
           map(value => this._filter(value))

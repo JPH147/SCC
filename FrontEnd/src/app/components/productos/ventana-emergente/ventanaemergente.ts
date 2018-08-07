@@ -10,7 +10,7 @@ import {ProductoService} from '../productos.service';
   selector: 'app-ventanaemergente',
   templateUrl: './ventanaemergente.html',
   styleUrls: ['./ventanaemergente.css'],
-  providers:[ServiciosGenerales, ProductoService]
+  providers: [ServiciosGenerales, ProductoService]
 })
 
 // tslint:disable-next-line:component-class-suffix
@@ -126,9 +126,9 @@ export class VentanaEmergenteProductos {
       this.Modelos = [];
       // tslint:disable-next-line:forin
       for (let i in res) {
-        this.Modelos.push( res[i] )
+        this.Modelos.push( res[i] );
       }
-   })
+   });
 
   }
 }

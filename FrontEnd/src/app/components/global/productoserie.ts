@@ -22,7 +22,7 @@ export class ServiciosProductoSerie {
           .set('prid', id)
       })
       .pipe (map(res => {
-        if (res['codigo'] == 0) {
+        if (res['codigo'] === 0) {
           console.log(res);
           return res['data'].producto_series;
         } else {
