@@ -27,8 +27,9 @@ Class Almacen{
         {
             extract($row);
             $almacen_item = array (
-                "alm_nombre"=>$row['alm_nombre'],
-                "alm_descripcion"=>$row['alm_descripcion']
+                "id"=>$row['idalmacen'],
+                "nombre"=>$row['alm_nombre'],
+                "descripcion"=>$row['alm_descripcion']
             );
 
                 array_push($almacen_list["almacenes"],$almacen_item);

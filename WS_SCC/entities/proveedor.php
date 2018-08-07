@@ -1,45 +1,54 @@
 <?php
-Class Producto{
+Class Proveedor{
 
 	private $conn;
 
-	private $idproveedor;
-	private $tipo_documento;
-	private $prv_documento;
-	private $prv_nombre;
-	private $prv_representante_legal;
-	private $prv_observacion;
-  private $total_pagina;
-  private $total_resultado;
+	public $idproveedor;
+	public $tipo_documento;
+	public $prv_documento;
+	public $prv_nombre;
+	public $prv_representante_legal;
+	public $prv_observacion;
+  public $total_pagina;
+  public $total_resultado;
+
+    public function __construct($db){
+        $this->conn = $db;
+    }
 
   function read(){
+
   	$query = "CALL sp_listarproveedor(?,?,?,?,?)";
+
   	$result = $this->conn->prepare($query);
-  	$result->bindParam(1, $this->tipo_documento);
+  	
+    $result->bindParam(1, $this->tipo_documento);
   	$result->bindParam(2, $this->prv_documento);
   	$result->bindParam(3, $this->prv_nombre);
-    $result->bindParam(5, $this->numero_pagina);
-    $result->bindParam(6, $this->total_pagina);
+    $result->bindParam(4, $this->numero_pagina);
+    $result->bindParam(5, $this->total_pagina);
+
   	$result->execute();
     	
-    $producto_list=array();
-    $producto_list["productos"]=array();
-    $contador = $this->total_pagina*($this->numero_pagina);
+    $proveedor=array();
+    $proveedor["proveedor"]=array();
+    $contador = $this->total_pagina*($this->numero_pagina-1);
+
     while($row = $result->fetch(PDO::FETCH_ASSOC))
     {
     	extract($row);
     	$contador=$contador+1;
-    	$producto_item = array (
+    	$proveedor_item = array (
     	  "numero"=>$contador,
     	  "id"=>$idproveedor,
-    	  "tip_documento"=>$tipo_documento,
+    	  "tipo_documento"=>$tipo_documento,
     	  "documento"=>$prv_documento,
     	  "nombre"=>$prv_nombre,
     	  "representante_legal"=>$prv_representante_legal,
     	  "observacion"=>$prv_observacion,
     	);
-    	array_push($producto_list["productos"],$producto_item);
+    	array_push($proveedor["proveedor"],$proveedor_item);
     }
-  	return $producto_list;
+  	return $proveedor;
   }
 }
