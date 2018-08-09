@@ -73,9 +73,9 @@
       </mat-form-field>
       <a></a>
       <mat-form-field>
-         <input matInput [matDatepicker]="picker1" placeholder="Mes y Año de Pago">
-         <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-         <mat-datepicker #picker1></mat-datepicker>
+         <input matInput [matDatepicker]="InputFechaPago" placeholder="Mes y Año de Pago">
+         <mat-datepicker-toggle matSuffix [for]="InputFechaPago"></mat-datepicker-toggle>
+         <mat-datepicker #InputFechaPago></mat-datepicker>
       </mat-form-field>
    </div>
    <div class="row4col-pagos">
@@ -90,15 +90,15 @@
       </mat-form-field>
       <p></p>
       <mat-form-field>
-         <input matInput placeholder="Monto Total">
+         <input matInput placeholder="Monto Total" #InputMontoTotal>
       </mat-form-field>
       <p></p>
       <mat-form-field>
-         <input matInput placeholder="Cuotas">
+         <input matInput placeholder="Cuotas" #InputCuota>
       </mat-form-field>
       <a></a>
       <div class="button-row">
-         <button mat-raised-button color="primary">GENERAR</button>
+         <button mat-raised-button color="primary" (click)="GeneraCronograma()">GENERAR</button>
       </div>
       <div class="button-row">
          <button mat-raised-button color="primary" class="agregar" (click)="Agregar()">ADJUNTAR</button>
@@ -128,7 +128,7 @@
    </div>
 </mat-card>
 <mat-card>
-   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+   <table mat-table [dataSource]="ListadoCronograma" class="mat-elevation-z8">
       <!-- Name Column -->
       <ng-container matColumnDef="numero">
          <th mat-header-cell *matHeaderCellDef> No. </th>

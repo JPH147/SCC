@@ -13,8 +13,8 @@ export class VentaService {
   constructor(private http: HttpClient) {}
 
   Listado(
-    fechainicio: Date,
-    monto: number,
+    fechainicio: string,
+    monto: any,
     numerocuotas: number
   ): Observable<Venta[]>
 { return this.http.get(this.url + 'cronograma/create.php?fechainicio='
@@ -31,6 +31,6 @@ export class VentaService {
 
 export interface Venta {
   numero: number;
-  fechapago: Date;
+  fechapago: string;
   monto: number;
 }
