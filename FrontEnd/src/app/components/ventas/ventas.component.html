@@ -73,10 +73,23 @@
       </mat-form-field>
       <a></a>
       <mat-form-field>
-         <input matInput [matDatepicker]="InputFechaPago" placeholder="Mes y Año de Pago">
+         <input matInput [matDatepicker]="InputFechaPago" placeholder="Mes y Año de Pago" [(ngModel)]="myDate"  [formControl]="FechaPago">
          <mat-datepicker-toggle matSuffix [for]="InputFechaPago"></mat-datepicker-toggle>
          <mat-datepicker #InputFechaPago></mat-datepicker>
       </mat-form-field>
+
+      <!--<mat-form-field>
+        <input matInput [matDatepicker]="InputFechaPago" placeholder="Mes y Año de Pago">
+        <mat-datepicker-toggle matSuffix [for]="InputFechaPago"></mat-datepicker-toggle>
+        <mat-datepicker #InputFechaPago
+                        startView="multi-year"
+                        (yearSelected)="chosenYearHandler($event)"
+                        (monthSelected)="chosenMonthHandler($event, dp)"
+                        panelClass="example-month-picker">
+        </mat-datepicker>
+      </mat-form-field>-->
+
+
    </div>
    <div class="row4col-pagos">
       <mat-form-field>

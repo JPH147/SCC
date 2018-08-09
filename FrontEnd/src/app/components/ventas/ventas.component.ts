@@ -4,6 +4,9 @@ import {FormControl, FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {VentaService} from './ventas.service';
 import {VentaDataSource} from './ventas.dataservice';
 import { MatCard, MatInputModule, MatButton, MatDatepicker, MatTableModule, MatIcon, MatDialog } from '@angular/material';
+import {ServiciosTipoDocumento,TipoDocumento} from '../global/tipodocumento';
+import {ServiciosTipoPago, TipoPago} from '../global/tipopago';
+
 
 export interface PeriodicElement {
   numero: number;
