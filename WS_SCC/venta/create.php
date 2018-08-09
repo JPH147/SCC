@@ -17,6 +17,7 @@
         $venta = new Venta($db);
         $data = json_decode(file_get_contents('php://input'), true);
 
+        
         if (!empty(trim($_POST["pvnt_serie"]))
          && !empty(trim($_POST["pvnt_numerodocumento"]))
          && ($_POST["pid_cliente"])!=null && ($_POST["pvnt_fecha"])!=null
@@ -31,13 +32,13 @@
             $venta->id_cliente = $_POST["pid_cliente"];
             $venta->vnt_fecha = $_POST["pvnt_fecha"];
             $venta->id_vendedor = $_POST["pid_vendedor"];
-            $venta->vnt_contrato_pdf = "prueba";
-            $venta->vnt_dni_pdf = "prueba";
-            $venta->vnt_cip_pdf = "prueba";
-            $venta->vnt_planilla_pdf = "prueba";
-            $venta->vnt_letra_pdf = "prueba";
-            $venta->vnt_voucher_pdf = "prueba";
-            $venta->vnt_autorizacion_pdf = "prueba";
+            $venta->vnt_contrato_pdf = "-";
+            $venta->vnt_dni_pdf = "-";
+            $venta->vnt_cip_pdf = "-";
+            $venta->vnt_planilla_pdf = "-";
+            $venta->vnt_letra_pdf = "-";
+            $venta->vnt_voucher_pdf = "-";
+            $venta->vnt_autorizacion_pdf = "-";
             $venta->vnt_fecha_inicio = $_POST["pvnt_fecha_inicio"];
             $venta->vnt_inicial = $_POST["pvnt_inicial"];
             $venta->vnt_numero_couta = $_POST["pvnt_numero_couta"];
@@ -47,6 +48,8 @@
             $venta->vnt_tipoventa = $_POST["pvnt_tipoventa"];
             $venta->id_tipoventa_referencia = $_POST["pid_tipoventa_referencia"];
             $venta->vnt_estado = 1;
+
+            print_r($venta);
 
             if($venta->create())
             {

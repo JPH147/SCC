@@ -36,10 +36,13 @@ Class Venta{
         $query = "CALL sp_crearventa(:pvnt_serie, :pvnt_numerodocumento,:pid_cliente,
         :pvnt_fecha,:pid_vendedor,:pvnt_contrato_pdf,:pvnt_dni_pdf,:pvnt_cip_pdf,:pvnt_planilla_pdf,
         :pvnt_letra_pdf,:pvnt_voucher_pdf,:pvnt_autorizacion_pdf,:pvnt_fecha_inicio,:pvnt_inicial,
-        :pvnt_inicial, :pvnt_numero_couta,:pvnt_cuotas,:pid_tipopago,:pvnt_total,:pvnt_tipoventa,
+        :pvnt_numero_couta,:pvnt_cuotas,:pid_tipopago,:pvnt_total,:pvnt_tipoventa,
         :pid_tipoventa_referencia,:pvnt_estado)";
 
+        
         $result = $this->conn->prepare($query);
+
+        
 
         $result->bindParam(":pvnt_serie", $this->vnt_serie);
         $result->bindParam(":pvnt_numerodocumento", $this->vnt_numerodocumento);
@@ -66,7 +69,7 @@ Class Venta{
         $this->vnt_serie=htmlspecialchars(strip_tags($this->vnt_serie));
         $this->vnt_numerodocumento=htmlspecialchars(strip_tags($this->vnt_numerodocumento));
         $this->id_cliente=htmlspecialchars(strip_tags($this->id_cliente));
-        $this->vnt_fecha=htmlspecialchars(strip_tags($this->vnt_fecha));
+        $this->vnt_fecha=$this->vnt_fecha;
         $this->id_vendedor=htmlspecialchars(strip_tags($this->id_vendedor));
         $this->vnt_contrato_pdf=htmlspecialchars(strip_tags($this->vnt_contrato_pdf));
         $this->vnt_dni_pdf=htmlspecialchars(strip_tags($this->vnt_dni_pdf));
@@ -75,7 +78,7 @@ Class Venta{
         $this->vnt_letra_pdf=htmlspecialchars(strip_tags($this->vnt_letra_pdf));
         $this->vnt_voucher_pdf=htmlspecialchars(strip_tags($this->vnt_voucher_pdf));
         $this->vnt_autorizacion_pdf=htmlspecialchars(strip_tags($this->vnt_autorizacion_pdf));
-        $this->vnt_fecha_inicio=htmlspecialchars(strip_tags($this->vnt_fecha_inicio));
+        $this->vnt_fecha_inicio=$this->vnt_fecha_inicio;
         $this->vnt_inicial=htmlspecialchars(strip_tags($this->vnt_inicial));
         $this->vnt_numero_couta=htmlspecialchars(strip_tags($this->vnt_numero_couta));
         $this->vnt_cuotas=htmlspecialchars(strip_tags($this->vnt_cuotas));
@@ -83,13 +86,13 @@ Class Venta{
         $this->vnt_total=htmlspecialchars(strip_tags($this->vnt_total));
         $this->vnt_tipoventa=htmlspecialchars(strip_tags($this->vnt_tipoventa));
         $this->id_tipoventa_referencia=htmlspecialchars(strip_tags($this->id_tipoventa_referencia));
-        $this->vnt_estado=htmlspecialchars(strip_tags($this->vnt_estado));;
+        $this->vnt_estado=htmlspecialchars(strip_tags($this->vnt_estado));
 
         if($result->execute())
         {
             return true;
         }
-        
+        print_r($result);
         return false;
     }
 
