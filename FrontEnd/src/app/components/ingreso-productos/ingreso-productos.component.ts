@@ -1,34 +1,41 @@
+
+import { ServiciosGenerales, Almacen } from './../global/servicios';
 import { ventanaseries } from './ventana-series/ventanaseries';
 import { DialogData } from '../salida-vendedores/salida-vendedores.component';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {Observable} from 'rxjs';
-import {map, startWith} from 'rxjs/operators';
+import { map, startWith, subscribeOn } from 'rxjs/operators';
 import {SelectionModel} from '@angular/cdk/collections';
 import {MatTableDataSource} from '@angular/material';
 import { MatDialog } from '@angular/material';
+import { eventNames } from 'cluster';
 
 export interface Food {
   value: string;
   viewValue: string;
 }
+
 @Component({
   selector: 'app-ingreso-productos',
   templateUrl: './ingreso-productos.component.html',
   styleUrls: ['./ingreso-productos.component.css'],
+  providers: [ServiciosGenerales]
 })
 
   export class IngresoProductosComponent implements OnInit {
-    public IngProdCabeceraForm: FormGroup;
+    public IngresoProductoForm: FormGroup;
     public articulos: Array <articulo>;
     public contador: number;
-    public almacenes: Array<any>;
+    public almacenes: Array<any> = [];
+    public TipoIngresos: Array<any> = [];
     public seriventana: string;
-    public almacen: string;
-    public tipoingreso: string;      // Tipo de Ingreso Almacen
-    public docreferencia: string; // documento referencia de ingreso almncen
+   //  public Almacenes: Almacen [] = [];
+    public tipoIngreso: string;      // Tipo de Ingreso Almacen
+    public docReferencia: string; // documento referencia de ingreso almncen
     public proveedor: string;
-    public fecingreso: Date;      // fecha de ingreso a almcen
+    public fechaIngreso: Date;      // fecha de ingreso a almcen
+    public  data;
 
 
     selected = 'option2';
@@ -37,52 +44,64 @@ export interface Food {
     filteredOptions: Observable<string[]>;
     displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
 
-    selection = new SelectionModel<PeriodicElement>(true, []);
-    foods: Food[] = [
-      {value: 'steak-0', viewValue: 'Almacen Principal'},
-      {value: 'pizza-1', viewValue: 'Almacen Dos'},
-      {value: 'tacos-2', viewValue: 'Almacen Tres'}
-    ];
-
     constructor(public DialogoSerie: MatDialog,
     // tslint:disable-next-line:no-shadowed-variable
     private FormBuilder: FormBuilder,
+   /* public data,*/
+    private Servicios: ServiciosGenerales,
     ) {}
 
     ngOnInit() {
-      this.IngProdCabeceraForm = this.FormBuilder.group({
+
+      this.ListarAlmacen();
+      this.ListarTransaccionTipo();
+
+      this.IngresoProductoForm = this.FormBuilder.group({
           'almacen': [null, [Validators.required] ],
-          'tipoingreso': [null, [Validators.required]],
-
-
+          'tipoIngreso': [null, [Validators.required]],
+          'docReferencia': [null, [Validators.required]],
+          'proveedor': [null, [Validators.required]],
+          'fecingreso': [null, [Validators.required]],
       });
-
-      this.filteredOptions = this.myControl.valueChanges
-        .pipe(
-          startWith(''),
-          map(value => this._filter(value))
-        );
-
+/*
+      this.Servicios.ListarAlmacen().subscribe(res => {
+        // tslint:disable-next-line:forin
+       for (let i in res) {
+         this.Almacen.push(res [i]);
+       }
+     });
+*/
       this.contador = 1;
       this.articulos = [
         {numero: this.contador, nombre: '', cantidad: null, precio: null}
       ];
 
-  }
-
-    private _filter(value: string): string[] {
-        const filterValue = value.toLowerCase();
-
-        return this.options.filter(option => option.toLowerCase().includes(filterValue));
-    }
-    isAllSelected() {
 
     }
 
-/** Selects all rows if they are not all selected; otherwise clear selection. */
-    masterToggle() {
+    ListarTransaccionTipo() {
+      this.Servicios.ListarTransaccionTipo().subscribe( res => {
+        this.TipoIngresos = [];
+        // tslint:disable-next-line:forin
+        for (let i in res) {
+            this.TipoIngresos.push(res[i]);
 
-  }
+        }
+      });
+    }
+
+
+    ListarAlmacen() {
+      this.Servicios.ListarAlmacen().subscribe( res => {
+        this.almacenes = [];
+        // tslint:disable-next-line:forin
+        for ( let i in res) {
+          this.almacenes.push(res [i]);
+        }
+
+      });
+
+    }
 
   agregar() {
     this.contador++;
@@ -101,15 +120,17 @@ AgregarSerie() {
 
   }
 
+  Guardar(){
+    console.log(this.IngresoProductoForm)
+  }
+
+  Cambio(evento){
+    console.log(evento)
+  }
+
+
 }
 
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-
-}
 // tslint:disable-next-line:class-name
 export interface articulo {
   numero: number;
