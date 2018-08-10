@@ -1,12 +1,11 @@
 import { VentanaEmergenteArchivos } from './ventana-emergente/ventanaemergente';
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Inject } from '@angular/core';
 import {FormControl, FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {VentaService} from './ventas.service';
 import {VentaDataSource} from './ventas.dataservice';
-import { MatCard, MatInputModule, MatButton, MatDatepicker, MatTableModule, MatIcon, MatDialog } from '@angular/material';
+import { MatCard, MatInputModule, MatButton, MatDatepicker, MatTableModule, MatIcon, MatDialog, MAT_DIALOG_DATA } from '@angular/material';
 import {ServiciosTipoDocumento,TipoDocumento} from '../global/tipodocumento';
 import {ServiciosTipoPago, TipoPago} from '../global/tipopago';
-
 
 export interface PeriodicElement {
   numero: number;
@@ -24,10 +23,12 @@ const ELEMENT_DATA: PeriodicElement[] = [
   selector: 'app-ventas',
   templateUrl: './ventas.component.html',
   styleUrls: ['./ventas.component.css'],
-  providers: [VentaService]
+  providers: [VentaService,ServiciosTipoDocumento,ServiciosTipoPago]
 })
 export class VentasComponent implements OnInit {
   public ListadoCronograma: VentaDataSource;
+  public LstTipoDocumento: TipoDocumento[] = [];
+  public LstTipoPago: TipoPago[] = [];
   public typesdoc: string[] = [
     'Factura', 'Boleta'
   ];
@@ -45,12 +46,17 @@ export class VentasComponent implements OnInit {
   @ViewChild('InputCuota') FiltroCuota: ElementRef;
 
   constructor(
+    /*@Inject(MAT_DIALOG_DATA) public data,*/
     private Servicio: VentaService,
     public DialogoArchivos: MatDialog,
-    private FormBuilder: FormBuilder
+    private FormBuilder: FormBuilder,
+    private ServicioTipoDocumento: ServiciosTipoDocumento,
+    private ServicioTipoPago: ServiciosTipoPago
   ) {
     this.contador = 1;
     this.productos = [{ producto: '', imei: ''} ];
+    this.ListarTipoDocumento();
+    this.ListarTipoPago();
   }
   ngOnInit() {
     this.ListadoCronograma = new VentaDataSource(this.Servicio);
@@ -82,6 +88,27 @@ export class VentasComponent implements OnInit {
   EliminarProductos() {
     this.contador--;
     this.productos.splice(1);
+  }
+
+  ListarTipoPago() {
+    this.ServicioTipoPago.ListarTipoPago().subscribe( res => {
+      this.LstTipoPago = [];
+      // tslint:disable-next-line:forin
+      for (let i in res) {
+        this.LstTipoPago.push ( res[i] );
+      }
+   });
+  }
+
+   ListarTipoDocumento() {
+    this.ServicioTipoDocumento.ListarTipoDocumento().subscribe( res => {
+      this.LstTipoDocumento = [];
+      // tslint:disable-next-line:forin
+      for (let i in res) {
+        this.LstTipoDocumento.push ( res[i] );
+      }
+   });
+
   }
 
 }
