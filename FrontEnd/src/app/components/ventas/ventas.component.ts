@@ -1,9 +1,12 @@
 import { VentanaEmergenteArchivos } from './ventana-emergente/ventanaemergente';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import {FormControl, FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {VentaService} from './ventas.service';
 import {VentaDataSource} from './ventas.dataservice';
 import { MatCard, MatInputModule, MatButton, MatDatepicker, MatTableModule, MatIcon, MatDialog } from '@angular/material';
+import {ServiciosTipoDocumento,TipoDocumento} from '../global/tipodocumento';
+import {ServiciosTipoPago, TipoPago} from '../global/tipopago';
+
 
 export interface PeriodicElement {
   numero: number;
@@ -20,7 +23,8 @@ const ELEMENT_DATA: PeriodicElement[] = [
 @Component({
   selector: 'app-ventas',
   templateUrl: './ventas.component.html',
-  styleUrls: ['./ventas.component.css']
+  styleUrls: ['./ventas.component.css'],
+  providers: [VentaService]
 })
 export class VentasComponent implements OnInit {
   public ListadoCronograma: VentaDataSource;
@@ -35,8 +39,13 @@ export class VentasComponent implements OnInit {
   public productos: any;
   public contador: number;
   public VentasForm: FormGroup;
+
+  @ViewChild('InputFechaPago') FiltroFecha: ElementRef;
+  @ViewChild('InputMontoTotal') FiltroMonto: ElementRef;
+  @ViewChild('InputCuota') FiltroCuota: ElementRef;
+
   constructor(
-    // private Servicio: VentaService
+    private Servicio: VentaService,
     public DialogoArchivos: MatDialog,
     private FormBuilder: FormBuilder
   ) {
@@ -44,8 +53,8 @@ export class VentasComponent implements OnInit {
     this.productos = [{ producto: '', imei: ''} ];
   }
   ngOnInit() {
-    // this.ListadoCronograma = new VentaDataSource(this.Servicio);
-    // this.ListadoCronograma.GenerarCronograma(new Date('2018-07-19'), 100, 10);
+    this.ListadoCronograma = new VentaDataSource(this.Servicio);
+    this.ListadoCronograma.GenerarCronograma('','',0);
   }
   /* Agregar productos */
  Agregar() {
@@ -53,6 +62,14 @@ export class VentasComponent implements OnInit {
   let VentanaAdjuntos = this.DialogoArchivos.open(VentanaEmergenteArchivos, {
     width: '800px'
   });
+  }
+
+  /*Cronograma */
+  GeneraCronograma() {
+    //this.FiltroFecha.nativeElement.value
+    this.ListadoCronograma.GenerarCronograma('2018-08-08',
+    this.FiltroMonto.nativeElement.value,this.FiltroCuota.nativeElement.value);
+
   }
   /*VentanaAdjuntos.afterClosed().subscribe(res => {
     this.CargarData();
