@@ -1,5 +1,6 @@
+import { TipoProductoModelo } from './servicios';
 import {Injectable} from '@angular/core';
-import {HttpClient } from '@angular/common/http';
+import {HttpClient, HttpParams, } from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {URL} from './url';
@@ -98,8 +99,46 @@ export class ServiciosGenerales {
   }));
 }
 
+  ListarAlmacen(
+  ): Observable<Almacen> {
+    return this.http.get(this.url + 'almacen/read.php')
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res['data'].almacenes;
+      } else {
+        console.log('Error al importar los datos, revisar servicio');
+        }
+    }));
+  }
 
+  ListarTransaccionTipo (
+  ): Observable <any> {
+    return this.http.get(this.url + 'transacciontipo/read.php', {
+      params: new HttpParams()
+      .set('prid', '1')
+    })
 
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+          return res['data'].tipos;
+      } else {
+          console.log('Error al importar los datos, revisar servicio');
+        }
+    }));
+  }
+}
+
+export interface TipoTransaccion {
+  numero: number;
+  id: number;
+  nombre: string;
+
+}
+
+export interface Almacen {
+  numero: number;
+  id_almacen: number;
+  Alm_nombre: string;
 }
 
 export interface TipoProductoModelo {
