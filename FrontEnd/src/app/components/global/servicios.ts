@@ -4,7 +4,7 @@ import {HttpClient, HttpParams, } from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {URL} from './url';
-
+import * as moment from 'moment';
 
 @Injectable()
 
@@ -16,7 +16,7 @@ export class ServiciosGenerales {
 
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnInit() {}
-
+ // F=moment(fecha).format('YYYY/MM/DD');
   ListarTipoProductos(
     nombre: string,
     unidad_medida: string
@@ -88,16 +88,16 @@ export class ServiciosGenerales {
   ListarSubsede(
   id_sede: number,
   ssd_nombre: string
-  ): Observable<Sede> {
-    return this.http.get(this.url + 'subsede/read.php?id_sede=' + id_sede + '&ssd_nombre' + ssd_nombre)
-    .pipe(map(res => {
-    if (res['codigo'] === 0 ) {
-        return res['data'].subsede;
-    } else {
-        console.log('Error al importar los datos, revisar servicio');
-      }
-  }));
-}
+    ): Observable<Sede> {
+      return this.http.get(this.url + 'subsede/read.php?id_sede=' + id_sede + '&ssd_nombre' + ssd_nombre)
+      .pipe(map(res => {
+      if (res['codigo'] === 0 ) {
+          return res['data'].subsede;
+      } else {
+          console.log('Error al importar los datos, revisar servicio');
+        }
+    }));
+  }
 
   ListarAlmacen(
   ): Observable<Almacen> {
@@ -112,21 +112,38 @@ export class ServiciosGenerales {
   }
 
   ListarTransaccionTipo (
-  ): Observable <any> {
-    return this.http.get(this.url + 'transacciontipo/read.php', {
-      params: new HttpParams()
-      .set('prid', '1')
-    })
+    ): Observable <any> {
+      return this.http.get(this.url + 'transacciontipo/read.php', {
+        params: new HttpParams()
+        .set('prid', '1')
+      })
 
-    .pipe(map(res => {
-      if (res['codigo'] === 0) {
-          return res['data'].tipos;
-      } else {
-          console.log('Error al importar los datos, revisar servicio');
-        }
-    }));
+      .pipe(map(res => {
+        if (res['codigo'] === 0) {
+            return res['data'].tipos;
+        } else {
+            console.log('Error al importar los datos, revisar servicio');
+          }
+      }));
+    }
+
+  ListarProveedor(
+    nombre: string
+    ): Observable <any> {
+      return this.http.get(this.url + 'proveedor/read.php', {
+        params: new  HttpParams()
+        .set('prnombre', nombre)
+      })
+      .pipe(map(res => {
+          if (res['codigo'] === 0) {
+            return res['data'].proveedor;
+          } else {
+              console.log ('Error al importar los datos, revisar servicio');
+          }
+      }));
+      }
   }
-}
+
 
 export interface TipoTransaccion {
   numero: number;

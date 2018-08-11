@@ -2,47 +2,44 @@
 import { ServiciosGenerales, Almacen } from './../global/servicios';
 import { ventanaseries } from './ventana-series/ventanaseries';
 import { DialogData } from '../salida-vendedores/salida-vendedores.component';
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {Observable} from 'rxjs';
+import { Component, OnInit, ViewChild,ElementRef } from '@angular/core';
+import { FormControl, FormBuilder, FormGroup, Validators, PatternValidator } from '@angular/forms';
+import {Observable, fromEvent} from 'rxjs';
 import { map, startWith, subscribeOn } from 'rxjs/operators';
-import {SelectionModel} from '@angular/cdk/collections';
+import { SelectionModel, DataSource } from '@angular/cdk/collections';
 import {MatTableDataSource} from '@angular/material';
 import { MatDialog } from '@angular/material';
 import { eventNames } from 'cluster';
-
-export interface Food {
-  value: string;
-  viewValue: string;
-}
-
+import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
+import * as moment from 'moment';
 @Component({
   selector: 'app-ingreso-productos',
   templateUrl: './ingreso-productos.component.html',
   styleUrls: ['./ingreso-productos.component.css'],
   providers: [ServiciosGenerales]
 })
-
   export class IngresoProductosComponent implements OnInit {
+
+    @ViewChild('Proveedor') FiltroProveedor: ElementRef;
+
     public IngresoProductoForm: FormGroup;
     public articulos: Array <articulo>;
     public contador: number;
     public almacenes: Array<any> = [];
     public TipoIngresos: Array<any> = [];
+    public proveedores: Array<any> = [];
     public seriventana: string;
    //  public Almacenes: Almacen [] = [];
     public tipoIngreso: string;      // Tipo de Ingreso Almacen
     public docReferencia: string; // documento referencia de ingreso almncen
     public proveedor: string;
-    public fechaIngreso: Date;      // fecha de ingreso a almcen
+    public fecingreso: Date;      // fecha de ingreso a almcen
     public  data;
 
 
     selected = 'option2';
     myControl = new FormControl();
-    options: string[] = ['One', 'Two', 'Three'];
     filteredOptions: Observable<string[]>;
-    displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
 
     constructor(public DialogoSerie: MatDialog,
     // tslint:disable-next-line:no-shadowed-variable
@@ -55,11 +52,12 @@ export interface Food {
 
       this.ListarAlmacen();
       this.ListarTransaccionTipo();
+      this.ListarProveedor(' ');
 
       this.IngresoProductoForm = this.FormBuilder.group({
           'almacen': [null, [Validators.required] ],
           'tipoIngreso': [null, [Validators.required]],
-          'docReferencia': [null, [Validators.required]],
+          'docReferencia': [null, [Validators.required, Validators.pattern('[0-9-]+')]],
           'proveedor': [null, [Validators.required]],
           'fecingreso': [null, [Validators.required]],
       });
@@ -79,6 +77,33 @@ export interface Food {
 
     }
 
+    // Selector Proveedores activos
+    ListarProveedor(nombre: string) {
+      this.Servicios.ListarProveedor(nombre).subscribe( res => {
+        this.proveedores = [];
+        console.log(res);
+        // tslint:disable-next-line:forin
+        for (let i in res) {
+          this.proveedores.push(res[i]);
+        }
+      });
+    }
+
+    // tslint:disable-next-line:use-life-cycle-interface
+    ngAfterViewInit() {
+
+      fromEvent(this.FiltroProveedor.nativeElement,'keyup')
+      .pipe(
+        debounceTime(10),
+        distinctUntilChanged(),
+        tap(() => {
+          this.ListarProveedor(this.FiltroProveedor.nativeElement.value);
+        })
+       ).subscribe();
+
+    }
+
+    // Selector tipo de ingresos
     ListarTransaccionTipo() {
       this.Servicios.ListarTransaccionTipo().subscribe( res => {
         this.TipoIngresos = [];
@@ -90,7 +115,7 @@ export interface Food {
       });
     }
 
-
+    // Selector Almacenes Activos
     ListarAlmacen() {
       this.Servicios.ListarAlmacen().subscribe( res => {
         this.almacenes = [];
@@ -120,8 +145,9 @@ AgregarSerie() {
 
   }
 
-  Guardar(){
-    console.log(this.IngresoProductoForm)
+  Guardar() {
+    console.log(this.IngresoProductoForm);
+    console.log(moment(this.IngresoProductoForm.get('fecingreso').value).format('DD/MM/YYYY'));
   }
 
   Cambio(evento){

@@ -4,6 +4,8 @@ import {CdkTreeModule} from '@angular/cdk/tree';
 import {HttpClientModule} from '@angular/common/http';
 import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MAT_DATE_LOCALE} from '@angular/material/core';
+import * as moment from 'moment';
 import {
   MatAutocompleteModule,
   MatBadgeModule,
@@ -89,6 +91,7 @@ import {VentanaEmergenteStock } from './components/stock/ventana-emergentestock/
 @NgModule({
   imports: [
 /* Angular Material */
+    MatNativeDateModule,
     CdkTableModule,
     CdkTreeModule,
     MatAutocompleteModule,
@@ -195,7 +198,7 @@ import {VentanaEmergenteStock } from './components/stock/ventana-emergentestock/
     VentanaEmergenteStock
   ],
   bootstrap: [AppComponent],
-  providers: [appRoutingProvider]
+  providers: [appRoutingProvider, {provide: MAT_DATE_LOCALE, useValue: 'en-GB'}]
 })
 
 export class AppModule {}

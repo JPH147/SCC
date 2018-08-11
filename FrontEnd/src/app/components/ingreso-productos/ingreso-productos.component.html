@@ -12,26 +12,26 @@
       <mat-card class="CabeceraSalidaVendedor">
         <mat-grid-list cols="3" rowHeight="80px">
         <mat-grid-tile>
-            <!-- Seleccionar Almacen -->
-            <mat-form-field>
-              <mat-select placeholder="Selecciona Almacen" formControlName="almacen">
-                <mat-option *ngFor="let almacen of almacenes" [value]="almacen.id">
-                  {{almacen.nombre}}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
+          <!-- Seleccionar Almacen -->
+          <mat-form-field class="example-full-width">
+            <mat-select placeholder="Selecciona Almacen" formControlName="almacen">
+              <mat-option *ngFor="let almacen of almacenes" [value]="almacen.id">
+                {{almacen.nombre}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile>
         <!--Campo ingresar Tipo de Ingreso a almacen -->
-            <mat-form-field>
-                <mat-select placeholder="Tipo de  Ingreso" formControlName= "tipoIngreso">
-                  <mat-option *ngFor="let tipoIngreso of TipoIngresos" [value]="tipoIngreso.id">
-                    {{tipoIngreso.nombre}}
-                  </mat-option>
-                </mat-select>
+        <mat-grid-tile>
+            <mat-form-field  class="example-full-width">
+              <mat-select placeholder="Tipo de  Ingreso" formControlName= "tipoIngreso">
+                <mat-option *ngFor="let tipoIngreso of TipoIngresos" [value]="tipoIngreso.id">
+                  {{tipoIngreso.nombre}}
+                </mat-option>
+              </mat-select>
               </mat-form-field>
-          </mat-grid-tile>
+        </mat-grid-tile>
 
 
           <!--Campo ingresar Documento de Referencia -->
@@ -41,13 +41,13 @@
             </mat-form-field>
           </mat-grid-tile>
 
+          <!--Campo ingresar Proveedor -->
           <mat-grid-tile>
-            <!--Campo ingresar Proveedor -->
-                <mat-form-field>
-                  <input placeholder="Ingresa Proveedor" aria-label="Number" matInput [matAutocomplete]="auto" formControlName=proveedor>
+                <mat-form-field class="example-full-width">
+                  <input #Proveedor placeholder="Ingresa Proveedor" matInput [matAutocomplete]="auto" formControlName=proveedor>
                   <mat-autocomplete #auto="matAutocomplete">
-                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                      {{option}}
+                    <mat-option *ngFor="let proveedor of proveedores " [value]="proveedor.nombre">
+                      {{proveedor.nombre}}
                     </mat-option>
                   </mat-autocomplete>
                 </mat-form-field>
@@ -73,7 +73,7 @@
     <!-- Boton Agrega Productos -->
     <mat-grid-list cols="1"  rowHeight="55px">
       <mat-grid-tile>
-        <button mat-mini-fab color="primary" (click)="agregar()" matTooltip="Agrega  Productos" >   <mat-icon>add</mat-icon></button>
+        <button mat-mini-fab color="primary" (click)="agregar()" matTooltip="Agrega Productos"  type="button"><mat-icon>add</mat-icon></button>
       </mat-grid-tile>
     </mat-grid-list>
 
@@ -108,7 +108,7 @@
         </mat-grid-tile>
 
         <mat-grid-tile colspan="1">
-          <button mat-mini-fab color="primary" (click) = "AgregarSerie()"  matTooltip="Ingresa Serie Producto"><mat-icon> reorder </mat-icon> </button>
+          <button mat-mini-fab color="primary" (click) = "AgregarSerie()"  matTooltip="Ingresa Serie Producto" type="button"><mat-icon> reorder </mat-icon> </button>
           <button mat-mini-fab color="primary" matTooltip="Elimina  Producto"> <mat-icon>delete</mat-icon></button>
         </mat-grid-tile>
       </mat-grid-list>

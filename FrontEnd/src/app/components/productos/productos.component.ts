@@ -9,6 +9,7 @@ import {fromEvent} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
 import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
 
+
 @Component({
   selector: 'app-productos',
   templateUrl: './productos.component.html',
