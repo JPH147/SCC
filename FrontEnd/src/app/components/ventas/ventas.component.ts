@@ -6,6 +6,9 @@ import {VentaDataSource} from './ventas.dataservice';
 import { MatCard, MatInputModule, MatButton, MatDatepicker, MatTableModule, MatIcon, MatDialog, MAT_DIALOG_DATA } from '@angular/material';
 import {ServiciosTipoDocumento,TipoDocumento} from '../global/tipodocumento';
 import {ServiciosTipoPago, TipoPago} from '../global/tipopago';
+import {ClienteService, Cliente} from '../clientes/clientes.service';
+import {ClienteDataSource} from '../clientes/clientes.dataservice';
+
 
 export interface PeriodicElement {
   numero: number;
@@ -23,11 +26,14 @@ const ELEMENT_DATA: PeriodicElement[] = [
   selector: 'app-ventas',
   templateUrl: './ventas.component.html',
   styleUrls: ['./ventas.component.css'],
-  providers: [VentaService,ServiciosTipoDocumento,ServiciosTipoPago]
+  providers: [VentaService, ServiciosTipoDocumento, ServiciosTipoPago, ClienteService]
 })
 export class VentasComponent implements OnInit {
   public ListadoCronograma: VentaDataSource;
+  public ListadoCliente: ClienteDataSource;
   public LstTipoDocumento: TipoDocumento[] = [];
+  public LstCliente: any = [];
+  public VentasForm: FormGroup;
   public LstTipoPago: TipoPago[] = [];
   public typesdoc: string[] = [
     'Factura', 'Boleta'
@@ -39,7 +45,6 @@ export class VentasComponent implements OnInit {
   public dataSource = ELEMENT_DATA;
   public productos: any;
   public contador: number;
-  public VentasForm: FormGroup;
 
   @ViewChild('InputFechaPago') FiltroFecha: ElementRef;
   @ViewChild('InputMontoTotal') FiltroMonto: ElementRef;
@@ -48,7 +53,9 @@ export class VentasComponent implements OnInit {
   constructor(
     /*@Inject(MAT_DIALOG_DATA) public data,*/
     private Servicio: VentaService,
+    private ClienteServicio: ClienteService,
     public DialogoArchivos: MatDialog,
+    // tslint:disable-next-line:no-shadowed-variable
     private FormBuilder: FormBuilder,
     private ServicioTipoDocumento: ServiciosTipoDocumento,
     private ServicioTipoPago: ServiciosTipoPago
@@ -57,10 +64,69 @@ export class VentasComponent implements OnInit {
     this.productos = [{ producto: '', imei: ''} ];
     this.ListarTipoDocumento();
     this.ListarTipoPago();
+    this.ListarClientes();
   }
   ngOnInit() {
     this.ListadoCronograma = new VentaDataSource(this.Servicio);
-    this.ListadoCronograma.GenerarCronograma('','',0);
+    this.ListadoCliente = new ClienteDataSource(this.ClienteServicio);
+    //this.CargarClientes('', '', '', '', '', '');
+    this.LstCliente = this.ClienteServicio.Listado('', '', '', '', '', '');
+    this.ListadoCronograma.GenerarCronograma('', '', 0);
+    this.VentasForm = this.FormBuilder.group({
+      'talonario': [null, [
+        Validators.required
+      ]],
+      'contrato': [null, [
+        Validators.required
+      ]],
+      'tipodoc': [null, [
+        Validators.required
+      ]],
+      'estado': [null, [
+        Validators.required
+      ]],
+      'cliente': [null, [
+        Validators.required
+      ]],
+      'cargo': [null, [
+        Validators.required
+      ]],
+      'trabajo': [null, [
+        Validators.required
+      ]],
+      'domicilio': [null, [
+        Validators.required
+      ]],
+      'lugar': [null, [
+        Validators.required
+      ]],
+      'telefono': [null, [
+        Validators.required
+      ]],
+      'vendedor': [null, [
+        Validators.required
+      ]],
+      'fechaventa': [null, [
+        Validators.required
+      ]],
+      'fechapago': [null, [
+        Validators.required
+      ]],
+      'tipopago': [null, [
+        Validators.required
+      ]],
+      'montototal': [null, [
+        Validators.required,
+        Validators.pattern('[0-9- ]+')
+      ]],
+      'cuotas':[null, [
+        Validators.required,
+        Validators.pattern('[0-9- ]+')
+      ]],
+      'observaciones': [null, [
+        Validators.required
+      ]],
+    });
   }
   /* Agregar productos */
  Agregar() {
@@ -72,9 +138,8 @@ export class VentasComponent implements OnInit {
 
   /*Cronograma */
   GeneraCronograma() {
-    //this.FiltroFecha.nativeElement.value
-    this.ListadoCronograma.GenerarCronograma('2018-08-08',
-    this.FiltroMonto.nativeElement.value,this.FiltroCuota.nativeElement.value);
+    this.ListadoCronograma.GenerarCronograma(this.VentasForm.value.fechapago.toISOString() ,
+    this.FiltroMonto.nativeElement.value, this.FiltroCuota.nativeElement.value);
 
   }
   /*VentanaAdjuntos.afterClosed().subscribe(res => {
@@ -109,6 +174,10 @@ export class VentasComponent implements OnInit {
       }
    });
 
+  }
+
+  ListarClientes() {
+    //this.LstCliente = this.ClienteServicio.Listado('', '', '', this.VentasForm.value.cliente, this.VentasForm.value.cliente, '');
   }
 
 }

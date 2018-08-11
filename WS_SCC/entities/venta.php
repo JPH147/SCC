@@ -25,6 +25,7 @@ Class Venta{
     public $vnt_total;
     public $vnt_tipoventa;
     public $id_tipoventa_referencia;
+    public $vnt_observaciones;
     public $vnt_estado;
 
     public function __construct($db){
@@ -37,7 +38,7 @@ Class Venta{
         :pvnt_fecha,:pid_vendedor,:pvnt_contrato_pdf,:pvnt_dni_pdf,:pvnt_cip_pdf,:pvnt_planilla_pdf,
         :pvnt_letra_pdf,:pvnt_voucher_pdf,:pvnt_autorizacion_pdf,:pvnt_fecha_inicio,:pvnt_inicial,
         :pvnt_numero_couta,:pvnt_cuotas,:pid_tipopago,:pvnt_total,:pvnt_tipoventa,
-        :pid_tipoventa_referencia,:pvnt_estado)";
+        :pid_tipoventa_referencia,:pvnt_observaciones, :pvnt_estado)";
 
         
         $result = $this->conn->prepare($query);
@@ -64,6 +65,7 @@ Class Venta{
         $result->bindParam(":pvnt_total", $this->vnt_total);
         $result->bindParam(":pvnt_tipoventa", $this->vnt_tipoventa);
         $result->bindParam(":pid_tipoventa_referencia", $this->id_tipoventa_referencia);
+        $result->bindParam(":pvnt_observaciones", $this->vnt_observaciones);
         $result->bindParam(":pvnt_estado", $this->vnt_estado);
 
         $this->vnt_serie=htmlspecialchars(strip_tags($this->vnt_serie));
@@ -86,6 +88,7 @@ Class Venta{
         $this->vnt_total=htmlspecialchars(strip_tags($this->vnt_total));
         $this->vnt_tipoventa=htmlspecialchars(strip_tags($this->vnt_tipoventa));
         $this->id_tipoventa_referencia=htmlspecialchars(strip_tags($this->id_tipoventa_referencia));
+        $this->vnt_observaciones=htmlspecialchars(strip_tags($this->vnt_observaciones));
         $this->vnt_estado=htmlspecialchars(strip_tags($this->vnt_estado));
 
         if($result->execute())
