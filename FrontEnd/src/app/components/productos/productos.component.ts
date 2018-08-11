@@ -106,8 +106,8 @@ ngAfterViewInit () {
   VentanaConfirmar.afterClosed().subscribe(res => {
     if (res === true) {
      // tslint:disable-next-line:no-shadowed-variable
-     this.Servicio.Eliminar(producto.id).subscribe(res => {
-       this.CargarData();
+      this.Servicio.Eliminar(producto.id).subscribe(res => {
+      this.CargarData();
      });
     }
   });

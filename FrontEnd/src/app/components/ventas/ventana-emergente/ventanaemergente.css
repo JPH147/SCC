@@ -1,6 +1,6 @@
 .example-form {
     min-width: 150px;
-    max-width: 500px;
+    max-width: 1000px;
     width: 100%;
   }
   
@@ -19,11 +19,27 @@
     margin-right: 8px;
   }
   
-  .input-ventana{ 
-    width:75%
-  }
+  .customClass {
+    background-color: #dd3;
+    border-radius: 5px;
+    margin:5px;
+    color: #000;
+    width: 500px;
+}
 
-  .subtitle {
-    font-size: 12px;
-  }
-  
+.customClass .img-ul-upload {
+    background-color: #000;
+}
+
+.customClass .img-ul-clear {
+    background-color: #B819BB !important;
+}
+
+.customClass .img-ul-drag-box-msg {
+    color: purple !important;
+}
+
+.customClass .img-ul-container {
+    background-color: #FF6CAD !important;
+}
+

@@ -59,7 +59,6 @@ export class VentanaEmergenteProductos {
 
     /*Relación de productos*/
     this.Servicios.ListarTipoProductos('', '').subscribe(res => {
-      // tslint:disable-next-line:forin
       for (let i in res) {
         this.Tipos.push(res[i]);
       }
