@@ -163,6 +163,7 @@ export class ClientesComponent implements OnInit {
 }
 
 AgregarDatoContacto(id){
+  // tslint:disable-next-line:prefer-const
   let VentanaContacto = this.DialogoContacto.open(VentanaEmergenteContacto, {
     width: '800px',
     data: id
@@ -170,6 +171,7 @@ AgregarDatoContacto(id){
 }
 
 SubirImagen(id) {
+  // tslint:disable-next-line:prefer-const
   let VentanaFileUpload = this.DialogFileUpload.open(FileUpload, {
     width: '800px',
     data : id

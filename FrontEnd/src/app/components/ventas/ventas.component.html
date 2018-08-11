@@ -18,15 +18,25 @@
          <mat-form-field class="rows4"><input matInput placeholder="N° Contrato"></mat-form-field>
          <a></a> 
       </mat-grid-tile>
-      <mat-grid-tile coslpan="1">
+
+      <!--<mat-grid-tile coslpan="1">
          <mat-form-field class="rows4">
-            <mat-select placeholder="Tipo de Contrato">
-               <mat-option>--</mat-option>
+            <mat-select placeholder="Tipo de Documento">
+               <mat-option></mat-option>
                <mat-option *ngFor="let typedoc of typesdoc" [value]="typedoc">{{typedoc}}</mat-option>
             </mat-select>
          </mat-form-field>
-      </mat-grid-tile>
+      </mat-grid-tile>-->
+
       <mat-grid-tile coslpan="1">
+        <mat-form-field class="rows4">
+          <mat-select placeholder='Selecciona Tipo de Doc.' >
+            <mat-option *ngFor="let tipodocumento of LstTipoDocumento" [value] = "tipodocumento.id"> {{tipodocumento.nombre}} </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-grid-tile>
+
+        <mat-grid-tile coslpan="1">
          <mat-form-field class="rows4">
             <mat-select placeholder="Estado de Contrato">
                <mat-option>--</mat-option>
@@ -73,13 +83,26 @@
       </mat-form-field>
       <a></a>
       <mat-form-field>
-         <input matInput [matDatepicker]="picker1" placeholder="Mes y Año de Pago">
-         <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-         <mat-datepicker #picker1></mat-datepicker>
+         <input matInput [matDatepicker]="InputFechaPago" placeholder="Mes y Año de Pago" [(ngModel)]="myDate"  [formControl]="FechaPago">
+         <mat-datepicker-toggle matSuffix [for]="InputFechaPago"></mat-datepicker-toggle>
+         <mat-datepicker #InputFechaPago></mat-datepicker>
       </mat-form-field>
+
+      <!--<mat-form-field>
+        <input matInput [matDatepicker]="InputFechaPago" placeholder="Mes y Año de Pago">
+        <mat-datepicker-toggle matSuffix [for]="InputFechaPago"></mat-datepicker-toggle>
+        <mat-datepicker #InputFechaPago
+                        startView="multi-year"
+                        (yearSelected)="chosenYearHandler($event)"
+                        (monthSelected)="chosenMonthHandler($event, dp)"
+                        panelClass="example-month-picker">
+        </mat-datepicker>
+      </mat-form-field>-->
+
+
    </div>
    <div class="row4col-pagos">
-      <mat-form-field>
+      <!--<mat-form-field>
          <mat-label>Tipo de pago</mat-label>
          <mat-select #idTalonario value="001" (selectionChange)="triggerResize()">
          <mat-option value="001">Contado</mat-option>
@@ -87,18 +110,29 @@
          <mat-option value="003">Directo</mat-option>
          <mat-option value="004">Canje</mat-option>
          </mat-select>
+      </mat-form-field>-->
+
+      <!--<mat-grid-tile>-->
+        <mat-form-field>
+          <mat-select placeholder='Selecciona Tipo de Pago' >
+            <mat-option *ngFor="let tipopago of LstTipoPago" [value] = "tipopago.id"> {{tipopago.nombre}} </mat-option>
+          </mat-select>
+        </mat-form-field>
+      <!--</mat-grid-tile>-->
+
+
+
+      <p></p>
+      <mat-form-field>
+         <input matInput placeholder="Monto Total" #InputMontoTotal>
       </mat-form-field>
       <p></p>
       <mat-form-field>
-         <input matInput placeholder="Monto Total">
-      </mat-form-field>
-      <p></p>
-      <mat-form-field>
-         <input matInput placeholder="Cuotas">
+         <input matInput placeholder="Cuotas" #InputCuota>
       </mat-form-field>
       <a></a>
       <div class="button-row">
-         <button mat-raised-button color="primary">GENERAR</button>
+         <button mat-raised-button color="primary" (click)="GeneraCronograma()">GENERAR</button>
       </div>
       <div class="button-row">
          <button mat-raised-button color="primary" class="agregar" (click)="Agregar()">ADJUNTAR</button>
@@ -128,7 +162,7 @@
    </div>
 </mat-card>
 <mat-card>
-   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+   <table mat-table [dataSource]="ListadoCronograma" class="mat-elevation-z8">
       <!-- Name Column -->
       <ng-container matColumnDef="numero">
          <th mat-header-cell *matHeaderCellDef> No. </th>

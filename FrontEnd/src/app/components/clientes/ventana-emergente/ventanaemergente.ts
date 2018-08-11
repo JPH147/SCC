@@ -10,7 +10,7 @@ import {ClienteService} from '../clientes.service';
   selector: 'app-ventanaemergente',
   templateUrl: './ventanaemergente.html',
   styleUrls: ['./ventanaemergente.css'],
-  providers:[ServiciosGenerales, ClienteService]
+  providers: [ServiciosGenerales, ClienteService]
 })
 
 // tslint:disable-next-line:component-class-suffix
@@ -33,13 +33,14 @@ export class VentanaEmergenteClientes {
     this.ventana.close();
   }
 
-  ngOnInit(){
+  // tslint:disable-next-line:use-life-cycle-interface
+  ngOnInit() {
     /* Crear formulario */
     this.ClientesForm = this.FormBuilder.group({
-      'institucion': [null,[
+      'institucion': [null, [
         Validators.required
       ]],
-      'sede': [null,[
+      'sede': [null, [
         Validators.required
       ]],
       'subsede': [null, [
@@ -88,7 +89,7 @@ export class VentanaEmergenteClientes {
     this.Servicios.ListarInstitucion().subscribe( res => {
       // tslint:disable-next-line:forin
       for (let i in res) {
-        this.Institucion.push(res[i])
+        this.Institucion.push(res[i]);
       }
     });
 

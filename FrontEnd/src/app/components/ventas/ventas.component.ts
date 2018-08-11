@@ -1,9 +1,11 @@
 import { VentanaEmergenteArchivos } from './ventana-emergente/ventanaemergente';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Inject } from '@angular/core';
 import {FormControl, FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {VentaService} from './ventas.service';
 import {VentaDataSource} from './ventas.dataservice';
-import { MatCard, MatInputModule, MatButton, MatDatepicker, MatTableModule, MatIcon, MatDialog } from '@angular/material';
+import { MatCard, MatInputModule, MatButton, MatDatepicker, MatTableModule, MatIcon, MatDialog, MAT_DIALOG_DATA } from '@angular/material';
+import {ServiciosTipoDocumento,TipoDocumento} from '../global/tipodocumento';
+import {ServiciosTipoPago, TipoPago} from '../global/tipopago';
 
 export interface PeriodicElement {
   numero: number;
@@ -20,10 +22,13 @@ const ELEMENT_DATA: PeriodicElement[] = [
 @Component({
   selector: 'app-ventas',
   templateUrl: './ventas.component.html',
-  styleUrls: ['./ventas.component.css']
+  styleUrls: ['./ventas.component.css'],
+  providers: [VentaService,ServiciosTipoDocumento,ServiciosTipoPago]
 })
 export class VentasComponent implements OnInit {
   public ListadoCronograma: VentaDataSource;
+  public LstTipoDocumento: TipoDocumento[] = [];
+  public LstTipoPago: TipoPago[] = [];
   public typesdoc: string[] = [
     'Factura', 'Boleta'
   ];
@@ -35,17 +40,27 @@ export class VentasComponent implements OnInit {
   public productos: any;
   public contador: number;
   public VentasForm: FormGroup;
+
+  @ViewChild('InputFechaPago') FiltroFecha: ElementRef;
+  @ViewChild('InputMontoTotal') FiltroMonto: ElementRef;
+  @ViewChild('InputCuota') FiltroCuota: ElementRef;
+
   constructor(
-    // private Servicio: VentaService
+    /*@Inject(MAT_DIALOG_DATA) public data,*/
+    private Servicio: VentaService,
     public DialogoArchivos: MatDialog,
-    private FormBuilder: FormBuilder
+    private FormBuilder: FormBuilder,
+    private ServicioTipoDocumento: ServiciosTipoDocumento,
+    private ServicioTipoPago: ServiciosTipoPago
   ) {
     this.contador = 1;
     this.productos = [{ producto: '', imei: ''} ];
+    this.ListarTipoDocumento();
+    this.ListarTipoPago();
   }
   ngOnInit() {
-    // this.ListadoCronograma = new VentaDataSource(this.Servicio);
-    // this.ListadoCronograma.GenerarCronograma(new Date('2018-07-19'), 100, 10);
+    this.ListadoCronograma = new VentaDataSource(this.Servicio);
+    this.ListadoCronograma.GenerarCronograma('','',0);
   }
   /* Agregar productos */
  Agregar() {
@@ -53,6 +68,14 @@ export class VentasComponent implements OnInit {
   let VentanaAdjuntos = this.DialogoArchivos.open(VentanaEmergenteArchivos, {
     width: '800px'
   });
+  }
+
+  /*Cronograma */
+  GeneraCronograma() {
+    //this.FiltroFecha.nativeElement.value
+    this.ListadoCronograma.GenerarCronograma('2018-08-08',
+    this.FiltroMonto.nativeElement.value,this.FiltroCuota.nativeElement.value);
+
   }
   /*VentanaAdjuntos.afterClosed().subscribe(res => {
     this.CargarData();
@@ -65,6 +88,27 @@ export class VentasComponent implements OnInit {
   EliminarProductos() {
     this.contador--;
     this.productos.splice(1);
+  }
+
+  ListarTipoPago() {
+    this.ServicioTipoPago.ListarTipoPago().subscribe( res => {
+      this.LstTipoPago = [];
+      // tslint:disable-next-line:forin
+      for (let i in res) {
+        this.LstTipoPago.push ( res[i] );
+      }
+   });
+  }
+
+   ListarTipoDocumento() {
+    this.ServicioTipoDocumento.ListarTipoDocumento().subscribe( res => {
+      this.LstTipoDocumento = [];
+      // tslint:disable-next-line:forin
+      for (let i in res) {
+        this.LstTipoDocumento.push ( res[i] );
+      }
+   });
+
   }
 
 }

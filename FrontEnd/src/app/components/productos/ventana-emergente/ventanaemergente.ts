@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit, AfterViewInit} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-import {FormControl, FormGroup, FormBuilder,FormGroupDirective, NgForm, Validators} from '@angular/forms';
+import {FormControl, FormGroup, FormBuilder, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {ServiciosGenerales, TipoProductoModelo, MarcaModelo, ModeloModelo} from '../../global/servicios';
 import { NgControl } from '@angular/forms';
@@ -10,7 +10,7 @@ import {ProductoService} from '../productos.service';
   selector: 'app-ventanaemergente',
   templateUrl: './ventanaemergente.html',
   styleUrls: ['./ventanaemergente.css'],
-  providers:[ServiciosGenerales, ProductoService]
+  providers: [ServiciosGenerales, ProductoService]
 })
 
 // tslint:disable-next-line:component-class-suffix
@@ -125,9 +125,9 @@ export class VentanaEmergenteProductos {
       this.Modelos = [];
       // tslint:disable-next-line:forin
       for (let i in res) {
-        this.Modelos.push( res[i] )
+        this.Modelos.push( res[i] );
       }
-   })
+   });
 
   }
 }

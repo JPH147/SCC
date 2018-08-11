@@ -22,8 +22,8 @@ this.CargandoInformacion.complete();
   }
 
   GenerarCronograma(
-    fechainicio: Date,
-    monto: number,
+    fechainicio: string,
+    monto: any,
     numerocuotas: number
   // tslint:disable-next-line:one-line
   ){
