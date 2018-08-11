@@ -18,15 +18,25 @@
          <mat-form-field class="rows4"><input matInput placeholder="N° Contrato"></mat-form-field>
          <a></a> 
       </mat-grid-tile>
-      <mat-grid-tile coslpan="1">
+
+      <!--<mat-grid-tile coslpan="1">
          <mat-form-field class="rows4">
-            <mat-select placeholder="Tipo de Contrato">
-               <mat-option>--</mat-option>
+            <mat-select placeholder="Tipo de Documento">
+               <mat-option></mat-option>
                <mat-option *ngFor="let typedoc of typesdoc" [value]="typedoc">{{typedoc}}</mat-option>
             </mat-select>
          </mat-form-field>
-      </mat-grid-tile>
+      </mat-grid-tile>-->
+
       <mat-grid-tile coslpan="1">
+        <mat-form-field class="rows4">
+          <mat-select placeholder='Selecciona Tipo de Doc.' >
+            <mat-option *ngFor="let tipodocumento of LstTipoDocumento" [value] = "tipodocumento.id"> {{tipodocumento.nombre}} </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-grid-tile>
+
+        <mat-grid-tile coslpan="1">
          <mat-form-field class="rows4">
             <mat-select placeholder="Estado de Contrato">
                <mat-option>--</mat-option>
@@ -92,7 +102,7 @@
 
    </div>
    <div class="row4col-pagos">
-      <mat-form-field>
+      <!--<mat-form-field>
          <mat-label>Tipo de pago</mat-label>
          <mat-select #idTalonario value="001" (selectionChange)="triggerResize()">
          <mat-option value="001">Contado</mat-option>
@@ -100,7 +110,18 @@
          <mat-option value="003">Directo</mat-option>
          <mat-option value="004">Canje</mat-option>
          </mat-select>
-      </mat-form-field>
+      </mat-form-field>-->
+
+      <!--<mat-grid-tile>-->
+        <mat-form-field>
+          <mat-select placeholder='Selecciona Tipo de Pago' >
+            <mat-option *ngFor="let tipopago of LstTipoPago" [value] = "tipopago.id"> {{tipopago.nombre}} </mat-option>
+          </mat-select>
+        </mat-form-field>
+      <!--</mat-grid-tile>-->
+
+
+
       <p></p>
       <mat-form-field>
          <input matInput placeholder="Monto Total" #InputMontoTotal>
