@@ -178,6 +178,15 @@ export class VentasComponent implements OnInit {
 
   ListarClientes() {
     //this.LstCliente = this.ClienteServicio.Listado('', '', '', this.VentasForm.value.cliente, this.VentasForm.value.cliente, '');
+
+    //this.ClienteServicio.Listado('', '', '', this.VentasForm.value.cliente, this.VentasForm.value.cliente, '').subscribe( res => {
+    /*this.ClienteServicio.Listado('', '', '', '', '', '').subscribe( res => {
+      this.LstCliente = [];
+      // tslint:disable-next-line:forin
+      for (let i in res) {
+        this.LstCliente.push ( res[i] );
+      
+   });}*/
   }
 
 }
