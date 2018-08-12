@@ -43,6 +43,8 @@ export class VentasServicio {
       Tipo=tipo_venta.toString()
     }
 
+    console.log("Servicio",cliente,Tipo,Finicio,Ffin,pagina_inicio,pagina_final,orden)
+
     return this.http.get(this.url + 'venta/read.php', {
       params: new HttpParams()
       .set('prcliente',cliente)
