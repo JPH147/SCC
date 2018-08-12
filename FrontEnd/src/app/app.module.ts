@@ -87,6 +87,7 @@ import { ImageUploadModule } from 'angular2-image-upload';
 import {FileUpload} from './components/clientes/file-upload/fileupload';
 import {VentanaEmergenteContacto} from './components/clientes/ventana-emergentecontacto/ventanaemergentecontacto';
 import {VentanaEmergenteStock } from './components/stock/ventana-emergentestock/ventanaemergentestock';
+import { VentasListarComponent } from './components/ventas-listar/ventas-listar.component';
 
 @NgModule({
   imports: [
@@ -175,7 +176,8 @@ import {VentanaEmergenteStock } from './components/stock/ventana-emergentestock/
     ventanaRetorno,
     FileUpload,
     VentanaEmergenteContacto,
-    VentanaEmergenteStock
+    VentanaEmergenteStock,
+    VentasListarComponent
    ],
   entryComponents: [
     AppComponent,

@@ -16,6 +16,7 @@ import { ventanaseries } from './components/ingreso-productos/ventana-series/ven
 import { ProveedoresComponent } from './components/proveedores/proveedores.component'
 import { ventanaseriessv } from './components/salida-vendedores/ventana-seriessv/ventanaseriessv';
 import { DireccionesComponent } from './components/direcciones/direcciones.component';
+import { VentasListarComponent } from './components/ventas-listar/ventas-listar.component';
 
 const appRoutes: Routes = [
   {path: 'usuarios', component: UsuariosComponent},
@@ -29,7 +30,8 @@ const appRoutes: Routes = [
   {path: 'retornovendedores', component: RetornoVendedoresComponent},
   {path: 'comisiones', component: ComisionesComponent},
   {path: 'clientes', component: ClientesComponent},
-  {path: 'ventas', component: VentasComponent},
+  {path: 'ventas', component: VentasListarComponent},
+  {path: 'ventas/nueva', component: VentasComponent},
   {path: 'usuarios', component: UsuariosComponent},
   {path: 'proveedores', component: ProveedoresComponent},
   {path: 'direcciones', component: DireccionesComponent},

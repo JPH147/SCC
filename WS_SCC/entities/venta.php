@@ -28,6 +28,22 @@ Class Venta{
     public $vnt_observaciones;
     public $vnt_estado;
 
+    // public $sede;
+    // public $subsede;
+    // public $cliente_nombre;
+    // public $cliente_apellido;
+    // public $fecha;
+    // public $vendedor;
+    // public $fecha_inicio;
+    // public $monto_inicial;
+    // public $numero_coutas;
+    // public $coutas;
+    // public $tipo_pago;
+    // public $monto_total;
+    // public $tipo_venta;
+    // public $referencia;
+    // public $observaciones;
+
     public function __construct($db){
         $this->conn = $db;
     }
@@ -97,6 +113,58 @@ Class Venta{
         }
         print_r($result);
         return false;
+    }
+
+    function read(){
+
+        $query = "CALL sp_listarventa(?,?,?,?,?,?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->cliente);
+        $result->bindParam(2, $this->tipo_venta);
+        $result->bindParam(3, $this->fecha_inicio);
+        $result->bindParam(4, $this->fecha_fin);
+        $result->bindParam(5, $this->numero_pagina);
+        $result->bindParam(6, $this->total_pagina);
+        $result->bindParam(7, $this->orden);
+
+        $result->execute();
+        
+        $venta_list=array();
+        $venta_list["ventas"]=array();
+
+        $contador = $this->total_pagina*($this->numero_pagina-1);
+        
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $contador=$contador+1;
+            $venta_item = array (
+                "numero"=>$contador,
+                "id"=>$id,
+                "serie"=>$serie,
+                "contrato"=>$contrato,
+                "sede"=>$sede,
+                "subsede"=>$subsede,
+                "cliente_nombre"=>$cliente_nombre,
+                "cliente_apellido"=>$cliente_apellido,
+                "fecha"=>$fecha,
+                "vendedor"=>$vendedor,
+                "fecha_inicio"=>$fecha_inicio,
+                "monto_inicial"=>$monto_inicial,
+                "numero_coutas"=>$numero_coutas,
+                "cuotas"=>$cuotas,
+                "tipo_pago"=>$tipo_pago,
+                "monto_total"=>$monto_total,
+                "tipo_venta"=>$tipo_venta,
+                "referencia"=>$referencia,
+                "observaciones"=>$observaciones
+            );
+            array_push($venta_list["ventas"],$venta_item);
+        }
+
+        return $venta_list;
     }
 
 }
