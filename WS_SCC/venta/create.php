@@ -25,6 +25,7 @@
          && ($_POST["pvnt_inicial"])!=null && ($_POST["pvnt_numero_couta"])!=null
          && ($_POST["pvnt_cuotas"])!=null && ($_POST["pid_tipopago"])!=null
          && ($_POST["pvnt_total"])!=null && ($_POST["pvnt_tipoventa"])!=null
+         && !empty(trim($_POST["pvnt_observaciones"]))
          && ($_POST["pid_tipoventa_referencia"])!=null)
         {
             $venta->vnt_serie = trim($_POST["pvnt_serie"]);
@@ -47,9 +48,10 @@
             $venta->vnt_total = $_POST["pvnt_total"];
             $venta->vnt_tipoventa = $_POST["pvnt_tipoventa"];
             $venta->id_tipoventa_referencia = $_POST["pid_tipoventa_referencia"];
+            $ventas->vnt_observaciones = trim($_POST["pvnt_observaciones"]);
             $venta->vnt_estado = 1;
 
-            print_r($venta);
+            //print_r($venta);
 
             if($venta->create())
             {

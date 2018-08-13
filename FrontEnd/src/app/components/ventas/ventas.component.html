@@ -1,10 +1,13 @@
 <mat-card>
-   <p> Ventas</p>
+  <mat-card-header>
+    <mat-card-title>Ventas</mat-card-title>
+  </mat-card-header>
+  <form [formGroup]="VentasForm">
    <mat-grid-list cols="4" rowHeight="100px">
       <mat-grid-tile coslpan="1">
          <mat-form-field class="rows4">
             <mat-label>N° Talonario</mat-label>
-            <mat-select #idTalonario value="001" (selectionChange)="triggerResize()">
+            <mat-select #idTalonario value="001" formControlName="talonario" (selectionChange)="triggerResize()">
             <mat-option value="001">001</mat-option>
             <mat-option value="002">002</mat-option>
             <mat-option value="003">003</mat-option>
@@ -15,22 +18,15 @@
          </mat-form-field>
       </mat-grid-tile>
       <mat-grid-tile coslpan="1">
-         <mat-form-field class="rows4"><input matInput placeholder="N° Contrato"></mat-form-field>
+         <mat-form-field class="rows4">
+           <input matInput placeholder="N° Contrato" formControlName="contrato">
+        </mat-form-field>
          <a></a> 
       </mat-grid-tile>
 
-      <!--<mat-grid-tile coslpan="1">
-         <mat-form-field class="rows4">
-            <mat-select placeholder="Tipo de Documento">
-               <mat-option></mat-option>
-               <mat-option *ngFor="let typedoc of typesdoc" [value]="typedoc">{{typedoc}}</mat-option>
-            </mat-select>
-         </mat-form-field>
-      </mat-grid-tile>-->
-
       <mat-grid-tile coslpan="1">
         <mat-form-field class="rows4">
-          <mat-select placeholder='Selecciona Tipo de Doc.' >
+          <mat-select placeholder='Selecciona Tipo de Doc.' formControlName="tipodoc" >
             <mat-option *ngFor="let tipodocumento of LstTipoDocumento" [value] = "tipodocumento.id"> {{tipodocumento.nombre}} </mat-option>
           </mat-select>
         </mat-form-field>
@@ -38,7 +34,7 @@
 
         <mat-grid-tile coslpan="1">
          <mat-form-field class="rows4">
-            <mat-select placeholder="Estado de Contrato">
+            <mat-select placeholder="Estado de Contrato" formControlName="estado">
                <mat-option>--</mat-option>
                <mat-option *ngFor="let state of states" [value]="state">{{state}}</mat-option>
             </mat-select>
@@ -46,44 +42,71 @@
       </mat-grid-tile>
    </mat-grid-list>
    <div class="row3col-cliente">
-      <mat-form-field>
-         <input matInput placeholder="Cliente">
+      <!--<mat-form-field>
+         <input matInput placeholder="Cliente" formControlName="cliente">
+      </mat-form-field>-->
+
+       <!--<mat-form-field>
+          <input matInput placeholder="Cliente" aria-label="Cliente" [matAutocomplete]="auto" >
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let cliente of LstCliente | async" [value]="cliente.id">
+              <span>{{cliente.nombre}}</span> |
+              <small>DNI: {{cliente.dni}}</small>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>-->
+
+        <mat-form-field>
+          <input #Cliente placeholder="Ingresa Cliente" matInput [matAutocomplete]="auto" formControlName= cliente>
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngFor="let cliente of LstCliente " [value]="cliente.id">
+                {{cliente.nombre + ' ' + cliente.apellido}}
+              </mat-option>
+          </mat-autocomplete>
+       </mat-form-field>
+      
+
+            <!--<mat-form-field >
+              <mat-select placeholder='Selecciona Cliente' formControlName="cliente" >
+                <mat-option *ngFor="let cliente of LstCliente" [value] = "cliente.id"> {{cliente.nombre + ' ' + cliente.apellido}} </mat-option>
+              </mat-select> 
+            </mat-form-field>-->
+        
+      <a></a>
+      <mat-form-field >
+         <input matInput placeholder="Cargo" formControlName="cargo">
       </mat-form-field>
       <a></a>
       <mat-form-field >
-         <input matInput placeholder="Cargo">
-      </mat-form-field>
-      <a></a>
-      <mat-form-field >
-         <input matInput placeholder="Centro de Trabajo">
+         <input matInput placeholder="Centro de Trabajo" formControlName="trabajo">
       </mat-form-field>
    </div>
    <div class="row3col-cliente">
       <mat-form-field>
-         <input matInput placeholder="Domicilio">
+         <input matInput placeholder="Domicilio" formControlName="domicilio">
       </mat-form-field>
       <a></a>
       <mat-form-field >
-         <input matInput placeholder="Lugar">
+         <input matInput placeholder="Lugar" formControlName="lugar">
       </mat-form-field>
       <a></a>
       <mat-form-field >
-         <input matInput placeholder="Teléfono">
+         <input matInput placeholder="Teléfono" formControlName="telefono">
       </mat-form-field>
    </div>
    <div class="row3col-cliente">
       <mat-form-field>
-         <input matInput placeholder="Vendedor">
+         <input matInput placeholder="Vendedor" formControlName="vendedor">
       </mat-form-field>
       <a></a>
       <mat-form-field>
-         <input matInput [matDatepicker]="picker" placeholder="Fecha de venta">
+         <input matInput [matDatepicker]="picker" placeholder="Fecha de venta" formControlName="fechaventa">
          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
          <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
       <a></a>
       <mat-form-field>
-         <input matInput [matDatepicker]="InputFechaPago" placeholder="Mes y Año de Pago" [(ngModel)]="myDate"  [formControl]="FechaPago">
+         <input matInput [matDatepicker]="InputFechaPago" placeholder="Mes y Año de Pago" formControlName="fechapago">
          <mat-datepicker-toggle matSuffix [for]="InputFechaPago"></mat-datepicker-toggle>
          <mat-datepicker #InputFechaPago></mat-datepicker>
       </mat-form-field>
@@ -102,33 +125,19 @@
 
    </div>
    <div class="row4col-pagos">
-      <!--<mat-form-field>
-         <mat-label>Tipo de pago</mat-label>
-         <mat-select #idTalonario value="001" (selectionChange)="triggerResize()">
-         <mat-option value="001">Contado</mat-option>
-         <mat-option value="002">Crédito</mat-option>
-         <mat-option value="003">Directo</mat-option>
-         <mat-option value="004">Canje</mat-option>
-         </mat-select>
-      </mat-form-field>-->
-
-      <!--<mat-grid-tile>-->
         <mat-form-field>
-          <mat-select placeholder='Selecciona Tipo de Pago' >
+          <mat-select placeholder='Selecciona Tipo de Pago'  formControlName="tipopago">
             <mat-option *ngFor="let tipopago of LstTipoPago" [value] = "tipopago.id"> {{tipopago.nombre}} </mat-option>
           </mat-select>
         </mat-form-field>
-      <!--</mat-grid-tile>-->
-
-
 
       <p></p>
       <mat-form-field>
-         <input matInput placeholder="Monto Total" #InputMontoTotal>
+         <input matInput placeholder="Monto Total"  formControlName="montototal" #InputMontoTotal>
       </mat-form-field>
       <p></p>
       <mat-form-field>
-         <input matInput placeholder="Cuotas" #InputCuota>
+         <input matInput placeholder="Cuotas" formControlName="cuotas" #InputCuota>
       </mat-form-field>
       <a></a>
       <div class="button-row">
@@ -140,7 +149,7 @@
    </div>
    <div class="row2col-comentario">
       <mat-form-field class="full-width">
-         <textarea matInput placeholder="Observaciones"></textarea>
+         <textarea matInput placeholder="Observaciones" formControlName="observaciones"></textarea>
       </mat-form-field>
    </div>
    <div class="row5col-producto" *ngFor="let producto of productos">
@@ -160,20 +169,18 @@
          <mat-icon>remove</mat-icon>
       </button>
    </div>
+  </form>
 </mat-card>
 <mat-card>
    <table mat-table [dataSource]="ListadoCronograma" class="mat-elevation-z8">
-      <!-- Name Column -->
       <ng-container matColumnDef="numero">
          <th mat-header-cell *matHeaderCellDef> No. </th>
          <td mat-cell *matCellDef="let element"> {{element.numero}} </td>
       </ng-container>
-      <!-- Name Column -->
       <ng-container matColumnDef="month">
          <th mat-header-cell *matHeaderCellDef> Periodo </th>
          <td mat-cell *matCellDef="let element"> {{element.month}} </td>
       </ng-container>
-      <!-- Weight Column -->
       <ng-container matColumnDef="price">
          <th mat-header-cell *matHeaderCellDef> Monto </th>
          <td mat-cell *matCellDef="let element"> {{element.price}} </td>
@@ -181,4 +188,5 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
    </table>
-</mat-card>
+  </mat-card>
+
