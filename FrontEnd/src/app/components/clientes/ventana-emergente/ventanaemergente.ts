@@ -186,4 +186,5 @@ SedeSeleccionada(event) {
    });
   }
 // tslint:disable-next-line:eofline
-}
+
+} // fin clase VentanaEmergenteCliente

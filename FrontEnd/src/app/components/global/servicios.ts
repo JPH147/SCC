@@ -142,8 +142,8 @@ export class ServiciosGenerales {
           }
       }));
       }
-  }
 
+  }
 
 export interface TipoTransaccion {
   numero: number;
