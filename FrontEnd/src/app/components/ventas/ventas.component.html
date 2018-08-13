@@ -42,33 +42,36 @@
       </mat-grid-tile>
    </mat-grid-list>
    <div class="row3col-cliente">
-      <mat-form-field>
-         <input matInput placeholder="Cliente" formControlName="cliente">
-      </mat-form-field>
-
       <!--<mat-form-field>
+         <input matInput placeholder="Cliente" formControlName="cliente">
+      </mat-form-field>-->
+
+       <!--<mat-form-field>
           <input matInput placeholder="Cliente" aria-label="Cliente" [matAutocomplete]="auto" >
           <mat-autocomplete #auto="matAutocomplete">
             <mat-option *ngFor="let cliente of LstCliente | async" [value]="cliente.id">
-              <span>{{cliente.nombrecliente}}</span> |
+              <span>{{cliente.nombre}}</span> |
               <small>DNI: {{cliente.dni}}</small>
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>-->
+
+        <mat-form-field>
+          <input #Cliente placeholder="Ingresa Cliente" matInput [matAutocomplete]="auto" formControlName= cliente>
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngFor="let cliente of LstCliente " [value]="cliente.id">
+                {{cliente.nombre + ' ' + cliente.apellido}}
+              </mat-option>
+          </mat-autocomplete>
+       </mat-form-field>
       
 
-        <!--<mat-grid-tile>
-            <mat-form-field >
+            <!--<mat-form-field >
               <mat-select placeholder='Selecciona Cliente' formControlName="cliente" >
-                <mat-option *ngFor="let cliente of LstCliente" [value] = "cliente.id"> {{cliente.nombrecliente}} </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </mat-grid-tile>-->
-          
-
-
-
-
+                <mat-option *ngFor="let cliente of LstCliente" [value] = "cliente.id"> {{cliente.nombre + ' ' + cliente.apellido}} </mat-option>
+              </mat-select> 
+            </mat-form-field>-->
+        
       <a></a>
       <mat-form-field >
          <input matInput placeholder="Cargo" formControlName="cargo">

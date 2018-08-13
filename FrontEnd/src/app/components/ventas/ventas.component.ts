@@ -8,7 +8,8 @@ import {ServiciosTipoDocumento,TipoDocumento} from '../global/tipodocumento';
 import {ServiciosTipoPago, TipoPago} from '../global/tipopago';
 import {ClienteService, Cliente} from '../clientes/clientes.service';
 import {ClienteDataSource} from '../clientes/clientes.dataservice';
-
+import {Observable, fromEvent} from 'rxjs';
+import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
 
 export interface PeriodicElement {
   numero: number;
@@ -32,7 +33,7 @@ export class VentasComponent implements OnInit {
   public ListadoCronograma: VentaDataSource;
   public ListadoCliente: ClienteDataSource;
   public LstTipoDocumento: TipoDocumento[] = [];
-  public LstCliente: any = [];
+  public LstCliente: Array<any> = [];
   public VentasForm: FormGroup;
   public LstTipoPago: TipoPago[] = [];
   public typesdoc: string[] = [
@@ -50,6 +51,8 @@ export class VentasComponent implements OnInit {
   @ViewChild('InputMontoTotal') FiltroMonto: ElementRef;
   @ViewChild('InputCuota') FiltroCuota: ElementRef;
 
+  @ViewChild('Cliente') ClienteAutoComplete: ElementRef;
+
   constructor(
     /*@Inject(MAT_DIALOG_DATA) public data,*/
     private Servicio: VentaService,
@@ -64,13 +67,12 @@ export class VentasComponent implements OnInit {
     this.productos = [{ producto: '', imei: ''} ];
     this.ListarTipoDocumento();
     this.ListarTipoPago();
-    this.ListarClientes();
+    //this.ListarClientes('', '', '', '' , '', '');
   }
   ngOnInit() {
     this.ListadoCronograma = new VentaDataSource(this.Servicio);
     this.ListadoCliente = new ClienteDataSource(this.ClienteServicio);
-    //this.CargarClientes('', '', '', '', '', '');
-    this.LstCliente = this.ClienteServicio.Listado('', '', '', '', '', '');
+    this.ListarClientes('', '', '', '' , this.ClienteAutoComplete.nativeElement.value , '');
     this.ListadoCronograma.GenerarCronograma('', '', 0);
     this.VentasForm = this.FormBuilder.group({
       'talonario': [null, [
@@ -128,6 +130,20 @@ export class VentasComponent implements OnInit {
       ]],
     });
   }
+
+  //tslint:disable-next-line:use-life-cycle-interface
+  ngAfterViewInit() {
+    fromEvent(this.ClienteAutoComplete.nativeElement, 'keyup')
+    .pipe(
+      debounceTime(10),
+      distinctUntilChanged(),
+      tap(() => {
+        this.ListarClientes('', '', '', '' , this.VentasForm.value.cliente , '');
+      })
+     ).subscribe();
+
+  }
+
   /* Agregar productos */
  Agregar() {
   // tslint:disable-next-line:prefer-const
@@ -176,17 +192,15 @@ export class VentasComponent implements OnInit {
 
   }
 
-  ListarClientes() {
-    //this.LstCliente = this.ClienteServicio.Listado('', '', '', this.VentasForm.value.cliente, this.VentasForm.value.cliente, '');
-
-    //this.ClienteServicio.Listado('', '', '', this.VentasForm.value.cliente, this.VentasForm.value.cliente, '').subscribe( res => {
-    /*this.ClienteServicio.Listado('', '', '', '', '', '').subscribe( res => {
+  ListarClientes(inst: string, sede: string, subsede: string, dni: string, nombre: string,apellido: string ) {
+    this.ClienteServicio.Listado(inst, sede, subsede, dni, nombre, apellido).subscribe( res => {
       this.LstCliente = [];
+      console.log(res);
       // tslint:disable-next-line:forin
       for (let i in res) {
-        this.LstCliente.push ( res[i] );
-      
-   });}*/
+        this.LstCliente.push(res[i]);
+      }
+    });
   }
 
 }
