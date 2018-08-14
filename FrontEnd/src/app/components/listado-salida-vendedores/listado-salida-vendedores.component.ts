@@ -1,86 +1,122 @@
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { VentanaEmergenteGastos} from './ventana-emergente/ventanaemergente';
 import { VentanaEmergenteDet } from './ventana-emergentedet/ventanaemergentedet';
-import { Component, OnInit } from '@angular/core';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import {MatSelect, MatPaginator, MatSort,MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
-
-
-export interface PeriodicElement {
-  pecosa: string;
-  position: number;
-  fecha: string;
-  destino: string;
-  sucursal: string;
-  estado: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, pecosa: '00059681', fecha: '08/02/2018', destino: 'Ica', sucursal: 'Lima', estado: 'Pendiente'},
-  {position: 2, pecosa: '00059682', fecha: '15/02/2018', destino: 'Chimbote', sucursal: 'Arequipa', estado: 'Pendiente'},
-  {position: 3, pecosa: '00059683', fecha: '21/02/2018', destino: 'La Merced', sucursal: 'Cuzco', estado: 'Cerrada'},
-  {position: 4, pecosa: '00059684', fecha: '27/02/2018', destino: 'Apurimac', sucursal: 'Piura', estado: 'Pendiente'},
-  {position: 5, pecosa: '00059685', fecha: '10/03/2018', destino: 'Abancay', sucursal: 'Trujillo', estado: 'Cerrada'},
-  {position: 6, pecosa: '00059686', fecha: '12/03/2018', destino: 'Ayacucho', sucursal: 'Chiclayo', estado: 'Pendiente'},
-  {position: 7, pecosa: '00059687', fecha: '20/03/2018', destino: 'Cajamarca', sucursal: 'Puno', estado: 'Pendiente'},
-  {position: 8, pecosa: '00059688', fecha: '25/03/2018', destino: 'Huancavelica', sucursal: 'Tumbes', estado: 'Cerrada'},
-  {position: 9, pecosa: '00059689', fecha: '02/04/2018', destino: 'Iquitos', sucursal: 'Callao', estado: 'Pendiente'},
-  {position: 10, pecosa: '00059690', fecha: '09/04/2018', destino: 'PucallPa', sucursal: 'Tacna', estado: 'Pendiente'},
-];
+import {ListadoSalidaVendedoresService} from './listado-salida-vendedores.service';
+import {ListadoSalidaVendedoresDataSource} from './listado-salida-vendedores.dataservice'
+import {ServiciosGenerales} from '../global/servicios'
+import {merge, Observable, fromEvent} from 'rxjs';
+import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
 
 @Component({
   selector: 'app-listado-salida-vendedores',
   templateUrl: './listado-salida-vendedores.component.html',
-  styleUrls: ['./listado-salida-vendedores.component.css']
+  styleUrls: ['./listado-salida-vendedores.component.css'],
+  providers:[ListadoSalidaVendedoresService,ServiciosGenerales]
 })
+
 export class ListadoSalidaVendedoresComponent implements OnInit {
-  static pecosa: any;
-  [x: string]: any;
-  displayedColumns: string[] = ['position', 'pecosa', 'sucursal', 'fecha', 'destino', 'estado', 'opciones'];
-  dataSource = ELEMENT_DATA;
-  Servicio: any;
 
-  constructor(
-  public DialogoGasto: MatDialog,
-  public Dialogodetalle: MatDialog
-  ) { }
+ @ViewChild('InputPecosa') FiltroPecosa: ElementRef;
+ @ViewChild('InputDestino') FiltroDestino: ElementRef;
+ @ViewChild('InputSucursal') FiltroSucursal: MatSelect;
+ @ViewChild('InputEstado') FiltroEstado: MatSelect;
+ @ViewChild('fechainicio') FechaInicioFiltro: ElementRef;
+ @ViewChild('fechafin') FechaFinFiltro: ElementRef;
+ @ViewChild(MatPaginator) paginator: MatPaginator;
+ @ViewChild(MatSort) sort: MatSort;
 
-  ngOnInit() {
-  }
+ ListadoSalida: ListadoSalidaVendedoresDataSource
+ 
+ private Sucursales:number;
+ 
+ displayedColumns: string[] = ['numero', 'pecosa', 'sucursal', 'fecha', 'destino', 'estado', 'opciones'];
+ 
+ constructor(
+ public DialogoGasto: MatDialog,
+ public Dialogodetalle: MatDialog,
+ private Servicio:ListadoSalidaVendedoresService,
+ private General: ServiciosGenerales
+ ) { }
 
+ngOnInit() {
 
- Cargagasto() {
-  // tslint:disable-next-line:prefer-const
-  let VentanaGastos = this.DialogoGasto.open(VentanaEmergenteGastos, {
-    width: '800px'
-  });
-  }
+  this.General.ListarSucursal(null,"").subscribe(res=>this.Sucursales=res)
 
-
-  Eliminasalida() {
-    const VentanaConfirmar = this.DialogoGasto.open(VentanaConfirmarComponent, {
-      width: '400px',
-      data: {objeto: 'pecosa', valor: ListadoSalidaVendedoresComponent.pecosa}
-
-    });
-    VentanaConfirmar.afterClosed().subscribe(res => {
-      if (res === true) {
-       // tslint:disable-next-line:no-shadowed-variable
-       this.Servicio.Eliminar().subscribe( res => {
-       //  this.CargarData();
-          this.snackBar.open('Se eliminó salida satisfactoriamente.', '', {
-           duration: 2500, verticalPosition: 'bottom'
-        });
-       });
-      }
-    });
-   }
-
-Detalle() {
-  const VentanaDetalle = this.Dialogodetalle.open(VentanaEmergenteDet, {
-    width: '1200px'
-  });
+  this.ListadoSalida = new ListadoSalidaVendedoresDataSource(this.Servicio);
+  this.ListadoSalida.CargarDatos(null, null, null, null, "", null,1, 10, "pecosa");
 
 }
 
+ngAfterViewInit(){
+
+  this.sort.sortChange.subscribe(res => {
+    this.paginator.pageIndex = 0;
+  });
+
+  merge(
+    this.paginator.page,
+    this.sort.sortChange,
+    fromEvent(this.FiltroPecosa.nativeElement,'keyup'),
+    fromEvent(this.FiltroDestino.nativeElement,'keyup')
+  ).pipe(
+     debounceTime(200),
+     distinctUntilChanged(),
+     tap(() => {
+      this.paginator.pageIndex = 0;
+      this.CargarData();
+     })
+    ).subscribe();
+}
+
+CargarData(){
+
+  this.ListadoSalida.CargarDatos(
+    this.FiltroPecosa.nativeElement.value,
+    this.FiltroSucursal.value,
+    this.FechaInicioFiltro.nativeElement.value,
+    this.FechaFinFiltro.nativeElement.value,
+    this.FiltroDestino.nativeElement.value,
+    this.FiltroEstado.value,
+    this.paginator.pageIndex+1,
+    this.paginator.pageSize,
+    this.sort.active +" " + this.sort.direction  )
+}
+
+CambioFiltro(){
+//   this.paginator.pageIndex = 0;
+   this.CargarData()
+}
+
+// Cargagasto() {
+//   let VentanaGastos = this.DialogoGasto.open(VentanaEmergenteGastos, {
+//     width: '800px'
+//   });
+// }
+
+// Eliminasalida() {
+//  const VentanaConfirmar = this.DialogoGasto.open(VentanaConfirmarComponent, {
+//   width: '400px',
+//   data: {objeto: 'pecosa', valor: ""}
+// });
+
+//   VentanaConfirmar.afterClosed().subscribe(res => {
+//    if (res === true) {
+//     // tslint:disable-next-line:no-shadowed-variable
+//     this.Servicio.Eliminar().subscribe( res => {
+//     //  this.CargarData();
+//        this.snackBar.open('Se eliminó salida satisfactoriamente.', '', {
+//         duration: 2500, verticalPosition: 'bottom'
+//      });
+//      });
+//    }
+//   });
+// }
+//  Detalle() {
+//    const VentanaDetalle = this.Dialogodetalle.open(VentanaEmergenteDet, {
+//      width: '1200px'
+//    });
+//  }
 
 }

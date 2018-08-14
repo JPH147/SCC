@@ -32,23 +32,32 @@ var ClienteService = /** @class */ (function () {
         }));
     };
     ClienteService.prototype.Eliminar = function (idcliente) {
+        // tslint:disable-next-line:prefer-const
         var params = 'idcliente=' + idcliente;
+        // tslint:disable-next-line:prefer-const
         var headers = new http_1.HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
         return this.http.post(this.url + 'cliente/delete.php', params, { headers: headers });
+        // tslint:disable-next-line:indent
     };
-    ClienteService.prototype.Agregar = function (id_institucion, clt_codigo, clt_dni, clt_nombre, clt_apellido, clt_cip, clt_email, clt_casilla, clt_trabajo, clt_cargo, clt_calificacion_crediticia, clt_calificacion_personal, clt_aporte) {
+    ClienteService.prototype.Agregar = function (id_subsede, clt_codigo, clt_dni, clt_nombre, clt_apellido, clt_cip, clt_email, clt_casilla, clt_trabajo, clt_cargo, clt_calificacion_crediticia, clt_calificacion_personal, clt_aporte) {
         var today = new Date();
+        // tslint:disable-next-line:no-var-keyword
+        // tslint:disable-next-line:prefer-const
         var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-        var params = 'id_institucion=' + id_institucion + '&clt_codigo=' + clt_codigo
+        // tslint:disable-next-line:prefer-const
+        var params = 'id_subsede=' + id_subsede + '&clt_codigo=' + clt_codigo
             + '&clt_dni=' + clt_dni + '&clt_nombre=' + clt_nombre + '&clt_apellido=' + clt_apellido
             + '&clt_cip=' + clt_cip + '&clt_email=' + clt_email + '&clt_casilla=' + clt_casilla
             + '&clt_trabajo=' + clt_trabajo + '&clt_cargo=' + clt_cargo + '&clt_calificacion_crediticia=' + clt_calificacion_crediticia
             + '&clt_calificacion_personal=' + clt_calificacion_personal + '&clt_aporte=' + clt_aporte + '&clt_estado=1'
             + '&clt_fecharegistro=' + date;
+        // tslint:disable-next-line:prefer-const
         var headers = new http_1.HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
         return this.http.post(this.url + 'cliente/create.php', params, { headers: headers });
     };
-    ClienteService.prototype.Seleccionar = function (id) {
+    ClienteService.prototype.Seleccionar = function (id
+    // tslint:disable-next-line:whitespace
+    ) {
         return this.http.get(this.url + 'cliente/readxId.php?idcliente=' + id)
             .pipe(operators_1.map(function (res) {
             if (res['codigo'] === 0) {

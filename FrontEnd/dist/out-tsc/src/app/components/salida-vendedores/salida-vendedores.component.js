@@ -13,36 +13,22 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var ventanaseriessv_1 = require("./ventana-seriessv/ventanaseriessv");
+var ventanaretorno_1 = require("./ventana-retorno/ventanaretorno");
 var core_1 = require("@angular/core");
 var material_1 = require("@angular/material");
 var forms_1 = require("@angular/forms");
-var collections_1 = require("@angular/cdk/collections");
 var SalidaVendedoresComponent = /** @class */ (function () {
-    function SalidaVendedoresComponent(dialog, DialogoSerie) {
+    function SalidaVendedoresComponent(dialog, DialogoSerie, Dialogotalon) {
         this.dialog = dialog;
         this.DialogoSerie = DialogoSerie;
+        this.Dialogotalon = Dialogotalon;
         this.date = new forms_1.FormControl(new Date());
         this.serializedDate = new forms_1.FormControl((new Date()).toISOString());
         this.toppings = new forms_1.FormControl();
         this.toppingList = ['Jean Pierre', 'Joel Vicuña', 'Carlos Rodriguez', 'Jean Paul', 'Ivan Arones', 'Fernando Martinez'];
-        this.selection = new collections_1.SelectionModel(true, []);
-        this.foods = [
-            { value: 'steak-0', viewValue: 'Celular' },
-            { value: 'pizza-1', viewValue: 'Televisor' },
-            { value: 'tacos-2', viewValue: 'Libro' }
-        ];
+        this.contador = 1;
+        this.serietalonarios = [{ numero: this.contador, serie: '', inicio: '', fin: '' }];
     }
-    SalidaVendedoresComponent.prototype.openDialog = function () {
-        var _this = this;
-        var dialogRef = this.dialog.open(DialogoComponent, {
-            width: '250px',
-            data: { name: this.name, animal: this.animal }
-        });
-        dialogRef.afterClosed().subscribe(function (result) {
-            console.log('The dialog was closed');
-            _this.animal = result;
-        });
-    };
     SalidaVendedoresComponent.prototype.ngOnInit = function () {
         this.contador = 1;
         this.articulos = [
@@ -58,16 +44,34 @@ var SalidaVendedoresComponent = /** @class */ (function () {
     };
     SalidaVendedoresComponent.prototype.AgregarSerieSalidaV = function () {
         var serieventana = this.DialogoSerie.open(ventanaseriessv_1.ventanaseriessv, {
+            width: '800px'
+        });
+    };
+    SalidaVendedoresComponent.prototype.Agregatalonario = function () {
+        var serietalorarios = this.Dialogotalon.open(ventanaretorno_1.ventanaRetorno, {
             width: '600px'
+        });
+    };
+    SalidaVendedoresComponent.prototype.openDialog = function () {
+        var _this = this;
+        var dialogRef = this.dialog.open(DialogoComponent, {
+            width: '250px',
+            data: { name: this.name, animal: this.animal }
+        });
+        dialogRef.afterClosed().subscribe(function (result) {
+            console.log('The dialog was closed');
+            _this.animal = result;
         });
     };
     SalidaVendedoresComponent = __decorate([
         core_1.Component({
             selector: 'app-salida-vendedores',
             templateUrl: './salida-vendedores.component.html',
-            styleUrls: ['./salida-vendedores.component.css']
+            styleUrls: ['./salida-vendedores.component.css'],
         }),
-        __metadata("design:paramtypes", [material_1.MatDialog, material_1.MatDialog])
+        __metadata("design:paramtypes", [material_1.MatDialog,
+            material_1.MatDialog,
+            material_1.MatDialog])
     ], SalidaVendedoresComponent);
     return SalidaVendedoresComponent;
 }());

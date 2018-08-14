@@ -22,7 +22,6 @@ export class ProductosComponent implements OnInit {
   ListadoProductos: ProductoDataSource;
   Columnas: string[] = ['numero', 'descripcion', 'tipo', 'marca', 'modelo', 'precio', 'opciones'];
   // tslint:disable-next-line:no-inferrable-types
-  public TotalResultados: number = 0;
 
   @ViewChild('InputProducto') FiltroProductos: ElementRef;
   @ViewChild('InputTipo') FiltroTipo: ElementRef;

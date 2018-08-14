@@ -20,14 +20,16 @@ var ServiciosDirecciones = /** @class */ (function () {
     }
     /************************************************************************************************/
     /* Departamentos */
-    ServiciosDirecciones.prototype.ListarDepartamentos = function (nombre) {
+    ServiciosDirecciones.prototype.ListarDepartamentos = function (nombre, pagina, total_pagina) {
         return this.http.get(this.url + 'direcciondepartamento/read.php', {
             params: new http_1.HttpParams()
                 .set('prnombre', nombre)
+                .set('prpagina', pagina.toString())
+                .set('prtotalpagina', total_pagina.toString())
         })
             .pipe(operators_1.map(function (res) {
             if (res['codigo'] === 0) {
-                return res = res['data'].departamentos;
+                return res = res;
             }
             else {
                 console.log('Error al importar los datos, revisar servicio');
@@ -67,15 +69,17 @@ var ServiciosDirecciones = /** @class */ (function () {
     };
     /************************************************************************************************/
     /* Provincias */
-    ServiciosDirecciones.prototype.ListarProvincias = function (departamento, provincia) {
+    ServiciosDirecciones.prototype.ListarProvincias = function (departamento, provincia, pagina, total_pagina) {
         return this.http.get(this.url + 'direccionprovincia/read.php', {
             params: new http_1.HttpParams()
                 .set('prdepartamento', departamento)
                 .set('prprovincia', provincia)
+                .set('prpagina', pagina.toString())
+                .set('prtotalpagina', total_pagina.toString())
         })
             .pipe(operators_1.map(function (res) {
             if (res['codigo'] === 0) {
-                return res = res['data'].provincias;
+                return res = res;
             }
             else {
                 console.log('Error al importar los datos, revisar servicio');
@@ -118,16 +122,18 @@ var ServiciosDirecciones = /** @class */ (function () {
     };
     /************************************************************************************************/
     /* Distritos */
-    ServiciosDirecciones.prototype.ListarDistritos = function (departamento, provincia, distrito) {
+    ServiciosDirecciones.prototype.ListarDistritos = function (departamento, provincia, distrito, pagina, total_pagina) {
         return this.http.get(this.url + 'direcciondistrito/read.php', {
             params: new http_1.HttpParams()
                 .set('prdepartamento', departamento)
                 .set('prprovincia', provincia)
                 .set('prdistrito', distrito)
+                .set('prpagina', pagina.toString())
+                .set('prtotalpagina', total_pagina.toString())
         })
             .pipe(operators_1.map(function (res) {
             if (res['codigo'] === 0) {
-                return res = res['data'].distritos;
+                return res = res;
             }
             else {
                 console.log('Error al importar los datos, revisar servicio');
@@ -156,14 +162,14 @@ var ServiciosDirecciones = /** @class */ (function () {
     ServiciosDirecciones.prototype.CrearDistrito = function (provincia, nombre) {
         var params = new http_1.HttpParams()
             .set('prnombre', nombre)
-            .set('prdepartamento', provincia.toString());
+            .set('prprovincia', provincia.toString());
         var headers = new http_1.HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
         return this.http.post(this.url + 'direcciondistrito/create.php', params, { headers: headers });
     };
     ServiciosDirecciones.prototype.ActualizarDistrito = function (id, provincia, nombre) {
         var params = new http_1.HttpParams()
             .set('prid', id.toString())
-            .set('prdepartamento', provincia.toString())
+            .set('prprovincia', provincia.toString())
             .set('prnombre', nombre);
         var headers = new http_1.HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
         return this.http.post(this.url + 'direcciondistrito/update.php', params, { headers: headers });

@@ -18,19 +18,19 @@
         $venta->tipo_venta = !empty($_GET['prtipo_venta']) ? $_GET['prtipo_venta'] : null;
         $venta->fecha_inicio = !empty($_GET['prfecha_inicio']) ? $_GET['prfecha_inicio'] : null;
         $venta->fecha_fin = !empty($_GET['prfecha_fin']) ? $_GET['prfecha_fin'] : null;
-        $venta->numero_pagina = !empty($_GET['prpagina']) ? $_GET['prpagina'] : null;
-        $venta->total_pagina = !empty($_GET['prtotalpagina']) ? $_GET['prtotalpagina'] : null;
-        $venta->orden = !empty($_GET['orden']) ? $_GET['orden'] : 'id desc';
+        $venta->numero_pagina = !empty($_GET['prpagina']) ? $_GET['prpagina'] : 1;
+        $venta->total_pagina = !empty($_GET['prtotalpagina']) ? $_GET['prtotalpagina'] : 20;
+        $venta->orden = !empty($_GET['prorden']) ? $_GET['prorden'] : 'serie asc';
 
         $venta_list = $venta->read();
-        //$producto_contar = $venta->contar();
+        $venta_contar = $venta->contar();
 
         if (count(array_filter($venta_list))>0)
         { 
-            print_json("0000", 1, $venta_list);
+            print_json("0000", $venta_contar, $venta_list);
         }
         else
-        { print_json("0001", 1, $venta_list); }
+        { print_json("0001", $venta_contar, $venta_list); }
     }
 
     catch(Exception $exception)

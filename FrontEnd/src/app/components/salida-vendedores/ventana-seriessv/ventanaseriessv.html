@@ -1,14 +1,43 @@
 <mat-card>
-    <button mat-mini-fab color="primary" class = 'boton' (click)="AgregarSerieSV()"><mat-icon>add</mat-icon></button>
+
+  <form [formGroup]="SeriesProductosForm" (ngSubmit)="Guardar(SeriesProductosForm)">
+  
     <mat-card-header>
       <mat-card-title>Ingresa Series</mat-card-title>
     </mat-card-header>
+    
     <mat-card-content>
-      <div *ngFor="let serie of seriearticulo">
-        <mat-form-field class="example-full-width">
-          <input matInput placeholder="Ingresa Series">
-        </mat-form-field>
-      </div>
+
+    <mat-selection-list #shoes (selectionChange)="Cambio($event)">
+      <mat-list-option formArrayName="series" *ngFor="let serie of SeriesProductosForm['controls'].series['controls'];let i = index">
+        <div [formGroupName]="i">
+          
+          <mat-grid-list cols=3 rowHeight="70px">
+          
+            <mat-grid-tile>
+              <mat-form-field>
+                <input matInput placeholder="Serie" formControlName="serie">
+              </mat-form-field>
+            </mat-grid-tile>
+          
+            <mat-grid-tile>
+              <mat-form-field>
+                <input matInput placeholder="Precio mínimo" formControlName="precio">
+              </mat-form-field>
+            </mat-grid-tile>
+          
+            <mat-grid-tile>
+              <mat-form-field>
+                <input matInput placeholder="Cantidad" formControlName="cantidad">
+              </mat-form-field>
+            </mat-grid-tile>
+          
+          </mat-grid-list>
+          
+        </div>
+      </mat-list-option>
+    </mat-selection-list>
+
     </mat-card-content>
 
     <mat-card-actions>
@@ -19,5 +48,6 @@
       </mat-grid-list>
     </mat-card-actions>
 
+  </form>
 
-  </mat-card>
+</mat-card>

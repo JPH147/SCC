@@ -18,25 +18,39 @@ var ProductoService = /** @class */ (function () {
         this.http = http;
         this.url = url_1.URL.url;
     }
-    ProductoService.prototype.Listado = function (tipo, marca, modelo, descripcion) {
-        return this.http.get(this.url + 'producto/read.php?prtipo='
-            + tipo + '&prmarca=' + marca + '&prmodelo=' + modelo + '&prdescripcion=+ ' + descripcion)
+    ProductoService.prototype.Listado = function (tipo, marca, modelo, descripcion, pagina, total_pagina, columna, tipo_orden) {
+        var orden;
+        orden = columna.concat(' ', tipo_orden);
+        return this.http.get(this.url + 'producto/read.php', {
+            params: new http_1.HttpParams()
+                .set('prtipo', tipo)
+                .set('prmarca', marca)
+                .set('prmodelo', modelo)
+                .set('prdescripcion', descripcion)
+                .set('prpagina', pagina.toString())
+                .set('prtotalpagina', total_pagina.toString())
+                .set('orden', orden)
+        })
             .pipe(operators_1.map(function (res) {
             if (res['codigo'] === 0) {
-                return res['data'].productos;
+                return res;
             }
             else {
                 console.log('Error al importar los datos, revisar servicio');
+                return res;
             }
         }));
     };
     ProductoService.prototype.Eliminar = function (producto) {
+        // tslint:disable-next-line:prefer-const
         var params = 'idproducto=' + producto;
         var headers = new http_1.HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
         return this.http.post(this.url + 'producto/delete.php', params, { headers: headers });
     };
     ProductoService.prototype.Agregar = function (modelo, descripcion, precio) {
+        // tslint:disable-next-line:prefer-const
         var params = 'id_modelo=' + modelo + '&prd_descripcion=' + descripcion + '&prd_precio=' + precio;
+        // tslint:disable-next-line:prefer-const
         var headers = new http_1.HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
         return this.http.post(this.url + 'producto/create.php', params, { headers: headers });
     };
@@ -52,7 +66,11 @@ var ProductoService = /** @class */ (function () {
         }));
     };
     ProductoService.prototype.Actualizar = function (id, modelo, descripcion, precio) {
-        var params = 'id_producto=' + id + '&id_modelo=' + modelo + '&prd_descripcion=' + descripcion + '&prd_precio=' + precio;
+        // tslint:disable-next-line:prefer-const
+        // tslint:disable-next-line:whitespace
+        // tslint:disable-next-line:prefer-const
+        var params = 'id_producto=' + id + '&id_modelo= ' + modelo + '&prd_descripcion = ' + descripcion + '&prd_precio=' + precio;
+        // tslint:disable-next-line:prefer-const
         var headers = new http_1.HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
         return this.http.post(this.url + 'producto/update.php', params, { headers: headers });
     };

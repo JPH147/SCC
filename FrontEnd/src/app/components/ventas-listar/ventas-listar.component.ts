@@ -1,11 +1,10 @@
 import { VentanaEmergenteProductos } from '../productos/ventana-emergente/ventanaemergente';
 import {Component, OnInit, ViewChild, AfterViewInit, ElementRef} from '@angular/core';
 import { MatPaginator, MatSort, MatDialog, MatSelect } from '@angular/material';
-import {merge, Observable} from 'rxjs';
+import {merge, Observable, fromEvent} from 'rxjs';
 import {catchError, map, startWith, switchMap} from 'rxjs/operators';
 import {ProductoService} from '../productos/productos.service';
 import {VentaDataSource} from './ventas-listar.dataservice';
-import {fromEvent} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
 import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
 import {VentasServicio} from './ventas-listar.service'
@@ -20,9 +19,7 @@ export class VentasListarComponent implements OnInit {
 
 
   ListadoVentas: VentaDataSource;
-  Columnas: string[] = ['numero', 'serie', 'cliente', 'tipo_venta', 'monto_total', 'fecha', 'opciones'];
-  // tslint:disable-next-line:no-inferrable-types
-  public TotalResultados: number = 0;
+  Columnas: string[] = ['numero', 'serie','contrato', 'cliente_nombre', 'tipo_venta', 'monto_total', 'fecha', 'opciones'];
 
   @ViewChild('InputCliente') FiltroCliente: ElementRef;
   @ViewChild('InputTipo') FiltroTipo: MatSelect;
@@ -38,60 +35,51 @@ export class VentasListarComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-   this.Servicio.Listado("",null,null,null,1,20,"id").subscribe()
    this.ListadoVentas = new VentaDataSource(this.Servicio);
-   this.ListadoVentas.CargarProductos("",null,null,null,1,20,"id");
+   this.ListadoVentas.CargarProductos("",null,null,null,1,10,"serie asc");
  }
 
 // tslint:disable-next-line:use-life-cycle-interface
 ngAfterViewInit () {
 
-//   this.sort.sortChange.subscribe(res => {
-//     this.paginator.pageIndex = 0;
-//   });
+  this.sort.sortChange.subscribe(res => {
+    this.paginator.pageIndex = 0;
+  });
 
-//   merge(
-//     this.paginator.page,
-//     this.sort.sortChange
-//   )
-//   .pipe(
-//     tap(() => this.CargarData())
-//   ).subscribe();
+  merge(
+    this.paginator.page,
+    this.sort.sortChange
+  )
+  .pipe(
+    tap(() => this.CargarData())
+  ).subscribe();
 
-//   merge(
-//    fromEvent(this.FiltroProductos.nativeElement, 'keyup'),
-//    fromEvent(this.FiltroTipo.nativeElement, 'keyup'),
-//    fromEvent(this.FiltroMarca.nativeElement, 'keyup'),
-//    fromEvent(this.FiltroModelo.nativeElement, 'keyup')
-//   )
-//   .pipe(
-//      debounceTime(200),
-//      distinctUntilChanged(),
-//      tap(() => {
-//        this.paginator.pageIndex = 0;
-//        this.CargarData();
-//      })
-//     ).subscribe();
+  fromEvent(this.FiltroCliente.nativeElement, 'keyup')
+  .pipe(
+     debounceTime(200),
+     distinctUntilChanged(),
+     tap(() => {
+       this.paginator.pageIndex = 0;
+       this.CargarData();
+     })
+    ).subscribe();
  }
 
  CargarData() {
-
-   console.log("Component",this.FiltroCliente.nativeElement.value,
-     this.FiltroTipo.value,
-     this.FechaInicioFiltro.nativeElement.value,
-     this.FechaFinFiltro.nativeElement.value,
-     1,20,"id")
 
    this.ListadoVentas.CargarProductos(
      this.FiltroCliente.nativeElement.value,
      this.FiltroTipo.value,
      this.FechaInicioFiltro.nativeElement.value,
      this.FechaFinFiltro.nativeElement.value,
-     1,20,"id"
+     this.paginator.pageIndex+1,
+     this.paginator.pageSize,
+     this.sort.active +" " + this.sort.direction
    );
  }
 
  CambioFiltro(){
+   this.paginator.pageIndex = 0;
    this.CargarData()
  }
 

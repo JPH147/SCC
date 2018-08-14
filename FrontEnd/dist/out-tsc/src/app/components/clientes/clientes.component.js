@@ -16,11 +16,17 @@ var clientes_service_1 = require("./clientes.service");
 var clientes_dataservice_1 = require("./clientes.dataservice");
 var rxjs_1 = require("rxjs");
 var operators_1 = require("rxjs/operators");
+var ventana_confirmar_component_1 = require("../global/ventana-confirmar/ventana-confirmar.component");
+var fileupload_1 = require("./file-upload/fileupload");
+var ventanaemergentecontacto_1 = require("./ventana-emergentecontacto/ventanaemergentecontacto");
 var ClientesComponent = /** @class */ (function () {
-    function ClientesComponent(Servicio, DialogoClientes) {
+    function ClientesComponent(Servicio, DialogoClientes, DialogFileUpload, DialogoContacto, snackBar) {
         this.Servicio = Servicio;
         this.DialogoClientes = DialogoClientes;
-        this.Columnas = ['numero', 'codigo', 'dni', 'nombrecliente', 'apellidocliente', 'institucion', 'sede', 'subsede', 'opciones'];
+        this.DialogFileUpload = DialogFileUpload;
+        this.DialogoContacto = DialogoContacto;
+        this.snackBar = snackBar;
+        this.Columnas = ['numero', 'codigo', 'dni', 'nombrecliente', 'apellidocliente', 'subsede', 'opciones'];
     }
     ClientesComponent.prototype.ngOnInit = function () {
         this.ListadoCliente = new clientes_dataservice_1.ClienteDataSource(this.Servicio);
@@ -65,12 +71,28 @@ var ClientesComponent = /** @class */ (function () {
         });
         VentanaClientes.afterClosed().subscribe(function (res) {
             _this.CargarData();
+            /*this.snackBar.open('Se creó el cliente satisfactoriamente.', '', {
+              duration: 2500
+            });*/
         });
     };
-    ClientesComponent.prototype.Eliminar = function (id) {
+    ClientesComponent.prototype.Eliminar = function (cliente) {
         var _this = this;
-        this.Servicio.Eliminar(id).subscribe(function (res) {
-            _this.CargarData();
+        // tslint:disable-next-line:prefer-const
+        var VentanaConfirmar = this.DialogoClientes.open(ventana_confirmar_component_1.VentanaConfirmarComponent, {
+            width: '400px',
+            data: { objeto: 'cliente', valor: cliente.dni }
+        });
+        VentanaConfirmar.afterClosed().subscribe(function (res) {
+            if (res === true) {
+                // tslint:disable-next-line:no-shadowed-variable
+                _this.Servicio.Eliminar(cliente.id).subscribe(function (res) {
+                    _this.CargarData();
+                    _this.snackBar.open('Se eliminó el cliente satisfactoriamente.', '', {
+                        duration: 2500, verticalPosition: 'bottom'
+                    });
+                });
+            }
         });
     };
     ClientesComponent.prototype.Editar = function (id) {
@@ -85,6 +107,20 @@ var ClientesComponent = /** @class */ (function () {
             VentanaClientes.afterClosed().subscribe(function (res) {
                 _this.CargarData();
             });
+        });
+    };
+    ClientesComponent.prototype.AgregarDatoContacto = function (id) {
+        // tslint:disable-next-line:prefer-const
+        var VentanaContacto = this.DialogoContacto.open(ventanaemergentecontacto_1.VentanaEmergenteContacto, {
+            width: '800px',
+            data: id
+        });
+    };
+    ClientesComponent.prototype.SubirImagen = function (id) {
+        // tslint:disable-next-line:prefer-const
+        var VentanaFileUpload = this.DialogFileUpload.open(fileupload_1.FileUpload, {
+            width: '800px',
+            data: id
         });
     };
     __decorate([
@@ -119,7 +155,10 @@ var ClientesComponent = /** @class */ (function () {
             providers: [clientes_service_1.ClienteService]
         }),
         __metadata("design:paramtypes", [clientes_service_1.ClienteService,
-            material_1.MatDialog])
+            material_1.MatDialog,
+            material_1.MatDialog,
+            material_1.MatDialog,
+            material_1.MatSnackBar])
     ], ClientesComponent);
     return ClientesComponent;
 }());

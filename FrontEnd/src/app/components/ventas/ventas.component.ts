@@ -29,6 +29,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
   styleUrls: ['./ventas.component.css'],
   providers: [VentaService, ServiciosTipoDocumento, ServiciosTipoPago, ClienteService]
 })
+
 export class VentasComponent implements OnInit {
   public ListadoCronograma: VentaDataSource;
   public ListadoCliente: ClienteDataSource;

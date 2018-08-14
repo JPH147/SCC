@@ -14,6 +14,7 @@ var ventas_component_1 = require("./components/ventas/ventas.component");
 var listado_salida_vendedores_component_1 = require("./components/listado-salida-vendedores/listado-salida-vendedores.component");
 var proveedores_component_1 = require("./components/proveedores/proveedores.component");
 var direcciones_component_1 = require("./components/direcciones/direcciones.component");
+var ventas_listar_component_1 = require("./components/ventas-listar/ventas-listar.component");
 var appRoutes = [
     { path: 'usuarios', component: usuarios_component_1.UsuariosComponent },
     { path: 'productos', component: productos_component_1.ProductosComponent },
@@ -22,10 +23,12 @@ var appRoutes = [
     { path: 'stock/salidaproductos', component: salida_productos_component_1.SalidaProductosComponent },
     { path: 'salidavendedores', component: listado_salida_vendedores_component_1.ListadoSalidaVendedoresComponent },
     { path: 'salidavendedores/ingreso', component: salida_vendedores_component_1.SalidaVendedoresComponent },
+    { path: 'salidavendedores/retorno', component: retorno_vendedores_component_1.RetornoVendedoresComponent },
     { path: 'retornovendedores', component: retorno_vendedores_component_1.RetornoVendedoresComponent },
     { path: 'comisiones', component: comisiones_component_1.ComisionesComponent },
     { path: 'clientes', component: clientes_component_1.ClientesComponent },
-    { path: 'ventas', component: ventas_component_1.VentasComponent },
+    { path: 'ventas', component: ventas_listar_component_1.VentasListarComponent },
+    { path: 'ventas/nueva', component: ventas_component_1.VentasComponent },
     { path: 'usuarios', component: usuarios_component_1.UsuariosComponent },
     { path: 'proveedores', component: proveedores_component_1.ProveedoresComponent },
     { path: 'direcciones', component: direcciones_component_1.DireccionesComponent },

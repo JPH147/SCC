@@ -1,7 +1,6 @@
 
 import { ServiciosGenerales, Almacen } from './../global/servicios';
 import { ventanaseries } from './ventana-series/ventanaseries';
-import { DialogData } from '../salida-vendedores/salida-vendedores.component';
 import { Component, OnInit, ViewChild,ElementRef } from '@angular/core';
 import { FormControl, FormBuilder, FormGroup, Validators, PatternValidator } from '@angular/forms';
 import {Observable, fromEvent} from 'rxjs';

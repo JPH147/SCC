@@ -100,7 +100,7 @@ export class ServiciosGenerales {
   }
 
   ListarAlmacen(
-  ): Observable<Almacen> {
+  ): Observable<Almacen[]> {
     return this.http.get(this.url + 'almacen/read.php')
     .pipe(map(res => {
       if (res['codigo'] === 0) {
@@ -142,6 +142,34 @@ export class ServiciosGenerales {
           }
       }));
       }
+
+  ListarSucursal(
+      id:number,
+      nombre:string
+    ):Observable<any>{
+
+      let ID:string;
+
+      if( id==null ){
+        ID=""
+      }else{
+        ID=id.toString()
+      }
+
+      return this.http.get(this.url + 'sucursal/read.php', {
+        params: new HttpParams()
+        .set('prid', ID)
+        .set('prnombre',nombre)
+      })
+
+      .pipe(map(res => {
+        if (res['codigo'] === 0) {
+            return res['data'].sucursal;
+        } else {
+            console.log('Error al importar los datos, revisar servicio');
+          }
+      }));
+    }
   }
 
 

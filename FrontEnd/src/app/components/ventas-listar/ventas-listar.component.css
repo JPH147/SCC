@@ -36,8 +36,12 @@ mat-card{
   max-width: 5%;
 }
 
-.mat-column-tipo,
 .mat-column-serie,
+.mat-column-contrato{
+  max-width: 10%;
+}
+
+.mat-column-tipo,
 .mat-column-monto_total,
 .mat-column-tipo_venta,
 .mat-column-fecha,

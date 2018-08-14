@@ -167,5 +167,25 @@ Class Venta{
         return $venta_list;
     }
 
+    function contar(){
+
+        $query = "CALL sp_listarventacontar(?,?,?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->cliente);
+        $result->bindParam(2, $this->tipo_venta);
+        $result->bindParam(3, $this->fecha_inicio);
+        $result->bindParam(4, $this->fecha_fin);
+
+        $result->execute();
+
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        $this->total_resultado=$row['total'];
+
+        return $this->total_resultado;
+    }
+
 }
 ?>
