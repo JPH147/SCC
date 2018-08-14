@@ -142,7 +142,6 @@ export class ServiciosGenerales {
           }
       }));
       }
-<<<<<<< HEAD
 
   ListarSucursal(
       id:number,
@@ -171,10 +170,6 @@ export class ServiciosGenerales {
           }
       }));
     }
-  }
-=======
->>>>>>> 66add31e83f28dfe0f5b920f76250161cf44118a
-
   }
 
 export interface TipoTransaccion {

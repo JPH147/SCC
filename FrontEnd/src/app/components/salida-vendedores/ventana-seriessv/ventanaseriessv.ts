@@ -35,11 +35,11 @@ export class ventanaseriessv  implements OnInit {
 
   CrearSerie():FormGroup{
     return this.FormBuilder.group({
-      'serie':[{value:null, disabled:true},[
+      'serie':[{value:null, disabled:false},[
       ]],
       'precio':[{value:null, disabled:false},[
       ]],
-      'cantidad':[{value:null, disabled:true},[
+      'cantidad':[{value:null, disabled:false},[
       ]]
     })
   }
