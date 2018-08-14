@@ -1,4 +1,5 @@
 
+import { IngresoProductoService } from './ingreso-productos.service';
 import { ServiciosGenerales, Almacen } from './../global/servicios';
 import { ventanaseries } from './ventana-series/ventanaseries';
 import { Component, OnInit, ViewChild,ElementRef } from '@angular/core';
@@ -11,11 +12,13 @@ import { MatDialog } from '@angular/material';
 import { eventNames } from 'cluster';
 import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
 import * as moment from 'moment';
+
+
 @Component({
   selector: 'app-ingreso-productos',
   templateUrl: './ingreso-productos.component.html',
   styleUrls: ['./ingreso-productos.component.css'],
-  providers: [ServiciosGenerales]
+  providers: [ServiciosGenerales, IngresoProductoService]
 })
   export class IngresoProductosComponent implements OnInit {
 
@@ -42,9 +45,10 @@ import * as moment from 'moment';
 
     constructor(public DialogoSerie: MatDialog,
     // tslint:disable-next-line:no-shadowed-variable
-    private FormBuilder: FormBuilder,
-   /* public data,*/
-    private Servicios: ServiciosGenerales,
+      private FormBuilder: FormBuilder,
+    /* public data,*/
+      private Servicios: ServiciosGenerales,
+      private IngresoProductoservicios: IngresoProductoService,
     ) {}
 
     ngOnInit() {
@@ -59,6 +63,7 @@ import * as moment from 'moment';
           'docReferencia': [null, [Validators.required, Validators.pattern('[0-9-]+')]],
           'proveedor': [null, [Validators.required]],
           'fecingreso': [null, [Validators.required]],
+
       });
 /*
       this.Servicios.ListarAlmacen().subscribe(res => {
@@ -80,7 +85,7 @@ import * as moment from 'moment';
     ListarProveedor(nombre: string) {
       this.Servicios.ListarProveedor(nombre).subscribe( res => {
         this.proveedores = [];
-        console.log(res);
+       // console.log(res);
         // tslint:disable-next-line:forin
         for (let i in res) {
           this.proveedores.push(res[i]);
@@ -144,17 +149,27 @@ AgregarSerie() {
 
   }
 
-  Guardar() {
-    console.log(this.IngresoProductoForm);
-    console.log(moment(this.IngresoProductoForm.get('fecingreso').value).format('DD/MM/YYYY'));
+  // Guardar Datos Formulario Ingreso Productos Almacen
+  Guardar(formulario) {
+   // console.log(this.IngresoProductoForm);
+   // console.log(moment(this.IngresoProductoForm.get('fecingreso').value).format('DD/MM/YYYY'));
+
+      this.IngresoProductoservicios.Agregar(formulario.value.almacen, formulario.value.tipoIngreso,
+        1,1,formulario.value.fecingreso, formulario.value.docReferencia).subscribe (res => console.log(res) );
+
+     this.IngresoProductoForm.reset();
+
   }
 
-  Cambio(evento){
-    console.log(evento)
+
+
+  Cambio(evento) {
+    console.log(evento);
   }
 
 
-}
+} // Fin de la Clase IngresoProductoComponent
+
 
 // tslint:disable-next-line:class-name
 export interface articulo {

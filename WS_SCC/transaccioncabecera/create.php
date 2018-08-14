@@ -29,7 +29,7 @@
             $transaccion->id_vendedor = !empty($_POST["prvendedor"]) ? $_POST["prvendedor"] : null;
             $transaccion->fecha = $_POST["prfecha"];
             $transaccion->documento = $_POST["prdocumento"];
-            $transaccion->id_transaccion = $_POST["id"];
+            $transaccion->id_transaccion = "JP";
             
             if($transaccion->create())
             {
