@@ -40,7 +40,6 @@ constructor(private Servicio: VentasServicio) { }
   )
   .subscribe(res => {
     this.TotalResultados.next(res['mensaje']);
-    // tslint:disable-next-line:semicolon
     this.InformacionProductos.next(res['data'].ventas)
   });
   }

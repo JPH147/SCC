@@ -9,43 +9,79 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var stock_service_1 = require("./stock.service");
+var stock_dataservice_1 = require("./stock.dataservice");
 var http_1 = require("@angular/common/http");
 var core_1 = require("@angular/core");
 var material_1 = require("@angular/material");
 var rxjs_1 = require("rxjs");
 var operators_1 = require("rxjs/operators");
+var ventanaemergentestock_1 = require("./ventana-emergentestock/ventanaemergentestock");
 var StockComponent = /** @class */ (function () {
-    function StockComponent(http) {
+    function StockComponent(http, Servicio, DialogoStock) {
         this.http = http;
-        this.displayedColumns = ['created', 'state', 'number', 'title'];
-        this.data = [];
-        this.resultsLength = 0;
-        this.isLoadingResults = true;
-        this.isRateLimitReached = false;
+        this.Servicio = Servicio;
+        this.DialogoStock = DialogoStock;
+        this.displayedColumns = ['numero', 'almacen', 'tipo', 'marca', 'modelo', 'descripcion', 'unidad_medida', 'cantidad', 'opciones'];
+        this.TotalResultados = 0;
     }
     StockComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.exampleDatabase = new ExampleHttpDao(this.http);
-        // If the user changes the sort order, reset back to the first page.
-        this.sort.sortChange.subscribe(function () { return _this.paginator.pageIndex = 0; });
-        rxjs_1.merge(this.sort.sortChange, this.paginator.page)
-            .pipe(operators_1.startWith({}), operators_1.switchMap(function () {
-            _this.isLoadingResults = true;
-            // tslint:disable-next-line:no-non-null-assertion
-            return _this.exampleDatabase.getRepoIssues(_this.sort.active, _this.sort.direction, _this.paginator.pageIndex);
-        }), operators_1.map(function (data) {
-            // Flip flag to show that loading has finished.
-            _this.isLoadingResults = false;
-            _this.isRateLimitReached = false;
-            _this.resultsLength = data.total_count;
-            return data.items;
-        }), operators_1.catchError(function () {
-            _this.isLoadingResults = false;
-            // Catch if the GitHub API has reached its rate limit. Return empty data.
-            _this.isRateLimitReached = true;
-            return rxjs_1.of([]);
-        })).subscribe(function (data) { return _this.data = data; });
+        this.Listadodata = new stock_dataservice_1.StockDataSource(this.Servicio);
+        this.Listadodata.CargarStock('', '', '', '', '', 1, 20, 'descripcion asc');
+        this.Listadodata.Totalresultados.subscribe(function (res) {
+            _this.TotalResultados = res;
+        });
     };
+    // tslint:disable-next-line:use-life-cycle-interface
+    StockComponent.prototype.ngAfterViewInit = function () {
+        var _this = this;
+        this.sort.sortChange.subscribe(function (res) {
+            _this.paginator.pageIndex = 0;
+        });
+        rxjs_1.merge(this.paginator.page, this.sort.sortChange)
+            .pipe(operators_1.tap(function () { return _this.CargarData(); })).subscribe();
+        rxjs_1.merge(rxjs_1.fromEvent(this.FiltroAlmacen.nativeElement, 'keyup'), rxjs_1.fromEvent(this.FiltroTipo.nativeElement, 'keyup'), rxjs_1.fromEvent(this.FiltroMarca.nativeElement, 'keyup'), rxjs_1.fromEvent(this.FiltroModelo.nativeElement, 'keyup'), rxjs_1.fromEvent(this.FiltroDescripcion.nativeElement, 'keyup'))
+            .pipe(operators_1.debounceTime(200), operators_1.distinctUntilChanged(), operators_1.tap(function () {
+            _this.paginator.pageIndex = 0;
+            _this.CargarData();
+        })).subscribe();
+    };
+    StockComponent.prototype.CargarData = function () {
+        this.Listadodata.CargarStock(this.FiltroAlmacen.nativeElement.value, this.FiltroTipo.nativeElement.value, this.FiltroMarca.nativeElement.value, this.FiltroModelo.nativeElement.value, this.FiltroDescripcion.nativeElement.value, this.paginator.pageIndex + 1, this.paginator.pageSize, this.sort.active + ' ' + this.sort.direction
+        // 'descripcion asc'
+        );
+    };
+    StockComponent.prototype.DetalleStock = function (id) {
+        var _this = this;
+        var VentanaDetalleStock = this.DialogoStock.open(ventanaemergentestock_1.VentanaEmergenteStock, {
+            width: '600px',
+            data: id
+        });
+        VentanaDetalleStock.afterClosed().subscribe(function (res) {
+            _this.CargarData();
+        });
+    };
+    __decorate([
+        core_1.ViewChild('InputAlmacen'),
+        __metadata("design:type", core_1.ElementRef)
+    ], StockComponent.prototype, "FiltroAlmacen", void 0);
+    __decorate([
+        core_1.ViewChild('InputTipo'),
+        __metadata("design:type", core_1.ElementRef)
+    ], StockComponent.prototype, "FiltroTipo", void 0);
+    __decorate([
+        core_1.ViewChild('InputMarca'),
+        __metadata("design:type", core_1.ElementRef)
+    ], StockComponent.prototype, "FiltroMarca", void 0);
+    __decorate([
+        core_1.ViewChild('InputModelo'),
+        __metadata("design:type", core_1.ElementRef)
+    ], StockComponent.prototype, "FiltroModelo", void 0);
+    __decorate([
+        core_1.ViewChild('InputDescripcion'),
+        __metadata("design:type", core_1.ElementRef)
+    ], StockComponent.prototype, "FiltroDescripcion", void 0);
     __decorate([
         core_1.ViewChild(material_1.MatPaginator),
         __metadata("design:type", material_1.MatPaginator)
@@ -58,24 +94,15 @@ var StockComponent = /** @class */ (function () {
         core_1.Component({
             selector: 'app-stock',
             templateUrl: './stock.component.html',
-            styleUrls: ['./stock.component.css']
+            styleUrls: ['./stock.component.css'],
+            providers: [stock_service_1.StockService]
         }),
-        __metadata("design:paramtypes", [http_1.HttpClient])
+        __metadata("design:paramtypes", [http_1.HttpClient,
+            stock_service_1.StockService,
+            material_1.MatDialog])
     ], StockComponent);
     return StockComponent;
 }());
 exports.StockComponent = StockComponent;
 /** An example database that the data source uses to retrieve data for the table. */
-var ExampleHttpDao = /** @class */ (function () {
-    function ExampleHttpDao(http) {
-        this.http = http;
-    }
-    ExampleHttpDao.prototype.getRepoIssues = function (sort, order, page) {
-        var href = 'https://api.github.com/search/issues';
-        var requestUrl = href + "?q=repo:angular/material2&sort=" + sort + "&order=" + order + "&page=" + (page + 1);
-        return this.http.get(requestUrl);
-    };
-    return ExampleHttpDao;
-}());
-exports.ExampleHttpDao = ExampleHttpDao;
 //# sourceMappingURL=stock.component.js.map

@@ -11,6 +11,7 @@ var tree_1 = require("@angular/cdk/tree");
 var http_1 = require("@angular/common/http");
 var core_1 = require("@angular/core");
 var forms_1 = require("@angular/forms");
+var core_2 = require("@angular/material/core");
 var material_1 = require("@angular/material");
 var platform_browser_1 = require("@angular/platform-browser");
 var animations_1 = require("@angular/platform-browser/animations");
@@ -32,18 +33,28 @@ var ventas_component_1 = require("./components/ventas/ventas.component");
 var salida_vendedores_component_2 = require("./components/salida-vendedores/salida-vendedores.component");
 var listado_salida_vendedores_component_1 = require("./components/listado-salida-vendedores/listado-salida-vendedores.component");
 var ventanaemergente_1 = require("./components/productos/ventana-emergente/ventanaemergente");
+var ventanaemergente_2 = require("./components/ventas/ventana-emergente/ventanaemergente");
 var ventanaseries_1 = require("./components/ingreso-productos/ventana-series/ventanaseries");
 var ventanaseriesalida_1 = require("./components/salida-productos/ventana-seriesalida/ventanaseriesalida");
-var ventanaemergente_2 = require("./components/clientes/ventana-emergente/ventanaemergente");
+var ventanaemergente_3 = require("./components/clientes/ventana-emergente/ventanaemergente");
 var proveedores_component_1 = require("./components/proveedores/proveedores.component");
 var ventanaseriessv_1 = require("./components/salida-vendedores/ventana-seriessv/ventanaseriessv");
-var ventana_confirmar_component_1 = require("./components/productos/ventana-confirmar/ventana-confirmar.component");
 var direcciones_component_1 = require("./components/direcciones/direcciones.component");
 var departamento_component_1 = require("./components/direcciones/departamento/departamento.component");
-var ventanaemergente_3 = require("./components/direcciones/departamento/ventana-emergente/ventanaemergente");
-var ventana_confirmar_component_2 = require("./components/direcciones/departamento/ventana-confirmar/ventana-confirmar.component");
+var ventanaemergente_4 = require("./components/direcciones/departamento/ventana-emergente/ventanaemergente");
+var ventanaemergente_5 = require("./components/direcciones/provincia/ventana-emergente/ventanaemergente");
+var ventanaemergente_6 = require("./components/direcciones/distrito/ventana-emergente/ventanaemergente");
 var provincia_component_1 = require("./components/direcciones/provincia/provincia.component");
 var distrito_component_1 = require("./components/direcciones/distrito/distrito.component");
+var ventana_confirmar_component_1 = require("./components/global/ventana-confirmar/ventana-confirmar.component");
+var ventanaretorno_1 = require("./components/salida-vendedores/ventana-retorno/ventanaretorno");
+var ventanaemergente_7 = require("./components/listado-salida-vendedores/ventana-emergente/ventanaemergente");
+var ventanaemergentedet_1 = require("./components/listado-salida-vendedores/ventana-emergentedet/ventanaemergentedet");
+var angular2_image_upload_1 = require("angular2-image-upload");
+var fileupload_1 = require("./components/clientes/file-upload/fileupload");
+var ventanaemergentecontacto_1 = require("./components/clientes/ventana-emergentecontacto/ventanaemergentecontacto");
+var ventanaemergentestock_1 = require("./components/stock/ventana-emergentestock/ventanaemergentestock");
+var ventas_listar_component_1 = require("./components/ventas-listar/ventas-listar.component");
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
@@ -51,6 +62,7 @@ var AppModule = /** @class */ (function () {
         core_1.NgModule({
             imports: [
                 /* Angular Material */
+                material_1.MatNativeDateModule,
                 table_1.CdkTableModule,
                 tree_1.CdkTreeModule,
                 material_1.MatAutocompleteModule,
@@ -97,6 +109,7 @@ var AppModule = /** @class */ (function () {
                 forms_1.ReactiveFormsModule,
                 layout_1.LayoutModule,
                 app_routing_1.routing,
+                angular2_image_upload_1.ImageUploadModule.forRoot()
             ],
             declarations: [
                 app_component_1.AppComponent,
@@ -114,9 +127,10 @@ var AppModule = /** @class */ (function () {
                 salida_vendedores_component_2.DialogoComponent,
                 listado_salida_vendedores_component_1.ListadoSalidaVendedoresComponent,
                 ventanaemergente_1.VentanaEmergenteProductos,
+                ventanaemergente_2.VentanaEmergenteArchivos,
                 ventanaseries_1.ventanaseries,
                 ventanaseriesalida_1.ventanaseriesalida,
-                ventanaemergente_2.VentanaEmergenteClientes,
+                ventanaemergente_3.VentanaEmergenteClientes,
                 proveedores_component_1.ProveedoresComponent,
                 ventanaseriessv_1.ventanaseriessv,
                 ventana_confirmar_component_1.VentanaConfirmarComponent,
@@ -124,23 +138,39 @@ var AppModule = /** @class */ (function () {
                 departamento_component_1.DepartamentoComponent,
                 provincia_component_1.ProvinciaComponent,
                 distrito_component_1.DistritoComponent,
-                ventanaemergente_3.VentanaEmergenteDepartamento,
-                ventana_confirmar_component_2.VentanaEliminarDepartamento
+                ventanaemergente_4.VentanaEmergenteDepartamento,
+                ventanaemergente_5.VentanaEmergenteProvincia,
+                ventanaemergente_6.VentanaEmergenteDistrito,
+                ventanaemergente_7.VentanaEmergenteGastos,
+                ventanaemergentedet_1.VentanaEmergenteDet,
+                ventanaretorno_1.ventanaRetorno,
+                fileupload_1.FileUpload,
+                ventanaemergentecontacto_1.VentanaEmergenteContacto,
+                ventanaemergentestock_1.VentanaEmergenteStock,
+                ventas_listar_component_1.VentasListarComponent
             ],
             entryComponents: [
                 app_component_1.AppComponent,
                 salida_vendedores_component_2.DialogoComponent,
                 ventanaemergente_1.VentanaEmergenteProductos,
+                ventanaemergente_2.VentanaEmergenteArchivos,
                 ventanaseries_1.ventanaseries,
                 ventanaseriesalida_1.ventanaseriesalida,
-                ventanaemergente_2.VentanaEmergenteClientes,
+                ventanaemergente_3.VentanaEmergenteClientes,
                 ventanaseriessv_1.ventanaseriessv,
                 ventana_confirmar_component_1.VentanaConfirmarComponent,
-                ventanaemergente_3.VentanaEmergenteDepartamento,
-                ventana_confirmar_component_2.VentanaEliminarDepartamento
+                ventanaemergente_4.VentanaEmergenteDepartamento,
+                ventanaemergente_5.VentanaEmergenteProvincia,
+                ventanaemergente_6.VentanaEmergenteDistrito,
+                ventanaemergente_7.VentanaEmergenteGastos,
+                ventanaemergentedet_1.VentanaEmergenteDet,
+                ventanaretorno_1.ventanaRetorno,
+                fileupload_1.FileUpload,
+                ventanaemergentecontacto_1.VentanaEmergenteContacto,
+                ventanaemergentestock_1.VentanaEmergenteStock
             ],
             bootstrap: [app_component_1.AppComponent],
-            providers: [app_routing_1.appRoutingProvider]
+            providers: [app_routing_1.appRoutingProvider, { provide: core_2.MAT_DATE_LOCALE, useValue: 'en-GB' }]
         })
     ], AppModule);
     return AppModule;

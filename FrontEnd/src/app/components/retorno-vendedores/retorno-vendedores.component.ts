@@ -2,7 +2,7 @@ import { element } from 'protractor';
 import { Component, OnInit } from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
-
+import {VentasComponent} from '../ventas/ventas.component'
 
 export interface PeriodicElement {
 
@@ -93,9 +93,15 @@ const ELEMENT_DATA2: PeriodicElement2 [] = [
     dataSource2 = ELEMENT_DATA2;
     displayedColumns2: string[] = ['position2', 'seriet', 'inicio', 'fin', 'confirmar', 'obs2'];
 
-    constructor() { }
+    constructor(public DialogoAgregar: MatDialog) { }
 
     ngOnInit() {
+    }
+
+    RegistrarVenta(){
+    const serieventana = this.DialogoAgregar.open(VentasComponent, {
+      width: '1200px'
+    });
     }
 
   }

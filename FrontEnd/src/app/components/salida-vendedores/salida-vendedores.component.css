@@ -32,10 +32,6 @@
 
 }
 
-.IngFecha{
-  float: right;
-}
-
 .example-table-container {
   position: relative;
   max-height: 400px;
@@ -175,4 +171,8 @@ example-button-row {
 .Alintaguia{
   float: left;
   margin-right:32%
-  }
+}
+
+.formulario-principal{
+  width: 80%
+}

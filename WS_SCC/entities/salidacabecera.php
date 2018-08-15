@@ -11,7 +11,7 @@ Class SalidaCabecera{
     public $pecosa;
     public $id_sucursal;
     public $sucursal;
-    public $fecha;
+
     public $destino;
     public $id_tipo_movilidad;
     public $estado;
@@ -19,6 +19,10 @@ Class SalidaCabecera{
     public $numero_pagina;
     public $total_pagina;
     public $orden;
+
+    public $fecha;
+    public $guia;
+    public $tipo_movilidad;
 
     public $fecha_inicio;
     public $fecha_fin;
@@ -41,7 +45,7 @@ Class SalidaCabecera{
         $result->bindParam(3, $this->fecha_inicio);
         $result->bindParam(4, $this->fecha_fin);
         $result->bindParam(5, $this->destino);
-        $result->bindParam(6, $this->id_tipo_movilidad);
+        $result->bindParam(6, $this->estado);
         $result->bindParam(7, $this->numero_pagina);
         $result->bindParam(8, $this->total_pagina);
         $result->bindParam(9, $this->orden);
@@ -81,28 +85,27 @@ Class SalidaCabecera{
         return $SCabecera_list;
     }
 
-    // function contar(){
+    function contar(){
 
-    //     $query = "CALL sp_listartransaccioncabeceracontar(?,?,?,?,?,?,?)";
+        $query = "CALL sp_listarsalidacabeceracontar(?,?,?,?,?,?)";
 
-    //     $result = $this->conn->prepare($query);
+        $result = $this->conn->prepare($query);
 
-    //     $result->bindParam(1, $this->almacen);
-    //     $result->bindParam(2, $this->tipo);
-    //     $result->bindParam(3, $this->referencia);
-    //     $result->bindParam(4, $this->referente);
-    //     $result->bindParam(5, $this->fecha_inicio);
-    //     $result->bindParam(6, $this->fecha_fin);
-    //     $result->bindParam(7, $this->documento);
+        $result->bindParam(1, $this->pecosa);
+        $result->bindParam(2, $this->id_sucursal);
+        $result->bindParam(3, $this->fecha_inicio);
+        $result->bindParam(4, $this->fecha_fin);
+        $result->bindParam(5, $this->destino);
+        $result->bindParam(6, $this->estado);
 
-    //     $result->execute();
+        $result->execute();
 
-    //     $row = $result->fetch(PDO::FETCH_ASSOC);
+        $row = $result->fetch(PDO::FETCH_ASSOC);
 
-    //     $this->total_resultado=$row['total'];
+        $this->total_resultado=$row['total'];
 
-    //     return $this->total_resultado;
-    // }
+        return $this->total_resultado;
+    }
 
     // /* Seleccionar producto */
     // function readxId(){
@@ -132,76 +135,53 @@ Class SalidaCabecera{
     //     $this->transaccion_detalle=$this->detalle->readxcabecera($row['idtransaccion_cabecera']);
     // }
 
-    // /* Crear producto */
-    // function create()
-    // {
-    //     $query = "call sp_creartransaccioncabecera(
-    //         :pralmacen,
-    //         :prtipo,
-    //         :prreferencia,
-    //         :prproveedor,
-    //         :prcliente,
-    //         :prsalida,
-    //         :prsucursal,
-    //         :prvendedor,
-    //         :prfecha,
-    //         :prdocumento,
-    //         @id
-    //     )";
+    function create()
+    {
+        $query = "call sp_crearsalidavendedor(
+            :prcodigo,
+            :prsucursal,
+            :prfecha,
+            :prdestino,
+            :prguia,
+            :prtipomovilidad
+        )";
 
-    //     $result = $this->conn->prepare($query);
+        $result = $this->conn->prepare($query);
 
-    //     $result->bindParam(":pralmacen", $this->id_almacen);
-    //     $result->bindParam(":prtipo", $this->id_tipo);
-    //     $result->bindParam(":prreferencia", $this->id_referencia);
-    //     $result->bindParam(":prproveedor", $this->id_proveedor);
-    //     $result->bindParam(":prcliente", $this->id_cliente);
-    //     $result->bindParam(":prsalida", $this->id_salida_venta);
-    //     $result->bindParam(":prsucursal", $this->id_sucursal);
-    //     $result->bindParam(":prvendedor", $this->id_vendedor);
-    //     $result->bindParam(":prfecha", $this->fecha);
-    //     $result->bindParam(":prdocumento", $this->documento);
-    //   //  $result->bindParam("@id", $this->id_transaccion);
+        $result->bindParam(":prcodigo", $this->pecosa);
+        $result->bindParam(":prsucursal", $this->id_sucursal);
+        $result->bindParam(":prfecha", $this->fecha);
+        $result->bindParam(":prdestino", $this->destino);
+        $result->bindParam(":prguia", $this->guia);
+        $result->bindParam(":prtipomovilidad", $this->tipo_movilidad);
+//        $result->bindParam("@id", $this->id_salida);
 
-    //     $this->id_almacen=htmlspecialchars(strip_tags($this->id_almacen));
-    //     $this->id_tipo=htmlspecialchars(strip_tags($this->id_tipo));
-    //     $this->id_referencia=htmlspecialchars(strip_tags($this->id_referencia));
+        $this->pecosa=htmlspecialchars(strip_tags($this->pecosa));
+        $this->id_sucursal=htmlspecialchars(strip_tags($this->id_sucursal));
+        $this->fecha=htmlspecialchars(strip_tags($this->fecha));
+        $this->destino=htmlspecialchars(strip_tags($this->destino));
 
-    //     if(!empty($this->id_proveedor)){
-    //        $this->id_proveedor=htmlspecialchars(strip_tags($this->id_proveedor)); 
-    //     };
 
-    //     if(!empty($this->id_cliente)){
-    //        $this->id_cliente=htmlspecialchars(strip_tags($this->id_cliente));
-    //     };
+        if(!empty($this->guia)){
+           $this->guia=htmlspecialchars(strip_tags($this->guia)); 
+        };
 
-    //     if(!empty($this->id_salida_venta)){
-    //         $this->id_salida_venta=htmlspecialchars(strip_tags($this->id_salida_venta));
-    //     };
+        if(!empty($this->tipo_movilidad)){
+           $this->tipo_movilidad=htmlspecialchars(strip_tags($this->tipo_movilidad));
+        };
 
-    //     if(!empty($this->id_sucursal)){
-    //         $this->id_sucursal=htmlspecialchars(strip_tags($this->id_sucursal));
-    //     };
-
-    //     if(!empty($this->id_vendedor)){
-    //         $this->id_vendedor=htmlspecialchars(strip_tags($this->id_vendedor));
-    //     };
-
-    //     $this->fecha=htmlspecialchars(strip_tags($this->fecha));
-    //     $this->documento=htmlspecialchars(strip_tags($this->documento));
-
-    //     if($result->execute())
-    //     {
-    //         while($row = $result->fetch(PDO::FETCH_ASSOC))
-    //         {
-    //             extract($row);
-    //             $this->id=$idtransaccion;
-    //         }
-    //         return true;
-    //     }
+        if($result->execute())
+        {
+            while($row = $result->fetch(PDO::FETCH_ASSOC))
+            {
+                extract($row);
+                $this->id=$prid;
+            }
+            return true;
+        }
         
-    //     return false;
-    // }
+        return false;
+    }
 
     // /* Eliminar producto */
     // function delete()

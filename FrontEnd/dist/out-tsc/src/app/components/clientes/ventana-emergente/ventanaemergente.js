@@ -18,17 +18,22 @@ var forms_1 = require("@angular/forms");
 var servicios_1 = require("../../global/servicios");
 var clientes_service_1 = require("../clientes.service");
 var VentanaEmergenteClientes = /** @class */ (function () {
-    function VentanaEmergenteClientes(data, ventana, FormBuilder, Servicios, ClienteServicios) {
+    function VentanaEmergenteClientes(data, ventana, 
+    // tslint:disable-next-line:no-shadowed-variable
+    FormBuilder, Servicios, ClienteServicios) {
         this.data = data;
         this.ventana = ventana;
         this.FormBuilder = FormBuilder;
         this.Servicios = Servicios;
         this.ClienteServicios = ClienteServicios;
+        this.Sede = [];
+        this.Subsede = [];
         this.Institucion = [];
     }
     VentanaEmergenteClientes.prototype.onNoClick = function () {
         this.ventana.close();
     };
+    // tslint:disable-next-line:use-life-cycle-interface
     VentanaEmergenteClientes.prototype.ngOnInit = function () {
         var _this = this;
         /* Crear formulario */
@@ -36,12 +41,18 @@ var VentanaEmergenteClientes = /** @class */ (function () {
             'institucion': [null, [
                     forms_1.Validators.required
                 ]],
+            'sede': [null, [
+                    forms_1.Validators.required
+                ]],
+            'subsede': [null, [
+                    forms_1.Validators.required
+                ]],
             'codigo': [null, [
                     forms_1.Validators.required
                 ]],
             'dni': [null, [
                     forms_1.Validators.required,
-                    forms_1.Validators.pattern("[0-9- ]+")
+                    forms_1.Validators.pattern('[0-9- ]+')
                 ]],
             'nombre': [null, [
                     forms_1.Validators.required
@@ -72,22 +83,22 @@ var VentanaEmergenteClientes = /** @class */ (function () {
                 ]],
             'aporte': [null, [
                     forms_1.Validators.required,
-                    forms_1.Validators.pattern("[0-9- ]+")
-                ]],
-            'fecharegistro': [null, [
-                    forms_1.Validators.required
-                ]],
+                    forms_1.Validators.pattern('[0-9- ]+')
+                ]]
         });
-        /*Relación de productos*/
         this.Servicios.ListarInstitucion().subscribe(function (res) {
+            // tslint:disable-next-line:forin
             for (var i in res) {
                 _this.Institucion.push(res[i]);
             }
         });
         if (this.data) {
-            // Se traen y asignan los datos
+            console.log(this.data);
             this.ClientesForm.get('institucion').setValue(this.data.institucion);
-            this.ListarInstitucion();
+            this.ListarSede(this.data.institucion);
+            this.ClientesForm.get('sede').setValue(this.data.sede);
+            this.ListarSubsede(this.data.sede);
+            this.ClientesForm.get('subsede').setValue(this.data.subsede);
             this.ClientesForm.get('codigo').setValue(this.data.codigo);
             this.ClientesForm.get('dni').setValue(this.data.dni);
             this.ClientesForm.get('nombre').setValue(this.data.nombre);
@@ -97,20 +108,36 @@ var VentanaEmergenteClientes = /** @class */ (function () {
             this.ClientesForm.get('casilla').setValue(this.data.casilla);
             this.ClientesForm.get('trabajo').setValue(this.data.trabajo);
             this.ClientesForm.get('cargo').setValue(this.data.cargo);
-            this.ClientesForm.get('calificacioncrediticia').setValue(this.data.calificacioncrediticia);
-            this.ClientesForm.get('calificacionpersonal').setValue(this.data.calificacionpersonal);
+            this.ClientesForm.get('calificacioncrediticia').setValue(this.data.calificacion_crediticia);
+            this.ClientesForm.get('calificacionpersonal').setValue(this.data.calificacion_personal);
             this.ClientesForm.get('aporte').setValue(this.data.aporte);
-            this.ClientesForm.get('fecharegistro').setValue(this.data.fecharegistro);
-            this.ClientesForm.controls['institucion'].enable();
+            // this.ClientesForm.get('fecharegistro').setValue(this.data.fecharegistro);
+            this.ClientesForm.controls['sede'].enable();
+            this.ClientesForm.controls['subsede'].enable();
         }
+    };
+    VentanaEmergenteClientes.prototype.InstitucionSeleccionada = function (event) {
+        this.ListarSede(event.value);
+        this.ClientesForm.get('sede').setValue('');
+        this.ClientesForm.get('subsede').setValue('');
+        this.ClientesForm.controls['sede'].enable();
+        this.ClientesForm.controls['subsede'].disable();
+    };
+    /* Se muestran los modelos cuando se selecciona una marca */
+    VentanaEmergenteClientes.prototype.SedeSeleccionada = function (event) {
+        this.ListarSubsede(event.value);
+        this.ClientesForm.get('subsede').setValue('');
+        this.ClientesForm.controls['subsede'].enable();
     };
     /* Enviar al formulario */
     VentanaEmergenteClientes.prototype.Guardar = function (formulario) {
         /*if(this.data){
-          this.ClienteService.Actualizar(this.data.id,formulario.value.modelo, formulario.value.descripcion, formulario.value.precio).subscribe(res=>console.log(res))
+          // tslint:disable-next-line:max-line-length
+          this.ClienteService.Actualizar(this.data.id,formulario.value.modelo,
+            formulario.value.descripcion, formulario.value.precio).subscribe(res=>console.log(res))
         }*/
         if (!this.data) {
-            this.ClienteServicios.Agregar(formulario.value.institucion, formulario.value.codigo, formulario.value.dni, formulario.value.nombre, formulario.value.apellido, formulario.value.cip, formulario.value.email, formulario.value.casilla, formulario.value.trabajo, formulario.value.cargo, formulario.value.calificacioncrediticia, formulario.value.calificacionpersonal, formulario.value.aporte).subscribe(function (res) { return console.log(res); });
+            this.ClienteServicios.Agregar(formulario.value.subsede, formulario.value.codigo, formulario.value.dni, formulario.value.nombre, formulario.value.apellido, formulario.value.cip, formulario.value.email, formulario.value.casilla, formulario.value.trabajo, formulario.value.cargo, formulario.value.calificacioncrediticia, formulario.value.calificacionpersonal, formulario.value.aporte).subscribe(function (res) { return console.log(res); });
         }
         this.ClientesForm.reset();
         this.ventana.close();
@@ -119,8 +146,30 @@ var VentanaEmergenteClientes = /** @class */ (function () {
         var _this = this;
         this.Servicios.ListarInstitucion().subscribe(function (res) {
             _this.Institucion = [];
+            // tslint:disable-next-line:forin
             for (var i in res) {
                 _this.Institucion.push(res[i]);
+            }
+        });
+    };
+    VentanaEmergenteClientes.prototype.ListarSede = function (i) {
+        var _this = this;
+        this.Servicios.ListarSede(i, '').subscribe(function (res) {
+            _this.Sede = [];
+            // tslint:disable-next-line:forin
+            for (var i_1 in res) {
+                _this.Sede.push(res[i_1]);
+            }
+            // tslint:disable-next-line:semicolon
+        });
+    };
+    VentanaEmergenteClientes.prototype.ListarSubsede = function (i) {
+        var _this = this;
+        this.Servicios.ListarSubsede(i, '').subscribe(function (res) {
+            _this.Subsede = [];
+            // tslint:disable-next-line:forin
+            for (var i_2 in res) {
+                _this.Subsede.push(res[i_2]);
             }
         });
     };

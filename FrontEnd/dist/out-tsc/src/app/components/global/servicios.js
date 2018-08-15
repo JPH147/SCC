@@ -18,7 +18,9 @@ var ServiciosGenerales = /** @class */ (function () {
         this.http = http;
         this.url = url_1.URL.url;
     }
+    // tslint:disable-next-line:use-life-cycle-interface
     ServiciosGenerales.prototype.ngOnInit = function () { };
+    // F=moment(fecha).format('YYYY/MM/DD');
     ServiciosGenerales.prototype.ListarTipoProductos = function (nombre, unidad_medida) {
         return this.http.get(this.url + 'productotipo/read.php?prnombre=' + nombre + '&prum' + unidad_medida)
             .pipe(operators_1.map(function (res) {
@@ -57,6 +59,89 @@ var ServiciosGenerales = /** @class */ (function () {
             .pipe(operators_1.map(function (res) {
             if (res['codigo'] === 0) {
                 return res['data'].institucion;
+            }
+            else {
+                console.log('Error al importar los datos, revisar servicio');
+            }
+        }));
+    };
+    ServiciosGenerales.prototype.ListarSede = function (id_institucion, sd_nombre) {
+        return this.http.get(this.url + 'sede/read.php?id_institucion=' + id_institucion + '&sd_nombre' + sd_nombre)
+            .pipe(operators_1.map(function (res) {
+            if (res['codigo'] === 0) {
+                return res['data'].sede;
+            }
+            else {
+                console.log('Error al importar los datos, revisar servicio');
+            }
+        }));
+    };
+    ServiciosGenerales.prototype.ListarSubsede = function (id_sede, ssd_nombre) {
+        return this.http.get(this.url + 'subsede/read.php?id_sede=' + id_sede + '&ssd_nombre' + ssd_nombre)
+            .pipe(operators_1.map(function (res) {
+            if (res['codigo'] === 0) {
+                return res['data'].subsede;
+            }
+            else {
+                console.log('Error al importar los datos, revisar servicio');
+            }
+        }));
+    };
+    ServiciosGenerales.prototype.ListarAlmacen = function () {
+        return this.http.get(this.url + 'almacen/read.php')
+            .pipe(operators_1.map(function (res) {
+            if (res['codigo'] === 0) {
+                return res['data'].almacenes;
+            }
+            else {
+                console.log('Error al importar los datos, revisar servicio');
+            }
+        }));
+    };
+    ServiciosGenerales.prototype.ListarTransaccionTipo = function () {
+        return this.http.get(this.url + 'transacciontipo/read.php', {
+            params: new http_1.HttpParams()
+                .set('prid', '1')
+        })
+            .pipe(operators_1.map(function (res) {
+            if (res['codigo'] === 0) {
+                return res['data'].tipos;
+            }
+            else {
+                console.log('Error al importar los datos, revisar servicio');
+            }
+        }));
+    };
+    ServiciosGenerales.prototype.ListarProveedor = function (nombre) {
+        return this.http.get(this.url + 'proveedor/read.php', {
+            params: new http_1.HttpParams()
+                .set('prnombre', nombre)
+        })
+            .pipe(operators_1.map(function (res) {
+            if (res['codigo'] === 0) {
+                return res['data'].proveedor;
+            }
+            else {
+                console.log('Error al importar los datos, revisar servicio');
+            }
+        }));
+    };
+    ServiciosGenerales.prototype.ListarSucursal = function (id, nombre) {
+        var ID;
+        if (id == null) {
+            ID = "";
+        }
+        else {
+            ID = id.toString();
+        }
+        return this.http.get(this.url + 'sucursal/read.php', {
+            params: new http_1.HttpParams()
+                .set('prid', ID)
+                .set('prnombre', nombre)
+        })
+            .pipe(operators_1.map(function (res) {
+            if (res['codigo'] === 0) {
+                return res['data'].sucursal;
             }
             else {
                 console.log('Error al importar los datos, revisar servicio');

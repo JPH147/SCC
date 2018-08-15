@@ -63,7 +63,6 @@ import { RetornoVendedoresComponent } from './components/retorno-vendedores/reto
 import { ComisionesComponent } from './components/comisiones/comisiones.component';
 import { ClientesComponent } from './components/clientes/clientes.component';
 import { VentasComponent } from './components/ventas/ventas.component';
-import {DialogoComponent} from './components/salida-vendedores/salida-vendedores.component';
 import { ListadoSalidaVendedoresComponent } from './components/listado-salida-vendedores/listado-salida-vendedores.component';
 import {VentanaEmergenteProductos} from './components/productos/ventana-emergente/ventanaemergente';
 import {VentanaEmergenteArchivos} from './components/ventas/ventana-emergente/ventanaemergente';
@@ -80,7 +79,6 @@ import {VentanaEmergenteDistrito } from './components/direcciones/distrito/venta
 import { ProvinciaComponent } from './components/direcciones/provincia/provincia.component';
 import { DistritoComponent } from './components/direcciones/distrito/distrito.component';
 import { VentanaConfirmarComponent } from './components/global/ventana-confirmar/ventana-confirmar.component';
-import { ventanaRetorno } from './components/salida-vendedores/ventana-retorno/ventanaretorno';
 import { VentanaEmergenteGastos } from './components/listado-salida-vendedores/ventana-emergente/ventanaemergente';
 import { VentanaEmergenteDet} from './components/listado-salida-vendedores/ventana-emergentedet/ventanaemergentedet';
 import { ImageUploadModule } from 'angular2-image-upload';
@@ -88,6 +86,7 @@ import {FileUpload} from './components/clientes/file-upload/fileupload';
 import {VentanaEmergenteContacto} from './components/clientes/ventana-emergentecontacto/ventanaemergentecontacto';
 import {VentanaEmergenteStock } from './components/stock/ventana-emergentestock/ventanaemergentestock';
 import { VentasListarComponent } from './components/ventas-listar/ventas-listar.component';
+import { VentanaTalonarioComponent } from './components/salida-vendedores/ventana-talonario/ventana-talonario.component';
 
 @NgModule({
   imports: [
@@ -154,7 +153,6 @@ import { VentasListarComponent } from './components/ventas-listar/ventas-listar.
     ComisionesComponent,
     ClientesComponent,
     VentasComponent,
-    DialogoComponent,
     ListadoSalidaVendedoresComponent,
     VentanaEmergenteProductos,
     VentanaEmergenteArchivos,
@@ -173,15 +171,14 @@ import { VentasListarComponent } from './components/ventas-listar/ventas-listar.
     VentanaEmergenteDistrito,
     VentanaEmergenteGastos,
     VentanaEmergenteDet,
-    ventanaRetorno,
     FileUpload,
     VentanaEmergenteContacto,
     VentanaEmergenteStock,
-    VentasListarComponent
+    VentasListarComponent,
+    VentanaTalonarioComponent
    ],
   entryComponents: [
     AppComponent,
-    DialogoComponent,
     VentanaEmergenteProductos,
     VentanaEmergenteArchivos,
     ventanaseries,
@@ -194,10 +191,11 @@ import { VentasListarComponent } from './components/ventas-listar/ventas-listar.
     VentanaEmergenteDistrito,
     VentanaEmergenteGastos,
     VentanaEmergenteDet,
-    ventanaRetorno,
     FileUpload,
     VentanaEmergenteContacto,
-    VentanaEmergenteStock
+    VentanaEmergenteStock,
+    VentanaTalonarioComponent,
+    VentasComponent
   ],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider, {provide: MAT_DATE_LOCALE, useValue: 'en-GB'}]

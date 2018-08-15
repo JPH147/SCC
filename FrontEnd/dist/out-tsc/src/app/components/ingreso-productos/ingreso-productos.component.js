@@ -9,43 +9,94 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var servicios_1 = require("./../global/servicios");
 var ventanaseries_1 = require("./ventana-series/ventanaseries");
 var core_1 = require("@angular/core");
 var forms_1 = require("@angular/forms");
-var operators_1 = require("rxjs/operators");
-var collections_1 = require("@angular/cdk/collections");
+var rxjs_1 = require("rxjs");
 var material_1 = require("@angular/material");
+var operators_1 = require("rxjs/operators");
+var moment = require("moment");
 var IngresoProductosComponent = /** @class */ (function () {
-    function IngresoProductosComponent(DialogoSerie) {
+    function IngresoProductosComponent(DialogoSerie, 
+    // tslint:disable-next-line:no-shadowed-variable
+    FormBuilder, 
+    /* public data,*/
+    Servicios) {
         this.DialogoSerie = DialogoSerie;
+        this.FormBuilder = FormBuilder;
+        this.Servicios = Servicios;
+        this.almacenes = [];
+        this.TipoIngresos = [];
+        this.proveedores = [];
         this.selected = 'option2';
         this.myControl = new forms_1.FormControl();
-        this.options = ['One', 'Two', 'Three'];
-        this.displayedColumns = ['position', 'name', 'weight', 'symbol'];
-        this.selection = new collections_1.SelectionModel(true, []);
-        this.foods = [
-            { value: 'steak-0', viewValue: 'Almacen Principal' },
-            { value: 'pizza-1', viewValue: 'Almacen Dos' },
-            { value: 'tacos-2', viewValue: 'Almacen Tres' }
-        ];
     }
     IngresoProductosComponent.prototype.ngOnInit = function () {
-        var _this = this;
-        this.filteredOptions = this.myControl.valueChanges
-            .pipe(operators_1.startWith(''), operators_1.map(function (value) { return _this._filter(value); }));
+        this.ListarAlmacen();
+        this.ListarTransaccionTipo();
+        this.ListarProveedor(' ');
+        this.IngresoProductoForm = this.FormBuilder.group({
+            'almacen': [null, [forms_1.Validators.required]],
+            'tipoIngreso': [null, [forms_1.Validators.required]],
+            'docReferencia': [null, [forms_1.Validators.required, forms_1.Validators.pattern('[0-9-]+')]],
+            'proveedor': [null, [forms_1.Validators.required]],
+            'fecingreso': [null, [forms_1.Validators.required]],
+        });
+        /*
+              this.Servicios.ListarAlmacen().subscribe(res => {
+                // tslint:disable-next-line:forin
+               for (let i in res) {
+                 this.Almacen.push(res [i]);
+               }
+             });
+        */
         this.contador = 1;
         this.articulos = [
             { numero: this.contador, nombre: '', cantidad: null, precio: null }
         ];
     };
-    IngresoProductosComponent.prototype._filter = function (value) {
-        var filterValue = value.toLowerCase();
-        return this.options.filter(function (option) { return option.toLowerCase().includes(filterValue); });
+    // Selector Proveedores activos
+    IngresoProductosComponent.prototype.ListarProveedor = function (nombre) {
+        var _this = this;
+        this.Servicios.ListarProveedor(nombre).subscribe(function (res) {
+            _this.proveedores = [];
+            console.log(res);
+            // tslint:disable-next-line:forin
+            for (var i in res) {
+                _this.proveedores.push(res[i]);
+            }
+        });
     };
-    IngresoProductosComponent.prototype.isAllSelected = function () {
+    // tslint:disable-next-line:use-life-cycle-interface
+    IngresoProductosComponent.prototype.ngAfterViewInit = function () {
+        var _this = this;
+        rxjs_1.fromEvent(this.FiltroProveedor.nativeElement, 'keyup')
+            .pipe(operators_1.debounceTime(10), operators_1.distinctUntilChanged(), operators_1.tap(function () {
+            _this.ListarProveedor(_this.FiltroProveedor.nativeElement.value);
+        })).subscribe();
     };
-    /** Selects all rows if they are not all selected; otherwise clear selection. */
-    IngresoProductosComponent.prototype.masterToggle = function () {
+    // Selector tipo de ingresos
+    IngresoProductosComponent.prototype.ListarTransaccionTipo = function () {
+        var _this = this;
+        this.Servicios.ListarTransaccionTipo().subscribe(function (res) {
+            _this.TipoIngresos = [];
+            // tslint:disable-next-line:forin
+            for (var i in res) {
+                _this.TipoIngresos.push(res[i]);
+            }
+        });
+    };
+    // Selector Almacenes Activos
+    IngresoProductosComponent.prototype.ListarAlmacen = function () {
+        var _this = this;
+        this.Servicios.ListarAlmacen().subscribe(function (res) {
+            _this.almacenes = [];
+            // tslint:disable-next-line:forin
+            for (var i in res) {
+                _this.almacenes.push(res[i]);
+            }
+        });
     };
     IngresoProductosComponent.prototype.agregar = function () {
         this.contador++;
@@ -59,13 +110,27 @@ var IngresoProductosComponent = /** @class */ (function () {
             width: '600px'
         });
     };
+    IngresoProductosComponent.prototype.Guardar = function () {
+        console.log(this.IngresoProductoForm);
+        console.log(moment(this.IngresoProductoForm.get('fecingreso').value).format('DD/MM/YYYY'));
+    };
+    IngresoProductosComponent.prototype.Cambio = function (evento) {
+        console.log(evento);
+    };
+    __decorate([
+        core_1.ViewChild('Proveedor'),
+        __metadata("design:type", core_1.ElementRef)
+    ], IngresoProductosComponent.prototype, "FiltroProveedor", void 0);
     IngresoProductosComponent = __decorate([
         core_1.Component({
             selector: 'app-ingreso-productos',
             templateUrl: './ingreso-productos.component.html',
             styleUrls: ['./ingreso-productos.component.css'],
+            providers: [servicios_1.ServiciosGenerales]
         }),
-        __metadata("design:paramtypes", [material_1.MatDialog])
+        __metadata("design:paramtypes", [material_1.MatDialog,
+            forms_1.FormBuilder,
+            servicios_1.ServiciosGenerales])
     ], IngresoProductosComponent);
     return IngresoProductosComponent;
 }());

@@ -23,15 +23,15 @@ export class VentasServicio {
     orden:string
   ): Observable<any> {
 
-    let Tipo:string, Finicio: string ,Ffin: string;
+    let Tipo:string, Finicio: string ,Ffin: string, Orden:string;
 
-    if (fecha_inicio==null) {
+    if (!fecha_inicio) {
       Finicio=""
     }else{
       Finicio=moment(fecha_inicio,"DD/MM/YYYY").format("YYYY/MM/DD").toString()
     }
 
-    if (fecha_fin==null) {
+    if (!fecha_fin) {
       Ffin=""
     }else{
       Ffin=moment(fecha_fin,"DD/MM/YYYY").format("YYYY/MM/DD").toString()
@@ -43,8 +43,6 @@ export class VentasServicio {
       Tipo=tipo_venta.toString()
     }
 
-    console.log("Servicio",cliente,Tipo,Finicio,Ffin,pagina_inicio,pagina_final,orden)
-
     return this.http.get(this.url + 'venta/read.php', {
       params: new HttpParams()
       .set('prcliente',cliente)
@@ -53,7 +51,7 @@ export class VentasServicio {
       .set('prfecha_fin',Ffin)
       .set('prpagina',pagina_inicio.toString())
       .set('prtotalpagina',pagina_final.toString())
-      .set('orden',orden)
+      .set('prorden',orden)
   })
     .pipe(map(res => {
       if (res['codigo'] === 0) {

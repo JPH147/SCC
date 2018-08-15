@@ -16,27 +16,33 @@ var operators_1 = require("rxjs/operators");
 var direcciones_1 = require("../../global/direcciones");
 var material_1 = require("@angular/material");
 var ventanaemergente_1 = require("./ventana-emergente/ventanaemergente");
-var ventana_confirmar_component_1 = require("./ventana-confirmar/ventana-confirmar.component");
+var ventana_confirmar_component_1 = require("../../global/ventana-confirmar/ventana-confirmar.component");
 var DepartamentoComponent = /** @class */ (function () {
     function DepartamentoComponent(Servicio, DialogoDepartamentos) {
         this.Servicio = Servicio;
         this.DialogoDepartamentos = DialogoDepartamentos;
         this.Columnas = ['numero', 'nombre', 'opciones'];
+        this.TotalResultados = 0;
     }
     DepartamentoComponent.prototype.ngOnInit = function () {
+        var _this = this;
         this.ListadoDepartamentos = new departamento_dataservice_1.DepartamentoDataSource(this.Servicio);
-        this.ListadoDepartamentos.CargarDepartamentos('');
+        this.ListadoDepartamentos.CargarDepartamentos('', 0, 10);
+        this.ListadoDepartamentos.TotalResultados.subscribe(function (res) { return _this.TotalResultados = res; });
     };
     // tslint:disable-next-line:use-life-cycle-interface
     DepartamentoComponent.prototype.ngAfterViewInit = function () {
         var _this = this;
+        this.paginator.page
+            .pipe(operators_1.tap(function () { return _this.CargarData(); })).subscribe();
         rxjs_1.fromEvent(this.FiltroDepartamento.nativeElement, 'keyup')
             .pipe(operators_1.debounceTime(200), operators_1.distinctUntilChanged(), operators_1.tap(function () {
+            _this.paginator.pageIndex = 0;
             _this.CargarData();
         })).subscribe();
     };
     DepartamentoComponent.prototype.CargarData = function () {
-        this.ListadoDepartamentos.CargarDepartamentos(this.FiltroDepartamento.nativeElement.value);
+        this.ListadoDepartamentos.CargarDepartamentos(this.FiltroDepartamento.nativeElement.value, this.paginator.pageIndex, this.paginator.pageSize);
     };
     DepartamentoComponent.prototype.Agregar = function () {
         var _this = this;
@@ -47,14 +53,18 @@ var DepartamentoComponent = /** @class */ (function () {
             _this.CargarData();
         });
     };
-    DepartamentoComponent.prototype.Eliminar = function (producto) {
+    DepartamentoComponent.prototype.Eliminar = function (departamento) {
         var _this = this;
-        var VentanaDepartamento = this.DialogoDepartamentos.open(ventana_confirmar_component_1.VentanaEliminarDepartamento, {
+        var VentanaDepartamento = this.DialogoDepartamentos.open(ventana_confirmar_component_1.VentanaConfirmarComponent, {
             width: '400px',
-            data: producto
+            data: { objeto: 'el departamento', valor: departamento.descripcion }
         });
         VentanaDepartamento.afterClosed().subscribe(function (res) {
-            _this.CargarData();
+            if (res == true) {
+                _this.Servicio.EliminarDepartamento(departamento.id).subscribe(function (res) {
+                    _this.CargarData();
+                });
+            }
         });
     };
     DepartamentoComponent.prototype.Editar = function (id) {
@@ -74,11 +84,16 @@ var DepartamentoComponent = /** @class */ (function () {
         core_1.ViewChild('InputDepartamento'),
         __metadata("design:type", core_1.ElementRef)
     ], DepartamentoComponent.prototype, "FiltroDepartamento", void 0);
+    __decorate([
+        core_1.ViewChild(material_1.MatPaginator),
+        __metadata("design:type", material_1.MatPaginator)
+    ], DepartamentoComponent.prototype, "paginator", void 0);
     DepartamentoComponent = __decorate([
         core_1.Component({
             selector: 'app-departamento',
             templateUrl: './departamento.component.html',
-            styleUrls: ['./departamento.component.css']
+            styleUrls: ['./departamento.component.css'],
+            providers: [direcciones_1.ServiciosDirecciones]
         }),
         __metadata("design:paramtypes", [direcciones_1.ServiciosDirecciones,
             material_1.MatDialog])

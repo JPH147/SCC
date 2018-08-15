@@ -1,12 +1,14 @@
-
-.card-principal{
+mat-card{
   width: 80%;
   position: relative;
   margin-left: auto;
   margin-right: auto;
   margin-top: 20px;
-  margin-bottom: 10px
+  margin-bottom: 10px;
+  min-height: 300px;
 }
+
+
 .tituloProd {
   padding: 15px;
   font-size: 30px;
@@ -30,42 +32,31 @@
 
   }
 
-  mat-card{
-    width: 80%;
-    position: relative;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 20px;
-    margin-bottom: 10px;
-    min-height: 300px;
-  }
-
   .agregar{
     float:right;
     margin-left: 5px;
     z-index: 1
    }
 
-  .spinner-container{
-    position: absolute;
-    top: 200px;
-    left: 0;
-    right: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+.spinner-container{
+  position: absolute;
+  top: 200px;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  .mat-column-numero,
-  .mat-column-tipo,
-  .mat-column-marca,
-  .mat-column-modelo,
-  .mat-column-unidad_medida,
-  .mat-column-opciones
-  {
-    max-width: 10%;
-  }
+.mat-column-numero{
+  max-width: 5%;
+}
 
-  table {
-    width: 100%;
-  }
+.mat-column-pecosa,
+.mat-column-fecha,
+.mat-column-sucursal,
+.mat-column-destino,
+.mat-column-estados
+{
+  max-width: 15%;
+}
