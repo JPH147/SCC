@@ -11,16 +11,6 @@
     <mat-card-header>
       <mat-card class="CabeceraSalidaVendedor">
         <mat-grid-list cols="3" rowHeight="80px">
-        <mat-grid-tile>
-          <!-- Seleccionar Almacen -->
-          <mat-form-field class="example-full-width">
-            <mat-select placeholder="Selecciona Almacen" formControlName="almacen">
-              <mat-option *ngFor="let almacen of almacenes" [value]="almacen.id">
-                {{almacen.nombre}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </mat-grid-tile>
 
         <!--Campo ingresar Tipo de Ingreso a almacen -->
         <mat-grid-tile>
@@ -33,6 +23,16 @@
               </mat-form-field>
         </mat-grid-tile>
 
+         <!-- Seleccionar Almacen -->
+        <mat-grid-tile>
+          <mat-form-field class="example-full-width">
+              <mat-select placeholder="Selecciona Almacen Origen" formControlName="almacen">
+                <mat-option *ngFor="let almacen of almacenes" [value]="almacen.id">
+                  {{almacen.nombre}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-grid-tile>
 
           <!--Campo ingresar Documento de Referencia -->
           <mat-grid-tile >
@@ -41,20 +41,68 @@
             </mat-form-field>
           </mat-grid-tile>
 
-          <!--Campo ingresar Proveedor -->
-          <mat-grid-tile>
-                <mat-form-field class="example-full-width">
-                  <input #Proveedor placeholder="Ingresa Proveedor" matInput [matAutocomplete]="auto" formControlName=proveedor>
-                  <mat-autocomplete #auto="matAutocomplete">
-                    <mat-option *ngFor="let proveedor of proveedores " [value]="proveedor.nombre">
-                      {{proveedor.nombre}}
-                    </mat-option>
-                  </mat-autocomplete>
-                </mat-form-field>
+
+          <mat-grid-tile [ngSwitch]= "IngresoProductoForm.get('tipoIngreso').value">
+            <!--Campo ingresar Proveedor -->
+            <mat-form-field class="example-full-width" *ngSwitchCase= "1">
+              <input #Proveedor placeholder="Ingresa Proveedor" matInput [matAutocomplete]="auto" formControlName=proveedor>
+              <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let proveedor of proveedores " [value]="proveedor.nombre">
+                  {{proveedor.nombre}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+            <!--Campo ingresar Ciente -->
+            <mat-form-field class="example-full-width" *ngSwitchCase="2">
+              <input #Proveedor placeholder="Ingresa Clientes" matInput [matAutocomplete]="auto" formControlName=cliente>
+              <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let cliente of clientes " [value]="cliente.nombre + ' ' +  cliente.apellido">
+                  {{cliente.nombre + ' ' +  cliente.apellido}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+              <!--Campo ingresar Vendedor -->
+            <mat-form-field class="example-full-width" *ngSwitchCase="6">
+              <input #Proveedor placeholder="Ingresa Vendedor" matInput [matAutocomplete]="auto" formControlName=vendedor>
+              <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let vendedor of Vendedores" [value]="vendedor.nombre">
+                  {{vendedor.nombre}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width" *ngSwitchCase="7">
+                <input #Proveedor placeholder="Responsable Traslado" matInput [matAutocomplete]="auto" formControlName=vendedor>
+                <mat-autocomplete #auto="matAutocomplete">
+                  <mat-option *ngFor="let vendedor of Vendedores" [value]="vendedor.nombre">
+                    {{vendedor.nombre}}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+
+            <mat-form-field class="example-full-width" *ngSwitchDefault>
+                <input #Proveedor placeholder="Ingresa Proveedor" matInput [matAutocomplete]="auto" formControlName=proveedor>
+                <mat-autocomplete #auto="matAutocomplete">
+                  <mat-option *ngFor="let proveedor of proveedores " [value]="proveedor.nombre">
+                    {{proveedor.nombre}}
+                  </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
           </mat-grid-tile>
 
+        <!-- Seleccionar Almacen  Destino -->
+        <mat-grid-tile>
+          <mat-form-field class="example-full-width">
+              <mat-select placeholder="Selecciona Almacen destino" formControlName="almacen">
+                <mat-option *ngFor="let almacen of almacenes" [value]="almacen.id">
+                  {{almacen.nombre}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-grid-tile>
+
+           <!--Campo ingresar Fecha de Ingreso almacen -->
           <mat-grid-tile>
-            <!--Campo ingresar Fecha de Ingreso almacen -->
             <mat-form-field class ="IngFecha" class="Alma1">
                 <input matInput [matDatepicker]="picker" placeholder="Fecha Ingreso" formControlName="fecingreso">
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>

@@ -1,10 +1,12 @@
+import { Cliente } from './../clientes/clientes.service';
 import { TipoProductoModelo } from './servicios';
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams, } from '@angular/common/http';
+import {HttpClient, HttpParams } from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {URL} from './url';
 import * as moment from 'moment';
+import { equalParamsAndUrlSegments } from '../../../../node_modules/@angular/router/src/router_state';
 
 @Injectable()
 
@@ -112,6 +114,7 @@ export class ServiciosGenerales {
   }
 
   ListarTransaccionTipo (
+
     ): Observable <any> {
       return this.http.get(this.url + 'transacciontipo/read.php', {
         params: new HttpParams()
@@ -128,7 +131,7 @@ export class ServiciosGenerales {
     }
 
   ListarProveedor(
-    nombre: string
+     nombre: string
     ): Observable <any> {
       return this.http.get(this.url + 'proveedor/read.php', {
         params: new  HttpParams()
@@ -136,6 +139,7 @@ export class ServiciosGenerales {
       })
       .pipe(map(res => {
           if (res['codigo'] === 0) {
+
             return res['data'].proveedor;
           } else {
               console.log ('Error al importar los datos, revisar servicio');
@@ -143,15 +147,67 @@ export class ServiciosGenerales {
       }));
       }
 
+  ListarCliente(
+    nombre: string
+    ): Observable <any> {
+      return this.http.get(this.url + 'cliente/read.php', {
+        params: new  HttpParams()
+        .set('pclt_nombre', nombre)
+      })
+      .pipe(map(res => {
+          if (res['codigo'] === 0) {
+            console.log(res['data']);
+            return res['data'].clientes;
+          } else {
+              console.log ('Error al importar los datos, revisar servicio');
+          }
+      }));
   }
 
-export interface TipoTransaccion {
+  ListarVendedor(
+    nombre: string
+    ): Observable <any> {
+      return this.http.get(this.url + 'vendedor/read.php', {
+        params: new  HttpParams()
+        .set('vnd_nombre', nombre)
+      })
+      .pipe(map(res => {
+          if (res['codigo'] === 0) {
+
+            return res['data'].vendedores;
+          } else {
+              console.log ('Error al importar los datos, revisar servicio');
+          }
+      }));
+  }
+
+
+
+
+  }
+
+export interface ListarCliente {
+id: number;
+instnombre: string;
+ssdNombre: string;
+pcltDni: string;
+pcltNombre: string;
+pcltApellido: string;
+}
+
+export interface ListarVendedor {
+id: number;
+vndNombre: string;
+scsNombre: string;
+}
+
+
+  export interface TipoTransaccion {
   numero: number;
   id: number;
   nombre: string;
 
 }
-
 export interface Almacen {
   numero: number;
   id_almacen: number;

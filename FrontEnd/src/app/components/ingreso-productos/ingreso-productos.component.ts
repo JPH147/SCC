@@ -1,6 +1,6 @@
-
+import { Cliente } from './../clientes/clientes.service';
 import { IngresoProductoService } from './ingreso-productos.service';
-import { ServiciosGenerales, Almacen } from './../global/servicios';
+import { ServiciosGenerales, Almacen, ListarCliente, ListarVendedor } from './../global/servicios';
 import { ventanaseries } from './ventana-series/ventanaseries';
 import { DialogData } from '../salida-vendedores/salida-vendedores.component';
 import { Component, OnInit, ViewChild,ElementRef } from '@angular/core';
@@ -24,6 +24,8 @@ import * as moment from 'moment';
   export class IngresoProductosComponent implements OnInit {
 
     @ViewChild('Proveedor') FiltroProveedor: ElementRef;
+    @ViewChild('Cliente') FiltroCliente: ElementRef;
+    @ViewChild('Vendedor') FiltroVendedor: ElementRef;
 
     public IngresoProductoForm: FormGroup;
     public articulos: Array <articulo>;
@@ -31,11 +33,16 @@ import * as moment from 'moment';
     public almacenes: Array<any> = [];
     public TipoIngresos: Array<any> = [];
     public proveedores: Array<any> = [];
+    public clientes: Array<any> = [];
+    public Vendedores: Array<any> = [];
+    public Sucursales: Array<any> = [];
     public seriventana: string;
-   //  public Almacenes: Almacen [] = [];
     public tipoIngreso: string;      // Tipo de Ingreso Almacen
     public docReferencia: string; // documento referencia de ingreso almncen
     public proveedor: string;
+    public cliente: string;
+    public vendedor: string;
+    public nombre: string;
     public fecingreso: Date;      // fecha de ingreso a almcen
     public  data;
 
@@ -43,6 +50,8 @@ import * as moment from 'moment';
     selected = 'option2';
     myControl = new FormControl();
     filteredOptions: Observable<string[]>;
+
+
 
     constructor(public DialogoSerie: MatDialog,
     // tslint:disable-next-line:no-shadowed-variable
@@ -56,29 +65,26 @@ import * as moment from 'moment';
 
       this.ListarAlmacen();
       this.ListarTransaccionTipo();
-      this.ListarProveedor(' ');
+      this.ListarProveedor('');
+      this.ListarCliente('');
+      this.ListarVendedor('');
 
       this.IngresoProductoForm = this.FormBuilder.group({
           'almacen': [null, [Validators.required] ],
           'tipoIngreso': [null, [Validators.required]],
-          'docReferencia': [null, [Validators.required, Validators.pattern('[0-9-]+')]],
+          'docReferencia': [null, [Validators.required]],
           'proveedor': [null, [Validators.required]],
+          'cliente': [null, [Validators.required]],
+          'vendedor': [null, [Validators.required]],
+          'sucursal': [null, [Validators.required]],
+          'documento': [null, [Validators.required]],
           'fecingreso': [null, [Validators.required]],
-
       });
-/*
-      this.Servicios.ListarAlmacen().subscribe(res => {
-        // tslint:disable-next-line:forin
-       for (let i in res) {
-         this.Almacen.push(res [i]);
-       }
-     });
-*/
+
       this.contador = 1;
       this.articulos = [
         {numero: this.contador, nombre: '', cantidad: null, precio: null}
       ];
-
 
     }
 
@@ -86,7 +92,7 @@ import * as moment from 'moment';
     ListarProveedor(nombre: string) {
       this.Servicios.ListarProveedor(nombre).subscribe( res => {
         this.proveedores = [];
-       // console.log(res);
+        console.log(res);
         // tslint:disable-next-line:forin
         for (let i in res) {
           this.proveedores.push(res[i]);
@@ -97,7 +103,7 @@ import * as moment from 'moment';
     // tslint:disable-next-line:use-life-cycle-interface
     ngAfterViewInit() {
 
-      fromEvent(this.FiltroProveedor.nativeElement,'keyup')
+      fromEvent(this.FiltroProveedor.nativeElement, 'keyup')
       .pipe(
         debounceTime(10),
         distinctUntilChanged(),
@@ -115,6 +121,31 @@ import * as moment from 'moment';
         // tslint:disable-next-line:forin
         for (let i in res) {
             this.TipoIngresos.push(res[i]);
+
+        }
+      });
+    }
+
+    ListarCliente(nombre: string) {
+      this.Servicios.ListarCliente(nombre).subscribe( res => {
+        this.clientes = [];
+
+        // tslint:disable-next-line:forin
+        for (let i in res) {
+
+            this.clientes.push(res[i]);
+            //console.log(res[i]);
+        }
+      });
+    }
+
+    ListarVendedor(nombre: string) {
+      this.Servicios.ListarVendedor(nombre).subscribe( res => {
+        this.Vendedores = [];
+
+        // tslint:disable-next-line:forin
+        for (let i in res) {
+            this.Vendedores.push(res[i]);
 
         }
       });
@@ -155,14 +186,13 @@ AgregarSerie() {
    // console.log(this.IngresoProductoForm);
    // console.log(moment(this.IngresoProductoForm.get('fecingreso').value).format('DD/MM/YYYY'));
 
-      this.IngresoProductoservicios.Agregar(formulario.value.almacen, formulario.value.tipoIngreso,
-        1,1,formulario.value.fecingreso, formulario.value.docReferencia).subscribe (res => console.log(res) );
+    this.IngresoProductoservicios.Agregar(formulario.value.almacen, formulario.value.tipoIngreso,
+    formulario.value.docReferencia, formulario.value.proveedor, formulario.value.cliente, formulario.value.sucursal,
+    formulario.value.vendedor, formulario.value.fecingreso, formulario.value.docReferencia).subscribe (res => console.log(res) );
 
      this.IngresoProductoForm.reset();
 
   }
-
-
 
   Cambio(evento) {
     console.log(evento);

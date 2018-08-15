@@ -59,6 +59,8 @@ export class ClienteService {
     clt_aporte: number
     ): Observable<any> {
 
+    // tslint:disable-next-line:no-var-keyword
+    // tslint:disable-next-line:prefer-const
     var today = new Date();
     // tslint:disable-next-line:no-var-keyword
     // tslint:disable-next-line:prefer-const
