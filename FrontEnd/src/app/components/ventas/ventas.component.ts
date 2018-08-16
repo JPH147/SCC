@@ -132,7 +132,7 @@ export class VentasComponent implements OnInit {
     });
   }
 
-  //tslint:disable-next-line:use-life-cycle-interface
+  // tslint:disable-next-line:use-life-cycle-interface
   ngAfterViewInit() {
     fromEvent(this.ClienteAutoComplete.nativeElement, 'keyup')
     .pipe(

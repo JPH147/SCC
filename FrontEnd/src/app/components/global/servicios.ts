@@ -156,7 +156,6 @@ export class ServiciosGenerales {
       })
       .pipe(map(res => {
           if (res['codigo'] === 0) {
-            console.log(res['data']);
             return res['data'].clientes;
           } else {
               console.log ('Error al importar los datos, revisar servicio');

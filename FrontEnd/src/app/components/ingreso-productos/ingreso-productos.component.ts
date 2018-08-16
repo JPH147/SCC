@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material';
 import { eventNames } from 'cluster';
 import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
 import * as moment from 'moment';
+import { disableDebugTools } from '@angular/platform-browser';
 
 
 @Component({
@@ -72,11 +73,11 @@ import * as moment from 'moment';
           'almacen': [null, [Validators.required] ],
           'tipoIngreso': [null, [Validators.required]],
           'docReferencia': [null, [Validators.required]],
-          'proveedor': [null, [Validators.required]],
-          'cliente': [null, [Validators.required]],
-          'vendedor': [null, [Validators.required]],
-          'sucursal': [null, [Validators.required]],
-          'documento': [null, [Validators.required]],
+          'proveedor': [null, [Validators.nullValidator] ],
+          'cliente': [null, [Validators.nullValidator]],
+          'vendedor': [null, [Validators.nullValidator]],
+          'sucursal': [null, [Validators.nullValidator]],
+          'documento': [null, [Validators.nullValidator]],
           'fecingreso': [null, [Validators.required]],
       });
 
@@ -85,6 +86,10 @@ import * as moment from 'moment';
         {numero: this.contador, nombre: '', cantidad: null, precio: null}
       ];
 
+    }
+
+    displayEntidad(proveedor?: any): string | undefined {
+      return proveedor ? proveedor.nombre : undefined;
     }
 
     // Selector Proveedores activos
@@ -128,12 +133,11 @@ import * as moment from 'moment';
     ListarCliente(nombre: string) {
       this.Servicios.ListarCliente(nombre).subscribe( res => {
         this.clientes = [];
-
         // tslint:disable-next-line:forin
         for (let i in res) {
 
             this.clientes.push(res[i]);
-            //console.log(res[i]);
+            // console.log(res[i]);
         }
       });
     }
@@ -185,9 +189,32 @@ AgregarSerie() {
    // console.log(this.IngresoProductoForm);
    // console.log(moment(this.IngresoProductoForm.get('fecingreso').value).format('DD/MM/YYYY'));
 
-    this.IngresoProductoservicios.Agregar(formulario.value.almacen, formulario.value.tipoIngreso,
-    formulario.value.docReferencia, formulario.value.proveedor, formulario.value.cliente, formulario.value.sucursal,
-    formulario.value.vendedor, formulario.value.fecingreso, formulario.value.docReferencia).subscribe (res => console.log(res) );
+   let tipoingreso = formulario.value.tipoIngreso;
+
+   if (tipoingreso === 1) {
+     console.log(tipoingreso);
+    this.IngresoProductoservicios.AgregarCompraMercaderia(formulario.value.almacen, formulario.value.tipoIngreso,
+    formulario.value.docReferencia, formulario.value.proveedor.id ,
+    formulario.value.fecingreso, formulario.value.docReferencia).subscribe (res => console.log(res));
+   }
+
+   if (tipoingreso === 2) {
+    this.IngresoProductoservicios.AgregarDevolucionCliente(formulario.value.almacen, formulario.value.tipoIngreso,
+      formulario.value.docReferencia, formulario.value.cliente.id,
+      formulario.value.fecingreso, formulario.value.docReferencia).subscribe (res => console.log(res));
+   }
+
+   if (tipoingreso === 6) {
+    this.IngresoProductoservicios.AgregarDevolucionVendedor (formulario.value.almacen, formulario.value.tipoIngreso,
+      formulario.value.docReferencia, formulario.value.vendedor.id,
+      formulario.value.fecingreso, formulario.value.docReferencia).subscribe (res => console.log(res));
+   }
+
+   if (tipoingreso === 7) {
+    this.IngresoProductoservicios.AgregarTransferenciaSucursal (formulario.value.almacen, formulario.value.tipoIngreso,
+      formulario.value.docReferencia,
+      formulario.value.fecingreso, formulario.value.docReferencia).subscribe (res => console.log(res));
+   }
 
      this.IngresoProductoForm.reset();
 
