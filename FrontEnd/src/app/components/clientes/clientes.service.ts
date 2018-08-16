@@ -99,8 +99,8 @@ export interface Cliente {
   institucion: string;
   codigo: string;
   dni: string;
-  nombrecliente: string;
-  apellidocliente: string;
+  nombre: string;
+  apellido: string;
   cip: string;
   email: string;
   casilla: string;

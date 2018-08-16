@@ -19,7 +19,7 @@ export class VentanaEmergenteContacto {
   public Relevancias: RelevanciaTelefono[];
   public contador: number;
   public ListTelefonos: any;
-  public items: any[] = [];
+  public items: FormArray;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
@@ -29,52 +29,54 @@ export class VentanaEmergenteContacto {
     private ServicioTelefono: ServiciosTelefonos,
   ) {
     this.contador = 1;
-    this.items = [{telefono: '', tipo: 1 , relevancia: 1, observacion: ''} ];
-
   }
 
   onNoClick(): void {
     this.ventana.close();
   }
-
+/*
   add() {
     this.items.push(this.createItem());
     console.log(this.items);
- }
+  }*/
 
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnInit() {
     this.TelefonosForm = this.FormBuilder.group({
-      'telefono': [null, [
-        Validators.required,
-        Validators.pattern('[0-9- ]+')
-      ]],
-      'tipo': [null, [
-        Validators.required
-      ]],
-      'relevancia': [null, [
-        Validators.required
-      ]],
-      'observacion': [null, [
-        Validators.required
-      ]],
-      items : this.FormBuilder.array([this.createItem()])
+      items : this.FormBuilder.array([this.createItem(1)])
   });
   this.ListarTipos();
   this.ListarRelevancia();
 }
-createItem(): FormGroup {
+createItem(value): FormGroup {
   return this.FormBuilder.group({
-    telefono: '',
-    tipo: 2 ,
-    relevancia: 1,
-    observacion: ''
+    telefono: [null,[
+      Validators.required,
+      Validators.pattern('[0-9- ]+')
+    ]],
+    tipo: [{value:2,disabled:false},[
+
+    ]] ,
+    relevancia: [{value:value,disabled:true},[
+
+    ]],
+    observacion: [null,[
+      Validators.required
+    ]]
   });
 }
 
- /* addItem(): void {
+  add(): void {
     //this.items = this.TelefonosForm.get('items') as FormArray;
-    this.items.push(this.createItem());
+ //   this.items.push(this.createItem());
+    this.items = this.TelefonosForm.get('items') as FormArray;
+    this.items.push(this.createItem(2))
+  }
+ 
+ /* Para eliminar items */
+  /*
+  EliminarItem(index){
+    this.items.removeAt(index);
   }*/
 
   ListarTipos() {
@@ -93,6 +95,8 @@ createItem(): FormGroup {
     }
 
   Guardar(formulario) {
+    console.log(formulario.get('items').value);
+    /*
     if (this.data !== 0) {
       console.log(this.data);
       this.ServicioTelefono.CrearTelefono(this.data, formulario.value.telefono ,
@@ -100,6 +104,7 @@ createItem(): FormGroup {
         formulario.value.relevancia).subscribe(res => console.log(res));
     }
       this.ventana.close();
+      */
   }
 
 }
