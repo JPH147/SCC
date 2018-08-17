@@ -179,7 +179,7 @@ export class ServiciosGenerales {
       return this.http.get(this.url + 'sucursal/read.php', {
         params: new HttpParams()
         .set('prid', ID)
-        .set('prnombre',nombre)
+        .set('prnombre', nombre)
       })
 
       .pipe(map(res => {
@@ -208,7 +208,37 @@ export class ServiciosGenerales {
             }
         }));
     }
+
+    ListarProductos(
+      nombre: string
+      ): Observable <any> {
+        return this.http.get(this.url + 'producto/read.php', {
+          params: new  HttpParams()
+          .set('prdescripcion', nombre)
+
+        })
+        .pipe(map(res => {
+            if (res['codigo'] === 0) {
+              return res['data'].productos;
+            } else {
+                console.log ('Error al importar los datos, revisar servicio');
+            }
+        }));
+    }
+
+
+
+
   }
+
+export interface ListarProductos {
+  id: number;
+  tipo: string;
+  marca: string;
+  modelo: string;
+  descripcion: string;
+  precio: number;
+}
 
 export interface ListarCliente {
 id: number;
