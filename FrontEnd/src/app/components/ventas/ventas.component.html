@@ -42,36 +42,17 @@
       </mat-grid-tile>
    </mat-grid-list>
    <div class="row3col-cliente">
-      <!--<mat-form-field>
-         <input matInput placeholder="Cliente" formControlName="cliente">
-      </mat-form-field>-->
-
-       <!--<mat-form-field>
-          <input matInput placeholder="Cliente" aria-label="Cliente" [matAutocomplete]="auto" >
-          <mat-autocomplete #auto="matAutocomplete">
-            <mat-option *ngFor="let cliente of LstCliente | async" [value]="cliente.id">
-              <span>{{cliente.nombre}}</span> |
-              <small>DNI: {{cliente.dni}}</small>
-            </mat-option>
-          </mat-autocomplete>
-        </mat-form-field>-->
 
         <mat-form-field>
           <input #Cliente placeholder="Ingresa Cliente" matInput [matAutocomplete]="auto" formControlName= cliente>
-            <mat-autocomplete #auto="matAutocomplete">
-              <mat-option *ngFor="let cliente of LstCliente " [value]="cliente.id">
+            <mat-autocomplete #auto="matAutocomplete" [displayWith] = "displayCliente">
+              <mat-option *ngFor="let cliente of LstCliente " [value]="cliente">
                 {{cliente.nombre + ' ' + cliente.apellido}}
               </mat-option>
           </mat-autocomplete>
        </mat-form-field>
       
 
-            <!--<mat-form-field >
-              <mat-select placeholder='Selecciona Cliente' formControlName="cliente" >
-                <mat-option *ngFor="let cliente of LstCliente" [value] = "cliente.id"> {{cliente.nombre + ' ' + cliente.apellido}} </mat-option>
-              </mat-select> 
-            </mat-form-field>-->
-        
       <a></a>
       <mat-form-field >
          <input matInput placeholder="Cargo" formControlName="cargo">
@@ -110,18 +91,6 @@
          <mat-datepicker-toggle matSuffix [for]="InputFechaPago"></mat-datepicker-toggle>
          <mat-datepicker #InputFechaPago></mat-datepicker>
       </mat-form-field>
-
-      <!--<mat-form-field>
-        <input matInput [matDatepicker]="InputFechaPago" placeholder="Mes y Año de Pago">
-        <mat-datepicker-toggle matSuffix [for]="InputFechaPago"></mat-datepicker-toggle>
-        <mat-datepicker #InputFechaPago
-                        startView="multi-year"
-                        (yearSelected)="chosenYearHandler($event)"
-                        (monthSelected)="chosenMonthHandler($event, dp)"
-                        panelClass="example-month-picker">
-        </mat-datepicker>
-      </mat-form-field>-->
-
 
    </div>
    <div class="row4col-pagos">

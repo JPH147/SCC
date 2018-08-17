@@ -10,6 +10,7 @@ import {ClienteService, Cliente} from '../clientes/clientes.service';
 import {ClienteDataSource} from '../clientes/clientes.dataservice';
 import {Observable, fromEvent} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
 
 export interface PeriodicElement {
   numero: number;
@@ -40,6 +41,8 @@ export class VentasComponent implements OnInit {
   public typesdoc: string[] = [
     'Factura', 'Boleta'
   ];
+  public idcliente: number;
+  private sub: any;
   public states: string[] = [
     'Activo', 'Finalizado', 'Canjeado', 'Anulado'
   ];
@@ -62,7 +65,8 @@ export class VentasComponent implements OnInit {
     // tslint:disable-next-line:no-shadowed-variable
     private FormBuilder: FormBuilder,
     private ServicioTipoDocumento: ServiciosTipoDocumento,
-    private ServicioTipoPago: ServiciosTipoPago
+    private ServicioTipoPago: ServiciosTipoPago,
+    private route: ActivatedRoute
   ) {
     this.contador = 1;
     this.productos = [{ producto: '', imei: ''} ];
@@ -71,6 +75,10 @@ export class VentasComponent implements OnInit {
     //this.ListarClientes('', '', '', '' , '', '');
   }
   ngOnInit() {
+    this.sub = this.route.params.subscribe(params => {
+      this.idcliente = +params['id'];
+   });
+    this.ObtenerClientexId();
     this.ListadoCronograma = new VentaDataSource(this.Servicio);
     this.ListadoCliente = new ClienteDataSource(this.ClienteServicio);
     this.ListarClientes('', '', '', '' , this.ClienteAutoComplete.nativeElement.value , '');
@@ -142,8 +150,19 @@ export class VentasComponent implements OnInit {
         this.ListarClientes('', '', '', '' , this.VentasForm.value.cliente , '');
       })
      ).subscribe();
-
   }
+
+  displayCliente(cliente?: any): string | undefined {
+    if (cliente) {
+      return (cliente.nombre + ' ' + cliente.apellido) ;
+    }
+  }
+
+  displayVendedor(vendedor?: any): string | undefined {
+    return vendedor ? vendedor.nombre : undefined;
+  }
+
+
 
   /* Agregar productos */
  Agregar() {
@@ -196,12 +215,24 @@ export class VentasComponent implements OnInit {
   ListarClientes(inst: string, sede: string, subsede: string, dni: string, nombre: string,apellido: string ) {
     this.ClienteServicio.Listado(inst, sede, subsede, dni, nombre, apellido).subscribe( res => {
       this.LstCliente = [];
-      console.log(res);
       // tslint:disable-next-line:forin
       for (let i in res) {
         this.LstCliente.push(res[i]);
       }
     });
+  }
+
+  ObtenerClientexId() {
+    if (this.idcliente) {
+    this.ClienteServicio.Seleccionar(this.idcliente).subscribe(res => {
+      if (res) {
+        this.VentasForm.get('cliente').setValue(res);
+        this.VentasForm.get('cargo').setValue(res.cargo);
+        this.VentasForm.get('trabajo').setValue(res.trabajo);
+        //this.VentasForm.get('domicilio').setValue(res.)
+      }
+    });
+    }
   }
 
 }
