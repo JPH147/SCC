@@ -12,6 +12,7 @@ import { MatCard, MatInputModule, MatButton, MatDatepicker, MatTableModule } fro
 })
 
 
+// tslint:disable-next-line:class-name
 // tslint:disable-next-line:component-class-suffix
 export class ventanaseries  implements OnInit {
   public seriearticulo: Array<any> ;
