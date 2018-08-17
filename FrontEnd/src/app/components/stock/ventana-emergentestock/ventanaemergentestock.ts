@@ -35,8 +35,7 @@ export class VentanaEmergenteStock  implements OnInit {
     }
 
     ListarProductoSerie() {
-      this.Servicios.Listado(this.data).subscribe( res => {
-        console.log(this.data);
+      this.Servicios.Listado(this.data.almacen,this.data.producto).subscribe( res => {
         this.LstSerie = [];
         // tslint:disable-next-line:forin
         for (let i in res) {

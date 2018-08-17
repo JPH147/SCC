@@ -8,42 +8,44 @@
     
     <mat-card-content>
 
-    <mat-selection-list #shoes (selectionChange)="Cambio($event)">
-      <mat-list-option formArrayName="series" *ngFor="let serie of SeriesProductosForm['controls'].series['controls'];let i = index">
+      <div formArrayName="series" *ngFor="let serie of SeriesProductosForm['controls'].series['controls'];let i = index">
         <div [formGroupName]="i">
           
-          <mat-grid-list cols=3 rowHeight="70px">
+          <mat-grid-list cols=7 rowHeight="70px">
           
-            <mat-grid-tile>
+            <mat-grid-tile colspan=2>
               <mat-form-field>
                 <input matInput placeholder="Serie" formControlName="serie">
               </mat-form-field>
             </mat-grid-tile>
           
-            <mat-grid-tile>
+            <mat-grid-tile colspan=2>
               <mat-form-field>
                 <input matInput placeholder="Precio mínimo" formControlName="precio">
               </mat-form-field>
             </mat-grid-tile>
           
-            <mat-grid-tile>
+            <mat-grid-tile colspan=2>
               <mat-form-field>
                 <input matInput placeholder="Cantidad" formControlName="cantidad">
               </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile colspan=1>
+              <mat-checkbox formControlName="considerar"></mat-checkbox>
             </mat-grid-tile>
           
           </mat-grid-list>
           
         </div>
-      </mat-list-option>
-    </mat-selection-list>
+      </div>
 
     </mat-card-content>
 
     <mat-card-actions>
       <mat-grid-list cols=1 rowHeight="40px">
         <mat-grid-tile>
-          <button mat-raised-button color="primary">Grabar</button>
+          <button mat-raised-button color="primary" [mat-dialog-close]="SeriesProductosForm.get('series').value" >Grabar</button>
         </mat-grid-tile>
       </mat-grid-list>
     </mat-card-actions>

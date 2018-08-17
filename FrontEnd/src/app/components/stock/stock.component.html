@@ -47,7 +47,7 @@
                 matSort matSortActive="descripcion" matSortDisableClear matSortDirection="asc" matSortDisableClear>
                 <!-- Number Column -->
                 <ng-container matColumnDef="numero" class="numero">
-                  <mat-header-cell *matHeaderCellDef>numero</mat-header-cell>
+                  <mat-header-cell *matHeaderCellDef>N°</mat-header-cell>
                   <mat-cell *matCellDef="let row">{{row.numero}}</mat-cell>
                 </ng-container>
 
@@ -91,7 +91,7 @@
                 <ng-container matColumnDef="opciones">
                   <mat-header-cell *matHeaderCellDef>Opciones</mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                  <button mat-icon-button color="primary" (click)= "DetalleStock(row.id_producto)" Tooltip = "Detalle Productos"> <mat-icon> visibility </mat-icon></button>
+                  <button mat-icon-button color="primary" (click)= "DetalleStock(row.almacen,row.id_producto)" Tooltip = "Detalle Productos"> <mat-icon> visibility </mat-icon></button>
                   </mat-cell>
                 </ng-container>
 

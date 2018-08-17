@@ -61,10 +61,10 @@ Class SalidaCabecera{
 		{
 			extract($row);
             $contador=$contador+1;
-            $SGasto=$this->detalle->read_gasto($id);
-            $SMovilidad=$this->detalle->read_movilidad($id);
-            $SVendedor=$this->detalle->read_vendedor($id);
-            $SProducto=$this->detalle->read_producto($id);
+            // $SGasto=$this->detalle->read_gasto($id);
+            // $SMovilidad=$this->detalle->read_movilidad($id);
+            // $SVendedor=$this->detalle->read_vendedor($id);
+            // $SProducto=$this->detalle->read_producto($id);
             $salida_item = array (
                 "numero"=>$contador,
                 "id"=>$id,
@@ -73,10 +73,10 @@ Class SalidaCabecera{
                 "fecha"=>$fecha,
                 "destino"=>$destino,
                 "tipo_movilidad"=>$tipo_movilidad,
-                "movilidad"=>$SMovilidad,
-                "gasto"=>$SGasto,
-                "productos"=>$SProducto,
-                "vendedor"=>$SVendedor,
+                // "movilidad"=>$SMovilidad,
+                // "gasto"=>$SGasto,
+                // "productos"=>$SProducto,
+                // "vendedor"=>$SVendedor,
                 "estado"=>$estado
             );
             array_push($SCabecera_list["salidas"],$salida_item);

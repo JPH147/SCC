@@ -53,7 +53,8 @@ Class Stock{
                 "id_producto"=>$id_producto,
                 "descripcion"=>$descripcion,
                 "unidad_medida"=>$unidad_medida,
-                "cantidad"=>$cantidad
+                "cantidad"=>$cantidad,
+                "precio"=>$precio
             );
             array_push($stock_list["stock"],$stock_item);
         }

@@ -1,6 +1,5 @@
-import { ventanaseriessv } from './ventana-seriessv/ventanaseriessv';
-import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatChipInputEvent} from '@angular/material';
+import { Component, OnInit, Inject, ViewChild, ElementRef, ViewChildren, QueryList } from '@angular/core';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatChipInputEvent, MatSelect} from '@angular/material';
 import {FormControl, FormGroup, FormBuilder, FormArray,Validators} from '@angular/forms';
 import {Observable, fromEvent} from 'rxjs';
 import {COMMA, SPACE} from '@angular/cdk/keycodes';
@@ -9,14 +8,15 @@ import {SalidaVendedoresService} from './salida-vendedores.service';
 import {ServiciosGenerales, Almacen} from '../global/servicios';
 import {ServiciosVentas} from '../global/ventas';
 import {ProductoService} from '../productos/productos.service'
-import {ServiciosProductoSerie} from '../global/productoserie'
 import {VentanaTalonarioComponent} from './ventana-talonario/ventana-talonario.component'
+import { ventanaseriessv } from './ventana-seriessv/ventanaseriessv';
+import {StockService} from '../stock/stock.service'
 
 @Component({
   selector: 'app-salida-vendedores',
   templateUrl: './salida-vendedores.component.html',
   styleUrls: ['./salida-vendedores.component.css'],
-  providers: [SalidaVendedoresService,ServiciosGenerales,ServiciosVentas,ProductoService,ServiciosProductoSerie]
+  providers: [SalidaVendedoresService,ServiciosGenerales,ServiciosVentas,ProductoService,StockService]
 })
 
 export class SalidaVendedoresComponent implements OnInit {
@@ -36,8 +36,9 @@ export class SalidaVendedoresComponent implements OnInit {
   public numero: number;
 
 
-  @ViewChild('InputVendedor') FiltroVendedor: ElementRef;
+  @ViewChildren('InputVendedor') FiltroVendedor: QueryList<any>;
   @ViewChild('InputProducto') FiltroProducto: ElementRef;
+  @ViewChild('InputAlmacen') FiltroAlmacen: MatSelect;
   public SalidaVendedoresForm:FormGroup;
   public Sucursales: Array<any>;
   public Vendedor: Array<any>;
@@ -48,12 +49,7 @@ export class SalidaVendedoresComponent implements OnInit {
   readonly separatorKeysCodes: number[] = [SPACE,COMMA];
   departamentos: any[] = [];
 
-  animal: string;
-  name: string;
-  date = new FormControl(new Date());
-  serializedDate = new FormControl((new Date()).toISOString());
-  toppings = new FormControl();
-  toppingList: string[] = ['Jean Pierre', 'Joel Vicuña', 'Carlos Rodriguez', 'Jean Paul', 'Ivan Arones', 'Fernando Martinez'];
+  public Series: ProductosSalida[]=[];
 
   /***************/
 
@@ -65,8 +61,7 @@ export class SalidaVendedoresComponent implements OnInit {
     private FormBuilder: FormBuilder,
     private Global: ServiciosGenerales,
     private Ventas:ServiciosVentas,
-    private Articulos: ProductoService,
-    private Series: ServiciosProductoSerie
+    private Articulos: StockService
     ) { }
 
  ngOnInit() {
@@ -74,7 +69,6 @@ export class SalidaVendedoresComponent implements OnInit {
     this.Global.ListarSucursal(null,"").subscribe(res=>this.Sucursales=res);
     this.Global.ListarAlmacen().subscribe(res=>this.Almacenes=res);
     this.Ventas.ListarVendedor(null,"","").subscribe(res=>this.Vendedor=res['data'].vendedores);
-    this.Articulos.Listado("","","","",1,20,"descripcion","asc").subscribe(res=>this.Producto=res['data'].productos)
 
 
     this.SalidaVendedoresForm = this.FormBuilder.group({
@@ -114,21 +108,36 @@ export class SalidaVendedoresComponent implements OnInit {
  }
 
  ngAfterViewInit(){
-   fromEvent(this.FiltroVendedor.nativeElement,'keyup')
-   .pipe(
-     debounceTime(10),
-     distinctUntilChanged(),
-     tap(() => {
-       this.Ventas.ListarVendedor(null,this.FiltroVendedor.nativeElement.value,"").subscribe(res=>this.Vendedor=res['data'].vendedores);
-     })
-    ).subscribe();
+
+   // fromEvent(this.FiltroVendedor.nativeElement,'keyup')
+   // .pipe(
+   //   debounceTime(10),
+   //   distinctUntilChanged(),
+   //   tap(() => {
+   //     this.Ventas.ListarVendedor(null,this.FiltroVendedor.nativeElement.value,"").subscribe(res=>this.Vendedor=res['data'].vendedores);
+   //   })
+   //  ).subscribe();
  
+  this.FiltroVendedor.changes.subscribe(res=>{
+     // console.log(this.FiltroVendedor['_results'])
+    for (let i in this.FiltroVendedor['_results']) {
+      fromEvent(this.FiltroVendedor['_results'][i].nativeElement,'keyup')
+      .pipe(
+          tap(()=>{
+            this.Ventas.ListarVendedor(null,this.FiltroVendedor['_results'][i].nativeElement.value,"").subscribe(res=>this.Vendedor=res['data'].vendedores);
+          })
+        ).subscribe()
+    }
+  })
+
+
+
    fromEvent(this.FiltroProducto.nativeElement,'keyup')
    .pipe(
      debounceTime(10),
      distinctUntilChanged(),
      tap(() => {
-       this.Articulos.Listado("","","",this.FiltroProducto.nativeElement.value,1,20,"descripcion","asc").subscribe(res=>{this.Producto=res['data'].productos;console.log(res)})
+        this.Articulos.ListarStock(this.FiltroAlmacen.value, '', '', '', this.FiltroProducto.nativeElement.value, 1, 20, 'descripcion asc').subscribe(res=>this.Producto=res['data'].stock)
      })
     ).subscribe();
 
@@ -170,7 +179,7 @@ export class SalidaVendedoresComponent implements OnInit {
 
   displayFn2(producto) {
     if (producto){
-      return producto.descripcion  
+      return producto.descripcion 
     }else{
       return ""
     }
@@ -180,7 +189,7 @@ export class SalidaVendedoresComponent implements OnInit {
     return this.FormBuilder.group({
       'nombre':[{value:null, disabled:false},[
       ]],
-      'comision':[{value:null, disabled:false},[
+      'comision':[{value:null, disabled:true},[
       ]]
     })
   }
@@ -243,43 +252,72 @@ export class SalidaVendedoresComponent implements OnInit {
   }
 
   VendedorSeleccionado(event,i){
-    console.log(event);
+    this.Ventas.ListarVendedor(null,"","").subscribe(res=>this.Vendedor=res['data'].vendedores);
     this.SalidaVendedoresForm.get('vendedores').value[i].nombre=event.option.value.id;
     this.SalidaVendedoresForm.get('vendedores')['controls'][i].get('comision').setValue(event.option.value.comision)
-    console.log(this.SalidaVendedoresForm.get('vendedores')['controls'][i])
   }
   
-  Abierto(event,i){
-  //  console.log(event,i)
+  ProductoSeleccionado(event,i){
+    this.Articulos.ListarStock(this.FiltroAlmacen.value, '', '', '', '', 1, 20, 'descripcion asc').subscribe(res=>{
+      this.Producto=res['data'].stock;
+      for (let i of this.SalidaVendedoresForm['controls'].productos.value) {
+        this.EliminarElemento(this.Producto,i.producto.id_producto)
+      }
+    });
+
+
+   // this.EliminarElemento(this.Producto,"JP")
+
+    // console.log(this.Producto);
+    for (let i of this.SalidaVendedoresForm['controls'].productos.value) {
+       this.EliminarElemento(this.Producto,i.producto.id_producto)
+    }
   }
 
+  EliminarElemento(array,value){
+     array.forEach( (item, index) => {
+       if(item.id_producto === value) array.splice(index,1);
+     });
+  }
 
   AgregarSerieSalidaV(producto) {
-    this.Series.Listado(producto.id).subscribe(res=>{
-      const serieventana = this.DialogoSerie.open(ventanaseriessv, {
-        width: '800px',
-        data:{IMEI:res,precio:producto.precio}
-      });
+    const serieventana = this.DialogoSerie.open(ventanaseriessv, {
+      width: '800px',
+      data:{almacen:this.FiltroAlmacen.value,id_producto:producto.id_producto,precio:producto.precio, }
+    });
+
+    serieventana.afterClosed().subscribe(res=>{
+      for (let i in res) {
+        this.Series.push({id_serie:res[0].id_serie, precio:res[0].precio, cantidad:res[0].cantidad})
+      }
+      console.log(this.Series);
     })
   }
 
-AgregarTalonario() {
-  const  serietalorarios = this.Dialogotalon.open(VentanaTalonarioComponent, {
-    width: '800px'
-  });
+  AgregarTalonario() {
+    const  serietalorarios = this.Dialogotalon.open(VentanaTalonarioComponent, {
+      width: '800px'
+    });
+  }
 
+  ResetearForm(event){
+    this.ResetearFormArray(this.productos);
+    this.Series=[];
+    this.Articulos.ListarStock(event.value, '', '', '', '', 1, 20, 'descripcion asc').subscribe(res=>this.Producto=res['data'].stock)
+  }
+
+  ResetearFormArray = (formArray: FormArray) => {
+    if (formArray) {
+      formArray.reset()
+      while (formArray.length !== 1) {
+        formArray.removeAt(0)
+      }
+    }
+  }
 }
 
-// openDialog(): void {
-//   const dialogRef = this.dialog.open(DialogoComponent, {
-//     width: '250px',
-//     data: {name: this.name, animal: this.animal}
-//   });
-
-//   dialogRef.afterClosed().subscribe(result => {
-//     console.log('The dialog was closed');
-//     this.animal = result;
-//   });
-// }
-
+export interface ProductosSalida{
+  id_serie:number,
+  precio:number,
+  cantidad:number
 }

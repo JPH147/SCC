@@ -86,10 +86,10 @@ export class StockComponent implements OnInit {
   );
   }
 
-DetalleStock(id) {
+DetalleStock(almacen,id) {
 const VentanaDetalleStock = this.DialogoStock.open(VentanaEmergenteStock, {
     width: '600px',
-    data: id
+    data: {almacen:almacen,producto:id}
   });
 
 
