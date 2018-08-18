@@ -32,14 +32,21 @@
         </mat-form-field>
       </mat-grid-tile>
 
-        <mat-grid-tile coslpan="1">
+        <!--<mat-grid-tile coslpan="1">
          <mat-form-field class="rows4">
             <mat-select placeholder="Estado de Contrato" formControlName="estado">
                <mat-option>--</mat-option>
                <mat-option *ngFor="let state of states" [value]="state">{{state}}</mat-option>
             </mat-select>
          </mat-form-field>
-      </mat-grid-tile>
+      </mat-grid-tile>-->
+
+      <mat-grid-tile coslpan="1">
+        <mat-form-field class="rows4">
+          <input matInput placeholder="Lugar de Venta" formControlName="lugar">
+       </mat-form-field>
+        <a></a> 
+     </mat-grid-tile> 
    </mat-grid-list>
    <div class="row3col-cliente">
 
@@ -67,10 +74,10 @@
          <input matInput placeholder="Domicilio" formControlName="domicilio">
       </mat-form-field>
       <a></a>
-      <mat-form-field >
+      <!--<mat-form-field >
          <input matInput placeholder="Lugar" formControlName="lugar">
       </mat-form-field>
-      <a></a>
+      <a></a>-->
       <mat-form-field >
          <input matInput placeholder="Teléfono" formControlName="telefono">
       </mat-form-field>

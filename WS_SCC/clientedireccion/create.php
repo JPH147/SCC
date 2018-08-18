@@ -18,12 +18,12 @@
         $data = json_decode(file_get_contents('php://input'), true);
 
         if (($_POST["id_cliente"])!=null  && !empty(trim($_POST["drc_nombre"])) 
-        && ($_POST["id_provincia"])!=null && ($_POST["drc_relevancia"])!=null
+        && ($_POST["pid_distrito"])!=null && ($_POST["drc_relevancia"])!=null
         && !empty(trim($_POST["drc_observacion"])))
         {
             $producto->id_cliente = $_POST["id_cliente"];
             $producto->drc_nombre = trim($_POST["drc_nombre"]);
-            $producto->id_provincia = $_POST["id_provincia"];
+            $producto->id_distrito = $_POST["pid_distrito"];
             $producto->drc_relevancia = $_POST["drc_relevancia"];
             $producto->drc_observacion = $_POST["drc_observacion"];
 
