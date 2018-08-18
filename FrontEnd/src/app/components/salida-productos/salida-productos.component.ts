@@ -1,7 +1,7 @@
 import { ventanaseriesalida } from './ventana-seriesalida/ventanaseriesalida';
-import { Component, OnInit } from '@angular/core';
-import {FormControl} from '@angular/forms';
-import {Observable} from 'rxjs';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import {FormControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Observable, fromEvent} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
 import {SelectionModel} from '@angular/cdk/collections';
 import {MatTableDataSource} from '@angular/material';
@@ -19,6 +19,10 @@ export interface Food {
 })
 
 export class SalidaProductosComponent implements OnInit {
+
+  // @ViewChild ('')
+
+  public SalidaProductosForm: FormGroup;
   public articulos: Array <articulo>;
   public contador: number;
   public almacenes: Array<any>;

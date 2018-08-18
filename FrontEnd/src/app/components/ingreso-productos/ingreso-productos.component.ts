@@ -29,6 +29,7 @@ import { disableDebugTools } from '@angular/platform-browser';
 
     public IngresoProductoForm: FormGroup;
     public articulos: Array <articulo>;
+    public productos: Array<any> = [];
     public contador: number;
     public almacenes: Array<any> = [];
     public TipoIngresos: Array<any> = [];
@@ -68,6 +69,7 @@ import { disableDebugTools } from '@angular/platform-browser';
       this.ListarProveedor('');
       this.ListarCliente('');
       this.ListarVendedor('');
+      this.ListarProductos('');
 
       this.IngresoProductoForm = this.FormBuilder.group({
           'almacen': [null, [Validators.required] ],
@@ -79,6 +81,9 @@ import { disableDebugTools } from '@angular/platform-browser';
           'sucursal': [null, [Validators.nullValidator]],
           'documento': [null, [Validators.nullValidator]],
           'fecingreso': [null, [Validators.required]],
+          'producto': [null, [Validators.required]],
+          'cantidad': [null, [Validators.required]],
+          'precioUnitario': [null, [Validators.required]],
       });
 
       this.contador = 1;
@@ -88,15 +93,23 @@ import { disableDebugTools } from '@angular/platform-browser';
 
     }
 
-    displayEntidad(proveedor?: any): string | undefined {
+    displayCliente(cliente?: any): string | undefined {
+      return cliente ? cliente.nombre + ' ' + cliente.apellido : undefined;
+    }
+
+    displayProveedor(proveedor?: any): string | undefined {
       return proveedor ? proveedor.nombre : undefined;
+    }
+
+    displayVendedor(vendedor?: any): string | undefined {
+      return vendedor ? vendedor.nombre : undefined;
     }
 
     // Selector Proveedores activos
     ListarProveedor(nombre: string) {
       this.Servicios.ListarProveedor(nombre).subscribe( res => {
         this.proveedores = [];
-        console.log(res);
+       // console.log(res);
         // tslint:disable-next-line:forin
         for (let i in res) {
           this.proveedores.push(res[i]);
@@ -167,6 +180,18 @@ import { disableDebugTools } from '@angular/platform-browser';
 
     }
 
+    ListarProductos(nombre: string) {
+      this.Servicios.ListarProductos(nombre).subscribe( res => {
+        this.productos = [];
+        // tslint:disable-next-line:forin
+        for ( let i in res) {
+           this.productos.push(res [i]);
+                  }
+
+      });
+
+    }
+
   agregar() {
     this.contador++;
     this.articulos.push({numero: this.contador, nombre: '', cantidad: null, precio: null});
@@ -189,6 +214,7 @@ AgregarSerie() {
    // console.log(this.IngresoProductoForm);
    // console.log(moment(this.IngresoProductoForm.get('fecingreso').value).format('DD/MM/YYYY'));
 
+   // tslint:disable-next-line:prefer-const
    let tipoingreso = formulario.value.tipoIngreso;
 
    if (tipoingreso === 1) {
@@ -223,7 +249,6 @@ AgregarSerie() {
   Cambio(evento) {
     console.log(evento);
   }
-
 
 } // Fin de la Clase IngresoProductoComponent
 

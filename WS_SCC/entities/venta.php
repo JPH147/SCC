@@ -19,7 +19,7 @@ Class Venta{
     public $vnt_autorizacion_pdf;
     public $vnt_fecha_inicio;
     public $vnt_inicial;
-    public $vnt_numero_couta;
+    public $vnt_numero_cuota;
     public $vnt_cuotas;
     public $id_tipopago;
     public $vnt_total;
@@ -50,19 +50,31 @@ Class Venta{
 
     function create()
     {
-        $query = "CALL sp_crearventa(:pvnt_serie, :pvnt_numerodocumento,:pid_cliente,
-        :pvnt_fecha,:pid_vendedor,:pvnt_contrato_pdf,:pvnt_dni_pdf,:pvnt_cip_pdf,:pvnt_planilla_pdf,
-        :pvnt_letra_pdf,:pvnt_voucher_pdf,:pvnt_autorizacion_pdf,:pvnt_fecha_inicio,:pvnt_inicial,
-        :pvnt_numero_couta,:pvnt_cuotas,:pid_tipopago,:pvnt_total,:pvnt_tipoventa,
-        :pid_tipoventa_referencia,:pvnt_observaciones, :pvnt_estado)";
+        $query = "CALL sp_crearventa(
+        :pvnt_talonario
+        :pid_cliente,
+        :pvnt_fecha,
+        :pid_vendedor,
+        :pvnt_contrato_pdf,
+        :pvnt_dni_pdf,
+        :pvnt_cip_pdf,
+        :pvnt_planilla_pdf,
+        :pvnt_letra_pdf,
+        :pvnt_voucher_pdf,
+        :pvnt_autorizacion_pdf,
+        :pvnt_fecha_inicio,
+        :pvnt_inicial,
+        :pvnt_numero_cuota,
+        :pvnt_cuotas,
+        :pid_tipopago,
+        :pvnt_total,
+        :pvnt_tipoventa,
+        :pvnt_observaciones, 
+        :pvnt_estado)";
 
-        
         $result = $this->conn->prepare($query);
 
-        
-
-        $result->bindParam(":pvnt_serie", $this->vnt_serie);
-        $result->bindParam(":pvnt_numerodocumento", $this->vnt_numerodocumento);
+        $result->bindParam(":pvnt_talonario", $this->id_talonario);
         $result->bindParam(":pid_cliente", $this->id_cliente);
         $result->bindParam(":pvnt_fecha", $this->vnt_fecha);
         $result->bindParam(":pid_vendedor", $this->id_vendedor);
@@ -75,12 +87,11 @@ Class Venta{
         $result->bindParam(":pvnt_autorizacion_pdf", $this->vnt_autorizacion_pdf);
         $result->bindParam(":pvnt_fecha_inicio", $this->vnt_fecha_inicio);
         $result->bindParam(":pvnt_inicial", $this->vnt_inicial);
-        $result->bindParam(":pvnt_numero_couta", $this->vnt_numero_couta);
+        $result->bindParam(":pvnt_numero_cuota", $this->vnt_numero_cuota);
         $result->bindParam(":pvnt_cuotas", $this->vnt_cuotas);
         $result->bindParam(":pid_tipopago", $this->id_tipopago);
         $result->bindParam(":pvnt_total", $this->vnt_total);
         $result->bindParam(":pvnt_tipoventa", $this->vnt_tipoventa);
-        $result->bindParam(":pid_tipoventa_referencia", $this->id_tipoventa_referencia);
         $result->bindParam(":pvnt_observaciones", $this->vnt_observaciones);
         $result->bindParam(":pvnt_estado", $this->vnt_estado);
 
@@ -98,7 +109,7 @@ Class Venta{
         $this->vnt_autorizacion_pdf=htmlspecialchars(strip_tags($this->vnt_autorizacion_pdf));
         $this->vnt_fecha_inicio=$this->vnt_fecha_inicio;
         $this->vnt_inicial=htmlspecialchars(strip_tags($this->vnt_inicial));
-        $this->vnt_numero_couta=htmlspecialchars(strip_tags($this->vnt_numero_couta));
+        $this->vnt_numero_cuota=htmlspecialchars(strip_tags($this->vnt_numero_cuota));
         $this->vnt_cuotas=htmlspecialchars(strip_tags($this->vnt_cuotas));
         $this->id_tipopago=htmlspecialchars(strip_tags($this->id_tipopago));
         $this->vnt_total=htmlspecialchars(strip_tags($this->vnt_total));
@@ -158,7 +169,6 @@ Class Venta{
                 "tipo_pago"=>$tipo_pago,
                 "monto_total"=>$monto_total,
                 "tipo_venta"=>$tipo_venta,
-                "referencia"=>$referencia,
                 "observaciones"=>$observaciones
             );
             array_push($venta_list["ventas"],$venta_item);

@@ -20,8 +20,8 @@ Class ProductoSerie{
 
         $result = $this->conn->prepare($query);
 
-        $result->bindParam(1, $this->producto);
-        $result->bindParam(2, $this->serie);
+        $result->bindParam(1, $this->almacen);
+        $result->bindParam(2, $this->id_producto);
 
         $result->execute();
         
@@ -36,8 +36,11 @@ Class ProductoSerie{
             $contador=$contador+1;
             $producto_serie_item = array (
                 "numero"=>$contador,
-                "producto"=>$prd_descripcion,
-                "serie"=>$ps_serie
+                "almacen"=>$almacen,
+                "id_producto"=>$id_producto,
+                "id_serie"=>$id_serie,
+                "serie"=>$serie,
+                "cantidad"=>$cantidad
             );
             array_push($producto_serie_list["producto_series"],$producto_serie_item);
         }
@@ -45,23 +48,23 @@ Class ProductoSerie{
         return $producto_serie_list;
     }
 
-    function contar(){
+    // function contar(){
 
-        $query = "CALL sp_listarproductoseriecontar(?,?)";
+    //     $query = "CALL sp_listarproductoseriecontar(?,?)";
 
-        $result = $this->conn->prepare($query);
+    //     $result = $this->conn->prepare($query);
 
-        $result->bindParam(1, $this->prproducto);
-        $result->bindParam(2, $this->prserie);
+    //     $result->bindParam(1, $this->prproducto);
+    //     $result->bindParam(2, $this->prserie);
 
-        $result->execute();
+    //     $result->execute();
 
-        $row = $result->fetch(PDO::FETCH_ASSOC);
+    //     $row = $result->fetch(PDO::FETCH_ASSOC);
 
-        $this->total_producto_serie=$row['total'];
+    //     $this->total_producto_serie=$row['total'];
 
-        return $this->total_producto_serie;
-    }
+    //     return $this->total_producto_serie;
+    // }
 
     function readxId(){
 

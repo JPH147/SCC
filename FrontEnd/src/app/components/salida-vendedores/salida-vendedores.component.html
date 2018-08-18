@@ -137,7 +137,7 @@
 
           <mat-grid-tile>
             <mat-form-field class="formulario-principal">
-              <input matInput placeholder="Comision efectiva" formControlName="comision">
+              <input matInput placeholder="Comision efectiva" formControlName="comision" [value]="SalidaVendedoresForm.get('vendedores')['controls'][i].get('comision').value | percent:'1.0-0'">
             </mat-form-field>
           </mat-grid-tile>
 
@@ -168,8 +168,8 @@
     
     <mat-card-subtitle>
       <mat-form-field>
-        <mat-select placeholder="Selecciona Almacen" >
-          <mat-option *ngFor="let almacen of Almacenes" [value]="almacen.id">
+        <mat-select placeholder="Selecciona Almacen" #InputAlmacen (selectionChange)="ResetearForm($event)">
+          <mat-option *ngFor="let almacen of Almacenes" [value]="almacen.nombre">
             {{almacen.nombre}}
           </mat-option>
         </mat-select>
@@ -183,7 +183,7 @@
           <mat-grid-tile>
             <mat-form-field class="formulario-principal">
               <input matInput placeholder="Producto" [matAutocomplete]="autoproducto" #InputProducto formControlName="producto">
-              <mat-autocomplete #autoproducto="matAutocomplete" [displayWith]="displayFn2">
+              <mat-autocomplete #autoproducto="matAutocomplete" [displayWith]="displayFn2" (optionSelected)="ProductoSeleccionado($event, i)">
                 <mat-option *ngFor="let producto of Producto" [value]="producto">
                   {{producto.descripcion}}
                 </mat-option>
@@ -198,7 +198,7 @@
           </mat-grid-tile>
         
           <mat-grid-tile>
-            <button mat-mini-fab type="button" color="primary" matTooltip="Agregar series" (click)="AgregarSerieSalidaV(producto.value.producto)"><mat-icon>reorder</mat-icon></button>
+            <button mat-mini-fab type="button" color="primary" matTooltip="Agregar series" (click)="AgregarSerieSalidaV(producto.value.producto)" [disabled]="!producto.value.producto"><mat-icon>reorder</mat-icon></button>
             <button mat-mini-fab type="button" color="primary" matTooltip="Eliminar producto" (click)="EliminarProducto()"><mat-icon>delete</mat-icon></button>
           </mat-grid-tile>
         
