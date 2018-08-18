@@ -229,9 +229,25 @@ export class ServiciosDirecciones{
 				   .set('prnombre', nombre);
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 		return this.http.post(this.url+'direcciondistrito/update.php',params,{headers:headers});
+	
 	}
-	/************************************************************************************************/
-
+/************************************************************************************************/
+	CrearDireccion(
+		id: number,
+		nombre: string,
+		iddistrito: number,
+		relevancia: number,
+		observacion: string
+	): Observable<any> {
+		let params = new HttpParams()
+		.set('id_cliente', id.toString())
+		.set('drc_nombre', nombre)
+		.set('pid_distrito', iddistrito.toString())
+		.set('drc_relevancia', relevancia.toString())
+		.set('drc_observacion', observacion);
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+		return this.http.post(this.url + 'clientedireccion/create.php', params, {headers: headers});
+		}
 }
 
 export interface Departamento{
@@ -252,5 +268,5 @@ export interface Distrito {
 	id:number,
 	departamento:string,
 	provincia:string,
-	nombre:string,		
+	nombre:string,
 }

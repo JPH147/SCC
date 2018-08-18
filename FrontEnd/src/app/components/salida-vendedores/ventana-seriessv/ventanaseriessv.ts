@@ -2,22 +2,26 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatCard, MatInputModule, MatButton, MatDatepicker, MatTableModule } from '@angular/material';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {FormControl, FormGroup, FormBuilder, FormArray,Validators} from '@angular/forms';
+import {ServiciosProductoSerie} from '../../global/productoserie'
 
 @Component({
   selector: 'app-ventanaseriessv',
   templateUrl: './ventanaseriessv.html',
-  styleUrls: ['./ventanaseriessv.css']
+  styleUrls: ['./ventanaseriessv.css'],
+  providers:[ServiciosProductoSerie]
 })
 
 export class ventanaseriessv  implements OnInit {
 
   public SeriesProductosForm:FormGroup;
   public series: FormArray;
+  public Productos:Array<any>;
 
   constructor(
      @Inject(MAT_DIALOG_DATA) public data,
       public ventana: MatDialogRef<ventanaseriessv>,
-      private FormBuilder: FormBuilder
+      private FormBuilder: FormBuilder,
+      private Series:ServiciosProductoSerie
   ) { }
 
   ngOnInit() {
@@ -26,31 +30,35 @@ export class ventanaseriessv  implements OnInit {
       series: this.FormBuilder.array([this.CrearSerie()])
     })
 
-    if (this.data){
-      this.ListadoSeries(this.data)
-      this.EliminarSerie(Object.keys(this.data.IMEI).length)
-    }
-
+    this.Series.Listado(this.data.almacen,this.data.id_producto).subscribe(res=>{
+      this.ListadoSeries(res);
+    })
   }
 
   CrearSerie():FormGroup{
     return this.FormBuilder.group({
+      'id_serie':[{value:null, disabled:false},[
+      ]],
       'serie':[{value:null, disabled:false},[
       ]],
       'precio':[{value:null, disabled:false},[
       ]],
       'cantidad':[{value:null, disabled:false},[
+      ]],
+      'considerar':[{value:false,disabled:false},[
       ]]
     })
   }
 
   ListadoSeries(object){
-    for (let i in object.IMEI) {
-      this.SeriesProductosForm.get('series')['controls'][i].get('serie').setValue(object.IMEI[i].serie);
-      this.SeriesProductosForm.get('series')['controls'][i].get('precio').setValue(object.precio);
-      this.SeriesProductosForm.get('series')['controls'][i].get('cantidad').setValue(1)
+    for (let i in object) {
+      this.SeriesProductosForm.get('series')['controls'][i].get('id_serie').setValue(object[i].id_serie);
+      this.SeriesProductosForm.get('series')['controls'][i].get('serie').setValue(object[i].serie);
+      this.SeriesProductosForm.get('series')['controls'][i].get('precio').setValue(this.data.precio);
+      this.SeriesProductosForm.get('series')['controls'][i].get('cantidad').setValue(object[i].cantidad);
       this.AgregarSerie();
     }
+    this.EliminarSerie(Object.keys(object).length)    
   }
   
   AgregarSerie():void{
@@ -62,7 +70,8 @@ export class ventanaseriessv  implements OnInit {
     this.series.removeAt(index);
   };
 
-  Cambio(event){
-    console.log(event)
+  Guardar(formulario){
+    formulario.enable();
+    return formulario.get('series').value;
   }
 }

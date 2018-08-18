@@ -162,10 +162,10 @@ export class ClientesComponent implements OnInit {
   });
 }
 
-AgregarDatoContacto(id){
+AgregarDatoContacto(id) {
   // tslint:disable-next-line:prefer-const
   let VentanaContacto = this.DialogoContacto.open(VentanaEmergenteContacto, {
-    width: '800px',
+    width: '1200px',
     data: id
   });
 }
@@ -177,7 +177,5 @@ SubirImagen(id) {
     data : id
   });
 }
-
-
 
 }

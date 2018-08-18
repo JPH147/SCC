@@ -15,11 +15,21 @@ export class ServiciosProductoSerie {
   ) {}
 
   Listado(
-    id: string,
+    almacen: string,
+    producto:number
     ): Observable <any> {
-      return this.http.get(this.url + 'productoserie/readxproducto.php', {
+
+      let Almacen:string="";
+      let Producto:string="";
+
+      if(producto>0){
+        Producto=producto.toString()
+      }
+
+      return this.http.get(this.url + 'productoserie/read.php', {
         params: new HttpParams()
-          .set('prid', id)
+          .set('pralmacen', almacen)
+          .set('prproducto',Producto)
       })
       .pipe (map(res => {
         if (res['codigo'] === 0) {
