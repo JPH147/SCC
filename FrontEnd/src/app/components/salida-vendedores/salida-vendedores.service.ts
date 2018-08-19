@@ -19,10 +19,11 @@ export class SalidaVendedoresService {
     fecha: Date,
     destino:string,
     guia: string,
-    movilidad:boolean
+    movilidad:boolean,
+    observacion:string
     ): Observable<any> {
     
-    let TM:string;
+    let TM:string, Fecha:string;
 
   	if (movilidad) {
   		TM='1'
@@ -30,19 +31,79 @@ export class SalidaVendedoresService {
   		TM='0'
   	}
 
+    if (fecha) {
+      Fecha=moment(fecha).format("YYYY/MM/DD").toString()
+    }else{
+      Fecha=''
+    }
+
     let params = new HttpParams()
    				.set('prpecosa', pecosa.toString())
    				.set('prsucursal', prsucursal.toString())
-   				.set('prfecha', moment(fecha).format("YYYY/MM/DD").toString())
+   				.set('prfecha', Fecha)
    				.set('prdestino', destino)
    				.set('prguia', guia)
    				.set('prmovilidad', TM)
-    
-    console.log(params);
+          .set('observacion', observacion)
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'salidacabecera/create.php', params, {headers: headers});
   }
+
+  AgregarMovilidad(
+    cabecera: number,
+    placa: string,
+    dni: string,
+    nombre:string
+    ): Observable<any> {
+    
+    let params = new HttpParams()
+           .set('prcabecera', cabecera.toString())
+           .set('prvehiculo', placa)
+           .set('prchoferdni', dni)
+           .set('prchofernombre', nombre)
+    
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'salidacabecera/create-movilidad.php', params, {headers: headers});
+  }
+
+  AgregarProducto(
+    cabecera: number,
+    serie: number,
+    precio: number,
+    cantidad:number
+    ): Observable<any> {
+    
+    let params = new HttpParams()
+           .set('prcabecera', cabecera.toString())
+           .set('prserie', serie.toString())
+           .set('prprecio', precio.toString())
+           .set('prcantidad', cantidad.toString())
+    
+    console.log(params);
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'salidacabecera/create-producto.php', params, {headers: headers});
+  }
+
+  AgregarVendedor(
+    cabecera: number,
+    vendedor: number,
+    comision: number
+    ): Observable<any> {
+    
+    let params = new HttpParams()
+           .set('prcabecera', cabecera.toString())
+           .set('prvendedor', vendedor.toString())
+           .set('prcomision', comision.toString())
+    
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'salidacabecera/create-vendedor.php', params, {headers: headers});
+  }
+
 
 }
