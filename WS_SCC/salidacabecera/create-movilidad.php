@@ -17,19 +17,16 @@
         $salida = new SalidaCabecera($db);
         $data = json_decode(file_get_contents('php://input'), true);
 
-        if (($_POST["prpecosa"])!=null)
+        if (($_POST["prcabecera"])!=null)
         {
-            $salida->pecosa = $_POST["prpecosa"];
-            $salida->id_sucursal = $_POST["prsucursal"];
-            $salida->fecha = $_POST["prfecha"];
-            $salida->destino = $_POST["prdestino"];
-            $salida->guia = $_POST["prguia"];
-            $salida->tipo_movilidad = $_POST["prmovilidad"];
-            $salida->observacion = !empty($_POST["probservacion"]) ? $_POST["probservacion"] : '';
+            $salida->cabecera = $_POST["prcabecera"];
+            $salida->vehiculo = $_POST["prvehiculo"];
+            $salida->chofer_dni = $_POST["prchoferdni"];
+            $salida->chofer_nombre = $_POST["prchofernombre"];
 
-            if($salida->create())
+            if($salida->create_movilidad())
             {
-                print_json("0000", "Se creó la salida satisfactoriamente.", $salida->id);
+                print_json("0000", "Se creó la salida satisfactoriamente.", "");
             }
             else
             {
