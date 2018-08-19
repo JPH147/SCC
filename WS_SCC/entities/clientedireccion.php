@@ -6,6 +6,7 @@ Class ClienteDireccion{
 
     public $idcliente_direccion;
     public $id_cliente;
+    public $clt_nombre;
     public $drc_nombre;
     public $id_distrito;
     public $drc_relevancia;
@@ -41,6 +42,35 @@ Class ClienteDireccion{
         
         return false;
     }
+    function read()
+    {
+        $query = "CALL sp_listarclientedireccion(:pid_cliente, :pdrc_relevancia)";
 
+        $result = $this->conn->prepare($query);
+        $result->bindParam(":pid_cliente", $this->id_cliente);
+        $result->bindParam(":pdrc_relevancia", $this->drc_relevancia);
+
+        $result->execute();
+        $direccion_list=array();
+        $direccion_list["direcciones"]=array();
+        $contador = 0;
+
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $contador=$contador+1;
+            $direccion_item = array (
+                "numero"=>$contador,
+                "idcliente"=>$row['idcliente'],
+                "cliente"=>$row['cliente'],
+                "direccion"=>$row['direccion'],
+                "relevancia"=>$row['drc_relevancia'],
+                "observacion"=>$row['drc_observacion'],
+            );
+
+            array_push($direccion_list["direcciones"],$direccion_item);
+        }
+        return $direccion_list;
+    }
 }
 ?>

@@ -95,23 +95,23 @@ export class VentanaEmergenteClientes {
 
     if (this.data) {
       console.log(this.data);
-      this.ClientesForm.get('institucion').setValue(this.data.institucion);
-      this.ListarSede(this.data.institucion);
-      this.ClientesForm.get('sede').setValue(this.data.sede);
-      this.ListarSubsede(this.data.sede);
-      this.ClientesForm.get('subsede').setValue(this.data.subsede);
-      this.ClientesForm.get('codigo').setValue(this.data.codigo);
-      this.ClientesForm.get('dni').setValue(this.data.dni);
-      this.ClientesForm.get('nombre').setValue(this.data.nombre);
-      this.ClientesForm.get('apellido').setValue(this.data.apellido);
-      this.ClientesForm.get('cip').setValue(this.data.cip);
-      this.ClientesForm.get('email').setValue(this.data.email);
-      this.ClientesForm.get('casilla').setValue(this.data.casilla);
-      this.ClientesForm.get('trabajo').setValue(this.data.trabajo);
-      this.ClientesForm.get('cargo').setValue(this.data.cargo);
-      this.ClientesForm.get('calificacioncrediticia').setValue(this.data.calificacion_crediticia);
-      this.ClientesForm.get('calificacionpersonal').setValue(this.data.calificacion_personal);
-      this.ClientesForm.get('aporte').setValue(this.data.aporte);
+      this.ClientesForm.get('institucion').setValue(this.data.objeto.institucion);
+      this.ListarSede(this.data.objeto.institucion);
+      this.ClientesForm.get('sede').setValue(this.data.objeto.sede);
+      this.ListarSubsede(this.data.objeto.sede);
+      this.ClientesForm.get('subsede').setValue(this.data.objeto.subsede);
+      this.ClientesForm.get('codigo').setValue(this.data.objeto.codigo);
+      this.ClientesForm.get('dni').setValue(this.data.objeto.dni);
+      this.ClientesForm.get('nombre').setValue(this.data.objeto.nombre);
+      this.ClientesForm.get('apellido').setValue(this.data.objeto.apellido);
+      this.ClientesForm.get('cip').setValue(this.data.objeto.cip);
+      this.ClientesForm.get('email').setValue(this.data.objeto.email);
+      this.ClientesForm.get('casilla').setValue(this.data.objeto.casilla);
+      this.ClientesForm.get('trabajo').setValue(this.data.objeto.trabajo);
+      this.ClientesForm.get('cargo').setValue(this.data.objeto.cargo);
+      this.ClientesForm.get('calificacioncrediticia').setValue(this.data.objeto.calificacion_crediticia);
+      this.ClientesForm.get('calificacionpersonal').setValue(this.data.objeto.calificacion_personal);
+      this.ClientesForm.get('aporte').setValue(this.data.objeto.aporte);
       // this.ClientesForm.get('fecharegistro').setValue(this.data.fecharegistro);
       this.ClientesForm.controls['sede'].enable();
       this.ClientesForm.controls['subsede'].enable();
@@ -138,13 +138,20 @@ SedeSeleccionada(event) {
 
   /* Enviar al formulario */
   Guardar(formulario) {
-    /*if(this.data){
+    console.log(formulario.value.subsede);
+    if (this.data.objeto) {
       // tslint:disable-next-line:max-line-length
-      this.ClienteService.Actualizar(this.data.id,formulario.value.modelo,
-        formulario.value.descripcion, formulario.value.precio).subscribe(res=>console.log(res))
-    }*/
+      this.ClienteServicios.Actualizar(this.data.id, formulario.value.subsede, formulario.value.codigo,
+        formulario.value.dni, formulario.value.nombre, formulario.value.apellido, formulario.value.cip,
+        formulario.value.email, formulario.value.casilla, formulario.value.trabajo, formulario.value.cargo,
+        formulario.value.calificacioncrediticia, formulario.value.calificacionpersonal, formulario.value.aporte
+      ).subscribe(res => console.log(res));
 
-    if (!this.data) {
+      this.ClientesForm.reset();
+      this.ventana.close();
+    }
+
+    if (!this.data.objeto) {
       this.ClienteServicios.Agregar(formulario.value.subsede , formulario.value.codigo,
         formulario.value.dni, formulario.value.nombre, formulario.value.apellido,
         formulario.value.cip, formulario.value.email, formulario.value.casilla,

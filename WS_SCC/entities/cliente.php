@@ -163,7 +163,9 @@ Class Cliente{
 
     function update()
     {
-        $query = "CALL sp_actualizarcliente (:idcliente,:id_subsede,:clt_codigo,:clt_dni,:clt_nombre,:clt_apellido,:clt_foto,:clt_cip,:clt_email,:clt_casilla,:clt_trabajo,:clt_cargo,:clt_calificacion_crediticia,:clt_calificacion_personal,:clt_aporte,:clt_fecharegistro)"; 
+        $query = "CALL sp_actualizarcliente (:idcliente,:id_subsede,:clt_codigo,:clt_dni,:clt_nombre,
+        :clt_apellido,:clt_cip,:clt_email,:clt_casilla,:clt_trabajo,
+        :clt_cargo,:clt_calificacion_crediticia,:clt_calificacion_personal,:clt_aporte)"; 
 
         $result = $this->conn->prepare($query);
 
@@ -173,7 +175,6 @@ Class Cliente{
         $this->clt_dni=htmlspecialchars(strip_tags($this->clt_dni));
         $this->clt_nombre=htmlspecialchars(strip_tags($this->clt_nombre));
         $this->clt_apellido=htmlspecialchars(strip_tags($this->clt_apellido));
-        $this->clt_foto=htmlspecialchars(strip_tags($this->clt_foto));
         $this->clt_cip=htmlspecialchars(strip_tags($this->clt_cip));
         $this->clt_email=htmlspecialchars(strip_tags($this->clt_email));
         $this->clt_casilla=htmlspecialchars(strip_tags($this->clt_casilla));
@@ -189,7 +190,6 @@ Class Cliente{
         $result->bindParam(":clt_dni", $this->clt_dni);
         $result->bindParam(":clt_nombre", $this->clt_nombre);
         $result->bindParam(":clt_apellido", $this->clt_apellido);
-        $result->bindParam(":clt_foto", $this->clt_foto);
         $result->bindParam(":clt_cip", $this->clt_cip);
         $result->bindParam(":clt_email", $this->clt_email);
         $result->bindParam(":clt_casilla", $this->clt_casilla);

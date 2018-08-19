@@ -69,8 +69,8 @@
                         </mat-grid-tile>
 
                     <mat-grid-tile colspan="1">
-                      <mat-form-field class="input-ventana">
-                        <mat-select placeholder='Selecciona Departamento' formControlName="departamento" (selectionChange)="DepartamentoSeleccionado($event)" >
+                      <mat-form-field>
+                        <mat-select placeholder='Selecciona Departamento' formControlName="departamento" (selectionChange)="DepartamentoSeleccionado($event,i)" >
                             <mat-option *ngFor="let departamento of LstDepartamento" [value]="departamento.nombre">
                                 {{departamento.nombre}}
                             </mat-option>
@@ -79,8 +79,8 @@
                     </mat-grid-tile>
 
                     <mat-grid-tile colspan="1">
-                        <mat-form-field class="input-ventana">
-                          <mat-select placeholder='Selecciona Provincia' formControlName="provincia" (selectionChange)="ProvinciaSeleccionada($event)">
+                        <mat-form-field>
+                          <mat-select placeholder='Selecciona Provincia' formControlName="provincia" (selectionChange)="ProvinciaSeleccionada($event,i)">
                               <mat-option *ngFor="let provincia of LstProvincia" [value]="provincia.nombre">
                                   {{provincia.nombre}}
                               </mat-option>
@@ -89,7 +89,7 @@
                       </mat-grid-tile> 
 
                       <mat-grid-tile colspan="1">
-                          <mat-form-field class="input-ventana">
+                          <mat-form-field>
                             <mat-select placeholder='Selecciona Distrito' formControlName="distrito" >
                                 <mat-option *ngFor="let distrito of LstDistrito" [value]="distrito.id">
                                     {{distrito.nombre}}
@@ -100,9 +100,9 @@
 
                         <mat-grid-tile colspan="1">
                             <mat-form-field class="input-ventana">
-                              <mat-select placeholder='Selecciona Relevancia' formControlName="relevancia" >
-                                  <mat-option *ngFor="let relevancia of Relevancias" [value]="relevancia.id">
-                                      {{relevancia.viewValue}}
+                              <mat-select placeholder='Selecciona Relevancia' formControlName="relevanciadis" >
+                                  <mat-option *ngFor="let relevanciadis of RelevanciaDireccion" [value]="relevanciadis.id">
+                                      {{relevanciadis.viewValue}}
                                   </mat-option>
                               </mat-select>
                             </mat-form-field>

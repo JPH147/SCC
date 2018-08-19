@@ -80,19 +80,20 @@
       <mat-grid-list cols="3" rowHeight="60px">
         <mat-grid-tile>
           <mat-form-field >
-            <input matInput maxlength="10" placeholder="Placa" formControlName="placa">
+            <input matInput maxlength="10" placeholder="Placa" formControlName="placa" #InputPlaca>
+            <mat-hint align="end">{{InputPlaca.value.length}} / 7</mat-hint>
           </mat-form-field>
         </mat-grid-tile>
 
         <mat-grid-tile>
           <mat-form-field >
-              <input matInput maxlength="8" placeholder="DNI" formControlName="dni">
-              <mat-hint align="end">{{message.value.length}} / 8</mat-hint>
+            <input matInput maxlength="8" placeholder="DNI" formControlName="dni" #InputDNI>
+            <mat-hint align="end">{{InputDNI.value.length}} / 8</mat-hint>
           </mat-form-field>
         </mat-grid-tile>
 
         <mat-grid-tile>
-          <mat-form-field class="example-full-width">
+          <mat-form-field>
             <input matInput maxlength="45" placeholder="Chofer" formControlName="chofer">
           </mat-form-field>
         </mat-grid-tile>
@@ -119,6 +120,12 @@
         <button mat-mini-fab type="button" color="primary" matTooltip="Agrega Vendedor" (click)="AgregarVendedor()"><mat-icon>add</mat-icon></button>
       </mat-grid-tile>
     </mat-grid-list>
+
+    <mat-card-subtitle>
+      <mat-form-field>
+        <input matInput formControlName="comision" [value]="SalidaVendedoresForm.get('comision').value | percent:'1.0-0'">
+      </mat-form-field>
+    </mat-card-subtitle>
 
     <div formArrayName="vendedores" *ngFor="let vendedor of SalidaVendedoresForm['controls'].vendedores['controls'];let i = index">
       <div [formGroupName]="i">
@@ -183,7 +190,7 @@
           <mat-grid-tile>
             <mat-form-field class="formulario-principal">
               <input matInput placeholder="Producto" [matAutocomplete]="autoproducto" #InputProducto formControlName="producto">
-              <mat-autocomplete #autoproducto="matAutocomplete" [displayWith]="displayFn2" (optionSelected)="ProductoSeleccionado($event, i)">
+              <mat-autocomplete #autoproducto="matAutocomplete" [displayWith]="displayFn2" (optionSelected)="ProductoSeleccionado('')">
                 <mat-option *ngFor="let producto of Producto" [value]="producto">
                   {{producto.descripcion}}
                 </mat-option>
@@ -193,13 +200,13 @@
         
           <mat-grid-tile>
             <mat-form-field class="formulario-principal">
-              <input matInput placeholder="Cantidad">
+              <input matInput placeholder="Cantidad" formControlName="cantidad">
             </mat-form-field>
           </mat-grid-tile>
         
           <mat-grid-tile>
-            <button mat-mini-fab type="button" color="primary" matTooltip="Agregar series" (click)="AgregarSerieSalidaV(producto.value.producto)" [disabled]="!producto.value.producto"><mat-icon>reorder</mat-icon></button>
-            <button mat-mini-fab type="button" color="primary" matTooltip="Eliminar producto" (click)="EliminarProducto()"><mat-icon>delete</mat-icon></button>
+            <button mat-mini-fab type="button" color="primary" matTooltip="Agregar series" (click)="AgregarSerieSalidaV(producto.value.producto,i)" [disabled]="!producto.value.producto"><mat-icon>reorder</mat-icon></button>
+            <button mat-mini-fab type="button" color="primary" matTooltip="Eliminar producto" (click)="EliminarProducto(producto.value.producto,i)"><mat-icon>delete</mat-icon></button>
           </mat-grid-tile>
         
         </mat-grid-list>
@@ -219,7 +226,7 @@
   <mat-grid-list cols="1" rowHeight="70px">
     <mat-grid-tile>
       <mat-form-field class="formulario-principal">
-          <input matInput placeholder="Observaciones">
+          <input matInput placeholder="Observaciones" formControlName="observacion">
       </mat-form-field>
     </mat-grid-tile>
   </mat-grid-list>

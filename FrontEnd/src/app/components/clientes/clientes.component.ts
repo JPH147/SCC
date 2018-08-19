@@ -153,7 +153,8 @@ export class ClientesComponent implements OnInit {
     // tslint:disable-next-line:prefer-const
     let VentanaClientes = this.DialogoClientes.open(VentanaEmergenteClientes, {
       width: '800px',
-      data: res
+      data: {objeto: res, id: id},
+
     });
     // tslint:disable-next-line:no-shadowed-variable
     VentanaClientes.afterClosed().subscribe (res => {

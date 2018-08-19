@@ -77,6 +77,32 @@ export class ClienteService {
     return this.http.post(this.url + 'cliente/create.php', params, {headers: headers});
   }
 
+  Actualizar(idcliente: number,
+    id_subsede: number,
+    clt_codigo: string,
+    clt_dni: string,
+    clt_nombre: string,
+    clt_apellido: string,
+    clt_cip: string,
+    clt_email: string,
+    clt_casilla: string,
+    clt_trabajo: string,
+    clt_cargo: string,
+    clt_calificacion_crediticia: string,
+    clt_calificacion_personal: string,
+    clt_aporte: number): Observable<any> {
+      let params = 'idcliente=' + idcliente + '&id_subsede=' + id_subsede + '&clt_codigo=' + clt_codigo
+      + '&clt_dni=' + clt_dni + '&clt_nombre=' + clt_nombre + '&clt_apellido=' + clt_apellido
+      + '&clt_cip=' + clt_cip + '&clt_email=' + clt_email + '&clt_casilla=' + clt_casilla
+      + '&clt_trabajo=' + clt_trabajo + '&clt_cargo=' + clt_cargo + '&clt_calificacion_crediticia=' + clt_calificacion_crediticia
+      + '&clt_calificacion_personal=' + clt_calificacion_personal + '&clt_aporte=' + clt_aporte;
+
+      console.log(params);
+      // tslint:disable-next-line:prefer-const
+      let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+      return this.http.post(this.url + 'cliente/update.php', params, {headers: headers});
+  }
+
 
   Seleccionar(
     id: number

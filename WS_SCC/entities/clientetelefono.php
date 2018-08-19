@@ -41,5 +41,36 @@ Class ClienteTelefono{
         return false;
     }
 
+    function read()
+    {
+        $query = "CALL sp_listarclientetelefono(:pid_cliente, :ptlf_relevancia)";
+
+        $result = $this->conn->prepare($query);
+        $result->bindParam(":pid_cliente", $this->id_cliente);
+        $result->bindParam(":ptlf_relevancia", $this->tlf_relevancia);
+
+        $result->execute();
+        $telefono_list=array();
+        $telefono_list["telefonos"]=array();
+        $contador = 0;
+
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $contador=$contador+1;
+            $telefono_item = array (
+                "numero"=>$contador,
+                "idcliente"=>$row['idcliente'],
+                "cliente"=>$row['cliente'],
+                "tlf_numero"=>$row['tlf_numero'],
+                "tlf_observacion"=>$row['tlf_observacion'],
+                "id_tipo"=>$row['id_tipo'],
+                "tlf_relevancia"=>$row['tlf_relevancia']
+            );
+
+            array_push($telefono_list["telefonos"],$telefono_item);
+        }
+        return $telefono_list;
+    }
 }
 ?>

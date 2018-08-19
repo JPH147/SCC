@@ -11,6 +11,8 @@ import {ClienteDataSource} from '../clientes/clientes.dataservice';
 import {Observable, fromEvent} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
+import {ServiciosTelefonos, Telefono} from '../global/telefonos';
+import {ServiciosDirecciones, Direccion} from '../global/direcciones';
 
 export interface PeriodicElement {
   numero: number;
@@ -28,7 +30,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
   selector: 'app-ventas',
   templateUrl: './ventas.component.html',
   styleUrls: ['./ventas.component.css'],
-  providers: [VentaService, ServiciosTipoDocumento, ServiciosTipoPago, ClienteService]
+  providers: [VentaService, ServiciosTipoDocumento, ServiciosTipoPago, ClienteService, ServiciosTelefonos, ServiciosDirecciones]
 })
 
 export class VentasComponent implements OnInit {
@@ -38,6 +40,8 @@ export class VentasComponent implements OnInit {
   public LstCliente: Array<any> = [];
   public VentasForm: FormGroup;
   public LstTipoPago: TipoPago[] = [];
+  public telefono: Telefono;
+  public direccion: Direccion;
   public typesdoc: string[] = [
     'Factura', 'Boleta'
   ];
@@ -61,6 +65,8 @@ export class VentasComponent implements OnInit {
     /*@Inject(MAT_DIALOG_DATA) public data,*/
     private Servicio: VentaService,
     private ClienteServicio: ClienteService,
+    private DireccionServicio: ServiciosDirecciones,
+    private TelefonoServicio: ServiciosTelefonos,
     public DialogoArchivos: MatDialog,
     // tslint:disable-next-line:no-shadowed-variable
     private FormBuilder: FormBuilder,
@@ -79,6 +85,8 @@ export class VentasComponent implements OnInit {
       this.idcliente = +params['id'];
    });
     this.ObtenerClientexId();
+    this.ObtenerDireccion();
+    this.ObtenerTelefono();
     this.ListadoCronograma = new VentaDataSource(this.Servicio);
     this.ListadoCliente = new ClienteDataSource(this.ClienteServicio);
     this.ListarClientes('', '', '', '' , this.ClienteAutoComplete.nativeElement.value , '');
@@ -232,6 +240,26 @@ export class VentasComponent implements OnInit {
         //this.VentasForm.get('domicilio').setValue(res.)
       }
     });
+    }
+  }
+
+  ObtenerDireccion() {
+    if (this.idcliente) {
+        this.DireccionServicio.ListarDireccion( this.idcliente.toString() , '1').subscribe(res => {
+          if (res) {
+            this.VentasForm.get('domicilio').setValue(res[0].direccion);
+          }
+        });
+    }
+  }
+
+  ObtenerTelefono() {
+    if (this.idcliente) {
+        this.TelefonoServicio.ListarTelefono( this.idcliente.toString() , '1').subscribe(res => {
+          if (res) {
+            this.VentasForm.get('telefono').setValue(res[0].tlf_numero);
+          }
+        });
     }
   }
 

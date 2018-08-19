@@ -37,7 +37,7 @@ export class SalidaVendedoresComponent implements OnInit {
 
 
   @ViewChildren('InputVendedor') FiltroVendedor: QueryList<any>;
-  @ViewChild('InputProducto') FiltroProducto: ElementRef;
+  @ViewChildren('InputProducto') FiltroProducto: QueryList<any>;
   @ViewChild('InputAlmacen') FiltroAlmacen: MatSelect;
   public SalidaVendedoresForm:FormGroup;
   public Sucursales: Array<any>;
@@ -92,7 +92,8 @@ export class SalidaVendedoresComponent implements OnInit {
         Validators.required
       ]],
       'placa': [{value:null, disabled:true}, [
-        Validators.required
+        Validators.required,
+        Validators.minLength(7)
       ]],
       'dni': [{value:null, disabled:true}, [
         Validators.required,
@@ -102,6 +103,10 @@ export class SalidaVendedoresComponent implements OnInit {
       'chofer': [{value:null, disabled:true}, [
         Validators.required
       ]],
+      'observacion': [{value:null, disabled:false}, [
+      ]],
+      'comision':[{value:0.05,disabled:true},[
+      ]],
       vendedores: this.FormBuilder.array([this.CrearVendedor()]),
       productos: this.FormBuilder.array([this.CrearProducto()])
     });
@@ -109,38 +114,35 @@ export class SalidaVendedoresComponent implements OnInit {
 
  ngAfterViewInit(){
 
-   // fromEvent(this.FiltroVendedor.nativeElement,'keyup')
-   // .pipe(
-   //   debounceTime(10),
-   //   distinctUntilChanged(),
-   //   tap(() => {
-   //     this.Ventas.ListarVendedor(null,this.FiltroVendedor.nativeElement.value,"").subscribe(res=>this.Vendedor=res['data'].vendedores);
-   //   })
-   //  ).subscribe();
- 
   this.FiltroVendedor.changes.subscribe(res=>{
      // console.log(this.FiltroVendedor['_results'])
     for (let i in this.FiltroVendedor['_results']) {
       fromEvent(this.FiltroVendedor['_results'][i].nativeElement,'keyup')
       .pipe(
           tap(()=>{
-            this.Ventas.ListarVendedor(null,this.FiltroVendedor['_results'][i].nativeElement.value,"").subscribe(res=>this.Vendedor=res['data'].vendedores);
+            if (this.FiltroVendedor['_results'][i].nativeElement.value) {
+              this.VendedorSeleccionado2(this.FiltroVendedor['_results'][i].nativeElement.value)
+            }
           })
         ).subscribe()
     }
   })
 
-
-
-   fromEvent(this.FiltroProducto.nativeElement,'keyup')
-   .pipe(
-     debounceTime(10),
-     distinctUntilChanged(),
-     tap(() => {
-        this.Articulos.ListarStock(this.FiltroAlmacen.value, '', '', '', this.FiltroProducto.nativeElement.value, 1, 20, 'descripcion asc').subscribe(res=>this.Producto=res['data'].stock)
-     })
-    ).subscribe();
-
+  this.FiltroProducto.changes.subscribe(res=>{
+     // console.log(this.FiltroVendedor['_results'])
+    for (let i in this.FiltroProducto['_results']) {
+      fromEvent(this.FiltroProducto['_results'][i].nativeElement,'keyup')
+      .pipe(
+          debounceTime(100),
+          distinctUntilChanged(),
+          tap(()=>{
+            if (this.FiltroProducto['_results'][i].nativeElement.value) {
+              this.ProductoSeleccionado(this.FiltroProducto['_results'][i].nativeElement.value)
+            }
+          })
+        ).subscribe()
+    }
+  })
  }
 
   /*******************/
@@ -218,27 +220,10 @@ export class SalidaVendedoresComponent implements OnInit {
     this.productos.push(this.CrearProducto())
   };
 
-  EliminarProducto(index){
-    this.productos.removeAt(index);
+  EliminarProducto(producto,i){
+    this.productos.removeAt(i);
   };
 
-  Guardar(formulario){
-    let destinos:string="";
-
-    for (let i of this.departamentos) {
-      destinos=destinos +", "+ i.name
-    }
-
-    this.Servicio.Agregar(
-      formulario.value.pecosa,
-      formulario.value.sucursal,
-      formulario.value.fecha_salida,
-      destinos,
-      formulario.value.guia_remision,
-      formulario.value.tipo_movilidad
-      ).subscribe(res=>console.log(res));
-  }
-  
   ActivarMovilidad(event){
     if (event.checked) {
       this.SalidaVendedoresForm.controls['placa'].enable();
@@ -251,46 +236,79 @@ export class SalidaVendedoresComponent implements OnInit {
     }
   }
 
-  VendedorSeleccionado(event,i){
-    this.Ventas.ListarVendedor(null,"","").subscribe(res=>this.Vendedor=res['data'].vendedores);
-    this.SalidaVendedoresForm.get('vendedores').value[i].nombre=event.option.value.id;
-    this.SalidaVendedoresForm.get('vendedores')['controls'][i].get('comision').setValue(event.option.value.comision)
+  VendedorSeleccionado(event,index){
+    // this.Ventas.ListarVendedor(null,"","").subscribe(res=>{
+    //   this.Vendedor=res['data'].vendedores;
+    //   for (let i of this.SalidaVendedoresForm['controls'].vendedores.value) {
+    //     if (i.nombre) {
+    //       this.EliminarElemento(this.Vendedor,i.nombre.id)
+    //     }
+    //   }
+    // });
+    this.VendedorSeleccionado2("");
+    this.SalidaVendedoresForm.get('vendedores')['controls'][index].get('comision').setValue(event.option.value.comision)
   }
   
-  ProductoSeleccionado(event,i){
-    this.Articulos.ListarStock(this.FiltroAlmacen.value, '', '', '', '', 1, 20, 'descripcion asc').subscribe(res=>{
+  VendedorSeleccionado2(filtro){
+    this.Ventas.ListarVendedor(null,filtro,"").subscribe(res=>{
+      this.Vendedor=res['data'].vendedores;
+      for (let i of this.SalidaVendedoresForm['controls'].vendedores.value) {
+        if (i.nombre) {
+          this.EliminarElemento(this.Vendedor,i.nombre.id)
+        }
+      }
+    });
+  }
+
+  ProductoSeleccionado(filtro){
+    this.Articulos.ListarStock(this.FiltroAlmacen.value, '', '', '', filtro, 1, 20, 'descripcion asc').subscribe(res=>{
       this.Producto=res['data'].stock;
       for (let i of this.SalidaVendedoresForm['controls'].productos.value) {
-        this.EliminarElemento(this.Producto,i.producto.id_producto)
+        if (i.producto) {
+          this.EliminarElemento(this.Producto,i.producto.id_producto)
+        }
       }
     });
 
-
-   // this.EliminarElemento(this.Producto,"JP")
-
-    // console.log(this.Producto);
-    for (let i of this.SalidaVendedoresForm['controls'].productos.value) {
-       this.EliminarElemento(this.Producto,i.producto.id_producto)
-    }
+    // for (let i of this.SalidaVendedoresForm['controls'].productos.value) {
+    //    if (i.producto) {
+    //      this.EliminarElemento(this.Producto,i.producto.id_producto)
+    //    }
+    // }
   }
 
   EliminarElemento(array,value){
+    // console.log(array,value);
      array.forEach( (item, index) => {
-       if(item.id_producto === value) array.splice(index,1);
+       if (item.id_producto) {
+         if(item.id_producto === value) array.splice(index,1);
+       }
+       else if (item.id) {
+         if(item.id === value) array.splice(index,1);
+       }
      });
   }
 
-  AgregarSerieSalidaV(producto) {
+  AgregarSerieSalidaV(producto,index) {
     const serieventana = this.DialogoSerie.open(ventanaseriessv, {
       width: '800px',
-      data:{almacen:this.FiltroAlmacen.value,id_producto:producto.id_producto,precio:producto.precio, }
+      data:{almacen:this.FiltroAlmacen.value, id_producto:producto.id_producto, precio:producto.precio, series:this.Series}
     });
 
     serieventana.afterClosed().subscribe(res=>{
-      for (let i in res) {
-        this.Series.push({id_serie:res[0].id_serie, precio:res[0].precio, cantidad:res[0].cantidad})
+      if (res) {
+        this.EliminarElemento(this.Series,res[0].id_producto);
       }
-      console.log(this.Series);
+      let ip:number=0;
+      for (let i in res) {
+        this.Series.push({id_producto:res[i].id_producto,id_serie:res[i].id_serie, serie:res[i].serie,precio:res[i].precio, cantidad:res[i].cantidad, considerar:res[i].considerar})
+        // Saber cuántos elementos de RES son del producto
+        if (res[i].id_producto=producto.id_producto && res[i].considerar==true) {
+          ip++
+        }
+      }
+      // console.log(this.Series);
+      this.SalidaVendedoresForm.get('productos')['controls'][index].get('cantidad').setValue(ip)
     })
   }
 
@@ -314,10 +332,67 @@ export class SalidaVendedoresComponent implements OnInit {
       }
     }
   }
+
+  Guardar(formulario){
+    let destinos:string="";
+
+    for (let i of this.departamentos) {
+      destinos=destinos +", "+ i.name
+    }
+
+    // console.log("Series",this.Series);
+   // console.log("Formulario", formulario.value.vendedores)
+
+    this.Servicio.Agregar(
+      formulario.value.pecosa,
+      formulario.value.sucursal,
+      formulario.value.fecha_salida,
+      destinos,
+      formulario.value.guia_remision,
+      formulario.value.tipo_movilidad,
+      formulario.value.observacion
+      ).subscribe(res=>{
+
+        // Grabar datos de chofer
+        if (formulario.value.tipo_movilidad) {
+          this.Servicio.AgregarMovilidad(
+            res.data,
+            formulario.value.placa,
+            formulario.value.dni,
+            formulario.value.chofer
+          )
+        }
+
+        // Grabar datos de vendedor
+        for (let i of formulario.value.vendedores) {
+          // console.log(i.nombre.id)
+          this.Servicio.AgregarVendedor(
+            res.data,
+            i.nombre.id,
+            this.SalidaVendedoresForm.get('comision').value
+          ).subscribe(res=>console.log("Vendedor"))
+        }
+
+        // Grabar datos de productos
+        for (let i of this.Series) {
+          if (i.considerar) {
+            this.Servicio.AgregarProducto(
+              res.data,
+              i.id_serie,
+              i.precio,
+              i.cantidad
+            ).subscribe(res=>console.log("Series"))
+          }
+        }
+      });
+  }
 }
 
 export interface ProductosSalida{
+  id_producto:number,
   id_serie:number,
+  serie:string,
   precio:number,
-  cantidad:number
+  cantidad:number,
+  considerar:boolean
 }

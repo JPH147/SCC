@@ -23,6 +23,17 @@ Class SalidaCabecera{
     public $fecha;
     public $guia;
     public $tipo_movilidad;
+    public $observacion;
+
+    public $cabecera;
+    public $vehiculo;
+    public $chofer_dni;
+    public $chofer_nombre;
+    public $serie;
+    public $precio;
+    public $cantidad;
+    public $vendedor;
+    public $comisiones;
 
     public $fecha_inicio;
     public $fecha_fin;
@@ -107,43 +118,16 @@ Class SalidaCabecera{
         return $this->total_resultado;
     }
 
-    // /* Seleccionar producto */
-    // function readxId(){
-    //     $query ="call sp_listartransaccioncabeceraxId(?)";
-        
-    //     $result = $this->conn->prepare($query);
-        
-    //     $result->bindParam(1, $this->id_transaccion);
-        
-    //     $result->execute();
-    
-    //     $row = $result->fetch(PDO::FETCH_ASSOC);
+    function create(){
 
-    //     $this->detalle->readxcabecera($row['idtransaccion_cabecera']);
-
-    //     $this->id_transaccion=$row['idtransaccion_cabecera'];
-    //     $this->id_almacen=$row['id_almacen'];
-    //     $this->id_tipo=$row['id_tipo_transaccion'];
-    //     $this->id_referencia=$row['tsccab_referencia'];
-    //     $this->id_proveedor=$row['id_proveedor'];
-    //     $this->id_cliente=$row['id_cliente'];
-    //     $this->id_salida_venta=$row['id_salida_venta'];
-    //     $this->id_sucursal=$row['id_sucursal'];
-    //     $this->id_vendedor=$row['id_vendedor'];
-    //     $this->fecha=$row['tsccab_fecha'];
-    //     $this->documento=$row['tsccab_documento_referencia'];
-    //     $this->transaccion_detalle=$this->detalle->readxcabecera($row['idtransaccion_cabecera']);
-    // }
-
-    function create()
-    {
         $query = "call sp_crearsalidavendedor(
             :prcodigo,
             :prsucursal,
             :prfecha,
             :prdestino,
             :prguia,
-            :prtipomovilidad
+            :prtipomovilidad,
+            :probservacion
         )";
 
         $result = $this->conn->prepare($query);
@@ -154,6 +138,7 @@ Class SalidaCabecera{
         $result->bindParam(":prdestino", $this->destino);
         $result->bindParam(":prguia", $this->guia);
         $result->bindParam(":prtipomovilidad", $this->tipo_movilidad);
+        $result->bindParam(":probservacion", $this->observacion);
 //        $result->bindParam("@id", $this->id_salida);
 
         $this->pecosa=htmlspecialchars(strip_tags($this->pecosa));
@@ -161,9 +146,12 @@ Class SalidaCabecera{
         $this->fecha=htmlspecialchars(strip_tags($this->fecha));
         $this->destino=htmlspecialchars(strip_tags($this->destino));
 
-
         if(!empty($this->guia)){
            $this->guia=htmlspecialchars(strip_tags($this->guia)); 
+        };
+
+        if(!empty($this->observacion)){
+           $this->observacion=htmlspecialchars(strip_tags($this->observacion)); 
         };
 
         if(!empty($this->tipo_movilidad)){
@@ -183,90 +171,86 @@ Class SalidaCabecera{
         return false;
     }
 
-    // /* Eliminar producto */
-    // function delete()
-    // {
-    //     $query = "call sp_eliminartransaccioncabecera(?)";
-    //     $result = $this->conn->prepare($query);
+    function create_movilidad(){
 
-    //     $result->bindParam(1, $this->id_transaccion);
+        $query = "call sp_crearsalidavendedormovilidad(
+            :pridcabecera,
+            :prvehiculo,
+            :prchoferdni,
+            :prchofernombre
+        )";
 
-    //     if($result->execute())
-    //         {
-    //             return true;
-    //         }
-    //         else
-    //         {
-    //             return false;
-    //         }
-    // }
+        $result = $this->conn->prepare($query);
 
-    // /* Actualizar producto */
-    // function update()
-    // {
-    //     $query = "call sp_actualizartransaccioncabecera(
-    //         :prid,
-    //         :pralmacen,
-    //         :prtipo,
-    //         :prreferencia,
-    //         :prproveedor,
-    //         :prcliente,
-    //         :prsalida,
-    //         :prsucursal,
-    //         :prvendedor,
-    //         :prfecha,
-    //         :prdocumento
-    //     )";
-    //     $result = $this->conn->prepare($query);
+        $result->bindParam(":pridcabecera", $this->cabecera);
+        $result->bindParam(":prvehiculo", $this->vehiculo);
+        $result->bindParam(":prchoferdni", $this->chofer_dni);
+        $result->bindParam(":prchofernombre", $this->chofer_nombre);
 
-    //     $result->bindParam(":prid", $this->id_transaccion);
-    //     $result->bindParam(":pralmacen", $this->id_almacen);
-    //     $result->bindParam(":prtipo", $this->id_tipo);
-    //     $result->bindParam(":prreferencia", $this->id_referencia);
-    //     $result->bindParam(":prproveedor", $this->id_proveedor);
-    //     $result->bindParam(":prcliente", $this->id_cliente);
-    //     $result->bindParam(":prsalida", $this->id_salida_venta);
-    //     $result->bindParam(":prsucursal", $this->id_sucursal);
-    //     $result->bindParam(":prvendedor", $this->id_vendedor);
-    //     $result->bindParam(":prfecha", $this->fecha);
-    //     $result->bindParam(":prdocumento", $this->documento);
+        $this->cabecera=htmlspecialchars(strip_tags($this->cabecera));
+        $this->vehiculo=htmlspecialchars(strip_tags($this->vehiculo));
+        $this->chofer_dni=htmlspecialchars(strip_tags($this->chofer_dni));
+        $this->chofer_nombre=htmlspecialchars(strip_tags($this->chofer_nombre));
 
-    //     $this->id_transaccion=htmlspecialchars(strip_tags($this->id_transaccion));
-    //     $this->id_almacen=htmlspecialchars(strip_tags($this->id_almacen));
-    //     $this->id_tipo=htmlspecialchars(strip_tags($this->id_tipo));
-    //     $this->id_referencia=htmlspecialchars(strip_tags($this->id_referencia));
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
+    }
 
-    //     if(!empty($this->id_proveedor)){
-    //        $this->id_proveedor=htmlspecialchars(strip_tags($this->id_proveedor)); 
-    //     };
+    function create_producto(){
 
-    //     if(!empty($this->id_cliente)){
-    //        $this->id_cliente=htmlspecialchars(strip_tags($this->id_cliente));
-    //     };
+        $query = "call sp_crearsalidavendedorproducto(
+            :pridcabecera,
+            :prserie,
+            :prprecio,
+            :prcantidad
+        )";
 
-    //     if(!empty($this->id_salida_venta)){
-    //         $this->id_salida_venta=htmlspecialchars(strip_tags($this->id_salida_venta));
-    //     };
+        $result = $this->conn->prepare($query);
 
-    //     if(!empty($this->id_sucursal)){
-    //         $this->id_sucursal=htmlspecialchars(strip_tags($this->id_sucursal));
-    //     };
+        $result->bindParam(":pridcabecera", $this->cabecera);
+        $result->bindParam(":prserie", $this->serie);
+        $result->bindParam(":prprecio", $this->precio);
+        $result->bindParam(":prcantidad", $this->cantidad);
 
-    //     if(!empty($this->id_vendedor)){
-    //         $this->id_vendedor=htmlspecialchars(strip_tags($this->id_vendedor));
-    //     };
+        $this->cabecera=htmlspecialchars(strip_tags($this->cabecera));
+        $this->serie=htmlspecialchars(strip_tags($this->serie));
+        $this->precio=htmlspecialchars(strip_tags($this->precio));
+        $this->cantidad=htmlspecialchars(strip_tags($this->cantidad));
 
-    //     $this->fecha=htmlspecialchars(strip_tags($this->fecha));
-    //     $this->documento=htmlspecialchars(strip_tags($this->documento));
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
+    }
 
-    //     if($result->execute())
-    //         {
-    //             return true;
-    //         }
-    //         else
-    //         {
-    //             return false;
-    //         }
-    // }
+    function create_vendedor(){
+
+        $query = "call sp_crearsalidavendedorvendedor(
+            :pridcabecera,
+            :prvendedor,
+            :prcomision
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":pridcabecera", $this->cabecera);
+        $result->bindParam(":prvendedor", $this->vendedor);
+        $result->bindParam(":prcomision", $this->comision);
+
+        $this->cabecera=htmlspecialchars(strip_tags($this->cabecera));
+        $this->vendedor=htmlspecialchars(strip_tags($this->vendedor));
+        $this->comision=htmlspecialchars(strip_tags($this->comision));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
+    }
+
 }
 ?>

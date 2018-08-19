@@ -7,7 +7,7 @@
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
  
     include_once '../config/database.php';
-    include_once '../entities/producto.php';
+    include_once '../entities/cliente.php';
     include_once '../shared/utilities.php';
 
     $database = new Database();
@@ -23,40 +23,28 @@
             && !empty(trim($_POST["clt_trabajo"])) && !empty(trim($_POST["clt_cargo"])) && !empty(trim($_POST["clt_calificacion_crediticia"]))
             && !empty(trim($_POST["clt_calificacion_personal"])) && ($_POST["clt_aporte"])!=null)
     	{
-    		$producto->id_producto = $_POST["id_producto"];
-            $producto->id_modelo = $_POST["id_modelo"];
-            $producto->prd_descripcion = $_POST["prd_descripcion"];
-            $producto->prd_precio = $_POST["prd_precio"];
+            $cliente->idcliente= $_POST["idcliente"]; 
+    		$cliente->id_subsede = $_POST["id_subsede"];
+            $cliente->clt_codigo = trim($_POST["clt_codigo"]);
+            $cliente->clt_dni = trim($_POST["clt_dni"]);
+            $cliente->clt_nombre = trim($_POST["clt_nombre"]);
+            $cliente->clt_apellido = trim($_POST["clt_apellido"]);
+            $cliente->clt_cip = trim($_POST["clt_cip"]);
+            $cliente->clt_email = trim($_POST["clt_email"]);
+            $cliente->clt_casilla = trim($_POST["clt_casilla"]);
+            $cliente->clt_trabajo = trim ($_POST["clt_trabajo"]);
+            $cliente->clt_cargo = trim($_POST["clt_cargo"]);
+            $cliente->clt_calificacion_crediticia = trim($_POST["clt_calificacion_crediticia"]);
+            $cliente->clt_calificacion_personal = trim($_POST["clt_calificacion_personal"]);
+            $cliente->clt_aporte = $_POST["clt_aporte"];
 
-            $this->idcliente=htmlspecialchars(strip_tags($this->idcliente));
-            $this->id_subsede=htmlspecialchars(strip_tags($this->id_subsede));
-            $this->clt_codigo=htmlspecialchars(strip_tags($this->clt_codigo));
-            $this->clt_dni=htmlspecialchars(strip_tags($this->clt_dni));
-            $this->clt_nombre=htmlspecialchars(strip_tags($this->clt_nombre));
-            $this->clt_apellido=htmlspecialchars(strip_tags($this->clt_apellido));
-            $this->clt_foto=htmlspecialchars(strip_tags($this->clt_foto));
-            $this->clt_cip=htmlspecialchars(strip_tags($this->clt_cip));
-            $this->clt_email=htmlspecialchars(strip_tags($this->clt_email));
-            $this->clt_casilla=htmlspecialchars(strip_tags($this->clt_casilla));
-            $this->clt_trabajo=htmlspecialchars(strip_tags($this->clt_trabajo));        
-            $this->clt_cargo=htmlspecialchars(strip_tags($this->clt_cargo));
-            $this->clt_calificacion_crediticia=htmlspecialchars(strip_tags($this->clt_calificacion_crediticia));
-            $this->clt_calificacion_personal=htmlspecialchars(strip_tags($this->clt_calificacion_personal));        
-            $this->clt_aporte=htmlspecialchars(strip_tags($this->clt_aporte));
-
-
-
-
-
-
-
-	    	if($producto->update())
+	    	if($cliente->update())
 	        {
-	            print_json("0000", "Se actualizó el producto satisfactoriamente.", "");
+	            print_json("0000", "Se actualizó el cliente satisfactoriamente.", "");
 	        }
 	        else
 	        {
-	            print_json("9999", "Ocurrió un error al actualizar el producto.", "");
+	            print_json("9999", "Ocurrió un error al actualizar el cliente.", "");
 	        }
 	    }
     	else
