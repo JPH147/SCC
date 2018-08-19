@@ -14,10 +14,10 @@ export class SalidaProductosService {
 
 
 SalidaTransferenciaAlmacen(
-pralmacen: number,
+pralmacenSale: number,
 prtipo: number,
 prreferencia: number,
-pralmacen1: number,  // Sucursal
+pralmacenEntra: number,  // Sucursal
 perfecha: Date,
 
 
@@ -27,10 +27,10 @@ perfecha: Date,
 
   // tslint:disable-next-line:prefer-const
   let params = new HttpParams()
-    .set('pralmacen', pralmacen.toString())
+    .set('pralmacen', pralmacenSale.toString())
     .set('prtipo', prtipo.toString())
     .set('prreferencia', prreferencia.toString())
-    .set('prsucursal', pralmacen1.toString())
+    .set('prsucursal', pralmacenEntra.toString())
     .set('prfecha', moment(perfecha).format('YYYY/MM/DD').toString());
 
     /* const params = '&pralmacen=' + pralmacen + '&prtipo=' + prtipo + '&prreferencia=' + prreferencia +

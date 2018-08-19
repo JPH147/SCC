@@ -22,13 +22,8 @@ export class SalidaVendedoresService {
     movilidad:boolean,
     observacion:string
     ): Observable<any> {
-<<<<<<< HEAD
 
-    let TM:string;
-=======
-    
     let TM:string, Fecha:string;
->>>>>>> 9b7a948f9f04ff84f71e730152260c5bd288962f
 
     if (movilidad) {
         TM = '1';
@@ -36,17 +31,6 @@ export class SalidaVendedoresService {
         TM = '0';
     }
 
-<<<<<<< HEAD
-    // tslint:disable-next-line:prefer-const
-    let params = new HttpParams()
-        .set('prpecosa', pecosa.toString())
-        .set('prsucursal', prsucursal.toString())
-        .set('prfecha', moment(fecha).format('YYYY/MM/DD').toString())
-        .set('prdestino', destino)
-        .set('prguia', guia)
-        .set('prmovilidad', TM);
-
-=======
     if (fecha) {
       Fecha=moment(fecha).format("YYYY/MM/DD").toString()
     }else{
@@ -73,13 +57,13 @@ export class SalidaVendedoresService {
     dni: string,
     nombre:string
     ): Observable<any> {
-    
+
     let params = new HttpParams()
            .set('prcabecera', cabecera.toString())
            .set('prvehiculo', placa)
            .set('prchoferdni', dni)
            .set('prchofernombre', nombre)
-    
+
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'salidacabecera/create-movilidad.php', params, {headers: headers});
@@ -91,14 +75,13 @@ export class SalidaVendedoresService {
     precio: number,
     cantidad:number
     ): Observable<any> {
-    
+
     let params = new HttpParams()
            .set('prcabecera', cabecera.toString())
            .set('prserie', serie.toString())
            .set('prprecio', precio.toString())
            .set('prcantidad', cantidad.toString())
-    
->>>>>>> 9b7a948f9f04ff84f71e730152260c5bd288962f
+
     console.log(params);
 
     // tslint:disable-next-line:prefer-const
@@ -112,20 +95,16 @@ export class SalidaVendedoresService {
     vendedor: number,
     comision: number
     ): Observable<any> {
-    
+
     let params = new HttpParams()
            .set('prcabecera', cabecera.toString())
            .set('prvendedor', vendedor.toString())
            .set('prcomision', comision.toString())
-    
+
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'salidacabecera/create-vendedor.php', params, {headers: headers});
   }
 
-<<<<<<< HEAD
-}
-=======
 
 }
->>>>>>> 9b7a948f9f04ff84f71e730152260c5bd288962f
