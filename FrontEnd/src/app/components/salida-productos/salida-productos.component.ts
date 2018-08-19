@@ -1,3 +1,4 @@
+import { ServiciosGenerales, Almacen, ListarCliente, ListarVendedor } from './../global/servicios';
 import { ventanaseriesalida } from './ventana-seriesalida/ventanaseriesalida';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import {FormControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
@@ -7,15 +8,13 @@ import {SelectionModel} from '@angular/cdk/collections';
 import {MatTableDataSource} from '@angular/material';
 import { MatDialog } from '@angular/material';
 
-export interface Food {
-  value: string;
-  viewValue: string;
-}
+
 
 @Component({
   selector: 'app-salida-productos',
   templateUrl: './salida-productos.component.html',
-  styleUrls: ['./salida-productos.component.css']
+  styleUrls: ['./salida-productos.component.css'],
+  providers: [ServiciosGenerales]
 })
 
 export class SalidaProductosComponent implements OnInit {
@@ -25,8 +24,13 @@ export class SalidaProductosComponent implements OnInit {
   public SalidaProductosForm: FormGroup;
   public articulos: Array <articulo>;
   public contador: number;
-  public almacenes: Array<any>;
+  public almacenes: Array<any> = [];
+  public productos: Array<any> = [];
   public serieventana: string;
+  public almacen: string;
+  public almacen1: string;
+  public fechaingreso: Date;
+  public producto: string;
 
 
   selected = 'option2';
@@ -35,17 +39,26 @@ export class SalidaProductosComponent implements OnInit {
   filteredOptions: Observable<string[]>;
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
 
-  selection = new SelectionModel<PeriodicElement>(true, []);
-  foods: Food[] = [
-    {value: 'steak-0', viewValue: 'Almacen Principal'},
-    {value: 'pizza-1', viewValue: 'Almacen Dos'},
-    {value: 'tacos-2', viewValue: 'Almacen Tres'}
-  ];
 
-  constructor (public DialogoSerie: MatDialog) {
-  }
+
+  constructor (public DialogoSerie: MatDialog,
+    // tslint:disable-next-line:no-shadowed-variable
+    private FormBuilder: FormBuilder,
+    private Servicios: ServiciosGenerales,
+  ) {}
 
   ngOnInit() {
+    this.ListarAlmacen();
+    this.ListarProductos('');
+
+    this.SalidaProductosForm = this.FormBuilder.group({
+      'almacen': [null, [Validators.required] ],
+      'almacen1': [null, [Validators.required] ],
+      'cantidad': [null, [Validators.required] ],
+      'fechaingreso': [null, [Validators.required]],
+      'producto': [null, [Validators.required]],
+
+    });
 
     this.filteredOptions = this.myControl.valueChanges
         .pipe(
@@ -85,8 +98,39 @@ export class SalidaProductosComponent implements OnInit {
       width: '600px'
     });
   }
+
+// Selector Almacenes Activos
+ListarAlmacen() {
+  this.Servicios.ListarAlmacen().subscribe( res => {
+    this.almacenes = [];
+    // tslint:disable-next-line:forin
+    for ( let i in res) {
+      this.almacenes.push(res [i]);
+    }
+
+  });
+
 }
 
+ListarProductos(nombre: string) {
+  this.Servicios.ListarProductos(nombre).subscribe( res => {
+    this.productos = [];
+    // tslint:disable-next-line:forin
+    for ( let i in res) {
+       this.productos.push(res [i]);
+
+      }
+
+  });
+
+}
+
+// Guardar(formulario) {
+  // this.SalidaProductoServicios.AgregarCompraMercaderia(formulario.value.almacen, formulario.value.tipoIngreso,
+  //  formulario.value.docReferencia, formulario.value.proveedor.id ,
+    // formulario.value.fecingreso, formulario.value.docReferencia).subscribe (res => console.log(res));
+
+}
 
   export interface PeriodicElement {
     name: string;

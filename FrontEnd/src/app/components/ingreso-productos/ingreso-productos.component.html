@@ -98,8 +98,9 @@
 
            <!--Campo ingresar Fecha de Ingreso almacen -->
           <mat-grid-tile>
-            <mat-form-field class ="IngFecha" class="Alma1"  class="example-full-width">
+            <mat-form-field class ="IngFecha" class="Alma1"  class="example-full-width" >
                 <input matInput [matDatepicker]="picker" placeholder="Fecha Ingreso" formControlName="fecingreso">
+                <mat-error> </mat-error>
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
