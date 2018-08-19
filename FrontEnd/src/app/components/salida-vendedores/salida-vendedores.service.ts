@@ -21,25 +21,27 @@ export class SalidaVendedoresService {
     guia: string,
     movilidad:boolean
     ): Observable<any> {
-    
+
     let TM:string;
 
-  	if (movilidad) {
-  		TM='1'
-  	} else{
-  		TM='0'
-  	}
+    if (movilidad) {
+        TM = '1';
+    } else {
+        TM = '0';
+    }
 
+    // tslint:disable-next-line:prefer-const
     let params = new HttpParams()
-   				.set('prpecosa', pecosa.toString())
-   				.set('prsucursal', prsucursal.toString())
-   				.set('prfecha', moment(fecha).format("YYYY/MM/DD").toString())
-   				.set('prdestino', destino)
-   				.set('prguia', guia)
-   				.set('prmovilidad', TM)
-    
+        .set('prpecosa', pecosa.toString())
+        .set('prsucursal', prsucursal.toString())
+        .set('prfecha', moment(fecha).format('YYYY/MM/DD').toString())
+        .set('prdestino', destino)
+        .set('prguia', guia)
+        .set('prmovilidad', TM);
+
     console.log(params);
 
+    // tslint:disable-next-line:prefer-const
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'salidacabecera/create.php', params, {headers: headers});

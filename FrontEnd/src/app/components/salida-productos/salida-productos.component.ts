@@ -1,3 +1,4 @@
+import { SalidaProductosService } from './salida-productos.service';
 import { ServiciosGenerales, Almacen, ListarCliente, ListarVendedor } from './../global/servicios';
 import { ventanaseriesalida } from './ventana-seriesalida/ventanaseriesalida';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
@@ -29,7 +30,7 @@ export class SalidaProductosComponent implements OnInit {
   public serieventana: string;
   public almacen: string;
   public almacen1: string;
-  public fechaingreso: Date;
+  public fechamov: Date;
   public producto: string;
 
 
@@ -41,10 +42,12 @@ export class SalidaProductosComponent implements OnInit {
 
 
 
+
   constructor (public DialogoSerie: MatDialog,
     // tslint:disable-next-line:no-shadowed-variable
     private FormBuilder: FormBuilder,
     private Servicios: ServiciosGenerales,
+    private SalidaProductosServicios: SalidaProductosService,
   ) {}
 
   ngOnInit() {
@@ -55,7 +58,7 @@ export class SalidaProductosComponent implements OnInit {
       'almacen': [null, [Validators.required] ],
       'almacen1': [null, [Validators.required] ],
       'cantidad': [null, [Validators.required] ],
-      'fechaingreso': [null, [Validators.required]],
+      'fechamov': [null, [Validators.required]],
       'producto': [null, [Validators.required]],
 
     });
@@ -100,35 +103,43 @@ export class SalidaProductosComponent implements OnInit {
   }
 
 // Selector Almacenes Activos
-ListarAlmacen() {
-  this.Servicios.ListarAlmacen().subscribe( res => {
-    this.almacenes = [];
-    // tslint:disable-next-line:forin
-    for ( let i in res) {
-      this.almacenes.push(res [i]);
-    }
-
-  });
-
-}
-
-ListarProductos(nombre: string) {
-  this.Servicios.ListarProductos(nombre).subscribe( res => {
-    this.productos = [];
-    // tslint:disable-next-line:forin
-    for ( let i in res) {
-       this.productos.push(res [i]);
-
+  ListarAlmacen() {
+    this.Servicios.ListarAlmacen().subscribe( res => {
+      this.almacenes = [];
+      // tslint:disable-next-line:forin
+      for ( let i in res) {
+        this.almacenes.push(res [i]);
       }
 
-  });
+    });
 
-}
+  }
 
-// Guardar(formulario) {
-  // this.SalidaProductoServicios.AgregarCompraMercaderia(formulario.value.almacen, formulario.value.tipoIngreso,
-  //  formulario.value.docReferencia, formulario.value.proveedor.id ,
-    // formulario.value.fecingreso, formulario.value.docReferencia).subscribe (res => console.log(res));
+  ListarProductos(nombre: string) {
+    this.Servicios.ListarProductos(nombre).subscribe( res => {
+      this.productos = [];
+      // tslint:disable-next-line:forin
+      for ( let i in res) {
+        this.productos.push(res [i]);
+
+        }
+
+    });
+
+  }
+
+  GuardarTransferenciaAlmacen(formulario) {
+   // console.log(formulario)
+
+    this.SalidaProductosServicios.SalidaTransferenciaAlmacen(
+    formulario.value.almacen,
+    5,
+    4,
+    formulario.value.almacen1,
+    formulario.value.fechamov,
+    ).subscribe (res => console.log(res));
+  }
+
 
 }
 
