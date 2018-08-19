@@ -17,10 +17,7 @@ export class ventanaseriesalida  implements OnInit {
   public contador: number;
   public serie: Array<any>;
 
-
-
     constructor() {
-
     }
 
     ngOnInit() {

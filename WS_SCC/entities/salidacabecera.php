@@ -47,7 +47,7 @@ Class SalidaCabecera{
 
     function read(){
 
-        $query = "CALL sp_listarsalidacabecera(?,?,?,?,?,?,?,?,?)";
+        $query = "CALL sp_listarsalidacabecera(?,?,?,?,?,?,?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
@@ -56,10 +56,12 @@ Class SalidaCabecera{
         $result->bindParam(3, $this->fecha_inicio);
         $result->bindParam(4, $this->fecha_fin);
         $result->bindParam(5, $this->destino);
-        $result->bindParam(6, $this->estado);
-        $result->bindParam(7, $this->numero_pagina);
-        $result->bindParam(8, $this->total_pagina);
-        $result->bindParam(9, $this->orden);
+        $result->bindParam(6, $this->serie);
+        $result->bindParam(7, $this->vendedor);
+        $result->bindParam(8, $this->estado);
+        $result->bindParam(9, $this->numero_pagina);
+        $result->bindParam(10, $this->total_pagina);
+        $result->bindParam(11, $this->orden);
 
         $result->execute();
         

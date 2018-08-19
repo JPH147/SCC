@@ -28,6 +28,8 @@ constructor(private Servicio: ListadoSalidaVendedoresService) { }
     fecha_inicio: Date,
     fecha_fin: Date,
     destino: string,
+    serie:number,
+    vendedor:string,
     estado:number,
     pagina: number,
     total_pagina: number,
@@ -35,7 +37,7 @@ constructor(private Servicio: ListadoSalidaVendedoresService) { }
   ) {
   this.CargandoInformacion.next(true);
 
-  this.Servicio.Listado(pecosa, sucursal, fecha_inicio, fecha_fin, destino,estado, pagina, total_pagina, orden)
+  this.Servicio.Listado(pecosa, sucursal, fecha_inicio, fecha_fin, destino,serie,vendedor,estado, pagina, total_pagina, orden)
   .pipe(catchError(() => of([])),
   finalize(() => this.CargandoInformacion.next(false))
   )

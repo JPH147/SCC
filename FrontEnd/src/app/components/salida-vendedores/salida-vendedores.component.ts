@@ -237,14 +237,6 @@ export class SalidaVendedoresComponent implements OnInit {
   }
 
   VendedorSeleccionado(event,index){
-    // this.Ventas.ListarVendedor(null,"","").subscribe(res=>{
-    //   this.Vendedor=res['data'].vendedores;
-    //   for (let i of this.SalidaVendedoresForm['controls'].vendedores.value) {
-    //     if (i.nombre) {
-    //       this.EliminarElemento(this.Vendedor,i.nombre.id)
-    //     }
-    //   }
-    // });
     this.VendedorSeleccionado2("");
     this.SalidaVendedoresForm.get('vendedores')['controls'][index].get('comision').setValue(event.option.value.comision)
   }
@@ -337,7 +329,7 @@ export class SalidaVendedoresComponent implements OnInit {
     let destinos:string="";
 
     for (let i of this.departamentos) {
-      destinos=destinos +", "+ i.name
+      destinos=i.name +", " +destinos
     }
 
     // console.log("Series",this.Series);
@@ -365,7 +357,6 @@ export class SalidaVendedoresComponent implements OnInit {
 
         // Grabar datos de vendedor
         for (let i of formulario.value.vendedores) {
-          // console.log(i.nombre.id)
           this.Servicio.AgregarVendedor(
             res.data,
             i.nombre.id,

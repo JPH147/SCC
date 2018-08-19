@@ -21,6 +21,8 @@ export class ListadoSalidaVendedoresComponent implements OnInit {
  @ViewChild('InputPecosa') FiltroPecosa: ElementRef;
  @ViewChild('InputDestino') FiltroDestino: ElementRef;
  @ViewChild('InputSucursal') FiltroSucursal: MatSelect;
+ @ViewChild('InputSerie') FiltroSerie: ElementRef;
+ @ViewChild('InputVendedor') FiltroVendedor: ElementRef;
  @ViewChild('InputEstado') FiltroEstado: MatSelect;
  @ViewChild('fechainicio') FechaInicioFiltro: ElementRef;
  @ViewChild('fechafin') FechaFinFiltro: ElementRef;
@@ -45,7 +47,7 @@ ngOnInit() {
   this.General.ListarSucursal(null,"").subscribe(res=>this.Sucursales=res)
 
   this.ListadoSalida = new ListadoSalidaVendedoresDataSource(this.Servicio);
-  this.ListadoSalida.CargarDatos(null, null, null, null, "", null,1, 10, "pecosa");
+  this.ListadoSalida.CargarDatos(null, null, null, null, "",null,"", null,1, 10, "pecosa");
 
 }
 
@@ -59,7 +61,9 @@ ngAfterViewInit(){
     this.paginator.page,
     this.sort.sortChange,
     fromEvent(this.FiltroPecosa.nativeElement,'keyup'),
-    fromEvent(this.FiltroDestino.nativeElement,'keyup')
+    fromEvent(this.FiltroDestino.nativeElement,'keyup'),
+    fromEvent(this.FiltroSerie.nativeElement,'keyup'),
+    fromEvent(this.FiltroVendedor.nativeElement,'keyup')
   ).pipe(
      debounceTime(200),
      distinctUntilChanged(),
@@ -78,6 +82,8 @@ CargarData(){
     this.FechaInicioFiltro.nativeElement.value,
     this.FechaFinFiltro.nativeElement.value,
     this.FiltroDestino.nativeElement.value,
+    this.FiltroSerie.nativeElement.value,
+    this.FiltroVendedor.nativeElement.value,
     this.FiltroEstado.value,
     this.paginator.pageIndex+1,
     this.paginator.pageSize,

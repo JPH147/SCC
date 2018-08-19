@@ -1,20 +1,20 @@
 import { ServiciosGenerales, Almacen, ListarCliente, ListarVendedor } from './../global/servicios';
 import { ventanaseriesalida } from './ventana-seriesalida/ventanaseriesalida';
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import {FormControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList } from '@angular/core';
+import {FormControl, FormBuilder, FormGroup, Validators, FormArray} from '@angular/forms';
 import {Observable, fromEvent} from 'rxjs';
-import {map, startWith} from 'rxjs/operators';
+import {map, startWith, debounceTime, tap, distinctUntilChanged} from 'rxjs/operators';
 import {SelectionModel} from '@angular/cdk/collections';
 import {MatTableDataSource} from '@angular/material';
 import { MatDialog } from '@angular/material';
-
+import {StockService} from '../stock/stock.service'
 
 
 @Component({
   selector: 'app-salida-productos',
   templateUrl: './salida-productos.component.html',
   styleUrls: ['./salida-productos.component.css'],
-  providers: [ServiciosGenerales]
+  providers: [ServiciosGenerales,StockService]
 })
 
 export class SalidaProductosComponent implements OnInit {
@@ -25,67 +25,103 @@ export class SalidaProductosComponent implements OnInit {
   public articulos: Array <articulo>;
   public contador: number;
   public almacenes: Array<any> = [];
-  public productos: Array<any> = [];
+  public productos: FormArray;
   public serieventana: string;
   public almacen: string;
   public almacen1: string;
   public fechaingreso: Date;
   public producto: string;
+  public Producto: Array<any>;
+  public Series: any[]=[];
 
+  @ViewChildren('InputProducto') FiltroProducto: QueryList<any>;
 
-  selected = 'option2';
-  myControl = new FormControl();
-  options: string[] = ['One', 'Two', 'Three'];
-  filteredOptions: Observable<string[]>;
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-
-
-
-  constructor (public DialogoSerie: MatDialog,
-    // tslint:disable-next-line:no-shadowed-variable
+  constructor (
+    public DialogoSerie: MatDialog,
     private FormBuilder: FormBuilder,
     private Servicios: ServiciosGenerales,
+    private Articulos: StockService
   ) {}
 
   ngOnInit() {
     this.ListarAlmacen();
-    this.ListarProductos('');
 
     this.SalidaProductosForm = this.FormBuilder.group({
       'almacen': [null, [Validators.required] ],
       'almacen1': [null, [Validators.required] ],
       'cantidad': [null, [Validators.required] ],
       'fechaingreso': [null, [Validators.required]],
-      'producto': [null, [Validators.required]],
-
+      productos: this.FormBuilder.array([this.CrearProducto()])
     });
-
-    this.filteredOptions = this.myControl.valueChanges
-        .pipe(
-          startWith(''),
-          map(value => this._filter(value))
-        );
 
       this.contador = 1;
       this.articulos = [
         {numero: this.contador, nombre: '', cantidad: null, precio: null}
       ];
   }
-     private _filter(value: string): string[] {
-      const filterValue = value.toLowerCase();
 
-      return this.options.filter(option => option.toLowerCase().includes(filterValue));
-  }
-  isAllSelected() {
+  ngAfterViewInit(){
+
+    this.FiltroProducto.changes.subscribe(res=>{
+
+      for (let i in this.FiltroProducto['_results']) {
+        fromEvent(this.FiltroProducto['_results'][i].nativeElement,'keyup')
+        .pipe(
+            debounceTime(100),
+            distinctUntilChanged(),
+            tap(()=>{
+              if (this.FiltroProducto['_results'][i].nativeElement.value) {
+                this.ProductoSeleccionado(this.FiltroProducto['_results'][i].nativeElement.value)
+              }
+            })
+          ).subscribe()
+      }
+    })
   }
 
-/** Selects all rows if they are not all selected; otherwise clear selection. */
-  masterToggle() {
+  CrearProducto():FormGroup{
+    return this.FormBuilder.group({
+      'producto':[{value:null, disabled:false},[
+      ]],
+      'cantidad':[{value:null, disabled:false},[
+      ]],
+    })
   }
 
-  agregar() {
-    this.contador++;
-    this.articulos.push({numero: this.contador, nombre: '', cantidad: null, precio: null});
+  ResetearForm(event){
+    console.log(event)
+    this.ResetearFormArray(this.productos);
+    this.Series=[];
+    this.Articulos.ListarStock(event.value.nombre, '', '', '', '', 1, 20, 'descripcion asc').subscribe(res=>this.Producto=res['data'].stock)
+  }
+
+  ResetearFormArray = (formArray: FormArray) => {
+    if (formArray) {
+      formArray.reset()
+      while (formArray.length !== 1) {
+        formArray.removeAt(0)
+      }
+    }
+  }
+
+  AgregarProducto():void{
+    this.productos = this.SalidaProductosForm.get('productos') as FormArray;
+    this.productos.push(this.CrearProducto())
+  };
+
+  EliminarProducto(producto,i){
+    this.productos.removeAt(i);
+  };
+
+  ProductoSeleccionado(filtro){
+    this.Articulos.ListarStock(this.SalidaProductosForm.get('almacen').value, '', '', '', filtro, 1, 20, 'descripcion asc').subscribe(res=>{
+      this.Producto=res['data'].stock;
+      for (let i of this.SalidaProductosForm['controls'].productos.value) {
+        if (i.producto) {
+          this.EliminarProducto(this.Producto,i.producto.id_producto)
+        }
+      }
+    });
   }
 
   Aceptar() {
@@ -93,36 +129,54 @@ export class SalidaProductosComponent implements OnInit {
   }
 
 
-  AgregarSerieSalida() {
+  AgregarSerieSalida(articulo) {
+    console.log(articulo);
     const serieventana = this.DialogoSerie.open(ventanaseriesalida, {
       width: '600px'
     });
+
+    serieventana.afterClosed().subscribe(res=>{
+      console.log(res)
+    })
+  }
+
+  displayFn2(producto) {
+    if (producto){
+      return producto.descripcion 
+    }else{
+      return ""
+    }
   }
 
 // Selector Almacenes Activos
 ListarAlmacen() {
   this.Servicios.ListarAlmacen().subscribe( res => {
-    this.almacenes = [];
-    // tslint:disable-next-line:forin
-    for ( let i in res) {
-      this.almacenes.push(res [i]);
-    }
-
+    this.almacenes = res;
   });
 
 }
 
-ListarProductos(nombre: string) {
-  this.Servicios.ListarProductos(nombre).subscribe( res => {
-    this.productos = [];
-    // tslint:disable-next-line:forin
-    for ( let i in res) {
-       this.productos.push(res [i]);
+// ListarProductos(nombre: string) {
+//   this.Servicios.ListarProductos(nombre).subscribe( res => {
+//     this.productos = [];
+//     // tslint:disable-next-line:forin
+//     for ( let i in res) {
+//        this.productos.push(res [i]);
 
-      }
+//       }
 
-  });
+//   });
+// }
 
+// AlmacenSeleccionado(event){
+
+//   // this.EliminarAlmacen(this.almacenes,event.value)
+// }
+
+EliminarAlmacen(array,value){
+   array.forEach( (item, index) => {
+     if(item.id === value) array.splice(index,1);
+   });
 }
 
 // Guardar(formulario) {

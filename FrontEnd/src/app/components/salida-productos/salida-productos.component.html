@@ -16,9 +16,9 @@
           <mat-grid-tile>
 
             <!-- Seleccionar Almacen  Origen -->
-            <mat-form-field>
-              <mat-select placeholder="Almacen Origen" class="example-full-width" formControlName="almacen" >
-                <mat-option *ngFor="let almacen of almacenes" [value]="almacen.id">
+            <mat-form-field class="formulario-salida">
+              <mat-select placeholder="Almacen Origen" formControlName="almacen" (selectionChange)="ResetearForm($event)">
+                <mat-option *ngFor="let almacen of almacenes" [value]="almacen">
                   {{almacen.nombre}}
                 </mat-option>
               </mat-select>
@@ -28,8 +28,8 @@
 
           <!-- Seleccionar Almacen  Origen -->
           <mat-grid-tile>
-            <mat-form-field>
-              <mat-select placeholder="Almacen Destino " class="example-full-width" formControlName="almacen1" >
+            <mat-form-field class="formulario-salida">
+              <mat-select placeholder="Almacen Destino" formControlName="almacen1">
                 <mat-option *ngFor="let almacen1 of almacenes" [value]="almacen1.id">
                   {{almacen1.nombre}}
                 </mat-option>
@@ -39,7 +39,7 @@
 
           <mat-grid-tile>
             <!--Campo ingresar Fecha de Salida almacen -->
-            <mat-form-field  class ="IngFecha" class="Alma1" type="Date" >
+            <mat-form-field  class ="IngFecha" class="Alma1" type="Date"  class="formulario-salida">
                 <input matInput [matDatepicker]="picker" placeholder="Fecha Movimiento" formControlName="fechaingreso" >
                 <mat-error> </mat-error>
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -58,7 +58,7 @@
     <!-- Boton Agrega Productos -->
     <mat-grid-list cols="1"  rowHeight="55px">
         <mat-grid-tile>
-          <button mat-mini-fab color="primary" matTooltip="Agrega  Productos" type= "button"><mat-icon>add</mat-icon></button>
+          <button mat-mini-fab color="primary" matTooltip="Agrega Productos" type="button" (click)="AgregarProducto()"><mat-icon>add</mat-icon></button>
         </mat-grid-tile>
       </mat-grid-list>
 
@@ -68,32 +68,37 @@
 
       <!-- Agrega Productos -->
       <mat-card class="CabeceraSalidaVendedor">
+        <div formArrayName="productos" *ngFor="let producto of SalidaProductosForm['controls'].productos['controls']; let i = index">
+          <div [formGroupName]="i">
 
-        <mat-grid-list cols="6" rowHeight="70px" *ngFor="let articulo of articulos">
+            <mat-grid-list cols="3" rowHeight="70px" *ngFor="let articulo of articulos">
 
-          <mat-grid-tile colspan="3">
-            <mat-form-field class="example-full-width">
-              <mat-select placeholder="Selecciona Producto"   formControlName="producto">
-                <mat-option *ngFor="let producto of productos"  [value]="producto.descripcion">
-                  {{producto.descripcion}}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </mat-grid-tile>
+              <mat-grid-tile>
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="Producto" [matAutocomplete]="autoproducto" #InputProducto formControlName="producto">
+                  <mat-autocomplete #autoproducto="matAutocomplete" [displayWith]="displayFn2" (optionSelected)="ProductoSeleccionado('')">
+                    <mat-option *ngFor="let producto of Producto" [value]="producto">
+                      {{producto.descripcion}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </mat-grid-tile>
 
-          <mat-grid-tile colspan="2">
-            <mat-form-field class="example-full-width">
-              <input matInput placeholder="Cantidad">
-            </mat-form-field>
-          </mat-grid-tile>
+              <mat-grid-tile>
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="Cantidad">
+                </mat-form-field>
+              </mat-grid-tile>
 
-          <mat-grid-tile colspan="1">
-              <button mat-mini-fab color="primary" (click) = " AgregarSerieSalida () " matTooltip="Ingresa Serie Producto" type="buton"><mat-icon> reorder </mat-icon> </button>
+              <mat-grid-tile>
+                <button mat-mini-fab color="primary" (click) = " AgregarSerieSalida (articulo) " matTooltip="Ingresa Serie Producto" type="button"><mat-icon> reorder </mat-icon> </button>
+                <button mat-mini-fab color="primary" matTooltip="Elimina  Producto" type="button"><mat-icon>delete</mat-icon></button>
+              </mat-grid-tile>
 
-            <button mat-mini-fab color="primary" matTooltip="Elimina  Producto" type="button"><mat-icon>delete</mat-icon></button>
+            </mat-grid-list>
 
-          </mat-grid-tile>
-        </mat-grid-list>
+          </div>
+        </div>
       </mat-card>
 
     </mat-card-content>
@@ -104,7 +109,7 @@
           <mat-grid-list cols="1"  rowHeight="55px">
               <mat-grid-tile>
                 <button mat-raised-button  color="primary" [disabled]="SalidaProductosForm.invalid">Grabar</button>
-                <button mat-raised-button  color="accent">Limpiar</button>
+                <button mat-raised-button  color="accent" type="button">Limpiar</button>
               </mat-grid-tile>
             </mat-grid-list>
         </mat-card-actions>

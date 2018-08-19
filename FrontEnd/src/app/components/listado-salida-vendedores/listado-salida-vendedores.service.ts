@@ -19,13 +19,15 @@ export class ListadoSalidaVendedoresService {
   fecha_inicio: Date,
   fecha_fin: Date,
   destino: string,
+  serie:number,
+  vendedor:string,
   estado:number,
   pagina: number,
   total_pagina: number,
   orden: string
   ): Observable<any> {
 
-    let Pecosa:string, Sucursal:string, Estado:string, Finicio: string ,Ffin: string;
+    let Pecosa:string, Sucursal:string, Estado:string, Finicio: string ,Ffin: string,Serie:string="";
 
     if (!fecha_inicio) {
       Finicio=""
@@ -51,6 +53,10 @@ export class ListadoSalidaVendedoresService {
       Sucursal=sucursal.toString()
     }
 
+    if(serie!=null){
+      Serie=serie.toString()
+    }
+
     if (estado == null) {
       Estado=""
     }else{
@@ -64,6 +70,8 @@ export class ListadoSalidaVendedoresService {
       .set('prfechainicio', Finicio)
       .set('prfechafin', Ffin)
       .set('prdestino', destino)
+      .set('prserie', Serie)
+      .set('prvendedor', vendedor)
       .set('prestado', Estado)
       .set('prpagina', pagina.toString())
       .set('prtotalpagina', total_pagina.toString())

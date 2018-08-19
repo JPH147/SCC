@@ -21,6 +21,8 @@
         $salida->fecha_inicio = !empty($_GET['prfechainicio']) ? $_GET['prfechainicio'] : null;
         $salida->fecha_fin = !empty($_GET['prfechafin']) ? $_GET['prfechafin'] : null;
         $salida->destino = !empty($_GET['prdestino']) ? $_GET['prdestino'] : '';
+        $salida->serie = !empty($_GET['prserie']) ? $_GET['prserie'] : null;
+        $salida->vendedor = !empty($_GET['prvendedor']) ? $_GET['prvendedor'] : '';
         $salida->estado = !empty($_GET['prestado']) ? $_GET['prestado'] : null;
         $salida->numero_pagina = !empty($_GET['prpagina']) ? $_GET['prpagina'] : 1;
         $salida->total_pagina = !empty($_GET['prtotalpagina']) ? $_GET['prtotalpagina'] : 20;
