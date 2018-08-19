@@ -28,6 +28,7 @@ export class VentanaEmergenteContacto {
   // Direcciones
   public DireccionesForm: FormGroup;
   public itemsDir: FormArray;
+  public RelevanciaDireccion: RelevanciaDireccion[];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
@@ -57,6 +58,7 @@ export class VentanaEmergenteContacto {
   this.ListarTipos();
   this.ListarRelevancia();
   this.ListarDepartamento();
+  this.ListarRelevanciaDireccion();
 }
 createTelefono(value): FormGroup {
   return this.FormBuilder.group({
@@ -67,7 +69,7 @@ createTelefono(value): FormGroup {
     tipo: [{value:2,disabled:false},[
 
     ]] ,
-    relevancia: [{value:value,disabled:true},[
+    relevancia: [{value: value, disabled: true},[
 
     ]],
     observacion: [null,[
@@ -99,18 +101,23 @@ createTelefono(value): FormGroup {
         {id: 0, viewValue: 'Inactivo'},
       ];
     }
+    ListarRelevanciaDireccion() {
+      this.RelevanciaDireccion = [
+        {id: 1, viewValue: 'Primaria'},
+        {id: 2, viewValue: 'Secundaria'},
+      ];
+    }
 
   GuardarTelefonos(formulario) {
-    console.log(formulario.get('items').value);
-    /*
-    if (this.data !== 0) {
-      console.log(this.data);
-      this.ServicioTelefono.CrearTelefono(this.data, formulario.value.telefono ,
-        formulario.value.observacion, formulario.value.tipo,
-        formulario.value.relevancia).subscribe(res => console.log(res));
+
+    // tslint:disable-next-line:forin
+    for (let i in formulario.get('items').value) {
+      this.ServicioTelefono.CrearTelefono(this.data, formulario.get('items').value[i].telefono ,
+      formulario.get('items').value[i].observacion, formulario.get('items').value[i].tipo,
+      formulario.getRawValue().items[i].relevancia).subscribe(res => console.log(res));
     }
+
       this.ventana.close();
-      */
   }
 
   createDirecciones(value): FormGroup {
@@ -127,7 +134,7 @@ createTelefono(value): FormGroup {
       distrito: [null,[
         Validators.required
       ]],
-      relevancia: [{value: value, disabled: true}, [
+      relevanciadis: [{value: value, disabled: true}, [
       ]],
       observacion: [null,[
         Validators.required
@@ -142,14 +149,17 @@ createTelefono(value): FormGroup {
 
   GuardarDirecciones(formulario) {
     if (this.data !== 0) {
-      console.log(this.data);
-      this.ServicioDireccion.CrearDireccion(this.data, formulario.value.direccion ,
-        formulario.value.distrito , formulario.value.relevancia,
-        formulario.value.observacion).subscribe(res => console.log(res));
-    }
+      // tslint:disable-next-line:forin
+      for (let i in formulario.get('itemsDir').value) {
+        this.ServicioDireccion.CrearDireccion(this.data, formulario.get('itemsDir').value[i].direccion ,
+        formulario.get('itemsDir').value[i].distrito,
+        formulario.getRawValue().itemsDir[i].relevanciadis,
+        formulario.get('itemsDir').value[i].observacion
+        ).subscribe(res => console.log(res));
       this.ventana.close();
+      }
+    }
   }
-
       ListarDepartamento() {
         this.ServicioDireccion.ListarDepartamentos('', 0, 50).subscribe( res => {
           this.LstDepartamento = res['data'].departamentos;
@@ -168,19 +178,18 @@ createTelefono(value): FormGroup {
     });
   }
 
-  DepartamentoSeleccionado(event) {
-    console.log(event.value);
-    this.ListarProvincia(event.value);
-    this.DireccionesForm.get('provincia').setValue(null);
-    this.DireccionesForm.get('distrito').setValue(null);
-    this.DireccionesForm.controls['provincia'].enable();
-    this.DireccionesForm.controls['distrito'].disable();
+  DepartamentoSeleccionado(event, i) {
+    this.ServicioDireccion.ListarProvincias(event.value, '' , 0, 30).
+    subscribe(res => this.LstProvincia = res['data'].provincias);
+    console.log(this.LstProvincia);
+    this.DireccionesForm.get('itemsDir')['controls'][i].get('provincia').setValue('');
   }
 
-  ProvinciaSeleccionada(event) {
-  this.ListarDistrito(event.value);
-  this.DireccionesForm.get('distrito').setValue(null);
-  this.DireccionesForm.controls['distrito'].enable();
+  ProvinciaSeleccionada(event, i) {
+    console.log(this.DireccionesForm.get('itemsDir')['controls'][i].get('provincia').value);
+    this.ServicioDireccion.ListarDistritos('', event.value, '' , 0, 50).
+    subscribe(res => this.LstDistrito = res['data'].distritos);
+    this.DireccionesForm.get('itemsDir')['controls'][i].get('distrito').setValue('');
   }
 }
 
@@ -190,6 +199,11 @@ export interface TipoTelefono {
 }
 
 export interface RelevanciaTelefono {
+  id: number;
+  viewValue: string;
+}
+
+export interface RelevanciaDireccion {
   id: number;
   viewValue: string;
 }

@@ -30,11 +30,35 @@ export class ServiciosTelefonos {
         console.log(params);
         return this.http.post(this.url + 'clientetelefono/create.php', params, {headers: headers});
   }
+
+  ListarTelefono(
+	id_cliente:string,
+	tlf_relevancia:string,
+// tslint:disable-next-line:no-unused-expression
+): Observable <any>
+{
+	return this.http.get(this.url + 'clientetelefono/read.php',{
+		params: new HttpParams()
+		.set('id_cliente', id_cliente)
+		.set('tlf_relevancia', tlf_relevancia)
+	})
+	.pipe(map(res=>{
+		if(res['codigo'] === 0) {
+			return res['data'].telefonos;
+		} else {
+			console.log('Error al importar los datos, revisar servicio');
+		}
+	}))
+}
+
+
+
 }
 
 export interface Telefono {
     numero: number;
     id: number;
+    cliente: string;
     nrotelefono: string;
     observacion: string;
     id_tipo: number;

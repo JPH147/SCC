@@ -248,19 +248,41 @@ export class ServiciosDirecciones{
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 		return this.http.post(this.url + 'clientedireccion/create.php', params, {headers: headers});
 		}
+
+		ListarDireccion(
+			id_cliente:string,
+			drc_relevancia:string,
+		// tslint:disable-next-line:no-unused-expression
+		): Observable <any>
+		{
+			return this.http.get(this.url + 'clientedireccion/read.php',{
+				params: new HttpParams()
+				.set('id_cliente', id_cliente)
+				.set('drc_relevancia', drc_relevancia)
+			})
+			.pipe(map(res=>{
+				if(res['codigo'] === 0) {
+					return res['data'].direcciones;
+				} else {
+					console.log('Error al importar los datos, revisar servicio');
+				}
+			}))
+		}
 }
 
-export interface Departamento{
+
+
+export interface Departamento {
 	numero:number,
 	id:number,
-	nombre:string,
+	nombre: string
 }
 
-export interface Provincia{
+export interface Provincia {
 	numero:number,
 	id:number,
 	departamento:string,
-	nombre:string,	
+	nombre:string
 }
 
 export interface Distrito {
@@ -268,5 +290,14 @@ export interface Distrito {
 	id:number,
 	departamento:string,
 	provincia:string,
-	nombre:string,
+	nombre:string
+}
+
+export interface Direccion {
+	numero: number,
+	idcliente: number,
+	cliente: string,
+	direccion: string,
+	relevancia: number,
+	observacion: string
 }

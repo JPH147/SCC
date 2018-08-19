@@ -14,20 +14,20 @@
 
     try
     {
-        $producto = new Producto($db);
+        $clientedir = new ClienteDireccion($db);
         $data = json_decode(file_get_contents('php://input'), true);
 
         if (($_POST["id_cliente"])!=null  && !empty(trim($_POST["drc_nombre"])) 
         && ($_POST["pid_distrito"])!=null && ($_POST["drc_relevancia"])!=null
         && !empty(trim($_POST["drc_observacion"])))
         {
-            $producto->id_cliente = $_POST["id_cliente"];
-            $producto->drc_nombre = trim($_POST["drc_nombre"]);
-            $producto->id_distrito = $_POST["pid_distrito"];
-            $producto->drc_relevancia = $_POST["drc_relevancia"];
-            $producto->drc_observacion = $_POST["drc_observacion"];
+            $clientedir->id_cliente = $_POST["id_cliente"];
+            $clientedir->drc_nombre = trim($_POST["drc_nombre"]);
+            $clientedir->id_distrito = $_POST["pid_distrito"];
+            $clientedir->drc_relevancia = $_POST["drc_relevancia"];
+            $clientedir->drc_observacion = $_POST["drc_observacion"];
 
-            if($producto->create())
+            if($clientedir->create())
             {
                 print_json("0000", "Se creó la dirección satisfactoriamente.", "");
             }
