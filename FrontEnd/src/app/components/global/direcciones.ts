@@ -298,6 +298,13 @@ export interface Direccion {
 	idcliente: number,
 	cliente: string,
 	direccion: string,
+	id_departamento: number,
+	departamento: string,
+	id_provincia: number,
+	provincia: string,
+	id_distrito: number,
+	distrito: string,
+	direccioncompleta: string,
 	relevancia: number,
 	observacion: string
 }

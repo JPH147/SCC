@@ -3,24 +3,63 @@
     <mat-card-title>Ventas</mat-card-title>
   </mat-card-header>
   <form [formGroup]="VentasForm">
+
+      <div class="row3col-cliente">
+
+          <mat-form-field>
+            <input #Cliente placeholder="Ingresa Cliente" matInput [matAutocomplete]="auto" formControlName= cliente>
+              <mat-autocomplete #auto="matAutocomplete" [displayWith] = "displayCliente">
+                <mat-option *ngFor="let cliente of LstCliente " [value]="cliente">
+                  {{cliente.nombre + ' ' + cliente.apellido}}
+                </mat-option>
+            </mat-autocomplete>
+         </mat-form-field>
+        
+  
+        <a></a>
+        <mat-form-field >
+           <input matInput placeholder="Cargo" formControlName="cargo">
+        </mat-form-field>
+        <a></a>
+        <mat-form-field >
+           <input matInput placeholder="Centro de Trabajo" formControlName="trabajo">
+        </mat-form-field>
+     </div>
+     <div class="row3col-cliente">
+        <mat-form-field>
+           <input matInput placeholder="Domicilio" formControlName="domicilio">
+        </mat-form-field>
+        <a></a>
+        <!--<mat-form-field >
+           <input matInput placeholder="Lugar" formControlName="lugar">
+        </mat-form-field>
+        <a></a>-->
+        <mat-form-field >
+           <input matInput placeholder="Teléfono" formControlName="telefono">
+        </mat-form-field>
+     </div>
+
    <mat-grid-list cols="4" rowHeight="100px">
       <mat-grid-tile coslpan="1">
          <mat-form-field class="rows4">
             <mat-label>N° Talonario</mat-label>
-            <mat-select #idTalonario value="001" formControlName="talonario" (selectionChange)="triggerResize()">
-            <mat-option value="001">001</mat-option>
-            <mat-option value="002">002</mat-option>
-            <mat-option value="003">003</mat-option>
-            <mat-option value="004">004</mat-option>
-            <mat-option value="005">005</mat-option>
-            <mat-option value="006">006</mat-option>
+            <mat-select placeholder='Selecciona N° Talonario' formControlName="talonario" (selectionChange)="SerieSeleccionada($event)">
+              <mat-option *ngFor="let talonarioserie of LstSeries" [value] = "talonarioserie.serie"> {{talonarioserie.serie}} </mat-option>
             </mat-select>
          </mat-form-field>
       </mat-grid-tile>
       <mat-grid-tile coslpan="1">
-         <mat-form-field class="rows4">
+         <!--<mat-form-field class="rows4">
            <input matInput placeholder="N° Contrato" formControlName="contrato">
-        </mat-form-field>
+        </mat-form-field>-->
+
+
+        <mat-form-field class="rows4">
+          <mat-label>N° Contrato</mat-label>
+          <mat-select placeholder='Selecciona N° Contrato' formControlName="contrato">
+            <mat-option *ngFor="let contrato of LstContrato" [value] = "contrato.id"> {{contrato.numero}} </mat-option>
+          </mat-select>
+       </mat-form-field>
          <a></a> 
       </mat-grid-tile>
 
@@ -48,44 +87,16 @@
         <a></a> 
      </mat-grid-tile> 
    </mat-grid-list>
+   
    <div class="row3col-cliente">
-
-        <mat-form-field>
-          <input #Cliente placeholder="Ingresa Cliente" matInput [matAutocomplete]="auto" formControlName= cliente>
-            <mat-autocomplete #auto="matAutocomplete" [displayWith] = "displayCliente">
-              <mat-option *ngFor="let cliente of LstCliente " [value]="cliente">
-                {{cliente.nombre + ' ' + cliente.apellido}}
+      <mat-form-field>
+          <input #Vendedor placeholder="Ingresa Vendedor" matInput [matAutocomplete]="auto" formControlName= vendedor>
+            <mat-autocomplete #auto="matAutocomplete" [displayWith] = "displayVendedor">
+              <mat-option *ngFor="let vendedor of LstVendedor " [value]="vendedor">
+                {{vendedor.nombre}}
               </mat-option>
           </mat-autocomplete>
        </mat-form-field>
-      
-
-      <a></a>
-      <mat-form-field >
-         <input matInput placeholder="Cargo" formControlName="cargo">
-      </mat-form-field>
-      <a></a>
-      <mat-form-field >
-         <input matInput placeholder="Centro de Trabajo" formControlName="trabajo">
-      </mat-form-field>
-   </div>
-   <div class="row3col-cliente">
-      <mat-form-field>
-         <input matInput placeholder="Domicilio" formControlName="domicilio">
-      </mat-form-field>
-      <a></a>
-      <!--<mat-form-field >
-         <input matInput placeholder="Lugar" formControlName="lugar">
-      </mat-form-field>
-      <a></a>-->
-      <mat-form-field >
-         <input matInput placeholder="Teléfono" formControlName="telefono">
-      </mat-form-field>
-   </div>
-   <div class="row3col-cliente">
-      <mat-form-field>
-         <input matInput placeholder="Vendedor" formControlName="vendedor">
-      </mat-form-field>
       <a></a>
       <mat-form-field>
          <input matInput [matDatepicker]="picker" placeholder="Fecha de venta" formControlName="fechaventa">
@@ -110,24 +121,42 @@
       <p></p>
       <mat-form-field>
          <input matInput placeholder="Monto Total"  formControlName="montototal" #InputMontoTotal>
+         <mat-error>Solo debe ingresar valores númericos</mat-error>
+         <span matPrefix>S/.&nbsp;</span>
+         <span matSuffix>.00</span>
       </mat-form-field>
+
       <p></p>
       <mat-form-field>
-         <input matInput placeholder="Cuotas" formControlName="cuotas" #InputCuota>
+          <input matInput placeholder="Cuota Inicial" formControlName="inicial" #InputInicial>
+          <mat-error>Solo debe ingresar valores númericos</mat-error>
+          <span matPrefix>S/ &nbsp;</span>
+          <span matSuffix>.00</span>
+       </mat-form-field>
+
+      <p></p>
+      <mat-form-field>
+         <input matInput placeholder="N° Cuotas" formControlName="cuotas" #InputCuota>
+         <mat-error>Solo debe ingresar valores númericos</mat-error>
       </mat-form-field>
-      <a></a>
-      <div class="button-row">
-         <button mat-raised-button color="primary" (click)="GeneraCronograma()">GENERAR</button>
-      </div>
-      <div class="button-row">
-         <button mat-raised-button color="primary" class="agregar" (click)="Agregar()">ADJUNTAR</button>
-      </div>
+      
    </div>
    <div class="row2col-comentario">
       <mat-form-field class="full-width">
          <textarea matInput placeholder="Observaciones" formControlName="observaciones"></textarea>
       </mat-form-field>
    </div>
+   <mat-grid-list cols="3" rowHeight="100px">
+   <div class="button-row">
+      <button mat-raised-button color="primary" class="agregar" (click)="Agregar()" [disabled]="VentasForm.invalid">Adjuntar</button>
+   </div>
+   <div class="button-row">
+      <button mat-raised-button color="primary" (click)="GeneraCronograma()" >Generar</button>
+   </div>
+   <div class="button-row">
+      <button mat-raised-button color="primary" class="agregar" (click)="Agregar()" [disabled]="VentasForm.invalid">Grabar</button>
+   </div>
+</mat-grid-list>
    <div class="row5col-producto" *ngFor="let producto of productos">
       <mat-form-field>
          <input matInput placeholder="Producto">

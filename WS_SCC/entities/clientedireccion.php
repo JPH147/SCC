@@ -64,6 +64,13 @@ Class ClienteDireccion{
                 "idcliente"=>$row['idcliente'],
                 "cliente"=>$row['cliente'],
                 "direccion"=>$row['direccion'],
+                "id_departamento"=>$row['id_departamento'],
+                "departamento"=>$row["dpt_nombre"],
+                "id_provincia"=>$row['id_provincia'],
+                "provincia"=>$row['prv_nombre'],
+                "id_distrito"=>$row['id_distrito'],
+                "distrito"=> $row['dst_nombre'],
+                "direccioncompleta"=> $row['direccioncompleta'],
                 "relevancia"=>$row['drc_relevancia'],
                 "observacion"=>$row['drc_observacion'],
             );

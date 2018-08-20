@@ -4,7 +4,7 @@ import {FormControl, FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {VentaService} from './ventas.service';
 import {VentaDataSource} from './ventas.dataservice';
 import { MatCard, MatInputModule, MatButton, MatDatepicker, MatTableModule, MatIcon, MatDialog, MAT_DIALOG_DATA } from '@angular/material';
-import {ServiciosTipoDocumento,TipoDocumento} from '../global/tipodocumento';
+import {ServiciosTipoDocumento, TipoDocumento} from '../global/tipodocumento';
 import {ServiciosTipoPago, TipoPago} from '../global/tipopago';
 import {ClienteService, Cliente} from '../clientes/clientes.service';
 import {ClienteDataSource} from '../clientes/clientes.dataservice';
@@ -13,7 +13,7 @@ import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import {ServiciosTelefonos, Telefono} from '../global/telefonos';
 import {ServiciosDirecciones, Direccion} from '../global/direcciones';
-
+import {ServiciosGenerales, Talonario, Serie, ListarVendedor} from '../global/servicios';
 export interface PeriodicElement {
   numero: number;
   month: string;
@@ -30,7 +30,8 @@ const ELEMENT_DATA: PeriodicElement[] = [
   selector: 'app-ventas',
   templateUrl: './ventas.component.html',
   styleUrls: ['./ventas.component.css'],
-  providers: [VentaService, ServiciosTipoDocumento, ServiciosTipoPago, ClienteService, ServiciosTelefonos, ServiciosDirecciones]
+  providers: [VentaService, ServiciosTipoDocumento, ServiciosTipoPago, ClienteService,
+     ServiciosTelefonos, ServiciosDirecciones, ServiciosGenerales]
 })
 
 export class VentasComponent implements OnInit {
@@ -40,6 +41,9 @@ export class VentasComponent implements OnInit {
   public LstCliente: Array<any> = [];
   public VentasForm: FormGroup;
   public LstTipoPago: TipoPago[] = [];
+  public LstContrato: Talonario[] = [];
+  public LstVendedor: ListarVendedor[] = [];
+  public LstSeries: Serie[] = [];
   public telefono: Telefono;
   public direccion: Direccion;
   public typesdoc: string[] = [
@@ -66,6 +70,8 @@ export class VentasComponent implements OnInit {
     private Servicio: VentaService,
     private ClienteServicio: ClienteService,
     private DireccionServicio: ServiciosDirecciones,
+    // tslint:disable-next-line:no-shadowed-variable
+    private ServiciosGenerales: ServiciosGenerales,
     private TelefonoServicio: ServiciosTelefonos,
     public DialogoArchivos: MatDialog,
     // tslint:disable-next-line:no-shadowed-variable
@@ -78,7 +84,6 @@ export class VentasComponent implements OnInit {
     this.productos = [{ producto: '', imei: ''} ];
     this.ListarTipoDocumento();
     this.ListarTipoPago();
-    //this.ListarClientes('', '', '', '' , '', '');
   }
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
@@ -87,8 +92,10 @@ export class VentasComponent implements OnInit {
     this.ObtenerClientexId();
     this.ObtenerDireccion();
     this.ObtenerTelefono();
+    this.ListarVendedor();
+    this.ListarTalonarioSerie();
     this.ListadoCronograma = new VentaDataSource(this.Servicio);
-    this.ListadoCliente = new ClienteDataSource(this.ClienteServicio);
+    //this.ListadoCliente = new ClienteDataSource(this.ClienteServicio);
     this.ListarClientes('', '', '', '' , this.ClienteAutoComplete.nativeElement.value , '');
     this.ListadoCronograma.GenerarCronograma('', '', 0);
     this.VentasForm = this.FormBuilder.group({
@@ -99,9 +106,6 @@ export class VentasComponent implements OnInit {
         Validators.required
       ]],
       'tipodoc': [null, [
-        Validators.required
-      ]],
-      'estado': [null, [
         Validators.required
       ]],
       'cliente': [null, [
@@ -138,7 +142,11 @@ export class VentasComponent implements OnInit {
         Validators.required,
         Validators.pattern('[0-9- ]+')
       ]],
-      'cuotas':[null, [
+      'cuotas': [null, [
+        Validators.required,
+        Validators.pattern('[0-9- ]+')
+      ]],
+      'inicial': [null, [
         Validators.required,
         Validators.pattern('[0-9- ]+')
       ]],
@@ -169,8 +177,6 @@ export class VentasComponent implements OnInit {
   displayVendedor(vendedor?: any): string | undefined {
     return vendedor ? vendedor.nombre : undefined;
   }
-
-
 
   /* Agregar productos */
  Agregar() {
@@ -237,6 +243,10 @@ export class VentasComponent implements OnInit {
         this.VentasForm.get('cliente').setValue(res);
         this.VentasForm.get('cargo').setValue(res.cargo);
         this.VentasForm.get('trabajo').setValue(res.trabajo);
+
+        this.VentasForm.get('cliente').disable();
+        this.VentasForm.get('cargo').disable();
+        this.VentasForm.get('trabajo').disable();
         //this.VentasForm.get('domicilio').setValue(res.)
       }
     });
@@ -247,8 +257,9 @@ export class VentasComponent implements OnInit {
     if (this.idcliente) {
         this.DireccionServicio.ListarDireccion( this.idcliente.toString() , '1').subscribe(res => {
           if (res) {
-            this.VentasForm.get('domicilio').setValue(res[0].direccion);
+            this.VentasForm.get('domicilio').setValue(res[0].direccioncompleta);
           }
+          this.VentasForm.get('domicilio').disable();
         });
     }
   }
@@ -259,8 +270,44 @@ export class VentasComponent implements OnInit {
           if (res) {
             this.VentasForm.get('telefono').setValue(res[0].tlf_numero);
           }
+          this.VentasForm.get('telefono').disable();
         });
     }
+  }
+
+  ListarTalonarioSerie() {
+    this.ServiciosGenerales.ListarSerie().subscribe( res => {
+      this.LstSeries = [];
+      // tslint:disable-next-line:forin
+      for (let i in res) {
+        this.LstSeries.push ( res[i] );
+      }
+    });
+  }
+
+
+  ListarTalonarioNumero(pserie: string) {
+    this.ServiciosGenerales.ListarNumeroTalonario(pserie).subscribe( res => {
+      this.LstContrato = [];
+      // tslint:disable-next-line:forin
+      for (let i in res) {
+        this.LstContrato.push ( res[i] );
+      }
+   });
+  }
+
+  SerieSeleccionada(event) {
+    this.ListarTalonarioNumero(event.value);
+    this.VentasForm.get('contrato').setValue('');
+  }
+  ListarVendedor() {
+    this.ServiciosGenerales.ListarVendedor('').subscribe( res => {
+      this.LstVendedor = [];
+      // tslint:disable-next-line:forin
+      for (let i in res) {
+        this.LstVendedor.push(res[i]);
+      }
+    });
   }
 
 }

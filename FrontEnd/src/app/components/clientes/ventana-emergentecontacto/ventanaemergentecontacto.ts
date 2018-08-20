@@ -50,6 +50,9 @@ export class VentanaEmergenteContacto {
       items : this.FormBuilder.array([this.createTelefono(1)])
   });
 
+  this.ListarDirecciones(this.data);
+  this.ListarTelefonos(this.data);
+
   this.DireccionesForm = this.FormBuilder.group({
     itemsDir : this.FormBuilder.array([this.createDirecciones(1)])
 });
@@ -191,6 +194,60 @@ createTelefono(value): FormGroup {
     subscribe(res => this.LstDistrito = res['data'].distritos);
     this.DireccionesForm.get('itemsDir')['controls'][i].get('distrito').setValue('');
   }
+
+  ListarDirecciones(id: number) {
+    if (id) {
+        this.ServicioDireccion.ListarDireccion( id.toString() , '' ).subscribe(res => {
+          if (res) {
+            console.log(res);
+            // tslint:disable-next-line:forin
+            for (let i = 0; i < res.length - 1 ; i++) {
+              this.addDirecciones();
+            }
+            // tslint:disable-next-line:forin
+            for (let i in res) {
+              this.DireccionesForm.get('itemsDir')['controls'][i].get('direccion').setValue(res[i].direccion);
+              this.DireccionesForm.get('itemsDir')['controls'][i].get('observacion').setValue(res[i].observacion);
+              this.DireccionesForm.get('itemsDir')['controls'][i].get('departamento').setValue(res[i].departamento);
+              this.ListarProvincia(res[i].departamento);
+              console.log(res[i].departamento);
+              this.DireccionesForm.get('itemsDir')['controls'][i].get('provincia').setValue(res[i].provincia);
+              this.ListarDistrito(res[i].provincia);
+              console.log(res[i].provincia);
+              this.DireccionesForm.get('itemsDir')['controls'][i].get('distrito').setValue(res[i].id_distrito);
+            }
+          }
+        });
+    }
+  }
+
+  ListarTelefonos(id: number) {
+    if (id) {
+        this.ServicioTelefono.ListarTelefono( id.toString() , '' ).subscribe(res => {
+          if (res) {
+            console.log(res);
+            // tslint:disable-next-line:forin
+            for (let i = 0; i < res.length - 1 ; i++) {
+              this.add();
+            }
+            // tslint:disable-next-line:forin
+            for (let i in res) {
+              this.TelefonosForm.get('items')['controls'][i].get('telefono').setValue(res[i].tlf_numero);
+              this.TelefonosForm.get('items')['controls'][i].get('observacion').setValue(res[i].tlf_observacion);
+              this.TelefonosForm.get('items')['controls'][i].get('tipo').setValue(res[i].id_tipo);
+            }
+          }
+        });
+    }
+  }/*ListarTelefonos() {
+    if (this.idcliente) {
+        this.ServicioTelefono.ListarTelefono( this.idcliente.toString() , '1').subscribe(res => {
+          if (res) {
+            this.VentasForm.get('telefono').setValue(res[0].tlf_numero);
+          }
+        });
+    }
+  }*/
 }
 
 export interface TipoTelefono {
