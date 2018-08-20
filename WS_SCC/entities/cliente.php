@@ -139,7 +139,7 @@ Class Cliente{
         $result->execute();
     
         $row = $result->fetch(PDO::FETCH_ASSOC);
-        
+        $this->idcliente = $row['idcliente'];
         $this->id_institucion=$row['id_institucion'];
         $this->id_sede=$row['id_sede'];
         $this->id_subsede=$row['id_subsede'];

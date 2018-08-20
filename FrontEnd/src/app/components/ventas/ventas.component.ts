@@ -64,6 +64,7 @@ export class VentasComponent implements OnInit {
   @ViewChild('InputCuota') FiltroCuota: ElementRef;
 
   @ViewChild('Cliente') ClienteAutoComplete: ElementRef;
+  @ViewChild('Vendedor') VendedorAutoComplete: ElementRef;
 
   constructor(
     /*@Inject(MAT_DIALOG_DATA) public data,*/
@@ -92,12 +93,11 @@ export class VentasComponent implements OnInit {
     this.ObtenerClientexId();
     this.ObtenerDireccion();
     this.ObtenerTelefono();
-    this.ListarVendedor();
+    this.ListarVendedor(this.VendedorAutoComplete.nativeElement.value);
     this.ListarTalonarioSerie();
     this.ListadoCronograma = new VentaDataSource(this.Servicio);
     //this.ListadoCliente = new ClienteDataSource(this.ClienteServicio);
     this.ListarClientes('', '', '', '' , this.ClienteAutoComplete.nativeElement.value , '');
-    this.ListadoCronograma.GenerarCronograma('', '', 0);
     this.VentasForm = this.FormBuilder.group({
       'talonario': [null, [
         Validators.required
@@ -166,7 +166,19 @@ export class VentasComponent implements OnInit {
         this.ListarClientes('', '', '', '' , this.VentasForm.value.cliente , '');
       })
      ).subscribe();
+
+     fromEvent(this.VendedorAutoComplete.nativeElement, 'keyup')
+    .pipe(
+      debounceTime(10),
+      distinctUntilChanged(),
+      tap(() => {
+        this.ListarVendedor(this.VentasForm.value.vendedor);
+      })
+     ).subscribe();
   }
+
+
+  
 
   displayCliente(cliente?: any): string | undefined {
     if (cliente) {
@@ -189,7 +201,7 @@ export class VentasComponent implements OnInit {
   /*Cronograma */
   GeneraCronograma() {
     this.ListadoCronograma.GenerarCronograma(this.VentasForm.value.fechapago.toISOString() ,
-    this.FiltroMonto.nativeElement.value, this.FiltroCuota.nativeElement.value);
+    this.VentasForm.value.montototal, this.VentasForm.value.cuotas, this.VentasForm.value.inicial);
 
   }
   /*VentanaAdjuntos.afterClosed().subscribe(res => {
@@ -253,6 +265,17 @@ export class VentasComponent implements OnInit {
     }
   }
 
+  GrabarVenta() {
+
+   this.Servicio.CrearVenta(this.VentasForm.value.contrato, this.VentasForm.getRawValue().cliente.id,
+    this.VentasForm.value.fechaventa, this.VentasForm.value.vendedor.id,
+    this.VentasForm.value.fechapago, this.VentasForm.value.inicial, this.VentasForm.value.cuotas,
+    this.VentasForm.value.tipopago, this.VentasForm.value.montototal, this.VentasForm.value.tipopago,
+    this.VentasForm.value.lugar, this.VentasForm.value.observaciones).subscribe(res => {
+      console.log(res);
+    });
+  }
+
   ObtenerDireccion() {
     if (this.idcliente) {
         this.DireccionServicio.ListarDireccion( this.idcliente.toString() , '1').subscribe(res => {
@@ -300,8 +323,8 @@ export class VentasComponent implements OnInit {
     this.ListarTalonarioNumero(event.value);
     this.VentasForm.get('contrato').setValue('');
   }
-  ListarVendedor() {
-    this.ServiciosGenerales.ListarVendedor('').subscribe( res => {
+  ListarVendedor(nombre: string) {
+    this.ServiciosGenerales.ListarVendedor(nombre).subscribe( res => {
       this.LstVendedor = [];
       // tslint:disable-next-line:forin
       for (let i in res) {

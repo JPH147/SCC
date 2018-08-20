@@ -7,9 +7,9 @@
       <div class="row3col-cliente">
 
           <mat-form-field>
-            <input #Cliente placeholder="Ingresa Cliente" matInput [matAutocomplete]="auto" formControlName= cliente>
-              <mat-autocomplete #auto="matAutocomplete" [displayWith] = "displayCliente">
-                <mat-option *ngFor="let cliente of LstCliente " [value]="cliente">
+            <input #Cliente placeholder="Ingresa Cliente" matInput [matAutocomplete]="auto2" formControlName= cliente>
+              <mat-autocomplete #auto2="matAutocomplete" [displayWith] = "displayCliente">
+                <mat-option *ngFor="let cliente of LstCliente" [value]="cliente">
                   {{cliente.nombre + ' ' + cliente.apellido}}
                 </mat-option>
             </mat-autocomplete>
@@ -146,16 +146,12 @@
          <textarea matInput placeholder="Observaciones" formControlName="observaciones"></textarea>
       </mat-form-field>
    </div>
-   <mat-grid-list cols="3" rowHeight="100px">
-   <div class="button-row">
-      <button mat-raised-button color="primary" class="agregar" (click)="Agregar()" [disabled]="VentasForm.invalid">Adjuntar</button>
-   </div>
-   <div class="button-row">
-      <button mat-raised-button color="primary" (click)="GeneraCronograma()" >Generar</button>
-   </div>
-   <div class="button-row">
-      <button mat-raised-button color="primary" class="agregar" (click)="Agregar()" [disabled]="VentasForm.invalid">Grabar</button>
-   </div>
+   <mat-grid-list cols="1" rowHeight="100px">
+   <mat-grid-tile>
+      <button mat-raised-button color="primary" class="boton-opciones" (click)="Agregar()" [disabled]="VentasForm.invalid">Adjuntar</button>
+      <button mat-raised-button color="primary" class="boton-opciones" (click)="GeneraCronograma()">Generar</button>
+      <button mat-raised-button color="primary" class="boton-opciones" (click)="GrabarVenta()" [disabled]="VentasForm.invalid">Grabar</button>
+    </mat-grid-tile>
 </mat-grid-list>
    <div class="row5col-producto" *ngFor="let producto of productos">
       <mat-form-field>
@@ -166,11 +162,15 @@
          <input matInput placeholder="IMEI">
       </mat-form-field>
       <a></a>
-      <button mat-mini-fab color="primary" (click)="AgregaProductos()">
+      <mat-form-field>
+        <input matInput placeholder="Precio">
+     </mat-form-field>
+     <a></a>
+      <button mat-mini-fab color="primary" (click)="AgregaProductos()" type="button">
          <mat-icon>add</mat-icon>
       </button>
       <a></a>
-      <button mat-mini-fab color="primary" (click)="EliminarProductos()">
+      <button mat-mini-fab color="primary" (click)="EliminarProductos()" type="button">
          <mat-icon>remove</mat-icon>
       </button>
    </div>

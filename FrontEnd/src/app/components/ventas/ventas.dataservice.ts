@@ -16,7 +16,7 @@ constructor(private Servicio: VentaService) { }
   return this.InformacionVenta.asObservable();
   }
 
-disconnect(){
+disconnect() {
 this.InformacionVenta.complete();
 this.CargandoInformacion.complete();
   }
@@ -24,16 +24,16 @@ this.CargandoInformacion.complete();
   GenerarCronograma(
     fechainicio: string,
     monto: any,
-    numerocuotas: number
+    numerocuotas: number,
+    inicial: number
   // tslint:disable-next-line:one-line
   ){
   this.CargandoInformacion.next(true);
 
-  this.Servicio.Listado(fechainicio, monto, numerocuotas)
+  this.Servicio.GenerarCronograma(fechainicio, monto, numerocuotas, inicial)
   .pipe(catchError(() => of([])),
   finalize(() => this.CargandoInformacion.next(false))
   )
   .subscribe(res => this.InformacionVenta.next(res));
   }
-
 }

@@ -21,6 +21,7 @@
 		$cliente->readxId();
 
 	    $cliente_list = array(
+				"id" => $cliente->idcliente,
 				"institucion"=>$cliente->id_institucion,
 				"sede"=>$cliente->id_sede,
                 "subsede"=>$cliente->id_subsede,
