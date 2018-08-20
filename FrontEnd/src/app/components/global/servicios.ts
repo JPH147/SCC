@@ -201,7 +201,7 @@ export class ServiciosGenerales {
         })
         .pipe(map(res => {
             if (res['codigo'] === 0) {
-
+              console.log(res['data'].vendedores);
               return res['data'].vendedores;
             } else {
                 console.log ('Error al importar los datos, revisar servicio');
@@ -226,9 +226,32 @@ export class ServiciosGenerales {
         }));
     }
 
+    ListarNumeroTalonario(prserie: string): Observable <any> {
+      return this.http.get(this.url + 'talonario/read-numero.php', {
+        params: new  HttpParams()
+        .set('prserie', prserie)
+      })
+      .pipe(map(res => {
+          if (res['codigo'] === 0) {
+            return res['data'].numeros;
+          } else {
+              console.log ('Error al importar los datos, revisar servicio');
+          }
+      }));
+    }
 
-
-
+    ListarSerie(): Observable <any> {
+      return this.http.get(this.url + 'talonario/read-serie.php', {
+        params: new  HttpParams()
+      })
+      .pipe(map(res => {
+          if (res['codigo'] === 0) {
+            return res['data'].series;
+          } else {
+              console.log ('Error al importar los datos, revisar servicio');
+          }
+      }));
+    }
   }
 
 export interface ListarProductos {
@@ -254,7 +277,6 @@ id: number;
 vndNombre: string;
 scsNombre: string;
 }
-
 
   export interface TipoTransaccion {
   numero: number;
@@ -303,6 +325,14 @@ export interface Sede {
 }
 export interface Institucion {
   numero: number;
-id: number;
-nombre: string;
+  id: number;
+  nombre: string;
+}
+export interface Talonario {
+  id: number;
+  serie: number;
+  numero: number;
+}
+export interface Serie {
+  serie: number;
 }

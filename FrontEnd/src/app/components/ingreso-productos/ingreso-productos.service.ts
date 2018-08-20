@@ -19,41 +19,48 @@ constructor(private http: HttpClient) {}
 
 AgregarCompraMercaderia(
 
-  id_almacen: number,
-  id_tipo: number,
-  id_referencia: number,
-  id_proveedor: number,
-  fecha: Date,
-  documento: string
+    pralmacen: number,
+      prtipo: number,
+      pr_referencia: number,
+      prproveedor: number,
+      prfecha: Date,
+      prdocumento: string
+
   ): Observable <any> {
 
       // tslint:disable-next-line:prefer-const
-      let F = moment(fecha).format('YYYY/MM/DD').toString();
+      let params = new HttpParams()
+      .set('pralmacen', pralmacen.toString())
+      .set('prtipo', prtipo.toString())
+      .set('prreferencia', pr_referencia.toString())
+      .set('prproveedor', prproveedor.toString())
+      .set('prfecha', moment (prfecha).format('YYYY/MM/DD').toString())
+      .set('prdocumento', prdocumento.toString());
 
-      const params = '&pralmacen=' + id_almacen + '&prtipo=' + id_tipo + '&prreferencia=' + id_referencia +
-       '&prproveedor=' + id_proveedor + '&prfecha=' + F + '&prdocumento=-' ;
-       console.log(params);
       // tslint:disable-next-line:prefer-const
       let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
       return this.http.post(this.url + 'transaccioncabecera/create.php', params, {headers: headers});
      }
 
-
      AgregarDevolucionCliente(
 
-      id_almacen: number,
-      id_tipo: number,
-      id_referencia: number,
-      id_cliente: number,
-      fecha: Date,
-      documento: string
+      pralmacen: number,
+      prtipo: number,
+      pr_referencia: number,
+      prcliente: number,
+      prfecha: Date,
+      prdocumento: string
       ): Observable <any> {
 
-          // tslint:disable-next-line:prefer-const
-      let F = moment(fecha).format('YYYY/MM/DD').toString();
-      const params = '&pralmacen=' + id_almacen + '&prtipo=' + id_tipo + '&prreferencia=' + id_referencia +
-       '&prcliente=' + id_cliente + '&prfecha=' + F + '&prdocumento=-';
-       console.log(params);
+        // tslint:disable-next-line:prefer-const
+        let params = new HttpParams()
+          .set('pralmacen', pralmacen.toString())
+          .set('prtipo', prtipo.toString())
+          .set('prreferencia', pr_referencia.toString())
+          .set('prcliente', prcliente.toString())
+          .set('prfecha', moment (prfecha).format('YYYY/MM/DD').toString())
+          .set('prdocumento', prdocumento.toString());
+
       // tslint:disable-next-line:prefer-const
       let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
       return this.http.post(this.url + 'transaccioncabecera/create.php', params, {headers: headers});
@@ -62,18 +69,24 @@ AgregarCompraMercaderia(
 
      AgregarDevolucionVendedor(
 
-      id_almacen: number,
-      id_tipo: number,
-      id_referencia: number,
-      id_vendedor: number,
-      fecha: Date,
-      documento: string
+      pralmacen: number,
+      prtipo: number,
+      pr_referencia: number,
+      prprvendedor: number,
+      prfecha: Date,
+      prdocumento: string
+
       ): Observable <any> {
 
-        let F = moment(fecha).format('YYYY/MM/DD').toString();
-      const params = '&pralmacen=' + id_almacen + '&prtipo=' + id_tipo + '&prreferencia=' + id_referencia +
-       '&prvendedor=' + id_vendedor + '&prfecha=' + F + '&prdocumento=-';
-       console.log(params);
+        // tslint:disable-next-line:prefer-const
+        let params = new HttpParams()
+        .set('pralmacen', pralmacen.toString())
+        .set('prtipo', prtipo.toString())
+        .set('prreferencia', pr_referencia.toString())
+        .set('prcliente', prprvendedor.toString())
+        .set('prfecha', moment (prfecha).format('YYYY/MM/DD').toString())
+        .set('prdocumento', prdocumento.toString());
+
       // tslint:disable-next-line:prefer-const
       let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
       return this.http.post(this.url + 'transaccioncabecera/create.php', params, {headers: headers});
@@ -81,19 +94,24 @@ AgregarCompraMercaderia(
 
 
      AgregarTransferenciaSucursal(
+      pralmacenSale: number,
+      prtipo: number,
+      prreferencia: number,
+      pralmacenEntra: number,  // Sucursal
+      perfecha: Date,
+      prdocumento: string,
 
-      id_almacen: number,
-      id_tipo: number,
-      id_referencia: number,
-      fecha: Date,
-      documento: string
       ): Observable <any> {
 
-        let F = moment(fecha).format('YYYY/MM/DD').toString();
+        // tslint:disable-next-line:prefer-const
+        let params = new HttpParams()
+        .set('pralmacen', pralmacenSale.toString())
+        .set('prtipo', prtipo.toString())
+        .set('prreferencia', prreferencia.toString())
+        .set('prsucursal', pralmacenEntra.toString())
+        .set('prfecha', moment(perfecha).format('YYYY/MM/DD').toString())
+        .set('prdocumento', prdocumento.toString());
 
-      const params = '&pralmacen=' + id_almacen + '&prtipo=' + id_tipo + '&prreferencia=' + id_referencia +
-      '&prfecha=' + F + '&prdocumento=-';
-       console.log(params);
       // tslint:disable-next-line:prefer-const
       let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
       return this.http.post(this.url + 'transaccioncabecera/create.php', params, {headers: headers});

@@ -12,7 +12,6 @@ export class SalidaProductosService {
 
   constructor(private http: HttpClient) { }
 
-
   SalidaTransferenciaAlmacen(
   pralmacen: number,
   prtipo: number,
@@ -52,6 +51,4 @@ export class SalidaProductosService {
 
     return this.http.post(this.url + 'transacciondetalle/create.php', params, {headers: headers});
   }
-
-
 }

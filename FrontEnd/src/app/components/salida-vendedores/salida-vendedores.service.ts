@@ -22,7 +22,7 @@ export class SalidaVendedoresService {
     movilidad:boolean,
     observacion:string
     ): Observable<any> {
-    
+
     let TM:string, Fecha:string;
 
     if (movilidad) {
@@ -57,13 +57,13 @@ export class SalidaVendedoresService {
     dni: string,
     nombre:string
     ): Observable<any> {
-    
+
     let params = new HttpParams()
            .set('prcabecera', cabecera.toString())
            .set('prvehiculo', placa)
            .set('prchoferdni', dni)
            .set('prchofernombre', nombre)
-    
+
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'salidacabecera/create-movilidad.php', params, {headers: headers});
@@ -75,13 +75,13 @@ export class SalidaVendedoresService {
     precio: number,
     cantidad:number
     ): Observable<any> {
-    
+
     let params = new HttpParams()
            .set('prcabecera', cabecera.toString())
            .set('prserie', serie.toString())
            .set('prprecio', precio.toString())
            .set('prcantidad', cantidad.toString())
-    
+
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'salidacabecera/create-producto.php', params, {headers: headers});
@@ -92,14 +92,15 @@ export class SalidaVendedoresService {
     vendedor: number,
     comision: number
     ): Observable<any> {
-    
+
     let params = new HttpParams()
            .set('prcabecera', cabecera.toString())
            .set('prvendedor', vendedor.toString())
            .set('prcomision', comision.toString())
-    
+
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'salidacabecera/create-vendedor.php', params, {headers: headers});
   }
 }
+
