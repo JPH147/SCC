@@ -25,11 +25,11 @@ export class SalidaVendedoresService {
     
     let TM:string, Fecha:string;
 
-  	if (movilidad) {
-  		TM='1'
-  	} else{
-  		TM='0'
-  	}
+    if (movilidad) {
+        TM = '1';
+    } else {
+        TM = '0';
+    }
 
     if (fecha) {
       Fecha=moment(fecha).format("YYYY/MM/DD").toString()
@@ -82,8 +82,6 @@ export class SalidaVendedoresService {
            .set('prprecio', precio.toString())
            .set('prcantidad', cantidad.toString())
     
-    console.log(params);
-
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'salidacabecera/create-producto.php', params, {headers: headers});
@@ -104,6 +102,4 @@ export class SalidaVendedoresService {
 
     return this.http.post(this.url + 'salidacabecera/create-vendedor.php', params, {headers: headers});
   }
-
-
 }

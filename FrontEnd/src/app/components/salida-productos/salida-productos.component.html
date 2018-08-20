@@ -86,13 +86,13 @@
 
               <mat-grid-tile>
                 <mat-form-field class="example-full-width">
-                  <input matInput placeholder="Cantidad">
+                  <input matInput placeholder="Cantidad" formControlName="cantidad">
                 </mat-form-field>
               </mat-grid-tile>
 
               <mat-grid-tile>
-                <button mat-mini-fab color="primary" (click) = " AgregarSerieSalida (articulo) " matTooltip="Ingresa Serie Producto" type="button"><mat-icon> reorder </mat-icon> </button>
-                <button mat-mini-fab color="primary" matTooltip="Elimina  Producto" type="button"><mat-icon>delete</mat-icon></button>
+                <button mat-mini-fab color="primary" (click) = " AgregarSerieSalida (producto.value.producto,i) " matTooltip="Ingresa Serie Producto" type="button"><mat-icon> reorder </mat-icon> </button>
+                <button mat-mini-fab color="primary" matTooltip="Elimina  Producto" type="button" (click)="EliminarProducto(producto.value.producto,i)"><mat-icon>delete</mat-icon></button>
               </mat-grid-tile>
 
             </mat-grid-list>
@@ -108,7 +108,7 @@
       <mat-card-actions>
           <mat-grid-list cols="1"  rowHeight="55px">
               <mat-grid-tile>
-                <button mat-raised-button  color="primary" [disabled]="SalidaProductosForm.invalid">Grabar</button>
+                <button mat-raised-button  color="primary" (click)="GuardarTransferenciaAlmacen(SalidaProductosForm)">Grabar</button>
                 <button mat-raised-button  color="accent" type="button">Limpiar</button>
               </mat-grid-tile>
             </mat-grid-list>

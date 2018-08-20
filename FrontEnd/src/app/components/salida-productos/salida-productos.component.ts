@@ -1,3 +1,4 @@
+import { SalidaProductosService } from './salida-productos.service';
 import { ServiciosGenerales, Almacen, ListarCliente, ListarVendedor } from './../global/servicios';
 import { ventanaseriesalida } from './ventana-seriesalida/ventanaseriesalida';
 import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList } from '@angular/core';
@@ -19,8 +20,6 @@ import {StockService} from '../stock/stock.service'
 
 export class SalidaProductosComponent implements OnInit {
 
-  // @ViewChild ('')
-
   public SalidaProductosForm: FormGroup;
   public articulos: Array <articulo>;
   public contador: number;
@@ -29,7 +28,7 @@ export class SalidaProductosComponent implements OnInit {
   public serieventana: string;
   public almacen: string;
   public almacen1: string;
-  public fechaingreso: Date;
+  public fechamov: Date;
   public producto: string;
   public Producto: Array<any>;
   public Series: any[]=[];
@@ -40,6 +39,7 @@ export class SalidaProductosComponent implements OnInit {
     public DialogoSerie: MatDialog,
     private FormBuilder: FormBuilder,
     private Servicios: ServiciosGenerales,
+    private SalidaProductosServicios: SalidaProductosService,
     private Articulos: StockService
   ) {}
 
@@ -63,7 +63,6 @@ export class SalidaProductosComponent implements OnInit {
   ngAfterViewInit(){
 
     this.FiltroProducto.changes.subscribe(res=>{
-
       for (let i in this.FiltroProducto['_results']) {
         fromEvent(this.FiltroProducto['_results'][i].nativeElement,'keyup')
         .pipe(
@@ -89,7 +88,6 @@ export class SalidaProductosComponent implements OnInit {
   }
 
   ResetearForm(event){
-    console.log(event)
     this.ResetearFormArray(this.productos);
     this.Series=[];
     this.Articulos.ListarStock(event.value.nombre, '', '', '', '', 1, 20, 'descripcion asc').subscribe(res=>this.Producto=res['data'].stock)
@@ -114,14 +112,20 @@ export class SalidaProductosComponent implements OnInit {
   };
 
   ProductoSeleccionado(filtro){
-    this.Articulos.ListarStock(this.SalidaProductosForm.get('almacen').value, '', '', '', filtro, 1, 20, 'descripcion asc').subscribe(res=>{
+    this.Articulos.ListarStock(this.SalidaProductosForm.get('almacen').value.nombre, '', '', '', filtro, 1, 20, 'descripcion asc').subscribe(res=>{
       this.Producto=res['data'].stock;
       for (let i of this.SalidaProductosForm['controls'].productos.value) {
         if (i.producto) {
-          this.EliminarProducto(this.Producto,i.producto.id_producto)
+          this.EliminarElemento(this.Producto,i.producto.id_producto)
         }
       }
     });
+  }
+
+  EliminarElemento(array,value){
+     array.forEach( (item, index) => {
+       if(item.id_producto === value) array.splice(index,1);
+     });
   }
 
   Aceptar() {
@@ -129,14 +133,26 @@ export class SalidaProductosComponent implements OnInit {
   }
 
 
-  AgregarSerieSalida(articulo) {
-    console.log(articulo);
+  AgregarSerieSalida(producto,index) {
+
     const serieventana = this.DialogoSerie.open(ventanaseriesalida, {
-      width: '600px'
+      width: '800px',
+      data:{almacen:this.SalidaProductosForm.get('almacen').value.nombre, id_producto:producto.id_producto, precio:producto.precio, series:this.Series}
     });
 
     serieventana.afterClosed().subscribe(res=>{
-      console.log(res)
+      if (res) {
+        this.EliminarElemento(this.Series,res[0].id_producto);
+      }
+      let ip:number=0;
+      for (let i in res) {
+        this.Series.push({id_producto:res[i].id_producto,id_serie:res[i].id_serie, serie:res[i].serie,precio:res[i].precio, cantidad:res[i].cantidad, considerar:res[i].considerar})
+        // Saber cuántos elementos de RES son del producto
+        if (res[i].id_producto=producto.id_producto && res[i].considerar==true) {
+          ip++
+        }
+      }
+      this.SalidaProductosForm.get('productos')['controls'][index].get('cantidad').setValue(ip)
     })
   }
 
@@ -153,36 +169,31 @@ ListarAlmacen() {
   this.Servicios.ListarAlmacen().subscribe( res => {
     this.almacenes = res;
   });
-
 }
 
-// ListarProductos(nombre: string) {
-//   this.Servicios.ListarProductos(nombre).subscribe( res => {
-//     this.productos = [];
-//     // tslint:disable-next-line:forin
-//     for ( let i in res) {
-//        this.productos.push(res [i]);
-
-//       }
-
-//   });
-// }
-
-// AlmacenSeleccionado(event){
-
-//   // this.EliminarAlmacen(this.almacenes,event.value)
-// }
-
-EliminarAlmacen(array,value){
-   array.forEach( (item, index) => {
-     if(item.id === value) array.splice(index,1);
-   });
+GuardarTransferenciaAlmacen(formulario) {
+  // console.log(this.SalidaProductosForm['controls'].productos)
+  this.SalidaProductosServicios.SalidaTransferenciaAlmacen(
+  formulario.value.almacen.id,
+  5,
+  4,
+  formulario.value.almacen1,
+  formulario.value.fechamov,
+  ).subscribe (res=>{
+    // Grabar datos de productos
+    for (let i of this.Series) {
+      if (i.considerar) {
+        this.SalidaProductosServicios.AgregarProducto(
+          res.data,
+          i.id_serie,
+          i.precio,
+          i.cantidad * (-1)
+        ).subscribe(res=>console.log(res))
+      }
+    }
+  });
 }
 
-// Guardar(formulario) {
-  // this.SalidaProductoServicios.AgregarCompraMercaderia(formulario.value.almacen, formulario.value.tipoIngreso,
-  //  formulario.value.docReferencia, formulario.value.proveedor.id ,
-    // formulario.value.fecingreso, formulario.value.docReferencia).subscribe (res => console.log(res));
 
 }
 

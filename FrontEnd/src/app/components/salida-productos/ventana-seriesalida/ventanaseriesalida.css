@@ -1,3 +1,7 @@
 .boton {
   float: right;
-  }
+}
+
+.formulario-grande{
+  width: 90%
+}

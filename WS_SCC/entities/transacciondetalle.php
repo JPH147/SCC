@@ -136,7 +136,6 @@ Class TransaccionDetalle{
         $query = "call sp_creartransacciondetalle(
             :prcabecera,
             :prproductoserie,
-            :prserie,
             :prcantidad,
             :prprecio
             )";
