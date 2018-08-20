@@ -131,8 +131,7 @@ Class ProductoSerie{
 
         $query = "call sp_crearproductoserie(
             :prproducto,
-            :prserie,
-            @total
+            :prserie
             )";
 
         $result = $this->conn->prepare($query);

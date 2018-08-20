@@ -37,7 +37,6 @@ AgregarCompraMercaderia(
       .set('prfecha', moment (prfecha).format('YYYY/MM/DD').toString())
       .set('prdocumento', prdocumento.toString());
 
-      // tslint:disable-next-line:prefer-const
       let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
       return this.http.post(this.url + 'transaccioncabecera/create.php', params, {headers: headers});
      }
@@ -115,4 +114,24 @@ AgregarCompraMercaderia(
       // tslint:disable-next-line:prefer-const
       let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
       return this.http.post(this.url + 'transaccioncabecera/create.php', params, {headers: headers});
-     } }
+     } 
+
+  CrearTransaccionDetalle(
+    id_cabecera: number,
+    id_serie: number,
+    cantidad: number,
+    precio:number
+  ): Observable<any> {
+    
+    let params = new HttpParams()
+    .set('prcabecera',id_cabecera.toString())
+    .set('prproductoserie',id_serie.toString())
+    .set('prcantidad',cantidad.toString())
+    .set('prprecio',precio.toString())
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    return this.http.post(this.url + 'transacciondetalle/create.php', params, {headers: headers});
+  }
+
+
+}

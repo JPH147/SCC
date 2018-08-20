@@ -1,25 +1,21 @@
+import { Component, OnInit, ViewChild,ElementRef, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
 import { Cliente } from './../clientes/clientes.service';
 import { IngresoProductoService } from './ingreso-productos.service';
+import {ServiciosProductoSerie} from '../global/productoserie';
 import { ServiciosGenerales, Almacen, ListarCliente, ListarVendedor } from './../global/servicios';
 import { ventanaseries } from './ventana-series/ventanaseries';
-import { Component, OnInit, ViewChild,ElementRef } from '@angular/core';
-import { FormControl, FormBuilder, FormGroup, Validators, PatternValidator } from '@angular/forms';
+import { FormControl, FormBuilder, FormGroup, Validators, PatternValidator,FormArray } from '@angular/forms';
 import {Observable, fromEvent} from 'rxjs';
-import { map, startWith, subscribeOn } from 'rxjs/operators';
-import { SelectionModel, DataSource } from '@angular/cdk/collections';
-import {MatTableDataSource} from '@angular/material';
-import { MatDialog } from '@angular/material';
-import { eventNames } from 'cluster';
+import { MatDialog,MatSnackBar } from '@angular/material';
 import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
-import * as moment from 'moment';
-import { disableDebugTools } from '@angular/platform-browser';
+import {ProductoService} from '../productos/productos.service';
 
 
 @Component({
   selector: 'app-ingreso-productos',
   templateUrl: './ingreso-productos.component.html',
   styleUrls: ['./ingreso-productos.component.css'],
-  providers: [ServiciosGenerales, IngresoProductoService]
+  providers: [ServiciosGenerales, IngresoProductoService,ProductoService,ServiciosProductoSerie]
 })
   export class IngresoProductosComponent implements OnInit {
 
@@ -28,8 +24,6 @@ import { disableDebugTools } from '@angular/platform-browser';
     @ViewChild('Vendedor') FiltroVendedor: ElementRef;
 
     public IngresoProductoForm: FormGroup;
-    public articulos: Array <articulo>;
-    public productos: Array<any> = [];
     public contador: number;
     public almacenes: Array<any> = [];
     public TipoIngresos: Array<any> = [];
@@ -48,18 +42,23 @@ import { disableDebugTools } from '@angular/platform-browser';
     public  data;
 
 
+    @ViewChildren('InputProducto') FiltroProducto: QueryList<any>;
+    public productos: FormArray;
+    public Series: any[]=[];
+    public Producto: Array<any>;
+
     selected = 'option2';
     myControl = new FormControl();
     filteredOptions: Observable<string[]>;
 
-
-
     constructor(public DialogoSerie: MatDialog,
     // tslint:disable-next-line:no-shadowed-variable
       private FormBuilder: FormBuilder,
-    /* public data,*/
+      public snackBar: MatSnackBar,
       private Servicios: ServiciosGenerales,
       private IngresoProductoservicios: IngresoProductoService,
+      private Articulos: ProductoService,
+      private SSeries: ServiciosProductoSerie
     ) {}
 
     ngOnInit() {
@@ -69,7 +68,9 @@ import { disableDebugTools } from '@angular/platform-browser';
       this.ListarProveedor('');
       this.ListarCliente('');
       this.ListarVendedor('');
-      this.ListarProductos('');
+
+      // this.SSeries.CrearProductoSerie(10,"JPERTUI").subscribe(res=>console.log(res.data))
+      // this.IngresoProductoservicios.CrearTransaccionDetalle(40,40,1,1000).subscribe(res=>console.log(res))
 
       this.IngresoProductoForm = this.FormBuilder.group({
           'almacen': [null, [Validators.required] ],
@@ -85,14 +86,107 @@ import { disableDebugTools } from '@angular/platform-browser';
           'producto': [null, [Validators.required]],
           'cantidad': [null, [Validators.required]],
           'precioUnitario': [null, [Validators.required]],
+          productos: this.FormBuilder.array([this.CrearProducto()])
       });
-
-      this.contador = 1;
-      this.articulos = [
-        {numero: this.contador, nombre: '', cantidad: null, precio: null}
-      ];
-
     }
+
+    ngAfterViewInit() {
+
+      fromEvent(this.FiltroProveedor.nativeElement, 'keyup')
+      .pipe(
+        debounceTime(10),
+        distinctUntilChanged(),
+        tap(() => {
+          this.ListarProveedor(this.FiltroProveedor.nativeElement.value);
+        })
+       ).subscribe();
+
+      this.FiltroProducto.changes.subscribe(res=>{
+        for (let i in this.FiltroProducto['_results']) {
+          fromEvent(this.FiltroProducto['_results'][i].nativeElement,'keyup')
+          .pipe(
+              debounceTime(100),
+              distinctUntilChanged(),
+              tap(()=>{
+                if (this.FiltroProducto['_results'][i].nativeElement.value) {
+                  this.ProductoSeleccionado(this.FiltroProducto['_results'][i].nativeElement.value)
+                }
+              })
+            ).subscribe()
+        }
+      })
+    }
+
+    /*********************************************/
+    CrearProducto():FormGroup{
+      return this.FormBuilder.group({
+        'producto':[{value:null, disabled:false},[
+          Validators.required
+        ]],
+        'cantidad':[{value:null, disabled:true},[
+        ]],
+        'precioUnitario':[{value:null, disabled:false},[
+          Validators.required,
+          Validators.pattern ('[0-9- ]+')
+        ]],
+      })
+    }
+
+    AgregarProducto():void{
+      this.productos = this.IngresoProductoForm.get('productos') as FormArray;
+      this.productos.push(this.CrearProducto())
+    };
+
+    ResetearForm(event){
+      this.ResetearFormArray(this.productos);
+      this.Series=[];
+      this.Articulos.Listado('', '', '', '', 1, 10, "descripcion", "asc").subscribe(res=>this.Producto=res['data'].productos)
+    }
+
+    ResetearFormArray = (formArray: FormArray) => {
+      if (formArray) {
+        formArray.reset()
+        while (formArray.length !== 1) {
+          formArray.removeAt(0)
+        }
+      }
+    }
+
+    EliminarProducto(producto,i){
+      this.productos.removeAt(i);
+    };
+
+    EliminarElemento(array,value){
+       array.forEach( (item, index) => {
+         if(item.id == value) array.splice(index,1);
+       });
+    }
+
+    EliminarElemento2(array,value){
+       array.forEach( (item, index) => {
+         if(item.id_producto == value) array.splice(index,1);
+       });
+    }
+
+    ProductoSeleccionado(filtro){
+      this.Articulos.Listado('', '', '', '', 1, 10, "descripcion", "asc").subscribe(res=>{
+        this.Producto=res['data'].productos;
+        for (let i of this.IngresoProductoForm['controls'].productos.value) {
+          if (i.producto) {
+            this.EliminarElemento(this.Producto,i.producto.id)
+          }
+        }
+      });
+    }
+
+    displayFn2(producto) {
+      if (producto){
+        return producto.descripcion 
+      }else{
+        return ""
+      }
+    }
+    /*********************************************/
 
     displayCliente(cliente?: any): string | undefined {
       return cliente ? cliente.nombre + ' ' + cliente.apellido : undefined;
@@ -106,6 +200,7 @@ import { disableDebugTools } from '@angular/platform-browser';
       return vendedor ? vendedor.nombre : undefined;
     }
 
+
     // Selector Proveedores activos
     ListarProveedor(nombre: string) {
       this.Servicios.ListarProveedor(nombre).subscribe( res => {
@@ -116,20 +211,6 @@ import { disableDebugTools } from '@angular/platform-browser';
           this.proveedores.push(res[i]);
         }
       });
-    }
-
-    // tslint:disable-next-line:use-life-cycle-interface
-    ngAfterViewInit() {
-
-      fromEvent(this.FiltroProveedor.nativeElement, 'keyup')
-      .pipe(
-        debounceTime(10),
-        distinctUntilChanged(),
-        tap(() => {
-          this.ListarProveedor(this.FiltroProveedor.nativeElement.value);
-        })
-       ).subscribe();
-
     }
 
     // Selector tipo de ingresos
@@ -181,100 +262,100 @@ import { disableDebugTools } from '@angular/platform-browser';
 
     }
 
-    ListarProductos(nombre: string) {
-      this.Servicios.ListarProductos(nombre).subscribe( res => {
-        this.productos = [];
-        // tslint:disable-next-line:forin
-        for ( let i in res) {
-           this.productos.push(res [i]);
-                  }
+  AgregarSerie(producto,index) {
 
-      });
+    const serieventana = this.DialogoSerie.open(ventanaseries, {
+      width: '800px',
+      data: {producto: producto.get('producto').value.id, series:this.Series}
+    });
 
-    }
+    serieventana.afterClosed().subscribe(res=>{
+      if (res) {
 
-  agregar() {
-    this.contador++;
-    this.articulos.push({numero: this.contador, nombre: '', cantidad: null, precio: null});
+        for (let i of res) {
+          this.EliminarElemento2(this.Series,i.producto)
+        }
+
+        for (let i of res) {
+          if (i.series != '') {
+            this.Series.push({id_producto: producto.get('producto').value.id, serie: i.series})
+          }
+        }
+        this.IngresoProductoForm.get('productos')['controls'][index].get('cantidad').setValue(res.length)
+
+      }
+    })
   }
 
-  Aceptar() {
-    console.log(this.articulos);
-  }
 
 
-AgregarSerie() {
-  const serieventana = this.DialogoSerie.open(ventanaseries, {
-    width: '600px'
-  });
-
-  }
-
-  // Guardar Datos Formulario Ingreso Productos Almacen
   Guardar(formulario) {
-   // console.log(this.IngresoProductoForm);
-   // console.log(moment(this.IngresoProductoForm.get('fecingreso').value).format('DD/MM/YYYY'));
 
-   // tslint:disable-next-line:prefer-const
    let tipoingreso = formulario.value.tipoIngreso;
 
-   if (tipoingreso === 1) {
-     console.log(tipoingreso);
+   if (tipoingreso == 1) {
     this.IngresoProductoservicios.AgregarCompraMercaderia(
       formulario.value.almacen,
       1,
       1,
-      formulario.value.proveedor.id ,
+      formulario.value.proveedor.id,
       formulario.value.fecingreso,
-      formulario.value.docReferencia).subscribe (res => console.log(res));
+      formulario.value.docReferencia).subscribe (res => {
+        let id_cabecera= res.data
+
+          for (let i of formulario.value.productos) {
+            for (let is of this.Series) {
+              if (i.producto.id == is.id_producto) {
+                this.SSeries.CrearProductoSerie(i.producto.id,is.serie).subscribe(response=>{
+                  this.IngresoProductoservicios.CrearTransaccionDetalle(id_cabecera,response.data,1,i.precioUnitario).subscribe()
+                })
+              }
+            }
+          }
+        this.IngresoProductoForm.reset();
+        this.Series=[];
+        this.ResetearFormArray(this.productos);
+        this.snackBar.open("El ingreso se guardó satisfactoriamente", '', {
+          duration: 2000,
+        });
+      });
    }
 
-   if (tipoingreso === 2) {
-    this.IngresoProductoservicios.AgregarDevolucionCliente(
-      formulario.value.almacen,
-      2,
-      2,
-      formulario.value.cliente.id,
-      formulario.value.fecingreso,
-      formulario.value.docReferencia).subscribe (res => console.log(res));
-   }
+   
 
-   if (tipoingreso === 6) {
-    this.IngresoProductoservicios.AgregarDevolucionVendedor (
-      formulario.value.almacen,
-      6,
-      5,
-      formulario.value.vendedor.id,
-      formulario.value.fecingreso,
-      formulario.value.docReferencia).subscribe (res => console.log(res));
-   }
+   // if (tipoingreso === 2) {
+   //  this.IngresoProductoservicios.AgregarDevolucionCliente(
+   //    formulario.value.almacen,
+   //    2,
+   //    2,
+   //    formulario.value.cliente.id,
+   //    formulario.value.fecingreso,
+   //    formulario.value.docReferencia).subscribe (res => console.log(res));
+   // }
 
-   if (tipoingreso === 7) {
-    this.IngresoProductoservicios.AgregarTransferenciaSucursal (
-      formulario.value.almacen,
-      7,
-      4,
-      formulario.value.almacen1,
-      formulario.value.fecingreso,
-       formulario.value.docReferencia).subscribe (res => console.log(res));
-   }
+   // if (tipoingreso === 6) {
+   //  this.IngresoProductoservicios.AgregarDevolucionVendedor (
+   //    formulario.value.almacen,
+   //    6,
+   //    5,
+   //    formulario.value.vendedor.id,
+   //    formulario.value.fecingreso,
+   //    formulario.value.docReferencia).subscribe (res => console.log(res));
+   // }
 
-     this.IngresoProductoForm.reset();
+   // if (tipoingreso === 7) {
+   //  this.IngresoProductoservicios.AgregarTransferenciaSucursal (
+   //    formulario.value.almacen,
+   //    7,
+   //    4,
+   //    formulario.value.almacen1,
+   //    formulario.value.fecingreso,
+   //     formulario.value.docReferencia).subscribe (res => console.log(res));
+   // }
 
+   // this.IngresoProductoForm.reset();
+   // this.Series=[];
+   // this.ResetearFormArray(this.productos);
   }
 
-  Cambio(evento) {
-    console.log(evento);
-  }
-
-} // Fin de la Clase IngresoProductoComponent
-
-
-// tslint:disable-next-line:class-name
-export interface articulo {
-  numero: number;
-  nombre: string;
-  cantidad: number;
-  precio: number;
 }
-

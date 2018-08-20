@@ -148,8 +148,7 @@ Class TransaccionCabecera{
             :prsucursal,
             :prvendedor,
             :prfecha,
-            :prdocumento,
-            @id
+            :prdocumento
         )";
 
         $result = $this->conn->prepare($query);

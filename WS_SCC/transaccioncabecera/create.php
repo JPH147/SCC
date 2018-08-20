@@ -29,7 +29,6 @@
             $transaccion->id_vendedor = !empty($_POST["prvendedor"]) ? $_POST["prvendedor"] : null;
             $transaccion->fecha = $_POST["prfecha"];
             $transaccion->documento = !empty($_POST["prdocumento"]) ? $_POST["prdocumento"] : '';
-            $transaccion->id_transaccion = 0;
             
             if($transaccion->create())
             {
