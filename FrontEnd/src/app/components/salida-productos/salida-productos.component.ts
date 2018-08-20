@@ -6,22 +6,21 @@ import {FormControl, FormBuilder, FormGroup, Validators, FormArray} from '@angul
 import {Observable, fromEvent} from 'rxjs';
 import {map, startWith, debounceTime, tap, distinctUntilChanged} from 'rxjs/operators';
 import {SelectionModel} from '@angular/cdk/collections';
-import {MatTableDataSource} from '@angular/material';
+import {MatTableDataSource, MatSnackBar} from '@angular/material';
 import { MatDialog } from '@angular/material';
 import {StockService} from '../stock/stock.service'
-
+import {ServiciosProductoSerie} from '../global/productoserie'
 
 @Component({
   selector: 'app-salida-productos',
   templateUrl: './salida-productos.component.html',
   styleUrls: ['./salida-productos.component.css'],
-  providers: [ServiciosGenerales,StockService]
+  providers: [ServiciosGenerales,StockService,ServiciosProductoSerie]
 })
 
 export class SalidaProductosComponent implements OnInit {
 
   public SalidaProductosForm: FormGroup;
-  public articulos: Array <articulo>;
   public contador: number;
   public almacenes: Array<any> = [];
   public productos: FormArray;
@@ -38,9 +37,11 @@ export class SalidaProductosComponent implements OnInit {
   constructor (
     public DialogoSerie: MatDialog,
     private FormBuilder: FormBuilder,
+    public snackBar: MatSnackBar,
     private Servicios: ServiciosGenerales,
     private SalidaProductosServicios: SalidaProductosService,
-    private Articulos: StockService
+    private Articulos: StockService,
+    private SSeries:ServiciosProductoSerie
   ) {}
 
   ngOnInit() {
@@ -54,10 +55,6 @@ export class SalidaProductosComponent implements OnInit {
       productos: this.FormBuilder.array([this.CrearProducto()])
     });
 
-      this.contador = 1;
-      this.articulos = [
-        {numero: this.contador, nombre: '', cantidad: null, precio: null}
-      ];
   }
 
   ngAfterViewInit(){
@@ -82,8 +79,8 @@ export class SalidaProductosComponent implements OnInit {
     return this.FormBuilder.group({
       'producto':[{value:null, disabled:false},[
       ]],
-      'cantidad':[{value:null, disabled:false},[
-      ]],
+      'cantidad':[{value:null, disabled:true},[
+      ]]
     })
   }
 
@@ -128,11 +125,6 @@ export class SalidaProductosComponent implements OnInit {
      });
   }
 
-  Aceptar() {
-    console.log(this.articulos);
-  }
-
-
   AgregarSerieSalida(producto,index) {
 
     const serieventana = this.DialogoSerie.open(ventanaseriesalida, {
@@ -152,7 +144,7 @@ export class SalidaProductosComponent implements OnInit {
           ip++
         }
       }
-      this.SalidaProductosForm.get('productos')['controls'][index].get('cantidad').setValue(ip)
+      this.SalidaProductosForm.get('productos')['controls'][index].get('cantidad').setValue(ip);
     })
   }
 
@@ -188,27 +180,22 @@ GuardarTransferenciaAlmacen(formulario) {
           i.id_serie,
           i.precio,
           i.cantidad * (-1)
-        ).subscribe(res=>console.log(res))
+        ).subscribe(res=>{
+            this.SSeries.RegistrarProductoOUT(i.id_serie).subscribe(res=>{
+          })
+        })
       }
     }
+
+    // this.SalidaProductosForm.reset()
+    // this.Series=[];
+    // this.ResetearFormArray(this.productos);
+    this.snackBar.open("El producto se guardó satisfactoriamente", '', {
+      duration: 2000,
+    });
   });
-}
 
 
 }
 
-  export interface PeriodicElement {
-    name: string;
-    position: number;
-    weight: number;
-    symbol: string;
-
-  }
-  // tslint:disable-next-line:class-name
-  export interface articulo {
-    numero: number;
-    nombre: string;
-    cantidad: number;
-    precio: number;
-  }
-
+}

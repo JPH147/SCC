@@ -33,7 +33,6 @@ const TREE_DATA = JSON.stringify({
     Stock: 'stock',
     Recursos: {
       'Salida de vendedores': 'salidavendedores',
-      'Retorno de vendedores': 'retornovendedores',
       'Comisiones': 'comisiones',
     }
   },

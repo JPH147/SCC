@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, ViewChild, ElementRef, ViewChildren, QueryList } from '@angular/core';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatChipInputEvent, MatSelect} from '@angular/material';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatChipInputEvent, MatSelect, MatSnackBar} from '@angular/material';
 import {FormControl, FormGroup, FormBuilder, FormArray,Validators} from '@angular/forms';
 import {Observable, fromEvent} from 'rxjs';
 import {COMMA, SPACE} from '@angular/cdk/keycodes';
@@ -11,31 +11,17 @@ import {ProductoService} from '../productos/productos.service'
 import {VentanaTalonarioComponent} from './ventana-talonario/ventana-talonario.component'
 import { ventanaseriessv } from './ventana-seriessv/ventanaseriessv';
 import {StockService} from '../stock/stock.service'
+import {ServiciosProductoSerie} from '../global/productoserie'
 
 @Component({
   selector: 'app-salida-vendedores',
   templateUrl: './salida-vendedores.component.html',
   styleUrls: ['./salida-vendedores.component.css'],
-  providers: [SalidaVendedoresService,ServiciosGenerales,ServiciosVentas,ProductoService,StockService]
+  providers: [SalidaVendedoresService,ServiciosGenerales,ServiciosVentas,ProductoService,StockService,ServiciosProductoSerie]
 })
 
 export class SalidaVendedoresComponent implements OnInit {
   
-  public talonarioSalidaForm: FormGroup;
-  public talonarioForm: FormGroup;
-  public contador: number;
-  public almacenes: Array<any>;
-  public serieventana: string;
-  public talonventana: string;
-  public serietalorarios: Array<any>;
-  public Agregatalonarion: any;
-  public selectedValue: string;
-  public serie: Array<any>;
-  public inicio: number;
-  public fin: number;
-  public numero: number;
-
-
   @ViewChildren('InputVendedor') FiltroVendedor: QueryList<any>;
   @ViewChildren('InputProducto') FiltroProducto: QueryList<any>;
   @ViewChild('InputAlmacen') FiltroAlmacen: MatSelect;
@@ -54,6 +40,7 @@ export class SalidaVendedoresComponent implements OnInit {
   /***************/
 
   constructor(
+    public snackBar: MatSnackBar,
     public dialog: MatDialog,
     public DialogoSerie: MatDialog,
     public Dialogotalon: MatDialog,
@@ -61,7 +48,8 @@ export class SalidaVendedoresComponent implements OnInit {
     private FormBuilder: FormBuilder,
     private Global: ServiciosGenerales,
     private Ventas:ServiciosVentas,
-    private Articulos: StockService
+    private Articulos: StockService,
+    private SSeries:ServiciosProductoSerie
     ) { }
 
  ngOnInit() {
@@ -361,7 +349,7 @@ export class SalidaVendedoresComponent implements OnInit {
             res.data,
             i.nombre.id,
             this.SalidaVendedoresForm.get('comision').value
-          ).subscribe(res=>console.log("Vendedor"))
+          ).subscribe()
         }
 
         // Grabar datos de productos
@@ -372,9 +360,19 @@ export class SalidaVendedoresComponent implements OnInit {
               i.id_serie,
               i.precio,
               i.cantidad
-            ).subscribe(res=>console.log("Series"))
+            ).subscribe(res=>{
+              this.SSeries.RegistrarProductoOUT(i.id_serie).subscribe(res=>{
+            })
+            })
           }
         }
+
+        // this.SalidaVendedoresForm.reset()
+        // this.Series=[];
+        // this.ResetearFormArray(this.productos);
+        this.snackBar.open("El producto se guardó satisfactoriamente", '', {
+          duration: 2000,
+        });
       });
   }
 }

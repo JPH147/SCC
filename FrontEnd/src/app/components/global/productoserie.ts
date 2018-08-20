@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpParams, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {URL} from './url';
@@ -40,10 +40,27 @@ export class ServiciosProductoSerie {
         }
       }));
     }
-}
 
-export interface ProductoSerie {
-  numero: number;
-  producto: string;
-    serie: string;
+  CrearProductoSerie(
+    id_producto: number,
+    serie:string
+  ): Observable<any> {
+
+    let params = new HttpParams()
+    .set('prproducto',id_producto.toString())
+    .set('prserie',serie)
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    return this.http.post(this.url + 'productoserie/create.php', params, {headers: headers});
+  }
+
+  RegistrarProductoOUT(
+    serie:number
+  ){
+    let params = new HttpParams()
+    .set('prid',serie.toString())
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    return this.http.post(this.url+'productoserie/updateout.php', params, {headers:headers})
+  }
+
 }

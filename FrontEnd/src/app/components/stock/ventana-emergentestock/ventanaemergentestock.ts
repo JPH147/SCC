@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {StockDataSource} from '../stock.dataservice';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import {ServiciosProductoSerie, ProductoSerie} from '../../global/productoserie';
+import {ServiciosProductoSerie} from '../../global/productoserie';
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 
 @Component({
@@ -20,7 +20,7 @@ export class VentanaEmergenteStock  implements OnInit {
   public series: Array <string>;
   public contador: number;
   public serie: Array<any>;
-  public LstSerie: ProductoSerie[] = [];
+  public LstSerie: Array<any> = [];
 
   Columnas: string[] = ['numero', 'producto', 'serie' ];
 

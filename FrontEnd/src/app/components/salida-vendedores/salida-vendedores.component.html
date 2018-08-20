@@ -215,23 +215,24 @@
    </mat-card>
 </mat-card-content>
 
-<mat-card>
+<mat-card-content>
+  <mat-card class = "CabeceraSalidaVendedor">
+    <mat-card-header>
+      <mat-card-title>
+        Observaciones
+      </mat-card-title>
+    </mat-card-header>
+    
+    <mat-grid-list cols="1" rowHeight="70px">
+      <mat-grid-tile>
+        <mat-form-field class="formulario-principal">
+            <input matInput placeholder="Observaciones" formControlName="observacion">
+        </mat-form-field>
+      </mat-grid-tile>
+    </mat-grid-list>
 
-  <mat-card-header>
-    <mat-card-title>
-      Observaciones
-    </mat-card-title>
-  </mat-card-header>
-  
-  <mat-grid-list cols="1" rowHeight="70px">
-    <mat-grid-tile>
-      <mat-form-field class="formulario-principal">
-          <input matInput placeholder="Observaciones" formControlName="observacion">
-      </mat-form-field>
-    </mat-grid-tile>
-  </mat-grid-list>
-
-</mat-card>
+  </mat-card>
+</mat-card-content>
 
 <mat-card-actions>
   <mat-grid-list cols="1" rowHeight="55px">
