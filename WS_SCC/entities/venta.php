@@ -120,7 +120,6 @@ Class Venta{
                 "fecha_inicio"=>$fecha_inicio,
                 "monto_inicial"=>$monto_inicial,
                 "numero_coutas"=>$numero_coutas,
-                "cuotas"=>$cuotas,
                 "tipo_pago"=>$tipo_pago,
                 "monto_total"=>$monto_total,
                 "tipo_venta"=>$tipo_venta,

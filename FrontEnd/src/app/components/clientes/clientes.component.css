@@ -45,11 +45,11 @@
     .mat-column-sede,
     .mat-column-subsede
     {
-      max-width: 40%;
+      max-width: 20%;
     }
 
     .mat-column-codigo{
-      max-width: 5%;
+      max-width: 7%;
     }
 
     .mat-column-opciones

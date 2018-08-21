@@ -92,14 +92,14 @@
         <mat-cell *matCellDef="let cliente"> {{cliente.numero}} </mat-cell>
       </ng-container>
 
+      <ng-container matColumnDef="subsede">
+        <mat-header-cell *matHeaderCellDef> Subsede </mat-header-cell>
+        <mat-cell *matCellDef="let cliente"> {{cliente.subsede}} </mat-cell>
+      </ng-container>
+
       <ng-container matColumnDef="codigo">
         <mat-header-cell *matHeaderCellDef> Código </mat-header-cell>
         <mat-cell *matCellDef="let cliente"> {{cliente.codigo}} </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="dni">
-        <mat-header-cell *matHeaderCellDef> DNI </mat-header-cell>
-        <mat-cell *matCellDef="let cliente"> {{cliente.dni}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="nombrecliente">
@@ -107,20 +107,10 @@
         <mat-cell *matCellDef="let cliente"> {{cliente.nombre}} </mat-cell>
       </ng-container>
 
-     <!-- <ng-container matColumnDef="institucion">
-        <mat-header-cell *matHeaderCellDef> Institución </mat-header-cell>
-        <mat-cell *matCellDef="let cliente"> {{cliente.institucion}} </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="sede">
-        <mat-header-cell *matHeaderCellDef> Sede </mat-header-cell>
-        <mat-cell *matCellDef="let cliente"> {{cliente.sede}} </mat-cell>
-      </ng-container>-->
-
-      <ng-container matColumnDef="subsede">
-        <mat-header-cell *matHeaderCellDef> Subsede </mat-header-cell>
-        <mat-cell *matCellDef="let cliente"> {{cliente.subsede}} </mat-cell>
-      </ng-container>
+      <ng-container matColumnDef="dni">
+        <mat-header-cell *matHeaderCellDef> DNI </mat-header-cell>
+        <mat-cell *matCellDef="let cliente"> {{cliente.dni}} </mat-cell>
+      </ng-container>      
 
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>

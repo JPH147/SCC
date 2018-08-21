@@ -18,7 +18,7 @@
     	$data = json_decode(file_get_contents('php://input'),true);
 
         if (( ($_POST["idcliente"])!=null) && ($_POST["id_subsede"])!=null  && !empty(trim($_POST["clt_codigo"])) && !empty(trim($_POST["clt_dni"]))
-            && !empty(trim($_POST["clt_nombre"])) &&
+            && !empty(trim($_POST["clt_nombre"]))
             && !empty(trim($_POST["clt_cip"])) && !empty(trim($_POST["clt_email"])) && !empty(trim($_POST["clt_casilla"]))
             && !empty(trim($_POST["clt_trabajo"])) && !empty(trim($_POST["clt_cargo"])) && !empty(trim($_POST["clt_calificacion_crediticia"]))
             && !empty(trim($_POST["clt_calificacion_personal"])) && ($_POST["clt_aporte"])!=null)

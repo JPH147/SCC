@@ -20,7 +20,7 @@ import { VentanaEmergenteContacto} from './ventana-emergentecontacto/ventanaemer
 export class ClientesComponent implements OnInit {
 
   ListadoCliente: ClienteDataSource;
-  Columnas: string[] = ['numero', 'codigo' , 'dni', 'nombrecliente', 'subsede' , 'opciones'];
+  Columnas: string[] = ['numero', 'subsede' , 'codigo' , 'nombrecliente', 'dni',  'opciones'];
   public maestro;
 
 
