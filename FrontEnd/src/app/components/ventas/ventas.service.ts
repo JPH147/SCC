@@ -45,9 +45,6 @@ export class VentaService {
     pvnt_observaciones: string
   ): Observable<any> {
 
-
-    
-
     let params = 'pid_talonario=' + pid_talonario + '&pid_cliente=' + pid_cliente
     + '&pvnt_fecha=' +  moment(pvnt_fecha).format('YYYY/MM/DD').toString()
     + '&pid_vendedor=' + pid_vendedor + '&pvnt_fecha_inicio=' + moment(pvnt_fecha_inicio).format('YYYY/MM/DD').toString()
