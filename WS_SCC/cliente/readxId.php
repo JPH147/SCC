@@ -28,7 +28,6 @@
                 "codigo"=>$cliente->clt_codigo,
                 "dni"=>$cliente->clt_dni,
                 "nombre"=>$cliente->clt_nombre,
-                "apellido"=>$cliente->clt_apellido,
                 "foto"=>$cliente->clt_foto,
                 "cip"=>$cliente->clt_cip,
                 "email"=>$cliente->clt_email,

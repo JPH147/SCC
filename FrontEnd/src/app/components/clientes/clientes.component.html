@@ -30,12 +30,13 @@
             <input matInput placeholder="Nombre" #InputNombreCliente>
           </mat-form-field>
         </mat-grid-tile>
-          <mat-grid-tile>
+
+          <!--<mat-grid-tile>
             <mat-icon>search</mat-icon>
               <mat-form-field>
             <input matInput placeholder="Apellido" #InputApellido>
           </mat-form-field>
-        </mat-grid-tile>
+        </mat-grid-tile>-->
       </mat-grid-list>
 
 
@@ -104,11 +105,6 @@
       <ng-container matColumnDef="nombrecliente">
         <mat-header-cell *matHeaderCellDef> Nombre</mat-header-cell>
         <mat-cell *matCellDef="let cliente"> {{cliente.nombre}} </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="apellidocliente">
-        <mat-header-cell *matHeaderCellDef> Apellido </mat-header-cell>
-        <mat-cell *matCellDef="let cliente"> {{cliente.apellido}} </mat-cell>
       </ng-container>
 
      <!-- <ng-container matColumnDef="institucion">

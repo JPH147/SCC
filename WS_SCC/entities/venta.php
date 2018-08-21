@@ -115,7 +115,6 @@ Class Venta{
                 "sede"=>$sede,
                 "subsede"=>$subsede,
                 "cliente_nombre"=>$cliente_nombre,
-                "cliente_apellido"=>$cliente_apellido,
                 "fecha"=>$fecha,
                 "vendedor"=>$vendedor,
                 "fecha_inicio"=>$fecha_inicio,

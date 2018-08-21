@@ -10,7 +10,7 @@
             <input #Cliente placeholder="Ingresa Cliente" matInput [matAutocomplete]="auto2" formControlName= cliente>
               <mat-autocomplete #auto2="matAutocomplete" [displayWith] = "displayCliente">
                 <mat-option *ngFor="let cliente of LstCliente" [value]="cliente">
-                  {{cliente.nombre + ' ' + cliente.apellido}}
+                  {{cliente.nombre}}
                 </mat-option>
             </mat-autocomplete>
          </mat-form-field>

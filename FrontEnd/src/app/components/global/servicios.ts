@@ -268,7 +268,6 @@ instnombre: string;
 ssdNombre: string;
 pcltDni: string;
 pcltNombre: string;
-pcltApellido: string;
 }
 
 export interface ListarVendedor {

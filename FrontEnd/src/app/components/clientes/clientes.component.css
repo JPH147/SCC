@@ -61,10 +61,9 @@
     {
       max-width: 8%;
     }
-    .mat-column-nombrecliente,
-    .mat-column-apellidocliente
+    .mat-column-nombrecliente
     {
-      max-width: 12%;
+      max-width: 25%;
     }
 
     .mat-expansion-panel-header-title

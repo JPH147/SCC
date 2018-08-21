@@ -97,7 +97,7 @@ export class VentasComponent implements OnInit {
     this.ListarTalonarioSerie();
     this.ListadoCronograma = new VentaDataSource(this.Servicio);
     //this.ListadoCliente = new ClienteDataSource(this.ClienteServicio);
-    this.ListarClientes('', '', '', '' , this.ClienteAutoComplete.nativeElement.value , '');
+    this.ListarClientes('', '', '', this.ClienteAutoComplete.nativeElement.value , '');
     this.VentasForm = this.FormBuilder.group({
       'talonario': [null, [
         Validators.required
@@ -163,7 +163,7 @@ export class VentasComponent implements OnInit {
       debounceTime(10),
       distinctUntilChanged(),
       tap(() => {
-        this.ListarClientes('', '', '', '' , this.VentasForm.value.cliente , '');
+        this.ListarClientes('', '', '', this.VentasForm.value.cliente , '');
       })
      ).subscribe();
 
@@ -177,12 +177,9 @@ export class VentasComponent implements OnInit {
      ).subscribe();
   }
 
-
-  
-
   displayCliente(cliente?: any): string | undefined {
     if (cliente) {
-      return (cliente.nombre + ' ' + cliente.apellido) ;
+      return (cliente.nombre) ;
     }
   }
 
@@ -238,8 +235,8 @@ export class VentasComponent implements OnInit {
 
   }
 
-  ListarClientes(inst: string, sede: string, subsede: string, dni: string, nombre: string,apellido: string ) {
-    this.ClienteServicio.Listado(inst, sede, subsede, dni, nombre, apellido).subscribe( res => {
+  ListarClientes(inst: string, sede: string, subsede: string, dni: string, nombre: string) {
+    this.ClienteServicio.Listado(inst, sede, subsede, dni, nombre).subscribe( res => {
       this.LstCliente = [];
       // tslint:disable-next-line:forin
       for (let i in res) {

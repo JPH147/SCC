@@ -189,7 +189,7 @@ import {ProductoService} from '../productos/productos.service';
     /*********************************************/
 
     displayCliente(cliente?: any): string | undefined {
-      return cliente ? cliente.nombre + ' ' + cliente.apellido : undefined;
+      return cliente ? cliente.nombre : undefined;
     }
 
     displayProveedor(proveedor?: any): string | undefined {

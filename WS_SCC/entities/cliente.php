@@ -14,7 +14,6 @@ Class Cliente{
     public $clt_codigo;
     public $clt_dni;
     public $clt_nombre;
-    public $clt_apellido;
     public $clt_foto;
     public $clt_cip;
     public $clt_email;
@@ -36,7 +35,7 @@ Class Cliente{
     }
 
     function read(){
-        $query = "CALL sp_listarcliente (?,?,?,?,?,?)";
+        $query = "CALL sp_listarcliente (?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
@@ -45,7 +44,6 @@ Class Cliente{
         $result->bindParam(3, $this->ssd_nombre);
         $result->bindParam(4, $this->clt_dni);
         $result->bindParam(5, $this->clt_nombre);
-        $result->bindParam(6, $this->clt_apellido);
 
         $result->execute();
     
@@ -66,7 +64,6 @@ Class Cliente{
                 "codigo"=>$row['clt_codigo'],
                 "dni"=>$row['clt_dni'],
                 "nombre"=>$row['clt_nombre'],
-                "apellido"=>$row['clt_apellido'],
                 "cip"=>$row['clt_cip'],
                 "email"=>$row['clt_email'],
                 "casilla"=>$row['clt_casilla'],
@@ -85,7 +82,7 @@ Class Cliente{
     
     function create()
     {
-        $query = "CALL sp_crearcliente (:id_subsede,:clt_codigo,:clt_dni,:clt_nombre,:clt_apellido,:clt_foto,:clt_cip,:clt_email,:clt_casilla,:clt_trabajo,:clt_cargo,:clt_calificacion_crediticia,:clt_calificacion_personal,:clt_aporte,:clt_estado,:clt_fecharegistro)"; 
+        $query = "CALL sp_crearcliente (:id_subsede,:clt_codigo,:clt_dni,:clt_nombre,:clt_foto,:clt_cip,:clt_email,:clt_casilla,:clt_trabajo,:clt_cargo,:clt_calificacion_crediticia,:clt_calificacion_personal,:clt_aporte,:clt_estado,:clt_fecharegistro)"; 
 
         $result = $this->conn->prepare($query);
 
@@ -93,7 +90,6 @@ Class Cliente{
         $this->clt_codigo=htmlspecialchars(strip_tags($this->clt_codigo));
         $this->clt_dni=htmlspecialchars(strip_tags($this->clt_dni));
         $this->clt_nombre=htmlspecialchars(strip_tags($this->clt_nombre));
-        $this->clt_apellido=htmlspecialchars(strip_tags($this->clt_apellido));
         $this->clt_foto=htmlspecialchars(strip_tags($this->clt_foto));
         $this->clt_cip=htmlspecialchars(strip_tags($this->clt_cip));
         $this->clt_email=htmlspecialchars(strip_tags($this->clt_email));
@@ -110,7 +106,6 @@ Class Cliente{
         $result->bindParam(":clt_codigo", $this->clt_codigo);
         $result->bindParam(":clt_dni", $this->clt_dni);
         $result->bindParam(":clt_nombre", $this->clt_nombre);
-        $result->bindParam(":clt_apellido", $this->clt_apellido);
         $result->bindParam(":clt_foto", $this->clt_foto);
         $result->bindParam(":clt_cip", $this->clt_cip);
         $result->bindParam(":clt_email", $this->clt_email);
@@ -146,7 +141,6 @@ Class Cliente{
         $this->clt_codigo=$row['clt_codigo'];
         $this->clt_dni=$row['clt_dni'];
         $this->clt_nombre=$row['clt_nombre'];
-        $this->clt_apellido=$row['clt_apellido'];
         $this->clt_foto=$row['clt_foto'];
         $this->clt_cip= $row['clt_cip'];
 
@@ -164,7 +158,7 @@ Class Cliente{
     function update()
     {
         $query = "CALL sp_actualizarcliente (:idcliente,:id_subsede,:clt_codigo,:clt_dni,:clt_nombre,
-        :clt_apellido,:clt_cip,:clt_email,:clt_casilla,:clt_trabajo,
+        :clt_cip,:clt_email,:clt_casilla,:clt_trabajo,
         :clt_cargo,:clt_calificacion_crediticia,:clt_calificacion_personal,:clt_aporte)"; 
 
         $result = $this->conn->prepare($query);
@@ -174,7 +168,6 @@ Class Cliente{
         $this->clt_codigo=htmlspecialchars(strip_tags($this->clt_codigo));
         $this->clt_dni=htmlspecialchars(strip_tags($this->clt_dni));
         $this->clt_nombre=htmlspecialchars(strip_tags($this->clt_nombre));
-        $this->clt_apellido=htmlspecialchars(strip_tags($this->clt_apellido));
         $this->clt_cip=htmlspecialchars(strip_tags($this->clt_cip));
         $this->clt_email=htmlspecialchars(strip_tags($this->clt_email));
         $this->clt_casilla=htmlspecialchars(strip_tags($this->clt_casilla));
@@ -189,7 +182,6 @@ Class Cliente{
         $result->bindParam(":clt_codigo", $this->clt_codigo);
         $result->bindParam(":clt_dni", $this->clt_dni);
         $result->bindParam(":clt_nombre", $this->clt_nombre);
-        $result->bindParam(":clt_apellido", $this->clt_apellido);
         $result->bindParam(":clt_cip", $this->clt_cip);
         $result->bindParam(":clt_email", $this->clt_email);
         $result->bindParam(":clt_casilla", $this->clt_casilla);

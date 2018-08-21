@@ -17,12 +17,11 @@ export class ClienteService {
   sd_nombre: string,
   ssd_nombre: string,
   dni: string,
-  nombre: string,
-  apellido: string
+  nombre: string
   ): Observable<Cliente[]>  {
      return this.http.get(this.url + 'cliente/read.php?inst_nombre='
    + inst_nombre + '&sd_nombre=' + sd_nombre + '&ssd_nombre='
-   + ssd_nombre + '&pclt_dni=' + dni + '&pclt_nombre=' + nombre + '&pclt_apellido=' + apellido)
+   + ssd_nombre + '&pclt_dni=' + dni + '&pclt_nombre=' + nombre)
     .pipe(map(res => {
       if (res['codigo'] === 0) {
           return res['data'].clientes;
@@ -48,7 +47,6 @@ export class ClienteService {
     clt_codigo: string,
     clt_dni: string,
     clt_nombre: string,
-    clt_apellido: string,
     clt_cip: string,
     clt_email: string,
     clt_casilla: string,
@@ -67,7 +65,7 @@ export class ClienteService {
     let date = today.getFullYear() + '-' + (today.getMonth() + 1 ) + '-' + today.getDate();
     // tslint:disable-next-line:prefer-const
     let params = 'id_subsede=' + id_subsede + '&clt_codigo=' + clt_codigo
-    + '&clt_dni=' + clt_dni + '&clt_nombre=' + clt_nombre + '&clt_apellido=' + clt_apellido
+    + '&clt_dni=' + clt_dni + '&clt_nombre=' + clt_nombre
     + '&clt_cip=' + clt_cip + '&clt_email=' + clt_email + '&clt_casilla=' + clt_casilla
     + '&clt_trabajo=' + clt_trabajo + '&clt_cargo=' + clt_cargo + '&clt_calificacion_crediticia=' + clt_calificacion_crediticia
     + '&clt_calificacion_personal=' + clt_calificacion_personal + '&clt_aporte=' + clt_aporte + '&clt_estado=1'
@@ -82,7 +80,6 @@ export class ClienteService {
     clt_codigo: string,
     clt_dni: string,
     clt_nombre: string,
-    clt_apellido: string,
     clt_cip: string,
     clt_email: string,
     clt_casilla: string,
@@ -92,7 +89,7 @@ export class ClienteService {
     clt_calificacion_personal: string,
     clt_aporte: number): Observable<any> {
       let params = 'idcliente=' + idcliente + '&id_subsede=' + id_subsede + '&clt_codigo=' + clt_codigo
-      + '&clt_dni=' + clt_dni + '&clt_nombre=' + clt_nombre + '&clt_apellido=' + clt_apellido
+      + '&clt_dni=' + clt_dni + '&clt_nombre=' + clt_nombre
       + '&clt_cip=' + clt_cip + '&clt_email=' + clt_email + '&clt_casilla=' + clt_casilla
       + '&clt_trabajo=' + clt_trabajo + '&clt_cargo=' + clt_cargo + '&clt_calificacion_crediticia=' + clt_calificacion_crediticia
       + '&clt_calificacion_personal=' + clt_calificacion_personal + '&clt_aporte=' + clt_aporte;
@@ -126,7 +123,6 @@ export interface Cliente {
   codigo: string;
   dni: string;
   nombre: string;
-  apellido: string;
   cip: string;
   email: string;
   casilla: string;

@@ -21,7 +21,6 @@
         $cliente->ssd_nombre = !empty($_GET['ssd_nombre']) ? $_GET['ssd_nombre'] : null;
         $cliente->clt_dni = !empty($_GET['pclt_dni']) ? $_GET['pclt_dni'] : null;
         $cliente->clt_nombre = !empty($_GET['pclt_nombre']) ? $_GET['pclt_nombre'] : null;
-        $cliente->clt_apellido = !empty($_GET['pclt_apellido']) ? $_GET['pclt_apellido'] : null;
 
         $cliente_list = $cliente->read();
 

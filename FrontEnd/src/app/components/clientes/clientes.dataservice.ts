@@ -26,13 +26,12 @@ this.CargandoInformacion.complete();
     sede: string,
     subsede: string,
     dni: string,
-    nombre: string,
-    apellido: string
+    nombre: string
   // tslint:disable-next-line:one-line
   ){
   this.CargandoInformacion.next(true);
 
-  this.Servicio.Listado(nombreinst, sede , subsede, dni, nombre, apellido)
+  this.Servicio.Listado(nombreinst, sede , subsede, dni, nombre)
   .pipe(catchError(() => of([])),
   finalize(() => this.CargandoInformacion.next(false))
   )

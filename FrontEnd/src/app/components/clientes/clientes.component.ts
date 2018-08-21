@@ -20,13 +20,13 @@ import { VentanaEmergenteContacto} from './ventana-emergentecontacto/ventanaemer
 export class ClientesComponent implements OnInit {
 
   ListadoCliente: ClienteDataSource;
-  Columnas: string[] = ['numero', 'codigo' , 'dni', 'nombrecliente', 'apellidocliente', 'subsede' , 'opciones'];
+  Columnas: string[] = ['numero', 'codigo' , 'dni', 'nombrecliente', 'subsede' , 'opciones'];
   public maestro;
 
 
   @ViewChild('InputDNI') FiltroDni: ElementRef;
   @ViewChild('InputNombreCliente') FiltroNombre: ElementRef;
-  @ViewChild('InputApellido') FiltroApellido: ElementRef;
+ // @ViewChild('InputApellido') FiltroApellido: ElementRef;
   @ViewChild('InputSede') FiltroSede: ElementRef;
   @ViewChild('InputSubsede') FiltroSubsede: ElementRef;
   @ViewChild('InputNombreInst') FiltroInst: ElementRef;
@@ -41,7 +41,7 @@ export class ClientesComponent implements OnInit {
 
   ngOnInit() {
    this.ListadoCliente = new ClienteDataSource(this.Servicio);
-   this.ListadoCliente.CargarClientes('', '', '', '', '', '');
+   this.ListadoCliente.CargarClientes('', '', '', '', '');
  }
 
  // tslint:disable-next-line:use-life-cycle-interface
@@ -63,17 +63,6 @@ export class ClientesComponent implements OnInit {
        this.CargarData();
      })
     ).subscribe();
-
-   fromEvent(this.FiltroApellido.nativeElement, 'keyup')
-   .pipe(
-     debounceTime(200),
-     distinctUntilChanged(),
-     tap(() => {
-       this.CargarData();
-     })
-    ).subscribe();
-
-
     fromEvent(this.FiltroInst.nativeElement, 'keyup')
     .pipe(
       debounceTime(200),
@@ -109,8 +98,7 @@ export class ClientesComponent implements OnInit {
    this.FiltroSede.nativeElement.value,
    this.FiltroSubsede.nativeElement.value,
    this.FiltroDni.nativeElement.value,
-   this.FiltroNombre.nativeElement.value,
-   this.FiltroApellido.nativeElement.value);
+   this.FiltroNombre.nativeElement.value);
  }
 
  Agregar() {

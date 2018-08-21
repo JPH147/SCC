@@ -56,9 +56,6 @@ export class VentanaEmergenteClientes {
       'nombre': [null, [
         Validators.required
       ]],
-      'apellido': [null, [
-        Validators.required
-      ]],
       'cip': [null, [
         Validators.required
       ]],
@@ -103,7 +100,6 @@ export class VentanaEmergenteClientes {
       this.ClientesForm.get('codigo').setValue(this.data.objeto.codigo);
       this.ClientesForm.get('dni').setValue(this.data.objeto.dni);
       this.ClientesForm.get('nombre').setValue(this.data.objeto.nombre);
-      this.ClientesForm.get('apellido').setValue(this.data.objeto.apellido);
       this.ClientesForm.get('cip').setValue(this.data.objeto.cip);
       this.ClientesForm.get('email').setValue(this.data.objeto.email);
       this.ClientesForm.get('casilla').setValue(this.data.objeto.casilla);
@@ -142,7 +138,7 @@ SedeSeleccionada(event) {
     if (this.data.objeto) {
       // tslint:disable-next-line:max-line-length
       this.ClienteServicios.Actualizar(this.data.id, formulario.value.subsede, formulario.value.codigo,
-        formulario.value.dni, formulario.value.nombre, formulario.value.apellido, formulario.value.cip,
+        formulario.value.dni, formulario.value.nombre, formulario.value.cip,
         formulario.value.email, formulario.value.casilla, formulario.value.trabajo, formulario.value.cargo,
         formulario.value.calificacioncrediticia, formulario.value.calificacionpersonal, formulario.value.aporte
       ).subscribe(res => console.log(res));
@@ -153,7 +149,7 @@ SedeSeleccionada(event) {
 
     if (!this.data.objeto) {
       this.ClienteServicios.Agregar(formulario.value.subsede , formulario.value.codigo,
-        formulario.value.dni, formulario.value.nombre, formulario.value.apellido,
+        formulario.value.dni, formulario.value.nombre,
         formulario.value.cip, formulario.value.email, formulario.value.casilla,
         formulario.value.trabajo, formulario.value.cargo, formulario.value.calificacioncrediticia,
         formulario.value.calificacionpersonal, formulario.value.aporte).subscribe(res => console.log(res));
