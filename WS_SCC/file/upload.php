@@ -1,5 +1,4 @@
 <?php
- 
 header("Access-Control-Allow-Origin: *");
  
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -10,11 +9,9 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $path = '../uploads/';
  
 if (isset($_FILES['image'])) {
-  $tipo= $_GET['tipo'];
-  $numdoc = $_GET['numdoc'];
   $originalName = $_FILES['image']['name'];
   $ext = '.'.pathinfo($originalName, PATHINFO_EXTENSION);
-  $generatedName = $tipo.'_'.$numdoc.$ext;
+  $generatedName = md5($_FILES['image']['tmp_name']).$ext;
   $filePath = $path.$generatedName;
  
   if (!is_writable($path)) {
@@ -26,11 +23,13 @@ if (isset($_FILES['image'])) {
   }
  
   if (move_uploaded_file($_FILES['image']['tmp_name'], $filePath)) {
-    echo json_encode(array(
+
+    echo $filePath ;
+    /*echo json_encode(array(
       'status'        => true,
       'originalName'  => $originalName,
       'generatedName' => $generatedName
-    ));
+    ));*/
   }
 }
 else {

@@ -5,6 +5,7 @@ import {ErrorStateMatcher} from '@angular/material/core';
 import {ServiciosGenerales} from '../../global/servicios';
 import { NgControl } from '@angular/forms';
 import {ClienteService} from '../clientes.service';
+import { FileHolder } from '../../../../../node_modules/angular2-image-upload';
 
 @Component({
   selector: 'app-fileupload',
@@ -30,7 +31,15 @@ export class FileUpload {
     ngOnInit() {
       }
 
-      
+
+      onUploadFinished(file: FileHolder) {
+
+        if ( this.data) {
+        console.log(file);
+        console.log(file.serverResponse.response._body);
+        console.log(this.data);
+        }
+      }
 
   onNoClick(): void {
     this.ventana.close();
