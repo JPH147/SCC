@@ -10,9 +10,11 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $path = '../uploads/';
  
 if (isset($_FILES['image'])) {
+  $tipo= $_GET['tipo'];
+  $numdoc = $_GET['numdoc'];
   $originalName = $_FILES['image']['name'];
   $ext = '.'.pathinfo($originalName, PATHINFO_EXTENSION);
-  $generatedName = md5($_FILES['image']['tmp_name']).$ext;
+  $generatedName = $tipo.'_'.$numdoc.$ext;
   $filePath = $path.$generatedName;
  
   if (!is_writable($path)) {
