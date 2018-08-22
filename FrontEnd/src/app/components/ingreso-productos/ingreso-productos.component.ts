@@ -44,7 +44,7 @@ import {ProductoService} from '../productos/productos.service';
 
     @ViewChildren('InputProducto') FiltroProducto: QueryList<any>;
     public productos: FormArray;
-    public Series: any[]=[];
+    public Series: any[] = [];
     public Producto: Array<any>;
 
     selected = 'option2';
@@ -90,6 +90,7 @@ import {ProductoService} from '../productos/productos.service';
       });
     }
 
+    // tslint:disable-next-line:use-life-cycle-interface
     ngAfterViewInit() {
 
       fromEvent(this.FiltroProveedor.nativeElement, 'keyup')
@@ -101,7 +102,8 @@ import {ProductoService} from '../productos/productos.service';
         })
        ).subscribe();
 
-      this.FiltroProducto.changes.subscribe(res=>{
+      this.FiltroProducto.changes.subscribe(res => {
+        // tslint:disable-next-line:forin
         for (let i in this.FiltroProducto['_results']) {
           fromEvent(this.FiltroProducto['_results'][i].nativeElement,'keyup')
           .pipe(
@@ -118,14 +120,14 @@ import {ProductoService} from '../productos/productos.service';
     }
 
     /*********************************************/
-    CrearProducto():FormGroup{
+    CrearProducto(): FormGroup{
       return this.FormBuilder.group({
-        'producto':[{value:null, disabled:false},[
+        'producto': [{value: null, disabled: false}, [
           Validators.required
         ]],
-        'cantidad':[{value:null, disabled:true},[
+        'cantidad': [{value: null, disabled: true}, [
         ]],
-        'precioUnitario':[{value:null, disabled:false},[
+        'precioUnitario': [{value:null, disabled: false}, [
           Validators.required,
           Validators.pattern ('[0-9- ]+')
         ]],
@@ -134,43 +136,45 @@ import {ProductoService} from '../productos/productos.service';
 
     AgregarProducto():void{
       this.productos = this.IngresoProductoForm.get('productos') as FormArray;
-      this.productos.push(this.CrearProducto())
+      this.productos.push(this.CrearProducto());
     };
 
-    ResetearForm(event){
+    ResetearForm(event) {
       this.ResetearFormArray(this.productos);
-      this.Series=[];
-      this.Articulos.Listado('', '', '', '', 1, 10, "descripcion", "asc").subscribe(res=>this.Producto=res['data'].productos)
+      this.Series = [];
+      this.Articulos.Listado('', '', '', '', 1, 10, 'descripcion', 'asc').subscribe(res => this.Producto = res['data'].productos);
     }
 
     ResetearFormArray = (formArray: FormArray) => {
       if (formArray) {
-        formArray.reset()
+        formArray.reset();
         while (formArray.length !== 1) {
-          formArray.removeAt(0)
+          formArray.removeAt(0);
         }
       }
     }
 
-    EliminarProducto(producto,i){
+    EliminarProducto(producto, i) {
       this.productos.removeAt(i);
     };
 
-    EliminarElemento(array,value){
+    EliminarElemento(array,value) {
        array.forEach( (item, index) => {
-         if(item.id == value) array.splice(index,1);
+         // tslint:disable-next-line:curly
+         if(item.id == value) array.splice(index, 1);
        });
     }
 
-    EliminarElemento2(array,value){
+    EliminarElemento2(array,value) {
        array.forEach( (item, index) => {
-         if(item.id_producto == value) array.splice(index,1);
+         // tslint:disable-next-line:curly
+         if(item.id_producto === value) array.splice(index,1);
        });
     }
 
     ProductoSeleccionado(filtro){
-      this.Articulos.Listado('', '', '', '', 1, 10, "descripcion", "asc").subscribe(res=>{
-        this.Producto=res['data'].productos;
+      this.Articulos.Listado('', '', '', '', 1, 10, 'descripcion', 'asc').subscribe(res => {
+        this.Producto = res['data'].productos;
         for (let i of this.IngresoProductoForm['controls'].productos.value) {
           if (i.producto) {
             this.EliminarElemento(this.Producto,i.producto.id)
@@ -180,10 +184,10 @@ import {ProductoService} from '../productos/productos.service';
     }
 
     displayFn2(producto) {
-      if (producto){
-        return producto.descripcion 
-      }else{
-        return ""
+      if (producto) {
+        return producto.descripcion;
+      } else {
+        return '';
       }
     }
     /*********************************************/
@@ -277,7 +281,7 @@ import {ProductoService} from '../productos/productos.service';
         }
 
         for (let i of res) {
-          if (i.series != '') {
+          if (i.series !== '') {
             this.Series.push({id_producto: producto.get('producto').value.id, serie: i.series})
           }
         }
@@ -291,9 +295,10 @@ import {ProductoService} from '../productos/productos.service';
 
   Guardar(formulario) {
 
+   // tslint:disable-next-line:prefer-const
    let tipoingreso = formulario.value.tipoIngreso;
 
-   if (tipoingreso == 1) {
+   if (tipoingreso === 1) {
     this.IngresoProductoservicios.AgregarCompraMercaderia(
       formulario.value.almacen,
       1,
@@ -301,21 +306,23 @@ import {ProductoService} from '../productos/productos.service';
       formulario.value.proveedor.id,
       formulario.value.fecingreso,
       formulario.value.docReferencia).subscribe (res => {
-        let id_cabecera= res.data
+        // tslint:disable-next-line:prefer-const
+        let id_cabecera = res.data;
 
           for (let i of formulario.value.productos) {
+            // tslint:disable-next-line:prefer-const
             for (let is of this.Series) {
-              if (i.producto.id == is.id_producto) {
-                this.SSeries.CrearProductoSerie(i.producto.id,is.serie).subscribe(response=>{
-                  this.IngresoProductoservicios.CrearTransaccionDetalle(id_cabecera,response.data,1,i.precioUnitario).subscribe()
-                })
+              if (i.producto.id === is.id_producto) {
+                this.SSeries.CrearProductoSerie(i.producto.id,is.serie).subscribe(response => {
+                  this.IngresoProductoservicios.CrearTransaccionDetalle(id_cabecera, response.data, 1, i.precioUnitario).subscribe();
+                });
               }
             }
           }
         this.IngresoProductoForm.reset();
-        this.Series=[];
+        this.Series = [];
         this.ResetearFormArray(this.productos);
-        this.snackBar.open("El ingreso se guardó satisfactoriamente", '', {
+        this.snackBar.open('El ingreso se guardó satisfactoriamente', '', {
           duration: 2000,
         });
       });
