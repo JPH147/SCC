@@ -92,6 +92,11 @@
         <mat-cell *matCellDef="let cliente"> {{cliente.numero}} </mat-cell>
       </ng-container>
 
+      <ng-container matColumnDef="foto">
+        <mat-header-cell *matHeaderCellDef>Foto </mat-header-cell>
+        <img *matCellDef="let cliente" [attr.src]="cliente.foto" width="40px" height="60px" />
+    </ng-container>
+
       <ng-container matColumnDef="subsede">
         <mat-header-cell *matHeaderCellDef> Subsede </mat-header-cell>
         <mat-cell *matCellDef="let cliente"> {{cliente.subsede}} </mat-cell>
@@ -116,7 +121,7 @@
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let cliente">
           <button mat-icon-button matTooltip="Agregar Datos de Contacto" (click)="AgregarDatoContacto(cliente.id)" color="primary"><mat-icon> local_phone </mat-icon></button>
-          <button mat-icon-button matTooltip="Subir Foto" color="primary" (click)="SubirImagen(cliente.id)"><mat-icon> cloud_upload </mat-icon></button>
+          <button mat-icon-button matTooltip="Subir Foto" color="primary" (click)="SubirImagen(cliente)"><mat-icon> cloud_upload </mat-icon></button>
           <button mat-icon-button matTooltip="Hacer Venta" color="primary" [routerLink]="['/ventas/nueva', cliente.id]"><mat-icon> add_shopping_cart </mat-icon></button>
           <button mat-icon-button matTooltip="Ver Ventas" color="primary"><mat-icon> attach_money</mat-icon></button>
           <button mat-icon-button matTooltip="Editar Cliente" color="primary" (click)="Editar(cliente.id)"><mat-icon> edit </mat-icon></button>

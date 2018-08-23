@@ -24,6 +24,7 @@ export class ClienteService {
    + ssd_nombre + '&pclt_dni=' + dni + '&pclt_nombre=' + nombre)
     .pipe(map(res => {
       if (res['codigo'] === 0) {
+        console.log(res['data'].clientes);
           return res['data'].clientes;
       }  else {
           console.log('Error al importar los datos, revisar servicio');
@@ -100,6 +101,20 @@ export class ClienteService {
       return this.http.post(this.url + 'cliente/update.php', params, {headers: headers});
   }
 
+  ActualizarFoto(idcliente: number,
+  clt_foto: string): Observable<any> {
+    let params = new HttpParams()
+    .set('idcliente', idcliente.toString())
+    .set('clt_foto', clt_foto);
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    return this.http.post(this.url + 'cliente/updateimage.php', params, {headers: headers}).pipe(map(res => {
+     console.log(res);
+      return res;
+    }));
+  }
+
+
 
   Seleccionar(
     id: number
@@ -131,4 +146,5 @@ export interface Cliente {
   calificacioncrediticia: string;
   calificacionpersonal: string;
   aporte: number;
+  foto: string;
 }

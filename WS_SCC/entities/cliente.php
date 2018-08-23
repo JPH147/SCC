@@ -72,7 +72,8 @@ Class Cliente{
                 "calificacion_crediticia"=>$row['clt_calificacion_crediticia'],
                 "calificacion_personal"=>$row['clt_calificacion_personal'],
                 "aporte"=>$row['clt_aporte'],
-                "fecharegistro"=>$row['clt_fecharegistro']
+                "fecharegistro"=>$row['clt_fecharegistro'],
+                "foto"=>$row['clt_foto']
             );
 
                 array_push($cliente_list["clientes"],$cliente_item);
@@ -214,6 +215,25 @@ Class Cliente{
             {
                 return false;
             }
+    }
+    function updatefoto()
+    {
+        $query= "CALL sp_actualizarfoto(:idcliente, :clt_foto)";
+
+        $result = $this->conn->prepare($query);
+
+        $this->idcliente=htmlspecialchars(strip_tags($this->idcliente));
+        $this->clt_foto=htmlspecialchars(strip_tags($this->clt_foto));
+
+        $result->bindParam(":idcliente", $this->idcliente);
+        $result->bindParam(":clt_foto", $this->clt_foto);
+
+        if($result->execute())
+        {
+            return true;
+        }
+        
+        return false;
     }
 }
 ?>

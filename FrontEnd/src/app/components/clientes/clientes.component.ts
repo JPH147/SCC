@@ -20,7 +20,7 @@ import { VentanaEmergenteContacto} from './ventana-emergentecontacto/ventanaemer
 export class ClientesComponent implements OnInit {
 
   ListadoCliente: ClienteDataSource;
-  Columnas: string[] = ['numero', 'subsede' , 'codigo' , 'nombrecliente', 'dni',  'opciones'];
+  Columnas: string[] = ['numero', 'foto', 'subsede' , 'codigo' , 'nombrecliente', 'dni',  'opciones'];
   public maestro;
 
 
@@ -151,11 +151,11 @@ export class ClientesComponent implements OnInit {
   });
 }
 
-AgregarDatoContacto(id) {
+AgregarDatoContacto(cliente) {
   // tslint:disable-next-line:prefer-const
   let VentanaContacto = this.DialogoContacto.open(VentanaEmergenteContacto, {
     width: '1200px',
-    data: id
+    data: cliente
   });
 }
 

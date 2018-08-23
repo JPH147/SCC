@@ -36,10 +36,19 @@ export class FileUpload {
 
         if ( this.data) {
         console.log(file);
+        this.Servicios.RenameFile(file.serverResponse.response._body, 'FOTO', this.data.dni).subscribe( res => {
+          console.log(res);
+          if (res) {
+              this.ClienteServicios.ActualizarFoto(this.data.id, res.mensaje).subscribe( res2 => {
+                console.log(res2);
+              }
+            );
+            }
+        });
+        }
         console.log(file.serverResponse.response._body);
         console.log(this.data);
         }
-      }
 
   onNoClick(): void {
     this.ventana.close();

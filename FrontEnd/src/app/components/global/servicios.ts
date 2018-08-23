@@ -251,6 +251,26 @@ export class ServiciosGenerales {
           }
       }));
     }
+
+    RenameFile(nameimg: string,
+    tipodoc: string,
+    numdoc: string): Observable <any> {
+      return this.http.get(this.url + 'file/rename.php', {
+      params: new  HttpParams()
+      .set('nameimg', nameimg.trim())
+      .set('tipodoc', tipodoc.trim())
+      .set('numdoc', numdoc)
+    })
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        console.log(res);
+        return res;
+      } else {
+          console.log ('Error al importar los datos, revisar servicio');
+      }
+  }));
+    }
+
   }
 
 export interface ListarProductos {

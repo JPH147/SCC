@@ -1,5 +1,8 @@
 <?php
+
 header("Access-Control-Allow-Origin: *");
+
+include_once '../shared/utilities.php';
 
 $path = '../uploads/';
 
@@ -13,11 +16,11 @@ $return_path =$path . $tipodoc . "_".$numdoc.".".$ext;
 
 if (rename( $nameimg ,$return_path ))
 {
-    echo json_encode(array('path'=>$return_path));
+    print_json("0000", trim($return_path), "");
 }
 else
 {
-    echo 'No';
+    print_json("0001", "Ocurrió un error", "");
 }
 
 

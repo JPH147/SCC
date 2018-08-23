@@ -53,7 +53,7 @@
     }
     catch(Exception $exception)
     {
-        print_json("9999", "Ocurrió un error al actualizar el producto.", $exception->getMessage());
+        print_json("9999", "Ocurrió un error al actualizar el cliente.", $exception->getMessage());
     }
 
 ?>

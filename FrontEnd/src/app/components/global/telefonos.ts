@@ -51,10 +51,6 @@ export class ServiciosTelefonos {
 	}))
 }
 
-
-
-}
-
 export interface Telefono {
     numero: number;
     id: number;
