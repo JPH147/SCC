@@ -15,6 +15,12 @@
 
         <mat-grid-tile>
           <mat-form-field>
+            <input matInput formControlName="unidad_medida" placeholder="Unidad de medida">
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field>
             <mat-select placeholder='Selecciona Marca' formControlName="marca" (selectionChange)="MarcaSeleccionada($event)">
               <mat-option *ngFor="let marca of Marcas" [value] = "marca.id"> {{marca.nombre}} </mat-option>
             </mat-select>

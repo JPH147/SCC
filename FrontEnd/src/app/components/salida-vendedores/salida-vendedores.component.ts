@@ -7,17 +7,18 @@ import {map, startWith, tap, debounceTime, distinctUntilChanged} from 'rxjs/oper
 import {SalidaVendedoresService} from './salida-vendedores.service';
 import {ServiciosGenerales, Almacen} from '../global/servicios';
 import {ServiciosVentas} from '../global/ventas';
-import {ProductoService} from '../productos/productos.service'
-import {VentanaTalonarioComponent} from './ventana-talonario/ventana-talonario.component'
+import {ProductoService} from '../productos/productos.service';
+import {VentanaTalonarioComponent} from './ventana-talonario/ventana-talonario.component';
 import { ventanaseriessv } from './ventana-seriessv/ventanaseriessv';
-import {StockService} from '../stock/stock.service'
-import {ServiciosProductoSerie} from '../global/productoserie'
+import {StockService} from '../stock/stock.service';
+import {ServiciosProductoSerie} from '../global/productoserie';
+import {SalidaProductosService} from '../salida-productos/salida-productos.service';
 
 @Component({
   selector: 'app-salida-vendedores',
   templateUrl: './salida-vendedores.component.html',
   styleUrls: ['./salida-vendedores.component.css'],
-  providers: [SalidaVendedoresService,ServiciosGenerales,ServiciosVentas,ProductoService,StockService,ServiciosProductoSerie]
+  providers: [SalidaVendedoresService,ServiciosGenerales,ServiciosVentas,ProductoService,StockService,ServiciosProductoSerie,SalidaProductosService]
 })
 
 export class SalidaVendedoresComponent implements OnInit {
@@ -49,7 +50,8 @@ export class SalidaVendedoresComponent implements OnInit {
     private Global: ServiciosGenerales,
     private Ventas:ServiciosVentas,
     private Articulos: StockService,
-    private SSeries:ServiciosProductoSerie
+    private SSeries:ServiciosProductoSerie,
+    private TransaccionService: SalidaProductosService,
     ) { }
 
  ngOnInit() {
@@ -241,7 +243,7 @@ export class SalidaVendedoresComponent implements OnInit {
   }
 
   ProductoSeleccionado(filtro){
-    this.Articulos.ListarStock(this.FiltroAlmacen.value, '', '', '', filtro, 1, 20, 'descripcion asc').subscribe(res=>{
+    this.Articulos.ListarStock(this.FiltroAlmacen.value.nombre, '', '', '', filtro, 1, 20, 'descripcion asc').subscribe(res=>{
       this.Producto=res['data'].stock;
       for (let i of this.SalidaVendedoresForm['controls'].productos.value) {
         if (i.producto) {
@@ -272,7 +274,7 @@ export class SalidaVendedoresComponent implements OnInit {
   AgregarSerieSalidaV(producto,index) {
     const serieventana = this.DialogoSerie.open(ventanaseriessv, {
       width: '800px',
-      data:{almacen:this.FiltroAlmacen.value, id_producto:producto.id_producto, precio:producto.precio, series:this.Series}
+      data:{almacen:this.FiltroAlmacen.value.nombre, id_producto:producto.id_producto, precio:producto.precio, series:this.Series}
     });
 
     serieventana.afterClosed().subscribe(res=>{
@@ -315,13 +317,13 @@ export class SalidaVendedoresComponent implements OnInit {
 
   Guardar(formulario){
     let destinos:string="";
+    let id_cabecera:number;
 
     for (let i of this.departamentos) {
       destinos=i.name +", " +destinos
     }
 
-    // console.log("Series",this.Series);
-   // console.log("Formulario", formulario.value.vendedores)
+        console.log(this.FiltroAlmacen.value)
 
     this.Servicio.Agregar(
       formulario.value.pecosa,
@@ -332,6 +334,16 @@ export class SalidaVendedoresComponent implements OnInit {
       formulario.value.tipo_movilidad,
       formulario.value.observacion
       ).subscribe(res=>{
+
+        // Crear transaccion en el almacen
+        this.TransaccionService.SalidaTransferenciaAlmacenVendedores(
+          this.FiltroAlmacen.value.id,
+          res.data,
+          formulario.value.fecha_salida,
+          formulario.value.pecosa
+         ).subscribe(res=>{
+           id_cabecera=res.data
+         })
 
         // Grabar datos de chofer
         if (formulario.value.tipo_movilidad) {
@@ -361,15 +373,18 @@ export class SalidaVendedoresComponent implements OnInit {
               i.precio,
               i.cantidad
             ).subscribe(res=>{
-              this.SSeries.RegistrarProductoOUT(i.id_serie).subscribe(res=>{
-            })
+                this.TransaccionService.AgregarProducto(
+                  id_cabecera,
+                  i.id_serie,
+                  i.precio,
+                  i.cantidad
+                ).subscribe(res=>{
+                  this.SSeries.RegistrarProductoOUT(i.id_serie).subscribe()
+                })
             })
           }
         }
 
-        // this.SalidaVendedoresForm.reset()
-        // this.Series=[];
-        // this.ResetearFormArray(this.productos);
         this.snackBar.open("El producto se guardó satisfactoriamente", '', {
           duration: 2000,
         });

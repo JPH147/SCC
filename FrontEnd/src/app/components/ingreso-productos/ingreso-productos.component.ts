@@ -142,7 +142,7 @@ import {ProductoService} from '../productos/productos.service';
     ResetearForm(event) {
       this.ResetearFormArray(this.productos);
       this.Series = [];
-      this.Articulos.Listado('', '', '', '', 1, 10, 'descripcion', 'asc').subscribe(res => this.Producto = res['data'].productos);
+      this.Articulos.Listado('', '', '', '', null,null,1, 10, 'descripcion', 'asc',1).subscribe(res => this.Producto = res['data'].productos);
     }
 
     ResetearFormArray = (formArray: FormArray) => {
@@ -173,7 +173,7 @@ import {ProductoService} from '../productos/productos.service';
     }
 
     ProductoSeleccionado(filtro){
-      this.Articulos.Listado('', '', '', '', 1, 10, 'descripcion', 'asc').subscribe(res => {
+      this.Articulos.Listado('', '', '', '', null,null,1, 10, 'descripcion', 'asc',1).subscribe(res => {
         this.Producto = res['data'].productos;
         for (let i of this.IngresoProductoForm['controls'].productos.value) {
           if (i.producto) {

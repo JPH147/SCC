@@ -20,9 +20,12 @@
         $producto->mrc_nombre = !empty($_GET['prmarca']) ? $_GET['prmarca'] :'';
         $producto->mdl_nombre = !empty($_GET['prmodelo']) ? $_GET['prmodelo'] : '';
         $producto->prd_descripcion = !empty($_GET['prdescripcion']) ? $_GET['prdescripcion'] : '';
+        $producto->precio_minimo = !empty($_GET['prpreciominimo']) ? $_GET['prpreciominimo'] : null;
+        $producto->precio_maximo = !empty($_GET['prpreciomaximo']) ? $_GET['prpreciomaximo'] : null;
         $producto->numero_pagina = !empty($_GET['prpagina']) ? $_GET['prpagina'] : 1;
         $producto->total_pagina = !empty($_GET['prtotalpagina']) ? $_GET['prtotalpagina'] : 20;
         $producto->orden = !empty($_GET['orden']) ? $_GET['orden'] : 'descripcion asc';
+        $producto->estado = !empty($_GET['prestado']) ? $_GET['prestado'] : null;
 
         $producto_list = $producto->read();
         $producto_contar = $producto->contar();

@@ -33,6 +33,24 @@ export class ServiciosGenerales {
   }));
   }
 
+  ListarUnidadMedida(
+    tipo_producto:string
+  ):Observable<any>{
+
+    return this.http.get(this.url + 'productotipo/read_um.php', {
+    params: new HttpParams()
+    .set('prproducto',tipo_producto)
+    })
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+          return res;
+      }  else {
+          console.log('Error al importar los datos, revisar servicio');
+          return res;
+      }
+    }));
+  }
+
   ListarMarca(
     id_tipo: string,
     nombre: string

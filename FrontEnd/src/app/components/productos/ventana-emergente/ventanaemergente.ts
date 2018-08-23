@@ -21,6 +21,7 @@ export class VentanaEmergenteProductos {
   public Tipos: TipoProductoModelo[] = [];
   public Marcas: MarcaModelo[] = [];
   public Modelos: ModeloModelo[] = [];
+  public unidad_medida: string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
@@ -55,6 +56,8 @@ export class VentanaEmergenteProductos {
       'descripcion': [null, [
         Validators.required
       ]],
+      'unidad_medida':[{value:null,disabled:true},[
+      ]]
     });
 
     /*Relación de productos*/
@@ -83,6 +86,7 @@ export class VentanaEmergenteProductos {
   /* Se muestran marcas cuando se selecciona un tipo de producto */
   TipoSeleccionado(event) {
       this.ListarMarcas(event.value);
+      this.Servicios.ListarUnidadMedida(event.value).subscribe(res=>this.ProductosForm.get('unidad_medida').setValue(res.data.unidades[0].nombre));
       this.ProductosForm.get('marca').setValue('');
       this.ProductosForm.get('modelo').setValue('');
       this.ProductosForm.controls['marca'].enable();

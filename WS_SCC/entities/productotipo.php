@@ -43,6 +43,35 @@ class Tipo_Producto{
 		return $tipo_producto_list;
 	}
 
+	function read_unidadmedida(){
+	$query = "CALL sp_listarunidadmedida(?)";
+
+		$result = $this->conn->prepare($query);
+
+		$result->bindParam(1, $this->id_tipo_producto);
+
+		$result->execute();
+
+		$unidad_medida_list=array();
+		$unidad_medida_list["unidades"]=array();
+
+		$contador = 0;
+
+		while($row = $result->fetch(PDO::FETCH_ASSOC))
+		{
+			extract($row);
+			$contador = $contador+1;
+			$unidad_medida_fila = array(
+				"numero"=>$contador,
+				"id"=>$id,
+				"nombre"=>$nombre,
+			);
+			array_push($unidad_medida_list["unidades"],$unidad_medida_fila);
+		}
+
+		return $unidad_medida_list;
+	}
+
 	
 }
 

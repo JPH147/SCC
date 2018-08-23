@@ -1,39 +1,57 @@
 <mat-card>
   <!-- Encabezado -->
+  <button mat-raised-button color="primary" class="agregar" (click)="Agregar()">Agregar</button>
   <mat-card-title>
     <div id = "tituloProd"> Listado de Productos</div>
   </mat-card-title>
 
   <!-- Filtros Productos, tipo  Marca Modelo -->
-  <mat-grid-list cols= "5" rowHeight="90px">
+  <mat-grid-list cols= "4" rowHeight="90px">
     <mat-grid-tile>
       <mat-icon>search</mat-icon>
       <mat-form-field>
         <input matInput placeholder="Producto" #InputProducto>
       </mat-form-field>
     </mat-grid-tile>
-        <mat-grid-tile>
+    <mat-grid-tile>
       <mat-icon>search</mat-icon>
       <mat-form-field>
         <input matInput placeholder="Tipo" #InputTipo>
       </mat-form-field>
     </mat-grid-tile>
-        <mat-grid-tile>
+    <mat-grid-tile>
       <mat-icon>search</mat-icon>
-      <mat-form-field>
-        <input matInput placeholder="Marca" #InputMarca>
-      </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Marca" #InputMarca>
+        </mat-form-field>
     </mat-grid-tile>
-        <mat-grid-tile>
+    <mat-grid-tile>
       <mat-icon>search</mat-icon>
       <mat-form-field>
         <input matInput placeholder="Modelo" #InputModelo>
       </mat-form-field>
-      </mat-grid-tile>
-      <!-- Boton Agrega Productos -->
-      <mat-grid-tile>
-      <button mat-raised-button color="primary" class="agregar" (click)="Agregar()">Agregar</button>
-      </mat-grid-tile>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-icon>attach_money</mat-icon>
+      <mat-form-field>
+        <input matInput placeholder="Precio mínimo" #InputPMinimo>
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-icon>attach_money</mat-icon>
+      <mat-form-field>
+        <input matInput placeholder="Precio máximo" #InputPMaximo>
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-form-field>
+        <mat-select placeholder="Estado" #InputEstado [value]=1>
+          <mat-option [value]="0">Todos</mat-option>
+          <mat-option [value]="1">Activos</mat-option>
+          <mat-option [value]="2">Inactivos</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </mat-grid-tile>
   </mat-grid-list>
 
   <mat-card-content>
@@ -77,8 +95,12 @@
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let producto">
-        <button mat-icon-button color="primary" (click)="Editar(producto.id)" matTooltip="Editar"><mat-icon> edit </mat-icon></button>
-        <button mat-icon-button color="primary" (click)="Eliminar(producto)" matTooltip="Eliminar"><mat-icon> delete </mat-icon></button>
+          <button mat-icon-button color="primary" (click)="Editar(producto.id)" matTooltip="Editar"><mat-icon> edit </mat-icon></button>
+          <div>
+            <button mat-icon-button color="primary" (click)="Eliminar(producto)" matTooltip="Eliminar" *ngIf="producto.estado==1"><mat-icon> delete </mat-icon></button>  
+          </div>
+          
+          <button mat-icon-button color="accent" (click)="Activar(producto.id)" matTooltip="Eliminar" *ngIf="producto.estado!=1"><mat-icon> delete_forever </mat-icon></button>
         </mat-cell>
       </ng-container>
 

@@ -27,14 +27,17 @@ constructor(private Servicio: ProductoService) { }
     marca: string,
     modelo: string,
     descripcion: string,
+    precio_minimo:number,
+    precio_maximo:number,
     pagina: number,
     total_pagina: number,
     columna: string,
-    tipo_orden: string
+    tipo_orden: string,
+    estado:number,
   ) {
   this.CargandoInformacion.next(true);
 
-  this.Servicio.Listado(tipo, marca, modelo, descripcion, pagina, total_pagina, columna, tipo_orden)
+  this.Servicio.Listado(tipo, marca, modelo, descripcion,precio_minimo,precio_maximo, pagina, total_pagina, columna, tipo_orden,estado)
   .pipe(catchError(() => of([])),
   finalize(() => this.CargandoInformacion.next(false))
   )

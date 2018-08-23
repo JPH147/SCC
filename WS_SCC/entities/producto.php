@@ -22,6 +22,10 @@ Class Producto{
     public $total_resultado;
     public $orden;
 
+    public $precio_minimo;
+    public $precio_maximo;
+    public $estado;
+
     public function __construct($db){
         $this->conn = $db;
     }
@@ -29,7 +33,7 @@ Class Producto{
     /* Listar productos */
     function read(){
 
-        $query = "CALL sp_listarproducto(?,?,?,?,?,?,?)";
+        $query = "CALL sp_listarproducto(?,?,?,?,?,?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
@@ -37,9 +41,12 @@ Class Producto{
         $result->bindParam(2, $this->mrc_nombre);
         $result->bindParam(3, $this->mdl_nombre);
         $result->bindParam(4, $this->prd_descripcion);
-        $result->bindParam(5, $this->numero_pagina);
-        $result->bindParam(6, $this->total_pagina);
-        $result->bindParam(7, $this->orden);
+        $result->bindParam(5, $this->precio_minimo);
+        $result->bindParam(6, $this->precio_maximo);
+        $result->bindParam(7, $this->numero_pagina);
+        $result->bindParam(8, $this->total_pagina);
+        $result->bindParam(9, $this->orden);
+        $result->bindParam(10, $this->estado);
 
         $result->execute();
         
@@ -60,7 +67,8 @@ Class Producto{
                 "modelo"=>$modelo,
                 "descripcion"=>$descripcion,
                 "unidad_medida"=>$unidad_medida,
-                "precio"=>$precio
+                "precio"=>$precio,
+                "estado"=>$estado
             );
             array_push($producto_list["productos"],$producto_item);
         }
@@ -70,7 +78,7 @@ Class Producto{
 
     function contar(){
 
-        $query = "CALL sp_listarproductocontar(?,?,?,?)";
+        $query = "CALL sp_listarproductocontar(?,?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
@@ -78,7 +86,8 @@ Class Producto{
         $result->bindParam(2, $this->mrc_nombre);
         $result->bindParam(3, $this->mdl_nombre);
         $result->bindParam(4, $this->prd_descripcion);
-
+        $result->bindParam(5, $this->precio_minimo);
+        $result->bindParam(6, $this->precio_maximo);
         $result->execute();
 
         $row = $result->fetch(PDO::FETCH_ASSOC);
@@ -137,6 +146,24 @@ Class Producto{
     function delete()
     {
         $query = "call sp_eliminarproducto(?)";
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->idproducto);
+
+        if($result->execute())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+    }
+
+    /* Activar producto */
+    function activar()
+    {
+        $query = "call sp_activarproducto(?)";
         $result = $this->conn->prepare($query);
 
         $result->bindParam(1, $this->idproducto);

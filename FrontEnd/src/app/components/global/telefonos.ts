@@ -8,6 +8,7 @@ import {URL} from './url';
 @Injectable()
 
 export class ServiciosTelefonos {
+
  public url: string = URL.url;
 
   constructor(
@@ -49,6 +50,7 @@ export class ServiciosTelefonos {
 			console.log('Error al importar los datos, revisar servicio');
 		}
 	}))
+}
 }
 
 export interface Telefono {

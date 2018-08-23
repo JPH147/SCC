@@ -17,12 +17,31 @@ export class ProductoService {
   marca: string,
   modelo: string,
   descripcion: string,
+  precio_minimo:number,
+  precio_maximo:number,
   pagina: number,
   total_pagina: number,
   columna: string,
-  tipo_orden: string
-  ): Observable<any> { let orden;
+  tipo_orden: string,
+  estado:number
+  ): Observable<any> {
+
+    let orden:string, Pminimo:string='', Pmaximo:string='', Estado:string="";
+    
     orden = columna.concat(' ', tipo_orden);
+
+    if (precio_minimo != null) {
+      Pminimo=precio_minimo.toString()
+    }
+
+    if (precio_maximo != null) {
+      Pmaximo=precio_maximo.toString()
+    }
+
+    if(estado){
+      Estado=estado.toString()
+    }
+
 
     return this.http.get(this.url + 'producto/read.php', {
       params: new HttpParams()
@@ -30,9 +49,12 @@ export class ProductoService {
       .set('prmarca', marca)
       .set('prmodelo', modelo)
       .set('prdescripcion', descripcion)
+      .set('prpreciominimo',Pminimo)
+      .set('prpreciomaximo',Pmaximo)
       .set('prpagina', pagina.toString())
       .set('prtotalpagina', total_pagina.toString())
       .set('orden', orden)
+      .set('prestado',Estado)
   })
     .pipe(map(res => {
       if (res['codigo'] === 0) {
@@ -51,6 +73,15 @@ export class ProductoService {
     let params = 'idproducto=' + producto;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     return this.http.post(this.url + 'producto/delete.php', params, {headers: headers});
+  }
+
+  Activar(
+   producto: number
+  ): Observable<any> {
+    // tslint:disable-next-line:prefer-const
+    let params = 'idproducto=' + producto;
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    return this.http.post(this.url + 'producto/activar.php', params, {headers: headers});
   }
 
   Agregar(
