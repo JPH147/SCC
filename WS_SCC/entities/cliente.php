@@ -216,6 +216,7 @@ Class Cliente{
                 return false;
             }
     }
+    
     function updatefoto()
     {
         $query= "CALL sp_actualizarfoto(:idcliente, :clt_foto)";

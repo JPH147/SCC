@@ -270,14 +270,18 @@ export class ServiciosGenerales {
       }));
     }
 
-    RenameFile(nameimg: string,
-    tipodoc: string,
-    numdoc: string): Observable <any> {
+    RenameFile(
+      nameimg: string,
+      tipodoc: string,
+      numdoc: string,
+      grupo:string
+    ): Observable <any> {
       return this.http.get(this.url + 'file/rename.php', {
       params: new  HttpParams()
       .set('nameimg', nameimg.trim())
       .set('tipodoc', tipodoc.trim())
       .set('numdoc', numdoc)
+      .set('prgrupo',grupo)
     })
     .pipe(map(res => {
       if (res['codigo'] === 0) {

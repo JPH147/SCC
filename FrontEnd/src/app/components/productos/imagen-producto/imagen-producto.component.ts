@@ -4,28 +4,27 @@ import {FormControl, FormGroup, FormBuilder,FormGroupDirective, NgForm, Validato
 import {ErrorStateMatcher} from '@angular/material/core';
 import {ServiciosGenerales} from '../../global/servicios';
 import { NgControl } from '@angular/forms';
-import {ClienteService} from '../clientes.service';
+import {ProductoService} from '../productos.service';
 import { FileHolder } from '../../../../../node_modules/angular2-image-upload';
 
 @Component({
-  selector: 'app-fileupload',
-  templateUrl: './fileupload.html',
-  styleUrls: ['./fileupload.css'],
-  providers:[ServiciosGenerales, ClienteService]
+  selector: 'app-imagen-producto',
+  templateUrl: './imagen-producto.component.html',
+  styleUrls: ['./imagen-producto.component.css'],
+  providers:[ServiciosGenerales, ProductoService]
 })
 
 // tslint:disable-next-line:component-class-suffix
-export class FileUpload {
+export class ImagenProductoComponent {
   public selectedValue: string;
   public ClientesForm: FormGroup;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
-    public ventana: MatDialogRef<FileUpload>,
-    // tslint:disable-next-line:no-shadowed-variable
+    public ventana: MatDialogRef<ImagenProductoComponent>,
     private FormBuilder: FormBuilder,
     private Servicios: ServiciosGenerales,
-    private ClienteServicios: ClienteService,
+    private ProductoServicios: ProductoService,
     ) {}
 
     ngOnInit() {
@@ -35,19 +34,16 @@ export class FileUpload {
       onUploadFinished(file: FileHolder) {
 
         if ( this.data) {
-        console.log(file);
-        this.Servicios.RenameFile(file.serverResponse.response._body, 'FOTO', this.data.dni,"cliente").subscribe( res => {
-          console.log(res);
-          if (res) {
-              this.ClienteServicios.ActualizarFoto(this.data.id, res.mensaje).subscribe( res2 => {
-                console.log(res2);
+          // console.log(file);
+          this.Servicios.RenameFile(file.serverResponse.response._body, 'PRODUCTO', this.data.id,"producto").subscribe( res => {
+            console.log("res",res);
+            if (res) {
+                this.ProductoServicios.ActualizarFoto(this.data.id, res.mensaje).subscribe();
               }
-            );
-            }
-        });
+          });
         }
-        console.log(file.serverResponse.response._body);
-        console.log(this.data);
+        // console.log(file.serverResponse.response._body);
+        // console.log(this.data);
         }
 
   onNoClick(): void {
