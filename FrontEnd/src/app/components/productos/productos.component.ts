@@ -8,7 +8,7 @@ import {ProductoDataSource} from './productos.dataservice';
 import {fromEvent} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
 import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
-
+import {ImagenProductoComponent} from './imagen-producto/imagen-producto.component'
 
 @Component({
   selector: 'app-productos',
@@ -36,7 +36,8 @@ export class ProductosComponent implements OnInit {
   constructor(
     private Servicio: ProductoService,
     public DialogoProductos: MatDialog,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
+    public DialogFileUpload: MatDialog,
   ) {}
 
   ngOnInit() {
@@ -145,6 +146,13 @@ ngAfterViewInit () {
         duration: 2000,
       });
    })
+ }
+
+ CargarImagen(producto){
+    let VentanaFileUpload = this.DialogFileUpload.open(ImagenProductoComponent, {
+    width: '800px',
+    data : producto
+  });
  }
 
 }

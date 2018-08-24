@@ -87,6 +87,8 @@ import {VentanaEmergenteContacto} from './components/clientes/ventana-emergentec
 import {VentanaEmergenteStock } from './components/stock/ventana-emergentestock/ventanaemergentestock';
 import { VentasListarComponent } from './components/ventas-listar/ventas-listar.component';
 import { VentanaTalonarioComponent } from './components/salida-vendedores/ventana-talonario/ventana-talonario.component';
+import {ImagenProductoComponent} from './components/productos/imagen-producto/imagen-producto.component';
+
 
 @NgModule({
   imports: [
@@ -175,7 +177,8 @@ import { VentanaTalonarioComponent } from './components/salida-vendedores/ventan
     VentanaEmergenteContacto,
     VentanaEmergenteStock,
     VentasListarComponent,
-    VentanaTalonarioComponent
+    VentanaTalonarioComponent,
+    ImagenProductoComponent
    ],
   entryComponents: [
     AppComponent,
@@ -195,7 +198,8 @@ import { VentanaTalonarioComponent } from './components/salida-vendedores/ventan
     VentanaEmergenteContacto,
     VentanaEmergenteStock,
     VentanaTalonarioComponent,
-    VentasComponent
+    VentasComponent,
+    ImagenProductoComponent
   ],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider, {provide: MAT_DATE_LOCALE, useValue: 'en-GB'}]

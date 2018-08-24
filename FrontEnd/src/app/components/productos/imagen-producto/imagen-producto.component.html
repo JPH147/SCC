@@ -1,0 +1,13 @@
+<mat-card>
+    <mat-card-header>
+      <mat-card-title>Subir Foto del Cliente</mat-card-title>
+    </mat-card-header>
+	<image-upload
+	[max]="1"
+	[url]="'http://localhost/SCC/WS_SCC/file/upload.php'"
+	[buttonCaption]="'Foto del producto'"
+	[maxFileSize]="1000000"
+	(uploadFinished)="onUploadFinished($event)"
+	[fileTooLargeMessage]="'La foto debe pesar menos de 1MB'">
+	</image-upload>
+</mat-card>

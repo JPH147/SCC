@@ -125,6 +125,23 @@ export class ProductoService {
     return this.http.post(this.url + 'producto/update.php', params, {headers: headers});
   }
 
+  ActualizarFoto(
+    id: number,
+    nombre_foto: string
+
+  ): Observable<any> {
+    let params = new HttpParams()
+    .set('prid', id.toString())
+    .set('prfoto', nombre_foto);
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'producto/updateimage.php', params, {headers: headers}).pipe(map(res => {
+     console.log(res);
+      return res;
+    }));
+  }
+
 }
 
 export interface Producto {

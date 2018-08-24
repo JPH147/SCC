@@ -13,6 +13,7 @@ Class Producto{
     public $prd_precio;
 
     public $id_producto;
+    public $id;
 
     public $id_tipo_producto;
     public $id_marca;
@@ -22,6 +23,7 @@ Class Producto{
     public $total_resultado;
     public $orden;
 
+    public $foto;
     public $precio_minimo;
     public $precio_maximo;
     public $estado;
@@ -203,5 +205,26 @@ Class Producto{
                 return false;
             }
     }
+
+    function updatefoto()
+    {
+        $query= "CALL sp_actualizarproductofoto(:id, :nombre)";
+
+        $result = $this->conn->prepare($query);
+
+        $this->id=htmlspecialchars(strip_tags($this->id));
+        $this->foto=htmlspecialchars(strip_tags($this->foto));
+
+        $result->bindParam(":id", $this->id);
+        $result->bindParam(":nombre", $this->foto);
+
+        if($result->execute())
+        {
+            return true;
+        }
+        
+        return false;
+    }
+
 }
 ?>
