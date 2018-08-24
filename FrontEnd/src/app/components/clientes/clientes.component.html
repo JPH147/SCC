@@ -94,7 +94,7 @@
 
       <ng-container matColumnDef="foto">
         <mat-header-cell *matHeaderCellDef>Foto </mat-header-cell>
-        <img *matCellDef="let cliente" [attr.src]="cliente.foto" width="40px" height="55px" />
+        <mat-cell *matCellDef="let cliente"><img [attr.src]="cliente.foto" class="foto-cliente"></mat-cell>
     </ng-container>
 
       <ng-container matColumnDef="subsede">
