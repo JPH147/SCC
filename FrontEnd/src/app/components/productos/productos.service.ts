@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {URL} from '../global/url';
+import {URL,URLIMAGENES} from '../global/url';
 
 @Injectable()
 
@@ -58,6 +58,11 @@ export class ProductoService {
   })
     .pipe(map(res => {
       if (res['codigo'] === 0) {
+
+        for (let i in res['data'].productos) {
+          res['data'].productos[i].foto = URLIMAGENES.urlimages+"producto/"+ res['data'].productos[i].foto;
+        }
+
           return res;
       }  else {
           console.log('Error al importar los datos, revisar servicio');

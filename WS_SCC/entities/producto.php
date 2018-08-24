@@ -70,6 +70,7 @@ Class Producto{
                 "descripcion"=>$descripcion,
                 "unidad_medida"=>$unidad_medida,
                 "precio"=>$precio,
+                "foto"=>$foto,
                 "estado"=>$estado
             );
             array_push($producto_list["productos"],$producto_item);

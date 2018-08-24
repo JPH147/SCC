@@ -6,6 +6,7 @@ import {ServiciosGenerales} from '../../global/servicios';
 import { NgControl } from '@angular/forms';
 import {ClienteService} from '../clientes.service';
 import { FileHolder } from '../../../../../node_modules/angular2-image-upload';
+import {URL} from '../../global/url';
 
 @Component({
   selector: 'app-fileupload',
@@ -18,7 +19,8 @@ import { FileHolder } from '../../../../../node_modules/angular2-image-upload';
 export class FileUpload {
   public selectedValue: string;
   public ClientesForm: FormGroup;
-
+  public ruta:string;
+  
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
     public ventana: MatDialogRef<FileUpload>,
@@ -29,7 +31,8 @@ export class FileUpload {
     ) {}
 
     ngOnInit() {
-      }
+       this.ruta=URL.url+"file/upload.php"
+    }
 
 
       onUploadFinished(file: FileHolder) {

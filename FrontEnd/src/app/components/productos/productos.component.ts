@@ -20,7 +20,7 @@ import {ImagenProductoComponent} from './imagen-producto/imagen-producto.compone
 export class ProductosComponent implements OnInit {
 
   ListadoProductos: ProductoDataSource;
-  Columnas: string[] = ['numero', 'descripcion', 'tipo', 'marca', 'modelo', 'precio', 'opciones'];
+  Columnas: string[] = ['numero','foto', 'descripcion', 'tipo', 'marca', 'modelo', 'precio', 'opciones'];
   // tslint:disable-next-line:no-inferrable-types
 
   @ViewChild('InputProducto') FiltroProductos: ElementRef;

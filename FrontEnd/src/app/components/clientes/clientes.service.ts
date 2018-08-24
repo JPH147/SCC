@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {URL} from '../global/url';
+import {URL,URLIMAGENES} from '../global/url';
 
 @Injectable()
 
@@ -27,7 +27,7 @@ export class ClienteService {
        // console.log(res['data'].clientes);
 
         for (let i in res['data'].clientes) {
-          res['data'].clientes[i].foto = URL.urlimages + res['data'].clientes[i].foto;
+          res['data'].clientes[i].foto = URLIMAGENES.urlimages+"cliente/"+ res['data'].clientes[i].foto;
         }
           return res['data'].clientes;
       }  else {

@@ -4,7 +4,7 @@
     </mat-card-header>
 	<image-upload
 	[max]="1"
-	[url]="'http://localhost/SCC/WS_SCC/file/upload.php'"
+	url="{{ruta}}"
 	[buttonCaption]="'Foto del producto'"
 	[maxFileSize]="1000000"
 	(uploadFinished)="onUploadFinished($event)"

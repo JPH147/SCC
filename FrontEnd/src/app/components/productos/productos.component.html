@@ -67,6 +67,13 @@
         <mat-cell *matCellDef="let producto"> {{producto.numero}} </mat-cell>
       </ng-container>
 
+      <ng-container matColumnDef="foto">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Foto </mat-header-cell>
+        <mat-cell *matCellDef="let producto">
+          <img [attr.src]="producto.foto" width="40px" height="55px" />
+        </mat-cell>
+      </ng-container>
+
       <ng-container matColumnDef="tipo">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </mat-header-cell>
         <mat-cell *matCellDef="let producto"> {{producto.tipo}} </mat-cell>
