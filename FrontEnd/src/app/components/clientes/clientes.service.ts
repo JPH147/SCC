@@ -24,7 +24,11 @@ export class ClienteService {
    + ssd_nombre + '&pclt_dni=' + dni + '&pclt_nombre=' + nombre)
     .pipe(map(res => {
       if (res['codigo'] === 0) {
-        console.log(res['data'].clientes);
+       // console.log(res['data'].clientes);
+
+        for (let i in res['data'].clientes) {
+          res['data'].clientes[i].foto = URL.urlimages + res['data'].clientes[i].foto;
+        }
           return res['data'].clientes;
       }  else {
           console.log('Error al importar los datos, revisar servicio');

@@ -37,6 +37,11 @@
       max-width: 2%;
     }
 
+    .mat-column-foto
+    {
+      max-width: 10%;
+    }
+
     .mat-column-institucion
     {
       max-width: 10%;

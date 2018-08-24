@@ -31,7 +31,7 @@
             $cliente->clt_codigo = trim($_POST["clt_codigo"]);
             $cliente->clt_dni = trim($_POST["clt_dni"]);
             $cliente->clt_nombre = trim($_POST["clt_nombre"]);
-            $cliente->clt_foto = "-"; //"FOTO_".$cliente->clt_dni;
+            $cliente->clt_foto = "Unknown.png"; //"FOTO_".$cliente->clt_dni;
             $cliente->clt_cip = trim($_POST["clt_cip"]);
             $cliente->clt_email = trim($_POST["clt_email"]);
             $cliente->clt_casilla = trim($_POST["clt_casilla"]);

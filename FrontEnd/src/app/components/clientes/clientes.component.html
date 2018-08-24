@@ -17,7 +17,7 @@
         </mat-panel-title>
       </mat-expansion-panel-header>
 
-      <mat-grid-list cols=3 rowHeight="60px">
+      <mat-grid-list cols=2 rowHeight="60px">
         <mat-grid-tile>
           <mat-icon>search</mat-icon>
           <mat-form-field>
@@ -94,7 +94,7 @@
 
       <ng-container matColumnDef="foto">
         <mat-header-cell *matHeaderCellDef>Foto </mat-header-cell>
-        <img *matCellDef="let cliente" [attr.src]="cliente.foto" width="40px" height="60px" />
+        <img *matCellDef="let cliente" [attr.src]="cliente.foto" width="40px" height="55px" />
     </ng-container>
 
       <ng-container matColumnDef="subsede">

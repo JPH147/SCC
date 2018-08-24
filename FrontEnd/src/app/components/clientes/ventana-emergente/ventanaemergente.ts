@@ -134,8 +134,8 @@ SedeSeleccionada(event) {
 
   /* Enviar al formulario */
   Guardar(formulario) {
-    console.log(formulario.value.subsede);
-    if (this.data.objeto) {
+    //console.log(formulario.value.subsede);
+    if (this.data) {
       // tslint:disable-next-line:max-line-length
       this.ClienteServicios.Actualizar(this.data.id, formulario.value.subsede, formulario.value.codigo,
         formulario.value.dni, formulario.value.nombre, formulario.value.cip,
@@ -147,7 +147,7 @@ SedeSeleccionada(event) {
       this.ventana.close();
     }
 
-    if (!this.data.objeto) {
+    if (!this.data) {
       this.ClienteServicios.Agregar(formulario.value.subsede , formulario.value.codigo,
         formulario.value.dni, formulario.value.nombre,
         formulario.value.cip, formulario.value.email, formulario.value.casilla,

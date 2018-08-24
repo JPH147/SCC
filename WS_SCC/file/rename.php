@@ -12,11 +12,11 @@ $numdoc = $_GET['numdoc'];
 
 $ext = pathinfo($nameimg, PATHINFO_EXTENSION);
 
-$return_path =$path . $tipodoc . "_".$numdoc.".".$ext;
-
+$return_name =$tipodoc . "_".$numdoc.".".$ext;
+$return_path =$path . $return_name;
 if (rename( $nameimg ,$return_path ))
 {
-    print_json("0000", trim($return_path), "");
+    print_json("0000", trim($return_name), "");
 }
 else
 {
