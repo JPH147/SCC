@@ -8,6 +8,9 @@ Class ProductoSerie{
     public $producto;
     public $serie;
     public $estado;
+    public $color;
+    public $almacenamiento;
+    public $observacion;
 
     public function __construct($db){
         $this->conn = $db;
@@ -131,16 +134,26 @@ Class ProductoSerie{
 
         $query = "call sp_crearproductoserie(
             :prproducto,
-            :prserie
+            :prserie,
+            :prcolor,
+            :pralmacenamiento,
+            :probservacion
             )";
 
         $result = $this->conn->prepare($query);
 
         $result->bindParam(":prproducto", $this->id_producto);
         $result->bindParam(":prserie", $this->serie);
+        $result->bindParam(":prcolor", $this->color);
+        $result->bindParam(":pralmacenamiento", $this->almacenamiento);
+        $result->bindParam(":probservacion", $this->observacion);
+
 
         $this->id_producto=htmlspecialchars(strip_tags($this->id_producto));
         $this->serie=htmlspecialchars(strip_tags($this->serie));
+        $this->color=htmlspecialchars(strip_tags($this->color));
+        $this->almacenamiento=htmlspecialchars(strip_tags($this->almacenamiento));
+        $this->observacion=htmlspecialchars(strip_tags($this->observacion));
 
         if($result->execute())
         {

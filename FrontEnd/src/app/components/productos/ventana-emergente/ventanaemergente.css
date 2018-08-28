@@ -22,3 +22,8 @@
 .input-ventana{ 
   width:75%
 }
+
+.mensaje-error{
+  color: red;
+  text-align: center;
+}

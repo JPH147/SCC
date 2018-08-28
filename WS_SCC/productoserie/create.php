@@ -21,6 +21,9 @@
         {
             $productoserie->id_producto = $_POST["prproducto"];
             $productoserie->serie = $_POST["prserie"];
+            $productoserie->color = $_POST["prcolor"];
+            $productoserie->almacenamiento = $_POST["pralmacenamiento"];
+            $productoserie->observacion = $_POST["probservacion"];
             
             if($productoserie->create())
             {
