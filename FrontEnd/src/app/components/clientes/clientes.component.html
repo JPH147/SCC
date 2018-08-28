@@ -121,7 +121,7 @@
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let cliente">
           <button mat-icon-button matTooltip="Agregar Datos de Contacto" (click)="AgregarDatoContacto(cliente.id)" color="primary"><mat-icon> local_phone </mat-icon></button>
-          <button mat-icon-button matTooltip="Subir Foto" color="primary" (click)="SubirImagen(cliente)"><mat-icon> cloud_upload </mat-icon></button>
+          <button mat-icon-button matTooltip="Subir Foto" color="primary" (click)="SubirImagen(cliente)"><mat-icon> add_a_photo </mat-icon></button>
           <button mat-icon-button matTooltip="Hacer Venta" color="primary" [routerLink]="['/ventas/nueva', cliente.id]"><mat-icon> add_shopping_cart </mat-icon></button>
           <button mat-icon-button matTooltip="Ver Ventas" color="primary"><mat-icon> attach_money</mat-icon></button>
           <button mat-icon-button matTooltip="Editar Cliente" color="primary" (click)="Editar(cliente.id)"><mat-icon> edit </mat-icon></button>

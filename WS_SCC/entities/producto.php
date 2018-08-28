@@ -23,6 +23,7 @@ Class Producto{
     public $total_resultado;
     public $orden;
 
+    public $nombre;
     public $foto;
     public $precio_minimo;
     public $precio_maximo;
@@ -108,6 +109,28 @@ Class Producto{
         $result = $this->conn->prepare($query);
         
         $result->bindParam(1, $this->id_producto);
+        
+        $result->execute();
+    
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+        
+        $this->idproducto=$row['idproducto'];
+        $this->id_tipo_producto=$row['id_tipo_producto'];
+        $this->id_marca=$row['id_marca'];
+        $this->id_modelo=$row['id_modelo'];
+        $this->prd_descripcion=$row['prd_descripcion'];
+        $this->und_nombre=$row['und_nombre'];
+        $this->prd_precio=$row['prd_precio'];
+    }
+
+    /* Seleccionar producto por nombre */
+    function readxnombre()
+    {
+        $query ="call sp_listarproductoxnombre(?)";
+        
+        $result = $this->conn->prepare($query);
+        
+        $result->bindParam(1, $this->nombre);
         
         $result->execute();
     

@@ -150,9 +150,14 @@ ngAfterViewInit () {
 
  CargarImagen(producto){
     let VentanaFileUpload = this.DialogFileUpload.open(ImagenProductoComponent, {
-    width: '800px',
-    data : producto
-  });
+      width: '800px',
+      data : producto
+    });
+
+    VentanaFileUpload.afterClosed().subscribe(res=>{
+       this.CargarData();
+    })
+
  }
 
 }

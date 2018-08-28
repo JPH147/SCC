@@ -115,18 +115,35 @@ export class ProductoService {
     }));
   }
 
+  Verificar(
+    nombre: string
+  ): Observable<any> {
+
+    return this.http.get(this.url + 'producto/readxnombre.php?prnombre=', {
+     params: new HttpParams()
+    .set('prnombre',nombre.trim())
+    })
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+          return res['data'];
+      }  else {
+          console.log('No hay datos para mostrar');
+          return []
+      }
+    }));
+  }
+
   Actualizar(
     id: number,
     modelo: number,
     descripcion: string,
     precio: number
     ): Observable<any> {
-    // tslint:disable-next-line:prefer-const
-    // tslint:disable-next-line:whitespace
-    // tslint:disable-next-line:prefer-const
+
     let params = 'id_producto=' + id + '&id_modelo= ' + modelo + '&prd_descripcion = ' + descripcion + '&prd_precio=' + precio;
-    // tslint:disable-next-line:prefer-const
+
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
     return this.http.post(this.url + 'producto/update.php', params, {headers: headers});
   }
 
