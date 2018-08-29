@@ -103,7 +103,7 @@
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let producto">
-          <button mat-icon-button color="primary" (click)="CargarImagen(producto)" matTooltip="Editar"><mat-icon> add_a_photo </mat-icon></button>
+          <button mat-icon-button color="primary" (click)="CargarImagen(producto)" matTooltip="Cargar Imagen"><mat-icon> add_a_photo </mat-icon></button>
           <button mat-icon-button color="primary" (click)="Editar(producto.id)" matTooltip="Editar"><mat-icon> edit </mat-icon></button>
           <div>
             <button mat-icon-button color="primary" (click)="Eliminar(producto)" matTooltip="Eliminar" *ngIf="producto.estado==1"><mat-icon> delete </mat-icon></button>  
