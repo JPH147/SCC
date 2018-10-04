@@ -1,3 +1,71 @@
-<p>
-  proveedores works!
-</p>
+<mat-card>
+
+   <!-- Encabezado -->
+  <mat-card-title>
+    <div id = "tituloProd"> Listado de Proveedores</div>
+  </mat-card-title>
+
+  <button mat-raised-button color="primary" class="agregar" (click)="Agregar()">Agregar Proveedor</button>
+  <br/><br/><br/>
+
+
+  <mat-grid-list cols=2 rowHeight="60px">
+      <mat-grid-tile>
+        <mat-icon>search</mat-icon>
+        <mat-form-field>
+          <input matInput placeholder="RUC" #InputRUC>
+        </mat-form-field>
+      </mat-grid-tile>
+          <mat-grid-tile>
+        <mat-icon>search</mat-icon>
+        <mat-form-field>
+          <input matInput placeholder="Nombre" #InputNombreProvedor>
+        </mat-form-field>
+      </mat-grid-tile>
+  </mat-grid-list>
+  <br/>
+  <mat-card-content>
+
+    <div class = "spinner-container" *ngIf = "ListadoProveedor.Cargando| async">
+      <mat-spinner></mat-spinner>
+    </div>
+
+    <mat-table [dataSource]="ListadoProveedor" class="mat-elevation-z8">
+
+
+      <ng-container matColumnDef="numero">
+        <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+        <mat-cell *matCellDef="let proveedor"> {{proveedor.numero}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="ruc">
+        <mat-header-cell *matHeaderCellDef> RUC </mat-header-cell>
+        <mat-cell *matCellDef="let proveedor"> {{proveedor.documento}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="nombre">
+        <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+        <mat-cell *matCellDef="let proveedor"> {{proveedor.nombre}} </mat-cell>
+      </ng-container>
+
+
+      <ng-container matColumnDef="opciones">
+        <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
+        <mat-cell *matCellDef="let proveedor">
+          <button mat-icon-button matTooltip="Editar Proveedor" color="primary"><mat-icon> edit </mat-icon></button>
+          <button mat-icon-button matTooltip="Eliminar Proveedor" color="primary"><mat-icon> delete </mat-icon></button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: Columnas;"></mat-row>
+    </mat-table>
+
+
+
+  </mat-card-content>    
+
+
+
+
+</mat-card>

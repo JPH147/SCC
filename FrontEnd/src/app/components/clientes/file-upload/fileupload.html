@@ -1,4 +1,4 @@
-<mat-card>
+<!--<mat-card>
     <mat-card-header>
       <mat-card-title>Subir Foto del Cliente</mat-card-title>
     </mat-card-header>
@@ -11,4 +11,25 @@ url="{{ruta}}"
 (uploadFinished)="onUploadFinished($event)"
 [fileTooLargeMessage]="'La foto debe pesar menos de 1MB'">
 </image-upload>
+</mat-card>-->
+
+
+<mat-card>
+  <mat-card-content>
+  <img [attr.src]="this.data.foto" class="imagen-cliente">
+  </mat-card-content>
+  <mat-card-actions>
+    <mat-grid-list	cols=1 rowHeight="200px">
+      <mat-grid-tile>
+      <image-upload
+      [max]="1"
+      url="{{ruta}}"
+      [buttonCaption]="'Actualizar foto'"
+      [maxFileSize]="1000000"
+      (uploadFinished)="onUploadFinished($event)"
+      [fileTooLargeMessage]="'La foto debe pesar menos de 1MB'">
+      </image-upload>
+    </mat-grid-tile>
+  </mat-grid-list>
+</mat-card-actions>
 </mat-card>
