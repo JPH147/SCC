@@ -35,16 +35,10 @@ export class VentanaEmergenteStock  implements OnInit {
     }
 
     ListarProductoSerie() {
-      this.Servicios.Listado(this.data.almacen,this.data.producto).subscribe( res => {
-        this.LstSerie = [];
-        // tslint:disable-next-line:forin
-        for (let i in res) {
-          this.LstSerie.push ( res[i] );
-        }
+      this.Servicios.Listado(this.data.almacen,this.data.producto.id_producto).subscribe( res => {
+        this.LstSerie = res;
      });
     }
-
-
 
   AgregarSerieVS() {
     this.contador++;

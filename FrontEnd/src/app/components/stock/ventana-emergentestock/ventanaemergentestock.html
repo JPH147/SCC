@@ -1,14 +1,39 @@
-
 <mat-card>
-    <mat-card-header>
-      <mat-card-title> Detalle Serie Productos Stock</mat-card-title>
-    </mat-card-header>
-    <mat-list>
-      <mat-list-item *ngFor="let serie of LstSerie">
-         <p matline> {{serie.serie}} </p>
-      </mat-list-item>
-   </mat-list>
 
+	<mat-card-header>
+		<mat-card-title>
+			{{data.producto.descripcion}}
+		</mat-card-title>
+	</mat-card-header>
 
+  <mat-grid-list cols=4 rowHeight="40px">
+  	<mat-grid-tile>
+  	  <strong>Serie</strong>
+  	</mat-grid-tile>
+  	<mat-grid-tile>
+  	  <strong>Color</strong>
+  	</mat-grid-tile>
+  	<mat-grid-tile>
+  	  <strong>Almacenamiento</strong>
+  	</mat-grid-tile>
+  	<mat-grid-tile>
+  	  <strong>Observación</strong>
+  	</mat-grid-tile>
+  </mat-grid-list>
+
+  <mat-grid-list cols=4 rowHeight="40px" *ngFor="let serie of LstSerie">
+  	<mat-grid-tile>
+  	  {{serie.serie}}
+  	</mat-grid-tile>
+  	<mat-grid-tile>
+  	  {{serie.color}}
+  	</mat-grid-tile>
+  	<mat-grid-tile>
+  	  {{serie.almacenamiento}}
+  	</mat-grid-tile>
+  	<mat-grid-tile>
+  	  {{serie.observacion}}
+  	</mat-grid-tile>
+  </mat-grid-list>
 
   </mat-card>

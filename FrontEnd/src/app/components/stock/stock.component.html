@@ -48,50 +48,50 @@
                 <!-- Number Column -->
                 <ng-container matColumnDef="numero" class="numero">
                   <mat-header-cell *matHeaderCellDef>N°</mat-header-cell>
-                  <mat-cell *matCellDef="let row">{{row.numero}}</mat-cell>
+                  <mat-cell *matCellDef="let producto">{{producto.numero}}</mat-cell>
                 </ng-container>
 
                 <!-- Title Column -->
                 <ng-container matColumnDef="almacen">
                   <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Almacen</mat-header-cell>
-                  <mat-cell *matCellDef="let row">{{row.almacen}}</mat-cell>
+                  <mat-cell *matCellDef="let producto">{{producto.almacen}}</mat-cell>
                 </ng-container>
 
                 <!-- State Column -->
                 <ng-container matColumnDef="tipo">
                   <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Tipo</mat-header-cell>
-                  <mat-cell *matCellDef="let row">{{row.tipo}}</mat-cell>
+                  <mat-cell *matCellDef="let producto">{{producto.tipo}}</mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="marca">
                   <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Marca</mat-header-cell>
-                  <mat-cell *matCellDef="let row">{{row.marca}}</mat-cell>
+                  <mat-cell *matCellDef="let producto">{{producto.marca}}</mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="modelo">
                   <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Modelo</mat-header-cell>
-                  <mat-cell *matCellDef="let row">{{row.modelo}}</mat-cell>
+                  <mat-cell *matCellDef="let producto">{{producto.modelo}}</mat-cell>
                 </ng-container>
                 <!-- Created Column -->
                 <ng-container matColumnDef="descripcion">
                   <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Descripcion</mat-header-cell>
-                  <mat-cell *matCellDef="let row">{{row.descripcion}}</mat-cell>
+                  <mat-cell *matCellDef="let producto">{{producto.descripcion}}</mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="unidad_medida">
                   <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Unidad Medida</mat-header-cell>
-                  <mat-cell *matCellDef="let row">{{row.unidad_medida}}</mat-cell>
+                  <mat-cell *matCellDef="let producto">{{producto.unidad_medida}}</mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="cantidad">
                   <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Stock</mat-header-cell>
-                  <mat-cell *matCellDef="let row">{{row.cantidad}}</mat-cell>
+                  <mat-cell *matCellDef="let producto">{{producto.cantidad}}</mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="opciones">
                   <mat-header-cell *matHeaderCellDef>Opciones</mat-header-cell>
-                  <mat-cell *matCellDef="let row">
-                  <button mat-icon-button color="primary" (click)= "DetalleStock(row.almacen,row.id_producto)" Tooltip = "Detalle Productos"> <mat-icon> visibility </mat-icon></button>
+                  <mat-cell *matCellDef="let producto">
+                  <button mat-icon-button color="primary" (click)= "DetalleStock(producto.almacen,producto)" Tooltip = "Detalle Productos"> <mat-icon> visibility </mat-icon></button>
                   </mat-cell>
                 </ng-container>
 

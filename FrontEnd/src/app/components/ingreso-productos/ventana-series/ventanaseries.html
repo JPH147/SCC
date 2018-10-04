@@ -3,12 +3,22 @@
     <mat-card-header>
       <mat-card-title>Ingresar series</mat-card-title>
     </mat-card-header>
-    <mat-card-content>
 
-      <mat-grid-list cols=3 rowHeight="70px">
-        <mat-grid-tile *ngFor="let serie of seriearticulo">
+    <mat-card-content>
+      <mat-grid-list cols=3 rowHeight="70px" *ngFor="let serie of seriearticulo">
+        <mat-grid-tile>
           <mat-form-field class="input-serie">
-            <input matInput placeholder="Serie {{serie.numero}}" [(ngModel)]="serie.series">
+            <input matInput placeholder="Serie" [(ngModel)]="serie.series">
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <mat-form-field class="input-serie">
+            <input matInput placeholder="Color" [(ngModel)]="serie.color">
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <mat-form-field class="input-serie">
+            <input matInput placeholder="Almacenamiento" [(ngModel)]="serie.almacenamientos">
           </mat-form-field>
         </mat-grid-tile>
       </mat-grid-list>

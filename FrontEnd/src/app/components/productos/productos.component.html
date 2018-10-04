@@ -109,7 +109,7 @@
             <button mat-icon-button color="primary" (click)="Eliminar(producto)" matTooltip="Eliminar" *ngIf="producto.estado==1"><mat-icon> delete </mat-icon></button>  
           </div>
           
-          <button mat-icon-button color="accent" (click)="Activar(producto.id)" matTooltip="Eliminar" *ngIf="producto.estado!=1"><mat-icon> delete_forever </mat-icon></button>
+          <button mat-icon-button color="accent" (click)="Activar(producto.id)" matTooltip="Restaurar" *ngIf="producto.estado!=1"><mat-icon> delete_forever </mat-icon></button>
         </mat-cell>
       </ng-container>
 

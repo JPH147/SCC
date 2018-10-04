@@ -41,9 +41,12 @@ Class ProductoSerie{
                 "numero"=>$contador,
                 "almacen"=>$almacen,
                 "id_producto"=>$id_producto,
+                "descripcion"=>$descripcion,
                 "id_serie"=>$id_serie,
                 "serie"=>$serie,
-                "cantidad"=>$cantidad
+                "color"=>$color,
+                "almacenamiento"=>$almacenamiento,
+                "observacion"=>$observacion
             );
             array_push($producto_serie_list["producto_series"],$producto_serie_item);
         }
