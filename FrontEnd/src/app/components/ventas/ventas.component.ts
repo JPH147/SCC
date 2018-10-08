@@ -97,7 +97,7 @@ export class VentasComponent implements OnInit {
     this.ListarTalonarioSerie();
     this.ListadoCronograma = new VentaDataSource(this.Servicio);
     //this.ListadoCliente = new ClienteDataSource(this.ClienteServicio);
-    this.ListarClientes('', '', '', this.ClienteAutoComplete.nativeElement.value , '');
+    this.ListarClientes('', '', '', this.ClienteAutoComplete.nativeElement.value , '', 1, 10);
     this.VentasForm = this.FormBuilder.group({
       'talonario': [null, [
         Validators.required
@@ -163,7 +163,8 @@ export class VentasComponent implements OnInit {
       debounceTime(10),
       distinctUntilChanged(),
       tap(() => {
-        this.ListarClientes('', '', '', this.VentasForm.value.cliente , '');
+        //console.log(this.VentasForm.value.cliente)
+        this.ListarClientes('', '', '', '', this.VentasForm.value.cliente , 1, 500);
       })
      ).subscribe();
 
@@ -235,11 +236,12 @@ export class VentasComponent implements OnInit {
 
   }
 
-  ListarClientes(inst: string, sede: string, subsede: string, dni: string, nombre: string) {
-    this.ClienteServicio.Listado(inst, sede, subsede, dni, nombre).subscribe( res => {
+  ListarClientes(inst: string, sede: string, subsede: string, dni: string, nombre: string, prpagina: number, prtotal: number) {
+    this.ClienteServicio.Listado(inst, sede, subsede, dni, nombre, prpagina, prtotal).subscribe( res => {
       this.LstCliente = [];
       // tslint:disable-next-line:forin
       for (let i in res) {
+        console.log(res[i]);
         this.LstCliente.push(res[i]);
       }
     });

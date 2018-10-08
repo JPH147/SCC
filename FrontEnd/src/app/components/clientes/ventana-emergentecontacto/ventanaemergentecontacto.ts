@@ -196,8 +196,9 @@ createTelefono(value): FormGroup {
   }
 
   ListarDirecciones(id: number) {
+    console.log(id);
     if (id) {
-        this.ServicioDireccion.ListarDireccion( id.toString() , '' ).subscribe(res => {
+        this.ServicioDireccion.ListarDireccion(id.toString() ,'').subscribe(res => {
           if (res) {
             console.log(res);
             // tslint:disable-next-line:forin
@@ -227,7 +228,7 @@ createTelefono(value): FormGroup {
           if (res) {
             console.log(res);
             // tslint:disable-next-line:forin
-            for (let i = 0; i < res.length - 1 ; i++) {
+            for (let i = 0; i < res.length  - 1 ; i++) {
               this.add();
             }
             // tslint:disable-next-line:forin

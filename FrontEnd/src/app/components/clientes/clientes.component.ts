@@ -41,7 +41,7 @@ export class ClientesComponent implements OnInit {
 
   ngOnInit() {
    this.ListadoCliente = new ClienteDataSource(this.Servicio);
-   this.ListadoCliente.CargarClientes('', '', '', '', '');
+   this.ListadoCliente.CargarClientes('', '', '', '', '', 1, 10);
  }
 
  // tslint:disable-next-line:use-life-cycle-interface
@@ -98,7 +98,7 @@ export class ClientesComponent implements OnInit {
    this.FiltroSede.nativeElement.value,
    this.FiltroSubsede.nativeElement.value,
    this.FiltroDni.nativeElement.value,
-   this.FiltroNombre.nativeElement.value);
+   this.FiltroNombre.nativeElement.value, 1, 10);
  }
 
  Agregar() {
@@ -153,6 +153,7 @@ export class ClientesComponent implements OnInit {
 
 AgregarDatoContacto(cliente) {
   // tslint:disable-next-line:prefer-const
+  console.log(cliente);
   let VentanaContacto = this.DialogoContacto.open(VentanaEmergenteContacto, {
     width: '1200px',
     data: cliente

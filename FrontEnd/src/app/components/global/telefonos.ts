@@ -44,6 +44,7 @@ export class ServiciosTelefonos {
 		.set('tlf_relevancia', tlf_relevancia)
 	})
 	.pipe(map(res=>{
+            console.log(res);
 		if(res['codigo'] === 0) {
 			return res['data'].telefonos;
 		} else {

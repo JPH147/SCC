@@ -21,12 +21,15 @@
         $cliente->ssd_nombre = !empty($_GET['ssd_nombre']) ? $_GET['ssd_nombre'] : null;
         $cliente->clt_dni = !empty($_GET['pclt_dni']) ? $_GET['pclt_dni'] : null;
         $cliente->clt_nombre = !empty($_GET['pclt_nombre']) ? $_GET['pclt_nombre'] : null;
+        $cliente->prpagina = !empty($_GET['prpagina']) ? $_GET['prpagina'] : null;
+        $cliente->prtotalpagina = !empty($_GET['prtotalpagina']) ? $_GET['prtotalpagina'] : null;
+
 
         $cliente_list = $cliente->read();
-
+        $cliente_contar = $cliente->contar();
         if (count(array_filter($cliente_list))>0)
         { 
-            print_json("0000", "OK", $cliente_list);
+            print_json("0000", $cliente_contar, $cliente_list);
          }
         else
         { print_json("0001", "No existen clientes registrados", null); }

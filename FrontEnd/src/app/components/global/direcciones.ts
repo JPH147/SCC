@@ -261,6 +261,7 @@ export class ServiciosDirecciones{
 				.set('drc_relevancia', drc_relevancia)
 			})
 			.pipe(map(res=>{
+				console.log(res);
 				if(res['codigo'] === 0) {
 					return res['data'].direcciones;
 				} else {
