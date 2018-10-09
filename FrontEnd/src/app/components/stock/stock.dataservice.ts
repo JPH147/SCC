@@ -5,18 +5,22 @@ import {BehaviorSubject, Observable} from 'rxjs';
 import {catchError, finalize, subscribeOn} from 'rxjs/operators';
 import {of} from 'rxjs';
 import { ReturnStatement } from '@angular/compiler';
+import {ServiciosProductoSerie} from '../global/productoserie';
 
 export class StockDataSource implements DataSource <stock> {
-private InformacionStock = new BehaviorSubject<stock[]> ([]);
-private CargandoInformacion = new BehaviorSubject<boolean>(false);
-public Cargando = this.CargandoInformacion.asObservable();
-public Totalresultados = new BehaviorSubject<number> (0);
 
-constructor (private Servicio: StockService) {}
-  // tslint:disable-next-line:no-shadowed-variable
+  private InformacionStock = new BehaviorSubject<stock[]> ([]);
+  private CargandoInformacion = new BehaviorSubject<boolean>(false);
+  public Cargando = this.CargandoInformacion.asObservable();
+  public Totalresultados = new BehaviorSubject<number> (0);
+
+  constructor (
+    private Servicio: StockService,
+  ) {}
+  
   connect(CollectionViewer: CollectionViewer): Observable<stock[]> {
     return this.InformacionStock.asObservable();
-    }
+   }
 
   disconnect() {
     this.InformacionStock.complete();
@@ -32,7 +36,7 @@ constructor (private Servicio: StockService) {}
     pagina_inicio: number,
     total_pagina: number,
     orden: string
-    ) {
+  ){
     this.CargandoInformacion.next(true);
     this.Servicio.ListarStock(almacen, tipo, marca, modelo, producto, pagina_inicio, total_pagina, orden, )
     .pipe(catchError(() => of ([])),
@@ -42,6 +46,43 @@ constructor (private Servicio: StockService) {}
       this.Totalresultados.next(res['mensaje']);
       this.InformacionStock.next(res['data'].stock);
     });
+  }
 
 }
+
+export class StockSerieDataSource implements DataSource <stock> {
+
+  private InformacionStock = new BehaviorSubject<stock[]> ([]);
+  private CargandoInformacion = new BehaviorSubject<boolean>(false);
+  public Cargando = this.CargandoInformacion.asObservable();
+  public Totalresultados = new BehaviorSubject<number> (0);
+
+  constructor (private Servicio: ServiciosProductoSerie) {}
+
+  connect(CollectionViewer: CollectionViewer): Observable<stock[]> {
+    return this.InformacionStock.asObservable();
+    }
+
+  disconnect() {
+    this.InformacionStock.complete();
+    this.CargandoInformacion.complete();
+    }
+
+  CargarStock(
+    almacen: string,
+    producto: number,
+    pagina: number,
+    total_pagina: number
+  ){
+    this.CargandoInformacion.next(true);
+    this.Servicio.Listado(almacen, producto,pagina,total_pagina)
+    .pipe(catchError(() => of ([])),
+    finalize(() => this.CargandoInformacion.next(false))
+    )
+    .subscribe(res => {
+      this.Totalresultados.next(res['mensaje']);
+      this.InformacionStock.next(res['data'].producto_series);
+    });
+  }
+  
 }

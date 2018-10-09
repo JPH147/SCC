@@ -16,7 +16,9 @@ export class ServiciosProductoSerie {
 
   Listado(
     almacen: string,
-    producto:number
+    producto:number,
+    pagina: number,
+    total_pagina: number
     ): Observable <any> {
 
       let Almacen:string="";
@@ -30,10 +32,12 @@ export class ServiciosProductoSerie {
         params: new HttpParams()
           .set('pralmacen', almacen)
           .set('prproducto',Producto)
+          .set('prpagina', pagina.toString())
+          .set('prptotalpagina',total_pagina.toString())
       })
       .pipe (map(res => {
         if (res['codigo'] === 0) {
-          return res['data'].producto_series;
+          return res;
         } else {
            console.log('Error al importar los datos, revisar servicio');
            return res;
