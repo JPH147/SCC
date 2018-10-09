@@ -21,7 +21,6 @@ export class ServiciosProductoSerie {
     total_pagina: number
     ): Observable <any> {
 
-      let Almacen:string="";
       let Producto:string="";
 
       if(producto>0){
@@ -33,14 +32,14 @@ export class ServiciosProductoSerie {
           .set('pralmacen', almacen)
           .set('prproducto',Producto)
           .set('prpagina', pagina.toString())
-          .set('prptotalpagina',total_pagina.toString())
+          .set('prtotalpagina',total_pagina.toString())
       })
       .pipe (map(res => {
         if (res['codigo'] === 0) {
           return res;
         } else {
-           console.log('Error al importar los datos, revisar servicio');
-           return res;
+          console.log('Error al importar los datos, revisar servicio');
+          return res;
         }
       }));
     }
