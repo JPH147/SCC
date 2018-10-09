@@ -15,6 +15,7 @@ import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 
 // tslint:disable-next-line:component-class-suffix
 export class VentanaEmergenteStock  implements OnInit {
+
   public seriearticulo: Array<any> ;
   public numero: number;
   public series: Array <string>;
@@ -23,6 +24,9 @@ export class VentanaEmergenteStock  implements OnInit {
   public LstSerie: Array<any> = [];
 
   Columnas: string[] = ['numero', 'producto', 'serie' ];
+  Listadodata: StockDataSource;
+  displayedColumns: string[] = ['numero',  'almacen', 'tipo', 'marca', 'modelo', 'descripcion', 'unidad_medida', 'cantidad', 'opciones'];
+
 
   constructor(@Inject(MAT_DIALOG_DATA) public data,public Servicios: ServiciosProductoSerie) {
 
