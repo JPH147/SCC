@@ -17,19 +17,22 @@ export class ClienteService {
   sd_nombre: string,
   ssd_nombre: string,
   dni: string,
-  nombre: string
-  ): Observable<Cliente[]>  {
+  nombre: string,
+  prpagina: number,
+  prtotalpagina: number
+
+  ): Observable<any>  {
      return this.http.get(this.url + 'cliente/read.php?inst_nombre='
    + inst_nombre + '&sd_nombre=' + sd_nombre + '&ssd_nombre='
-   + ssd_nombre + '&pclt_dni=' + dni + '&pclt_nombre=' + nombre)
+   + ssd_nombre + '&pclt_dni=' + dni + '&pclt_nombre=' + nombre +
+   '&prpagina=' + prpagina + '&prtotalpagina=' + prtotalpagina)
     .pipe(map(res => {
       if (res['codigo'] === 0) {
-       // console.log(res['data'].clientes);
-
+        // tslint:disable-next-line:forin
         for (let i in res['data'].clientes) {
-          res['data'].clientes[i].foto = URLIMAGENES.urlimages+"cliente/"+ res['data'].clientes[i].foto;
+          res['data'].clientes[i].foto = URLIMAGENES.urlimages + 'cliente/' + res['data'].clientes[i].foto;
         }
-          return res['data'].clientes;
+          return res;
       }  else {
           console.log('Error al importar los datos, revisar servicio');
       }

@@ -28,6 +28,8 @@ Class Cliente{
 
     public $clt_aporteinicio;
     public $clt_aportefin;
+    public $prpagina;
+    public $prtotalpagina;
 
 
     public function __construct($db){
@@ -35,7 +37,7 @@ Class Cliente{
     }
 
     function read(){
-        $query = "CALL sp_listarcliente (?,?,?,?,?)";
+        $query = "CALL sp_listarcliente (?,?,?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
@@ -44,6 +46,8 @@ Class Cliente{
         $result->bindParam(3, $this->ssd_nombre);
         $result->bindParam(4, $this->clt_dni);
         $result->bindParam(5, $this->clt_nombre);
+        $result->bindParam(6, $this->prpagina);
+        $result->bindParam(7, $this->prtotalpagina);
 
         $result->execute();
     
@@ -79,6 +83,27 @@ Class Cliente{
                 array_push($cliente_list["clientes"],$cliente_item);
         }
         return $cliente_list;
+    }
+
+
+    function contar(){
+
+        $query = "CALL sp_listarclientecontar(?,?,?,?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_subsede);
+        $result->bindParam(2, $this->sd_nombre);
+        $result->bindParam(3, $this->ssd_nombre);
+        $result->bindParam(4, $this->clt_dni);
+        $result->bindParam(5, $this->clt_nombre);
+        $result->execute();
+
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        $this->total_resultado=$row['total'];
+
+        return $this->total_resultado;
     }
     
     function create()

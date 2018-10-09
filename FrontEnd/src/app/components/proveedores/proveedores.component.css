@@ -34,7 +34,7 @@
 
     .mat-column-numero
     {
-      max-width: 2%;
+      max-width: 10%;
     }
 
     .mat-column-foto
@@ -49,10 +49,10 @@
       max-width: 10%;
     }
 
-    .mat-column-sede,
-    .mat-column-subsede
+    .mat-column-ruc,
+    .mat-column-nombre
     {
-      max-width: 20%;
+      max-width: 40%;
     }
 
     .mat-column-codigo{
