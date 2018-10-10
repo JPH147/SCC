@@ -72,7 +72,7 @@ createTelefono(value): FormGroup {
     tipo: [{value:2,disabled:false},[
 
     ]] ,
-    relevancia: [{value: value, disabled: true},[
+    relevancia: [{value: value, disabled: false},[
 
     ]],
     observacion: [null,[
@@ -137,7 +137,7 @@ createTelefono(value): FormGroup {
       distrito: [null,[
         Validators.required
       ]],
-      relevanciadis: [{value: value, disabled: true}, [
+      relevanciadis: [{value: value, disabled: false}, [
       ]],
       observacion: [null,[
         Validators.required
