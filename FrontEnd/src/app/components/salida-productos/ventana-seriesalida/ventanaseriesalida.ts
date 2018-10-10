@@ -56,8 +56,8 @@ export class ventanaseriesalida  implements OnInit {
       }  
       else{
         /*Si no hay series para el producto, trae los datos*/
-        this.Series.Listado(this.data.almacen,this.data.id_producto).subscribe(res=>{
-          this.ListadoSeries(res);
+        this.Series.Listado(this.data.almacen,this.data.id_producto,1,5).subscribe(res=>{
+          this.ListadoSeries(res['data'].producto_series);
         })
       }
     }

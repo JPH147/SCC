@@ -1,9 +1,10 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import {FormControl} from '@angular/forms';
-import {StockDataSource} from '../stock.dataservice';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import {StockSerieDataSource} from '../stock.dataservice';
+import { MatPaginator,MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import {ServiciosProductoSerie} from '../../global/productoserie';
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
+import {tap} from 'rxjs/operators';
 
 @Component({
   selector: 'app-ventanaemergentestock',
@@ -15,6 +16,8 @@ import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 
 // tslint:disable-next-line:component-class-suffix
 export class VentanaEmergenteStock  implements OnInit {
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   public seriearticulo: Array<any> ;
   public numero: number;
   public series: Array <string>;
@@ -23,29 +26,32 @@ export class VentanaEmergenteStock  implements OnInit {
   public LstSerie: Array<any> = [];
 
   Columnas: string[] = ['numero', 'producto', 'serie' ];
+  ListadoSeriesData: StockSerieDataSource;
+  displayedColumns: string[] = ['numero','serie','color','almacenamiento'];
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data,public Servicios: ServiciosProductoSerie) {
 
-    }
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data,
+    public Servicios: ServiciosProductoSerie
+  ){ }
 
-    ngOnInit() {
-      this.contador = 1;
-      this.seriearticulo = [{numero: this.contador, series: ''} ];
-      this.ListarProductoSerie();
-    }
+  ngOnInit() {
+    this.ListadoSeriesData = new StockSerieDataSource(this.Servicios);
+    this.ListadoSeriesData.CargarStock(this.data.almacen,this.data.producto.id_producto, 1, 5);
+  }
 
-    ListarProductoSerie() {
-      this.Servicios.Listado(this.data.almacen,this.data.producto.id_producto).subscribe( res => {
-        this.LstSerie = res;
-     });
-    }
+  ngAfterViewInit(){
+    this.paginator.page
+    .pipe(
+      tap(() => this.CargarData())
+    ).subscribe();
+  }
 
-  AgregarSerieVS() {
-    this.contador++;
-    this.seriearticulo.push({numero: this.contador, series: ''});
+  CargarData(){
+   this.ListadoSeriesData.CargarStock(this.data.almacen,this.data.producto.id_producto,this.paginator.pageIndex + 1,this.paginator.pageSize,); 
   }
 
   Aceptar() {
-    console.log(this.seriearticulo);
+    
   }
 }

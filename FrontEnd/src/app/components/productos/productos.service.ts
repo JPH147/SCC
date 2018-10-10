@@ -13,17 +13,17 @@ export class ProductoService {
   constructor(private http: HttpClient) {}
 
   Listado(
-  tipo: string,
-  marca: string,
-  modelo: string,
-  descripcion: string,
-  precio_minimo:number,
-  precio_maximo:number,
-  pagina: number,
-  total_pagina: number,
-  columna: string,
-  tipo_orden: string,
-  estado:number
+    tipo: string,
+    marca: string,
+    modelo: string,
+    descripcion: string,
+    precio_minimo:number,
+    precio_maximo:number,
+    pagina: number,
+    total_pagina: number,
+    columna: string,
+    tipo_orden: string,
+    estado:number
   ): Observable<any> {
 
     let orden:string, Pminimo:string='', Pmaximo:string='', Estado:string="";
