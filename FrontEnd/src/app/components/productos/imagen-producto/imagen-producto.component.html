@@ -1,19 +1,31 @@
 <mat-card>
-    <mat-card-content>
+  
+  <mat-card-content>
 		<img [attr.src]="this.data.foto" class="imagen-producto">
-    </mat-card-content>
-    <mat-card-actions>
-    	<mat-grid-list	cols=1 rowHeight="200px">
-    		<mat-grid-tile>
+  </mat-card-content>
+   
+  <mat-card-content>
+   	<mat-grid-list	cols=1 rowHeight="200px">
+   		<mat-grid-tile>
 				<image-upload
-				[max]="1"
-				url="{{ruta}}"
-				[buttonCaption]="'Actualizar foto'"
-				[maxFileSize]="1000000"
-				(uploadFinished)="onUploadFinished($event)"
-				[fileTooLargeMessage]="'La foto debe pesar menos de 1MB'">
+					[max]="1"
+					url="{{ruta}}"
+					[buttonCaption]="'Actualizar foto'"
+					[maxFileSize]="1000000"
+					[fileTooLargeMessage]="'La foto debe pesar menos de 1MB'"
+					(uploadFinished)="FotoCargada($event)">
 				</image-upload>
 			</mat-grid-tile>
 		</mat-grid-list>
+	</mat-card-content>
+
+	<mat-card-actions>
+		<mat-grid-list	cols=1 rowHeight="70px">
+			<mat-grid-tile>
+				<button mat-raised-button color="primary" (click)="SubirFoto()">Aceptar</button>
+			</mat-grid-tile>
+		</mat-grid-list>
 	</mat-card-actions>
+
+
 </mat-card>

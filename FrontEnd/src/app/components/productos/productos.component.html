@@ -71,7 +71,6 @@
         <mat-header-cell *matHeaderCellDef mat-sort-header> Foto </mat-header-cell>
         <mat-cell *matCellDef="let producto">
           <img [attr.src]="producto.foto" class="imagen-producto" />
-          <!-- <img src="{{producto.foto}}" class="imagen-producto" alt=""> -->
         </mat-cell>
       </ng-container>
 
@@ -93,6 +92,11 @@
       <ng-container matColumnDef="descripcion">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Descripcion</mat-header-cell>
         <mat-cell *matCellDef="let producto"> {{producto.descripcion}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="unidad_medida">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Unidad de medida</mat-header-cell>
+        <mat-cell *matCellDef="let producto"> {{producto.unidad_medida}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="precio">

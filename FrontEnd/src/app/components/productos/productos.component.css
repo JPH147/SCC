@@ -37,10 +37,13 @@ mat-card{
 .mat-column-marca,
 .mat-column-modelo,
 .mat-column-precio,
-.mat-column-opciones,
-.mat-column-foto
+.mat-column-opciones
 {
   max-width: 12%;
+}
+
+.mat-column-foto{
+  max-width: 8%;
 }
 
 .mat-column-numero{

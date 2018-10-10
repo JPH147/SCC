@@ -140,7 +140,13 @@ export class ProductoService {
     precio: number
     ): Observable<any> {
 
-    let params = 'id_producto=' + id + '&id_modelo= ' + modelo + '&prd_descripcion = ' + descripcion + '&prd_precio=' + precio;
+    // let params = 'id_producto=' + id + '&id_modelo= ' + modelo + '&prd_descripcion = ' + descripcion + '&prd_precio=' + precio;
+
+    let params = new HttpParams()
+           .set('id_producto', id.toString())
+           .set('id_modelo', modelo.toString())
+           .set('prd_descripcion', descripcion)
+           .set('prd_precio', precio.toString())
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -159,7 +165,6 @@ export class ProductoService {
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'producto/updateimage.php', params, {headers: headers}).pipe(map(res => {
-     console.log(res);
       return res;
     }));
   }
