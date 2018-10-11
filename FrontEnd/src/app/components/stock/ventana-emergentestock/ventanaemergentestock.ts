@@ -25,9 +25,8 @@ export class VentanaEmergenteStock  implements OnInit {
   public serie: Array<any>;
   public LstSerie: Array<any> = [];
 
-  Columnas: string[] = ['numero', 'producto', 'serie' ];
   ListadoSeriesData: StockSerieDataSource;
-  displayedColumns: string[] = ['numero','serie','color','almacenamiento'];
+  Columnas: string[] = ['numero','serie','color','almacenamiento','proveedor'];
 
 
   constructor(

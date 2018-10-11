@@ -17,10 +17,12 @@ import { ProveedoresComponent } from './components/proveedores/proveedores.compo
 import { ventanaseriessv } from './components/salida-vendedores/ventana-seriessv/ventanaseriessv';
 import { DireccionesComponent } from './components/direcciones/direcciones.component';
 import { VentasListarComponent } from './components/ventas-listar/ventas-listar.component';
+import { HistorialSerieComponent } from './components/historial-serie/historial-serie.component';
 
 const appRoutes: Routes = [
   {path: 'usuarios', component: UsuariosComponent},
   {path: 'productos', component: ProductosComponent},
+  {path: 'historial', component: HistorialSerieComponent},
   {path: 'stock', component: StockComponent},
   {path: 'stock/ingresoproductos', component: IngresoProductosComponent},
   {path: 'stock/salidaproductos', component: SalidaProductosComponent},

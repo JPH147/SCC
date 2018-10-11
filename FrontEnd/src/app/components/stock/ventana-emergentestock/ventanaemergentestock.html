@@ -6,34 +6,46 @@
 		</mat-card-title>
 	</mat-card-header>
 
-<mat-card-content>
+  <mat-card-content>
 
-  <div class = "spinner-container" *ngIf = "ListadoSeriesData.Cargando| async">
-   <mat-spinner></mat-spinner>
-  </div>
+    <div class = "spinner-container" *ngIf = "ListadoSeriesData.Cargando| async">
+     <mat-spinner></mat-spinner>
+    </div>
 
-   <mat-table [dataSource]="ListadoSeriesData" class="example-table">
-     <ng-container matColumnDef="numero">
-       <mat-header-cell *matHeaderCellDef>N°</mat-header-cell>
-       <mat-cell *matCellDef="let producto">{{producto.numero}}</mat-cell>
-     </ng-container>
-     <ng-container matColumnDef="serie">
-       <mat-header-cell *matHeaderCellDef>Serie</mat-header-cell>
-       <mat-cell *matCellDef="let producto">{{producto.serie}}</mat-cell>
-     </ng-container>
-     <ng-container matColumnDef="color">
-       <mat-header-cell *matHeaderCellDef>Color</mat-header-cell>
-       <mat-cell *matCellDef="let producto">{{producto.color}}</mat-cell>
-     </ng-container>
-     <ng-container matColumnDef="almacenamiento">
-       <mat-header-cell *matHeaderCellDef>Almacenamiento</mat-header-cell>
-       <mat-cell *matCellDef="let producto">{{producto.almacenamiento}} GB</mat-cell>
-     </ng-container>
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-   </mat-table>
-   <mat-paginator [length]="ListadoSeriesData.Totalresultados | async" [pageSize]="5" [pageSizeOptions]="[5,10,15]"></mat-paginator>
+    <mat-table [dataSource]="ListadoSeriesData">
+
+      <ng-container matColumnDef="numero">
+        <mat-header-cell *matHeaderCellDef>N°</mat-header-cell>
+        <mat-cell *matCellDef="let producto">{{producto.numero}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="serie">
+        <mat-header-cell *matHeaderCellDef>Serie</mat-header-cell>
+        <mat-cell *matCellDef="let producto">{{producto.serie}}</mat-cell>
+      </ng-container>
+       
+      <ng-container matColumnDef="color">
+        <mat-header-cell *matHeaderCellDef>Color</mat-header-cell>
+        <mat-cell *matCellDef="let producto">{{producto.color}}</mat-cell>
+      </ng-container>
+       
+      <ng-container matColumnDef="almacenamiento">
+        <mat-header-cell *matHeaderCellDef>Almacenamiento</mat-header-cell>
+        <mat-cell *matCellDef="let producto">{{producto.almacenamiento}} GB</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="proveedor">
+        <mat-header-cell *matHeaderCellDef>Proveedor</mat-header-cell>
+        <mat-cell *matCellDef="let producto">{{producto.proveedor}} GB</mat-cell>
+      </ng-container>
+       
+      <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: Columnas;"></mat-row>
+
+    </mat-table>
+
+    <mat-paginator [length]="ListadoSeriesData.Totalresultados | async" [pageSize]="5" [pageSizeOptions]="[5,10]"></mat-paginator>
 
   </mat-card-content>
 
-  </mat-card>
+</mat-card>

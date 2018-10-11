@@ -42,7 +42,9 @@ export class ImagenProductoComponent {
         // console.log(file);
         this.Servicios.RenameFile(this.file.serverResponse.response._body, 'PRODUCTO', this.data.id+"-"+Math.floor(Math.random() * 100000),"producto").subscribe( res => {
           if (res) {
-            this.ProductoServicios.ActualizarFoto(this.data.id, res.mensaje).subscribe(res=>{this.ventana.close()});
+            this.ProductoServicios.ActualizarFoto(this.data.id, res.mensaje).subscribe(res=>{
+              this.ventana.close()
+            });
           }
         });
       }

@@ -88,6 +88,7 @@ import {VentanaEmergenteStock } from './components/stock/ventana-emergentestock/
 import { VentasListarComponent } from './components/ventas-listar/ventas-listar.component';
 import { VentanaTalonarioComponent } from './components/salida-vendedores/ventana-talonario/ventana-talonario.component';
 import {ImagenProductoComponent} from './components/productos/imagen-producto/imagen-producto.component';
+import { HistorialSerieComponent } from './components/historial-serie/historial-serie.component';
 
 
 @NgModule({
@@ -178,7 +179,8 @@ import {ImagenProductoComponent} from './components/productos/imagen-producto/im
     VentanaEmergenteStock,
     VentasListarComponent,
     VentanaTalonarioComponent,
-    ImagenProductoComponent
+    ImagenProductoComponent,
+    HistorialSerieComponent
    ],
   entryComponents: [
     AppComponent,

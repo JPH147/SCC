@@ -31,6 +31,7 @@ const TREE_DATA = JSON.stringify({
   Logística: {
     Productos: 'productos',
     Stock: 'stock',
+    Historial: 'historial',
     Recursos: {
       'Salida de vendedores': 'salidavendedores',
       'Comisiones': 'comisiones',
