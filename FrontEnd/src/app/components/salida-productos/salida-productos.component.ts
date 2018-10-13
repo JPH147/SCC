@@ -50,8 +50,8 @@ export class SalidaProductosComponent implements OnInit {
     this.SalidaProductosForm = this.FormBuilder.group({
       'almacen': [null, [Validators.required] ],
       'almacen1': [null, [Validators.required] ],
-      'cantidad': [null, [Validators.required] ],
       'fechaingreso': [null, [Validators.required]],
+      'documento': [null, [Validators.required]],
       productos: this.FormBuilder.array([this.CrearProducto()])
     });
 
@@ -171,12 +171,13 @@ GuardarTransferenciaAlmacen(formulario) {
   4,
   formulario.value.almacen1,
   formulario.value.fechamov,
+  formulario.value.documento
   ).subscribe (res=>{
     // Grabar datos de productos
     for (let i of this.Series) {
       if (i.considerar) {
         this.SalidaProductosServicios.AgregarProducto(
-          res.data,
+          res['data'],
           i.id_serie,
           i.precio,
           i.cantidad * (-1)

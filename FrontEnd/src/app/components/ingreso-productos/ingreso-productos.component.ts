@@ -269,7 +269,7 @@ import {ProductoService} from '../productos/productos.service';
   AgregarSerie(producto,index) {
 
     const serieventana = this.DialogoSerie.open(ventanaseries, {
-      width: '800px',
+      width: '1200px',
       data: {producto: producto.get('producto').value.id, series:this.Series}
     });
 
@@ -281,8 +281,8 @@ import {ProductoService} from '../productos/productos.service';
         }
 
         for (let i of res) {
-          if (i.series !== '') {
-            this.Series.push({id_producto: producto.get('producto').value.id, serie: i.series})
+          if (i.serie !== '') {
+            this.Series.push({id_producto: producto.get('producto').value.id, serie: i.serie, color:i.color, almacenamiento: i.almacenamiento, observacion:i.observacion})
           }
         }
         this.IngresoProductoForm.get('productos')['controls'][index].get('cantidad').setValue(res.length)
@@ -306,15 +306,12 @@ import {ProductoService} from '../productos/productos.service';
       formulario.value.proveedor.id,
       formulario.value.fecingreso,
       formulario.value.docReferencia).subscribe (res => {
-        // tslint:disable-next-line:prefer-const
-        let id_cabecera = res.data;
-
+        let id_cabecera = res['data'];
           for (let i of formulario.value.productos) {
-            // tslint:disable-next-line:prefer-const
             for (let is of this.Series) {
               if (i.producto.id === is.id_producto) {
-                this.SSeries.CrearProductoSerie(i.producto.id,is.serie).subscribe(response => {
-                  this.IngresoProductoservicios.CrearTransaccionDetalle(id_cabecera, response.data, 1, i.precioUnitario).subscribe();
+                this.SSeries.CrearProductoSerie(i.producto.id,is.serie, is.color, is.almacenamiento).subscribe(response => {
+                  this.IngresoProductoservicios.CrearTransaccionDetalle(id_cabecera, response['data'], 1, i.precioUnitario, is.observacion).subscribe();
                 });
               }
             }
@@ -325,6 +322,7 @@ import {ProductoService} from '../productos/productos.service';
         this.snackBar.open('El ingreso se guardó satisfactoriamente', '', {
           duration: 2000,
         });
+
       });
    }
 

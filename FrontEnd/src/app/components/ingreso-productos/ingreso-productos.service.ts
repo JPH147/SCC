@@ -17,16 +17,14 @@ public url: string = URL.url;
 constructor(private http: HttpClient) {}
 
 
-AgregarCompraMercaderia(
-
+    AgregarCompraMercaderia(
     pralmacen: number,
       prtipo: number,
       pr_referencia: number,
       prproveedor: number,
       prfecha: Date,
       prdocumento: string
-
-  ): Observable <any> {
+    ): Observable <any> {
 
       // tslint:disable-next-line:prefer-const
       let params = new HttpParams()
@@ -121,7 +119,8 @@ AgregarCompraMercaderia(
     id_cabecera: number,
     id_serie: number,
     cantidad: number,
-    precio: number
+    precio: number,
+    observacion:string
   ): Observable<any> {
 
     // tslint:disable-next-line:prefer-const
@@ -130,6 +129,7 @@ AgregarCompraMercaderia(
     .set('prproductoserie', id_serie.toString())
     .set('prcantidad', cantidad.toString())
     .set('prprecio', precio.toString())
+    .set('probservacion', observacion)
 
     // tslint:disable-next-line:prefer-const
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');

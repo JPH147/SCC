@@ -19,7 +19,7 @@ export class SalidaProductosService {
   prreferencia: number,
   pralmacen1: number,  // Sucursal
   perfecha: Date,
-
+  documento:string
   ): Observable <any> {
 
     let params = new HttpParams()
@@ -27,7 +27,8 @@ export class SalidaProductosService {
       .set('prtipo', prtipo.toString())
       .set('prreferencia', prreferencia.toString())
       .set('prsucursal', pralmacen1.toString())
-      .set('prfecha', moment(perfecha).format('YYYY/MM/DD').toString());
+      .set('prfecha', moment(perfecha).format('YYYY/MM/DD').toString())
+      .set('prdocumento', documento);
 
       let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
       return this.http.post(this.url + 'transaccioncabecera/create.php', params, {headers: headers});

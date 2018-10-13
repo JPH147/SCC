@@ -47,7 +47,7 @@ export class VentanaEmergenteStock  implements OnInit {
   }
 
   CargarData(){
-   this.ListadoSeriesData.CargarStock(this.data.almacen,this.data.producto.id_producto,this.paginator.pageIndex + 1,this.paginator.pageSize,); 
+   this.ListadoSeriesData.CargarStock(this.data.almacen,this.data.producto.id_producto,this.paginator.pageIndex + 1,this.paginator.pageSize); 
   }
 
   Aceptar() {

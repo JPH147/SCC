@@ -1,8 +1,10 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { fromEvent } from 'rxjs';
-import {ProveedorService} from './proveedor.service';
-import {ProveedorDataSource} from './proveedor.dataservice';
+import {ProveedorService} from './proveedores.service';
+import {ProveedorDataSource} from './proveedores.dataservice';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
+import {MatPaginator, MatSort, MatDialog} from '@angular/material';
+import {ProveedoresMovimientosComponent} from './proveedores-movimientos/proveedores-movimientos.component'
 
 @Component({
   selector: 'app-proveedores',
@@ -21,7 +23,7 @@ export class ProveedoresComponent implements OnInit {
 
   constructor(
     private Servicio: ProveedorService,
-
+    private DialogoMovimiento: MatDialog,
   ) { }
 
   ngOnInit() {
@@ -52,11 +54,17 @@ export class ProveedoresComponent implements OnInit {
     ).subscribe();
   }
 
+  VerDetalle(proveedor){
+    let VentanaDialogo = this.DialogoMovimiento.open(ProveedoresMovimientosComponent,{
+       width: '1200px',
+       data: {id: proveedor.id, nombre: proveedor.nombre}
+    })
+  }
+
   CargarData() {
     this.ListadoProveedor.CargarProveedores(
       this.FiltroRuc.nativeElement.value,
       this.FiltroNombre.nativeElement.value);
-    
   }
 
 }

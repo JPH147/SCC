@@ -1,0 +1,84 @@
+<mat-card>
+
+	<mat-card-header>
+		<mat-card-title>
+			{{data.nombre}}
+		</mat-card-title>
+	</mat-card-header>
+
+	<mat-card-content>
+		
+		<mat-grid-list cols=4 rowHeight="70px">
+		
+			<mat-grid-tile>
+				<mat-icon>search</mat-icon>
+				<mat-form-field>
+					<input matInput placeholder="Producto" #InputProducto>
+				</mat-form-field>
+			</mat-grid-tile>
+			
+			<mat-grid-tile>
+				<mat-icon>search</mat-icon>
+				<mat-form-field>
+					<input matInput placeholder="IMEI" #InputIMEI>
+				</mat-form-field>
+			</mat-grid-tile>
+
+			<mat-grid-tile>
+        <mat-form-field>
+          <input matInput [matDatepicker]="Inicio" placeholder="Fecha de inicio" [(ngModel)]="FInicio" (dateChange)="CargarData()">
+          <mat-datepicker-toggle matSuffix [for]="Inicio"></mat-datepicker-toggle>
+          <mat-datepicker #Inicio ></mat-datepicker>
+        </mat-form-field>
+      </mat-grid-tile>
+
+			<mat-grid-tile>
+        <mat-form-field>
+          <input matInput [matDatepicker]="Salida" placeholder="Fecha de fin" [(ngModel)]="FFin" (dateChange)="CargarData()">
+          <mat-datepicker-toggle matSuffix [for]="Salida"></mat-datepicker-toggle>
+          <mat-datepicker #Salida ></mat-datepicker>
+        </mat-form-field>
+      </mat-grid-tile>
+
+		</mat-grid-list>
+
+	</mat-card-content>
+
+  <mat-card-content>
+
+    <div class = "spinner-container" *ngIf = "MovimientosProveedoresData.Cargando| async">
+     <mat-spinner></mat-spinner>
+    </div>
+
+    <mat-table [dataSource]="MovimientosProveedoresData">
+
+      <ng-container matColumnDef="numero">
+        <mat-header-cell *matHeaderCellDef>N°</mat-header-cell>
+        <mat-cell *matCellDef="let movimiento">{{movimiento.numero}}</mat-cell>
+      </ng-container>
+       
+      <ng-container matColumnDef="almacen">
+        <mat-header-cell *matHeaderCellDef>Almacén</mat-header-cell>
+        <mat-cell *matCellDef="let movimiento">{{movimiento.almacen}}</mat-cell>
+      </ng-container>
+       
+      <ng-container matColumnDef="referencia">
+        <mat-header-cell *matHeaderCellDef>Documento</mat-header-cell>
+        <mat-cell *matCellDef="let movimiento">{{movimiento.referencia}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="fecha">
+        <mat-header-cell *matHeaderCellDef>Fecha</mat-header-cell>
+        <mat-cell *matCellDef="let movimiento">{{movimiento.fecha}}</mat-cell>
+      </ng-container>
+       
+      <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: Columnas;"></mat-row>
+
+    </mat-table>
+
+    <mat-paginator [length]="MovimientosProveedoresData.TotalResultado | async" [pageSize]="5" [pageSizeOptions]="[5,10]"></mat-paginator>
+
+  </mat-card-content>
+
+</mat-card>
