@@ -1,10 +1,15 @@
 <mat-card>
+
+    <div>
+        <button mat-fab matTooltip="Salida" class="agregar"  [routerLink]="['salidaproductos']" color="primary"><mat-icon> flight_takeoff </mat-icon></button>
+        <button mat-fab matTooltip="Ingreso" class="agregar"  [routerLink]="['ingresoproductos']" color="primary"><mat-icon> flight_land </mat-icon></button>
+      </div>
     <mat-card-title>
       <div id = "tituloProd"> Listado de Stock</div>
     </mat-card-title>
-        <button class="agregar" mat-raised-button color="primary"  [routerLink]="['salidaproductos']">Salida</button>
+        <!--<button class="agregar" mat-raised-button color="primary"  [routerLink]="['salidaproductos']">Salida</button>
         <button class="agregar" mat-raised-button color="primary"  [routerLink]="['ingresoproductos']">Ingreso</button>
-        <br> <br>
+        <br> <br>-->
 
        <mat-grid-list cols= "5" rowHeight="90px">
         <mat-grid-tile>

@@ -6,33 +6,25 @@ import {URL} from '../global/url';
 
 @Injectable()
 
-export class StockService {
+export class  HistorialSerieService {
   public url: string = URL.url;
 
   constructor(private http: HttpClient) {}
 
-  ListarStock(
-    almacen: string,
-    tipo: string,
-    marca: string,
-    modelo: string,
-    producto: string,
+  ListadoSerie(
+    serie: string,
     pagina_inicio: number,
     total_pagina: number,
-    orden: string
+    
   ): Observable<any> {
-    return this.http.get(this.url + 'stock/read.php', {
+    return this.http.get(this.url + 'serieproducto/read.php', {
       params: new HttpParams()
-      .set('pralmacen', almacen)
-      .set('prtipo', tipo)
-      .set('prmarca', marca)
-      .set('prmodelo', modelo)
-      .set('prdescripcion', producto)
+      .set('prserie', serie)
       .set('prpagina', pagina_inicio.toString())
       .set('prtotalpagina', total_pagina.toString())
-      .set('orden', orden)
-    }).pipe(map(res => {
+       }).pipe(map(res => {
       if (res['codigo'] === 0) {
+        console.log(res);
         return res;
       } else {
         console.log('Error al importar los datos, revisar servicio');
@@ -40,4 +32,13 @@ export class StockService {
     }
     }));
   }
+}
+
+export interface ProductoSerie {
+  fecha: string;
+  serie: string;
+  producto: string;
+  documeto: string;
+  transaccion: string;
+  tenedor:string;
 }

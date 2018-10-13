@@ -1,13 +1,13 @@
 <mat-card>
   <!-- Encabezado -->
+
+  <div>
+    <button mat-fab matTooltip="Agregar Cliente" class="agregar"  (click)="Agregar()" color="primary"><mat-icon> person_add </mat-icon></button>
+  </div>
+  
   <mat-card-title>
     <div id = "tituloProd"> Listado de Clientes</div>
   </mat-card-title>
-
-  <button mat-raised-button color="primary" class="agregar" (click)="Agregar()">Agregar Cliente</button>
-  <br/><br/><br/>
-
-
 
   <mat-accordion multi=true>
     <mat-expansion-panel>

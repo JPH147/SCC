@@ -1,11 +1,17 @@
 <mat-card>
   <!-- Encabezado -->
+
+  <div>
+      <button mat-fab matTooltip="Agregar Venta" class="agregar"  class="agregar" [routerLink]="['nueva']" color="primary"><mat-icon> add_shopping_cart </mat-icon></button>
+  </div>
+
+
   <mat-card-title>
     <div id = "tituloProd"> Listado de ventas</div>
   </mat-card-title>
 
   <!-- Filtros Productos, tipo  Marca Modelo -->
-  <mat-grid-list cols= "5" rowHeight="90px">
+  <mat-grid-list cols= "4" rowHeight="90px">
     <mat-grid-tile>
       <mat-icon>search</mat-icon>
       <mat-form-field>
@@ -37,9 +43,12 @@
       </mat-form-field>
     </mat-grid-tile>
     <!-- Boton Agrega Productos -->
-    <mat-grid-tile>
+    <!--<mat-grid-tile>
       <button mat-raised-button color="primary" class="agregar" [routerLink]="['nueva']">Agregar</button>
-    </mat-grid-tile>
+
+        
+      
+    </mat-grid-tile>-->
   </mat-grid-list>
 
   <mat-card-content>

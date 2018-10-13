@@ -18,8 +18,9 @@ mat-card{
 
 .agregar{
   float:right;
-  margin-left: 5px;
-  z-index: 1
+  margin-bottom: 5px;
+  height: 70px;
+  width: 70px;
  }
 
 .spinner-container{
@@ -47,4 +48,19 @@ mat-card{
 .mat-column-fecha,
 .mat-column-opciones{
   max-width: 13%;
+}
+
+mat-row:nth-child(even){
+  background-color:#f2f2f2;
+  }
+
+mat-row:nth-child(odd){
+  background-color:white;
+  }
+
+mat-header-cell {
+  font-weight:  bold;
+  font-size: 14px;
+  background-color:#673ab7;
+  color: #fff;
 }

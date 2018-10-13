@@ -140,7 +140,7 @@ export class ProductoService {
     precio: number
     ): Observable<any> {
 
-    // let params = 'id_producto=' + id + '&id_modelo= ' + modelo + '&prd_descripcion = ' + descripcion + '&prd_precio=' + precio;
+    // let params = 'id_producto=' + id + '&id_modelo=' + modelo + '&prd_descripcion=' + descripcion + '&prd_precio=' + precio;
 
     let params = new HttpParams()
            .set('id_producto', id.toString())
