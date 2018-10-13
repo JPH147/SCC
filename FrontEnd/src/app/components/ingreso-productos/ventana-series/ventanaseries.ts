@@ -25,13 +25,13 @@ export class ventanaseries  implements OnInit {
   ngOnInit() {
     // console.log(this.data,this.data.producto);
     this.contador = 1;
-    this.seriearticulo = [{numero: this.contador, producto:this.data.producto,series: '', color:'', almacenamiento:''} ];
+    this.seriearticulo = [{numero: this.contador, producto:this.data.producto,serie: '', color:'', almacenamiento:'', observacion:""} ];
 
     if (this.data.series.length>0) {
       let is:number=0;
       for (let i of this.data.series) {
         if (this.data.producto==i.id_producto) {
-          this.seriearticulo.push({numero:this.contador, producto: this.data.producto,series:i.serie})
+          this.seriearticulo.push({numero:this.contador, producto: this.data.producto,  serie:i.serie, color:i.color, almacenamiento:i.almacenamiento, observacion:i.observacion})
           this.contador++;
           is++;
         }
@@ -51,7 +51,7 @@ export class ventanaseries  implements OnInit {
 
   AgregarSerieVS() {
     this.contador++;
-    this.seriearticulo.push({numero: this.contador, producto: this.data.producto, series: '', color:'', almacenamiento:''});
+    this.seriearticulo.push({numero: this.contador, producto: this.data.producto, serie: '', color:'', almacenamiento:'', observacion:""});
   }
 
   Aceptar() {

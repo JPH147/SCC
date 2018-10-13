@@ -46,12 +46,18 @@ export class ServiciosProductoSerie {
 
   CrearProductoSerie(
     id_producto: number,
-    serie:string
+    serie:string,
+    color:string,
+    almacenamiento:string
   ): Observable<any> {
 
     let params = new HttpParams()
     .set('prproducto',id_producto.toString())
     .set('prserie',serie)
+    .set('prcolor',color)
+    .set('pralmacenamiento',almacenamiento)
+
+    console.log(params)
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     return this.http.post(this.url + 'productoserie/create.php', params, {headers: headers});

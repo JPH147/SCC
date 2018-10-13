@@ -89,6 +89,7 @@ import { VentasListarComponent } from './components/ventas-listar/ventas-listar.
 import { VentanaTalonarioComponent } from './components/salida-vendedores/ventana-talonario/ventana-talonario.component';
 import {ImagenProductoComponent} from './components/productos/imagen-producto/imagen-producto.component';
 import { HistorialSerieComponent } from './components/historial-serie/historial-serie.component';
+import { ProveedoresMovimientosComponent } from './components/proveedores/proveedores-movimientos/proveedores-movimientos.component';
 
 
 @NgModule({
@@ -180,7 +181,8 @@ import { HistorialSerieComponent } from './components/historial-serie/historial-
     VentasListarComponent,
     VentanaTalonarioComponent,
     ImagenProductoComponent,
-    HistorialSerieComponent
+    HistorialSerieComponent,
+    ProveedoresMovimientosComponent
    ],
   entryComponents: [
     AppComponent,
@@ -201,7 +203,8 @@ import { HistorialSerieComponent } from './components/historial-serie/historial-
     VentanaEmergenteStock,
     VentanaTalonarioComponent,
     VentasComponent,
-    ImagenProductoComponent
+    ImagenProductoComponent,
+    ProveedoresMovimientosComponent
   ],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider, {provide: MAT_DATE_LOCALE, useValue: 'en-GB'}]

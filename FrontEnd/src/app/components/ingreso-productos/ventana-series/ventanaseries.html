@@ -5,10 +5,10 @@
     </mat-card-header>
 
     <mat-card-content>
-      <mat-grid-list cols=3 rowHeight="70px" *ngFor="let serie of seriearticulo">
+      <mat-grid-list cols=4 rowHeight="70px" *ngFor="let serie of seriearticulo">
         <mat-grid-tile>
           <mat-form-field class="input-serie">
-            <input matInput placeholder="Serie" [(ngModel)]="serie.series">
+            <input matInput placeholder="Serie" [(ngModel)]="serie.serie">
           </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -18,7 +18,7 @@
         </mat-grid-tile>
         <mat-grid-tile>
           <mat-form-field class="input-serie">
-            <input matInput placeholder="Almacenamiento" [(ngModel)]="serie.almacenamientos">
+            <input matInput placeholder="Almacenamiento" [(ngModel)]="serie.almacenamiento">
           </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
