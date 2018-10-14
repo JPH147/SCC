@@ -100,7 +100,7 @@ ngAfterViewInit () {
  Agregar() {
    // tslint:disable-next-line:prefer-const
    let VentanaProductos = this.DialogoProductos.open(VentanaEmergenteProductos, {
-     width: '800px'
+     width: '600px'
    });
 
    VentanaProductos.afterClosed().subscribe(res => {
@@ -129,7 +129,7 @@ ngAfterViewInit () {
    this.Servicio.Seleccionar(id).subscribe(res => {
      // tslint:disable-next-line:prefer-const
      let VentanaProductos = this.DialogoProductos.open(VentanaEmergenteProductos, {
-       width: '800px',
+       width: '600px',
        data: res
      });
      // tslint:disable-next-line:no-shadowed-variable

@@ -1,10 +1,11 @@
-<mat-card>
+<mat-card class="card">
   <mat-card-header>
-    <mat-card-title>Agrega Producto Nuevo</mat-card-title>
+    <mat-card-title *ngIf="!data">Agregar Nuevo Producto</mat-card-title>
+    <mat-card-title *ngIf="data">Editar Producto</mat-card-title>
   </mat-card-header>
   <form [formGroup]="ProductosForm" (ngSubmit)="Guardar(ProductosForm)">
     <mat-card-content>
-      <mat-grid-list cols="2" rowHeight="120px">
+      <mat-grid-list cols="2" rowHeight="70px">
         <mat-grid-tile>
           <mat-form-field>
             <mat-select placeholder='Selecciona Tipo' formControlName="tipo" (selectionChange)="TipoSeleccionado($event)">
