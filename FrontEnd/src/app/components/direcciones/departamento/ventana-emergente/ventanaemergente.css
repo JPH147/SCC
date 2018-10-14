@@ -4,11 +4,14 @@
 .mat-card-header{
   background-color: #673ab7;
   color: #fff;
-  padding: 10px;
+  padding-top: 20px;
+  justify-content: center;
   
 }
 .card{
   padding: 0px;
+  border-radius: 10px 10px;
+  overflow: hidden;
 }
 
 .mat-card-title{

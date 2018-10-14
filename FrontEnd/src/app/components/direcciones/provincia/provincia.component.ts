@@ -69,7 +69,7 @@ ngAfterViewInit () {
 
  Agregar() {
    let VentanaProvincia= this.DialogoProvincias.open(VentanaEmergenteProvincia, {
-     width: '400px'
+     width: '350px'
    });
    VentanaProvincia.afterClosed().subscribe(res => {
      this.CargarData();
@@ -95,7 +95,7 @@ ngAfterViewInit () {
    this.Servicio.SeleccionarProvincia(id).subscribe(res => {
 
      let VentanaProvincia = this.DialogoProvincias.open(VentanaEmergenteProvincia, {
-       width: '480px',
+       width: '350px',
        data: res
      });
      // tslint:disable-next-line:no-shadowed-variable

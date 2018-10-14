@@ -4,3 +4,9 @@
 body{
 	margin: 0px
 }
+
+.mat-dialog-container {
+	padding: 0px !important;
+	border-radius: 15px 15px;
+	overflow: hidden;
+  }

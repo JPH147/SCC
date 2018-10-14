@@ -64,7 +64,7 @@ ngAfterViewInit () {
  Agregar() {
 
    let VentanaDepartamento = this.DialogoDepartamentos.open(VentanaEmergenteDepartamento, {
-     width: '400px'
+     width: '350px'
    });
 
    VentanaDepartamento.afterClosed().subscribe(res => {
@@ -90,7 +90,7 @@ ngAfterViewInit () {
    this.Servicio.SeleccionarDepartamento(id).subscribe(res => {
 
      let VentanaDepartamento = this.DialogoDepartamentos.open(VentanaEmergenteDepartamento, {
-       width: '480px',
+       width: '350px',
        data: res
      });
      // tslint:disable-next-line:no-shadowed-variable

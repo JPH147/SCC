@@ -6,12 +6,14 @@ import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
 import { MatPaginator, MatSort, MatDialog } from '@angular/material';
 import {VentanaConfirmarComponent} from '../../global/ventana-confirmar/ventana-confirmar.component'
 import {VentanaEmergenteDistrito} from './ventana-emergente/ventanaemergente'
+// import {ViewEncapsulation} from '@angular/core';
 
 @Component({
   selector: 'app-distrito',
   templateUrl: './distrito.component.html',
   styleUrls: ['./distrito.component.css'],
-  providers:[ServiciosDirecciones]
+  providers:[ServiciosDirecciones],
+//  encapsulation: ViewEncapsulation.None
 })
 export class DistritoComponent implements OnInit {
 
@@ -71,7 +73,7 @@ ngAfterViewInit () {
 
  Agregar() {
    let VentanaDistrito= this.DialogoDistritos.open(VentanaEmergenteDistrito, {
-     width: '400px'
+     width: '350px'
    });
 
    VentanaDistrito.afterClosed().subscribe(res => {
@@ -98,7 +100,7 @@ ngAfterViewInit () {
    this.Servicio.SeleccionarDistrito(id).subscribe(res => {
 
      let VentanaDistrito = this.DialogoDistritos.open(VentanaEmergenteDistrito, {
-       width: '480px',
+       width: '350px',
        data: res
      });
      // tslint:disable-next-line:no-shadowed-variable
