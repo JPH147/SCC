@@ -90,7 +90,10 @@ import { VentanaTalonarioComponent } from './components/salida-vendedores/ventan
 import {ImagenProductoComponent} from './components/productos/imagen-producto/imagen-producto.component';
 import { HistorialSerieComponent } from './components/historial-serie/historial-serie.component';
 import { ProveedoresMovimientosComponent } from './components/proveedores/proveedores-movimientos/proveedores-movimientos.component';
-
+import { DetalleProductosComponent} from './components/detalleproductos/detalleproductos.component';
+import {TipoComponent} from './components/detalleproductos/tipo/tipo.component';
+import { ModeloComponent } from './components/detalleproductos/modelo/modelo.component';
+import { MarcaComponent } from './components/detalleproductos/marca/marca.component';
 
 @NgModule({
   imports: [
@@ -182,7 +185,11 @@ import { ProveedoresMovimientosComponent } from './components/proveedores/provee
     VentanaTalonarioComponent,
     ImagenProductoComponent,
     HistorialSerieComponent,
-    ProveedoresMovimientosComponent
+    ProveedoresMovimientosComponent,
+    DetalleProductosComponent,
+    TipoComponent,
+    MarcaComponent,
+    ModeloComponent
    ],
   entryComponents: [
     AppComponent,

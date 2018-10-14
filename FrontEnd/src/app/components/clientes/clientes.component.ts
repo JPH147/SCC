@@ -104,7 +104,7 @@ export class ClientesComponent implements OnInit {
  Agregar() {
    // tslint:disable-next-line:prefer-const
    let VentanaClientes = this.DialogoClientes.open(VentanaEmergenteClientes, {
-     width: '800px'
+     width: '1000px'
    });
 
    VentanaClientes.afterClosed().subscribe(res => {
@@ -140,7 +140,7 @@ export class ClientesComponent implements OnInit {
   this.Servicio.Seleccionar(id).subscribe(res => {
     // tslint:disable-next-line:prefer-const
     let VentanaClientes = this.DialogoClientes.open(VentanaEmergenteClientes, {
-      width: '800px',
+      width: '1000px',
       data: {objeto: res, id: id},
 
     });

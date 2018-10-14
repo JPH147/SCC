@@ -40,18 +40,19 @@ const TREE_DATA = JSON.stringify({
   Cobranzas: '',
   'Administración del sistema': {
     Usuarios: 'usuarios',
-    Proveedores:'proveedores',
+    Proveedores: 'proveedores',
     Cooperativa: {
       'Aportes de socio': '',
       'Cuentas bancarias': ''
     },
     'Tipo de cambio': '',
     'Tablas maestras': {
-      'Sucursales': '',
-      'Direcciones': 'direcciones',
       'Bancos': '',
-      'Instituciones': '',
       'Condición laboral': '',
+      'Detalle Productos': 'detalleproductos',
+      'Direcciones': 'direcciones',
+      'Instituciones': '',
+      'Sucursales': '',
     }
   }
 });

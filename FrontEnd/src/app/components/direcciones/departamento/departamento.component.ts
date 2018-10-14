@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild, AfterViewInit, ElementRef} from '@angular/core';
 import {merge, Observable, fromEvent} from 'rxjs';
-import {DepartamentoDataSource} from './departamento.dataservice'
+import {DepartamentoDataSource} from './departamento.dataservice';
 import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
 import {ServiciosDirecciones, Departamento} from '../../global/direcciones';
 import { MatPaginator, MatSort, MatDialog } from '@angular/material';
