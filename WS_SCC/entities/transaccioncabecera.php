@@ -26,6 +26,8 @@ Class TransaccionCabecera{
     public $id_sucursal;
     public $id_vendedor;
     public $fecha;
+    public $producto;
+    public $serie;
     public $fecha_inicio;
     public $fecha_fin;
     public $documento;
@@ -136,8 +138,7 @@ Class TransaccionCabecera{
     }
 
     /* Crear producto */
-    function create()
-    {
+    function create(){
         $query = "call sp_creartransaccioncabecera(
             :pralmacen,
             :prtipo,
@@ -206,8 +207,7 @@ Class TransaccionCabecera{
     }
 
     /* Eliminar producto */
-    function delete()
-    {
+    function delete(){
         $query = "call sp_eliminartransaccioncabecera(?)";
         $result = $this->conn->prepare($query);
 
@@ -224,8 +224,7 @@ Class TransaccionCabecera{
     }
 
     /* Actualizar producto */
-    function update()
-    {
+    function update(){
         $query = "call sp_actualizartransaccioncabecera(
             :prid,
             :pralmacen,
@@ -290,5 +289,67 @@ Class TransaccionCabecera{
                 return false;
             }
     }
+
+
+    function readxproveedor(){
+
+        $query = "CALL sp_listartransaccionxproveedor(?,?,?,?,?,?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_proveedor);
+        $result->bindParam(2, $this->producto);
+        $result->bindParam(3, $this->serie);
+        $result->bindParam(4, $this->fecha_inicio);
+        $result->bindParam(5, $this->fecha_fin);
+        $result->bindParam(6, $this->numero_pagina);
+        $result->bindParam(7, $this->total_pagina);
+
+        $result->execute();
+        
+        $TCabecera_list=array();
+        $TCabecera_list["transacciones"]=array();
+
+        $contador = $this->total_pagina*($this->numero_pagina-1);
+
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $contador=$contador+1;
+            $TDetalle=$this->detalle->readxcabecera($id);
+            $transaccion_item = array (
+                "numero"=>$contador,
+                "id"=>$id,
+                "almacen"=>$almacen,                
+                "referencia"=>$documento_referencia,
+                "fecha"=>$fecha
+            );
+            array_push($TCabecera_list["transacciones"],$transaccion_item);
+        }
+
+        return $TCabecera_list;
+    }
+
+    function readxproveedorcontar(){
+
+        $query = "CALL sp_listartransaccionxproveedorcontar(?,?,?,?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_proveedor);
+        $result->bindParam(2, $this->producto);
+        $result->bindParam(3, $this->serie);
+        $result->bindParam(4, $this->fecha_inicio);
+        $result->bindParam(5, $this->fecha_fin);
+
+        $result->execute();
+
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        $this->total_resultado=$row['total'];
+
+        return $this->total_resultado;
+    }
+
 }
 ?>

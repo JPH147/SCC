@@ -6,11 +6,15 @@ Class ProductoSerie{
     public $id_producto_serie;
     public $id_producto;
     public $producto;
+    public $id_serie;
     public $serie;
     public $estado;
     public $color;
     public $almacenamiento;
+    public $proveedor;
     public $observacion;
+    public $numero_pagina;
+    public $total_pagina;
 
     public function __construct($db){
         $this->conn = $db;
@@ -19,12 +23,14 @@ Class ProductoSerie{
     /* Listar productos */
     function read(){
 
-        $query = "CALL sp_listarproductoserie(?,?)";
+        $query = "CALL sp_listarproductoserie(?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
         $result->bindParam(1, $this->almacen);
         $result->bindParam(2, $this->id_producto);
+        $result->bindParam(3, $this->numero_pagina);
+        $result->bindParam(4, $this->total_pagina);
 
         $result->execute();
         
@@ -39,14 +45,11 @@ Class ProductoSerie{
             $contador=$contador+1;
             $producto_serie_item = array (
                 "numero"=>$contador,
-                "almacen"=>$almacen,
-                "id_producto"=>$id_producto,
-                "descripcion"=>$descripcion,
                 "id_serie"=>$id_serie,
                 "serie"=>$serie,
                 "color"=>$color,
                 "almacenamiento"=>$almacenamiento,
-                "observacion"=>$observacion
+                "proveedor"=>$proveedor
             );
             array_push($producto_serie_list["producto_series"],$producto_serie_item);
         }
@@ -54,23 +57,23 @@ Class ProductoSerie{
         return $producto_serie_list;
     }
 
-    // function contar(){
+    function contar(){
 
-    //     $query = "CALL sp_listarproductoseriecontar(?,?)";
+        $query = "CALL sp_listarproductoseriecontar(?,?)";
 
-    //     $result = $this->conn->prepare($query);
+        $result = $this->conn->prepare($query);
 
-    //     $result->bindParam(1, $this->prproducto);
-    //     $result->bindParam(2, $this->prserie);
+        $result->bindParam(1, $this->almacen);
+        $result->bindParam(2, $this->id_producto);
 
-    //     $result->execute();
+        $result->execute();
 
-    //     $row = $result->fetch(PDO::FETCH_ASSOC);
+        $row = $result->fetch(PDO::FETCH_ASSOC);
 
-    //     $this->total_producto_serie=$row['total'];
+        $this->total_producto_serie=$row['total'];
 
-    //     return $this->total_producto_serie;
-    // }
+        return $this->total_producto_serie;
+    }
 
     function readxId(){
 
@@ -102,36 +105,6 @@ Class ProductoSerie{
         return $producto_serie_list;
     }
 
-    function readxproducto(){
-
-        $query ="call sp_listarproductoseriexproducto(?)";
-        
-        $result = $this->conn->prepare($query);
-        
-        $result->bindParam(1, $this->id_producto);
-        
-        $result->execute();
-    
-        $producto_serie_list=array();
-        $producto_serie_list["producto_series"]=array();
-
-        $contador = 0;
-
-        while($row = $result->fetch(PDO::FETCH_ASSOC))
-        {
-            extract($row);
-            $contador=$contador+1;
-            $producto_serie_item = array (
-                "numero"=>$contador,
-                "producto"=>$id_producto,
-                "serie"=>$ps_serie
-            );
-            array_push($producto_serie_list["producto_series"],$producto_serie_item);
-        }
-
-        return $producto_serie_list;
-    }
-
     /* Crear producto */
     function create(){
 
@@ -139,8 +112,7 @@ Class ProductoSerie{
             :prproducto,
             :prserie,
             :prcolor,
-            :pralmacenamiento,
-            :probservacion
+            :pralmacenamiento
             )";
 
         $result = $this->conn->prepare($query);
@@ -149,14 +121,11 @@ Class ProductoSerie{
         $result->bindParam(":prserie", $this->serie);
         $result->bindParam(":prcolor", $this->color);
         $result->bindParam(":pralmacenamiento", $this->almacenamiento);
-        $result->bindParam(":probservacion", $this->observacion);
-
 
         $this->id_producto=htmlspecialchars(strip_tags($this->id_producto));
         $this->serie=htmlspecialchars(strip_tags($this->serie));
         $this->color=htmlspecialchars(strip_tags($this->color));
         $this->almacenamiento=htmlspecialchars(strip_tags($this->almacenamiento));
-        $this->observacion=htmlspecialchars(strip_tags($this->observacion));
 
         if($result->execute())
         {

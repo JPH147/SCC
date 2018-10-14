@@ -23,6 +23,7 @@
             $transaccion->id_producto_serie = $_POST["prproductoserie"];
             $transaccion->cantidad = $_POST["prcantidad"];
             $transaccion->precio =  $_POST["prprecio"];
+            $transaccion->observacion =  $_POST["probservacion"];
 
 	    	if($transaccion->update())
 	        {
