@@ -32,22 +32,35 @@
       justify-content: center;
     }
     
-    .mat-column-numero,
-    .mat-column-tipo,
-    .mat-column-marca,
-    .mat-column-modelo,
-    .mat-column-precio,
-    .mat-column-opciones
+    .mat-column-fecha,
+    .mat-column-documento
     {
-      max-width: 12%;
+      max-width: 8%;
+    }
+
+    .transaccion
+    {
+      max-width:5%;
+    }
+
+    .mat-column-producto
+    {
+      max-width: 30%;
+    } 
+
+    .mat-column-tenedor
+     {
+      max-width:25%;
     }
     
-    .mat-column-foto{
-      max-width: 8%;
+   
+    .mat-column-serie
+    {
+      max-width: 13%;
     }
     
     .mat-column-numero{
-     max-width: 5%; 
+     max-width: 4%; 
     }
     
     .imagen-producto{

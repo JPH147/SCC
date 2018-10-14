@@ -1,7 +1,7 @@
 <mat-card class="card">
   <mat-card-header >
-    <mat-card-title *ngIf="!data">Agregar nuevo departamento</mat-card-title>
-    <mat-card-title *ngIf="data">Editar departamento</mat-card-title>
+    <mat-card-title *ngIf="!data">Agregar Departamento</mat-card-title>
+    <mat-card-title *ngIf="data">Editar Departamento</mat-card-title>
   </mat-card-header>
 
   <form [formGroup]="DepartamentosForm" (ngSubmit)="Guardar(DepartamentosForm); Notificacion(mensaje,'')">
