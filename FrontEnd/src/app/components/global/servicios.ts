@@ -89,7 +89,7 @@ export class ServiciosGenerales {
     prtotalpagina: number
   ): Observable<any> {
        // tslint:disable-next-line:max-line-length
-       return this.http.get(this.url + 'productomarca/read2.php?prtipo=' + tipo + '&prmarca=' + nombre + '&prpagina=' + prpagina + '&prtotalpagina=' + prtotalpagina)
+       return this.http.get(this.url + 'productomarca/read2.php?prtipo=' + tipo + '&prnombre=' + nombre + '&prpagina=' + prpagina + '&prtotalpagina=' + prtotalpagina)
       .pipe(map(res => {
       if (res['codigo'] === 0) {
         return res;
@@ -104,7 +104,7 @@ export class ServiciosGenerales {
     id_marca: string,
     nombre: string
   ): Observable<ModeloModelo> {
-      return this.http.get(this.url + 'productomodelo/read.php?prmarca=' + id_marca + '&prnombre' + nombre)
+      return this.http.get(this.url + 'productomodelo/read.php?prmarca=' + id_marca + '&prnombre=' + nombre)
       .pipe(map(res => {
       if (res['codigo'] === 0 ) {
           return res['data'].modelo;
@@ -112,6 +112,24 @@ export class ServiciosGenerales {
         console.log('Error al importar los datos, revisar servicio');
       }
     }));
+}
+
+
+ListarModelo2(
+  marca: string,
+  nombre: string,
+  prpagina: number,
+  prtotalpagina: number
+): Observable<any> {
+    // tslint:disable-next-line:max-line-length
+    return this.http.get(this.url + 'productomodelo/read2.php?prmarca=' + marca + '&prnombre=' + nombre + '&prpagina=' + prpagina + '&prtotalpagina=' + prtotalpagina)
+    .pipe(map(res => {
+    if (res['codigo'] === 0 ) {
+        return res;
+    } else {
+      console.log('Error al importar los datos, revisar servicio');
+    }
+  }));
 }
 
   ListarInstitucion(

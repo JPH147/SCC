@@ -1,7 +1,7 @@
 <mat-card>
 
         <div>
-            <button mat-fab matTooltip="Agregar Tipo de Producto" class="agregar"   color="primary" (click)="Agregar()"><mat-icon> add_location </mat-icon></button>
+            <button mat-fab matTooltip="Agregar Tipo de Producto" class="agregar"   color="primary" (click)="Agregar()"><mat-icon> playlist_add </mat-icon></button>
         </div>
       <!-- Encabezado -->
       <mat-card-title>
@@ -52,7 +52,7 @@
          <ng-container matColumnDef="opciones">
             <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
             <mat-cell *matCellDef="let tipo">
-              <button mat-icon-button color="primary" (click)="Editar(tipo.id)" matTooltip="Editar" matTooltip="Editar"><mat-icon> edit_location </mat-icon></button>
+              <button mat-icon-button color="primary" (click)="Editar(tipo.id)" matTooltip="Editar" matTooltip="Editar"><mat-icon> edit </mat-icon></button>
               <button mat-icon-button color="primary" (click)="Eliminar(tipo)" matTooltip="Eliminar" matTooltip="Eliminar"><mat-icon> delete </mat-icon></button>
             </mat-cell>
           </ng-container>
