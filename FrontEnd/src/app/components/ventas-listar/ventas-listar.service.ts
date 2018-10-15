@@ -4,7 +4,7 @@ import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {URL} from '../global/url';
 import * as moment from 'moment';
-
+ 
 @Injectable()
 
 export class VentasServicio {

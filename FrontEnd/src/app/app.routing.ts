@@ -18,12 +18,17 @@ import { ventanaseriessv } from './components/salida-vendedores/ventana-seriessv
 import { DireccionesComponent } from './components/direcciones/direcciones.component';
 import { VentasListarComponent } from './components/ventas-listar/ventas-listar.component';
 import { HistorialSerieComponent } from './components/historial-serie/historial-serie.component';
+<<<<<<< HEAD
+import { HistorialMovimientosComponent } from './components/historial-movimientos/historial-movimientos.component';
+=======
 import { DetalleProductosComponent } from './components/detalleproductos/detalleproductos.component';
+>>>>>>> 5cf7dac74c62f72f22572da2f6467d4670d29052
 
 const appRoutes: Routes = [
   {path: 'usuarios', component: UsuariosComponent},
   {path: 'productos', component: ProductosComponent},
-  {path: 'historial', component: HistorialSerieComponent},
+  {path: 'historial/serie', component: HistorialSerieComponent},
+  {path: 'historial', component: HistorialMovimientosComponent},
   {path: 'stock', component: StockComponent},
   {path: 'stock/ingresoproductos', component: IngresoProductosComponent},
   {path: 'stock/salidaproductos', component: SalidaProductosComponent},

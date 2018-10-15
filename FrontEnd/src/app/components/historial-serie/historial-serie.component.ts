@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { HistorialSerieService } from './historial-serie.service';
 import { HistorialSerieDataService } from './historial-serie.data.service';
 import { MatPaginator, MatSort, MatDialog, MatSelect, MatSnackBar } from '@angular/material';
@@ -36,30 +36,26 @@ export class HistorialSerieComponent implements OnInit {
   }
 
   ngAfterViewInit () {
-  this.sort.sortChange.subscribe(res => {
-    this.paginator.pageIndex = 0;
-  });
 
-  merge(
-    this.paginator.page,
-    this.sort.sortChange
-  )
-  .pipe(
-    tap(() => this.CargarData())
-  ).subscribe();
-
-  merge(
-   fromEvent(this.FiltroProductos.nativeElement, 'keyup')
-  )
-  .pipe(
-     debounceTime(200),
-     distinctUntilChanged(),
-     tap(() => {
-       this.paginator.pageIndex = 0;
-       this.CargarData();
-     })
+    merge(
+      this.paginator.page
+    )
+    .pipe(
+      tap(() => this.CargarData())
     ).subscribe();
-}
+  
+    merge(
+     fromEvent(this.FiltroProductos.nativeElement, 'keyup')
+    )
+    .pipe(
+       debounceTime(200),
+       distinctUntilChanged(),
+       tap(() => {
+         this.paginator.pageIndex = 0;
+         this.CargarData();
+       })
+      ).subscribe();
+  }
 
   CargarData() {
     this.ListadoProductos.CargarProductos(this.FiltroProductos.nativeElement.value,

@@ -19,7 +19,7 @@
         <mat-spinner></mat-spinner>
       </div>
 
-      <mat-table [dataSource]="ListadoProductos" class="example-table" matSort matSortActive="documento" matSortDisableClear matSortDirection="asc" matSortDisableClear>
+      <mat-table [dataSource]="ListadoProductos">
 
         <ng-container matColumnDef="numero" class="numero">
           <mat-header-cell *matHeaderCellDef>N°</mat-header-cell>
@@ -27,32 +27,32 @@
         </ng-container>
 
         <ng-container matColumnDef="serie">
-          <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Serie</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef>Serie</mat-header-cell>
           <mat-cell *matCellDef="let serie">{{serie.serie}}</mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="fecha">
-          <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Fecha</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef>Fecha</mat-header-cell>
           <mat-cell *matCellDef="let serie">{{serie.fecha}}</mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="documento">
-          <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Documento</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef>Documento</mat-header-cell>
           <mat-cell *matCellDef="let serie">{{serie.documento}}</mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="transaccion">
-          <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Transaccion</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef>Transaccion</mat-header-cell>
           <mat-cell *matCellDef="let serie">{{serie.transaccion}}</mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="producto">
-          <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Producto</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef>Producto</mat-header-cell>
           <mat-cell *matCellDef="let serie">{{serie.producto}}</mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="tenedor">
-          <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Tenedor</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef>Referente</mat-header-cell>
           <mat-cell *matCellDef="let serie">{{serie.tenedor}}</mat-cell>
         </ng-container>
 

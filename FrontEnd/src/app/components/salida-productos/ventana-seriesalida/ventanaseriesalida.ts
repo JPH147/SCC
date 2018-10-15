@@ -75,7 +75,7 @@ export class ventanaseriesalida  implements OnInit {
       ]],
       'precio':[{value:null, disabled:false},[
       ]],
-      'cantidad':[{value:null, disabled:false},[
+      'cantidad':[{value:1, disabled:true},[
       ]],
       'considerar':[{value:false,disabled:false},[
       ]]
