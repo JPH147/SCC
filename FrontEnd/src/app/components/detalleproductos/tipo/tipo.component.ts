@@ -6,6 +6,7 @@ import { MatPaginator, MatSort, MatDialog } from '@angular/material';
 import {VentanaConfirmarComponent} from '../../global/ventana-confirmar/ventana-confirmar.component'
 import { TipoDataSource } from './tipo.dataservice';
 import { ServiciosGenerales } from '../../global/servicios';
+import { VentanaEmergenteTipo } from './ventana-emergente/ventanaemergente';
 
 @Component({
   selector: 'app-tipo',
@@ -23,6 +24,7 @@ export class TipoComponent implements OnInit {
 
     constructor(
         private Servicio: ServiciosGenerales,
+        public DialogoTipo: MatDialog
       ) {}
 
     ngOnInit() {
@@ -55,5 +57,30 @@ export class TipoComponent implements OnInit {
         this.ListadoTipo.CargarTipo(
         this.FiltroTipo.nativeElement.value,
         this.FiltroUM.nativeElement.value, 1, 10);
+      }
+
+      Agregar() {
+
+        let VentanaTipo = this.DialogoTipo.open(VentanaEmergenteTipo, {
+          width: '350px'
+        });
+     
+        VentanaTipo.afterClosed().subscribe(res => {
+          this.CargarData();
+        });
+      }
+
+      Editar(id) {
+        this.Servicio.SeleccionarTipo(id).subscribe(res => {
+     
+          let VentanaTipo = this.DialogoTipo.open(VentanaEmergenteTipo, {
+            width: '350px',
+            data: res
+          });
+          // tslint:disable-next-line:no-shadowed-variable
+          VentanaTipo.afterClosed().subscribe (res => {
+            this.CargarData();
+          });
+        });
       }
 }

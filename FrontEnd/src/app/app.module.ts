@@ -95,6 +95,7 @@ import { DetalleProductosComponent} from './components/detalleproductos/detallep
 import {TipoComponent} from './components/detalleproductos/tipo/tipo.component';
 import { ModeloComponent } from './components/detalleproductos/modelo/modelo.component';
 import { MarcaComponent } from './components/detalleproductos/marca/marca.component';
+import { VentanaEmergenteTipo } from './components/detalleproductos/tipo/ventana-emergente/ventanaemergente';
 
 @NgModule({
   imports: [
@@ -191,7 +192,8 @@ import { MarcaComponent } from './components/detalleproductos/marca/marca.compon
     DetalleProductosComponent,
     TipoComponent,
     MarcaComponent,
-    ModeloComponent
+    ModeloComponent,
+    VentanaEmergenteTipo
    ],
   entryComponents: [
     AppComponent,
@@ -213,7 +215,8 @@ import { MarcaComponent } from './components/detalleproductos/marca/marca.compon
     VentanaTalonarioComponent,
     VentasComponent,
     ImagenProductoComponent,
-    ProveedoresMovimientosComponent
+    ProveedoresMovimientosComponent,
+    VentanaEmergenteTipo
   ],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider, {provide: MAT_DATE_LOCALE, useValue: 'en-GB'}]

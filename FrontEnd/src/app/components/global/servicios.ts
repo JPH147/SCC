@@ -1,7 +1,7 @@
 import { Cliente } from './../clientes/clientes.service';
 import { TipoProductoModelo } from './servicios';
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams } from '@angular/common/http';
+import {HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {URL} from './url';
@@ -50,6 +50,45 @@ export class ServiciosGenerales {
   }));
   }
 
+  CrearTipoProducto(
+    nombre:string,
+		id:number
+	):Observable<any>{
+		let params=new HttpParams()
+						.set('tprd_nombre', nombre)
+						.set('idunidadmedida', id.toString());
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+		return this.http.post(this.url+'productotipo/create.php',params,{headers:headers});
+  }
+  
+  EditarTipoProducto(id:number,
+    nombre: string,
+    idunidadmedida: number):Observable<any>{
+      let params=new HttpParams()
+              .set('id', id.toString())
+              .set('nombre', nombre.toString())
+              .set('idunidad', idunidadmedida.toString());
+      let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+      return this.http.post(this.url+'productotipo/update.php',params,{headers:headers});
+    }
+
+    SeleccionarTipo(
+      id:number
+    ):Observable<any[]>
+    {
+      return this.http.get(this.url+'productotipo/readxId.php',{
+        params: new HttpParams()
+        .set('id', id.toString())
+      })
+      .pipe(map(res=>{
+        if(res['codigo']===0){
+          return res=res['data']
+        }else{
+          console.log('Error al importar los datos, revisar servicio')
+        }
+      }))
+    }
+
   ListarUnidadMedida(
     tipo_producto:string
   ):Observable<any>{
@@ -82,6 +121,17 @@ export class ServiciosGenerales {
   }));
   }
 
+  CrearMarca(
+    id:number,
+		marca:string
+	):Observable<any>{
+		let params=new HttpParams()
+						.set('idtipoproducto', id.toString())
+						.set('marca', marca );
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+		return this.http.post(this.url+'productomarca/create.php',params,{headers:headers});
+	}
+
   ListarMarca2(
     tipo: string,
     nombre: string,
@@ -112,6 +162,17 @@ export class ServiciosGenerales {
         console.log('Error al importar los datos, revisar servicio');
       }
     }));
+}
+
+CrearModelo(
+  id:number,
+  modelo:string
+):Observable<any>{
+  let params=new HttpParams()
+          .set('idmarca', id.toString())
+          .set('modelo', modelo );
+  let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+  return this.http.post(this.url+'productomodelo/create.php',params,{headers:headers});
 }
 
 

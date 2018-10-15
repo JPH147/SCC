@@ -144,6 +144,47 @@ class Tipo_Producto{
         }
         
         return false;
+	}
+	
+	function update()
+    {
+        $query = "call sp_actualizartipoproducto(:id, :nombre, :idunidad)";
+        
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":id", $this->id_tipo_producto);
+        $result->bindParam(":nombre", $this->tprd_nombre);
+        $result->bindParam(":idunidad", $this->idunidadmedida);
+
+        $this->id_tipo_producto=htmlspecialchars(strip_tags($this->id_tipo_producto));
+        $this->tprd_nombre=htmlspecialchars(strip_tags($this->tprd_nombre));
+        $this->idunidadmedida=htmlspecialchars(strip_tags($this->idunidadmedida));
+
+        if($result->execute())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+	}
+	
+	function readxId(){
+
+        $query = "CALL sp_listartipoproductoxId(?)";
+        
+        $result = $this->conn->prepare($query);
+        
+        $result->bindParam(1, $this->id_tipo_producto);
+        
+        $result->execute();
+    
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+        
+        $this->id_tipo_producto=$row['id'];
+        $this->tprd_nombre=$row['nombre'];
+        $this->idunidadmedida=$row['idunidad'];
     }
 
 	
