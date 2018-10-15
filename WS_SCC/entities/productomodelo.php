@@ -1,6 +1,6 @@
 <?php 
 
-class Marca{
+class Modelo{
 	private $conn;
 	private $table_name = "modelo";
 
@@ -99,6 +99,24 @@ class Marca{
         $this->total_resultado=$row['total'];
 
         return $this->total_resultado;
+	}
+	
+	function create()
+    {
+        $query = "CALL sp_crearmodelo (:idmarca, :modelo)";
+        $result = $this->conn->prepare($query);
+		$this->id_marca = htmlspecialchars(strip_tags($this->id_marca));
+        $this->mdl_nombre = htmlspecialchars(strip_tags($this->mdl_nombre));
+
+		$result->bindParam(":idmarca",$this->id_marca);
+        $result->bindParam(":modelo", $this->mdl_nombre);
+
+        if($result->execute())
+        {
+            return true;
+        }
+        
+        return false;
     }
 
 	

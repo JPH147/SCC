@@ -95,6 +95,24 @@ class Marca{
         $this->total_resultado=$row['total'];
 
         return $this->total_resultado;
+	}
+	
+	function create()
+    {
+        $query = "CALL sp_crearmarca (:idtipoproducto, :marca)";
+        $result = $this->conn->prepare($query);
+		$this->id_tipo_producto = htmlspecialchars(strip_tags($this->id_tipo_producto));
+        $this->mrc_nombre = htmlspecialchars(strip_tags($this->mrc_nombre));
+
+		$result->bindParam(":idtipoproducto",$this->id_tipo_producto);
+        $result->bindParam(":marca", $this->mrc_nombre);
+
+        if($result->execute())
+        {
+            return true;
+        }
+        
+        return false;
     }
 
 	

@@ -8,7 +8,9 @@ class Tipo_Producto{
 	public $tprd_nombre;
 	public $und_nombre;
 	public $numero_pagina;
-    public $total_pagina;
+	public $total_pagina;
+	
+	public $idunidadmedida;
 
 	public function __construct($db){
 		$this->conn = $db;
@@ -125,6 +127,24 @@ class Tipo_Producto{
 
 		return $unidad_medida_list;
 	}
+
+	function create()
+    {
+        $query = "CALL sp_creartipoproducto (:prnombre, :idunidadmedida)";
+        $result = $this->conn->prepare($query);
+		$this->tprd_nombre = htmlspecialchars(strip_tags($this->tprd_nombre));
+        $this->idunidadmedida = htmlspecialchars(strip_tags($this->idunidadmedida));
+
+		$result->bindParam(":prnombre",$this->tprd_nombre);
+        $result->bindParam(":idunidadmedida", $this->idunidadmedida);
+
+        if($result->execute())
+        {
+            return true;
+        }
+        
+        return false;
+    }
 
 	
 }

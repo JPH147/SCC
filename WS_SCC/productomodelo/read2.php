@@ -14,7 +14,7 @@
     $db = $database -> getConnection();
 
     try{
-    	$modelo = new Marca($db);
+    	$modelo = new Modelo($db);
 
     	$modelo->marca = !empty($_GET['prmarca']) ? $_GET['prmarca'] : null;
     	$modelo->mdl_nombre = !empty($_GET['prnombre']) ? $_GET['prnombre'] : null;
