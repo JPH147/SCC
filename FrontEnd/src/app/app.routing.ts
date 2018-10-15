@@ -18,11 +18,13 @@ import { ventanaseriessv } from './components/salida-vendedores/ventana-seriessv
 import { DireccionesComponent } from './components/direcciones/direcciones.component';
 import { VentasListarComponent } from './components/ventas-listar/ventas-listar.component';
 import { HistorialSerieComponent } from './components/historial-serie/historial-serie.component';
+import { HistorialMovimientosComponent } from './components/historial-movimientos/historial-movimientos.component';
 
 const appRoutes: Routes = [
   {path: 'usuarios', component: UsuariosComponent},
   {path: 'productos', component: ProductosComponent},
-  {path: 'historial', component: HistorialSerieComponent},
+  {path: 'historial/serie', component: HistorialSerieComponent},
+  {path: 'historial', component: HistorialMovimientosComponent},
   {path: 'stock', component: StockComponent},
   {path: 'stock/ingresoproductos', component: IngresoProductosComponent},
   {path: 'stock/salidaproductos', component: SalidaProductosComponent},

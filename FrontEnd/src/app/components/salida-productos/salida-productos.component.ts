@@ -180,8 +180,9 @@ GuardarTransferenciaAlmacen(formulario) {
           res['data'],
           i.id_serie,
           i.precio,
-          i.cantidad * (-1)
+          -1
         ).subscribe(res=>{
+          // console.log(res)
             this.SSeries.RegistrarProductoOUT(i.id_serie).subscribe(res=>{
           })
         })

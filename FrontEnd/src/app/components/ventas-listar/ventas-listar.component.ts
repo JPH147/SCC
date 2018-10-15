@@ -16,7 +16,7 @@ import {VentasServicio} from './ventas-listar.service'
   providers:[VentasServicio,ProductoService]
 })
 export class VentasListarComponent implements OnInit {
-
+ 
 
   ListadoVentas: VentaDataSource;
   Columnas: string[] = ['numero', 'serie','contrato', 'cliente_nombre', 'tipo_venta', 'monto_total', 'fecha', 'opciones'];

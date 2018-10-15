@@ -50,6 +50,8 @@ export class SalidaProductosService {
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
+    // console.log(params);
+
     return this.http.post(this.url + 'transacciondetalle/create.php', params, {headers: headers});
   }
 
