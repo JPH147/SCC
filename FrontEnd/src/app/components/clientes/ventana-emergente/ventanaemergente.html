@@ -1,10 +1,11 @@
-<mat-card>
+<mat-card class="card">
     <mat-card-header>
-      <mat-card-title>Agrega Cliente Nuevo</mat-card-title>
+      <mat-card-title *ngIf="!data">Agregar Nuevo Cliente</mat-card-title>
+      <mat-card-title *ngIf="data">Editar Cliente</mat-card-title>
     </mat-card-header>
     <form [formGroup]="ClientesForm" (ngSubmit)="Guardar(ClientesForm)">
       <mat-card-content>
-        <mat-grid-list cols="3" rowHeight="80px">
+        <mat-grid-list cols="4" rowHeight="70px">
           <mat-grid-tile>
             <mat-form-field class="input-ventana"> 
               <mat-select placeholder='Selecciona Institucion' formControlName="institucion" (selectionChange)="InstitucionSeleccionada($event)">

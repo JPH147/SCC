@@ -33,6 +33,23 @@ export class ServiciosGenerales {
   }));
   }
 
+  ListarTipoProductos2(
+    nombre: string,
+    unidad_medida: string,
+    prpagina: number,
+    prtotalpagina: number
+  ): Observable<any> {
+  // tslint:disable-next-line:max-line-length
+  return this.http.get(this.url + 'productotipo/read2.php?prnombre=' + nombre + '&prum' + unidad_medida + '&prpagina' + prpagina + '&prtotalpagina=' + prtotalpagina)
+  .pipe(map(res => {
+      if (res['codigo'] === 0 ) {
+        return res;
+    } else {
+        console.log('Error al importar los datos, revisar servicio');
+    }
+  }));
+  }
+
   ListarUnidadMedida(
     tipo_producto:string
   ):Observable<any>{
@@ -64,6 +81,24 @@ export class ServiciosGenerales {
       }
   }));
   }
+
+  ListarMarca2(
+    tipo: string,
+    nombre: string,
+    prpagina: number,
+    prtotalpagina: number
+  ): Observable<any> {
+       // tslint:disable-next-line:max-line-length
+       return this.http.get(this.url + 'productomarca/read2.php?prtipo=' + tipo + '&prmarca=' + nombre + '&prpagina=' + prpagina + '&prtotalpagina=' + prtotalpagina)
+      .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res;
+      } else {
+          console.log('Error al importar los datos, revisar servicio');
+      }
+  }));
+  }
+
 
   ListarModelo(
     id_marca: string,
