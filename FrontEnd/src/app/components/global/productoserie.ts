@@ -63,6 +63,44 @@ export class ServiciosProductoSerie {
     return this.http.post(this.url + 'productoserie/create.php', params, {headers: headers});
   }
 
+  Seleccionar(
+    id:number
+  ): Observable<any>{
+
+    return this.http.get(this.url + 'productoserie/readxId.php', {
+      params: new HttpParams()
+      .set('prid', id.toString())
+    })
+    .pipe (map(res => {
+      if (res['codigo'] === 0) {
+        return res['data'];
+      } else {
+        console.log('Error al importar los datos, revisar servicio');
+        return res;
+      }
+    }));
+  }
+
+  Actualizar(
+    id: number,
+    id_producto: number,
+    serie: string,
+    color: string,
+    almacenamiento:string
+    ): Observable<any> {
+
+    let params = new HttpParams()
+      .set('prid', id.toString())
+      .set('prproducto', id_producto.toString())
+      .set('prserie', serie)
+      .set('prcolor', color)
+      .set('pralmacenamiento', almacenamiento)
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'productoserie/update.php', params, {headers: headers});
+  }
+
   RegistrarProductoOUT(
     serie:number
   ){

@@ -3,7 +3,6 @@ import {FormControl} from '@angular/forms';
 import {StockSerieDataSource} from '../stock.dataservice';
 import { MatPaginator,MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import {ServiciosProductoSerie} from '../../global/productoserie';
-import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {tap} from 'rxjs/operators';
 
 @Component({

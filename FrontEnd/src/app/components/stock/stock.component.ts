@@ -1,13 +1,12 @@
-
-import { StockService } from './stock.service';
-import {StockDataSource} from './stock.dataservice';
-import { FormControl } from '@angular/forms';
-import {HttpClient} from '@angular/common/http';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import {MatPaginator, MatSort, MatDialog} from '@angular/material';
 import {merge, Observable, of as observableOf, from, fromEvent} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap, delay, catchError, map, startWith, switchMap} from 'rxjs/operators';
 import { VentanaEmergenteStock } from './ventana-emergentestock/ventanaemergentestock';
+import { StockService } from './stock.service';
+import {StockDataSource} from './stock.dataservice';
+import { FormControl } from '@angular/forms';
+import {HttpClient} from '@angular/common/http';
 
 @Component({
   selector: 'app-stock',
@@ -45,12 +44,9 @@ export class StockComponent implements OnInit {
 
   // tslint:disable-next-line:use-life-cycle-interface
   ngAfterViewInit () {
-    this.sort.sortChange.subscribe(res => {
-      this.paginator.pageIndex = 0;
-    });
+
     merge(
-      this.paginator.page,
-      this.sort.sortChange
+      this.paginator.page
     )
     .pipe(
       tap(() => this.CargarData())
@@ -61,7 +57,8 @@ export class StockComponent implements OnInit {
       fromEvent(this.FiltroTipo.nativeElement, 'keyup'),
       fromEvent(this.FiltroMarca.nativeElement, 'keyup'),
       fromEvent(this.FiltroModelo.nativeElement, 'keyup'),
-      fromEvent(this.FiltroDescripcion.nativeElement, 'keyup')
+      fromEvent(this.FiltroDescripcion.nativeElement, 'keyup'),
+      this.sort.sortChange
     )
     .pipe(
       debounceTime(200),

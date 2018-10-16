@@ -21,18 +21,19 @@
 	    $transaccion->readxId();
 
 	    $transaccion_list = array(
-	        "id"=>$transaccion->id_transaccion,
-            "almacen"=>$transaccion->id_almacen,
-            "tipo"=>$transaccion->id_tipo,
-            "referencia"=>$transaccion->id_referencia,
-            "proveedor"=>$transaccion->id_proveedor,
-            "cliente"=>$transaccion->id_cliente,
-            "salida_venta"=>$transaccion->id_salida_venta,
-            "sucursal"=>$transaccion->id_sucursal,
-            "vendedor"=>$transaccion->id_vendedor,
+	        "id"=>$transaccion->id,
+            "almacen"=>$transaccion->almacen,
+            "id_tipo"=>$transaccion->id_tipo,
+            "tipo"=>$transaccion->tipo,
+            "referencia"=>$transaccion->referencia,
+            "proveedor"=>$transaccion->proveedor,
+            "cliente"=>$transaccion->cliente,
+            "salida_venta"=>$transaccion->salida_venta,
+            "sucursal"=>$transaccion->sucursal,
+            "vendedor"=>$transaccion->vendedor,
             "fecha"=>$transaccion->fecha,
             "documento"=>$transaccion->documento,
-            "detalle"=>$transaccion->transaccion_detalle
+            "detalle"=>$transaccion->transaccion_detalle,
 	    );
 
 	    if(trim($transaccion->fecha)!= ''){

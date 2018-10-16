@@ -12,7 +12,7 @@
 
 .spinner-container{
   position: absolute;
-  top: 200px;
+  top: 300px;
   left: 0;
   right: 0;
   display: flex;
@@ -26,8 +26,8 @@ padding: 25px;
 font-size: 30px;
 text-align: center;
 font-family: sans-serif;
-
 }
+
 .example-table-container {
   position: relative;
   max-height: 400px;

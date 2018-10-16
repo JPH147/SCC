@@ -7,7 +7,7 @@
 	header('Content-Type: application/json');
 
 	include_once '../config/database.php';
-	include_once '../entities/productoserie.php';
+    include_once '../entities/productoserie.php';
 	include_once '../shared/utilities.php';
 	 
 	$database = new Database();
@@ -16,17 +16,15 @@
 
 	try
 	{
-	    $productoserie->id = isset($_GET['prid']) ? $_GET['prid'] : die();
+	    $productoserie->id_producto_serie = isset($_GET['prid']) ? $_GET['prid'] : die();
 	    
-	    $productoserie->readxId();
+	    $productoserie->readxproducto();
 
 	    $producto_serie_list = array(
-	    "id_producto_serie"=>$productoserie->id_producto_serie,
-        "id_producto"=>$productoserie->id_producto,
-        "producto"=>$productoserie->producto,
-        "serie"=>$productoserie->serie,
-        "color"=>$productoserie->color,
-        "almacenamiento"=>$productoserie->almacenamiento
+	        "id"=>$productoserie->id_producto_serie,
+            "id_producto"=>$productoserie->id_producto,
+            "serie"=>$productoserie->serie,
+            "estado"=>$productoserie->estado
 	    );
 
 	    if(trim($productoserie->id_producto_serie)!= ''){
@@ -34,6 +32,7 @@
 	    }
 	    else{
 	        print_json("0001", "No se encuentra el producto registrado con el id " . $productoserie->id_producto_serie , null);
+
 	    }
 
 	}

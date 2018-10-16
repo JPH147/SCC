@@ -28,3 +28,42 @@ mat-card{
 .mat-column-referencia{
 	max-width: 10%;
 }
+
+#tituloProd {
+padding: 25px;
+font-size: 30px;
+text-align: center;
+font-family: sans-serif;
+}
+
+.tabla-detalle{
+  width: 100%
+}
+
+#detalle-numero{
+  max-width: 10%
+}
+
+#detalle-almacenamiento,
+#detalle-precio,
+#detalle-color,
+#detalle-serie{
+  max-width: 15%
+}
+
+#detalle-producto{
+  max-width: 20%
+}
+
+.detalle-columnas{
+  text-align: center
+}
+
+.regresar{
+  float: left
+}
+
+td,
+th{
+  height: 42px
+}

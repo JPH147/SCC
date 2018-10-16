@@ -23,20 +23,21 @@ export class FileFlatNode {
  * The file structure tree data in string. The data could be parsed into a Json object
  */
 const TREE_DATA = JSON.stringify({
-  Créditos: {
+  Ventas: {
     Clientes: 'clientes',
     Ventas: 'ventas',
-    Préstamos: ''
+    'Salida de vendedores': 'salidavendedores',
+    Comisiones: 'comisiones',
   },
-  Logística: {
+  Almacenes: {
     Productos: 'productos',
     Stock: 'stock',
-    Historial: 'historial',
-    Recursos: {
-      'Salida de vendedores': 'salidavendedores',
-      'Comisiones': 'comisiones',
-    }
+    Historial: {
+      'Movimientos de almacén':'movimientos',
+      'Movimientos de series':'series'
+    },
   },
+  Créditos:'',
   Cobranzas: '',
   'Administración del sistema': {
     Usuarios: 'usuarios',
