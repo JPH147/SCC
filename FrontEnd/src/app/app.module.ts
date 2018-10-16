@@ -99,6 +99,8 @@ import { VentanaEmergenteProveedores } from './components/proveedores/ventana-em
 import { DetalleDocumentoAlmacenComponent } from './components/detalle-documento-almacen/detalle-documento-almacen.component';
 import { VentanaEditarSerieComponent } from './components/detalle-documento-almacen/ventana-editar-serie/ventana-editar-serie.component';
 import { VentanaEmergenteTipo } from './components/detalleproductos/tipo/ventana-emergente/ventanaemergente';
+import { VentanaEmergenteModelo } from './components/detalleproductos/modelo/ventana-emergente/ventanaemergente';
+import { VentanaEmergenteMarca } from './components/detalleproductos/marca/ventana-emergente/ventanaemergente';
 
 @NgModule({
   imports: [
@@ -196,10 +198,18 @@ import { VentanaEmergenteTipo } from './components/detalleproductos/tipo/ventana
     TipoComponent,
     MarcaComponent,
     ModeloComponent,
+<<<<<<< HEAD
     VentanaEmergenteProveedores,
     DetalleDocumentoAlmacenComponent,
     VentanaEditarSerieComponent,
     VentanaEmergenteTipo
+=======
+    DetalleDocumentoAlmacenComponent,
+    VentanaEditarSerieComponent,
+    VentanaEmergenteTipo,
+    VentanaEmergenteModelo,
+    VentanaEmergenteMarca
+>>>>>>> 1dd1855f165777cb56e609c834afcb621360eb4b
    ],
   entryComponents: [
     AppComponent,
@@ -222,9 +232,16 @@ import { VentanaEmergenteTipo } from './components/detalleproductos/tipo/ventana
     VentasComponent,
     ImagenProductoComponent,
     ProveedoresMovimientosComponent,
+<<<<<<< HEAD
     VentanaEmergenteProveedores,
     VentanaEditarSerieComponent,
     VentanaEmergenteTipo
+=======
+    VentanaEditarSerieComponent,
+    VentanaEmergenteTipo,
+    VentanaEmergenteModelo,
+    VentanaEmergenteMarca
+>>>>>>> 1dd1855f165777cb56e609c834afcb621360eb4b
   ],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider, {provide: MAT_DATE_LOCALE, useValue: 'en-GB'}]
