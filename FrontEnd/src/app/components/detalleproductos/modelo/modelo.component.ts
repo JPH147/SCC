@@ -6,6 +6,7 @@ import { MatPaginator, MatSort, MatDialog } from '@angular/material';
 import {VentanaConfirmarComponent} from '../../global/ventana-confirmar/ventana-confirmar.component'
 import { ModeloDataSource } from './modelo.data.service';
 import { ServiciosGenerales } from '../../global/servicios';
+import { VentanaEmergenteModelo } from './ventana-emergente/ventanaemergente';
 
 @Component({
   selector: 'app-modelo',
@@ -23,6 +24,7 @@ export class ModeloComponent implements OnInit {
 
     constructor(
       private Servicio: ServiciosGenerales,
+      public DialogoModelo: MatDialog
     ) {}
 
     ngOnInit() {
@@ -55,5 +57,30 @@ export class ModeloComponent implements OnInit {
       this.ListadoModelo.CargarModelo(
       this.FiltroMarca.nativeElement.value,
       this.FiltroModelo.nativeElement.value, 1, 10);
+    }
+
+    Agregar() {
+
+      let VentanaTipo = this.DialogoModelo.open(VentanaEmergenteModelo, {
+        width: '350px'
+      });
+   
+      VentanaTipo.afterClosed().subscribe(res => {
+        this.CargarData();
+      });
+    }
+
+    Editar(id) {
+      this.Servicio.SeleccionarModelo(id).subscribe(res => {
+   
+        let VentanaTipo = this.DialogoModelo.open(VentanaEmergenteModelo, {
+          width: '350px',
+          data: res
+        });
+        // tslint:disable-next-line:no-shadowed-variable
+        VentanaTipo.afterClosed().subscribe (res => {
+          this.CargarData();
+        });
+      });
     }
 }

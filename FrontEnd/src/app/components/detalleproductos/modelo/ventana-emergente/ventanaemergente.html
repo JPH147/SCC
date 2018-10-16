@@ -1,0 +1,36 @@
+<mat-card class="card">
+  <mat-card-header >
+    <mat-card-title *ngIf="!data">Agregar Modelo</mat-card-title>
+    <mat-card-title *ngIf="data">Editar Modelo</mat-card-title>
+  </mat-card-header>
+
+  <form [formGroup]="ModeloForm" (ngSubmit)="Guardar(ModeloForm); Notificacion(mensaje,'')">
+    
+    <mat-card-content>
+      <mat-grid-list cols="1" rowHeight="80px">
+        <mat-grid-tile>
+          <mat-form-field>
+            <input matInput placeholder="Modelo" formControlName="nombre">
+          </mat-form-field>
+        </mat-grid-tile>
+          
+        <mat-grid-tile>
+              <mat-form-field>
+                  <mat-select placeholder="Marca" formControlName="idmarca">
+                      <mat-option *ngFor="let mar of lstmarcas" [value]="mar.id">{{mar.nombre}}</mat-option>
+                  </mat-select>
+              </mat-form-field>
+          </mat-grid-tile>
+      </mat-grid-list>
+
+    </mat-card-content>
+
+    <mat-card-actions>
+      <mat-grid-list cols=1 rowHeight="40px">
+        <mat-grid-tile>
+          <button type="submit" mat-raised-button color="primary" [disabled]="ModeloForm.invalid">Guardar</button>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-card-actions>
+  </form>
+</mat-card>
