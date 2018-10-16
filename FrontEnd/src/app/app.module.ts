@@ -198,18 +198,15 @@ import { VentanaEmergenteMarca } from './components/detalleproductos/marca/venta
     TipoComponent,
     MarcaComponent,
     ModeloComponent,
-<<<<<<< HEAD
     VentanaEmergenteProveedores,
     DetalleDocumentoAlmacenComponent,
     VentanaEditarSerieComponent,
-    VentanaEmergenteTipo
-=======
+    VentanaEmergenteTipo,
     DetalleDocumentoAlmacenComponent,
     VentanaEditarSerieComponent,
     VentanaEmergenteTipo,
     VentanaEmergenteModelo,
     VentanaEmergenteMarca
->>>>>>> 1dd1855f165777cb56e609c834afcb621360eb4b
    ],
   entryComponents: [
     AppComponent,
@@ -232,16 +229,13 @@ import { VentanaEmergenteMarca } from './components/detalleproductos/marca/venta
     VentasComponent,
     ImagenProductoComponent,
     ProveedoresMovimientosComponent,
-<<<<<<< HEAD
     VentanaEmergenteProveedores,
     VentanaEditarSerieComponent,
-    VentanaEmergenteTipo
-=======
+    VentanaEmergenteTipo,
     VentanaEditarSerieComponent,
     VentanaEmergenteTipo,
     VentanaEmergenteModelo,
     VentanaEmergenteMarca
->>>>>>> 1dd1855f165777cb56e609c834afcb621360eb4b
   ],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider, {provide: MAT_DATE_LOCALE, useValue: 'en-GB'}]
