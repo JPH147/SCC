@@ -205,8 +205,8 @@ Class Producto{
     }
 
     /* Actualizar producto */
-    function update()
-    {
+    function update(){
+        
         $query = "call sp_actualizarproducto(:id_producto, :id_modelo, :descripcion, :prd_precio)";
         $result = $this->conn->prepare($query);
 

@@ -121,20 +121,21 @@ Class TransaccionCabecera{
     
         $row = $result->fetch(PDO::FETCH_ASSOC);
 
-        $this->detalle->readxcabecera($row['idtransaccion_cabecera']);
+        $this->detalle->readxcabecera($row['id']);
 
-        $this->id_transaccion=$row['idtransaccion_cabecera'];
-        $this->id_almacen=$row['id_almacen'];
+        $this->id=$row['id'];
+        $this->almacen=$row['almacen'];
         $this->id_tipo=$row['id_tipo_transaccion'];
-        $this->id_referencia=$row['tsccab_referencia'];
-        $this->id_proveedor=$row['id_proveedor'];
-        $this->id_cliente=$row['id_cliente'];
-        $this->id_salida_venta=$row['id_salida_venta'];
-        $this->id_sucursal=$row['id_sucursal'];
-        $this->id_vendedor=$row['id_vendedor'];
-        $this->fecha=$row['tsccab_fecha'];
-        $this->documento=$row['tsccab_documento_referencia'];
-        $this->transaccion_detalle=$this->detalle->readxcabecera($row['idtransaccion_cabecera']);
+        $this->tipo=$row['tipo_transaccion'];
+        $this->referencia=$row['referencia'];
+        $this->proveedor=$row['proveedor'];
+        $this->cliente=$row['cliente'];
+        $this->salida_venta=$row['salida_venta'];
+        $this->sucursal=$row['sucursal'];
+        $this->vendedor=$row['vendedor'];
+        $this->fecha=$row['fecha'];
+        $this->documento=$row['documento'];
+        $this->transaccion_detalle=$this->detalle->readxcabecera($row['id']);
     }
 
     /* Crear producto */

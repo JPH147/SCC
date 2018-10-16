@@ -3,6 +3,7 @@ Class ProductoSerie{
 
     private $conn;
 
+    public $id;
     public $id_producto_serie;
     public $id_producto;
     public $producto;
@@ -75,7 +76,7 @@ Class ProductoSerie{
         return $this->total_producto_serie;
     }
 
-    function readxId(){
+    function readxproducto(){
 
         $query = "CALL sp_listarproductoseriexproducto(?)";
 
@@ -103,6 +104,25 @@ Class ProductoSerie{
         }
 
         return $producto_serie_list;
+    }
+
+    function readxId(){
+        $query ="call sp_listarproductoseriexId(?)";
+        
+        $result = $this->conn->prepare($query);
+        
+        $result->bindParam(1, $this->id);
+        
+        $result->execute();
+    
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        $this->id_producto_serie=$row['id'];
+        $this->id_producto=$row['id_producto'];
+        $this->producto=$row['producto'];
+        $this->serie=$row['serie'];
+        $this->color=$row['color'];
+        $this->almacenamiento=$row['almacenamiento'];
     }
 
     /* Crear producto */
@@ -138,6 +158,32 @@ Class ProductoSerie{
         }
         
         return false;
+    }
+
+    function update(){
+        
+      $query = "call sp_actualizarproductoserie(:prid, :prproducto, :prserie, :prcolor, :pralmacenamiento)";
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(":prid", $this->id_producto_serie);
+      $result->bindParam(":prproducto", $this->id_producto);
+      $result->bindParam(":prserie", $this->serie);
+      $result->bindParam(":prcolor", $this->color);
+      $result->bindParam(":pralmacenamiento", $this->almacenamiento);
+
+      $this->id_producto_serie=htmlspecialchars(strip_tags($this->id_producto_serie));
+      $this->id_producto=htmlspecialchars(strip_tags($this->id_producto));
+      $this->serie=htmlspecialchars(strip_tags($this->serie));
+      $this->color=htmlspecialchars(strip_tags($this->color));
+      $this->almacenamiento=htmlspecialchars(strip_tags($this->almacenamiento));
+
+      if($result->execute()){
+        return true;
+      }
+      else{
+        return false;
+      }
+
     }
 
     /* Actualizar producto */

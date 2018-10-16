@@ -12,6 +12,8 @@ Class TransaccionDetalle{
     public $cantidad;
     public $precio;
     public $observacion;
+    public $color;
+    public $almacenamiento;
 
     public function __construct($db){
         $this->conn = $db;
@@ -99,13 +101,14 @@ Class TransaccionDetalle{
             $contador=$contador+1;
             $detalle_items = array (
                 "numero"=>$contador,
-                "id"=>$idtransaccion_detalle,
-                "cabecera"=>$id_movimiento_cabecera,
-                "producto"=>$prd_descripcion,
-                "serie"=>$ps_serie,
-                "cantidad"=>$tscdet_cantidad,
-                "precio"=>$tscdet_precio,
-                "observacion"=>$tscdet_observacion
+                "producto"=>$producto,
+                "serie"=>$serie,
+                "id_serie"=>$id_serie,
+                "color"=>$color,
+                "almacenamiento"=>$almacenamiento,
+                "cantidad"=>$cantidad,
+                "precio"=>$precio,
+                "observacion"=>$observacion
             );
             array_push($detalle_list,$detalle_items);
         }

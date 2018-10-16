@@ -1,0 +1,82 @@
+<mat-card>
+	
+  <button mat-mini-fab color="primary" class="regresar" [routerLink]="['../']"><mat-icon>keyboard_arrow_left</mat-icon></button>
+
+  <mat-card-title>
+    <div id="tituloProd">Detalle de documento</div>
+  </mat-card-title>
+
+	<mat-card-content>
+		
+		<mat-card-subtitle>
+			Cabecera de documento
+		</mat-card-subtitle>
+
+		<div class="spinner-container" *ngIf="cargando">
+	      <mat-spinner></mat-spinner>
+		</div>
+
+			<mat-grid-list cols=3 rowHeight="70px">
+			
+				<mat-grid-tile>
+					<strong>ALMACEN: &nbsp;</strong> {{almacen}}
+				</mat-grid-tile>
+
+				<mat-grid-tile>
+					<strong>TIPO: &nbsp;</strong> {{tipo}}
+				</mat-grid-tile>
+
+				<mat-grid-tile [ngSwitch]="referencia">
+					<strong *ngSwitchCase="1">PROVEEDOR: &nbsp;</strong>
+					<strong *ngSwitchCase="2">CLIENTE: &nbsp;</strong>
+					<strong *ngSwitchCase="3">SALIDA DE VENTA: &nbsp;</strong>
+					<strong *ngSwitchCase="4">SUCURSAL: &nbsp;</strong>
+					<strong *ngSwitchCase="5">VENDEDOR: &nbsp;</strong>
+					{{referente}}
+				</mat-grid-tile>
+
+				<mat-grid-tile>
+					<strong>DOCUMENTO: &nbsp;</strong> {{documento}}
+				</mat-grid-tile>
+
+				<mat-grid-tile>
+					<strong>FECHA: &nbsp;</strong> {{fecha | date:"dd/MM/yyyy"}}
+				</mat-grid-tile>
+
+			</mat-grid-list>
+
+		<mat-card-subtitle>
+			Detalle de documento
+		</mat-card-subtitle>
+	
+		<table  class="tabla-detalle">
+		  <tr>
+		  	<th>N°</th>
+		  	<th>PRODUCTO</th>
+		    <th>SERIE</th>
+		    <th>COLOR</th> 
+		    <th>ALMACENAMIENTO</th>
+		    <!-- <th>CANTIDAD</th> -->
+		    <th>PRECIO</th>
+		    <th>OBSERVACIONES</th>
+		    <th *ngIf="id_tipo==1">OPCIONES</th>
+		  </tr>
+		  <tr *ngFor="let detalle of detalle">
+		    <td class="detalle-columnas" id="detalle-numero">{{detalle.numero}}</td> 
+		    <td class="detalle-columnas" id="detalle-producto">{{detalle.producto}}</td>
+		    <td class="detalle-columnas" id="detalle-serie">{{detalle.serie}}</td> 
+		    <td class="detalle-columnas" id="detalle-color">{{detalle.color}}</td>
+		    <td class="detalle-columnas" id="detalle-almacenamiento">{{detalle.almacenamiento}}</td>
+		    <!-- <td class="detalle-columnas" id="detalle-cantida">{{detalle.cantidad}}</td> -->
+		    <td class="detalle-columnas" id="detalle-precio">{{detalle.precio | currency:'S/.' }}</td>
+		    <td class="detalle-columnas" id="detalle-observacion">{{detalle.observacion}}</td>
+		    <td class="detalle-columnas" id="detalle-opciones" *ngIf="id_tipo==1">
+		    	<button mat-icon-button color="primary" (click)="Editar(detalle)"> <mat-icon>edit</mat-icon> </button>
+		    </td>
+		  </tr>
+		</table>		
+
+	</mat-card-content>
+
+
+</mat-card>

@@ -95,7 +95,13 @@ import { DetalleProductosComponent} from './components/detalleproductos/detallep
 import {TipoComponent} from './components/detalleproductos/tipo/tipo.component';
 import { ModeloComponent } from './components/detalleproductos/modelo/modelo.component';
 import { MarcaComponent } from './components/detalleproductos/marca/marca.component';
+<<<<<<< HEAD
 import { VentanaEmergenteProveedores } from './components/proveedores/ventana-emergente/ventana-emergente.component';
+=======
+import { DetalleDocumentoAlmacenComponent } from './components/detalle-documento-almacen/detalle-documento-almacen.component';
+import { VentanaEditarSerieComponent } from './components/detalle-documento-almacen/ventana-editar-serie/ventana-editar-serie.component';
+import { VentanaEmergenteTipo } from './components/detalleproductos/tipo/ventana-emergente/ventanaemergente';
+>>>>>>> df83f3b4c237b748659e2dece9de45b80d2a83a1
 
 @NgModule({
   imports: [
@@ -193,7 +199,16 @@ import { VentanaEmergenteProveedores } from './components/proveedores/ventana-em
     TipoComponent,
     MarcaComponent,
     ModeloComponent,
+<<<<<<< HEAD
     VentanaEmergenteProveedores
+=======
+<<<<<<< HEAD
+    DetalleDocumentoAlmacenComponent,
+    VentanaEditarSerieComponent
+=======
+    VentanaEmergenteTipo
+>>>>>>> 74262b324eed5fb072b8049528bda8382ae70c08
+>>>>>>> df83f3b4c237b748659e2dece9de45b80d2a83a1
    ],
   entryComponents: [
     AppComponent,
@@ -216,7 +231,15 @@ import { VentanaEmergenteProveedores } from './components/proveedores/ventana-em
     VentasComponent,
     ImagenProductoComponent,
     ProveedoresMovimientosComponent,
+<<<<<<< HEAD
     VentanaEmergenteProveedores
+=======
+<<<<<<< HEAD
+    VentanaEditarSerieComponent
+=======
+    VentanaEmergenteTipo
+>>>>>>> 74262b324eed5fb072b8049528bda8382ae70c08
+>>>>>>> df83f3b4c237b748659e2dece9de45b80d2a83a1
   ],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider, {provide: MAT_DATE_LOCALE, useValue: 'en-GB'}]
