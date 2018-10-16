@@ -54,9 +54,11 @@ export class ModeloComponent implements OnInit {
      }
 
   CargarData() {
+    console.log(this.paginator);
       this.ListadoModelo.CargarModelo(
       this.FiltroMarca.nativeElement.value,
-      this.FiltroModelo.nativeElement.value, 1, 10);
+      this.FiltroModelo.nativeElement.value,  this.paginator.pageIndex +1,
+      this.paginator.pageSize);
     }
 
     Agregar() {
@@ -82,5 +84,20 @@ export class ModeloComponent implements OnInit {
           this.CargarData();
         });
       });
+    }
+
+    Eliminar(modelo) {
+      let VentanaProvincia = this.DialogoModelo.open(VentanaConfirmarComponent,{
+        width: '400px',
+        data: {objeto: 'el modelo', valor: modelo.nombre}
+      });
+   
+      VentanaProvincia.afterClosed().subscribe(res=>{
+        if(res==true){
+         this.Servicio.EliminarModelo(modelo.id).subscribe(res=>{
+           this.CargarData();
+         })
+        }
+      })
     }
 }

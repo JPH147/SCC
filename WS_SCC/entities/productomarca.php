@@ -154,6 +154,23 @@ class Marca{
         $this->id_marca=$row['id'];
         $this->id_tipo_producto=$row['idtipo'];
         $this->mrc_nombre=$row['marca'];
+	}
+	
+	function delete()
+    {
+        $query = "call sp_eliminarmarca(?)";
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_marca);
+
+        if($result->execute())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
     }
 
 	

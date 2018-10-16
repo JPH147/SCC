@@ -18,6 +18,7 @@ export class MarcaComponent implements OnInit {
 
   ListadoMarca: MarcaDataSource;
     Columnas: string[] = ['numero', 'tipo', 'marca', 'opciones'];
+    public TotalResultados:number=0;
     @ViewChild('InputTipo') FiltroTipo: ElementRef;
     @ViewChild('InputNombre') FiltroMarca: ElementRef;
     @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -30,6 +31,7 @@ export class MarcaComponent implements OnInit {
   ngOnInit() {
       this.ListadoMarca = new MarcaDataSource(this.Servicio);
       this.ListadoMarca.CargarMarca('', '', 1, 10);
+      this.ListadoMarca.TotalResultados.subscribe(res=>this.TotalResultados=res);
   }
 
   // tslint:disable-next-line:use-life-cycle-interface
@@ -54,9 +56,11 @@ export class MarcaComponent implements OnInit {
      }
 
   CargarData() {
+    console.log(this.paginator);
       this.ListadoMarca.CargarMarca(
       this.FiltroTipo.nativeElement.value,
-      this.FiltroMarca.nativeElement.value, 1, 10);
+      this.FiltroMarca.nativeElement.value,  this.paginator.pageIndex+1,
+      this.paginator.pageSize);
     }
 
     Agregar() {
@@ -82,5 +86,20 @@ export class MarcaComponent implements OnInit {
           this.CargarData();
         });
       });
+    }
+
+    Eliminar(marca) {
+      let VentanaProvincia = this.DialogoMarca.open(VentanaConfirmarComponent,{
+        width: '400px',
+        data: {objeto: 'la marca', valor: marca.nombre}
+      });
+   
+      VentanaProvincia.afterClosed().subscribe(res=>{
+        if(res==true){
+         this.Servicio.EliminarMarca(marca.id).subscribe(res=>{
+           this.CargarData();
+         })
+        }
+      })
     }
 }
