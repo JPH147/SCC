@@ -97,6 +97,7 @@ import { ModeloComponent } from './components/detalleproductos/modelo/modelo.com
 import { MarcaComponent } from './components/detalleproductos/marca/marca.component';
 import { DetalleDocumentoAlmacenComponent } from './components/detalle-documento-almacen/detalle-documento-almacen.component';
 import { VentanaEditarSerieComponent } from './components/detalle-documento-almacen/ventana-editar-serie/ventana-editar-serie.component';
+import { VentanaEmergenteTipo } from './components/detalleproductos/tipo/ventana-emergente/ventanaemergente';
 
 @NgModule({
   imports: [
@@ -194,8 +195,12 @@ import { VentanaEditarSerieComponent } from './components/detalle-documento-alma
     TipoComponent,
     MarcaComponent,
     ModeloComponent,
+<<<<<<< HEAD
     DetalleDocumentoAlmacenComponent,
     VentanaEditarSerieComponent
+=======
+    VentanaEmergenteTipo
+>>>>>>> 74262b324eed5fb072b8049528bda8382ae70c08
    ],
   entryComponents: [
     AppComponent,
@@ -218,7 +223,11 @@ import { VentanaEditarSerieComponent } from './components/detalle-documento-alma
     VentasComponent,
     ImagenProductoComponent,
     ProveedoresMovimientosComponent,
+<<<<<<< HEAD
     VentanaEditarSerieComponent
+=======
+    VentanaEmergenteTipo
+>>>>>>> 74262b324eed5fb072b8049528bda8382ae70c08
   ],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider, {provide: MAT_DATE_LOCALE, useValue: 'en-GB'}]
