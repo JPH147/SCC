@@ -65,6 +65,33 @@ export class ProveedorService {
 
   }
 
+  Eliminar(
+    idproveedor: number
+   ): Observable<any>  {
+     // tslint:disable-next-line:prefer-const
+     let params = 'idproveedor=' + idproveedor;
+     // tslint:disable-next-line:prefer-const
+     let headers = new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded');
+     return this.http.post(this.url + 'proveedor/delete.php', params, {headers: headers});
+    // tslint:disable-next-line:indent
+     }
+
+     Seleccionar(
+      id: number
+    // tslint:disable-next-line:whitespace
+    ):Observable<Proveedor> {
+      return this.http.get(this.url + 'proveedor/readxId.php?idproveedor=' + id)
+      .pipe(map(res => {
+        if (res['codigo'] === 0) {
+            return res['data'];
+        }  else {
+            console.log('Error al importar los datos, revisar servicio');
+        }
+      }));
+    }
+
+
+
 }
 
 export interface Proveedor {

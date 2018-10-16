@@ -3,9 +3,10 @@ import { fromEvent } from 'rxjs';
 import {ProveedorService} from './proveedores.service';
 import {ProveedorDataSource} from './proveedores.dataservice';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
-import {MatPaginator, MatSort, MatDialog} from '@angular/material';
+import {MatPaginator, MatSort, MatDialog, MatSnackBar} from '@angular/material';
 import {ProveedoresMovimientosComponent} from './proveedores-movimientos/proveedores-movimientos.component'
-
+import { VentanaEmergenteProveedores } from './ventana-emergente/ventana-emergente.component';
+import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
 @Component({
   selector: 'app-proveedores',
   templateUrl: './proveedores.component.html',
@@ -24,6 +25,9 @@ export class ProveedoresComponent implements OnInit {
   constructor(
     private Servicio: ProveedorService,
     private DialogoMovimiento: MatDialog,
+    public DialogoProveedores: MatDialog,
+
+    public snackBar: MatSnackBar,
   ) { }
 
   ngOnInit() {
@@ -65,6 +69,55 @@ export class ProveedoresComponent implements OnInit {
     this.ListadoProveedor.CargarProveedores(
       this.FiltroRuc.nativeElement.value,
       this.FiltroNombre.nativeElement.value);
+  }
+
+  Agregar() {
+    // tslint:disable-next-line:prefer-const
+    let VentanaProveedores = this.DialogoProveedores.open(VentanaEmergenteProveedores, {
+      width: '800px'
+    });
+ 
+    VentanaProveedores.afterClosed().subscribe(res => {
+     this.CargarData();
+     /*this.snackBar.open('Se creó el cliente satisfactoriamente.', '', {
+       duration: 2500
+     });*/
+   });
+  }
+
+
+  Eliminar(proveedor) {
+    // tslint:disable-next-line:prefer-const
+    let VentanaConfirmar = this.DialogoProveedores.open(VentanaConfirmarComponent, {
+      width: '400px',
+      data: {objeto: 'proveedor', valor: proveedor.nombre}
+    });
+    VentanaConfirmar.afterClosed().subscribe(res => {
+      if (res === true) {
+       // tslint:disable-next-line:no-shadowed-variable
+       this.Servicio.Eliminar(proveedor.id).subscribe(res => {
+         this.CargarData();
+         this.snackBar.open('Se eliminó el proveedor satisfactoriamente.', '', {
+          duration: 2500, verticalPosition: 'bottom'
+        });
+       });
+      }
+    });
+   }
+
+   Editar(id) {
+    this.Servicio.Seleccionar(id).subscribe(res => {
+      // tslint:disable-next-line:prefer-const
+      let VentanaProveedores = this.DialogoProveedores.open(VentanaEmergenteProveedores, {
+        width: '800px',
+        data: {objeto: res, id: id},
+  
+      });
+      // tslint:disable-next-line:no-shadowed-variable
+      VentanaProveedores.afterClosed().subscribe (res => {
+        this.CargarData();
+      });
+    });
   }
 
 }
