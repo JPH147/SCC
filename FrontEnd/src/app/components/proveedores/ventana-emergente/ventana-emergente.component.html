@@ -1,0 +1,58 @@
+<mat-card class="card">
+    <mat-card-header>
+      <mat-card-title *ngIf="!data">Agregar Proveedor</mat-card-title>
+      <mat-card-title *ngIf="data">Editar Proveedor</mat-card-title>
+    </mat-card-header>
+    <form [formGroup]="ProveedoresForm" (ngSubmit)="Guardar(ProveedoresForm)">
+      <mat-card-content>
+        <mat-grid-list cols="2" rowHeight="70px">
+          <mat-grid-tile>
+            <mat-form-field class="input-ventana" > 
+              <mat-select placeholder='Selecciona Tipo Documento' formControlName="tipodocumento" (selectionChange)="DocumentoSeleccionado($event)" >
+                <mat-option *ngFor="let tipodocumento of TipoDocumento" [value] = "tipodocumento.id"> {{tipodocumento.nombre}} </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <mat-form-field class="input-ventana" hintLabel="Maximo 8 digito DNI 11 digitos RUC" type="number">
+              <input matInput placeholder='Ingresa DNI/RUC' formControlName="documento" maxlength="11">
+                <!-- <mat-error *ngIf="ProveedoresForm.get('tipodocumento.id=1').invalid">Debes escribir sólo números</mat-error>   -->
+            <!--   <mat-option *ngFor="let documento of TipoDocumento" [value] = "TipoDocumento.documento"> {{TipoDocumento.documento}} </mat-option> -->
+            
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <mat-form-field class="input-ventana">
+              <input matInput placeholder='Ingresa Nombre / Razon Social' formControlName="nombre" >
+           <!--     <mat-option *ngFor="let nombre of tipodocumento" [value] = "tipodocumento.nombre"> {{TipoDocumento.nombre}} </mat-option> -->
+              
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <mat-form-field class="input-ventana">
+              <input matInput placeholder="Ingresa Representante Legal" formControlName="representante">
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <mat-form-field class="input-ventana">
+              <input matInput placeholder="Ingresa Observaciones"  formControlName="observacion" >
+           <!--   <mat-error *ngIf="ClientesForm.get('dni').invalid">Debes escribir sólo números</mat-error>  -->
+            </mat-form-field>
+          </mat-grid-tile>
+
+          
+        </mat-grid-list>
+      </mat-card-content>
+      <mat-card-actions>
+        <mat-grid-list cols=1 rowHeight="40px">
+          <mat-grid-tile>
+            <button type="submit" mat-raised-button color="primary" [disabled]="ProveedoresForm.invalid" >Grabar</button>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </mat-card-actions>
+    </form>
+  </mat-card>

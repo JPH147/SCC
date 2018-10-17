@@ -113,6 +113,64 @@ class Marca{
         }
         
         return false;
+	}
+	
+	function update()
+    {
+        $query = "call sp_actualizarmarca(:id, :idtipoproducto, :marca)";
+        
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":id", $this->id_marca);
+        $result->bindParam(":idtipoproducto", $this->id_tipo_producto);
+        $result->bindParam(":marca", $this->mrc_nombre);
+
+        $this->id_marca=htmlspecialchars(strip_tags($this->id_marca));
+        $this->id_tipo_producto=htmlspecialchars(strip_tags($this->id_tipo_producto));
+        $this->mdl_nombre=htmlspecialchars(strip_tags($this->mrc_nombre));
+
+        if($result->execute())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+	}
+	
+	function readxId(){
+
+        $query = "CALL sp_listarmarcaxId(?)";
+        
+        $result = $this->conn->prepare($query);
+        
+        $result->bindParam(1, $this->id_marca);
+        
+        $result->execute();
+    
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+        
+        $this->id_marca=$row['id'];
+        $this->id_tipo_producto=$row['idtipo'];
+        $this->mrc_nombre=$row['marca'];
+	}
+	
+	function delete()
+    {
+        $query = "call sp_eliminarmarca(?)";
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_marca);
+
+        if($result->execute())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
     }
 
 	

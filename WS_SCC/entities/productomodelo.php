@@ -12,6 +12,7 @@ class Modelo{
 	public $marca;
 	public $numero_pagina;
 	public $total_pagina;
+	public $id_tipo;
 
 	public function __construct($db){
 		$this->conn = $db;
@@ -117,6 +118,64 @@ class Modelo{
         }
         
         return false;
+	}
+	
+	function update()
+    {
+        $query = "call sp_actualizarmodelo(:id, :idmarca, :modelo)";
+        
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":id", $this->id_modelo);
+        $result->bindParam(":idmarca", $this->id_marca);
+        $result->bindParam(":modelo", $this->mdl_nombre);
+
+        $this->id_modelo=htmlspecialchars(strip_tags($this->id_modelo));
+        $this->id_marca=htmlspecialchars(strip_tags($this->id_marca));
+        $this->mdl_nombre=htmlspecialchars(strip_tags($this->mdl_nombre));
+
+        if($result->execute())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+	}
+	
+	function readxId(){
+
+        $query = "CALL sp_listarmodeloxId(?)";
+        
+        $result = $this->conn->prepare($query);
+        
+        $result->bindParam(1, $this->id_modelo);
+        
+        $result->execute();
+    
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+        
+        $this->id_modelo=$row['id'];
+        $this->id_marca=$row['idmarca'];
+        $this->mdl_nombre=$row['modelo'];
+	}
+	
+	function delete()
+    {
+        $query = "call sp_eliminarmodelo(?)";
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_modelo);
+
+        if($result->execute())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
     }
 
 	

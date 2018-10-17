@@ -6,6 +6,7 @@ import { MatPaginator, MatSort, MatDialog } from '@angular/material';
 import {VentanaConfirmarComponent} from '../../global/ventana-confirmar/ventana-confirmar.component'
 import { ModeloDataSource } from './modelo.data.service';
 import { ServiciosGenerales } from '../../global/servicios';
+import { VentanaEmergenteModelo } from './ventana-emergente/ventanaemergente';
 
 @Component({
   selector: 'app-modelo',
@@ -23,6 +24,7 @@ export class ModeloComponent implements OnInit {
 
     constructor(
       private Servicio: ServiciosGenerales,
+      public DialogoModelo: MatDialog
     ) {}
 
     ngOnInit() {
@@ -52,8 +54,50 @@ export class ModeloComponent implements OnInit {
      }
 
   CargarData() {
+    console.log(this.paginator);
       this.ListadoModelo.CargarModelo(
       this.FiltroMarca.nativeElement.value,
-      this.FiltroModelo.nativeElement.value, 1, 10);
+      this.FiltroModelo.nativeElement.value,  this.paginator.pageIndex +1,
+      this.paginator.pageSize);
+    }
+
+    Agregar() {
+
+      let VentanaTipo = this.DialogoModelo.open(VentanaEmergenteModelo, {
+        width: '350px'
+      });
+   
+      VentanaTipo.afterClosed().subscribe(res => {
+        this.CargarData();
+      });
+    }
+
+    Editar(id) {
+      this.Servicio.SeleccionarModelo(id).subscribe(res => {
+   
+        let VentanaTipo = this.DialogoModelo.open(VentanaEmergenteModelo, {
+          width: '350px',
+          data: res
+        });
+        // tslint:disable-next-line:no-shadowed-variable
+        VentanaTipo.afterClosed().subscribe (res => {
+          this.CargarData();
+        });
+      });
+    }
+
+    Eliminar(modelo) {
+      let VentanaProvincia = this.DialogoModelo.open(VentanaConfirmarComponent,{
+        width: '400px',
+        data: {objeto: 'el modelo', valor: modelo.nombre}
+      });
+   
+      VentanaProvincia.afterClosed().subscribe(res=>{
+        if(res==true){
+         this.Servicio.EliminarModelo(modelo.id).subscribe(res=>{
+           this.CargarData();
+         })
+        }
+      })
     }
 }

@@ -56,9 +56,9 @@
     
          <ng-container matColumnDef="opciones">
             <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
-            <mat-cell *matCellDef="let tipo">
-              <button mat-icon-button color="primary" (click)="Editar(modelo.id)" matTooltip="Editar" matTooltip="Editar"><mat-icon> edit </mat-icon></button>
-              <button mat-icon-button color="primary" (click)="Eliminar(modelo)" matTooltip="Eliminar" matTooltip="Eliminar"><mat-icon> delete </mat-icon></button>
+            <mat-cell *matCellDef="let modelo">
+              <button mat-icon-button color="primary" (click)="Editar(modelo.id)" matTooltip="Editar" ><mat-icon> edit </mat-icon></button>
+              <button mat-icon-button color="primary" (click)="Eliminar(modelo)" matTooltip="Eliminar"><mat-icon> delete </mat-icon></button>
             </mat-cell>
           </ng-container>
     

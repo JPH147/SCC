@@ -51,8 +51,8 @@ export class ServiciosGenerales {
   }
 
   CrearTipoProducto(
-    nombre:string,
-		id:number
+    nombre: string,
+		id: number
 	):Observable<any>{
 		let params=new HttpParams()
 						.set('tprd_nombre', nombre)
@@ -89,6 +89,12 @@ export class ServiciosGenerales {
       }))
     }
 
+    EliminarTipo(id:number):Observable<any>{
+      let params = new HttpParams().set('idtipo',id.toString());
+      let headers = new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded');
+      return this.http.post(this.url + 'productotipo/delete.php', params, {headers: headers});
+
+    }
   ListarUnidadMedida(
     tipo_producto:string
   ):Observable<any>{
@@ -111,7 +117,7 @@ export class ServiciosGenerales {
     id_tipo: string,
     nombre: string
   ): Observable<MarcaModelo> {
-       return this.http.get(this.url + 'productomarca/read.php?prtipo=' + id_tipo + '&prmarca' + nombre)
+       return this.http.get(this.url + 'productomarca/read.php?prtipo=' + id_tipo + '&prmarca=' + nombre)
       .pipe(map(res => {
       if (res['codigo'] === 0) {
         return res['data'].marca;
@@ -149,6 +155,41 @@ export class ServiciosGenerales {
   }));
   }
 
+  EditarMarca(id: number,
+    idtipoproducto: number,
+    marca: string): Observable<any> {
+      let params = new HttpParams()
+              .set('id', id.toString())
+              .set('idtipoproducto', idtipoproducto.toString())
+              .set('marca', marca.toString());
+      let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+      return this.http.post(this.url + 'productomarca/update.php', params, {headers: headers});
+    }
+
+
+    SeleccionarMarca(
+      id: number
+    ): Observable<any[]> {
+      return this.http.get(this.url + 'productomarca/readxId.php', {
+        params: new HttpParams()
+        .set('id', id.toString())
+      })
+      .pipe(map(res=>{
+        if (res['codigo'] === 0){
+          return res = res['data'];
+        } else {
+          console.log('Error al importar los datos, revisar servicio');
+        }
+      }));
+    }
+
+    EliminarMarca(id:number):Observable<any>{
+      let params = new HttpParams().set('idmarca',id.toString());
+      let headers = new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded');
+      return this.http.post(this.url + 'productomarca/delete.php', params, {headers: headers});
+
+    }
+
 
   ListarModelo(
     id_marca: string,
@@ -165,14 +206,15 @@ export class ServiciosGenerales {
 }
 
 CrearModelo(
-  id:number,
-  modelo:string
-):Observable<any>{
-  let params=new HttpParams()
+  id: number,
+  modelo: string
+): Observable<any> {
+  // tslint:disable-next-line:prefer-const
+  let params = new HttpParams()
           .set('idmarca', id.toString())
           .set('modelo', modelo );
   let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-  return this.http.post(this.url+'productomodelo/create.php',params,{headers:headers});
+  return this.http.post(this.url + 'productomodelo/create.php', params, {headers: headers});
 }
 
 
@@ -192,6 +234,54 @@ ListarModelo2(
     }
   }));
 }
+
+EditarModelo(id: number,
+  idmarca: number,
+  modelo: string): Observable<any> {
+    let params=new HttpParams()
+            .set('id', id.toString())
+            .set('idmarca', idmarca.toString())
+            .set('modelo', modelo.toString());
+            console.log(params);
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    return this.http.post(this.url + 'productomodelo/update.php', params, {headers: headers});
+  }
+
+  SeleccionarModelo(
+    id: number
+  ): Observable<any[]> {
+    return this.http.get(this.url + 'productomodelo/readxId.php', {
+      params: new HttpParams()
+      .set('id', id.toString())
+    })
+    .pipe(map(res=>{
+      if (res['codigo'] === 0){
+        return res = res['data'];
+      } else {
+        console.log('Error al importar los datos, revisar servicio');
+      }
+    }));
+  }
+
+  ListarTipoDocumento(
+    ):  Observable<TipoDocumento> {
+        return this.http.get(this.url + 'tipodocumento/read.php')
+        .pipe(map(res => {
+        if (res['codigo'] === 0 ) {
+          return res['data'].tipodocumento;
+        } else {
+          console.log('Error al importar los datos, revisar servicio');
+        }
+      }));
+    }
+
+
+  EliminarModelo(id:number):Observable<any>{
+    let params = new HttpParams().set('idmodelo',id.toString());
+    let headers = new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded');
+    return this.http.post(this.url + 'productomodelo/delete.php', params, {headers: headers});
+
+  }
 
   ListarInstitucion(
   ):  Observable<Institucion> {
@@ -476,6 +566,13 @@ export interface Sede {
   id: number;
   nombre: string;
 }
+
+export interface TipoDocumento {
+ 
+  id: number;
+  nombre: string;
+}
+
 export interface Institucion {
   numero: number;
   id: number;

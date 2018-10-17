@@ -56,7 +56,8 @@ export class TipoComponent implements OnInit {
     CargarData() {
         this.ListadoTipo.CargarTipo(
         this.FiltroTipo.nativeElement.value,
-        this.FiltroUM.nativeElement.value, 1, 10);
+        this.FiltroUM.nativeElement.value, this.paginator.pageIndex +1,
+        this.paginator.pageSize);
       }
 
       Agregar() {
@@ -82,5 +83,20 @@ export class TipoComponent implements OnInit {
             this.CargarData();
           });
         });
+      }
+
+      Eliminar(tipo) {
+        let VentanaProvincia = this.DialogoTipo.open(VentanaConfirmarComponent,{
+          width: '400px',
+          data: {objeto: 'el tipo', valor: tipo.nombre}
+        });
+     
+        VentanaProvincia.afterClosed().subscribe(res=>{
+          if(res==true){
+           this.Servicio.EliminarTipo(tipo.id).subscribe(res=>{
+             this.CargarData();
+           })
+          }
+        })
       }
 }

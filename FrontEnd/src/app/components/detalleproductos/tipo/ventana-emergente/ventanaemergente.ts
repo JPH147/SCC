@@ -9,9 +9,10 @@ import { ServiciosGenerales } from '../../../global/servicios';
   selector: 'app-ventanaemergentetipo',
   templateUrl: './ventanaemergente.html',
   styleUrls: ['./ventanaemergente.css'],
-  providers:[ServiciosGenerales]
+  providers: [ServiciosGenerales]
 })
 
+// tslint:disable-next-line:component-class-suffix
 export class VentanaEmergenteTipo {
   
   public selectedValue: string;
@@ -23,8 +24,9 @@ export class VentanaEmergenteTipo {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
     public ventana: MatDialogRef<VentanaEmergenteTipo>,
+    // tslint:disable-next-line:no-shadowed-variable
     private FormBuilder: FormBuilder,
-    private Servicios:ServiciosGenerales,
+    private Servicios: ServiciosGenerales,
     public snackBar: MatSnackBar
     ) {}
 

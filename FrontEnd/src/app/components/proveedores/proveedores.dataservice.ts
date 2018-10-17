@@ -9,6 +9,7 @@ export class ProveedorDataSource implements DataSource<Proveedor> {
     private InformacionProveedores = new BehaviorSubject<Proveedor[]>([]);
     private CargandoInformacion = new BehaviorSubject<boolean>(false);
     public Cargando = this.CargandoInformacion.asObservable();
+    public TotalResultados= new BehaviorSubject<number>(0);;
 
     constructor (private Servicio: ProveedorService) {}
 
@@ -22,15 +23,21 @@ export class ProveedorDataSource implements DataSource<Proveedor> {
     }
 
     CargarProveedores(
+        prtipodocumento: string,
         ruc: string,
-        nombre: string
+        nombre: string,
+        prpagina: number,
+        prtotalpagina:number
     ){
         this.CargandoInformacion.next(true);
-        this.Servicio.Listado(ruc, nombre)
+        this.Servicio.Listado(prtipodocumento,ruc, nombre,prpagina,prtotalpagina)
         .pipe(catchError(() => of([])),
         finalize(() => this.CargandoInformacion.next(false))
         )
-        .subscribe(res => this.InformacionProveedores.next(res));
+        .subscribe(res => {
+            this.TotalResultados.next(res.length);
+            this.InformacionProveedores.next(res);
+          });
     }
 
 }
