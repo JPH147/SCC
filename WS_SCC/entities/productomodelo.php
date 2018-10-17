@@ -159,6 +159,23 @@ class Modelo{
         $this->id_modelo=$row['id'];
         $this->id_marca=$row['idmarca'];
         $this->mdl_nombre=$row['modelo'];
+	}
+	
+	function delete()
+    {
+        $query = "call sp_eliminarmodelo(?)";
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_modelo);
+
+        if($result->execute())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
     }
 
 	

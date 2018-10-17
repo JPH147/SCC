@@ -185,6 +185,23 @@ class Tipo_Producto{
         $this->id_tipo_producto=$row['id'];
         $this->tprd_nombre=$row['nombre'];
         $this->idunidadmedida=$row['idunidad'];
+	}
+	
+	function delete()
+    {
+        $query = "call sp_eliminartipoproducto(?)";
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_tipo_producto);
+
+        if($result->execute())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
     }
 
 	

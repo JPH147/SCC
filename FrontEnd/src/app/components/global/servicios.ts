@@ -89,6 +89,12 @@ export class ServiciosGenerales {
       }))
     }
 
+    EliminarTipo(id:number):Observable<any>{
+      let params = new HttpParams().set('idtipo',id.toString());
+      let headers = new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded');
+      return this.http.post(this.url + 'productotipo/delete.php', params, {headers: headers});
+
+    }
   ListarUnidadMedida(
     tipo_producto:string
   ):Observable<any>{
@@ -177,6 +183,13 @@ export class ServiciosGenerales {
       }));
     }
 
+    EliminarMarca(id:number):Observable<any>{
+      let params = new HttpParams().set('idmarca',id.toString());
+      let headers = new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded');
+      return this.http.post(this.url + 'productomarca/delete.php', params, {headers: headers});
+
+    }
+
 
   ListarModelo(
     id_marca: string,
@@ -263,6 +276,12 @@ EditarModelo(id: number,
     }
 
 
+  EliminarModelo(id:number):Observable<any>{
+    let params = new HttpParams().set('idmodelo',id.toString());
+    let headers = new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded');
+    return this.http.post(this.url + 'productomodelo/delete.php', params, {headers: headers});
+
+  }
 
   ListarInstitucion(
   ):  Observable<Institucion> {
