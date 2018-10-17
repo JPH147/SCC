@@ -1,6 +1,6 @@
 // tslint:disable-next-line:no-var-keyword
 export var URL = {
-  url: 'localhost/SCC/WS_SCC/',
+  url: '//localhost/SCC/WS_SCC/',
 };
 
 export var URLIMAGENES = {
