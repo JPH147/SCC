@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { fromEvent } from 'rxjs';
+import { fromEvent,merge } from 'rxjs';
 import {ProveedorService} from './proveedores.service';
 import {ProveedorDataSource} from './proveedores.dataservice';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
@@ -16,7 +16,7 @@ import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-con
 export class ProveedoresComponent implements OnInit {
 
   ListadoProveedor: ProveedorDataSource;
-  Columnas: string[] = ['numero', 'ruc', 'nombre','representante_legal','tipo_documento','opciones'];
+  Columnas: string[] = ['numero', 'tipo_documento', 'ruc', 'nombre','representante_legal','opciones'];
   public maestro;
 
   @ViewChild('InputRUC') FiltroRuc: ElementRef;
@@ -40,20 +40,19 @@ export class ProveedoresComponent implements OnInit {
   ngAfterViewInit() {
     //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
     //Add 'implements AfterViewInit' to the class.
-    fromEvent(this.FiltroRuc.nativeElement, 'keyup')
-    .pipe(
-     debounceTime(200),
-     distinctUntilChanged(),
-     tap(() => {
-       this.CargarData();
-     })
-    ).subscribe();
+    this.paginator.page.subscribe(res=>{
+      this.CargarData();
+    })
 
-    fromEvent(this.FiltroNombre.nativeElement, 'keyup')
+    merge(
+      fromEvent(this.FiltroNombre.nativeElement, 'keyup'),
+      fromEvent(this.FiltroRuc.nativeElement, 'keyup')
+    )    
    .pipe(
      debounceTime(200),
      distinctUntilChanged(),
      tap(() => {
+       this.paginator.pageIndex=0;
        this.CargarData();
      })
     ).subscribe();
@@ -69,7 +68,8 @@ export class ProveedoresComponent implements OnInit {
   CargarData() {
     this.ListadoProveedor.CargarProveedores('',
       this.FiltroRuc.nativeElement.value,
-      this.FiltroNombre.nativeElement.value,  this.paginator.pageIndex +1,
+      this.FiltroNombre.nativeElement.value,
+      this.paginator.pageIndex +1,
       this.paginator.pageSize);
   }
 

@@ -34,13 +34,24 @@ mat-card{
 .mat-column-numero{
   max-width: 10%;
 }
+.mat-colimn-representante_legal{
+  max-width: 30%;
+}
+
+.mat-column-nombre{
+  max-width: 25%;
+}
+
+.mat-colimn-tipo_documento{
+  max-width: 10%;
+}
 
 .mat-column-ruc{
-  max-width: 20%;
+  max-width: 15%;
 }
 
 .mat-column-opciones{
-  max-width: 20%;
+  max-width: 10%;
 }
 
 mat-row:hover {
