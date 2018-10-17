@@ -18,7 +18,7 @@ export class VentanaEmergenteTipo {
   public TipoForm: FormGroup;
   public Tipo: Array<any>;
   public lstunidades: any[] = [];
-  private mensaje: string;
+  public mensaje: string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,

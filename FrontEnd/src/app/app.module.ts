@@ -101,7 +101,6 @@ import { VentanaEmergenteTipo } from './components/detalleproductos/tipo/ventana
 
 @NgModule({
   imports: [
-/* Angular Material */
     MatNativeDateModule,
     CdkTableModule,
     CdkTreeModule,
@@ -140,7 +139,6 @@ import { VentanaEmergenteTipo } from './components/detalleproductos/tipo/ventana
     MatToolbarModule,
     MatTooltipModule,
     MatTreeModule,
-  /* Angular Material */
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
@@ -195,12 +193,9 @@ import { VentanaEmergenteTipo } from './components/detalleproductos/tipo/ventana
     TipoComponent,
     MarcaComponent,
     ModeloComponent,
-<<<<<<< HEAD
     DetalleDocumentoAlmacenComponent,
-    VentanaEditarSerieComponent
-=======
+    VentanaEditarSerieComponent,
     VentanaEmergenteTipo
->>>>>>> 74262b324eed5fb072b8049528bda8382ae70c08
    ],
   entryComponents: [
     AppComponent,
@@ -223,11 +218,8 @@ import { VentanaEmergenteTipo } from './components/detalleproductos/tipo/ventana
     VentasComponent,
     ImagenProductoComponent,
     ProveedoresMovimientosComponent,
-<<<<<<< HEAD
-    VentanaEditarSerieComponent
-=======
-    VentanaEmergenteTipo
->>>>>>> 74262b324eed5fb072b8049528bda8382ae70c08
+    VentanaEditarSerieComponent,
+    VentanaEmergenteTipo,
   ],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider, {provide: MAT_DATE_LOCALE, useValue: 'en-GB'}]

@@ -17,7 +17,7 @@ export class VentanaEmergenteDepartamento {
   public selectedValue: string;
   public DepartamentosForm: FormGroup;
   public Departamento: Array<Departamento>;
-  private mensaje: string;
+  public mensaje: string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,

@@ -31,7 +31,7 @@ export class ListadoSalidaVendedoresComponent implements OnInit {
 
  ListadoSalida: ListadoSalidaVendedoresDataSource
  
- private Sucursales:number;
+ public Sucursales:Array<any>;
  
  displayedColumns: string[] = ['numero', 'pecosa', 'sucursal', 'fecha', 'destino', 'estado', 'opciones'];
  

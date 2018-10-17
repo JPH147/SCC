@@ -17,14 +17,14 @@ export class VentanaEmergenteProvincia {
   public selectedValue: string;
   public ProvinciasForm: FormGroup;
   public departamentos: Departamento[]=[];
-  private mensaje: string;
+  public mensaje: string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
-    public ventana: MatDialogRef<VentanaEmergenteProvincia>,
+    private ventana: MatDialogRef<VentanaEmergenteProvincia>,
     private FormBuilder: FormBuilder,
     private Servicio:ServiciosDirecciones,
-    public snackBar: MatSnackBar
+    private snackBar: MatSnackBar
     ) {}
 
   onNoClick(): void {
