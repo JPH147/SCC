@@ -14,14 +14,14 @@
     $db = $database->getConnection();
 
     try{
-    	$cliente = new Cliente($db);
+    	$proveedor = new Proveedor($db);
     	$data = json_decode(file_get_contents('php://input'),true);
 
     	if(($_POST["idproveedor"])!=null)
     	{
-    		$cliente->idcliente = $_POST["idprovedor"];
+    		$proveedor->idproveedor = $_POST["idproveedor"];
 
-	    	if($cliente->delete())
+	    	if($proveedor->delete())
 	        {
 	                print_json("0000", "Se eliminó el proveedor satisfactoriamente.", "");
 	        }

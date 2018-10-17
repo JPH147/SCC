@@ -17,9 +17,11 @@
     	$proveedor = new Proveedor($db);
     	$data = json_decode(file_get_contents('php://input'),true);
 
-        if (( ($_POST["idproveedor"])!=null) && ($_POST["prv_tipo_documento"])!=null  && !empty(trim($_POST["prv_documento"])) && !empty(trim($_POST["prv_nombre"]))
+        if (( ($_POST["idproveedor"])!=null) && ($_POST["prv_tipo_documento"])!=null  
+            && !empty(trim($_POST["prv_documento"])) 
+            && !empty(trim($_POST["prv_nombre"]))
             && !empty(trim($_POST["prv_representante_legal"]))
-            && !empty(trim($_POST["prv_observacion"])) && !empty(trim($_POST["prv_estado"])) 
+            && !empty(trim($_POST["prv_observacion"]))) 
     	{
             $proveedor->idproveedor= $_POST["idproveedor"]; 
     		$proveedor->prv_tipo_documento = $_POST["prv_tipo_documento"];
@@ -27,7 +29,7 @@
             $proveedor->prv_nombre = trim($_POST["prv_nombre"]);
             $proveedor->prv_representante_legal = trim($_POST["prv_representante_legal"]);
             $proveedor->prv_observacion = trim($_POST["prv_observacion"]);
-            $proveedor->prv_estado = trim($_POST["prv_estado"]);
+           
            
 	    	if($proveedor->update())
 	        {

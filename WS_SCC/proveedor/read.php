@@ -23,10 +23,11 @@
         $proveedor->total_pagina = !empty($_GET['prtotalpagina']) ? $_GET['prtotalpagina'] : 20;
 
         $proveedor_list = $proveedor->read();
+        $contar = $proveedor->contar();
 
-        if (count(array_filter($proveedor_list))>0)
+        if ( $contar>0)
         { 
-            print_json("0000", 1, $proveedor_list);
+            print_json("0000", $contar, $proveedor_list);
         }
         else
         { 

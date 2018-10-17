@@ -250,6 +250,19 @@ EditarModelo(id: number,
     }));
   }
 
+  ListarTipoDocumento(
+    ):  Observable<TipoDocumento> {
+        return this.http.get(this.url + 'tipodocumento/read.php')
+        .pipe(map(res => {
+        if (res['codigo'] === 0 ) {
+          return res['data'].tipodocumento;
+        } else {
+          console.log('Error al importar los datos, revisar servicio');
+        }
+      }));
+    }
+
+
 
   ListarInstitucion(
   ):  Observable<Institucion> {
@@ -534,6 +547,13 @@ export interface Sede {
   id: number;
   nombre: string;
 }
+
+export interface TipoDocumento {
+ 
+  id: number;
+  nombre: string;
+}
+
 export interface Institucion {
   numero: number;
   id: number;

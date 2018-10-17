@@ -16,11 +16,12 @@ import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-con
 export class ProveedoresComponent implements OnInit {
 
   ListadoProveedor: ProveedorDataSource;
-  Columnas: string[] = ['numero', 'ruc', 'nombre','opciones'];
+  Columnas: string[] = ['numero', 'ruc', 'nombre','representante_legal','tipo_documento','opciones'];
   public maestro;
 
   @ViewChild('InputRUC') FiltroRuc: ElementRef;
   @ViewChild('InputNombreProvedor') FiltroNombre: ElementRef;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
     private Servicio: ProveedorService,
@@ -32,7 +33,7 @@ export class ProveedoresComponent implements OnInit {
 
   ngOnInit() {
     this.ListadoProveedor = new ProveedorDataSource(this.Servicio);
-    this.ListadoProveedor.CargarProveedores('','');
+    this.ListadoProveedor.CargarProveedores('','','',1,10);
   }
 
 
@@ -66,9 +67,10 @@ export class ProveedoresComponent implements OnInit {
   }
 
   CargarData() {
-    this.ListadoProveedor.CargarProveedores(
+    this.ListadoProveedor.CargarProveedores('',
       this.FiltroRuc.nativeElement.value,
-      this.FiltroNombre.nativeElement.value);
+      this.FiltroNombre.nativeElement.value,  this.paginator.pageIndex +1,
+      this.paginator.pageSize);
   }
 
   Agregar() {
