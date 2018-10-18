@@ -104,7 +104,6 @@ import { VentanaEmergenteMarca } from './components/detalleproductos/marca/venta
 
 @NgModule({
   imports: [
-/* Angular Material */
     MatNativeDateModule,
     CdkTableModule,
     CdkTreeModule,
@@ -143,7 +142,6 @@ import { VentanaEmergenteMarca } from './components/detalleproductos/marca/venta
     MatToolbarModule,
     MatTooltipModule,
     MatTreeModule,
-  /* Angular Material */
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
@@ -198,6 +196,9 @@ import { VentanaEmergenteMarca } from './components/detalleproductos/marca/venta
     TipoComponent,
     MarcaComponent,
     ModeloComponent,
+    DetalleDocumentoAlmacenComponent,
+    VentanaEditarSerieComponent,
+    VentanaEmergenteTipo,
     VentanaEmergenteProveedores,
     DetalleDocumentoAlmacenComponent,
     VentanaEditarSerieComponent,
@@ -229,6 +230,8 @@ import { VentanaEmergenteMarca } from './components/detalleproductos/marca/venta
     VentasComponent,
     ImagenProductoComponent,
     ProveedoresMovimientosComponent,
+    VentanaEditarSerieComponent,
+    VentanaEmergenteTipo,
     VentanaEmergenteProveedores,
     VentanaEditarSerieComponent,
     VentanaEmergenteTipo,
