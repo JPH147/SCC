@@ -14,7 +14,7 @@ url="{{ruta}}"
 </mat-card>-->
 
 
-<mat-card>
+<mat-card class= "card-imagen">
   <mat-card-content>
   <img [attr.src]="this.data.foto" class="imagen-cliente">
   </mat-card-content>
@@ -26,10 +26,20 @@ url="{{ruta}}"
       url="{{ruta}}"
       [buttonCaption]="'Actualizar foto'"
       [maxFileSize]="1000000"
-      (uploadFinished)="onUploadFinished($event)"
+      (uploadFinished)="FotoCargada($event)"
       [fileTooLargeMessage]="'La foto debe pesar menos de 1MB'">
       </image-upload>
     </mat-grid-tile>
   </mat-grid-list>
 </mat-card-actions>
+
+<mat-card-actions>
+  <mat-grid-list	cols=1 rowHeight="60px">
+    <mat-grid-tile>
+      <button mat-raised-button color="primary" (click)="SubirFoto()">Aceptar</button>
+    </mat-grid-tile>
+  </mat-grid-list>
+</mat-card-actions>
+
+
 </mat-card>

@@ -166,6 +166,10 @@ SubirImagen(id) {
     width: '800px',
     data : id
   });
+
+  VentanaFileUpload.afterClosed().subscribe(res=>{
+    this.CargarData()
+  })
 }
 
 }

@@ -37,15 +37,15 @@
           </mat-grid-tile>
 
           <mat-grid-tile>
-            <mat-form-field class="input-ventana">
-              <input matInput placeholder="Ingresa DNI"  formControlName="dni" maxlength="8">
+            <mat-form-field class="input-ventana" hintLabel=" 8 Digitos">
+              <input matInput placeholder="Ingresa DNI"  formControlName="dni" maxlength="8" >
               <mat-error *ngIf="ClientesForm.get('dni').invalid">Debes escribir sólo números</mat-error>
             </mat-form-field>
           </mat-grid-tile>
 
           <mat-grid-tile>
-            <mat-form-field class="input-ventana">
-              <input matInput placeholder="Ingresa Nombre del Cliente" formControlName="nombre">
+            <mat-form-field class="input-ventana" hintLabel="Ingresar Apellidos coma(,) Nombre ">
+              <input matInput placeholder="Ingresa Nombre del Cliente" formControlName="nombre"  >
             </mat-form-field>
           </mat-grid-tile>
       
