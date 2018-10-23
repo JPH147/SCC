@@ -19,7 +19,7 @@ export class VentanaEmergenteModelo {
   public ModeloForm: FormGroup;
   public Tipo: Array<any>;
   public lstmarcas: any[] = [];
-  private mensaje: string;
+  public mensaje: string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
@@ -55,7 +55,6 @@ export class VentanaEmergenteModelo {
     });
 
     if (this.data) {
-        console.log(this.data);
       this.ModeloForm.get('nombre').setValue(this.data.modelo);
       this.ModeloForm.get('idmarca').setValue(this.data.id_marca);
     }

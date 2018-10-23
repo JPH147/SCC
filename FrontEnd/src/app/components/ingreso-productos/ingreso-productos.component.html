@@ -160,7 +160,7 @@
             <mat-grid-tile colspan=3>
               <mat-form-field class="example-full-width">
                 <input matInput placeholder="Producto" [matAutocomplete]="autoproducto" #InputProducto formControlName="producto">
-                <mat-autocomplete #autoproducto="matAutocomplete" [displayWith]="displayFn2" (optionSelected)="ProductoSeleccionado('')">
+                <mat-autocomplete #autoproducto="matAutocomplete" [displayWith]="displayFn2" (optionSelected)="ProductoSeleccionado(i)">
                   <mat-option *ngFor="let producto of Producto" [value]="producto">
                     {{producto.descripcion}}
                   </mat-option>

@@ -23,10 +23,11 @@ export class SalidaProductosComponent implements OnInit {
   public SalidaProductosForm: FormGroup;
   public contador: number;
   public almacenes: Array<any> = [];
+  public almacen_origen: Array<any> = [];
+  public almacen_destino: Array<any> = [];
   public productos: FormArray;
   public serieventana: string;
-  public almacen: string;
-  public almacen1: string;
+
   public fechamov: Date;
   public producto: string;
   public Producto: Array<any>;
@@ -44,8 +45,11 @@ export class SalidaProductosComponent implements OnInit {
     private SSeries:ServiciosProductoSerie
   ) {}
 
+
   ngOnInit() {
+
     this.ListarAlmacen();
+
 
     this.SalidaProductosForm = this.FormBuilder.group({
       'almacen': [null, [Validators.required] ],
@@ -87,7 +91,9 @@ export class SalidaProductosComponent implements OnInit {
   ResetearForm(event){
     this.ResetearFormArray(this.productos);
     this.Series=[];
-    this.Articulos.ListarStock(event.value.nombre, '', '', '', '', 1, 20, 'descripcion asc').subscribe(res=>this.Producto=res['data'].stock)
+    this.Articulos.ListarStock(event.value.nombre, '', '', '', '', 1, 20, 'descripcion asc').subscribe(res=>this.Producto=res['data'].stock);
+    this.almacen_destino=this.almacenes;
+    this.almacen_destino=this.almacen_destino.filter(e=>e.id!=event.value.id);
   }
 
   ResetearFormArray = (formArray: FormArray) => {
@@ -159,9 +165,17 @@ export class SalidaProductosComponent implements OnInit {
 // Selector Almacenes Activos
 ListarAlmacen() {
   this.Servicios.ListarAlmacen().subscribe( res => {
-    this.almacenes = res;
-  });
+    this.almacenes=res;
+    this.almacen_origen=res;
+    this.almacen_destino=res;
+  })
 }
+
+AlmacenSeleccionado(evento){
+  this.almacen_origen=this.almacenes;
+  this.almacen_origen=this.almacen_origen.filter(e=>e.id!=evento.value)
+}
+
 
 GuardarTransferenciaAlmacen(formulario) {
   // console.log(this.SalidaProductosForm['controls'].productos)
@@ -188,10 +202,6 @@ GuardarTransferenciaAlmacen(formulario) {
         })
       }
     }
-
-    // this.SalidaProductosForm.reset()
-    // this.Series=[];
-    // this.ResetearFormArray(this.productos);
     this.snackBar.open("El producto se guardó satisfactoriamente", '', {
       duration: 2000,
     });

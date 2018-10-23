@@ -16,6 +16,7 @@
     try{
     	$modelo = new Modelo($db);
 
+        $modelo->tipo = !empty($_GET['prtipo']) ? $_GET['prtipo'] : null;
     	$modelo->marca = !empty($_GET['prmarca']) ? $_GET['prmarca'] : null;
     	$modelo->mdl_nombre = !empty($_GET['prnombre']) ? $_GET['prnombre'] : null;
         $modelo->numero_pagina = !empty($_GET['prpagina']) ? $_GET['prpagina'] : null;

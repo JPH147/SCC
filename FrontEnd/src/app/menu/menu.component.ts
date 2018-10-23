@@ -50,7 +50,7 @@ const TREE_DATA = JSON.stringify({
     'Tablas maestras': {
       'Bancos': '',
       'Condición laboral': '',
-      'Detalle Productos': 'detalleproductos',
+      'Detalle de productos': 'detalleproductos',
       'Direcciones': 'direcciones',
       'Instituciones': '',
       'Sucursales': '',

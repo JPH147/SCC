@@ -24,6 +24,7 @@ constructor(private Servicio: ServiciosGenerales) { }
 
 
   CargarModelo(
+    tipo: string,
     marca: string,
     nombre: string,
     prpagina: number,
@@ -32,15 +33,13 @@ constructor(private Servicio: ServiciosGenerales) { }
   ){
   this.CargandoInformacion.next(true);
 
-  this.Servicio.ListarModelo2(marca, nombre , prpagina, prtotalpagina)
+  this.Servicio.ListarModelo2(tipo,marca, nombre , prpagina, prtotalpagina)
   .pipe(catchError(() => of([])),
   finalize(() => this.CargandoInformacion.next(false))
   )
   .subscribe(res => {
-    console.log(res);
-    this.TotalResultados.next(res['mensaje']);
-    console.log(this.TotalResultados);
-    this.InformacionModelo.next(res['data'].modelo);
+      this.TotalResultados.next(res['mensaje']);
+      this.InformacionModelo.next(res['data'].modelo);
     });
   }
 

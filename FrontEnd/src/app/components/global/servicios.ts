@@ -219,13 +219,21 @@ CrearModelo(
 
 
 ListarModelo2(
+  tipo: string,
   marca: string,
   nombre: string,
   prpagina: number,
   prtotalpagina: number
 ): Observable<any> {
     // tslint:disable-next-line:max-line-length
-    return this.http.get(this.url + 'productomodelo/read2.php?prmarca=' + marca + '&prnombre=' + nombre + '&prpagina=' + prpagina + '&prtotalpagina=' + prtotalpagina)
+    return this.http.get(this.url + 'productomodelo/read2.php', {
+      params: new HttpParams()
+        .set('prtipo', tipo)
+        .set('prmarca', marca)
+        .set('prnombre',nombre)
+        .set('prpagina', prpagina.toString())
+        .set('prtotalpagina',prtotalpagina.toString())
+    })
     .pipe(map(res => {
     if (res['codigo'] === 0 ) {
         return res;

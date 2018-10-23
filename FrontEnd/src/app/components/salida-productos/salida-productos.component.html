@@ -21,7 +21,7 @@
             <!-- Seleccionar Almacen  Origen -->
             <mat-form-field class="formulario-salida">
               <mat-select placeholder="Almacen Origen" formControlName="almacen" (selectionChange)="ResetearForm($event)">
-                <mat-option *ngFor="let almacen of almacenes" [value]="almacen">
+                <mat-option *ngFor="let almacen of almacen_origen" [value]="almacen">
                   {{almacen.nombre}}
                 </mat-option>
               </mat-select>
@@ -29,12 +29,12 @@
           </mat-grid-tile>
 
 
-          <!-- Seleccionar Almacen  Origen -->
+          <!-- Seleccionar Almacen  destino -->
           <mat-grid-tile>
             <mat-form-field class="formulario-salida">
-              <mat-select placeholder="Almacen Destino" formControlName="almacen1">
-                <mat-option *ngFor="let almacen1 of almacenes" [value]="almacen1.id">
-                  {{almacen1.nombre}}
+              <mat-select placeholder="Almacen Destino" formControlName="almacen1" (selectionChange)="AlmacenSeleccionado($event)">
+                <mat-option *ngFor="let almacen of almacen_destino" [value]="almacen.id">
+                  {{almacen.nombre}}
                 </mat-option>
               </mat-select>
             </mat-form-field>

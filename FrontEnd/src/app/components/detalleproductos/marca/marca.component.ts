@@ -17,16 +17,16 @@ import { VentanaEmergenteMarca } from './ventana-emergente/ventanaemergente';
 export class MarcaComponent implements OnInit {
 
   ListadoMarca: MarcaDataSource;
-    Columnas: string[] = ['numero', 'tipo', 'marca', 'opciones'];
-    public TotalResultados:number=0;
-    @ViewChild('InputTipo') FiltroTipo: ElementRef;
-    @ViewChild('InputNombre') FiltroMarca: ElementRef;
-    @ViewChild(MatPaginator) paginator: MatPaginator;
+  Columnas: string[] = ['numero', 'tipo', 'marca', 'opciones'];
+  public TotalResultados:number=0;
+  @ViewChild('InputTipo') FiltroTipo: ElementRef;
+  @ViewChild('InputNombre') FiltroMarca: ElementRef;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
-    constructor(
-      private Servicio: ServiciosGenerales,
-      public DialogoMarca: MatDialog
-    ) {}
+  constructor(
+    private Servicio: ServiciosGenerales,
+    public DialogoMarca: MatDialog,
+  ) {}
 
   ngOnInit() {
       this.ListadoMarca = new MarcaDataSource(this.Servicio);
@@ -56,7 +56,6 @@ export class MarcaComponent implements OnInit {
      }
 
   CargarData() {
-    console.log(this.paginator);
       this.ListadoMarca.CargarMarca(
       this.FiltroTipo.nativeElement.value,
       this.FiltroMarca.nativeElement.value,  this.paginator.pageIndex+1,

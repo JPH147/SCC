@@ -37,9 +37,7 @@ constructor(private Servicio: ServiciosGenerales) { }
   finalize(() => this.CargandoInformacion.next(false))
   )
   .subscribe(res => {
-    console.log(res);
     this.TotalResultados.next(res['mensaje']);
-    console.log(this.TotalResultados);
     this.InformacionTipo.next(res['data'].tipo_productos);
     });
   }

@@ -18,18 +18,20 @@ export class ModeloComponent implements OnInit {
 
   ListadoModelo: ModeloDataSource;
     Columnas: string[] = ['numero', 'tipo', 'marca', 'modelo', 'opciones'];
+
+    @ViewChild('InputTipo') FiltroTipo: ElementRef;
     @ViewChild('InputMarca') FiltroMarca: ElementRef;
     @ViewChild('InputNombre') FiltroModelo: ElementRef;
     @ViewChild(MatPaginator) paginator: MatPaginator;
 
     constructor(
       private Servicio: ServiciosGenerales,
-      public DialogoModelo: MatDialog
+      public DialogoModelo: MatDialog,
     ) {}
 
     ngOnInit() {
       this.ListadoModelo = new ModeloDataSource(this.Servicio);
-      this.ListadoModelo.CargarModelo('', '', 1, 10);
+      this.ListadoModelo.CargarModelo('','', '', 1, 10);
     }
 
     // tslint:disable-next-line:use-life-cycle-interface
@@ -40,6 +42,7 @@ export class ModeloComponent implements OnInit {
           tap(() => this.CargarData())
          ).subscribe();
        merge(
+         fromEvent(this.FiltroTipo.nativeElement, 'keyup'),
          fromEvent(this.FiltroMarca.nativeElement, 'keyup'),
          fromEvent(this.FiltroModelo.nativeElement, 'keyup')
         )
@@ -53,12 +56,13 @@ export class ModeloComponent implements OnInit {
         ).subscribe();
      }
 
-  CargarData() {
-    console.log(this.paginator);
+    CargarData() {
       this.ListadoModelo.CargarModelo(
-      this.FiltroMarca.nativeElement.value,
-      this.FiltroModelo.nativeElement.value,  this.paginator.pageIndex +1,
-      this.paginator.pageSize);
+        this.FiltroTipo.nativeElement.value,
+        this.FiltroMarca.nativeElement.value,
+        this.FiltroModelo.nativeElement.value,  this.paginator.pageIndex +1,
+        this.paginator.pageSize
+      );
     }
 
     Agregar() {

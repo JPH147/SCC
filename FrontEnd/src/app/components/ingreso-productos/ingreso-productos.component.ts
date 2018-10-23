@@ -159,20 +159,15 @@ import {ProductoService} from '../productos/productos.service';
     };
 
     EliminarElemento(array,value) {
-       array.forEach( (item, index) => {
-         // tslint:disable-next-line:curly
-         if(item.id == value) array.splice(index, 1);
-       });
+      array=array.filter(e=>e.id!=value)
     }
 
     EliminarElemento2(array,value) {
-       array.forEach( (item, index) => {
-         // tslint:disable-next-line:curly
-         if(item.id_producto === value) array.splice(index,1);
-       });
+       array=array.filter(e=>e.id_producto!=value)
     }
 
-    ProductoSeleccionado(filtro){
+    ProductoSeleccionado(index){
+      console.log(index)
       this.Articulos.Listado('', '', '', '', null,null,1, 10, 'descripcion', 'asc',1).subscribe(res => {
         this.Producto = res['data'].productos;
         for (let i of this.IngresoProductoForm['controls'].productos.value) {
@@ -181,6 +176,7 @@ import {ProductoService} from '../productos/productos.service';
           }
         }
       });
+      this.IngresoProductoForm.get('productos')['controls'][index].get('cantidad').setValue(0)
     }
 
     displayFn2(producto) {
@@ -286,7 +282,6 @@ import {ProductoService} from '../productos/productos.service';
           }
         }
         this.IngresoProductoForm.get('productos')['controls'][index].get('cantidad').setValue(res.length)
-
       }
     })
   }

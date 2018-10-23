@@ -24,7 +24,7 @@ export class TipoComponent implements OnInit {
 
     constructor(
         private Servicio: ServiciosGenerales,
-        public DialogoTipo: MatDialog
+        public DialogoTipo: MatDialog,
       ) {}
 
     ngOnInit() {
@@ -55,9 +55,10 @@ export class TipoComponent implements OnInit {
 
     CargarData() {
         this.ListadoTipo.CargarTipo(
-        this.FiltroTipo.nativeElement.value,
-        this.FiltroUM.nativeElement.value, this.paginator.pageIndex +1,
-        this.paginator.pageSize);
+          this.FiltroTipo.nativeElement.value,
+          this.FiltroUM.nativeElement.value,
+          this.paginator.pageIndex +1,
+          this.paginator.pageSize);
       }
 
       Agregar() {

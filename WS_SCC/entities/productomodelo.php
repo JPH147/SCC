@@ -9,6 +9,7 @@ class Modelo{
 	public $mrc_nombre;
 	public $mdl_nombre;
 	public $id_marca;
+	public $tipo;
 	public $marca;
 	public $numero_pagina;
 	public $total_pagina;
@@ -51,14 +52,15 @@ class Modelo{
 	}
 
 	function read2(){
-		$query = "CALL sp_listarmodelo2(?,?,?,?)";
+		$query = "CALL sp_listarmodelo2(?,?,?,?,?)";
 
 		$result = $this->conn->prepare($query);
 
-		$result->bindParam(1, $this->marca);
-		$result->bindParam(2, $this->mdl_nombre);
-		$result->bindParam(3, $this->numero_pagina);
-		$result->bindParam(4, $this->total_pagina);
+		$result->bindParam(1, $this->tipo);
+		$result->bindParam(2, $this->marca);
+		$result->bindParam(3, $this->mdl_nombre);
+		$result->bindParam(4, $this->numero_pagina);
+		$result->bindParam(5, $this->total_pagina);
 
 		$result->execute();
 
