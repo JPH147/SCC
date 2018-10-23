@@ -14,17 +14,9 @@ import { ActivatedRoute } from '@angular/router';
 import {ServiciosTelefonos, Telefono} from '../global/telefonos';
 import {ServiciosDirecciones, Direccion} from '../global/direcciones';
 import {ServiciosGenerales, Talonario, Serie, ListarVendedor} from '../global/servicios';
-export interface PeriodicElement {
-  numero: number;
-  month: string;
-  price: string;
-}
 
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  {numero: 1, month: 'Agosto', price: '255.00'},
-  {numero: 2, month: 'Setiembre', price: '255.00'}
-];
+
 
 @Component({
   selector: 'app-ventas',
@@ -39,6 +31,7 @@ export class VentasComponent implements OnInit {
   public ListadoCliente: ClienteDataSource;
   public LstTipoDocumento: TipoDocumento[] = [];
   public LstCliente: Array<any> = [];
+  public LstCargo: Array<any> = [];
   public VentasForm: FormGroup;
   public LstTipoPago: TipoPago[] = [];
   public LstContrato: Talonario[] = [];
@@ -54,10 +47,9 @@ export class VentasComponent implements OnInit {
   public states: string[] = [
     'Activo', 'Finalizado', 'Canjeado', 'Anulado'
   ];
-  public displayedColumns: string[] = ['numero', 'month', 'price'];
-  public dataSource = ELEMENT_DATA;
   public productos: any;
   public contador: number;
+  public idventa:number;
 
   @ViewChild('InputFechaPago') FiltroFecha: ElementRef;
   @ViewChild('InputMontoTotal') FiltroMonto: ElementRef;
@@ -88,8 +80,16 @@ export class VentasComponent implements OnInit {
   }
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
-      this.idcliente = +params['id'];
+      if(params['id']){
+        this.idcliente = +params['id']
+        
+      }
+     if(params['idventa']){
+       this.idventa = +params['idventa']
+     }
+      console.log(params)
    });
+  
     this.ObtenerClientexId();
     this.ObtenerDireccion();
     this.ObtenerTelefono();
@@ -164,7 +164,8 @@ export class VentasComponent implements OnInit {
       distinctUntilChanged(),
       tap(() => {
         //console.log(this.VentasForm.value.cliente)
-        this.ListarClientes('', '', '', '', this.VentasForm.value.cliente , 1, 500);
+        this.ListarClientes('', '', '', '', this.ClienteAutoComplete.nativeElement.value , 1, 5);
+      
       })
      ).subscribe();
 
@@ -202,6 +203,27 @@ export class VentasComponent implements OnInit {
     this.VentasForm.value.montototal, this.VentasForm.value.cuotas, this.VentasForm.value.inicial);
 
   }
+
+  ClienteSeleccionado(evento){
+   // console.log(evento.option.value)
+    this.VentasForm.get('cargo').setValue(evento.option.value.cargo);
+    this.VentasForm.get('cargo').disable();
+    this.VentasForm.get('trabajo').setValue(evento.option.value.trabajo);
+    this.VentasForm.get('trabajo').disable();
+   /// console.log(evento.option.value)
+    this.idcliente = evento.option.value.id
+   
+     // this.ObtenerClientexId();
+    this.ObtenerDireccion();
+    this.ObtenerTelefono();  
+
+    this.VentasForm.get('domicilio').setValue(evento.option.value.domicilio);
+    this.VentasForm.get('domicilio').disable();
+    this.VentasForm.get('telefono').setValue(evento.option.value.telefono);
+    this.VentasForm.get('telefono').disable();
+    
+  }
+
   /*VentanaAdjuntos.afterClosed().subscribe(res => {
     this.CargarData();
   });*/
@@ -238,12 +260,8 @@ export class VentasComponent implements OnInit {
 
   ListarClientes(inst: string, sede: string, subsede: string, dni: string, nombre: string, prpagina: number, prtotal: number) {
     this.ClienteServicio.Listado(inst, sede, subsede, dni, nombre, prpagina, prtotal).subscribe( res => {
-      this.LstCliente = [];
-      // tslint:disable-next-line:forin
-      for (let i in res) {
-        console.log(res[i]);
-        this.LstCliente.push(res[i]);
-      }
+      this.LstCliente = res['data'].clientes;
+  
     });
   }
 
@@ -259,10 +277,12 @@ export class VentasComponent implements OnInit {
         this.VentasForm.get('cargo').disable();
         this.VentasForm.get('trabajo').disable();
         //this.VentasForm.get('domicilio').setValue(res.)
+        
       }
     });
     }
   }
+
 
   GrabarVenta() {
 

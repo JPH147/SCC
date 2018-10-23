@@ -21,8 +21,8 @@
         $cliente->ssd_nombre = !empty($_GET['ssd_nombre']) ? $_GET['ssd_nombre'] : null;
         $cliente->clt_dni = !empty($_GET['pclt_dni']) ? $_GET['pclt_dni'] : null;
         $cliente->clt_nombre = !empty($_GET['pclt_nombre']) ? $_GET['pclt_nombre'] : null;
-        $cliente->prpagina = !empty($_GET['prpagina']) ? $_GET['prpagina'] : null;
-        $cliente->prtotalpagina = !empty($_GET['prtotalpagina']) ? $_GET['prtotalpagina'] : null;
+        $cliente->prpagina = !empty($_GET['prpagina']) ? $_GET['prpagina'] : 1;
+        $cliente->prtotalpagina = !empty($_GET['prtotalpagina']) ? $_GET['prtotalpagina'] : 20;
 
 
         $cliente_list = $cliente->read();

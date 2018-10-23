@@ -8,12 +8,14 @@ import {VentaDataSource} from './ventas-listar.dataservice';
 import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
 import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
 import {VentasServicio} from './ventas-listar.service'
+import { ClienteService } from '../clientes/clientes.service';
+
 
 @Component({
   selector: 'app-ventas-listar',
   templateUrl: './ventas-listar.component.html',
   styleUrls: ['./ventas-listar.component.css'],
-  providers:[VentasServicio,ProductoService]
+  providers:[VentasServicio,ProductoService, ClienteService]
 })
 export class VentasListarComponent implements OnInit {
  

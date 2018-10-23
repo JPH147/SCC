@@ -8,6 +8,13 @@ mat-card{
     min-height: 100px;
   }
 
+ .tituloProd {
+    padding: 15px;
+    font-size: 30px;
+    text-align: center;
+    font-family: sans-serif;
+  }
+
 .inputfile {
     width: 0.1px;
     height: 0.1px;
@@ -142,3 +149,9 @@ mat-card{
   .boton-opciones{
     margin: 0 10px;
   }
+
+
+  .example-right-align {
+    text-align: right;
+  }
+  

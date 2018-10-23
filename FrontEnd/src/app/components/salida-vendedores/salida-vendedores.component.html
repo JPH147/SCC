@@ -1,7 +1,7 @@
 <mat-card class="card-principal">
 
   <mat-card-title>
-    <div id = "tituloProd"> Salida de vendedores </div>
+    <div id = "tituloProd"> Salida de Vendedores </div>
   </mat-card-title>
 
   <form [formGroup]="SalidaVendedoresForm" (ngSubmit)="Guardar(SalidaVendedoresForm)">
@@ -61,7 +61,7 @@
           </mat-grid-tile>
 
           <mat-grid-tile>
-            <button mat-raised-button type="button" (click)="AgregarTalonario()"> Ingresar Talonarios</button>
+            <button mat-fab color="primary" (click)="AgregarTalonario()"  matTooltip="Ingresa Talonarios"> <mat-icon> ballot </mat-icon>   </button>
             </mat-grid-tile>
           </mat-grid-list>
     </mat-card>
@@ -150,7 +150,7 @@
 
           <!-- Boton elimina Producto -->
           <mat-grid-tile>
-            <button mat-mini-fab type="button" color="primary" (click)="EliminarVendedor(i)"><mat-icon>delete</mat-icon></button>
+            <button mat-mini-fab type="button" color="primary" (click)="EliminarVendedor(i)" matTooltip="Eliminar Vendedor"><mat-icon>delete</mat-icon></button>
           </mat-grid-tile>
         </mat-grid-list>
       </div>
@@ -206,7 +206,7 @@
         
           <mat-grid-tile>
             <button mat-mini-fab type="button" color="primary" matTooltip="Agregar series" (click)="AgregarSerieSalidaV(producto.value.producto,i)" [disabled]="!producto.value.producto"><mat-icon>reorder</mat-icon></button>
-            <button mat-mini-fab type="button" color="primary" matTooltip="Eliminar producto" (click)="EliminarProducto(producto.value.producto,i)"><mat-icon>delete</mat-icon></button>
+            <button mat-mini-fab type="button" color="primary" matTooltip="Eliminar producto" (click)="EliminarProducto(producto.value.producto,i)"matTooltip="Eliminar Producto" ><mat-icon>delete</mat-icon></button>
           </mat-grid-tile>
         
         </mat-grid-list>
@@ -235,10 +235,11 @@
 </mat-card-content>
 
 <mat-card-actions>
-  <mat-grid-list cols="1" rowHeight="55px">
-    <mat-grid-tile>
-      <button mat-raised-button type="submit" color="primary" >Grabar</button>
-      <button mat-raised-button type="button" color="primary">Limpiar</button>
+  <mat-grid-list cols="1" rowHeight="65px">
+    <mat-grid-tile> 
+      <button mat-fab color="primary" matTooltip="Grabar" > <mat-icon> save</mat-icon></button>
+      
+      <button mat-fab color="primary" matTooltip="Limpiar"> <mat-icon> update </mat-icon> </button>
     </mat-grid-tile>
     </mat-grid-list>
   </mat-card-actions>

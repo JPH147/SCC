@@ -67,7 +67,7 @@ export class VentanaEmergenteProveedores {
 
 
     if (this.data) {
-      console.log(this.data);
+      
       this.ProveedoresForm.get('tipodocumento').setValue(this.data.objeto.tipo_documento);
       //this.ListarSede(this.data.objeto.institucion);
       this.ProveedoresForm.get('documento').setValue(this.data.objeto.documento);
