@@ -35,8 +35,8 @@ export class ProveedorDataSource implements DataSource<Proveedor> {
         finalize(() => this.CargandoInformacion.next(false))
         )
         .subscribe(res => {
-            this.TotalResultados.next(res.length);
-            this.InformacionProveedores.next(res);
+            this.TotalResultados.next(res['mensaje']);
+            this.InformacionProveedores.next(res['data'].proveedor);
           });
     }
 

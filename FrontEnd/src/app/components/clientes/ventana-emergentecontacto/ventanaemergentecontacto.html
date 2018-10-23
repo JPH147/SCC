@@ -1,7 +1,7 @@
-<mat-tab-group>
+<mat-tab-group >
     <mat-tab label="Telefonos">
         <button mat-mini-fab color="primary" class="boton" (click)="add()" type="button"><mat-icon>add</mat-icon></button>
-      <mat-card>
+      <mat-card >
           <form [formGroup]="TelefonosForm" (ngSubmit)="GuardarTelefonos(TelefonosForm)">
             <mat-card-content>
               <div formArrayName="items" *ngFor="let telefono of TelefonosForm['controls'].items['controls']; let i = index">

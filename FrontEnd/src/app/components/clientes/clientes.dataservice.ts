@@ -39,7 +39,7 @@ this.CargandoInformacion.complete();
   finalize(() => this.CargandoInformacion.next(false))
   )
   .subscribe(res => {
-    console.log(res);
+    //console.log(res);
     this.TotalResultados.next(res['mensaje']);
      this.InformacionClientes.next(res['data'].clientes);
     });

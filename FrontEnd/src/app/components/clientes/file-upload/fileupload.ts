@@ -20,6 +20,8 @@ export class FileUpload {
   public selectedValue: string;
   public ClientesForm: FormGroup;
   public ruta:string;
+  public carga_finalizada:boolean;
+  public file:FileHolder;
   
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
@@ -32,26 +34,37 @@ export class FileUpload {
 
     ngOnInit() {
        this.ruta=URL.url+"file/upload.php"
+       this.carga_finalizada=false;
     }
 
 
-      onUploadFinished(file: FileHolder) {
-
+     // onUploadFinished(file: FileHolder) {
+      
+        SubirFoto() {
         if ( this.data) {
-        console.log(file);
-        this.Servicios.RenameFile(file.serverResponse.response._body, 'FOTO', this.data.dni,"cliente").subscribe( res => {
-          console.log(res);
+        //console.log(file);
+        this.Servicios.RenameFile(this.file.serverResponse.response._body, 'CLIENTE', this.data.dni+ "-"+Math.floor(Math.random() * 100000),"cliente").subscribe( res => {
+         // this.Servicios.RenameFile(file.serverResponse.response._body, 'FOTO', this.data.dni,"cliente").subscribe( res => {
+          //console.log(res);
           if (res) {
               this.ClienteServicios.ActualizarFoto(this.data.id, res.mensaje).subscribe( res2 => {
-                console.log(res2);
+              //  console.log(res2);
+                this.ventana.close()
               }
             );
             }
         });
         }
-        console.log(file.serverResponse.response._body);
-        console.log(this.data);
+      //  console.log(file.serverResponse.response._body);
+     //   console.log(this.data);
         }
+
+        FotoCargada(file: FileHolder){
+          this.carga_finalizada=true;
+          this.file=file;
+        }
+    
+
 
   onNoClick(): void {
     this.ventana.close();

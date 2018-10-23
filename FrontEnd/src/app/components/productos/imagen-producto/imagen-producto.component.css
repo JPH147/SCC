@@ -4,3 +4,9 @@
 	display:block;
     margin:auto;
 }
+
+.card-imagen{
+	border-style:  groove;
+	border-width: 10px;
+	background-color: rgb(240, 240, 240)  
+}

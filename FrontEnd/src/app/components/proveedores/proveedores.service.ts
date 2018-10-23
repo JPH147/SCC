@@ -31,7 +31,7 @@ export class ProveedorService {
     })
     .pipe(map(res => {
       if( res['codigo'] === 0){
-        return res['data'].proveedor;
+        return res;
       } else {
         console.log('Error al importar los datos, revisar servicio');
           return res;

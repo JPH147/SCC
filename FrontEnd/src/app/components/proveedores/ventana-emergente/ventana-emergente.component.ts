@@ -42,7 +42,8 @@ export class VentanaEmergenteProveedores {
         Validators.required
       ]],
       'documento': [null, [
-        Validators.required
+        Validators.required,
+        Validators.pattern('[0-9- ]+')
       ]],
       'nombre': [null, [
         Validators.required

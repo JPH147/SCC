@@ -15,3 +15,38 @@
 .mat-column-numero{
 	max-width: 10%
 }
+
+
+.mat-card-header{
+  background-color: #673ab7;
+  color: #fff;
+  padding-top: 20px;
+  justify-content: center;
+  
+}
+.card{
+  padding: 0px;
+  border-radius: 10px 10px;
+  overflow: hidden;
+}
+
+.mat-card-title{
+  font-weight: bold;
+  align-content: center; 
+  font-size: 16px;
+}
+
+mat-row:nth-child(even){
+  background-color:#f2f2f2;
+  }
+
+mat-row:nth-child(odd){
+  background-color:white;
+  }
+
+mat-header-cell {
+  font-weight:  bold;
+  font-size: 14px;
+  background-color:#673ab7;
+  color: #fff;
+}
