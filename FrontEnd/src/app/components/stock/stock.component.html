@@ -95,7 +95,7 @@
         <ng-container matColumnDef="opciones">
           <mat-header-cell *matHeaderCellDef>Opciones</mat-header-cell>
           <mat-cell *matCellDef="let producto">
-          <button mat-icon-button color="primary" (click)= "DetalleStock(producto.almacen,producto)" Tooltip = "Detalle Productos"> <mat-icon> visibility </mat-icon></button>
+          <button mat-icon-button color="primary" (click)= "DetalleStock(producto.almacen,producto)" matTooltip="Ver series"> <mat-icon> visibility </mat-icon></button>
           </mat-cell>
         </ng-container>
 

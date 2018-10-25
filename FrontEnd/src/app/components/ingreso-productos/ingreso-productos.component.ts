@@ -77,11 +77,11 @@ import {ProductoService} from '../productos/productos.service';
           'almacen1': [null, [Validators.required] ],
           'tipoIngreso': [null, [Validators.required]],
           'docReferencia': [null, [Validators.required]],
-          'proveedor': [null, [Validators.nullValidator] ],
-          'cliente': [null, [Validators.nullValidator]],
-          'vendedor': [null, [Validators.nullValidator]],
-          'sucursal': [null, [Validators.nullValidator]],
-          'documento': [null, [Validators.nullValidator]],
+          'proveedor': [null, [Validators.required] ],
+          'cliente': [null, [Validators.required]],
+          'vendedor': [null, [Validators.required]],
+          'sucursal': [null, [Validators.required]],
+          'documento': [null, [Validators.required]],
           'fecingreso': [null, [Validators.required]],
           'producto': [null, [Validators.required]],
           'cantidad': [null, [Validators.required]],
@@ -167,7 +167,6 @@ import {ProductoService} from '../productos/productos.service';
     }
 
     ProductoSeleccionado(index){
-      console.log(index)
       this.Articulos.Listado('', '', '', '', null,null,1, 10, 'descripcion', 'asc',1).subscribe(res => {
         this.Producto = res['data'].productos;
         for (let i of this.IngresoProductoForm['controls'].productos.value) {
@@ -176,7 +175,19 @@ import {ProductoService} from '../productos/productos.service';
           }
         }
       });
-      this.IngresoProductoForm.get('productos')['controls'][index].get('cantidad').setValue(0)
+      this.IngresoProductoForm.get('productos')['controls'][index].get('cantidad').setValue(0);
+      this.Verificar()
+    }
+
+    Verificar(){
+      this.IngresoProductoForm.value.productos.forEach((item,index)=>{
+        // console.log(this.Series, item.producto);
+        this.Series=this.Series.filter(e=>e.id_producto!=item.producto.id)
+        // this.Series.forEach(Item=>{
+        //   console.log(Item.id_producto,item.producto.id)
+        // })
+        console.log(this.Series, this.IngresoProductoForm.value.productos)
+      })
     }
 
     displayFn2(producto) {

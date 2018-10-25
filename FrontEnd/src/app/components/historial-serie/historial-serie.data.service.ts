@@ -41,7 +41,7 @@ export class HistorialSerieDataService implements DataSource<ProductoSerie> {
       .subscribe(res => {
         this.TotalResultados.next(res['mensaje']);
         // tslint:disable-next-line:semicolon
-        console.log(res['data'].series);
+        // console.log(res['data'].series);
         this.InformacionProductos.next(res['data'].series)
       });
       }

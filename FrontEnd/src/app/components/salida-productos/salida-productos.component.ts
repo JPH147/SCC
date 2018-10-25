@@ -134,7 +134,7 @@ export class SalidaProductosComponent implements OnInit {
   AgregarSerieSalida(producto,index) {
 
     const serieventana = this.DialogoSerie.open(ventanaseriesalida, {
-      width: '800px',
+      width: '1200px',
       data:{almacen:this.SalidaProductosForm.get('almacen').value.nombre, id_producto:producto.id_producto, precio:producto.precio, series:this.Series}
     });
 
@@ -144,7 +144,7 @@ export class SalidaProductosComponent implements OnInit {
       }
       let ip:number=0;
       for (let i in res) {
-        this.Series.push({id_producto:res[i].id_producto,id_serie:res[i].id_serie, serie:res[i].serie,precio:res[i].precio, cantidad:res[i].cantidad, considerar:res[i].considerar})
+        this.Series.push({id_producto:res[i].id_producto,id_serie:res[i].id_serie, serie:res[i].serie,precio:res[i].precio, almacenamiento:res[i].almacenamiento,color:res[i].color,cantidad:res[i].cantidad, considerar:res[i].considerar})
         // Saber cuántos elementos de RES son del producto
         if (res[i].id_producto=producto.id_producto && res[i].considerar==true) {
           ip++
