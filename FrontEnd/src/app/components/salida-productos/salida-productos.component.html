@@ -118,7 +118,7 @@
       <mat-card-actions>
           <mat-grid-list cols="1"  rowHeight="55px">
               <mat-grid-tile>
-                <button mat-raised-button  color="primary" (click)="GuardarTransferenciaAlmacen(SalidaProductosForm)">Grabar</button>
+                <button mat-raised-button  color="primary" (click)="GuardarTransferenciaAlmacen(SalidaProductosForm)" [disabled]="SalidaProductosForm.invalid">Grabar</button>
                 <button mat-raised-button  color="accent" type="button">Limpiar</button>
               </mat-grid-tile>
             </mat-grid-list>

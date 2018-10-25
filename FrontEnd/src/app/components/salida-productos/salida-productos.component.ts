@@ -55,7 +55,7 @@ export class SalidaProductosComponent implements OnInit {
       'almacen': [null, [Validators.required] ],
       'almacen1': [null, [Validators.required] ],
       'fechaingreso': [null, [Validators.required]],
-      'documento': [null, [Validators.required]],
+      'documento': [null, []],
       productos: this.FormBuilder.array([this.CrearProducto()])
     });
 

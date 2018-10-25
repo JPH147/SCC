@@ -13,7 +13,12 @@
         </mat-grid-tile>
         <mat-grid-tile>
           <mat-form-field class="input-serie">
-            <input matInput placeholder="Color" [(ngModel)]="serie.color">
+            <input matInput placeholder="Color" [matAutocomplete]="auto" [(ngModel)]="serie.color" #InputColor>
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="ColorSeleccionado($event)">
+              <mat-option *ngFor="let color of colores" [value]="color.nombre">
+                {{color.nombre}}
+              </mat-option>
+            </mat-autocomplete>
           </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>

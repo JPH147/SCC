@@ -26,6 +26,7 @@ const TREE_DATA = JSON.stringify({
   Ventas: {
     Clientes: 'clientes',
     Ventas: 'ventas',
+    Devoluciones: 'devoluciones',
     'Salida de vendedores': 'salidavendedores',
     Comisiones: 'comisiones',
   },

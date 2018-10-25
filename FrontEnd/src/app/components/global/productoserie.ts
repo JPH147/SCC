@@ -110,4 +110,20 @@ export class ServiciosProductoSerie {
     return this.http.post(this.url+'productoserie/updateout.php', params, {headers:headers})
   }
 
+  ListarColor(
+  nombre: string
+  ): Observable <any> {
+    return this.http.get(this.url + 'colores/read.php', {
+      params: new  HttpParams()
+      .set('prnombre', nombre)
+    })
+    .pipe(map(res => {
+        if (res['codigo'] === 0) {
+          return res['data'].colores;
+        } else {
+          console.log ('Error al importar los datos, revisar servicio');
+        }
+    }));
+  }
+
 }

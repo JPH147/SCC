@@ -143,6 +143,18 @@ import {ProductoService} from '../productos/productos.service';
       this.ResetearFormArray(this.productos);
       this.Series = [];
       this.Articulos.Listado('', '', '', '', null,null,1, 10, 'descripcion', 'asc',1).subscribe(res => this.Producto = res['data'].productos);
+      
+      if (event.value==7) {
+        this.IngresoProductoForm.get('productos')['controls'].forEach((item, index)=>{
+          item.get('precioUnitario').disable()
+        })
+      }else{
+        this.IngresoProductoForm.get('productos')['controls'].forEach((item, index)=>{
+          item.get('precioUnitario').enable()
+        })
+      }
+
+
     }
 
     ResetearFormArray = (formArray: FormArray) => {
@@ -158,12 +170,17 @@ import {ProductoService} from '../productos/productos.service';
       this.productos.removeAt(i);
     };
 
-    EliminarElemento(array,value) {
-      array=array.filter(e=>e.id!=value)
+    EliminarElemento(array:Array<any>,value) {
+      array.forEach((item, index)=>{
+        if (item.id==value) {
+          array.splice(index,1)
+        }
+      })
+      // array=array.filter(e=>e.id!=value)
     }
 
     EliminarElemento2(array,value) {
-       array=array.filter(e=>e.id_producto!=value)
+      array=array.filter(e=>e.id_producto!=value)
     }
 
     ProductoSeleccionado(index){
@@ -171,7 +188,8 @@ import {ProductoService} from '../productos/productos.service';
         this.Producto = res['data'].productos;
         for (let i of this.IngresoProductoForm['controls'].productos.value) {
           if (i.producto) {
-            this.EliminarElemento(this.Producto,i.producto.id)
+            this.EliminarElemento(this.Producto,i.producto.id);
+            // console.log(this.Producto,i.producto.id)
           }
         }
       });
@@ -186,7 +204,7 @@ import {ProductoService} from '../productos/productos.service';
         // this.Series.forEach(Item=>{
         //   console.log(Item.id_producto,item.producto.id)
         // })
-        console.log(this.Series, this.IngresoProductoForm.value.productos)
+        // console.log(this.Series, this.IngresoProductoForm.value.productos)
       })
     }
 
@@ -227,12 +245,9 @@ import {ProductoService} from '../productos/productos.service';
     // Selector tipo de ingresos
     ListarTransaccionTipo() {
       this.Servicios.ListarTransaccionTipo().subscribe( res => {
-        this.TipoIngresos = [];
-        // tslint:disable-next-line:forin
-        for (let i in res) {
-            this.TipoIngresos.push(res[i]);
-
-        }
+        this.TipoIngresos=res;
+        this.TipoIngresos = this.TipoIngresos.filter(e=>e.id!=2);
+        this.TipoIngresos = this.TipoIngresos.filter(e=>e.id!=6);
       });
     }
 
@@ -281,18 +296,22 @@ import {ProductoService} from '../productos/productos.service';
     });
 
     serieventana.afterClosed().subscribe(res=>{
+
       if (res) {
+
+        let contador=0;
 
         for (let i of res) {
           this.EliminarElemento2(this.Series,i.producto)
         }
 
         for (let i of res) {
-          if (i.serie !== '') {
-            this.Series.push({id_producto: producto.get('producto').value.id, serie: i.serie, color:i.color, almacenamiento: i.almacenamiento, observacion:i.observacion})
+          if (i.serie != '') {
+            this.Series.push({id_producto: producto.get('producto').value.id, serie: i.serie, color:i.color, almacenamiento: i.almacenamiento, observacion:i.observacion});
+            contador++
           }
         }
-        this.IngresoProductoForm.get('productos')['controls'][index].get('cantidad').setValue(res.length)
+        this.IngresoProductoForm.get('productos')['controls'][index].get('cantidad').setValue(contador)
       }
     })
   }
