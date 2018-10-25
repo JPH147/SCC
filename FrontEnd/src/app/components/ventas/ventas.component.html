@@ -1,6 +1,7 @@
 <mat-card>
+    <mat-card-title class="tituloProd">Ventas</mat-card-title>
   <mat-card-header>
-    <mat-card-title>Ventas</mat-card-title>
+    
   </mat-card-header>
   <form [formGroup]="VentasForm">
 
@@ -8,7 +9,7 @@
 
           <mat-form-field>
             <input #Cliente placeholder="Ingresa Cliente" matInput [matAutocomplete]="auto2" formControlName= cliente>
-              <mat-autocomplete #auto2="matAutocomplete" [displayWith] = "displayCliente">
+              <mat-autocomplete #auto2="matAutocomplete" [displayWith] = "displayCliente" (optionSelected)="ClienteSeleccionado($event)">
                 <mat-option *ngFor="let cliente of LstCliente" [value]="cliente">
                   {{cliente.nombre}}
                 </mat-option>
@@ -18,7 +19,8 @@
   
         <a></a>
         <mat-form-field >
-           <input matInput placeholder="Cargo" formControlName="cargo">
+           <input matInput placeholder="Cargo" formControlName="cargo" >
+                      
         </mat-form-field>
         <a></a>
         <mat-form-field >
@@ -120,7 +122,7 @@
 
       <p></p>
       <mat-form-field>
-         <input matInput placeholder="Monto Total"  formControlName="montototal" #InputMontoTotal>
+         <input matInput placeholder="Monto Total"  formControlName="montototal" #InputMontoTotal class="example-right-align">
          <mat-error>Solo debe ingresar valores númericos</mat-error>
          <span matPrefix>S/.&nbsp;</span>
          <span matSuffix>.00</span>
@@ -128,7 +130,7 @@
 
       <p></p>
       <mat-form-field>
-          <input matInput placeholder="Cuota Inicial" formControlName="inicial" #InputInicial>
+          <input matInput placeholder="Cuota Inicial" formControlName="inicial" #InputInicial class="example-right-align">
           <mat-error>Solo debe ingresar valores númericos</mat-error>
           <span matPrefix>S/ &nbsp;</span>
           <span matSuffix>.00</span>
@@ -148,9 +150,9 @@
    </div>
    <mat-grid-list cols="1" rowHeight="100px">
    <mat-grid-tile>
-      <button mat-raised-button color="primary" class="boton-opciones" (click)="Agregar()" [disabled]="VentasForm.invalid">Adjuntar</button>
-      <button mat-raised-button color="primary" class="boton-opciones" (click)="GeneraCronograma()">Generar</button>
-      <button mat-raised-button color="primary" class="boton-opciones" (click)="GrabarVenta()" [disabled]="VentasForm.invalid">Grabar</button>
+      <button mat-fab color="primary" class="boton-opciones" (click)="Agregar()" [disabled]="VentasForm.invalid"  matTooltip="Adjuntar Imagen Documentos"><mat-icon> photo_library </mat-icon></button>
+      <button mat-fab color="primary" class="boton-opciones" (click)="GeneraCronograma()" [disabled]="VentasForm.invalid" matTooltip="Generar Cronograma"> <mat-icon> sync </mat-icon>  </button>
+      <button mat-fab color="primary" class="boton-opciones" (click)="GrabarVenta()" [disabled]="VentasForm.invalid" matTooltip="Grabar"> <mat-icon>  save   </mat-icon></button>
     </mat-grid-tile>
 </mat-grid-list>
    <div class="row5col-producto" *ngFor="let producto of productos">
@@ -163,14 +165,17 @@
       </mat-form-field>
       <a></a>
       <mat-form-field>
-        <input matInput placeholder="Precio">
+        <input matInput placeholder="Precio" class="example-right-align">
+        <mat-error>Solo debe ingresar valores númericos</mat-error>
+        <span matPrefix>S/ &nbsp;</span>
+        <span matSuffix>.00</span>
      </mat-form-field>
      <a></a>
-      <button mat-mini-fab color="primary" (click)="AgregaProductos()" type="button">
+      <button mat-mini-fab color="primary" (click)="AgregaProductos()" type="button" matTooltip="Agregar Producto">
          <mat-icon>add</mat-icon>
       </button>
       <a></a>
-      <button mat-mini-fab color="primary" (click)="EliminarProductos()" type="button">
+      <button mat-mini-fab color="primary" (click)="EliminarProductos()" type="button" matTooltip="Elimina Producto">
          <mat-icon>remove</mat-icon>
       </button>
    </div>
