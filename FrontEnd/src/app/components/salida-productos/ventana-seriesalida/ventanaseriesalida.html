@@ -11,17 +11,23 @@
       <div formArrayName="series" *ngFor="let serie of SeriesProductosForm['controls'].series['controls'];let i = index">
         <div [formGroupName]="i">
           
-          <mat-grid-list cols=7 rowHeight="70px">
+          <mat-grid-list cols=5 rowHeight="70px">
           
-            <mat-grid-tile colspan=4>
+            <mat-grid-tile colspan=2>
               <mat-form-field class="formulario-grande">
                 <input matInput placeholder="Serie" formControlName="serie">
               </mat-form-field>
             </mat-grid-tile>
           
-            <mat-grid-tile colspan=2>
+            <mat-grid-tile colspan=1>
               <mat-form-field>
-                <input matInput placeholder="Cantidad" formControlName="cantidad">
+                <input matInput placeholder="Color" formControlName="color">
+              </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile colspan=1>
+              <mat-form-field>
+                <input matInput placeholder="Almacenamiento" formControlName="almacenamiento">
               </mat-form-field>
             </mat-grid-tile>
 

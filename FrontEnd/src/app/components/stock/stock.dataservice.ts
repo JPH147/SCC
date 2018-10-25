@@ -80,6 +80,7 @@ export class StockSerieDataSource implements DataSource <stock> {
     finalize(() => this.CargandoInformacion.next(false))
     )
     .subscribe(res => {
+      console.log(res,almacen,producto,pagina,total_pagina);
       this.Totalresultados.next(res['mensaje']);
       this.InformacionStock.next(res['data'].producto_series);
     });
