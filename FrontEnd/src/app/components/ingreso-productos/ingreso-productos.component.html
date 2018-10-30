@@ -80,7 +80,14 @@
             </mat-form-field>
 
             <mat-form-field class="example-full-width" *ngSwitchCase="7" >
-             <!-- <input #Proveedor placeholder="Responsable Traslado" matInput [matAutocomplete]="auto" formControlName=vendedor > -->
+              <mat-select placeholder="Selecciona Almacen Destino" formControlName="almacen1">
+                <mat-option *ngFor="let almacen of almacenes" [value]="almacen.id">
+                  {{almacen.nombre}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+<!--             <mat-form-field class="example-full-width" *ngSwitchCase="7" >
              <input  matInput [matAutocomplete]="auto"  disabled value >
 
                 <mat-autocomplete #auto="matAutocomplete">
@@ -88,7 +95,7 @@
                     {{vendedor.nombre}}
                   </mat-option>
                 </mat-autocomplete>
-              </mat-form-field>
+              </mat-form-field> -->
 
           </mat-grid-tile>
 
@@ -103,29 +110,6 @@
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
-          </mat-grid-tile>
-
-
-          <mat-grid-tile >
-              <mat-form-field class="example-full-width" *ngSwitchCase="7" >
-                  <mat-select placeholder="Selecciona Almacen Destino" formControlName="almacen1">
-                    <mat-option *ngFor="let almacen of almacenes" [value]="almacen.id">
-                      {{almacen.nombre}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-
-
-                <mat-form-field class="example-full-width" *ngSwitch != "7"  >
-                    <mat-select placeholder="Selecciona Almacen Destino" formControlName="almacen1">
-                        <input #Proveedor matInput placeholder="" disabled value="" >
-
-                      <mat-option *ngFor="let almacen of almacenes" [value]="almacen.id">
-                        {{almacen.nombre}}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-
           </mat-grid-tile>
 
       </mat-grid-list>

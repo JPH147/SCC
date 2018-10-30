@@ -118,8 +118,13 @@
       <mat-card-actions>
           <mat-grid-list cols="1"  rowHeight="65px">
               <mat-grid-tile>
+<<<<<<< HEAD
                 <button  mat-fab color="primary" matTooltip="Grabar" (click)="GuardarTransferenciaAlmacen(SalidaProductosForm)"><mat-icon> save</mat-icon></button>
                 <button mat-fab color="warn" matTooltip="Limpiar" > <mat-icon> restore</mat-icon></button>
+=======
+                <button mat-raised-button  color="primary" (click)="GuardarTransferenciaAlmacen(SalidaProductosForm)" [disabled]="SalidaProductosForm.invalid">Grabar</button>
+                <button mat-raised-button  color="accent" type="button">Limpiar</button>
+>>>>>>> 0a97e4c07e90cdeaf39134120e30d58fa37f2ffc
               </mat-grid-tile>
             </mat-grid-list>
         </mat-card-actions>
