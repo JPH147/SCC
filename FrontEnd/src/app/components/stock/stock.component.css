@@ -90,16 +90,19 @@ mat-card{
 .mat-column-unidad_medida
 
 {
-  max-width: 10%;
+  max-width: 11%;
 }
 
-
+.mat-column-descripcion
+{
+  max-width: 27%;
+}
 
 .mat-column-cantidad,
 .mat-column-numero,
 .mat-column-opciones
 {
-  max-width: 4%;
+  max-width: 5%;
 }
 
 mat-row:nth-child(even){

@@ -116,10 +116,10 @@
   <!-- Botones Grabar Limpiar Formulario -->
 
       <mat-card-actions>
-          <mat-grid-list cols="1"  rowHeight="55px">
+          <mat-grid-list cols="1"  rowHeight="65px">
               <mat-grid-tile>
-                <button mat-raised-button  color="primary" (click)="GuardarTransferenciaAlmacen(SalidaProductosForm)">Grabar</button>
-                <button mat-raised-button  color="accent" type="button">Limpiar</button>
+                <button  mat-fab color="primary" matTooltip="Grabar" (click)="GuardarTransferenciaAlmacen(SalidaProductosForm)"><mat-icon> save</mat-icon></button>
+                <button mat-fab color="warn" matTooltip="Limpiar" > <mat-icon> restore</mat-icon></button>
               </mat-grid-tile>
             </mat-grid-list>
         </mat-card-actions>
