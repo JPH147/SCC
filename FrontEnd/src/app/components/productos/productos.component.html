@@ -1,9 +1,9 @@
 <mat-card>
   <!-- Encabezado -->
 
-  <div>
-      <button mat-fab matTooltip="Agregar Productos" class="agregar"  (click)="Agregar()" color="primary"><mat-icon> library_add </mat-icon></button>
-    </div>
+  <!-- <div>
+    <button mat-fab matTooltip="Agregar Productos" class="agregar"  (click)="Agregar()" color="primary"><mat-icon> library_add </mat-icon></button>
+  </div> -->
 
   <!--<button mat-raised-button color="primary" class="agregar" (click)="Agregar()">Agregar</button>-->
   <mat-card-title>
@@ -56,6 +56,9 @@
           <mat-option [value]="2">Inactivos</mat-option>
         </mat-select>
       </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <button mat-raised-button (click)="Agregar()" color="primary">Agregar</button>
     </mat-grid-tile>
   </mat-grid-list>
 

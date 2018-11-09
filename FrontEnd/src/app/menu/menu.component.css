@@ -1,13 +1,25 @@
-a {
-  color: inherit;
-  text-decoration: inherit;
+mat-expansion-panel{
+	margin-top: 0;
+	margin-bottom: 0;
+	background: none;
+	box-shadow: none !important
 }
 
-mat-tree{
-	background: none
+mat-panel-title{
+	color: #dedede
 }
 
 .mat-icon-button {
 	position: absolute;
 	right: 0;
+}
+
+.titulo{
+	margin-left: 5px;
+	padding-top: 3px
+}
+
+.lista-opciones{
+	color: #dedede !important;
+	padding-left: 8px
 }

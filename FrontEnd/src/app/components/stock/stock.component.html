@@ -1,9 +1,9 @@
 <mat-card class="card">
 
-    <div>
+<!--     <div>
         <button mat-fab matTooltip="Salida" class="agregar"  [routerLink]="['salidaproductos']" color="primary"><mat-icon> unarchive </mat-icon></button>
         <button mat-fab matTooltip="Ingreso" class="agregar"  [routerLink]="['ingresoproductos']" color="primary"><mat-icon> archive </mat-icon></button>
-      </div>
+      </div> -->
     <mat-card-title>
       <div id = "tituloProd"> Listado de Stock</div>
     </mat-card-title>
@@ -11,7 +11,7 @@
         <button class="agregar" mat-raised-button color="primary"  [routerLink]="['ingresoproductos']">Ingreso</button>
         <br> <br>-->
 
-       <mat-grid-list cols= "5" rowHeight="90px">
+       <mat-grid-list cols= "4" rowHeight="90px">
         <mat-grid-tile>
           <mat-icon>search</mat-icon>
           <mat-form-field>
@@ -41,6 +41,14 @@
             <mat-form-field>
               <input matInput placeholder="Descripcion" #InputDescripcion>
             </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+        </mat-grid-tile>
+        <mat-grid-tile>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <button mat-raised-button color="primary" [routerLink]="['ingresoproductos']" class="opciones">Ingreso</button>
+          <button mat-raised-button color="primary" [routerLink]="['salidaproductos']" class="opciones">Salida</button>
         </mat-grid-tile>
       </mat-grid-list>
 

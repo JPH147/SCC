@@ -1,21 +1,22 @@
-<mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-  <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding>
-     <a
-     [routerLink]="node.type"
-     routerLinkActive
-     #rla="routerLinkActive">
-   	 <span class="hijo">{{node.filename}}</span>
-     </a>
-     <button mat-icon-button disabled ></button>
-  </mat-tree-node>
+<mat-accordion>
 
-  <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding>
-    <span class="padre">{{node.filename}}</span>
-    <button mat-icon-button matTreeNodeToggle
-            [attr.aria-label]="'toggle ' + node.filename">
-      <mat-icon class="mat-icon-rtl-mirror">
-        {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
-      </mat-icon>
-    </button>
-  </mat-tree-node>
-</mat-tree>
+  <mat-expansion-panel [hideToggle]=true *ngFor="let m of menu" [disabled]="m.disabled">
+
+    <mat-expansion-panel-header [collapsedHeight]="'50px'">
+
+      <mat-panel-title>
+
+        <div><mat-icon> {{m.icono}} </mat-icon></div>
+        <div class="titulo"> {{m.nombre | uppercase}} </div>
+
+      </mat-panel-title>
+
+    </mat-expansion-panel-header>
+
+    <mat-nav-list class="lista-opciones">
+       <a mat-list-item class="lista-opciones" *ngFor="let s of m.submenu" [routerLink]="[s.path]"> {{s.nombre}} </a>
+    </mat-nav-list>
+
+  </mat-expansion-panel>
+
+</mat-accordion>

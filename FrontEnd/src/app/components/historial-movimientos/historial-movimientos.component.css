@@ -1,3 +1,11 @@
+#tituloProd {
+    padding: 25px;
+    font-size: 30px;
+    text-align: center;
+    font-family: sans-serif;
+    
+}
+
 .derecha{
     float: right
 }
@@ -21,7 +29,6 @@ mat-card{
   justify-content: center;
 }
 
-.mat-column-numero,
 .mat-column-opciones,
 .mat-column-almacen,
 .mat-column-fecha,
@@ -34,4 +41,6 @@ mat-card{
   font-size: 30px;
   text-align: center;
   font-family: sans-serif;
+.mat-column-numero{
+  max-width: 5%; 
 }

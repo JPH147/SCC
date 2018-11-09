@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   public estado: boolean;
-  public usuarios;
+  public usuario: any;
 
   constructor() {
 
@@ -15,12 +15,14 @@ export class AppComponent {
 
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnInit() {
-    this.usuarios = { nombre: 'Jean Pierre Rodriguez Farfan',
-    rol: 'Administrador',
-    cargo: 'Tercero',
-    ultimo_login: '"03/08/2018',
-    email: 'jeanpierre.rodriguez@genussolucionesti.com',
-    telefono: '996040111',
+    this.estado=true;
+    this.usuario = {
+      nombre: 'Jean Pierre Rodriguez Farfan',
+      rol: 'Administrador',
+      cargo: 'Tercero',
+      ultimo_login: '"03/08/2018',
+      email: 'jeanpierre.rodriguez@genussolucionesti.com',
+      telefono: '996040111',
   };
  }
 }

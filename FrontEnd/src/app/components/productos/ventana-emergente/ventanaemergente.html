@@ -1,14 +1,21 @@
 <mat-card class="card">
-  <mat-card-header>
+<!--   <mat-card-header>
     <mat-card-title *ngIf="!data">Agregar Nuevo Producto</mat-card-title>
     <mat-card-title *ngIf="data">Editar Producto</mat-card-title>
-  </mat-card-header>
+  </mat-card-header> -->
+  <mat-toolbar color="primary">
+    <mat-toolbar-row *ngIf="!data"><h4>Agregar producto</h4></mat-toolbar-row>
+    <mat-toolbar-row *ngIf="data">Editar producto</mat-toolbar-row>
+    <!-- <mat-card-title *ngIf="!data">Agregar Nuevo Producto</mat-card-title>
+    <mat-card-title *ngIf="data">Editar Producto</mat-card-title> -->
+  </mat-toolbar>
+
   <form [formGroup]="ProductosForm" (ngSubmit)="Guardar(ProductosForm)">
     <mat-card-content>
       <mat-grid-list cols="2" rowHeight="70px">
         <mat-grid-tile>
           <mat-form-field>
-            <mat-select placeholder='Selecciona Tipo' formControlName="tipo" (selectionChange)="TipoSeleccionado($event)">
+            <mat-select placeholder='Tipo' formControlName="tipo" (selectionChange)="TipoSeleccionado($event)">
               <mat-option *ngFor="let tipo of Tipos" [value] = "tipo.id"> {{tipo.nombre}} </mat-option>
             </mat-select>
           </mat-form-field>
@@ -22,7 +29,7 @@
 
         <mat-grid-tile>
           <mat-form-field>
-            <mat-select placeholder='Selecciona Marca' formControlName="marca" (selectionChange)="MarcaSeleccionada($event)">
+            <mat-select placeholder='Marca' formControlName="marca" (selectionChange)="MarcaSeleccionada($event)">
               <mat-option *ngFor="let marca of Marcas" [value] = "marca.id"> {{marca.nombre}} </mat-option>
             </mat-select>
           </mat-form-field>
@@ -30,23 +37,30 @@
 
         <mat-grid-tile>
           <mat-form-field>
-            <mat-select placeholder='Selecciona Modelo'  formControlName="modelo">
+            <mat-select placeholder='Modelo'  formControlName="modelo">
               <mat-option *ngFor="let modelo of Modelos" [value] = "modelo.id"> {{modelo.nombre}} </mat-option>
             </mat-select>
           </mat-form-field>
         </mat-grid-tile>
 
         <mat-grid-tile>
+<<<<<<< HEAD
           <mat-form-field>
             <input matInput placeholder="Ingresa Precio Minimo" formControlName="precio"  class="example-right-align" >
             <mat-error *ngIf="ProductosForm.get('precio').invalid" >Debes escribir sólo números</mat-error>
             <span matPrefix>S/. </span>
+=======
+          <mat-form-field class="input-precio">
+            <input matInput placeholder="Precio de venta" formControlName="precio">
+            <mat-error *ngIf="ProductosForm.get('precio').invalid">Debes escribir sólo números</mat-error>
+            <span matPrefix>S/.&nbsp;</span>
+>>>>>>> 1297a7d44e7c367438c8320b8a05f33ad58ce4bf
           </mat-form-field>
         </mat-grid-tile>
 
         <mat-grid-tile [colspan]="2">
           <mat-form-field class="input-ventana">
-            <input matInput placeholder="Ingresa Descripcion del Producto" formControlName="descripcion" #InputDescripcion>
+            <input matInput placeholder="Descripción" formControlName="descripcion" #InputDescripcion>
           </mat-form-field>
         </mat-grid-tile>
       </mat-grid-list>
