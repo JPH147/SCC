@@ -6,11 +6,30 @@
     [attr.role]="'navigation'"
     [mode]=" 'side'"
     [(opened)]="estado">
-    <mat-toolbar color="primary"> Menu </mat-toolbar>
-    <div class="cabecera-menu">
-        <div class="imagen"></div>
-        <mat-toolbar color="primary">{{usuarios.nombre}}</mat-toolbar>
+    <!-- <mat-toolbar color="primary"> Menu </mat-toolbar> -->
+    
+    <div class="menu-empresa" color="primary">
+      <!-- <img src="assets/alvis.png" alt="Logo principal" class="imagen-menu"> -->
+      <!-- &nbsp; -->
+      Cooperativa Alvis
     </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="cabecera-menu">
+      <div class="avatar-usuario">
+        <img src="assets/avatares/avatar1.png" alt="" class="imagen-responsiva">  
+      </div>
+      <div class="datos-usuario">
+        <div class="nombre-usuario">
+          {{usuario.nombre}}
+        </div>
+        <div class="rol-usuario">
+          {{usuario.rol}}
+        </div>
+      </div>
+    </div>
+    <mat-divider></mat-divider>
     <div class="menu">
         <app-menu></app-menu>
     </div>
@@ -30,7 +49,6 @@
      <mat-icon class="icono">chat</mat-icon>
      <mat-icon class="icono">account_circle</mat-icon>
     </mat-toolbar>
-    <!-- Add Content Here -->
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

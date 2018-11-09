@@ -1,45 +1,131 @@
-import {FlatTreeControl} from '@angular/cdk/tree';
-import {Component, Injectable} from '@angular/core';
-import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
-import {BehaviorSubject, Observable, of as observableOf} from 'rxjs';
+import {Component, OnInit} from '@angular/core';
 
-/**
- * File node data with nested structure.
- * Each node has a filename, and a type or a list of children.
- */
-export class FileNode {
-  children: FileNode[];
-  filename: string;
-  type: any;
+@Component({
+  selector: 'app-menu',
+  templateUrl: 'menu.component.html',
+  styleUrls: ['menu.component.css'],
+  providers: []
+})
+export class MenuComponent implements OnInit{
+
+  public menu: Menu[];
+
+  constructor( ) {
+  }
+
+  ngOnInit(){
+    this.menu=[
+      // {
+      //   nombre: "Inicio",
+      //   icono: "home",
+      //   disabled:false,
+      //   submenu:[]
+      // },
+      {
+        nombre: "Ventas",
+        icono: "store_mall_directory",
+        disabled:false,
+        submenu:[
+          {
+            nombre: "Clientes",
+            path: "clientes"
+          },
+          {
+            nombre: "Ventas",
+            path: "ventas"
+          },
+          {
+            nombre: "Devoluciones",
+            path: "devoluciones"
+          },
+          {
+            nombre: "Salida de ventas",
+            path: "salidavendedores"
+          },
+          {
+            nombre: "Comisiones",
+            path: "comisiones"
+          }
+        ]
+      },
+      {
+        nombre: "Inventarios",
+        icono: "domain",
+        disabled:false,
+        submenu:[
+          {
+            nombre: "Productos",
+            path: "productos"
+          },
+          {
+            nombre: "Stock",
+            path: "stock"
+          },
+          {
+            nombre: "Historial de documentos",
+            path: "movimientos"
+          },
+          {
+            nombre: "Historial de series",
+            path: "series"
+          }
+        ]
+      },
+      {
+        nombre: "Créditos",
+        icono: "account_balance",
+        disabled:true,
+        submenu:[]
+      },
+      {
+        nombre: "Cobranzas",
+        icono: "gavel",
+        disabled:true,
+        submenu:[]
+      },
+      {
+        nombre: "Tablas maestras",
+        icono: "table_chart",
+        disabled:false,
+        submenu:[
+          {
+            nombre: "Cooperativa",
+            path: ""
+          },
+          {
+            nombre: "Proveedores",
+            path: "proveedores"
+          },
+          {
+            nombre: "Productos",
+            path: "detalleproductos"
+          },
+          {
+            nombre: "Instituciones",
+            path: ""
+          }
+        ]
+      },
+    ]
+  }
+
 }
 
-/** Flat node with expandable and level information */
-export class FileFlatNode {
-  constructor(
-    public expandable: boolean, public filename: string, public level: number, public type: any) {}
+export interface Menu{
+  nombre: string,
+  icono:string,
+  disabled:boolean,
+  submenu: Submenu[]
 }
 
-/**
- * The file structure tree data in string. The data could be parsed into a Json object
- */
+export interface Submenu{
+  nombre:string,
+  path:string,
+}
+
+/*
+
 const TREE_DATA = JSON.stringify({
-  Ventas: {
-    Clientes: 'clientes',
-    Ventas: 'ventas',
-    Devoluciones: 'devoluciones',
-    'Salida de vendedores': 'salidavendedores',
-    Comisiones: 'comisiones',
-  },
-  Almacenes: {
-    Productos: 'productos',
-    Stock: 'stock',
-    Historial: {
-      'Movimientos de almacén':'movimientos',
-      'Movimientos de series':'series'
-    },
-  },
-  Créditos:'',
-  Cobranzas: '',
   'Administración del sistema': {
     Usuarios: 'usuarios',
     Proveedores: 'proveedores',
@@ -58,96 +144,4 @@ const TREE_DATA = JSON.stringify({
     }
   }
 });
-
-/**
- * File database, it can build a tree structured Json object from string.
- * Each node in Json object represents a file or a directory. For a file, it has filename and type.
- * For a directory, it has filename and children (a list of files or directories).
- * The input will be a json object string, and the output is a list of `FileNode` with nested
- * structure.
- */
-@Injectable()
-export class FileDatabase {
-  dataChange = new BehaviorSubject<FileNode[]>([]);
-
-  get data(): FileNode[] { return this.dataChange.value; }
-
-  constructor() {
-    this.initialize();
-  }
-
-  initialize() {
-    // Parse the string to json object.
-    const dataObject = JSON.parse(TREE_DATA);
-
-    // Build the tree nodes from Json object. The result is a list of `FileNode` with nested
-    //     file node as children.
-    const data = this.buildFileTree(dataObject, 0);
-
-    // Notify the change.
-    this.dataChange.next(data);
-  }
-
-  /**
-   * Build the file structure tree. The `value` is the Json object, or a sub-tree of a Json object.
-   * The return value is the list of `FileNode`.
-   */
-  buildFileTree(obj: object, level: number): FileNode[] {
-    return Object.keys(obj).reduce<FileNode[]>((accumulator, key) => {
-      const value = obj[key];
-      const node = new FileNode();
-      node.filename = key;
-
-      if (value != null) {
-        if (typeof value === 'object') {
-          node.children = this.buildFileTree(value, level + 1);
-        } else {
-          node.type = value;
-        }
-      }
-
-      return accumulator.concat(node);
-    }, []);
-  }
-}
-
-/**
- * @title Tree with flat nodes
- */
-@Component({
-  selector: 'app-menu',
-  templateUrl: 'menu.component.html',
-  styleUrls: ['menu.component.css'],
-  providers: [FileDatabase]
-})
-export class MenuComponent {
-  treeControl: FlatTreeControl<FileFlatNode>;
-  treeFlattener: MatTreeFlattener<FileNode, FileFlatNode>;
-  dataSource: MatTreeFlatDataSource<FileNode, FileFlatNode>;
-
-  constructor(database: FileDatabase) {
-    this.treeFlattener = new MatTreeFlattener(this.transformer, this._getLevel,
-      this._isExpandable, this._getChildren);
-    this.treeControl = new FlatTreeControl<FileFlatNode>(this._getLevel, this._isExpandable);
-    this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
-
-    database.dataChange.subscribe(data => this.dataSource.data = data);
-  }
-
-  transformer = (node: FileNode, level: number) => {
-    return new FileFlatNode(!!node.children, node.filename, level, node.type);
-  }
-
-  private _getLevel = (node: FileFlatNode) => node.level;
-
-  private _isExpandable = (node: FileFlatNode) => node.expandable;
-
-  private _getChildren = (node: FileNode): Observable<FileNode[]> => observableOf(node.children);
-
-  hasChild = (_: number, _nodeData: FileFlatNode) => _nodeData.expandable;
-}
-
-
-/**  Copyright 2018 Google Inc. All Rights Reserved.
-    Use of this source code is governed by an MIT-style license that
-    can be found in the LICENSE file at http://angular.io/license */
+*/

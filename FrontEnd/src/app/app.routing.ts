@@ -24,6 +24,7 @@ import { DetalleDocumentoAlmacenComponent } from './components/detalle-documento
 
 const appRoutes: Routes = [
   {path: 'usuarios', component: UsuariosComponent},
+  {path: 'usuarios', component: UsuariosComponent},
   {path: 'productos', component: ProductosComponent},
   {path: 'series', component: HistorialSerieComponent},
   {path: 'movimientos', component: HistorialMovimientosComponent},

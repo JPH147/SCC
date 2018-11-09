@@ -100,7 +100,8 @@ ngAfterViewInit () {
  Agregar() {
    // tslint:disable-next-line:prefer-const
    let VentanaProductos = this.DialogoProductos.open(VentanaEmergenteProductos, {
-     width: '600px'
+     width: '600px',
+     panelClass: "dialogo-rediseno"
    });
 
    VentanaProductos.afterClosed().subscribe(res => {

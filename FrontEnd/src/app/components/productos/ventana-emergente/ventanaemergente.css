@@ -20,7 +20,7 @@
 }
 
 .input-ventana{ 
-  width:75%
+  width:80%
 }
 
 .mensaje-error{
@@ -37,7 +37,7 @@
 }
 .card{
   padding: 0px;
-  border-radius: 10px 10px;
+  /*border-radius: 10px 10px;*/
   overflow: hidden;
 }
 
@@ -60,4 +60,8 @@ mat-header-cell {
   font-size: 14px;
   background-color:#673ab7;
   color: #fff;
+}
+
+.input-precio{
+  max-width: 180px;
 }
