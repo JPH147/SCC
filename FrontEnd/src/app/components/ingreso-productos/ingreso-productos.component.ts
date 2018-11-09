@@ -31,6 +31,8 @@ import {ProductoService} from '../productos/productos.service';
     public clientes: Array<any> = [];
     public Vendedores: Array<any> = [];
     public Sucursales: Array<any> = [];
+    public almacen_origen: Array<any> = [];
+    public almacen_destino: Array<any> = [];
     public seriventana: string;
     public tipoIngreso: string;      // Tipo de Ingreso Almacen
     public docReferencia: string; // documento referencia de ingreso almncen
@@ -144,6 +146,9 @@ import {ProductoService} from '../productos/productos.service';
       this.Series = [];
       this.Articulos.Listado('', '', '', '', null,null,1, 10, 'descripcion', 'asc',1).subscribe(res => this.Producto = res['data'].productos);
       
+      this.almacen_destino=this.almacenes;
+      this.almacen_destino=this.almacen_destino.filter(e=>e.id!=event.value.id);
+
       if (event.value==7) {
         this.IngresoProductoForm.get('productos')['controls'].forEach((item, index)=>{
           item.get('precioUnitario').disable()
@@ -276,17 +281,34 @@ import {ProductoService} from '../productos/productos.service';
     }
 
     // Selector Almacenes Activos
-    ListarAlmacen() {
-      this.Servicios.ListarAlmacen().subscribe( res => {
-        this.almacenes = [];
-        // tslint:disable-next-line:forin
-        for ( let i in res) {
-          this.almacenes.push(res [i]);
-        }
+    //ListarAlmacen() {
+    // this.Servicios.ListarAlmacen().subscribe( res => {
+    //    this.almacenes = [];
+    //    // tslint:disable-next-line:forin
+    //    for ( let i in res) {
+    //      this.almacenes.push(res [i]);
+   //     }
+//
+  //    });
 
-      });
+  //  }
 
+
+// Selector Almacenes Activos
+ListarAlmacen() {
+  this.Servicios.ListarAlmacen().subscribe( res => {
+    this.almacenes=res;
+    this.almacen_origen=res;
+    this.almacen_destino=res;
+  })
+}
+
+
+    AlmacenSeleccionado(evento){
+      this.almacen_origen=this.almacenes;
+      this.almacen_origen=this.almacen_origen.filter(e=>e.id!=evento.value)
     }
+
 
   AgregarSerie(producto,index) {
 

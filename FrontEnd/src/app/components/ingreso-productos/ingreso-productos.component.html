@@ -34,8 +34,8 @@
          <!-- Seleccionar Almacen -->
         <mat-grid-tile>
           <mat-form-field class="example-full-width">
-              <mat-select placeholder="Almacen" formControlName="almacen">
-                <mat-option *ngFor="let almacen of almacenes" [value]="almacen.id">
+              <mat-select placeholder="Almacen de Origen" formControlName="almacen" (selectionChange)="ResetearForm($event)">
+                <mat-option *ngFor="let almacen of almacen_origen" [value]="almacen">
                   {{almacen.nombre}}
                 </mat-option>
               </mat-select>
@@ -80,8 +80,8 @@
             </mat-form-field>
 
             <mat-form-field class="example-full-width" *ngSwitchCase="7" >
-              <mat-select placeholder="Selecciona Almacen Destino" formControlName="almacen1">
-                <mat-option *ngFor="let almacen of almacenes" [value]="almacen.id">
+              <mat-select placeholder="Almacen Destino" formControlName="almacen1" (selectionChange)="AlmacenSeleccionado($event)" >
+                <mat-option *ngFor="let almacen of almacen_destino" [value]="almacen.id">
                   {{almacen.nombre}}
                 </mat-option>
               </mat-select>
@@ -161,7 +161,7 @@
 
             <mat-grid-tile colspan="2">
               <mat-form-field  class="example-full-width">
-                <input matInput placeholder="Precio unitario" formControlName="precioUnitario">
+                <input matInput placeholder="Precio unitario" formControlName="precioUnitario" class="example-right-align" >
                 <span matPrefix>S/.&nbsp;</span>
               </mat-form-field>
             </mat-grid-tile>

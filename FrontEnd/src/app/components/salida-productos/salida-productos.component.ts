@@ -206,7 +206,7 @@ GuardarTransferenciaAlmacen(formulario) {
       duration: 2000,
     });
   });
-
+  this.ResetearForm(formulario)
 
 }
 

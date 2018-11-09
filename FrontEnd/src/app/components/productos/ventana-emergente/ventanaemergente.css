@@ -61,3 +61,8 @@ mat-header-cell {
   background-color:#673ab7;
   color: #fff;
 }
+
+
+.example-right-align {
+  text-align: right;
+}
