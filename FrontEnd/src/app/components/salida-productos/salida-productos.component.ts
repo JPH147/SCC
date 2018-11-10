@@ -67,14 +67,14 @@ export class SalidaProductosComponent implements OnInit {
       for (let i in this.FiltroProducto['_results']) {
         fromEvent(this.FiltroProducto['_results'][i].nativeElement,'keyup')
         .pipe(
-            debounceTime(100),
-            distinctUntilChanged(),
-            tap(()=>{
-              if (this.FiltroProducto['_results'][i].nativeElement.value) {
-                this.ProductoSeleccionado(this.FiltroProducto['_results'][i].nativeElement.value)
-              }
-            })
-          ).subscribe()
+          debounceTime(100),
+          distinctUntilChanged(),
+          tap(()=>{
+            if (this.FiltroProducto['_results'][i].nativeElement.value) {
+              this.ProductoSeleccionado(this.FiltroProducto['_results'][i].nativeElement.value)
+            }
+          })
+        ).subscribe()
       }
     })
   }
@@ -94,6 +94,12 @@ export class SalidaProductosComponent implements OnInit {
     this.Articulos.ListarStock(event.value.nombre, '', '', '', '', 1, 20, 'descripcion asc').subscribe(res=>this.Producto=res['data'].stock);
     this.almacen_destino=this.almacenes;
     this.almacen_destino=this.almacen_destino.filter(e=>e.id!=event.value.id);
+  }
+
+  Reset(){
+    this.SalidaProductosForm.reset();
+    // this.SalidaProductosForm.controls['control'].markAsPristine();
+    this.ResetearFormArray(this.productos);
   }
 
   ResetearFormArray = (formArray: FormArray) => {

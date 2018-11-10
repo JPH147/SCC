@@ -47,27 +47,10 @@
   font-size: 16px;
 }
 
-mat-row:nth-child(even){
-  background-color:#f2f2f2;
-  }
-
-mat-row:nth-child(odd){
-  background-color:white;
-  }
-
-mat-header-cell {
-  font-weight:  bold;
-  font-size: 14px;
-  background-color:#673ab7;
-  color: #fff;
-}
-
-<<<<<<< HEAD
-
 .example-right-align {
   text-align: right;
-=======
-.input-precio{
-  max-width: 180px;
->>>>>>> 1297a7d44e7c367438c8320b8a05f33ad58ce4bf
+}
+
+mat-form-field.input-precio{
+  width: 180px;
 }

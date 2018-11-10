@@ -42,19 +42,20 @@
             </mat-select>
           </mat-form-field>
         </mat-grid-tile>
-
+<!-- 
         <mat-grid-tile>
-<<<<<<< HEAD
           <mat-form-field>
             <input matInput placeholder="Ingresa Precio Minimo" formControlName="precio"  class="example-right-align" >
             <mat-error *ngIf="ProductosForm.get('precio').invalid" >Debes escribir sólo números</mat-error>
             <span matPrefix>S/. </span>
-=======
+          </mat-form-field>
+        </mat-grid-tile> -->
+
+        <mat-grid-tile>
           <mat-form-field class="input-precio">
             <input matInput placeholder="Precio de venta" formControlName="precio">
             <mat-error *ngIf="ProductosForm.get('precio').invalid">Debes escribir sólo números</mat-error>
             <span matPrefix>S/.&nbsp;</span>
->>>>>>> 1297a7d44e7c367438c8320b8a05f33ad58ce4bf
           </mat-form-field>
         </mat-grid-tile>
 
