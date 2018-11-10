@@ -62,12 +62,11 @@ mat-header-cell {
   color: #fff;
 }
 
-<<<<<<< HEAD
 
 .example-right-align {
   text-align: right;
-=======
+}
+
 .input-precio{
   max-width: 180px;
->>>>>>> 1297a7d44e7c367438c8320b8a05f33ad58ce4bf
 }
