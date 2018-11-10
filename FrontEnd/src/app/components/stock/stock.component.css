@@ -59,16 +59,6 @@ table {
   text-align: center;
 }
 
-/* Column Widths */
-.mat-column-number,
-.mat-column-state {
-  max-width: 64px;
-}
-
-.mat-column-created {
-  max-width: 124px;
-}
-
 mat-card{
   width: 80%;
   position: relative;
@@ -83,29 +73,19 @@ mat-card{
   margin-left: 25px;
 }
 
-.mat-column-modelo,
-.mat-column-tipo,
-.mat-column-marca,
-.mat-column-almacen,
-.mat-column-unidad_medida
 
-{
-  max-width: 11%;
-}
-
-<<<<<<< HEAD
-.mat-column-descripcion
-{
-  max-width: 27%;
-}
-
-=======
->>>>>>> 1297a7d44e7c367438c8320b8a05f33ad58ce4bf
 .mat-column-cantidad,
 .mat-column-numero,
-.mat-column-opciones
-{
+.mat-column-opciones{
   max-width: 5%;
+}
+
+.mat-column-almacen,
+.mat-column-tipo,
+.mat-column-marca,
+.mat-column-modelo,
+.mat-column-unidad_medida{
+  max-width: 10%
 }
 
 .agregar{

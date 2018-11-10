@@ -6,6 +6,7 @@ Class TransaccionCabecera{
 
     private $conn;
     private $detalle;
+    public $resultado;
 
     public $numero_pagina;
     public $total_pagina;

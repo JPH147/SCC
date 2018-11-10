@@ -1,9 +1,10 @@
+  <mat-toolbar color="primary">
+    <mat-toolbar-row *ngIf="!data">Agregar marca</mat-toolbar-row>
+    <mat-toolbar-row *ngIf="data">Editar marca</mat-toolbar-row>
+  </mat-toolbar>
+
   <mat-card class="card">
-    <mat-card-header >
-      <mat-card-title *ngIf="!data">Agregar Marca</mat-card-title>
-      <mat-card-title *ngIf="data">Editar Marca</mat-card-title>
-    </mat-card-header>
-  
+
     <form [formGroup]="MarcaForm" (ngSubmit)="Guardar(MarcaForm); Notificacion(mensaje,'')">
       
       <mat-card-content>

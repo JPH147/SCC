@@ -18,7 +18,7 @@ constructor(private http: HttpClient) {}
 
 
     AgregarCompraMercaderia(
-    pralmacen: number,
+      pralmacen: number,
       prtipo: number,
       pr_referencia: number,
       prproveedor: number,
@@ -32,8 +32,10 @@ constructor(private http: HttpClient) {}
       .set('prtipo', prtipo.toString())
       .set('prreferencia', pr_referencia.toString())
       .set('prproveedor', prproveedor.toString())
-      .set('prfecha', moment (prfecha).format('YYYY/MM/DD').toString())
-      .set('prdocumento', prdocumento.toString());
+      .set('prfecha', moment (prfecha).format('YYYY/MM/DD'))
+      .set('prdocumento', prdocumento);
+
+      // console.log(params);
 
       // tslint:disable-next-line:prefer-const
       let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');

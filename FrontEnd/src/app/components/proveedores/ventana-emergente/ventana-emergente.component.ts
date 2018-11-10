@@ -19,7 +19,8 @@ export class VentanaEmergenteProveedores {
   public TipoDocumento: any;
   public Documento: any[];
   public Nombre: any[];
-
+  public tipo_documento: string;
+  public identificador_nombre: string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
@@ -80,6 +81,10 @@ export class VentanaEmergenteProveedores {
       //this.ProveedoresForm.controls['sede'].enable();
       //this.ProveedoresForm.controls['subsede'].enable();
     }
+
+    this.tipo_documento="Documento";
+    this.identificador_nombre="Nombre"
+
   }
 
   ListarTipoDocumento() {
@@ -94,8 +99,15 @@ export class VentanaEmergenteProveedores {
   }
 
   DocumentoSeleccionado(event) {
-    //this.ProveedoresForm.get('tipodocumento').setValue('tipodocumento.nombre');
-    console.log(this.ProveedoresForm.value.tipodocumento)
+    if (event.value==1) {
+      this.tipo_documento="DNI";
+      this.identificador_nombre="Nombre"
+    }
+    if (event.value==2) {
+      this.tipo_documento="RUC";
+      this.identificador_nombre="Razón social"
+    }
+
   }
 
 
