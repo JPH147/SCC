@@ -19,6 +19,8 @@
               <mat-option *ngFor="let tipo of Tipos" [value] = "tipo.id"> {{tipo.nombre}} </mat-option>
             </mat-select>
           </mat-form-field>
+          <!--<button mat-icon-button color="primary" (click)= "AgregarTipo()" Tooltip = "Agregar Tipo"> <mat-icon> add </mat-icon></button>-->
+          <button mat-mini-fab matTooltip="Agregar Tipo de Producto" color="primary" class="agregar" (click)="AgregarTipo()"><mat-icon> add </mat-icon></button>
         </mat-grid-tile>
 
         <mat-grid-tile>
@@ -33,6 +35,7 @@
               <mat-option *ngFor="let marca of Marcas" [value] = "marca.id"> {{marca.nombre}} </mat-option>
             </mat-select>
           </mat-form-field>
+          <button mat-mini-fab matTooltip="Agregar Marca" color="primary" class="agregar" (click)="AgregarMarca()"><mat-icon> add </mat-icon></button>
         </mat-grid-tile>
 
         <mat-grid-tile>
@@ -41,6 +44,7 @@
               <mat-option *ngFor="let modelo of Modelos" [value] = "modelo.id"> {{modelo.nombre}} </mat-option>
             </mat-select>
           </mat-form-field>
+          <button mat-mini-fab matTooltip="Agregar Modelo" color="primary" class="agregar" (click)="AgregarModelo()"><mat-icon> add </mat-icon></button>
         </mat-grid-tile>
 <!-- 
         <mat-grid-tile>

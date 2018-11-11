@@ -1,8 +1,8 @@
 <mat-card class="card">
-  <mat-card-header >
-    <mat-card-title *ngIf="!data">Agregar Modelo</mat-card-title>
-    <mat-card-title *ngIf="data">Editar Modelo</mat-card-title>
-  </mat-card-header>
+  <mat-toolbar color="primary">
+    <mat-toolbar-row *ngIf="!data"><h4>Agregar Modelo</h4></mat-toolbar-row>
+  <mat-toolbar-row *ngIf="data">Editar Modelo</mat-toolbar-row>
+</mat-toolbar>
 
   <form [formGroup]="ModeloForm" (ngSubmit)="Guardar(ModeloForm); Notificacion(mensaje,'')">
     

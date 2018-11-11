@@ -1,8 +1,8 @@
 <mat-card class="card">
-    <mat-card-header >
-      <mat-card-title *ngIf="!data">Agregar Tipo de Productos</mat-card-title>
-      <mat-card-title *ngIf="data">Editar Tipo de Productos</mat-card-title>
-    </mat-card-header>
+  <mat-toolbar color="primary">
+      <mat-toolbar-row *ngIf="!data"><h4>Agregar Tipo de Productos</h4></mat-toolbar-row>
+    <mat-toolbar-row *ngIf="data">Editar Tipo de Productos</mat-toolbar-row>
+  </mat-toolbar>
   
     <form [formGroup]="TipoForm" (ngSubmit)="Guardar(TipoForm); Notificacion(mensaje,'')">
       

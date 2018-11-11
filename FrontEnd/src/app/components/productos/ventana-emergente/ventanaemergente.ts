@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit, AfterViewInit, ViewChild, ElementRef} from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material';
 import {FormControl, FormGroup, FormBuilder, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {ServiciosGenerales, TipoProductoModelo, MarcaModelo, ModeloModelo} from '../../global/servicios';
@@ -7,6 +7,9 @@ import { NgControl } from '@angular/forms';
 import {ProductoService} from '../productos.service';
 import {merge,fromEvent} from 'rxjs';
 import {tap, debounceTime, distinctUntilChanged} from 'rxjs/operators';
+import { VentanaEmergenteTipo } from '../../detalleproductos/tipo/ventana-emergente/ventanaemergente';
+import { VentanaEmergenteModelo } from '../../detalleproductos/modelo/ventana-emergente/ventanaemergente';
+import { VentanaEmergenteMarca } from '../../detalleproductos/marca/ventana-emergente/ventanaemergente';
 
 @Component({
   selector: 'app-ventanaemergente',
@@ -36,6 +39,10 @@ export class VentanaEmergenteProductos {
     private FormBuilder: FormBuilder,
     private Servicios: ServiciosGenerales,
     private ProductoServicios: ProductoService,
+    public DialogoTipo: MatDialog,
+    public DialogoMarca: MatDialog,
+    public DialogoModelo: MatDialog,
+    public DialogoProductos: MatDialog
     ) {}
 
   onNoClick(): void {
@@ -67,6 +74,7 @@ export class VentanaEmergenteProductos {
     });
 
     /*Relación de productos*/
+
     this.Servicios.ListarTipoProductos('', '').subscribe(res => {
       for (let i in res) {
         this.Tipos.push(res[i]);
@@ -101,6 +109,61 @@ export class VentanaEmergenteProductos {
      ).subscribe()
   }
 
+
+  AgregarTipo() {
+
+    let VentanaTipo = this.DialogoTipo.open(VentanaEmergenteTipo, {
+      width: '350px',
+      panelClass: "dialogo-rediseno"
+    });
+ 
+    VentanaTipo.afterClosed().subscribe(res => {
+      //this.ListarTipos();
+
+      let VentanaProductos = this.DialogoProductos.open(VentanaEmergenteProductos,{
+        width: '600px',
+        panelClass: "dialogo-rediseno"
+
+      });
+    });
+  }
+
+  AgregarMarca() {
+
+    let VentanaTipo = this.DialogoTipo.open(VentanaEmergenteMarca, {
+      width: '350px',
+      panelClass: "dialogo-rediseno"
+    });
+ 
+    VentanaTipo.afterClosed().subscribe(res => {
+      //this.ListarTipos();
+
+      let VentanaProductos = this.DialogoProductos.open(VentanaEmergenteProductos,{
+        width: '600px',
+        panelClass: "dialogo-rediseno"
+
+      });
+    });
+  }
+
+  AgregarModelo() {
+
+    let VentanaTipo = this.DialogoTipo.open(VentanaEmergenteModelo, {
+      width: '350px',
+      panelClass: "dialogo-rediseno"
+    });
+ 
+    VentanaTipo.afterClosed().subscribe(res => {
+      //this.ListarTipos();
+
+      let VentanaProductos = this.DialogoProductos.open(VentanaEmergenteProductos,{
+        width: '600px',
+        panelClass: "dialogo-rediseno"
+
+      });
+    });
+  }
+
   /* Se muestran marcas cuando se selecciona un tipo de producto */
   TipoSeleccionado(event) {
       this.ListarMarcas(event.value);
@@ -132,6 +195,15 @@ export class VentanaEmergenteProductos {
       this.ProductosForm.reset();
       this.ventana.close();
   }
+
+  ListarTipos(){
+    this.Servicios.ListarTipoProductos('', '').subscribe(res => {
+      this.Marcas = [];
+      // tslint:disable-next-line:forin
+      for (let i in res) {
+        this.Tipos.push(res[i]);
+      }
+    })}
 
   ListarMarcas(i) {
     this.Servicios.ListarMarca(i, '').subscribe(res => {
