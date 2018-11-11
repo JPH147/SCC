@@ -32,6 +32,8 @@ Class TransaccionCabecera{
     public $fecha_fin;
     public $documento;
     public $transaccion_detalle;
+    public $tipo_transaccion;
+    public $proxnumero;
 
     public function __construct($db){
         $this->conn = $db;
@@ -350,6 +352,23 @@ Class TransaccionCabecera{
         $this->total_resultado=$row['total'];
 
         return $this->total_resultado;
+    }
+
+    function select(){
+
+        $query = "CALL sp_seleccionarproxdocalmacen(?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_almacen);
+        $result->bindParam(2, $this->tipo_transaccion);
+
+        $result->execute();
+
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        $this->serie=$row['serie'];
+        $this->proxnumero=$row['numero'];
     }
 
 }

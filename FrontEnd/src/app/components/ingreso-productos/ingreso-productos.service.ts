@@ -137,4 +137,28 @@ constructor(private http: HttpClient) {}
   }
 
 
+  ObtenerNumeroDocumento(
+    almacen:number,
+    tipo:number // 1. Ingreso, 2. Salida
+  ): Observable<any> {
+    let params = new HttpParams()
+    
+    return this.http.get(this.url+'transaccioncabecera/select.php',{
+			params: new HttpParams()
+			.set ('id_almacen', almacen.toString())
+      .set('tipo_transaccion', tipo.toString())
+		})
+		.pipe(map(res=>{
+			if(res['codigo']===0){
+				return res=res
+			}else{
+				console.log('Error al importar los datos, revisar servicio')
+			}
+		}))
+   
+  }
+
+
+
+
 }

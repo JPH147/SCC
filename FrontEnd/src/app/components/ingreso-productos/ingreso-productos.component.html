@@ -3,7 +3,7 @@
   <button mat-mini-fab type="button" color="primary" [routerLink]="['../']"><mat-icon>keyboard_arrow_left</mat-icon></button>
 
   <mat-card-title>
-    <div id = "tituloProd"> Ingreso de Productos Nro.</div>
+    <div id = "tituloProd"> Ingreso de Productos Nro. {{documento_serie}}-{{documento_numero}}</div>
   </mat-card-title>
 
   <form [formGroup]="IngresoProductoForm" (submit)="Guardar(IngresoProductoForm)">
@@ -34,7 +34,7 @@
          <!-- Seleccionar Almacen -->
         <mat-grid-tile>
           <mat-form-field class="example-full-width">
-              <mat-select placeholder="Almacen de Origen" formControlName="almacen" (selectionChange)="ResetearForm($event)">
+              <mat-select placeholder="Almacen de Origen" formControlName="almacen"  (selectionChange)="ResetearForm($event)">
                 <mat-option *ngFor="let almacen of almacen_origen" [value]="almacen">
                   {{almacen.nombre}}
                 </mat-option>

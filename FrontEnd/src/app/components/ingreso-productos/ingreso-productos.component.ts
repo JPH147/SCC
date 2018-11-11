@@ -15,7 +15,7 @@ import {ProductoService} from '../productos/productos.service';
   selector: 'app-ingreso-productos',
   templateUrl: './ingreso-productos.component.html',
   styleUrls: ['./ingreso-productos.component.css'],
-  providers: [ServiciosGenerales, IngresoProductoService,ProductoService,ServiciosProductoSerie]
+  providers: [ServiciosGenerales, IngresoProductoService, ProductoService, ServiciosProductoSerie]
 })
   export class IngresoProductosComponent implements OnInit {
 
@@ -42,6 +42,8 @@ import {ProductoService} from '../productos/productos.service';
     public nombre: string;
     public fecingreso: Date;      // fecha de ingreso a almcen
     public  data;
+    public documento_serie:string;
+    public documento_numero:number;
 
 
     @ViewChildren('InputProducto') FiltroProducto: QueryList<any>;
@@ -65,8 +67,12 @@ import {ProductoService} from '../productos/productos.service';
 
     ngOnInit() {
 
+      this.documento_serie="";
+      this.documento_numero=null;
+      
       this.ListarAlmacen();
       this.ListarTransaccionTipo();
+      //this.ObtenerNumeroDocumento('');
       this.ListarProveedor('');
       this.ListarCliente('');
       this.ListarVendedor('');
@@ -90,6 +96,7 @@ import {ProductoService} from '../productos/productos.service';
           'precioUnitario': [null, [Validators.required]],
           productos: this.FormBuilder.array([this.CrearProducto()])
       });
+      
     }
 
     // tslint:disable-next-line:use-life-cycle-interface
@@ -119,6 +126,7 @@ import {ProductoService} from '../productos/productos.service';
             ).subscribe()
         }
       })
+
     }
 
     /*********************************************/
@@ -158,7 +166,7 @@ import {ProductoService} from '../productos/productos.service';
           item.get('precioUnitario').enable()
         })
       }
-
+      this.ObtenerNumeroDocumento(this.IngresoProductoForm.value.almacen['id']);
 
     }
 
@@ -293,6 +301,17 @@ import {ProductoService} from '../productos/productos.service';
 
   //  }
 
+  ObtenerNumeroDocumento(id_almacen){
+    // this.MovimientoIngresoForm.value.almacen
+    
+    this.IngresoProductoservicios.ObtenerNumeroDocumento(id_almacen,1).subscribe(res=>{
+      if(res)
+      {
+        this.documento_serie=res['data'].serie;
+        this.documento_numero=res['data'].numero;
+      }
+    })
+  }
 
 // Selector Almacenes Activos
 ListarAlmacen() {
@@ -300,13 +319,15 @@ ListarAlmacen() {
     this.almacenes=res;
     this.almacen_origen=res;
     this.almacen_destino=res;
+   //console.log(this.almacen_origen)
   })
 }
 
-
     AlmacenSeleccionado(evento){
       this.almacen_origen=this.almacenes;
-      this.almacen_origen=this.almacen_origen.filter(e=>e.id!=evento.value)
+      this.almacen_origen=this.almacen_origen.filter(e=>e.id!=evento.value);
+      this.ObtenerNumeroDocumento(evento.e)
+     
     }
 
 
