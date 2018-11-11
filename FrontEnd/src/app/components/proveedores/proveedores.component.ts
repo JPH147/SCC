@@ -16,7 +16,7 @@ import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-con
 export class ProveedoresComponent implements OnInit {
 
   ListadoProveedor: ProveedorDataSource;
-  Columnas: string[] = ['numero', 'tipo_documento', 'ruc', 'nombre','representante_legal','opciones'];
+  Columnas: string[] = ['numero', 'tipo_documento', 'ruc', 'nombre','opciones'];
   public maestro;
 
   @ViewChild('InputRUC') FiltroRuc: ElementRef;
@@ -81,9 +81,6 @@ export class ProveedoresComponent implements OnInit {
  
     VentanaProveedores.afterClosed().subscribe(res => {
      this.CargarData();
-     /*this.snackBar.open('Se creó el cliente satisfactoriamente.', '', {
-       duration: 2500
-     });*/
    });
   }
 

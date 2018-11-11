@@ -1,17 +1,13 @@
 <mat-card>
     <div>
-        <button mat-fab matTooltip="Agregar Proveedor" class="agregar"  (click)="Agregar()" color="primary"><mat-icon> person_add </mat-icon></button>
-      </div>
+      <button mat-fab matTooltip="Agregar Proveedor" class="agregar"  (click)="Agregar()" color="primary"><mat-icon> person_add </mat-icon></button>
+    </div>
    <!-- Encabezado -->
   <mat-card-title>
-    <div id = "tituloProd"> Listado de Proveedores</div>
+    <div id = "tituloProd"> Listado de proveedores</div>
   </mat-card-title>
 
-  <!-- <button mat-raised-button color="primary" class="agregar">Agregar Proveedor</button> -->
-  <br/><br/><br/>
-
-
-  <mat-grid-list cols=2 rowHeight="60px">
+  <mat-grid-list cols=4 rowHeight="70px">
       <mat-grid-tile>
         <mat-icon>search</mat-icon>
         <mat-form-field>
@@ -25,7 +21,8 @@
         </mat-form-field>
       </mat-grid-tile>
   </mat-grid-list>
-  <br/>
+
+
   <mat-card-content>
 
     <div class = "spinner-container" *ngIf = "ListadoProveedor.Cargando| async">
@@ -41,19 +38,14 @@
       </ng-container>
 
       <ng-container matColumnDef="ruc">
-        <mat-header-cell *matHeaderCellDef> Nro. Documento </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef> Documento </mat-header-cell>
         <mat-cell *matCellDef="let proveedor"> {{proveedor.documento}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="nombre">
-        <mat-header-cell *matHeaderCellDef> Razon Social / Nombre </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
         <mat-cell *matCellDef="let proveedor"> {{proveedor.nombre}} </mat-cell>
       </ng-container>
-
-      <ng-container matColumnDef="representante_legal">
-          <mat-header-cell *matHeaderCellDef> Representante Legal </mat-header-cell>
-          <mat-cell *matCellDef="let proveedor"> {{proveedor.representante_legal}} </mat-cell>
-        </ng-container>
 
         <ng-container matColumnDef="tipo_documento">
             <mat-header-cell *matHeaderCellDef> Tipo Documento </mat-header-cell>

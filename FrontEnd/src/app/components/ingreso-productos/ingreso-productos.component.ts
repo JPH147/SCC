@@ -363,12 +363,11 @@ ListarAlmacen() {
 
   Guardar(formulario) {
 
-   // tslint:disable-next-line:prefer-const
    let tipoingreso = formulario.value.tipoIngreso;
 
    if (tipoingreso === 1) {
     this.IngresoProductoservicios.AgregarCompraMercaderia(
-      formulario.value.almacen,
+      formulario.value.almacen.id,
       1,
       1,
       formulario.value.proveedor.id,
@@ -393,42 +392,6 @@ ListarAlmacen() {
 
       });
    }
-
-   
-
-   // if (tipoingreso === 2) {
-   //  this.IngresoProductoservicios.AgregarDevolucionCliente(
-   //    formulario.value.almacen,
-   //    2,
-   //    2,
-   //    formulario.value.cliente.id,
-   //    formulario.value.fecingreso,
-   //    formulario.value.docReferencia).subscribe (res => console.log(res));
-   // }
-
-   // if (tipoingreso === 6) {
-   //  this.IngresoProductoservicios.AgregarDevolucionVendedor (
-   //    formulario.value.almacen,
-   //    6,
-   //    5,
-   //    formulario.value.vendedor.id,
-   //    formulario.value.fecingreso,
-   //    formulario.value.docReferencia).subscribe (res => console.log(res));
-   // }
-
-   // if (tipoingreso === 7) {
-   //  this.IngresoProductoservicios.AgregarTransferenciaSucursal (
-   //    formulario.value.almacen,
-   //    7,
-   //    4,
-   //    formulario.value.almacen1,
-   //    formulario.value.fecingreso,
-   //     formulario.value.docReferencia).subscribe (res => console.log(res));
-   // }
-
-   // this.IngresoProductoForm.reset();
-   // this.Series=[];
-   // this.ResetearFormArray(this.productos);
   }
 
 }

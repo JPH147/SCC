@@ -1,31 +1,31 @@
+  <mat-toolbar color="primary">
+    <mat-toolbar-row *ngIf="!data">Agregar proveedor</mat-toolbar-row>
+    <mat-toolbar-row *ngIf="data">Editar proveedor</mat-toolbar-row>
+  </mat-toolbar>
+
 <mat-card class="card">
-    <mat-card-header>
-      <mat-card-title *ngIf="!data">Agregar Proveedor</mat-card-title>
-      <mat-card-title *ngIf="data">Editar Proveedor</mat-card-title>
-    </mat-card-header>
+
     <form [formGroup]="ProveedoresForm" (ngSubmit)="Guardar(ProveedoresForm)">
       <mat-card-content>
         <mat-grid-list cols="2" rowHeight="70px">
           <mat-grid-tile>
             <mat-form-field class="input-ventana" > 
               <mat-select placeholder='Selecciona Tipo Documento' formControlName="tipodocumento" (selectionChange)="DocumentoSeleccionado($event)" >
-                <mat-option *ngFor="let tipodocumento of TipoDocumento" [value] = "tipodocumento.id"> {{tipodocumento.nombre}} </mat-option>
+                <mat-option [value] = 1> DNI </mat-option>
+                <mat-option [value] = 2> RUC </mat-option>
               </mat-select>
             </mat-form-field>
           </mat-grid-tile>
 
           <mat-grid-tile>
-            <mat-form-field class="input-ventana" hintLabel="DNI 8 Digitos / RUC 11 Digitos" type="number">
-              <input matInput placeholder='Ingresa DNI/RUC' formControlName="documento" maxlength="11">
-                <!-- <mat-error *ngIf="ProveedoresForm.get('tipodocumento.id=1').invalid">Debes escribir sólo números</mat-error>   -->
-            <!--   <mat-option *ngFor="let documento of TipoDocumento" [value] = "TipoDocumento.documento"> {{TipoDocumento.documento}} </mat-option> -->
-            
+            <mat-form-field class="input-ventana" type="number">
+              <input matInput placeholder="{{tipo_documento}}" formControlName="documento">
             </mat-form-field>
           </mat-grid-tile>
 
           <mat-grid-tile>
             <mat-form-field class="input-ventana">
-              <input matInput placeholder='Ingresa Nombre / Razon Social' formControlName="nombre" >
+              <input matInput placeholder={{identificador_nombre}} formControlName="nombre" >
            <!--     <mat-option *ngFor="let nombre of tipodocumento" [value] = "tipodocumento.nombre"> {{TipoDocumento.nombre}} </mat-option> -->
               
             </mat-form-field>
@@ -56,3 +56,4 @@
       </mat-card-actions>
     </form>
   </mat-card>
+

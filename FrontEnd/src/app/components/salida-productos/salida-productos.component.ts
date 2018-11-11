@@ -52,12 +52,21 @@ export class SalidaProductosComponent implements OnInit {
 
 
     this.SalidaProductosForm = this.FormBuilder.group({
-      'almacen': [null, [Validators.required] ],
-      'almacen1': [null, [Validators.required] ],
-      'fechaingreso': [null, [Validators.required]],
-      'documento': [null, []],
+      'almacen': [null, [
+        Validators.required
+      ] ],
+      'almacen1': [null, [
+        Validators.required
+      ] ],
+      'fechaingreso': [null, [
+        Validators.required
+      ]],
+      'documento': [null, [
+        Validators.required
+      ]],
       productos: this.FormBuilder.array([this.CrearProducto()])
     });
+    this.CrearProducto();
 
   }
 
@@ -67,33 +76,53 @@ export class SalidaProductosComponent implements OnInit {
       for (let i in this.FiltroProducto['_results']) {
         fromEvent(this.FiltroProducto['_results'][i].nativeElement,'keyup')
         .pipe(
-            debounceTime(100),
-            distinctUntilChanged(),
-            tap(()=>{
+          debounceTime(100),
+          distinctUntilChanged(),
+          tap(()=>{
+            if (this.FiltroProducto['_results'][i]) {
               if (this.FiltroProducto['_results'][i].nativeElement.value) {
-                this.ProductoSeleccionado(this.FiltroProducto['_results'][i].nativeElement.value)
+                this.ProductoElegido(this.FiltroProducto['_results'][i].nativeElement.value)
               }
-            })
-          ).subscribe()
+            }
+          })
+        ).subscribe()
       }
     })
   }
 
   CrearProducto():FormGroup{
     return this.FormBuilder.group({
+      'id_producto':[{value:null, disabled:false},[
+      ]],
+      'descripcion':[{value:null, disabled:false},[
+      ]],
       'producto':[{value:null, disabled:false},[
+        Validators.required
       ]],
       'cantidad':[{value:null, disabled:true},[
-      ]]
+      ]],
+      'cantidad-validacion':[{value:null, disabled:false},[
+        Validators.required,
+        Validators.min(1)
+      ]],
+
     })
   }
 
   ResetearForm(event){
     this.ResetearFormArray(this.productos);
+    this.SalidaProductosForm['controls'].productos['controls'][0].get('descripcion').enable();
+    this.SalidaProductosForm['controls'].productos['controls'][0].reset();
     this.Series=[];
     this.Articulos.ListarStock(event.value.nombre, '', '', '', '', 1, 20, 'descripcion asc').subscribe(res=>this.Producto=res['data'].stock);
     this.almacen_destino=this.almacenes;
     this.almacen_destino=this.almacen_destino.filter(e=>e.id!=event.value.id);
+  }
+
+  Reset(){
+    this.SalidaProductosForm.reset();
+    // this.SalidaProductosForm.controls['control'].markAsPristine();
+    this.ResetearFormArray(this.productos);
   }
 
   ResetearFormArray = (formArray: FormArray) => {
@@ -111,10 +140,28 @@ export class SalidaProductosComponent implements OnInit {
   };
 
   EliminarProducto(producto,i){
-    this.productos.removeAt(i);
+    if (producto) {
+      this.EliminarElemento(this.Series,producto.id_producto);
+    }
+    if (this.productos) {
+      this.productos.removeAt(i);
+    }
   };
 
-  ProductoSeleccionado(filtro){
+  // Se asigna el valor al id del producto para que se active la opción de elegir cantidad
+  ProductoSeleccionado(index,evento){
+    if (typeof(index) == 'number') {
+      if (evento.option.value.id_producto) {
+        this.SalidaProductosForm['controls'].productos['controls'][index].get('id_producto').setValue(evento.option.value.id_producto)
+      }
+    }
+    this.SalidaProductosForm['controls'].productos['controls'][index].get('producto').setValue(evento.option.value);
+    this.SalidaProductosForm['controls'].productos['controls'][index].get('descripcion').disable();
+    this.ProductoElegido("");
+  }
+
+  // Con esta función se aplica el filtro a los inputs
+  ProductoElegido(filtro){
     this.Articulos.ListarStock(this.SalidaProductosForm.get('almacen').value.nombre, '', '', '', filtro, 1, 20, 'descripcion asc').subscribe(res=>{
       this.Producto=res['data'].stock;
       for (let i of this.SalidaProductosForm['controls'].productos.value) {
@@ -132,6 +179,8 @@ export class SalidaProductosComponent implements OnInit {
   }
 
   AgregarSerieSalida(producto,index) {
+
+    // console.log(producto,index)
 
     const serieventana = this.DialogoSerie.open(ventanaseriesalida, {
       width: '1200px',
@@ -151,6 +200,7 @@ export class SalidaProductosComponent implements OnInit {
         }
       }
       this.SalidaProductosForm.get('productos')['controls'][index].get('cantidad').setValue(ip);
+      this.SalidaProductosForm.get('productos')['controls'][index].get('cantidad-validacion').setValue(ip);
     })
   }
 
@@ -202,11 +252,12 @@ GuardarTransferenciaAlmacen(formulario) {
         })
       }
     }
-    this.snackBar.open("El producto se guardó satisfactoriamente", '', {
+    this.snackBar.open("Se guardó la transferencia satisfactoriamente", '', {
       duration: 2000,
     });
+    this.Reset()
   });
-  this.ResetearForm(formulario)
+  
 
 }
 

@@ -27,7 +27,7 @@
             $transaccion->id_salida_venta = !empty($_POST["prsalida"]) ? $_POST["prsalida"] : null;
             $transaccion->id_sucursal = !empty($_POST["prsucursal"]) ? $_POST["prsucursal"] : null;
             $transaccion->id_vendedor = !empty($_POST["prvendedor"]) ? $_POST["prvendedor"] : null;
-            $transaccion->fecha = $_POST["prfecha"];
+            $transaccion->fecha = !empty($_POST["prfecha"]) ? $_POST["prfecha"] : null;
             $transaccion->documento = !empty($_POST["prdocumento"]) ? $_POST["prdocumento"] : '';
             
             if($transaccion->create())

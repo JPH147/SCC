@@ -37,29 +37,32 @@ export class MarcaComponent implements OnInit {
   // tslint:disable-next-line:use-life-cycle-interface
   ngAfterViewInit () {
 
-      this.paginator.page
-        .pipe(
-          tap(() => this.CargarData())
-         ).subscribe();
-       merge(
-         fromEvent(this.FiltroTipo.nativeElement, 'keyup'),
-         fromEvent(this.FiltroMarca.nativeElement, 'keyup')
-        )
-       .pipe(
-         debounceTime(200),
-         distinctUntilChanged(),
-         tap(() => {
-           this.paginator.pageIndex = 0;
-           this.CargarData();
-         })
-        ).subscribe();
-     }
+    this.paginator.page
+      .pipe(
+        tap(() => this.CargarData())
+    ).subscribe();
+
+    merge(
+      fromEvent(this.FiltroTipo.nativeElement, 'keyup'),
+      fromEvent(this.FiltroMarca.nativeElement, 'keyup')
+     )
+    .pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      tap(() => {
+        this.paginator.pageIndex = 0;
+        this.CargarData();
+      })
+     ).subscribe();
+  }
 
   CargarData() {
       this.ListadoMarca.CargarMarca(
-      this.FiltroTipo.nativeElement.value,
-      this.FiltroMarca.nativeElement.value,  this.paginator.pageIndex+1,
-      this.paginator.pageSize);
+        this.FiltroTipo.nativeElement.value,
+        this.FiltroMarca.nativeElement.value,
+        this.paginator.pageIndex+1,
+        this.paginator.pageSize
+      );
     }
 
     Agregar() {

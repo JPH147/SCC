@@ -57,7 +57,7 @@
 		    <th>COLOR</th> 
 		    <th>ALMACENAMIENTO</th>
 		    <!-- <th>CANTIDAD</th> -->
-		    <th>PRECIO</th>
+		    <th *ngIf="referencia == 'proveedor'">PRECIO</th>
 		    <th>OBSERVACIONES</th>
 		    <th *ngIf="id_tipo==1">OPCIONES</th>
 		  </tr>
@@ -67,8 +67,7 @@
 		    <td class="detalle-columnas" id="detalle-serie">{{detalle.serie}}</td> 
 		    <td class="detalle-columnas" id="detalle-color">{{detalle.color}}</td>
 		    <td class="detalle-columnas" id="detalle-almacenamiento">{{detalle.almacenamiento}}</td>
-		    <!-- <td class="detalle-columnas" id="detalle-cantida">{{detalle.cantidad}}</td> -->
-		    <td class="detalle-columnas" id="detalle-precio">{{detalle.precio | currency:'S/.' }}</td>
+			<td class="detalle-columnas" id="detalle-precio" *ngIf="referencia == 'proveedor'">{{detalle.precio | currency:'S/.' }}</td>
 		    <td class="detalle-columnas" id="detalle-observacion">{{detalle.observacion}}</td>
 		    <td class="detalle-columnas" id="detalle-opciones" *ngIf="id_tipo==1">
 		    	<button mat-icon-button color="primary" (click)="Editar(detalle)"> <mat-icon>edit</mat-icon> </button>
