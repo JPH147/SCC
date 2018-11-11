@@ -4,13 +4,6 @@
   </mat-toolbar>
 
 <mat-card class="card">
-<<<<<<< HEAD
-  <mat-toolbar color="primary">
-    <mat-toolbar-row *ngIf="!data"><h4>Agregar Modelo</h4></mat-toolbar-row>
-  <mat-toolbar-row *ngIf="data">Editar Modelo</mat-toolbar-row>
-</mat-toolbar>
-=======
->>>>>>> 8ebd7d0494f7baa599873a67411decdf2e66f39c
 
   <form [formGroup]="ModeloForm" (ngSubmit)="Guardar(ModeloForm); Notificacion(mensaje,'')">
     
