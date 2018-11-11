@@ -7,14 +7,12 @@
     <div id = "tituloProd"> Salida de Productos Nro.</div>
   </mat-card-title>
 
-  <mat-card-subtitle>
-      Cabecera Salida Productos
-  </mat-card-subtitle>
-
-  <form [formGroup]="SalidaProductosForm"  [formGroup]= "regiForm">
+  <form [formGroup]="SalidaProductosForm">
     <mat-card-header>
-
       <mat-card class="CabeceraSalidaVendedor">
+        <mat-card-subtitle>
+            Cabecera del documento
+        </mat-card-subtitle>
         <mat-grid-list cols="3" rowHeight="80px">
           <mat-grid-tile>
 
@@ -25,6 +23,7 @@
                   {{almacen.nombre}}
                 </mat-option>
               </mat-select>
+              <mat-error> Debe ingresar el almacén de salida </mat-error>
             </mat-form-field>
           </mat-grid-tile>
 
@@ -33,10 +32,11 @@
           <mat-grid-tile>
             <mat-form-field class="formulario-salida">
               <mat-select placeholder="Almacen Destino" formControlName="almacen1" (selectionChange)="AlmacenSeleccionado($event)">
-                <mat-option *ngFor="let almacen of almacen_destino" [value]="almacen1">
+                <mat-option *ngFor="let almacen of almacen_destino" [value]="almacen">
                   {{almacen.nombre}}
                 </mat-option>
               </mat-select>
+              <mat-error> Debe ingresar un almacén de llegada </mat-error>
             </mat-form-field>
           </mat-grid-tile>
 
@@ -44,7 +44,7 @@
             <!--Campo ingresar Fecha de Salida almacen -->
             <mat-form-field  class ="IngFecha" class="Alma1" type="Date"  class="formulario-salida">
                 <input matInput [matDatepicker]="picker" placeholder="Fecha Movimiento" formControlName="fechaingreso" >
-                <mat-error> </mat-error>
+                <mat-error> Debe ingresar la fecha de salida </mat-error>
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
@@ -53,6 +53,7 @@
           <mat-grid-tile>
             <mat-form-field class="formulario-salida">
               <input matInput placeholder="Guía de remisión" type="text" formControlName="documento">
+              <mat-error> Debe ingresar el documento de referencia </mat-error>
             </mat-form-field>
           </mat-grid-tile>
 
@@ -64,17 +65,23 @@
   <br>
 
   <mat-card-content>
+      <!-- Agrega Productos -->
+
+      <mat-card class="CabeceraSalidaVendedor" *ngIf="!SalidaProductosForm.value.almacen">      
+        <mat-card-subtitle>
+            Debe seleccionar un almacén para empezar
+        </mat-card-subtitle>      
+      </mat-card>
+
+      <mat-card class="CabeceraSalidaVendedor" *ngIf="SalidaProductosForm.value.almacen">
 
       <mat-card-subtitle>
-          Detalle de Productos
+          Detalle del documento
       </mat-card-subtitle>
-
-      <!-- Agrega Productos -->
-      <mat-card class="CabeceraSalidaVendedor">
 
       <mat-grid-list cols="1"  rowHeight="55px">
         <mat-grid-tile>
-          <button mat-mini-fab color="primary" matTooltip="Agrega Productos" type="button" (click)="AgregarProducto()"><mat-icon>add</mat-icon></button>
+          <button mat-mini-fab color="primary" matTooltip="Añadir productos" type="button" (click)="AgregarProducto()"><mat-icon>add</mat-icon></button>  <!-- [disabled]="Producto ? Producto.length==0 : true" -->
         </mat-grid-tile>
       </mat-grid-list>
       
@@ -85,8 +92,8 @@
 
               <mat-grid-tile>
                 <mat-form-field class="example-full-width">
-                  <input matInput placeholder="Producto" [matAutocomplete]="autoproducto" #InputProducto formControlName="producto">
-                  <mat-autocomplete #autoproducto="matAutocomplete" [displayWith]="displayFn2" (optionSelected)="ProductoSeleccionado('')">
+                  <input matInput placeholder="Producto" [matAutocomplete]="autoproducto" #InputProducto formControlName="descripcion">
+                  <mat-autocomplete #autoproducto="matAutocomplete" [displayWith]="displayFn2" (optionSelected)="ProductoSeleccionado(i,$event)">
                     <mat-option *ngFor="let producto of Producto" [value]="producto">
                       {{producto.descripcion}}
                     </mat-option>
@@ -97,18 +104,22 @@
               <mat-grid-tile>
                 <mat-form-field class="example-full-width">
                   <input matInput placeholder="Cantidad" formControlName="cantidad">
+                  <mat-error> La cantidad debe ser mayor a 0 </mat-error>
                 </mat-form-field>
               </mat-grid-tile>
 
               <mat-grid-tile>
-                <button mat-mini-fab color="primary" (click) = " AgregarSerieSalida (producto.value.producto,i) " matTooltip="Ingresa Serie Producto" type="button" [disabled]="!producto.value.producto"><mat-icon> reorder </mat-icon> </button>
-                <button mat-mini-fab color="primary" matTooltip="Elimina  Producto" type="button" (click)="EliminarProducto(producto.value.producto,i)"><mat-icon>delete</mat-icon></button>
+                <button mat-mini-fab color="primary" (click) = " AgregarSerieSalida (producto.value.producto,i) " matTooltip="Ingresa Serie Producto" type="button" [disabled]="!producto.value.id_producto"><mat-icon> reorder </mat-icon> </button>
+                <button mat-mini-fab color="primary" matTooltip="Elimina  Producto" type="button" (click)="EliminarProducto(producto.value.producto,i)" [disabled]="!productos"><mat-icon>delete</mat-icon></button>
               </mat-grid-tile>
 
             </mat-grid-list>
 
           </div>
         </div>
+
+        <mat-error *ngIf="SalidaProductosForm['controls'].productos.invalid && SalidaProductosForm['controls'].productos.touched"> Todos los campos de la descripción de los productos deben estar llenos y la cantidad de productos debe ser mayor a 0 </mat-error>
+
       </mat-card>
 
     </mat-card-content>

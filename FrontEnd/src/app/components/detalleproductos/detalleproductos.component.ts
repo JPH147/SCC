@@ -4,6 +4,7 @@ import {TipoComponent} from "./tipo/tipo.component";
 import {MarcaComponent} from "./marca/marca.component";
 import {ModeloComponent} from "./modelo/modelo.component";
 import { ServiciosGenerales } from '../global/servicios';
+import {BehaviorSubject} from 'rxjs';
 
 @Component({
   selector: 'app-detalleproductos',
@@ -12,6 +13,8 @@ import { ServiciosGenerales } from '../global/servicios';
   providers: [ServiciosGenerales,TipoComponent,MarcaComponent,ModeloComponent]
 })
 export class DetalleProductosComponent implements OnInit {
+
+  public opcion= new BehaviorSubject<number>(0);
 
   constructor(
 	private Tipo:TipoComponent,
@@ -26,15 +29,17 @@ export class DetalleProductosComponent implements OnInit {
 
   Cambiar(evento){
 
-  	if (evento==0) {
-  		this.Tipo.CargarData();
-  	}
-  	if (evento==1) {
-  		this.Marca.CargarData();
-  	}
-  	if (evento==2) {
-  		this.Modelo.CargarData();
-  	}
+    // this.opcion.next(evento);
+
+  	// if (evento==0) {
+  	// 	this.Tipo.CargarData();
+  	// }
+  	// if (evento==1) {
+  	// 	this.Marca.CargarData();
+  	// }
+  	// if (evento==2) {
+  	// 	this.Modelo.CargarData();
+  	// }
 	
   }
 

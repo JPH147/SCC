@@ -60,7 +60,7 @@ export class ventanaseriesalida  implements OnInit {
         /*Si no hay series para el producto, trae los datos*/
         this.Series.Listado(this.data.almacen,this.data.id_producto,1,5).subscribe(res=>{
           this.ListadoSeries(res['data'].producto_series);
-          console.log(res['data'].producto_series)
+          // console.log(res['data'].producto_series)
         })
       }
     }
@@ -74,7 +74,7 @@ export class ventanaseriesalida  implements OnInit {
       ]],
       'id_serie':[{value:null, disabled:false},[
       ]],
-      'serie':[{value:null, disabled:false},[
+      'serie':[{value:null, disabled:true},[
       ]],
       'precio':[{value:null, disabled:false},[
       ]],

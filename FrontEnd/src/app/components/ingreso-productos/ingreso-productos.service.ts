@@ -18,7 +18,7 @@ constructor(private http: HttpClient) {}
 
 
     AgregarCompraMercaderia(
-    pralmacen: number,
+      pralmacen: number,
       prtipo: number,
       pr_referencia: number,
       prproveedor: number,
@@ -32,8 +32,10 @@ constructor(private http: HttpClient) {}
       .set('prtipo', prtipo.toString())
       .set('prreferencia', pr_referencia.toString())
       .set('prproveedor', prproveedor.toString())
-      .set('prfecha', moment (prfecha).format('YYYY/MM/DD').toString())
-      .set('prdocumento', prdocumento.toString());
+      .set('prfecha', moment (prfecha).format('YYYY/MM/DD'))
+      .set('prdocumento', prdocumento);
+
+      // console.log(params);
 
       // tslint:disable-next-line:prefer-const
       let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
@@ -135,6 +137,30 @@ constructor(private http: HttpClient) {}
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     return this.http.post(this.url + 'transacciondetalle/create.php', params, {headers: headers});
   }
+
+
+  ObtenerNumeroDocumento(
+    almacen:number,
+    tipo:number // 1. Ingreso, 2. Salida
+  ): Observable<any> {
+    let params = new HttpParams()
+    
+    return this.http.get(this.url+'transaccioncabecera/select.php',{
+			params: new HttpParams()
+			.set ('id_almacen', almacen.toString())
+      .set('tipo_transaccion', tipo.toString())
+		})
+		.pipe(map(res=>{
+			if(res['codigo']===0){
+				return res=res
+			}else{
+				console.log('Error al importar los datos, revisar servicio')
+			}
+		}))
+   
+  }
+
+
 
 
 }

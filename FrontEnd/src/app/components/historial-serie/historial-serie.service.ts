@@ -24,7 +24,7 @@ export class  HistorialSerieService {
       .set('prtotalpagina', total_pagina.toString())
        }).pipe(map(res => {
       if (res['codigo'] === 0) {
-        console.log(res);
+        // console.log(res);
         return res;
       } else {
         console.log('Error al importar los datos, revisar servicio');

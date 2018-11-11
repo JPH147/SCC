@@ -32,43 +32,11 @@ mat-card{
 }
 
 .mat-column-numero{
-  max-width: 10%;
-}
-.mat-colimn-representante_legal{
-  max-width: 30%;
+  max-width: 5%;
 }
 
-.mat-column-nombre{
-  max-width: 25%;
-}
-
-.mat-colimn-tipo_documento{
-  max-width: 10%;
-}
-
-.mat-column-ruc{
-  max-width: 15%;
-}
-
+.mat-column-ruc,
+.mat-column-tipo_documento,
 .mat-column-opciones{
-  max-width: 10%;
-}
-
-mat-row:hover {
-  background: #f5f5f5;
-}
-
-mat-row:nth-child(even){
-  background-color:#f2f2f2;
-  }
-
-mat-row:nth-child(odd){
-  background-color:white;
-  }
-
-mat-header-cell {
-  font-weight:  bold;
-  font-size: 14px;
-  background-color:#673ab7;
-  color: #fff;
+  max-width: 15%;
 }
