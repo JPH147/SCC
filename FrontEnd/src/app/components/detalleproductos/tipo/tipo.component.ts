@@ -61,7 +61,7 @@ export class TipoComponent implements OnInit {
           this.paginator.pageSize);
       }
 
-      Agregar() {
+      AgregarTipo() {
 
         let VentanaTipo = this.DialogoTipo.open(VentanaEmergenteTipo, {
           width: '350px'
