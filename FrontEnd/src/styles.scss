@@ -48,3 +48,7 @@ mat-row:nth-child(even){
 .mat-sort-header-indicator{
 	color: white
 }
+
+.error{
+	color: mat-color($warn) !important
+}

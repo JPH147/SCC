@@ -8,7 +8,8 @@
       <mat-grid-list cols=4 rowHeight="70px" *ngFor="let serie of seriearticulo">
         <mat-grid-tile>
           <mat-form-field class="input-serie">
-            <input matInput placeholder="Serie" [(ngModel)]="serie.serie">
+            <input matInput placeholder="Serie" [(ngModel)]="serie.serie" #InputSerie>
+            <mat-hint class="error" *ngIf="serie.repetido">La serie ya se encuentra registrada</mat-hint>
           </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -36,8 +37,14 @@
 
     <mat-card-actions>
       <mat-grid-list cols=1 rowHeight="40px">
+        <mat-grid-tile *ngIf="invalidV">
+          <mat-error>Se ha ingresado más de una vez la misma serie</mat-error>
+        </mat-grid-tile>
+        <mat-grid-tile *ngIf="invalidP">
+          <mat-error>Se ha registrado esta serie en otro producto</mat-error>
+        </mat-grid-tile>
         <mat-grid-tile>
-          <button mat-raised-button color="primary" [mat-dialog-close]="Aceptar()">Grabar</button>
+          <button mat-raised-button color="primary" [mat-dialog-close]="Aceptar()" [disabled]="!invalidBD || invalidV || invalidP">Grabar</button>
         </mat-grid-tile>
       </mat-grid-list>
     </mat-card-actions>

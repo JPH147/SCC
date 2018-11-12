@@ -173,7 +173,6 @@ import {ProductoService} from '../productos/productos.service';
 
     Reset(){
       this.IngresoProductoForm.reset();
-      // this.SalidaProductosForm.controls['control'].markAsPristine();
       this.ResetearFormArray(this.productos);
     }
 
@@ -198,11 +197,14 @@ import {ProductoService} from '../productos/productos.service';
           array.splice(index,1)
         }
       })
-      // array=array.filter(e=>e.id!=value)
     }
 
-    EliminarElemento2(array,value) {
-      array=array.filter(e=>e.id_producto!=value)
+    EliminarElemento2(array,value){
+      array.forEach((item,index)=>{
+        if (item.id_producto==value) {
+          array.splice(index,1)
+        }
+      })
     }
 
     ProductoSeleccionado(index){
@@ -220,14 +222,9 @@ import {ProductoService} from '../productos/productos.service';
     }
 
     Verificar(){
-      this.IngresoProductoForm.value.productos.forEach((item,index)=>{
-        // console.log(this.Series, item.producto);
-        this.Series=this.Series.filter(e=>e.id_producto!=item.producto.id)
-        // this.Series.forEach(Item=>{
-        //   console.log(Item.id_producto,item.producto.id)
-        // })
-        // console.log(this.Series, this.IngresoProductoForm.value.productos)
-      })
+      // this.IngresoProductoForm.value.productos.forEach((item,index)=>{
+      //   this.Series=this.Series.filter(e=>e.id_producto!=item.producto.id)
+      // })
     }
 
     displayFn2(producto) {
@@ -322,22 +319,21 @@ import {ProductoService} from '../productos/productos.service';
     })
   }
 
-// Selector Almacenes Activos
-ListarAlmacen() {
-  this.Servicios.ListarAlmacen().subscribe( res => {
-    this.almacenes=res;
-    this.almacen_origen=res;
-    this.almacen_destino=res;
-   //console.log(this.almacen_origen)
-  })
-}
+  // Selector Almacenes Activos
+  ListarAlmacen() {
+    this.Servicios.ListarAlmacen().subscribe( res => {
+      this.almacenes=res;
+      this.almacen_origen=res;
+      this.almacen_destino=res;
+     //console.log(this.almacen_origen)
+    })
+  }
 
-    AlmacenSeleccionado(evento){
-      this.almacen_origen=this.almacenes;
-      this.almacen_origen=this.almacen_origen.filter(e=>e.id!=evento.value);
-      this.ObtenerNumeroDocumento(evento.e)
-     
-    }
+  AlmacenSeleccionado(evento){
+    this.almacen_origen=this.almacenes;
+    this.almacen_origen=this.almacen_origen.filter(e=>e.id!=evento.value);
+    this.ObtenerNumeroDocumento(evento.e)
+  }
 
 
   AgregarSerie(producto,index) {
@@ -354,7 +350,7 @@ ListarAlmacen() {
         let contador=0;
 
         for (let i of res) {
-          this.EliminarElemento2(this.Series,i.producto)
+          this.EliminarElemento2(this.Series,i.producto);
         }
 
         for (let i of res) {

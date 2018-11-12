@@ -126,4 +126,20 @@ export class ServiciosProductoSerie {
     }));
   }
 
+  ValidarSerie(
+    serie:string
+  ):Observable<any>{
+    return this.http.get(this.url+'productoserie/validar.php', {
+      params: new HttpParams()
+      .set('prserie', serie)
+    })
+    .pipe(map(res=>{
+        if (res['codigo'] === 0) {
+          return res['data'];
+        } else {
+          console.log ('Error al importar los datos, revisar servicio');
+        }
+    }))
+  }
+
 }

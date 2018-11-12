@@ -35,7 +35,6 @@ export class VentanaEmergenteProductos {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
     public ventana: MatDialogRef<VentanaEmergenteProductos>,
-    // tslint:disable-next-line:no-shadowed-variable
     private FormBuilder: FormBuilder,
     private Servicios: ServiciosGenerales,
     private ProductoServicios: ProductoService,

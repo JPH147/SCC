@@ -226,5 +226,21 @@ Class ProductoSerie{
                 return false;
             }
     }
+
+    function validar(){
+        $query = "CALL sp_validarproductoserie(?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->serie);
+        $result->execute();
+
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        $this->total_resultado=$row['total'];
+
+        return $this->total_resultado;
+    }
+    
 }
 ?>

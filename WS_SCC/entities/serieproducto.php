@@ -62,8 +62,6 @@ class SerieProducto{
         return $this->total_resultado;
     }
 
-	
-
 }
 
 ?>
