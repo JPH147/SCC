@@ -170,6 +170,15 @@ import {ProductoService} from '../productos/productos.service';
 
     }
 
+
+    Reset(){
+      this.IngresoProductoForm.reset();
+      // this.SalidaProductosForm.controls['control'].markAsPristine();
+      this.ResetearFormArray(this.productos);
+    }
+
+
+
     ResetearFormArray = (formArray: FormArray) => {
       if (formArray) {
         formArray.reset();

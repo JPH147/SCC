@@ -39,6 +39,7 @@
                   {{almacen.nombre}}
                 </mat-option>
               </mat-select>
+              <mat-error> Debe ingresar el almacén de salida </mat-error>
             </mat-form-field>
           </mat-grid-tile>
 
@@ -46,6 +47,7 @@
           <mat-grid-tile >
               <mat-form-field class="input-ventana" class="example-full-width">
               <input matInput placeholder="Documento Referencia" formControlName="docReferencia">
+              <mat-error> Debe ingresar el documento de referencia </mat-error>
             </mat-form-field>
           </mat-grid-tile>
 
@@ -54,6 +56,7 @@
             <!--Campo ingresar Proveedor -->
             <mat-form-field class="example-full-width" *ngSwitchDefault>
               <input #Proveedor placeholder="Proveedor" matInput [matAutocomplete]="auto" formControlName=proveedor>
+              <mat-error> Debe ingresar Proveedor </mat-error>
               <mat-autocomplete #auto="matAutocomplete" [displayWith] = "displayProveedor">
                 <mat-option *ngFor="let proveedor of proveedores" [value]="proveedor">
                   {{proveedor.nombre}}
@@ -63,6 +66,7 @@
             <!--Campo ingresar Ciente -->
             <mat-form-field class="example-full-width" *ngSwitchCase="2">
               <input #Proveedor placeholder="Cliente" matInput [matAutocomplete]="auto" formControlName=cliente>
+              <mat-error> Debe ingresar Cliente </mat-error>
               <mat-autocomplete #auto="matAutocomplete" [displayWith] = "displayCliente">
                 <mat-option *ngFor="let cliente of clientes " [value]="cliente">
                   {{cliente.nombre}}
@@ -72,6 +76,7 @@
               <!--Campo ingresar Vendedor -->
             <mat-form-field class="example-full-width" *ngSwitchCase="6">
               <input #Proveedor placeholder="Vendedor" matInput [matAutocomplete]="auto" formControlName=vendedor>
+              <mat-error> Debe ingresar Vendedor</mat-error>
               <mat-autocomplete #auto="matAutocomplete" [displayWith] = "displayVendedor">
                 <mat-option *ngFor="let vendedor of Vendedores" [value]="vendedor">
                   {{vendedor.nombre}}
@@ -85,6 +90,7 @@
                   {{almacen.nombre}}
                 </mat-option>
               </mat-select>
+              <mat-error> Debe ingresar un almacén de llegada </mat-error>
             </mat-form-field>
 
 <!--             <mat-form-field class="example-full-width" *ngSwitchCase="7" >
@@ -162,6 +168,7 @@
             <mat-grid-tile colspan="2">
               <mat-form-field  class="example-full-width">
                 <input matInput placeholder="Precio unitario" formControlName="precioUnitario" class="example-right-align" >
+                <mat-error> Debe ingresar Precio</mat-error>
                 <span matPrefix>S/.&nbsp;</span>
               </mat-form-field>
             </mat-grid-tile>
@@ -187,8 +194,8 @@
 <!--           <button mat-fab color="primary" matTooltip="Grabar" > <mat-icon> save</mat-icon></button>
           <button mat-fab color="warn" matTooltip="Limpiar" >  <mat-icon> restore</mat-icon></button> -->
 
-          <button mat-raised-button>Limpiar</button>
-          <button mat-raised-button color="primary" type="submit" >Grabar</button>
+          <button mat-raised-button (click)="Reset()" >Limpiar</button>
+          <button mat-raised-button color="primary" type="submit"  (click)="Guardar(IngresoProductoForm)" [disabled]="IngresoProductoForm">Grabar</button>
 
         </mat-grid-tile>
       </mat-grid-list>
