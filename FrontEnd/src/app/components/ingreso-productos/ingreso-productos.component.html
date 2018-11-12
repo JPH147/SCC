@@ -23,7 +23,7 @@
         <!--Campo ingresar Tipo de Ingreso a almacen -->
         <mat-grid-tile >
             <mat-form-field  class="example-full-width">
-              <mat-select placeholder="Tipo de  Ingreso" formControlName= "tipoIngreso"  (selectionChange)="ResetearForm($event)">
+              <mat-select placeholder="Tipo de  Ingreso" formControlName= "tipoIngreso" >
                 <mat-option *ngFor="let tipoIngreso of TipoIngresos" [value]="tipoIngreso.id">
                   {{tipoIngreso.nombre}}
                 </mat-option>
@@ -112,6 +112,7 @@
           <mat-grid-tile>
             <mat-form-field class ="IngFecha" class="Alma1"  class="example-full-width" >
                 <input matInput [matDatepicker]="picker" placeholder="Fecha Ingreso" formControlName="fecingreso">
+                <mat-error> Debe ingresar Fecha </mat-error>
                 <mat-error> </mat-error>
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
@@ -127,8 +128,10 @@
 
   <mat-card-content>
 
+     
+
     <!-- Boton Agrega Productos -->
-    <mat-card class="CabeceraSalidaVendedor">
+    <mat-card class="CabeceraSalidaVendedor" >
 
       <mat-card-header>
         <mat-card-title>
