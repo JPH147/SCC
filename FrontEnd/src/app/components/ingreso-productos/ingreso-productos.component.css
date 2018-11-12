@@ -169,3 +169,11 @@ mat-header-cell {
 .example-right-align {
   text-align: right;
 }
+
+.CabeceraSalidaVendedor{
+  width: 90%;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+
+}
