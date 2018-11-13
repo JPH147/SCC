@@ -92,23 +92,7 @@
               </mat-select>
               <mat-error> Debe ingresar un almacén de llegada </mat-error>
             </mat-form-field>
-
-<!--             <mat-form-field class="example-full-width" *ngSwitchCase="7" >
-             <input  matInput [matAutocomplete]="auto"  disabled value >
-
-                <mat-autocomplete #auto="matAutocomplete">
-                  <mat-option *ngFor="let vendedor of Vendedores" [value]="vendedor.nombre">
-                    {{vendedor.nombre}}
-                  </mat-option>
-                </mat-autocomplete>
-              </mat-form-field> -->
-
           </mat-grid-tile>
-
-        <!-- Seleccionar Almacen  Destino -->
-
-
-           <!--Campo ingresar Fecha de Ingreso almacen -->
           <mat-grid-tile>
             <mat-form-field class ="IngFecha" class="Alma1"  class="example-full-width" >
                 <input matInput [matDatepicker]="picker" placeholder="Fecha Ingreso" formControlName="fecingreso">
@@ -131,9 +115,9 @@
      
 
     <!-- Boton Agrega Productos -->
-    <mat-card class="CabeceraSalidaVendedor" >
+    <mat-card class="CabeceraSalidaVendedor" *ngIf="IngresoProductoForm.value.tipoIngreso==1">
 
-      <mat-card-header>
+      <mat-card-header>                 
         <mat-card-title>
             Detalle de Productos
         </mat-card-title>

@@ -56,7 +56,6 @@ import {ProductoService} from '../productos/productos.service';
     filteredOptions: Observable<string[]>;
 
     constructor(public DialogoSerie: MatDialog,
-    // tslint:disable-next-line:no-shadowed-variable
       private FormBuilder: FormBuilder,
       public snackBar: MatSnackBar,
       private Servicios: ServiciosGenerales,
@@ -72,7 +71,6 @@ import {ProductoService} from '../productos/productos.service';
       
       this.ListarAlmacen();
       this.ListarTransaccionTipo();
-      //this.ObtenerNumeroDocumento('');
       this.ListarProveedor('');
       this.ListarCliente('');
       this.ListarVendedor('');
@@ -96,6 +94,8 @@ import {ProductoService} from '../productos/productos.service';
           'precioUnitario': [null, [Validators.required]],
           productos: this.FormBuilder.array([this.CrearProducto()])
       });
+     
+      this.CrearProducto()
       
     }
 
@@ -116,11 +116,11 @@ import {ProductoService} from '../productos/productos.service';
         for (let i in this.FiltroProducto['_results']) {
           fromEvent(this.FiltroProducto['_results'][i].nativeElement,'keyup')
           .pipe(
-              debounceTime(100),
+              debounceTime(200),
               distinctUntilChanged(),
               tap(()=>{
                 if (this.FiltroProducto['_results'][i].nativeElement.value) {
-                  this.ProductoSeleccionado(this.FiltroProducto['_results'][i].nativeElement.value)
+                  this.FiltrarProductos(this.FiltroProducto['_results'][i].nativeElement.value)
                 }
               })
             ).subscribe()
@@ -132,6 +132,9 @@ import {ProductoService} from '../productos/productos.service';
     /*********************************************/
     CrearProducto(): FormGroup{
       return this.FormBuilder.group({
+        'descripcion': [{value: null, disabled: false}, [
+          Validators.required
+        ]],
         'producto': [{value: null, disabled: false}, [
           Validators.required
         ]],
@@ -153,7 +156,6 @@ import {ProductoService} from '../productos/productos.service';
       this.ResetearFormArray(this.productos);
       this.Series = [];
       this.Articulos.Listado('', '', '', '', null,null,1, 10, 'descripcion', 'asc',1).subscribe(res => this.Producto = res['data'].productos);
-      
       this.almacen_destino=this.almacenes;
       this.almacen_destino=this.almacen_destino.filter(e=>e.id!=event.value.id);
 
@@ -166,7 +168,7 @@ import {ProductoService} from '../productos/productos.service';
           item.get('precioUnitario').enable()
         })
       }
-      this.ObtenerNumeroDocumento(this.IngresoProductoForm.value.almacen['id']);
+      this.ObtenerNumeroDocumento(event.value.id);
 
     }
 
@@ -175,8 +177,6 @@ import {ProductoService} from '../productos/productos.service';
       this.IngresoProductoForm.reset();
       this.ResetearFormArray(this.productos);
     }
-
-
 
     ResetearFormArray = (formArray: FormArray) => {
       if (formArray) {
@@ -207,17 +207,24 @@ import {ProductoService} from '../productos/productos.service';
       })
     }
 
+    FiltrarProductos(filtro){
+      this.Articulos.Listado('','','',filtro,null,null,1,10,'descripcion','asc',1).subscribe(res=>{
+        this.Producto=res['data'].productos;
+      })
+    }
+
     ProductoSeleccionado(index){
+      this.Producto=[];
       this.Articulos.Listado('', '', '', '', null,null,1, 10, 'descripcion', 'asc',1).subscribe(res => {
         this.Producto = res['data'].productos;
         for (let i of this.IngresoProductoForm['controls'].productos.value) {
           if (i.producto) {
-            this.EliminarElemento(this.Producto,i.producto.id);
-            // console.log(this.Producto,i.producto.id)
+            console.log(i);
+            this.EliminarElemento(this.Producto, i.producto.id);
           }
         }
       });
-      this.IngresoProductoForm.get('productos')['controls'][index].get('cantidad').setValue(0);
+      // this.IngresoProductoForm.get('productos')['controls'][index].get('cantidad').setValue(0);
       this.Verificar()
     }
 
@@ -332,7 +339,6 @@ import {ProductoService} from '../productos/productos.service';
   AlmacenSeleccionado(evento){
     this.almacen_origen=this.almacenes;
     this.almacen_origen=this.almacen_origen.filter(e=>e.id!=evento.value);
-    this.ObtenerNumeroDocumento(evento.e)
   }
 
 
