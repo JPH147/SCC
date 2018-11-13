@@ -16,11 +16,11 @@
     try{
     	$modelo = new Modelo($db);
 
-        $modelo->tipo = !empty($_GET['prtipo']) ? $_GET['prtipo'] : null;
-    	$modelo->marca = !empty($_GET['prmarca']) ? $_GET['prmarca'] : null;
-    	$modelo->mdl_nombre = !empty($_GET['prnombre']) ? $_GET['prnombre'] : null;
-        $modelo->numero_pagina = !empty($_GET['prpagina']) ? $_GET['prpagina'] : null;
-        $modelo->total_pagina = !empty($_GET['prtotalpagina']) ? $_GET['prtotalpagina'] : null;
+        $modelo->tipo = !empty($_GET['prtipo']) ? trim($_GET['prtipo']) : null;
+    	$modelo->marca = !empty($_GET['prmarca']) ? trim($_GET['prmarca']) : null;
+    	$modelo->mdl_nombre = !empty($_GET['prnombre']) ? trim($_GET['prnombre']) : null;
+        $modelo->numero_pagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : null;
+        $modelo->total_pagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : null;
 
 
         $modelo_list = $modelo->read2();

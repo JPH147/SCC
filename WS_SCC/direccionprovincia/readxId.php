@@ -16,7 +16,7 @@
 
 	try
 	{
-	    $provincia->id_provincia = isset($_GET['prid']) ? $_GET['prid'] : die();
+	    $provincia->id_provincia = isset($_GET['prid']) ? trim($_GET['prid']) : die();
 	    
 	    $provincia->readxId();
 

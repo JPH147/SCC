@@ -17,12 +17,12 @@
     	$producto = new Producto($db);
     	$data = json_decode(file_get_contents('php://input'),true);
 
-    	if(($_POST["id_producto"])!=null)
+    	if(trim($_POST["id_producto"])!=null)
     	{
-    		$producto->id_producto = $_POST["id_producto"];
-            $producto->id_modelo = $_POST["id_modelo"];
-            $producto->prd_descripcion = $_POST["prd_descripcion"];
-            $producto->prd_precio = $_POST["prd_precio"];
+    		$producto->id_producto = trim($_POST["id_producto"]);
+            $producto->id_modelo = trim($_POST["id_modelo"]);
+            $producto->prd_descripcion = trim($_POST["prd_descripcion"]);
+            $producto->prd_precio = trim($_POST["prd_precio"]);
 
 	    	if($producto->update())
 	        {

@@ -19,7 +19,7 @@
 
     	if(($_POST["idmodelo"])!=null)
     	{
-    		$modelo->id_modelo = $_POST["idmodelo"];
+    		$modelo->id_modelo = trim($_POST["idmodelo"]);
 
 	    	if($modelo->delete())
 	        {

@@ -16,10 +16,10 @@
     try{
     	$tipo_producto = new Tipo_Producto($db);
 
-    	$tipo_producto->tprd_nombre = !empty($_GET['prnombre']) ? $_GET['prnombre'] : null;
-        $tipo_producto->und_nombre = !empty($_GET['prum']) ? $_GET['prum'] : null;
-        $tipo_producto->numero_pagina = !empty($_GET['prpagina']) ? $_GET['prpagina'] : null;
-        $tipo_producto->total_pagina = !empty($_GET['prtotalpagina']) ? $_GET['prtotalpagina'] : null;
+    	$tipo_producto->tprd_nombre = !empty($_GET['prnombre']) ? trim($_GET['prnombre']) : null;
+        $tipo_producto->und_nombre = !empty($_GET['prum']) ? trim($_GET['prum']) : null;
+        $tipo_producto->numero_pagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : null;
+        $tipo_producto->total_pagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : null;
 
         $tipo_producto_list = $tipo_producto->read2();
         $total = $tipo_producto->contar();

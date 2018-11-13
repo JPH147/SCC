@@ -16,10 +16,10 @@
     try{
     	$marca = new Marca($db);
 
-    	$marca->tipo = !empty($_GET['prtipo']) ? $_GET['prtipo'] : null;
-        $marca->mrc_nombre = !empty($_GET['prnombre']) ? $_GET['prnombre'] : null;
-        $marca->numero_pagina = !empty($_GET['prpagina']) ? $_GET['prpagina'] : null;
-        $marca->total_pagina = !empty($_GET['prtotalpagina']) ? $_GET['prtotalpagina'] : null;
+    	$marca->tipo = !empty($_GET['prtipo']) ? trim($_GET['prtipo']) : null;
+        $marca->mrc_nombre = !empty($_GET['prnombre']) ? trim($_GET['prnombre']) : null;
+        $marca->numero_pagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : null;
+        $marca->total_pagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : null;
 
         $marca_list = $marca->read2();
         $contar = $marca->contar();

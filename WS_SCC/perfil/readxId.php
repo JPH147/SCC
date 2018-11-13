@@ -14,7 +14,7 @@ $db = $database->getConnection();
 $perfil = new Perfil($db);
 try
 {
-    $perfil->idperfil = isset($_GET['idperfil']) ? $_GET['idperfil'] : die();
+    $perfil->idperfil = isset($_GET['idperfil']) ? trim($_GET['idperfil']) : die();
     
     $perfil->readxId();
 

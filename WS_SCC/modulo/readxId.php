@@ -14,7 +14,7 @@ $db = $database->getConnection();
 $modulo = new Modulo($db);
 try
 {
-    $modulo->idmodulo = isset($_GET['idmodulo']) ? $_GET['idmodulo'] : die();
+    $modulo->idmodulo = isset($_GET['idmodulo']) ? trim($_GET['idmodulo']) : die();
     
     $modulo->readxId();
 

@@ -16,7 +16,7 @@
 
 	try
 	{
-	    $productoserie->id_producto_serie = isset($_GET['prid']) ? $_GET['prid'] : die();
+	    $productoserie->id_producto_serie = isset($_GET['prid']) ? trim($_GET['prid']) : die();
 	    
 	    $productoserie->readxproducto();
 

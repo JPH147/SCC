@@ -18,7 +18,7 @@
 
         if (!empty(trim($_POST["prnombre"])))
         {
-            $distrito->id_provincia = $_POST["prprovincia"];
+            $distrito->id_provincia = trim($_POST["prprovincia"]);
             $distrito->dst_nombre = trim($_POST["prnombre"]);
 
             if($distrito->create())

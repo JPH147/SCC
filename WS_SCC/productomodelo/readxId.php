@@ -16,7 +16,7 @@
 
 	try
 	{
-	    $modelo->id_modelo = isset($_GET['id']) ? $_GET['id'] : die();
+	    $modelo->id_modelo = isset($_GET['id']) ? trim($_GET['id']) : die();
 	    
 	    $modelo->readxId();
 

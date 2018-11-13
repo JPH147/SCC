@@ -19,7 +19,7 @@
 
     	if(($_POST["prid"])!=null)
     	{
-            $productoserie->id_producto_serie = $_POST["prid"];
+            $productoserie->id_producto_serie = trim($_POST["prid"]);
 
 	    	if($productoserie->enter())
 	        {

@@ -19,7 +19,7 @@
 
     	if(($_POST["idmarca"])!=null)
     	{
-    		$marca->id_marca = $_POST["idmarca"];
+    		$marca->id_marca = trim($_POST["idmarca"]);
 
 	    	if($marca->delete())
 	        {

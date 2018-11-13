@@ -16,9 +16,9 @@
         $productotipo = new Tipo_Producto($db);
         $data = json_decode(file_get_contents('php://input'),true);
 
-        if(($_POST["id"])!=null &&  ($_POST["nombre"])!=null  &&  ($_POST["idunidad"])!=null )
+        if(trim($_POST["id"])!=null &&  trim($_POST["nombre"])!=null  &&  trim($_POST["idunidad"])!=null )
         {
-            $productotipo->id_tipo_producto = $_POST["id"];
+            $productotipo->id_tipo_producto = trim($_POST["id"]);
             $productotipo->tprd_nombre = trim($_POST["nombre"]);
             $productotipo->idunidadmedida = trim($_POST["idunidad"]);
 

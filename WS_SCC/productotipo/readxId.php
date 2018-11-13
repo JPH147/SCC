@@ -16,7 +16,7 @@
 
 	try
 	{
-	    $productotipo->id_tipo_producto = isset($_GET['id']) ? $_GET['id'] : die();
+	    $productotipo->id_tipo_producto = isset($_GET['id']) ? trim($_GET['id']) : die();
 	    
 	    $productotipo->readxId();
 

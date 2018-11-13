@@ -16,7 +16,7 @@
 
 	try
 	{
-	    $departamento->id_departamento = isset($_GET['prid']) ? $_GET['prid'] : die();
+	    $departamento->id_departamento = isset($_GET['prid']) ? trim($_GET['prid']) : die();
 	    
 	    $departamento->readxId();
 

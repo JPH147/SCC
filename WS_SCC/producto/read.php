@@ -16,16 +16,16 @@
     try{
         $producto = new Producto($db);
 
-        $producto->tprd_nombre = !empty($_GET['prtipo']) ? $_GET['prtipo'] :'';
-        $producto->mrc_nombre = !empty($_GET['prmarca']) ? $_GET['prmarca'] :'';
-        $producto->mdl_nombre = !empty($_GET['prmodelo']) ? $_GET['prmodelo'] : '';
-        $producto->prd_descripcion = !empty($_GET['prdescripcion']) ? $_GET['prdescripcion'] : '';
-        $producto->precio_minimo = !empty($_GET['prpreciominimo']) ? $_GET['prpreciominimo'] : null;
-        $producto->precio_maximo = !empty($_GET['prpreciomaximo']) ? $_GET['prpreciomaximo'] : null;
-        $producto->numero_pagina = !empty($_GET['prpagina']) ? $_GET['prpagina'] : 1;
-        $producto->total_pagina = !empty($_GET['prtotalpagina']) ? $_GET['prtotalpagina'] : 20;
-        $producto->orden = !empty($_GET['orden']) ? $_GET['orden'] : 'descripcion asc';
-        $producto->estado = !empty($_GET['prestado']) ? $_GET['prestado'] : null;
+        $producto->tprd_nombre = !empty($_GET['prtipo']) ? trim($_GET['prtipo']) :'';
+        $producto->mrc_nombre = !empty($_GET['prmarca']) ? trim($_GET['prmarca']) :'';
+        $producto->mdl_nombre = !empty($_GET['prmodelo']) ? trim($_GET['prmodelo']) : '';
+        $producto->prd_descripcion = !empty($_GET['prdescripcion']) ? trim($_GET['prdescripcion']) : '';
+        $producto->precio_minimo = !empty($_GET['prpreciominimo']) ? trim($_GET['prpreciominimo']) : null;
+        $producto->precio_maximo = !empty($_GET['prpreciomaximo']) ? trim($_GET['prpreciomaximo']) : null;
+        $producto->numero_pagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : 1;
+        $producto->total_pagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : 20;
+        $producto->orden = !empty($_GET['orden']) ? trim($_GET['orden']) : 'descripcion asc';
+        $producto->estado = !empty($_GET['prestado']) ? trim($_GET['prestado']) : null;
 
         $producto_list = $producto->read();
         $producto_contar = $producto->contar();

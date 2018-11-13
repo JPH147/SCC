@@ -17,9 +17,9 @@
     	$producto = new Producto($db);
     	$data = json_decode(file_get_contents('php://input'),true);
 
-    	if(($_POST["idproducto"])!=null)
+    	if(trim($_POST["idproducto"])!=null)
     	{
-    		$producto->idproducto = $_POST["idproducto"];
+    		$producto->idproducto = trim($_POST["idproducto"]);
 
 	    	if($producto->delete())
 	        {

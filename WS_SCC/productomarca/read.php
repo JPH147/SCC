@@ -16,8 +16,8 @@
     try{
     	$marca = new Marca($db);
 
-    	$marca->id_tipo_producto = !empty($_GET['prtipo']) ? $_GET['prtipo'] : null;
-    	$marca->mrc_nombre = !empty($_GET['prnombre']) ? $_GET['prnombre'] : null;
+    	$marca->id_tipo_producto = !empty($_GET['prtipo']) ? trim($_GET['prtipo']) : null;
+    	$marca->mrc_nombre = !empty($_GET['prnombre']) ? trim($_GET['prnombre']) : null;
 
     	$marca_list = $marca->read();
 

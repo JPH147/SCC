@@ -19,7 +19,7 @@
 
     	if(($_POST["idtipo"])!=null)
     	{
-    		$tipo->id_tipo_producto = $_POST["idtipo"];
+    		$tipo->id_tipo_producto = trim($_POST["idtipo"]);
 
 	    	if($tipo->delete())
 	        {
