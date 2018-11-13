@@ -19,7 +19,7 @@
 
     	if(($_POST["idcliente"])!=null)
     	{
-    		$cliente->idcliente = $_POST["idcliente"];
+    		$cliente->idcliente = trim($_POST["idcliente"]);
 
 	    	if($cliente->delete())
 	        {

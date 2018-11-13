@@ -21,11 +21,11 @@
         && !empty(trim($_POST["tlf_observacion"])) && ($_POST["id_tipo"])!=null 
         && ($_POST["tlf_relevancia"])!=null )
         {
-            $clientetelefono->id_cliente = $_POST["id_cliente"];
+            $clientetelefono->id_cliente = trim($_POST["id_cliente"]);
             $clientetelefono->tlf_numero = trim($_POST["tlf_numero"]);
             $clientetelefono->tlf_observacion =trim($_POST["tlf_observacion"]);
-            $clientetelefono->id_tipo = $_POST["id_tipo"];
-            $clientetelefono->tlf_relevancia = $_POST["tlf_relevancia"];
+            $clientetelefono->id_tipo = trim($_POST["id_tipo"]);
+            $clientetelefono->tlf_relevancia = trim($_POST["tlf_relevancia"]);
 
             if($clientetelefono->create())
             {

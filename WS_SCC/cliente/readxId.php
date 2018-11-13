@@ -16,7 +16,7 @@
 
 	try
 	{
-	    $cliente->idcliente = isset($_GET['idcliente']) ? $_GET['idcliente'] : die();
+	    $cliente->idcliente = isset($_GET['idcliente']) ? trim($_GET['idcliente']) : die();
 	    
 		$cliente->readxId();
 

@@ -14,7 +14,7 @@ $db = $database->getConnection();
 $almacen = new Almacen($db);
 try
 {
-    $almacen->idalmacen = isset($_GET['idalmacen']) ? $_GET['idalmacen'] : die();
+    $almacen->idalmacen = isset($_GET['idalmacen']) ? trim($_GET['idalmacen']) : die();
     
     $almacen->readxId();
 

@@ -16,8 +16,8 @@
     try{
         $clientedireccion = new ClienteDireccion($db);
 
-        $clientedireccion->id_cliente = !empty($_GET['id_cliente']) ? $_GET['id_cliente'] : null;
-        $clientedireccion->drc_relevancia = !empty($_GET['drc_relevancia']) ? $_GET['drc_relevancia'] : null;
+        $clientedireccion->id_cliente = !empty($_GET['id_cliente']) ? trim($_GET['id_cliente']) : null;
+        $clientedireccion->drc_relevancia = !empty($_GET['drc_relevancia']) ? trim($_GET['drc_relevancia']) : null;
 
         $direccion_list = $clientedireccion->read();
 

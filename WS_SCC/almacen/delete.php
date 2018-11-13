@@ -19,7 +19,7 @@
 
     	if(($_POST["idalmacen"])!=null)
     	{
-    		$almacen->idalmacen = $_POST["idalmacen"];
+    		$almacen->idalmacen = trimn($_POST["idalmacen"]);
 
 	    	if($almacen->delete())
 	        {
