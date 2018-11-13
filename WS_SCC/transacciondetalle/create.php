@@ -19,11 +19,11 @@
 
         if (($_POST["prcabecera"])!=null)
         {
-            $transaccion->id_cabecera = $_POST["prcabecera"];
-            $transaccion->id_producto_serie = $_POST["prproductoserie"];
-            $transaccion->cantidad = $_POST["prcantidad"];
-            $transaccion->precio =  $_POST["prprecio"];
-            $transaccion->observacion =  $_POST["probservacion"];
+            $transaccion->id_cabecera = trim($_POST["prcabecera"]);
+            $transaccion->id_producto_serie = trim($_POST["prproductoserie"]);
+            $transaccion->cantidad = trim($_POST["prcantidad"]);
+            $transaccion->precio =  trim($_POST["prprecio"]);
+            $transaccion->observacion =  trim($_POST["probservacion"]);
 
             if($transaccion->create())
             {

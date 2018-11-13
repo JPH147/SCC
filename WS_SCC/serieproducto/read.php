@@ -16,9 +16,9 @@
     try{
         $producto_serie = new SerieProducto($db);
 
-        $producto_serie->serie = !empty($_GET['prserie']) ? $_GET['prserie'] : "";
-        $producto_serie->numero_pagina = !empty($_GET['prpagina']) ? $_GET['prpagina'] : 1;
-        $producto_serie->total_pagina = !empty($_GET['prtotalpagina']) ? $_GET['prtotalpagina'] : 20;
+        $producto_serie->serie = !empty($_GET['prserie']) ? trim($_GET['prserie']) : "";
+        $producto_serie->numero_pagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : 1;
+        $producto_serie->total_pagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : 20;
 
 
         $producto_serie_list = $producto_serie->read();

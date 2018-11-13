@@ -17,9 +17,9 @@
     	$usuario = new Usuario($db);
     	$data = json_decode(file_get_contents('php://input'),true);
 
-    	if(($_POST["idusuario"])!=null)
+    	if(trim($_POST["idusuario"])!=null)
     	{
-    		$usuario->idusuario = $_POST["idusuario"];
+    		$usuario->idusuario = trim($_POST["idusuario"]);
 
 	    	if($usuario->delete())
 	        {

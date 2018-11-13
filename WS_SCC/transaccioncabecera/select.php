@@ -16,8 +16,8 @@
 
 	try
 	{
-        $transaccion->id_almacen = isset($_GET['id_almacen']) ? $_GET['id_almacen'] : die();
-        $transaccion->tipo_transaccion = isset($_GET['tipo_transaccion']) ? $_GET['tipo_transaccion'] : die();
+        $transaccion->id_almacen = isset($_GET['id_almacen']) ? trim($_GET['id_almacen']) : die();
+        $transaccion->tipo_transaccion = isset($_GET['tipo_transaccion']) ? trim($_GET['tipo_transaccion']) : die();
 	    $transaccion->select();
 	    $transaccion_list = array(
 	        "serie"=>$transaccion->serie,

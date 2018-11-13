@@ -16,8 +16,8 @@
     try{
     	$sede = new Sede($db);
 
-    	$sede->id_institucion = !empty($_GET['id_institucion']) ? $_GET['id_institucion'] : null;
-    	$sede->sd_nombre = !empty($_GET['sd_nombre']) ? $_GET['sd_nombre'] : null;
+    	$sede->id_institucion = !empty($_GET['id_institucion']) ? trim($_GET['id_institucion']) : null;
+    	$sede->sd_nombre = !empty($_GET['sd_nombre']) ? trim($_GET['sd_nombre']) : null;
 
     	$sede_list = $sede->read();
 

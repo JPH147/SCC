@@ -14,13 +14,13 @@
     try{
         $venta = new Venta($db);
 
-        $venta->cliente = !empty($_GET['prcliente']) ? $_GET['prcliente'] :'';
-        $venta->tipo_venta = !empty($_GET['prtipo_venta']) ? $_GET['prtipo_venta'] : null;
-        $venta->fecha_inicio = !empty($_GET['prfecha_inicio']) ? $_GET['prfecha_inicio'] : null;
-        $venta->fecha_fin = !empty($_GET['prfecha_fin']) ? $_GET['prfecha_fin'] : null;
-        $venta->numero_pagina = !empty($_GET['prpagina']) ? $_GET['prpagina'] : 1;
-        $venta->total_pagina = !empty($_GET['prtotalpagina']) ? $_GET['prtotalpagina'] : 20;
-        $venta->orden = !empty($_GET['prorden']) ? $_GET['prorden'] : 'serie asc';
+        $venta->cliente = !empty($_GET['prcliente']) ? trim($_GET['prcliente']) :'';
+        $venta->tipo_venta = !empty($_GET['prtipo_venta']) ? trim($_GET['prtipo_venta']) : null;
+        $venta->fecha_inicio = !empty($_GET['prfecha_inicio']) ? trim($_GET['prfecha_inicio']) : null;
+        $venta->fecha_fin = !empty($_GET['prfecha_fin']) ? trim($_GET['prfecha_fin']) : null;
+        $venta->numero_pagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : 1;
+        $venta->total_pagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : 20;
+        $venta->orden = !empty($_GET['prorden']) ? trim($_GET['prorden']) : 'serie asc';
 
         $venta_list = $venta->read();
         $venta_contar = $venta->contar();

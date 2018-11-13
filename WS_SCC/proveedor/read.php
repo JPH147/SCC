@@ -16,11 +16,11 @@
     try{
         $proveedor = new Proveedor($db);
 
-        $proveedor->tipo_documento = !empty($_GET['prtipodocumento']) ? $_GET['prtipodocumento'] : null;
-        $proveedor->prv_documento = !empty($_GET['prdocumento']) ? $_GET['prdocumento'] : '';
-        $proveedor->prv_nombre = !empty($_GET['prnombre']) ? $_GET['prnombre'] : '';
-        $proveedor->numero_pagina = !empty($_GET['prpagina']) ? $_GET['prpagina'] : 1;
-        $proveedor->total_pagina = !empty($_GET['prtotalpagina']) ? $_GET['prtotalpagina'] : 20;
+        $proveedor->tipo_documento = !empty($_GET['prtipodocumento']) ? trim($_GET['prtipodocumento']) : null;
+        $proveedor->prv_documento = !empty($_GET['prdocumento']) ? trim($_GET['prdocumento']) : '';
+        $proveedor->prv_nombre = !empty($_GET['prnombre']) ? trim($_GET['prnombre']) : '';
+        $proveedor->numero_pagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : 1;
+        $proveedor->total_pagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : 20;
 
         $proveedor_list = $proveedor->read();
         $contar = $proveedor->contar();

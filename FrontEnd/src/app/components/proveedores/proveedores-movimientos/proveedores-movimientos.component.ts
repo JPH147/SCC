@@ -1,10 +1,11 @@
 import { Component, OnInit, Inject, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import {MovimientosProveedorDataSource} from '../proveedores.dataservice';
-import { MatPaginator,MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatPaginator,MatDialogRef, MAT_DIALOG_DATA,MatDialog } from '@angular/material';
 import {ProveedorService} from '../proveedores.service';
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {fromEvent, merge} from 'rxjs';
 import {tap, debounceTime, distinctUntilChanged} from 'rxjs/operators';
+import {DetalleDocumentoAlmacenComponent} from '../../detalle-documento-almacen/detalle-documento-almacen.component'
 
 @Component({
   selector: 'app-proveedores-movimientos',
@@ -22,12 +23,13 @@ export class ProveedoresMovimientosComponent implements OnInit {
 	public FFin:Date = new Date();
 
   MovimientosProveedoresData: MovimientosProveedorDataSource;
-  Columnas: string[] = ['numero','almacen', 'referencia', 'fecha'];
+  Columnas: string[] = ['numero','almacen', 'referencia', 'fecha', 'opciones'];
 
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
-    public Servicios: ProveedorService
+    public Servicios: ProveedorService,
+    private Dialogo: MatDialog
   ) { }
 
   ngOnInit() {
@@ -53,6 +55,14 @@ export class ProveedoresMovimientosComponent implements OnInit {
     	})
     ).subscribe()
 
+  }
+
+  AbrirDetalle(movimiento){
+    console.log(movimiento);
+    let Ventana = this.Dialogo.open(DetalleDocumentoAlmacenComponent,{
+      width: '1000px',
+      data: {id:movimiento.id}
+    })
   }
 
   CargarData(){

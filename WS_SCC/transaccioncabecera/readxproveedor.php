@@ -16,13 +16,13 @@
     try{
         $transaccion = new TransaccionCabecera($db);
 
-        $transaccion->id_proveedor = !empty($_GET['pridproveedor']) ? $_GET['pridproveedor'] :null;
-        $transaccion->producto = !empty($_GET['prproducto']) ? $_GET['prproducto'] :'';
-        $transaccion->serie = !empty($_GET['prserie']) ? $_GET['prserie'] : '';
-        $transaccion->fecha_inicio = !empty($_GET['prfechainicio']) ? $_GET['prfechainicio'] : null;
-        $transaccion->fecha_fin = !empty($_GET['prfechafin']) ? $_GET['prfechafin'] : null;
-        $transaccion->numero_pagina = !empty($_GET['prpagina']) ? $_GET['prpagina'] : 1;
-        $transaccion->total_pagina = !empty($_GET['prtotalpagina']) ? $_GET['prtotalpagina'] : 20;
+        $transaccion->id_proveedor = !empty($_GET['pridproveedor']) ? trim($_GET['pridproveedor']) :null;
+        $transaccion->producto = !empty($_GET['prproducto']) ? trim($_GET['prproducto']) :'';
+        $transaccion->serie = !empty($_GET['prserie']) ? trim($_GET['prserie']) : '';
+        $transaccion->fecha_inicio = !empty($_GET['prfechainicio']) ? trim($_GET['prfechainicio']) : null;
+        $transaccion->fecha_fin = !empty($_GET['prfechafin']) ? trim($_GET['prfechafin']): null;
+        $transaccion->numero_pagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : 1;
+        $transaccion->total_pagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : 20;
 
         $transaccion_list = $transaccion->readxproveedor();
         $transaccion_contar = $transaccion->readxproveedorcontar();

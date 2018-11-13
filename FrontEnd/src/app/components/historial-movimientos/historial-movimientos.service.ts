@@ -15,6 +15,7 @@ export class  HistorialMovimientosService {
   ListarMovimientos(
     almacen:string,
     tipo:string,
+    estado_transaccion:number,
     referente:string,
     fecha_inicio: Date,
     fecha_fin: Date,
@@ -27,6 +28,7 @@ export class  HistorialMovimientosService {
       params: new HttpParams()
         .set('pralmacen', almacen)
         .set('prtipo', tipo)
+        .set('prparametro',estado_transaccion.toString())
         .set('prreferente', referente)
         .set('prfechainicio', moment(fecha_inicio).format("YYYY/MM/DD"))
         .set('prfechafin', moment(fecha_fin).format("YYYY/MM/DD"))
@@ -39,7 +41,7 @@ export class  HistorialMovimientosService {
       if (res['codigo'] === 0) {
         return res;
       } else {
-        console.log('Error al importar los datos, revisar servicio');
+        console.log('No hay datos para mostrar');
         return res;
     }
     }));

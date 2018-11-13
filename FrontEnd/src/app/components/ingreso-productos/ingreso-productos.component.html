@@ -182,7 +182,7 @@
           <button mat-fab color="warn" matTooltip="Limpiar" >  <mat-icon> restore</mat-icon></button> -->
 
           <button mat-raised-button (click)="Reset()" >Limpiar</button>
-          <button mat-raised-button color="primary" type="submit"  (click)="Guardar(IngresoProductoForm)" [disabled]="IngresoProductoForm">Grabar</button>
+          <button mat-raised-button color="primary" type="submit"  (click)="Guardar(IngresoProductoForm)" [disabled]="IngresoProductoForm.invalid">Grabar</button>
 
         </mat-grid-tile>
       </mat-grid-list>

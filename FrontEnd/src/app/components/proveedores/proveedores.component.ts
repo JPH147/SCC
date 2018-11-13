@@ -7,6 +7,7 @@ import {MatPaginator, MatSort, MatDialog, MatSnackBar} from '@angular/material';
 import {ProveedoresMovimientosComponent} from './proveedores-movimientos/proveedores-movimientos.component'
 import { VentanaEmergenteProveedores } from './ventana-emergente/ventana-emergente.component';
 import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
+
 @Component({
   selector: 'app-proveedores',
   templateUrl: './proveedores.component.html',

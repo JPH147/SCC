@@ -16,9 +16,9 @@
     try{
         $vendedor = new Vendedor($db);
 
-        $vendedor->vnd_dni = !empty($_GET['vnd_dni']) ? $_GET['vnd_dni'] : null;
-        $vendedor->vnd_nombre = !empty($_GET['vnd_nombre']) ? $_GET['vnd_nombre'] : null;
-        $vendedor->scs_nombre = !empty($_GET['scs_nombre']) ? $_GET['scs_nombre'] : null;
+        $vendedor->vnd_dni = !empty($_GET['vnd_dni']) ? trim($_GET['vnd_dni']) : null;
+        $vendedor->vnd_nombre = !empty($_GET['vnd_nombre']) ? trim($_GET['vnd_nombre']) : null;
+        $vendedor->scs_nombre = !empty($_GET['scs_nombre']) ? trim($_GET['scs_nombre']) : null;
 
         $vendedor_list = $vendedor->read();
 

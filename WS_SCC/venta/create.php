@@ -26,16 +26,16 @@
          && ($_POST["pvnt_tipoventa"])!=null && !empty(trim($_POST["pvnt_lugarventa"]))
          && !empty(trim($_POST["pvnt_observaciones"])))
         {
-            $venta->id_talonario = $_POST["pid_talonario"];
-            $venta->id_cliente = $_POST["pid_cliente"];
-            $venta->vnt_fecha = $_POST["pvnt_fecha"];
-            $venta->id_vendedor = $_POST["pid_vendedor"];
-            $venta->vnt_fecha_inicio = $_POST["pvnt_fecha_inicio"];
-            $venta->vnt_inicial = $_POST["pvnt_inicial"];
-            $venta->vnt_numero_cuota = $_POST["pvnt_numero_cuota"];
-            $venta->id_tipopago = $_POST["pid_tipopago"];
-            $venta->vnt_total = $_POST["pvnt_total"];
-            $venta->vnt_tipoventa = $_POST["pvnt_tipoventa"];
+            $venta->id_talonario = trim($_POST["pid_talonario"]);
+            $venta->id_cliente = trim($_POST["pid_cliente"]);
+            $venta->vnt_fecha = trim($_POST["pvnt_fecha"]);
+            $venta->id_vendedor = trim($_POST["pid_vendedor"]);
+            $venta->vnt_fecha_inicio =trim( $_POST["pvnt_fecha_inicio"]);
+            $venta->vnt_inicial = trim($_POST["pvnt_inicial"]);
+            $venta->vnt_numero_cuota = trim($_POST["pvnt_numero_cuota"]);
+            $venta->id_tipopago = trim($_POST["pid_tipopago"]);
+            $venta->vnt_total = trim($_POST["pvnt_total"]);
+            $venta->vnt_tipoventa = trim($_POST["pvnt_tipoventa"]);
             $venta->vnt_lugarventa = trim($_POST["pvnt_lugarventa"]);
             $venta->vnt_observaciones = trim($_POST["pvnt_observaciones"]);
 

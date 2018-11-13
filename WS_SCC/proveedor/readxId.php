@@ -16,7 +16,7 @@
 
 	try
 	{
-	    $proveedor->idproveedor = $_GET['id'];
+	    $proveedor->idproveedor = trim($_GET['id']);
 	    $proveedor->readxId();
 
 	    $proveedor_list = array(

@@ -17,6 +17,7 @@ Class TransaccionCabecera{
     public $almacen;
     public $id_almacen;
     public $tipo;
+    public $parametro;
     public $id_tipo;
     public $referencia;
     public $id_referencia;
@@ -45,20 +46,21 @@ Class TransaccionCabecera{
     /* Listar productos */
     function read(){
 
-        $query = "CALL sp_listartransaccioncabecera(?,?,?,?,?,?,?,?,?,?)";
+        $query = "CALL sp_listartransaccioncabecera(?,?,?,?,?,?,?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
         $result->bindParam(1, $this->almacen);
         $result->bindParam(2, $this->tipo);
-        $result->bindParam(3, $this->referencia);
-        $result->bindParam(4, $this->referente);
-        $result->bindParam(5, $this->fecha_inicio);
-        $result->bindParam(6, $this->fecha_fin);
-        $result->bindParam(7, $this->documento);
-        $result->bindParam(8, $this->numero_pagina);
-        $result->bindParam(9, $this->total_pagina);
-        $result->bindParam(10, $this->orden);
+        $result->bindParam(3, $this->parametro);
+        $result->bindParam(4, $this->referencia);
+        $result->bindParam(5, $this->referente);
+        $result->bindParam(6, $this->fecha_inicio);
+        $result->bindParam(7, $this->fecha_fin);
+        $result->bindParam(8, $this->documento);
+        $result->bindParam(9, $this->numero_pagina);
+        $result->bindParam(10, $this->total_pagina);
+        $result->bindParam(11, $this->orden);
 
         $result->execute();
         

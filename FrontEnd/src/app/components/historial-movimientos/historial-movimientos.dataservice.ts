@@ -31,6 +31,7 @@ export class HistorialMovimientosDataService implements DataSource<any> {
   CargarDatos(
     almacen:string,
     tipo:string,
+    estado_transaccion:number,
     referente:string,
     fecha_inicio: Date,
     fecha_fin: Date,
@@ -43,6 +44,7 @@ export class HistorialMovimientosDataService implements DataSource<any> {
   this.Servicio.ListarMovimientos(
     almacen,
     tipo,
+    estado_transaccion,
     referente,
     fecha_inicio,
     fecha_fin,

@@ -16,7 +16,7 @@
     try{
         $transaccion = new TransaccionDetalle($db);
 
-        $transaccion->documento = !empty($_GET['prguia']) ? $_GET['prguia'] : null;
+        $transaccion->documento = !empty($_GET['prguia']) ? trim($_GET['prguia']) : null;
         
         $transaccion_list = $transaccion->readxdocumento();
 

@@ -67,7 +67,7 @@ class Modelo{
 		$modelo_list=array();
 		$modelo_list["modelo"]=array();
 
-		$contador = 0;
+        $contador = $this->total_pagina*($this->numero_pagina-1);
 
 		while($row = $result->fetch(PDO::FETCH_ASSOC))
 		{
@@ -88,12 +88,13 @@ class Modelo{
 
 	function contar(){
 
-        $query = "CALL sp_listarmodelocontar(?,?)";
+        $query = "CALL sp_listarmodelocontar(?,?,?)";
 
         $result = $this->conn->prepare($query);
 
-		$result->bindParam(1, $this->marca);
-		$result->bindParam(2, $this->mdl_nombre);
+		$result->bindParam(1, $this->tipo);
+		$result->bindParam(2, $this->marca);
+		$result->bindParam(3, $this->mdl_nombre);
 
         $result->execute();
 

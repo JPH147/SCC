@@ -17,13 +17,13 @@
     	$transaccion = new TransaccionDetalle($db);
     	$data = json_decode(file_get_contents('php://input'),true);
 
-    	if(($_POST["prid"])!=null)
+    	if(trim($_POST["prid"])!=null)
     	{
-            $transaccion->id_transaccion = $_POST["prid"];
-            $transaccion->id_producto_serie = $_POST["prproductoserie"];
-            $transaccion->cantidad = $_POST["prcantidad"];
-            $transaccion->precio =  $_POST["prprecio"];
-            $transaccion->observacion =  $_POST["probservacion"];
+            $transaccion->id_transaccion = trim($_POST["prid"]);
+            $transaccion->id_producto_serie = trim($_POST["prproductoserie"]);
+            $transaccion->cantidad = trim($_POST["prcantidad"]);
+            $transaccion->precio =  trim($_POST["prprecio"]);
+            $transaccion->observacion =  trim($_POST["probservacion"]);
 
 	    	if($transaccion->update())
 	        {

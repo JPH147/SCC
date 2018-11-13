@@ -7,16 +7,17 @@
   <mat-grid-list cols= "4" rowHeight="90px">
     
     <mat-grid-tile>
-      <mat-icon>search</mat-icon>
       <mat-form-field>
-        <input matInput placeholder="Almacén" #InputAlmacen>
+        <mat-select placeholder="Tipo de transacción" (selectionChange)="CargarInformacion()" #InputTipo>
+          <mat-option *ngFor="let tipo of tipo_transaccion" [value]="tipo.id">{{tipo.nombre}}</mat-option>
+        </mat-select>
       </mat-form-field>
     </mat-grid-tile>
 
     <mat-grid-tile>
       <mat-icon>search</mat-icon>
       <mat-form-field>
-        <input matInput placeholder="Tipo" #InputTipo>
+        <input matInput placeholder="Almacén" #InputAlmacen>
       </mat-form-field>
     </mat-grid-tile>
 
@@ -34,21 +35,36 @@
       </mat-form-field>
     </mat-grid-tile>
 
-      <mat-grid-tile>
-        <mat-form-field>
-          <input matInput [matDatepicker]="Inicio" placeholder="Fecha de inicio" [(ngModel)]="fecha_inicio" (dateChange)="CargarInformacion()">
-          <mat-datepicker-toggle matSuffix [for]="Inicio"></mat-datepicker-toggle>
-          <mat-datepicker #Inicio ></mat-datepicker>
-        </mat-form-field>
-      </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-form-field>
+        <input matInput [matDatepicker]="Inicio" placeholder="Fecha de inicio" [(ngModel)]="fecha_inicio" (dateChange)="CargarInformacion()">
+        <mat-datepicker-toggle matSuffix [for]="Inicio"></mat-datepicker-toggle>
+        <mat-datepicker #Inicio ></mat-datepicker>
+      </mat-form-field>
+    </mat-grid-tile>
 
-      <mat-grid-tile>
-        <mat-form-field>
-          <input matInput [matDatepicker]="Salida" placeholder="Fecha de fin" [(ngModel)]="fecha_fin" (dateChange)="CargarInformacion()">
-          <mat-datepicker-toggle matSuffix [for]="Salida"></mat-datepicker-toggle>
-          <mat-datepicker #Salida ></mat-datepicker>
-        </mat-form-field>
-      </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-form-field>
+        <input matInput [matDatepicker]="Salida" placeholder="Fecha de fin" [(ngModel)]="fecha_fin" (dateChange)="CargarInformacion()">
+        <mat-datepicker-toggle matSuffix [for]="Salida"></mat-datepicker-toggle>
+        <mat-datepicker #Salida ></mat-datepicker>
+      </mat-form-field>
+    </mat-grid-tile>
+
+    <mat-grid-tile>
+      
+    </mat-grid-tile>
+
+    <mat-grid-tile *ngIf="FiltroTipo.value==5">
+      <mat-form-field appearance="outline" color="accent">
+        <mat-label>Estado de la transacción</mat-label>
+        <mat-select placeholder="Estado de la transacción" [value]=0 (selectionChange)="CargarInformacion()" #InputEstadoTransferencia>
+          <mat-option [value]=0>Todos</mat-option>
+          <mat-option [value]=1>Pendientes</mat-option>
+          <mat-option [value]=2>Entregados</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </mat-grid-tile>
 
   </mat-grid-list>
 

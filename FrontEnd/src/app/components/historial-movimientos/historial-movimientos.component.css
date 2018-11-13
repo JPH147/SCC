@@ -36,6 +36,10 @@ mat-card{
 	max-width: 10%;
 }
 
+.mat-column-tipo{
+  max-width: 20%;
+}
+
 #tituloProd {
   padding: 25px;
   font-size: 30px;

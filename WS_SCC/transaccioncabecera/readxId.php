@@ -16,7 +16,7 @@
 
 	try
 	{
-	    $transaccion->id_transaccion = isset($_GET['prid']) ? $_GET['prid'] : die();
+	    $transaccion->id_transaccion = isset($_GET['prid']) ? trim($_GET['prid']) : die();
 	    
 	    $transaccion->readxId();
 
