@@ -15,7 +15,7 @@
     {
         $cronograma = new Cronograma();
 
-        $array = $cronograma->create(date_create($_GET["fechainicio"]),$_GET["monto"],$_GET["numerocuotas"],$_GET["montoinicial"]);
+        $array = $cronograma->create(date_create(trim($_GET["fechainicio"])),trim($_GET["monto"]),trim($_GET["numerocuotas"]),trim($_GET["montoinicial"]));
 
         if($array!=null)
             print_json("0000", "OK", $array);

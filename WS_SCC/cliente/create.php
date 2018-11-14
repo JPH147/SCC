@@ -41,7 +41,7 @@
             $cliente->clt_calificacion_personal = trim($_POST["clt_calificacion_personal"]);
             $cliente->clt_aporte = trim($_POST["clt_aporte"]);
             $cliente->clt_estado = trim($_POST["clt_estado"]);
-            $cliente->clt_fecharegistro = $_POST["clt_fecharegistro"];
+            $cliente->clt_fecharegistro = trim($_POST["clt_fecharegistro"]);
 
             if($cliente->create())
             {

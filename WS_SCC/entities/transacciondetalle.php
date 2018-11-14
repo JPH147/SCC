@@ -5,6 +5,7 @@ Class TransaccionDetalle{
 
     public $id_cabecera;
     public $id_transaccion;
+    public $documento;
     public $id_producto;
     public $producto;
     public $id_producto_serie;
@@ -135,6 +136,41 @@ Class TransaccionDetalle{
         $this->cantidad=$row['tscdet_cantidad'];
         $this->precio=$row['tscdet_precio'];
         $this->observacion=$row['tscdet_observacion'];
+    }
+
+    function readxdocumento(){
+
+        $query = "CALL sp_listartransacciondetallexdocumento(?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->documento);
+
+        $result->execute();
+        
+        $detalle_list=array();
+        $detalle_list["detalles"]=array();
+
+        $contador = 0;
+
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $contador=$contador+1;
+            $detalle_items = array (
+                "numero"=>$contador,
+                "producto"=>$producto,
+                "serie"=>$serie,
+                "color"=>$color,
+                "almacenamiento"=>$almacenamiento,
+                "cantidad"=>$cantidad,
+                "precio"=>$precio,
+                "observacion"=>$observacion
+            );
+            array_push($detalle_list["detalles"],$detalle_items);
+        }
+
+        return $detalle_list;
     }
 
     /* Crear producto */

@@ -16,9 +16,9 @@
     try{
     	$departamento = new Departamento($db);
 
-        $departamento->dpt_nombre = !empty($_GET['prnombre']) ? $_GET['prnombre'] : null;
-        $departamento->numero_pagina = !empty($_GET['prpagina']) ? $_GET['prpagina'] : null;
-        $departamento->total_pagina = !empty($_GET['prtotalpagina']) ? $_GET['prtotalpagina'] : null;
+        $departamento->dpt_nombre = !empty($_GET['prnombre']) ? trim($_GET['prnombre']) : null;
+        $departamento->numero_pagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : null;
+        $departamento->total_pagina = !empty($_GET['prtotalpagina']) trim(? $_GET['prtotalpagina']) : null;
     	$departamento_list = $departamento->read();
         $departamento_contar = $departamento->contar();
 

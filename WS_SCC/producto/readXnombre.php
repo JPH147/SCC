@@ -16,7 +16,7 @@
 
 	try
 	{
-	    $producto->nombre = $_GET['prnombre'];
+	    $producto->nombre = trim($_GET['prnombre']);
 	    
 	    $producto->readxnombre();
 

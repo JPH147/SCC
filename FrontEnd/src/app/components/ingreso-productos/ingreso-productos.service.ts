@@ -160,6 +160,23 @@ constructor(private http: HttpClient) {}
    
   }
 
+  SeleccionarCabecera(
+    guia:string,
+  ): Observable<any> {
+    return this.http.get(this.url + 'transacciondetalle/readxdocumento.php', {
+      params: new HttpParams()
+        .set('prguia', guia)
+      }).pipe(map(res => {
+
+      if (res['codigo'] === 0) {
+        return res;
+      } else {
+        console.log('Error al importar los datos, revisar servicio');
+        return res;
+    }
+    }));
+  }
+
 
 
 

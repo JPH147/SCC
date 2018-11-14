@@ -16,7 +16,7 @@
 
 	try
 	{
-	    $marca->id_marca = isset($_GET['id']) ? $_GET['id'] : die();
+	    $marca->id_marca = isset($_GET['id']) ? trim($_GET['id']) : die();
 	    
 	    $marca->readxId();
 

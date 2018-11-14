@@ -17,10 +17,10 @@
     	$producto = new Producto($db);
     	$data = json_decode(file_get_contents('php://input'),true);
 
-        if (( ($_POST["prid"])!=null) && !empty(trim($_POST["prfoto"])))
+        if (( trim($_POST["prid"])!=null) && !empty(trim($_POST["prfoto"])))
     	{
-            $producto->id= $_POST["prid"]; 
-    		$producto->foto = $_POST["prfoto"];
+            $producto->id= trim($_POST["prid"];) 
+    		$producto->foto = trim($_POST["prfoto"]);
 
 	    	if($producto->updatefoto())
 	        {

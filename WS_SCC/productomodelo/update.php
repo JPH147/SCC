@@ -16,10 +16,10 @@
         $modelo = new Modelo($db);
         $data = json_decode(file_get_contents('php://input'),true);
 
-        if(($_POST["id"])!=null &&  ($_POST["idmarca"])!=null  &&  ($_POST["modelo"])!=null )
+        if( trim($_POST["id"])!=null &&  trim($_POST["idmarca"])!=null  &&  trim($_POST["modelo"])!=null )
         {
-            $modelo->id_modelo = $_POST["id"];
-            $modelo->id_marca = $_POST["idmarca"];
+            $modelo->id_modelo = trim($_POST["id"]);
+            $modelo->id_marca = trim($_POST["idmarca"]);
             $modelo->mdl_nombre = trim($_POST["modelo"]);
 
 

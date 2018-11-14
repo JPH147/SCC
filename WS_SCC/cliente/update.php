@@ -23,8 +23,8 @@
             && !empty(trim($_POST["clt_trabajo"])) && !empty(trim($_POST["clt_cargo"])) && !empty(trim($_POST["clt_calificacion_crediticia"]))
             && !empty(trim($_POST["clt_calificacion_personal"])) && ($_POST["clt_aporte"])!=null)
     	{
-            $cliente->idcliente= $_POST["idcliente"]; 
-    		$cliente->id_subsede = $_POST["id_subsede"];
+            $cliente->idcliente= trim($_POST["idcliente"]); 
+    		$cliente->id_subsede = trim($_POST["id_subsede")];
             $cliente->clt_codigo = trim($_POST["clt_codigo"]);
             $cliente->clt_dni = trim($_POST["clt_dni"]);
             $cliente->clt_nombre = trim($_POST["clt_nombre"]);
@@ -35,7 +35,7 @@
             $cliente->clt_cargo = trim($_POST["clt_cargo"]);
             $cliente->clt_calificacion_crediticia = trim($_POST["clt_calificacion_crediticia"]);
             $cliente->clt_calificacion_personal = trim($_POST["clt_calificacion_personal"]);
-            $cliente->clt_aporte = $_POST["clt_aporte"];
+            $cliente->clt_aporte = trim($_POST["clt_aporte")];
 
 	    	if($cliente->update())
 	        {

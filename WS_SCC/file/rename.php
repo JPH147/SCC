@@ -6,10 +6,10 @@ include_once '../shared/utilities.php';
 
 $path = '../uploads/';
 
-$nameimg= $_GET['nameimg'];
-$tipodoc = $_GET['tipodoc'];
-$numdoc = $_GET['numdoc'];
-$grupo = $_GET['prgrupo'];
+$nameimg= trim($_GET['nameimg']);
+$tipodoc = trim($_GET['tipodoc']);
+$numdoc = trim($_GET['numdoc']);
+$grupo = trim($_GET['prgrupo']);
 
 $ext = pathinfo($nameimg, PATHINFO_EXTENSION);
 

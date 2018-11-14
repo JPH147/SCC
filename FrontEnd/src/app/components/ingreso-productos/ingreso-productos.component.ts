@@ -22,6 +22,7 @@ import {ProductoService} from '../productos/productos.service';
     @ViewChild('Proveedor') FiltroProveedor: ElementRef;
     @ViewChild('Cliente') FiltroCliente: ElementRef;
     @ViewChild('Vendedor') FiltroVendedor: ElementRef;
+    @ViewChild('docRefencia') FiltroReferencia: ElementRef;
 
     public IngresoProductoForm: FormGroup;
     public contador: number;
@@ -44,7 +45,8 @@ import {ProductoService} from '../productos/productos.service';
     public  data;
     public documento_serie:string;
     public documento_numero:number;
-
+    public detalle:Array<any>;
+    public obsRec:Array<any>;
 
     @ViewChildren('InputProducto') FiltroProducto: QueryList<any>;
     public productos: FormArray;
@@ -54,9 +56,8 @@ import {ProductoService} from '../productos/productos.service';
     selected = 'option2';
     myControl = new FormControl();
     filteredOptions: Observable<string[]>;
-
+  
     constructor(public DialogoSerie: MatDialog,
-    // tslint:disable-next-line:no-shadowed-variable
       private FormBuilder: FormBuilder,
       public snackBar: MatSnackBar,
       private Servicios: ServiciosGenerales,
@@ -72,7 +73,6 @@ import {ProductoService} from '../productos/productos.service';
       
       this.ListarAlmacen();
       this.ListarTransaccionTipo();
-      //this.ObtenerNumeroDocumento('');
       this.ListarProveedor('');
       this.ListarCliente('');
       this.ListarVendedor('');
@@ -96,7 +96,9 @@ import {ProductoService} from '../productos/productos.service';
           'precioUnitario': [null, [Validators.required]],
           productos: this.FormBuilder.array([this.CrearProducto()])
       });
-      
+     
+      this.CrearProducto()
+      console.log(this.FiltroReferencia)
     }
 
     // tslint:disable-next-line:use-life-cycle-interface
@@ -116,22 +118,36 @@ import {ProductoService} from '../productos/productos.service';
         for (let i in this.FiltroProducto['_results']) {
           fromEvent(this.FiltroProducto['_results'][i].nativeElement,'keyup')
           .pipe(
-              debounceTime(100),
+              debounceTime(200),
               distinctUntilChanged(),
               tap(()=>{
                 if (this.FiltroProducto['_results'][i].nativeElement.value) {
-                  this.ProductoSeleccionado(this.FiltroProducto['_results'][i].nativeElement.value)
+                  this.FiltrarProductos(this.FiltroProducto['_results'][i].nativeElement.value)
                 }
               })
             ).subscribe()
         }
       })
 
+      fromEvent(this.FiltroReferencia.nativeElement, 'keyup')
+      .pipe(
+        debounceTime(10),
+        distinctUntilChanged(),
+        tap(() => {
+          
+          this.SeleccionarCabecera(this.FiltroReferencia.nativeElement.value);
+        })
+       ).subscribe();
+    
+     
     }
 
     /*********************************************/
     CrearProducto(): FormGroup{
       return this.FormBuilder.group({
+        'descripcion': [{value: null, disabled: false}, [
+          Validators.required
+        ]],
         'producto': [{value: null, disabled: false}, [
           Validators.required
         ]],
@@ -153,7 +169,6 @@ import {ProductoService} from '../productos/productos.service';
       this.ResetearFormArray(this.productos);
       this.Series = [];
       this.Articulos.Listado('', '', '', '', null,null,1, 10, 'descripcion', 'asc',1).subscribe(res => this.Producto = res['data'].productos);
-      
       this.almacen_destino=this.almacenes;
       this.almacen_destino=this.almacen_destino.filter(e=>e.id!=event.value.id);
 
@@ -166,7 +181,7 @@ import {ProductoService} from '../productos/productos.service';
           item.get('precioUnitario').enable()
         })
       }
-      this.ObtenerNumeroDocumento(this.IngresoProductoForm.value.almacen['id']);
+      this.ObtenerNumeroDocumento(event.value.id);
 
     }
 
@@ -175,8 +190,6 @@ import {ProductoService} from '../productos/productos.service';
       this.IngresoProductoForm.reset();
       this.ResetearFormArray(this.productos);
     }
-
-
 
     ResetearFormArray = (formArray: FormArray) => {
       if (formArray) {
@@ -207,17 +220,24 @@ import {ProductoService} from '../productos/productos.service';
       })
     }
 
+    FiltrarProductos(filtro){
+      this.Articulos.Listado('','','',filtro,null,null,1,10,'descripcion','asc',1).subscribe(res=>{
+        this.Producto=res['data'].productos;
+      })
+    }
+
     ProductoSeleccionado(index){
+      this.Producto=[];
       this.Articulos.Listado('', '', '', '', null,null,1, 10, 'descripcion', 'asc',1).subscribe(res => {
         this.Producto = res['data'].productos;
         for (let i of this.IngresoProductoForm['controls'].productos.value) {
           if (i.producto) {
-            this.EliminarElemento(this.Producto,i.producto.id);
-            // console.log(this.Producto,i.producto.id)
+            console.log(i);
+            this.EliminarElemento(this.Producto, i.producto.id);
           }
         }
       });
-      this.IngresoProductoForm.get('productos')['controls'][index].get('cantidad').setValue(0);
+      // this.IngresoProductoForm.get('productos')['controls'][index].get('cantidad').setValue(0);
       this.Verificar()
     }
 
@@ -318,6 +338,15 @@ import {ProductoService} from '../productos/productos.service';
       }
     })
   }
+  SeleccionarCabecera(guia){
+    this.IngresoProductoservicios.SeleccionarCabecera(guia).subscribe(res => {
+      if(res)
+      {
+        console.log(res)
+        this.detalle = res['data'].detalles
+      }
+    })
+  }
 
   // Selector Almacenes Activos
   ListarAlmacen() {
@@ -332,7 +361,6 @@ import {ProductoService} from '../productos/productos.service';
   AlmacenSeleccionado(evento){
     this.almacen_origen=this.almacenes;
     this.almacen_origen=this.almacen_origen.filter(e=>e.id!=evento.value);
-    this.ObtenerNumeroDocumento(evento.e)
   }
 
 

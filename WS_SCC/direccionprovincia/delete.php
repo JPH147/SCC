@@ -19,7 +19,7 @@
 
     	if(($_POST["prid"])!=null)
     	{
-    		$provincia->id_provincia = $_POST["prid"];
+    		$provincia->id_provincia = trim($_POST["prid"]);
 
 	    	if($provincia->delete())
 	        {

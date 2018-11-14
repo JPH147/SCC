@@ -16,7 +16,7 @@
     try{
     	$tipo_producto = new Tipo_Producto($db);
 
-    	$tipo_producto->id_tipo_producto = !empty($_GET['prproducto']) ? $_GET['prproducto'] : null;
+    	$tipo_producto->id_tipo_producto = !empty($_GET['prproducto']) ? trim($_GET['prproducto']) : null;
 
     	$unidad_medida_list = $tipo_producto->read_unidadmedida();
 

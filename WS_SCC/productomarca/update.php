@@ -16,9 +16,9 @@
         $marca = new Marca($db);
         $data = json_decode(file_get_contents('php://input'),true);
 
-        if(($_POST["id"])!=null &&  ($_POST["idtipoproducto"])!=null  &&  ($_POST["marca"])!=null )
+        if( trim($_POST["id"])!=null &&  trim($_POST["idtipoproducto"])!=null  &&  trim($_POST["marca"])!=null )
         {
-            $marca->id_marca = $_POST["id"];
+            $marca->id_marca = trim($_POST["id"]);
             $marca->id_tipo_producto = trim($_POST["idtipoproducto"]);
             $marca->mrc_nombre = trim($_POST["marca"]);
 

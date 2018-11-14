@@ -16,7 +16,7 @@
 
 	try
 	{
-	    $distrito->id_distrito = isset($_GET['prid']) ? $_GET['prid'] : die();
+	    $distrito->id_distrito = isset($_GET['prid']) ? trim($_GET['prid']) : die();
 	    
 	    $distrito->readxId();
 

@@ -21,11 +21,11 @@
         && ($_POST["pid_distrito"])!=null && ($_POST["drc_relevancia"])!=null
         && !empty(trim($_POST["drc_observacion"])))
         {
-            $clientedir->id_cliente = $_POST["id_cliente"];
+            $clientedir->id_cliente = trim($_POST["id_cliente"]);
             $clientedir->drc_nombre = trim($_POST["drc_nombre"]);
-            $clientedir->id_distrito = $_POST["pid_distrito"];
-            $clientedir->drc_relevancia = $_POST["drc_relevancia"];
-            $clientedir->drc_observacion = $_POST["drc_observacion"];
+            $clientedir->id_distrito = trim($_POST["pid_distrito"]);
+            $clientedir->drc_relevancia = trim($_POST["drc_relevancia"]);
+            $clientedir->drc_observacion = trim($_POST["drc_observacion"]);
 
             if($clientedir->create())
             {

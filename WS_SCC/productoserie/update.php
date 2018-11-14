@@ -19,11 +19,11 @@
 
     	if(($_POST["prid"])!=null)
     	{
-    		$productoserie->id_producto_serie = $_POST["prid"];
-            $productoserie->id_producto = $_POST["prproducto"];
-            $productoserie->serie = $_POST["prserie"];
-            $productoserie->color = $_POST["prcolor"];
-            $productoserie->almacenamiento = $_POST["pralmacenamiento"];
+    		$productoserie->id_producto_serie = trim($_POST["prid"]);
+            $productoserie->id_producto = trim($_POST["prproducto"]);
+            $productoserie->serie = trim($_POST["prserie"]);
+            $productoserie->color = trim($_POST["prcolor"]);
+            $productoserie->almacenamiento = trim($_POST["pralmacenamiento"]);
 
 	    	if($productoserie->update())
 	        {

@@ -18,7 +18,7 @@
 
     	if(($_POST["prid"])!=null)
     	{
-            $departamento->id_departamento = $_POST["prid"];
+            $departamento->id_departamento = trim($_POST["prid"]);
             $departamento->dpt_nombre = trim($_POST["prnombre"]);
 
 	    	if($departamento->update())

@@ -177,3 +177,47 @@ mat-header-cell {
   margin-right: auto;
 
 }
+
+
+#detalle-numero{
+  max-width: 10%
+}
+
+#detalle-almacenamiento,
+#detalle-precio,
+#detalle-color,
+#detalle-serie{
+  max-width: 15%
+}
+
+#detalle-producto{
+  max-width: 20%
+}
+
+.detalle-columnas{
+  text-align: center
+}
+
+.regresar{
+  float: left
+}
+
+td,
+th{
+  height: 42px
+}
+
+example-h2 {
+  margin: 10px;
+}
+
+.example-section {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  height: 60px;
+}
+
+.example-margin {
+  margin: 0 10px;
+}

@@ -16,13 +16,13 @@
     try{
         $cliente = new Cliente($db);
 
-        $cliente->inst_nombre = !empty($_GET['inst_nombre']) ? $_GET['inst_nombre'] : null;
-        $cliente->sd_nombre = !empty($_GET['sd_nombre']) ? $_GET['sd_nombre'] : null;
-        $cliente->ssd_nombre = !empty($_GET['ssd_nombre']) ? $_GET['ssd_nombre'] : null;
-        $cliente->clt_dni = !empty($_GET['pclt_dni']) ? $_GET['pclt_dni'] : null;
-        $cliente->clt_nombre = !empty($_GET['pclt_nombre']) ? $_GET['pclt_nombre'] : null;
-        $cliente->prpagina = !empty($_GET['prpagina']) ? $_GET['prpagina'] : 1;
-        $cliente->prtotalpagina = !empty($_GET['prtotalpagina']) ? $_GET['prtotalpagina'] : 20;
+        $cliente->inst_nombre = !empty($_GET['inst_nombre']) ? trim($_GET['inst_nombre']) : null;
+        $cliente->sd_nombre = !empty($_GET['sd_nombre']) ? trim($_GET['sd_nombre']) : null;
+        $cliente->ssd_nombre = !empty($_GET['ssd_nombre']) ? trim($_GET['ssd_nombre']) : null;
+        $cliente->clt_dni = !empty($_GET['pclt_dni']) ? trim($_GET['pclt_dni']) : null;
+        $cliente->clt_nombre = !empty($_GET['pclt_nombre']) ? trim($_GET['pclt_nombre']) : null;
+        $cliente->prpagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : 1;
+        $cliente->prtotalpagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : 20;
 
 
         $cliente_list = $cliente->read();

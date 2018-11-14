@@ -15,10 +15,10 @@
     try{
         $productoserie = new ProductoSerie($db);
 
-        $productoserie->almacen = !empty($_GET['pralmacen']) ? $_GET['pralmacen'] :'';
-        $productoserie->id_producto = !empty($_GET['prproducto']) ? $_GET['prproducto'] :null;
-        $productoserie->numero_pagina = !empty($_GET['prpagina']) ? $_GET['prpagina'] : 1;
-        $productoserie->total_pagina = !empty($_GET['prtotalpagina']) ? $_GET['prtotalpagina'] : 20;
+        $productoserie->almacen = !empty($_GET['pralmacen']) ? trim($_GET['pralmacen']) :'';
+        $productoserie->id_producto = !empty($_GET['prproducto']) ? trim($_GET['prproducto']) :null;
+        $productoserie->numero_pagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : 1;
+        $productoserie->total_pagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : 20;
 
         $producto_serie_list = $productoserie->read();
         $producto_serie_contar = $productoserie->contar();

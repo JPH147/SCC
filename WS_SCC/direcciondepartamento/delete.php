@@ -19,7 +19,7 @@
 
     	if(($_POST["prid"])!=null)
     	{
-    		$departamento->id_departamento = $_POST["prid"];
+    		$departamento->id_departamento = trim($_POST["prid"]);
 
 	    	if($departamento->delete())
 	        {

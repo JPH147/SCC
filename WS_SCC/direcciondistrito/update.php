@@ -18,7 +18,7 @@
 
         if(($_POST["prid"])!=null)
         {
-            $distrito->id_distrito = $_POST["prid"];
+            $distrito->id_distrito = trim($_POST["prid"]);
             $distrito->id_provincia = trim($_POST["prprovincia"]);
             $distrito->dst_nombre = trim($_POST["prnombre"]);
 

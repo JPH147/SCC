@@ -16,8 +16,8 @@
     try{
         $clientetelefono = new ClienteTelefono($db);
 
-        $clientetelefono->id_cliente = !empty($_GET['id_cliente']) ? $_GET['id_cliente'] : null;
-        $clientetelefono->drc_relevancia = !empty($_GET['tlf_relevancia']) ? $_GET['tlf_relevancia'] : null;
+        $clientetelefono->id_cliente = !empty($_GET['id_cliente']) ? trim($_GET['id_cliente']) : null;
+        $clientetelefono->drc_relevancia = !empty($_GET['tlf_relevancia']) ? trim($_GET['tlf_relevancia']) : null;
 
         $telefono_list = $clientetelefono->read();
 

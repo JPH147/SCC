@@ -16,7 +16,7 @@
     try{
     	$colores = new Colores($db);
 
-    	$colores->clr_nombre = !empty($_GET['prnombre']) ? $_GET['prnombre'] : '';
+    	$colores->clr_nombre = !empty($_GET['prnombre']) ? trim($_GET['prnombre']) : '';
 
     	$colores = $colores->read();
 
