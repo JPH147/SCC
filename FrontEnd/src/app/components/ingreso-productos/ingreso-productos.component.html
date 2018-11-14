@@ -183,6 +183,8 @@
       </div>
       </mat-card-content>
 
+      <!-- Tipo de Transaccion transferencia de almacen  -->
+
       <mat-card-content  *ngIf = "IngresoProductoForm.get('tipoIngreso').value ==7">
           <table  class="tabla-detalle">
               <tr>
@@ -195,7 +197,7 @@
                 
                 <th>OBSERVACIONES</th>
                 <th>OBS. RECEPCION</th>
-                <th>CONFORME</th>
+                <!-- <th>CONFORME</th> -->
 
                 <th *ngIf="id_tipo==1">OPCIONES</th>
               </tr>
@@ -210,9 +212,9 @@
                 <td class="detalle-columnas" id="detalle-observacion">
                     <input type="text" name="observacion">
                 </td>
-                <td class="detalle-columnas" id="detalle-opciones">
+                <!-- <td class="detalle-columnas" id="detalle-opciones">
                    <mat-checkbox class="example-margin" value="false"></mat-checkbox>
-                </td>
+                </td> -->
               </tr>
             </table>		
 

@@ -36,6 +36,7 @@ Class TransaccionCabecera{
     public $transaccion_detalle;
     public $tipo_transaccion;
     public $proxnumero;
+    public $numero_documento;
 
     public function __construct($db){
         $this->conn = $db;
@@ -155,7 +156,8 @@ Class TransaccionCabecera{
             :prsucursal,
             :prvendedor,
             :prfecha,
-            :prdocumento
+            :prdocumento,
+            :prnumerodoc
         )";
 
         $result = $this->conn->prepare($query);
@@ -170,6 +172,7 @@ Class TransaccionCabecera{
         $result->bindParam(":prvendedor", $this->id_vendedor);
         $result->bindParam(":prfecha", $this->fecha);
         $result->bindParam(":prdocumento", $this->documento);
+        $result->bindParam(":prnumerodoc", $this->numero_documento);
       //  $result->bindParam("@id", $this->id_transaccion);
 
         $this->id_almacen=htmlspecialchars(strip_tags($this->id_almacen));
