@@ -98,7 +98,11 @@ import {ProductoService} from '../productos/productos.service';
       });
      
       this.CrearProducto()
+<<<<<<< HEAD
       console.log(this.FiltroReferencia)
+=======
+      
+>>>>>>> 2d425fe34127d1eae71278d7be7bf87585aa22f6
     }
 
     // tslint:disable-next-line:use-life-cycle-interface
@@ -146,7 +150,10 @@ import {ProductoService} from '../productos/productos.service';
     CrearProducto(): FormGroup{
       return this.FormBuilder.group({
         'descripcion': [{value: null, disabled: false}, [
+<<<<<<< HEAD
           Validators.required
+=======
+>>>>>>> 2d425fe34127d1eae71278d7be7bf87585aa22f6
         ]],
         'producto': [{value: null, disabled: false}, [
           Validators.required
@@ -283,7 +290,11 @@ import {ProductoService} from '../productos/productos.service';
 
     // Selector tipo de ingresos
     ListarTransaccionTipo() {
+<<<<<<< HEAD
       this.Servicios.ListarTransaccionTipo('1').subscribe( res => {
+=======
+      this.Servicios.ListarTransaccionTipo("1").subscribe( res => {
+>>>>>>> 2d425fe34127d1eae71278d7be7bf87585aa22f6
         this.TipoIngresos=res;
         this.TipoIngresos = this.TipoIngresos.filter(e=>e.id!=2);
         this.TipoIngresos = this.TipoIngresos.filter(e=>e.id!=6);
