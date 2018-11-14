@@ -82,24 +82,19 @@ import {ProductoService} from '../productos/productos.service';
 
       this.IngresoProductoForm = this.FormBuilder.group({
           'almacen': [null, [Validators.required] ],
-          'almacen1': [null, [Validators.required] ],
-          'tipoIngreso': [null, [Validators.required]],
-          'docReferencia': [null, [Validators.required]],
-          'proveedor': [null, [Validators.required] ],
-          'cliente': [null, [Validators.required]],
-          'vendedor': [null, [Validators.required]],
-          'sucursal': [null, [Validators.required]],
-          'documento': [null, [Validators.required]],
+          'tipoIngreso': [null, [Validators.required] ],
+          'docReferencia': [null, [Validators.required] ],
+          'proveedor': [null, [
+          ] ],
+          // 'cliente': [null, [Validators.required]],
+          // 'vendedor': [null, [Validators.required]],
+          'almacen1': [null, [
+          ] ],
+          // 'documento': [null, [Validators.required]],
           'fecingreso': [null, [Validators.required]],
-          'producto': [null, [Validators.required]],
-          'cantidad': [null, [Validators.required]],
-          'precioUnitario': [null, [Validators.required]],
           productos: this.FormBuilder.array([this.CrearProducto()])
       });
      
-      this.CrearProducto()
-      console.log(this.FiltroReferencia)
-      
     }
 
     // tslint:disable-next-line:use-life-cycle-interface
@@ -135,19 +130,29 @@ import {ProductoService} from '../productos/productos.service';
         debounceTime(10),
         distinctUntilChanged(),
         tap(() => {
-          
-          this.SeleccionarCabecera(this.FiltroReferencia.nativeElement.value);
+          if (this.IngresoProductoForm.value.tipoIngreso==7) {
+            this.SeleccionarCabecera(this.FiltroReferencia.nativeElement.value);
+          }
         })
        ).subscribe();
-    
-     
+    }
+
+    ActualizarTipoIngreso(evento){
+      if (evento.value==1) {
+        this.IngresoProductoForm.get('almacen1').clearValidators();
+        this.IngresoProductoForm.get('proveedor').setValidators([Validators.required]);
+      }
+      if (evento.value==7) {
+        this.IngresoProductoForm.get('proveedor').clearValidators();
+        this.IngresoProductoForm.get('almacen1').setValidators([Validators.required]);
+      }
     }
 
     /*********************************************/
     CrearProducto(): FormGroup{
       return this.FormBuilder.group({
         'descripcion': [{value: null, disabled: false}, [
-          Validators.required
+          // Validators.required
         ]],
         'producto': [{value: null, disabled: false}, [
           Validators.required
@@ -188,8 +193,11 @@ import {ProductoService} from '../productos/productos.service';
 
 
     Reset(){
+      this.IngresoProductoForm.get('proveedor').setValidators([]);
+      this.IngresoProductoForm.get('almacen1').setValidators([]);
       this.IngresoProductoForm.reset();
       this.ResetearFormArray(this.productos);
+      this.Series = [];
     }
 
     ResetearFormArray = (formArray: FormArray) => {
@@ -228,24 +236,26 @@ import {ProductoService} from '../productos/productos.service';
     }
 
     ProductoSeleccionado(index){
+
+      this.IngresoProductoForm.get('productos')['controls'][index].get('cantidad').setValue(0);
+      this.IngresoProductoForm.get('productos')['controls'][index].get('producto').setValue(this.IngresoProductoForm.get('productos')['controls'][index].value.descripcion);
+      this.IngresoProductoForm.get('productos')['controls'][index].get('descripcion').disable();
+
       this.Producto=[];
       this.Articulos.Listado('', '', '', '', null,null,1, 10, 'descripcion', 'asc',1).subscribe(res => {
         this.Producto = res['data'].productos;
         for (let i of this.IngresoProductoForm['controls'].productos.value) {
           if (i.producto) {
-            console.log(i);
             this.EliminarElemento(this.Producto, i.producto.id);
           }
         }
       });
-      // this.IngresoProductoForm.get('productos')['controls'][index].get('cantidad').setValue(0);
+      
       this.Verificar()
     }
 
     Verificar(){
-      // this.IngresoProductoForm.value.productos.forEach((item,index)=>{
-      //   this.Series=this.Series.filter(e=>e.id_producto!=item.producto.id)
-      // })
+      // console.log(this.IngresoProductoForm.get('productos')['controls'])
     }
 
     displayFn2(producto) {
@@ -397,32 +407,33 @@ import {ProductoService} from '../productos/productos.service';
 
   Guardar(formulario) {
 
-   let tipoingreso = formulario.value.tipoIngreso;
+   // let tipoingreso = formulario.value.tipoIngreso;
 
-   if (tipoingreso === 1) {
+   if (formulario.value.tipoIngreso === 1) {
     this.IngresoProductoservicios.AgregarCompraMercaderia(
       formulario.value.almacen.id,
       1,
       1,
       formulario.value.proveedor.id,
       formulario.value.fecingreso,
-      formulario.value.docReferencia).subscribe (res => {
-        let id_cabecera = res['data'];
-          for (let i of formulario.value.productos) {
-            for (let is of this.Series) {
-              if (i.producto.id === is.id_producto) {
-                this.SSeries.CrearProductoSerie(i.producto.id,is.serie, is.color, is.almacenamiento).subscribe(response => {
-                  this.IngresoProductoservicios.CrearTransaccionDetalle(id_cabecera, response['data'], 1, i.precioUnitario, is.observacion).subscribe();
-                });
-              }
-            }
-          }
-        this.IngresoProductoForm.reset();
-        this.Series = [];
-        this.ResetearFormArray(this.productos);
-        this.snackBar.open('El ingreso se guardó satisfactoriamente', '', {
-          duration: 2000,
-        });
+      formulario.value.docReferencia,
+      this.documento_numero
+      ).subscribe (res => {
+        // let id_cabecera = res['data'];
+        //   for (let i of formulario.value.productos) {
+        //     for (let is of this.Series) {
+        //       if (i.producto.id === is.id_producto) {
+        //         this.SSeries.CrearProductoSerie(is.id_producto,is.serie, is.color, is.almacenamiento).subscribe(response => {
+        //           this.IngresoProductoservicios.CrearTransaccionDetalle(id_cabecera, response['data'], 1, i.precioUnitario, is.observacion).subscribe(rest=>
+        //             );
+        //         });
+        //       }
+        //     }
+        //   }
+        // this.Reset();
+        // this.snackBar.open('El ingreso se guardó satisfactoriamente', '', {
+        //   duration: 2000,
+        // });
 
       });
    }

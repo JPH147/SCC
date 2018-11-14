@@ -6,7 +6,7 @@
     <div id = "tituloProd"> Ingreso de Productos Nro. {{documento_serie}}-{{documento_numero}}</div>
   </mat-card-title>
 
-  <form [formGroup]="IngresoProductoForm" (submit)="Guardar(IngresoProductoForm)">
+  <form [formGroup]="IngresoProductoForm">
 
     <mat-card-content>
 
@@ -23,7 +23,7 @@
         <!--Campo ingresar Tipo de Ingreso a almacen -->
         <mat-grid-tile >
             <mat-form-field  class="example-full-width">
-              <mat-select placeholder="Tipo de  Ingreso" formControlName= "tipoIngreso" >
+              <mat-select placeholder="Tipo de ingreso" formControlName= "tipoIngreso" (selectionChange)="ActualizarTipoIngreso($event)">
                 <mat-option *ngFor="let tipoIngreso of TipoIngresos" [value]="tipoIngreso.id">
                   {{tipoIngreso.nombre}}
                 </mat-option>
@@ -70,7 +70,7 @@
               </mat-autocomplete>
             </mat-form-field>
             <!--Campo ingresar Ciente -->
-            <mat-form-field class="example-full-width" *ngSwitchCase="2">
+            <!-- <mat-form-field class="example-full-width" *ngSwitchCase="2">
               <input #Proveedor placeholder="Cliente" matInput [matAutocomplete]="auto" formControlName=cliente>
               <mat-error> Debe ingresar Cliente </mat-error>
               <mat-autocomplete #auto="matAutocomplete" [displayWith] = "displayCliente">
@@ -78,9 +78,9 @@
                   {{cliente.nombre}}
                 </mat-option>
               </mat-autocomplete>
-            </mat-form-field>
+            </mat-form-field> -->
               <!--Campo ingresar Vendedor -->
-            <mat-form-field class="example-full-width" *ngSwitchCase="6">
+<!--             <mat-form-field class="example-full-width" *ngSwitchCase="6">
               <input #Proveedor placeholder="Vendedor" matInput [matAutocomplete]="auto" formControlName=vendedor>
               <mat-error> Debe ingresar Vendedor</mat-error>
               <mat-autocomplete #auto="matAutocomplete" [displayWith] = "displayVendedor">
@@ -88,7 +88,7 @@
                   {{vendedor.nombre}}
                 </mat-option>
               </mat-autocomplete>
-            </mat-form-field>
+            </mat-form-field> -->
 
             <mat-form-field class="example-full-width" *ngSwitchCase="7" >
               <mat-select placeholder="Almacen Destino" formControlName="almacen1" (selectionChange)="AlmacenSeleccionado($event)" >
@@ -122,7 +122,7 @@
      
 
     <!-- Boton Agrega Productos -->
-    <mat-card class="CabeceraSalidaVendedor"    >
+    <mat-card class="CabeceraSalidaVendedor">
 
       <mat-card-header>                 
 
@@ -148,7 +148,7 @@
 
             <mat-grid-tile colspan=3>
               <mat-form-field class="example-full-width">
-                <input matInput placeholder="Producto" [matAutocomplete]="autoproducto" #InputProducto formControlName="producto">
+                <input matInput placeholder="Producto" [matAutocomplete]="autoproducto" #InputProducto formControlName="descripcion">
                 <mat-autocomplete #autoproducto="matAutocomplete" [displayWith]="displayFn2" (optionSelected)="ProductoSeleccionado(i)">
                   <mat-option *ngFor="let producto of Producto" [value]="producto">
                     {{producto.descripcion}}
@@ -167,14 +167,14 @@
             <mat-grid-tile colspan="2">
               <mat-form-field  class="example-full-width">
                 <input matInput placeholder="Precio unitario" formControlName="precioUnitario" class="example-right-align" >
-                <mat-error> Debe ingresar Precio</mat-error>
+                <mat-error> Debe ingresar el precio</mat-error>
                 <span matPrefix>S/.&nbsp;</span>
               </mat-form-field>
             </mat-grid-tile>
 
             <mat-grid-tile colspan="1">
-              <button mat-mini-fab color="primary" (click) = "AgregarSerie(producto,i)"  matTooltip="Ingresa Serie Producto" type="button"><mat-icon> reorder </mat-icon> </button>
-              <button mat-mini-fab color="primary" matTooltip="Elimina  Producto" type="button" (click)="EliminarProducto(producto.value.producto,i)"> <mat-icon>delete</mat-icon></button>
+              <button mat-mini-fab color="primary" (click) = "AgregarSerie(producto,i)"  matTooltip="Ingresa Serie Producto" type="button" [disabled]="!producto.value.producto"><mat-icon> reorder </mat-icon> </button>
+              <button mat-mini-fab color="primary" matTooltip="Elimina  Producto" type="button" (click)="EliminarProducto(producto.value.producto,i)" [disabled]="!productos || productos.length==1"> <mat-icon>delete</mat-icon></button>
             </mat-grid-tile>
 
           </mat-grid-list>
@@ -236,8 +236,8 @@
 <!--           <button mat-fab color="primary" matTooltip="Grabar" > <mat-icon> save</mat-icon></button>
           <button mat-fab color="warn" matTooltip="Limpiar" >  <mat-icon> restore</mat-icon></button> -->
 
-          <button mat-raised-button (click)="Reset()" >Limpiar</button>
-          <button mat-raised-button color="primary" type="submit"  (click)="Guardar(IngresoProductoForm)" [disabled]="IngresoProductoForm.invalid">Grabar</button>
+          <button mat-raised-button type="button" (click)="Reset()" >Limpiar</button>
+          <button mat-raised-button color="primary" type="submit"  (click)="Guardar(IngresoProductoForm)" [disabled]="IngresoProductoForm.invalid || Series.length==0">Grabar</button>
 
         </mat-grid-tile>
       </mat-grid-list>

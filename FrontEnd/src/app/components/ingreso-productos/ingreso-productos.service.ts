@@ -18,26 +18,22 @@ constructor(private http: HttpClient) {}
 
 
     AgregarCompraMercaderia(
-      pralmacen: number,
-      prtipo: number,
-      pr_referencia: number,
-      prproveedor: number,
-      prfecha: Date,
-      prdocumento: string
+      almacen: number,
+      tipo: number,
+      referencia: number,
+      proveedor: number,
+      fecha: Date,
+      documento: string,
+      numero_documento:number
     ): Observable <any> {
-
-      // tslint:disable-next-line:prefer-const
       let params = new HttpParams()
-      .set('pralmacen', pralmacen.toString())
-      .set('prtipo', prtipo.toString())
-      .set('prreferencia', pr_referencia.toString())
-      .set('prproveedor', prproveedor.toString())
-      .set('prfecha', moment (prfecha).format('YYYY/MM/DD'))
-      .set('prdocumento', prdocumento);
-
-      // console.log(params);
-
-      // tslint:disable-next-line:prefer-const
+      .set('pralmacen', almacen.toString())
+      .set('prtipo', tipo.toString())
+      .set('prreferencia', referencia.toString())
+      .set('prproveedor', proveedor.toString())
+      .set('prfecha', moment (fecha).format('YYYY/MM/DD'))
+      .set('prdocumento', documento)
+      .set('prnumerodoc', numero_documento.toString());
       let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
       return this.http.post(this.url + 'transaccioncabecera/create.php', params, {headers: headers});
      }

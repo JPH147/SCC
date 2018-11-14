@@ -40,7 +40,7 @@ export class HistorialMovimientosComponent implements OnInit {
   	this.fecha_fin= new Date();
 
   	this.ListadoMovimientos = new HistorialMovimientosDataService(this.Servicio);
-    this.ListadoMovimientos.CargarDatos("","",0,"",this.fecha_inicio,this.fecha_fin,"",1,10,"fecha desc");
+    this.ListadoMovimientos.CargarDatos("",0,0,"",this.fecha_inicio,this.fecha_fin,"",1,10,"fecha desc");
 
     this.SGenerales.ListarTransaccionTipo("").subscribe(res=>{
       this.tipo_transaccion=res
@@ -62,7 +62,8 @@ export class HistorialMovimientosComponent implements OnInit {
       fromEvent(this.FiltroAlmacen.nativeElement, 'keyup'),
       fromEvent(this.FiltroReferente.nativeElement, 'keyup'),
       fromEvent(this.FiltroDocumento.nativeElement, 'keyup'),
-      this.sort.sortChange
+      this.sort.sortChange,
+      this.FiltroTipo.valueChange,
     )
     .pipe(
       debounceTime(200),
@@ -74,8 +75,12 @@ export class HistorialMovimientosComponent implements OnInit {
      ).subscribe();
   }
 
-  CargarInformacion(){
+  CargarInformacionEspecial(){
+    this.paginator.pageIndex = 0;
+    this.CargarInformacion();
+  }
 
+  CargarInformacion(){
     let estado_transaccion:number;
 
     if (this.FiltroEstadoTransferencia) {

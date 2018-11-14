@@ -205,7 +205,6 @@ Class TransaccionCabecera{
         $result->bindParam(":prfecha", $this->fecha);
         $result->bindParam(":prdocumento", $this->documento);
         $result->bindParam(":prnumerodoc", $this->numero_documento);
-      //  $result->bindParam("@id", $this->id_transaccion);
 
         $this->id_almacen=htmlspecialchars(strip_tags($this->id_almacen));
         $this->id_tipo=htmlspecialchars(strip_tags($this->id_tipo));

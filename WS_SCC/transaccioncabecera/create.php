@@ -17,7 +17,7 @@
         $transaccion = new TransaccionCabecera($db);
         $data = json_decode(file_get_contents('php://input'), true);
 
-        if (($_POST["prtipo"])!=null)
+        if (trim($_POST["pralmacen"])!=null)
         {
             $transaccion->id_almacen = trim($_POST["pralmacen"]);
             $transaccion->id_tipo = trim($_POST["prtipo"]);
@@ -29,7 +29,7 @@
             $transaccion->id_vendedor = !empty($_POST["prvendedor"]) ? trim($_POST["prvendedor"]) : null;
             $transaccion->fecha = !empty($_POST["prfecha"]) ? trim($_POST["prfecha"]) : null;
             $transaccion->documento = !empty($_POST["prdocumento"]) ? trim($_POST["prdocumento"]) : '';
-            $transaccion->documento = !empty($_POST["prnumerodoc"]) ? trim($_POST["prnumerodoc"]) : '';
+            $transaccion->numero_documento = !empty($_POST["prnumerodoc"]) ? trim($_POST["prnumerodoc"]) : null;
             
             if($transaccion->create())
             {

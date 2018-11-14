@@ -14,7 +14,7 @@ export class  HistorialMovimientosService {
 
   ListarMovimientos(
     almacen:string,
-    tipo:string,
+    tipo:number,
     estado_transaccion:number,
     referente:string,
     fecha_inicio: Date,
@@ -24,10 +24,19 @@ export class  HistorialMovimientosService {
     total_pagina: number,
     orden:string,
   ): Observable<any> {
+
+    // let parametro_corregido;
+
+    // if (estado_transaccion == 0) {
+    //   parametro_corregido=null
+    // }else{
+    //   parametro_corregido=estado_transaccion.toString()
+    // }
+
     return this.http.get(this.url + 'transaccioncabecera/read.php', {
       params: new HttpParams()
         .set('pralmacen', almacen)
-        .set('prtipo', tipo)
+        .set('prtipo', tipo.toString())
         .set('prparametro',estado_transaccion.toString())
         .set('prreferente', referente)
         .set('prfechainicio', moment(fecha_inicio).format("YYYY/MM/DD"))

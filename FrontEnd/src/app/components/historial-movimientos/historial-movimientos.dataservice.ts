@@ -30,7 +30,7 @@ export class HistorialMovimientosDataService implements DataSource<any> {
 
   CargarDatos(
     almacen:string,
-    tipo:string,
+    tipo:number,
     estado_transaccion:number,
     referente:string,
     fecha_inicio: Date,
