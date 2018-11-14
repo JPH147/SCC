@@ -46,7 +46,7 @@ import {ProductoService} from '../productos/productos.service';
     public documento_serie:string;
     public documento_numero:number;
     public detalle:Array<any>;
-    public obsRec:Array<any>;
+    public obsentrega:Array<any>;
 
     @ViewChildren('InputProducto') FiltroProducto: QueryList<any>;
     public productos: FormArray;
@@ -430,9 +430,13 @@ import {ProductoService} from '../productos/productos.service';
       this.IngresoProductoservicios.AgregarTransferenciaSucursal(
         formulario.value.almacen.id,
         7,
-        formulario.value.docRefencia,
-        formulario.value.almacen,
+        formulario.value.tipoingreso.id,
+        formulario.value.almacen1.id,
+        formulario.value.prsucursal.id,
         formulario.value.fecingreso,
+        formulario.value.docReferencia,
+         this.documento_numero=res['data'].numero;
+
       )
 
       }*/
