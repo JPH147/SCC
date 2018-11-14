@@ -16,14 +16,14 @@
     try{
         $stock = new Stock($db);
 
-        $stock->almacen = !empty($_GET['pralmacen']) ? $_GET['pralmacen'] :'';
-        $stock->tipo = !empty($_GET['prtipo']) ? $_GET['prtipo'] :'';
-        $stock->marca = !empty($_GET['prmarca']) ? $_GET['prmarca'] : '';
-        $stock->modelo = !empty($_GET['prmodelo']) ? $_GET['prmodelo'] : '';
-        $stock->descripcion = !empty($_GET['prdescripcion']) ? $_GET['prdescripcion'] : '';
-        $stock->numero_pagina = !empty($_GET['prpagina']) ? $_GET['prpagina'] : 1;
-        $stock->total_pagina = !empty($_GET['prtotalpagina']) ? $_GET['prtotalpagina'] : 20;
-        $stock->orden = !empty($_GET['orden']) ? $_GET['orden'] : 'modelo asc';
+        $stock->almacen = !empty($_GET['pralmacen']) ? trim($_GET['pralmacen']) :'';
+        $stock->tipo = !empty($_GET['prtipo']) ? trim($_GET['prtipo']) :'';
+        $stock->marca = !empty($_GET['prmarca']) ? trim($_GET['prmarca']) : '';
+        $stock->modelo = !empty($_GET['prmodelo']) ? trim($_GET['prmodelo']) : '';
+        $stock->descripcion = !empty($_GET['prdescripcion']) ? trim($_GET['prdescripcion']) : '';
+        $stock->numero_pagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : 1;
+        $stock->total_pagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : 20;
+        $stock->orden = !empty($_GET['orden']) ? trim($_GET['orden']) : 'modelo asc';
 
         $stock_list = $stock->read();
         $stock_contar = $stock->contar();

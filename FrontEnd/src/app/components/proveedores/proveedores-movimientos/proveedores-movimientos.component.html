@@ -1,10 +1,10 @@
 <mat-card class= "card">
 
-	<mat-card-header>
-		<mat-card-title>
-			{{data.nombre}}
-		</mat-card-title>
-	</mat-card-header>
+  <mat-toolbar>
+    <mat-toolbar-row>
+      {{data.nombre}}
+    </mat-toolbar-row>
+  </mat-toolbar>
 
 	<mat-card-content>
 		
@@ -71,7 +71,16 @@
         <mat-header-cell *matHeaderCellDef>Fecha</mat-header-cell>
         <mat-cell *matCellDef="let movimiento">{{movimiento.fecha}}</mat-cell>
       </ng-container>
-       
+
+      <ng-container matColumnDef="opciones">
+        <mat-header-cell *matHeaderCellDef>Opciones</mat-header-cell>
+        <mat-cell *matCellDef="let movimiento">
+          <button mat-icon-button color="primary" (click)="AbrirDetalle(movimiento)">
+            <mat-icon>visibility</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+
       <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>
       <mat-row *matRowDef="let row; columns: Columnas;"></mat-row>
 

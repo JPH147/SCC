@@ -19,7 +19,7 @@
 
     	if(($_POST["prid"])!=null)
     	{
-    		$transaccion->id_transaccion = $_POST["prid"];
+    		$transaccion->id_transaccion = trim($_POST["prid"]);
 
 	    	if($transaccion->delete())
 	        {

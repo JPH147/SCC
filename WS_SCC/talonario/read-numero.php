@@ -15,10 +15,9 @@
     try{
         $talonario = new Talonario($db);
 
-        $talonario->serie = !empty($_GET['prserie']) ? $_GET['prserie'] :null;
+        $talonario->serie = !empty($_GET['prserie']) ? trim($_GET['prserie']) :null;
 
         $talonario = $talonario->read_numero();
-       // $producto_contar = $talonario->contar();
 
         if (count(array_filter($talonario))>0)
         { 

@@ -19,7 +19,7 @@
 
     	if(($_POST["idproveedor"])!=null)
     	{
-    		$proveedor->idproveedor = $_POST["idproveedor"];
+    		$proveedor->idproveedor = trim($_POST["idproveedor"]);
 
 	    	if($proveedor->delete())
 	        {

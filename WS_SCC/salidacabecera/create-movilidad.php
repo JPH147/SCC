@@ -19,10 +19,10 @@
 
         if (($_POST["prcabecera"])!=null)
         {
-            $salida->cabecera = $_POST["prcabecera"];
-            $salida->vehiculo = $_POST["prvehiculo"];
-            $salida->chofer_dni = $_POST["prchoferdni"];
-            $salida->chofer_nombre = $_POST["prchofernombre"];
+            $salida->cabecera = trim($_POST["prcabecera"]);
+            $salida->vehiculo = trim($_POST["prvehiculo"]);
+            $salida->chofer_dni = trim($_POST["prchoferdni"]);
+            $salida->chofer_nombre = trim($_POST["prchofernombre"]);
 
             if($salida->create_movilidad())
             {

@@ -344,11 +344,11 @@ EditarModelo(id: number,
   }
 
   ListarTransaccionTipo (
-
-    ): Observable <any> {
+    tipo:string //1. Ingreso, 2 Salida
+  ): Observable <any> {
       return this.http.get(this.url + 'transacciontipo/read.php', {
         params: new HttpParams()
-        .set('prid', '1')
+        .set('prid', tipo)
       })
 
       .pipe(map(res => {

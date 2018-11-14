@@ -1,6 +1,6 @@
-<mat-card>
+<mat-card [ngClass]="{'no-card':this.data}">
 	
-  <button mat-mini-fab color="primary" class="regresar" [routerLink]="['../']"><mat-icon>keyboard_arrow_left</mat-icon></button>
+  <button mat-mini-fab color="primary" class="regresar" [routerLink]="['../']" *ngIf="!this.data"><mat-icon>keyboard_arrow_left</mat-icon></button>
 
   <mat-card-title>
     <div id="tituloProd">Detalle de documento</div>
@@ -59,7 +59,7 @@
 		    <!-- <th>CANTIDAD</th> -->
 		    <th *ngIf="referencia == 'proveedor'">PRECIO</th>
 		    <th>OBSERVACIONES</th>
-		    <th *ngIf="id_tipo==1">OPCIONES</th>
+		    <th *ngIf="id_tipo==1 && !this.data">OPCIONES</th>
 		  </tr>
 		  <tr *ngFor="let detalle of detalle">
 		    <td class="detalle-columnas" id="detalle-numero">{{detalle.numero}}</td> 
@@ -69,7 +69,7 @@
 		    <td class="detalle-columnas" id="detalle-almacenamiento">{{detalle.almacenamiento}}</td>
 			<td class="detalle-columnas" id="detalle-precio" *ngIf="referencia == 'proveedor'">{{detalle.precio | currency:'S/.' }}</td>
 		    <td class="detalle-columnas" id="detalle-observacion">{{detalle.observacion}}</td>
-		    <td class="detalle-columnas" id="detalle-opciones" *ngIf="id_tipo==1">
+		    <td class="detalle-columnas" id="detalle-opciones" *ngIf="id_tipo==1 && !this.data">
 		    	<button mat-icon-button color="primary" (click)="Editar(detalle)"> <mat-icon>edit</mat-icon> </button>
 		    </td>
 		  </tr>

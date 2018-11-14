@@ -19,13 +19,13 @@
 
         if ( ($_POST["idusuario"])!=null && !empty(trim($_POST["usr_nombre"])) 
             && !empty(trim($_POST["usr_usuario"])) && !empty(trim($_POST["usr_clave"]))
-            && ($_POST["idperfil"])!=null )
+            && trim($_POST["idperfil"])!=null )
     	{
-            $usuario->idusuario = $_POST["idusuario"];
-    		$usuario->usr_nombre = $_POST["usr_nombre"];
-            $usuario->usr_usuario = $_POST["usr_usuario"];
-            $usuario->usr_clave = $_POST["usr_clave"];
-            $usuario->idperfil = $_POST["idperfil"];
+            $usuario->idusuario = trim($_POST["idusuario"]);
+    		$usuario->usr_nombre = trim($_POST["usr_nombre"]);
+            $usuario->usr_usuario = trim($_POST["usr_usuario"]);
+            $usuario->usr_clave = trim($_POST["usr_clave"]);
+            $usuario->idperfil = trim($_POST["idperfil"]);
 
 	    	if($usuario->update())
 	        {

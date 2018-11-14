@@ -61,7 +61,7 @@ class Marca{
 		$marca_list=array();
 		$marca_list["marca"]=array();
 
-		$contador = 0;
+        $contador = $this->total_pagina*($this->numero_pagina-1);
 
 		while($row = $result->fetch(PDO::FETCH_ASSOC))
 		{

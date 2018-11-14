@@ -16,8 +16,7 @@
         $talonario = new Talonario($db);
 
         $talonario = $talonario->read_serie();
-       // $producto_contar = $talonario->contar();
-
+ 
         if (count(array_filter($talonario))>0)
         { 
             print_json("0000", "0", $talonario);

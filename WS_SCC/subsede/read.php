@@ -16,8 +16,8 @@
     try{
     	$subsede = new Subsede($db);
 
-    	$subsede->id_sede = !empty($_GET['id_sede']) ? $_GET['id_sede'] : null;
-    	$subsede->ssd_nombre = !empty($_GET['ssd_nombre']) ? $_GET['ssd_nombre'] : null;
+    	$subsede->id_sede = !empty($_GET['id_sede']) ? trim($_GET['id_sede']) : null;
+    	$subsede->ssd_nombre = !empty($_GET['ssd_nombre']) ? trim($_GET['ssd_nombre']) : null;
 
     	$subsede_list = $subsede->read();
 

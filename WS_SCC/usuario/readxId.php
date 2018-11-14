@@ -14,7 +14,7 @@ $db = $database->getConnection();
 $usuario = new Usuario($db);
 try
 {
-    $usuario->idusuario = isset($_GET['idusuario']) ? $_GET['idusuario'] : die();
+    $usuario->idusuario = isset($_GET['idusuario']) ? trim($_GET['idusuario']) : die();
     
     $usuario->readxId();
 

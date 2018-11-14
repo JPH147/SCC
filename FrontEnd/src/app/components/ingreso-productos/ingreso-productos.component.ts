@@ -425,6 +425,21 @@ import {ProductoService} from '../productos/productos.service';
 
       });
    }
+   /*if (tipoingreso === 7) {
+      this.IngresoProductoservicios.AgregarTransferenciaSucursal(
+        formulario.value.almacen.id,
+        7,
+        formulario.value.docRefencia,
+        formulario.value.almacen,
+        formulario.value.fecingreso,
+      )
+
+      }*/
+
+
+
+   }
+
+
   }
 
-}

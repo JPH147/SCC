@@ -19,13 +19,13 @@
 
         if (($_POST["prpecosa"])!=null)
         {
-            $salida->pecosa = $_POST["prpecosa"];
-            $salida->id_sucursal = $_POST["prsucursal"];
-            $salida->fecha = $_POST["prfecha"];
-            $salida->destino = $_POST["prdestino"];
-            $salida->guia = $_POST["prguia"];
-            $salida->tipo_movilidad = $_POST["prmovilidad"];
-            $salida->observacion = !empty($_POST["probservacion"]) ? $_POST["probservacion"] : '';
+            $salida->pecosa = trim($_POST["prpecosa"]);
+            $salida->id_sucursal = trim($_POST["prsucursal"]);
+            $salida->fecha = trim($_POST["prfecha"]);
+            $salida->destino = trim($_POST["prdestino"]);
+            $salida->guia = trim($_POST["prguia"]);
+            $salida->tipo_movilidad = trim($_POST["prmovilidad"]);
+            $salida->observacion = !empty($_POST["probservacion"]) ? trim($_POST["probservacion"]) : '';
 
             if($salida->create())
             {

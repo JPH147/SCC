@@ -16,7 +16,7 @@
     try{
         $transaccion = new TransaccionTipo($db);
 
-        $transaccion->tipo = !empty($_GET['prid']) ? $_GET['prid'] :null;
+        $transaccion->tipo = !empty($_GET['prid']) ? trim($_GET['prid']) :null;
 
         $transaccion_list = $transaccion->read();
 

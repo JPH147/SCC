@@ -16,16 +16,17 @@
     try{
         $transaccion = new TransaccionCabecera($db);
 
-        $transaccion->almacen = !empty($_GET['pralmacen']) ? $_GET['pralmacen'] :'';
-        $transaccion->tipo = !empty($_GET['prtipo']) ? $_GET['prtipo'] :'';
-        $transaccion->referencia = !empty($_GET['prreferencia']) ? $_GET['prreferencia'] : null;
-        $transaccion->referente = !empty($_GET['prreferente']) ? $_GET['prreferente'] : '';
-        $transaccion->fecha_inicio = !empty($_GET['prfechainicio']) ? $_GET['prfechainicio'] : null;
-        $transaccion->fecha_fin = !empty($_GET['prfechafin']) ? $_GET['prfechafin'] : null;
-        $transaccion->documento = !empty($_GET['prdocumento']) ? $_GET['prdocumento'] : '';
-        $transaccion->numero_pagina = !empty($_GET['prpagina']) ? $_GET['prpagina'] : 1;
-        $transaccion->total_pagina = !empty($_GET['prtotalpagina']) ? $_GET['prtotalpagina'] : 20;
-        $transaccion->orden = !empty($_GET['orden']) ? $_GET['orden'] : 'almacen asc';
+        $transaccion->almacen = !empty($_GET['pralmacen']) ? trim($_GET['pralmacen']) :'';
+        $transaccion->tipo = !empty($_GET['prtipo']) ? trim($_GET['prtipo']) : null;
+        $transaccion->parametro = !empty($_GET['prparametro']) ? trim($_GET['prparametro']) : null;
+        $transaccion->referencia = !empty($_GET['prreferencia']) ? trim($_GET['prreferencia']) : null;
+        $transaccion->referente = !empty($_GET['prreferente']) ?trim( $_GET['prreferente']) : '';
+        $transaccion->fecha_inicio = !empty($_GET['prfechainicio']) ? trim($_GET['prfechainicio']) : null;
+        $transaccion->fecha_fin = !empty($_GET['prfechafin']) ? trim($_GET['prfechafin']) : null;
+        $transaccion->documento = !empty($_GET['prdocumento']) ? trim($_GET['prdocumento']) : '';
+        $transaccion->numero_pagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : 1;
+        $transaccion->total_pagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : 20;
+        $transaccion->orden = !empty($_GET['orden']) ? trim($_GET['orden']) : 'almacen asc';
 
         $transaccion_list = $transaccion->read();
         $transaccion_contar = $transaccion->contar();

@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, Optional } from '@angular/core';
 import {DetalleDocumentoAlmacenService} from './detalle-documento-almacen.service';
 import {ActivatedRoute, Params} from '@angular/router';
 import {FormGroup, FormBuilder} from '@angular/forms';
 import {finalize} from 'rxjs/operators';
-import {MatDialog, MatSnackBar} from '@angular/material';
+import {MatDialog, MatSnackBar, MAT_DIALOG_DATA} from '@angular/material';
 import {VentanaEditarSerieComponent} from './ventana-editar-serie/ventana-editar-serie.component'
 import {ServiciosProductoSerie} from '../global/productoserie';
 
@@ -26,6 +26,7 @@ export class DetalleDocumentoAlmacenComponent implements OnInit {
 	public cargando:boolean;
 
   constructor(
+    @Optional() @Inject (MAT_DIALOG_DATA) public data,
   	private Servicio:DetalleDocumentoAlmacenService,
     private SServicio: ServiciosProductoSerie,
   	private ruta: ActivatedRoute,
@@ -41,42 +42,49 @@ export class DetalleDocumentoAlmacenComponent implements OnInit {
   CargarInformacion(){
     
     this.cargando=true;
+    if (this.data) {
+      this.Servicio.SeleccionarCabecera(this.data.id).subscribe(res=>{
+        this.AsignarValores(res)
+      })
+    }else{
+      this.Servicio.SeleccionarCabecera(+this.ruta.snapshot.paramMap.get("id"))
+      .subscribe(res=>{
+        this.AsignarValores(res)
+      })
+    }
+  }
 
-    this.Servicio.SeleccionarCabecera(+this.ruta.snapshot.paramMap.get("id"))
-    .subscribe(res=>{
-      console.log(res)
-      this.almacen= res['data'].almacen;
-      this.tipo= res['data'].tipo;
-      this.referencia= res['data'].referencia;
-      this.id_tipo= res['data'].id_tipo;
-      // this.referente= res['data'].proveedor+res['data'].cliente+res['data'].sucursal+res['data'].vendedor+res['data'].salida_venta;
-      this.documento= res['data'].documento;
-      this.fecha= res['data'].fecha;
-      this.detalle=res['data'].detalle;
-      switch (res['data'].referencia) {
-        case 1:{
-          this.referente= res['data'].proveedor
-          break;
+  AsignarValores(objeto){
+        this.almacen= objeto['data'].almacen;
+        this.tipo= objeto['data'].tipo;
+        this.referencia= objeto['data'].referencia;
+        this.id_tipo= objeto['data'].id_tipo;
+        this.documento= objeto['data'].documento;
+        this.fecha= objeto['data'].fecha;
+        this.detalle=objeto['data'].detalle;
+        switch (objeto['data'].referencia) {
+          case 1:{
+            this.referente= objeto['data'].proveedor
+            break;
+          }
+          case 2:{
+            this.referente= objeto['data'].cliente
+            break;
+          }
+          case 3:{
+            this.referente= objeto['data'].salida_venta
+            break;
+          }
+          case 4:{
+            this.referente= objeto['data'].sucursal
+            break;
+          }
+          case 5:{
+            this.referente= objeto['data'].vendedor
+            break;
+          }
         }
-        case 2:{
-          this.referente= res['data'].cliente
-          break;
-        }
-        case 3:{
-          this.referente= res['data'].salida_venta
-          break;
-        }
-        case 4:{
-          this.referente= res['data'].sucursal
-          break;
-        }
-        case 5:{
-          this.referente= res['data'].vendedor
-          break;
-        }
-      }
-      this.cargando=false
-    })
+        this.cargando=false
   }
 
   Editar(detalle){

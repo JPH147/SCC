@@ -62,7 +62,7 @@ class Tipo_Producto{
 		$tipo_producto_list=array();
 		$tipo_producto_list["tipo_productos"]=array();
 
-		$contador = 0;
+        $contador = $this->total_pagina*($this->numero_pagina-1);
 
 		while($row = $result->fetch(PDO::FETCH_ASSOC))
 		{

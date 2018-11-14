@@ -19,10 +19,10 @@
 
         if (($_POST["prcabecera"])!=null)
         {
-            $salida->cabecera = $_POST["prcabecera"];
-            $salida->serie = $_POST["prserie"];
-            $salida->precio = $_POST["prprecio"];
-            $salida->cantidad = $_POST["prcantidad"];
+            $salida->cabecera = trim($_POST["prcabecera"]);
+            $salida->serie = trim($_POST["prserie"]);
+            $salida->precio = trim($_POST["prprecio"]);
+            $salida->cantidad = trim($_POST["prcantidad"]);
 
             if($salida->create_producto())
             {
