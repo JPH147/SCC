@@ -14,6 +14,7 @@ Class TransaccionCabecera{
     public $orden;
     public $id;
     public $id_transaccion;
+    public $documento;
     public $almacen;
     public $id_almacen;
     public $tipo;
@@ -32,11 +33,14 @@ Class TransaccionCabecera{
     public $serie;
     public $fecha_inicio;
     public $fecha_fin;
-    public $documento;
     public $transaccion_detalle;
     public $tipo_transaccion;
     public $proxnumero;
     public $numero_documento;
+    public $id_tipo_transaccion;
+    public $numero_transaccion;
+    public $id_almacen_referencia;
+    public $almacen_referencia;
 
     public function __construct($db){
         $this->conn = $db;
@@ -94,17 +98,18 @@ Class TransaccionCabecera{
 
     function contar(){
 
-        $query = "CALL sp_listartransaccioncabeceracontar(?,?,?,?,?,?,?)";
+        $query = "CALL sp_listartransaccioncabeceracontar(?,?,?,?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
         $result->bindParam(1, $this->almacen);
         $result->bindParam(2, $this->tipo);
-        $result->bindParam(3, $this->referencia);
-        $result->bindParam(4, $this->referente);
-        $result->bindParam(5, $this->fecha_inicio);
-        $result->bindParam(6, $this->fecha_fin);
-        $result->bindParam(7, $this->documento);
+        $result->bindParam(3, $this->parametro);
+        $result->bindParam(4, $this->referencia);
+        $result->bindParam(5, $this->referente);
+        $result->bindParam(6, $this->fecha_inicio);
+        $result->bindParam(7, $this->fecha_fin);
+        $result->bindParam(8, $this->documento);
 
         $result->execute();
 
@@ -115,7 +120,6 @@ Class TransaccionCabecera{
         return $this->total_resultado;
     }
 
-    /* Seleccionar producto */
     function readxId(){
         $query ="call sp_listartransaccioncabeceraxId(?)";
         
@@ -139,6 +143,34 @@ Class TransaccionCabecera{
         $this->salida_venta=$row['salida_venta'];
         $this->sucursal=$row['sucursal'];
         $this->vendedor=$row['vendedor'];
+        $this->fecha=$row['fecha'];
+        $this->documento=$row['documento'];
+        $this->transaccion_detalle=$this->detalle->readxcabecera($row['id']);
+    }
+
+    function readxdocumento(){
+        
+        $query ="call sp_listartransferenciacabeceraxdocumento(?,?)";
+        
+        $result = $this->conn->prepare($query);
+        
+        $result->bindParam(1, $this->almacen);
+        $result->bindParam(2, $this->documento);
+
+        $result->execute();
+    
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        $this->detalle->readxcabecera($row['id']);
+
+        $this->id=$row['id'];
+        $this->id_tipo_transaccion=$row['id_tipo_transaccion'];
+        $this->tipo_transaccion=$row['tipo_transaccion'];
+        $this->numero_transaccion=$row['numero_transaccion'];
+        $this->id_almacen=$row['id_almacen'];
+        $this->almacen=$row['almacen'];
+        $this->id_almacen_referencia=$row['id_almacen_referencia'];
+        $this->almacen_referencia=$row['almacen_referencia'];
         $this->fecha=$row['fecha'];
         $this->documento=$row['documento'];
         $this->transaccion_detalle=$this->detalle->readxcabecera($row['id']);
