@@ -283,7 +283,7 @@ import {ProductoService} from '../productos/productos.service';
 
     // Selector tipo de ingresos
     ListarTransaccionTipo() {
-      this.Servicios.ListarTransaccionTipo().subscribe( res => {
+      this.Servicios.ListarTransaccionTipo('1').subscribe( res => {
         this.TipoIngresos=res;
         this.TipoIngresos = this.TipoIngresos.filter(e=>e.id!=2);
         this.TipoIngresos = this.TipoIngresos.filter(e=>e.id!=6);
