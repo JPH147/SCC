@@ -18,22 +18,26 @@ constructor(private http: HttpClient) {}
 
 
     AgregarCompraMercaderia(
-      almacen: number,
-      tipo: number,
-      referencia: number,
-      proveedor: number,
-      fecha: Date,
-      documento: string,
-      numero_documento:number
+      pralmacen: number,
+      prtipo: number,
+      pr_referencia: number,
+      prproveedor: number,
+      prfecha: Date,
+      prdocumento: string
     ): Observable <any> {
+
+      // tslint:disable-next-line:prefer-const
       let params = new HttpParams()
-      .set('pralmacen', almacen.toString())
-      .set('prtipo', tipo.toString())
-      .set('prreferencia', referencia.toString())
-      .set('prproveedor', proveedor.toString())
-      .set('prfecha', moment (fecha).format('YYYY/MM/DD'))
-      .set('prdocumento', documento)
-      .set('prnumerodoc', numero_documento.toString());
+      .set('pralmacen', pralmacen.toString())
+      .set('prtipo', prtipo.toString())
+      .set('prreferencia', pr_referencia.toString())
+      .set('prproveedor', prproveedor.toString())
+      .set('prfecha', moment (prfecha).format('YYYY/MM/DD'))
+      .set('prdocumento', prdocumento);
+
+      // console.log(params);
+
+      // tslint:disable-next-line:prefer-const
       let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
       return this.http.post(this.url + 'transaccioncabecera/create.php', params, {headers: headers});
      }
@@ -96,6 +100,7 @@ constructor(private http: HttpClient) {}
       pralmacenEntra: number,  // Sucursal
       perfecha: Date,
       prdocumento: string,
+      prnumerodoc: number,
 
       ): Observable <any> {
 
@@ -106,7 +111,8 @@ constructor(private http: HttpClient) {}
         .set('prreferencia', prreferencia.toString())
         .set('prsucursal', pralmacenEntra.toString())
         .set('prfecha', moment(perfecha).format('YYYY/MM/DD').toString())
-        .set('prdocumento', prdocumento.toString());
+        .set('prdocumento', prdocumento.toString())
+        .set('prnumerodoc', prnumerodoc.toString());
 
       // tslint:disable-next-line:prefer-const
       let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
@@ -157,11 +163,13 @@ constructor(private http: HttpClient) {}
   }
 
   SeleccionarCabecera(
-    guia:string,
+    pralmacen:number,
+    prdocumento:string
   ): Observable<any> {
-    return this.http.get(this.url + 'transacciondetalle/readxdocumento.php', {
+    return this.http.get(this.url + 'transaccioncabecera/readxdocumento.php', {
       params: new HttpParams()
-        .set('prguia', guia)
+        .set('pralmacen', pralmacen.toString())
+        .set('prdocumento', prdocumento)
       }).pipe(map(res => {
 
       if (res['codigo'] === 0) {
