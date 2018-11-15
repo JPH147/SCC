@@ -91,9 +91,9 @@
             </mat-form-field> -->
 
             <mat-form-field class="example-full-width" *ngSwitchCase="7" >
-              <mat-select placeholder="Almacen Destino" formControlName="almacen1" (selectionChange)="AlmacenSeleccionado($event)" >
+              <mat-select placeholder="Almacen Destino" formControlName="almacen1"  >
                 <mat-option *ngFor="let almacen of almacen_destino" [value]="almacen.id">
-                  {{almacen.nombre}}
+                  {{almacen.almacen_referencia}}
                 </mat-option>
               </mat-select>
               <mat-error> Debe ingresar un almacén de llegada </mat-error>
