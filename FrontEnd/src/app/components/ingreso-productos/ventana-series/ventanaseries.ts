@@ -84,7 +84,7 @@ export class ventanaseries  implements OnInit {
           tap(()=>{
             // console.log(this.seriearticulo.some(e=>e.serie==this.FiltroSerie['_results'][i].nativeElement.value.trim()))
             if (this.seriearticulo.length>1) {
-              if(this.FiltroSerie['_results'][i].nativeElement.value){
+              if(this.FiltroSerie['_results'][i].nativeElement.value.trim()){
                 if(this.Duplicados()==0){
                   this.seriearticulo[i].repetidoV=false
                 }else{
@@ -108,8 +108,8 @@ export class ventanaseries  implements OnInit {
           distinctUntilChanged(),
           debounceTime(200),
           tap(()=>{
-            if(this.FiltroSerie['_results'][i].nativeElement.value){
-              this.DuplicadosVista(this.FiltroSerie['_results'][i].nativeElement.value,i);
+            if(this.FiltroSerie['_results'][i].nativeElement.value.trim()){
+              this.DuplicadosVista(this.FiltroSerie['_results'][i].nativeElement.value,i.trim());
               this.Servicios.ValidarSerie(this.FiltroSerie['_results'][i].nativeElement.value.trim()).subscribe(res=>{
                 if (res==1) {
                   this.seriearticulo[i].repetidoBD=true;
@@ -198,8 +198,14 @@ export class ventanaseries  implements OnInit {
   // Para saber si se agregó la misma serie a otro producto
   DuplicadosVista(value,i){
     if (this.series_vista) {
-      this.seriearticulo[i].repetidoP=this.series_vista.some(e=>e.serie==value)
+      this.seriearticulo[i].repetidoP=this.series_vista.some(e=>e.serie.trim()==value.trim())
     }
+  }
+
+  EliminarEspacios(){
+    this.seriearticulo.forEach((item)=>{
+      item.serie=item.serie.trim()
+    })
   }
 
   ComprobarVista(){
@@ -226,12 +232,10 @@ export class ventanaseries  implements OnInit {
     }else{
       this.invalidBD=false
     }
-
-
-    // this.invalidBD=this.seriearticulo.some(e=>e.repetidoBD==true)
   }
 
   Comprobar(){
+    this.EliminarEspacios();
     this.ComprobarVista();
     this.ComprobarPagina();
     this.ComprobarBD();

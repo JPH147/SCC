@@ -23,7 +23,7 @@
         <!--Campo ingresar Tipo de Ingreso a almacen -->
         <mat-grid-tile >
             <mat-form-field  class="example-full-width">
-              <mat-select placeholder="Tipo de ingreso" formControlName= "tipoIngreso" (selectionChange)="ActualizarTipoIngreso($event)">
+              <mat-select placeholder="Tipo de ingreso" formControlName= "tipoIngreso" (selectionChange)="ActualizarTipoIngreso($event)" [value]=1>
                 <mat-option *ngFor="let tipoIngreso of TipoIngresos" [value]="tipoIngreso.id">
                   {{tipoIngreso.nombre}}
                 </mat-option>
@@ -34,7 +34,7 @@
          <!-- Seleccionar Almacen -->
         <mat-grid-tile>
           <mat-form-field class="example-full-width">
-              <mat-select placeholder="Almacen de Origen" formControlName="almacen"  (selectionChange)="ResetearForm($event)">
+              <mat-select placeholder="Almacen" formControlName="almacen"  (selectionChange)="ResetearForm($event)">
                 <mat-option *ngFor="let almacen of almacen_origen" [value]="almacen">
                   {{almacen.nombre}}
                 </mat-option>
@@ -91,11 +91,7 @@
             </mat-form-field> -->
 
             <mat-form-field class="example-full-width" *ngSwitchCase="7" >
-              <mat-select placeholder="Almacen Destino" formControlName="almacen1"  >
-                <mat-option *ngFor="let almacen of almacen_destino" [value]="almacen.id">
-                  {{almacen.nombre}}
-                </mat-option>
-              </mat-select>
+              <input matInput type="text" formControlName="almacen1" placeholder="Almacén de referencia">
               <mat-error> Debe ingresar un almacén de llegada </mat-error>
             </mat-form-field>
           </mat-grid-tile>
@@ -196,7 +192,7 @@
                 <!--<th>CANTIDAD</th>-->
                 
                 <th>OBSERVACIONES</th>
-                <th>OBS. RECEPCION</th>
+                <!-- <th>OBS. RECEPCION</th> -->
                 <!-- <th>CONFORME</th> -->
 
                 <th *ngIf="id_tipo==1">OPCIONES</th>
@@ -209,9 +205,11 @@
                 <td class="detalle-columnas" id="detalle-almacenamiento">{{detalle.almacenamiento}}</td>
                 <!-- <td class="detalle-columnas" id="detalle-cantidad" >{{detalle.cantidad}}</td> -->
                 <td class="detalle-columnas" id="detalle-observacion">{{detalle.observacion}}</td>
-                <td class="detalle-columnas" id="detalle-observacion">
-                    <input type="text" name="obsentrega">
-                </td>
+<!--                 <td class="detalle-columnas" id="detalle-observacion">
+                  <mat-form-field>
+                    <input matInput type="text" placeohlder="Observación" [value]="detalle.nueva_observacion">
+                  </mat-form-field>
+                </td> -->
                 <!-- <td class="detalle-columnas" id="detalle-opciones">
                    <mat-checkbox class="example-margin" value="false"></mat-checkbox>
                 </td> -->
@@ -237,7 +235,7 @@
           <button mat-fab color="warn" matTooltip="Limpiar" >  <mat-icon> restore</mat-icon></button> -->
 
           <button mat-raised-button type="button" (click)="Reset()" >Limpiar</button>
-          <button mat-raised-button color="primary" type="submit"  (click)="Guardar(IngresoProductoForm)" [disabled]="IngresoProductoForm.invalid || Series.length==0">Grabar</button>
+          <button mat-raised-button color="primary" type="submit"  (click)="Guardar(IngresoProductoForm)" [disabled]="IngresoProductoForm.invalid || (Series.length==0 && IngresoProductoForm.value.tipoIngreso==1)">Grabar</button>
 
         </mat-grid-tile>
       </mat-grid-list>

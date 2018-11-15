@@ -23,7 +23,8 @@ constructor(private http: HttpClient) {}
       pr_referencia: number,
       prproveedor: number,
       prfecha: Date,
-      prdocumento: string
+      prdocumento: string,
+      prnumerodoc: number,
     ): Observable <any> {
 
       // tslint:disable-next-line:prefer-const
@@ -33,7 +34,8 @@ constructor(private http: HttpClient) {}
       .set('prreferencia', pr_referencia.toString())
       .set('prproveedor', prproveedor.toString())
       .set('prfecha', moment (prfecha).format('YYYY/MM/DD'))
-      .set('prdocumento', prdocumento);
+      .set('prdocumento', prdocumento)
+      .set('prnumerodoc', prnumerodoc.toString());
 
       // console.log(params);
 

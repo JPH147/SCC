@@ -40,7 +40,13 @@ export class ServiciosGenerales {
     prtotalpagina: number
   ): Observable<any> {
   // tslint:disable-next-line:max-line-length
-  return this.http.get(this.url + 'productotipo/read2.php?prnombre=' + nombre + '&prum' + unidad_medida + '&prpagina' + prpagina + '&prtotalpagina=' + prtotalpagina)
+  return this.http.get(this.url + 'productotipo/read2.php', {params: new HttpParams()
+    .set('prnombre',nombre)
+    .set('prum',unidad_medida)
+    .set('prpagina',prpagina.toString())
+    .set('prtotalpagina',prtotalpagina.toString())
+    })
+
   .pipe(map(res => {
       if (res['codigo'] === 0 ) {
         return res;
@@ -145,7 +151,12 @@ export class ServiciosGenerales {
     prtotalpagina: number
   ): Observable<any> {
        // tslint:disable-next-line:max-line-length
-       return this.http.get(this.url + 'productomarca/read2.php?prtipo=' + tipo + '&prnombre=' + nombre + '&prpagina=' + prpagina + '&prtotalpagina=' + prtotalpagina)
+       return this.http.get(this.url + 'productomarca/read2.php',{params: new HttpParams()
+        .set('prtipo',tipo)
+        .set('prnombre',nombre)
+        .set('prpagina',prpagina.toString())
+        .set('prtotalpagina',prtotalpagina.toString())
+        })
       .pipe(map(res => {
       if (res['codigo'] === 0) {
         return res;

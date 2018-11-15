@@ -24,7 +24,7 @@
             && !empty(trim($_POST["prv_observacion"]))) 
     	{
             $proveedor->idproveedor= trim($_POST["idproveedor"]); 
-    		$proveedor->prv_tipo_documento = trim($_POST["prv_tipo_documento")];
+    		$proveedor->prv_tipo_documento = trim($_POST["prv_tipo_documento"]);
             $proveedor->prv_documento = trim($_POST["prv_documento"]);
             $proveedor->prv_nombre = trim($_POST["prv_nombre"]);
             $proveedor->prv_representante_legal = trim($_POST["prv_representante_legal"]);

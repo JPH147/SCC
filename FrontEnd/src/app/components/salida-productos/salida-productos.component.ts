@@ -10,12 +10,13 @@ import {MatTableDataSource, MatSnackBar} from '@angular/material';
 import { MatDialog } from '@angular/material';
 import {StockService} from '../stock/stock.service'
 import {ServiciosProductoSerie} from '../global/productoserie'
+import {IngresoProductoService} from '../ingreso-productos/ingreso-productos.service'
 
 @Component({
   selector: 'app-salida-productos',
   templateUrl: './salida-productos.component.html',
   styleUrls: ['./salida-productos.component.css'],
-  providers: [ServiciosGenerales,StockService,ServiciosProductoSerie]
+  providers: [ServiciosGenerales,StockService,ServiciosProductoSerie,IngresoProductoService]
 })
 
 export class SalidaProductosComponent implements OnInit {
@@ -27,7 +28,8 @@ export class SalidaProductosComponent implements OnInit {
   public almacen_destino: Array<any> = [];
   public productos: FormArray;
   public serieventana: string;
-
+  public documento_serie:string;
+  public documento_numero:number;
   public fechamov: Date;
   public producto: string;
   public Producto: Array<any>;
@@ -42,7 +44,8 @@ export class SalidaProductosComponent implements OnInit {
     private Servicios: ServiciosGenerales,
     private SalidaProductosServicios: SalidaProductosService,
     private Articulos: StockService,
-    private SSeries:ServiciosProductoSerie
+    private SSeries:ServiciosProductoSerie,
+    private IServicios: IngresoProductoService
   ) {}
 
 
@@ -117,6 +120,7 @@ export class SalidaProductosComponent implements OnInit {
     this.Articulos.ListarStock(event.value.nombre, '', '', '', '', 1, 20, 'descripcion asc').subscribe(res=>this.Producto=res['data'].stock);
     this.almacen_destino=this.almacenes;
     this.almacen_destino=this.almacen_destino.filter(e=>e.id!=event.value.id);
+    this.ObtenerNumeroDocumento(event.value.id);
   }
 
   Reset(){
@@ -178,6 +182,17 @@ export class SalidaProductosComponent implements OnInit {
      });
   }
 
+  ObtenerNumeroDocumento(id_almacen){
+   
+    this.IServicios.ObtenerNumeroDocumento(id_almacen,2).subscribe(res=>{
+      if(res)
+      {
+        this.documento_serie=res['data'].serie;
+        this.documento_numero=res['data'].numero;
+      }
+    })
+  }
+
   AgregarSerieSalida(producto,index) {
 
     // console.log(producto,index)
@@ -233,10 +248,12 @@ GuardarTransferenciaAlmacen(formulario) {
   formulario.value.almacen.id,
   5,
   4,
-  formulario.value.almacen1,
+  formulario.value.almacen1.id,
   formulario.value.fechamov,
-  formulario.value.documento
+  formulario.value.documento,
+  this.documento_numero
   ).subscribe (res=>{
+    // console.log(res)
     // Grabar datos de productos
     for (let i of this.Series) {
       if (i.considerar) {
@@ -248,6 +265,7 @@ GuardarTransferenciaAlmacen(formulario) {
         ).subscribe(res=>{
           // console.log(res)
             this.SSeries.RegistrarProductoOUT(i.id_serie).subscribe(res=>{
+              // console.log(res)
           })
         })
       }

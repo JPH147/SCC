@@ -18,8 +18,8 @@
 
     	$tipo_producto->tprd_nombre = !empty($_GET['prnombre']) ? trim($_GET['prnombre']) : null;
         $tipo_producto->und_nombre = !empty($_GET['prum']) ? trim($_GET['prum']) : null;
-        $tipo_producto->numero_pagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : null;
-        $tipo_producto->total_pagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : null;
+        $tipo_producto->numero_pagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : 1;
+        $tipo_producto->total_pagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : 20;
 
         $tipo_producto_list = $tipo_producto->read2();
         $total = $tipo_producto->contar();

@@ -15,7 +15,7 @@ export class  DetalleDocumentoAlmacenService {
   SeleccionarCabecera(
     id:number
   ): Observable<any> {
-    return this.http.get(this.url + 'transaccioncabecera/readxid.php', {
+    return this.http.get(this.url + 'transaccioncabecera/readxId.php', {
       params: new HttpParams()
         .set('prid', id.toString())
       }).pipe(map(res => {
