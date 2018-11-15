@@ -37,8 +37,9 @@ export class ventanaseries  implements OnInit {
     // console.log(this.data,this.data.producto);
     this.invalidV=false;
     this.invalidBD=false;
+    this.invalidP=false;
     this.contador = 1;
-    this.seriearticulo = [{numero: this.contador, producto:this.data.producto,serie: '', color:'', almacenamiento:'', observacion:"", repetido:false} ];
+    this.seriearticulo = [{numero: this.contador, producto:this.data.producto,serie: '', color:'', almacenamiento:'', observacion:"", repetidoBD:false, repetidoV:false, repetidoP:false} ];
     this.ListarColores("");
 
     if (this.data.series.length>0) {
@@ -47,7 +48,7 @@ export class ventanaseries  implements OnInit {
       let is:number=0;
       for (let i of this.data.series) {
         if (this.data.producto==i.id_producto) {
-          this.seriearticulo.push({numero:this.contador, producto: this.data.producto,  serie:i.serie, color:i.color, almacenamiento:i.almacenamiento, observacion:i.observacion, repetido:false})
+          this.seriearticulo.push({numero:this.contador, producto: this.data.producto,  serie:i.serie, color:i.color, almacenamiento:i.almacenamiento, observacion:i.observacion, repetidoBD:false, repetidoV:false, repetidoP:false})
           this.contador++;
           is++;
           this.invalidV=false;
@@ -85,12 +86,13 @@ export class ventanaseries  implements OnInit {
             if (this.seriearticulo.length>1) {
               if(this.FiltroSerie['_results'][i].nativeElement.value){
                 if(this.Duplicados()==0){
-                  this.invalidV=false
+                  this.seriearticulo[i].repetidoV=false
                 }else{
-                  this.invalidV=true
+                  this.seriearticulo[i].repetidoV=true
                 }
               }
             }
+            this.Comprobar();
           })
         ).subscribe()
       }
@@ -107,17 +109,19 @@ export class ventanaseries  implements OnInit {
           debounceTime(200),
           tap(()=>{
             if(this.FiltroSerie['_results'][i].nativeElement.value){
-              this.DuplicadosVista(this.FiltroSerie['_results'][i].nativeElement.value);
+              this.DuplicadosVista(this.FiltroSerie['_results'][i].nativeElement.value,i);
               this.Servicios.ValidarSerie(this.FiltroSerie['_results'][i].nativeElement.value.trim()).subscribe(res=>{
                 if (res==1) {
-                  this.seriearticulo[i].repetido=true;
-                  this.invalidBD=false;
+                  this.seriearticulo[i].repetidoBD=true;
+                  // this.invalidBD=false;
                 }else{
-                  this.seriearticulo[i].repetido=false;
-                  this.invalidBD=true;
+                  this.seriearticulo[i].repetidoBD=false;
+                  // this.invalidBD=true;
                 }
+                this.Comprobar();
               })
             }
+            this.Comprobar();
           })
         ).subscribe()
       }
@@ -147,7 +151,7 @@ export class ventanaseries  implements OnInit {
 
   AgregarSerieVS() {
     this.contador++;
-    this.seriearticulo.push({numero: this.contador, producto: this.data.producto, serie: '', color:'', almacenamiento:'', observacion:"", repetido:false});
+    this.seriearticulo.push({numero: this.contador, producto: this.data.producto, serie: '', color:'', almacenamiento:'', observacion:"", repetidoBD:false, repetidoV:false, repetidoP:false});
   }
 
   Aceptar() {
@@ -192,10 +196,45 @@ export class ventanaseries  implements OnInit {
   }
 
   // Para saber si se agregó la misma serie a otro producto
-  DuplicadosVista(value){
+  DuplicadosVista(value,i){
     if (this.series_vista) {
-      this.invalidP=this.series_vista.some(e=>e.serie==value)
+      this.seriearticulo[i].repetidoP=this.series_vista.some(e=>e.serie==value)
     }
+  }
+
+  ComprobarVista(){
+    if (this.seriearticulo.some(e=>e.repetidoV==true)) {
+      this.invalidV=true
+    }else{
+      this.invalidV=false
+    }
+    // this.invalidV=this.seriearticulo.some(e=>e.repetidoV==true)
+  }
+
+  ComprobarPagina(){
+    if (this.seriearticulo.some(e=>e.repetidoP==true)) {
+      this.invalidP=true
+    }else{
+      this.invalidP=false
+    }
+    // this.invalidP=this.seriearticulo.some(e=>e.repetidoP==true)
+  }  
+
+  ComprobarBD(){
+    if (this.seriearticulo.some(e=>e.repetidoBD==true)) {
+      this.invalidBD=true
+    }else{
+      this.invalidBD=false
+    }
+
+
+    // this.invalidBD=this.seriearticulo.some(e=>e.repetidoBD==true)
+  }
+
+  Comprobar(){
+    this.ComprobarVista();
+    this.ComprobarPagina();
+    this.ComprobarBD();
   }
 
 }

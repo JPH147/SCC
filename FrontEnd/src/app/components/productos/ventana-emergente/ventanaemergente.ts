@@ -44,9 +44,9 @@ export class VentanaEmergenteProductos {
     public DialogoProductos: MatDialog
     ) {}
 
-  onNoClick(): void {
-    this.ventana.close();
-  }
+  // onNoClick(): void {
+  //   this.ventana.close();
+  // }
 
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnInit() {
@@ -113,54 +113,48 @@ export class VentanaEmergenteProductos {
 
     let VentanaTipo = this.DialogoTipo.open(VentanaEmergenteTipo, {
       width: '350px',
-      panelClass: "dialogo-rediseno"
+      panelClass: "dialogo-rediseno",
     });
  
-    VentanaTipo.afterClosed().subscribe(res => {
-      //this.ListarTipos();
+    // VentanaTipo.afterClosed().subscribe(res => {
+    //   let VentanaProductos = this.DialogoProductos.open(VentanaEmergenteProductos,{
+    //     width: '600px',
+    //     panelClass: "dialogo-rediseno"
 
-      let VentanaProductos = this.DialogoProductos.open(VentanaEmergenteProductos,{
-        width: '600px',
-        panelClass: "dialogo-rediseno"
-
-      });
-    });
+    //   });
+    // });
   }
 
   AgregarMarca() {
 
-    let VentanaTipo = this.DialogoTipo.open(VentanaEmergenteMarca, {
+    let VentanaMarca = this.DialogoMarca.open(VentanaEmergenteMarca, {
       width: '350px',
       panelClass: "dialogo-rediseno"
     });
  
-    VentanaTipo.afterClosed().subscribe(res => {
-      //this.ListarTipos();
+    // VentanaMarca.afterClosed().subscribe(res => {
+    //   let VentanaProductos = this.DialogoProductos.open(VentanaEmergenteProductos,{
+    //     width: '600px',
+    //     panelClass: "dialogo-rediseno"
 
-      let VentanaProductos = this.DialogoProductos.open(VentanaEmergenteProductos,{
-        width: '600px',
-        panelClass: "dialogo-rediseno"
-
-      });
-    });
+    //   });
+    // });
   }
 
   AgregarModelo() {
 
-    let VentanaTipo = this.DialogoTipo.open(VentanaEmergenteModelo, {
+    let VentanaModelo = this.DialogoModelo.open(VentanaEmergenteModelo, {
       width: '350px',
       panelClass: "dialogo-rediseno"
     });
  
-    VentanaTipo.afterClosed().subscribe(res => {
-      //this.ListarTipos();
+    // VentanaModelo.afterClosed().subscribe(res => {
+    //   let VentanaProductos = this.DialogoProductos.open(VentanaEmergenteProductos,{
+    //     width: '600px',
+    //     panelClass: "dialogo-rediseno"
 
-      let VentanaProductos = this.DialogoProductos.open(VentanaEmergenteProductos,{
-        width: '600px',
-        panelClass: "dialogo-rediseno"
-
-      });
-    });
+    //   });
+    // });
   }
 
   /* Se muestran marcas cuando se selecciona un tipo de producto */

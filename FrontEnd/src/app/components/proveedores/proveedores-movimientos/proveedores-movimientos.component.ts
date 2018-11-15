@@ -58,7 +58,7 @@ export class ProveedoresMovimientosComponent implements OnInit {
   }
 
   AbrirDetalle(movimiento){
-    console.log(movimiento);
+    // console.log(movimiento);
     let Ventana = this.Dialogo.open(DetalleDocumentoAlmacenComponent,{
       width: '1000px',
       data: {id:movimiento.id}
