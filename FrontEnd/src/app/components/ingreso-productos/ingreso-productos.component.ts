@@ -371,7 +371,7 @@ import {ProductoService} from '../productos/productos.service';
       this.almacenes=res;
       this.almacen_origen=res;
       this.almacen_destino=res;
-    console.log(this.almacen_destino)
+    //console.log(this.almacen_destino)
     })
   }
 
