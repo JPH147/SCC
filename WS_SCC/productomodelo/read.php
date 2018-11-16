@@ -17,7 +17,7 @@
     	$modelo = new Modelo($db);
 
     	$modelo->id_marca = !empty($_GET['prmarca']) ? trim($_GET['prmarca']) : null;
-    	$modelo->mdl_nombre = !empty($_GET['prnombre']) ? trim($_GET['prnombre']) : null;
+    	$modelo->mdl_nombre = !empty($_GET['prnombre']) ? trim($_GET['prnombre']) : '';
 
     	$modelo_list = $modelo->read();
 

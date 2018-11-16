@@ -25,6 +25,7 @@ export class VentanaEmergenteModelo {
   public lstmarcas: any[] = [];
   public mensaje: string;
   public total:number;
+  public marca_seleccionada: string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
@@ -51,12 +52,7 @@ export class VentanaEmergenteModelo {
     });
 
     this.Servicios.ListarMarca('', '').subscribe(res=>{
-      // tslint:disable-next-line:prefer-const
-      let marcas = res;
-      // tslint:disable-next-line:forin
-      for (let i in marcas) {
-        this.lstmarcas.push(marcas[i]);
-      }
+      this.lstmarcas = res;
     });
 
     if (this.data) {
@@ -79,16 +75,22 @@ export class VentanaEmergenteModelo {
       debounceTime(200),
       distinctUntilChanged(),
       tap(()=>{
-        this.Servicios.ListarModelo2("","",this.FiltroModelo.nativeElement.value.trim(),1,1).subscribe(res=>{
-          // console.log(res)
-          if (res) {
-            this.total=res['data'].modelo.length;
-          }else{
-            this.total=0
-          }
-        })
+        if (this.ModeloForm.value.idmarca) {
+          this.Servicios.ListarModelo(this.ModeloForm.value.idmarca,this.FiltroModelo.nativeElement.value.trim()).subscribe(res=>{
+            // console.log(res);
+            if (res) {
+              this.total=res.length;
+            }else{
+              this.total=0
+            }
+          })
+        }
       })
     ).subscribe()
+  }
+
+  ObtenerArreglo(){
+    this.marca_seleccionada = this.lstmarcas.filter(e=>e.id==this.ModeloForm.value.idmarca)[0].nombre;
   }
 
   Guardar(formulario) {

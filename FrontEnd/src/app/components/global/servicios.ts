@@ -148,7 +148,7 @@ export class ServiciosGenerales {
   ListarMarca(
     id_tipo: string,
     nombre: string
-  ): Observable<MarcaModelo> {
+  ): Observable<any> {
        return this.http.get(this.url + 'productomarca/read.php?prtipo=' + id_tipo + '&prmarca=' + nombre)
       .pipe(map(res => {
       if (res['codigo'] === 0) {
@@ -231,7 +231,7 @@ export class ServiciosGenerales {
   ListarModelo(
     id_marca: string,
     nombre: string
-  ): Observable<ModeloModelo> {
+  ): Observable<any> {
       return this.http.get(this.url + 'productomodelo/read.php?prmarca=' + id_marca + '&prnombre=' + nombre)
       .pipe(map(res => {
       if (res['codigo'] === 0 ) {

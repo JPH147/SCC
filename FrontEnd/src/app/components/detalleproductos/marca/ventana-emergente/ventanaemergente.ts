@@ -56,14 +56,14 @@ export class VentanaEmergenteMarca {
       if (this.data) {
         if (this.data.productos) {
           this.Servicios.ListarTipoProductos(this.data.productos.id_tipo,"","").subscribe(rest=>{
-            this.MarcaForm.get('idtipo').setValue(rest[0].id);
             this.ObtenerArreglo();
+            this.MarcaForm.get('idtipo').setValue(rest[0].id);
           })
         } else {
           this.MarcaForm.get('nombre').setValue(this.data.marca);
           this.Servicios.ListarTipoProductos(this.data.idtipo,"","").subscribe(rest=>{
-            this.MarcaForm.get('idtipo').setValue(rest[0].id);
             this.ObtenerArreglo();
+            this.MarcaForm.get('idtipo').setValue(rest[0].id);
           })
         }
       }
