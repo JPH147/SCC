@@ -85,9 +85,15 @@ export class VentanaEmergenteTipo {
   }
 
   Guardar(formulario){
+
     if(this.data){
-      this.mensaje='Datos actualizados satisfactoriamente';
-      this.Servicios.EditarTipoProducto(this.data.id,formulario.value.nombre, formulario.value.idunidadmedida).subscribe();
+      if (this.data.productos) {
+        this.mensaje='Tipo de Producto creado satisfactoriamente';
+        this.Servicios.CrearTipoProducto(formulario.value.nombre, formulario.value.idunidadmedida).subscribe();
+      } else {
+        this.mensaje='Datos actualizados satisfactoriamente';
+        this.Servicios.EditarTipoProducto(this.data.id,formulario.value.nombre, formulario.value.idunidadmedida).subscribe();
+      }
     }
 
     if(!this.data){

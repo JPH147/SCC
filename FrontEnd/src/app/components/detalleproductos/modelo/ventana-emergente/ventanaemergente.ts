@@ -60,8 +60,13 @@ export class VentanaEmergenteModelo {
     });
 
     if (this.data) {
-      this.ModeloForm.get('nombre').setValue(this.data.modelo);
-      this.ModeloForm.get('idmarca').setValue(this.data.id_marca);
+       if (this.data.productos) {
+         // console.log(this.data.productos)
+        this.ModeloForm.get('idmarca').setValue(this.data.productos.id_marca);
+       }else{
+        this.ModeloForm.get('nombre').setValue(this.data.modelo);
+        this.ModeloForm.get('idmarca').setValue(this.data.id_marca);
+       }
     }
   }
 
@@ -88,8 +93,13 @@ export class VentanaEmergenteModelo {
 
   Guardar(formulario) {
     if (this.data) {
-      this.mensaje = 'Datos actualizados satisfactoriamente';
-      this.Servicios.EditarModelo(this.data.id, formulario.value.idmarca, formulario.value.nombre).subscribe();
+      if (this.data.productos) {
+        this.mensaje = 'Modelo creado satisfactoriamente';
+        this.Servicios.CrearModelo(formulario.value.idmarca, formulario.value.nombre).subscribe();
+      } else {
+        this.mensaje = 'Datos actualizados satisfactoriamente';
+        this.Servicios.EditarModelo(this.data.id, formulario.value.idmarca, formulario.value.nombre).subscribe();
+      }
     }
 
     if (!this.data) {

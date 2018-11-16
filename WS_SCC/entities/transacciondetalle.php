@@ -54,7 +54,7 @@ Class TransaccionDetalle{
                 "producto"=>$prd_descripcion,
                 "serie"=>$ps_serie,
                 "cantidad"=>$tscdet_cantidad,
-                "precio"=>$tscdet_precio,
+                "precio"=>$precio,
                 "observacion"=>$tscdet_observacion
             );
             array_push($detalle_list["detalles"],$detalle_items);

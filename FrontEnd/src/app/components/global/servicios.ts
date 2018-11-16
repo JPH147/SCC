@@ -20,15 +20,29 @@ export class ServiciosGenerales {
   ngOnInit() {}
  // F=moment(fecha).format('YYYY/MM/DD');
   ListarTipoProductos(
+    id:number,
     nombre: string,
     unidad_medida: string
-  ): Observable<TipoProductoModelo> {
-  return this.http.get(this.url + 'productotipo/read.php?prnombre=' + nombre + '&prum' + unidad_medida)
+  ): Observable<any> {
+
+  let id_producto:string;
+
+  if (id) {
+    id_producto=id.toString()
+  }else{
+    id_producto='';
+  }
+
+  return this.http.get(this.url + 'productotipo/read.php',{ params: new HttpParams()
+    .set('prid',id_producto)
+    .set('prnombre',nombre)
+    .set('prum',unidad_medida)
+  })
   .pipe(map(res => {
       if (res['codigo'] === 0 ) {
         return res['data'].tipo_productos;
     } else {
-        console.log('Error al importar los datos, revisar servicio');
+        // console.log('Error al importar los datos, revisar servicio');
     }
   }));
   }
@@ -63,7 +77,7 @@ export class ServiciosGenerales {
       return res;
     } else {
       // return res
-      console.log('Error al importar los datos, revisar servicio');
+      // console.log('Error al importar los datos, revisar servicio');
     }
   }));
   }
@@ -102,7 +116,7 @@ export class ServiciosGenerales {
         if(res['codigo']===0){
           return res=res['data']
         }else{
-          console.log('Error al importar los datos, revisar servicio')
+          // console.log('Error al importar los datos, revisar servicio')
         }
       }))
     }
@@ -125,8 +139,8 @@ export class ServiciosGenerales {
       if (res['codigo'] === 0) {
           return res;
       }  else {
-          console.log('Error al importar los datos, revisar servicio');
-          return res;
+          // console.log('Error al importar los datos, revisar servicio');
+          // return res;
       }
     }));
   }
@@ -140,7 +154,7 @@ export class ServiciosGenerales {
       if (res['codigo'] === 0) {
         return res['data'].marca;
       } else {
-          console.log('Error al importar los datos, revisar servicio');
+          // console.log('Error al importar los datos, revisar servicio');
       }
   }));
   }
@@ -173,7 +187,7 @@ export class ServiciosGenerales {
       if (res['codigo'] === 0) {
         return res;
       } else {
-          console.log('Error al importar los datos, revisar servicio');
+          // console.log('Error al importar los datos, revisar servicio');
       }
   }));
   }
@@ -201,7 +215,7 @@ export class ServiciosGenerales {
         if (res['codigo'] === 0){
           return res = res['data'];
         } else {
-          console.log('Error al importar los datos, revisar servicio');
+          // console.log('Error al importar los datos, revisar servicio');
         }
       }));
     }
@@ -223,7 +237,7 @@ export class ServiciosGenerales {
       if (res['codigo'] === 0 ) {
           return res['data'].modelo;
       } else {
-        console.log('Error al importar los datos, revisar servicio');
+        // console.log('Error al importar los datos, revisar servicio');
       }
     }));
 }
@@ -261,12 +275,13 @@ ListarModelo2(
     if (res['codigo'] === 0 ) {
         return res;
     } else {
-      console.log('Error al importar los datos, revisar servicio');
+      // console.log('Error al importar los datos, revisar servicio');
     }
   }));
 }
 
-EditarModelo(id: number,
+EditarModelo(
+  id: number,
   idmarca: number,
   modelo: string): Observable<any> {
     let params=new HttpParams()
@@ -289,7 +304,7 @@ EditarModelo(id: number,
       if (res['codigo'] === 0){
         return res = res['data'];
       } else {
-        console.log('Error al importar los datos, revisar servicio');
+        // console.log('Error al importar los datos, revisar servicio');
       }
     }));
   }
@@ -301,7 +316,7 @@ EditarModelo(id: number,
         if (res['codigo'] === 0 ) {
           return res['data'].tipodocumento;
         } else {
-          console.log('Error al importar los datos, revisar servicio');
+          // console.log('Error al importar los datos, revisar servicio');
         }
       }));
     }
@@ -321,7 +336,7 @@ EditarModelo(id: number,
       if (res['codigo'] === 0 ) {
         return res['data'].institucion;
       } else {
-        console.log('Error al importar los datos, revisar servicio');
+        // console.log('Error al importar los datos, revisar servicio');
       }
     }));
   }
@@ -335,7 +350,7 @@ EditarModelo(id: number,
       if (res['codigo'] === 0 ) {
         return res['data'].sede;
     } else {
-       console.log('Error al importar los datos, revisar servicio');
+       // console.log('Error al importar los datos, revisar servicio');
     }
   }));
   }
@@ -349,7 +364,7 @@ EditarModelo(id: number,
       if (res['codigo'] === 0 ) {
           return res['data'].subsede;
       } else {
-          console.log('Error al importar los datos, revisar servicio');
+          // console.log('Error al importar los datos, revisar servicio');
         }
     }));
   }
@@ -361,7 +376,7 @@ EditarModelo(id: number,
       if (res['codigo'] === 0) {
         return res['data'].almacenes;
       } else {
-        console.log('Error al importar los datos, revisar servicio');
+        // console.log('Error al importar los datos, revisar servicio');
         }
     }));
   }
@@ -378,7 +393,7 @@ EditarModelo(id: number,
         if (res['codigo'] === 0) {
             return res['data'].tipos;
         } else {
-            console.log('Error al importar los datos, revisar servicio');
+            // console.log('Error al importar los datos, revisar servicio');
           }
       }));
     }
@@ -395,7 +410,7 @@ EditarModelo(id: number,
 
             return res['data'].proveedor;
           } else {
-              console.log ('Error al importar los datos, revisar servicio');
+              // console.log ('Error al importar los datos, revisar servicio');
           }
       }));
       }
@@ -411,7 +426,7 @@ EditarModelo(id: number,
           if (res['codigo'] === 0) {
             return res['data'].clientes;
           } else {
-              console.log ('Error al importar los datos, revisar servicio');
+              // console.log ('Error al importar los datos, revisar servicio');
           }
       }));
     }
@@ -439,7 +454,7 @@ EditarModelo(id: number,
         if (res['codigo'] === 0) {
             return res['data'].sucursal;
         } else {
-            console.log('Error al importar los datos, revisar servicio');
+            // console.log('Error al importar los datos, revisar servicio');
           }
       }));
     }
@@ -456,7 +471,7 @@ EditarModelo(id: number,
             if (res['codigo'] === 0) {
               return res['data'].vendedores;
             } else {
-                console.log ('Error al importar los datos, revisar servicio');
+                // console.log ('Error al importar los datos, revisar servicio');
             }
         }));
     }
@@ -473,7 +488,7 @@ EditarModelo(id: number,
             if (res['codigo'] === 0) {
               return res['data'].productos;
             } else {
-                console.log ('Error al importar los datos, revisar servicio');
+                // console.log ('Error al importar los datos, revisar servicio');
             }
         }));
     }
@@ -487,7 +502,7 @@ EditarModelo(id: number,
           if (res['codigo'] === 0) {
             return res['data'].numeros;
           } else {
-              console.log ('Error al importar los datos, revisar servicio');
+              // console.log ('Error al importar los datos, revisar servicio');
           }
       }));
     }
@@ -500,7 +515,7 @@ EditarModelo(id: number,
           if (res['codigo'] === 0) {
             return res['data'].series;
           } else {
-              console.log ('Error al importar los datos, revisar servicio');
+              // console.log ('Error al importar los datos, revisar servicio');
           }
       }));
     }
@@ -522,7 +537,7 @@ EditarModelo(id: number,
       if (res['codigo'] === 0) {
         return res;
       } else {
-          console.log ('Error al importar los datos, revisar servicio');
+          // console.log ('Error al importar los datos, revisar servicio');
       }
   }));
     }

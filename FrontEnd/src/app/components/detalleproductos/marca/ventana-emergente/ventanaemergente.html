@@ -18,8 +18,8 @@
           </mat-grid-tile>
           <mat-grid-tile>
                 <mat-form-field>
-                    <mat-select placeholder="Tipo Producto" formControlName="idtipo" #InputTipo>
-                        <mat-option *ngFor="let tipo of lsttipos" [value]="tipo">{{tipo.nombre}}</mat-option>
+                    <mat-select placeholder="Tipo Producto" formControlName="idtipo" #InputTipo (selectionChange)="ObtenerArreglo()">
+                        <mat-option *ngFor="let tipo of lsttipos" [value]="tipo.id">{{tipo.nombre}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </mat-grid-tile>

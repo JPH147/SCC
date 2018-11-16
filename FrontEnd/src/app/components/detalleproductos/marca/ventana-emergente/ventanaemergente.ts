@@ -22,9 +22,10 @@ export class VentanaEmergenteMarca {
   public selectedValue: string;
   public MarcaForm: FormGroup;
   public Tipo: Array<any>;
-  public lsttipos: any[] = [];
+  public lsttipos: Array<any>= [];
   public mensaje: string;
   public total: number;
+  public producto_seleccionado: string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
@@ -50,32 +51,23 @@ export class VentanaEmergenteMarca {
       ]]
     });
 
-    this.Servicios.ListarTipoProductos2(null,'', '',1,100).subscribe(res=>{
-
-
-      this.lsttipos = res['data'].tipo_productos;
-      
-      this.lsttipos.forEach((item)=>{
-        delete item["numero"]
-      });
-
+    this.Servicios.ListarTipoProductos(null,'', '').subscribe(res=>{
+      this.lsttipos = res;
       if (this.data) {
-
-        this.MarcaForm.get('nombre').setValue(this.data.marca);
-        // this.MarcaForm.get('idtipo').setValue(this.data.idtipo);
-        this.Servicios.ListarTipoProductos2(this.data.idtipo,"","",1,1).subscribe(rest=>{
-          
-          delete rest['data'].tipo_productos[0]["numero"];
-
-          this.MarcaForm.get('idtipo').setValue(rest['data'].tipo_productos[0])
-          
-          console.log(this.lsttipos,this.MarcaForm.value.idtipo)
-        })
+        if (this.data.productos) {
+          this.Servicios.ListarTipoProductos(this.data.productos.id_tipo,"","").subscribe(rest=>{
+            this.MarcaForm.get('idtipo').setValue(rest[0].id);
+            this.ObtenerArreglo();
+          })
+        } else {
+          this.MarcaForm.get('nombre').setValue(this.data.marca);
+          this.Servicios.ListarTipoProductos(this.data.idtipo,"","").subscribe(rest=>{
+            this.MarcaForm.get('idtipo').setValue(rest[0].id);
+            this.ObtenerArreglo();
+          })
+        }
       }
-
     });
-
-
   }
 
   ngAfterViewInit(){
@@ -87,8 +79,9 @@ export class VentanaEmergenteMarca {
       debounceTime(200),
       distinctUntilChanged(),
       tap(()=>{
-        if (this.MarcaForm.value.idtipo) {
-          this.Servicios.ListarMarca2(this.MarcaForm.value.idtipo.nombre,this.FiltroMarca.nativeElement.value.trim(),1,1).subscribe(res=>{
+        if (this.producto_seleccionado) {
+          this.Servicios.ListarMarca2(this.producto_seleccionado,this.FiltroMarca.nativeElement.value.trim(),1,1).subscribe(res=>{
+            // console.log(res)
             if (res) {
               this.total=res['data'].marca.length;
             }else{
@@ -100,10 +93,19 @@ export class VentanaEmergenteMarca {
     ).subscribe()
   }
 
+  ObtenerArreglo(){
+    this.producto_seleccionado = this.lsttipos.filter(e=>e.id==this.MarcaForm.value.idtipo)[0].nombre;
+  }
+
   Guardar(formulario) {
     if (this.data) {
-      this.mensaje = 'Datos actualizados satisfactoriamente';
-      this.Servicios.EditarMarca(this.data.id, formulario.value.idtipo.id, formulario.value.nombre).subscribe();
+      if (this.data.productos) {
+        this.mensaje = 'Marca creada satisfactoriamente';
+        this.Servicios.CrearMarca(formulario.value.idtipo, formulario.value.nombre).subscribe();
+      } else {
+        this.mensaje = 'Datos actualizados satisfactoriamente';
+        this.Servicios.EditarMarca(this.data.id, formulario.value.idtipo, formulario.value.nombre).subscribe();
+      }
     }
 
     if (!this.data) {

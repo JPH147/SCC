@@ -16,6 +16,7 @@
     try{
     	$tipo_producto = new Tipo_Producto($db);
 
+        $tipo_producto->id_tipo_producto = !empty($_GET['prid']) ? trim($_GET['prid']) : null;
     	$tipo_producto->tprd_nombre = !empty($_GET['prnombre']) ? trim($_GET['prnombre']) : null;
     	$tipo_producto->und_nombre = !empty($_GET['prum']) ? trim($_GET['prum']) : null;
 
