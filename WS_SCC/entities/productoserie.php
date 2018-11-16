@@ -16,6 +16,7 @@ Class ProductoSerie{
     public $observacion;
     public $numero_pagina;
     public $total_pagina;
+    public $precio_compra;
 
     public function __construct($db){
         $this->conn = $db;
@@ -50,7 +51,8 @@ Class ProductoSerie{
                 "serie"=>$serie,
                 "color"=>$color,
                 "almacenamiento"=>$almacenamiento,
-                "proveedor"=>$proveedor
+                "proveedor"=>$proveedor,
+                "precio"=>$precio,
             );
             array_push($producto_serie_list["producto_series"],$producto_serie_item);
         }
@@ -76,36 +78,6 @@ Class ProductoSerie{
         return $this->total_producto_serie;
     }
 
-    function readxproducto(){
-
-        $query = "CALL sp_listarproductoseriexproducto(?)";
-
-        $result = $this->conn->prepare($query);
-
-        $result->bindParam(1, $this->producto);
-
-        $result->execute();
-        
-        $producto_serie_list=array();
-        $producto_serie_list["producto_series"]=array();
-
-        $contador = 0;
-
-        while($row = $result->fetch(PDO::FETCH_ASSOC))
-        {
-            extract($row);
-            $contador=$contador+1;
-            $producto_serie_item = array (
-                "numero"=>$contador,
-                "producto"=>$prd_descripcion,
-                "serie"=>$ps_serie
-            );
-            array_push($producto_serie_list["producto_series"],$producto_serie_item);
-        }
-
-        return $producto_serie_list;
-    }
-
     function readxId(){
         $query ="call sp_listarproductoseriexId(?)";
         
@@ -123,6 +95,7 @@ Class ProductoSerie{
         $this->serie=$row['serie'];
         $this->color=$row['color'];
         $this->almacenamiento=$row['almacenamiento'];
+        $this->precio_compra=$row['precio'];
     }
 
     /* Crear producto */
@@ -132,7 +105,8 @@ Class ProductoSerie{
             :prproducto,
             :prserie,
             :prcolor,
-            :pralmacenamiento
+            :pralmacenamiento,
+            :prprecio
             )";
 
         $result = $this->conn->prepare($query);
@@ -141,11 +115,13 @@ Class ProductoSerie{
         $result->bindParam(":prserie", $this->serie);
         $result->bindParam(":prcolor", $this->color);
         $result->bindParam(":pralmacenamiento", $this->almacenamiento);
+        $result->bindParam(":prprecio", $this->precio_compra);
 
         $this->id_producto=htmlspecialchars(strip_tags($this->id_producto));
         $this->serie=htmlspecialchars(strip_tags($this->serie));
         $this->color=htmlspecialchars(strip_tags($this->color));
         $this->almacenamiento=htmlspecialchars(strip_tags($this->almacenamiento));
+        $this->precio_compra=htmlspecialchars(strip_tags($this->precio_compra));
 
         if($result->execute())
         {
@@ -162,7 +138,7 @@ Class ProductoSerie{
 
     function update(){
         
-      $query = "call sp_actualizarproductoserie(:prid, :prproducto, :prserie, :prcolor, :pralmacenamiento)";
+      $query = "call sp_actualizarproductoserie(:prid, :prproducto, :prserie, :prcolor, :pralmacenamiento, :prprecio)";
       $result = $this->conn->prepare($query);
 
       $result->bindParam(":prid", $this->id_producto_serie);
@@ -170,12 +146,14 @@ Class ProductoSerie{
       $result->bindParam(":prserie", $this->serie);
       $result->bindParam(":prcolor", $this->color);
       $result->bindParam(":pralmacenamiento", $this->almacenamiento);
+      $result->bindParam(":prprecio", $this->precio_compra);
 
       $this->id_producto_serie=htmlspecialchars(strip_tags($this->id_producto_serie));
       $this->id_producto=htmlspecialchars(strip_tags($this->id_producto));
       $this->serie=htmlspecialchars(strip_tags($this->serie));
       $this->color=htmlspecialchars(strip_tags($this->color));
       $this->almacenamiento=htmlspecialchars(strip_tags($this->almacenamiento));
+      $this->precio_compra=htmlspecialchars(strip_tags($this->precio_compra));
 
       if($result->execute()){
         return true;
@@ -187,45 +165,45 @@ Class ProductoSerie{
     }
 
     /* Actualizar producto */
-    function enter(){
+    // function enter(){
 
-        $query = "call sp_actualizarproductoserieingresar(:prid)";
+    //     $query = "call sp_actualizarproductoserieingresar(:prid)";
 
-        $result = $this->conn->prepare($query);
+    //     $result = $this->conn->prepare($query);
 
-        $result->bindParam(":prid", $this->id_producto_serie);
+    //     $result->bindParam(":prid", $this->id_producto_serie);
 
-        $this->id_producto_serie=htmlspecialchars(strip_tags($this->id_producto_serie));
+    //     $this->id_producto_serie=htmlspecialchars(strip_tags($this->id_producto_serie));
 
-        if($result->execute())
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-    }
+    //     if($result->execute())
+    //         {
+    //             return true;
+    //         }
+    //         else
+    //         {
+    //             return false;
+    //         }
+    // }
 
-    function leave(){
+    // function leave(){
 
-        $query = "call sp_actualizarproductoseriequitar(:prid)";
+    //     $query = "call sp_actualizarproductoseriequitar(:prid)";
 
-        $result = $this->conn->prepare($query);
+    //     $result = $this->conn->prepare($query);
 
-        $result->bindParam(":prid", $this->id_producto_serie);
+    //     $result->bindParam(":prid", $this->id_producto_serie);
 
-        $this->id_producto_serie=htmlspecialchars(strip_tags($this->id_producto_serie));
+    //     $this->id_producto_serie=htmlspecialchars(strip_tags($this->id_producto_serie));
 
-        if($result->execute())
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-    }
+    //     if($result->execute())
+    //         {
+    //             return true;
+    //         }
+    //         else
+    //         {
+    //             return false;
+    //         }
+    // }
 
     function validar(){
         $query = "CALL sp_validarproductoserie(?)";

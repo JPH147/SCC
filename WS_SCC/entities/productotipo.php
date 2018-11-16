@@ -48,14 +48,15 @@ class Tipo_Producto{
 	}
 
 	function read2(){
-		$query = "CALL sp_listartipoproducto2(?,?,?,?)";
+		$query = "CALL sp_listartipoproducto2(?,?,?,?,?)";
 
 		$result = $this->conn->prepare($query);
 
-		$result->bindParam(1, $this->tprd_nombre);
-		$result->bindParam(2, $this->und_nombre);
-		$result->bindParam(3, $this->numero_pagina);
-		$result->bindParam(4, $this->total_pagina);
+		$result->bindParam(1, $this->id_tipo_producto);
+		$result->bindParam(2, $this->tprd_nombre);
+		$result->bindParam(3, $this->und_nombre);
+		$result->bindParam(4, $this->numero_pagina);
+		$result->bindParam(5, $this->total_pagina);
 
 		$result->execute();
 
