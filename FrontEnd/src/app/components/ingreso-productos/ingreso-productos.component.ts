@@ -472,8 +472,8 @@ import {ProductoService} from '../productos/productos.service';
         this.documento_numero).subscribe (res => {
           let id_cabecera = res ['data'];
           for(let i of this.detalle) {
-            this.IngresoProductoservicios.CrearTransaccionDetalle(id_cabecera,i.serie,i.cantidad*(-1),i.precio,"").subscribe(res=>{
-              console.log(res)
+            this.IngresoProductoservicios.CrearTransaccionDetalle(id_cabecera,i.id_serie,i.cantidad*(-1),i.precio,"").subscribe(res=>{
+              console.log(this.detalle)
             })
           }
           })
