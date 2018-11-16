@@ -32,11 +32,12 @@ constructor(private Servicio: ServiciosGenerales) { }
   ){
   this.CargandoInformacion.next(true);
 
-  this.Servicio.ListarTipoProductos2(nombre, unidad_medida , prpagina, prtotalpagina)
+  this.Servicio.ListarTipoProductos2(null,nombre, unidad_medida , prpagina, prtotalpagina)
   .pipe(catchError(() => of([])),
-  finalize(() => this.CargandoInformacion.next(false))
+    finalize(() => this.CargandoInformacion.next(false))
   )
   .subscribe(res => {
+    // console.log(res)
     this.TotalResultados.next(res['mensaje']);
     this.InformacionTipo.next(res['data'].tipo_productos);
     });

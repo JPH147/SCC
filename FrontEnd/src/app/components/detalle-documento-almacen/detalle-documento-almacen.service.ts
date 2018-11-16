@@ -19,13 +19,12 @@ export class  DetalleDocumentoAlmacenService {
       params: new HttpParams()
         .set('prid', id.toString())
       }).pipe(map(res => {
-
       if (res['codigo'] === 0) {
         return res;
       } else {
         console.log('Error al importar los datos, revisar servicio');
         return res;
-    }
+      }
     }));
   }
 

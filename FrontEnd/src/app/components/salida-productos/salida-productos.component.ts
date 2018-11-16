@@ -264,9 +264,9 @@ GuardarTransferenciaAlmacen(formulario) {
           -1
         ).subscribe(res=>{
           // console.log(res)
-            this.SSeries.RegistrarProductoOUT(i.id_serie).subscribe(res=>{
+            // this.SSeries.RegistrarProductoOUT(i.id_serie).subscribe(res=>{
               // console.log(res)
-          })
+          // })
         })
       }
     }

@@ -116,11 +116,18 @@ export class VentanaEmergenteProductos {
       panelClass: "dialogo-rediseno",
     });
  
+    VentanaTipo.afterClosed().subscribe(res=>{
+      this.Servicios.ListarTipoProductos('', '').subscribe(res => {
+        for (let i in res) {
+          this.Tipos.push(res[i]);
+        }
+      });
+    })
+
     // VentanaTipo.afterClosed().subscribe(res => {
     //   let VentanaProductos = this.DialogoProductos.open(VentanaEmergenteProductos,{
     //     width: '600px',
     //     panelClass: "dialogo-rediseno"
-
     //   });
     // });
   }
@@ -132,6 +139,12 @@ export class VentanaEmergenteProductos {
       panelClass: "dialogo-rediseno"
     });
  
+    VentanaMarca.afterClosed().subscribe(res=>{
+      this.ListarMarcas(this.ProductosForm.value.marca);
+    })
+
+
+
     // VentanaMarca.afterClosed().subscribe(res => {
     //   let VentanaProductos = this.DialogoProductos.open(VentanaEmergenteProductos,{
     //     width: '600px',
@@ -148,6 +161,10 @@ export class VentanaEmergenteProductos {
       panelClass: "dialogo-rediseno"
     });
  
+    VentanaModelo.afterClosed().subscribe(res=>{
+      this.ListarModelos(this.ProductosForm.value.tipo);
+    })
+
     // VentanaModelo.afterClosed().subscribe(res => {
     //   let VentanaProductos = this.DialogoProductos.open(VentanaEmergenteProductos,{
     //     width: '600px',

@@ -10,10 +10,12 @@
         <mat-grid-list cols="1" rowHeight="80px">
           <mat-grid-tile>
             <mat-form-field>
-              <input matInput placeholder="Nombre del Tipo" formControlName="nombre">
+              <input matInput placeholder="Nombre del Tipo" formControlName="nombre" #InputTipo>
             </mat-form-field>
           </mat-grid-tile>
-            
+          <mat-grid-tile *ngIf="total==1">
+            <mat-error>Ya existe este tipo de producto</mat-error>
+          </mat-grid-tile>
           <mat-grid-tile>
                 <mat-form-field>
                     <mat-select placeholder="Unidad de Medida" formControlName="idunidadmedida">
@@ -28,7 +30,7 @@
       <mat-card-actions>
         <mat-grid-list cols=1 rowHeight="40px">
           <mat-grid-tile>
-            <button type="submit" mat-raised-button color="primary" [disabled]="TipoForm.invalid">Guardar</button>
+            <button type="submit" mat-raised-button color="primary" [disabled]="TipoForm.invalid || total==1">Guardar</button>
           </mat-grid-tile>
         </mat-grid-list>
       </mat-card-actions>

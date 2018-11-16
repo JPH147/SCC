@@ -446,7 +446,7 @@ import {ProductoService} from '../productos/productos.service';
           for (let i of formulario.value.productos) {
             for (let is of this.Series) {
               if (i.producto.id === is.id_producto) {
-                this.SSeries.CrearProductoSerie(i.producto.id,is.serie, is.color, is.almacenamiento).subscribe(response => {
+                this.SSeries.CrearProductoSerie(i.producto.id,is.serie, is.color, is.almacenamiento, i.precioUnitario).subscribe(response => {
                   this.IngresoProductoservicios.CrearTransaccionDetalle(id_cabecera, response['data'], 1, i.precioUnitario, is.observacion).subscribe();
                 });
               }

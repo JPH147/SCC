@@ -52,23 +52,39 @@
 		<table  class="tabla-detalle">
 		  <tr>
 		  	<th>N°</th>
+
 		  	<th>PRODUCTO</th>
+
 		    <th>SERIE</th>
+
 		    <th>COLOR</th> 
+
 		    <th>ALMACENAMIENTO</th>
+
 		    <!-- <th>CANTIDAD</th> -->
 		    <th *ngIf="referencia==1">PRECIO</th>
+
 		    <th>OBSERVACIONES</th>
+
 		    <th *ngIf="id_tipo==1 && !this.data">OPCIONES</th>
+
 		  </tr>
 		  <tr *ngFor="let detalle of detalle">
+
 		    <td class="detalle-columnas" id="detalle-numero">{{detalle.numero}}</td> 
+
 		    <td class="detalle-columnas" id="detalle-producto">{{detalle.producto}}</td>
+
 		    <td class="detalle-columnas" id="detalle-serie">{{detalle.serie}}</td> 
+
 		    <td class="detalle-columnas" id="detalle-color">{{detalle.color}}</td>
+
 		    <td class="detalle-columnas" id="detalle-almacenamiento">{{detalle.almacenamiento}}</td>
-			<td class="detalle-columnas" id="detalle-precio" *ngIf="referencia == 'proveedor'">{{detalle.precio | currency:'S/.' }}</td>
+
+			<td class="detalle-columnas" id="detalle-precio" *ngIf="referencia ==1">{{detalle.precio | currency:'S/.' }}</td>
+
 		    <td class="detalle-columnas" id="detalle-observacion">{{detalle.observacion}}</td>
+
 		    <td class="detalle-columnas" id="detalle-opciones" *ngIf="id_tipo==1 && !this.data">
 		    	<button mat-icon-button color="primary" (click)="Editar(detalle)"> <mat-icon>edit</mat-icon> </button>
 		    </td>

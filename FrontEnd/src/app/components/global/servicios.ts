@@ -34,13 +34,24 @@ export class ServiciosGenerales {
   }
 
   ListarTipoProductos2(
+    id:number,
     nombre: string,
     unidad_medida: string,
     prpagina: number,
     prtotalpagina: number
   ): Observable<any> {
   // tslint:disable-next-line:max-line-length
+
+  let id_producto:string;
+
+  if (id) {
+    id_producto=id.toString()
+  }else{
+    id_producto='';
+  }
+
   return this.http.get(this.url + 'productotipo/read2.php', {params: new HttpParams()
+    .set('prid',id_producto)
     .set('prnombre',nombre)
     .set('prum',unidad_medida)
     .set('prpagina',prpagina.toString())
@@ -48,10 +59,11 @@ export class ServiciosGenerales {
     })
 
   .pipe(map(res => {
-      if (res['codigo'] === 0 ) {
-        return res;
+    if (res['codigo'] === 0 ) {
+      return res;
     } else {
-        console.log('Error al importar los datos, revisar servicio');
+      // return res
+      console.log('Error al importar los datos, revisar servicio');
     }
   }));
   }
