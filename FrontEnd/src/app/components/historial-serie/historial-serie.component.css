@@ -33,30 +33,25 @@ mat-card{
 }
 
 .mat-column-fecha,
-.mat-column-documento{
+.mat-column-documento,
+.mat-column-movimiento{
   max-width: 8%;
 }
 
-.transaccion{
+.mat-column-numero{
   max-width:5%;
 }
 
+.mat-column-transaccion{
+  max-width:15%;
+}
+
 .mat-column-producto{
-  max-width: 30%;
+  max-width: 20%;
 } 
 
-.mat-column-tenedor{
-  max-width:25%;
-}
-    
-   
-.mat-column-serie
-{
-  max-width: 13%;
-}
-    
-.mat-column-numero{
- max-width: 5%; 
+.mat-column-serie{
+  max-width: 10%;
 }
     
 .imagen-producto{

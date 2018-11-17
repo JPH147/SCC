@@ -5,6 +5,10 @@ class SerieProducto{
 	//private $table_name = "tipo_producto";
 
 	public $serie;
+	public $movimiento_serie;
+	public $movimiento_numero;
+	public $numero_pagina;
+	public $total_pagina;
 
 	public function __construct($db){
 		$this->conn = $db;
@@ -33,6 +37,8 @@ class SerieProducto{
 			$contador = $contador+1;
 			$serieproducto_fila = array(
 				"numero" => $contador,
+				"movimiento_serie"=>$movimiento_serie,
+				"movimiento_numero"=>$movimiento_numero,
                 "fecha" => $fecha,
                 "documento" => $documento,
                 "transaccion" => $transaccion,
