@@ -16,15 +16,15 @@
 
 	try
 	{
-	    $marca->id_marca = isset($_GET['id']) ? trim($_GET['id']) : die();
+	    $marca->id_marca = isset($_GET['prid']) ? trim($_GET['prid']) : die();
 	    
 	    $marca->readxId();
 
 	    $marca_list = array(
-	        "id"=>$marca->id_marca,
-            "idtipo"=>$marca->id_tipo_producto,
-            "marca"=>$marca->mrc_nombre,
-
+	        "id"=>$marca->id,
+            "nombre"=>$marca->nombre,
+            "id_tipo"=>$marca->id_tipo,
+            "nombre_tipo"=>$marca->nombre_tipo
 	    );
 
 	    if(trim($marca->id_marca)!= null){

@@ -29,24 +29,21 @@ mat-card{
   justify-content: center;
 }
 
-.mat-column-numero,
-.mat-column-opciones{
-  max-width: 1%,
-}
-
-.mat-column-fecha,
-.mat-column-almacen,
-.mat-column-documento{
-  max-width: 5%,
-}
-
-.mat-column-referencia{
-	max-width: 10%;
-}
-
-.mat-column-referente,
 .mat-column-tipo{
-  max-width: 30%;
+	max-width: 15%;
+}
+
+.mat-column-opciones,
+.mat-column-referencia,
+.mat-column-documento,
+.mat-column-almacen,
+.mat-column-movimiento,
+.mat-column-fecha{
+  max-width: 8%;
+}
+
+.mat-column-numero{
+  max-width: 5%;
 }
 
 #tituloProd {

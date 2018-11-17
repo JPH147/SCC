@@ -29,17 +29,6 @@ export class DetalleProductosComponent implements OnInit {
 
   Cambiar(evento){
 
-    // this.opcion.next(evento);
-
-  	// if (evento==0) {
-  	// 	this.Tipo.CargarData();
-  	// }
-  	// if (evento==1) {
-  	// 	this.Marca.CargarData();
-  	// }
-  	// if (evento==2) {
-  	// 	this.Modelo.CargarData();
-  	// }
 	
   }
 

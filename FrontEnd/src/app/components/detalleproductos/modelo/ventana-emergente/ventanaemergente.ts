@@ -21,11 +21,12 @@ export class VentanaEmergenteModelo {
   @ViewChild('InputMarca') FiltroMarca: MatSelect;
   public selectedValue: string;
   public ModeloForm: FormGroup;
-  public Tipo: Array<any>;
-  public lstmarcas: any[] = [];
+  public Tipos: Array<any>;
+  public Marcas: any[] = [];
   public mensaje: string;
   public total:number;
   public marca_seleccionada: string;
+  public tipo:number;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
@@ -43,26 +44,44 @@ export class VentanaEmergenteModelo {
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnInit() {
     this.ModeloForm = this.FormBuilder.group({
-      'nombre': [null, [
+      'nombre': [ {value:null, disabled: true}, [
         Validators.required
       ]],
-      'idmarca': [null, [
+      'idmarca': [ {value:null, disabled: true}, [
         Validators.required
-      ]]
+      ]],
+      'id_tipo': [ {value:null, disabled: false}, [
+        Validators.required
+      ]],
     });
 
-    this.Servicios.ListarMarca('', '').subscribe(res=>{
-      this.lstmarcas = res;
-    });
+    // this.Servicios.ListarMarca('', '').subscribe(res=>{
+    //   this.Marcas = res;
+    // });
+
+    this.ListarTipos();
 
     if (this.data) {
-       if (this.data.productos) {
-         // console.log(this.data.productos)
-        this.ModeloForm.get('idmarca').setValue(this.data.productos.id_marca);
-       }else{
-        this.ModeloForm.get('nombre').setValue(this.data.modelo);
-        this.ModeloForm.get('idmarca').setValue(this.data.id_marca);
-       }
+
+      this.ModeloForm.get('nombre').enable();
+      this.ModeloForm.get('idmarca').enable();
+
+      if (this.data.productos) {
+        
+        this.Servicios.SeleccionarMarca(this.data.productos.id_marca).subscribe(res=>{
+          this.ModeloForm.get('id_tipo').setValue(res['id_tipo']);
+          this.ListarMarcas(res['id_tipo']);
+          this.ModeloForm.get('idmarca').setValue(this.data.productos.id_marca);
+        })
+
+      }else{
+       this.ModeloForm.get('nombre').setValue(this.data.modelo);
+        this.Servicios.SeleccionarMarca(this.data.id_marca).subscribe(res=>{
+          this.ModeloForm.get('id_tipo').setValue(res['id_tipo']);
+          this.ListarMarcas(res['id_tipo']);
+          this.ModeloForm.get('idmarca').setValue(this.data.id_marca);
+        })
+      }
     }
   }
 
@@ -90,8 +109,35 @@ export class VentanaEmergenteModelo {
   }
 
   ObtenerArreglo(){
-    this.marca_seleccionada = this.lstmarcas.filter(e=>e.id==this.ModeloForm.value.idmarca)[0].nombre;
+    this.marca_seleccionada = this.Marcas.filter(e=>e.id==this.ModeloForm.value.idmarca)[0].nombre;
   }
+
+  /*****************************************************************************/
+  TipoSeleccionado(event) {
+    this.ListarMarcas(event.value);
+    this.ModeloForm.get('idmarca').setValue('');
+    this.ModeloForm.get('nombre').setValue('');
+    this.ModeloForm.controls['idmarca'].enable();
+    this.ModeloForm.controls['nombre'].disable();
+  }
+
+  MarcaSeleccionada(){
+    this.ModeloForm.get('nombre').setValue('');
+    this.ModeloForm.controls['nombre'].enable();
+  }
+
+  ListarTipos(){
+    this.Servicios.ListarTipoProductos(null,'', '').subscribe(res => {
+      this.Marcas = [];
+      this.Tipos=res
+    })}
+
+  ListarMarcas(i) {
+    this.Servicios.ListarMarca(i, '').subscribe(res => {
+      this.Marcas = res;
+  })}
+
+  /*****************************************************************************/
 
   Guardar(formulario) {
     if (this.data) {

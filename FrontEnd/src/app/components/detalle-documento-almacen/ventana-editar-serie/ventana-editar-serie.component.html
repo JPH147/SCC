@@ -10,7 +10,7 @@
 	
         <mat-grid-tile>
           <mat-form-field>
-            <input matInput placeholder="Serie" [(ngModel)]="this.Informacion.serie">
+            <input matInput placeholder="Serie" [(ngModel)]="this.Informacion.serie" #InputSerie>
           </mat-form-field>
         </mat-grid-tile>
 
@@ -39,8 +39,11 @@
 
    <mat-card-actions>
      <mat-grid-list cols=1 rowHeight="40px">
+        <mat-grid-tile *ngIf="repetido">
+          <mat-error>La serie ya se encuentra registrada.</mat-error>
+        </mat-grid-tile>
        <mat-grid-tile>
-         <button mat-raised-button color="primary" [mat-dialog-close]="this.Informacion">Grabar</button>
+         <button mat-raised-button color="primary" [mat-dialog-close]="this.Informacion" [disabled]="repetido || verificando">Grabar</button>
        </mat-grid-tile>
      </mat-grid-list>
    </mat-card-actions>

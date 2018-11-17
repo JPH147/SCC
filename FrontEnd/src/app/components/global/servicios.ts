@@ -127,6 +127,7 @@ export class ServiciosGenerales {
       return this.http.post(this.url + 'productotipo/delete.php', params, {headers: headers});
 
     }
+
   ListarUnidadMedida(
     tipo_producto:string
   ):Observable<any>{
@@ -209,7 +210,7 @@ export class ServiciosGenerales {
     ): Observable<any[]> {
       return this.http.get(this.url + 'productomarca/readxId.php', {
         params: new HttpParams()
-        .set('id', id.toString())
+        .set('prid', id.toString())
       })
       .pipe(map(res=>{
         if (res['codigo'] === 0){

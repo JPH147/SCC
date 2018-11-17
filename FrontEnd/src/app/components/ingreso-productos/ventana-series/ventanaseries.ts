@@ -44,7 +44,7 @@ export class ventanaseries  implements OnInit {
 
     if (this.data.series.length>0) {
       this.series_vista=this.data.series;
-      console.log(this.data.series)
+      // console.log(this.data.series)
       let is:number=0;
       for (let i of this.data.series) {
         if (this.data.producto==i.id_producto) {

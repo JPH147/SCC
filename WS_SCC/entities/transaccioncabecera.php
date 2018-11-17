@@ -41,6 +41,8 @@ Class TransaccionCabecera{
     public $numero_transaccion;
     public $id_almacen_referencia;
     public $almacen_referencia;
+    public $documento_serie;
+    public $documento_numero;
 
     public function __construct($db){
         $this->conn = $db;
@@ -82,7 +84,9 @@ Class TransaccionCabecera{
             $transaccion_item = array (
                 "numero"=>$contador,
                 "id"=>$id,
-                "almacen"=>$almacen,                
+                "movimiento_serie"=>$movimiento_serie,
+                "movimiento_numero"=>$movimiento_numero,
+                "almacen"=>$almacen,            
                 "tipo"=>$tipo,
                 "referencia"=>$referencia,
                 "referente"=>$referente,

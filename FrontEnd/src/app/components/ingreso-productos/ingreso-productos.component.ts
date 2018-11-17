@@ -48,6 +48,8 @@ import {ProductoService} from '../productos/productos.service';
     public detalle:Array<any>;
     public obsentrega:Array<any>;
     public id_almacen_referencia:number;
+    public enviado:boolean;
+    public Hoy: Date= new Date();
 
     @ViewChildren('InputProducto') FiltroProducto: QueryList<any>;
     public productos: FormArray;
@@ -71,7 +73,8 @@ import {ProductoService} from '../productos/productos.service';
 
       this.documento_serie="";
       this.documento_numero=null;
-      
+      this.enviado=false;
+
       this.ListarAlmacen();
       this.ListarTransaccionTipo();
       this.ListarProveedor('');
@@ -259,6 +262,7 @@ import {ProductoService} from '../productos/productos.service';
 
       this.IngresoProductoForm.get('productos')['controls'][index].get('cantidad').setValue(0);
       this.IngresoProductoForm.get('productos')['controls'][index].get('producto').setValue(this.IngresoProductoForm.get('productos')['controls'][index].value.descripcion);
+      this.IngresoProductoForm.get('productos')['controls'][index].get('descripcion').disable()
 
       this.Producto=[];
       this.Articulos.Listado('', '', '', '', null,null,1, 10, 'descripcion', 'asc',1).subscribe(res => {
@@ -270,14 +274,6 @@ import {ProductoService} from '../productos/productos.service';
           }
         }
       });
-      this.IngresoProductoForm.get('productos')['controls'][index].get('cantidad').setValue(0);
-      this.Verificar()
-    }
-
-    Verificar(){
-      // this.IngresoProductoForm.value.productos.forEach((item,index)=>{
-      //   this.Series=this.Series.filter(e=>e.id_producto!=item.producto.id)
-      // })
     }
 
     displayFn2(producto) {
@@ -432,6 +428,7 @@ import {ProductoService} from '../productos/productos.service';
   Guardar(formulario) {
 
    let tipoingreso = formulario.value.tipoIngreso;
+   this.enviado=true;
 
    if (tipoingreso === 1) {
       this.IngresoProductoservicios.AgregarCompraMercaderia(
@@ -453,6 +450,7 @@ import {ProductoService} from '../productos/productos.service';
             }
           }
         this.IngresoProductoForm.reset();
+        this.enviado=false;
         this.Series = [];
         this.ResetearFormArray(this.productos);
         this.snackBar.open('El ingreso se guardó satisfactoriamente', '', {
@@ -478,6 +476,7 @@ import {ProductoService} from '../productos/productos.service';
           }
           })
         this.IngresoProductoForm.reset();
+        this.enviado=false;
         this.Series = [];
         this.ResetearFormArray(this.productos);
         this.snackBar.open('El ingreso se guardó satisfactoriamente', '', {

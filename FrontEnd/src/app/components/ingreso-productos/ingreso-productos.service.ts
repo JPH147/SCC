@@ -158,7 +158,7 @@ constructor(private http: HttpClient) {}
 			if(res['codigo']===0){
 				return res=res
 			}else{
-				console.log('Error al importar los datos, revisar servicio')
+				// console.log('Error al importar los datos, revisar servicio')
 			}
 		}))
    
@@ -177,7 +177,7 @@ constructor(private http: HttpClient) {}
       if (res['codigo'] === 0) {
         return res;
       } else {
-        console.log('Error al importar los datos, revisar servicio');
+        // console.log('Error al importar los datos, revisar servicio');
         return res;
     }
     }));

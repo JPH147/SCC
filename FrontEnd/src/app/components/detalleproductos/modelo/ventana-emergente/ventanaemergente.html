@@ -9,21 +9,32 @@
     
     <mat-card-content>
       <mat-grid-list cols="1" rowHeight="80px">
+        
         <mat-grid-tile>
           <mat-form-field>
             <input matInput placeholder="Modelo" formControlName="nombre" #InputModelo>
           </mat-form-field>
         </mat-grid-tile>
-          <mat-grid-tile *ngIf="total>0">
-            <mat-error>Ya existe este modelo para esta marca</mat-error>
-          </mat-grid-tile>
+        <mat-grid-tile *ngIf="total>0">
+          <mat-error>Ya existe este modelo para esta marca</mat-error>
+        </mat-grid-tile>
+
         <mat-grid-tile>
-              <mat-form-field>
-                  <mat-select placeholder="Marca" formControlName="idmarca" #InputMarca>
-                      <mat-option *ngFor="let mar of lstmarcas" [value]="mar.id">{{mar.nombre}}</mat-option>
-                  </mat-select>
-              </mat-form-field>
-          </mat-grid-tile>
+          <mat-form-field>
+              <mat-select placeholder="Marca" formControlName="idmarca" #InputMarca (selectionChange)="MarcaSeleccionada($event)">
+                  <mat-option *ngFor="let mar of Marcas" [value]="mar.id">{{mar.nombre}}</mat-option>
+              </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile *ngIf="!this.data">
+          <mat-form-field>
+            <mat-select placeholder='Tipo' (selectionChange)="TipoSeleccionado($event)" formControlName="id_tipo">
+              <mat-option *ngFor="let tipo of Tipos" [value] = "tipo.id"> {{tipo.nombre}} </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+
       </mat-grid-list>
 
     </mat-card-content>

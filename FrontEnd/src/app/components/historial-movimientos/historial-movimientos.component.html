@@ -79,43 +79,48 @@
 
       <ng-container matColumnDef="numero">
         <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
-        <mat-cell *matCellDef="let producto"> {{producto.numero}} </mat-cell>
+        <mat-cell *matCellDef="let movimiento"> {{movimiento.numero}} </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="documento">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Documento </mat-header-cell>
-        <mat-cell *matCellDef="let producto"> {{producto.documento}} </mat-cell>
+      <ng-container matColumnDef="movimiento">
+        <mat-header-cell *matHeaderCellDef> Movimiento </mat-header-cell>
+        <mat-cell *matCellDef="let movimiento"> {{movimiento.movimiento_serie}}-{{movimiento.movimiento_numero}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="almacen">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Almacén </mat-header-cell>
-        <mat-cell *matCellDef="let producto"> {{producto.almacen}} </mat-cell>
+        <mat-cell *matCellDef="let movimiento"> {{movimiento.almacen}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="tipo">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </mat-header-cell>
-        <mat-cell *matCellDef="let producto"> {{producto.tipo}} </mat-cell>
+        <mat-cell *matCellDef="let movimiento"> {{movimiento.tipo}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="referencia">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Referencia </mat-header-cell>
-        <mat-cell *matCellDef="let producto"> {{producto.referencia}} </mat-cell>
+        <mat-cell *matCellDef="let movimiento"> {{movimiento.referencia}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="referente">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Referente </mat-header-cell>
-        <mat-cell *matCellDef="let producto"> {{producto.referente}} </mat-cell>
+        <mat-cell *matCellDef="let movimiento"> {{movimiento.referente}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="documento">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Documento </mat-header-cell>
+        <mat-cell *matCellDef="let movimiento"> {{movimiento.documento}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="fecha">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </mat-header-cell>
-        <mat-cell *matCellDef="let producto"> {{producto.fecha}} </mat-cell>
+        <mat-cell *matCellDef="let movimiento"> {{movimiento.fecha}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
-        <mat-cell *matCellDef="let producto">
-          <button mat-icon-button color="primary" matTooltip="Ver detalle" [routerLink]="[producto.id]"><mat-icon> visibility </mat-icon></button>
+        <mat-cell *matCellDef="let movimiento">
+          <button mat-icon-button color="primary" matTooltip="Ver detalle" [routerLink]="[movimiento.id]"><mat-icon> visibility </mat-icon></button>
         </mat-cell>
       </ng-container>
 

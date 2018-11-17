@@ -97,8 +97,8 @@
           </mat-grid-tile>
           <mat-grid-tile>
             <mat-form-field class ="IngFecha" class="Alma1"  class="example-full-width" >
-                <input matInput [matDatepicker]="picker" placeholder="Fecha Ingreso" formControlName="fecingreso">
-                <mat-error> Debe ingresar Fecha </mat-error>
+                <input matInput [matDatepicker]="picker" placeholder="Fecha Ingreso" formControlName="fecingreso" [max]="Hoy">
+                <mat-error> Debe ingresar la fecha </mat-error>
                 <mat-error> </mat-error>
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
@@ -235,7 +235,7 @@
           <button mat-fab color="warn" matTooltip="Limpiar" >  <mat-icon> restore</mat-icon></button> -->
 
           <button mat-raised-button type="button" (click)="Reset()" >Limpiar</button>
-          <button mat-raised-button color="primary" type="submit"  (click)="Guardar(IngresoProductoForm)" [disabled]="IngresoProductoForm.invalid || (Series.length==0 && IngresoProductoForm.value.tipoIngreso==1)">Grabar</button>
+          <button mat-raised-button color="primary" type="submit"  (click)="Guardar(IngresoProductoForm)" [disabled]="IngresoProductoForm.invalid || (Series.length==0 && IngresoProductoForm.value.tipoIngreso==1) || enviado">Grabar</button>
 
         </mat-grid-tile>
       </mat-grid-list>

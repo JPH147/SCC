@@ -34,6 +34,8 @@ export class SalidaProductosComponent implements OnInit {
   public producto: string;
   public Producto: Array<any>;
   public Series: any[]=[];
+  public enviado:boolean;
+  public Hoy: Date = new Date();
 
   @ViewChildren('InputProducto') FiltroProducto: QueryList<any>;
 
@@ -52,7 +54,7 @@ export class SalidaProductosComponent implements OnInit {
   ngOnInit() {
 
     this.ListarAlmacen();
-
+    this.enviado=false;
 
     this.SalidaProductosForm = this.FormBuilder.group({
       'almacen': [null, [
@@ -244,6 +246,7 @@ AlmacenSeleccionado(evento){
 
 GuardarTransferenciaAlmacen(formulario) {
   // console.log(this.SalidaProductosForm['controls'].productos)
+  this.enviado=true;
   this.SalidaProductosServicios.SalidaTransferenciaAlmacen(
   formulario.value.almacen.id,
   5,
@@ -273,7 +276,8 @@ GuardarTransferenciaAlmacen(formulario) {
     this.snackBar.open("Se guardó la transferencia satisfactoriamente", '', {
       duration: 2000,
     });
-    this.Reset()
+    this.Reset();
+    this.enviado=false;
   });
   
 

@@ -11,6 +11,11 @@ class Marca{
 	public $numero_pagina;
 	public $total_pagina;
 	public $tipo;
+	public $id;
+	public $nombre;
+	public $id_tipo;
+	public $nombre_tipo;
+
 
 	public function __construct($db){
 		$this->conn = $db;
@@ -79,6 +84,24 @@ class Marca{
 		return $marca_list;
 	}
 
+    function readxId()
+    {
+        $query ="call sp_listarmarcaxId(?)";
+        
+        $result = $this->conn->prepare($query);
+        
+        $result->bindParam(1, $this->id_marca);
+        
+        $result->execute();
+    
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+        
+        $this->id=$row['id'];
+        $this->nombre=$row['nombre'];
+        $this->id_tipo=$row['id_tipo'];
+        $this->nombre_tipo=$row['nombre_tipo'];
+    }
+
 	function contar(){
 
         $query = "CALL sp_listarmarcacontar(?,?)";
@@ -137,23 +160,6 @@ class Marca{
             {
                 return false;
             }
-	}
-	
-	function readxId(){
-
-        $query = "CALL sp_listarmarcaxId(?)";
-        
-        $result = $this->conn->prepare($query);
-        
-        $result->bindParam(1, $this->id_marca);
-        
-        $result->execute();
-    
-        $row = $result->fetch(PDO::FETCH_ASSOC);
-        
-        $this->id_marca=$row['id'];
-        $this->id_tipo_producto=$row['idtipo'];
-        $this->mrc_nombre=$row['marca'];
 	}
 	
 	function delete()

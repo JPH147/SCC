@@ -43,7 +43,7 @@
           <mat-grid-tile>
             <!--Campo ingresar Fecha de Salida almacen -->
             <mat-form-field  class ="IngFecha" class="Alma1" type="Date"  class="formulario-salida">
-                <input matInput [matDatepicker]="picker" placeholder="Fecha Movimiento" formControlName="fechaingreso" >
+                <input matInput [matDatepicker]="picker" placeholder="Fecha Movimiento" formControlName="fechaingreso" [max]="Hoy">
                 <mat-error> Debe ingresar la fecha de salida </mat-error>
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
@@ -130,7 +130,7 @@
           <mat-grid-list cols="1"  rowHeight="65px">
               <mat-grid-tile>
                 <button mat-raised-button (click)="Reset()" type="button">Limpiar</button>
-                <button mat-raised-button  color="primary" (click)="GuardarTransferenciaAlmacen(SalidaProductosForm)" [disabled]="SalidaProductosForm.invalid">Grabar</button>
+                <button mat-raised-button  color="primary" (click)="GuardarTransferenciaAlmacen(SalidaProductosForm)" [disabled]="SalidaProductosForm.invalid || enviado">Grabar</button>
               </mat-grid-tile>
             </mat-grid-list>
         </mat-card-actions>
