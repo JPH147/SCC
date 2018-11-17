@@ -21,7 +21,7 @@
 
         <mat-grid-tile>
           <mat-form-field>
-              <mat-select placeholder="Marca" formControlName="idmarca" #InputMarca (selectionChange)="MarcaSeleccionada($event)">
+              <mat-select placeholder="Marca" formControlName="idmarca" #InputMarca (selectionChange)="MarcaSeleccionada()">
                   <mat-option *ngFor="let mar of Marcas" [value]="mar.id">{{mar.nombre}}</mat-option>
               </mat-select>
           </mat-form-field>
