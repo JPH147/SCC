@@ -29,15 +29,24 @@ mat-card{
   justify-content: center;
 }
 
-.mat-column-opciones,
-.mat-column-almacen,
+.mat-column-numero,
+.mat-column-opciones{
+  max-width: 1%,
+}
+
 .mat-column-fecha,
+.mat-column-almacen,
+.mat-column-documento{
+  max-width: 5%,
+}
+
 .mat-column-referencia{
 	max-width: 10%;
 }
 
+.mat-column-referente,
 .mat-column-tipo{
-  max-width: 20%;
+  max-width: 30%;
 }
 
 #tituloProd {
@@ -47,6 +56,3 @@ mat-card{
   font-family: sans-serif;
 
  }
-.mat-column-numero{
-  max-width: 5%; 
-}

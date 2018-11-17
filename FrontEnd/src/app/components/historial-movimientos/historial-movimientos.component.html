@@ -82,6 +82,11 @@
         <mat-cell *matCellDef="let producto"> {{producto.numero}} </mat-cell>
       </ng-container>
 
+      <ng-container matColumnDef="documento">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Documento </mat-header-cell>
+        <mat-cell *matCellDef="let producto"> {{producto.documento}} </mat-cell>
+      </ng-container>
+
       <ng-container matColumnDef="almacen">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Almacén </mat-header-cell>
         <mat-cell *matCellDef="let producto"> {{producto.almacen}} </mat-cell>

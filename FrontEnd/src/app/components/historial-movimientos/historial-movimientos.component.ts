@@ -27,7 +27,7 @@ export class HistorialMovimientosComponent implements OnInit {
 	public fecha_fin:Date;
 
   ListadoMovimientos: HistorialMovimientosDataService;
-  Columnas: string[] = ['numero', 'tipo','almacen', 'referencia', 'referente', 'fecha', 'opciones'];
+  Columnas: string[] = ['numero', 'documento', 'tipo','almacen', 'referencia', 'referente', 'fecha', 'opciones'];
 
   constructor(
   	private Servicio: HistorialMovimientosService,

@@ -212,6 +212,7 @@ export class VentanaEmergenteProductos {
       this.Modelos = [];
       // tslint:disable-next-line:forin
       for (let i in res) {
+       
         this.Modelos.push( res[i] );
       }
    });
