@@ -230,6 +230,7 @@ import {ProductoService} from '../productos/productos.service';
           formArray.removeAt(0);
         }
       }
+      this.IngresoProductoForm.get('productos')['controls'][0].get('descripcion').enable();
     }
 
     EliminarProducto(producto, i) {
