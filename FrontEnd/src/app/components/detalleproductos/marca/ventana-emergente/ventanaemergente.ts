@@ -1,9 +1,11 @@
-import {Component, Inject, OnInit, AfterViewInit} from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA,MatSnackBar} from '@angular/material';
+import {Component, Inject, OnInit, AfterViewInit, ViewChild, ElementRef} from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA,MatSnackBar, MatSelect} from '@angular/material';
 import {FormControl, FormGroup, FormBuilder,FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
 import { NgControl } from '@angular/forms';
 import { ServiciosGenerales } from '../../../global/servicios';
+import {fromEvent,merge} from 'rxjs';
+import {debounceTime, tap, distinctUntilChanged} from 'rxjs/operators'
 
 @Component({
   selector: 'app-ventanaemergentemarca',
@@ -15,11 +17,15 @@ import { ServiciosGenerales } from '../../../global/servicios';
 // tslint:disable-next-line:component-class-suffix
 export class VentanaEmergenteMarca {
 
+  @ViewChild ('InputMarca') FiltroMarca: ElementRef;
+  @ViewChild('InputTipo') FiltroTipo: MatSelect;
   public selectedValue: string;
   public MarcaForm: FormGroup;
   public Tipo: Array<any>;
-  public lsttipos: any[] = [];
+  public lsttipos: Array<any>= [];
   public mensaje: string;
+  public total: number;
+  public producto_seleccionado: string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
@@ -45,25 +51,61 @@ export class VentanaEmergenteMarca {
       ]]
     });
 
-    this.Servicios.ListarTipoProductos('', '').subscribe(res=>{
-      // tslint:disable-next-line:prefer-const
-      let tipos = res;
-      // tslint:disable-next-line:forin
-      for (let i in tipos) {
-        this.lsttipos.push(tipos[i]);
+    this.Servicios.ListarTipoProductos(null,'', '').subscribe(res=>{
+      this.lsttipos = res;
+      if (this.data) {
+        if (this.data.productos) {
+          this.Servicios.ListarTipoProductos(this.data.productos.id_tipo,"","").subscribe(rest=>{
+            this.ObtenerArreglo();
+            this.MarcaForm.get('idtipo').setValue(rest[0].id);
+          })
+        } else {
+          this.MarcaForm.get('nombre').setValue(this.data.marca);
+          this.Servicios.ListarTipoProductos(this.data.idtipo,"","").subscribe(rest=>{
+            this.ObtenerArreglo();
+            this.MarcaForm.get('idtipo').setValue(rest[0].id);
+          })
+        }
       }
     });
+  }
 
-    if (this.data) {
-      this.MarcaForm.get('nombre').setValue(this.data.marca);
-      this.MarcaForm.get('idtipo').setValue(this.data.idtipo);
-    }
+  ngAfterViewInit(){
+    merge(
+      fromEvent(this.FiltroMarca.nativeElement,'keyup'),
+      this.FiltroTipo.selectionChange
+    )
+    .pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      tap(()=>{
+        if (this.producto_seleccionado) {
+          this.Servicios.ListarMarca2(this.producto_seleccionado,this.FiltroMarca.nativeElement.value.trim(),1,1).subscribe(res=>{
+            // console.log(res)
+            if (res) {
+              this.total=res['data'].marca.length;
+            }else{
+              this.total=0
+            }
+          })
+        }
+      })
+    ).subscribe()
+  }
+
+  ObtenerArreglo(){
+    this.producto_seleccionado = this.lsttipos.filter(e=>e.id==this.MarcaForm.value.idtipo)[0].nombre;
   }
 
   Guardar(formulario) {
     if (this.data) {
-      this.mensaje = 'Datos actualizados satisfactoriamente';
-      this.Servicios.EditarMarca(this.data.id, formulario.value.idtipo, formulario.value.nombre).subscribe();
+      if (this.data.productos) {
+        this.mensaje = 'Marca creada satisfactoriamente';
+        this.Servicios.CrearMarca(formulario.value.idtipo, formulario.value.nombre).subscribe();
+      } else {
+        this.mensaje = 'Datos actualizados satisfactoriamente';
+        this.Servicios.EditarMarca(this.data.id, formulario.value.idtipo, formulario.value.nombre).subscribe();
+      }
     }
 
     if (!this.data) {

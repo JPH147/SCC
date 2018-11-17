@@ -17,26 +17,27 @@ class Tipo_Producto{
 	}
 
 	function read(){
-		$query = "CALL sp_listartipoproducto(?,?)";
+		$query = "CALL sp_listartipoproducto(?,?,?)";
 
 		$result = $this->conn->prepare($query);
 
-		$result->bindParam(1, $this->tprd_nombre);
-		$result->bindParam(2, $this->und_nombre);
+		$result->bindParam(1, $this->id_tipo_producto);
+		$result->bindParam(2, $this->tprd_nombre);
+		$result->bindParam(3, $this->und_nombre);
 
 		$result->execute();
 
 		$tipo_producto_list=array();
 		$tipo_producto_list["tipo_productos"]=array();
 
-		$contador = 0;
+		// $contador = 0;
 
 		while($row = $result->fetch(PDO::FETCH_ASSOC))
 		{
 			extract($row);
-			$contador = $contador+1;
+			// $contador = $contador+1;
 			$tipo_producto_fila = array(
-				"numero"=>$contador,
+				// "numero"=>$contador,
 				"id"=>$id_tipo_producto,
 				"nombre"=>$tprd_nombre,
 				"unidad_medida"=>$und_nombre
@@ -48,14 +49,15 @@ class Tipo_Producto{
 	}
 
 	function read2(){
-		$query = "CALL sp_listartipoproducto2(?,?,?,?)";
+		$query = "CALL sp_listartipoproducto2(?,?,?,?,?)";
 
 		$result = $this->conn->prepare($query);
 
-		$result->bindParam(1, $this->tprd_nombre);
-		$result->bindParam(2, $this->und_nombre);
-		$result->bindParam(3, $this->numero_pagina);
-		$result->bindParam(4, $this->total_pagina);
+		$result->bindParam(1, $this->id_tipo_producto);
+		$result->bindParam(2, $this->tprd_nombre);
+		$result->bindParam(3, $this->und_nombre);
+		$result->bindParam(4, $this->numero_pagina);
+		$result->bindParam(5, $this->total_pagina);
 
 		$result->execute();
 

@@ -74,7 +74,7 @@ export class VentanaEmergenteProductos {
 
     /*Relación de productos*/
 
-    this.Servicios.ListarTipoProductos('', '').subscribe(res => {
+    this.Servicios.ListarTipoProductos(null,'', '').subscribe(res => {
       for (let i in res) {
         this.Tipos.push(res[i]);
       }
@@ -116,51 +116,45 @@ export class VentanaEmergenteProductos {
       panelClass: "dialogo-rediseno",
     });
  
-    // VentanaTipo.afterClosed().subscribe(res => {
-    //   let VentanaProductos = this.DialogoProductos.open(VentanaEmergenteProductos,{
-    //     width: '600px',
-    //     panelClass: "dialogo-rediseno"
-
-    //   });
-    // });
+    VentanaTipo.afterClosed().subscribe(res=>{
+      this.Servicios.ListarTipoProductos(null,'', '').subscribe(res => {
+        for (let i in res) {
+          this.Tipos.push(res[i]);
+        }
+      });
+    })
   }
 
   AgregarMarca() {
 
     let VentanaMarca = this.DialogoMarca.open(VentanaEmergenteMarca, {
       width: '350px',
-      panelClass: "dialogo-rediseno"
+      panelClass: "dialogo-rediseno",
+      data: {productos:{id_tipo: this.ProductosForm.value.tipo}}
     });
  
-    // VentanaMarca.afterClosed().subscribe(res => {
-    //   let VentanaProductos = this.DialogoProductos.open(VentanaEmergenteProductos,{
-    //     width: '600px',
-    //     panelClass: "dialogo-rediseno"
-
-    //   });
-    // });
+    VentanaMarca.afterClosed().subscribe(res=>{
+      this.ListarMarcas(this.ProductosForm.value.tipo);
+    })
   }
 
   AgregarModelo() {
 
     let VentanaModelo = this.DialogoModelo.open(VentanaEmergenteModelo, {
       width: '350px',
-      panelClass: "dialogo-rediseno"
+      panelClass: "dialogo-rediseno",
+      data: {productos:{id_marca: this.ProductosForm.value.marca}}
     });
  
-    // VentanaModelo.afterClosed().subscribe(res => {
-    //   let VentanaProductos = this.DialogoProductos.open(VentanaEmergenteProductos,{
-    //     width: '600px',
-    //     panelClass: "dialogo-rediseno"
-
-    //   });
-    // });
+    VentanaModelo.afterClosed().subscribe(res=>{
+      this.ListarModelos(this.ProductosForm.value.marca);
+    })
   }
 
   /* Se muestran marcas cuando se selecciona un tipo de producto */
   TipoSeleccionado(event) {
-      this.ListarMarcas(event.value);
-      this.Servicios.ListarUnidadMedida(event.value).subscribe(res=>this.ProductosForm.get('unidad_medida').setValue(res.data.unidades[0].nombre));
+      this.ListarMarcas(this.ProductosForm.value.tipo);
+      this.Servicios.ListarUnidadMedida(this.ProductosForm.value.tipo).subscribe(res=>this.ProductosForm.get('unidad_medida').setValue(res.data.unidades[0].nombre));
       this.ProductosForm.get('marca').setValue('');
       this.ProductosForm.get('modelo').setValue('');
       this.ProductosForm.controls['marca'].enable();
@@ -169,7 +163,7 @@ export class VentanaEmergenteProductos {
 
   /* Se muestran los modelos cuando se selecciona una marca */
   MarcaSeleccionada(event) {
-    this.ListarModelos(event.value);
+    this.ListarModelos(this.ProductosForm.value.marca);
     this.ProductosForm.get('modelo').setValue('');
     this.ProductosForm.controls['modelo'].enable();
    }
@@ -190,7 +184,7 @@ export class VentanaEmergenteProductos {
   }
 
   ListarTipos(){
-    this.Servicios.ListarTipoProductos('', '').subscribe(res => {
+    this.Servicios.ListarTipoProductos(null,'', '').subscribe(res => {
       this.Marcas = [];
       // tslint:disable-next-line:forin
       for (let i in res) {

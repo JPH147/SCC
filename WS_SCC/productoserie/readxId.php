@@ -26,7 +26,8 @@
         "producto"=>$productoserie->producto,
         "serie"=>$productoserie->serie,
         "color"=>$productoserie->color,
-        "almacenamiento"=>$productoserie->almacenamiento
+        "almacenamiento"=>$productoserie->almacenamiento,
+        "precio"=>$productoserie->precio_compra
 	    );
 
 	    if(trim($productoserie->id_producto_serie)!= ''){

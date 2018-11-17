@@ -48,7 +48,8 @@ export class ServiciosProductoSerie {
     id_producto: number,
     serie:string,
     color:string,
-    almacenamiento:string
+    almacenamiento:string,
+    precio:number,
   ): Observable<any> {
 
     let params = new HttpParams()
@@ -56,6 +57,7 @@ export class ServiciosProductoSerie {
     .set('prserie',serie)
     .set('prcolor',color)
     .set('pralmacenamiento',almacenamiento)
+    .set('prprecio',precio.toString());
 
     console.log(params)
 
@@ -86,8 +88,9 @@ export class ServiciosProductoSerie {
     id_producto: number,
     serie: string,
     color: string,
-    almacenamiento:string
-    ): Observable<any> {
+    almacenamiento:string,
+    precio:number,
+  ): Observable<any> {
 
     let params = new HttpParams()
       .set('prid', id.toString())
@@ -95,7 +98,10 @@ export class ServiciosProductoSerie {
       .set('prserie', serie)
       .set('prcolor', color)
       .set('pralmacenamiento', almacenamiento)
-
+      .set('prprecio',precio.toString());
+    
+    console.log(params);
+    
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'productoserie/update.php', params, {headers: headers});

@@ -10,14 +10,16 @@
         <mat-grid-list cols="1" rowHeight="80px">
           <mat-grid-tile>
             <mat-form-field>
-              <input matInput placeholder="Marca" formControlName="nombre">
+              <input matInput placeholder="Marca" formControlName="nombre" #InputMarca>
             </mat-form-field>
           </mat-grid-tile>
-            
+          <mat-grid-tile *ngIf="total>0">
+            <mat-error>Ya existe esta marca para este producto</mat-error>
+          </mat-grid-tile>
           <mat-grid-tile>
                 <mat-form-field>
-                    <mat-select placeholder="Tipo Producto" formControlName="idtipo">
-                        <mat-option *ngFor="let tip of lsttipos" [value]="tip.id">{{tip.nombre}}</mat-option>
+                    <mat-select placeholder="Tipo Producto" formControlName="idtipo" #InputTipo (selectionChange)="ObtenerArreglo()">
+                        <mat-option *ngFor="let tipo of lsttipos" [value]="tipo.id">{{tipo.nombre}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </mat-grid-tile>
@@ -28,7 +30,7 @@
       <mat-card-actions>
         <mat-grid-list cols=1 rowHeight="40px">
           <mat-grid-tile>
-            <button type="submit" mat-raised-button color="primary" [disabled]="MarcaForm.invalid">Guardar</button>
+            <button type="submit" mat-raised-button color="primary" [disabled]="MarcaForm.invalid || total>0">Guardar</button>
           </mat-grid-tile>
         </mat-grid-list>
       </mat-card-actions>

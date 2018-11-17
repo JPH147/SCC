@@ -24,6 +24,8 @@
             $productoserie->serie = trim($_POST["prserie"]);
             $productoserie->color = trim($_POST["prcolor"]);
             $productoserie->almacenamiento = trim($_POST["pralmacenamiento"]);
+            $productoserie->precio_compra = trim($_POST["prprecio"]);
+        
 
 	    	if($productoserie->update())
 	        {

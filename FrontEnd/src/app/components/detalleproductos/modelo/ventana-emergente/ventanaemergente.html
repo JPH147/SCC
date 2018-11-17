@@ -11,13 +11,15 @@
       <mat-grid-list cols="1" rowHeight="80px">
         <mat-grid-tile>
           <mat-form-field>
-            <input matInput placeholder="Modelo" formControlName="nombre">
+            <input matInput placeholder="Modelo" formControlName="nombre" #InputModelo>
           </mat-form-field>
         </mat-grid-tile>
-          
+          <mat-grid-tile *ngIf="total>0">
+            <mat-error>Ya existe este modelo para esta marca</mat-error>
+          </mat-grid-tile>
         <mat-grid-tile>
               <mat-form-field>
-                  <mat-select placeholder="Marca" formControlName="idmarca">
+                  <mat-select placeholder="Marca" formControlName="idmarca" #InputMarca>
                       <mat-option *ngFor="let mar of lstmarcas" [value]="mar.id">{{mar.nombre}}</mat-option>
                   </mat-select>
               </mat-form-field>
@@ -29,7 +31,7 @@
     <mat-card-actions>
       <mat-grid-list cols=1 rowHeight="40px">
         <mat-grid-tile>
-          <button type="submit" mat-raised-button color="primary" [disabled]="ModeloForm.invalid">Guardar</button>
+          <button type="submit" mat-raised-button color="primary" [disabled]="ModeloForm.invalid || total>0">Guardar</button>
         </mat-grid-tile>
       </mat-grid-list>
     </mat-card-actions>

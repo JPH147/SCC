@@ -54,7 +54,7 @@ Class TransaccionDetalle{
                 "producto"=>$prd_descripcion,
                 "serie"=>$ps_serie,
                 "cantidad"=>$tscdet_cantidad,
-                "precio"=>$tscdet_precio,
+                "precio"=>$precio,
                 "observacion"=>$tscdet_observacion
             );
             array_push($detalle_list["detalles"],$detalle_items);
@@ -231,7 +231,6 @@ Class TransaccionDetalle{
             :prid,
             :prproductoserie,
             :prcantidad,
-            :prprecio,
             :observacion
             )";
 
@@ -240,14 +239,12 @@ Class TransaccionDetalle{
         $result->bindParam(":prid", $this->id_transaccion);
         $result->bindParam(":prproductoserie", $this->id_producto_serie);
         $result->bindParam(":prcantidad", $this->cantidad);
-        $result->bindParam(":prprecio", $this->precio);
         $result->bindParam(":prprecio", $this->observacion);
 
         $this->id_transaccion=htmlspecialchars(strip_tags($this->id_transaccion));
         $this->id_producto=htmlspecialchars(strip_tags($this->id_producto));
         $this->serie=htmlspecialchars(strip_tags($this->serie));
         $this->cantidad=htmlspecialchars(strip_tags($this->cantidad));
-        $this->precio=htmlspecialchars(strip_tags($this->precio));
         $this->observacion=htmlspecialchars(strip_tags($this->observacion));
 
         if($result->execute())

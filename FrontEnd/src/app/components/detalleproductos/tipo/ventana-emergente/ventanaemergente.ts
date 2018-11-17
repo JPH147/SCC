@@ -1,9 +1,11 @@
-import {Component, Inject, OnInit, AfterViewInit, Optional} from '@angular/core';
+import {Component, Inject, OnInit, AfterViewInit, Optional, ViewChild, ElementRef} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA,MatSnackBar} from '@angular/material';
 import {FormControl, FormGroup, FormBuilder,FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
 import { NgControl } from '@angular/forms';
 import { ServiciosGenerales } from '../../../global/servicios';
+import {fromEvent} from 'rxjs';
+import {debounceTime, tap, distinctUntilChanged} from 'rxjs/operators'
 
 @Component({
   selector: 'app-ventanaemergentetipo',
@@ -15,11 +17,13 @@ import { ServiciosGenerales } from '../../../global/servicios';
 // tslint:disable-next-line:component-class-suffix
 export class VentanaEmergenteTipo {
   
+  @ViewChild ('InputTipo') FiltroTipo: ElementRef;
   public selectedValue: string;
   public TipoForm: FormGroup;
   public Tipo: Array<any>;
   public lstunidades: any[] = [];
   public mensaje: string;
+  public total: number;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
@@ -35,6 +39,7 @@ export class VentanaEmergenteTipo {
   }
 
   ngOnInit(){
+
     this.TipoForm = this.FormBuilder.group({
       'nombre': [null,[
         Validators.required
@@ -58,10 +63,37 @@ export class VentanaEmergenteTipo {
 
   }  
 
+  ngAfterViewInit(){
+    fromEvent(this.FiltroTipo.nativeElement,'keyup')
+    .pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      tap(()=>{
+        // console.log("holaa")
+        this.Servicios.ListarTipoProductos2(null,this.FiltroTipo.nativeElement.value.trim(),"",1,1).subscribe(res=>{
+          // console.log(res)
+          if (res) {
+            this.total=res['data'].tipo_productos.length;
+            // console.log(this.total)
+            // console.log("hola")
+          }else{
+            this.total=0
+          }
+        })
+      })
+    ).subscribe()
+  }
+
   Guardar(formulario){
+
     if(this.data){
-      this.mensaje='Datos actualizados satisfactoriamente';
-      this.Servicios.EditarTipoProducto(this.data.id,formulario.value.nombre, formulario.value.idunidadmedida).subscribe();
+      if (this.data.productos) {
+        this.mensaje='Tipo de Producto creado satisfactoriamente';
+        this.Servicios.CrearTipoProducto(formulario.value.nombre, formulario.value.idunidadmedida).subscribe();
+      } else {
+        this.mensaje='Datos actualizados satisfactoriamente';
+        this.Servicios.EditarTipoProducto(this.data.id,formulario.value.nombre, formulario.value.idunidadmedida).subscribe();
+      }
     }
 
     if(!this.data){

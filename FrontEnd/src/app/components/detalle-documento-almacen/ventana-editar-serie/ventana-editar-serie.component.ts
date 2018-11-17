@@ -12,7 +12,7 @@ import {ServiciosProductoSerie} from '../../global/productoserie';
 export class VentanaEditarSerieComponent implements OnInit {
 
 	public EditarSerieForm: FormGroup;
-  public Informacion:any = {id:null, id_producto:null,serie:"", color:"", almacenamiento:""};
+  public Informacion:any = {id:null, id_producto:null,serie:"", color:"", almacenamiento:"",precio:null};
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
@@ -28,11 +28,13 @@ export class VentanaEditarSerieComponent implements OnInit {
 
   ActualizarInformacion(){
     this.SServicio.Seleccionar(this.data.id_serie).subscribe(res=>{
+      // console.log(res)
       this.Informacion.id=res.id_producto_serie;
       this.Informacion.id_producto=res.id_producto;
       this.Informacion.serie=res.serie;
       this.Informacion.color=res.color;
       this.Informacion.almacenamiento=res.almacenamiento;
+      this.Informacion.precio=res.precio;
     })
   }
 

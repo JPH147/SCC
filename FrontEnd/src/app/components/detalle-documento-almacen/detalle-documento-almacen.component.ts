@@ -95,7 +95,8 @@ export class DetalleDocumentoAlmacenComponent implements OnInit {
 
     VentanaEditar.afterClosed().subscribe(res=>{
       if (res) {
-        this.SServicio.Actualizar(res.id, res.id_producto, res.serie, res.color, res.almacenamiento).subscribe(res=>{
+        this.SServicio.Actualizar(res.id, res.id_producto, res.serie, res.color, res.almacenamiento, res.precio).subscribe(res=>{
+          console.log(res)
           this.CargarInformacion();
           this.Notificacion("Se editó el producto con éxito","")
         })

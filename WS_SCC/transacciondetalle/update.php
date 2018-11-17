@@ -22,7 +22,6 @@
             $transaccion->id_transaccion = trim($_POST["prid"]);
             $transaccion->id_producto_serie = trim($_POST["prproductoserie"]);
             $transaccion->cantidad = trim($_POST["prcantidad"]);
-            $transaccion->precio =  trim($_POST["prprecio"]);
             $transaccion->observacion =  trim($_POST["probservacion"]);
 
 	    	if($transaccion->update())
