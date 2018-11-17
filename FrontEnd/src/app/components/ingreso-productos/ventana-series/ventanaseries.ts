@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, Inject, ViewChildren, QueryList, } from '@angular/core';
 import {FormControl} from '@angular/forms';
 import { MatCard, MatInputModule, MatButton, MatDatepicker, MatTableModule,MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import {ServiciosProductoSerie} from '../../global/productoserie';
@@ -26,6 +26,7 @@ export class ventanaseries  implements OnInit {
   public invalidV:boolean;
   public invalidP:boolean;
   public series_vista:Array<any>;
+  public cargando:boolean;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
@@ -35,6 +36,7 @@ export class ventanaseries  implements OnInit {
 
   ngOnInit() {
     // console.log(this.data,this.data.producto);
+    this.cargando=false;
     this.invalidV=false;
     this.invalidBD=false;
     this.invalidP=false;
@@ -71,7 +73,7 @@ export class ventanaseries  implements OnInit {
   ngAfterViewInit(){
     this.FiltrarColores();
     this.FiltrarSerie();
-    this.FiltrarSerieVista()
+    this.FiltrarSerieVista();
   }
 
   FiltrarSerieVista(){
@@ -108,17 +110,17 @@ export class ventanaseries  implements OnInit {
           distinctUntilChanged(),
           debounceTime(200),
           tap(()=>{
+            this.cargando=true;
             if(this.FiltroSerie['_results'][i].nativeElement.value.trim()){
               this.DuplicadosVista(this.FiltroSerie['_results'][i].nativeElement.value,i.trim());
               this.Servicios.ValidarSerie(this.FiltroSerie['_results'][i].nativeElement.value.trim()).subscribe(res=>{
-                if (res==1) {
-                  this.seriearticulo[i].repetidoBD=true;
-                  // this.invalidBD=false;
-                }else{
+                if (res==0) {
                   this.seriearticulo[i].repetidoBD=false;
-                  // this.invalidBD=true;
+                }else{
+                  this.seriearticulo[i].repetidoBD=true;
                 }
                 this.Comprobar();
+                this.cargando=false;
               })
             }
             this.Comprobar();
@@ -126,7 +128,7 @@ export class ventanaseries  implements OnInit {
         ).subscribe()
       }
     })
-  }
+  };
 
   FiltrarColores(){
     this.FiltroColor.changes.subscribe(res=>{
@@ -239,6 +241,7 @@ export class ventanaseries  implements OnInit {
     this.ComprobarVista();
     this.ComprobarPagina();
     this.ComprobarBD();
+    // this.cargando=false;
   }
 
 }
