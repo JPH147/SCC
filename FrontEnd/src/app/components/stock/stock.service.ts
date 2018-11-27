@@ -32,6 +32,7 @@ export class StockService {
       .set('prtotalpagina', total_pagina.toString())
       .set('orden', orden)
     }).pipe(map(res => {
+      // console.log(almacen,tipo,marca,modelo,producto,pagina_inicio,total_pagina,orden);
       if (res['codigo'] === 0) {
         return res;
       } else {

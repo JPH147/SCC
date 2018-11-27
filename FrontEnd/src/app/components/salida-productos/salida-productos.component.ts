@@ -232,6 +232,7 @@ export class SalidaProductosComponent implements OnInit {
     });
 
     serieventana.afterClosed().subscribe(res=>{
+      console.log(res)
       if (res) {
         this.EliminarElemento(this.Series,res[0].id_producto);
       }

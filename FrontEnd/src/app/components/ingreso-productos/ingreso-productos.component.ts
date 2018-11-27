@@ -88,12 +88,12 @@ import {ServiciosDocumentos} from '../global/documentos';
           'almacen1': [{value:null,disabled:true} ],
           'tipoIngreso': [null, [Validators.required]],
           'docReferencia': [null, [Validators.required]],
-          'proveedor': [null, [Validators.required] ],
+          'proveedor': [{value:null,disabled:true}, [Validators.required] ],
           // 'cliente': [null, [Validators.required]],
           // 'vendedor': [null, [Validators.required]],
           // 'sucursal': [null, [Validators.required]],
           // 'documento': [null, [Validators.required]],
-          'fecingreso': [{value:this.Hoy}, [Validators.required]],
+          'fecingreso': [{value:this.Hoy,disabled:false}, [Validators.required]],
           // 'producto': [null, [Validators.required]],
           // 'cantidad': [null, [Validators.required]],
           // 'precioUnitario': [null, [Validators.required]],
@@ -101,6 +101,10 @@ import {ServiciosDocumentos} from '../global/documentos';
           // observacion: this.FormBuilder.array([this.CrearObservacion()]),
       });
      
+      this.IngresoProductoForm.get('productos')['controls'][0].get('descripcion').disable()
+      this.IngresoProductoForm.get('productos')['controls'][0].get('producto').disable()
+      this.IngresoProductoForm.get('productos')['controls'][0].get('precioUnitario').disable()
+
       // this.CrearObservacion()
       // console.log(this.FiltroReferencia)
       
@@ -178,8 +182,9 @@ import {ServiciosDocumentos} from '../global/documentos';
 
 
     ActualizarTipoIngreso(evento){
-      this.CrearProducto()
+
       if (evento.value==1) {
+        this.CrearProducto()
         this.ResetearFormArray(this.productos);
         this.IngresoProductoForm.get('proveedor').enable()
         this.IngresoProductoForm.get('productos')['controls'][0].get('descripcion').enable()

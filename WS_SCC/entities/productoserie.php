@@ -39,7 +39,7 @@ Class ProductoSerie{
         $producto_serie_list=array();
         $producto_serie_list["producto_series"]=array();
 
-        $contador = 0;
+        $contador = $this->total_pagina*($this->numero_pagina-1);
 
         while($row = $result->fetch(PDO::FETCH_ASSOC))
         {

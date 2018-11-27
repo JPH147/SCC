@@ -43,16 +43,20 @@
             </mat-form-field>
           </mat-grid-tile>
 
-          <mat-grid-tile >
+          <mat-grid-tile>
+            
+          </mat-grid-tile>
+
+          <mat-grid-tile *ngIf="IngresoProductoForm.get('tipoIngreso').value==1">
               <mat-form-field class="input-ventana" class="example-full-width">
               <input #docRefencia matInput placeholder="Documento Referencia" formControlName="docReferencia">
               <mat-error> Debe ingresar el documento de referencia </mat-error>
             </mat-form-field>
           </mat-grid-tile>
 
-          <mat-grid-tile> <!--[ngSwitch]= "IngresoProductoForm.get('tipoIngreso').value" -->
+          <mat-grid-tile *ngIf="IngresoProductoForm.get('tipoIngreso').value==1">
             <!--Campo ingresar Proveedor -->
-            <mat-form-field class="example-full-width" *ngSwitchDefault>
+            <mat-form-field class="example-full-width">
               <input #Proveedor placeholder="Proveedor" matInput [matAutocomplete]="auto" formControlName=proveedor >
               <mat-error> Debe ingresar Proveedor </mat-error>
               <mat-autocomplete #auto="matAutocomplete" [displayWith] = "displayProveedor" (optionSelected)="ProveedorSeleccionado()">
@@ -61,35 +65,15 @@
                 </mat-option>
               </mat-autocomplete>
             </mat-form-field>
-            <!--Campo ingresar Ciente -->
-            <!-- <mat-form-field class="example-full-width" *ngSwitchCase="2">
-              <input #Proveedor placeholder="Cliente" matInput [matAutocomplete]="auto" formControlName=cliente>
-              <mat-error> Debe ingresar Cliente </mat-error>
-              <mat-autocomplete #auto="matAutocomplete" [displayWith] = "displayCliente">
-                <mat-option *ngFor="let cliente of clientes " [value]="cliente">
-                  {{cliente.nombre}}
-                </mat-option>
-              </mat-autocomplete>
-            </mat-form-field> -->
-              <!--Campo ingresar Vendedor -->
-<!--             <mat-form-field class="example-full-width" *ngSwitchCase="6">
-              <input #Proveedor placeholder="Vendedor" matInput [matAutocomplete]="auto" formControlName=vendedor>
-              <mat-error> Debe ingresar Vendedor</mat-error>
-              <mat-autocomplete #auto="matAutocomplete" [displayWith] = "displayVendedor">
-                <mat-option *ngFor="let vendedor of Vendedores" [value]="vendedor">
-                  {{vendedor.nombre}}
-                </mat-option>
-              </mat-autocomplete>
-            </mat-form-field> -->
-
+<!-- 
             <mat-form-field class="example-full-width" *ngSwitchCase="7" >
               <input matInput type="text" formControlName="almacen1" placeholder="Almacén de referencia">
               <mat-error> Debe ingresar un almacén de llegada </mat-error>
-            </mat-form-field>
+            </mat-form-field> -->
           </mat-grid-tile>
-          <mat-grid-tile>
+          <mat-grid-tile *ngIf="IngresoProductoForm.get('tipoIngreso').value==1">
             <mat-form-field class ="IngFecha" class="Alma1"  class="example-full-width" >
-                <input matInput [matDatepicker]="picker" placeholder="Fecha Ingreso" formControlName="fecingreso" [max]="Hoy" [value]="Hoy"> 
+                <input matInput [matDatepicker]="picker" placeholder="Fecha Ingreso" formControlName="fecingreso" [max]="Hoy"> 
                 <mat-error> Debe ingresar la fecha </mat-error>
                 <mat-error> </mat-error>
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -230,7 +214,7 @@
 
 
 
-   <mat-card-actions >
+   <mat-card-actions  *ngIf="IngresoProductoForm.get('tipoIngreso').value==1">
       <mat-grid-list cols="1"  rowHeight="65px">
         <mat-grid-tile>
 

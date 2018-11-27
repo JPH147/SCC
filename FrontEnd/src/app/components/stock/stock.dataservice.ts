@@ -43,6 +43,7 @@ export class StockDataSource implements DataSource <stock> {
     finalize(() => this.CargandoInformacion.next(false))
     )
     .subscribe(res => {
+      // console.log(almacen,tipo,marca,modelo,producto,pagina_inicio,total_pagina,orden);
       this.Totalresultados.next(res['mensaje']);
       this.InformacionStock.next(res['data'].stock);
     });
@@ -80,7 +81,7 @@ export class StockSerieDataSource implements DataSource <stock> {
     finalize(() => this.CargandoInformacion.next(false))
     )
     .subscribe(res => {
-      console.log(res,almacen,producto,pagina,total_pagina);
+      // console.log(almacen,producto,pagina,total_pagina);
       this.Totalresultados.next(res['mensaje']);
       this.InformacionStock.next(res['data'].producto_series);
     });
