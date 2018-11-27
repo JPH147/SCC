@@ -65,15 +65,28 @@ export class ventanaseries  implements OnInit {
       }
 
     }else{
-      // this.seriearticulo = [{numero: this.contador, producto:this.data.producto,series: ''} ];
     }
 
   }
 
   ngAfterViewInit(){
+    this.ValidarBD();
     this.FiltrarColores();
     this.FiltrarSerie();
     this.FiltrarSerieVista();
+  }
+
+  ValidarBD(){
+    this.seriearticulo.forEach((item,index)=>{
+      this.Servicios.ValidarSerie(item.serie).subscribe(res=>{
+        if (res==0) {
+          this.seriearticulo[index].repetidoBD=false;
+        }else{
+          this.seriearticulo[index].repetidoBD=true;
+        }
+        this.Comprobar();
+      })
+    })
   }
 
   FiltrarSerieVista(){

@@ -33,38 +33,51 @@ export class VentanaEditarSerieComponent implements OnInit {
   }
 
   ngAfterViewInit(){
+    
     this.FiltrarSerie();
+
+    this.SServicio.ValidarSerie(this.Informacion.serie).subscribe(res=>{
+      this.verificando=false;
+      if (res==0) {
+        this.repetido=false;                
+      }else{
+        this.repetido=true;
+      }
+    })
+
   }
 
   FiltrarSerie(){
-    // this.Servicios.ValidarSerie()
-        fromEvent(this.FiltroSerie.nativeElement,'keyup')
-        .pipe(
-          distinctUntilChanged(),
-          debounceTime(200),
-          tap(()=>{
-            this.verificando=true;
-            this.SServicio.ValidarSerie(this.FiltroSerie.nativeElement.value.trim()).subscribe(res=>{
-              if (res==1) {
-                this.repetido=true;
-              }else{
-                this.repetido=false;
-              }
-              this.verificando=false;
-            })
-          })
-        ).subscribe()
+    fromEvent(this.FiltroSerie.nativeElement,'keyup')
+    .pipe(
+      distinctUntilChanged(),
+      debounceTime(200),
+      tap(()=>{
+        this.verificando=true;
+        this.SServicio.ValidarSerie(this.FiltroSerie.nativeElement.value.trim()).subscribe(res=>{
+          this.verificando=false;
+          console.log(res)
+          if (res==0) {
+            this.repetido=false;                
+          }else{
+            this.repetido=true;
+          }
+        })
+      })
+    ).subscribe()
   }
 
   ActualizarInformacion(){
-    this.SServicio.Seleccionar(this.data.id_serie).subscribe(res=>{
-      // console.log(res)
-      this.Informacion.id=res.id_producto_serie;
-      this.Informacion.id_producto=res.id_producto;
-      this.Informacion.serie=res.serie;
-      this.Informacion.color=res.color;
-      this.Informacion.almacenamiento=res.almacenamiento;
-      this.Informacion.precio=res.precio;
+    this.SServicio.ValidarSerie(this.FiltroSerie.nativeElement.value.trim()).subscribe(res=> {
+      this.SServicio.Seleccionar(this.data.id_serie).subscribe(res=>{
+        // console.log(res)
+        this.Informacion.id=res.id_producto_serie;
+        this.Informacion.id_producto=res.id_producto;
+        this.Informacion.serie=res.serie;
+        this.Informacion.color=res.color;
+        this.Informacion.almacenamiento=res.almacenamiento;
+        this.Informacion.precio=res.precio;
+      })
     })
   }
 

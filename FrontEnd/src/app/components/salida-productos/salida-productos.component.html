@@ -18,7 +18,7 @@
 
             <!-- Seleccionar Almacen  Origen -->
             <mat-form-field class="formulario-salida">
-              <mat-select placeholder="Almacen Origen" formControlName="almacen" (selectionChange)="ResetearForm($event)">
+              <mat-select placeholder="Almacen Origen" formControlName="almacen" (selectionChange)="ResetearForm($event); ValidarDocumento()">
                 <mat-option *ngFor="let almacen of almacen_origen" [value]="almacen">
                   {{almacen.nombre}}
                 </mat-option>
@@ -31,7 +31,7 @@
           <!-- Seleccionar Almacen  destino -->
           <mat-grid-tile>
             <mat-form-field class="formulario-salida">
-              <mat-select placeholder="Almacen Destino" formControlName="almacen1" (selectionChange)="AlmacenSeleccionado($event)">
+              <mat-select placeholder="Almacen Destino" formControlName="almacen1" (selectionChange)="AlmacenSeleccionado($event); ValidarDocumento()">
                 <mat-option *ngFor="let almacen of almacen_destino" [value]="almacen">
                   {{almacen.nombre}}
                 </mat-option>
@@ -52,7 +52,7 @@
 
           <mat-grid-tile>
             <mat-form-field class="formulario-salida">
-              <input matInput placeholder="Guía de remisión" type="text" formControlName="documento">
+              <input matInput placeholder="Guía de remisión" type="text" formControlName="documento" #InputDocumento>
               <mat-error> Debe ingresar el documento de referencia </mat-error>
             </mat-form-field>
           </mat-grid-tile>
@@ -64,7 +64,19 @@
   <!-- Line de Detalles de  ingreso de Productos -->
   <br>
 
-  <mat-card-content>
+  <div class="spinner-container" *ngIf="enviado">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <mat-card-content *ngIf="nuevo_documento == false">
+    <mat-card-title class="error-card">
+      <mat-error>
+        Ya se ha registrado este documento
+      </mat-error>
+    </mat-card-title>
+  </mat-card-content>
+
+  <mat-card-content *ngIf="nuevo_documento == true">
       <!-- Agrega Productos -->
 
       <mat-card class="CabeceraSalidaVendedor" *ngIf="!SalidaProductosForm.value.almacen">      

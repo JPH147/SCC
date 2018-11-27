@@ -31,6 +31,7 @@ Class TransaccionCabecera{
     public $fecha;
     public $producto;
     public $serie;
+    public $total;
     public $fecha_inicio;
     public $fecha_fin;
     public $transaccion_detalle;
@@ -178,6 +179,22 @@ Class TransaccionCabecera{
         $this->fecha=$row['fecha'];
         $this->documento=$row['documento'];
         $this->transaccion_detalle=$this->detalle->readxcabecera($row['id']);
+    }
+
+    function validar(){
+        $query ="call sp_validartransaccioncabecera(?,?,?)";
+        
+        $result = $this->conn->prepare($query);
+        
+        $result->bindParam(1, $this->tipo);
+        $result->bindParam(2, $this->referente);
+        $result->bindParam(3, $this->documento);
+        
+        $result->execute();
+    
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        $this->total=$row['total'];
     }
 
     /* Crear producto */
