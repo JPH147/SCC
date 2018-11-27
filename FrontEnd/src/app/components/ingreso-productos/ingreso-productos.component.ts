@@ -139,9 +139,9 @@ import {ServiciosDocumentos} from '../global/documentos';
         distinctUntilChanged(),
         tap(() => {
           if (this.IngresoProductoForm.value.tipoIngreso==7 && this.IngresoProductoForm.value.almacen) {
-            this.ValidarDocumento();
             this.SeleccionarCabecera(this.IngresoProductoForm.value.almacen.id, this.FiltroReferencia.nativeElement.value.trim());
           }
+          this.ValidarDocumento();
         })
        ).subscribe();
     }
@@ -154,6 +154,7 @@ import {ServiciosDocumentos} from '../global/documentos';
           // console.log("b",res)
           if (res.total==0) {
             this.nuevo_documento = true
+            
           }else{
             this.nuevo_documento = false
           }
