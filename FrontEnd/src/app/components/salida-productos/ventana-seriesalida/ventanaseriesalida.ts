@@ -32,23 +32,28 @@ export class ventanaseriesalida  implements OnInit {
     })
 
     if (this.data.series) {
+      // console.log(this.data)
       this.data.series.forEach((item,index)=>{
         if (item.id_producto==this.data.id_producto) {
           this.contador++
         }
       })
       if (this.contador>0) {
-        /*Si hay series para el producto, muestra los datos*/
+        // console.log(this.contador)
         let i:number=0;
         this.data.series.forEach((item,index)=>{
           if (item.id_producto==this.data.id_producto) {
             this.SeriesProductosForm.get('series')['controls'][i].get('id_producto').setValue(item.id_producto);
             this.SeriesProductosForm.get('series')['controls'][i].get('id_serie').setValue(item.id_serie);
             this.SeriesProductosForm.get('series')['controls'][i].get('serie').setValue(item.serie);
+            this.SeriesProductosForm.get('series')['controls'][i].get('serie_mostrar').setValue(item.serie);
             this.SeriesProductosForm.get('series')['controls'][i].get('color').setValue(item.color);
+            this.SeriesProductosForm.get('series')['controls'][i].get('color_mostrar').setValue(item.color);
             this.SeriesProductosForm.get('series')['controls'][i].get('almacenamiento').setValue(item.almacenamiento);
+            this.SeriesProductosForm.get('series')['controls'][i].get('almacenamiento_mostrar').setValue(item.almacenamiento);
             this.SeriesProductosForm.get('series')['controls'][i].get('precio').setValue(item.precio);
             this.SeriesProductosForm.get('series')['controls'][i].get('cantidad').setValue(1);
+            this.SeriesProductosForm.get('series')['controls'][i].get('cantidad_mostrar').setValue(1);
             this.SeriesProductosForm.get('series')['controls'][i].get('considerar').setValue(item.considerar);
             this.AgregarSerie();
             i++;
@@ -57,10 +62,8 @@ export class ventanaseriesalida  implements OnInit {
         this.EliminarSerie(i)
       }  
       else{
-        /*Si no hay series para el producto, trae los datos*/
         this.Series.Listado(this.data.almacen,this.data.id_producto,1,5).subscribe(res=>{
           this.ListadoSeries(res['data'].producto_series);
-          // console.log(res['data'].producto_series)
         })
       }
     }
@@ -74,15 +77,23 @@ export class ventanaseriesalida  implements OnInit {
       ]],
       'id_serie':[{value:null, disabled:false},[
       ]],
-      'serie':[{value:null, disabled:true},[
+      'serie':[{value:null, disabled:false},[
+      ]],
+      'serie_mostrar':[{value:null, disabled:true},[
       ]],
       'precio':[{value:null, disabled:false},[
       ]],
-      'almacenamiento':[{value:null, disabled:true},[
+      'almacenamiento':[{value:null, disabled:false},[
       ]],
-      'color':[{value:null, disabled:true},[
+      'almacenamiento_mostrar':[{value:null, disabled:true},[
       ]],
-      'cantidad':[{value:1, disabled:true},[
+      'color':[{value:null, disabled:false},[
+      ]],
+      'color_mostrar':[{value:null, disabled:true},[
+      ]],
+      'cantidad':[{value:1, disabled:false},[
+      ]],
+      'cantidad_mostrar':[{value:null, disabled:true},[
       ]],
       'considerar':[{value:false,disabled:false},[
       ]]
@@ -94,10 +105,14 @@ export class ventanaseriesalida  implements OnInit {
       this.SeriesProductosForm.get('series')['controls'][i].get('id_producto').setValue(this.data.id_producto);
       this.SeriesProductosForm.get('series')['controls'][i].get('id_serie').setValue(object[i].id_serie);
       this.SeriesProductosForm.get('series')['controls'][i].get('serie').setValue(object[i].serie);
+      this.SeriesProductosForm.get('series')['controls'][i].get('serie_mostrar').setValue(object[i].serie);
       this.SeriesProductosForm.get('series')['controls'][i].get('color').setValue(object[i].color);
+      this.SeriesProductosForm.get('series')['controls'][i].get('color_mostrar').setValue(object[i].color);
       this.SeriesProductosForm.get('series')['controls'][i].get('almacenamiento').setValue(object[i].almacenamiento);
+      this.SeriesProductosForm.get('series')['controls'][i].get('almacenamiento_mostrar').setValue(object[i].almacenamiento);
       this.SeriesProductosForm.get('series')['controls'][i].get('precio').setValue(this.data.precio);
       this.SeriesProductosForm.get('series')['controls'][i].get('cantidad').setValue(1);
+      this.SeriesProductosForm.get('series')['controls'][i].get('cantidad_mostrar').setValue(1);
       this.AgregarSerie();
     }
     this.EliminarSerie(Object.keys(object).length)    
@@ -119,8 +134,4 @@ export class ventanaseriesalida  implements OnInit {
      });
   }
 
-  // Guardar(formulario){
-  //   formulario.enable();
-  //   return formulario.get('series').value;
-  // }
 }

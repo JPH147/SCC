@@ -88,7 +88,7 @@ import {ServiciosDocumentos} from '../global/documentos';
           'almacen1': [{value:null,disabled:true} ],
           'tipoIngreso': [null, [Validators.required]],
           'docReferencia': [null, [Validators.required]],
-          'proveedor': [{value:null,disabled:true}, [Validators.required] ],
+          'proveedor': [{value:null,disabled:false}, [Validators.required] ],
           // 'cliente': [null, [Validators.required]],
           // 'vendedor': [null, [Validators.required]],
           // 'sucursal': [null, [Validators.required]],
@@ -100,13 +100,6 @@ import {ServiciosDocumentos} from '../global/documentos';
           productos: this.FormBuilder.array([this.CrearProducto()]),
           // observacion: this.FormBuilder.array([this.CrearObservacion()]),
       });
-     
-      this.IngresoProductoForm.get('productos')['controls'][0].get('descripcion').disable()
-      this.IngresoProductoForm.get('productos')['controls'][0].get('producto').disable()
-      this.IngresoProductoForm.get('productos')['controls'][0].get('precioUnitario').disable()
-
-      // this.CrearObservacion()
-      // console.log(this.FiltroReferencia)
       
     }
 
@@ -249,9 +242,9 @@ import {ServiciosDocumentos} from '../global/documentos';
 
 
     Reset(){
-      console.log(this.IngresoProductoForm);
-      // this.IngresoProductoForm.reset();
-      // this.ResetearFormArray(this.productos);
+      // console.log(this.IngresoProductoForm);
+      this.IngresoProductoForm.reset();
+      this.ResetearFormArray(this.productos);
     }
 
     ResetearFormArray = (formArray: FormArray) => {
@@ -270,6 +263,8 @@ import {ServiciosDocumentos} from '../global/documentos';
 
     EliminarProducto(producto, i) {
       this.productos.removeAt(i);
+      this.EliminarElemento2(this.Series,producto.id);
+      console.log(producto)
     };
 
     EliminarElemento(array:Array<any>,value) {
@@ -464,7 +459,6 @@ import {ServiciosDocumentos} from '../global/documentos';
     if (tipoingreso == 1) {
 
       this.SDocumentos.ValidarDocumento(1,this.IngresoProductoForm.value.proveedor.id,this.IngresoProductoForm.value.docReferencia).subscribe(resultado=>{
-        // console.log(resultado)
         if (resultado['total']==0) {
           this.SSeries.Validacion
           .pipe(

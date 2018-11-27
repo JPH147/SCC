@@ -232,11 +232,15 @@ export class SalidaProductosComponent implements OnInit {
     });
 
     serieventana.afterClosed().subscribe(res=>{
-      console.log(res)
+
+      let ip:number;
+      // console.log(res)
+      
       if (res) {
+        ip=0;
         this.EliminarElemento(this.Series,res[0].id_producto);
       }
-      let ip:number=0;
+
       for (let i in res) {
         this.Series.push({id_producto:res[i].id_producto,id_serie:res[i].id_serie, serie:res[i].serie,precio:res[i].precio, almacenamiento:res[i].almacenamiento,color:res[i].color,cantidad:res[i].cantidad, considerar:res[i].considerar})
         // Saber cuántos elementos de RES son del producto
@@ -244,8 +248,10 @@ export class SalidaProductosComponent implements OnInit {
           ip++
         }
       }
+      if (ip) {
       this.SalidaProductosForm.get('productos')['controls'][index].get('cantidad').setValue(ip);
       this.SalidaProductosForm.get('productos')['controls'][index].get('cantidad-validacion').setValue(ip);
+      }
     })
   }
 

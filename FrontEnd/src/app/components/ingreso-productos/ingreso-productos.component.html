@@ -65,12 +65,8 @@
                 </mat-option>
               </mat-autocomplete>
             </mat-form-field>
-<!-- 
-            <mat-form-field class="example-full-width" *ngSwitchCase="7" >
-              <input matInput type="text" formControlName="almacen1" placeholder="Almacén de referencia">
-              <mat-error> Debe ingresar un almacén de llegada </mat-error>
-            </mat-form-field> -->
           </mat-grid-tile>
+
           <mat-grid-tile *ngIf="IngresoProductoForm.get('tipoIngreso').value!=7">
             <mat-form-field class ="IngFecha" class="Alma1"  class="example-full-width" >
                 <input matInput [matDatepicker]="picker" placeholder="Fecha Ingreso" formControlName="fecingreso" [max]="Hoy"> 
@@ -88,9 +84,9 @@
 
   <br>
 
-    <div class="spinner-container" *ngIf="enviado">
-      <mat-spinner></mat-spinner>
-    </div>
+  <div class="spinner-container" *ngIf="enviado">
+    <mat-spinner></mat-spinner>
+  </div>
 
   
 <!-- Line de Detalles de  ingreso de Productos -->
