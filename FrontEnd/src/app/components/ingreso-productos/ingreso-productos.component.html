@@ -23,7 +23,7 @@
         <!--Campo ingresar Tipo de Ingreso a almacen -->
         <mat-grid-tile >
             <mat-form-field  class="example-full-width">
-              <mat-select placeholder="Tipo de ingreso" formControlName= "tipoIngreso" (selectionChange)="ActualizarTipoIngreso($event)" [value]=1>
+              <mat-select placeholder="Tipo de ingreso" formControlName= "tipoIngreso" (selectionChange)="ActualizarTipoIngreso($event)">
                 <mat-option *ngFor="let tipoIngreso of TipoIngresos" [value]="tipoIngreso.id">
                   {{tipoIngreso.nombre}}
                 </mat-option>
@@ -47,14 +47,14 @@
             
           </mat-grid-tile>
 
-          <mat-grid-tile *ngIf="IngresoProductoForm.get('tipoIngreso').value==1">
+          <mat-grid-tile *ngIf="IngresoProductoForm.get('tipoIngreso').value!=7">
               <mat-form-field class="input-ventana" class="example-full-width">
               <input #docRefencia matInput placeholder="Documento Referencia" formControlName="docReferencia">
               <mat-error> Debe ingresar el documento de referencia </mat-error>
             </mat-form-field>
           </mat-grid-tile>
 
-          <mat-grid-tile *ngIf="IngresoProductoForm.get('tipoIngreso').value==1">
+          <mat-grid-tile *ngIf="IngresoProductoForm.get('tipoIngreso').value!=7">
             <!--Campo ingresar Proveedor -->
             <mat-form-field class="example-full-width">
               <input #Proveedor placeholder="Proveedor" matInput [matAutocomplete]="auto" formControlName=proveedor >
@@ -71,7 +71,7 @@
               <mat-error> Debe ingresar un almacén de llegada </mat-error>
             </mat-form-field> -->
           </mat-grid-tile>
-          <mat-grid-tile *ngIf="IngresoProductoForm.get('tipoIngreso').value==1">
+          <mat-grid-tile *ngIf="IngresoProductoForm.get('tipoIngreso').value!=7">
             <mat-form-field class ="IngFecha" class="Alma1"  class="example-full-width" >
                 <input matInput [matDatepicker]="picker" placeholder="Fecha Ingreso" formControlName="fecingreso" [max]="Hoy"> 
                 <mat-error> Debe ingresar la fecha </mat-error>

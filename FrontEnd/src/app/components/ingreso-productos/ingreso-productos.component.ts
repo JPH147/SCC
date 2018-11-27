@@ -352,6 +352,7 @@ import {ServiciosDocumentos} from '../global/documentos';
         this.TipoIngresos=res;
         this.TipoIngresos = this.TipoIngresos.filter(e=>e.id!=2);
         this.TipoIngresos = this.TipoIngresos.filter(e=>e.id!=6);
+        this.IngresoProductoForm.get('tipoIngreso').setValue(1);
       });
     }
 
