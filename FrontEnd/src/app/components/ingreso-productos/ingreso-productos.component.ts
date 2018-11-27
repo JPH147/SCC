@@ -94,7 +94,7 @@ import {ProductoService} from '../productos/productos.service';
           // 'vendedor': [null, [Validators.required]],
           // 'sucursal': [null, [Validators.required]],
           // 'documento': [null, [Validators.required]],
-          'fecingreso': [null, [Validators.required]],
+          'fecingreso': [{value:this.Hoy}, [Validators.required]],
           // 'producto': [null, [Validators.required]],
           // 'cantidad': [null, [Validators.required]],
           // 'precioUnitario': [null, [Validators.required]],
