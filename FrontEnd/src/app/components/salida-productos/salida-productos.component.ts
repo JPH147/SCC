@@ -1,7 +1,7 @@
+import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList } from '@angular/core';
 import { SalidaProductosService } from './salida-productos.service';
 import { ServiciosGenerales, Almacen, ListarCliente, ListarVendedor } from './../global/servicios';
 import { ventanaseriesalida } from './ventana-seriesalida/ventanaseriesalida';
-import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList } from '@angular/core';
 import {FormControl, FormBuilder, FormGroup, Validators, FormArray} from '@angular/forms';
 import {Observable, fromEvent} from 'rxjs';
 import {map, startWith, debounceTime, tap, distinctUntilChanged} from 'rxjs/operators';
@@ -11,12 +11,13 @@ import { MatDialog } from '@angular/material';
 import {StockService} from '../stock/stock.service'
 import {ServiciosProductoSerie} from '../global/productoserie'
 import {IngresoProductoService} from '../ingreso-productos/ingreso-productos.service'
+import {ServiciosDocumentos} from '../global/documentos';
 
 @Component({
   selector: 'app-salida-productos',
   templateUrl: './salida-productos.component.html',
   styleUrls: ['./salida-productos.component.css'],
-  providers: [ServiciosGenerales,StockService,ServiciosProductoSerie,IngresoProductoService]
+  providers: [ServiciosGenerales,StockService,ServiciosProductoSerie,IngresoProductoService,ServiciosDocumentos]
 })
 
 export class SalidaProductosComponent implements OnInit {
@@ -36,7 +37,9 @@ export class SalidaProductosComponent implements OnInit {
   public Series: any[]=[];
   public enviado:boolean;
   public Hoy: Date = new Date();
+  public nuevo_documento:boolean;
 
+  @ViewChild('InputDocumento') FiltroDocumento: ElementRef;
   @ViewChildren('InputProducto') FiltroProducto: QueryList<any>;
 
   constructor (
@@ -47,7 +50,8 @@ export class SalidaProductosComponent implements OnInit {
     private SalidaProductosServicios: SalidaProductosService,
     private Articulos: StockService,
     private SSeries:ServiciosProductoSerie,
-    private IServicios: IngresoProductoService
+    private IServicios: IngresoProductoService,
+    private SDocumentos: ServiciosDocumentos,
   ) {}
 
 
@@ -93,6 +97,17 @@ export class SalidaProductosComponent implements OnInit {
         ).subscribe()
       }
     })
+
+    fromEvent(this.FiltroDocumento.nativeElement,'keyup')
+    .pipe(
+      debounceTime(100),
+      distinctUntilChanged(),
+      tap(()=>{
+        this.ValidarDocumento()
+      })
+     ).subscribe()
+
+
   }
 
   CrearProducto():FormGroup{
@@ -153,6 +168,18 @@ export class SalidaProductosComponent implements OnInit {
       this.productos.removeAt(i);
     }
   };
+
+  ValidarDocumento(){
+    if (this.SalidaProductosForm.value.almacen && this.SalidaProductosForm.value.documento) {
+      this.SDocumentos.ValidarDocumento(5,this.SalidaProductosForm.value.almacen.id,this.SalidaProductosForm.value.documento).subscribe(res=>{
+        if (res.total==0) {
+          this.nuevo_documento = true
+        }else{
+          this.nuevo_documento = false
+        }
+      })
+    }
+  }
 
   // Se asigna el valor al id del producto para que se active la opción de elegir cantidad
   ProductoSeleccionado(index,evento){
@@ -245,42 +272,50 @@ AlmacenSeleccionado(evento){
 
 
 GuardarTransferenciaAlmacen(formulario) {
-  // console.log(this.SalidaProductosForm['controls'].productos)
-  this.enviado=true;
-  this.SalidaProductosServicios.SalidaTransferenciaAlmacen(
-  formulario.value.almacen.id,
-  5,
-  4,
-  formulario.value.almacen1.id,
-  formulario.value.fechamov,
-  formulario.value.documento,
-  this.documento_numero
-  ).subscribe (res=>{
-    // console.log(res)
-    // Grabar datos de productos
-    for (let i of this.Series) {
-      if (i.considerar) {
-        this.SalidaProductosServicios.AgregarProducto(
-          res['data'],
-          i.id_serie,
-          i.precio,
-          -1
-        ).subscribe(res=>{
-          // console.log(res)
-            // this.SSeries.RegistrarProductoOUT(i.id_serie).subscribe(res=>{
-              // console.log(res)
-          // })
-        })
-      }
-    }
-    this.snackBar.open("Se guardó la transferencia satisfactoriamente", '', {
-      duration: 2000,
-    });
-    this.Reset();
-    this.enviado=false;
-  });
-  
 
+  this.enviado=true;
+  
+  this.SDocumentos.ValidarDocumento(5,this.SalidaProductosForm.value.almacen.id,this.SalidaProductosForm.value.documento).subscribe(res=>{
+    if (res.total==0) {
+      this.SalidaProductosServicios.SalidaTransferenciaAlmacen(
+        formulario.value.almacen.id,
+        5,
+        4,
+        formulario.value.almacen1.id,
+        formulario.value.fechamov,
+        formulario.value.documento,
+        this.documento_numero
+      ).subscribe (res=>{
+        // console.log(res)
+        // Grabar datos de productos
+        for (let i of this.Series) {
+          if (i.considerar) {
+            this.SalidaProductosServicios.AgregarProducto(
+              res['data'],
+              i.id_serie,
+              i.precio,
+              -1
+            ).subscribe(res=>{
+              // console.log(res)
+                // this.SSeries.RegistrarProductoOUT(i.id_serie).subscribe(res=>{
+                  // console.log(res)
+              // })
+            })
+          }
+        }
+        this.snackBar.open("Se guardó la transferencia satisfactoriamente", '', {
+          duration: 2000,
+        });
+        this.Reset();
+        this.enviado=false;
+      });    
+    }else{
+      this.snackBar.open("Ya se ha registrado este documento", '', {
+        duration: 2000,
+      });
+      this.enviado=false;
+    }
+  })
 }
 
 }

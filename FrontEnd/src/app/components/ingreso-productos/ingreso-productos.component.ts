@@ -7,15 +7,15 @@ import { ventanaseries } from './ventana-series/ventanaseries';
 import { FormControl, FormBuilder, FormGroup, Validators, PatternValidator,FormArray } from '@angular/forms';
 import {Observable, fromEvent} from 'rxjs';
 import { MatDialog,MatSnackBar } from '@angular/material';
-import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, tap, delay, map} from 'rxjs/operators';
 import {ProductoService} from '../productos/productos.service';
-
+import {ServiciosDocumentos} from '../global/documentos';
 
 @Component({
   selector: 'app-ingreso-productos',
   templateUrl: './ingreso-productos.component.html',
   styleUrls: ['./ingreso-productos.component.css'],
-  providers: [ServiciosGenerales, IngresoProductoService, ProductoService, ServiciosProductoSerie]
+  providers: [ServiciosGenerales, IngresoProductoService, ProductoService, ServiciosProductoSerie,ServiciosDocumentos]
 })
   export class IngresoProductosComponent implements OnInit {
 
@@ -50,6 +50,7 @@ import {ProductoService} from '../productos/productos.service';
     public id_almacen_referencia:number;
     public enviado:boolean;
     public Hoy: Date= new Date();
+    public nuevo_documento: boolean;
 
     @ViewChildren('InputProducto') FiltroProducto: QueryList<any>;
     public productos: FormArray;
@@ -66,7 +67,8 @@ import {ProductoService} from '../productos/productos.service';
       private Servicios: ServiciosGenerales,
       private IngresoProductoservicios: IngresoProductoService,
       private Articulos: ProductoService,
-      private SSeries: ServiciosProductoSerie
+      private SSeries: ServiciosProductoSerie,
+      private SDocumentos: ServiciosDocumentos
     ) {}
 
     ngOnInit() {
@@ -81,15 +83,12 @@ import {ProductoService} from '../productos/productos.service';
       this.ListarCliente('');
       this.ListarVendedor('');
 
-      // this.SSeries.CrearProductoSerie(10,"JPERTUI").subscribe(res=>console.log(res.data))
-      // this.IngresoProductoservicios.CrearTransaccionDetalle(40,40,1,1000).subscribe(res=>console.log(res))
-
       this.IngresoProductoForm = this.FormBuilder.group({
           'almacen': [null, [Validators.required] ],
           'almacen1': [{value:null,disabled:true} ],
           'tipoIngreso': [null, [Validators.required]],
           'docReferencia': [null, [Validators.required]],
-          'proveedor': [null, [] ],
+          'proveedor': [null, [Validators.required] ],
           // 'cliente': [null, [Validators.required]],
           // 'vendedor': [null, [Validators.required]],
           // 'sucursal': [null, [Validators.required]],
@@ -120,7 +119,6 @@ import {ProductoService} from '../productos/productos.service';
        ).subscribe();
 
       this.FiltroProducto.changes.subscribe(res => {
-        // tslint:disable-next-line:forin
         for (let i in this.FiltroProducto['_results']) {
           fromEvent(this.FiltroProducto['_results'][i].nativeElement,'keyup')
           .pipe(
@@ -141,34 +139,64 @@ import {ProductoService} from '../productos/productos.service';
         distinctUntilChanged(),
         tap(() => {
           if (this.IngresoProductoForm.value.tipoIngreso==7 && this.IngresoProductoForm.value.almacen) {
-            this.SeleccionarCabecera(this.IngresoProductoForm.value.almacen.id, this.FiltroReferencia.nativeElement.value);
+            this.ValidarDocumento();
+            this.SeleccionarCabecera(this.IngresoProductoForm.value.almacen.id, this.FiltroReferencia.nativeElement.value.trim());
           }
         })
        ).subscribe();
-   
     }
 
 
+    ValidarDocumento(){
+      // console.log("a")
+      if (this.IngresoProductoForm.value.tipoIngreso == 1 && this.IngresoProductoForm.value.docReferencia && this.IngresoProductoForm.value.proveedor) {
+        this.SDocumentos.ValidarDocumento(1,this.IngresoProductoForm.value.proveedor.id,this.IngresoProductoForm.value.docReferencia).subscribe(res=>{
+          // console.log("b",res)
+          if (res.total==0) {
+            this.nuevo_documento = true
+          }else{
+            this.nuevo_documento = false
+          }
+        })
+      }
+      if (this.IngresoProductoForm.value.tipoIngreso == 7 && this.IngresoProductoForm.value.docReferencia && this.id_almacen_referencia) {
+        this.SDocumentos.ValidarDocumento(7,this.id_almacen_referencia,this.IngresoProductoForm.value.docReferencia).subscribe(res=>{
+          // console.log("c",res)
+          if (res.total==0) {
+            this.nuevo_documento = true
+          }else{
+            this.nuevo_documento = false
+          }
+        })
+      }
+    }
+
+    ProveedorSeleccionado(){
+      this.ValidarDocumento()
+    }
+
 
     ActualizarTipoIngreso(evento){
+      this.CrearProducto()
       if (evento.value==1) {
-        // this.IngresoProductoForm.get('almacen1').clearValidators();
-        this.IngresoProductoForm.get('proveedor').setValidators([Validators.required]);
         this.ResetearFormArray(this.productos);
-        this.IngresoProductoForm.get('productos')['controls'][0].get('descripcion').setValidators([Validators.required]);
-        this.IngresoProductoForm.get('productos')['controls'][0].get('producto').setValidators([Validators.required]);
-        this.IngresoProductoForm.get('productos')['controls'][0].get('precioUnitario').setValidators([Validators.required, Validators.pattern ('[0-9- ]+')]);
-        this.CrearProducto();
+        this.IngresoProductoForm.get('proveedor').enable()
+        this.IngresoProductoForm.get('productos')['controls'][0].get('descripcion').enable()
+        this.IngresoProductoForm.get('productos')['controls'][0].get('producto').enable()
+        this.IngresoProductoForm.get('productos')['controls'][0].get('precioUnitario').enable()
       }
       if (evento.value==7) {
-        // console.log("Hola")
-        this.IngresoProductoForm.get('proveedor').clearValidators();
-        if (this.IngresoProductoForm.value.almacen) {
-          this.SeleccionarCabecera(this.IngresoProductoForm.value.almacen.id,this.IngresoProductoForm.value.docReferencia);
-        }
-        
-        // this.IngresoProductoForm.get('almacen1').setValidators([Validators.required]);
+        this.IngresoProductoForm.get('proveedor').disable()
+        this.IngresoProductoForm.get('productos')['controls'][0].get('descripcion').disable()
+        this.IngresoProductoForm.get('productos')['controls'][0].get('producto').disable()
+        this.IngresoProductoForm.get('productos')['controls'][0].get('precioUnitario').disable()
       }
+      if (this.IngresoProductoForm.value.almacen) {
+        this.SeleccionarCabecera(this.IngresoProductoForm.value.almacen.id,this.IngresoProductoForm.value.docReferencia);
+      }
+
+      this.IngresoProductoForm.get('productos')['controls'][0].get('cantidad').disable();
+      this.ValidarDocumento()
     }
 
 
@@ -176,15 +204,15 @@ import {ProductoService} from '../productos/productos.service';
     CrearProducto(): FormGroup{
       return this.FormBuilder.group({
         'descripcion': [{value: null, disabled: false}, [
-          // Validators.required
+          Validators.required
         ]],
         'producto': [{value: null, disabled: false}, [
-          // Validators.required
+          Validators.required
         ]],
-        'cantidad': [{value: null, disabled: true}, [
-        ]],
+        'cantidad': [{value: null, disabled: true}, [ ]],
         'precioUnitario': [{value:null, disabled: false}, [
-          // Validators.required,
+          Validators.required,
+          Validators.min(1),
           Validators.pattern ('[0-9- ]+')
         ]],
       })
@@ -204,23 +232,20 @@ import {ProductoService} from '../productos/productos.service';
       this.almacen_destino=this.almacen_destino.filter(e=>e.id!=event.value.id);
 
       if (event.value==7) {
-        this.IngresoProductoForm.get('productos')['controls'].forEach((item, index)=>{
-          item.get('precioUnitario').disable()
-        })
+        // this.IngresoProductoForm.get('productos')['controls'][0].get('precioUnitario').disable()
       }else{
-        this.IngresoProductoForm.get('productos')['controls'].forEach((item, index)=>{
-          item.get('precioUnitario').enable()
-        })
+        // this.IngresoProductoForm.get('productos')['controls'][0].get('precioUnitario').enable()
       }
+
       this.ObtenerNumeroDocumento(event.value.id);
 
     }
 
 
     Reset(){
-      // console.log(this.IngresoProductoForm);
-      this.IngresoProductoForm.reset();
-      this.ResetearFormArray(this.productos);
+      console.log(this.IngresoProductoForm);
+      // this.IngresoProductoForm.reset();
+      // this.ResetearFormArray(this.productos);
     }
 
     ResetearFormArray = (formArray: FormArray) => {
@@ -232,6 +257,9 @@ import {ProductoService} from '../productos/productos.service';
       }
       this.IngresoProductoForm.get('productos')['controls'][0].get('descripcion').enable();
       this.IngresoProductoForm.get('productos')['controls'][0].get('descripcion').setValue("");
+      this.IngresoProductoForm.get('productos')['controls'][0].get('cantidad').setValue(0);
+      this.IngresoProductoForm.get('productos')['controls'][0].get('precioUnitario').enable();
+      this.IngresoProductoForm.get('productos')['controls'][0].get('precioUnitario').setValue(0);
     }
 
     EliminarProducto(producto, i) {
@@ -345,19 +373,6 @@ import {ProductoService} from '../productos/productos.service';
       });
     }
 
-    // Selector Almacenes Activos
-    //ListarAlmacen() {
-    // this.Servicios.ListarAlmacen().subscribe( res => {
-    //    this.almacenes = [];
-    //    // tslint:disable-next-line:forin
-    //    for ( let i in res) {
-    //      this.almacenes.push(res [i]);
-   //     }
-//
-  //    });
-
-  //  }
-
   ObtenerNumeroDocumento(id_almacen){
     // this.MovimientoIngresoForm.value.almacen
     
@@ -377,7 +392,12 @@ import {ProductoService} from '../productos/productos.service';
         // this.detalle['nueva_observacion']="";
         this.IngresoProductoForm.get("almacen1").setValue(res['data'].almacen);
         this.id_almacen_referencia=res['data'].id_almacen;
+      }else{
+        this.detalle = [];
+        this.IngresoProductoForm.get("almacen1").setValue("");
+        this.id_almacen_referencia=null;
       }
+      this.ValidarDocumento()
     })
   }
 
@@ -429,72 +449,99 @@ import {ProductoService} from '../productos/productos.service';
 
   Guardar(formulario) {
 
-   let tipoingreso = formulario.value.tipoIngreso;
-   this.enviado=true;
+    let tipoingreso = formulario.value.tipoIngreso;
+    this.enviado=true;
 
-   if (tipoingreso === 1) {
-      this.IngresoProductoservicios.AgregarCompraMercaderia(
-      formulario.value.almacen.id,
-      1,
-      1,
-      formulario.value.proveedor.id,
-      formulario.value.fecingreso,
-      formulario.value.docReferencia,
-      this.documento_numero).subscribe (res => {
-        let id_cabecera = res['data'];
-          for (let i of formulario.value.productos) {
-            for (let is of this.Series) {
-              if (i.producto.id === is.id_producto) {
-                this.SSeries.CrearProductoSerie(i.producto.id,is.serie, is.color, is.almacenamiento, i.precioUnitario).subscribe(response => {
-                  this.IngresoProductoservicios.CrearTransaccionDetalle(id_cabecera, response['data'], 1, i.precioUnitario, is.observacion).subscribe();
+    this.SSeries.ValidarSeries(this.Series)
+
+    if (tipoingreso == 1) {
+
+      this.SDocumentos.ValidarDocumento(1,this.IngresoProductoForm.value.proveedor.id,this.IngresoProductoForm.value.docReferencia).subscribe(resultado=>{
+        // console.log(resultado)
+        if (resultado['total']==0) {
+          this.SSeries.Validacion
+          .pipe(
+            distinctUntilChanged()
+          )
+          .subscribe(rest=>{
+            if (rest===0) {
+              this.IngresoProductoservicios.AgregarCompraMercaderia(
+                formulario.value.almacen.id,
+                1,
+                1,
+                formulario.value.proveedor.id,
+                formulario.value.fecingreso,
+                formulario.value.docReferencia,
+                this.documento_numero
+              ).subscribe (res => {
+                let id_cabecera = res['data'];
+                for (let i of formulario.value.productos) {
+                  for (let is of this.Series) {
+                    if (i.producto.id === is.id_producto) {
+                      this.SSeries.CrearProductoSerie(i.producto.id,is.serie, is.color, is.almacenamiento, i.precioUnitario).subscribe(response => {
+                        this.IngresoProductoservicios.CrearTransaccionDetalle(id_cabecera, response['data'], 1, i.precioUnitario, is.observacion).subscribe();
+                      });
+                    }
+                  }
+                }
+                this.IngresoProductoForm.reset();
+                this.enviado=false;
+                this.Series = [];
+                this.ResetearFormArray(this.productos);
+                this.snackBar.open('El ingreso se guardó satisfactoriamente', '', {
+                  duration: 2000,
                 });
-              }
+              });
+            }else if (rest>0) {
+              this.snackBar.open('No se puede guardar porque hay series duplicadas', '', {
+                duration: 2000,
+              });
+              this.SSeries.Validacion.next(null)
+              this.enviado=false;
             }
-          }
-        this.IngresoProductoForm.reset();
-        this.enviado=false;
-        this.Series = [];
-        this.ResetearFormArray(this.productos);
-        this.snackBar.open('El ingreso se guardó satisfactoriamente', '', {
-          duration: 2000,
-        });
 
-      });
-   }
-  if (tipoingreso === 7) {
-      this.IngresoProductoservicios.AgregarTransferenciaSucursal(
-        formulario.value.almacen.id,
-        7,
-        4,
-        this.id_almacen_referencia,
-        formulario.value.fecingreso,
-        formulario.value.docReferencia,
-        this.documento_numero).subscribe (res => {
-          let id_cabecera = res ['data'];
-          for(let i of this.detalle) {
-            this.IngresoProductoservicios.CrearTransaccionDetalle(id_cabecera,i.id_serie,i.cantidad*(-1),i.precio,"").subscribe(res=>{
-             
-            })
-          }
           })
-        this.IngresoProductoForm.reset();
-        this.enviado=false;
-        this.Series = [];
-        this.ResetearFormArray(this.productos);
-        this.snackBar.open('El ingreso se guardó satisfactoriamente', '', {
-          duration: 2000,
-        });
+        }else{
+          this.snackBar.open('Ya se ha registrado este documento', '', {
+            duration: 2000,
+          });
+          this.enviado=false;
+        }
+      })
+    }
 
-      }
+    if (tipoingreso == 7) {
 
-   }
-
+      this.SDocumentos.ValidarDocumento(7,this.id_almacen_referencia,this.IngresoProductoForm.value.docReferencia).subscribe(resultado=>{
+        if (resultado['total']==0) {
+          this.IngresoProductoservicios.AgregarTransferenciaSucursal(
+            formulario.value.almacen.id,
+            7,
+            4,
+            this.id_almacen_referencia,
+            formulario.value.fecingreso,
+            formulario.value.docReferencia,
+            this.documento_numero
+          ).subscribe (res => {
+              let id_cabecera = res['data'];
+              for(let i of this.detalle) {
+                this.IngresoProductoservicios.CrearTransaccionDetalle(id_cabecera,i.id_serie,i.cantidad*(-1),i.precio,"").subscribe()
+              }
+          })
+          this.IngresoProductoForm.reset();
+          this.enviado=false;
+          this.Series = [];
+          this.ResetearFormArray(this.productos);
+          this.snackBar.open('El ingreso se guardó satisfactoriamente', '', {
+            duration: 2000,
+          });
+        }else{
+          this.snackBar.open('Ya se ha registrado este documento', '', {
+            duration: 2000,
+          });
+        }
+      })
+    }
   }
 
-  /*
-  
-  for(let i of arreglo){
-    this.funcion(i.serie)
-  }
-  
-  */
+}

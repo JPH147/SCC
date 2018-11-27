@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams, HttpHeaders} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {URL} from './url';
 
@@ -9,6 +9,7 @@ import {URL} from './url';
 
 export class ServiciosProductoSerie {
   public url: string = URL.url;
+  public Validacion = new Subject<number>();
 
   constructor(
   private http: HttpClient,
@@ -146,6 +147,36 @@ export class ServiciosProductoSerie {
           console.log ('Error al importar los datos, revisar servicio');
         }
     }))
+  }
+
+  ResetValidacion(){
+    // this.Validacion.complete();
+  }
+
+  ValidarSeries(
+    series: Array<any>
+  ){
+
+    let contador, duplicados:number;
+    contador=0;
+    duplicados=0;
+
+    series.forEach((item, index)=>{
+
+      this.ValidarSerie(item.serie).subscribe(res=>{
+        // console.log(item,res)
+        if (res==0) {
+          contador++;
+        }else{
+          contador++;
+          duplicados++;
+        }
+        if (contador==series.length) {
+          this.Validacion.next(duplicados)
+        }
+      })
+      
+    })
   }
 
 }
