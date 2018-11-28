@@ -4,18 +4,21 @@ import { IngresoProductoService } from './ingreso-productos.service';
 import {ServiciosProductoSerie} from '../global/productoserie';
 import { ServiciosGenerales, Almacen, ListarCliente, ListarVendedor } from './../global/servicios';
 import { ventanaseries } from './ventana-series/ventanaseries';
-import { FormControl, FormBuilder, FormGroup, Validators, PatternValidator,FormArray } from '@angular/forms';
+import { FormControl, FormBuilder, FormGroup, Validators, PatternValidator,FormArray, FormControlName } from '@angular/forms';
 import {Observable, fromEvent} from 'rxjs';
 import { MatDialog,MatSnackBar } from '@angular/material';
 import {debounceTime, distinctUntilChanged, tap, delay, map} from 'rxjs/operators';
 import {ProductoService} from '../productos/productos.service';
 import {ServiciosDocumentos} from '../global/documentos';
+import { HistorialMovimientosService } from '../historial-movimientos/historial-movimientos.service';
+import { HistorialMovimientosDataService } from '../historial-movimientos/historial-movimientos.dataservice';
+
 
 @Component({
   selector: 'app-ingreso-productos',
   templateUrl: './ingreso-productos.component.html',
   styleUrls: ['./ingreso-productos.component.css'],
-  providers: [ServiciosGenerales, IngresoProductoService, ProductoService, ServiciosProductoSerie,ServiciosDocumentos]
+  providers: [ServiciosGenerales, IngresoProductoService, ProductoService, ServiciosProductoSerie,ServiciosDocumentos, HistorialMovimientosService ]
 })
   export class IngresoProductosComponent implements OnInit {
 
@@ -51,6 +54,8 @@ import {ServiciosDocumentos} from '../global/documentos';
     public enviado:boolean;
     public Hoy: Date= new Date();
     public nuevo_documento: boolean;
+    public fecha_inicio:Date;
+	  public fecha_fin:Date;
 
     @ViewChildren('InputProducto') FiltroProducto: QueryList<any>;
     public productos: FormArray;
@@ -60,6 +65,11 @@ import {ServiciosDocumentos} from '../global/documentos';
     selected = 'option2';
     myControl = new FormControl();
     filteredOptions: Observable<string[]>;
+
+    ListadoMovimientos: HistorialMovimientosDataService;
+
+    Columnas: string[] = ['numero', 'movimiento','tipo','almacen', 'referencia', 'referente', 'documento', 'fecha', 'opciones'];
+    
   
     constructor(public DialogoSerie: MatDialog,
       private FormBuilder: FormBuilder,
@@ -68,7 +78,8 @@ import {ServiciosDocumentos} from '../global/documentos';
       private IngresoProductoservicios: IngresoProductoService,
       private Articulos: ProductoService,
       private SSeries: ServiciosProductoSerie,
-      private SDocumentos: ServiciosDocumentos
+      private SDocumentos: ServiciosDocumentos,
+      private SMovimineto: HistorialMovimientosService,
     ) {}
 
     ngOnInit() {
@@ -402,6 +413,20 @@ import {ServiciosDocumentos} from '../global/documentos';
       this.ValidarDocumento()
     })
   }
+
+  TransferenciaPendiente(almacen,tipo,estado_transaccion){
+
+    this.ListadoMovimientos = new HistorialMovimientosDataService(this.SMovimineto);
+    
+    this.ListadoMovimientos.CargarDatos(almacen,tipo,estado_transaccion,"",this.fecha_inicio,this.fecha_fin,"",1,10,"fecha desc");
+  
+    
+  }
+    
+
+  }
+
+
 
   // Selector Almacenes Activos
   ListarAlmacen() {

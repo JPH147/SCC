@@ -33,18 +33,24 @@ mat-card{
 	max-width: 15%;
 }
 
-.mat-column-opciones,
+
 .mat-column-referencia,
 .mat-column-documento,
 .mat-column-almacen,
 .mat-column-movimiento,
 .mat-column-fecha{
-  max-width: 8%;
+  max-width: 10%;
 }
 
+.mat-column-opciones,
 .mat-column-numero{
-  max-width: 5%;
+  max-width: 6%;
 }
+
+.mat-column-referente{
+  max-width: 20%;
+}
+
 
 #tituloProd {
   padding: 25px;
@@ -53,3 +59,7 @@ mat-card{
   font-family: sans-serif;
 
  }
+
+ .example-margin {
+  margin: 0 10px;
+}
