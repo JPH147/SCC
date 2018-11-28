@@ -16,7 +16,6 @@ public url: string = URL.url;
 
 constructor(private http: HttpClient) {}
 
-
     AgregarCompraMercaderia(
       pralmacen: number,
       prtipo: number,
@@ -179,10 +178,25 @@ constructor(private http: HttpClient) {}
       } else {
         // console.log('Error al importar los datos, revisar servicio');
         return res;
-    }
+      }
     }));
   }
 
+  ObtenerDetalle(
+    cabecera:number
+  ):Observable<any>{
+    return this.http.get(this.url+'transacciondetalle/readxcabecera.php',{
+      params: new HttpParams()
+        .set('prcabecera', cabecera.toString())
+    }).pipe(map(res=>{
+      if (res['codigo'] === 0) {
+        return res['data'];
+      } else {
+        // console.log('Error al importar los datos, revisar servicio');
+        return res;
+      }
+    }))
+  }
 
 
 

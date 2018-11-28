@@ -79,9 +79,9 @@ Class TransaccionCabecera{
 
         while($row = $result->fetch(PDO::FETCH_ASSOC))
 		{
-			extract($row);
-            $contador=$contador+1;
+            extract($row);
             $TDetalle=$this->detalle->readxcabecera($id);
+            $contador=$contador+1;
             $transaccion_item = array (
                 "numero"=>$contador,
                 "id"=>$id,

@@ -406,20 +406,6 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
       }
     })
   }
-  // SeleccionarCabecera(pralmacen, prdocumento){
-  //   this.IngresoProductoservicios.SeleccionarCabecera(pralmacen, prdocumento).subscribe(res => {
-  //     if(res['data']){
-  //       this.detalle = res['data'].detalle;
-  //       this.IngresoProductoForm.get("almacen1").setValue(res['data'].almacen);
-  //       this.id_almacen_referencia=res['data'].id_almacen;
-  //     }else{
-  //       this.detalle = [];
-  //       this.IngresoProductoForm.get("almacen1").setValue("");
-  //       this.id_almacen_referencia=null;
-  //     }
-  //     this.ValidarDocumento()
-  //   })
-  // }
 
   ListarTransferenciasPendientes() {
     if(this.IngresoProductoForm.value.tipoIngreso==7 && this.IngresoProductoForm.value.almacen){
@@ -435,17 +421,20 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
         20,
         "fecha asc"
       ).subscribe(res=>{
-        console.log(res['data'].transacciones);
+        // console.log(res['data'].transacciones);
         this.detalle_transacciones=res['data'].transacciones;
       })
     }
   }
 
   VerDetalle(detalle){
-    let detalle_ventana = this.DialogoSerie.open(VentanaDetalle, {
-      width: '800px',
-      data: detalle
-    });
+    this.IngresoProductoservicios.ObtenerDetalle(detalle.id).subscribe(res=>{
+      let detalle_ventana = this.DialogoSerie.open(VentanaDetalle, {
+        width: '800px',
+        data: res
+      });
+    })
+
   }
 
   AgregarIngreso(transaccion){

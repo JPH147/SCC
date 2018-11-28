@@ -85,19 +85,15 @@ Class TransaccionDetalle{
     function readxcabecera($id_cabecera){
 
         $query ="call sp_listartransacciondetallexcabecera(?)";
-        
         $result = $this->conn->prepare($query);
-        
         $result->bindParam(1, $id_cabecera);
-        
         $result->execute();
-        
         $detalle_list=array();
 
-        $contador = 0;
-
+        $contador = 0;;
         while($row = $result->fetch(PDO::FETCH_ASSOC))
-        {
+        {   
+            // echo "hola";
             extract($row);
             $contador=$contador+1;
             $detalle_items = array (

@@ -19,7 +19,7 @@
 
         if (( trim($_POST["prid"])!=null) && !empty(trim($_POST["prfoto"])))
     	{
-            $producto->id= trim($_POST["prid"];) 
+            $producto->id= trim($_POST["prid"]);
     		$producto->foto = trim($_POST["prfoto"]);
 
 	    	if($producto->updatefoto())

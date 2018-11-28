@@ -31,6 +31,10 @@ export class MenuComponent implements OnInit{
             path: "clientes"
           },
           {
+            nombre: "Evaluación",
+            path: "evaluacion"
+          },
+          {
             nombre: "Ventas",
             path: "ventas"
           },

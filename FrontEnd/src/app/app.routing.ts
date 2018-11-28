@@ -21,12 +21,14 @@ import { HistorialSerieComponent } from './components/historial-serie/historial-
 import { HistorialMovimientosComponent } from './components/historial-movimientos/historial-movimientos.component';
 import { DetalleProductosComponent } from './components/detalleproductos/detalleproductos.component';
 import { DetalleDocumentoAlmacenComponent } from './components/detalle-documento-almacen/detalle-documento-almacen.component';
+import { EvaluacionComponent } from './components/evaluacion/evaluacion.component';
 
 const appRoutes: Routes = [
   {path: 'usuarios', component: UsuariosComponent},
   {path: 'usuarios', component: UsuariosComponent},
   {path: 'productos', component: ProductosComponent},
   {path: 'series', component: HistorialSerieComponent},
+  {path: 'evaluacion', component: EvaluacionComponent},
   {path: 'movimientos', component: HistorialMovimientosComponent},
   {path: 'movimientos/:id', component: DetalleDocumentoAlmacenComponent},
   {path: 'stock', component: StockComponent},
