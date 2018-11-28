@@ -249,8 +249,8 @@ export class SalidaProductosComponent implements OnInit {
         }
       }
       if (ip) {
-      this.SalidaProductosForm.get('productos')['controls'][index].get('cantidad').setValue(ip);
-      this.SalidaProductosForm.get('productos')['controls'][index].get('cantidad-validacion').setValue(ip);
+        this.SalidaProductosForm.get('productos')['controls'][index].get('cantidad').setValue(ip);
+        this.SalidaProductosForm.get('productos')['controls'][index].get('cantidad-validacion').setValue(ip);
       }
     })
   }

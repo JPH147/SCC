@@ -97,14 +97,14 @@ export class ventanaseries  implements OnInit {
           distinctUntilChanged(),
           debounceTime(200),
           tap(()=>{
-            // console.log(this.seriearticulo.some(e=>e.serie==this.FiltroSerie['_results'][i].nativeElement.value.trim()))
             if (this.seriearticulo.length>1) {
               if(this.FiltroSerie['_results'][i].nativeElement.value.trim()){
-                if(this.Duplicados()==0){
-                  this.seriearticulo[i].repetidoV=false
-                }else{
-                  this.seriearticulo[i].repetidoV=true
-                }
+                this.DuplicadosVista(this.FiltroSerie['_results'][i].nativeElement.value.trim(),i)
+                // if(this.Duplicados()==0){
+                //   this.seriearticulo[i].repetidoV=false
+                // }else{
+                //   this.seriearticulo[i].repetidoV=true
+                // }
               }
             }
             this.Comprobar();
@@ -125,13 +125,14 @@ export class ventanaseries  implements OnInit {
           tap(()=>{
             this.cargando=true;
             if(this.FiltroSerie['_results'][i].nativeElement.value.trim()){
-              this.DuplicadosVista(this.FiltroSerie['_results'][i].nativeElement.value,i.trim());
+              // this.DuplicadosVista(this.FiltroSerie['_results'][i].nativeElement.value,i.trim());
               this.Servicios.ValidarSerie(this.FiltroSerie['_results'][i].nativeElement.value.trim()).subscribe(res=>{
                 if (res==0) {
                   this.seriearticulo[i].repetidoBD=false;
                 }else{
                   this.seriearticulo[i].repetidoBD=true;
                 }
+                console.log(this.seriearticulo);
                 this.Comprobar();
                 this.cargando=false;
               })
@@ -210,11 +211,45 @@ export class ventanaseries  implements OnInit {
 
   }
 
+  // BuscarSerie(value){
+  //   return this.seriearticulo.some(e=>e.serie.trim()==)
+  // }
+
   // Para saber si se agregó la misma serie a otro producto
   DuplicadosVista(value,i){
-    if (this.series_vista) {
-      this.seriearticulo[i].repetidoP=this.series_vista.some(e=>e.serie.trim()==value.trim())
-    }
+    let contador=0;
+    let duplicado=0;
+    // console.log(control)
+    this.seriearticulo.forEach((item,index)=>{
+      contador++;
+      if (item.serie == value) {
+        duplicado++;
+      }
+      if (contador==this.seriearticulo.length) {
+        if (duplicado>1) {
+          this.seriearticulo[i].repetidoV=true
+        }else{
+          this.seriearticulo[i].repetidoV=false
+        }
+      }
+    })
+  }
+
+  DuplicadosTotales(){
+    let contador=0;
+    let duplicado=0;
+    this.seriearticulo.forEach((item,index)=>{
+      this.seriearticulo.forEach((item2,index2)=>{
+        if (item.serie==item2.serie) {
+          this.contador++;
+        }
+      })
+      if (contador>1) {
+        duplicado++;
+      }else{
+        contador=0;
+      }
+    })
   }
 
   EliminarEspacios(){
@@ -229,7 +264,6 @@ export class ventanaseries  implements OnInit {
     }else{
       this.invalidV=false
     }
-    // this.invalidV=this.seriearticulo.some(e=>e.repetidoV==true)
   }
 
   ComprobarPagina(){

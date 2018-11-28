@@ -149,10 +149,6 @@ export class ServiciosProductoSerie {
     }))
   }
 
-  ResetValidacion(){
-    // this.Validacion.complete();
-  }
-
   ValidarSeries(
     series: Array<any>
   ){
@@ -164,7 +160,7 @@ export class ServiciosProductoSerie {
     series.forEach((item, index)=>{
 
       this.ValidarSerie(item.serie).subscribe(res=>{
-        // console.log(item,res)
+        console.log(res)
         if (res==0) {
           contador++;
         }else{
