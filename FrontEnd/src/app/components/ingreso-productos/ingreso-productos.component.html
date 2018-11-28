@@ -34,7 +34,7 @@
          <!-- Seleccionar Almacen -->
         <mat-grid-tile>
           <mat-form-field class="example-full-width">
-              <mat-select placeholder="Almacen" formControlName="almacen"  (selectionChange)="ResetearForm($event); ValidarDocumento()">
+              <mat-select placeholder="Almacen" formControlName="almacen"  (selectionChange)="ResetearForm($event); ValidarDocumento();ListarTransferenciasPendientes()">
                 <mat-option *ngFor="let almacen of almacen_origen" [value]="almacen">
                   {{almacen.nombre}}
                 </mat-option>
@@ -91,7 +91,7 @@
   
 <!-- Line de Detalles de  ingreso de Productos -->
 
-  <mat-card-content *ngIf="nuevo_documento == false">
+  <mat-card-content *ngIf="nuevo_documento == false && IngresoProductoForm.get('tipoIngreso').value !=7">
     <mat-card-title class="error-card">
       <mat-error>
         Ya se ha registrado este documento
@@ -111,7 +111,7 @@
       </mat-card-header>
 
       <!-- Muesta Detalle para todos los casos que no sean  transferencia entre allmacenes -->
-      <mat-card-content  *ngIf = "IngresoProductoForm.get('tipoIngreso').value !=7">
+      <mat-card-content>
     
       <mat-grid-list cols="1"  rowHeight="55px" >
 
@@ -161,35 +161,40 @@
         </div>
       </div>
       </mat-card-content>
-
-      <!-- Tipo de Transaccion transferencia de almacen  -->
-
-<!--       <mat-card-content  *ngIf = "IngresoProductoForm.get('tipoIngreso').value ==7">
-          <table  class="tabla-detalle">
-              <tr>
-                <th>N°</th>
-                <th>PRODUCTO</th>
-                <th>SERIE</th>
-                <th>COLOR</th> 
-                <th>ALMACENAMIENTO</th>
-                <th>OBSERVACIONES</th>
-
-                <th *ngIf="id_tipo==1">OPCIONES</th>
-              </tr>
-              <tr *ngFor="let detalle of detalle">
-                <td class="detalle-columnas" id="detalle-numero">{{detalle.numero}}</td> 
-                <td class="detalle-columnas" id="detalle-producto">{{detalle.producto}}</td>
-                <td class="detalle-columnas" id="detalle-serie">{{detalle.serie}}</td> 
-                <td class="detalle-columnas" id="detalle-color">{{detalle.color}}</td>
-                <td class="detalle-columnas" id="detalle-almacenamiento">{{detalle.almacenamiento}}</td>
-                <td class="detalle-columnas" id="detalle-observacion">{{detalle.observacion}}</td>
-              </tr>
-            </table>		
-      </mat-card-content> -->
     </mat-card>
 
   </mat-card-content>
+      <!-- Tipo de Transaccion transferencia de almacen  -->
 
+  <mat-card class="CabeceraSalidaVendedor"  *ngIf = "IngresoProductoForm.value.tipoIngreso==7">
+    <mat-card-content>
+        <table  class="tabla-detalle">
+            <tr>
+              <th>N°</th>
+              <th>FECHA</th> 
+              <th>MOVIMIENTO</th>
+              <th>DOCUMENTO</th>
+              <th>REFERENTE</th>
+              <th>OPCIONES</th>
+            </tr>
+            <tr *ngFor="let detalle of detalle_transacciones">
+              <td class="detalle-columnas" id="detalle-numero">{{detalle.numero}}</td> 
+              <td class="detalle-columnas" id="detalle-producto">{{detalle.fecha || dd/MM/yy}}</td>
+              <td class="detalle-columnas" id="detalle-serie">{{detalle.movimiento_serie}}-{{detalle.movimiento_numero}}</td> 
+              <td class="detalle-columnas" id="detalle-color">{{detalle.documento}}</td>
+              <td class="detalle-columnas" id="detalle-almacenamiento">{{detalle.almacen}}</td>
+              <td class="detalle-columnas" id="detalle-observacion">
+                <button mat-icon-button color="primary" (click)="VerDetalle(detalle)" matTooltip="Ver detalle">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+                <button mat-icon-button color="primary" (click)="AgregarIngreso(detalle)" matTooltip="Aceptar transferencia">
+                  <mat-icon>check_circle</mat-icon>
+                </button>
+              </td>
+            </tr>
+          </table>		
+    </mat-card-content>
+  </mat-card>
 
 
    <mat-card-actions *ngIf="IngresoProductoForm.get('tipoIngreso').value!=7">

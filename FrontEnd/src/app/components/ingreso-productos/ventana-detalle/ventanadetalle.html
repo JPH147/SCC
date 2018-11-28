@@ -1,0 +1,20 @@
+<mat-card>
+    <mat-card-content>
+      <table class="tabla-detalle">
+        <tr>
+          <th>N°</th>
+          <th>PRODUCTO</th> 
+          <th>SERIE</th>
+          <th>COLOR</th>
+          <th>ALMACENAMIENTO</th>
+        </tr>
+        <tr *ngFor="let detalle of data.detalle">
+          <td class="detalle-columnas" id="detalle-numero">{{detalle.numero}}</td> 
+          <td class="detalle-columnas" id="detalle-producto">{{detalle.producto}}</td>
+          <td class="detalle-columnas" id="detalle-serie">{{detalle.serie}}</td> 
+          <td class="detalle-columnas" id="detalle-color">{{detalle.color}}</td>
+          <td class="detalle-columnas" id="detalle-almacenamiento">{{detalle.almacenamiento}}</td>
+        </tr>
+      </table>
+    </mat-card-content>
+  </mat-card>

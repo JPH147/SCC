@@ -1,0 +1,23 @@
+<mat-card>
+
+  <mat-card-content>
+    <mat-grid-list cols="1" rowHeight="70px">
+      <mat-grid-tile>
+        <mat-form-field>
+          <input matInput [matDatepicker]="picker" placeholder="Fecha de llegada" [(ngModel)]="fecha"> 
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <mat-grid-list cols="1" rowHeight="70px">
+      <mat-grid-tile>
+        <button mat-raised-button [mat-dialog-close]="fecha" [disabled]="!fecha" color="primary">Aceptar</button>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-card-actions>
+
+</mat-card>

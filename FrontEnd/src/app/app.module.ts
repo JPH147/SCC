@@ -67,6 +67,8 @@ import { ListadoSalidaVendedoresComponent } from './components/listado-salida-ve
 import {VentanaEmergenteProductos} from './components/productos/ventana-emergente/ventanaemergente';
 import {VentanaEmergenteArchivos} from './components/ventas/ventana-emergente/ventanaemergente';
 import {ventanaseries} from './components/ingreso-productos/ventana-series/ventanaseries';
+import {VentanaDetalle} from './components/ingreso-productos/ventana-detalle/ventanadetalle';
+import {VentanaFecha} from './components/ingreso-productos/ventana-fecha/ventanafecha';
 import { ventanaseriesalida } from './components/salida-productos/ventana-seriesalida/ventanaseriesalida';
 import {VentanaEmergenteClientes} from './components/clientes/ventana-emergente/ventanaemergente';
 import { ProveedoresComponent } from './components/proveedores/proveedores.component';
@@ -169,6 +171,8 @@ import { VentanaEmergenteMarca } from './components/detalleproductos/marca/venta
     VentanaEmergenteProductos,
     VentanaEmergenteArchivos,
     ventanaseries,
+    VentanaFecha,
+    VentanaDetalle,
     ventanaseriesalida,
     VentanaEmergenteClientes,
     ProveedoresComponent,
@@ -214,6 +218,8 @@ import { VentanaEmergenteMarca } from './components/detalleproductos/marca/venta
     VentanaEmergenteProductos,
     VentanaEmergenteArchivos,
     ventanaseries,
+    VentanaDetalle,
+    VentanaFecha,
     ventanaseriesalida,
     VentanaEmergenteClientes,
     ventanaseriessv,

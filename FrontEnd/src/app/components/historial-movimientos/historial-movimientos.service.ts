@@ -46,7 +46,6 @@ export class  HistorialMovimientosService {
         .set('prtotalpagina', total_pagina.toString())
         .set('orden', orden)
       }).pipe(map(res => {
-
       if (res['codigo'] === 0) {
         return res;
       } else {

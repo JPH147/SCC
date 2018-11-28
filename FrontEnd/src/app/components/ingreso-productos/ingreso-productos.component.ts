@@ -4,6 +4,8 @@ import { IngresoProductoService } from './ingreso-productos.service';
 import {ServiciosProductoSerie} from '../global/productoserie';
 import { ServiciosGenerales, Almacen, ListarCliente, ListarVendedor } from './../global/servicios';
 import { ventanaseries } from './ventana-series/ventanaseries';
+import { VentanaFecha } from './ventana-fecha/ventanafecha';
+import { VentanaDetalle } from './ventana-detalle/ventanadetalle';
 import { FormControl, FormBuilder, FormGroup, Validators, PatternValidator,FormArray, FormControlName } from '@angular/forms';
 import {Observable, fromEvent} from 'rxjs';
 import { MatDialog,MatSnackBar } from '@angular/material';
@@ -11,14 +13,19 @@ import {debounceTime, distinctUntilChanged, tap, delay, map} from 'rxjs/operator
 import {ProductoService} from '../productos/productos.service';
 import {ServiciosDocumentos} from '../global/documentos';
 import { HistorialMovimientosService } from '../historial-movimientos/historial-movimientos.service';
-import { HistorialMovimientosDataService } from '../historial-movimientos/historial-movimientos.dataservice';
-
 
 @Component({
   selector: 'app-ingreso-productos',
   templateUrl: './ingreso-productos.component.html',
   styleUrls: ['./ingreso-productos.component.css'],
-  providers: [ServiciosGenerales, IngresoProductoService, ProductoService, ServiciosProductoSerie,ServiciosDocumentos, HistorialMovimientosService ]
+  providers: [
+    ServiciosGenerales,
+    IngresoProductoService,
+    ProductoService,
+    ServiciosProductoSerie,
+    ServiciosDocumentos,
+    HistorialMovimientosService
+  ]
 })
   export class IngresoProductosComponent implements OnInit {
 
@@ -45,10 +52,10 @@ import { HistorialMovimientosDataService } from '../historial-movimientos/histor
     public vendedor: string;
     public nombre: string;
     public fecingreso: Date;      // fecha de ingreso a almcen
-    public  data;
+    public data;
     public documento_serie:string;
     public documento_numero:number;
-    public detalle:Array<any>;
+    public detalle_transacciones:Array<any>;
     public obsentrega:Array<any>;
     public id_almacen_referencia:number;
     public enviado:boolean;
@@ -66,7 +73,7 @@ import { HistorialMovimientosDataService } from '../historial-movimientos/histor
     myControl = new FormControl();
     filteredOptions: Observable<string[]>;
 
-    ListadoMovimientos: HistorialMovimientosDataService;
+    // ListadoMovimientos: HistorialMovimientosDataService;
 
     Columnas: string[] = ['numero', 'movimiento','tipo','almacen', 'referencia', 'referente', 'documento', 'fecha', 'opciones'];
     
@@ -147,7 +154,7 @@ import { HistorialMovimientosDataService } from '../historial-movimientos/histor
         distinctUntilChanged(),
         tap(() => {
           if (this.IngresoProductoForm.value.tipoIngreso==7 && this.IngresoProductoForm.value.almacen) {
-            this.SeleccionarCabecera(this.IngresoProductoForm.value.almacen.id, this.FiltroReferencia.nativeElement.value.trim());
+            // this.SeleccionarCabecera(this.IngresoProductoForm.value.almacen.id, this.FiltroReferencia.nativeElement.value.trim());
           }
           this.ValidarDocumento();
         })
@@ -184,7 +191,6 @@ import { HistorialMovimientosDataService } from '../historial-movimientos/histor
       this.ValidarDocumento()
     }
 
-
     ActualizarTipoIngreso(evento){
 
       if (evento.value==1) {
@@ -196,19 +202,19 @@ import { HistorialMovimientosDataService } from '../historial-movimientos/histor
         this.IngresoProductoForm.get('productos')['controls'][0].get('precioUnitario').enable()
       }
       if (evento.value==7) {
+        this.ListarTransferenciasPendientes();
         this.IngresoProductoForm.get('proveedor').disable()
         this.IngresoProductoForm.get('productos')['controls'][0].get('descripcion').disable()
         this.IngresoProductoForm.get('productos')['controls'][0].get('producto').disable()
         this.IngresoProductoForm.get('productos')['controls'][0].get('precioUnitario').disable()
       }
-      if (this.IngresoProductoForm.value.almacen) {
-        this.SeleccionarCabecera(this.IngresoProductoForm.value.almacen.id,this.IngresoProductoForm.value.docReferencia);
-      }
+      // if (this.IngresoProductoForm.value.almacen) {
+        // this.SeleccionarCabecera(this.IngresoProductoForm.value.almacen.id,this.IngresoProductoForm.value.docReferencia);
+      // }
 
       this.IngresoProductoForm.get('productos')['controls'][0].get('cantidad').disable();
       this.ValidarDocumento()
     }
-
 
     /*********************************************/
     CrearProducto(): FormGroup{
@@ -234,10 +240,12 @@ import { HistorialMovimientosDataService } from '../historial-movimientos/histor
     };
 
     ResetearForm(event) {
-      this.SeleccionarCabecera(this.IngresoProductoForm.value.almacen.id,this.IngresoProductoForm.value.docReferencia);
+      // this.SeleccionarCabecera(this.IngresoProductoForm.value.almacen.id,this.IngresoProductoForm.value.docReferencia);
       this.ResetearFormArray(this.productos);
       this.Series = [];
-      this.Articulos.Listado('', '', '', '', null,null,1, 10, 'descripcion', 'asc',1).subscribe(res => this.Producto = res['data'].productos);
+      this.Articulos.Listado('', '', '', '', null,null,1, 10, 'descripcion', 'asc',1).subscribe(res => {
+        this.Producto = res['data'].productos
+      });
       this.almacen_destino=this.almacenes;
       this.almacen_destino=this.almacen_destino.filter(e=>e.id!=event.value.id);
 
@@ -398,36 +406,86 @@ import { HistorialMovimientosDataService } from '../historial-movimientos/histor
       }
     })
   }
-  SeleccionarCabecera(pralmacen, prdocumento){
-    this.IngresoProductoservicios.SeleccionarCabecera(pralmacen, prdocumento).subscribe(res => {
-      if(res['data']){
-        // console.log(res)
-        this.detalle = res['data'].detalle;
-        // this.detalle['nueva_observacion']="";
-        this.IngresoProductoForm.get("almacen1").setValue(res['data'].almacen);
-        this.id_almacen_referencia=res['data'].id_almacen;
-      }else{
-        this.detalle = [];
-        this.IngresoProductoForm.get("almacen1").setValue("");
-        this.id_almacen_referencia=null;
+  // SeleccionarCabecera(pralmacen, prdocumento){
+  //   this.IngresoProductoservicios.SeleccionarCabecera(pralmacen, prdocumento).subscribe(res => {
+  //     if(res['data']){
+  //       this.detalle = res['data'].detalle;
+  //       this.IngresoProductoForm.get("almacen1").setValue(res['data'].almacen);
+  //       this.id_almacen_referencia=res['data'].id_almacen;
+  //     }else{
+  //       this.detalle = [];
+  //       this.IngresoProductoForm.get("almacen1").setValue("");
+  //       this.id_almacen_referencia=null;
+  //     }
+  //     this.ValidarDocumento()
+  //   })
+  // }
+
+  ListarTransferenciasPendientes() {
+    if(this.IngresoProductoForm.value.tipoIngreso==7 && this.IngresoProductoForm.value.almacen){
+      this.SMovimineto.ListarMovimientos(
+        "",
+        5,
+        1,
+        this.IngresoProductoForm.value.almacen.nombre,
+        new Date("2018/01/01"),
+        new Date(),
+        "",
+        1,
+        20,
+        "fecha asc"
+      ).subscribe(res=>{
+        console.log(res['data'].transacciones);
+        this.detalle_transacciones=res['data'].transacciones;
+      })
+    }
+  }
+
+  VerDetalle(detalle){
+    let detalle_ventana = this.DialogoSerie.open(VentanaDetalle, {
+      width: '800px',
+      data: detalle
+    });
+  }
+
+  AgregarIngreso(transaccion){
+
+    let contador=0
+
+    let ingreso_ventana = this.DialogoSerie.open(VentanaFecha,{
+      width: '800px'
+    })
+
+    ingreso_ventana.afterClosed().subscribe(res=>{
+      if(res){
+        this.IngresoProductoservicios.AgregarTransferenciaSucursal(
+          this.IngresoProductoForm.value.almacen.id,
+          7,
+          4,
+          transaccion.id_almacen,
+          res,
+          transaccion.documento,
+          this.documento_numero
+        ).subscribe (res => {
+            let id_cabecera = res['data'];
+            for(let i of transaccion.detalle) {
+              this.IngresoProductoservicios.CrearTransaccionDetalle(id_cabecera,i.id_serie,i.cantidad*(-1),i.precio,"").subscribe()
+              contador++
+            }
+            if(contador==transaccion.detalle.length){
+              this.IngresoProductoForm.reset();
+              this.enviado=false;
+              this.Series = [];
+              this.detalle_transacciones=[];
+              this.ResetearFormArray(this.productos);
+              this.snackBar.open('El ingreso se guardó satisfactoriamente', '', {
+                duration: 2000,
+              });
+            }
+        })
       }
-      this.ValidarDocumento()
     })
   }
-
-  TransferenciaPendiente(almacen,tipo,estado_transaccion){
-
-    this.ListadoMovimientos = new HistorialMovimientosDataService(this.SMovimineto);
-    
-    this.ListadoMovimientos.CargarDatos(almacen,tipo,estado_transaccion,"",this.fecha_inicio,this.fecha_fin,"",1,10,"fecha desc");
-  
-    
-  }
-    
-
-  }
-
-
 
   // Selector Almacenes Activos
   ListarAlmacen() {

@@ -1,0 +1,22 @@
+table{
+	width: 100%
+}
+
+#detalle-numero{
+	max-width: 10%
+  }
+  
+  #detalle-almacenamiento,
+  #detalle-precio,
+  #detalle-color,
+  #detalle-serie{
+	max-width: 15%
+  }
+  
+  #detalle-producto{
+	max-width: 20%
+  }
+  
+  .detalle-columnas{
+	text-align: center
+  }
