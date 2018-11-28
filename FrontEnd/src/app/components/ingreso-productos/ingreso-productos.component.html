@@ -164,7 +164,7 @@
 
       <!-- Tipo de Transaccion transferencia de almacen  -->
 
-      <mat-card-content  *ngIf = "IngresoProductoForm.get('tipoIngreso').value ==7">
+<!--       <mat-card-content  *ngIf = "IngresoProductoForm.get('tipoIngreso').value ==7">
           <table  class="tabla-detalle">
               <tr>
                 <th>N°</th>
@@ -172,11 +172,7 @@
                 <th>SERIE</th>
                 <th>COLOR</th> 
                 <th>ALMACENAMIENTO</th>
-                <!--<th>CANTIDAD</th>-->
-                
                 <th>OBSERVACIONES</th>
-                <!-- <th>OBS. RECEPCION</th> -->
-                <!-- <th>CONFORME</th> -->
 
                 <th *ngIf="id_tipo==1">OPCIONES</th>
               </tr>
@@ -186,32 +182,18 @@
                 <td class="detalle-columnas" id="detalle-serie">{{detalle.serie}}</td> 
                 <td class="detalle-columnas" id="detalle-color">{{detalle.color}}</td>
                 <td class="detalle-columnas" id="detalle-almacenamiento">{{detalle.almacenamiento}}</td>
-                <!-- <td class="detalle-columnas" id="detalle-cantidad" >{{detalle.cantidad}}</td> -->
                 <td class="detalle-columnas" id="detalle-observacion">{{detalle.observacion}}</td>
-<!--                 <td class="detalle-columnas" id="detalle-observacion">
-                  <mat-form-field>
-                    <input matInput type="text" placeohlder="Observación" [value]="detalle.nueva_observacion">
-                  </mat-form-field>
-                </td> -->
-                <!-- <td class="detalle-columnas" id="detalle-opciones">
-                   <mat-checkbox class="example-margin" value="false"></mat-checkbox>
-                </td> -->
               </tr>
             </table>		
-
-
-      </mat-card-content>
-
-
-
+      </mat-card-content> -->
     </mat-card>
 
   </mat-card-content>
 
 
 
-   <mat-card-actions  *ngIf="IngresoProductoForm.get('tipoIngreso').value==1">
-      <mat-grid-list cols="1"  rowHeight="65px">
+   <mat-card-actions *ngIf="IngresoProductoForm.get('tipoIngreso').value!=7">
+      <mat-grid-list cols="1" rowHeight="65px">
         <mat-grid-tile>
 
 <!--           <button mat-fab color="primary" matTooltip="Grabar" > <mat-icon> save</mat-icon></button>

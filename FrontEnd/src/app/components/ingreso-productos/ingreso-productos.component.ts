@@ -243,6 +243,7 @@ import {ServiciosDocumentos} from '../global/documentos';
 
     Reset(){
       // console.log(this.IngresoProductoForm);
+      this.enviado=false;
       this.IngresoProductoForm.reset();
       this.ResetearFormArray(this.productos);
     }
@@ -454,95 +455,107 @@ import {ServiciosDocumentos} from '../global/documentos';
     let tipoingreso = formulario.value.tipoIngreso;
     this.enviado=true;
 
-    this.SSeries.ValidarSeries(this.Series)
+    // console.log(this.Series)
 
     if (tipoingreso == 1) {
 
       this.SDocumentos.ValidarDocumento(1,this.IngresoProductoForm.value.proveedor.id,this.IngresoProductoForm.value.docReferencia).subscribe(resultado=>{
+        // Se valida que el documento no se haya registrado antes
         if (resultado['total']==0) {
-          this.SSeries.Validacion
-          .pipe(
-            distinctUntilChanged()
-          )
-          .subscribe(rest=>{
-            if (rest===0) {
-              this.IngresoProductoservicios.AgregarCompraMercaderia(
-                formulario.value.almacen.id,
-                1,
-                1,
-                formulario.value.proveedor.id,
-                formulario.value.fecingreso,
-                formulario.value.docReferencia,
-                this.documento_numero
-              ).subscribe (res => {
-                let id_cabecera = res['data'];
-                for (let i of formulario.value.productos) {
-                  for (let is of this.Series) {
-                    if (i.producto.id === is.id_producto) {
-                      this.SSeries.CrearProductoSerie(i.producto.id,is.serie, is.color, is.almacenamiento, i.precioUnitario).subscribe(response => {
-                        this.IngresoProductoservicios.CrearTransaccionDetalle(id_cabecera, response['data'], 1, i.precioUnitario, is.observacion).subscribe();
-                      });
-                    }
-                  }
-                }
-                this.IngresoProductoForm.reset();
-                this.enviado=false;
-                this.Series = [];
-                this.ResetearFormArray(this.productos);
-                this.snackBar.open('El ingreso se guardó satisfactoriamente', '', {
-                  duration: 2000,
-                });
-              });
-            }else if (rest>0) {
-              this.snackBar.open('No se puede guardar porque hay series duplicadas', '', {
-                duration: 2000,
-              });
-              this.SSeries.Validacion.next(null)
-              this.enviado=false;
-            }
 
-          })
-        }else{
-          this.snackBar.open('Ya se ha registrado este documento', '', {
-            duration: 2000,
-          });
-          this.enviado=false;
-        }
-      })
-    }
-
-    if (tipoingreso == 7) {
-
-      this.SDocumentos.ValidarDocumento(7,this.id_almacen_referencia,this.IngresoProductoForm.value.docReferencia).subscribe(resultado=>{
-        if (resultado['total']==0) {
-          this.IngresoProductoservicios.AgregarTransferenciaSucursal(
-            formulario.value.almacen.id,
-            7,
-            4,
-            this.id_almacen_referencia,
-            formulario.value.fecingreso,
-            formulario.value.docReferencia,
-            this.documento_numero
-          ).subscribe (res => {
-              let id_cabecera = res['data'];
-              for(let i of this.detalle) {
-                this.IngresoProductoservicios.CrearTransaccionDetalle(id_cabecera,i.id_serie,i.cantidad*(-1),i.precio,"").subscribe()
+          let contador, duplicados:number;
+          contador=0;
+          duplicados=0;
+          // Se valida que las series no se hayan registrado antes
+          this.Series.forEach((item, index)=>{
+            this.SSeries.ValidarSerie(item.serie).subscribe(res=>{
+              console.log(res)
+              if (res==0) {
+                contador++;
+              }else{
+                contador++;
+                duplicados++;
               }
+              if (contador==this.Series.length) {
+                if (duplicados>0) {
+                  this.snackBar.open('No se puede guardar porque hay series duplicadas', '', {
+                    duration: 2000,
+                  });
+                  this.SSeries.Validacion.next(null)
+                  this.enviado=false;
+                }else{
+                  this.IngresoProductoservicios.AgregarCompraMercaderia(
+                    formulario.value.almacen.id,
+                    1,
+                    1,
+                    formulario.value.proveedor.id,
+                    formulario.value.fecingreso,
+                    formulario.value.docReferencia,
+                    this.documento_numero
+                  ).subscribe (res => {
+                    let id_cabecera = res['data'];
+                    for (let i of formulario.value.productos) {
+                      for (let is of this.Series) {
+                        if (i.producto.id === is.id_producto) {
+                          this.SSeries.CrearProductoSerie(i.producto.id,is.serie, is.color, is.almacenamiento, i.precioUnitario).subscribe(response => {
+                            this.IngresoProductoservicios.CrearTransaccionDetalle(id_cabecera, response['data'], 1, i.precioUnitario, is.observacion).subscribe();
+                          });
+                        }
+                      }
+                    }
+                    this.IngresoProductoForm.reset();
+                    this.enviado=false;
+                    this.Series = [];
+                    this.ResetearFormArray(this.productos);
+                    this.snackBar.open('El ingreso se guardó satisfactoriamente', '', {
+                      duration: 2000,
+                    });
+                  });
+                }
+              }
+            })
           })
-          this.IngresoProductoForm.reset();
-          this.enviado=false;
-          this.Series = [];
-          this.ResetearFormArray(this.productos);
-          this.snackBar.open('El ingreso se guardó satisfactoriamente', '', {
-            duration: 2000,
-          });
         }else{
           this.snackBar.open('Ya se ha registrado este documento', '', {
             duration: 2000,
           });
+          this.enviado=false;
         }
       })
     }
+
+    // if (tipoingreso == 7) {
+
+    //   this.SDocumentos.ValidarDocumento(7,this.id_almacen_referencia,this.IngresoProductoForm.value.docReferencia).subscribe(resultado=>{
+    //     if (resultado['total']==0) {
+    //       this.IngresoProductoservicios.AgregarTransferenciaSucursal(
+    //         formulario.value.almacen.id,
+    //         7,
+    //         4,
+    //         this.id_almacen_referencia,
+    //         formulario.value.fecingreso,
+    //         formulario.value.docReferencia,
+    //         this.documento_numero
+    //       ).subscribe (res => {
+    //           let id_cabecera = res['data'];
+    //           for(let i of this.detalle) {
+    //             this.IngresoProductoservicios.CrearTransaccionDetalle(id_cabecera,i.id_serie,i.cantidad*(-1),i.precio,"").subscribe()
+    //           }
+    //       })
+    //       this.IngresoProductoForm.reset();
+    //       this.enviado=false;
+    //       this.Series = [];
+    //       this.ResetearFormArray(this.productos);
+    //       this.snackBar.open('El ingreso se guardó satisfactoriamente', '', {
+    //         duration: 2000,
+    //       });
+    //     }else{
+    //       this.snackBar.open('Ya se ha registrado este documento', '', {
+    //         duration: 2000,
+    //       });
+    //     }
+    //   })
+    // }
   }
 
 }
