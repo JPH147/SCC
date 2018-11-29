@@ -1,5 +1,23 @@
-<mat-card>
+<mat-card class="principal">
+  
   <mat-card-title>
-    <div id="tituloProd">Capacidad de pago</div>
+    <div id="tituloProd">Evaluación de crédito</div>
   </mat-card-title>
+
+  <mat-card-content>
+    <mat-horizontal-stepper>
+      <mat-step>
+        <ng-template matStepLabel>Verificar capacidad</ng-template>
+        <app-evaluacion-capacidad></app-evaluacion-capacidad>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>Calcular cuotas</ng-template>
+        <app-evaluacion-cuotas></app-evaluacion-cuotas>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>Hacer venta</ng-template>
+      </mat-step>
+    </mat-horizontal-stepper>
+  </mat-card-content>
+
 </mat-card>

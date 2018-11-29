@@ -1,0 +1,82 @@
+<mat-card class="principal">
+<!--   
+    <mat-card-title>
+      <div id="tituloProd">Evaluación de crédito</div>
+    </mat-card-title>
+   -->
+    <mat-card-content>
+        <div class="divider divider-1">
+          Capacidad de pago
+        </div>
+        <div class="divider divider-2">
+          Descuentos oficiales
+          &nbsp;
+          <button mat-icon-button color="primary" (click)="AgregarDescuentoOficial()">
+            <mat-icon>add_circle</mat-icon>
+          </button>
+        </div>
+        <div class="divider divider-2">
+          Descuentos personales
+          &nbsp;
+          <button mat-icon-button color="primary" (click)="AgregarDescuentoPersonal()">
+            <mat-icon>add_circle</mat-icon>
+          </button>
+        </div>
+      <!-- <mat-grid-list cols=4 rowHeight="300px">
+        <mat-grid-tile colspan=2> -->
+      <div class="divider divider-1">
+        <mat-list>
+          <mat-list-item>
+            <mat-form-field>
+              <input type="text" matInput placeholder="Sueldo bruto" [(ngModel)]="sueldo_bruto" #InputSueldo>
+            </mat-form-field>
+          </mat-list-item>
+          <mat-list-item>
+            <mat-form-field>
+                <input type="text" matInput placeholder="Total de descuentos oficiales" [(ngModel)]="total_descuento_oficial" disabled>
+            </mat-form-field>
+          </mat-list-item>
+          <mat-list-item>
+            <mat-form-field>
+                <input type="text" matInput placeholder="Monto base" [(ngModel)]="sueldo_base" disabled>
+            </mat-form-field>
+          </mat-list-item>
+          <mat-list-item>
+            <mat-form-field>
+              <input type="text" matInput placeholder="Monto disponible" [(ngModel)]="sueldo_disponible" disabled>
+            </mat-form-field>
+          </mat-list-item>
+          <mat-list-item>
+            <mat-form-field>
+              <input type="text" matInput placeholder="Total de descuentos personales" [(ngModel)]="total_descuento_personal" disabled>
+            </mat-form-field>
+          </mat-list-item>
+          <mat-list-item>
+              <mat-form-field>
+                <input type="text" matInput placeholder="Capacidad de pago" [(ngModel)]="capacidad_pago" disabled>
+              </mat-form-field>
+            </mat-list-item>
+        </mat-list>
+      </div>
+      <div class="divider divider-2">
+        <mat-list>
+          <mat-list-item *ngFor="let descuento of descuento_oficial">
+            <mat-form-field>
+              <input type="text" matInput placeholder="Descuento" [(ngModel)]="descuento.descuento" #InputDescuento>
+            </mat-form-field>
+          </mat-list-item>
+        </mat-list>
+      </div>
+      <div class="divider divider-2">
+        <mat-list>
+          <mat-list-item *ngFor="let descuento of descuento_personal">
+            <mat-form-field>
+              <input type="text" matInput placeholder="Descuento" [(ngModel)]="descuento.descuento" #InputDescuento>
+            </mat-form-field>
+          </mat-list-item>
+        </mat-list>
+      </div>
+    </mat-card-content>
+  
+  </mat-card>
+  

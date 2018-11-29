@@ -104,6 +104,8 @@ import { VentanaEmergenteTipo } from './components/detalleproductos/tipo/ventana
 import { VentanaEmergenteModelo } from './components/detalleproductos/modelo/ventana-emergente/ventanaemergente';
 import { VentanaEmergenteMarca } from './components/detalleproductos/marca/ventana-emergente/ventanaemergente';
 import { EvaluacionComponent } from './components/evaluacion/evaluacion.component';
+import { EvaluacionCapacidadComponent } from './components/evaluacion/evaluacion-capacidad/evaluacion-capacidad.component';
+import { EvaluacionCuotasComponent } from './components/evaluacion/evaluacion-cuotas/evaluacion-cuotas.component';
 
 @NgModule({
   imports: [
@@ -213,7 +215,9 @@ import { EvaluacionComponent } from './components/evaluacion/evaluacion.componen
     VentanaEmergenteTipo,
     VentanaEmergenteModelo,
     VentanaEmergenteMarca,
-    EvaluacionComponent
+    EvaluacionComponent,
+    EvaluacionCapacidadComponent,
+    EvaluacionCuotasComponent
    ],
   entryComponents: [
     AppComponent,

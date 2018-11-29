@@ -4,11 +4,11 @@ import {tap, debounceTime, distinctUntilChanged} from'rxjs/operators';
 
 
 @Component({
-  selector: 'app-evaluacion',
-  templateUrl: './evaluacion.component.html',
-  styleUrls: ['./evaluacion.component.css']
+  selector: 'app-evaluacion-capacidad',
+  templateUrl: './evaluacion-capacidad.component.html',
+  styleUrls: ['./evaluacion-capacidad.component.css']
 })
-export class EvaluacionComponent implements OnInit {
+export class EvaluacionCapacidadComponent implements OnInit {
 
   public sueldo_bruto: number;
   public total_descuento_oficial: number;
