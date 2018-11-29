@@ -3,19 +3,22 @@
     <mat-grid-list cols=3 rowHeight="70px">
       <mat-grid-tile>
         <mat-form-field>
-          <input type="text" matInput placeholder="Capital">
+          <input type="text" matInput placeholder="Capital" [(ngModel)]="capital">
         </mat-form-field>
       </mat-grid-tile>
       <mat-grid-tile>
-          <mat-form-field>
-            <input type="text" matInput placeholder="Número de cuotas">
-          </mat-form-field>
-        </mat-grid-tile>
-        <mat-grid-tile>
-            <mat-form-field>
-              <input type="text" matInput placeholder="Total a pagar">
-            </mat-form-field>
-          </mat-grid-tile>
+        <mat-form-field>
+          <input type="text" matInput placeholder="Número de cuotas" [(ngModel)]="cuotas">
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <mat-form-field>
+          <input type="text" matInput placeholder="Total a pagar" [(ngModel)]="prestamo" disabled>
+        </mat-form-field>
+      </mat-grid-tile>
     </mat-grid-list>
+    <!-- <mat-table>
+      
+    </mat-table> -->
   </mat-card-content>
 </mat-card>
