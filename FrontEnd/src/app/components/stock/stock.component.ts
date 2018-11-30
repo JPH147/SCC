@@ -36,7 +36,7 @@ export class StockComponent implements OnInit {
 
   ngOnInit() {
     this.Listadodata = new StockDataSource(this.Servicio);
-    this.Listadodata.CargarStock('', '', '', '', '', 1, 20, 'descripcion asc');
+    this.Listadodata.CargarStock('', '', '', '', '', 1, 10, 'descripcion asc');
     this.Listadodata.Totalresultados.subscribe(res => {
     this.TotalResultados = res;
     });

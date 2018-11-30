@@ -132,7 +132,7 @@ export class ventanaseries  implements OnInit {
                 }else{
                   this.seriearticulo[i].repetidoBD=true;
                 }
-                console.log(this.seriearticulo);
+                // console.log(this.seriearticulo);
                 this.Comprobar();
                 this.cargando=false;
               })

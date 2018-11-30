@@ -8,11 +8,15 @@
     <mat-horizontal-stepper>
       <mat-step>
         <ng-template matStepLabel>Verificar capacidad</ng-template>
-        <app-evaluacion-capacidad></app-evaluacion-capacidad>
+        <app-evaluacion-capacidad
+          (capacidad)="DefinirCapacidad($event)"
+        ></app-evaluacion-capacidad>
+        <!-- <button mat-button matStepperNext>Siguiente</button> -->
       </mat-step>
       <mat-step>
         <ng-template matStepLabel>Calcular cuotas</ng-template>
-        <app-evaluacion-cuotas></app-evaluacion-cuotas>
+        <app-evaluacion-cuotas
+          [datos]="datos_prestamo"></app-evaluacion-cuotas>
       </mat-step>
       <mat-step>
         <ng-template matStepLabel>Hacer venta</ng-template>
