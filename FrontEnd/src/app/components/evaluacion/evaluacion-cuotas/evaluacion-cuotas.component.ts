@@ -31,7 +31,7 @@ export class EvaluacionCuotasComponent implements OnInit {
 
   CalcularPrimerPago(){
     let fecha:Date;
-    for(let i=1; i=12;i++){
+    for(let i=1; i==12;i++){
       fecha=new Date(this.fecha_inicio.valueOf() + 1000*60*60*24*30*i);
       this.cronograma.push({
         numero:i,
