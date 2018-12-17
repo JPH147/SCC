@@ -3,12 +3,12 @@
     <mat-grid-list cols=3 rowHeight="70px">
       <mat-grid-tile>
         <mat-form-field>
-          <input type="text" matInput placeholder="Capital" [(ngModel)]="capital">
+          <input type="text" matInput placeholder="Capital" [(ngModel)]="capital" #InputCapital>
         </mat-form-field>
       </mat-grid-tile>
       <mat-grid-tile>
         <mat-form-field>
-          <input type="text" matInput placeholder="Número de cuotas" [(ngModel)]="cuotas">
+          <input type="text" matInput placeholder="Número de cuotas" [(ngModel)]="cuotas" #InputCuotas>
         </mat-form-field>
       </mat-grid-tile>
       <mat-grid-tile>
@@ -17,8 +17,43 @@
         </mat-form-field>
       </mat-grid-tile>
     </mat-grid-list>
-    <!-- <mat-table>
-      
-    </mat-table> -->
+
+    <mat-grid-list cols=1 rowHeight="50px" *ngIf="monto_mayor">
+      <mat-grid-tile>
+        <mat-error>El monto a pagar es mayor a la capacidad de pago</mat-error>
+      </mat-grid-tile>
+    </mat-grid-list>
+
+    <mat-table [dataSource]="EvaluacionCuotas">
+
+      <ng-container matColumnDef="numero">
+        <mat-header-cell *matHeaderCellDef>N°</mat-header-cell>
+        <mat-cell *matCellDef="let cuota">{{cuota.numero}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="monto">
+        <mat-header-cell *matHeaderCellDef>Monto de la cuota</mat-header-cell>
+        <mat-cell *matCellDef="let cuota">{{cuota.monto  | currency:'S/.'}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="aporte">
+        <mat-header-cell *matHeaderCellDef>Aporte de socio</mat-header-cell>
+        <mat-cell *matCellDef="let cuota">{{cuota.aporte  | currency:'S/.'}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="fecha">
+        <mat-header-cell *matHeaderCellDef>Fecha de pago</mat-header-cell>
+        <mat-cell *matCellDef="let cuota">{{cuota.fecha | date:'MM/yy'}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="total">
+        <mat-header-cell *matHeaderCellDef>Total a pagar</mat-header-cell>
+        <mat-cell *matCellDef="let cuota">{{cuota.total  | currency:'S/.' }}</mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>
+      <mat-row *matRowDef="let row;columns:Columnas"></mat-row>
+    </mat-table>
+
   </mat-card-content>
 </mat-card>

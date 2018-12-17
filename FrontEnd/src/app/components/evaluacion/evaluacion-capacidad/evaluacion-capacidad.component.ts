@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ViewChildren, ElementRef, QueryList, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Output,EventEmitter,ViewChild, ViewChildren, ElementRef, QueryList, AfterViewInit } from '@angular/core';
 import {fromEvent, merge} from 'rxjs';
 import {tap, debounceTime, distinctUntilChanged} from'rxjs/operators';
 
@@ -19,6 +19,7 @@ export class EvaluacionCapacidadComponent implements OnInit {
   public descuento_oficial: Array<any>=[];
   public descuento_personal:Array<any>=[];
 
+  @Output() capacidad = new EventEmitter();
   @ViewChild('InputSueldo') FiltroSueldo: ElementRef;
   @ViewChildren('InputDescuento') FiltroDescuento: QueryList<any>;
 
@@ -83,7 +84,7 @@ export class EvaluacionCapacidadComponent implements OnInit {
     this.sueldo_base=this.sueldo_bruto-this.total_descuento_oficial;
     this.sueldo_disponible=this.sueldo_base*0.5;
     this.capacidad_pago=this.sueldo_disponible-this.total_descuento_personal;
-
+    this.capacidad.emit(this.capacidad_pago);
   }
 
 }
