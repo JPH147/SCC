@@ -78,7 +78,8 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
     Columnas: string[] = ['numero', 'movimiento','tipo','almacen', 'referencia', 'referente', 'documento', 'fecha', 'opciones'];
     
   
-    constructor(public DialogoSerie: MatDialog,
+    constructor(
+      public DialogoSerie: MatDialog,
       private FormBuilder: FormBuilder,
       public snackBar: MatSnackBar,
       private Servicios: ServiciosGenerales,
@@ -283,7 +284,10 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
 
     EliminarProducto(producto, i) {
       this.productos.removeAt(i);
-      this.EliminarElemento2(this.Series,producto.id);
+      if (producto) {
+        this.EliminarElemento2(this.Series,producto.id);
+      }
+      
       console.log(producto)
     };
 
@@ -482,7 +486,6 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
       this.almacenes=res;
       this.almacen_origen=res;
       this.almacen_destino=res;
-    //console.log(this.almacen_destino)
     })
   }
 

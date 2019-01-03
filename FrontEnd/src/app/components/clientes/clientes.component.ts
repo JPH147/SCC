@@ -20,16 +20,17 @@ import { VentanaEmergenteContacto} from './ventana-emergentecontacto/ventanaemer
 export class ClientesComponent implements OnInit {
 
   ListadoCliente: ClienteDataSource;
-  Columnas: string[] = ['numero', 'foto', 'subsede' , 'codigo' , 'nombrecliente', 'dni',  'opciones'];
+  Columnas: string[] = ['numero', 'foto', 'codigo' , 'dni', 'nombrecliente', 'subsede' ,  'opciones'];
   public maestro;
 
-
-  @ViewChild('InputDNI') FiltroDni: ElementRef;
-  @ViewChild('InputNombreCliente') FiltroNombre: ElementRef;
- // @ViewChild('InputApellido') FiltroApellido: ElementRef;
+  @ViewChild('InputInstitucion') FiltroInstitucion: ElementRef;
   @ViewChild('InputSede') FiltroSede: ElementRef;
   @ViewChild('InputSubsede') FiltroSubsede: ElementRef;
-  @ViewChild('InputNombreInst') FiltroInst: ElementRef;
+  @ViewChild('InputCargo') FiltroCargo: ElementRef;
+  @ViewChild('InputCodigo') FiltroCodigo: ElementRef;
+  @ViewChild('InputDNI') FiltroDni: ElementRef;
+  @ViewChild('InputNombre') FiltroNombre: ElementRef;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
     private Servicio: ClienteService,
@@ -41,64 +42,51 @@ export class ClientesComponent implements OnInit {
 
   ngOnInit() {
    this.ListadoCliente = new ClienteDataSource(this.Servicio);
-   this.ListadoCliente.CargarClientes('', '', '', '', '', 1, 10);
+   this.ListadoCliente.CargarClientes('', '', '', '', '', '','',1, 10);
  }
 
  // tslint:disable-next-line:use-life-cycle-interface
  ngAfterViewInit() {
-   fromEvent(this.FiltroDni.nativeElement, 'keyup')
-   .pipe(
+   merge(
+     fromEvent(this.FiltroDni.nativeElement, 'keyup'),
+     fromEvent(this.FiltroNombre.nativeElement, 'keyup'),
+     fromEvent(this.FiltroInstitucion.nativeElement, 'keyup'),
+     fromEvent(this.FiltroSede.nativeElement, 'keyup'),
+     fromEvent(this.FiltroSubsede.nativeElement, 'keyup'),
+     fromEvent(this.FiltroCargo.nativeElement, 'keyup'),
+     fromEvent(this.FiltroCodigo.nativeElement, 'keyup'),
+   ).pipe(
+     debounceTime(200),
+     distinctUntilChanged(),
+     tap(() => {
+       this.paginator.pageIndex=0;
+       this.CargarData();
+     })
+    ).subscribe();
+
+    this.paginator.page
+    .pipe(
      debounceTime(200),
      distinctUntilChanged(),
      tap(() => {
        this.CargarData();
      })
     ).subscribe();
-
-    fromEvent(this.FiltroNombre.nativeElement, 'keyup')
-   .pipe(
-     debounceTime(200),
-     distinctUntilChanged(),
-     tap(() => {
-       this.CargarData();
-     })
-    ).subscribe();
-    fromEvent(this.FiltroInst.nativeElement, 'keyup')
-    .pipe(
-      debounceTime(200),
-      distinctUntilChanged(),
-      tap(() => {
-        this.CargarData();
-      })
-     ).subscribe();
-
-     fromEvent(this.FiltroSede.nativeElement, 'keyup')
-    .pipe(
-      debounceTime(200),
-      distinctUntilChanged(),
-      tap(() => {
-        this.CargarData();
-      })
-     ).subscribe();
-
-     fromEvent(this.FiltroSubsede.nativeElement, 'keyup')
-    .pipe(
-      debounceTime(200),
-      distinctUntilChanged(),
-      tap(() => {
-        this.CargarData();
-      })
-     ).subscribe();
 
  }
 
  CargarData() {
    this.ListadoCliente.CargarClientes(
-   this.FiltroInst.nativeElement.value,
+   this.FiltroInstitucion.nativeElement.value,
    this.FiltroSede.nativeElement.value,
    this.FiltroSubsede.nativeElement.value,
+   this.FiltroCargo.nativeElement.value,
+   this.FiltroCodigo.nativeElement.value,
    this.FiltroDni.nativeElement.value,
-   this.FiltroNombre.nativeElement.value, 1, 10);
+   this.FiltroNombre.nativeElement.value,
+   this.paginator.pageIndex+1,
+   this.paginator.pageSize
+   );
  }
 
  Agregar() {
@@ -153,7 +141,7 @@ export class ClientesComponent implements OnInit {
 
 AgregarDatoContacto(cliente) {
   // tslint:disable-next-line:prefer-const
-  console.log(cliente);
+  // console.log(cliente);
   let VentanaContacto = this.DialogoContacto.open(VentanaEmergenteContacto, {
     width: '1200px',
     data: cliente

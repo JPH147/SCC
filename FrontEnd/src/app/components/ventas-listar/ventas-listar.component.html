@@ -1,23 +1,20 @@
 <mat-card>
   <!-- Encabezado -->
 
-  <div>
-      <button mat-fab matTooltip="Agregar Venta" class="agregar"  class="agregar" [routerLink]="['nueva']" color="primary"><mat-icon> add_shopping_cart </mat-icon></button>
-  </div>
-
-
   <mat-card-title>
     <div id = "tituloProd"> Listado de Ventas</div>
   </mat-card-title>
 
   <!-- Filtros Productos, tipo  Marca Modelo -->
-  <mat-grid-list cols= "4" rowHeight="90px">
+  <mat-grid-list cols= "4" rowHeight="70px">
+
     <mat-grid-tile>
       <mat-icon>search</mat-icon>
       <mat-form-field>
         <input matInput placeholder="Cliente" #InputCliente>
       </mat-form-field>
     </mat-grid-tile>
+
     <mat-grid-tile>
       <mat-icon>search</mat-icon>
       <mat-form-field>
@@ -28,6 +25,7 @@
         </mat-select>
       </mat-form-field>
     </mat-grid-tile>
+
     <mat-grid-tile>
       <mat-form-field>
         <input matInput [matDatepicker]="inicio" placeholder="Fecha de inicio" #fechainicio (dateChange)="CambioFiltro()">
@@ -35,6 +33,7 @@
         <mat-datepicker #inicio disabled="false"></mat-datepicker>
       </mat-form-field>
     </mat-grid-tile>
+
     <mat-grid-tile>
       <mat-form-field>
         <input matInput [matDatepicker]="fin" placeholder="Fecha de fin" #fechafin (dateChange)="CambioFiltro()">
@@ -42,13 +41,20 @@
         <mat-datepicker #fin disabled="false"></mat-datepicker>
       </mat-form-field>
     </mat-grid-tile>
-    <!-- Boton Agrega Productos -->
-    <!--<mat-grid-tile>
-      <button mat-raised-button color="primary" class="agregar" [routerLink]="['nueva']">Agregar</button>
 
-        
-      
-    </mat-grid-tile>-->
+    <mat-grid-tile>
+    </mat-grid-tile>
+
+    <mat-grid-tile>
+    </mat-grid-tile>
+
+    <mat-grid-tile>
+    </mat-grid-tile>
+
+    <mat-grid-tile>
+      <button mat-raised-button matTooltip="Agregar venta" [routerLink]="['nueva']" color="primary"> Agregar </button>
+    </mat-grid-tile>
+
   </mat-grid-list>
 
   <mat-card-content>

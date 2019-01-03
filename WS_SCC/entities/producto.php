@@ -23,7 +23,9 @@ Class Producto{
     public $total_resultado;
     public $orden;
 
+    public $sucursal;
     public $nombre;
+    public $precio;
     public $foto;
     public $precio_minimo;
     public $precio_maximo;
@@ -72,7 +74,7 @@ Class Producto{
                 "unidad_medida"=>$unidad_medida,
                 "precio"=>$precio,
                 "foto"=>$foto,
-                "estado"=>$estado
+                "estado"=>$estado,
             );
             array_push($producto_list["productos"],$producto_item);
         }
@@ -143,6 +145,38 @@ Class Producto{
         $this->prd_descripcion=$row['prd_descripcion'];
         $this->und_nombre=$row['und_nombre'];
         $this->prd_precio=$row['prd_precio'];
+    }
+
+   function read_sucursal(){
+
+        $query = "CALL sp_listarproductosxsucursal(?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->sucursal);
+        $result->bindParam(2, $this->nombre);
+
+        $result->execute();
+        
+        $producto_list=array();
+        $producto_list["productos"]=array();
+
+        $contador = $this->total_pagina*($this->numero_pagina-1);
+
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $contador=$contador+1;
+            $producto_item = array (
+                "numero"=>$contador,
+                "id"=>$id,
+                "nombre"=>$nombre,
+                "precio"=>$precio,
+            );
+            array_push($producto_list["productos"],$producto_item);
+        }
+
+        return $producto_list;
     }
 
     /* Crear producto */

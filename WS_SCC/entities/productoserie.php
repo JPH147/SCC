@@ -7,6 +7,8 @@ Class ProductoSerie{
     public $id_producto_serie;
     public $id_producto;
     public $producto;
+    public $sucursal;
+    public $almacen;
     public $id_serie;
     public $serie;
     public $estado;
@@ -67,6 +69,61 @@ Class ProductoSerie{
         $result = $this->conn->prepare($query);
 
         $result->bindParam(1, $this->almacen);
+        $result->bindParam(2, $this->id_producto);
+
+        $result->execute();
+
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        $this->total_producto_serie=$row['total'];
+
+        return $this->total_producto_serie;
+    }
+
+    function read_sucursal(){
+
+        $query = "CALL sp_listarproductoseriexsucursal(?,?,?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->sucursal);
+        $result->bindParam(2, $this->id_producto);
+        $result->bindParam(3, $this->numero_pagina);
+        $result->bindParam(4, $this->total_pagina);
+
+        $result->execute();
+        
+        $producto_serie_list=array();
+        $producto_serie_list["producto_series"]=array();
+
+        $contador = $this->total_pagina*($this->numero_pagina-1);
+
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $contador=$contador+1;
+            $producto_serie_item = array (
+                "numero"=>$contador,
+                "id_serie"=>$id_serie,
+                "serie"=>$serie,
+                "color"=>$color,
+                "almacenamiento"=>$almacenamiento,
+                "proveedor"=>$proveedor,
+                "precio"=>$precio,
+            );
+            array_push($producto_serie_list["producto_series"],$producto_serie_item);
+        }
+
+        return $producto_serie_list;
+    }
+
+    function contar_sucursal(){
+
+        $query = "CALL sp_listarproductoseriecontarxsucursal(?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->sucursal);
         $result->bindParam(2, $this->id_producto);
 
         $result->execute();

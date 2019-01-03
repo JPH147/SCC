@@ -1,157 +1,45 @@
 mat-card{
-    width: 80%;
-    position: relative;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 20px;
-    margin-bottom: 10px;
-    min-height: 100px;
-  }
-
- .tituloProd {
-    padding: 15px;
-    font-size: 30px;
-    text-align: center;
-    font-family: sans-serif;
-  }
-
-.inputfile {
-    width: 0.1px;
-    height: 0.1px;
-    opacity: 0;
-    overflow: hidden;
-    position: absolute;
-    z-index: -1;
+  width: 80%;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  min-height: 100px;
 }
 
-.inputfile + label {
-    max-width: 80%;
-    font-size: 1.25rem;
-    /* 20px */
-    font-weight: 700;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    cursor: pointer;
-    display: inline-block;
-    position: absolute;
-    overflow: hidden;
-    /* 10px 20px */
+.documentos{
+  width: 100%;
+  margin: 0;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  padding: 0px
 }
 
-.inputfile:focus + label,
-.inputfile.has-focus + label {
-    outline: 1px dotted #000;
-    outline: -webkit-focus-ring-color none;
+.tituloProd {
+  padding: 15px;
+  font-size: 30px;
+  text-align: center;
+  font-family: sans-serif;
 }
 
-.inputfile + label svg {
-    width: 1.5em;
-    height: 1.5em;
-    vertical-align: middle;
-    fill: currentColor;
-    margin-top: 0.45em;
-    margin-left: 0.45em;
-}
-.inputfile-3 + label {
-    color: #8561c5;
+.boton{
+  float: right;
+  z-index: 2
 }
 
-.inputfile-3:focus + label,
-.inputfile-3.has-focus + label,
-.inputfile-3 + label:hover {
-    color: #5c34a4;
+.columnas-1{
+  width: 80%;
 }
 
-.box {
-	background-color: transparent;
+.columnas-2{
+  width: 90%
 }
-.box + .box {
-	margin-top: 2.5rem;
+
+.columnas-3{
+  width: 93.33%
 }
-.row4col-numerocomprobante {
-    display: grid;
-    width: 100%;
-    grid-template-columns: 10% 2% 18% 2% 24% 2% 17%;
-    margin-bottom: 5px;
-    margin-left : 5%
-  }
 
-  .row4col-pagos {
-    display: grid;
-    width: 100%;
-    grid-template-columns: 22% 2% 24% 2% 23% 2% 22%;
-    margin-bottom: 5px;
-    margin-left : 1%
-  }
-
-  
-.row3col-cliente {
-    display: grid;
-    width: 100%;
-    grid-template-columns: 48% 2% 23% 2% 23%;
-    margin-bottom: 5px;
-    margin-left : 1%
-  }
-.row2col-producto {
-    display: grid;
-    width: 60%;
-    grid-template-columns: 45% 10% 45%;
-    margin-bottom: 5px;
-    margin-left : 5%
-  }
-  .row2col-comentario {
-    display: grid;
-    width: 100%;
-    grid-template-columns: 98%;
-    margin-bottom: 5px;
-    margin-left : 1%
-  }
-  .row2col-productoventa {
-    display: grid;
-    width: 60%;
-    grid-template-columns: 45% 10% 45%;
-    margin-bottom: 5px;
-    margin-left : 5%
-  }
-  .row5col-producto {
-    display: grid;
-    width: 100%;
-    grid-template-columns: 40% 2% 28% 2% 14% 2% 5% 2% 5%;
-    margin-bottom: 5px;
-    margin-left : 1%
-  }
-  .button-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-  }
-  .full-width {
-    width: 100%;
-  }
-  .titulo {
-      display: flex;
-      justify-content: space-around;
-      align-content:space-between;
-      width: 50%;
-  }
-  
-  .button-row button,
-  .button-row a {
-    margin-right: 8px;
-  }
-  table {
-    width: 100%;
-  }
-  .rows4 {
-    width: 90%;
-  }
-  
-  .boton-opciones{
-    margin: 0 10px;
-  }
-
-
-  .example-right-align {
-    text-align: right;
-  }
-  
+.columnas-4{
+  width: 95%
+}

@@ -17,7 +17,7 @@
     	$sucursal = new Sucursal($db);
 
     	$sucursal->id = !empty($_GET['prid']) ? trim($_GET['prid']) : null;
-    	$sucursal->nombre = !empty($_GET['prnombre']) ? trim($_GET['prnombre']) : null;
+    	$sucursal->nombre = !empty($_GET['prnombre']) ? trim($_GET['prnombre']) : '';
 
     	$sucursal_list = $sucursal->read();
 

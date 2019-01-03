@@ -1,0 +1,16 @@
+.inside-grid {
+  position: absolute;
+  left: 5px;
+}
+
+.listado-productos{
+	margin-bottom: 20px;
+	width: 90%;
+	position: relative;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+tr{
+	text-align: left
+}

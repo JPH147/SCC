@@ -13,54 +13,109 @@ export class VentaService {
 
   constructor(private http: HttpClient) {}
 
-  GenerarCronograma(
-    fechainicio: string,
-    monto: any,
-    numerocuotas: number,
-    montoinicial: number
-  ): Observable<Venta[]> {
-    return this.http.get(this.url + 'cronograma/create.php?fechainicio=' +
-    fechainicio + '&monto=' + monto + '&numerocuotas=' + numerocuotas + '&montoinicial=' + montoinicial)
-    .pipe(map(res => {
-      console.log(res);
-      if (res['codigo'] === 0) {
-          return res['data'].cuotas;
-      }  else {
-          console.log('Error al importar los datos, revisar servicio');
-      }
-    }));
-  }
-
-  CrearVenta(pid_talonario: number,
-    pid_cliente: number,
-    pvnt_fecha: Date,
-    pid_vendedor: number,
-    pvnt_fecha_inicio: Date,
-    pvnt_inicial: number,
-    pvnt_numero_cuota: number,
-    pid_tipopago: number,
-    pvnt_total: number,
-    pvnt_tipoventa: number,
-    pvnt_lugarventa: string,
-    pvnt_observaciones: string
+  CrearVenta(
+    fecha:Date,
+    sucursal:number,
+    talonario:number,
+    cliente:number,
+    lugar:string,
+    vendedor:number,
+    tipo_venta:number,
+    tipo_documento:number,
+    tipo_pago:number,
+    inicial:number,
+    cuotas:number,
+    total:number,
+    fechainicio:Date,
+    pdfcontrato:string,
+    pdfdni:string,
+    pdfcip:string,
+    pdfplanilla:string,
+    pdfletra:string,
+    pdfvoucher:string,
+    pdfautorizacion:string,
+    observaciones:string,
   ): Observable<any> {
 
-    let params = 'pid_talonario=' + pid_talonario + '&pid_cliente=' + pid_cliente
-    + '&pvnt_fecha=' +  moment(pvnt_fecha).format('YYYY/MM/DD').toString()
-    + '&pid_vendedor=' + pid_vendedor + '&pvnt_fecha_inicio=' + moment(pvnt_fecha_inicio).format('YYYY/MM/DD').toString()
-    + '&pvnt_inicial=' + pvnt_inicial + '&pvnt_numero_cuota=' + pvnt_numero_cuota
-    + '&pid_tipopago=' + pid_tipopago + '&pvnt_total=' + pvnt_total + '&pvnt_tipoventa=' + pvnt_tipoventa
-    + '&pvnt_lugarventa=' + pvnt_lugarventa + '&pvnt_observaciones=' + pvnt_observaciones;
-    // tslint:disable-next-line:prefer-const
+    let params = new HttpParams()
+    .set('prfecha',moment(fecha).format("YYYY-MM-DD"))
+    .set('prsucursal',sucursal.toString())
+    .set('prtalonario',talonario.toString())
+    .set('prcliente',cliente.toString())
+    .set('prlugar',lugar)
+    .set('prvendedor',vendedor.toString())
+    .set('prtipoventa',tipo_venta.toString())
+    .set('prtipodocumento',tipo_documento.toString())
+    .set('prtipopago',tipo_pago.toString())
+    .set('prinicial',inicial.toString())
+    .set('prcuotas',cuotas.toString())
+    .set('prtotal',total.toString())
+    .set('prfechainicio',moment(fechainicio).format("YYYY-MM-DD"))
+    .set('prpdfcontrato',pdfcontrato)
+    .set('prpdfdni',pdfdni)
+    .set('prpdfcip',pdfcip)
+    .set('prpdfplanilla',pdfplanilla)
+    .set('prpdfletra',pdfletra)
+    .set('prpdfvoucher',pdfvoucher)
+    .set('prpdfautorizacion',pdfautorizacion)
+    .set('probservaciones',observaciones)
+
+    console.log(params);
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-    console.log(params);
+
     return this.http.post(this.url + 'venta/create.php', params, {headers: headers});
   }
-}
 
-export interface Venta {
-  numero: number;
-  month: string;
-  price: number;
+  CrearVentaCronograma(
+    venta:number,
+    monto:number,
+    vencimiento:Date,
+  ): Observable<any> {
+
+    let params = new HttpParams()
+    .set('prventa',venta.toString())
+    .set('prmonto',monto.toString())
+    .set('prvencimiento',moment(vencimiento).format("YYYY-MM-DD"))
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'venta/create-cronograma.php', params, {headers: headers});
+  }
+
+  CrearVentaProductos(
+    venta:number,
+    producto_serie:number,
+    precio:number,
+  ): Observable<any> {
+
+    let params = new HttpParams()
+    .set('prventa',venta.toString())
+    .set('prproductoserie',producto_serie.toString())
+    .set('prprecio',precio.toString())
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'venta/create-productos.php', params, {headers: headers});
+  }
+
+  SeleccionarVenta(
+    id_venta:number
+  ): Observable<any>{
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.get(this.url + 'venta/readxId.php', {
+      params: new HttpParams()
+      .set('prid',id_venta.toString())
+    }).pipe(map(res=>{
+      if (res['codigo'] === 0) {
+        return res['data'];
+      }  else {
+        console.log('Error al importar los datos, revisar servicio');
+      }
+    }))
+
+  }
+
 }

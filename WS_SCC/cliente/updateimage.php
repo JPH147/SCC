@@ -20,7 +20,7 @@
         if (( ($_POST["idcliente"])!=null) && !empty(trim($_POST["clt_foto"])))
     	{
             $cliente->idcliente= trim($_POST["idcliente"]); 
-    		$cliente->clt_foto = trim($_POST["clt_foto")];
+    		$cliente->clt_foto = trim($_POST["clt_foto"]);
 
 	    	if($cliente->updatefoto())
 	        {

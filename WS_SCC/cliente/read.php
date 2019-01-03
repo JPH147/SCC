@@ -16,13 +16,15 @@
     try{
         $cliente = new Cliente($db);
 
-        $cliente->inst_nombre = !empty($_GET['inst_nombre']) ? trim($_GET['inst_nombre']) : null;
-        $cliente->sd_nombre = !empty($_GET['sd_nombre']) ? trim($_GET['sd_nombre']) : null;
-        $cliente->ssd_nombre = !empty($_GET['ssd_nombre']) ? trim($_GET['ssd_nombre']) : null;
-        $cliente->clt_dni = !empty($_GET['pclt_dni']) ? trim($_GET['pclt_dni']) : null;
-        $cliente->clt_nombre = !empty($_GET['pclt_nombre']) ? trim($_GET['pclt_nombre']) : null;
+        $cliente->inst_nombre = !empty($_GET['prinstitucion']) ? trim($_GET['prinstitucion']) : '';
+        $cliente->sd_nombre = !empty($_GET['prsede']) ? trim($_GET['prsede']) : '';
+        $cliente->ssd_nombre = !empty($_GET['prsubsede']) ? trim($_GET['prsubsede']) : '';
+        $cliente->clt_cargo = !empty($_GET['prcargo']) ? trim($_GET['prcargo']) : '';
+        $cliente->clt_codigo = !empty($_GET['prcodigo']) ? trim($_GET['prcodigo']) : '';
+        $cliente->clt_dni = !empty($_GET['prdni']) ? trim($_GET['prdni']) : '';
+        $cliente->clt_nombre = !empty($_GET['prnombre']) ? trim($_GET['prnombre']) : '';
         $cliente->prpagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : 1;
-        $cliente->prtotalpagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : 20;
+        $cliente->prtotalpagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : 10;
 
 
         $cliente_list = $cliente->read();
@@ -32,7 +34,7 @@
             print_json("0000", $cliente_contar, $cliente_list);
          }
         else
-        { print_json("0001", "No existen clientes registrados", null); }
+        { print_json("0001", $cliente_contar, $cliente_list); }
     }
 
     catch(Exception $exception)

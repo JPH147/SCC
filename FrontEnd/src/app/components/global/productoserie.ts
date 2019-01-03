@@ -20,30 +20,60 @@ export class ServiciosProductoSerie {
     producto:number,
     pagina: number,
     total_pagina: number
-    ): Observable <any> {
+  ): Observable <any> {
 
-      let Producto:string="";
+    let Producto:string="";
 
-      if(producto>0){
-        Producto=producto.toString()
+   if(producto>0){
+     Producto=producto.toString()
+   }
+
+    return this.http.get(this.url + 'productoserie/read.php', {
+      params: new HttpParams()
+        .set('pralmacen', almacen)
+        .set('prproducto',Producto)
+        .set('prpagina', pagina.toString())
+        .set('prtotalpagina',total_pagina.toString())
+    })
+    .pipe (map(res => {
+      if (res['codigo'] === 0) {
+        return res;
+      } else {
+        console.log('Error al importar los datos, revisar servicio');
+        return res;
       }
+    }));
+  }
 
-      return this.http.get(this.url + 'productoserie/read.php', {
-        params: new HttpParams()
-          .set('pralmacen', almacen)
-          .set('prproducto',Producto)
-          .set('prpagina', pagina.toString())
-          .set('prtotalpagina',total_pagina.toString())
-      })
-      .pipe (map(res => {
-        if (res['codigo'] === 0) {
-          return res;
-        } else {
-          console.log('Error al importar los datos, revisar servicio');
-          return res;
-        }
-      }));
-    }
+  ListadoSucursal(
+    sucursal: number,
+    producto:number,
+    pagina: number,
+    total_pagina: number
+  ): Observable <any> {
+
+    let Producto:string="";
+
+   if(producto>0){
+     Producto=producto.toString()
+   }
+
+    return this.http.get(this.url + 'productoserie/read-sucursal.php', {
+      params: new HttpParams()
+        .set('prsucursal', sucursal.toString())
+        .set('prproducto',Producto)
+        .set('prpagina', pagina.toString())
+        .set('prtotalpagina',total_pagina.toString())
+    })
+    .pipe (map(res => {
+      if (res['codigo'] === 0) {
+        return res;
+      } else {
+        console.log('Error al importar los datos, revisar servicio');
+        return res;
+      }
+    }));
+  }
 
   CrearProductoSerie(
     id_producto: number,

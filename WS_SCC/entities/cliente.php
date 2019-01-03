@@ -37,17 +37,19 @@ Class Cliente{
     }
 
     function read(){
-        $query = "CALL sp_listarcliente (?,?,?,?,?,?,?)";
+        $query = "CALL sp_listarcliente (?,?,?,?,?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
-        $result->bindParam(1, $this->id_subsede);
+        $result->bindParam(1, $this->inst_nombre);
         $result->bindParam(2, $this->sd_nombre);
         $result->bindParam(3, $this->ssd_nombre);
-        $result->bindParam(4, $this->clt_dni);
-        $result->bindParam(5, $this->clt_nombre);
-        $result->bindParam(6, $this->prpagina);
-        $result->bindParam(7, $this->prtotalpagina);
+        $result->bindParam(4, $this->clt_cargo);
+        $result->bindParam(5, $this->clt_codigo);
+        $result->bindParam(6, $this->clt_dni);
+        $result->bindParam(7, $this->clt_nombre);
+        $result->bindParam(8, $this->prpagina);
+        $result->bindParam(9, $this->prtotalpagina);
 
         $result->execute();
     
@@ -61,23 +63,23 @@ Class Cliente{
             $contador=$contador+1;
             $cliente_item = array (
                 "numero"=>$contador,
-                "id"=>$row['idcliente'],
-                "institucion"=>$row['inst_nombre'],
-                "sede"=>$row['sd_nombre'],
-                "subsede"=>$row['ssd_nombre'],
-                "codigo"=>$row['clt_codigo'],
-                "dni"=>$row['clt_dni'],
-                "nombre"=>$row['clt_nombre'],
-                "cip"=>$row['clt_cip'],
-                "email"=>$row['clt_email'],
-                "casilla"=>$row['clt_casilla'],
-                "trabajo"=>$row['clt_trabajo'],
-                "cargo"=>$row['clt_cargo'],
-                "calificacion_crediticia"=>$row['clt_calificacion_crediticia'],
-                "calificacion_personal"=>$row['clt_calificacion_personal'],
-                "aporte"=>$row['clt_aporte'],
-                "fecharegistro"=>$row['clt_fecharegistro'],
-                "foto"=>$row['clt_foto']
+                "id"=>$row['id'],
+                "institucion"=>$row['institucion'],
+                "sede"=>$row['sede'],
+                "subsede"=>$row['subsede'],
+                "codigo"=>$row['codigo'],
+                "dni"=>$row['dni'],
+                "nombre"=>$row['nombre'],
+                "cip"=>$row['cip'],
+                "email"=>$row['email'],
+                "casilla"=>$row['casilla'],
+                "trabajo"=>$row['trabajo'],
+                "cargo"=>$row['cargo'],
+                "calificacion_crediticia"=>$row['calificacion_crediticia'],
+                "calificacion_personal"=>$row['calificacion_personal'],
+                "aporte"=>$row['aporte'],
+                "fecharegistro"=>$row['fecha_registro'],
+                "foto"=>$row['foto']
             );
 
                 array_push($cliente_list["clientes"],$cliente_item);
@@ -88,15 +90,17 @@ Class Cliente{
 
     function contar(){
 
-        $query = "CALL sp_listarclientecontar(?,?,?,?,?)";
+        $query = "CALL sp_listarclientecontar(?,?,?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
-        $result->bindParam(1, $this->id_subsede);
+        $result->bindParam(1, $this->inst_nombre);
         $result->bindParam(2, $this->sd_nombre);
         $result->bindParam(3, $this->ssd_nombre);
-        $result->bindParam(4, $this->clt_dni);
-        $result->bindParam(5, $this->clt_nombre);
+        $result->bindParam(4, $this->clt_cargo);
+        $result->bindParam(5, $this->clt_codigo);
+        $result->bindParam(6, $this->clt_dni);
+        $result->bindParam(7, $this->clt_nombre);
         $result->execute();
 
         $row = $result->fetch(PDO::FETCH_ASSOC);
@@ -105,7 +109,43 @@ Class Cliente{
 
         return $this->total_resultado;
     }
+
+    function readpreciso(){
+        $query = "CALL sp_listarclientepreciso(?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->clt_dni);
+        $result->bindParam(2, $this->clt_nombre);
+
+        $result->execute();
     
+        $cliente_list=array();
+        $cliente_list["clientes"]=array();
+
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $cliente_item = array (
+                "id"=>$row['id'],
+                "institucion"=>$row['institucion'],
+                "sede"=>$row['sede'],
+                "subsede"=>$row['subsede'],
+                "codigo"=>$row['codofin'],
+                "dni"=>$row['dni'],
+                "nombre"=>$row['nombre'],
+                "cip"=>$row['cip'],
+                "email"=>$row['email'],
+                "cargo"=>$row['cargo'],
+                "aporte"=>$row['aporte'],
+            );
+
+            array_push($cliente_list["clientes"],$cliente_item);
+        }
+        return $cliente_list;
+    }
+    
+
     function create()
     {
         $query = "CALL sp_crearcliente (:id_subsede,:clt_codigo,:clt_dni,:clt_nombre,:clt_foto,:clt_cip,:clt_email,:clt_casilla,:clt_trabajo,:clt_cargo,:clt_calificacion_crediticia,:clt_calificacion_personal,:clt_aporte,:clt_estado,:clt_fecharegistro)"; 
@@ -152,6 +192,7 @@ Class Cliente{
         
         return false;
     }
+    
     function readxId()
     {
         $query ="CALL sp_listarclientexId (?)";
@@ -183,9 +224,21 @@ Class Cliente{
 
     function update()
     {
-        $query = "CALL sp_actualizarcliente (:idcliente,:id_subsede,:clt_codigo,:clt_dni,:clt_nombre,
-        :clt_cip,:clt_email,:clt_casilla,:clt_trabajo,
-        :clt_cargo,:clt_calificacion_crediticia,:clt_calificacion_personal,:clt_aporte)"; 
+        $query = "CALL sp_actualizarcliente (
+            :idcliente,
+            :id_subsede,
+            :clt_codigo,
+            :clt_dni,
+            :clt_nombre,
+            :clt_cip,
+            :clt_email,
+            :clt_casilla,
+            :clt_trabajo,
+            :clt_cargo,
+            :clt_calificacion_crediticia,
+            :clt_calificacion_personal,
+            :clt_aporte
+        )"; 
 
         $result = $this->conn->prepare($query);
 

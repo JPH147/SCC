@@ -25,7 +25,7 @@ class Departamento{
 		$departamento_list=array();
 		$departamento_list["departamentos"]=array();
 
-		$contador = $this->total_pagina*($this->numero_pagina);
+        $contador = $this->total_pagina*($this->numero_pagina-1);
 
 		while($row = $result->fetch(PDO::FETCH_ASSOC))
 		{

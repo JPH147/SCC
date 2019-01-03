@@ -1,22 +1,52 @@
 <!-- Todo el proyecto -->
 <mat-card class="principal">
+
   <mat-card-content>
-    <mat-grid-list cols=3 rowHeight="70px">
+
+    <mat-grid-list cols=4 rowHeight="70px">
+
       <mat-grid-tile>
         <mat-form-field>
           <input type="text" matInput placeholder="Capital" [(ngModel)]="capital" #InputCapital>
         </mat-form-field>
+        <button mat-icon-button color="primary" *ngIf="tipo==2" (click)="AgregarProducto()"><mat-icon>add</mat-icon></button>
       </mat-grid-tile>
+
       <mat-grid-tile>
         <mat-form-field>
           <input type="text" matInput placeholder="Número de cuotas" [(ngModel)]="cuotas" #InputCuotas>
         </mat-form-field>
       </mat-grid-tile>
+
       <mat-grid-tile>
         <mat-form-field>
           <input type="text" matInput placeholder="Total a pagar" [(ngModel)]="prestamo" disabled>
         </mat-form-field>
       </mat-grid-tile>
+
+      <mat-grid-tile>
+        <mat-form-field>
+          <input matInput [matDatepicker]="picker" placeholder="Fecha de inicio" [(ngModel)]="fecha_inicio" disabled (dateChange)="CambioFecha()"> 
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker [disabled]="false"></mat-datepicker>
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <mat-checkbox color="primary" [(ngModel)]="pago_inicio_mes" (change)="CambioModoPago()">Iniciar el próximo mes</mat-checkbox>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <mat-radio-group (change)="CambioTipoVenta()" [(ngModel)]="tipo">
+          <mat-radio-button color="primary" [value]=1>Crédito</mat-radio-button>
+          &nbsp;&nbsp;
+          <mat-radio-button color="primary" [value]=2>Equipo</mat-radio-button>
+        </mat-radio-group>
+      </mat-grid-tile>
+
     </mat-grid-list>
 
     <mat-grid-list cols=1 rowHeight="50px" *ngIf="monto_mayor">

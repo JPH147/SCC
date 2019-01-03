@@ -23,25 +23,26 @@ this.CargandoInformacion.complete();
   }
 
   CargarClientes(
-    nombreinst: string,
+    institucion: string,
     sede: string,
     subsede: string,
+    cargo:string,
+    codigo:string,
     dni: string,
     nombre: string,
     prpagina: number,
     prtotalpagina: number
-  // tslint:disable-next-line:one-line
   ){
   this.CargandoInformacion.next(true);
 
-  this.Servicio.Listado(nombreinst, sede , subsede, dni, nombre, prpagina, prtotalpagina)
+  this.Servicio.Listado(institucion, sede , subsede, cargo, codigo, dni, nombre, prpagina, prtotalpagina)
   .pipe(catchError(() => of([])),
   finalize(() => this.CargandoInformacion.next(false))
   )
   .subscribe(res => {
-    //console.log(res);
-    this.TotalResultados.next(res['mensaje']);
-     this.InformacionClientes.next(res['data'].clientes);
+      // console.log(res);
+      this.TotalResultados.next(res['mensaje']);
+      this.InformacionClientes.next(res['data'].clientes);
     });
   }
 

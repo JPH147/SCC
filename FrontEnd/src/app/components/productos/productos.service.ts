@@ -58,15 +58,14 @@ export class ProductoService {
   })
     .pipe(map(res => {
       if (res['codigo'] === 0) {
-
         for (let i in res['data'].productos) {
           res['data'].productos[i].foto = URLIMAGENES.urlimages+"producto/"+ res['data'].productos[i].foto;
         }
-
-          return res;
-      }  else {
-          console.log('Error al importar los datos, revisar servicio');
-          return res;
+        return res;
+      }else {
+        console.log('Error al importar los datos, revisar servicio');
+        // console.log(tipo,marca,modelo,descripcion,Pminimo,Pmaximo,pagina,total_pagina,orden,Estado)
+        return res;
       }
     }));
   }
@@ -74,8 +73,10 @@ export class ProductoService {
   Eliminar(
    producto: number
   ): Observable<any> {
-    // tslint:disable-next-line:prefer-const
-    let params = 'idproducto=' + producto;
+
+    let params = new HttpParams()
+    .set('idproducto', producto.toString())
+
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     return this.http.post(this.url + 'producto/delete.php', params, {headers: headers});
   }
@@ -83,8 +84,10 @@ export class ProductoService {
   Activar(
    producto: number
   ): Observable<any> {
-    // tslint:disable-next-line:prefer-const
-    let params = 'idproducto=' + producto;
+
+    let params = new HttpParams()
+    .set('idproducto', producto.toString())
+
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     return this.http.post(this.url + 'producto/activar.php', params, {headers: headers});
   }
@@ -95,7 +98,11 @@ export class ProductoService {
     precio: number
     ): Observable<any> {
     // tslint:disable-next-line:prefer-const
-    let params = 'id_modelo=' + modelo + '&prd_descripcion=' + descripcion + '&prd_precio=' + precio;
+    // let params = 'id_modelo=' + modelo + '&prd_descripcion=' + descripcion + '&prd_precio=' + precio;
+      let params = new HttpParams()
+      .set('id_modelo', modelo.toString())
+      .set('prd_descripcion', descripcion)
+      .set('prd_precio', precio.toString());
     // tslint:disable-next-line:prefer-const
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     return this.http.post(this.url + 'producto/create.php', params, {headers: headers});

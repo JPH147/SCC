@@ -17,28 +17,49 @@ Class ClienteTelefono{
 
     function create()
     {
-        $query = "CALL sp_crearclientetelefono(:id_cliente, :tlf_numero, :tlf_observacion, :id_tipo , :tlf_relevancia)";
+      $query = "CALL sp_crearclientetelefono(
+        :id_cliente,
+        :tlf_numero,
+        :tlf_observacion,
+        :id_tipo,
+        :tlf_relevancia
+      )";
 
-        $result = $this->conn->prepare($query);
+      $result = $this->conn->prepare($query);
 
-        $result->bindParam(":id_cliente", $this->id_cliente);
-        $result->bindParam(":tlf_numero", $this->tlf_numero);
-        $result->bindParam(":tlf_observacion", $this->tlf_observacion);
-        $result->bindParam(":id_tipo", $this->id_tipo);
-        $result->bindParam(":tlf_relevancia", $this->tlf_relevancia);
+      $result->bindParam(":id_cliente", $this->id_cliente);
+      $result->bindParam(":tlf_numero", $this->tlf_numero);
+      $result->bindParam(":tlf_observacion", $this->tlf_observacion);
+      $result->bindParam(":id_tipo", $this->id_tipo);
+      $result->bindParam(":tlf_relevancia", $this->tlf_relevancia);
 
-        $this->id_cliente=htmlspecialchars(strip_tags($this->id_cliente));
-        $this->tlf_numero=htmlspecialchars(strip_tags($this->tlf_numero));
-        $this->tlf_observacion=htmlspecialchars(strip_tags($this->tlf_observacion));
-        $this->id_tipo=htmlspecialchars(strip_tags($this->id_tipo));
-        $this->tlf_relevancia=htmlspecialchars(strip_tags($this->tlf_relevancia));
+      $this->id_cliente=htmlspecialchars(strip_tags($this->id_cliente));
+      $this->tlf_numero=htmlspecialchars(strip_tags($this->tlf_numero));
+      $this->tlf_observacion=htmlspecialchars(strip_tags($this->tlf_observacion));
+      $this->id_tipo=htmlspecialchars(strip_tags($this->id_tipo));
+      $this->tlf_relevancia=htmlspecialchars(strip_tags($this->tlf_relevancia));
 
-        if($result->execute())
-        {
-            return true;
-        }
-        
-        return false;
+      if($result->execute())
+      {
+       return true;
+      }
+      return false;
+    }
+
+    function delete(){
+      $query = "CALL sp_eliminarclientetelefono(:id_telefono)";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(":id_telefono", $this->idcliente_telefono);
+
+      $this->idcliente_telefono=htmlspecialchars(strip_tags($this->idcliente_telefono));
+
+      if($result->execute())
+      {
+        return true;
+      }
+      return false;
     }
 
     function read()
@@ -60,12 +81,14 @@ Class ClienteTelefono{
             $contador=$contador+1;
             $telefono_item = array (
                 "numero"=>$contador,
+                "id"=>$row['idcliente_telefono'],
                 "idcliente"=>$row['idcliente'],
                 "cliente"=>$row['cliente'],
                 "tlf_numero"=>$row['tlf_numero'],
                 "tlf_observacion"=>$row['tlf_observacion'],
                 "id_tipo"=>$row['id_tipo'],
-                "tlf_relevancia"=>$row['tlf_relevancia']
+                "tlf_relevancia"=>$row['tlf_relevancia'],
+                "estado"=>$row['tlf_estado'],
             );
 
             array_push($telefono_list["telefonos"],$telefono_item);

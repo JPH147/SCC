@@ -19,7 +19,13 @@ Class ClienteDireccion{
 
     function create()
     {
-        $query = "CALL sp_crearclientedireccion(:id_cliente, :drc_nombre, :pid_distrito, :drc_relevancia , :drc_observacion)";
+        $query = "CALL sp_crearclientedireccion(
+            :id_cliente,
+            :drc_nombre,
+            :pid_distrito,
+            :drc_relevancia,
+            :drc_observacion
+        )";
 
         $result = $this->conn->prepare($query);
 
@@ -39,9 +45,25 @@ Class ClienteDireccion{
         {
             return true;
         }
-        
         return false;
     }
+
+    function delete(){
+      $query = "CALL sp_eliminarclientedireccion(:id_direccion)";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(":id_direccion", $this->idcliente_direccion);
+
+      $this->idcliente_direccion=htmlspecialchars(strip_tags($this->idcliente_direccion));
+
+      if($result->execute())
+      {
+        return true;
+      }
+      return false;
+    }
+
     function read()
     {
         $query = "CALL sp_listarclientedireccion(:pid_cliente, :pdrc_relevancia)";
@@ -61,6 +83,7 @@ Class ClienteDireccion{
             $contador=$contador+1;
             $direccion_item = array (
                 "numero"=>$contador,
+                "id"=>$row['id'],
                 "idcliente"=>$row['idcliente'],
                 "cliente"=>$row['cliente'],
                 "direccion"=>$row['direccion'],
@@ -73,6 +96,7 @@ Class ClienteDireccion{
                 "direccioncompleta"=> $row['direccioncompleta'],
                 "relevancia"=>$row['drc_relevancia'],
                 "observacion"=>$row['drc_observacion'],
+                "estado"=>$row['drc_estado']
             );
 
             array_push($direccion_list["direcciones"],$direccion_item);

@@ -1,0 +1,58 @@
+<mat-card>
+
+  <mat-toolbar color="primary">
+    <mat-toolbar-row><h4>Agregar productos</h4></mat-toolbar-row>
+  </mat-toolbar>
+
+  <mat-card-content>
+
+    <div class="spinner-container" *ngIf="ListadoProductos.Cargando| async">
+      <mat-spinner></mat-spinner>
+    </div>
+
+    <mat-table [dataSource]="ListadoProductos" matSort matSortActive="descripcion" matSortDirection="asc" matSortDisableClear>
+
+      <ng-container matColumnDef="serie">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Serie </mat-header-cell>
+        <mat-cell *matCellDef="let producto"> {{producto.serie}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="color">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Color </mat-header-cell>
+        <mat-cell *matCellDef="let producto"> {{producto.color}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="almacenamiento">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Almacenamiento </mat-header-cell>
+        <mat-cell *matCellDef="let producto"> {{producto.almacenamiento}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="proveedor">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Proveedor </mat-header-cell>
+        <mat-cell *matCellDef="let producto"> {{producto.proveedor}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="opciones">
+        <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
+        <mat-cell *matCellDef="let producto">
+        	<button mat-icon-button color="primary" [mat-dialog-close]="producto"><mat-icon>add_circle</mat-icon></button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: Columnas;"></mat-row>
+    </mat-table>
+
+    <mat-paginator [length]="ListadoProductos.Total | async" [pageSize]="5"></mat-paginator>
+
+  </mat-card-content>
+<!-- 
+	<mat-card-actions>
+		<mat-grid-list cols="1" rowHeight="40px">
+			<mat-grid-tile>
+				<button mat-raised-button color="primary" [mat-dialog-close]="[Productos, total]">Agregar</button>
+			</mat-grid-tile>
+		</mat-grid-list>
+	</mat-card-actions> -->
+
+</mat-card>

@@ -247,28 +247,40 @@ export class ServiciosDirecciones{
 		.set('drc_observacion', observacion);
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 		return this.http.post(this.url + 'clientedireccion/create.php', params, {headers: headers});
-		}
+	}
 
-		ListarDireccion(
-			id_cliente:string,
-			drc_relevancia:string,
-		// tslint:disable-next-line:no-unused-expression
-		): Observable <any>
-		{
-			return this.http.get(this.url + 'clientedireccion/read.php',{
-				params: new HttpParams()
-				.set('id_cliente', id_cliente)
-				.set('drc_relevancia', drc_relevancia)
-			})
-			.pipe(map(res=>{
-				console.log(res);
-				if(res['codigo'] === 0) {
-					return res['data'].direcciones;
-				} else {
-					console.log('Error al importar los datos, revisar servicio');
-				}
-			}))
-		}
+	ListarDireccion(
+		id_cliente:string,
+		drc_relevancia:string,
+	// tslint:disable-next-line:no-unused-expression
+	): Observable <any>
+	{
+		return this.http.get(this.url + 'clientedireccion/read.php',{
+			params: new HttpParams()
+			.set('id_cliente', id_cliente)
+			.set('drc_relevancia', drc_relevancia)
+		})
+		.pipe(map(res=>{
+			// console.log(res);
+			if(res['codigo'] === 0) {
+				return res['data'].direcciones;
+			} else {
+				// console.log('Error al importar los datos, revisar servicio');
+			}
+		}))
+	}
+
+	EliminarDireccion(
+		id_direccion: number,
+	){
+		let params = new HttpParams()
+		.set('prid', id_direccion.toString())
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+		
+		return this.http.post(this.url + 'clientedireccion/delete.php', params, {headers: headers});
+	}
+
 }
 
 

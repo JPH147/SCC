@@ -71,7 +71,6 @@
             <mat-form-field class ="IngFecha" class="Alma1"  class="example-full-width" >
                 <input matInput [matDatepicker]="picker" placeholder="Fecha Ingreso" formControlName="fecingreso" [max]="Hoy"> 
                 <mat-error> Debe ingresar la fecha </mat-error>
-                <mat-error> </mat-error>
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
@@ -114,9 +113,8 @@
       <mat-card-content>
     
       <mat-grid-list cols="1"  rowHeight="55px" >
-
         <mat-grid-tile>
-          <button mat-mini-fab color="primary" (click)="AgregarProducto()" matTooltip="Agrega Productos"  type="button"><mat-icon>add</mat-icon></button>
+          <button mat-mini-fab color="primary" (click)="AgregarProducto()" matTooltip="Agregar productos"  type="button"><mat-icon>add</mat-icon></button>
         </mat-grid-tile>
       </mat-grid-list>
 
@@ -152,8 +150,8 @@
             </mat-grid-tile>
 
             <mat-grid-tile colspan="1">
-              <button mat-mini-fab color="primary" (click) = "AgregarSerie(producto,i)"  matTooltip="Ingresa Serie Producto" type="button" [disabled]="!producto.value.producto"><mat-icon> reorder </mat-icon> </button>
-              <button mat-mini-fab color="primary" matTooltip="Elimina  Producto" type="button" (click)="EliminarProducto(producto.value.producto,i)" [disabled]="!productos || productos.length==1"> <mat-icon>delete</mat-icon></button>
+              <button mat-mini-fab color="primary" (click) = "AgregarSerie(producto,i)"  matTooltip="Ingresar series" type="button" [disabled]="!producto.value.producto"><mat-icon> reorder </mat-icon> </button>
+              <button mat-mini-fab color="primary" matTooltip="Eliminar" type="button" (click)="EliminarProducto(producto.value.producto,i)" [disabled]="!productos || productos.length==1"> <mat-icon>delete</mat-icon></button>
             </mat-grid-tile>
 
           </mat-grid-list>

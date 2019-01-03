@@ -106,6 +106,9 @@ import { VentanaEmergenteMarca } from './components/detalleproductos/marca/venta
 import { EvaluacionComponent } from './components/evaluacion/evaluacion.component';
 import { EvaluacionCapacidadComponent } from './components/evaluacion/evaluacion-capacidad/evaluacion-capacidad.component';
 import { EvaluacionCuotasComponent } from './components/evaluacion/evaluacion-cuotas/evaluacion-cuotas.component';
+import { AgregarProductoComponent } from './components/evaluacion/agregar-producto/agregar-producto.component';
+import { EvaluacionOrdenComponent } from './components/evaluacion/evaluacion-orden/evaluacion-orden.component';
+import { VentanaProductosComponent } from './components/ventas/ventana-productos/ventana-productos.component';
 
 @NgModule({
   imports: [
@@ -217,7 +220,10 @@ import { EvaluacionCuotasComponent } from './components/evaluacion/evaluacion-cu
     VentanaEmergenteMarca,
     EvaluacionComponent,
     EvaluacionCapacidadComponent,
-    EvaluacionCuotasComponent
+    EvaluacionCuotasComponent,
+    AgregarProductoComponent,
+    EvaluacionOrdenComponent,
+    VentanaProductosComponent
    ],
   entryComponents: [
     AppComponent,
@@ -250,7 +256,9 @@ import { EvaluacionCuotasComponent } from './components/evaluacion/evaluacion-cu
     VentanaEditarSerieComponent,
     VentanaEmergenteTipo,
     VentanaEmergenteModelo,
-    VentanaEmergenteMarca
+    VentanaEmergenteMarca,
+    AgregarProductoComponent,
+    VentanaProductosComponent
   ],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider, {provide: MAT_DATE_LOCALE, useValue: 'en-GB'}]

@@ -17,7 +17,7 @@
         $productoserie = new ProductoSerie($db);
         $data = json_decode(file_get_contents('php://input'), true);
 
-        if (($_POST["prserie"])!=null)
+        if ($_POST["prserie"]!=null)
         {
             $productoserie->id_producto = trim($_POST["prproducto"]);
             $productoserie->serie = trim($_POST["prserie"]);

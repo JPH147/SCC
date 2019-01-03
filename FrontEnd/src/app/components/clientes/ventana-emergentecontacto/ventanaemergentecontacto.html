@@ -1,131 +1,162 @@
 <mat-tab-group >
-    <mat-tab label="Telefonos">
-        <button mat-mini-fab color="primary" class="boton" (click)="add()" type="button"><mat-icon>add</mat-icon></button>
-      <mat-card >
-          <form [formGroup]="TelefonosForm" (ngSubmit)="GuardarTelefonos(TelefonosForm)">
-            <mat-card-content>
-              <div formArrayName="items" *ngFor="let telefono of TelefonosForm['controls'].items['controls']; let i = index">
-                <div [formGroupName]="i">
-                  <mat-grid-list cols=4 rowHeight="80px">
-                      <mat-grid-tile colspan="1">
-                          <mat-form-field class="input-ventana">
-                            <input matInput placeholder="Número de Teléfono"  formControlName="telefono" maxlength="9">
-                            <mat-error *ngIf="TelefonosForm.get('items')['controls'][i].get('telefono').invalid">Debes escribir sólo números</mat-error>
-                          </mat-form-field>
-                        </mat-grid-tile>
 
-                    <mat-grid-tile colspan="1">
-                      <mat-form-field class="input-ventana">
-                        <mat-select placeholder='Selecciona Tipo' formControlName="tipo" >
-                            <mat-option *ngFor="let tipo of Tipos" [value]="tipo.id">
-                                {{tipo.viewValue}}
-                            </mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                    </mat-grid-tile>
+  <mat-tab label="Telefonos">
 
-                    <mat-grid-tile colspan="1">
-                        <mat-form-field class="input-ventana">
-                          <mat-select placeholder='Selecciona Relevancia' formControlName="relevancia" >
-                              <mat-option *ngFor="let relevancia of Relevancias" [value]="relevancia.id">
-                                  {{relevancia.viewValue}}
-                              </mat-option>
-                          </mat-select>
-                        </mat-form-field>
-                      </mat-grid-tile> 
+    <mat-card>
+      
+      <mat-grid-list cols="1" rowHeight="50px">
+        <mat-grid-tile>
+          <button mat-mini-fab color="primary" class="boton" (click)="AgregarTelefono()" type="button"><mat-icon>add</mat-icon></button>
+        </mat-grid-tile>
+      </mat-grid-list>
 
-                      <mat-grid-tile colspan="1">
-                          <mat-form-field class="input-ventana">
-                            <input matInput placeholder="Ingresa Observacion" formControlName="observacion">
-                          </mat-form-field>
-                        </mat-grid-tile>
-                  </mat-grid-list>
-                </div>
-              </div>
-            </mat-card-content>
-            <mat-card-actions>
-              <mat-grid-list cols=1 rowHeight="40px">
+      <form [formGroup]="TelefonosForm">
+        <mat-card-content>
+
+          <div formArrayName="items" *ngFor="let item of TelefonosForm['controls'].items['controls']; let i = index">
+            <div [formGroupName]="i">
+          
+              <mat-grid-list cols=4 rowHeight="70px">
+                        
                 <mat-grid-tile>
-                  <button type="submit" mat-raised-button [disabled]="TelefonosForm.invalid" color="primary">Grabar</button>
+                  <mat-form-field class="input-ventana">
+                    <input matInput placeholder="Número" formControlName="telefono" maxlength="11">
+                    <mat-error *ngIf="item.get('telefono').invalid">El número debe contener más de 7 dígitos</mat-error>
+                  </mat-form-field>
                 </mat-grid-tile>
+    
+                <mat-grid-tile>
+                  <mat-form-field class="input-ventana">
+                    <mat-select placeholder='Tipo' formControlName="tipo">
+                        <mat-option *ngFor="let tipo of Tipos" [value]="tipo.id">
+                            {{tipo.viewValue}}
+                        </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </mat-grid-tile>
+    
+                <mat-grid-tile>
+                  <mat-form-field class="input-ventana">
+                    <mat-select placeholder='Relevancia' formControlName="relevancia">
+                        <mat-option *ngFor="let relevancia of Relevancias" [value]="relevancia.id">
+                            {{relevancia.viewValue}}
+                        </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </mat-grid-tile> 
+    
+                <mat-grid-tile>
+                  <mat-form-field class="input-ventana">
+                    <input matInput placeholder="Observación" formControlName="observacion">
+                  </mat-form-field>
+                </mat-grid-tile>
+    
+                <button mat-mini-fab type="button" color="primary" class="boton" (click)="EliminarTelefono(item,i)" [disabled]="item.length==1 || item.value.estado==2"><mat-icon>delete</mat-icon></button>
+    
               </mat-grid-list>
-            </mat-card-actions>
+    
+            </div>
+          </div>
+    
+        </mat-card-content>
 
-          </form>
-        </mat-card>
-    </mat-tab>
+        <mat-card-actions>
+          <mat-grid-list cols=1 rowHeight="40px">
+            <mat-grid-tile>
+              <button type="submit" mat-raised-button [disabled]="TelefonosForm.invalid" color="primary" (click)="GuardarTelefonos(TelefonosForm)">Grabar</button>
+            </mat-grid-tile>
+          </mat-grid-list>
+        </mat-card-actions>
+
+      </form>
+    </mat-card>
+
+  </mat-tab>
+
     <mat-tab label="Direcciones">
-      <button mat-mini-fab color="primary" class="boton" (click)="addDirecciones()" type="button"><mat-icon>add</mat-icon></button>
+
       <mat-card>
-          <form [formGroup]="DireccionesForm" (ngSubmit)="GuardarDirecciones(DireccionesForm)">
-            <mat-card-content>
-              <div formArrayName="itemsDir" *ngFor="let direccion of DireccionesForm['controls'].itemsDir['controls']; let i = index">
-                <div [formGroupName]="i">
-                  <mat-grid-list cols=6 rowHeight="80px">
-                      <mat-grid-tile colspan="1">
-                          <mat-form-field class="input-ventana">
-                            <input matInput placeholder="Dirección"  formControlName="direccion">
-                          </mat-form-field>
-                        </mat-grid-tile>
+        
+        <mat-grid-list cols="1" rowHeight="50px">
+          <mat-grid-tile>
+            <button mat-mini-fab color="primary" class="boton" (click)="AgregarDirecciones()" type="button"><mat-icon>add</mat-icon></button>
+          </mat-grid-tile>
+        </mat-grid-list>
 
-                    <mat-grid-tile colspan="1">
-                      <mat-form-field>
-                        <mat-select placeholder='Selecciona Departamento' formControlName="departamento" (selectionChange)="DepartamentoSeleccionado($event,i)" >
-                            <mat-option *ngFor="let departamento of LstDepartamento" [value]="departamento.nombre">
-                                {{departamento.nombre}}
-                            </mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                    </mat-grid-tile>
+        <form [formGroup]="DireccionesForm">
+          <mat-card-content>
+            <div formArrayName="itemsDir" *ngFor="let direccion of DireccionesForm['controls'].itemsDir['controls']; let i = index">
+              <div [formGroupName]="i">
+                <mat-grid-list cols=6 rowHeight="80px">
+                  <mat-grid-tile colspan="1">
+                    <mat-form-field class="input-ventana">
+                      <input matInput placeholder="Dirección"  formControlName="direccion">
+                    </mat-form-field>
+                  </mat-grid-tile>
 
-                    <mat-grid-tile colspan="1">
-                        <mat-form-field>
-                          <mat-select placeholder='Selecciona Provincia' formControlName="provincia" (selectionChange)="ProvinciaSeleccionada($event,i)">
-                              <mat-option *ngFor="let provincia of LstProvincia" [value]="provincia.nombre">
-                                  {{provincia.nombre}}
-                              </mat-option>
-                          </mat-select>
-                        </mat-form-field>
-                      </mat-grid-tile> 
+                  <mat-grid-tile colspan="1">
+                    <mat-form-field>
+                      <mat-select placeholder='Selecciona Departamento' formControlName="departamento" (selectionChange)="DepartamentoSeleccionado($event,i)" >
+                        <mat-option *ngFor="let departamento of LstDepartamento" [value]="departamento.nombre">
+                            {{departamento.nombre}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </mat-grid-tile>
 
-                      <mat-grid-tile colspan="1">
-                          <mat-form-field>
-                            <mat-select placeholder='Selecciona Distrito' formControlName="distrito" >
-                                <mat-option *ngFor="let distrito of LstDistrito" [value]="distrito.id">
-                                    {{distrito.nombre}}
-                                </mat-option>
-                            </mat-select>
-                          </mat-form-field>
-                        </mat-grid-tile>
+                  <mat-grid-tile colspan="1">
+                    <mat-form-field>
+                      <mat-select placeholder='Selecciona Provincia' formControlName="provincia" (selectionChange)="ProvinciaSeleccionada($event,i)">
+                        <mat-option *ngFor="let provincia of LstProvincia" [value]="provincia.nombre">
+                          {{provincia.nombre}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </mat-grid-tile> 
 
-                        <mat-grid-tile colspan="1">
-                            <mat-form-field class="input-ventana">
-                              <mat-select placeholder='Selecciona Relevancia' formControlName="relevanciadis" >
-                                  <mat-option *ngFor="let relevanciadis of RelevanciaDireccion" [value]="relevanciadis.id">
-                                      {{relevanciadis.viewValue}}
-                                  </mat-option>
-                              </mat-select>
-                            </mat-form-field>
-                          </mat-grid-tile> 
+                  <mat-grid-tile colspan="1">
+                    <mat-form-field>
+                      <mat-select placeholder='Selecciona Distrito' formControlName="distrito" >
+                        <mat-option *ngFor="let distrito of LstDistrito" [value]="distrito.id">
+                          {{distrito.nombre}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </mat-grid-tile>
 
-                      <mat-grid-tile colspan="1">
-                          <mat-form-field class="input-ventana">
-                            <input matInput placeholder="Ingresa Observacion" formControlName="observacion">
-                          </mat-form-field>
-                        </mat-grid-tile>
-                  </mat-grid-list>
-                </div>
-              </div>
-            </mat-card-content>
-            <mat-card-actions>
-              <mat-grid-list cols=1 rowHeight="40px">
-                <mat-grid-tile>
-                  <button type="submit" mat-raised-button [disabled]="DireccionesForm.invalid" color="primary">Grabar</button>
-                </mat-grid-tile>
+                  <mat-grid-tile colspan="1">
+                    <mat-form-field class="input-ventana">
+                      <mat-select placeholder='Selecciona Relevancia' formControlName="relevanciadis" >
+                        <mat-option *ngFor="let relevanciadis of RelevanciaDireccion" [value]="relevanciadis.id">
+                          {{relevanciadis.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </mat-grid-tile> 
+
+                  <mat-grid-tile colspan="1">
+                    <mat-form-field class="input-ventana">
+                      <input matInput placeholder="Ingresa Observacion" formControlName="observacion">
+                    </mat-form-field>
+                  </mat-grid-tile>
+
+                <button mat-mini-fab type="button" color="primary" class="boton" (click)="EliminarDireccion(direccion,i)" [disabled]="direccion.length==1 || direccion.value.estado==2">
+                <mat-icon>delete</mat-icon></button>
+
               </mat-grid-list>
-            </mat-card-actions>
+            </div>
+          </div>
+        </mat-card-content>
 
-          </form>
-        </mat-card>
-    </mat-tab>
-  </mat-tab-group>
+        <mat-card-actions>
+          <mat-grid-list cols=1 rowHeight="40px">
+            <mat-grid-tile>
+              <button type="submit" mat-raised-button [disabled]="DireccionesForm.invalid" color="primary" (click)="GuardarDirecciones(DireccionesForm)">Grabar</button>
+            </mat-grid-tile>
+          </mat-grid-list>
+        </mat-card-actions>
+
+      </form>
+    </mat-card>
+  </mat-tab>
+</mat-tab-group>

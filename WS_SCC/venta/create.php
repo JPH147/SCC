@@ -18,32 +18,34 @@
         $data = json_decode(file_get_contents('php://input'), true);
 
         
-        if (($_POST["pid_talonario"])!=null
-         && ($_POST["pid_cliente"])!=null && ($_POST["pvnt_fecha"])!=null
-         && ($_POST["pid_vendedor"])!=null && ($_POST["pvnt_fecha_inicio"])!=null
-         && ($_POST["pvnt_inicial"])!=null && ($_POST["pvnt_numero_cuota"])!=null
-         && ($_POST["pid_tipopago"])!=null && ($_POST["pvnt_total"])!=null 
-         && ($_POST["pvnt_tipoventa"])!=null && !empty(trim($_POST["pvnt_lugarventa"]))
-         && !empty(trim($_POST["pvnt_observaciones"])))
+        if (($_POST["prfecha"])!=null)
         {
-            $venta->id_talonario = trim($_POST["pid_talonario"]);
-            $venta->id_cliente = trim($_POST["pid_cliente"]);
-            $venta->vnt_fecha = trim($_POST["pvnt_fecha"]);
-            $venta->id_vendedor = trim($_POST["pid_vendedor"]);
-            $venta->vnt_fecha_inicio =trim( $_POST["pvnt_fecha_inicio"]);
-            $venta->vnt_inicial = trim($_POST["pvnt_inicial"]);
-            $venta->vnt_numero_cuota = trim($_POST["pvnt_numero_cuota"]);
-            $venta->id_tipopago = trim($_POST["pid_tipopago"]);
-            $venta->vnt_total = trim($_POST["pvnt_total"]);
-            $venta->vnt_tipoventa = trim($_POST["pvnt_tipoventa"]);
-            $venta->vnt_lugarventa = trim($_POST["pvnt_lugarventa"]);
-            $venta->vnt_observaciones = trim($_POST["pvnt_observaciones"]);
 
-            //print_r($venta);
+            $venta->fecha=trim($_POST["prfecha"]);
+            $venta->sucursal=trim($_POST["prsucursal"]);
+            $venta->talonario=trim($_POST["prtalonario"]);
+            $venta->cliente=trim($_POST["prcliente"]);
+            $venta->lugar=trim($_POST["prlugar"]);
+            $venta->vendedor=trim($_POST["prvendedor"]);
+            $venta->tipoventa=trim($_POST["prtipoventa"]);
+            $venta->tipo_documento=trim($_POST["prtipodocumento"]);
+            $venta->tipopago=trim($_POST["prtipopago"]);
+            $venta->inicial=trim($_POST["prinicial"]);
+            $venta->cuotas=trim($_POST["prcuotas"]);
+            $venta->total=trim($_POST["prtotal"]);
+            $venta->fechainicio=trim($_POST["prfechainicio"]);
+            $venta->pdfcontrato=trim($_POST["prpdfcontrato"]);
+            $venta->pdfdni=trim($_POST["prpdfdni"]);
+            $venta->pdfcip=trim($_POST["prpdfcip"]);
+            $venta->pdfplanilla=trim($_POST["prpdfplanilla"]);
+            $venta->pdfletra=trim($_POST["prpdfletra"]);
+            $venta->pdfvoucher=trim($_POST["prpdfvoucher"]);
+            $venta->pdfautorizacion=trim($_POST["prpdfautorizacion"]);
+            $venta->observaciones=trim($_POST["probservaciones"]);
 
             if($venta->create())
             {
-                print_json("0000", "Se creó la venta satisfactoriamente.", "");
+                print_json("0000", "Se creó la venta satisfactoriamente.", $venta->idventa);
             }
             else
             {

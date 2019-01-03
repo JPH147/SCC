@@ -5,6 +5,7 @@ import {ErrorStateMatcher} from '@angular/material/core';
 import {ServiciosGenerales, TipoProductoModelo, MarcaModelo, ModeloModelo} from '../../global/servicios';
 import { NgControl } from '@angular/forms';
 import {VentaService} from '../ventas.service';
+import { FileHolder } from 'angular2-image-upload';
 
 @Component({
   selector: 'app-ventanaemergente',
@@ -16,53 +17,62 @@ import {VentaService} from '../ventas.service';
 // tslint:disable-next-line:component-class-suffix
 export class VentanaEmergenteArchivos {
 
-  public selectedValue: string;
-  public ProductosForm: FormGroup;
-  public Tipos: TipoProductoModelo[] = [];
-  public Marcas: MarcaModelo[] = [];
-  public Modelos: ModeloModelo[] = [];
-  isLinear = false;
-  firstFormGroup: FormGroup;
-  secondFormGroup: FormGroup;
-  thirdFormGroup: FormGroup;
-  fourthFormGroup: FormGroup;
-  fifthFormGroup: FormGroup;
-  sixthFormGroup: FormGroup;
-  seventhFormGroup: FormGroup;
+  public dni: FileHolder;
+  public cip: FileHolder;
+  public contrato: FileHolder;
+  public transaccion: FileHolder;
+  public planilla: FileHolder;
+  public letra: FileHolder;
+  public autorizacion: FileHolder;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
     public ventana: MatDialogRef<VentanaEmergenteArchivos>,
-    // tslint:disable-next-line:no-shadowed-variable
-    private FormBuilder: FormBuilder,
-    private Servicios: ServiciosGenerales,
-    private VentaServicios: VentaService,
-    private _formBuilder: FormBuilder
-    ) {}
+  ) {}
 
 
   ngOnInit() {
-    this.firstFormGroup = this._formBuilder.group({
-      firstCtrl: ['', Validators.required]
-    });
-    this.secondFormGroup = this._formBuilder.group({
-      secondCtrl: ['', Validators.required]
-    });
-    this.thirdFormGroup = this._formBuilder.group({
-      thirdCtrl: ['', Validators.required]
-    });
-    this.fourthFormGroup = this._formBuilder.group({
-      fourthCtrl: ['', Validators.required]
-    });
-    this.fifthFormGroup = this._formBuilder.group({
-      fifthCtrl: ['', Validators.required]
-    });
-    this.sixthFormGroup = this._formBuilder.group({
-      sixthCtrl: ['', Validators.required]
-    });
-    this.seventhFormGroup = this._formBuilder.group({
-      seventhCtrl: ['', Validators.required]
-    });
+
+    if (this.data) {
+      console.log(this.data)
+      this.dni=this.data.dni
+    }
+
+  }
+
+  SubirDNI(evento){
+    this.dni=evento;
+  }
+
+  SubirCIP(evento){
+    this.cip=evento;
+  }
+
+  SubirContrato(evento){
+    this.contrato=evento;
+  }
+
+  SubirTransaccion(evento){
+    this.transaccion=evento;
+  }
+
+  SubirPlanilla(evento){
+    this.planilla=evento;
+  }
+
+  SubirLetra(evento){
+    this.letra=evento;
+  }
+
+  SubirAutorizacion(evento){
+    this.autorizacion=evento;
   }
   
+  Guardar(){
+    
+    this.ventana.close({
+          dni:this.dni
+        })
+  }
+
 }

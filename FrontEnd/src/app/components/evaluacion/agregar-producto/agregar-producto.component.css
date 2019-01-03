@@ -1,0 +1,13 @@
+mat-card{
+  padding: 0px;
+  overflow: hidden;
+  height: 620px;
+}
+
+.filtros{
+	margin-top: 20px;
+}
+
+.mat-column-opciones{
+	max-width: 10%
+}

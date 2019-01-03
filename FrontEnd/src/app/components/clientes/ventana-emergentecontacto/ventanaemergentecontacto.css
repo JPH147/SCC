@@ -7,30 +7,18 @@ grid-template-columns:22% 4% 22% 4% 22% 4% 22%;*/
     width: 90%;
 }
 
+.boton{
+  float: right;
+  z-index: 2
+}
+
 .card{
-    padding: 0px;
-    border-radius: 10px 10px;
-    overflow: hidden;
-  }
-  
-  .mat-card-title{
-    font-weight: bold;
-    align-content: center; 
-    font-size: 16px;
-  }
-  
-  mat-row:nth-child(even){
-    background-color:#f2f2f2;
-    }
-  
-  mat-row:nth-child(odd){
-    background-color:white;
-    }
-  
-  mat-header-cell {
-    font-weight:  bold;
-    font-size: 14px;
-    background-color:#673ab7;
-    color: #fff;
-  }
-  
+  padding: 0px;
+  overflow: hidden;
+}
+
+.mat-card-title{
+  font-weight: bold;
+  align-content: center; 
+  font-size: 16px;
+}

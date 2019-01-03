@@ -44,87 +44,120 @@ export class VentanaEmergenteContacto {
   onNoClick(): void {
     this.ventana.close();
   }
-  // tslint:disable-next-line:use-life-cycle-interface
+
   ngOnInit() {
     this.TelefonosForm = this.FormBuilder.group({
       items : this.FormBuilder.array([this.createTelefono(1)])
-  });
+    });
 
-  this.ListarDirecciones(this.data);
-  this.ListarTelefonos(this.data);
+    this.DireccionesForm = this.FormBuilder.group({
+      itemsDir : this.FormBuilder.array([this.createDirecciones(1)])
+    });
 
-  this.DireccionesForm = this.FormBuilder.group({
-    itemsDir : this.FormBuilder.array([this.createDirecciones(1)])
-});
+    this.ListarDirecciones(this.data);
+    this.ListarTelefonos(this.data);
 
+    this.ListarTipos();
+    this.ListarRelevancia();
+    this.ListarDepartamento();
+    this.ListarRelevanciaDireccion();
+  }
 
-  this.ListarTipos();
-  this.ListarRelevancia();
-  this.ListarDepartamento();
-  this.ListarRelevanciaDireccion();
-}
-createTelefono(value): FormGroup {
-  return this.FormBuilder.group({
-    telefono: [null,[
-      Validators.required,
-      Validators.pattern('[0-9- ]+')
-    ]],
-    tipo: [{value:2,disabled:false},[
+  createTelefono(value): FormGroup {
+    return this.FormBuilder.group({
+      id:[null,[
+      ]],
+      telefono: [null,[
+        Validators.required,
+        Validators.minLength(7),
+        Validators.pattern('[0-9- ]+')
+      ]],
+      tipo: [{value:2,disabled:false},[
+        Validators.required,
+      ]] ,
+      relevancia: [{value: value, disabled: false},[
+        Validators.required,
+      ]],
+      observacion: ['',[
+      ]],
+      estado:[null,[
+      ]]
+    });
+  }
 
-    ]] ,
-    relevancia: [{value: value, disabled: false},[
-
-    ]],
-    observacion: [null,[
-      Validators.required
-    ]]
-  });
-}
-
-  add(): void {
+  AgregarTelefono(): void {
     this.items = this.TelefonosForm.get('items') as FormArray;
     this.items.push(this.createTelefono(2));
   }
- /* Para eliminar items */
-  /*
-  EliminarItem(index){
-    this.items.removeAt(index);
-  }*/
+  
+  EliminarTelefono(form,index){
+    form.get('estado').setValue(2);
+    form.get('telefono').disable();
+    form.get('tipo').disable();
+    form.get('relevancia').disable();
+    form.get('observacion').disable();
+  }
+
   ListarTipos() {
-      this.Tipos = [
-        {id: 1, viewValue: 'Celular'},
-        {id: 2, viewValue: 'Casa'},
-        {id: 3, viewValue: 'Trabajo'},
-        {id: 4, viewValue: 'Otro'}];
+    this.Tipos = [
+      {id: 1, viewValue: 'Celular'},
+      {id: 2, viewValue: 'Casa'},
+      {id: 3, viewValue: 'Trabajo'},
+      {id: 4, viewValue: 'Otro'}
+    ];
   }
   ListarRelevancia() {
-      this.Relevancias = [
-        {id: 1, viewValue: 'Principal'},
-        {id: 2, viewValue: 'Secundario'},
-        {id: 0, viewValue: 'Inactivo'},
-      ];
-    }
-    ListarRelevanciaDireccion() {
-      this.RelevanciaDireccion = [
-        {id: 1, viewValue: 'Primaria'},
-        {id: 2, viewValue: 'Secundaria'},
-      ];
-    }
+    this.Relevancias = [
+      {id: 1, viewValue: 'Principal'},
+      {id: 2, viewValue: 'Secundario'},
+      // {id: 0, viewValue: 'Inactivo'},
+    ];
+  }
+  
+  ListarRelevanciaDireccion() {
+    this.RelevanciaDireccion = [
+      {id: 1, viewValue: 'Primaria'},
+      {id: 2, viewValue: 'Secundaria'},
+    ];
+  }
 
   GuardarTelefonos(formulario) {
 
-    // tslint:disable-next-line:forin
-    for (let i in formulario.get('items').value) {
-      this.ServicioTelefono.CrearTelefono(this.data, formulario.get('items').value[i].telefono ,
-      formulario.get('items').value[i].observacion, formulario.get('items').value[i].tipo,
-      formulario.getRawValue().items[i].relevancia).subscribe(res => console.log(res));
-    }
+    for (let telefono of formulario.get('items').value) {
+      
+      // Agregar
+      if (telefono.estado == null) {
+        console.log(telefono);
+        this.ServicioTelefono.CrearTelefono(
+          this.data,
+          telefono.telefono,
+          telefono.observacion,
+          telefono.tipo,
+          telefono.relevancia
+        ).subscribe(res=>{
+        })
+      }
+      
+      // Eliminar
+      if (telefono.estado == 2 && telefono.id != null ) {
+        this.ServicioTelefono.EliminarTelefono(
+          telefono.id
+        ).subscribe(res=>{
+        })
+      }
+      
+      // if (telefono.estado == 1) {
+      //   console.log("Actualizar")
+      // }
 
-      this.ventana.close();
+    }
+    this.ventana.close();
   }
 
   createDirecciones(value): FormGroup {
     return this.FormBuilder.group({
+      id:[null,[
+      ]],
       direccion: [null,[
         Validators.required
       ]],
@@ -139,116 +172,140 @@ createTelefono(value): FormGroup {
       ]],
       relevanciadis: [{value: value, disabled: false}, [
       ]],
-      observacion: [null,[
-        Validators.required
+      observacion: ['',[
+      ]],
+      estado:[null,[
       ]]
     });
   }
 
-    addDirecciones(): void {
-      this.itemsDir = this.DireccionesForm.get('itemsDir') as FormArray;
-      this.itemsDir.push(this.createDirecciones(2));
-    }
+  AgregarDirecciones(): void {
+    this.itemsDir = this.DireccionesForm.get('itemsDir') as FormArray;
+    this.itemsDir.push(this.createDirecciones(2));
+  }
+
+  EliminarDireccion(form,index){
+    form.get('estado').setValue(2);
+    form.get('direccion').disable();
+    form.get('departamento').disable();
+    form.get('provincia').disable();
+    form.get('distrito').disable();
+    form.get('relevanciadis').disable();
+    form.get('observacion').disable();
+  }
 
   GuardarDirecciones(formulario) {
-    if (this.data !== 0) {
-      // tslint:disable-next-line:forin
-      for (let i in formulario.get('itemsDir').value) {
-        this.ServicioDireccion.CrearDireccion(this.data, formulario.get('itemsDir').value[i].direccion ,
-        formulario.get('itemsDir').value[i].distrito,
-        formulario.getRawValue().itemsDir[i].relevanciadis,
-        formulario.get('itemsDir').value[i].observacion
-        ).subscribe(res => console.log(res));
-      this.ventana.close();
+
+    for (let direccion of formulario.get('itemsDir').value) {
+      
+      // Agregar
+      if (direccion.estado == null) {
+        this.ServicioDireccion.CrearDireccion(
+          this.data,
+          direccion.direccion,
+          direccion.distrito,
+          direccion.relevanciadis,
+          direccion.observacion
+        ).subscribe(res=>console.log(res))
       }
+      
+      // Eliminar
+      if (direccion.estado == 2 && direccion.id != null ) {
+        this.ServicioDireccion.EliminarDireccion(
+          direccion.id
+        ).subscribe(res=>console.log(res))
+      }
+      this.ventana.close();
     }
   }
-      ListarDepartamento() {
-        this.ServicioDireccion.ListarDepartamentos('', 0, 50).subscribe( res => {
-          this.LstDepartamento = res['data'].departamentos;
-        });
-      }
+  
+  ListarDepartamento() {
+    this.ServicioDireccion.ListarDepartamentos('', 0, 50).subscribe( res => {
+      this.LstDepartamento = res['data'].departamentos;
+    });
+  }
 
-      ListarProvincia(i) {
-        this.ServicioDireccion.ListarProvincias(i, '' , 0, 30).subscribe( res => {
-          this.LstProvincia = res['data'].provincias;
-      });
-    }
+  ListarProvincia(i) {
+    this.ServicioDireccion.ListarProvincias(i, '' , 0, 30).subscribe( res => {
+      this.LstProvincia = res['data'].provincias;
+    });
+  }
 
-    ListarDistrito(i) {
-      this.ServicioDireccion.ListarDistritos('', i , '', 0, 50).subscribe( res => {
-        this.LstDistrito = res['data'].distritos;
+  ListarDistrito(i) {
+    this.ServicioDireccion.ListarDistritos('', i , '', 0, 50).subscribe( res => {
+      this.LstDistrito = res['data'].distritos;
     });
   }
 
   DepartamentoSeleccionado(event, i) {
     this.ServicioDireccion.ListarProvincias(event.value, '' , 0, 30).
     subscribe(res => this.LstProvincia = res['data'].provincias);
-    console.log(this.LstProvincia);
+    // console.log(this.LstProvincia);
     this.DireccionesForm.get('itemsDir')['controls'][i].get('provincia').setValue('');
   }
 
   ProvinciaSeleccionada(event, i) {
-    console.log(this.DireccionesForm.get('itemsDir')['controls'][i].get('provincia').value);
+    // console.log(this.DireccionesForm.get('itemsDir')['controls'][i].get('provincia').value);
     this.ServicioDireccion.ListarDistritos('', event.value, '' , 0, 50).
     subscribe(res => this.LstDistrito = res['data'].distritos);
     this.DireccionesForm.get('itemsDir')['controls'][i].get('distrito').setValue('');
   }
 
+
+  ListarTelefonos(id_cliente: number) {
+    this.ServicioTelefono.ListarTelefono( id_cliente , '' ).subscribe(res => {
+      if (res) {
+        // console.log(res)
+        for (let i = 0; i < res.length  - 1 ; i++) {
+          this.AgregarTelefono();
+        }
+        for (let i in res) {
+          this.TelefonosForm.get('items')['controls'][i].get('id').setValue(res[i].id);
+          this.TelefonosForm.get('items')['controls'][i].get('telefono').setValue(res[i].tlf_numero);
+          this.TelefonosForm.get('items')['controls'][i].get('telefono').disable();
+          this.TelefonosForm.get('items')['controls'][i].get('observacion').setValue(res[i].tlf_observacion);
+          this.TelefonosForm.get('items')['controls'][i].get('observacion').disable();
+          this.TelefonosForm.get('items')['controls'][i].get('tipo').setValue(res[i].id_tipo);
+          this.TelefonosForm.get('items')['controls'][i].get('tipo').disable();
+          this.TelefonosForm.get('items')['controls'][i].get('relevancia').setValue(res[i].tlf_relevancia);
+          this.TelefonosForm.get('items')['controls'][i].get('relevancia').disable();
+          this.TelefonosForm.get('items')['controls'][i].get('estado').setValue(res[i].estado);
+        }
+      }
+    });
+  }
+
   ListarDirecciones(id: number) {
-    console.log(id);
     if (id) {
-        this.ServicioDireccion.ListarDireccion(id.toString() ,'').subscribe(res => {
-          if (res) {
-            console.log(res);
-            // tslint:disable-next-line:forin
-            for (let i = 0; i < res.length - 1 ; i++) {
-              this.addDirecciones();
-            }
-            // tslint:disable-next-line:forin
-            for (let i in res) {
-              this.DireccionesForm.get('itemsDir')['controls'][i].get('direccion').setValue(res[i].direccion);
-              this.DireccionesForm.get('itemsDir')['controls'][i].get('observacion').setValue(res[i].observacion);
-              this.DireccionesForm.get('itemsDir')['controls'][i].get('departamento').setValue(res[i].departamento);
-              this.ListarProvincia(res[i].departamento);
-              console.log(res[i].departamento);
-              this.DireccionesForm.get('itemsDir')['controls'][i].get('provincia').setValue(res[i].provincia);
-              this.ListarDistrito(res[i].provincia);
-              console.log(res[i].provincia);
-              this.DireccionesForm.get('itemsDir')['controls'][i].get('distrito').setValue(res[i].id_distrito);
-            }
+      this.ServicioDireccion.ListarDireccion(id.toString() ,'').subscribe(res => {
+        if (res) {
+          for (let i = 0; i < res.length - 1 ; i++) {
+            this.AgregarDirecciones();
           }
-        });
+          for (let i in res) {
+            this.DireccionesForm.get('itemsDir')['controls'][i].get('id').setValue(res[i].id);
+            this.DireccionesForm.get('itemsDir')['controls'][i].get('direccion').setValue(res[i].direccion);
+            this.DireccionesForm.get('itemsDir')['controls'][i].get('observacion').setValue(res[i].observacion);
+            this.DireccionesForm.get('itemsDir')['controls'][i].get('estado').setValue(res[i].estado);
+            this.DireccionesForm.get('itemsDir')['controls'][i].get('relevanciadis').setValue(res[i].relevancia);
+            this.DireccionesForm.get('itemsDir')['controls'][i].get('departamento').setValue(res[i].departamento);
+            this.ListarProvincia(res[i].departamento);
+            this.DireccionesForm.get('itemsDir')['controls'][i].get('provincia').setValue(res[i].provincia);
+            this.ListarDistrito(res[i].provincia);
+            this.DireccionesForm.get('itemsDir')['controls'][i].get('distrito').setValue(res[i].id_distrito);
+
+            this.DireccionesForm.get('itemsDir')['controls'][i].get('direccion').disable()
+            this.DireccionesForm.get('itemsDir')['controls'][i].get('observacion').disable()
+            this.DireccionesForm.get('itemsDir')['controls'][i].get('relevanciadis').disable()
+            this.DireccionesForm.get('itemsDir')['controls'][i].get('departamento').disable()
+            this.DireccionesForm.get('itemsDir')['controls'][i].get('provincia').disable()
+            this.DireccionesForm.get('itemsDir')['controls'][i].get('distrito').disable()
+          }
+        }
+      });
     }
   }
 
-  ListarTelefonos(id: number) {
-    if (id) {
-        this.ServicioTelefono.ListarTelefono( id.toString() , '' ).subscribe(res => {
-          if (res) {
-            console.log(res);
-            // tslint:disable-next-line:forin
-            for (let i = 0; i < res.length  - 1 ; i++) {
-              this.add();
-            }
-            // tslint:disable-next-line:forin
-            for (let i in res) {
-              this.TelefonosForm.get('items')['controls'][i].get('telefono').setValue(res[i].tlf_numero);
-              this.TelefonosForm.get('items')['controls'][i].get('observacion').setValue(res[i].tlf_observacion);
-              this.TelefonosForm.get('items')['controls'][i].get('tipo').setValue(res[i].id_tipo);
-            }
-          }
-        });
-    }
-  }/*ListarTelefonos() {
-    if (this.idcliente) {
-        this.ServicioTelefono.ListarTelefono( this.idcliente.toString() , '1').subscribe(res => {
-          if (res) {
-            this.VentasForm.get('telefono').setValue(res[0].tlf_numero);
-          }
-        });
-    }
-  }*/
 }
 
 export interface TipoTelefono {
@@ -265,4 +322,5 @@ export interface RelevanciaDireccion {
   id: number;
   viewValue: string;
 }
+
 

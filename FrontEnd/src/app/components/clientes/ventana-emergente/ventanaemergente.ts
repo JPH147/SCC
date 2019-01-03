@@ -91,7 +91,7 @@ export class VentanaEmergenteClientes {
     });
 
     if (this.data) {
-      console.log(this.data);
+      // console.log(this.data);
       this.ClientesForm.get('institucion').setValue(this.data.objeto.institucion);
       this.ListarSede(this.data.objeto.institucion);
       this.ClientesForm.get('sede').setValue(this.data.objeto.sede);
@@ -137,10 +137,20 @@ SedeSeleccionada(event) {
     //console.log(formulario.value.subsede);
     if (this.data) {
       // tslint:disable-next-line:max-line-length
-      this.ClienteServicios.Actualizar(this.data.id, formulario.value.subsede, formulario.value.codigo,
-        formulario.value.dni, formulario.value.nombre, formulario.value.cip,
-        formulario.value.email, formulario.value.casilla, formulario.value.trabajo, formulario.value.cargo,
-        formulario.value.calificacioncrediticia, formulario.value.calificacionpersonal, formulario.value.aporte
+      this.ClienteServicios.Actualizar(
+        this.data.id,
+        formulario.value.subsede,
+        formulario.value.codigo,
+        formulario.value.dni,
+        formulario.value.nombre,
+        formulario.value.cip,
+        formulario.value.email,
+        formulario.value.casilla,
+        formulario.value.trabajo,
+        formulario.value.cargo,
+        formulario.value.calificacioncrediticia,
+        formulario.value.calificacionpersonal,
+        formulario.value.aporte
       ).subscribe(res => console.log(res));
 
       this.ClientesForm.reset();
@@ -148,11 +158,19 @@ SedeSeleccionada(event) {
     }
 
     if (!this.data) {
-      this.ClienteServicios.Agregar(formulario.value.subsede , formulario.value.codigo,
-        formulario.value.dni, formulario.value.nombre,
-        formulario.value.cip, formulario.value.email, formulario.value.casilla,
-        formulario.value.trabajo, formulario.value.cargo, formulario.value.calificacioncrediticia,
-        formulario.value.calificacionpersonal, formulario.value.aporte).subscribe(res => console.log(res));
+      this.ClienteServicios.Agregar(
+        formulario.value.subsede ,
+        formulario.value.codigo,
+        formulario.value.dni,
+        formulario.value.nombre,
+        formulario.value.cip,
+        formulario.value.email,
+        formulario.value.casilla,
+        formulario.value.trabajo,
+        formulario.value.cargo,
+        formulario.value.calificacioncrediticia,
+        formulario.value.calificacionpersonal,
+        formulario.value.aporte).subscribe(res => console.log(res));
     }
       this.ClientesForm.reset();
       this.ventana.close();

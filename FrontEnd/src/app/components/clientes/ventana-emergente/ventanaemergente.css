@@ -27,11 +27,10 @@
     color: #fff;
     padding-top: 20px;
     justify-content: center;
-    
   }
+
   .card{
     padding: 0px;
-    border-radius: 10px 10px;
     overflow: hidden;
   }
   

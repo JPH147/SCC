@@ -8,7 +8,8 @@ $primary: map-get($theme, primary);
 }
 
 body{
-	margin: 0px
+	margin: 0px;
+	// height: 100vh;
 }
 
 .mat-dialog-container {
@@ -28,9 +29,10 @@ body{
 
 
 /* Estilos para la tabla */
-mat-header-cell {
-  font-size: 14px;
-  background-color: mat-color($primary);
+mat-header-cell,
+mat-grid-tile-header {
+  font-size: 14px !important;
+  background-color: mat-color($primary) !important;
   color: #fff !important;
 }
 
@@ -51,4 +53,42 @@ mat-row:nth-child(even){
 
 .error{
 	color: mat-color($warn) !important
+}
+
+.cargar-imagen {
+  background-color: white !important;
+  width: 90% !important;
+ }
+
+.cargar-imagen .img-ul-button{
+  font-size: 14px !important;
+  font-family: 'Roboto' !important;
+  font-weight: 500;
+}
+
+.cargar-imagen .img-ul-file-upload{
+  padding: 0;
+}
+
+.cargar-imagen .img-ul-upload {
+  background-color: white !important;
+  color: rgba(0, 0, 0, 0.87) !important;
+  width: 95% !important;
+  box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+  text-transform: capitalize !important;
+  text-align: center;
+}
+
+.cargar-imagen .img-ul-clear {
+  background-color: white !important;
+  display: none !important;
+  border: none !important;
+}
+
+/*.cargar-imagen .img-ul-drag-box-msg {
+    color: purple !important;
+}*/
+
+.cargar-imagen .img-ul-container {
+  background-color: white !important
 }

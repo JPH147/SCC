@@ -16,13 +16,6 @@ mat-card{
   min-height: 300px;
 }
 
-.agregar{
-  float:right;
-  margin-bottom: 5px;
-  height: 70px;
-  width: 70px;
- }
-
 .spinner-container{
   position: absolute;
   top: 200px;

@@ -21,37 +21,53 @@ export class ServiciosTelefonos {
         tlf_observacion: string,
         id_tipo: number,
         tlf_relevancia: number
-): Observable<any> {
-        // tslint:disable-next-line:prefer-const
-        let params = 'id_cliente=' + id_cliente + '&tlf_numero=' + tlf_numero
-        + '&tlf_observacion=' + tlf_observacion + '&id_tipo=' + id_tipo
-        + '&tlf_relevancia=' + tlf_relevancia;
-        // tslint:disable-next-line:prefer-const
+  ): Observable<any> {
+
+        let params = new HttpParams()
+        .set('id_cliente', id_cliente.toString())
+        .set('tlf_numero', tlf_numero)
+        .set('tlf_observacion', tlf_observacion)
+        .set('id_tipo', id_tipo.toString())
+        .set('tlf_relevancia', tlf_relevancia.toString())
+
         let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-        console.log(params);
+
         return this.http.post(this.url + 'clientetelefono/create.php', params, {headers: headers});
   }
 
   ListarTelefono(
-	id_cliente:string,
+	id_cliente:number,
 	tlf_relevancia:string,
-// tslint:disable-next-line:no-unused-expression
-): Observable <any>
-{
-	return this.http.get(this.url + 'clientetelefono/read.php',{
-		params: new HttpParams()
-		.set('id_cliente', id_cliente)
-		.set('tlf_relevancia', tlf_relevancia)
-	})
-	.pipe(map(res=>{
-            console.log(res);
-		if(res['codigo'] === 0) {
-			return res['data'].telefonos;
-		} else {
-			console.log('Error al importar los datos, revisar servicio');
-		}
-	}))
-}
+
+  ): Observable <any>
+  {
+  	return this.http.get(this.url + 'clientetelefono/read.php',{
+  		params: new HttpParams()
+  		.set('id_cliente', id_cliente.toString())
+  		.set('tlf_relevancia', tlf_relevancia)
+  	})
+  	.pipe(map(res=>{
+              // console.log(res);
+  		if(res['codigo'] === 0) {
+  			return res['data'].telefonos;
+  		} else {
+  			// console.log('Error al importar los datos, revisar servicio');
+  		}
+  	}))
+  }
+
+  EliminarTelefono(
+    id_telefono:number
+  ): Observable<any>{
+
+    let params = new HttpParams()
+    .set('prid', id_telefono.toString())
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    
+    return this.http.post(this.url + 'clientetelefono/delete.php', params, {headers: headers});
+  }
+
 }
 
 export interface Telefono {

@@ -17,9 +17,7 @@
         $clientetelefono = new ClienteTelefono($db);
         $data = json_decode(file_get_contents('php://input'), true);
 
-        if (($_POST["id_cliente"])!=null  && !empty(trim($_POST["tlf_numero"]))
-        && !empty(trim($_POST["tlf_observacion"])) && ($_POST["id_tipo"])!=null 
-        && ($_POST["tlf_relevancia"])!=null )
+        if (($_POST["id_cliente"])!=null)
         {
             $clientetelefono->id_cliente = trim($_POST["id_cliente"]);
             $clientetelefono->tlf_numero = trim($_POST["tlf_numero"]);

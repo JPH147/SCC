@@ -8,7 +8,7 @@ mat-card.principal{
 }
 
 mat-form-field{
-    width: 70%
+    width: 80%
 }
 
 mat-list{
@@ -16,17 +16,28 @@ mat-list{
 }
 
 .divider{
-    /* height: 50px; */
     display: inline-table;
 }
 
 .divider-1{
-    width: 49%;
-    /* background-color: blue; */
-    /* height:300px; */
+    width: 46%;
 }
 
 .divider-2{
-    width: 24%;
-    /* background-color: red; */
+    width: 20%;
+}
+
+.espacio{
+  flex: 1 1 auto;
+}
+
+.titulo{
+    background-color: #424242  !important
+}
+
+.prueba {
+  position: absolute;
+  top: 50px;
+  left: 0px;
+  width: 100%
 }

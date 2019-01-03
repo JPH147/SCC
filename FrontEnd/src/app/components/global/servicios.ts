@@ -2,7 +2,7 @@ import { Cliente } from './../clientes/clientes.service';
 import { TipoProductoModelo } from './servicios';
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {URL} from './url';
 import * as moment from 'moment';
@@ -455,11 +455,30 @@ EditarModelo(
         if (res['codigo'] === 0) {
             return res['data'].sucursal;
         } else {
-            // console.log('Error al importar los datos, revisar servicio');
-          }
+          // console.log('Error al importar los datos, revisar servicio');
+        }
       }));
     }
 
+    ListarProductoEnSucursal(
+      id_sucursal:number,
+      producto:string
+    ): Observable<any> {
+
+      return this.http.get(this.url + 'producto/read-sucursal.php', {
+        params: new HttpParams()
+        .set('prsucursal', id_sucursal.toString())
+        .set('prnombre', producto)
+      })
+
+      .pipe(map(res => {
+        if (res['codigo'] === 0) {
+            return res['data'].productos;
+        } else {
+          // console.log('Error al importar los datos, revisar servicio');
+        }
+      }));
+    } 
 
     ListarVendedor(
       nombre: string
@@ -527,12 +546,17 @@ EditarModelo(
       numdoc: string,
       grupo:string
     ): Observable <any> {
+
+      if (!nameimg) {
+        return of({codigo:1, data:"",mensaje:""});
+      }
+
       return this.http.get(this.url + 'file/rename.php', {
       params: new  HttpParams()
       .set('nameimg', nameimg.trim())
       .set('tipodoc', tipodoc.trim())
-      .set('numdoc', numdoc)
-      .set('prgrupo',grupo)
+      .set('numdoc', numdoc.trim())
+      .set('prgrupo',grupo.trim())
     })
     .pipe(map(res => {
       if (res['codigo'] === 0) {

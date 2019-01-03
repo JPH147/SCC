@@ -5,7 +5,7 @@ import {ErrorStateMatcher} from '@angular/material/core';
 import {ServiciosGenerales} from '../../global/servicios';
 import { NgControl } from '@angular/forms';
 import {ProductoService} from '../productos.service';
-import { FileHolder } from '../../../../../node_modules/angular2-image-upload';
+import { FileHolder } from 'angular2-image-upload';
 import {URL} from '../../global/url';
 import * as moment from 'moment';
 

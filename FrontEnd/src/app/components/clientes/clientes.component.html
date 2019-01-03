@@ -1,82 +1,65 @@
 <mat-card>
-  <!-- Encabezado -->
-
-  <div>
-    <button mat-fab matTooltip="Agregar Cliente" class="agregar"  (click)="Agregar()" color="primary"><mat-icon> person_add </mat-icon></button>
-  </div>
   
   <mat-card-title>
     <div id = "tituloProd"> Listado de Clientes</div>
   </mat-card-title>
 
-  <mat-accordion multi=true>
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Filtro Cliente
-        </mat-panel-title>
-      </mat-expansion-panel-header>
+  <mat-grid-list cols=4 rowHeight="70px">
 
-      <mat-grid-list cols=2 rowHeight="60px">
-        <mat-grid-tile>
-          <mat-icon>search</mat-icon>
-          <mat-form-field>
-            <input matInput placeholder="DNI" #InputDNI>
-          </mat-form-field>
-        </mat-grid-tile>
-            <mat-grid-tile>
-          <mat-icon>search</mat-icon>
-          <mat-form-field>
-            <input matInput placeholder="Nombre" #InputNombreCliente>
-          </mat-form-field>
-        </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-icon>search</mat-icon>
+      <mat-form-field>
+        <input matInput placeholder="Institución" #InputInstitucion>
+      </mat-form-field>
+    </mat-grid-tile>
 
-          <!--<mat-grid-tile>
-            <mat-icon>search</mat-icon>
-              <mat-form-field>
-            <input matInput placeholder="Apellido" #InputApellido>
-          </mat-form-field>
-        </mat-grid-tile>-->
-      </mat-grid-list>
+    <mat-grid-tile>
+      <mat-icon>search</mat-icon>
+      <mat-form-field>
+        <input matInput placeholder="Sede" #InputSede>
+      </mat-form-field>
+    </mat-grid-tile>
+      
+    <mat-grid-tile>
+      <mat-icon>search</mat-icon>
+      <mat-form-field>
+        <input matInput placeholder="Subsede" #InputSubsede>
+      </mat-form-field>
+    </mat-grid-tile>
 
+    <mat-grid-tile>
+      <mat-icon>search</mat-icon>
+      <mat-form-field>
+        <input matInput placeholder="Cargo" #InputCargo>
+      </mat-form-field>
+    </mat-grid-tile>
 
-    </mat-expansion-panel>
-    <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            Filtro Institución
-          </mat-panel-title>
-        </mat-expansion-panel-header>
+    <mat-grid-tile>
+      <mat-icon>search</mat-icon>
+      <mat-form-field>
+        <input matInput placeholder="Código" #InputCodigo>
+      </mat-form-field>
+    </mat-grid-tile>
 
-      <mat-grid-list cols=3 rowHeight="60px">
-        <mat-grid-tile>
-          <mat-icon>search</mat-icon>
-          <mat-form-field>
-            <input matInput placeholder="Institución" #InputNombreInst>
-          </mat-form-field>
-        </mat-grid-tile>
-            <mat-grid-tile>
-          <mat-icon>search</mat-icon>
-          <mat-form-field>
-            <input matInput placeholder="Sede" #InputSede>
-          </mat-form-field>
-        </mat-grid-tile>
-            <mat-grid-tile>
-          <mat-icon>search</mat-icon>
-          <mat-form-field>
-            <input matInput placeholder="Subsede" #InputSubsede>
-          </mat-form-field>
-        </mat-grid-tile>
-      </mat-grid-list>
+    <mat-grid-tile>
+      <mat-icon>search</mat-icon>
+      <mat-form-field>
+        <input matInput placeholder="DNI" #InputDNI>
+      </mat-form-field>
+    </mat-grid-tile>
 
+    <mat-grid-tile>
+      <mat-icon>search</mat-icon>
+      <mat-form-field>
+        <input matInput placeholder="Nombre" #InputNombre>
+      </mat-form-field>
+    </mat-grid-tile>
 
-    </mat-expansion-panel>
-  </mat-accordion>
+    <mat-grid-tile>
+      <button mat-raised-button color="primary" (click)="Agregar()">Agregar</button>
+    </mat-grid-tile>
 
-
-
-  <br/>
-
+  </mat-grid-list>
 
   <mat-card-content>
 
@@ -120,13 +103,13 @@
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let cliente">
-          <button mat-icon-button matTooltip="Agregar Datos de Contacto" (click)="AgregarDatoContacto(cliente.id)" color="primary"><mat-icon> local_phone </mat-icon></button>
-          <button mat-icon-button matTooltip="Subir Foto" color="primary" (click)="SubirImagen(cliente)"><mat-icon> add_a_photo </mat-icon></button>
-          <button mat-icon-button matTooltip="Hacer Venta" color="primary" [routerLink]="['/ventas/nueva', cliente.id]"><mat-icon> add_shopping_cart </mat-icon></button>
-          <button mat-icon-button matTooltip="Ver Ventas" color="primary"><mat-icon> attach_money</mat-icon></button>
-          <button mat-icon-button matTooltip="Editar Cliente" color="primary" (click)="Editar(cliente.id)"><mat-icon>person_outline </mat-icon></button>
+          <button mat-icon-button matTooltip="Agregar datos de contacto" (click)="AgregarDatoContacto(cliente.id)" color="primary"><mat-icon> local_phone </mat-icon></button>
+          <button mat-icon-button matTooltip="Subir foto" color="primary" (click)="SubirImagen(cliente)"><mat-icon> add_a_photo </mat-icon></button>
+          <button mat-icon-button matTooltip="Realizar venta" color="primary" [routerLink]="['/ventas/nueva', cliente.id]"><mat-icon> add_shopping_cart </mat-icon></button>
+          <button mat-icon-button matTooltip="Ver ventas" color="primary"><mat-icon> attach_money</mat-icon></button>
+          <button mat-icon-button matTooltip="Editar" color="primary" (click)="Editar(cliente.id)"><mat-icon> edit </mat-icon></button>
 
-          <button mat-icon-button matTooltip="Eliminar Cliente" color="primary" (click)="Eliminar(cliente)"><mat-icon> delete </mat-icon></button>
+          <button mat-icon-button matTooltip="Eliminar" color="primary" (click)="Eliminar(cliente)"><mat-icon> delete </mat-icon></button>
         </mat-cell>
       </ng-container>
 
