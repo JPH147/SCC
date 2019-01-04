@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import { Component, OnInit, Input,AfterViewInit,ViewChild, ElementRef, EventEmitter, Output } from '@angular/core';
-=======
-import { Component, OnInit, Input,AfterViewInit,ViewChild, ElementRef } from '@angular/core';
->>>>>>> ef7c359a5d51e5916d48823301503eaa4e921f3c
 import { BehaviorSubject,Observable, fromEvent, merge } from 'rxjs';
 import {tap, debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {CollectionViewer} from '@angular/cdk/collections';
@@ -118,12 +114,9 @@ export class EvaluacionCuotasComponent implements OnInit {
 
   CalcularPrimerPago(){
     let fecha:Date;
-<<<<<<< HEAD
 
     let interes_mes_actual=(this.capital*this.interes)*(1-(moment(this.fecha_inicio).date()/moment(this.fecha_inicio).daysInMonth()));
 
-=======
->>>>>>> ef7c359a5d51e5916d48823301503eaa4e921f3c
     this.cronograma=[];
 
     for(let i=1; i<=this.cuotas ;i++){

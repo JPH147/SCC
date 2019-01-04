@@ -18,6 +18,7 @@ import { FileHolder } from 'angular2-image-upload';
 import * as moment from 'moment';
 import {Location} from '@angular/common';
 import {Notificaciones} from '../global/notificacion';
+import {URLIMAGENES} from '../global/url'
 
 @Component({
   selector: 'app-ventas',
@@ -270,12 +271,12 @@ export class VentasComponent implements OnInit {
 
   SeleccionarVentaxId(id_venta){
     this.Servicio.SeleccionarVenta(id_venta).subscribe(res=>{
-      console.log(res);
+      console.log(res)
       this.ObtenerClientexId(res.id_cliente);
       this.VentasForm.get('sucursal').setValue(res.id_sucursal);
       this.VentasForm.get('tipodoc').setValue(res.documento);
       this.VentasForm.get('lugar').setValue(res.lugar_venta);
-      // this.VentasForm.get('vendedor').setValue();
+      this.VentasForm.get('vendedor').setValue(this.LstVendedor.find(e=>e.id=res.id_vendedor));
       this.VentasForm.get('fechaventa').setValue(res.fecha);
       this.VentasForm.get('fechapago').setValue(res.fecha_inicio_pago);
       this.VentasForm.get('tipopago').setValue(res.idtipopago);
@@ -285,16 +286,43 @@ export class VentasComponent implements OnInit {
       this.VentasForm.get('observaciones').setValue(res.observacion);
 
       this.VentasForm.get('talonario').setValue(res.talonario_serie);
-      this.ListarTalonarioNumero(res.talonario_serie);
+      this.SeleccionarTalonarioNumero(res.id_talonario);
       this.VentasForm.get('contrato').setValue(res.id_talonario);
 
+      this.CrearCronograma();
+
+      this.sucursal=res.id_sucursal;
+      
+      for (let i in res.productos.productos) {
+        this.CrearProducto();
+        this.VentasForm['controls'].productos['controls'][i].get('id_producto').setValue(res.productos.productos[i].id_producto);
+        this.VentasForm['controls'].productos['controls'][i].get('descripcion').setValue(res.productos.productos[i]);
+        this.VentasForm['controls'].productos['controls'][i].get('id_serie').setValue(res.productos.productos[i].id_serie);
+        this.VentasForm['controls'].productos['controls'][i].get('serie').setValue(res.productos.productos[i].serie);
+        this.VentasForm['controls'].productos['controls'][i].get('precio').setValue(res.productos.productos[i].precio);
+      }
+
+      this.VentasForm.disable()
+
+      res.dni_pdf!="" ? this.dni=URLIMAGENES.urlimages+'venta/'+res.dni_pdf : null;
+      res.cip_pdf!="" ? this.cip=URLIMAGENES.urlimages+'venta/'+res.cip_pdf : null;
+      res.contrato_pdf!="" ? this.contrato=URLIMAGENES.urlimages+'venta/'+res.contrato_pdf : null;
+      res.transaccion_pdf!="" ? this.transaccion=URLIMAGENES.urlimages+'venta/'+res.voucher_pdf : null;
+      res.planilla_pdf!="" ? this.planilla=URLIMAGENES.urlimages+'venta/'+res.planilla_pdf : null;
+      res.letra_pdf!="" ? this.letra=URLIMAGENES.urlimages+'venta/'+res.letra_pdf : null;
+      res.autorizacion_pdf!="" ? this.autorizacion=URLIMAGENES.urlimages+'venta/'+res.autorizacion_pdf : null;
+
     })
+  }
+
+  Abrir(enlace){
+    console.log(enlace);
+    window.open(enlace, '_blank')
   }
 
   ObtenerClientexId(id_cliente) {
     this.ClienteServicio.Seleccionar(id_cliente).subscribe(res => {
       if (res) {
-        console.log(res)
         this.VentasForm.get('cliente').setValue(res);
         this.VentasForm.get('cargo').setValue(res.cargo);
         this.VentasForm.get('trabajo').setValue(res.trabajo);
@@ -458,23 +486,21 @@ export class VentasComponent implements OnInit {
 
   ListarTalonarioSerie() {
     this.ServiciosGenerales.ListarSerie().subscribe( res => {
-      this.LstSeries = [];
-      // tslint:disable-next-line:forin
-      for (let i in res) {
-        this.LstSeries.push ( res[i] );
-      }
+      this.LstSeries = res;
     });
   }
 
-
   ListarTalonarioNumero(pserie: string) {
     this.ServiciosGenerales.ListarNumeroTalonario(pserie).subscribe( res => {
-      this.LstContrato = [];
-      // tslint:disable-next-line:forin
-      for (let i in res) {
-        this.LstContrato.push ( res[i] );
-      }
+      this.LstContrato=res
    });
+  }
+
+  SeleccionarTalonarioNumero(id){
+    this.ServiciosGenerales.SeleccionarTalonario(id).subscribe(res=>{
+      this.LstContrato=[res]
+      // console.log(this.LstContrato)
+    })
   }
 
   SerieSeleccionada(event) {
@@ -484,7 +510,7 @@ export class VentasComponent implements OnInit {
 
   ListarVendedor(nombre: string) {
     this.ServiciosGenerales.ListarVendedor(nombre).subscribe( res => {
-      console.log(res);
+      // console.log(res);
       this.LstVendedor=res;
     });
   }

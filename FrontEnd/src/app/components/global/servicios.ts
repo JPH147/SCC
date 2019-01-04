@@ -540,6 +540,22 @@ EditarModelo(
       }));
     }
 
+    SeleccionarTalonario(
+      prid: number
+    ): Observable <any> {
+      return this.http.get(this.url + 'talonario/readxId.php', {
+        params: new  HttpParams()
+        .set('prid', prid.toString())
+      })
+      .pipe(map(res => {
+          if (res['codigo'] === 0) {
+            return res['data'];
+          } else {
+              // console.log ('Error al importar los datos, revisar servicio');
+          }
+      }));
+    }
+
     RenameFile(
       nameimg: string,
       tipodoc: string,

@@ -329,7 +329,7 @@ Class Venta{
             $venta_item = array (
                 "id"=>$id,
                 "id_producto"=>$id_producto,
-                "descripcion"=>$descripcion,
+                "nombre"=>$descripcion,
                 "id_serie"=>$id_serie,
                 "serie"=>$serie,
                 "precio"=>$precio,

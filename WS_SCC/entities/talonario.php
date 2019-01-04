@@ -59,6 +59,25 @@ class Talonario{
 		return $talonario_list;
 	}
 
+    function readxId()
+    {
+        $query ="call sp_listartalonarioxId(?)";
+        
+        $result = $this->conn->prepare($query);
+        
+        $result->bindParam(1, $this->id);
+        
+        $result->execute();
+    
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+      
+        $this->id=$row['id'];
+        $this->serie=$row['serie'];
+        $this->numero=$row['numero'];
+        $this->salida=$row['salida'];
+        $this->estado=$row['estado'];
+    }
+
 }
 
 ?>

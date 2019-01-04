@@ -159,7 +159,7 @@
         </mat-card-title>
       </mat-card-header>
 
-      <mat-grid-list cols="7" rowHeight="70px">
+      <mat-grid-list cols="7" rowHeight="70px" *ngIf="!idventa">
 
         <mat-grid-tile>
           <image-upload #CargarDNI
@@ -253,6 +253,40 @@
         </mat-grid-tile>
 
       </mat-grid-list>
+
+      <mat-grid-list cols="7" rowHeight="70px" *ngIf="idventa">
+
+        <mat-grid-tile>
+          <button mat-raised-button color="primary" (click)="Abrir(dni)" [disabled]="!dni">DNI</button>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <button mat-raised-button color="primary" (click)="Abrir(cip)" [disabled]="!cip">CIP</button>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <button mat-raised-button color="primary" (click)="Abrir(contrato)" [disabled]="!contrato">Contrato</button>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <button mat-raised-button color="primary" (click)="Abrir(transaccion)" [disabled]="!transaccion">Transaccion</button>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <button mat-raised-button color="primary" (click)="Abrir(planilla)" [disabled]="!planilla">Planilla</button>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <button mat-raised-button color="primary" (click)="Abrir(letra)" [disabled]="!letra">Letra</button>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <button mat-raised-button color="primary" (click)="Abrir(autorizacion)" [disabled]="!autorizacion">Autorización</button>
+        </mat-grid-tile>
+
+      </mat-grid-list>
+
+
     </mat-card>
 
     <mat-card class="documentos">
@@ -263,7 +297,7 @@
         </mat-card-title>
       </mat-card-header>
 
-      <mat-grid-list cols="4" rowHeight="70px">
+      <mat-grid-list cols="4" rowHeight="70px" *ngIf="!idventa">
         <mat-grid-tile colspan="4">
           <button mat-mini-fab color="primary" (click)="AgregarProducto()" matTooltip="Agregar productos" type="button" [disabled]="!this.sucursal"><mat-icon>add</mat-icon></button>
         </mat-grid-tile>
@@ -303,7 +337,7 @@
                 </mat-form-field>
               </mat-grid-tile>
 
-              <button mat-mini-fab type="button" color="primary" class="boton" matTooltip="Eliminar producto" (click)="EliminarProductos(i,producto)" [disabled]="VentasForm['controls'].productos['controls'].length==1"><mat-icon>delete</mat-icon></button>
+              <button mat-mini-fab type="button" color="primary" class="boton" matTooltip="Eliminar producto" (click)="EliminarProductos(i,producto)" [disabled]="VentasForm['controls'].productos['controls'].length==1" *ngIf="!idventa"><mat-icon>delete</mat-icon></button>
 
             </mat-grid-list>
           </div>
