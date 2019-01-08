@@ -24,6 +24,7 @@ import { DetalleDocumentoAlmacenComponent } from './components/detalle-documento
 import { EvaluacionComponent } from './components/evaluacion/evaluacion.component';
 
 const appRoutes: Routes = [
+  {path: '', component: EvaluacionComponent}, //prueba
   {path: 'usuarios', component: UsuariosComponent},
   {path: 'usuarios', component: UsuariosComponent},
   {path: 'productos', component: ProductosComponent},

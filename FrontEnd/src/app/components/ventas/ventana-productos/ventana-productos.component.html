@@ -6,9 +6,9 @@
 
   <mat-card-content>
 
-    <div class="spinner-container" *ngIf="ListadoProductos.Cargando| async">
+<!--     <div class="spinner-container" *ngIf="ListadoProductos.Cargando| async">
       <mat-spinner></mat-spinner>
-    </div>
+    </div> -->
 
     <mat-table [dataSource]="ListadoProductos" matSort matSortActive="descripcion" matSortDirection="asc" matSortDisableClear>
 

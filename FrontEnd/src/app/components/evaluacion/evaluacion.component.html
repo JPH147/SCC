@@ -6,7 +6,7 @@
 
   <mat-card-content>
     
-    <mat-grid-list cols="4" rowHeight="70px">
+<!--     <mat-grid-list cols="4" rowHeight="70px">
       
       <mat-grid-tile>
         <mat-form-field>
@@ -36,22 +36,22 @@
         </mat-form-field>
       </mat-grid-tile> 
 
-    </mat-grid-list>
+    </mat-grid-list> -->
 
-    <mat-horizontal-stepper>
-      <mat-step>
+    <!-- <mat-horizontal-stepper> -->
+<!--       <mat-step>
         <ng-template matStepLabel>Verificar capacidad</ng-template>
         <app-evaluacion-capacidad (capacidad)="DefinirCapacidad($event)" [cliente]="cliente" [montos]="montos_anteriores"></app-evaluacion-capacidad>
-      </mat-step>
-      <mat-step>
-        <ng-template matStepLabel>Calcular cuotas</ng-template>
+      </mat-step> -->
+      <!-- <mat-step> -->
+        <!-- <ng-template matStepLabel>Calcular cuotas</ng-template> -->
         <app-evaluacion-cuotas [datos]="datos_prestamo" (informacion)="InformacionPrestamo($event)"></app-evaluacion-cuotas>
-      </mat-step>
-      <mat-step>
+      <!-- </mat-step> -->
+      <!-- <mat-step>
         <ng-template matStepLabel>Hacer venta</ng-template>
         <app-evaluacion-orden [informacion_venta]="informacion" (presupuesto_guardado)="NuevaEvaluacion($event)"></app-evaluacion-orden>
-      </mat-step>
-    </mat-horizontal-stepper>
+      </mat-step> -->
+    <!-- </mat-horizontal-stepper> -->
   </mat-card-content>
 
 </mat-card>
