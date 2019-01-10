@@ -271,7 +271,6 @@ export class VentasComponent implements OnInit {
 
   SeleccionarVentaxId(id_venta){
     this.Servicio.SeleccionarVenta(id_venta).subscribe(res=>{
-      console.log(res)
       this.ObtenerClientexId(res.id_cliente);
       this.VentasForm.get('sucursal').setValue(res.id_sucursal);
       this.VentasForm.get('tipodoc').setValue(res.documento);
@@ -323,6 +322,7 @@ export class VentasComponent implements OnInit {
   ObtenerClientexId(id_cliente) {
     this.ClienteServicio.Seleccionar(id_cliente).subscribe(res => {
       if (res) {
+        console.log(res)
         this.VentasForm.get('cliente').setValue(res);
         this.VentasForm.get('cargo').setValue(res.cargo);
         this.VentasForm.get('trabajo').setValue(res.trabajo);
@@ -591,6 +591,8 @@ export class VentasComponent implements OnInit {
 
     let random=(new Date()).getTime()
 
+    // console.log(formulario.value.cliente)
+
     return forkJoin(
       this.ServiciosGenerales.RenameFile(this.dni,'DNI',random.toString(),"venta"),
       this.ServiciosGenerales.RenameFile(this.cip,'CIP',random.toString(),"venta"),
@@ -604,7 +606,7 @@ export class VentasComponent implements OnInit {
         formulario.value.fechaventa,
         formulario.value.sucursal,
         formulario.value.contrato,
-        formulario.value.cliente.id,
+        formulario.getrawvalue().cliente.id,
         formulario.value.lugar,
         formulario.value.vendedor.id,
         1,
@@ -623,6 +625,7 @@ export class VentasComponent implements OnInit {
         resultado[6].mensaje,
         formulario.value.observaciones,
       ).subscribe(res=>{
+        console.log(res)
         formulario.value.productos.forEach((item)=>{
           this.Servicio.CrearVentaProductos(res['data'],item.id_serie,item.precio).subscribe()
         }),

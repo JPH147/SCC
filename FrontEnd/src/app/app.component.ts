@@ -15,7 +15,7 @@ export class AppComponent {
 
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnInit() {
-    this.estado=false; //Valor original=true
+    this.estado=true; //Valor original=true
     this.usuario = {
       nombre: 'Jean Pierre Rodriguez Farfan',
       rol: 'Administrador',

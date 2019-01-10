@@ -39,13 +39,13 @@
         <mat-checkbox color="primary" [(ngModel)]="pago_inicio_mes" (change)="CambioModoPago()">Iniciar el próximo mes</mat-checkbox>
       </mat-grid-tile>
 
-<!--       <mat-grid-tile>
+      <mat-grid-tile>
         <mat-radio-group (change)="CambioTipoVenta()" [(ngModel)]="tipo">
           <mat-radio-button color="primary" [value]=1>Crédito</mat-radio-button>
           &nbsp;&nbsp;
           <mat-radio-button color="primary" [value]=2>Equipo</mat-radio-button>
         </mat-radio-group>
-      </mat-grid-tile> -->
+      </mat-grid-tile>
 
     </mat-grid-list>
 
@@ -63,23 +63,23 @@
       </ng-container>
 
       <ng-container matColumnDef="monto">
-        <mat-header-cell *matHeaderCellDef>Monto de la cuota</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef>Monto</mat-header-cell>
         <mat-cell *matCellDef="let cuota">{{cuota.monto  | currency:'S/.'}}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="aporte">
-        <mat-header-cell *matHeaderCellDef>Aporte de socio</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef>Aporte</mat-header-cell>
         <mat-cell *matCellDef="let cuota">{{cuota.aporte  | currency:'S/.'}}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="fecha">
-        <mat-header-cell *matHeaderCellDef>Fecha de pago</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef>Fecha</mat-header-cell>
         <mat-cell *matCellDef="let cuota">{{cuota.fecha | date:'MM/yy'}}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="total">
-        <mat-header-cell *matHeaderCellDef>Total a pagar</mat-header-cell>
-        <mat-cell *matCellDef="let cuota">{{cuota.total  | currency:'S/.' }}</mat-cell>
+        <mat-header-cell *matHeaderCellDef>Total</mat-header-cell>
+        <mat-cell *matCellDef="let cuota">{{cuota.total  | currency:'S/.'}}</mat-cell>
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>

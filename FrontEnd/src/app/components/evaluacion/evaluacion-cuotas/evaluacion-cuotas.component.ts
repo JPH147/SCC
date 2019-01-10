@@ -82,11 +82,10 @@ export class EvaluacionCuotasComponent implements OnInit {
 
   CalcularPagos(){
 
-    this.prestamo=Math.round(this.capital*(1+this.cuotas*this.interes)*100)/100;
     this.cronograma=[];
     let fecha:Date;
 
-    let interes_mes_actual=(this.capital*this.interes)*(1-(moment(this.fecha_inicio).date()/moment(this.fecha_inicio).daysInMonth()));
+    let interes_mes_actual=Math.round((this.capital*this.interes)*(1-(moment(this.fecha_inicio).date()/moment(this.fecha_inicio).daysInMonth()))*100)/100;
 
     if (!this.pago_inicio_mes) {
       this.cronograma.push({
@@ -108,6 +107,9 @@ export class EvaluacionCuotasComponent implements OnInit {
         total: (this.prestamo/this.cuotas) + ((this.pago_inicio_mes  && i==1 ) ? interes_mes_actual : 0) + (this.tipo==1 ? this.aporte : 0)
       })
     }
+
+    this.prestamo=Math.round(this.capital*(1+this.cuotas*this.interes)*100)/100+(!this.pago_inicio_mes ? interes_mes_actual : 0);
+
     this.EvaluacionCuotas.CargarInformacion(this.cronograma);
     this.EvaluarMonto()
   }

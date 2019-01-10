@@ -17,9 +17,7 @@
         $clientedir = new ClienteDireccion($db);
         $data = json_decode(file_get_contents('php://input'), true);
 
-        if (($_POST["id_cliente"])!=null  && !empty(trim($_POST["drc_nombre"])) 
-        && ($_POST["pid_distrito"])!=null && ($_POST["drc_relevancia"])!=null
-        && !empty(trim($_POST["drc_observacion"])))
+        if (($_POST["id_cliente"])!=null)
         {
             $clientedir->id_cliente = trim($_POST["id_cliente"]);
             $clientedir->drc_nombre = trim($_POST["drc_nombre"]);

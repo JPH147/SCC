@@ -38,10 +38,10 @@ export class MenuComponent implements OnInit{
             nombre: "Ventas",
             path: "ventas"
           },
-          {
-            nombre: "Devoluciones",
-            path: "devoluciones"
-          },
+          // {
+          //   nombre: "Devoluciones",
+          //   path: "devoluciones"
+          // },
           {
             nombre: "Salida de ventas",
             path: "salidavendedores"
