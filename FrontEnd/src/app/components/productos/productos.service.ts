@@ -63,7 +63,7 @@ export class ProductoService {
         }
         return res;
       }else {
-        console.log('Error al importar los datos, revisar servicio');
+        console.log('No hay datos que mostrar');
         // console.log(tipo,marca,modelo,descripcion,Pminimo,Pmaximo,pagina,total_pagina,orden,Estado)
         return res;
       }
@@ -95,16 +95,18 @@ export class ProductoService {
   Agregar(
     modelo: number,
     descripcion: string,
-    precio: number
+    precio: number,
+    cuotas:number,
     ): Observable<any> {
-    // tslint:disable-next-line:prefer-const
-    // let params = 'id_modelo=' + modelo + '&prd_descripcion=' + descripcion + '&prd_precio=' + precio;
+
       let params = new HttpParams()
       .set('id_modelo', modelo.toString())
       .set('prd_descripcion', descripcion)
-      .set('prd_precio', precio.toString());
-    // tslint:disable-next-line:prefer-const
+      .set('prd_precio', precio.toString())
+      .set('prcuotas', cuotas.toString());
+
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    
     return this.http.post(this.url + 'producto/create.php', params, {headers: headers});
   }
 
@@ -117,7 +119,7 @@ export class ProductoService {
       if (res['codigo'] === 0) {
           return res['data'];
       }  else {
-          console.log('Error al importar los datos, revisar servicio');
+          console.log('No hay datos que mostrar');
       }
     }));
   }
@@ -144,16 +146,16 @@ export class ProductoService {
     id: number,
     modelo: number,
     descripcion: string,
-    precio: number
+    precio: number,
+    cuotas: number
     ): Observable<any> {
 
-    // let params = 'id_producto=' + id + '&id_modelo=' + modelo + '&prd_descripcion=' + descripcion + '&prd_precio=' + precio;
-
     let params = new HttpParams()
-           .set('id_producto', id.toString())
-           .set('id_modelo', modelo.toString())
-           .set('prd_descripcion', descripcion)
-           .set('prd_precio', precio.toString())
+      .set('id_producto', id.toString())
+      .set('id_modelo', modelo.toString())
+      .set('prd_descripcion', descripcion)
+      .set('prd_precio', precio.toString())
+      .set('prcuotas', cuotas.toString());
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 

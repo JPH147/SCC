@@ -27,7 +27,8 @@
             "modelo"=>$producto->id_modelo,
             "descripcion"=>$producto->prd_descripcion,
             "unidad_medida"=>$producto->und_nombre,
-            "precio"=>$producto->prd_precio
+            "precio"=>$producto->prd_precio,
+            "cuotas"=>$producto->cuotas,
 	    );
 
 	    if(trim($producto->prd_descripcion)!= ''){

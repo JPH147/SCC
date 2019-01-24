@@ -42,7 +42,7 @@ export class ClienteService {
         })
         return res;
       }else {
-        console.log('Error al importar los datos, revisar servicio');
+        console.log('No hay datos que mostrar');
         return res;
       }
     }));
@@ -60,7 +60,7 @@ export class ClienteService {
       if (res['codigo'] === 0) {
         return res['data'].clientes;
       } else {
-        console.log('Error al importar los datos, revisar servicio');
+        console.log('No hay datos que mostrar');
       }
     }));
   }
@@ -76,29 +76,25 @@ export class ClienteService {
 	  }
 
   Agregar(
-    id_subsede: number,
+    id_subsede:number,
+    cargo_estado: number,
     clt_codigo: string,
     clt_dni: string,
     clt_nombre: string,
     clt_cip: string,
     clt_email: string,
     clt_casilla: string,
+    id_distrito:number,
     clt_trabajo: string,
-    clt_cargo: string,
-    clt_calificacion_crediticia: string,
+    capacidad_pago: number,
+    maximo_descuento: number,
     clt_calificacion_personal: string,
     clt_aporte: number
-    ): Observable<any> {
-
-    // let params = 'id_subsede=' + id_subsede + '&clt_codigo=' + clt_codigo
-    // + '&clt_dni=' + clt_dni + '&clt_nombre=' + clt_nombre
-    // + '&clt_cip=' + clt_cip + '&clt_email=' + clt_email + '&clt_casilla=' + clt_casilla
-    // + '&clt_trabajo=' + clt_trabajo + '&clt_cargo=' + clt_cargo + '&clt_calificacion_crediticia=' + clt_calificacion_crediticia
-    // + '&clt_calificacion_personal=' + clt_calificacion_personal + '&clt_aporte=' + clt_aporte + '&clt_estado=1'
-    // + '&clt_fecharegistro=' + date;
+  ): Observable<any> {
 
     let params = new HttpParams()
-    .set('id_subsede', id_subsede.toString())
+    .set('prsubsede', id_subsede.toString())
+    .set('prcargoestado', cargo_estado.toString())
     .set('clt_codigo', clt_codigo)
     .set('clt_dni', clt_dni)
     .set('clt_nombre', clt_nombre)
@@ -106,8 +102,9 @@ export class ClienteService {
     .set('clt_email', clt_email)
     .set('clt_casilla', clt_casilla)
     .set('clt_trabajo', clt_trabajo)
-    .set('clt_cargo',clt_cargo)
-    .set('clt_calificacion_crediticia',clt_calificacion_crediticia)
+    .set('prdistrito', id_distrito.toString())
+    .set('prapacidadpago',capacidad_pago.toString())
+    .set('prmaximodescuento',maximo_descuento.toString())
     .set('clt_calificacion_personal',clt_calificacion_personal)
     .set('clt_aporte',clt_aporte.toString())
     .set('clt_fecharegistro', moment(new Date()).format("YYYY-MM-DD"))
@@ -119,6 +116,7 @@ export class ClienteService {
   Actualizar(
     idcliente: number,
     id_subsede: number,
+    cargo_estado: number,
     clt_codigo: string,
     clt_dni: string,
     clt_nombre: string,
@@ -126,8 +124,9 @@ export class ClienteService {
     clt_email: string,
     clt_casilla: string,
     clt_trabajo: string,
-    clt_cargo: string,
-    clt_calificacion_crediticia: string,
+    id_distrito: number,
+    capacidad_pago: number,
+    maximo_descuento: number,
     clt_calificacion_personal: string,
     clt_aporte: number
   ): Observable<any> {
@@ -135,6 +134,7 @@ export class ClienteService {
     let params = new HttpParams()
     .set('idcliente', idcliente.toString())
     .set('id_subsede', id_subsede.toString())
+    .set('prcargoestado', cargo_estado.toString())
     .set('clt_codigo', clt_codigo)
     .set('clt_dni', clt_dni)
     .set('clt_nombre', clt_nombre)
@@ -142,8 +142,9 @@ export class ClienteService {
     .set('clt_email', clt_email)
     .set('clt_casilla', clt_casilla)
     .set('clt_trabajo', clt_trabajo)
-    .set('clt_cargo',clt_cargo)
-    .set('clt_calificacion_crediticia',clt_calificacion_crediticia)
+    .set('prdistritotrabajo',id_distrito.toString())
+    .set('prcapacidadpago', capacidad_pago.toString())
+    .set('prmaximodescuento', maximo_descuento.toString())
     .set('clt_calificacion_personal',clt_calificacion_personal)
     .set('clt_aporte',clt_aporte.toString())
     
@@ -161,12 +162,9 @@ export class ClienteService {
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     return this.http.post(this.url + 'cliente/updateimage.php', params, {headers: headers}).pipe(map(res => {
-     console.log(res);
       return res;
     }));
   }
-
-
 
   Seleccionar(
     id: number
@@ -176,11 +174,131 @@ export class ClienteService {
     .pipe(map(res => {
       if (res['codigo'] === 0) {
           return res['data'];
-      }  else {
-          console.log('Error al importar los datos, revisar servicio');
+      } else {
+        // console.log(res)
+        console.log('No hay datos que mostrar');
       }
     }));
   }
+
+  /******************************************/
+
+  CrearCuenta(
+    cliente:number,
+    banco:number,
+    cuenta:string,
+    cci:string,
+  ){
+    let params = new HttpParams()
+    .set('prcliente', cliente.toString())
+    .set('prbanco', banco.toString())
+    .set('prcuenta', cuenta)
+    .set('prcci', cci)
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    return this.http.post(this.url + 'clientecuenta/create.php', params, {headers: headers});
+  }
+
+  ListarCuenta(
+    id_cliente:number
+  ){
+    return this.http.get(this.url + 'clientecuenta/read.php',{
+       params: new HttpParams()
+       .set('prcliente', id_cliente.toString())
+     }).pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res;
+      }else {
+        console.log('No hay datos que mostrar');
+        return res;
+      }
+    }));
+  }
+
+  EliminarCuenta(
+    id_cuenta:number
+  ){
+    let params = new HttpParams()
+    .set('prid', id_cuenta.toString())
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    return this.http.post(this.url + 'clientecuenta/delete.php', params, {headers: headers});
+  }
+
+  CrearObservacion(
+    cliente:number,
+    observacion:string,
+    fecha: Date
+  ){
+    let params = new HttpParams()
+    .set('prcliente', cliente.toString())
+    .set('probservacion', observacion)
+    .set('prfecha', moment(fecha).format("YYYY-MM-DD"))
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    return this.http.post(this.url + 'clienteobservacion/create.php', params, {headers: headers});
+  }
+
+  ListarObservacion(
+    id_observacion:number
+  ){
+    return this.http.get(this.url + 'clienteobservacion/read.php',{
+       params: new HttpParams()
+       .set('prcliente', id_observacion.toString())
+     }).pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res;
+      }else {
+        console.log('No hay datos que mostrar');
+        return res;
+      }
+    }));
+  }
+
+  EliminarObservacion(
+    id_observacion:number
+  ){
+    let params = new HttpParams()
+    .set('prid', id_observacion.toString())
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    return this.http.post(this.url + 'clienteobservacion/delete.php', params, {headers: headers});
+  }
+
+  /**********************************/
+
+  ListarCargo(
+    id_sede:number
+  ){
+    return this.http.get(this.url + 'cargo/read-cargo.php',{
+       params: new HttpParams()
+       .set('prsede', id_sede.toString())
+     }).pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res['data'];
+      }else {
+        console.log('No hay datos que mostrar');
+        return res;
+      }
+    }));
+  }
+
+  ListarCargoEstado(
+    id_cargo:number
+  ){
+    return this.http.get(this.url + 'cargo/read-cargo-estado.php',{
+       params: new HttpParams()
+       .set('prcargo', id_cargo.toString())
+     }).pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res['data'];
+      }else {
+        console.log('No hay datos que mostrar');
+        return res;
+      }
+    }));
+  }
+
 }
 
 export interface Cliente {
@@ -200,3 +318,4 @@ export interface Cliente {
   aporte: number;
   foto: string;
 }
+

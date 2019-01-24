@@ -19,15 +19,11 @@
         $cliente = new Cliente($db);
         $data = json_decode(file_get_contents('php://input'), true);
 
-        if (($_POST["id_subsede"])!=null  && !empty(trim($_POST["clt_codigo"])) && !empty(trim($_POST["clt_dni"]))
-            && !empty(trim($_POST["clt_nombre"]))
-            && !empty(trim($_POST["clt_cip"])) && !empty(trim($_POST["clt_email"])) && !empty(trim($_POST["clt_casilla"]))
-            && !empty(trim($_POST["clt_trabajo"])) && !empty(trim($_POST["clt_cargo"])) && !empty(trim($_POST["clt_calificacion_crediticia"]))
-            && !empty(trim($_POST["clt_calificacion_personal"])) && ($_POST["clt_aporte"])!=null && ($_POST["clt_estado"])!=null
-            && ($_POST["clt_fecharegistro"])!=null)
+        if ( !empty(trim($_POST["clt_dni"])))
         {
 
-            $cliente->id_subsede = trim($_POST["id_subsede"]);
+            $cliente->id_sub_sede = trim($_POST["prsubsede"]);
+            $cliente->id_cargo_estado = trim($_POST["prcargoestado"]);
             $cliente->clt_codigo = trim($_POST["clt_codigo"]);
             $cliente->clt_dni = trim($_POST["clt_dni"]);
             $cliente->clt_nombre = trim($_POST["clt_nombre"]);
@@ -35,12 +31,12 @@
             $cliente->clt_cip = trim($_POST["clt_cip"]);
             $cliente->clt_email = trim($_POST["clt_email"]);
             $cliente->clt_casilla = trim($_POST["clt_casilla"]);
+            $cliente->id_distrito = trim($_POST["prdistrito"]);
             $cliente->clt_trabajo = trim($_POST["clt_trabajo"]);
-            $cliente->clt_cargo = trim($_POST["clt_cargo"]);
-            $cliente->clt_calificacion_crediticia = trim($_POST["clt_calificacion_crediticia"]);
+            $cliente->capacidad_pago = trim($_POST["prapacidadpago"]);
+            $cliente->clt_maximo_descuento = trim($_POST["prmaximodescuento"]);
             $cliente->clt_calificacion_personal = trim($_POST["clt_calificacion_personal"]);
             $cliente->clt_aporte = trim($_POST["clt_aporte"]);
-            $cliente->clt_estado = trim($_POST["clt_estado"]);
             $cliente->clt_fecharegistro = trim($_POST["clt_fecharegistro"]);
 
             if($cliente->create())

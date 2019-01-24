@@ -22,9 +22,10 @@ import { HistorialMovimientosComponent } from './components/historial-movimiento
 import { DetalleProductosComponent } from './components/detalleproductos/detalleproductos.component';
 import { DetalleDocumentoAlmacenComponent } from './components/detalle-documento-almacen/detalle-documento-almacen.component';
 import { EvaluacionComponent } from './components/evaluacion/evaluacion.component';
+import { ReglasEvaluacionComponent } from './components/tablas-maestras/reglas-evaluacion/reglas-evaluacion.component';
 
 const appRoutes: Routes = [
-  //{path: '', component: EvaluacionComponent}, //prueba
+  // {path: '', component: EvaluacionComponent}, //prueba
   {path: 'usuarios', component: UsuariosComponent},
   {path: 'usuarios', component: UsuariosComponent},
   {path: 'productos', component: ProductosComponent},
@@ -48,7 +49,8 @@ const appRoutes: Routes = [
   {path: 'direcciones', component: DireccionesComponent},
   {path: 'ventas/nueva/:id', component: VentasComponent},
   {path: 'ventas/ver/:idventa', component: VentasComponent},
-  {path : 'detalleproductos', component: DetalleProductosComponent}
+  {path : 'detalleproductos', component: DetalleProductosComponent},
+  {path : 'evaluacion-reglas', component: ReglasEvaluacionComponent}
 ];
 
 export const appRoutingProvider: any[] = [];

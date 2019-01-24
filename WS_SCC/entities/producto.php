@@ -11,6 +11,7 @@ Class Producto{
     public $prd_descripcion;
     public $und_nombre;
     public $prd_precio;
+    public $cuotas;
 
     public $id_producto;
     public $id;
@@ -123,6 +124,7 @@ Class Producto{
         $this->prd_descripcion=$row['prd_descripcion'];
         $this->und_nombre=$row['und_nombre'];
         $this->prd_precio=$row['prd_precio'];
+        $this->cuotas=$row['prd_maximo_cuotas'];
     }
 
     /* Seleccionar producto por nombre */
@@ -182,17 +184,24 @@ Class Producto{
     /* Crear producto */
     function create()
     {
-        $query = "CALL sp_crearproducto(:id_modelo, :prd_descripcion, :prd_precio)";
+        $query = "CALL sp_crearproducto(
+            :id_modelo,
+            :prd_descripcion,
+            :prd_precio,
+            :prcuotas
+        )";
 
         $result = $this->conn->prepare($query);
 
         $result->bindParam(":id_modelo", $this->id_modelo);
         $result->bindParam(":prd_descripcion", $this->prd_descripcion);
         $result->bindParam(":prd_precio", $this->prd_precio);
+        $result->bindParam(":prcuotas", $this->cuotas);
 
         $this->id_modelo=htmlspecialchars(strip_tags($this->id_modelo));
         $this->prd_descripcion=htmlspecialchars(strip_tags($this->prd_descripcion));
         $this->prd_precio=htmlspecialchars(strip_tags($this->prd_precio));
+        $this->cuotas=htmlspecialchars(strip_tags($this->cuotas));
 
         if($result->execute())
         {
@@ -241,18 +250,27 @@ Class Producto{
     /* Actualizar producto */
     function update(){
         
-        $query = "call sp_actualizarproducto(:id_producto, :id_modelo, :descripcion, :prd_precio)";
+        $query = "call sp_actualizarproducto(
+            :id_producto,
+            :id_modelo,
+            :descripcion,
+            :prd_precio,
+            :prcuotas
+        )";
+
         $result = $this->conn->prepare($query);
 
         $result->bindParam(":id_producto", $this->id_producto);
         $result->bindParam(":id_modelo", $this->id_modelo);
         $result->bindParam(":descripcion", $this->prd_descripcion);
         $result->bindParam(":prd_precio", $this->prd_precio);
+        $result->bindParam(":prcuotas", $this->cuotas);
 
         $this->id_producto=htmlspecialchars(strip_tags($this->id_producto));
         $this->id_modelo=htmlspecialchars(strip_tags($this->id_modelo));
         $this->prd_descripcion=htmlspecialchars(strip_tags($this->prd_descripcion));
         $this->prd_precio=htmlspecialchars(strip_tags($this->prd_precio));
+        $this->cuotas=htmlspecialchars(strip_tags($this->cuotas));
 
         if($result->execute())
             {

@@ -22,7 +22,7 @@ export class ServiciosTipoPago{
 			if(res['codigo']===0){
 				return res['data'].tipopago;
 			}else{
-				console.log('Error al importar los datos, revisar servicio')
+				console.log('No hay datos que mostrar')
 			}
 		}))
     }

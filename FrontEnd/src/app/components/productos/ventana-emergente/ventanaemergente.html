@@ -8,6 +8,7 @@
   <form [formGroup]="ProductosForm" (ngSubmit)="Guardar(ProductosForm)">
     <mat-card-content>
       <mat-grid-list cols="2" rowHeight="70px">
+
         <mat-grid-tile>
           <mat-form-field>
             <mat-select placeholder='Tipo' formControlName="tipo" (selectionChange)="TipoSeleccionado($event)">
@@ -47,12 +48,18 @@
           </button>
         </mat-grid-tile>
 
-
         <mat-grid-tile>
-          <mat-form-field class="input-precio">
+          <mat-form-field>
             <input matInput placeholder="Precio de venta" formControlName="precio">
             <mat-error *ngIf="ProductosForm.get('precio').invalid">Debes escribir sólo números</mat-error>
             <span matPrefix>S/.&nbsp;</span>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field>
+            <input matInput placeholder="Máxima cantidad de cuotas para financiar" formControlName="cuotas">
+            <mat-error *ngIf="ProductosForm.get('precio').invalid">Debes escribir sólo números</mat-error>
           </mat-form-field>
         </mat-grid-tile>
 
@@ -61,11 +68,14 @@
             <input matInput placeholder="Descripción" formControlName="descripcion" #InputDescripcion>
           </mat-form-field>
         </mat-grid-tile>
+
       </mat-grid-list>
+
       <div *ngIf="ProductosExistentes" class="mensaje-error">
         Ya existe un producto con esa descripción. ID: {{Productos.id}}
       </div>
     </mat-card-content>
+
     <mat-card-actions>
       <mat-grid-list cols=1 rowHeight="40px">
         <mat-grid-tile>
@@ -73,5 +83,6 @@
         </mat-grid-tile>
       </mat-grid-list>
     </mat-card-actions>
+
   </form>
 </mat-card>

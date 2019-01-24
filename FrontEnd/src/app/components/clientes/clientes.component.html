@@ -107,6 +107,7 @@
           <button mat-icon-button matTooltip="Subir foto" color="primary" (click)="SubirImagen(cliente)"><mat-icon> add_a_photo </mat-icon></button>
           <button mat-icon-button matTooltip="Realizar venta" color="primary" [routerLink]="['/ventas/nueva', cliente.id]"><mat-icon> add_shopping_cart </mat-icon></button>
           <button mat-icon-button matTooltip="Ver ventas" color="primary"><mat-icon> attach_money</mat-icon></button>
+          <button mat-icon-button matTooltip="Agregar observaciones" color="primary" (click)="AgregarObservaciones(cliente)"><mat-icon> find_replace</mat-icon></button>
           <button mat-icon-button matTooltip="Editar" color="primary" (click)="Editar(cliente.id)"><mat-icon> edit </mat-icon></button>
 
           <button mat-icon-button matTooltip="Eliminar" color="primary" (click)="Eliminar(cliente)"><mat-icon> delete </mat-icon></button>

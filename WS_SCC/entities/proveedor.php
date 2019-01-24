@@ -172,4 +172,4 @@ function update()
 			$this->prv_representante_legal=$row['representante'];
 			$this->prv_observacion=$row['observacion'];
 	}
-	}
+}

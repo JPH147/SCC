@@ -65,6 +65,10 @@ export class VentanaEmergenteProductos {
         Validators.required,
         Validators.pattern ('[0-9- ]+')
       ]],
+      'cuotas': [null, [
+        Validators.required,
+        Validators.pattern ('[0-9- ]+')
+      ]],
       'descripcion': [null, [
         Validators.required,
       ]],
@@ -90,6 +94,7 @@ export class VentanaEmergenteProductos {
       this.ProductosForm.get('modelo').setValue(this.data.modelo);
       this.ProductosForm.get('descripcion').setValue(this.data.descripcion);
       this.ProductosForm.get('precio').setValue(this.data.precio);
+      this.ProductosForm.get('cuotas').setValue(this.data.cuotas);
       // Se habilitan los formularios
       this.ProductosForm.controls['marca'].enable();
       this.ProductosForm.controls['modelo'].enable();
@@ -173,11 +178,11 @@ export class VentanaEmergenteProductos {
   Guardar(formulario) {
     if (this.data) {
       // tslint:disable-next-line:max-line-length
-      this.ProductoServicios.Actualizar(this.data.id, formulario.value.modelo, formulario.value.descripcion, formulario.value.precio).subscribe()
+      this.ProductoServicios.Actualizar(this.data.id, formulario.value.modelo, formulario.value.descripcion, formulario.value.precio, formulario.value.cuotas).subscribe()
     }
 
     if (!this.data) {
-      this.ProductoServicios.Agregar(formulario.value.modelo, formulario.value.descripcion, formulario.value.precio).subscribe();
+      this.ProductoServicios.Agregar(formulario.value.modelo, formulario.value.descripcion, formulario.value.precio, formulario.value.cuotas).subscribe();
     }
       this.ProductosForm.reset();
       this.ventana.close();

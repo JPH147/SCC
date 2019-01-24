@@ -20,7 +20,7 @@ export class EvaluacionComponent implements OnInit {
   public datos_prestamo = new BehaviorSubject<any>({
     interes: 0.15,
     aporte: 20,
-    capacidad:500
+    capacidad:270
   })
 
   public interes:number;
@@ -72,7 +72,6 @@ export class EvaluacionComponent implements OnInit {
         this.BuscarCliente();
       })
     ).subscribe()
-
   }
 
   DisplayDNI(cliente): string | undefined {
@@ -157,7 +156,7 @@ export class EvaluacionComponent implements OnInit {
     this.datos_prestamo.next({
       interes:this.interes,
       aporte:this.aporte,
-      capacidad:500
+      capacidad:270
     });
     this.montos_anteriores.next(null)
   }

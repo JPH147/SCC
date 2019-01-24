@@ -10,3 +10,7 @@ mat-card.principal{
 .mat-column-numero{
   max-width: 6%;
 }
+
+.mat-form-field{
+	width: 80%
+}

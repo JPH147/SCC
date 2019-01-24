@@ -23,19 +23,20 @@
             $producto->id_modelo = trim($_POST["id_modelo"]);
             $producto->prd_descripcion = trim($_POST["prd_descripcion"]);
             $producto->prd_precio = trim($_POST["prd_precio"]);
+            $producto->cuotas = trim($_POST["prcuotas"]);
 
 	    	if($producto->update())
 	        {
-	                print_json("0000", "Se actualizó el producto satisfactoriamente.", "");
+	           print_json("0000", "Se actualizó el producto satisfactoriamente.", "");
 	        }
 	        else
 	        {
-	                print_json("9999", "Ocurrió un error al actualizar el producto.", "");
+	           print_json("9999", "Ocurrió un error al actualizar el producto.", "");
 	        }
 	    }
     	else
 	    {
-	            print_json("9999", "Los campos no pueden estar vacíos.", "");
+	       print_json("9999", "Los campos no pueden estar vacíos.", "");
 	    }
     }
     catch(Exception $exception)

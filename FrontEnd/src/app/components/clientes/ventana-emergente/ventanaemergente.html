@@ -7,101 +7,187 @@
 
     <form [formGroup]="ClientesForm" (ngSubmit)="Guardar(ClientesForm)">
       <mat-card-content>
-        <mat-grid-list cols="4" rowHeight="70px">
-          <mat-grid-tile>
-            <mat-form-field class="input-ventana"> 
-              <mat-select placeholder='Selecciona Institucion' formControlName="institucion" (selectionChange)="InstitucionSeleccionada($event)">
-                <mat-option *ngFor="let institucion of Institucion" [value] = "institucion.id"> {{institucion.nombre}} </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </mat-grid-tile>
 
-          <mat-grid-tile>
-            <mat-form-field class="input-ventana">
-              <mat-select placeholder='Selecciona Sede' formControlName="sede" (selectionChange)="SedeSeleccionada($event)">
-                <mat-option *ngFor="let sede of Sede" [value] = "sede.id"> {{sede.nombre}} </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </mat-grid-tile>
+        <ng-container>
+          <mat-card-subtitle class="subtitulo">
+            Datos generales
+          </mat-card-subtitle>
 
-          <mat-grid-tile>
-            <mat-form-field class="input-ventana">
-              <mat-select placeholder='Selecciona Subsede' formControlName="subsede" >
-                <mat-option *ngFor="let subsede of Subsede" [value] = "subsede.id"> {{subsede.nombre}} </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </mat-grid-tile>
+          <mat-grid-list cols="4" rowHeight="70px">
 
-          <mat-grid-tile>
-            <mat-form-field class="input-ventana">
-              <input matInput placeholder="Ingresa Código del Cliente" formControlName="codigo">
-            </mat-form-field>
-          </mat-grid-tile>
+            <mat-grid-tile>
+              <mat-form-field class="input-ventana">
+                <input matInput placeholder="Código" formControlName="codigo">
+              </mat-form-field>
+            </mat-grid-tile>
 
-          <mat-grid-tile>
-            <mat-form-field class="input-ventana" hintLabel=" 8 Digitos">
-              <input matInput placeholder="Ingresa DNI"  formControlName="dni" maxlength="8" >
-              <mat-error *ngIf="ClientesForm.get('dni').invalid">Debes escribir sólo números</mat-error>
-            </mat-form-field>
-          </mat-grid-tile>
+            <mat-grid-tile>
+              <mat-form-field class="input-ventana">
+                <input matInput placeholder="DNI"  formControlName="dni" maxlength="8" >
+                <mat-error *ngIf="ClientesForm.get('dni').invalid">Debes escribir sólo números</mat-error>
+              </mat-form-field>
+            </mat-grid-tile>
 
-          <mat-grid-tile>
-            <mat-form-field class="input-ventana" hintLabel="Ingresar Apellidos coma(,) Nombre ">
-              <input matInput placeholder="Ingresa Nombre del Cliente" formControlName="nombre"  >
-            </mat-form-field>
-          </mat-grid-tile>
-      
-          <mat-grid-tile>
-            <mat-form-field class="input-ventana">
-              <input matInput placeholder="Ingresa CIP del Cliente" formControlName="cip">
-            </mat-form-field>
-          </mat-grid-tile>
+            <mat-grid-tile>
+              <mat-form-field class="input-ventana">
+                <input matInput placeholder="Nombre" formControlName="nombre"  >
+              </mat-form-field>
+            </mat-grid-tile>
 
-          <mat-grid-tile>
-            <mat-form-field class="input-ventana">
-              <input matInput placeholder="Ingresa Email del Cliente" formControlName="email" email="true">
-              <mat-error>Ingrese Email válido</mat-error>
-            </mat-form-field>
-          </mat-grid-tile>
+            <mat-grid-tile>
+              <mat-form-field class="input-ventana">
+                <input matInput placeholder="Email" formControlName="email" email="true">
+                <mat-error>Debe ser un email válido</mat-error>
+              </mat-form-field>
+            </mat-grid-tile>
 
-          <mat-grid-tile>
-            <mat-form-field class="input-ventana">
-              <input matInput placeholder="Ingresa Casilla" formControlName="casilla">
-            </mat-form-field>
-          </mat-grid-tile>
+            <mat-grid-tile>
+              <mat-form-field class="input-ventana">
+                <input matInput placeholder="Casilla" formControlName="casilla">
+              </mat-form-field>
+            </mat-grid-tile>
 
-          <mat-grid-tile>
-            <mat-form-field class="input-ventana">
-              <input matInput placeholder="Ingresa Dirección de trabajo" formControlName="trabajo">
-            </mat-form-field>
-          </mat-grid-tile>
+          </mat-grid-list>
+        </ng-container>
 
-          <mat-grid-tile>
-            <mat-form-field class="input-ventana">
-              <input matInput placeholder="Ingresa Cargo" formControlName="cargo">
-            </mat-form-field>
-          </mat-grid-tile>
+        <ng-container>
+          <mat-card-subtitle class="subtitulo">
+            Institución de trabajo
+          </mat-card-subtitle>
 
-          <mat-grid-tile>
-            <mat-form-field class="input-ventana">
-              <input matInput placeholder="Ingresa Calificación Crediticia" formControlName="calificacioncrediticia">
-            </mat-form-field>
-          </mat-grid-tile>
+          <mat-grid-list cols="4" rowHeight="70px">
 
-          <mat-grid-tile>
-            <mat-form-field class="input-ventana">
-              <input matInput placeholder="Ingresa Calificación Personal" formControlName="calificacionpersonal">
-            </mat-form-field>
-          </mat-grid-tile>
+            <mat-grid-tile>
+              <mat-form-field class="input-ventana"> 
+                <mat-select placeholder='Institucion' formControlName="institucion" (selectionChange)="InstitucionSeleccionada($event)">
+                  <mat-option *ngFor="let institucion of Institucion" [value] = "institucion.id"> {{institucion.nombre}} </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </mat-grid-tile>
 
-          <mat-grid-tile>
-            <mat-form-field class="input-ventana">
-              <input matInput placeholder="Ingresa Aporte"  formControlName="aporte">
-              <mat-error *ngIf="ClientesForm.get('aporte').invalid">Debes escribir sólo números</mat-error>
-              <span matPrefix>S/ </span>
-            </mat-form-field>
-          </mat-grid-tile>
-        </mat-grid-list>
+            <mat-grid-tile>
+              <mat-form-field class="input-ventana">
+                <mat-select placeholder='Sede' formControlName="sede" (selectionChange)="SedeSeleccionada($event)">
+                  <mat-option *ngFor="let sede of Sede" [value] = "sede.id"> {{sede.nombre}} </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+              <mat-form-field class="input-ventana">
+                <mat-select placeholder='Subsede' formControlName="subsede" >
+                  <mat-option *ngFor="let subsede of Subsede" [value] = "subsede.id"> {{subsede.nombre}} </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+              <mat-form-field class="input-ventana">
+                <mat-select placeholder='Cargo' formControlName="cargo" (selectionChange)="CargoSeleccionado($event)">
+                  <mat-option *ngFor="let cargo of Cargos" [value] = "cargo.id"> {{cargo.nombre}} </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+              <mat-form-field class="input-ventana">
+                <mat-select placeholder='Estado' formControlName="cargo_estado" >
+                  <mat-option *ngFor="let estado of Estados" [value] = "estado.id"> {{estado.nombre}} </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+              <mat-form-field class="input-ventana">
+                <input matInput placeholder="CIP" formControlName="cip">
+              </mat-form-field>
+            </mat-grid-tile>
+
+          </mat-grid-list>
+        </ng-container>
+
+        <ng-container>
+          <mat-card-subtitle class="subtitulo">
+            Datos del centro de trabajo
+          </mat-card-subtitle>
+
+          <mat-grid-list cols=4 rowHeight="70px">
+
+            <mat-grid-tile>
+              <mat-form-field class="input-ventana">
+                <mat-select placeholder='Departamento' formControlName="departamento" (selectionChange)="DepartamentoSeleccionado($event)" >
+                  <mat-option *ngFor="let departamento of Departamentos" [value]="departamento.nombre">
+                    {{departamento.nombre}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+              <mat-form-field class="input-ventana">
+                <mat-select placeholder='Provincia' formControlName="provincia" (selectionChange)="ProvinciaSeleccionada($event)">
+                  <mat-option *ngFor="let provincia of Provincias" [value]="provincia.nombre">
+                    {{provincia.nombre}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+              <mat-form-field class="input-ventana">
+                <mat-select placeholder='Distrito' formControlName="distrito" >
+                  <mat-option *ngFor="let distrito of Distritos" [value]="distrito.id">
+                    {{distrito.nombre}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+              <mat-form-field class="input-ventana">
+                <input matInput placeholder="Dirección" formControlName="trabajo">
+              </mat-form-field>
+            </mat-grid-tile>
+
+          </mat-grid-list>
+        </ng-container>
+
+        <ng-container>
+          <mat-card-subtitle class="subtitulo">
+            Información complementaria
+          </mat-card-subtitle>
+
+          <mat-grid-list cols="4" rowHeight="70px">
+
+            <mat-grid-tile>
+              <mat-form-field class="input-ventana">
+                <input matInput placeholder="Capacidad de pago" formControlName="capacidad_pago">
+                <span matPrefix>S/. &nbsp; </span>
+              </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+              <mat-form-field class="input-ventana">
+                <input matInput placeholder="Descuento máximo" formControlName="descuento_maximo">
+                <span matPrefix>S/. &nbsp; </span>
+              </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+              <mat-form-field class="input-ventana">
+                <input matInput placeholder="Calificación personal"  formControlName="calificacion_personal">
+              </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+              <mat-form-field class="input-ventana">
+                <input matInput placeholder="Aporte" formControlName="aporte">
+              </mat-form-field>
+            </mat-grid-tile>
+
+          </mat-grid-list>
+        </ng-container>
+
       </mat-card-content>
 
       <mat-card-actions>

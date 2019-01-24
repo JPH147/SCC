@@ -1,0 +1,50 @@
+<mat-card>
+   <!-- Encabezado -->
+  <mat-card-title>
+    <div id = "tituloProd"> Reglas para evaluación </div>
+  </mat-card-title>
+
+  <mat-card-content>
+
+    <div class = "spinner-container" *ngIf = "ListadoReglas.Cargando| async">
+      <mat-spinner></mat-spinner>
+    </div>
+
+    <mat-table [dataSource]="ListadoReglas">
+
+      <ng-container matColumnDef="numero">
+        <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+        <mat-cell *matCellDef="let regla"> {{ regla.numero }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="tipo">
+        <mat-header-cell *matHeaderCellDef> Tipo </mat-header-cell>
+        <mat-cell *matCellDef="let regla"> {{ regla.tipo }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="desde">
+        <mat-header-cell *matHeaderCellDef> Día de inicio </mat-header-cell>
+        <mat-cell *matCellDef="let regla"> {{ regla.desde }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="hasta">
+        <mat-header-cell *matHeaderCellDef> Día de fin </mat-header-cell>
+        <mat-cell *matCellDef="let regla"> {{ regla.hasta }} </mat-cell>
+      </ng-container>
+
+<!--       <ng-container matColumnDef="opciones">
+        <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
+        <mat-cell *matCellDef="let regla">
+          <button mat-icon-button matTooltip="Ver últimas compras" color="primary" (click)="VerDetalle(regla)"><mat-icon> visibility </mat-icon></button>
+          <button mat-icon-button matTooltip="Editar información" color="primary" (click)="Editar(regla.id)"><mat-icon> edit </mat-icon></button>
+          <button mat-icon-button matTooltip="Eliminar" color="primary" (click)="Eliminar(regla)"><mat-icon> delete </mat-icon></button>
+        </mat-cell>
+      </ng-container> -->
+
+      <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: Columnas;"></mat-row>
+    </mat-table>
+
+  </mat-card-content>
+
+</mat-card>

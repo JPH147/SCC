@@ -301,7 +301,7 @@ export class VentasComponent implements OnInit {
         this.VentasForm['controls'].productos['controls'][i].get('precio').setValue(res.productos.productos[i].precio);
       }
 
-      this.VentasForm.disable()
+      // this.VentasForm.disable()
 
       res.dni_pdf!="" ? this.dni=URLIMAGENES.urlimages+'venta/'+res.dni_pdf : null;
       res.cip_pdf!="" ? this.cip=URLIMAGENES.urlimages+'venta/'+res.cip_pdf : null;
@@ -322,13 +322,16 @@ export class VentasComponent implements OnInit {
   ObtenerClientexId(id_cliente) {
     this.ClienteServicio.Seleccionar(id_cliente).subscribe(res => {
       if (res) {
-        console.log(res)
+        // console.log(res)
         this.VentasForm.get('cliente').setValue(res);
         this.VentasForm.get('cargo').setValue(res.cargo);
         this.VentasForm.get('trabajo').setValue(res.trabajo);
-        this.VentasForm.get('cliente').disable();
-        this.VentasForm.get('cargo').disable();
-        this.VentasForm.get('trabajo').disable();
+
+        if (!this.idventa) {
+          this.VentasForm.get('cliente').disable();
+          this.VentasForm.get('cargo').disable();
+          this.VentasForm.get('trabajo').disable();
+        }
 
         this.idcliente =res.id;
         this.ObtenerDireccion();
@@ -468,7 +471,9 @@ export class VentasComponent implements OnInit {
           if (res) {
             this.VentasForm.get('domicilio').setValue(res[0].direccioncompleta);
           }
-          this.VentasForm.get('domicilio').disable();
+          if (!this.idventa) {
+            this.VentasForm.get('domicilio').disable();
+          }
         });
     }
   }
@@ -479,7 +484,9 @@ export class VentasComponent implements OnInit {
           if (res) {
             this.VentasForm.get('telefono').setValue(res[0].tlf_numero);
           }
-          this.VentasForm.get('telefono').disable();
+          if (!this.idventa) {
+            this.VentasForm.get('telefono').disable();
+          }
         });
     }
   }

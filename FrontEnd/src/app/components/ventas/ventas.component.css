@@ -16,6 +16,10 @@ mat-card{
   padding: 0px
 }
 
+.img-ul-drag-box-msg{
+  display: none !important;
+}
+
 .tituloProd {
   padding: 15px;
   font-size: 30px;
@@ -42,4 +46,13 @@ mat-card{
 
 .columnas-4{
   width: 95%
+}
+
+.readonly-wrapper {
+    cursor: not-allowed !important;
+    color: red !important;
+}
+
+.readonly-wrapper .readonly-block {
+    pointer-events: none !important;
 }

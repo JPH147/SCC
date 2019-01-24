@@ -22,6 +22,7 @@
             $producto->id_modelo = trim($_POST["id_modelo"]);
             $producto->prd_descripcion = trim($_POST["prd_descripcion"]);
             $producto->prd_precio = trim($_POST["prd_precio"]);
+            $producto->cuotas = trim($_POST["prcuotas"]);
 
             if($producto->create())
             {

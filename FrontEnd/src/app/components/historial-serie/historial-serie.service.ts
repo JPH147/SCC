@@ -27,7 +27,7 @@ export class  HistorialSerieService {
         // console.log(res);
         return res;
       } else {
-        console.log('Error al importar los datos, revisar servicio');
+        console.log('No hay datos que mostrar');
         return res;
     }
     }));

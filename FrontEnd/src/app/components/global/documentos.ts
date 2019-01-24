@@ -31,7 +31,7 @@ export class ServiciosDocumentos{
 			if(res['codigo']===0){
 				return res=res['data']
 			}else{
-				console.log('Error al importar los datos, revisar servicio')
+				console.log('No hay datos que mostrar')
 			}
 		}))
 	}

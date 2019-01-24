@@ -1,0 +1,15 @@
+.card{
+   padding: 0px;
+   overflow: hidden;
+}
+
+ .boton{
+  float: right;
+  z-index: 2;
+  margin-right: 20px;
+  margin-top: 20px;
+}
+
+.input-observacion{
+	width: 80%
+}

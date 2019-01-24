@@ -40,29 +40,25 @@ export class FileUpload {
 
      // onUploadFinished(file: FileHolder) {
       
-        SubirFoto() {
-        if ( this.data) {
-        //console.log(file);
+    SubirFoto() {
+      if (this.file) {
         this.Servicios.RenameFile(this.file.serverResponse.response._body, 'CLIENTE', this.data.dni+ "-"+Math.floor(Math.random() * 100000),"cliente").subscribe( res => {
-         // this.Servicios.RenameFile(file.serverResponse.response._body, 'FOTO', this.data.dni,"cliente").subscribe( res => {
-          //console.log(res);
           if (res) {
               this.ClienteServicios.ActualizarFoto(this.data.id, res.mensaje).subscribe( res2 => {
-              //  console.log(res2);
                 this.ventana.close()
               }
             );
             }
         });
-        }
-      //  console.log(file.serverResponse.response._body);
-     //   console.log(this.data);
-        }
+      }else{
+        this.ventana.close()
+      }
+    }
 
-        FotoCargada(file: FileHolder){
-          this.carga_finalizada=true;
-          this.file=file;
-        }
+    FotoCargada(file: FileHolder){
+      this.carga_finalizada=true;
+      this.file=file;
+    }
     
 
 

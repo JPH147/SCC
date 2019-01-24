@@ -107,6 +107,10 @@ export class MenuComponent implements OnInit{
           {
             nombre: "Instituciones",
             path: ""
+          },
+          {
+            nombre: "Reglas de evaluación",
+            path: "evaluacion-reglas"
           }
         ]
       },

@@ -25,6 +25,8 @@
 				"institucion"=>$cliente->id_institucion,
 				"sede"=>$cliente->id_sede,
                 "subsede"=>$cliente->id_subsede,
+                "id_cargo"=>$cliente->id_cargo,
+                "id_cargo_estado"=>$cliente->id_cargo_estado,
                 "codigo"=>$cliente->clt_codigo,
                 "dni"=>$cliente->clt_dni,
                 "nombre"=>$cliente->clt_nombre,
@@ -33,8 +35,13 @@
                 "email"=>$cliente->clt_email,
                 "casilla"=>$cliente->clt_casilla,
                 "trabajo"=>$cliente->clt_trabajo,
-                "cargo"=>$cliente->clt_cargo,
-                "calificacion_crediticia"=>$cliente->clt_calificacion_crediticia,
+                "id_distrito_trabajo"=>$cliente->id_distrito_trabajo,
+                "id_provincia"=>$cliente->id_provincia,
+                "provincia"=>$cliente->provincia,
+                "departamento"=>$cliente->departamento,
+                "id_departamento"=>$cliente->id_departamento,
+                "capacidad_pago"=>$cliente->capacidad_pago,
+                "maximo_descuento"=>$cliente->clt_maximo_descuento,
                 "calificacion_personal"=>$cliente->clt_calificacion_personal,
                 "aporte"=>$cliente->clt_aporte,
                 "fecharegistro"=>$cliente->clt_fecharegistro
@@ -45,7 +52,6 @@
 	    }
 	    else{
 	        print_json("0001", "No se encuentra producto registrado con el id " . $cliente->idcliente , null);
-
 	    }
 
 	}

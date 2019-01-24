@@ -109,6 +109,8 @@ import { EvaluacionCuotasComponent } from './components/evaluacion/evaluacion-cu
 import { AgregarProductoComponent } from './components/evaluacion/agregar-producto/agregar-producto.component';
 import { EvaluacionOrdenComponent } from './components/evaluacion/evaluacion-orden/evaluacion-orden.component';
 import { VentanaProductosComponent } from './components/ventas/ventana-productos/ventana-productos.component';
+import { ReglasEvaluacionComponent } from './components/tablas-maestras/reglas-evaluacion/reglas-evaluacion.component';
+import { VentanaObservacionesComponent } from './components/clientes/ventana-observaciones/ventana-observaciones.component';
 
 @NgModule({
   imports: [
@@ -133,7 +135,6 @@ import { VentanaProductosComponent } from './components/ventas/ventana-productos
     MatInputModule,
     MatListModule,
     MatMenuModule,
-    MatNativeDateModule,
     MatPaginatorModule,
     MatProgressBarModule,
     MatProgressSpinnerModule,
@@ -223,7 +224,9 @@ import { VentanaProductosComponent } from './components/ventas/ventana-productos
     EvaluacionCuotasComponent,
     AgregarProductoComponent,
     EvaluacionOrdenComponent,
-    VentanaProductosComponent
+    VentanaProductosComponent,
+    ReglasEvaluacionComponent,
+    VentanaObservacionesComponent
    ],
   entryComponents: [
     AppComponent,
@@ -258,7 +261,8 @@ import { VentanaProductosComponent } from './components/ventas/ventana-productos
     VentanaEmergenteModelo,
     VentanaEmergenteMarca,
     AgregarProductoComponent,
-    VentanaProductosComponent
+    VentanaProductosComponent,
+    VentanaObservacionesComponent
   ],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider, {provide: MAT_DATE_LOCALE, useValue: 'en-GB'}]

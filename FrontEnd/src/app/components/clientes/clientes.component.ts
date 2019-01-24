@@ -10,6 +10,8 @@ import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
 import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
 import { FileUpload } from './file-upload/fileupload';
 import { VentanaEmergenteContacto} from './ventana-emergentecontacto/ventanaemergentecontacto';
+import { VentanaObservacionesComponent} from './ventana-observaciones/ventana-observaciones.component';
+
 @Component({
   selector: 'app-clientes',
   templateUrl: './clientes.component.html',
@@ -115,16 +117,12 @@ export class ClientesComponent implements OnInit {
      // tslint:disable-next-line:no-shadowed-variable
      this.Servicio.Eliminar(cliente.id).subscribe(res => {
        this.CargarData();
-       this.snackBar.open('Se eliminó el cliente satisfactoriamente.', '', {
-        duration: 2500, verticalPosition: 'bottom'
-      });
      });
     }
   });
  }
 
-
- Editar(id) {
+Editar(id) {
   this.Servicio.Seleccionar(id).subscribe(res => {
     // tslint:disable-next-line:prefer-const
     let VentanaClientes = this.DialogoClientes.open(VentanaEmergenteClientes, {
@@ -144,6 +142,14 @@ AgregarDatoContacto(cliente) {
   // console.log(cliente);
   let VentanaContacto = this.DialogoContacto.open(VentanaEmergenteContacto, {
     width: '1200px',
+    data: cliente
+  });
+}
+
+AgregarObservaciones(cliente){
+
+  let VentanaContacto = this.DialogoContacto.open(VentanaObservacionesComponent, {
+    width: '800px',
     data: cliente
   });
 }

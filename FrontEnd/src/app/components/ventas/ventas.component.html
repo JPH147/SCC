@@ -9,7 +9,7 @@
 
       <mat-grid-tile colspan="2">
         <mat-form-field class="columnas-2">
-          <input #Cliente placeholder="Cliente" matInput [matAutocomplete]="auto2" formControlName= cliente>
+          <input #Cliente placeholder="Cliente" matInput [matAutocomplete]="auto2" formControlName="cliente" [readonly]="idventa">
           <mat-autocomplete #auto2="matAutocomplete" [displayWith] = "displayCliente" (optionSelected)="ClienteSeleccionado($event)">
             <mat-option *ngFor="let cliente of LstCliente" [value]="cliente">
               {{cliente.nombre}}
@@ -20,25 +20,25 @@
 
       <mat-grid-tile>
         <mat-form-field class="columnas-1">
-           <input matInput placeholder="Cargo" formControlName="cargo" >
+           <input matInput placeholder="Cargo" formControlName="cargo" [readonly]="idventa">
         </mat-form-field>
       </mat-grid-tile>
 
       <mat-grid-tile>
         <mat-form-field class="columnas-1">
-           <input matInput placeholder="Centro de Trabajo" formControlName="trabajo">
+           <input matInput placeholder="Centro de Trabajo" formControlName="trabajo" [readonly]="idventa">
         </mat-form-field>
       </mat-grid-tile>
 
       <mat-grid-tile colspan="2">
         <mat-form-field class="columnas-2">
-           <input matInput placeholder="Domicilio" formControlName="domicilio">
+           <input matInput placeholder="Domicilio" formControlName="domicilio" [readonly]="idventa">
         </mat-form-field>
       </mat-grid-tile>
 
       <mat-grid-tile>
         <mat-form-field class="columnas-1">
-          <input matInput placeholder="Teléfono" formControlName="telefono">
+          <input matInput placeholder="Teléfono" formControlName="telefono" [readonly]="idventa">
         </mat-form-field>
       </mat-grid-tile>
 
@@ -60,7 +60,7 @@
 
       <mat-grid-tile>
         <mat-form-field class="columnas-1">
-          <mat-select placeholder='Contrato' formControlName="contrato">
+          <mat-select placeholder='Contrato' formControlName="contrato" [disabled]="idventa">
             <mat-option *ngFor="let contrato of LstContrato" [value] = "contrato.id"> {{contrato.numero}} </mat-option>
           </mat-select>
        </mat-form-field>
@@ -68,7 +68,7 @@
 
       <mat-grid-tile>
         <mat-form-field class="columnas-1">
-          <mat-select placeholder='Tipo de Documento' formControlName="tipodoc" >
+          <mat-select placeholder='Tipo de Documento' formControlName="tipodoc">
             <mat-option [value] = 1> Factura </mat-option>
             <mat-option [value] = 6> Boleta </mat-option>
           </mat-select>
@@ -77,13 +77,13 @@
 
       <mat-grid-tile>
         <mat-form-field class="columnas-1">
-          <input matInput placeholder="Lugar de Venta" formControlName="lugar">
+          <input matInput placeholder="Lugar de Venta" formControlName="lugar" [readonly]="idventa">
         </mat-form-field>
       </mat-grid-tile> 
 
       <mat-grid-tile colspan=2>
         <mat-form-field class="columnas-2">
-          <input placeholder="Vendedor" matInput [matAutocomplete]="auto" formControlName= vendedor #Vendedor>
+          <input placeholder="Vendedor" matInput [matAutocomplete]="auto" formControlName= vendedor #Vendedor [readonly]="idventa">
           <mat-autocomplete #auto="matAutocomplete" [displayWith] = "displayVendedor">
             <mat-option *ngFor="let vendedor of LstVendedor " [value]="vendedor">
               {{vendedor.nombre}}
@@ -94,7 +94,7 @@
 
       <mat-grid-tile>
         <mat-form-field class="columnas-1">
-           <input matInput [matDatepicker]="picker" placeholder="Fecha de venta" formControlName="fechaventa">
+           <input matInput [matDatepicker]="picker" placeholder="Fecha de venta" formControlName="fechaventa" [readonly]="idventa">
            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
            <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
@@ -118,7 +118,7 @@
   
       <mat-grid-tile>
         <mat-form-field class="columnas-1">
-          <input matInput placeholder="Monto total"  formControlName="montototal" #InputMontoTotal>
+          <input matInput placeholder="Monto total"  formControlName="montototal" #InputMontoTotal [readonly]="idventa">
           <mat-error>Solo debe ingresar valores númericos</mat-error>
           <span matPrefix>S/.&nbsp;</span>
         </mat-form-field>
@@ -126,7 +126,7 @@
 
       <mat-grid-tile>
         <mat-form-field class="columnas-1">
-          <input matInput placeholder="Cuota inicial" formControlName="inicial" #InputInicial>
+          <input matInput placeholder="Cuota inicial" formControlName="inicial" #InputInicial [readonly]="idventa">
           <mat-error>Solo debe ingresar valores númericos</mat-error>
           <span matPrefix>S/ &nbsp;</span>
         </mat-form-field>
@@ -134,14 +134,14 @@
 
       <mat-grid-tile>
         <mat-form-field class="columnas-1">
-          <input matInput placeholder="N° de cuotas" formControlName="cuotas" #InputCuota>
+          <input matInput placeholder="N° de cuotas" formControlName="cuotas" #InputCuota [readonly]="idventa">
           <mat-error>Solo debe ingresar valores númericos</mat-error>
         </mat-form-field>
       </mat-grid-tile>
 
       <mat-grid-tile colspan="4">
         <mat-form-field class="columnas-4">
-           <input matInput placeholder="Observaciones" formControlName="observaciones">
+           <input matInput placeholder="Observaciones" formControlName="observaciones" [readonly]="idventa">
         </mat-form-field>
       </mat-grid-tile>
 

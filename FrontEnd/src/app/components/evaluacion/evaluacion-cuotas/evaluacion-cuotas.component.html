@@ -7,14 +7,14 @@
 
       <mat-grid-tile>
         <mat-form-field>
-          <input type="text" matInput placeholder="Capital" [(ngModel)]="capital" #InputCapital>
+          <input type="number" matInput placeholder="Capital" [(ngModel)]="capital" #InputCapital>
         </mat-form-field>
         <button mat-icon-button color="primary" *ngIf="tipo==2" (click)="AgregarProducto()"><mat-icon>add</mat-icon></button>
       </mat-grid-tile>
 
       <mat-grid-tile>
         <mat-form-field>
-          <input type="text" matInput placeholder="Número de cuotas" [(ngModel)]="cuotas" #InputCuotas>
+          <input type="number" matInput placeholder="Número de cuotas" [(ngModel)]="cuotas" #InputCuotas>
         </mat-form-field>
       </mat-grid-tile>
 
@@ -26,21 +26,30 @@
 
       <mat-grid-tile>
         <mat-form-field>
-          <input matInput [matDatepicker]="picker" placeholder="Fecha de inicio" [(ngModel)]="fecha_inicio" disabled (dateChange)="CambioFecha()"> 
+          <input matInput [matDatepicker]="picker" placeholder="Fecha de crédito" [(ngModel)]="fecha_prestamo" disabled (dateChange)="CambioFecha()"> 
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker [disabled]="false"></mat-datepicker>
+<!--           <input matInput [matDatepicker]="dp" placeholder="Inicio de pagos" [formControl]="date">
+          <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+          <mat-datepicker #dp
+                          startView="multi-year"
+                          (yearSelected)="chosenYearHandler($event)"
+                          (monthSelected)="chosenMonthHandler($event, dp)"
+                          panelClass="example-month-picker">
+          </mat-datepicker> -->
         </mat-form-field>
       </mat-grid-tile>
 
       <mat-grid-tile>
+        <mat-checkbox color="primary" [(ngModel)]="interes_por_dia" (change)="CalcularPagos()">Interés por día</mat-checkbox>
       </mat-grid-tile>
 
       <mat-grid-tile>
-        <mat-checkbox color="primary" [(ngModel)]="pago_inicio_mes" (change)="CambioModoPago()">Iniciar el próximo mes</mat-checkbox>
+        <mat-checkbox color="primary" [(ngModel)]="pago_proximo_mes" (change)="CalcularPagos($event)">Iniciar el próximo mes</mat-checkbox>
       </mat-grid-tile>
 
       <mat-grid-tile>
-        <mat-radio-group (change)="CambioTipoVenta()" [(ngModel)]="tipo">
+        <mat-radio-group (change)="CambioTipoVenta($event)" [(ngModel)]="tipo">
           <mat-radio-button color="primary" [value]=1>Crédito</mat-radio-button>
           &nbsp;&nbsp;
           <mat-radio-button color="primary" [value]=2>Equipo</mat-radio-button>
@@ -55,7 +64,13 @@
       </mat-grid-tile>
     </mat-grid-list>
 
-    <mat-table [dataSource]="EvaluacionCuotas">
+    <mat-grid-list cols=1 rowHeight="50px" *ngIf="!correcto">
+      <mat-grid-tile>
+        <mat-error> Los valores ingresados deben ser enteros </mat-error>
+      </mat-grid-tile>
+    </mat-grid-list>
+
+    <mat-table [dataSource]="EvaluacionCuotas" *ngIf="correcto">
 
       <ng-container matColumnDef="numero">
         <mat-header-cell *matHeaderCellDef>N°</mat-header-cell>
@@ -64,22 +79,26 @@
 
       <ng-container matColumnDef="monto">
         <mat-header-cell *matHeaderCellDef>Monto</mat-header-cell>
-        <mat-cell *matCellDef="let cuota">{{cuota.monto  | currency:'S/.'}}</mat-cell>
+        <!-- <mat-cell *matCellDef="let cuota">{{cuota.monto  | currency:'S/.'}}</mat-cell> -->
+        <mat-cell *matCellDef="let cuota">{{cuota.monto  | number:'1.1-1' }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="aporte">
         <mat-header-cell *matHeaderCellDef>Aporte</mat-header-cell>
-        <mat-cell *matCellDef="let cuota">{{cuota.aporte  | currency:'S/.'}}</mat-cell>
+        <!-- <mat-cell *matCellDef="let cuota">{{cuota.aporte  | currency:'S/.'}}</mat-cell> -->
+        <mat-cell *matCellDef="let cuota">{{cuota.aporte  | number:'1.1-1' }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="fecha">
-        <mat-header-cell *matHeaderCellDef>Fecha</mat-header-cell>
-        <mat-cell *matCellDef="let cuota">{{cuota.fecha | date:'MM/yy'}}</mat-cell>
+        <mat-header-cell *matHeaderCellDef>Periodo</mat-header-cell>
+        <!-- <mat-cell *matCellDef="let cuota">{{cuota.fecha | date:'MM/yy'}}</mat-cell> -->
+        <mat-cell *matCellDef="let cuota">{{cuota.fecha | date:'MM/yy' }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="total">
         <mat-header-cell *matHeaderCellDef>Total</mat-header-cell>
-        <mat-cell *matCellDef="let cuota">{{cuota.total  | currency:'S/.'}}</mat-cell>
+        <!-- <mat-cell *matCellDef="let cuota">{{cuota.total  | currency:'S/.'}}</mat-cell> -->
+        <mat-cell *matCellDef="let cuota">{{cuota.total  | number:'1.1-1' }}</mat-cell>
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>

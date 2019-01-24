@@ -38,7 +38,7 @@ export class ServiciosVentas{
 			if(res['codigo']===0){
 				return res=res
 			}else{
-				console.log('Error al importar los datos, revisar servicio')
+				console.log('No hay datos que mostrar')
 			}
 		}))
 	}
@@ -52,7 +52,7 @@ export class ServiciosVentas{
 			if(res['codigo']===0){
 				return res=res['data'].series
 			}else{
-				console.log('Error al importar los datos, revisar servicio')
+				console.log('No hay datos que mostrar')
 			}
 		}))
 	}
@@ -77,7 +77,7 @@ export class ServiciosVentas{
 			if(res['codigo']===0){
 				return res=res['data'].numeros
 			}else{
-				console.log('Error al importar los datos, revisar servicio')
+				console.log('No hay datos que mostrar')
 			}
 		}))
 	}

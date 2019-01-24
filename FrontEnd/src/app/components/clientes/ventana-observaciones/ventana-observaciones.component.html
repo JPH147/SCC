@@ -1,0 +1,33 @@
+<mat-card class="card">
+
+  <mat-toolbar color="primary">
+    <mat-toolbar-row>Observaciones</mat-toolbar-row>
+  </mat-toolbar>
+
+  <button mat-mini-fab color="primary" class="boton" (click)="AgregarObservacion()" type="button"><mat-icon>add</mat-icon></button>
+
+	<form [formGroup]="ObservacionForm">
+		<mat-card-content>
+
+			 <div formArrayName="observaciones" *ngFor="let item of ObservacionForm['controls'].observaciones['controls']; let i = index">
+            <div [formGroupName]="i">
+          
+              <mat-grid-list cols=1 rowHeight="70px">
+                        
+                <mat-grid-tile>
+                  <mat-form-field class="input-observacion">
+                    <input matInput placeholder="Observacion" formControlName="observacion">
+                  </mat-form-field>
+                </mat-grid-tile>
+    
+                <!-- <button mat-mini-fab type="button" color="primary" class="boton" (click)="EliminarTelefono(item,i)""><mat-icon>delete</mat-icon></button> -->
+    
+              </mat-grid-list>
+    
+            </div>
+          </div>
+			
+		</mat-card-content>
+	</form>
+
+</mat-card>

@@ -39,7 +39,7 @@ export class ServiciosProductoSerie {
       if (res['codigo'] === 0) {
         return res;
       } else {
-        console.log('Error al importar los datos, revisar servicio');
+        console.log('No hay datos que mostrar');
         return res;
       }
     }));
@@ -69,7 +69,7 @@ export class ServiciosProductoSerie {
       if (res['codigo'] === 0) {
         return res;
       } else {
-        console.log('Error al importar los datos, revisar servicio');
+        console.log('No hay datos que mostrar');
         return res;
       }
     }));
@@ -108,7 +108,7 @@ export class ServiciosProductoSerie {
       if (res['codigo'] === 0) {
         return res['data'];
       } else {
-        console.log('Error al importar los datos, revisar servicio');
+        console.log('No hay datos que mostrar');
         return res;
       }
     }));
@@ -158,7 +158,7 @@ export class ServiciosProductoSerie {
         if (res['codigo'] === 0) {
           return res['data'].colores;
         } else {
-          console.log ('Error al importar los datos, revisar servicio');
+          console.log ('No hay datos que mostrar');
         }
     }));
   }
@@ -174,7 +174,7 @@ export class ServiciosProductoSerie {
         if (res['codigo'] === 0) {
           return res['data'];
         } else {
-          console.log ('Error al importar los datos, revisar servicio');
+          console.log ('No hay datos que mostrar');
         }
     }))
   }
