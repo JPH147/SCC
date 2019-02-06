@@ -4,30 +4,52 @@
     <mat-toolbar-row>Observaciones</mat-toolbar-row>
   </mat-toolbar>
 
-  <button mat-mini-fab color="primary" class="boton" (click)="AgregarObservacion()" type="button"><mat-icon>add</mat-icon></button>
+  <button mat-raised-button color="primary" class="boton" (click)="Guardar()" type="button">Guardar</button>
 
-	<form [formGroup]="ObservacionForm">
-		<mat-card-content>
+	<mat-card-content>
 
-			 <div formArrayName="observaciones" *ngFor="let item of ObservacionForm['controls'].observaciones['controls']; let i = index">
-            <div [formGroupName]="i">
-          
-              <mat-grid-list cols=1 rowHeight="70px">
-                        
-                <mat-grid-tile>
-                  <mat-form-field class="input-observacion">
-                    <input matInput placeholder="Observacion" formControlName="observacion">
-                  </mat-form-field>
-                </mat-grid-tile>
-    
-                <!-- <button mat-mini-fab type="button" color="primary" class="boton" (click)="EliminarTelefono(item,i)""><mat-icon>delete</mat-icon></button> -->
-    
-              </mat-grid-list>
-    
-            </div>
-          </div>
-			
-		</mat-card-content>
-	</form>
+    <mat-grid-list cols=1 rowHeight="70px">
+      <mat-grid-tile>
+        <mat-form-field class="input-observacion">
+          <input matInput placeholder="Observacion" [(ngModel)]="observacion">
+        </mat-form-field>
+      </mat-grid-tile>
+    </mat-grid-list>
+
+    <div class = "spinner-container" *ngIf = "ListadoObservaciones.Cargando| async">
+      <mat-spinner></mat-spinner>
+    </div>
+
+    <mat-table [dataSource]="ListadoObservaciones" class="mat-elevation-z8">
+
+      <ng-container matColumnDef="numero">
+        <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+        <mat-cell *matCellDef="let observacion"> {{observacion.numero}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="observacion">
+        <mat-header-cell *matHeaderCellDef> Observación </mat-header-cell>
+        <mat-cell *matCellDef="let observacion"> {{observacion.observacion}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="fecha">
+        <mat-header-cell *matHeaderCellDef> Fecha </mat-header-cell>
+        <mat-cell *matCellDef="let observacion"> {{observacion.fecha | date:"dd/MM/yyyy"}} </mat-cell>
+	    </ng-container>
+
+      <ng-container matColumnDef="opciones">
+        <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
+        <mat-cell *matCellDef="let observacion">
+          <button mat-icon-button matTooltip="Eliminar" color="primary" (click)="Eliminar(observacion.id)"><mat-icon> delete </mat-icon></button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: Columnas;"></mat-row>
+    </mat-table>
+
+    <mat-paginator [length]="ListadoObservaciones.TotalResultados | async" [pageSize]="5" [pageSizeOptions]="[5,10,15]"></mat-paginator>
+
+	</mat-card-content>
 
 </mat-card>

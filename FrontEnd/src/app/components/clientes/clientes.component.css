@@ -85,3 +85,9 @@ mat-card{
   max-width: 100%;
   height: 40px
 }
+
+/* Para que no se muestre el total */
+.mat-paginator-range-label{
+  display: none !important;
+  color: red;
+}

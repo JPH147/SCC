@@ -181,6 +181,7 @@ export class VentanaEmergenteClientes {
 
   ListarDepartamento() {
     this.ServicioDireccion.ListarDepartamentos('', 0, 50).subscribe( res => {
+      console.log(res);
       this.Departamentos = res['data'].departamentos;
     });
   }
@@ -194,22 +195,20 @@ export class VentanaEmergenteClientes {
 
   ListarDistrito(i) {
     this.ServicioDireccion.ListarDistritos('', i , '', 0, 50).subscribe( res => {
+      console.log(i, res);
       this.Distritos = res['data'].distritos;
     });
   }
 
-  DepartamentoSeleccionado(event, i) {
+  DepartamentoSeleccionado(event) {
     this.ListarProvincia(event.value);
     this.Distritos=[];
     this.ClientesForm.get('provincia').setValue('');
     this.ClientesForm.get('distrito').setValue('');
   }
 
-  ProvinciaSeleccionada(event, i) {
-    this.ServicioDireccion.ListarDistritos('', event.value, '' , 0, 50).subscribe(res => {
-      this.Distritos = res['data'].distritos
-    });
-
+  ProvinciaSeleccionada(event) {
+    this.ListarDistrito(event.value)
     this.ClientesForm.get('distrito').setValue('');
   }
 

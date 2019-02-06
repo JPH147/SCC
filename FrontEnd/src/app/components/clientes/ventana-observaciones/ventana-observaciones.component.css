@@ -13,3 +13,19 @@
 .input-observacion{
 	width: 80%
 }
+
+.spinner-container{
+  position: absolute;
+  top: 150px;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mat-column-numero,
+.mat-column-fecha,
+.mat-column-opciones{
+	max-width: 10%
+}

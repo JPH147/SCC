@@ -2,18 +2,22 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4428cc1a-4863-4c91-93fe-91eecaab092f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WS_SCC/entities/reglas-evaluacion.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WS_SCC/reglas-evaluacion/read.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FrontEnd/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FrontEnd/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/app.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/app.routing.ts" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/app.routing.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/evaluacion/evaluacion-cuotas/evaluacion-cuotas.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/evaluacion/evaluacion-cuotas/evaluacion-cuotas.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/evaluacion/evaluacion-cuotas/evaluacion-cuotas.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/evaluacion/evaluacion-cuotas/evaluacion-cuotas.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/menu/menu.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/menu/menu.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FrontEnd/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/tsconfig.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WS_SCC/entities/proveedor.php" beforeDir="false" afterPath="$PROJECT_DIR$/WS_SCC/entities/proveedor.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/clientes.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/clientes.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/clientes.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/clientes.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/clientes.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/clientes.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/clientes.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/clientes.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/ventana-observaciones/ventana-observaciones.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/ventana-observaciones/ventana-observaciones.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/ventana-observaciones/ventana-observaciones.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/ventana-observaciones/ventana-observaciones.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/ventana-observaciones/ventana-observaciones.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/ventana-observaciones/ventana-observaciones.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/global/ventana-confirmar/ventana-confirmar.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/global/ventana-confirmar/ventana-confirmar.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/global/ventana-confirmar/ventana-confirmar.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/global/ventana-confirmar/ventana-confirmar.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/historial-movimientos/historial-movimientos.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/historial-movimientos/historial-movimientos.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/styles.scss" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/styles.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WS_SCC/cliente/read.php" beforeDir="false" afterPath="$PROJECT_DIR$/WS_SCC/cliente/read.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WS_SCC/clienteobservacion/create.php" beforeDir="false" afterPath="$PROJECT_DIR$/WS_SCC/clienteobservacion/create.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WS_SCC/clienteobservacion/read.php" beforeDir="false" afterPath="$PROJECT_DIR$/WS_SCC/clienteobservacion/read.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WS_SCC/entities/cliente.php" beforeDir="false" afterPath="$PROJECT_DIR$/WS_SCC/entities/cliente.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WS_SCC/entities/clienteobservacion.php" beforeDir="false" afterPath="$PROJECT_DIR$/WS_SCC/entities/clienteobservacion.php" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -28,10 +32,11 @@
     <session id="1250545887">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="1" />
+          <entry key="project.closed" value="2" />
+          <entry key="project.open.time.22" value="1" />
           <entry key="project.open.time.3" value="1" />
           <entry key="project.open.time.8" value="1" />
-          <entry key="project.opened" value="2" />
+          <entry key="project.opened" value="3" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
@@ -50,7 +55,7 @@
       </usages-collector>
       <usages-collector id="statistics.js.language.service.starts">
         <counts>
-          <entry key="Angular2LanguageService" value="2" />
+          <entry key="Angular2LanguageService" value="3" />
           <entry key="TsLintLanguageService" value="2" />
         </counts>
       </usages-collector>
@@ -75,8 +80,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/FrontEnd/src/app/components/evaluacion/evaluacion-cuotas/evaluacion-cuotas.component.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="273">
-              <caret line="46" column="21" lean-forward="true" selection-start-line="46" selection-start-column="21" selection-end-line="46" selection-end-column="21" />
+            <state relative-caret-position="966">
+              <caret line="46" column="21" selection-start-line="46" selection-start-column="21" selection-end-line="46" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -85,7 +90,7 @@
         <entry file="file://$PROJECT_DIR$/FrontEnd/src/app/components/evaluacion/evaluacion-cuotas/evaluacion-cuotas.component.ts">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="525">
-              <caret line="109" selection-start-line="109" selection-end-line="109" />
+              <caret line="170" selection-start-line="170" selection-end-line="170" />
               <folding>
                 <element signature="e#0#115#0" expanded="true" />
               </folding>
@@ -143,6 +148,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -207,7 +213,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -246,11 +251,12 @@
       <updated>1547675898606</updated>
       <workItem from="1547675901085" duration="1002000" />
       <workItem from="1547677054792" duration="1162000" />
+      <workItem from="1548812703356" duration="111000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2164000" />
+    <option name="totallyTimeSpent" value="2275000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -306,21 +312,12 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/FrontEnd/src/app/components/proveedores/proveedores.service.spec.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#56#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/FrontEnd/src/app/components/proveedores/proveedores.service.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="483">
           <caret line="32" selection-start-line="32" selection-end-line="37" selection-end-column="7" />
-          <folding>
-            <element signature="e#0#43#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -328,9 +325,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-651">
           <caret line="35" selection-start-line="35" selection-end-line="36" selection-end-column="59" />
-          <folding>
-            <element signature="e#0#73#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -352,9 +346,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="611">
           <caret line="52" column="28" selection-start-line="52" selection-start-column="28" selection-end-line="52" selection-end-column="28" />
-          <folding>
-            <element signature="e#0#50#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -387,9 +378,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="65">
           <caret line="5" column="68" lean-forward="true" selection-start-line="5" selection-start-column="68" selection-end-line="5" selection-end-column="68" />
-          <folding>
-            <element signature="e#0#50#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -397,23 +385,20 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="357">
           <caret line="17" column="31" selection-start-line="17" selection-start-column="31" selection-end-line="17" selection-end-column="31" />
-          <folding>
-            <element signature="e#0#43#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/FrontEnd/src/app/components/evaluacion/evaluacion-cuotas/evaluacion-cuotas.component.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="273">
-          <caret line="46" column="21" lean-forward="true" selection-start-line="46" selection-start-column="21" selection-end-line="46" selection-end-column="21" />
+        <state relative-caret-position="966">
+          <caret line="46" column="21" selection-start-line="46" selection-start-column="21" selection-end-line="46" selection-end-column="21" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/FrontEnd/src/app/components/evaluacion/evaluacion-cuotas/evaluacion-cuotas.component.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="525">
-          <caret line="109" selection-start-line="109" selection-end-line="109" />
+          <caret line="170" selection-start-line="170" selection-end-line="170" />
           <folding>
             <element signature="e#0#115#0" expanded="true" />
           </folding>

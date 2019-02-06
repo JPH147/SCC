@@ -92,3 +92,8 @@ mat-row:nth-child(even){
 .cargar-imagen .img-ul-container {
   background-color: white !important
 }
+
+// Para que en la página de clientes no se muestre el total porque el sp demora mucho en cargar
+.large .mat-paginator-range-label{
+  display: none !important;
+}

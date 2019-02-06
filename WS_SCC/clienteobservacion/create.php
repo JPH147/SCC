@@ -14,16 +14,16 @@
 
     try
     {
-        $clientedir = new ClienteObservacion($db);
+        $observacion = new ClienteObservacion($db);
         $data = json_decode(file_get_contents('php://input'), true);
 
         if (($_POST["prcliente"])!=null)
         {
-            $clientedir->id_cliente = trim($_POST["prcliente"]);
-            $clientedir->observacion = trim($_POST["probservacion"]);
-            $clientedir->fecha = trim($_POST["prfecha"]);
+            $observacion->id_cliente = trim($_POST["prcliente"]);
+            $observacion->observacion = trim($_POST["probservacion"]);
+            $observacion->fecha = trim($_POST["prfecha"]);
 
-            if($clientedir->create())
+            if($observacion->create())
             {
                 print_json("0000", "Se creó la observación satisfactoriamente.", "");
             }

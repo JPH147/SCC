@@ -240,11 +240,15 @@ export class ClienteService {
   }
 
   ListarObservacion(
-    id_observacion:number
+    id_observacion:number,
+    pagina_inicio:number,
+    total_pagina:number
   ){
     return this.http.get(this.url + 'clienteobservacion/read.php',{
        params: new HttpParams()
        .set('prcliente', id_observacion.toString())
+       .set('prpagina', pagina_inicio.toString())
+       .set('prtotalpagina', total_pagina.toString())
      }).pipe(map(res => {
       if (res['codigo'] === 0) {
         return res;
@@ -318,4 +322,5 @@ export interface Cliente {
   aporte: number;
   foto: string;
 }
+
 

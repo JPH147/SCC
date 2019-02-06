@@ -16,11 +16,11 @@
     try{
     	$distrito = new Distrito($db);
 
-    	$distrito->dpt_nombre = !empty($_GET['prdepartamento']) ? trim($_GET['prdepartamento']) : null;
-        $distrito->prv_nombre = !empty($_GET['prprovincia']) ? trim($_GET['prprovincia']) : null;
-        $distrito->dst_nombre = !empty($_GET['prdistrito']) ? trim($_GET['prdistrito']) : null;
-        $distrito->numero_pagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : null;
-        $distrito->total_pagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : null;
+    	$distrito->dpt_nombre = !empty($_GET['prdepartamento']) ? trim($_GET['prdepartamento']) : '';
+        $distrito->prv_nombre = !empty($_GET['prprovincia']) ? trim($_GET['prprovincia']) : '';
+        $distrito->dst_nombre = !empty($_GET['prdistrito']) ? trim($_GET['prdistrito']) : '';
+        $distrito->numero_pagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : 1;
+        $distrito->total_pagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : 20;
 
     	$distrito_list = $distrito->read();
         $distrito_contar = $distrito->contar();

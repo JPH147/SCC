@@ -128,7 +128,6 @@ Editar(id) {
     let VentanaClientes = this.DialogoClientes.open(VentanaEmergenteClientes, {
       width: '1000px',
       data: {objeto: res, id: id},
-
     });
     // tslint:disable-next-line:no-shadowed-variable
     VentanaClientes.afterClosed().subscribe (res => {
@@ -146,11 +145,11 @@ AgregarDatoContacto(cliente) {
   });
 }
 
-AgregarObservaciones(cliente){
+AgregarObservaciones(id){
 
   let VentanaContacto = this.DialogoContacto.open(VentanaObservacionesComponent, {
-    width: '800px',
-    data: cliente
+    width: '900px',
+    data: id
   });
 }
 

@@ -63,7 +63,7 @@ Class Cliente{
     
         $cliente_list=array();
         $cliente_list["clientes"]=array();
-        $contador = 0;
+        $contador = $this->prtotalpagina*($this->prpagina-1);
 
         while($row = $result->fetch(PDO::FETCH_ASSOC))
         {
@@ -111,7 +111,7 @@ Class Cliente{
 
     function contar(){
 
-        $query = "CALL sp_listarclientecontar(?,?,?,?,?,?,?)";
+        $query = "CALL sp_listarclientecontar(?,?,?,?,?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
@@ -122,13 +122,21 @@ Class Cliente{
         $result->bindParam(5, $this->clt_codigo);
         $result->bindParam(6, $this->clt_dni);
         $result->bindParam(7, $this->clt_nombre);
+        $result->bindParam(8, $this->prpagina);
+        $result->bindParam(9, $this->prtotalpagina);
         $result->execute();
 
         $row = $result->fetch(PDO::FETCH_ASSOC);
 
         $this->total_resultado=$row['total'];
 
-        return $this->total_resultado;
+        if ($this->total_resultado>1) {
+            $contador = $this->prtotalpagina*($this->prpagina);
+        }else{
+            $contador = $this->prtotalpagina*($this->prpagina)+1;
+        }
+
+        return $contador;
     }
 
     function readpreciso(){

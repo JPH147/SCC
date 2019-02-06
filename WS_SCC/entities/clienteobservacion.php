@@ -12,6 +12,9 @@ Class ClienteObservacion{
     public $observacion;
     public $fecha;
 
+    public $pagina;
+    public $totalpagina;
+
     public function __construct($db){
         $this->conn = $db;
     }
@@ -21,7 +24,7 @@ Class ClienteObservacion{
         $query = "CALL sp_crearclienteobservacion(
             :prcliente,
             :probservacion,
-            :prfecha,
+            :prfecha
         )";
 
         $result = $this->conn->prepare($query);
@@ -59,10 +62,13 @@ Class ClienteObservacion{
 
     function read()
     {
-        $query = "CALL sp_listarclienteobservacion(:id_cliente)";
+        $query = "CALL sp_listarclienteobservacion(:id_cliente, :pagina_inicio, :total_pagina)";
 
         $result = $this->conn->prepare($query);
+
         $result->bindParam(":id_cliente", $this->id_cliente);
+        $result->bindParam(":pagina_inicio", $this->pagina);
+        $result->bindParam(":total_pagina", $this->totalpagina);
 
         $result->execute();
         $observacion_list=array();
@@ -83,6 +89,23 @@ Class ClienteObservacion{
             array_push($observacion_list["observaciones"],$observacion_item);
         }
         return $observacion_list;
+    }
+
+    function contar(){
+
+        $query = "CALL sp_listarclienteobservacioncontar(?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_cliente);
+
+        $result->execute();
+
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        $this->total_resultado=$row['total'];
+
+        return $this->total_resultado;
     }
 }
 ?>

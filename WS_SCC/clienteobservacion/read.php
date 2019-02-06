@@ -17,16 +17,19 @@
         $clienteobservacion = new ClienteObservacion($db);
 
         $clienteobservacion->id_cliente = !empty($_GET['prcliente']) ? trim($_GET['prcliente']) : null;
+        $clienteobservacion->pagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : 1;
+        $clienteobservacion->totalpagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : 5;
 
         $observacion_list = $clienteobservacion->read();
+        $observacion_contar = $clienteobservacion->contar();
 
         if (count(array_filter($observacion_list))>0)
         { 
-            print_json("0000", "OK", $observacion_list);
+            print_json("0000", $observacion_contar, $observacion_list);
         }
         
         else
-        { print_json("0001", "No existen direcciones registrados", null); }
+        { print_json("0001", "No existen observaciones registrados", null); }
     }
 
     catch(Exception $exception)

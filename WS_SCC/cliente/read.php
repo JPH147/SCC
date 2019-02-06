@@ -29,6 +29,7 @@
 
         $cliente_list = $cliente->read();
         $cliente_contar = $cliente->contar();
+        
         if (count(array_filter($cliente_list))>0)
         { 
             print_json("0000", $cliente_contar, $cliente_list);
