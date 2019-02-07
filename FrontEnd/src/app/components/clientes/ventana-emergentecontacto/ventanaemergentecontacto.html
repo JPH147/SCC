@@ -1,3 +1,7 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row><h4>Datos de contacto</h4></mat-toolbar-row>
+</mat-toolbar>
+
 <mat-tab-group >
 
   <mat-tab label="Telefonos">
@@ -70,12 +74,11 @@
 
       </form>
     </mat-card>
-
   </mat-tab>
 
-    <mat-tab label="Direcciones">
+  <mat-tab label="Direcciones">
 
-      <mat-card>
+    <mat-card>
         
         <mat-grid-list cols="1" rowHeight="50px">
           <mat-grid-tile>
@@ -159,4 +162,84 @@
       </form>
     </mat-card>
   </mat-tab>
+
+  <mat-tab label="Cuentas bancarias">
+
+    <mat-card-content>
+      
+      <form [formGroup]="CuentasForm">
+        <mat-grid-list cols=4 rowHeight="70px">
+
+          <mat-grid-tile>
+            <mat-form-field>
+              <mat-select placeholder="Banco" formControlName="banco">
+                <mat-option *ngFor="let banco of Bancos" [value]="banco.id">{{banco.nombre}}</mat-option>
+                <mat-error>Este campo es obligatorio</mat-error>
+              </mat-select>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <mat-form-field>
+              <input matInput placeholder="Número" formControlName="cuenta">
+              <mat-error>Este campo es obligatorio</mat-error>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <mat-form-field>
+              <input matInput placeholder="CCI" formControlName="cci">
+              <mat-error>El CCI debe tener 20 dígitos</mat-error>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <button mat-raised-button color="primary" type="button" [disabled]="CuentasForm.invalid" (click)="AgregarCuenta()">Agregar</button>
+          </mat-grid-tile>
+
+        </mat-grid-list>
+      </form>
+
+      <div class = "spinner-container" *ngIf = "ListadoCuentas.Cargando| async">
+        <mat-spinner></mat-spinner>
+      </div>
+
+      <mat-table [dataSource]="ListadoCuentas" class="mat-elevation-z8">
+
+        <ng-container matColumnDef="numero">
+          <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+          <mat-cell *matCellDef="let observacion"> {{observacion.numero}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="banco">
+          <mat-header-cell *matHeaderCellDef> Banco </mat-header-cell>
+          <mat-cell *matCellDef="let observacion"> {{observacion.nombre_banco}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="cuenta">
+          <mat-header-cell *matHeaderCellDef> Cuenta </mat-header-cell>
+          <mat-cell *matCellDef="let observacion"> {{observacion.cuenta_numero}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="cci">
+          <mat-header-cell *matHeaderCellDef> CCI </mat-header-cell>
+          <mat-cell *matCellDef="let observacion"> {{observacion.cuenta_cci}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="opciones">
+          <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
+          <mat-cell *matCellDef="let observacion">
+            <button mat-icon-button matTooltip="Eliminar" color="primary" (click)="Eliminar(observacion.id)"><mat-icon> delete </mat-icon></button>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="ColumnasCuentas"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: ColumnasCuentas;"></mat-row>
+      </mat-table>
+
+      <mat-paginator [length]="ListadoCuentas.TotalResultados | async" [pageSize]="5" [pageSizeOptions]="[5,10,15]"></mat-paginator>
+
+    </mat-card-content>
+  </mat-tab>
+
 </mat-tab-group>

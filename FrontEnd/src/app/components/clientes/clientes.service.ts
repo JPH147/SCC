@@ -123,8 +123,8 @@ export class ClienteService {
     clt_cip: string,
     clt_email: string,
     clt_casilla: string,
-    clt_trabajo: string,
     id_distrito: number,
+    clt_trabajo: string,
     capacidad_pago: number,
     maximo_descuento: number,
     clt_calificacion_personal: string,
@@ -194,17 +194,21 @@ export class ClienteService {
     .set('prbanco', banco.toString())
     .set('prcuenta', cuenta)
     .set('prcci', cci)
-
+    console.log(params)
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     return this.http.post(this.url + 'clientecuenta/create.php', params, {headers: headers});
   }
 
   ListarCuenta(
-    id_cliente:number
+    id_cliente:number,
+    prpagina: number,
+    prtotalpagina: number
   ){
     return this.http.get(this.url + 'clientecuenta/read.php',{
        params: new HttpParams()
        .set('prcliente', id_cliente.toString())
+       .set('prpagina',prpagina.toString())
+       .set('prtotalpagina',prtotalpagina.toString())
      }).pipe(map(res => {
       if (res['codigo'] === 0) {
         return res;

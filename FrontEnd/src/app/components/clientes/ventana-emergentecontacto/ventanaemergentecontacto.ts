@@ -1,16 +1,20 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-import {FormControl, FormGroup, FormBuilder, FormArray , FormGroupDirective, NgForm, Validators} from '@angular/forms';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA, MatPaginator} from '@angular/material';
+import {FormGroup, FormBuilder, FormArray , Validators} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {ServiciosTelefonos} from '../../global/telefonos';
 import {ServiciosDirecciones} from '../../global/direcciones';
 import { NgControl } from '@angular/forms';
+import {ClienteCuentaDataSource} from './ventanaemergenteservice.dataservice';
+import { ClienteService } from '../clientes.service'
+import {ServiciosVentas} from '../../global/ventas';
+import {catchError, finalize, debounceTime, distinctUntilChanged, tap} from 'rxjs/operators'
 
 @Component({
   selector: 'app-ventanaemergentecontacto',
   templateUrl: './ventanaemergentecontacto.html',
   styleUrls: ['./ventanaemergentecontacto.css'],
-  providers: [ServiciosTelefonos, ServiciosDirecciones]
+  providers: [ServiciosTelefonos, ServiciosDirecciones, ClienteService, ServiciosVentas]
 })
 
 // tslint:disable-next-line:component-class-suffix
@@ -24,25 +28,29 @@ export class VentanaEmergenteContacto {
   public LstDepartamento: any;
   public LstProvincia: any;
   public LstDistrito: any;
+  public Bancos: Array<any>;
 
   // Direcciones
   public DireccionesForm: FormGroup;
   public itemsDir: FormArray;
   public RelevanciaDireccion: RelevanciaDireccion[];
 
+  // Cuentas
+  public ListadoCuentas: ClienteCuentaDataSource;
+  public ColumnasCuentas: string[] = [ 'numero', 'banco', 'cuenta', 'cci', 'opciones'];
+  public CuentasForm: FormGroup;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
     public ventana: MatDialogRef<VentanaEmergenteContacto>,
-    // tslint:disable-next-line:no-shadowed-variable
+    private Servicio: ClienteService,
+    private SVentas: ServiciosVentas,
     private FormBuilder: FormBuilder,
     private ServicioTelefono: ServiciosTelefonos,
     private ServicioDireccion: ServiciosDirecciones
   ) {
     this.contador = 1;
-  }
-
-  onNoClick(): void {
-    this.ventana.close();
   }
 
   ngOnInit() {
@@ -61,6 +69,42 @@ export class VentanaEmergenteContacto {
     this.ListarRelevancia();
     this.ListarDepartamento();
     this.ListarRelevanciaDireccion();
+    this.ListarBancos();
+
+    //Cuentas
+    this.ListadoCuentas = new ClienteCuentaDataSource(this.Servicio);
+    this.ListadoCuentas.CargarCuentas(this.data, 1, 5);
+
+    this.CuentasForm = this.FormBuilder.group({
+      banco: [null,[
+        Validators.required,
+      ]],
+      cuenta:[null,[
+        Validators.required,
+      ]],
+      cci:[null,[
+        Validators.required,
+        Validators.minLength(20),
+        Validators.maxLength(20)
+      ]]
+
+    })
+
+  }
+
+  ngAfterViewInit(){
+    this.paginator.page
+    .pipe(
+     debounceTime(200),
+     distinctUntilChanged(),
+     tap(() => {
+       this.CargarDataCuentas();
+     })
+    ).subscribe();
+  }
+
+  CargarDataCuentas(){
+     this.ListadoCuentas.CargarCuentas(this.data, this.paginator.pageIndex+1, this.paginator.pageSize);
   }
 
   createTelefono(value): FormGroup {
@@ -85,6 +129,12 @@ export class VentanaEmergenteContacto {
     });
   }
 
+  AgregarCuenta(){
+    this.Servicio.CrearCuenta(this.data, this.CuentasForm.value.banco, this.CuentasForm.value.cuenta, this.CuentasForm.value.cci).subscribe(res=>{
+      console.log(res)
+    })
+  }
+
   AgregarTelefono(): void {
     this.items = this.TelefonosForm.get('items') as FormArray;
     this.items.push(this.createTelefono(2));
@@ -96,6 +146,12 @@ export class VentanaEmergenteContacto {
     form.get('tipo').disable();
     form.get('relevancia').disable();
     form.get('observacion').disable();
+  }
+
+  ListarBancos(){
+    this.SVentas.ListarBancos().subscribe(res=>{
+      this.Bancos=res
+    })
   }
 
   ListarTipos() {
@@ -304,6 +360,10 @@ export class VentanaEmergenteContacto {
         }
       });
     }
+  }
+
+  onNoClick(): void {
+    this.ventana.close();
   }
 
 }

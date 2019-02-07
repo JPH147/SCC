@@ -63,7 +63,9 @@ export class VentanaEmergenteClientes {
       ]],
       'dni': [null, [
         Validators.required,
-        Validators.pattern('[0-9- ]+')
+        Validators.pattern('[0-9- ]+'),
+        Validators.minLength(8),
+        Validators.maxLength(8)
       ]],
       'nombre': [null, [
         Validators.required
@@ -72,7 +74,8 @@ export class VentanaEmergenteClientes {
         Validators.required
       ]],
       'email': [null, [
-        Validators.required
+        Validators.required,
+        Validators.email
       ]],
       'casilla': [null, [
         Validators.required
@@ -118,7 +121,7 @@ export class VentanaEmergenteClientes {
     });
 
     if (this.data) {
-      console.log(this.data);
+      // console.log(this.data);
       this.ClientesForm.get('institucion').setValue(this.data.objeto.institucion);
       this.ListarSede(this.data.objeto.institucion);
       this.ClientesForm.get('sede').setValue(this.data.objeto.sede);
@@ -181,21 +184,21 @@ export class VentanaEmergenteClientes {
 
   ListarDepartamento() {
     this.ServicioDireccion.ListarDepartamentos('', 0, 50).subscribe( res => {
-      console.log(res);
+      // console.log(res);
       this.Departamentos = res['data'].departamentos;
     });
   }
 
   ListarProvincia(i) {
     this.ServicioDireccion.ListarProvincias(i, '' , 0, 30).subscribe( res => {
-      console.log(i,res);
+      // console.log(i,res);
       this.Provincias = res['data'].provincias;
     });
   }
 
   ListarDistrito(i) {
     this.ServicioDireccion.ListarDistritos('', i , '', 0, 50).subscribe( res => {
-      console.log(i, res);
+      // console.log(i, res);
       this.Distritos = res['data'].distritos;
     });
   }

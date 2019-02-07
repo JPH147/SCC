@@ -110,7 +110,7 @@ export class ClientesComponent implements OnInit {
   // tslint:disable-next-line:prefer-const
   let VentanaConfirmar = this.DialogoClientes.open(VentanaConfirmarComponent, {
     width: '400px',
-    data: {objeto: 'cliente', valor: cliente.nombre}
+    data: {objeto: 'el cliente', valor: cliente.nombre}
   });
   VentanaConfirmar.afterClosed().subscribe(res => {
     if (res === true) {

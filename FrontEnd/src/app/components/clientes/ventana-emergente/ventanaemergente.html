@@ -24,7 +24,7 @@
             <mat-grid-tile>
               <mat-form-field class="input-ventana">
                 <input matInput placeholder="DNI"  formControlName="dni" maxlength="8" >
-                <mat-error *ngIf="ClientesForm.get('dni').invalid">Debes escribir sólo números</mat-error>
+                <mat-error *ngIf="ClientesForm.get('dni').invalid">Debes escribir 8 dígitos</mat-error>
               </mat-form-field>
             </mat-grid-tile>
 
