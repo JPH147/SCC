@@ -90,6 +90,7 @@ export class ServiciosDirecciones{
 		total_pagina:number,
 	):Observable<any>
 	{
+
 		return this.http.get(this.url+'direccionprovincia/read.php',{
 			params: new HttpParams()
 			.set('prdepartamento', departamento)
@@ -233,14 +234,14 @@ export class ServiciosDirecciones{
 	}
 /************************************************************************************************/
 	CrearDireccion(
-		id: number,
+		id_cliente: number,
 		nombre: string,
 		iddistrito: number,
 		relevancia: number,
 		observacion: string
 	): Observable<any> {
 		let params = new HttpParams()
-		.set('id_cliente', id.toString())
+		.set('id_cliente', id_cliente.toString())
 		.set('drc_nombre', nombre)
 		.set('pid_distrito', iddistrito.toString())
 		.set('drc_relevancia', relevancia.toString())
@@ -250,22 +251,27 @@ export class ServiciosDirecciones{
 	}
 
 	ListarDireccion(
-		id_cliente:string,
+		id_cliente:number,
 		drc_relevancia:string,
+		pagina:number,
+		total_pagina:number,
 	// tslint:disable-next-line:no-unused-expression
 	): Observable <any>
 	{
 		return this.http.get(this.url + 'clientedireccion/read.php',{
 			params: new HttpParams()
-			.set('id_cliente', id_cliente)
+			.set('id_cliente', id_cliente.toString())
 			.set('drc_relevancia', drc_relevancia)
+			.set('prpagina', pagina.toString())
+			.set('prtotalpagina', total_pagina.toString())
 		})
 		.pipe(map(res=>{
 			// console.log(res);
 			if(res['codigo'] === 0) {
-				return res['data'].direcciones;
+				return res
 			} else {
-				// console.log('No hay datos que mostrar');
+				console.log('No hay datos que mostrar');
+				return res
 			}
 		}))
 	}

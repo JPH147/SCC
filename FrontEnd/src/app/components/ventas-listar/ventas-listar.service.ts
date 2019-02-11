@@ -57,7 +57,7 @@ export class VentasServicio {
       if (res['codigo'] === 0) {
           return res;
       }  else {
-          console.log('No hay datos que mostrar',res);
+          console.log('No hay datos que mostrar');
           return res;
       }
     }));

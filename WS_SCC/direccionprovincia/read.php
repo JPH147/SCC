@@ -16,10 +16,10 @@
     try{
         $provincia = new Provincia($db);
 
-        $provincia->dpt_nombre = !empty($_GET['prdepartamento']) ? trim($_GET['prdepartamento']) : null;
-        $provincia->prv_nombre = !empty($_GET['prprovincia']) ? trim($_GET['prprovincia']) : null;
-        $provincia->numero_pagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : null;
-        $provincia->total_pagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : null;
+        $provincia->dpt_nombre = !empty($_GET['prdepartamento']) ? trim($_GET['prdepartamento']) : '';
+        $provincia->prv_nombre = !empty($_GET['prprovincia']) ? trim($_GET['prprovincia']) : '';
+        $provincia->numero_pagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : 1;
+        $provincia->total_pagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : 20;
 
         $provincia_list = $provincia->read();
         $provincia_contar = $provincia->contar();

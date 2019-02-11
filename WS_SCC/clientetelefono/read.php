@@ -18,12 +18,15 @@
 
         $clientetelefono->id_cliente = !empty($_GET['id_cliente']) ? trim($_GET['id_cliente']) : null;
         $clientetelefono->drc_relevancia = !empty($_GET['tlf_relevancia']) ? trim($_GET['tlf_relevancia']) : null;
+        $clientetelefono->prpagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : 1;
+        $clientetelefono->prtotalpagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : 5;
 
         $telefono_list = $clientetelefono->read();
+        $total_telefono = $clientetelefono->contar();
 
         if (count(array_filter($telefono_list))>0)
         { 
-            print_json("0000", "OK", $telefono_list);
+            print_json("0000", $total_telefono, $telefono_list);
          }
         else
         { print_json("0001", "No existen direcciones registrados", null); }

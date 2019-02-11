@@ -17,12 +17,15 @@
         $clientecuenta = new ClienteCuenta($db);
 
         $clientecuenta->id_cliente = !empty($_GET['prcliente']) ? trim($_GET['prcliente']) : null;
+        $clientecuenta->prpagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : 1;
+        $clientecuenta->prtotalpagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : 5;
 
         $lista_cuenta = $clientecuenta->read();
+        $total_cuenta = $clientecuenta->contar();
 
         if (count(array_filter($lista_cuenta))>0)
         { 
-            print_json("0000", "OK", $lista_cuenta);
+            print_json("0000", $total_cuenta, $lista_cuenta);
          }
         else
         { print_json("0001", "No existen direcciones registrados", null); }

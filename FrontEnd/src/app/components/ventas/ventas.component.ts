@@ -321,6 +321,7 @@ export class VentasComponent implements OnInit {
 
   ObtenerClientexId(id_cliente) {
     this.ClienteServicio.Seleccionar(id_cliente).subscribe(res => {
+      console.log(res)
       if (res) {
         // console.log(res)
         this.VentasForm.get('cliente').setValue(res);
@@ -467,7 +468,7 @@ export class VentasComponent implements OnInit {
 
   ObtenerDireccion() {
     if (this.idcliente) {
-        this.DireccionServicio.ListarDireccion( this.idcliente.toString() , '1').subscribe(res => {
+        this.DireccionServicio.ListarDireccion( this.idcliente, '1',1,20).subscribe(res => {
           if (res) {
             this.VentasForm.get('domicilio').setValue(res[0].direccioncompleta);
           }
@@ -480,7 +481,7 @@ export class VentasComponent implements OnInit {
 
   ObtenerTelefono() {
     if (this.idcliente) {
-        this.TelefonoServicio.ListarTelefono( this.idcliente , '1').subscribe(res => {
+        this.TelefonoServicio.ListarTelefono( this.idcliente , '1',1,20).subscribe(res => {
           if (res) {
             this.VentasForm.get('telefono').setValue(res[0].tlf_numero);
           }

@@ -38,20 +38,24 @@ export class ServiciosTelefonos {
   ListarTelefono(
 	id_cliente:number,
 	tlf_relevancia:string,
-
+    pagina:number,
+    total_pagina:number,
   ): Observable <any>
   {
   	return this.http.get(this.url + 'clientetelefono/read.php',{
   		params: new HttpParams()
   		.set('id_cliente', id_cliente.toString())
   		.set('tlf_relevancia', tlf_relevancia)
+      .set('prpagina', pagina.toString())
+      .set('prtotalpagina', total_pagina.toString())
   	})
   	.pipe(map(res=>{
               // console.log(res);
   		if(res['codigo'] === 0) {
-  			return res['data'].telefonos;
+  			return res
   		} else {
-  			// console.log('No hay datos que mostrar');
+  			console.log('No hay datos que mostrar');
+        return res;
   		}
   	}))
   }

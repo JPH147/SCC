@@ -1,14 +1,15 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatPaginator} from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatPaginator, MatDialog} from '@angular/material';
 import {FormGroup, FormBuilder, FormArray , Validators} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {ServiciosTelefonos} from '../../global/telefonos';
 import {ServiciosDirecciones} from '../../global/direcciones';
 import { NgControl } from '@angular/forms';
-import {ClienteCuentaDataSource} from './ventanaemergenteservice.dataservice';
+import { ClienteCuentaDataSource, ClienteTelefonoDataSource, ClienteDireccionDataSource } from './ventanaemergenteservice.dataservice';
 import { ClienteService } from '../clientes.service'
 import {ServiciosVentas} from '../../global/ventas';
 import {catchError, finalize, debounceTime, distinctUntilChanged, tap} from 'rxjs/operators'
+import {VentanaConfirmarComponent} from '../../global/ventana-confirmar/ventana-confirmar.component';
 
 @Component({
   selector: 'app-ventanaemergentecontacto',
@@ -20,26 +21,29 @@ import {catchError, finalize, debounceTime, distinctUntilChanged, tap} from 'rxj
 // tslint:disable-next-line:component-class-suffix
 export class VentanaEmergenteContacto {
   // Telefonos
+  public ListadoTelefonos: ClienteTelefonoDataSource;
+  public ColumnasTelefonos: string[] = [ 'telefono-numero', 'telefono-relevancia', 'telefono-tipo', 'telefono-numero_telefono', 'telefono-opciones'];
   public TelefonosForm: FormGroup;
   public Tipos: TipoTelefono[];
   public Relevancias: RelevanciaTelefono[];
-  public contador: number;
-  public items: FormArray;
+  @ViewChild('PaginadorTelefonos') paginatorTelefonos: MatPaginator;
+
+  // Direcciones
+  public ListadoDirecciones: ClienteDireccionDataSource;
+  public ColumnasDirecciones: string[] = [ 'direccion-numero', 'direccion-relevancia', 'direccion-nombre', 'direccion-opciones']; 
+  public DireccionesForm: FormGroup;
+  public RelevanciaDireccion: RelevanciaDireccion[];
   public LstDepartamento: any;
   public LstProvincia: any;
   public LstDistrito: any;
-  public Bancos: Array<any>;
-
-  // Direcciones
-  public DireccionesForm: FormGroup;
-  public itemsDir: FormArray;
-  public RelevanciaDireccion: RelevanciaDireccion[];
+  @ViewChild('PaginadorDirecciones') paginatorDirecciones: MatPaginator;
 
   // Cuentas
   public ListadoCuentas: ClienteCuentaDataSource;
-  public ColumnasCuentas: string[] = [ 'numero', 'banco', 'cuenta', 'cci', 'opciones'];
+  public ColumnasCuentas: string[] = [ 'cuenta-numero', 'cuenta-banco', 'cuenta-cuenta', 'cuenta-cci', 'cuenta-opciones'];  
   public CuentasForm: FormGroup;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  public Bancos: Array<any>;
+  @ViewChild('PaginadorCuentas') paginatorCuentas: MatPaginator;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
@@ -48,30 +52,61 @@ export class VentanaEmergenteContacto {
     private SVentas: ServiciosVentas,
     private FormBuilder: FormBuilder,
     private ServicioTelefono: ServiciosTelefonos,
-    private ServicioDireccion: ServiciosDirecciones
-  ) {
-    this.contador = 1;
-  }
+    private ServicioDireccion: ServiciosDirecciones,
+    private Dialogo: MatDialog
+  ) { }
 
   ngOnInit() {
-    this.TelefonosForm = this.FormBuilder.group({
-      items : this.FormBuilder.array([this.createTelefono(1)])
-    });
 
-    this.DireccionesForm = this.FormBuilder.group({
-      itemsDir : this.FormBuilder.array([this.createDirecciones(1)])
-    });
-
-    this.ListarDirecciones(this.data);
-    this.ListarTelefonos(this.data);
-
+    // Telefonos
     this.ListarTipos();
     this.ListarRelevancia();
+
+    this.ListadoTelefonos = new ClienteTelefonoDataSource(this.ServicioTelefono);
+    this.ListadoTelefonos.CargarTelefonos(this.data, 1, 5);
+
+    this.TelefonosForm = this.FormBuilder.group({
+      telefono: [null,[
+        Validators.required,
+        Validators.minLength(7),
+        Validators.pattern('[0-9- ]+')
+      ]],
+      tipo: [{value:2,disabled:false},[
+        Validators.required,
+      ]],
+      relevancia: [{value: null, disabled: false},[
+        Validators.required,
+      ]],
+    });
+
+    // Direcciones
     this.ListarDepartamento();
     this.ListarRelevanciaDireccion();
-    this.ListarBancos();
+
+    this.ListadoDirecciones = new ClienteDireccionDataSource(this.ServicioDireccion);
+    this.ListadoDirecciones.CargarDirecciones(this.data,1,5);
+
+    this.DireccionesForm = this.FormBuilder.group({
+      relevancia: [{value: null, disabled: false}, [
+        Validators.required,
+      ]],
+      nombre: [null,[
+        Validators.required
+      ]],
+      departamento: [null,[
+        Validators.required
+      ]],
+      provincia: [null,[
+        Validators.required
+      ]],
+      distrito: [null,[
+        Validators.required
+      ]],
+    })
 
     //Cuentas
+    this.ListarBancos();
+
     this.ListadoCuentas = new ClienteCuentaDataSource(this.Servicio);
     this.ListadoCuentas.CargarCuentas(this.data, 1, 5);
 
@@ -87,13 +122,31 @@ export class VentanaEmergenteContacto {
         Validators.minLength(20),
         Validators.maxLength(20)
       ]]
-
-    })
+    });
 
   }
 
   ngAfterViewInit(){
-    this.paginator.page
+
+    this.paginatorTelefonos.page
+    .pipe(
+     debounceTime(200),
+     distinctUntilChanged(),
+     tap(() => {
+       this.CargarDataTelefonos();
+     })
+    ).subscribe();
+
+    this.paginatorDirecciones.page
+    .pipe(
+     debounceTime(200),
+     distinctUntilChanged(),
+     tap(() => {
+       this.CargarDataDirecciones();
+     })
+    ).subscribe();
+
+    this.paginatorCuentas.page
     .pipe(
      debounceTime(200),
      distinctUntilChanged(),
@@ -103,49 +156,77 @@ export class VentanaEmergenteContacto {
     ).subscribe();
   }
 
-  CargarDataCuentas(){
-     this.ListadoCuentas.CargarCuentas(this.data, this.paginator.pageIndex+1, this.paginator.pageSize);
+  CargarDataTelefonos(){
+    this.ListadoTelefonos.CargarTelefonos(this.data, this.paginatorTelefonos.pageIndex+1, this.paginatorTelefonos.pageSize);
   }
 
-  createTelefono(value): FormGroup {
-    return this.FormBuilder.group({
-      id:[null,[
-      ]],
-      telefono: [null,[
-        Validators.required,
-        Validators.minLength(7),
-        Validators.pattern('[0-9- ]+')
-      ]],
-      tipo: [{value:2,disabled:false},[
-        Validators.required,
-      ]] ,
-      relevancia: [{value: value, disabled: false},[
-        Validators.required,
-      ]],
-      observacion: ['',[
-      ]],
-      estado:[null,[
-      ]]
-    });
+  CargarDataDirecciones(){
+    this.ListadoDirecciones.CargarDirecciones(this.data, this.paginatorDirecciones.pageIndex+1, this.paginatorDirecciones.pageSize); 
+  }
+
+  CargarDataCuentas(){
+    this.ListadoCuentas.CargarCuentas(this.data, this.paginatorCuentas.pageIndex+1, this.paginatorCuentas.pageSize);
+  }
+
+  AgregarTelefono(){
+    this.ServicioTelefono.CrearTelefono(this.data, this.TelefonosForm.value.telefono, "", this.TelefonosForm.value.tipo, this.TelefonosForm.value.relevancia).subscribe(res=>{
+      this.CargarDataTelefonos();
+    })
+  }
+
+  AgregarDireccion(){
+    this.ServicioDireccion.CrearDireccion(this.data, this.DireccionesForm.value.nombre, this.DireccionesForm.value.distrito, this.DireccionesForm.value.relevancia, '').subscribe(res=>{
+      console.log(res)
+      this.CargarDataDirecciones();
+    })
   }
 
   AgregarCuenta(){
     this.Servicio.CrearCuenta(this.data, this.CuentasForm.value.banco, this.CuentasForm.value.cuenta, this.CuentasForm.value.cci).subscribe(res=>{
-      console.log(res)
+      this.CargarDataCuentas();
     })
   }
 
-  AgregarTelefono(): void {
-    this.items = this.TelefonosForm.get('items') as FormArray;
-    this.items.push(this.createTelefono(2));
+  EliminarTelefono(telefono){
+    let VentanaConfirmar = this.Dialogo.open(VentanaConfirmarComponent, {
+      width: '400px',
+      data: {objeto: 'el teléfono', valor: telefono.tlf_numero}
+    });
+    VentanaConfirmar.afterClosed().subscribe(res => {
+      if (res === true) {
+        this.ServicioTelefono.EliminarTelefono(telefono.id).subscribe(res=>{
+          this.CargarDataTelefonos()
+        })
+      }
+    });
   }
-  
-  EliminarTelefono(form,index){
-    form.get('estado').setValue(2);
-    form.get('telefono').disable();
-    form.get('tipo').disable();
-    form.get('relevancia').disable();
-    form.get('observacion').disable();
+
+  EliminarDireccion(direccion){
+    let VentanaConfirmar = this.Dialogo.open(VentanaConfirmarComponent, {
+      width: '400px',
+      data: {objeto: 'la dirección', valor: direccion.direccioncompleta}
+    });
+    VentanaConfirmar.afterClosed().subscribe(res => {
+      if (res === true) {
+        this.ServicioDireccion.EliminarDireccion(direccion.id).subscribe(res=>{
+          this.CargarDataDirecciones()
+        })
+      }
+    });
+  }
+
+  EliminarCuenta(cuenta){
+    let VentanaConfirmar = this.Dialogo.open(VentanaConfirmarComponent, {
+      width: '400px',
+      data: {objeto: 'la cuenta', valor: cuenta.cuenta_numero}
+    });
+    VentanaConfirmar.afterClosed().subscribe(res => {
+      if (res === true) {
+       this.Servicio.EliminarCuenta(cuenta.id).subscribe(res => {
+         this.CargarDataCuentas();
+       });
+      }
+    });
   }
 
   ListarBancos(){
@@ -177,189 +258,37 @@ export class VentanaEmergenteContacto {
     ];
   }
 
-  GuardarTelefonos(formulario) {
-
-    for (let telefono of formulario.get('items').value) {
-      
-      // Agregar
-      if (telefono.estado == null) {
-        console.log(telefono);
-        this.ServicioTelefono.CrearTelefono(
-          this.data,
-          telefono.telefono,
-          telefono.observacion,
-          telefono.tipo,
-          telefono.relevancia
-        ).subscribe(res=>{
-        })
-      }
-      
-      // Eliminar
-      if (telefono.estado == 2 && telefono.id != null ) {
-        this.ServicioTelefono.EliminarTelefono(
-          telefono.id
-        ).subscribe(res=>{
-        })
-      }
-      
-      // if (telefono.estado == 1) {
-      //   console.log("Actualizar")
-      // }
-
-    }
-    this.ventana.close();
-  }
-
-  createDirecciones(value): FormGroup {
-    return this.FormBuilder.group({
-      id:[null,[
-      ]],
-      direccion: [null,[
-        Validators.required
-      ]],
-      departamento: [null,[
-        Validators.required
-      ]],
-      provincia: [null,[
-        Validators.required
-      ]],
-      distrito: [null,[
-        Validators.required
-      ]],
-      relevanciadis: [{value: value, disabled: false}, [
-      ]],
-      observacion: ['',[
-      ]],
-      estado:[null,[
-      ]]
-    });
-  }
-
-  AgregarDirecciones(): void {
-    this.itemsDir = this.DireccionesForm.get('itemsDir') as FormArray;
-    this.itemsDir.push(this.createDirecciones(2));
-  }
-
-  EliminarDireccion(form,index){
-    form.get('estado').setValue(2);
-    form.get('direccion').disable();
-    form.get('departamento').disable();
-    form.get('provincia').disable();
-    form.get('distrito').disable();
-    form.get('relevanciadis').disable();
-    form.get('observacion').disable();
-  }
-
-  GuardarDirecciones(formulario) {
-
-    for (let direccion of formulario.get('itemsDir').value) {
-      
-      // Agregar
-      if (direccion.estado == null) {
-        this.ServicioDireccion.CrearDireccion(
-          this.data,
-          direccion.direccion,
-          direccion.distrito,
-          direccion.relevanciadis,
-          direccion.observacion
-        ).subscribe(res=>console.log(res))
-      }
-      
-      // Eliminar
-      if (direccion.estado == 2 && direccion.id != null ) {
-        this.ServicioDireccion.EliminarDireccion(
-          direccion.id
-        ).subscribe(res=>console.log(res))
-      }
-      this.ventana.close();
-    }
-  }
-  
   ListarDepartamento() {
-    this.ServicioDireccion.ListarDepartamentos('', 0, 50).subscribe( res => {
+    this.ServicioDireccion.ListarDepartamentos('', 1, 50).subscribe( res => {
       this.LstDepartamento = res['data'].departamentos;
     });
   }
 
-  ListarProvincia(i) {
-    this.ServicioDireccion.ListarProvincias(i, '' , 0, 30).subscribe( res => {
+  ListarProvincia(departamento) {
+    this.ServicioDireccion.ListarProvincias(departamento, '' , 1, 30).subscribe( res => {
       this.LstProvincia = res['data'].provincias;
     });
   }
 
-  ListarDistrito(i) {
-    this.ServicioDireccion.ListarDistritos('', i , '', 0, 50).subscribe( res => {
+  ListarDistrito(provincia) {
+    this.ServicioDireccion.ListarDistritos('', provincia , '', 1, 50).subscribe( res => {
       this.LstDistrito = res['data'].distritos;
     });
   }
 
-  DepartamentoSeleccionado(event, i) {
-    this.ServicioDireccion.ListarProvincias(event.value, '' , 0, 30).
-    subscribe(res => this.LstProvincia = res['data'].provincias);
-    // console.log(this.LstProvincia);
-    this.DireccionesForm.get('itemsDir')['controls'][i].get('provincia').setValue('');
-  }
-
-  ProvinciaSeleccionada(event, i) {
-    // console.log(this.DireccionesForm.get('itemsDir')['controls'][i].get('provincia').value);
-    this.ServicioDireccion.ListarDistritos('', event.value, '' , 0, 50).
-    subscribe(res => this.LstDistrito = res['data'].distritos);
-    this.DireccionesForm.get('itemsDir')['controls'][i].get('distrito').setValue('');
-  }
-
-
-  ListarTelefonos(id_cliente: number) {
-    this.ServicioTelefono.ListarTelefono( id_cliente , '' ).subscribe(res => {
-      if (res) {
-        // console.log(res)
-        for (let i = 0; i < res.length  - 1 ; i++) {
-          this.AgregarTelefono();
-        }
-        for (let i in res) {
-          this.TelefonosForm.get('items')['controls'][i].get('id').setValue(res[i].id);
-          this.TelefonosForm.get('items')['controls'][i].get('telefono').setValue(res[i].tlf_numero);
-          this.TelefonosForm.get('items')['controls'][i].get('telefono').disable();
-          this.TelefonosForm.get('items')['controls'][i].get('observacion').setValue(res[i].tlf_observacion);
-          this.TelefonosForm.get('items')['controls'][i].get('observacion').disable();
-          this.TelefonosForm.get('items')['controls'][i].get('tipo').setValue(res[i].id_tipo);
-          this.TelefonosForm.get('items')['controls'][i].get('tipo').disable();
-          this.TelefonosForm.get('items')['controls'][i].get('relevancia').setValue(res[i].tlf_relevancia);
-          this.TelefonosForm.get('items')['controls'][i].get('relevancia').disable();
-          this.TelefonosForm.get('items')['controls'][i].get('estado').setValue(res[i].estado);
-        }
-      }
+  DepartamentoSeleccionado(event) {
+    this.ServicioDireccion.ListarProvincias(event.value, '' , 1, 30).subscribe(res => {
+      this.LstProvincia = res['data'].provincias
     });
+    this.DireccionesForm.get('provincia').setValue('');
+    this.DireccionesForm.get('distrito').setValue('');
   }
 
-  ListarDirecciones(id: number) {
-    if (id) {
-      this.ServicioDireccion.ListarDireccion(id.toString() ,'').subscribe(res => {
-        if (res) {
-          for (let i = 0; i < res.length - 1 ; i++) {
-            this.AgregarDirecciones();
-          }
-          for (let i in res) {
-            this.DireccionesForm.get('itemsDir')['controls'][i].get('id').setValue(res[i].id);
-            this.DireccionesForm.get('itemsDir')['controls'][i].get('direccion').setValue(res[i].direccion);
-            this.DireccionesForm.get('itemsDir')['controls'][i].get('observacion').setValue(res[i].observacion);
-            this.DireccionesForm.get('itemsDir')['controls'][i].get('estado').setValue(res[i].estado);
-            this.DireccionesForm.get('itemsDir')['controls'][i].get('relevanciadis').setValue(res[i].relevancia);
-            this.DireccionesForm.get('itemsDir')['controls'][i].get('departamento').setValue(res[i].departamento);
-            this.ListarProvincia(res[i].departamento);
-            this.DireccionesForm.get('itemsDir')['controls'][i].get('provincia').setValue(res[i].provincia);
-            this.ListarDistrito(res[i].provincia);
-            this.DireccionesForm.get('itemsDir')['controls'][i].get('distrito').setValue(res[i].id_distrito);
-
-            this.DireccionesForm.get('itemsDir')['controls'][i].get('direccion').disable()
-            this.DireccionesForm.get('itemsDir')['controls'][i].get('observacion').disable()
-            this.DireccionesForm.get('itemsDir')['controls'][i].get('relevanciadis').disable()
-            this.DireccionesForm.get('itemsDir')['controls'][i].get('departamento').disable()
-            this.DireccionesForm.get('itemsDir')['controls'][i].get('provincia').disable()
-            this.DireccionesForm.get('itemsDir')['controls'][i].get('distrito').disable()
-          }
-        }
-      });
-    }
+  ProvinciaSeleccionada(event) {
+    this.ServicioDireccion.ListarDistritos('', event.value, '' , 1, 50).subscribe(res => {
+      this.LstDistrito = res['data'].distritos
+    });
+    this.DireccionesForm.get('distrito').setValue('');
   }
 
   onNoClick(): void {

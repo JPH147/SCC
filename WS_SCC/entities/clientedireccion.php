@@ -12,7 +12,9 @@ Class ClienteDireccion{
     public $drc_relevancia;
     public $drc_observacion;
     public $drc_estado;
-
+    public $prpagina;
+    public $prtotalpagina;
+    
     public function __construct($db){
         $this->conn = $db;
     }
@@ -66,11 +68,13 @@ Class ClienteDireccion{
 
     function read()
     {
-        $query = "CALL sp_listarclientedireccion(:pid_cliente, :pdrc_relevancia)";
+        $query = "CALL sp_listarclientedireccion(:pid_cliente, :pdrc_relevancia, :pagina, :total_pagina)";
 
         $result = $this->conn->prepare($query);
         $result->bindParam(":pid_cliente", $this->id_cliente);
         $result->bindParam(":pdrc_relevancia", $this->drc_relevancia);
+        $result->bindParam(":pagina", $this->prpagina);
+        $result->bindParam(":total_pagina", $this->prtotalpagina);
 
         $result->execute();
         $direccion_list=array();
@@ -103,5 +107,24 @@ Class ClienteDireccion{
         }
         return $direccion_list;
     }
+
+    function contar(){
+
+        $query = "CALL sp_listarclientetelefonocontar(:pid_cliente, :pdrc_relevancia)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":pid_cliente", $this->id_cliente);
+        $result->bindParam(":pdrc_relevancia", $this->drc_relevancia);
+
+        $result->execute();
+
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        $this->total_resultado=$row['total'];
+
+        return $this->total_resultado;
+    }
+
 }
 ?>

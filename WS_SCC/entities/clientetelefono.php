@@ -10,6 +10,8 @@ Class ClienteTelefono{
     public $tlf_observacion;
     public $id_tipo;
     public $tlf_relevancia;
+    public $prpagina;
+    public $prtotalpagina;
 
     public function __construct($db){
         $this->conn = $db;
@@ -64,11 +66,13 @@ Class ClienteTelefono{
 
     function read()
     {
-        $query = "CALL sp_listarclientetelefono(:pid_cliente, :ptlf_relevancia)";
+        $query = "CALL sp_listarclientetelefono(:pid_cliente, :ptlf_relevancia, :pagina, :total_pagina)";
 
         $result = $this->conn->prepare($query);
         $result->bindParam(":pid_cliente", $this->id_cliente);
         $result->bindParam(":ptlf_relevancia", $this->tlf_relevancia);
+        $result->bindParam(":pagina", $this->prpagina);
+        $result->bindParam(":total_pagina", $this->prtotalpagina);
 
         $result->execute();
         $telefono_list=array();
@@ -95,5 +99,24 @@ Class ClienteTelefono{
         }
         return $telefono_list;
     }
+
+    function contar(){
+
+        $query = "CALL sp_listarclientetelefonocontar(:pid_cliente, :ptlf_relevancia)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":pid_cliente", $this->id_cliente);
+        $result->bindParam(":ptlf_relevancia", $this->tlf_relevancia);
+
+        $result->execute();
+
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        $this->total_resultado=$row['total'];
+
+        return $this->total_resultado;
+    }
+    
 }
 ?>

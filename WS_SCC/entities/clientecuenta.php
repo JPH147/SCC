@@ -11,6 +11,8 @@ Class ClienteCuenta{
     public $banco;
     public $cuenta;
     public $cci;
+    public $prpagina;
+    public $prtotalpagina;
 
     public function __construct($db){
         $this->conn = $db;
@@ -22,8 +24,7 @@ Class ClienteCuenta{
             :prcliente,
             :prbanco,
             :prcuenta,
-            :prcci,
-            :drc_observacion
+            :prcci
         )";
 
         $result = $this->conn->prepare($query);
@@ -63,10 +64,13 @@ Class ClienteCuenta{
 
     function read()
     {
-        $query = "CALL sp_listarclientecuenta(:id_cliente)";
+        $query = "CALL sp_listarclientecuenta(:id_cliente, :pagina, :total_pagina)";
 
         $result = $this->conn->prepare($query);
+
         $result->bindParam(":id_cliente", $this->id_cliente);
+        $result->bindParam(":pagina", $this->prpagina);
+        $result->bindParam(":total_pagina", $this->prtotalpagina);
 
         $result->execute();
         $cuentas_list=array();
@@ -84,12 +88,30 @@ Class ClienteCuenta{
                 "id_banco"=>$row['id_banco'],
                 "nombre_banco"=>$row['nombre_banco'],
                 "cuenta_numero"=>$row['cuenta_numero'],
-                "cuenta_cci"=>$row["cuenta_cci"]
+                "cuenta_cci"=>bcmul($row["cuenta_cci"],"1")
             );
 
             array_push($cuentas_list["cuentas"],$cuentas_item);
         }
         return $cuentas_list;
     }
+
+    function contar(){
+
+        $query = "CALL sp_listarclientecuentacontar(?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_cliente);
+
+        $result->execute();
+
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        $this->total_resultado=$row['total'];
+
+        return $this->total_resultado;
+    }
+
 }
 ?>

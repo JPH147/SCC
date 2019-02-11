@@ -6,161 +6,181 @@
 
   <mat-tab label="Telefonos">
 
-    <mat-card>
+    <mat-card-content>
       
-      <mat-grid-list cols="1" rowHeight="50px">
-        <mat-grid-tile>
-          <button mat-mini-fab color="primary" class="boton" (click)="AgregarTelefono()" type="button"><mat-icon>add</mat-icon></button>
-        </mat-grid-tile>
-      </mat-grid-list>
-
       <form [formGroup]="TelefonosForm">
-        <mat-card-content>
+        <mat-grid-list cols=4 rowHeight="70px">
 
-          <div formArrayName="items" *ngFor="let item of TelefonosForm['controls'].items['controls']; let i = index">
-            <div [formGroupName]="i">
-          
-              <mat-grid-list cols=4 rowHeight="70px">
-                        
-                <mat-grid-tile>
-                  <mat-form-field class="input-ventana">
-                    <input matInput placeholder="Número" formControlName="telefono" maxlength="11">
-                    <mat-error *ngIf="item.get('telefono').invalid">El número debe contener más de 7 dígitos</mat-error>
-                  </mat-form-field>
-                </mat-grid-tile>
-    
-                <mat-grid-tile>
-                  <mat-form-field class="input-ventana">
-                    <mat-select placeholder='Tipo' formControlName="tipo">
-                        <mat-option *ngFor="let tipo of Tipos" [value]="tipo.id">
-                            {{tipo.viewValue}}
-                        </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </mat-grid-tile>
-    
-                <mat-grid-tile>
-                  <mat-form-field class="input-ventana">
-                    <mat-select placeholder='Relevancia' formControlName="relevancia">
-                        <mat-option *ngFor="let relevancia of Relevancias" [value]="relevancia.id">
-                            {{relevancia.viewValue}}
-                        </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </mat-grid-tile> 
-    
-                <mat-grid-tile>
-                  <mat-form-field class="input-ventana">
-                    <input matInput placeholder="Observación" formControlName="observacion">
-                  </mat-form-field>
-                </mat-grid-tile>
-    
-                <button mat-mini-fab type="button" color="primary" class="boton" (click)="EliminarTelefono(item,i)" [disabled]="item.length==1 || item.value.estado==2"><mat-icon>delete</mat-icon></button>
-    
-              </mat-grid-list>
-    
-            </div>
-          </div>
-    
-        </mat-card-content>
+          <mat-grid-tile>
+            <mat-form-field>
+              <mat-select placeholder="Relevancia" formControlName="relevancia">
+                <mat-option *ngFor="let relevancia of Relevancias" [value]="relevancia.id">{{relevancia.viewValue}}</mat-option>
+              </mat-select>
+              <mat-error>Este campo es obligatorio</mat-error>
+            </mat-form-field>
+          </mat-grid-tile>
 
-        <mat-card-actions>
-          <mat-grid-list cols=1 rowHeight="40px">
-            <mat-grid-tile>
-              <button type="submit" mat-raised-button [disabled]="TelefonosForm.invalid" color="primary" (click)="GuardarTelefonos(TelefonosForm)">Grabar</button>
-            </mat-grid-tile>
-          </mat-grid-list>
-        </mat-card-actions>
+          <mat-grid-tile>
+            <mat-form-field>
+              <mat-select placeholder="Tipo" formControlName="tipo">
+                <mat-option *ngFor="let tipo of Tipos" [value]="tipo.id">{{tipo.viewValue}}</mat-option>
+              </mat-select>
+              <mat-error>Este campo es obligatorio</mat-error>
+            </mat-form-field>
+          </mat-grid-tile>
 
+          <mat-grid-tile>
+            <mat-form-field>
+              <input matInput placeholder="Número" formControlName="telefono">
+              <mat-error>Debe ingresar más de 7 dígitos</mat-error>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <button mat-raised-button color="primary" type="button" [disabled]="TelefonosForm.invalid" (click)="AgregarTelefono()">Agregar</button>
+          </mat-grid-tile>
+
+        </mat-grid-list>
       </form>
-    </mat-card>
+
+      <div class = "spinner-container" *ngIf = "ListadoTelefonos.Cargando| async">
+        <mat-spinner></mat-spinner>
+      </div>
+
+      <mat-table [dataSource]="ListadoTelefonos" class="mat-elevation-z8">
+
+        <ng-container matColumnDef="telefono-numero">
+          <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+          <mat-cell *matCellDef="let telefono"> {{telefono.numero}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="telefono-relevancia">
+          <mat-header-cell *matHeaderCellDef> Relevancia </mat-header-cell>
+          <mat-cell *matCellDef="let telefono"> {{telefono.tlf_relevancia==1 ? 'Principal' : 'Secundario'}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="telefono-tipo">
+          <mat-header-cell *matHeaderCellDef> Tipo </mat-header-cell>
+          <mat-cell *matCellDef="let telefono" [ngSwitch]="telefono.id_tipo">
+            <ng-container *ngSwitchCase=1> Celular </ng-container>
+            <ng-container *ngSwitchCase=2> Casa </ng-container>
+            <ng-container *ngSwitchCase=3> Trabajo </ng-container>
+            <ng-container *ngSwitchCase=4> Otro </ng-container>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="telefono-numero_telefono">
+          <mat-header-cell *matHeaderCellDef> Número </mat-header-cell>
+          <mat-cell *matCellDef="let telefono"> {{telefono.tlf_numero}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="telefono-opciones">
+          <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
+          <mat-cell *matCellDef="let telefono">
+            <button mat-icon-button matTooltip="Eliminar" color="primary" (click)="EliminarTelefono(telefono)"><mat-icon> delete </mat-icon></button>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="ColumnasTelefonos"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: ColumnasTelefonos;"></mat-row>
+      </mat-table>
+
+      <mat-paginator #PaginadorTelefonos [length]="ListadoTelefonos.TotalResultados | async" [pageSize]="5"></mat-paginator>
+
+    </mat-card-content>
   </mat-tab>
 
   <mat-tab label="Direcciones">
+    <mat-card-content>
+      
+      <form [formGroup]="DireccionesForm">
+        <mat-grid-list cols=4 rowHeight="70px">
 
-    <mat-card>
-        
-        <mat-grid-list cols="1" rowHeight="50px">
           <mat-grid-tile>
-            <button mat-mini-fab color="primary" class="boton" (click)="AgregarDirecciones()" type="button"><mat-icon>add</mat-icon></button>
+            <mat-form-field>
+              <mat-select placeholder="Relevancia" formControlName="relevancia">
+                <mat-option *ngFor="let relevancia of RelevanciaDireccion" [value]="relevancia.id">{{relevancia.viewValue}}</mat-option>
+              </mat-select>
+              <mat-error>Este campo es obligatorio</mat-error>
+            </mat-form-field>
           </mat-grid-tile>
+
+          <mat-grid-tile>
+            <mat-form-field>
+              <mat-select placeholder="Departamento" formControlName="departamento" (selectionChange)="DepartamentoSeleccionado($event)">
+                <mat-option *ngFor="let departamento of LstDepartamento" [value]="departamento.nombre">{{departamento.nombre}}</mat-option>
+              </mat-select>
+              <mat-error>Este campo es obligatorio</mat-error>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <mat-form-field>
+              <mat-select placeholder="Provincia" formControlName="provincia" (selectionChange)="ProvinciaSeleccionada($event)">
+                <mat-option *ngFor="let provincia of LstProvincia" [value]="provincia.nombre">{{provincia.nombre}}</mat-option>
+              </mat-select>
+              <mat-error>Este campo es obligatorio</mat-error>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <mat-form-field>
+              <mat-select placeholder="Distrito" formControlName="distrito">
+                <mat-option *ngFor="let distrito of LstDistrito" [value]="distrito.id">{{distrito.nombre}}</mat-option>
+              </mat-select>
+              <mat-error>Este campo es obligatorio</mat-error>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile colspan=3>
+            <mat-form-field class="grande">
+              <input matInput placeholder="Dirección" formControlName="nombre">
+              <mat-error>Este campo es obligatorio</mat-error>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <button mat-raised-button color="primary" type="button" [disabled]="DireccionesForm.invalid" (click)="AgregarDireccion()">Agregar</button>
+          </mat-grid-tile>
+
         </mat-grid-list>
-
-        <form [formGroup]="DireccionesForm">
-          <mat-card-content>
-            <div formArrayName="itemsDir" *ngFor="let direccion of DireccionesForm['controls'].itemsDir['controls']; let i = index">
-              <div [formGroupName]="i">
-                <mat-grid-list cols=6 rowHeight="80px">
-                  <mat-grid-tile colspan="1">
-                    <mat-form-field class="input-ventana">
-                      <input matInput placeholder="Dirección"  formControlName="direccion">
-                    </mat-form-field>
-                  </mat-grid-tile>
-
-                  <mat-grid-tile colspan="1">
-                    <mat-form-field>
-                      <mat-select placeholder='Selecciona Departamento' formControlName="departamento" (selectionChange)="DepartamentoSeleccionado($event,i)" >
-                        <mat-option *ngFor="let departamento of LstDepartamento" [value]="departamento.nombre">
-                            {{departamento.nombre}}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </mat-grid-tile>
-
-                  <mat-grid-tile colspan="1">
-                    <mat-form-field>
-                      <mat-select placeholder='Selecciona Provincia' formControlName="provincia" (selectionChange)="ProvinciaSeleccionada($event,i)">
-                        <mat-option *ngFor="let provincia of LstProvincia" [value]="provincia.nombre">
-                          {{provincia.nombre}}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </mat-grid-tile> 
-
-                  <mat-grid-tile colspan="1">
-                    <mat-form-field>
-                      <mat-select placeholder='Selecciona Distrito' formControlName="distrito" >
-                        <mat-option *ngFor="let distrito of LstDistrito" [value]="distrito.id">
-                          {{distrito.nombre}}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </mat-grid-tile>
-
-                  <mat-grid-tile colspan="1">
-                    <mat-form-field class="input-ventana">
-                      <mat-select placeholder='Selecciona Relevancia' formControlName="relevanciadis" >
-                        <mat-option *ngFor="let relevanciadis of RelevanciaDireccion" [value]="relevanciadis.id">
-                          {{relevanciadis.viewValue}}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </mat-grid-tile> 
-
-                  <mat-grid-tile colspan="1">
-                    <mat-form-field class="input-ventana">
-                      <input matInput placeholder="Ingresa Observacion" formControlName="observacion">
-                    </mat-form-field>
-                  </mat-grid-tile>
-
-                <button mat-mini-fab type="button" color="primary" class="boton" (click)="EliminarDireccion(direccion,i)" [disabled]="direccion.length==1 || direccion.value.estado==2">
-                <mat-icon>delete</mat-icon></button>
-
-              </mat-grid-list>
-            </div>
-          </div>
-        </mat-card-content>
-
-        <mat-card-actions>
-          <mat-grid-list cols=1 rowHeight="40px">
-            <mat-grid-tile>
-              <button type="submit" mat-raised-button [disabled]="DireccionesForm.invalid" color="primary" (click)="GuardarDirecciones(DireccionesForm)">Grabar</button>
-            </mat-grid-tile>
-          </mat-grid-list>
-        </mat-card-actions>
-
       </form>
-    </mat-card>
+
+      <div class = "spinner-container" *ngIf = "ListadoDirecciones.Cargando| async">
+        <mat-spinner></mat-spinner>
+      </div>
+
+      <mat-table [dataSource]="ListadoDirecciones" class="mat-elevation-z8">
+
+        <ng-container matColumnDef="direccion-numero">
+          <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+          <mat-cell *matCellDef="let direccion"> {{direccion.numero}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="direccion-relevancia">
+          <mat-header-cell *matHeaderCellDef> Relevancia </mat-header-cell>
+          <mat-cell *matCellDef="let direccion"> {{direccion.relevancia == 1 ? 'Principal' : 'Secundario'}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="direccion-nombre">
+          <mat-header-cell *matHeaderCellDef> Número </mat-header-cell>
+          <mat-cell *matCellDef="let direccion"> {{direccion.direccioncompleta}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="direccion-opciones">
+          <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
+          <mat-cell *matCellDef="let direccion">
+            <button mat-icon-button matTooltip="Eliminar" color="primary" (click)="EliminarDireccion(direccion)"><mat-icon> delete </mat-icon></button>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="ColumnasDirecciones"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: ColumnasDirecciones;"></mat-row>
+      </mat-table>
+
+      <mat-paginator #PaginadorDirecciones [length]="ListadoDirecciones.TotalResultados | async" [pageSize]="5"></mat-paginator>
+
+    </mat-card-content>
   </mat-tab>
 
   <mat-tab label="Cuentas bancarias">
@@ -174,8 +194,8 @@
             <mat-form-field>
               <mat-select placeholder="Banco" formControlName="banco">
                 <mat-option *ngFor="let banco of Bancos" [value]="banco.id">{{banco.nombre}}</mat-option>
-                <mat-error>Este campo es obligatorio</mat-error>
               </mat-select>
+              <mat-error>Este campo es obligatorio</mat-error>
             </mat-form-field>
           </mat-grid-tile>
 
@@ -206,30 +226,30 @@
 
       <mat-table [dataSource]="ListadoCuentas" class="mat-elevation-z8">
 
-        <ng-container matColumnDef="numero">
+        <ng-container matColumnDef="cuenta-numero">
           <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
-          <mat-cell *matCellDef="let observacion"> {{observacion.numero}} </mat-cell>
+          <mat-cell *matCellDef="let cuenta"> {{cuenta.numero}} </mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="banco">
+        <ng-container matColumnDef="cuenta-banco">
           <mat-header-cell *matHeaderCellDef> Banco </mat-header-cell>
-          <mat-cell *matCellDef="let observacion"> {{observacion.nombre_banco}} </mat-cell>
+          <mat-cell *matCellDef="let cuenta"> {{cuenta.nombre_banco}} </mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="cuenta">
+        <ng-container matColumnDef="cuenta-cuenta">
           <mat-header-cell *matHeaderCellDef> Cuenta </mat-header-cell>
-          <mat-cell *matCellDef="let observacion"> {{observacion.cuenta_numero}} </mat-cell>
+          <mat-cell *matCellDef="let cuenta"> {{cuenta.cuenta_numero}} </mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="cci">
+        <ng-container matColumnDef="cuenta-cci">
           <mat-header-cell *matHeaderCellDef> CCI </mat-header-cell>
-          <mat-cell *matCellDef="let observacion"> {{observacion.cuenta_cci}} </mat-cell>
+          <mat-cell *matCellDef="let cuenta"> {{cuenta.cuenta_cci}} </mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="opciones">
+        <ng-container matColumnDef="cuenta-opciones">
           <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
-          <mat-cell *matCellDef="let observacion">
-            <button mat-icon-button matTooltip="Eliminar" color="primary" (click)="Eliminar(observacion.id)"><mat-icon> delete </mat-icon></button>
+          <mat-cell *matCellDef="let cuenta">
+            <button mat-icon-button matTooltip="Eliminar" color="primary" (click)="EliminarCuenta(cuenta)"><mat-icon> delete </mat-icon></button>
           </mat-cell>
         </ng-container>
 
@@ -237,7 +257,7 @@
         <mat-row *matRowDef="let row; columns: ColumnasCuentas;"></mat-row>
       </mat-table>
 
-      <mat-paginator [length]="ListadoCuentas.TotalResultados | async" [pageSize]="5" [pageSizeOptions]="[5,10,15]"></mat-paginator>
+      <mat-paginator #PaginadorCuentas [length]="ListadoCuentas.TotalResultados | async" [pageSize]="5"></mat-paginator>
 
     </mat-card-content>
   </mat-tab>

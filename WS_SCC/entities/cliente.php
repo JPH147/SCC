@@ -34,6 +34,9 @@ Class Cliente{
     public $clt_estado;
     public $clt_fecharegistro;
 
+    public $cargo;
+    public $cargo_estado;
+
     public $clt_aporteinicio;
     public $clt_aportefin;
     public $prpagina;
@@ -284,7 +287,9 @@ Class Cliente{
         $this->id_sede=$row['id_sede'];
         $this->id_subsede=$row['id_subsede'];
         $this->id_cargo=$row['id_cargo'];
+        $this->cargo=$row['crg_nombre'];
         $this->id_cargo_estado=$row['id_cargo_estado'];
+        $this->cargo_estado=$row['id_cargo_estado'];
         $this->clt_codigo=$row['clt_codigo'];
         $this->clt_dni=$row['clt_dni'];
         $this->clt_nombre=$row['clt_nombre'];
@@ -355,7 +360,7 @@ Class Cliente{
         $result->bindParam(":clt_trabajo", $this->clt_trabajo);
         $result->bindParam(":id_distrito_trabajo", $this->id_distrito_trabajo);
         $result->bindParam(":clt_capacidad_pago", $this->capacidad_pago);
-        $result->bindParam(":cltrmaximo_descuento", $this->maximo_descuento);
+        $result->bindParam(":clt_maximo_descuento", $this->maximo_descuento);
         $result->bindParam(":clt_calificacion_personal", $this->clt_calificacion_personal);
         $result->bindParam(":clt_aporte", $this->clt_aporte);
         
@@ -366,6 +371,7 @@ Class Cliente{
         }
         
         return false;
+        // return $query;
     }
     function delete()
     {
