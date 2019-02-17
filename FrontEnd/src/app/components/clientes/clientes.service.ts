@@ -60,7 +60,7 @@ export class ClienteService {
       if (res['codigo'] === 0) {
         return res['data'].clientes;
       } else {
-        console.log('No hay datos que mostrar');
+        // console.log('No hay datos que mostrar');
       }
     }));
   }
@@ -194,26 +194,28 @@ export class ClienteService {
     .set('prbanco', banco.toString())
     .set('prcuenta', cuenta)
     .set('prcci', cci)
-    console.log(params)
+    // console.log(params)
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     return this.http.post(this.url + 'clientecuenta/create.php', params, {headers: headers});
   }
 
   ListarCuenta(
     id_cliente:number,
+    relevancia:string,
     prpagina: number,
     prtotalpagina: number
   ){
     return this.http.get(this.url + 'clientecuenta/read.php',{
        params: new HttpParams()
        .set('prcliente', id_cliente.toString())
+       .set('prrelevancia', relevancia)
        .set('prpagina',prpagina.toString())
        .set('prtotalpagina',prtotalpagina.toString())
      }).pipe(map(res => {
       if (res['codigo'] === 0) {
         return res;
       }else {
-        console.log('No hay datos que mostrar');
+        // console.log('No hay datos que mostrar');
         return res;
       }
     }));
@@ -227,6 +229,16 @@ export class ClienteService {
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     return this.http.post(this.url + 'clientecuenta/delete.php', params, {headers: headers});
+  }
+
+  EstablecerCuenta(
+    id_cuenta:number
+  ){
+    let params = new HttpParams()
+    .set('prcuenta', id_cuenta.toString())
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    return this.http.post(this.url + 'clientecuenta/actualizar-primario.php', params, {headers: headers});
   }
 
   CrearObservacion(

@@ -32,22 +32,21 @@
 }
 
 .mat-column-cuenta-numero,
-.mat-column-cuenta-opciones{
+.mat-column-cuenta-opciones,
+.mat-column-cuenta-relevancia{
 	max-width: 10%
 }
 
 .mat-column-telefono-numero,
-.mat-column-telefono-opciones{
+.mat-column-telefono-opciones,
+.mat-column-telefono-relevancia{
 	max-width: 10%
 }
 
 .mat-column-direccion-numero,
-.mat-column-direccion-opciones{
-	max-width: 10%
-}
-
+.mat-column-direccion-opciones,
 .mat-column-direccion-relevancia{
-	max-width: 20%
+	max-width: 10%
 }
 
 mat-form-field{

@@ -77,8 +77,8 @@
 
       <ng-container matColumnDef="foto">
         <mat-header-cell *matHeaderCellDef>Foto </mat-header-cell>
-        <mat-cell *matCellDef="let cliente"><img [attr.src]="cliente.foto" class="foto-cliente"></mat-cell>
-    </ng-container>
+        <mat-cell *matCellDef="let cliente"><img [attr.src]="cliente.foto" class="foto-cliente" (click)="VerFoto(cliente.nombre, cliente.foto)"></mat-cell>
+      </ng-container>
 
       <ng-container matColumnDef="subsede">
         <mat-header-cell *matHeaderCellDef> Subsede </mat-header-cell>
@@ -105,7 +105,7 @@
         <mat-cell *matCellDef="let cliente">
           <button mat-icon-button matTooltip="Agregar datos de contacto" (click)="AgregarDatoContacto(cliente.id)" color="primary"><mat-icon> local_phone </mat-icon></button>
           <button mat-icon-button matTooltip="Subir foto" color="primary" (click)="SubirImagen(cliente)"><mat-icon> add_a_photo </mat-icon></button>
-          <button mat-icon-button matTooltip="Realizar venta" color="primary" [routerLink]="['/ventas/nueva', cliente.id]"><mat-icon> add_shopping_cart </mat-icon></button>
+          <button mat-icon-button matTooltip="Realizar venta" color="primary" (click)="HacerVenta(cliente.id)"><mat-icon> add_shopping_cart </mat-icon></button>
           <button mat-icon-button matTooltip="Ver ventas" color="primary"><mat-icon> attach_money</mat-icon></button>
           <button mat-icon-button matTooltip="Agregar observaciones" color="primary" (click)="AgregarObservaciones(cliente.id)"><mat-icon> assignment</mat-icon></button>
           <button mat-icon-button matTooltip="Editar" color="primary" (click)="Editar(cliente.id)"><mat-icon> edit </mat-icon></button>

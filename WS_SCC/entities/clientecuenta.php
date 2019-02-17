@@ -4,13 +4,13 @@ Class ClienteCuenta{
     private $conn;
     private $table_name = "cliente_cuenta";
 
-    public $idcliente_direccion;
     public $id_cliente;
     public $id_cuenta;
     public $clt_nombre;
     public $banco;
     public $cuenta;
     public $cci;
+    public $relevancia;
     public $prpagina;
     public $prtotalpagina;
 
@@ -64,11 +64,12 @@ Class ClienteCuenta{
 
     function read()
     {
-        $query = "CALL sp_listarclientecuenta(:id_cliente, :pagina, :total_pagina)";
+        $query = "CALL sp_listarclientecuenta(:id_cliente, :relevancia, :pagina, :total_pagina)";
 
         $result = $this->conn->prepare($query);
 
         $result->bindParam(":id_cliente", $this->id_cliente);
+        $result->bindParam(":relevancia", $this->relevancia);
         $result->bindParam(":pagina", $this->prpagina);
         $result->bindParam(":total_pagina", $this->prtotalpagina);
 
@@ -88,7 +89,8 @@ Class ClienteCuenta{
                 "id_banco"=>$row['id_banco'],
                 "nombre_banco"=>$row['nombre_banco'],
                 "cuenta_numero"=>$row['cuenta_numero'],
-                "cuenta_cci"=>bcmul($row["cuenta_cci"],"1")
+                "cuenta_cci"=>$row["cuenta_cci"],
+                "relevancia"=>$row['relevancia'],
             );
 
             array_push($cuentas_list["cuentas"],$cuentas_item);
@@ -111,6 +113,25 @@ Class ClienteCuenta{
         $this->total_resultado=$row['total'];
 
         return $this->total_resultado;
+    }
+
+    function actualizar_primario()
+    {
+      $query = "CALL sp_actualizarrelevanciacuenta(
+        :id_cuenta
+      )";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(":id_cuenta", $this->id_cuenta);
+
+      $this->id_cuenta=htmlspecialchars(strip_tags($this->id_cuenta));
+
+      if($result->execute())
+      {
+       return true;
+      }
+      return false;
     }
 
 }

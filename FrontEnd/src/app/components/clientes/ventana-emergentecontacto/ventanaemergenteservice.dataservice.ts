@@ -9,7 +9,7 @@ import {VentanaConfirmarComponent} from '../../global/ventana-confirmar/ventana-
 export class ClienteCuentaDataSource implements DataSource<any> {
 
   private InformacionCuentas = new BehaviorSubject<any[]>([]);
-  private CargandoInformacion = new BehaviorSubject<boolean>(false);
+  public CargandoInformacion = new BehaviorSubject<boolean>(false);
   public Cargando = this.CargandoInformacion.asObservable();
   public TotalResultados = new BehaviorSubject<number>(0);
 
@@ -30,7 +30,7 @@ export class ClienteCuentaDataSource implements DataSource<any> {
     total_pagina: number
   ){
     this.CargandoInformacion.next(true);
-    this.Servicio.ListarCuenta(id_cliente, pagina , total_pagina)
+    this.Servicio.ListarCuenta(id_cliente, '', pagina , total_pagina)
     .pipe(catchError(() => of([])),
     finalize(() => this.CargandoInformacion.next(false))
     )
@@ -52,7 +52,7 @@ export class ClienteCuentaDataSource implements DataSource<any> {
 export class ClienteTelefonoDataSource implements DataSource<any> {
 
   private InformacionTelefonos = new BehaviorSubject<any[]>([]);
-  private CargandoInformacion = new BehaviorSubject<boolean>(false);
+  public CargandoInformacion = new BehaviorSubject<boolean>(false);
   public Cargando = this.CargandoInformacion.asObservable();
   public TotalResultados = new BehaviorSubject<number>(0);
 
@@ -95,7 +95,7 @@ export class ClienteTelefonoDataSource implements DataSource<any> {
 export class ClienteDireccionDataSource implements DataSource<any> {
 
   private InformacionDirecciones = new BehaviorSubject<any[]>([]);
-  private CargandoInformacion = new BehaviorSubject<boolean>(false);
+  public CargandoInformacion = new BehaviorSubject<boolean>(false);
   public Cargando = this.CargandoInformacion.asObservable();
   public TotalResultados = new BehaviorSubject<number>(0);
 

@@ -111,7 +111,7 @@ export class VentaService {
     }).pipe(map(res=>{
       if (res['codigo'] === 0) {
         return res['data'];
-      }  else {
+      } else {
         console.log('No hay datos que mostrar');
       }
     }))

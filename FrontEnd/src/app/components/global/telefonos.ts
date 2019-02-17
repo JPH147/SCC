@@ -18,21 +18,17 @@ export class ServiciosTelefonos {
   CrearTelefono(
         id_cliente: number,
         tlf_numero: string,
-        tlf_observacion: string,
         id_tipo: number,
-        tlf_relevancia: number
   ): Observable<any> {
 
-        let params = new HttpParams()
-        .set('id_cliente', id_cliente.toString())
-        .set('tlf_numero', tlf_numero)
-        .set('tlf_observacion', tlf_observacion)
-        .set('id_tipo', id_tipo.toString())
-        .set('tlf_relevancia', tlf_relevancia.toString())
+    let params = new HttpParams()
+    .set('id_cliente', id_cliente.toString())
+    .set('tlf_numero', tlf_numero)
+    .set('id_tipo', id_tipo.toString())
 
-        let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-        return this.http.post(this.url + 'clientetelefono/create.php', params, {headers: headers});
+    return this.http.post(this.url + 'clientetelefono/create.php', params, {headers: headers});
   }
 
   ListarTelefono(
@@ -70,6 +66,18 @@ export class ServiciosTelefonos {
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     
     return this.http.post(this.url + 'clientetelefono/delete.php', params, {headers: headers});
+  }
+
+  EstablecerTelefono(
+    id_telefono:number
+  ): Observable<any>{
+
+    let params = new HttpParams()
+    .set('prtelefono', id_telefono.toString())
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    
+    return this.http.post(this.url + 'clientetelefono/actualizar-primario.php', params, {headers: headers});
   }
 
 }

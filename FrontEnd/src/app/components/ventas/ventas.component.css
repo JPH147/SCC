@@ -56,3 +56,7 @@ mat-card{
 .readonly-wrapper .readonly-block {
     pointer-events: none !important;
 }
+
+.seccion{
+  margin-top: 20px;
+}

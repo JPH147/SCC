@@ -1,0 +1,15 @@
+<mat-card class="card">
+
+	<mat-toolbar color="primary">
+  	<mat-toolbar-row>{{this.data.nombre}}</mat-toolbar-row>
+  </mat-toolbar>
+
+	<mat-card-content>
+		<mat-grid-list cols=1 rowHeight="500px">
+			<mat-grid-tile>
+				<img [attr.src]="this.data.imagen" class="foto-cliente">
+			</mat-grid-tile>
+		</mat-grid-list>
+	</mat-card-content>
+
+</mat-card>

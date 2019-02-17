@@ -388,7 +388,7 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
     }
 
     ListarVendedor(nombre: string) {
-      this.Servicios.ListarVendedor(nombre).subscribe( res => {
+      this.Servicios.ListarVendedor("",nombre,"",1,5).subscribe( res => {
         this.Vendedores = [];
 
         // tslint:disable-next-line:forin

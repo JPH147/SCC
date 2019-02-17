@@ -2,22 +2,44 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4428cc1a-4863-4c91-93fe-91eecaab092f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/clientes.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/clientes.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/app.module.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/clientes.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/clientes.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/clientes.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/clientes.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/clientes.dataservice.ts" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/clientes.dataservice.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/clientes.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/clientes.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/ventana-observaciones/ventana-observaciones.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/ventana-observaciones/ventana-observaciones.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/ventana-observaciones/ventana-observaciones.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/ventana-observaciones/ventana-observaciones.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/ventana-observaciones/ventana-observaciones.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/ventana-observaciones/ventana-observaciones.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/global/ventana-confirmar/ventana-confirmar.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/global/ventana-confirmar/ventana-confirmar.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/global/ventana-confirmar/ventana-confirmar.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/global/ventana-confirmar/ventana-confirmar.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/historial-movimientos/historial-movimientos.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/historial-movimientos/historial-movimientos.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/ventana-emergente/ventanaemergente.html" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/ventana-emergente/ventanaemergente.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/ventana-emergente/ventanaemergente.ts" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/ventana-emergente/ventanaemergente.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/ventana-emergentecontacto/ventanaemergentecontacto.css" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/ventana-emergentecontacto/ventanaemergentecontacto.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/ventana-emergentecontacto/ventanaemergentecontacto.html" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/ventana-emergentecontacto/ventanaemergentecontacto.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/ventana-emergentecontacto/ventanaemergentecontacto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/ventana-emergentecontacto/ventanaemergentecontacto.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/ventana-emergentecontacto/ventanaemergenteservice.dataservice.ts" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/clientes/ventana-emergentecontacto/ventanaemergenteservice.dataservice.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/global/direcciones.ts" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/global/direcciones.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/global/productoserie.ts" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/global/productoserie.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/global/servicios.ts" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/global/servicios.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/global/telefonos.ts" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/global/telefonos.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/ingreso-productos/ingreso-productos.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/ingreso-productos/ingreso-productos.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/ventas-listar/ventas-listar.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/ventas-listar/ventas-listar.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/ventas/ventana-productos/ventana-productos.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/ventas/ventana-productos/ventana-productos.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/ventas/ventana-productos/ventana-productos.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/ventas/ventana-productos/ventana-productos.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/ventas/ventas.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/ventas/ventas.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/ventas/ventas.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/ventas/ventas.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/ventas/ventas.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/ventas/ventas.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/app/components/ventas/ventas.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/app/components/ventas/ventas.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FrontEnd/src/styles.scss" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/styles.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WS_SCC/cliente/read.php" beforeDir="false" afterPath="$PROJECT_DIR$/WS_SCC/cliente/read.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WS_SCC/clienteobservacion/create.php" beforeDir="false" afterPath="$PROJECT_DIR$/WS_SCC/clienteobservacion/create.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WS_SCC/clienteobservacion/read.php" beforeDir="false" afterPath="$PROJECT_DIR$/WS_SCC/clienteobservacion/read.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WS_SCC/entities/cliente.php" beforeDir="false" afterPath="$PROJECT_DIR$/WS_SCC/entities/cliente.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WS_SCC/entities/clienteobservacion.php" beforeDir="false" afterPath="$PROJECT_DIR$/WS_SCC/entities/clienteobservacion.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/src/tema.scss" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/src/tema.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WS_SCC/WS_SCC.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WS_SCC/clientecuenta/read.php" beforeDir="false" afterPath="$PROJECT_DIR$/WS_SCC/clientecuenta/read.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WS_SCC/clientedireccion/create.php" beforeDir="false" afterPath="$PROJECT_DIR$/WS_SCC/clientedireccion/create.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WS_SCC/clientedireccion/read.php" beforeDir="false" afterPath="$PROJECT_DIR$/WS_SCC/clientedireccion/read.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WS_SCC/clientetelefono/create.php" beforeDir="false" afterPath="$PROJECT_DIR$/WS_SCC/clientetelefono/create.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WS_SCC/clientetelefono/read.php" beforeDir="false" afterPath="$PROJECT_DIR$/WS_SCC/clientetelefono/read.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WS_SCC/entities/clientecuenta.php" beforeDir="false" afterPath="$PROJECT_DIR$/WS_SCC/entities/clientecuenta.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WS_SCC/entities/clientedireccion.php" beforeDir="false" afterPath="$PROJECT_DIR$/WS_SCC/entities/clientedireccion.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WS_SCC/entities/clientetelefono.php" beforeDir="false" afterPath="$PROJECT_DIR$/WS_SCC/entities/clientetelefono.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WS_SCC/entities/productoserie.php" beforeDir="false" afterPath="$PROJECT_DIR$/WS_SCC/entities/productoserie.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WS_SCC/entities/vendedor.php" beforeDir="false" afterPath="$PROJECT_DIR$/WS_SCC/entities/vendedor.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WS_SCC/vendedor/read.php" beforeDir="false" afterPath="$PROJECT_DIR$/WS_SCC/vendedor/read.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WS_SCC/venta/create.php" beforeDir="false" afterPath="$PROJECT_DIR$/WS_SCC/venta/create.php" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -32,11 +54,12 @@
     <session id="1250545887">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="2" />
+          <entry key="project.closed" value="3" />
+          <entry key="project.open.time.21" value="1" />
           <entry key="project.open.time.22" value="1" />
           <entry key="project.open.time.3" value="1" />
           <entry key="project.open.time.8" value="1" />
-          <entry key="project.opened" value="3" />
+          <entry key="project.opened" value="4" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
@@ -55,7 +78,7 @@
       </usages-collector>
       <usages-collector id="statistics.js.language.service.starts">
         <counts>
-          <entry key="Angular2LanguageService" value="3" />
+          <entry key="Angular2LanguageService" value="4" />
           <entry key="TsLintLanguageService" value="2" />
         </counts>
       </usages-collector>
@@ -148,7 +171,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -213,6 +235,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -252,11 +275,12 @@
       <workItem from="1547675901085" duration="1002000" />
       <workItem from="1547677054792" duration="1162000" />
       <workItem from="1548812703356" duration="111000" />
+      <workItem from="1550330126520" duration="17000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2275000" />
+    <option name="totallyTimeSpent" value="2292000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />

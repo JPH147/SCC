@@ -6,12 +6,13 @@ import {ServiciosGenerales, Institucion, Sede, Subsede} from '../../global/servi
 import { NgControl } from '@angular/forms';
 import {ClienteService} from '../clientes.service';
 import {ServiciosDirecciones} from '../../global/direcciones';
+import {ServiciosTelefonos} from '../../global/telefonos';
 
 @Component({
   selector: 'app-ventanaemergente',
   templateUrl: './ventanaemergente.html',
   styleUrls: ['./ventanaemergente.css'],
-  providers: [ServiciosGenerales, ClienteService, ServiciosDirecciones]
+  providers: [ServiciosGenerales, ClienteService, ServiciosDirecciones,ServiciosTelefonos]
 })
 
 // tslint:disable-next-line:component-class-suffix
@@ -35,7 +36,8 @@ export class VentanaEmergenteClientes {
     private FormBuilder: FormBuilder,
     private Servicios: ServiciosGenerales,
     private ClienteServicios: ClienteService,
-    private ServicioDireccion: ServiciosDirecciones
+    private ServicioDireccion: ServiciosDirecciones,
+    private ServicioTelefono: ServiciosTelefonos
     ) {}
 
   onNoClick(): void {
@@ -81,6 +83,15 @@ export class VentanaEmergenteClientes {
         Validators.required
       ]],
       'departamento': [null, [
+        Validators.required
+      ]],
+      'direccion': [null, [
+        Validators.required
+      ]],
+      'telefono': [null, [
+        Validators.required
+      ]],
+      'cuenta': [null, [
         Validators.required
       ]],
       'provincia': [null, [
@@ -153,8 +164,41 @@ export class VentanaEmergenteClientes {
       // this.ClientesForm.get('fecharegistro').setValue(this.data.fecharegistro);
       this.ClientesForm.controls['sede'].enable();
       this.ClientesForm.controls['subsede'].enable();
-    }
 
+      this.ObtenerDireccion(this.data.id);
+      this.ObtenerTelefono(this.data.id);
+      this.ObtenerCuenta(this.data.id);
+    }
+  }
+
+  ObtenerDireccion(id) {
+    this.ServicioDireccion.ListarDireccion( id, '1',1,1).subscribe(res => {
+      if (res['data']) {
+        this.ClientesForm.get('direccion').setValue(res['data'].direcciones[0].direccioncompleta);
+      }else{
+        this.ClientesForm.get('direccion').setValue("No registra")
+      }
+    });
+  }
+
+  ObtenerTelefono(id) {
+    this.ServicioTelefono.ListarTelefono( id, '1',1,1).subscribe(res => {
+      if (res['data']) {
+        this.ClientesForm.get('telefono').setValue(res['data'].telefonos[0].tlf_numero);
+      }else{
+        this.ClientesForm.get('telefono').setValue("No registra")
+      }
+    });
+  }
+
+  ObtenerCuenta(id) {
+    this.ClienteServicios.ListarCuenta( id, '1',1,1).subscribe(res => {
+      if (res['data']) {
+        this.ClientesForm.get('cuenta').setValue(res['data'].cuentas[0].cuenta_numero);
+      }else{
+        this.ClientesForm.get('cuenta').setValue("No registra")
+      }
+    });
   }
 
   InstitucionSeleccionada(event) {

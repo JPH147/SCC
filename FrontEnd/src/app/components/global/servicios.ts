@@ -481,17 +481,25 @@ EditarModelo(
     } 
 
     ListarVendedor(
-      nombre: string
+      dni:string,
+      nombre: string,
+      sucursal: string,
+      pagina: number,
+      total_pagina:number
       ): Observable <any> {
         return this.http.get(this.url + 'vendedor/read.php', {
           params: new  HttpParams()
-          .set('vnd_nombre', nombre)
+          .set('vnd_dni',dni)
+          .set('vnd_nombre',nombre)
+          .set('scs_nombre',sucursal)
+          .set('prpagina',pagina.toString())
+          .set('prtotalpagina',total_pagina.toString())
         })
         .pipe(map(res => {
             if (res['codigo'] === 0) {
               return res['data'].vendedores;
             } else {
-                // console.log ('No hay datos que mostrar');
+              // console.log ('No hay datos que mostrar');
             }
         }));
     }

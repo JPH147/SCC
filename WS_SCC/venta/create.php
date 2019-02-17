@@ -45,7 +45,7 @@
 
             if($venta->create())
             {
-                print_json("0000", "Se creó la venta satisfactoriamente.", $venta->idventa);
+                print_json("0000", "Se creó la venta satisfactoriamente.", $venta->id_venta);
             }
             else
             {

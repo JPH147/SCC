@@ -22,7 +22,7 @@ import {VentanaConfirmarComponent} from '../../global/ventana-confirmar/ventana-
 export class VentanaEmergenteContacto {
   // Telefonos
   public ListadoTelefonos: ClienteTelefonoDataSource;
-  public ColumnasTelefonos: string[] = [ 'telefono-numero', 'telefono-relevancia', 'telefono-tipo', 'telefono-numero_telefono', 'telefono-opciones'];
+  public ColumnasTelefonos: string[] = [ 'telefono-numero', 'telefono-tipo', 'telefono-numero_telefono', 'telefono-relevancia', 'telefono-opciones'];
   public TelefonosForm: FormGroup;
   public Tipos: TipoTelefono[];
   public Relevancias: RelevanciaTelefono[];
@@ -30,7 +30,7 @@ export class VentanaEmergenteContacto {
 
   // Direcciones
   public ListadoDirecciones: ClienteDireccionDataSource;
-  public ColumnasDirecciones: string[] = [ 'direccion-numero', 'direccion-relevancia', 'direccion-nombre', 'direccion-opciones']; 
+  public ColumnasDirecciones: string[] = [ 'direccion-numero', 'direccion-nombre', 'direccion-relevancia', 'direccion-opciones']; 
   public DireccionesForm: FormGroup;
   public RelevanciaDireccion: RelevanciaDireccion[];
   public LstDepartamento: any;
@@ -40,7 +40,7 @@ export class VentanaEmergenteContacto {
 
   // Cuentas
   public ListadoCuentas: ClienteCuentaDataSource;
-  public ColumnasCuentas: string[] = [ 'cuenta-numero', 'cuenta-banco', 'cuenta-cuenta', 'cuenta-cci', 'cuenta-opciones'];  
+  public ColumnasCuentas: string[] = [ 'cuenta-numero', 'cuenta-banco', 'cuenta-cuenta', 'cuenta-cci', 'cuenta-relevancia', 'cuenta-opciones'];  
   public CuentasForm: FormGroup;
   public Bancos: Array<any>;
   @ViewChild('PaginadorCuentas') paginatorCuentas: MatPaginator;
@@ -74,9 +74,6 @@ export class VentanaEmergenteContacto {
       tipo: [{value:2,disabled:false},[
         Validators.required,
       ]],
-      relevancia: [{value: null, disabled: false},[
-        Validators.required,
-      ]],
     });
 
     // Direcciones
@@ -87,9 +84,6 @@ export class VentanaEmergenteContacto {
     this.ListadoDirecciones.CargarDirecciones(this.data,1,5);
 
     this.DireccionesForm = this.FormBuilder.group({
-      relevancia: [{value: null, disabled: false}, [
-        Validators.required,
-      ]],
       nombre: [null,[
         Validators.required
       ]],
@@ -169,13 +163,13 @@ export class VentanaEmergenteContacto {
   }
 
   AgregarTelefono(){
-    this.ServicioTelefono.CrearTelefono(this.data, this.TelefonosForm.value.telefono, "", this.TelefonosForm.value.tipo, this.TelefonosForm.value.relevancia).subscribe(res=>{
+    this.ServicioTelefono.CrearTelefono(this.data, this.TelefonosForm.value.telefono, this.TelefonosForm.value.tipo).subscribe(res=>{
       this.CargarDataTelefonos();
     })
   }
 
   AgregarDireccion(){
-    this.ServicioDireccion.CrearDireccion(this.data, this.DireccionesForm.value.nombre, this.DireccionesForm.value.distrito, this.DireccionesForm.value.relevancia, '').subscribe(res=>{
+    this.ServicioDireccion.CrearDireccion(this.data, this.DireccionesForm.value.nombre, this.DireccionesForm.value.distrito).subscribe(res=>{
       console.log(res)
       this.CargarDataDirecciones();
     })
@@ -184,6 +178,27 @@ export class VentanaEmergenteContacto {
   AgregarCuenta(){
     this.Servicio.CrearCuenta(this.data, this.CuentasForm.value.banco, this.CuentasForm.value.cuenta, this.CuentasForm.value.cci).subscribe(res=>{
       this.CargarDataCuentas();
+    })
+  }
+
+  EstablecerTelefonoPrimario(id){
+    this.ListadoTelefonos.CargandoInformacion.next(true);
+    this.ServicioTelefono.EstablecerTelefono(id).subscribe(res=>{
+      this.ListadoTelefonos.CargarTelefonos(this.data, 1, 5);
+    })
+  }
+
+  EstablecerDireccionPrimaria(id){
+    this.ListadoDirecciones.CargandoInformacion.next(true);
+    this.ServicioDireccion.EstablecerDireccion(id).subscribe(res=>{
+      this.ListadoDirecciones.CargarDirecciones(this.data, 1, 5);
+    })
+  }
+
+  EstablecerCuentaPrimaria(id){
+    this.ListadoCuentas.CargandoInformacion.next(true);
+    this.Servicio.EstablecerCuenta(id).subscribe(res=>{
+      this.ListadoCuentas.CargarCuentas(this.data, 1, 5);
     })
   }
 

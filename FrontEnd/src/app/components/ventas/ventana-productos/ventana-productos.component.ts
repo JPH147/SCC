@@ -14,7 +14,7 @@ import {CollectionViewer} from '@angular/cdk/collections';
 export class VentanaProductosComponent implements OnInit {
 
   ListadoProductos: AgregarProductosDataSource;
-  Columnas: string[] = ['serie', 'color', 'almacenamiento', 'proveedor', 'opciones'];
+  Columnas: string[] = ['serie', 'color', 'almacenamiento', 'almacen', 'opciones'];
 
   @ViewChild(MatPaginator) Paginator: MatPaginator;
 
@@ -27,7 +27,8 @@ export class VentanaProductosComponent implements OnInit {
 
   ngOnInit() {
   	this.ListadoProductos = new AgregarProductosDataSource(this.Servicio);
-  	this.ListadoProductos.CargarInformacion(this.data.sucursal,this.data.producto,1);
+  	this.ListadoProductos.CargarInformacion(this.data.series,this.data.sucursal,this.data.producto,1);
+    // console.log(this.data)
   }
 
   ngAfterViewInit(){
@@ -42,7 +43,7 @@ export class VentanaProductosComponent implements OnInit {
   }
 
   CargarInformacion(){
-  	this.ListadoProductos.CargarInformacion(this.data.sucursal,this.data.producto,this.Paginator.pageIndex+1)
+  	this.ListadoProductos.CargarInformacion(this.data.series,this.data.sucursal,this.data.producto,this.Paginator.pageIndex+1)
   }
 
 }
@@ -65,6 +66,7 @@ export class AgregarProductosDataSource {
   }
   
   CargarInformacion(
+    series_registradas:Array<any>,
 		sucursal:number,
 		producto: number,
 		pagina_inicial: number,
@@ -75,7 +77,21 @@ export class AgregarProductosDataSource {
 			pagina_inicial,
 			5
     ).subscribe(res=>{
+      // console.log(res['data'].producto_series)
+
+      // Si la serie ya ha sido agregada, no se permite ingresarla dos veces.
+      // En este caso, se está utilizado "número" como "utilizado"
+      res['data'].producto_series.forEach((item)=>{
+        item.numero=false;
+        series_registradas.forEach((element)=>{
+          if (item.id_serie == element) {
+            item.numero=true
+          }
+        })
+      })
+
     	this.Productos.next(res['data'].producto_series);
+      // console.log("a")
     	this.Total.next(res['mensaje']);
     })
   }

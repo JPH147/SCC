@@ -1,157 +1,181 @@
 <mat-card>
-    <button mat-mini-fab type="button" color="primary" (click)="Atras()"><mat-icon>keyboard_arrow_left</mat-icon></button>
 
-    <mat-card-title class="tituloProd">Ventas</mat-card-title>
+  <button mat-mini-fab type="button" color="primary" (click)="Atras()"><mat-icon>keyboard_arrow_left</mat-icon></button>
+
+  <mat-card-title class="tituloProd">Ventas</mat-card-title>
   
   <form [formGroup]="VentasForm">
-
-    <mat-grid-list cols="4" rowHeight="70px">
-
-      <mat-grid-tile colspan="2">
-        <mat-form-field class="columnas-2">
-          <input #Cliente placeholder="Cliente" matInput [matAutocomplete]="auto2" formControlName="cliente" [readonly]="idventa">
-          <mat-autocomplete #auto2="matAutocomplete" [displayWith] = "displayCliente" (optionSelected)="ClienteSeleccionado($event)">
-            <mat-option *ngFor="let cliente of LstCliente" [value]="cliente">
-              {{cliente.nombre}}
-            </mat-option>
-          </mat-autocomplete>
-        </mat-form-field>
-      </mat-grid-tile>
-
-      <mat-grid-tile>
-        <mat-form-field class="columnas-1">
-           <input matInput placeholder="Cargo" formControlName="cargo" [readonly]="idventa">
-        </mat-form-field>
-      </mat-grid-tile>
-
-      <mat-grid-tile>
-        <mat-form-field class="columnas-1">
-           <input matInput placeholder="Centro de Trabajo" formControlName="trabajo" [readonly]="idventa">
-        </mat-form-field>
-      </mat-grid-tile>
-
-      <mat-grid-tile colspan="2">
-        <mat-form-field class="columnas-2">
-           <input matInput placeholder="Domicilio" formControlName="domicilio" [readonly]="idventa">
-        </mat-form-field>
-      </mat-grid-tile>
-
-      <mat-grid-tile>
-        <mat-form-field class="columnas-1">
-          <input matInput placeholder="Teléfono" formControlName="telefono" [readonly]="idventa">
-        </mat-form-field>
-      </mat-grid-tile>
-
-      <mat-grid-tile>
-        <mat-form-field class="columnas-1">
-          <mat-select placeholder="Sucursal" formControlName="sucursal" (selectionChange)="SucursalSeleccionada($event)">
-            <mat-option *ngFor="let sucursal of Sucursales" [value]="sucursal.id">{{sucursal.nombre}}</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </mat-grid-tile>
-
-      <mat-grid-tile>
-        <mat-form-field class="columnas-1">
-          <mat-select placeholder='Talonario' formControlName="talonario" (selectionChange)="SerieSeleccionada($event)">
-            <mat-option *ngFor="let talonarioserie of LstSeries" [value] = "talonarioserie.serie"> {{talonarioserie.serie}} </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </mat-grid-tile>
-
-      <mat-grid-tile>
-        <mat-form-field class="columnas-1">
-          <mat-select placeholder='Contrato' formControlName="contrato" [disabled]="idventa">
-            <mat-option *ngFor="let contrato of LstContrato" [value] = "contrato.id"> {{contrato.numero}} </mat-option>
-          </mat-select>
-       </mat-form-field>
-      </mat-grid-tile>
-
-      <mat-grid-tile>
-        <mat-form-field class="columnas-1">
-          <mat-select placeholder='Tipo de Documento' formControlName="tipodoc">
-            <mat-option [value] = 1> Factura </mat-option>
-            <mat-option [value] = 6> Boleta </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </mat-grid-tile>
-
-      <mat-grid-tile>
-        <mat-form-field class="columnas-1">
-          <input matInput placeholder="Lugar de Venta" formControlName="lugar" [readonly]="idventa">
-        </mat-form-field>
-      </mat-grid-tile> 
-
-      <mat-grid-tile colspan=2>
-        <mat-form-field class="columnas-2">
-          <input placeholder="Vendedor" matInput [matAutocomplete]="auto" formControlName= vendedor #Vendedor [readonly]="idventa">
-          <mat-autocomplete #auto="matAutocomplete" [displayWith] = "displayVendedor">
-            <mat-option *ngFor="let vendedor of LstVendedor " [value]="vendedor">
-              {{vendedor.nombre}}
-            </mat-option>
-          </mat-autocomplete>
-        </mat-form-field>
-      </mat-grid-tile>
-
-      <mat-grid-tile>
-        <mat-form-field class="columnas-1">
-           <input matInput [matDatepicker]="picker" placeholder="Fecha de venta" formControlName="fechaventa" [readonly]="idventa">
-           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-           <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-      </mat-grid-tile>
-
-      <mat-grid-tile>
-        <mat-form-field class="columnas-1">
-           <input matInput [matDatepicker]="InputFechaPago" placeholder="Inicio de pagos" [min]="VentasForm.value.fechaventa" formControlName="fechapago" (dateChange)="CrearCronograma()">
-           <mat-datepicker-toggle matSuffix [for]="InputFechaPago"></mat-datepicker-toggle>
-           <mat-datepicker #InputFechaPago></mat-datepicker>
-        </mat-form-field>
-      </mat-grid-tile>
-
-      <mat-grid-tile>
-        <mat-form-field class="columnas-1">
-          <mat-select placeholder='Tipo de pago' formControlName="tipopago">
-            <mat-option *ngFor="let tipopago of LstTipoPago" [value] = "tipopago.id"> {{tipopago.nombre}} </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </mat-grid-tile>
-  
-      <mat-grid-tile>
-        <mat-form-field class="columnas-1">
-          <input matInput placeholder="Monto total"  formControlName="montototal" #InputMontoTotal [readonly]="idventa">
-          <mat-error>Solo debe ingresar valores númericos</mat-error>
-          <span matPrefix>S/.&nbsp;</span>
-        </mat-form-field>
-      </mat-grid-tile>
-
-      <mat-grid-tile>
-        <mat-form-field class="columnas-1">
-          <input matInput placeholder="Cuota inicial" formControlName="inicial" #InputInicial [readonly]="idventa">
-          <mat-error>Solo debe ingresar valores númericos</mat-error>
-          <span matPrefix>S/ &nbsp;</span>
-        </mat-form-field>
-      </mat-grid-tile>
-
-      <mat-grid-tile>
-        <mat-form-field class="columnas-1">
-          <input matInput placeholder="N° de cuotas" formControlName="cuotas" #InputCuota [readonly]="idventa">
-          <mat-error>Solo debe ingresar valores númericos</mat-error>
-        </mat-form-field>
-      </mat-grid-tile>
-
-      <mat-grid-tile colspan="4">
-        <mat-form-field class="columnas-4">
-           <input matInput placeholder="Observaciones" formControlName="observaciones" [readonly]="idventa">
-        </mat-form-field>
-      </mat-grid-tile>
-
-<!--       <mat-grid-tile>
-        <button mat-raised-button type="button" color="primary" (click)="Agregar()">Adjuntar documentos</button>
-      </mat-grid-tile> -->
     
-    </mat-grid-list>
+    <div class="seccion">
+
+      <mat-card-subtitle>
+        Datos del cliente
+      </mat-card-subtitle>
+
+      <mat-grid-list cols="4" rowHeight="70px">
+
+        <mat-grid-tile colspan="2">
+          <mat-form-field class="columnas-2">
+            <input #Cliente placeholder="Cliente" matInput [matAutocomplete]="auto2" formControlName="cliente" readonly>
+            <mat-autocomplete #auto2="matAutocomplete" [displayWith] = "displayCliente" (optionSelected)="ClienteSeleccionado($event)">
+              <mat-option *ngFor="let cliente of LstCliente" [value]="cliente">
+                {{cliente.nombre}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+             <input matInput placeholder="Cargo" formControlName="cargo" readonly>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+             <input matInput placeholder="Centro de Trabajo" formControlName="trabajo" readonly>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan="2">
+          <mat-form-field class="columnas-2">
+             <input matInput placeholder="Domicilio" formControlName="domicilio" readonly>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput placeholder="Teléfono" formControlName="telefono" readonly>
+          </mat-form-field>
+        </mat-grid-tile>
+
+      </mat-grid-list>
+
+    </div>
+
+    <div class="seccion">
+
+      <mat-card-subtitle>
+        Datos de la venta
+      </mat-card-subtitle>
+
+      <mat-grid-list cols="4" rowHeight="70px">
+
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+             <input matInput [matDatepicker]="picker" placeholder="Fecha de venta" formControlName="fechaventa" [readonly]="idventa">
+             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+             <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <mat-select placeholder="Sucursal" formControlName="sucursal" (selectionChange)="SucursalSeleccionada($event)">
+              <mat-option *ngFor="let sucursal of Sucursales" [value]="sucursal.id">{{sucursal.nombre}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <mat-select placeholder='Talonario' formControlName="talonario" (selectionChange)="SerieSeleccionada($event)">
+              <mat-option *ngFor="let talonarioserie of LstSeries" [value] = "talonarioserie.serie"> {{talonarioserie.serie}} </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <mat-select placeholder='Contrato' formControlName="contrato">
+              <mat-option *ngFor="let contrato of LstContrato" [value] = "contrato.id"> {{contrato.numero}} </mat-option>
+            </mat-select>
+         </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan=2>
+          <mat-form-field class="columnas-2">
+            <input placeholder="Vendedor" matInput [matAutocomplete]="auto" formControlName= vendedor #Vendedor [readonly]="idventa">
+            <mat-autocomplete #auto="matAutocomplete" [displayWith] = "displayVendedor">
+              <mat-option *ngFor="let vendedor of LstVendedor " [value]="vendedor">
+                {{vendedor.nombre}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan=2>
+          <mat-form-field class="columnas-2">
+            <input matInput placeholder="Lugar de Venta" formControlName="lugar" [readonly]="idventa">
+          </mat-form-field>
+        </mat-grid-tile> 
+
+      </mat-grid-list>
+    </div>
+
+    <div class="seccion">
+
+      <mat-card-subtitle>
+        Datos del documento
+      </mat-card-subtitle>
+
+      <mat-grid-list cols="4" rowHeight="70px">
+
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+             <input matInput [matDatepicker]="InputFechaPago" placeholder="Inicio de pagos" [min]="VentasForm.value.fechaventa" formControlName="fechapago" (dateChange)="CrearCronograma()">
+             <mat-datepicker-toggle matSuffix [for]="InputFechaPago"></mat-datepicker-toggle>
+             <mat-datepicker #InputFechaPago></mat-datepicker>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <mat-select placeholder='Tipo de pago' formControlName="tipopago">
+              <mat-option *ngFor="let tipopago of LstTipoPago" [value] = "tipopago.id"> {{tipopago.nombre}} </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+
+<!--         <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput placeholder="Monto total"  formControlName="montototal" #InputMontoTotal [readonly]="idventa">
+            <mat-error>Solo debe ingresar valores númericos</mat-error>
+            <span matPrefix>S/.&nbsp;</span>
+          </mat-form-field>
+        </mat-grid-tile> -->
+
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput placeholder="Cuota inicial" formControlName="inicial" #InputInicial [readonly]="idventa">
+            <mat-error>Solo debe ingresar valores númericos</mat-error>
+            <span matPrefix>S/ &nbsp;</span>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput placeholder="N° de cuotas" formControlName="cuotas" #InputCuota [readonly]="idventa">
+            <mat-error>Solo debe ingresar valores númericos</mat-error>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan="3">
+          <mat-form-field class="columnas-3">
+             <input matInput placeholder="Observaciones" formControlName="observaciones" [readonly]="idventa">
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput placeholder="Monto total" formControlName="montototal" readonly>
+          </mat-form-field>
+        </mat-grid-tile>
+
+      </mat-grid-list>
+    </div>
     
-    <mat-card class="documentos">
+<!--     <mat-card class="documentos">
  
       <mat-card-header>
         <mat-card-title>
@@ -252,9 +276,9 @@
           </image-upload>  
         </mat-grid-tile>
 
-      </mat-grid-list>
+      </mat-grid-list> -->
 
-      <mat-grid-list cols="7" rowHeight="70px" *ngIf="idventa">
+<!--       <mat-grid-list cols="7" rowHeight="70px" *ngIf="idventa">
 
         <mat-grid-tile>
           <button mat-raised-button color="primary" (click)="Abrir(dni)" [disabled]="!dni">DNI</button>
@@ -284,38 +308,52 @@
           <button mat-raised-button color="primary" (click)="Abrir(autorizacion)" [disabled]="!autorizacion">Autorización</button>
         </mat-grid-tile>
 
-      </mat-grid-list>
+      </mat-grid-list> -->
 
 
-    </mat-card>
+    <!-- </mat-card> -->
 
-    <mat-card class="documentos">
+
+    <div class="seccion">
+
+      <mat-card-subtitle>
+        Datos del documento
+      </mat-card-subtitle>
+
+    <!-- <mat-card class="documentos">
 
       <mat-card-header>
         <mat-card-title>
           Productos
         </mat-card-title>
-      </mat-card-header>
+      </mat-card-header> -->
 
-      <mat-grid-list cols="4" rowHeight="70px" *ngIf="!idventa">
+      <mat-grid-list cols="4" rowHeight="50px" *ngIf="!idventa">
         <mat-grid-tile colspan="4">
           <button mat-mini-fab color="primary" (click)="AgregarProducto()" matTooltip="Agregar productos" type="button" [disabled]="!this.sucursal"><mat-icon>add</mat-icon></button>
         </mat-grid-tile>
       </mat-grid-list>
 
-      <ng-container *ngIf="this.sucursal">
+      <div *ngIf="this.sucursal">
         <div formArrayName="productos" *ngFor="let producto of VentasForm['controls'].productos['controls']; let i = index">
           <div [formGroupName]="i">
-            <mat-grid-list cols="4" rowHeight="70px">
 
-              <mat-grid-tile colspan="2">
+            <mat-grid-list cols="5" rowHeight="70px">
+
+              <mat-grid-tile colspan="2" *ngIf="!producto.value.id_producto">
                 <mat-form-field class="columnas-2">
-                  <input matInput placeholder="Producto" [matAutocomplete]="autoproducto" #InputProducto formControlName="descripcion">
-                  <mat-autocomplete #autoproducto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="ProductoSeleccionado(producto,$event)">
+                  <input matInput placeholder="Producto" [matAutocomplete]="autoproducto" #InputProducto>
+                  <mat-autocomplete #autoproducto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="ProductoSeleccionado(producto,$event,i)">
                     <mat-option *ngFor="let producto of Producto" [value]="producto">
                       {{producto.nombre}}
                     </mat-option>
                   </mat-autocomplete>
+                </mat-form-field>
+              </mat-grid-tile>
+
+              <mat-grid-tile colspan="2" *ngIf="producto.value.id_producto">
+                <mat-form-field class="columnas-2">
+                   <input matInput placeholder="Producto" formControlName="descripcion" readonly>
                 </mat-form-field>
               </mat-grid-tile>
 
@@ -325,27 +363,31 @@
 
               <mat-grid-tile *ngIf="producto.value.id_serie">
                 <mat-form-field class="columnas-1">
-                   <input matInput placeholder="IMEI" formControlName="serie">
+                   <input matInput placeholder="IMEI" formControlName="serie" readonly>
                 </mat-form-field>
               </mat-grid-tile>
 
               <mat-grid-tile>
                 <mat-form-field class="columnas-1">
-                  <input matInput placeholder="Precio" formControlName="precio">
-                  <mat-error>Solo debe ingresar valores númericos</mat-error>
+                  <input matInput placeholder="Precio" formControlName="precio" #InputPrecio>
+                  <mat-error>Solo puede ingresar números</mat-error>
                   <span matPrefix>S/ &nbsp;</span>
                 </mat-form-field>
               </mat-grid-tile>
 
-              <button mat-mini-fab type="button" color="primary" class="boton" matTooltip="Eliminar producto" (click)="EliminarProductos(i,producto)" [disabled]="VentasForm['controls'].productos['controls'].length==1" *ngIf="!idventa"><mat-icon>delete</mat-icon></button>
+              <mat-grid-tile>
+                <button  mat-icon-button type="button" color="primary" class="boton" matTooltip="Eliminar producto" (click)="EliminarProductos(i,producto)" [disabled]="VentasForm['controls'].productos['controls'].length==1" *ngIf="!idventa"><mat-icon>delete</mat-icon></button>
+              </mat-grid-tile>
 
             </mat-grid-list>
           </div>
         </div>
-      </ng-container>
+      </div>
 
-    </mat-card>
-    
+    <!-- </mat-card> -->
+
+    </div>
+
     <mat-card class="documentos">
 
       <mat-card-header>
@@ -410,8 +452,7 @@
     <mat-card-actions>
       <mat-grid-list cols="1" rowHeight="40px">
         <mat-grid-tile>
-          <!-- <button mat-raised-button type="button" (click)="Reset()"> Limpiar </button> -->
-          <button mat-raised-button color="primary" (click)="GrabarVenta(VentasForm)" [disabled]="VentasForm.invalid"> Guardar </button>
+          <button mat-raised-button color="primary" (click)="GrabarVenta(VentasForm)" [disabled]="VentasForm.invalid"> Guardar </button> 
         </mat-grid-tile>
       </mat-grid-list>
     </mat-card-actions>

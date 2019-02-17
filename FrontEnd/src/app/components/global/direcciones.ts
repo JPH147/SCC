@@ -237,15 +237,11 @@ export class ServiciosDirecciones{
 		id_cliente: number,
 		nombre: string,
 		iddistrito: number,
-		relevancia: number,
-		observacion: string
 	): Observable<any> {
 		let params = new HttpParams()
 		.set('id_cliente', id_cliente.toString())
 		.set('drc_nombre', nombre)
 		.set('pid_distrito', iddistrito.toString())
-		.set('drc_relevancia', relevancia.toString())
-		.set('drc_observacion', observacion);
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 		return this.http.post(this.url + 'clientedireccion/create.php', params, {headers: headers});
 	}
@@ -270,7 +266,7 @@ export class ServiciosDirecciones{
 			if(res['codigo'] === 0) {
 				return res
 			} else {
-				console.log('No hay datos que mostrar');
+				// console.log('No hay datos que mostrar');
 				return res
 			}
 		}))
@@ -285,6 +281,17 @@ export class ServiciosDirecciones{
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 		
 		return this.http.post(this.url + 'clientedireccion/delete.php', params, {headers: headers});
+	}
+
+	EstablecerDireccion(
+		id_direccion: number,
+	){
+		let params = new HttpParams()
+		.set('prdireccion', id_direccion.toString())
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+		
+		return this.http.post(this.url + 'clientedireccion/actualizar-primario.php', params, {headers: headers});
 	}
 
 }

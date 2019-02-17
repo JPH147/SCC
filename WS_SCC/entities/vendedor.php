@@ -30,13 +30,15 @@ Class Vendedor{
 
     function read(){
 
-        $query = "CALL sp_listarvendedor(?,?,?)";
+        $query = "CALL sp_listarvendedor(?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
         $result->bindParam(1, $this->vnd_dni);
         $result->bindParam(2, $this->vnd_nombre);
         $result->bindParam(3, $this->scs_nombre);
+        $result->bindParam(4, $this->numero_pagina);
+        $result->bindParam(5, $this->total_pagina);
 
         $result->execute();
     
@@ -60,6 +62,24 @@ Class Vendedor{
         return $vendedor_list;
     }
 
+    function contar(){
+
+        $query = "CALL sp_listarvendedorcontar(?,?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->vnd_dni);
+        $result->bindParam(2, $this->vnd_nombre);
+        $result->bindParam(3, $this->scs_nombre);
+
+        $result->execute();
+
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        $this->total_resultado=$row['total'];
+
+        return $this->total_resultado;
+    }
 
     function read_comisiones(){
 

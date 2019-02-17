@@ -17,6 +17,7 @@
         $clientecuenta = new ClienteCuenta($db);
 
         $clientecuenta->id_cliente = !empty($_GET['prcliente']) ? trim($_GET['prcliente']) : null;
+        $clientecuenta->relevancia = !empty($_GET['prrelevancia']) ? trim($_GET['prrelevancia']) : null;
         $clientecuenta->prpagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : 1;
         $clientecuenta->prtotalpagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : 5;
 

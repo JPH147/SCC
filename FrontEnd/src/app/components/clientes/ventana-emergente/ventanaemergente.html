@@ -47,6 +47,24 @@
               </mat-form-field>
             </mat-grid-tile>
 
+            <mat-grid-tile *ngIf="this.data">
+              <mat-form-field class="input-ventana">
+                <input matInput placeholder="Dirección" formControlName="direccion" readonly>
+              </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile *ngIf="this.data">
+              <mat-form-field class="input-ventana">
+                <input matInput placeholder="Teléfono" formControlName="telefono" readonly>
+              </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile *ngIf="this.data">
+              <mat-form-field class="input-ventana">
+                <input matInput placeholder="Cuenta" formControlName="cuenta" readonly>
+              </mat-form-field>
+            </mat-grid-tile>
+
           </mat-grid-list>
         </ng-container>
 

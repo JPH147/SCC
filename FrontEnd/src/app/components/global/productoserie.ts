@@ -66,6 +66,7 @@ export class ServiciosProductoSerie {
         .set('prtotalpagina',total_pagina.toString())
     })
     .pipe (map(res => {
+      // console.log(res,sucursal, Producto)
       if (res['codigo'] === 0) {
         return res;
       } else {

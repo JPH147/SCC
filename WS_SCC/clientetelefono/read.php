@@ -29,7 +29,7 @@
             print_json("0000", $total_telefono, $telefono_list);
          }
         else
-        { print_json("0001", "No existen direcciones registrados", null); }
+        { print_json("0001", 0, null); }
     }
 
     catch(Exception $exception)

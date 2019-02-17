@@ -21,9 +21,7 @@
         {
             $clientetelefono->id_cliente = trim($_POST["id_cliente"]);
             $clientetelefono->tlf_numero = trim($_POST["tlf_numero"]);
-            $clientetelefono->tlf_observacion =trim($_POST["tlf_observacion"]);
             $clientetelefono->id_tipo = trim($_POST["id_tipo"]);
-            $clientetelefono->tlf_relevancia = trim($_POST["tlf_relevancia"]);
 
             if($clientetelefono->create())
             {

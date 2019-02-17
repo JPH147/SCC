@@ -7,19 +7,19 @@ import {of} from 'rxjs';
 export class ClienteDataSource implements DataSource<Cliente> {
 
   private InformacionClientes = new BehaviorSubject<Cliente[]>([]);
-  private CargandoInformacion = new BehaviorSubject<boolean>(false);
+  public CargandoInformacion = new BehaviorSubject<boolean>(false);
   public Cargando = this.CargandoInformacion.asObservable();
   public TotalResultados = new BehaviorSubject<number>(0);
 
 constructor(private Servicio: ClienteService) { }
 
   connect(collectionViewer: CollectionViewer): Observable<Cliente[]> {
-  return this.InformacionClientes.asObservable();
+    return this.InformacionClientes.asObservable();
   }
 
-disconnect(){
-this.InformacionClientes.complete();
-this.CargandoInformacion.complete();
+  disconnect(){
+    this.InformacionClientes.complete();
+    this.CargandoInformacion.complete();
   }
 
   CargarClientes(

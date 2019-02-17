@@ -16,15 +16,18 @@
     try{
         $vendedor = new Vendedor($db);
 
-        $vendedor->vnd_dni = !empty($_GET['vnd_dni']) ? trim($_GET['vnd_dni']) : null;
-        $vendedor->vnd_nombre = !empty($_GET['vnd_nombre']) ? trim($_GET['vnd_nombre']) : null;
-        $vendedor->scs_nombre = !empty($_GET['scs_nombre']) ? trim($_GET['scs_nombre']) : null;
+        $vendedor->vnd_dni = !empty($_GET['vnd_dni']) ? trim($_GET['vnd_dni']) : '';
+        $vendedor->vnd_nombre = !empty($_GET['vnd_nombre']) ? trim($_GET['vnd_nombre']) : '';
+        $vendedor->scs_nombre = !empty($_GET['scs_nombre']) ? trim($_GET['scs_nombre']) : '';
+        $vendedor->numero_pagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : 1;
+        $vendedor->total_pagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : 10;
 
         $vendedor_list = $vendedor->read();
+        $vendedor_total = $vendedor->contar();
 
         if (count(array_filter($vendedor_list))>0)
         { 
-            print_json("0000", "OK", $vendedor_list);
+            print_json("0000", $vendedor_total, $vendedor_list);
          }
         else
         { print_json("0001", "No existen clientes registrados", null); }

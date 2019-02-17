@@ -24,9 +24,7 @@ Class ClienteDireccion{
         $query = "CALL sp_crearclientedireccion(
             :id_cliente,
             :drc_nombre,
-            :pid_distrito,
-            :drc_relevancia,
-            :drc_observacion
+            :pid_distrito
         )";
 
         $result = $this->conn->prepare($query);
@@ -34,14 +32,10 @@ Class ClienteDireccion{
         $result->bindParam(":id_cliente", $this->id_cliente);
         $result->bindParam(":drc_nombre", $this->drc_nombre);
         $result->bindParam(":pid_distrito", $this->id_distrito);
-        $result->bindParam(":drc_relevancia", $this->drc_relevancia);
-        $result->bindParam(":drc_observacion", $this->drc_observacion);
 
         $this->id_cliente=htmlspecialchars(strip_tags($this->id_cliente));
         $this->drc_nombre=htmlspecialchars(strip_tags($this->drc_nombre));
         $this->id_distrito=htmlspecialchars(strip_tags($this->id_distrito));
-        $this->drc_relevancia=htmlspecialchars(strip_tags($this->drc_relevancia));
-        $this->drc_observacion=htmlspecialchars(strip_tags($this->drc_observacion));
 
         if($result->execute())
         {
@@ -99,8 +93,6 @@ Class ClienteDireccion{
                 "distrito"=> $row['dst_nombre'],
                 "direccioncompleta"=> $row['direccioncompleta'],
                 "relevancia"=>$row['drc_relevancia'],
-                "observacion"=>$row['drc_observacion'],
-                "estado"=>$row['drc_estado']
             );
 
             array_push($direccion_list["direcciones"],$direccion_item);
@@ -124,6 +116,25 @@ Class ClienteDireccion{
         $this->total_resultado=$row['total'];
 
         return $this->total_resultado;
+    }
+
+    function actualizar_primario()
+    {
+      $query = "CALL sp_actualizarrelevanciadireccion(
+        :id_direccion
+      )";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(":id_direccion", $this->idcliente_direccion);
+
+      $this->idcliente_direccion=htmlspecialchars(strip_tags($this->idcliente_direccion));
+
+      if($result->execute())
+      {
+       return true;
+      }
+      return false;
     }
 
 }

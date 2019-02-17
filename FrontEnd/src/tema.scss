@@ -4,7 +4,7 @@
 // ...
 
 $primary: mat-palette($mat-cyan, 900);
-$accent:  mat-palette($mat-green, 700);
+$accent:  mat-palette($mat-amber, 500);
 $warn:    mat-palette($mat-deep-orange);
 
 $theme: mat-light-theme($primary, $accent, $warn);

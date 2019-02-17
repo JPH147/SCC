@@ -108,8 +108,9 @@ Class ProductoSerie{
                 "serie"=>$serie,
                 "color"=>$color,
                 "almacenamiento"=>$almacenamiento,
-                "proveedor"=>$proveedor,
                 "precio"=>$precio,
+                "id_almacen"=>$id_almacen,
+                "nombre_almacen"=>$nombre_almacen,
             );
             array_push($producto_serie_list["producto_series"],$producto_serie_item);
         }

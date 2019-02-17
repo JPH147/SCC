@@ -9,7 +9,7 @@ import {ClienteService, Cliente} from '../clientes/clientes.service';
 import {ClienteDataSource} from '../clientes/clientes.dataservice';
 import {Observable, forkJoin,fromEvent, merge, BehaviorSubject} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {ServiciosTelefonos, Telefono} from '../global/telefonos';
 import {ServiciosDirecciones, Direccion} from '../global/direcciones';
 import {ServiciosGenerales, Talonario, Serie, ListarVendedor} from '../global/servicios';
@@ -49,6 +49,7 @@ export class VentasComponent implements OnInit {
   public productos: FormArray;
   public Producto:Array<any>;
   public Cronograma: Array<any>;
+  public Series: Array<any>;
 
   public dni: string;
   public cip: string;
@@ -59,12 +60,13 @@ export class VentasComponent implements OnInit {
   public autorizacion: string;
 
   @ViewChild('InputFechaPago') FiltroFecha: ElementRef;
-  @ViewChild('InputMontoTotal') FiltroMonto: ElementRef;
+  // @ViewChild('InputMontoTotal') FiltroMonto: ElementRef;
   @ViewChild('InputInicial') FiltroInicial: ElementRef;
   @ViewChild('InputCuota') FiltroCuota: ElementRef;
   @ViewChild('Cliente') ClienteAutoComplete: ElementRef;
   @ViewChild('Vendedor') VendedorAutoComplete: ElementRef;
   @ViewChildren('InputProducto') FiltroProducto:QueryList<any>;
+  @ViewChildren('InputPrecio') FiltroPrecio:QueryList<any>;
 
   @ViewChild('CargarDNI') DocumentoDNI: ElementRef;
 
@@ -81,6 +83,7 @@ export class VentasComponent implements OnInit {
     private route: ActivatedRoute,
     private location: Location,
     private Notificacion: Notificaciones,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -88,6 +91,7 @@ export class VentasComponent implements OnInit {
     this.contador = 1;
     this.ListarTipoDocumento();
     this.ListarTipoPago();
+    this.Series=[];
 
     this.sub = this.route.params.subscribe(params => {
       if(params['id']){
@@ -147,7 +151,7 @@ export class VentasComponent implements OnInit {
       'tipopago': [null, [
         Validators.required
       ]],
-      'montototal': [null, [
+      'montototal': [0, [
         Validators.required,
         Validators.pattern('[0-9- ]+')
       ]],
@@ -198,9 +202,7 @@ export class VentasComponent implements OnInit {
       debounceTime(10),
       distinctUntilChanged(),
       tap(() => {
-        //console.log(this.VentasForm.value.cliente)
         this.ListarClientes('', '', '', '', this.ClienteAutoComplete.nativeElement.value , 1, 5);
-      
       })
      ).subscribe();
 
@@ -230,8 +232,33 @@ export class VentasComponent implements OnInit {
       }
     })
 
+    this.FiltroPrecio.changes.subscribe(res=>{
+      for (let i in this.FiltroPrecio['_results']) {
+        fromEvent(this.FiltroPrecio['_results'][i].nativeElement,'keyup')
+        .pipe(
+          debounceTime(100),
+          distinctUntilChanged(),
+          tap(()=>{
+            if (this.FiltroPrecio['_results'][i]) {
+              if (this.FiltroPrecio['_results'][i].nativeElement.value) {
+                // this.VentasForm.get('montototal').setValue(0);
+                this.CalcularTotales();
+                // if (this.productos) {
+                //   this.productos.value.forEach((item)=>{
+                //     this.VentasForm.get('montototal').setValue(this.VentasForm.value.montototal+item.precio);
+                //   })
+                // } else {
+                //   this.VentasForm.get('montototal').setValue(this.FiltroPrecio['_results'][i].nativeElement.value)
+                // }
+                this.CrearCronograma()
+              }
+            }
+          })
+        ).subscribe()
+      }
+    })
+
     merge(
-      fromEvent(this.FiltroMonto.nativeElement,'keyup'),
       fromEvent(this.FiltroInicial.nativeElement,'keyup'),
       fromEvent(this.FiltroCuota.nativeElement,'keyup')
     ).pipe(
@@ -239,7 +266,7 @@ export class VentasComponent implements OnInit {
       distinctUntilChanged(),
       tap(()=>{
         if (
-          this.FiltroMonto.nativeElement.value &&
+          // this.FiltroMonto.nativeElement.value &&
           this.FiltroInicial.nativeElement.value &&
           this.FiltroCuota.nativeElement.value &&
           this.VentasForm.value.fechapago
@@ -321,18 +348,18 @@ export class VentasComponent implements OnInit {
 
   ObtenerClientexId(id_cliente) {
     this.ClienteServicio.Seleccionar(id_cliente).subscribe(res => {
-      console.log(res)
+      // console.log(res)
       if (res) {
         // console.log(res)
         this.VentasForm.get('cliente').setValue(res);
         this.VentasForm.get('cargo').setValue(res.cargo);
         this.VentasForm.get('trabajo').setValue(res.trabajo);
 
-        if (!this.idventa) {
-          this.VentasForm.get('cliente').disable();
-          this.VentasForm.get('cargo').disable();
-          this.VentasForm.get('trabajo').disable();
-        }
+        // if (!this.idventa) {
+        //   this.VentasForm.get('cliente').disable();
+        //   this.VentasForm.get('cargo').disable();
+        //   this.VentasForm.get('trabajo').disable();
+        // }
 
         this.idcliente =res.id;
         this.ObtenerDireccion();
@@ -347,11 +374,11 @@ export class VentasComponent implements OnInit {
     this.Cronograma=[];
     let fecha:Date = new Date(this.VentasForm.value.fechapago);
 
-    let monto=Math.round((this.FiltroMonto.nativeElement.value-this.FiltroInicial.nativeElement.value)*100/this.FiltroCuota.nativeElement.value)/100
+    let monto=Math.round((this.VentasForm.value.montototal-this.FiltroInicial.nativeElement.value)*100/this.FiltroCuota.nativeElement.value)/100
 
     for (var i = 1; i<=this.FiltroCuota.nativeElement.value; i++) {
 
-      fecha=moment(fecha).add(1, 'months').toDate();
+      fecha=moment(this.VentasForm.value.fechapago).add(i-1, 'months').toDate();
 
       this.Cronograma.push({
         numero: i,
@@ -423,6 +450,13 @@ export class VentasComponent implements OnInit {
     }
   }
 
+  CalcularTotales(){
+    this.VentasForm.get('montototal').setValue(0)
+    this.VentasForm['controls'].productos['controls'].forEach((item)=>{
+      this.VentasForm.get('montototal').setValue(this.VentasForm.value.montototal*1+item.value.precio*1)
+    })
+  }
+
   BuscarProducto(
     sucursal:number,
     producto:string
@@ -432,32 +466,39 @@ export class VentasComponent implements OnInit {
     })
   }
 
-  ProductoSeleccionado(form,event){
+  ProductoSeleccionado(form,event,i){
     // console.log(form,event.option.value)
     form.get('id_producto').setValue(event.option.value.id);
-    form.get("descripcion").disable()
+    // form.get("descripcion").disable()
+    form.get('descripcion').setValue(event.option.value.nombre);
     form.get('precio').setValue(event.option.value.precio);
+    this.CalcularTotales()
+    // if (i==0) {
+    //   this.VentasForm.get('montototal').setValue(event.option.value.precio);
+    // }
   }
 
   SeleccionarSerie(producto){
 
     let Ventana = this.Dialogo.open(VentanaProductosComponent,{
       width: '1200px',
-      data: {sucursal: this.sucursal, producto: producto.value.id_producto}
+      data: {sucursal: this.sucursal, producto: producto.value.id_producto, series: this.Series}
     })
 
     Ventana.afterClosed().subscribe(res=>{
       if (res) {
         producto.get('id_serie').setValue(res.id_serie);
         producto.get('serie').setValue(res.serie);
-        producto.get('serie').disable()
+        this.Series.push(res.id_serie)
       }
     })
     
   }
 
   EliminarProductos(index,producto){
-    this.productos.removeAt(index)
+    this.productos.removeAt(index);
+    // this.Series=this.Series.filter(e=>e!=producto.value.id_serie)
+    this.Series.splice( this.Series.indexOf(producto.value.id_serie), 1 );
   }
 
   ListarClientes(inst: string, sede: string, subsede: string, dni: string, nombre: string, prpagina: number, prtotal: number) {
@@ -469,11 +510,12 @@ export class VentasComponent implements OnInit {
   ObtenerDireccion() {
     if (this.idcliente) {
         this.DireccionServicio.ListarDireccion( this.idcliente, '1',1,20).subscribe(res => {
+          // console.log(res);
           if (res) {
-            this.VentasForm.get('domicilio').setValue(res[0].direccioncompleta);
+            this.VentasForm.get('domicilio').setValue(res['data'].direcciones[0].direccioncompleta);
           }
           if (!this.idventa) {
-            this.VentasForm.get('domicilio').disable();
+            // this.VentasForm.get('domicilio').disable();
           }
         });
     }
@@ -483,10 +525,10 @@ export class VentasComponent implements OnInit {
     if (this.idcliente) {
         this.TelefonoServicio.ListarTelefono( this.idcliente , '1',1,20).subscribe(res => {
           if (res) {
-            this.VentasForm.get('telefono').setValue(res[0].tlf_numero);
+            this.VentasForm.get('telefono').setValue(res['data'].telefonos[0].tlf_numero);
           }
           if (!this.idventa) {
-            this.VentasForm.get('telefono').disable();
+            // this.VentasForm.get('telefono').disable();
           }
         });
     }
@@ -517,7 +559,7 @@ export class VentasComponent implements OnInit {
   }
 
   ListarVendedor(nombre: string) {
-    this.ServiciosGenerales.ListarVendedor(nombre).subscribe( res => {
+    this.ServiciosGenerales.ListarVendedor("",nombre,"",1,5).subscribe( res => {
       // console.log(res);
       this.LstVendedor=res;
     });
@@ -551,26 +593,9 @@ export class VentasComponent implements OnInit {
     this.autorizacion=evento.serverResponse.response._body;
   }
 
- /* Agregar documentos */
- // Agregar() {
- //    let VentanaAdjuntos = this.Dialogo.open(VentanaEmergenteArchivos, {
- //      width: '800px',
- //      data: {dni:this.dni}
- //    });
-
- //    VentanaAdjuntos.afterClosed().subscribe(res=>{
- //      console.log(res)
- //      if (res) {
- //        this.dni=res.dni;
- //      }
-      
- //    })
-
- //  }
-
- Atras(){
-   this.location.back()
- }
+  Atras(){
+    this.location.back()
+  }
 
   ResetearFormArray(formArray){
     if (formArray) {
@@ -581,40 +606,15 @@ export class VentasComponent implements OnInit {
     }
   }
 
-  Reset(){
-    // this.VentasForm.reset();
-    // this.dni="";
-    // this.cip="";
-    // this.contrato="";
-    // this.transaccion="";
-    // this.planilla="";
-    // this.letra="";
-    // this.autorizacion="";
-    // this.VentasForm.get('tipodoc').setValue(6);
-    // this.VentasForm.get('fechaventa').setValue(new Date());
-    // this.VentasForm.get('fechapago').setValue(moment(new Date()).add(1,'months'));
-  }
-
   GrabarVenta(formulario) {
 
     let random=(new Date()).getTime()
 
-    // console.log(formulario.value.cliente)
-
-    return forkJoin(
-      this.ServiciosGenerales.RenameFile(this.dni,'DNI',random.toString(),"venta"),
-      this.ServiciosGenerales.RenameFile(this.cip,'CIP',random.toString(),"venta"),
-      this.ServiciosGenerales.RenameFile(this.contrato,'CONTRATO',random.toString(),"venta"),
-      this.ServiciosGenerales.RenameFile(this.transaccion,'TRANSACCION',random.toString(),"venta"),
-      this.ServiciosGenerales.RenameFile(this.planilla,'PLANILLA',random.toString(),"venta"),
-      this.ServiciosGenerales.RenameFile(this.letra,'LETRA',random.toString(),"venta"),
-      this.ServiciosGenerales.RenameFile(this.autorizacion,'AUTORIZACION',random.toString(),"venta")
-    ).subscribe(resultado=>
       this.Servicio.CrearVenta(
         formulario.value.fechaventa,
         formulario.value.sucursal,
         formulario.value.contrato,
-        formulario.getrawvalue().cliente.id,
+        this.idcliente,
         formulario.value.lugar,
         formulario.value.vendedor.id,
         1,
@@ -624,13 +624,13 @@ export class VentasComponent implements OnInit {
         formulario.value.cuotas,
         formulario.value.montototal,
         formulario.value.fechapago,
-        resultado[0].mensaje,
-        resultado[1].mensaje,
-        resultado[2].mensaje,
-        resultado[3].mensaje,
-        resultado[4].mensaje,
-        resultado[5].mensaje,
-        resultado[6].mensaje,
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
         formulario.value.observaciones,
       ).subscribe(res=>{
         console.log(res)
@@ -642,12 +642,9 @@ export class VentasComponent implements OnInit {
           this.Servicio.CrearVentaCronograma(res['data'],item.monto,item.fecha).subscribe()
         })
         this.Cronograma=[];
-        this.Atras();
+        this.router.navigate(['../../'])
         this.Notificacion.Snack("Se agregó la venta con éxito!","");
       })
-    )
-
-
   }
 
 }

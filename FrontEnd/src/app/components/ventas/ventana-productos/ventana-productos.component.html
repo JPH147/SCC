@@ -27,15 +27,15 @@
         <mat-cell *matCellDef="let producto"> {{producto.almacenamiento}} </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="proveedor">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Proveedor </mat-header-cell>
-        <mat-cell *matCellDef="let producto"> {{producto.proveedor}} </mat-cell>
+      <ng-container matColumnDef="almacen">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Almacén </mat-header-cell>
+        <mat-cell *matCellDef="let producto"> {{producto.nombre_almacen}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let producto">
-        	<button mat-icon-button color="primary" [mat-dialog-close]="producto"><mat-icon>add_circle</mat-icon></button>
+        	<button mat-icon-button color="primary" [mat-dialog-close]="producto" [disabled]="producto.numero"><mat-icon>add_circle</mat-icon></button>
         </mat-cell>
       </ng-container>
 

@@ -97,3 +97,8 @@ mat-row:nth-child(even){
 .large .mat-paginator-range-label{
   display: none !important;
 }
+
+// Para que en el botón de subir archivo no se muestre el "o arrástrelo"
+.img-ul-drag-box-msg{
+  display: none !important;
+}

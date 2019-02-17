@@ -13,15 +13,6 @@
 
           <mat-grid-tile>
             <mat-form-field>
-              <mat-select placeholder="Relevancia" formControlName="relevancia">
-                <mat-option *ngFor="let relevancia of Relevancias" [value]="relevancia.id">{{relevancia.viewValue}}</mat-option>
-              </mat-select>
-              <mat-error>Este campo es obligatorio</mat-error>
-            </mat-form-field>
-          </mat-grid-tile>
-
-          <mat-grid-tile>
-            <mat-form-field>
               <mat-select placeholder="Tipo" formControlName="tipo">
                 <mat-option *ngFor="let tipo of Tipos" [value]="tipo.id">{{tipo.viewValue}}</mat-option>
               </mat-select>
@@ -34,6 +25,9 @@
               <input matInput placeholder="Número" formControlName="telefono">
               <mat-error>Debe ingresar más de 7 dígitos</mat-error>
             </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
           </mat-grid-tile>
 
           <mat-grid-tile>
@@ -54,11 +48,6 @@
           <mat-cell *matCellDef="let telefono"> {{telefono.numero}} </mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="telefono-relevancia">
-          <mat-header-cell *matHeaderCellDef> Relevancia </mat-header-cell>
-          <mat-cell *matCellDef="let telefono"> {{telefono.tlf_relevancia==1 ? 'Principal' : 'Secundario'}} </mat-cell>
-        </ng-container>
-
         <ng-container matColumnDef="telefono-tipo">
           <mat-header-cell *matHeaderCellDef> Tipo </mat-header-cell>
           <mat-cell *matCellDef="let telefono" [ngSwitch]="telefono.id_tipo">
@@ -72,6 +61,14 @@
         <ng-container matColumnDef="telefono-numero_telefono">
           <mat-header-cell *matHeaderCellDef> Número </mat-header-cell>
           <mat-cell *matCellDef="let telefono"> {{telefono.tlf_numero}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="telefono-relevancia">
+          <mat-header-cell *matHeaderCellDef> Relevancia </mat-header-cell>
+          <mat-cell *matCellDef="let telefono">
+            <button mat-icon-button *ngIf="telefono.tlf_relevancia==2" (click)="EstablecerTelefonoPrimario(telefono.id)"> <mat-icon> star_border </mat-icon> </button>
+            <button mat-icon-button *ngIf="telefono.tlf_relevancia==1" color="accent"> <mat-icon> star </mat-icon> </button>
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="telefono-opciones">
@@ -95,15 +92,6 @@
       
       <form [formGroup]="DireccionesForm">
         <mat-grid-list cols=4 rowHeight="70px">
-
-          <mat-grid-tile>
-            <mat-form-field>
-              <mat-select placeholder="Relevancia" formControlName="relevancia">
-                <mat-option *ngFor="let relevancia of RelevanciaDireccion" [value]="relevancia.id">{{relevancia.viewValue}}</mat-option>
-              </mat-select>
-              <mat-error>Este campo es obligatorio</mat-error>
-            </mat-form-field>
-          </mat-grid-tile>
 
           <mat-grid-tile>
             <mat-form-field>
@@ -157,14 +145,17 @@
           <mat-cell *matCellDef="let direccion"> {{direccion.numero}} </mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="direccion-relevancia">
-          <mat-header-cell *matHeaderCellDef> Relevancia </mat-header-cell>
-          <mat-cell *matCellDef="let direccion"> {{direccion.relevancia == 1 ? 'Principal' : 'Secundario'}} </mat-cell>
-        </ng-container>
-
         <ng-container matColumnDef="direccion-nombre">
           <mat-header-cell *matHeaderCellDef> Número </mat-header-cell>
           <mat-cell *matCellDef="let direccion"> {{direccion.direccioncompleta}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="direccion-relevancia">
+          <mat-header-cell *matHeaderCellDef> Relevancia </mat-header-cell>
+          <mat-cell *matCellDef="let direccion">
+            <button mat-icon-button *ngIf="direccion.relevancia==2" (click)="EstablecerDireccionPrimaria(direccion.id)"> <mat-icon> star_border </mat-icon> </button>
+            <button mat-icon-button *ngIf="direccion.relevancia==1" color="accent"> <mat-icon> star </mat-icon> </button>
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="direccion-opciones">
@@ -244,6 +235,14 @@
         <ng-container matColumnDef="cuenta-cci">
           <mat-header-cell *matHeaderCellDef> CCI </mat-header-cell>
           <mat-cell *matCellDef="let cuenta"> {{cuenta.cuenta_cci}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="cuenta-relevancia">
+          <mat-header-cell *matHeaderCellDef> Relevancia </mat-header-cell>
+          <mat-cell *matCellDef="let cuenta">
+            <button mat-icon-button *ngIf="cuenta.relevancia==2" (click)="EstablecerCuentaPrimaria(cuenta.id)"> <mat-icon> star_border </mat-icon> </button>
+            <button mat-icon-button *ngIf="cuenta.relevancia==1" color="accent"> <mat-icon> star </mat-icon> </button>
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="cuenta-opciones">
