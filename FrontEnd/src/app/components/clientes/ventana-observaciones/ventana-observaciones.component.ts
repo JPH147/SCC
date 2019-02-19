@@ -1,9 +1,8 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
-import { MatPaginator, MatDialog } from '@angular/material';
+import { MatPaginator, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import {catchError, finalize, debounceTime, distinctUntilChanged, tap} from 'rxjs/operators'
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ClienteService } from '../clientes.service'
 import {VentanaConfirmarComponent} from '../../global/ventana-confirmar/ventana-confirmar.component';
 

@@ -175,15 +175,13 @@
       </mat-grid-list>
     </div>
     
-<!--     <mat-card class="documentos">
+    <div class="seccion">
  
-      <mat-card-header>
-        <mat-card-title>
-          Documentos
-        </mat-card-title>
-      </mat-card-header>
+      <mat-card-subtitle>
+        Documentos
+      </mat-card-subtitle>
 
-      <mat-grid-list cols="7" rowHeight="70px" *ngIf="!idventa">
+      <mat-grid-list cols="7" rowHeight="100px" *ngIf="!idventa">
 
         <mat-grid-tile>
           <image-upload #CargarDNI
@@ -191,8 +189,7 @@
             [max]="1"
             [url]="'http://localhost/SCC/WS_SCC/file/upload.php'"
             [buttonCaption]="'DNI'"
-            [dropBoxMessage]="'o arrastrelo'"
-            [extensions]="['jpg','png','pdf']"
+            [extensions]="['pdf']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
             (uploadFinished)="SubirDNI($event)">
           </image-upload>  
@@ -205,7 +202,7 @@
             [url]="'http://localhost/SCC/WS_SCC/file/upload.php'"
             [buttonCaption]="'CIP'"
             [dropBoxMessage]="'o arrastrelo'"
-            [extensions]="['jpg','png','pdf']"
+            [extensions]="['pdf']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
             (uploadFinished)="SubirCIP($event)">
           </image-upload>  
@@ -217,8 +214,7 @@
             [max]="1"
             [url]="'http://localhost/SCC/WS_SCC/file/upload.php'"
             [buttonCaption]="'Contrato'"
-            [dropBoxMessage]="'o arrastrelo'"
-            [extensions]="['jpg','png','pdf']"
+            [extensions]="['pdf']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
             (uploadFinished)="SubirContrato($event)">
           </image-upload>  
@@ -230,8 +226,7 @@
             [max]="1"
             [url]="'http://localhost/SCC/WS_SCC/file/upload.php'"
             [buttonCaption]="'Transacción'"
-            [dropBoxMessage]="'o arrastrelo'"
-            [extensions]="['jpg','png','pdf']"
+            [extensions]="['pdf']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
             (uploadFinished)="SubirTransaccion($event)">
           </image-upload>  
@@ -243,8 +238,7 @@
             [max]="1"
             [url]="'http://localhost/SCC/WS_SCC/file/upload.php'"
             [buttonCaption]="'Planilla'"
-            [dropBoxMessage]="'o arrastrelo'"
-            [extensions]="['jpg','png','pdf']"
+            [extensions]="['pdf']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
             (uploadFinished)="SubirPlanilla($event)">
           </image-upload>  
@@ -256,8 +250,7 @@
             [max]="1"
             [url]="'http://localhost/SCC/WS_SCC/file/upload.php'"
             [buttonCaption]="'Letra'"
-            [dropBoxMessage]="'o arrastrelo'"
-            [extensions]="['jpg','png','pdf']"
+            [extensions]="['pdf']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
             (uploadFinished)="SubirLetra($event)">
           </image-upload>  
@@ -269,15 +262,14 @@
             [max]="1"
             [url]="'http://localhost/SCC/WS_SCC/file/upload.php'"
             [buttonCaption]="'Autorización'"
-            [dropBoxMessage]="'o arrastrelo'"
-            [extensions]="['jpg','png','pdf']"
+            [extensions]="['pdf']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
             (uploadFinished)="SubirAutorizacion($event)">
           </image-upload>  
         </mat-grid-tile>
 
-      </mat-grid-list> -->
-
+      </mat-grid-list>
+    </div>
 <!--       <mat-grid-list cols="7" rowHeight="70px" *ngIf="idventa">
 
         <mat-grid-tile>

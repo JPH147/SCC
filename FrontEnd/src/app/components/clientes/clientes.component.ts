@@ -16,6 +16,7 @@ import {ServiciosTelefonos} from '../global/telefonos';
 import {ServiciosDirecciones} from '../global/direcciones';
 import { Notificaciones } from '../global/notificacion';
 import {VentanaFotoComponent} from './ventana-foto/ventana-foto.component';
+import { VentanaVentasComponent } from './ventana-ventas/ventana-ventas.component'
 
 @Component({
   selector: 'app-clientes',
@@ -163,6 +164,13 @@ export class ClientesComponent implements OnInit {
     let VentanaContacto = this.DialogoContacto.open(VentanaObservacionesComponent, {
       width: '900px',
       data: id
+    });
+  }
+
+  VerVentas(cliente){
+    let VentanaContacto = this.DialogoContacto.open(VentanaVentasComponent, {
+      width: '900px',
+      data: {id: cliente.id, nombre: cliente.nombre}
     });
   }
 

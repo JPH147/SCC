@@ -112,6 +112,7 @@ import { VentanaProductosComponent } from './components/ventas/ventana-productos
 import { ReglasEvaluacionComponent } from './components/tablas-maestras/reglas-evaluacion/reglas-evaluacion.component';
 import { VentanaObservacionesComponent } from './components/clientes/ventana-observaciones/ventana-observaciones.component';
 import { VentanaFotoComponent } from './components/clientes/ventana-foto/ventana-foto.component';
+import { VentanaVentasComponent } from './components/clientes/ventana-ventas/ventana-ventas.component';
 
 @NgModule({
   imports: [
@@ -228,7 +229,8 @@ import { VentanaFotoComponent } from './components/clientes/ventana-foto/ventana
     VentanaProductosComponent,
     ReglasEvaluacionComponent,
     VentanaObservacionesComponent,
-    VentanaFotoComponent
+    VentanaFotoComponent,
+    VentanaVentasComponent
    ],
   entryComponents: [
     AppComponent,
@@ -265,7 +267,8 @@ import { VentanaFotoComponent } from './components/clientes/ventana-foto/ventana
     AgregarProductoComponent,
     VentanaProductosComponent,
     VentanaObservacionesComponent,
-    VentanaFotoComponent
+    VentanaFotoComponent,
+    VentanaVentasComponent
   ],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider, {provide: MAT_DATE_LOCALE, useValue: 'en-GB'}]

@@ -115,7 +115,39 @@ export class VentaService {
         console.log('No hay datos que mostrar');
       }
     }))
+  }
 
+  ListarVentasxCliente(
+    cliente:number,
+    talonario_serie:string,
+    talonario_numero:string,
+    estado:number,
+    pagina:number,
+    total_pagina:number,
+  ){
+    return this.http.get(this.url + 'venta/readxcliente.php', {
+      params: new HttpParams()
+      .set('prcliente',cliente.toString())
+      .set('prtalonarioserie',talonario_serie)
+      .set('prtalonarionumero',talonario_numero)
+      .set('prestado',estado.toString())
+      .set('prpagina',pagina.toString())
+      .set('prtotalpagina',total_pagina.toString())
+    })
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res;
+      }  else {
+        console.log('No hay datos que mostrar');
+        return res;
+      }
+    }));
+    // prcliente
+    // prtalonarioseerie
+    // prtalonarionumero
+    // prestado
+    // prpagina
+    // prtotalpagina
   }
 
 }

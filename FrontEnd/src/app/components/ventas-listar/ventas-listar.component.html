@@ -103,7 +103,10 @@
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let venta">
-          <!-- <button mat-icon-button color="primary" matTooltip="Ver detalle"   [routerLink]="['/ventas/ver', venta.id]" ><mat-icon> visibility </mat-icon></button> -->
+          <button mat-icon-button color="primary" matTooltip="Ver ddocumento"><mat-icon> visibility </mat-icon></button>
+          <button mat-icon-button color="primary" matTooltip="Editar"><mat-icon> edit </mat-icon></button>
+          <button mat-icon-button color="primary" matTooltip="Canjear"><mat-icon> import_export </mat-icon></button>
+          <button mat-icon-button color="primary" matTooltip="Anular"><mat-icon> delete </mat-icon></button>
         </mat-cell>
       </ng-container>
 

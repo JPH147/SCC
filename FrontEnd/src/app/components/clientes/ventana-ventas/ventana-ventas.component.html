@@ -1,0 +1,80 @@
+<mat-card class="card">
+
+  <mat-toolbar color="primary">
+    <mat-toolbar-row>Ventas a {{data.nombre}} </mat-toolbar-row>
+  </mat-toolbar>
+
+	<mat-card-content>
+
+    <mat-grid-list cols=4 rowHeight="70px">
+
+      <mat-grid-tile>
+        <mat-form-field>
+          <input matInput placeholder="Serie" #InputSerie>
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <mat-form-field>
+          <input matInput placeholder="Número" #InputNumero>
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <mat-form-field>
+          <mat-select placeholder="Estado" [(ngModel)]="estado" (selectionChange)="CargarData()">
+          	<mat-option [value]="0">Todas</mat-option>
+          	<mat-option [value]="1">Pendientes</mat-option>
+          	<mat-option [value]="2">Pagadas</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+				<button mat-raised-button color="primary" (click)="HacerVenta()">Nueva venta</button>
+      </mat-grid-tile>
+
+    </mat-grid-list>
+
+    <div class = "spinner-container" *ngIf = "ListadoVentas.Cargando| async">
+      <mat-spinner></mat-spinner>
+    </div>
+
+    <mat-table [dataSource]="ListadoVentas" class="mat-elevation-z8">
+
+      <ng-container matColumnDef="serie">
+        <mat-header-cell *matHeaderCellDef> Talonario </mat-header-cell>
+        <mat-cell *matCellDef="let venta"> {{venta.serie}}-{{venta.numero}}  </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="fecha">
+        <mat-header-cell *matHeaderCellDef> Fecha </mat-header-cell>
+        <mat-cell *matCellDef="let venta"> {{venta.fecha | date:"dd/MM/yyyy"}} </mat-cell>
+	    </ng-container>
+
+      <ng-container matColumnDef="total">
+        <mat-header-cell *matHeaderCellDef> Total </mat-header-cell>
+        <mat-cell *matCellDef="let venta"> {{venta.total}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="estado">
+        <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
+        <mat-cell *matCellDef="let venta"> {{venta.estado}} ({{venta.cuotas_pagadas}}/{{venta.total_cuotas}}) </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="opciones">
+        <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
+        <mat-cell *matCellDef="let venta">
+          <button mat-icon-button matTooltip="Ver detalle" color="primary" (click)="VerVenta(venta.id)"><mat-icon> visibility </mat-icon></button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: Columnas;"></mat-row>
+    </mat-table>
+
+    <mat-paginator [length]="ListadoVentas.TotalResultados | async" [pageSize]="5"></mat-paginator>
+
+	</mat-card-content>
+
+</mat-card>
