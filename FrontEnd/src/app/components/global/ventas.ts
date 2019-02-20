@@ -13,36 +13,6 @@ export class ServiciosVentas{
 		private http:HttpClient,
 	){}
 
-	ListarVendedor(
-		dni:number,
-		nombre:string,
-		sucursal:string,
-	):Observable<any>
-	{
-
-		let DNI:string;
-
-		if(dni){
-			DNI=dni.toString()
-		}else{
-			DNI=""
-		}
-
-		return this.http.get(this.url+'vendedor/read.php',{
-			params: new HttpParams()
-			.set('vnd_dni', DNI)
-			.set('vnd_nombre',nombre)
-			.set('scs_nombre',sucursal)
-		})
-		.pipe(map(res=>{
-			if(res['codigo']===0){
-				return res=res
-			}else{
-				console.log('No hay datos que mostrar')
-			}
-		}))
-	}
-
 	ListarTalonarioSerie():Observable<any>
 	{
 		return this.http.get(this.url+'talonario/read-serie.php',{

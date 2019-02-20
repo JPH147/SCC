@@ -50,6 +50,7 @@ export class VentasComponent implements OnInit {
   public Producto:Array<any>;
   public Cronograma: Array<any>;
   public Series: Array<any>;
+  public Autorizador: Array<any>;
 
   public dni: string;
   public cip: string;
@@ -76,7 +77,7 @@ export class VentasComponent implements OnInit {
     private DireccionServicio: ServiciosDirecciones,
     private ServiciosGenerales: ServiciosGenerales,
     private TelefonoServicio: ServiciosTelefonos,
-    public  Dialogo: MatDialog,
+    private  Dialogo: MatDialog,
     private FormBuilder: FormBuilder,
     private ServicioTipoDocumento: ServiciosTipoDocumento,
     private ServicioTipoPago: ServiciosTipoPago,
@@ -99,7 +100,6 @@ export class VentasComponent implements OnInit {
         this.ObtenerClientexId(this.idcliente);
       }
      if(params['idventa']){
-       console.log("here!")
        this.idventa = +params['idventa'];
        this.SeleccionarVentaxId(this.idventa);
      }
@@ -138,6 +138,9 @@ export class VentasComponent implements OnInit {
         Validators.required
       ]],
       'telefono': [null, [
+      ]],
+      'autorizador': [null, [
+        Validators.required
       ]],
       'vendedor': [null, [
         Validators.required
@@ -439,6 +442,19 @@ export class VentasComponent implements OnInit {
     this.sucursal=evento.value;
     this.ResetearProductosFormArray();
     this.BuscarProducto(this.sucursal,"");
+    this.VentasForm.get('autorizador').setValue(null)
+    this.ListarAutorizadores(evento.value);
+  }
+
+  ListarAutorizadores(id_sucursal){
+    this.ServiciosGenerales.ListarAutorizador(id_sucursal,"",1,50).subscribe(res=>{
+      if (res['data']) {
+        this.Autorizador=res['data'].autorizadores
+      }
+      else{
+        this.Autorizador=[]
+      }  
+    })
   }
 
   ResetearProductosFormArray(){

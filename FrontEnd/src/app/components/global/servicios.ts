@@ -504,6 +504,30 @@ EditarModelo(
         }));
     }
 
+
+    ListarAutorizador(
+      id_sucursal: number,
+      nombre: string,
+      pagina_inicio: number,
+      total_pagina: number
+    ){
+      return this.http.get(this.url+'autorizador/read.php',{
+        params: new HttpParams()
+        .set('prsucursal', id_sucursal.toString())
+        .set('prnombre',nombre)
+        .set('prpagina',pagina_inicio.toString())
+        .set('prtotalpagina',total_pagina.toString())
+      })
+      .pipe(map(res=>{
+        if(res['codigo']===0){
+          return res
+        }else{
+          console.log('No hay datos que mostrar')
+          return res;
+        }
+      }))
+    }
+
     ListarProductos(
       nombre: string
       ): Observable <any> {

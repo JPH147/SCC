@@ -106,6 +106,14 @@
 
         <mat-grid-tile colspan=2>
           <mat-form-field class="columnas-2">
+            <mat-select placeholder="Autorizador" formControlName="autorizador">
+              <mat-option *ngFor="let autorizador of Autorizador" [value]="autorizador.id">{{autorizador.nombre}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan=2>
+          <mat-form-field class="columnas-2">
             <input matInput placeholder="Lugar de Venta" formControlName="lugar" [readonly]="idventa">
           </mat-form-field>
         </mat-grid-tile> 
