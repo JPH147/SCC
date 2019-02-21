@@ -58,7 +58,7 @@ export class SalidaVendedoresComponent implements OnInit {
 
     this.Global.ListarSucursal(null,"").subscribe(res=>this.Sucursales=res);
     this.Global.ListarAlmacen().subscribe(res=>this.Almacenes=res);
-    this.Ventas.ListarVendedor(null,"","").subscribe(res=>this.Vendedor=res['data'].vendedores);
+    // this.Ventas.ListarVendedor(null,"","").subscribe(res=>this.Vendedor=res['data'].vendedores);
 
 
     this.SalidaVendedoresForm = this.FormBuilder.group({
@@ -232,14 +232,14 @@ export class SalidaVendedoresComponent implements OnInit {
   }
   
   VendedorSeleccionado2(filtro){
-    this.Ventas.ListarVendedor(null,filtro,"").subscribe(res=>{
-      this.Vendedor=res['data'].vendedores;
-      for (let i of this.SalidaVendedoresForm['controls'].vendedores.value) {
-        if (i.nombre) {
-          this.EliminarElemento(this.Vendedor,i.nombre.id)
-        }
-      }
-    });
+  //   this.Ventas.ListarVendedor(null,filtro,"").subscribe(res=>{
+  //     this.Vendedor=res['data'].vendedores;
+  //     for (let i of this.SalidaVendedoresForm['controls'].vendedores.value) {
+  //       if (i.nombre) {
+  //         this.EliminarElemento(this.Vendedor,i.nombre.id)
+  //       }
+  //     }
+  //   });
   }
 
   ProductoSeleccionado(filtro){

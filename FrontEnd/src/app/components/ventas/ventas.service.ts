@@ -17,7 +17,10 @@ export class VentaService {
     fecha:Date,
     sucursal:number,
     talonario:number,
+    autorizador:number,
     cliente:number,
+    cliente_direccion:number,
+    cliente_telefono:number,
     lugar:string,
     vendedor:number,
     tipo_venta:number,
@@ -41,7 +44,10 @@ export class VentaService {
     .set('prfecha',moment(fecha).format("YYYY-MM-DD"))
     .set('prsucursal',sucursal.toString())
     .set('prtalonario',talonario.toString())
+    .set('prautorizador',autorizador.toString())
     .set('prcliente',cliente.toString())
+    .set('prclientedireccion',cliente_direccion.toString())
+    .set('prclientetelefono',cliente_telefono.toString())
     .set('prlugar',lugar)
     .set('prvendedor',vendedor.toString())
     .set('prtipoventa',tipo_venta.toString())
