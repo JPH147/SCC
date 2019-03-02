@@ -64,7 +64,7 @@
     </div>
 
     <mat-table [dataSource]="ListadoVentas" class="mat-elevation-z8" matSort matSortActive="serie" matSortDirection="asc" matSortDisableClear>
-<!-- ['numero', 'serie', 'cliente', 'tipo_venta', 'monto_total', 'fecha', 'opciones']; -->
+
       <ng-container matColumnDef="numero">
         <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
         <mat-cell *matCellDef="let venta"> {{venta.numero}} </mat-cell>
@@ -86,7 +86,7 @@
       </ng-container>
 
       <ng-container matColumnDef="tipo_venta">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> TIpo de venta </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo de venta </mat-header-cell>
         <mat-cell *matCellDef="let venta"> {{venta.tipo_venta}} </mat-cell>
       </ng-container>
 
@@ -103,7 +103,7 @@
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let venta">
-          <button mat-icon-button color="primary" matTooltip="Ver documento"><mat-icon> visibility </mat-icon></button>
+          <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="[venta.id]"><mat-icon> visibility </mat-icon></button>
           <button mat-icon-button color="primary" matTooltip="Editar"><mat-icon> edit </mat-icon></button>
           <button mat-icon-button color="primary" matTooltip="Canjear"><mat-icon> import_export </mat-icon></button>
           <button mat-icon-button color="primary" matTooltip="Anular"><mat-icon> delete </mat-icon></button>

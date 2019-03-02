@@ -21,6 +21,7 @@ export class VentaService {
     cliente:number,
     cliente_direccion:number,
     cliente_telefono:number,
+    cliente_cargo:string,
     lugar:string,
     vendedor:number,
     tipo_venta:number,
@@ -48,6 +49,7 @@ export class VentaService {
     .set('prcliente',cliente.toString())
     .set('prclientedireccion',cliente_direccion.toString())
     .set('prclientetelefono',cliente_telefono.toString())
+    .set('prclientecargo',cliente_cargo)
     .set('prlugar',lugar)
     .set('prvendedor',vendedor.toString())
     .set('prtipoventa',tipo_venta.toString())

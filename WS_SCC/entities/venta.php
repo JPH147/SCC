@@ -6,9 +6,15 @@ Class Venta{
 
     public $id_venta;
     public $id_talonario;
+    public $id_autorizador;
     public $id_cliente;
+    public $id_clientedireccion;
+    public $id_clientetelefono;
+    public $clientecargo;
     public $vnt_fecha;
     public $id_vendedor;
+    public $nombre_vendedor;
+    public $nombre_autorizador;
     public $vnt_contrato_pdf;
     public $tipo_documento;
     public $vnt_dni_pdf;
@@ -34,7 +40,16 @@ Class Venta{
     public $precio;
     public $productos;
     public $cronograma;
-
+    public $talonario_serie;
+    public $talonario_numero;
+    public $talonario_contrato;
+    public $tipo_pago;
+    public $nombre_sucursal;
+    public $total_cuotas;
+    public $cuotas_pagadas;
+    public $estado;
+    public $numero_pagina;
+    public $total_pagina;
 
     public function __construct($db){
         $this->conn = $db;
@@ -72,6 +87,7 @@ Class Venta{
                 "contrato"=>$contrato,
                 "sede"=>$sede,
                 "subsede"=>$subsede,
+                "autorizador_nombre"=>$autorizador_nombre,
                 "cliente_nombre"=>$cliente_nombre,
                 "fecha"=>$fecha,
                 "vendedor"=>$vendedor,
@@ -115,7 +131,11 @@ Class Venta{
         :prfecha,
         :prsucursal,
         :prtalonario,
+        :prautorizador,
         :prcliente,
+        :prclientedireccion,
+        :prclientetelefono,
+        :prclientecargo,
         :prlugar,
         :prvendedor,
         :prtipoventa,
@@ -139,7 +159,11 @@ Class Venta{
         $result->bindParam(":prfecha", $this->fecha);
         $result->bindParam(":prsucursal", $this->sucursal);
         $result->bindParam(":prtalonario", $this->talonario);
-        $result->bindParam(":prcliente", $this->cliente);
+        $result->bindParam(":prautorizador", $this->id_autorizador);
+        $result->bindParam(":prcliente", $this->id_cliente);
+        $result->bindParam(":prclientedireccion", $this->id_clientedireccion);
+        $result->bindParam(":prclientetelefono", $this->id_clientetelefono);
+        $result->bindParam(":prclientecargo", $this->clientecargo);
         $result->bindParam(":prlugar", $this->lugar);
         $result->bindParam(":prvendedor", $this->vendedor);
         $result->bindParam(":prtipoventa", $this->tipoventa);
@@ -161,7 +185,11 @@ Class Venta{
         $this->fecha=htmlspecialchars(strip_tags($this->fecha));
         $this->sucursal=htmlspecialchars(strip_tags($this->sucursal));
         $this->talonario=htmlspecialchars(strip_tags($this->talonario));
-        $this->cliente=htmlspecialchars(strip_tags($this->cliente));
+        $this->id_autorizador=htmlspecialchars(strip_tags($this->id_autorizador));
+        $this->id_cliente=htmlspecialchars(strip_tags($this->id_cliente));
+        $this->id_clientedireccion=htmlspecialchars(strip_tags($this->id_clientedireccion));
+        $this->id_clientetelefono=htmlspecialchars(strip_tags($this->id_clientetelefono));
+        $this->clientecargo=htmlspecialchars(strip_tags($this->clientecargo));
         $this->lugar=htmlspecialchars(strip_tags($this->lugar));
         $this->vendedor=htmlspecialchars(strip_tags($this->vendedor));
         $this->tipoventa=htmlspecialchars(strip_tags($this->tipoventa));
@@ -211,11 +239,24 @@ Class Venta{
         $this->tipo_venta=$row['tipo_venta'];
         $this->fecha=$row['fecha'];
         $this->id_sucursal=$row['id_sucursal'];
+        $this->nombre_sucursal=$row['nombre_sucursal'];
         $this->id_talonario=$row['id_talonario'];
         $this->talonario_serie=$row['talonario_serie'];
+        $this->talonario_contrato=$row['talonario_contrato'];
         $this->id_cliente=$row['id_cliente'];
+        $this->cliente_nombre=$row['cliente_nombre'];
+        $this->cliente_trabajo=$row['cliente_trabajo'];
+        $this->cliente_cargo_nombre=$row['cliente_cargo_nombre'];
+        $this->id_cliente_direccion=$row['id_cliente_direccion'];
+        $this->cliente_direccion_nombre=$row['cliente_direccion_nombre'];
+        $this->id_cliente_telefono=$row['id_cliente_telefono'];
+        $this->cliente_telefono_numero=$row['cliente_telefono_numero'];
         $this->id_vendedor=$row['id_vendedor'];
+        $this->nombre_vendedor=$row['nombre_vendedor'];
+        $this->id_autorizador=$row['id_autorizador'];
+        $this->nombre_autorizador=$row['nombre_autorizador'];
         $this->idtipopago=$row['idtipopago'];
+        $this->tipo_pago=$row['tipo_pago'];
         $this->documento=$row['documento'];
         $this->monto_inicial=$row['monto_inicial'];
         $this->numero_cuotas=$row['numero_cuotas'];
@@ -270,14 +311,19 @@ Class Venta{
         
         $venta_list=array();
         $venta_list["cronograma"]=array();
+        $contador = 0;
 
         while($row = $result->fetch(PDO::FETCH_ASSOC))
         {
             extract($row);
+            $contador=$contador+1;
             $venta_item = array (
+                "numero"=>$contador,
                 "id_cronograma"=>$id_cronograma,
                 "monto_cuota"=>$monto_cuota,
                 "fecha_vencimiento"=>$fecha_vencimiento,
+                "monto_pagado"=>$monto_pagado,
+                "fecha_cancelacion"=>$fecha_cancelacion,
                 "estado"=>$estado,
             );
             array_push($venta_list["cronograma"],$venta_item);
@@ -340,5 +386,62 @@ Class Venta{
         return $venta_list;
     }
 
+    function readxcliente(){
+        $query = "CALL sp_listarventasxcliente(?,?,?,?,?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_cliente);
+        $result->bindParam(2, $this->talonario_serie);
+        $result->bindParam(3, $this->talonario_numero);
+        $result->bindParam(4, $this->estado);
+        $result->bindParam(5, $this->numero_pagina);
+        $result->bindParam(6, $this->total_pagina);
+
+        $result->execute();
+        
+        $venta_list=array();
+        $venta_list["ventas"]=array();
+        
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $venta_item = array (
+                "id"=>$id,
+                "tipo"=>$tipo,
+                "fecha"=>$fecha,
+                "id_talonario"=>$id_talonario,
+                "serie"=>$talonario_serie,
+                "numero"=>$talonario_numero,
+                "tipo_pago"=>$tipo_pago,
+                "total_cuotas"=>$total_cuotas,
+                "cuotas_pagadas"=>$cuotas_pagadas,
+                "total"=>$total,
+                "estado"=>$estado,
+            );
+            array_push($venta_list["ventas"],$venta_item);
+        }
+
+        return $venta_list;
+    }
+
+    function readxclientecontar(){
+        $query = "CALL sp_listarventasxclientecontar(?,?,?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_cliente);
+        $result->bindParam(2, $this->talonario_serie);
+        $result->bindParam(3, $this->talonario_numero);
+        $result->bindParam(4, $this->estado);
+
+        $result->execute();
+        
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        $this->total_resultado=$row['total'];
+
+        return $this->total_resultado;
+    }
 }
 ?>

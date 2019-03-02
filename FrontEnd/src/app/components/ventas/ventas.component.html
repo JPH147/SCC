@@ -2,14 +2,19 @@
 
   <button mat-mini-fab type="button" color="primary" (click)="Atras()"><mat-icon>keyboard_arrow_left</mat-icon></button>
 
-  <mat-card-title class="tituloProd">Ventas</mat-card-title>
+  <mat-card-title class="tituloProd" *ngIf="!idventa">Nueva venta</mat-card-title>
+  <mat-card-title class="tituloProd" *ngIf="idventa">Venta {{talonario}}</mat-card-title>
   
   <form [formGroup]="VentasForm">
+
+    <div class = "spinner-container" *ngIf = "Cargando| async">
+      <mat-spinner></mat-spinner>
+    </div>
     
     <div class="seccion">
 
-      <mat-card-subtitle>
-        Datos del cliente
+      <mat-card-subtitle class="titulo-seccion">
+        DATOS DEL CLIENTE
       </mat-card-subtitle>
 
       <mat-grid-list cols="4" rowHeight="70px">
@@ -50,13 +55,12 @@
         </mat-grid-tile>
 
       </mat-grid-list>
-
     </div>
 
     <div class="seccion">
 
-      <mat-card-subtitle>
-        Datos de la venta
+      <mat-card-subtitle class="titulo-seccion">
+        DATOS DE LA VENTA
       </mat-card-subtitle>
 
       <mat-grid-list cols="4" rowHeight="70px">
@@ -65,11 +69,11 @@
           <mat-form-field class="columnas-1">
              <input matInput [matDatepicker]="picker" placeholder="Fecha de venta" formControlName="fechaventa" [readonly]="idventa">
              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-             <mat-datepicker #picker></mat-datepicker>
+             <mat-datepicker #picker [disabled]="idventa"></mat-datepicker>
           </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile>
+        <mat-grid-tile *ngIf="!idventa">
           <mat-form-field class="columnas-1">
             <mat-select placeholder="Sucursal" formControlName="sucursal" (selectionChange)="SucursalSeleccionada($event)">
               <mat-option *ngFor="let sucursal of Sucursales" [value]="sucursal.id">{{sucursal.nombre}}</mat-option>
@@ -77,7 +81,13 @@
           </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile>
+        <mat-grid-tile *ngIf="idventa">
+          <mat-form-field class="columnas-1">
+            <input matInput placeholder="Sucursal" formControlName="sucursal" [readonly]="idventa">
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile *ngIf="!idventa">
           <mat-form-field class="columnas-1">
             <mat-select placeholder='Talonario' formControlName="talonario" (selectionChange)="SerieSeleccionada($event)">
               <mat-option *ngFor="let talonarioserie of LstSeries" [value] = "talonarioserie.serie"> {{talonarioserie.serie}} </mat-option>
@@ -85,7 +95,13 @@
           </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile>
+        <mat-grid-tile *ngIf="idventa">
+          <mat-form-field class="columnas-1">
+            <input matInput placeholder="Talonario" formControlName="talonario" [readonly]="idventa">
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile *ngIf="!idventa">
           <mat-form-field class="columnas-1">
             <mat-select placeholder='Contrato' formControlName="contrato">
               <mat-option *ngFor="let contrato of LstContrato" [value] = "contrato.id"> {{contrato.numero}} </mat-option>
@@ -93,22 +109,43 @@
          </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile colspan=2>
+        <mat-grid-tile *ngIf="idventa">
+          <mat-form-field class="columnas-1">
+            <input matInput placeholder="Contrato" formControlName="contrato" [readonly]="idventa">
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan=2 *ngIf="!idventa">
           <mat-form-field class="columnas-2">
-            <input placeholder="Vendedor" matInput [matAutocomplete]="auto" formControlName= vendedor #Vendedor [readonly]="idventa">
+            <input placeholder="Vendedor" matInput [matAutocomplete]="auto" formControlName=vendedor #Vendedor>
             <mat-autocomplete #auto="matAutocomplete" [displayWith] = "displayVendedor">
-              <mat-option *ngFor="let vendedor of LstVendedor " [value]="vendedor">
+              <mat-option *ngFor="let vendedor of LstVendedor" [value]="vendedor">
                 {{vendedor.nombre}}
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile colspan=2>
+        <mat-grid-tile colspan=2 *ngIf="idventa">
           <mat-form-field class="columnas-2">
-            <mat-select placeholder="Autorizador" formControlName="autorizador">
-              <mat-option *ngFor="let autorizador of Autorizador" [value]="autorizador.id">{{autorizador.nombre}}</mat-option>
-            </mat-select>
+            <input matInput type="text" placeholder="Vendedor" formControlName="vendedor" [readonly]="idventa" #Vendedor>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan=2 *ngIf="!idventa">
+          <mat-form-field class="columnas-2">
+            <input placeholder="Autorizador" matInput [matAutocomplete]="auto3" formControlName=autorizador #Autorizador>
+            <mat-autocomplete #auto3="matAutocomplete" [displayWith] = "displayVendedor">
+              <mat-option *ngFor="let autorizador of LstVendedor3" [value]="autorizador">
+                {{autorizador.nombre}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan=2 *ngIf="idventa">
+          <mat-form-field class="columnas-2">
+            <input matInput type="text" placeholder="Autorizador" formControlName="autorizador" [readonly]="idventa" #Autorizador>
           </mat-form-field>
         </mat-grid-tile>
 
@@ -123,21 +160,21 @@
 
     <div class="seccion">
 
-      <mat-card-subtitle>
-        Datos del documento
+      <mat-card-subtitle class="titulo-seccion">
+        DATOS DEL DOCUMENTO
       </mat-card-subtitle>
 
       <mat-grid-list cols="4" rowHeight="70px">
 
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
-             <input matInput [matDatepicker]="InputFechaPago" placeholder="Inicio de pagos" [min]="VentasForm.value.fechaventa" formControlName="fechapago" (dateChange)="CrearCronograma()">
+             <input matInput [matDatepicker]="InputFechaPago" placeholder="Inicio de pagos" [min]="VentasForm.value.fechaventa" formControlName="fechapago" (dateChange)="CrearCronograma()"  [readonly]="idventa">
              <mat-datepicker-toggle matSuffix [for]="InputFechaPago"></mat-datepicker-toggle>
-             <mat-datepicker #InputFechaPago></mat-datepicker>
+             <mat-datepicker #InputFechaPago [disabled]="idventa"></mat-datepicker>
           </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile>
+        <mat-grid-tile *ngIf="!idventa">
           <mat-form-field class="columnas-1">
             <mat-select placeholder='Tipo de pago' formControlName="tipopago">
               <mat-option *ngFor="let tipopago of LstTipoPago" [value] = "tipopago.id"> {{tipopago.nombre}} </mat-option>
@@ -145,13 +182,11 @@
           </mat-form-field>
         </mat-grid-tile>
 
-<!--         <mat-grid-tile>
+        <mat-grid-tile *ngIf="idventa">
           <mat-form-field class="columnas-1">
-            <input matInput placeholder="Monto total"  formControlName="montototal" #InputMontoTotal [readonly]="idventa">
-            <mat-error>Solo debe ingresar valores númericos</mat-error>
-            <span matPrefix>S/.&nbsp;</span>
+            <input matInput type="text" placeholder="Tipo de pago" formControlName="tipopago" [readonly]="idventa">
           </mat-form-field>
-        </mat-grid-tile> -->
+        </mat-grid-tile>
 
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
@@ -182,11 +217,11 @@
 
       </mat-grid-list>
     </div>
-    
+
     <div class="seccion">
  
-      <mat-card-subtitle>
-        Documentos
+      <mat-card-subtitle class="titulo-seccion">
+        DOCUMENTOS ADJUNTOS
       </mat-card-subtitle>
 
       <mat-grid-list cols="7" rowHeight="100px" *ngIf="!idventa">
@@ -275,8 +310,100 @@
             (uploadFinished)="SubirAutorizacion($event)">
           </image-upload>  
         </mat-grid-tile>
+      </mat-grid-list>
+
+      <mat-grid-list cols=7 rowHeight="20px" *ngIf=idventa>
+
+        <mat-grid-tile>
+          DNI
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          CIP
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          Contrato
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          Transacción
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          Planilla
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          Letra
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          Autorización
+        </mat-grid-tile>
 
       </mat-grid-list>
+
+      <mat-grid-list cols=7 rowHeight="60px" *ngIf=idventa>
+
+        <mat-grid-tile>
+          <button mat-icon-button color="primary">
+            <a href="{{dni}}">
+              <mat-icon class="icono-documentos"> description </mat-icon>
+            </a>
+          </button>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <button mat-icon-button color="primary">
+            <a href="{{cip}}">
+              <mat-icon class="icono-documentos"> description </mat-icon>
+            </a>
+          </button>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <button mat-icon-button color="primary">
+            <a href="{{contrato}}">
+              <mat-icon class="icono-documentos"> description </mat-icon>
+            </a>
+          </button>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <button mat-icon-button color="primary">
+            <a href="{{transaccion}}">
+              <mat-icon class="icono-documentos"> description </mat-icon>
+            </a>
+          </button>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <button mat-icon-button color="primary">
+            <a href="planilla">
+              <mat-icon class="icono-documentos"> description </mat-icon>
+            </a>
+          </button>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <button mat-icon-button color="primary">
+            <a href="{{letra}}">
+              <mat-icon class="icono-documentos"> description </mat-icon>
+            </a>
+          </button>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <button mat-icon-button color="primary">
+            <a href="{{autorizacion}}">
+              <mat-icon class="icono-documentos"> description </mat-icon>
+            </a>
+          </button>
+        </mat-grid-tile>
+
+      </mat-grid-list>
+
     </div>
 <!--       <mat-grid-list cols="7" rowHeight="70px" *ngIf="idventa">
 
@@ -316,17 +443,9 @@
 
     <div class="seccion">
 
-      <mat-card-subtitle>
-        Datos del documento
+      <mat-card-subtitle class="titulo-seccion">
+        PRODUCTOS
       </mat-card-subtitle>
-
-    <!-- <mat-card class="documentos">
-
-      <mat-card-header>
-        <mat-card-title>
-          Productos
-        </mat-card-title>
-      </mat-card-header> -->
 
       <mat-grid-list cols="4" rowHeight="50px" *ngIf="!idventa">
         <mat-grid-tile colspan="4">
@@ -334,7 +453,7 @@
         </mat-grid-tile>
       </mat-grid-list>
 
-      <div *ngIf="this.sucursal">
+      <ng-container *ngIf="this.sucursal && !idventa">
         <div formArrayName="productos" *ngFor="let producto of VentasForm['controls'].productos['controls']; let i = index">
           <div [formGroupName]="i">
 
@@ -376,27 +495,51 @@
               </mat-grid-tile>
 
               <mat-grid-tile>
-                <button  mat-icon-button type="button" color="primary" class="boton" matTooltip="Eliminar producto" (click)="EliminarProductos(i,producto)" [disabled]="VentasForm['controls'].productos['controls'].length==1" *ngIf="!idventa"><mat-icon>delete</mat-icon></button>
+                <button  mat-icon-button type="button" color="primary" class="boton" matTooltip="Eliminar producto" (click)="EliminarProductos(i,producto)" [disabled]="VentasForm['controls'].productos['controls'].length==1"><mat-icon>delete</mat-icon></button>
               </mat-grid-tile>
 
             </mat-grid-list>
           </div>
         </div>
-      </div>
+      </ng-container>
 
-    <!-- </mat-card> -->
+      <ng-container *ngIf="idventa">
+        <mat-grid-list cols="5" rowHeight="70px" *ngFor="let producto of ProductosComprados">
 
+          <mat-grid-tile colspan="2">
+            <mat-form-field class="columnas-2">
+               <input matInput placeholder="Producto" [value]="producto.nombre" readonly>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile colspan="2">
+            <mat-form-field class="columnas-2">
+               <input matInput placeholder="IMEI" [value]="producto.serie" readonly>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <mat-form-field class="columnas-1">
+              <input matInput placeholder="Precio" [value]="producto.precio" readonly>
+              <span matPrefix>S/ &nbsp;</span>
+            </mat-form-field>
+          </mat-grid-tile>
+
+        </mat-grid-list>
+      </ng-container>
     </div>
 
-    <mat-card class="documentos">
+<!--     <mat-card-subtitle>
+      Cronograma
+    </mat-card-subtitle> -->
 
-      <mat-card-header>
-        <mat-card-title>
-          Cronograma
-        </mat-card-title>
-      </mat-card-header>
+    <div class="seccion">
 
-      <ng-container>
+      <mat-card-subtitle class="titulo-seccion">
+        CRONOGRAMA
+      </mat-card-subtitle>
+
+      <ng-container *ngIf="!idventa">
         <mat-grid-list cols="7" rowHeight="70px">
 
           <mat-grid-tile>
@@ -447,12 +590,59 @@
 
         </mat-grid-list>
       </ng-container>
-    </mat-card>
 
-    <mat-card-actions>
+      <ng-container *ngIf="idventa">
+        <mat-table [dataSource]="ListadoVentas">
+
+          <ng-container matColumnDef="numero">
+            <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma"> {{cronograma.numero}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="monto_cuota">
+            <mat-header-cell *matHeaderCellDef> Monto </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_cuota }} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="fecha_vencimiento">
+            <mat-header-cell *matHeaderCellDef> Vencimiento </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma"> {{cronograma.fecha_vencimiento}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="monto_pagado">
+            <mat-header-cell *matHeaderCellDef> Total pagado </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_pagado}}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="fecha_cancelacion">
+            <mat-header-cell *matHeaderCellDef> Fecha de cancelación </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma"> {{cronograma.fecha_cancelacion}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="estado">
+            <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma"> {{cronograma.estado==1 ? "Por pagar" : "Pagado" }} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="opciones">
+            <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma">
+
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: Columnas;"></mat-row>
+
+        </mat-table>
+      </ng-container>
+
+    </div>
+
+    <mat-card-actions *ngIf="!idventa">
       <mat-grid-list cols="1" rowHeight="40px">
         <mat-grid-tile>
-          <button mat-raised-button color="primary" (click)="GrabarVenta(VentasForm)" [disabled]="VentasForm.invalid"> Guardar </button> 
+          <button mat-raised-button color="primary" (click)="GrabarVenta(VentasForm)" [disabled]="VentasForm.invalid"> Guardar </button>
         </mat-grid-tile>
       </mat-grid-list>
     </mat-card-actions>

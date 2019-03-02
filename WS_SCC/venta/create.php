@@ -24,7 +24,11 @@
             $venta->fecha=trim($_POST["prfecha"]);
             $venta->sucursal=trim($_POST["prsucursal"]);
             $venta->talonario=trim($_POST["prtalonario"]);
-            $venta->cliente=trim($_POST["prcliente"]);
+            $venta->id_autorizador=trim($_POST["prautorizador"]);
+            $venta->id_cliente=trim($_POST["prcliente"]);
+            $venta->id_clientedireccion=trim($_POST["prclientedireccion"]);
+            $venta->id_clientetelefono=trim($_POST["prclientetelefono"]);
+            $venta->clientecargo=trim($_POST["prclientecargo"]);
             $venta->lugar=trim($_POST["prlugar"]);
             $venta->vendedor=trim($_POST["prvendedor"]);
             $venta->tipoventa=trim($_POST["prtipoventa"]);
