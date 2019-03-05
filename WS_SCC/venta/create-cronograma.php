@@ -23,6 +23,7 @@
             $venta->venta=trim($_POST["prventa"]);
             $venta->monto=trim($_POST["prmonto"]);
             $venta->vencimiento=trim($_POST["prvencimiento"]);
+            $venta->estado=trim($_POST["prestado"]);
 
             if($venta->create_cronograma())
             {

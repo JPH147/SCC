@@ -48,6 +48,9 @@ Class Venta{
     public $total_cuotas;
     public $cuotas_pagadas;
     public $estado;
+    public $venta_nueva;
+    public $venta_anterior;
+
     public $numero_pagina;
     public $total_pagina;
 
@@ -88,6 +91,7 @@ Class Venta{
                 "sede"=>$sede,
                 "subsede"=>$subsede,
                 "autorizador_nombre"=>$autorizador_nombre,
+                "id_cliente"=>$id_cliente,
                 "cliente_nombre"=>$cliente_nombre,
                 "fecha"=>$fecha,
                 "vendedor"=>$vendedor,
@@ -278,19 +282,23 @@ Class Venta{
     function create_cronograma(){
         
         $query = "CALL sp_crearventacronograma(
-        :prventa,
-        :prmonto,
-        :prvencimiento)";
+            :prventa,
+            :prmonto,
+            :prvencimiento,
+            :prestado
+        )";
 
         $result = $this->conn->prepare($query);
 
         $result->bindParam(":prventa", $this->venta);
         $result->bindParam(":prmonto", $this->monto);
         $result->bindParam(":prvencimiento", $this->vencimiento);
+        $result->bindParam(":prestado", $this->estado);
 
         $this->venta=htmlspecialchars(strip_tags($this->venta));
         $this->monto=htmlspecialchars(strip_tags($this->monto));
         $this->vencimiento=htmlspecialchars(strip_tags($this->vencimiento));
+        $this->estado=htmlspecialchars(strip_tags($this->estado));
 
         if($result->execute())
         {
@@ -348,6 +356,28 @@ Class Venta{
         $this->venta=htmlspecialchars(strip_tags($this->venta));
         $this->producto_serie=htmlspecialchars(strip_tags($this->producto_serie));
         $this->precio=htmlspecialchars(strip_tags($this->precio));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    function create_canje(){
+
+        $query = "CALL sp_crearventacanje(
+            :prid_venta_nueva,
+            :prid_venta_anterior
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prid_venta_nueva", $this->venta_nueva);
+        $result->bindParam(":prid_venta_anterior", $this->venta_anterior);
+
+        $this->venta_nueva=htmlspecialchars(strip_tags($this->venta_nueva));
+        $this->venta_anterior=htmlspecialchars(strip_tags($this->venta_anterior));
 
         if($result->execute())
         {

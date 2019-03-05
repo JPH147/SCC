@@ -91,6 +91,11 @@ export class VentanaVentasComponent implements OnInit {
     this.ventana.close();
   }
 
+  VerVenta(id){
+    this.ventana.close();
+    this.router.navigate(['/ventas', id]);
+  }
+
 }
 
 export class VentasClienteDataSource implements DataSource<any> {

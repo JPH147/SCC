@@ -5,6 +5,8 @@
   <mat-card-title class="tituloProd" *ngIf="!idventa">Nueva venta</mat-card-title>
   <mat-card-title class="tituloProd" *ngIf="idventa">Venta {{talonario}}</mat-card-title>
   
+  <mat-card-subtitle *ngIf="venta_canje"> Venta canjeada por la {{talonario}} </mat-card-subtitle>
+
   <form [formGroup]="VentasForm">
 
     <div class = "spinner-container" *ngIf = "Cargando| async">
@@ -176,7 +178,7 @@
 
         <mat-grid-tile *ngIf="!idventa">
           <mat-form-field class="columnas-1">
-            <mat-select placeholder='Tipo de pago' formControlName="tipopago">
+            <mat-select placeholder='Tipo de pago' formControlName="tipopago" (selectionChange)="TipoPagoSeleccionado()">
               <mat-option *ngFor="let tipopago of LstTipoPago" [value] = "tipopago.id"> {{tipopago.nombre}} </mat-option>
             </mat-select>
           </mat-form-field>
@@ -198,7 +200,7 @@
 
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
-            <input matInput placeholder="N° de cuotas" formControlName="cuotas" #InputCuota [readonly]="idventa">
+            <input matInput placeholder="N° de cuotas" maxlength=3 formControlName="cuotas" #InputCuota [readonly]="idventa">
             <mat-error>Solo debe ingresar valores númericos</mat-error>
           </mat-form-field>
         </mat-grid-tile>
@@ -212,6 +214,7 @@
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
             <input matInput placeholder="Monto total" formControlName="montototal" readonly>
+            <span matPrefix>S/ &nbsp;</span>
           </mat-form-field>
         </mat-grid-tile>
 
@@ -347,99 +350,49 @@
       <mat-grid-list cols=7 rowHeight="60px" *ngIf=idventa>
 
         <mat-grid-tile>
-          <button mat-icon-button color="primary">
-            <a href="{{dni}}">
-              <mat-icon class="icono-documentos"> description </mat-icon>
-            </a>
+          <button mat-icon-button color="primary" [disabled]="!dni">
+            <mat-icon class="icono-documentos" (click)="AbrirDocumento(dni)"> description </mat-icon>
           </button>
         </mat-grid-tile>
 
         <mat-grid-tile>
-          <button mat-icon-button color="primary">
-            <a href="{{cip}}">
-              <mat-icon class="icono-documentos"> description </mat-icon>
-            </a>
+          <button mat-icon-button color="primary" [disabled]="!cip">
+            <mat-icon class="icono-documentos" (click)="AbrirDocumento(cip)"> description </mat-icon>
           </button>
         </mat-grid-tile>
 
         <mat-grid-tile>
-          <button mat-icon-button color="primary">
-            <a href="{{contrato}}">
-              <mat-icon class="icono-documentos"> description </mat-icon>
-            </a>
+          <button mat-icon-button color="primary" [disabled]="!contrato">
+            <mat-icon class="icono-documentos" (click)="AbrirDocumento(contrato)"> description </mat-icon>
           </button>
         </mat-grid-tile>
 
         <mat-grid-tile>
-          <button mat-icon-button color="primary">
-            <a href="{{transaccion}}">
-              <mat-icon class="icono-documentos"> description </mat-icon>
-            </a>
+          <button mat-icon-button color="primary" [disabled]="!transaccion">
+            <mat-icon class="icono-documentos" (click)="AbrirDocumento(transaccion)"> description </mat-icon>
           </button>
         </mat-grid-tile>
 
         <mat-grid-tile>
-          <button mat-icon-button color="primary">
-            <a href="planilla">
-              <mat-icon class="icono-documentos"> description </mat-icon>
-            </a>
+          <button mat-icon-button color="primary" [disabled]="!planilla">
+            <mat-icon class="icono-documentos" (click)="AbrirDocumento(planilla)"> description </mat-icon>
           </button>
         </mat-grid-tile>
 
         <mat-grid-tile>
-          <button mat-icon-button color="primary">
-            <a href="{{letra}}">
-              <mat-icon class="icono-documentos"> description </mat-icon>
-            </a>
+          <button mat-icon-button color="primary" [disabled]="!letra">
+            <mat-icon class="icono-documentos" (click)="AbrirDocumento(letra)"> description </mat-icon>
           </button>
         </mat-grid-tile>
 
         <mat-grid-tile>
-          <button mat-icon-button color="primary">
-            <a href="{{autorizacion}}">
-              <mat-icon class="icono-documentos"> description </mat-icon>
-            </a>
+          <button mat-icon-button color="primary" [disabled]="!autorizacion">
+            <mat-icon class="icono-documentos" (click)="AbrirDocumento(autorizacion)"> description </mat-icon>
           </button>
         </mat-grid-tile>
 
       </mat-grid-list>
-
     </div>
-<!--       <mat-grid-list cols="7" rowHeight="70px" *ngIf="idventa">
-
-        <mat-grid-tile>
-          <button mat-raised-button color="primary" (click)="Abrir(dni)" [disabled]="!dni">DNI</button>
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          <button mat-raised-button color="primary" (click)="Abrir(cip)" [disabled]="!cip">CIP</button>
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          <button mat-raised-button color="primary" (click)="Abrir(contrato)" [disabled]="!contrato">Contrato</button>
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          <button mat-raised-button color="primary" (click)="Abrir(transaccion)" [disabled]="!transaccion">Transaccion</button>
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          <button mat-raised-button color="primary" (click)="Abrir(planilla)" [disabled]="!planilla">Planilla</button>
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          <button mat-raised-button color="primary" (click)="Abrir(letra)" [disabled]="!letra">Letra</button>
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          <button mat-raised-button color="primary" (click)="Abrir(autorizacion)" [disabled]="!autorizacion">Autorización</button>
-        </mat-grid-tile>
-
-      </mat-grid-list> -->
-
-
-    <!-- </mat-card> -->
-
 
     <div class="seccion">
 
@@ -529,11 +482,7 @@
       </ng-container>
     </div>
 
-<!--     <mat-card-subtitle>
-      Cronograma
-    </mat-card-subtitle> -->
-
-    <div class="seccion">
+    <div class="seccion" *ngIf="VentasForm.value.tipopago!=3 && VentasForm.value.tipopago!='Contado'">
 
       <mat-card-subtitle class="titulo-seccion">
         CRONOGRAMA
@@ -611,7 +560,7 @@
 
           <ng-container matColumnDef="monto_pagado">
             <mat-header-cell *matHeaderCellDef> Total pagado </mat-header-cell>
-            <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_pagado}}</mat-cell>
+            <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_pagado ? cronograma.monto_pagado : 0}}</mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="fecha_cancelacion">
@@ -636,7 +585,6 @@
 
         </mat-table>
       </ng-container>
-
     </div>
 
     <mat-card-actions *ngIf="!idventa">

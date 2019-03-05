@@ -105,7 +105,7 @@
         <mat-cell *matCellDef="let venta">
           <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="[venta.id]"><mat-icon> visibility </mat-icon></button>
           <button mat-icon-button color="primary" matTooltip="Editar"><mat-icon> edit </mat-icon></button>
-          <button mat-icon-button color="primary" matTooltip="Canjear"><mat-icon> import_export </mat-icon></button>
+          <button mat-icon-button color="primary" matTooltip="Canjear" [routerLink]="['nueva', venta.id, venta.id_cliente]"><mat-icon> import_export </mat-icon></button>
           <button mat-icon-button color="primary" matTooltip="Anular"><mat-icon> delete </mat-icon></button>
         </mat-cell>
       </ng-container>

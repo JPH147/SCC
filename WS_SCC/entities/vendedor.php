@@ -15,7 +15,6 @@ Class Vendedor{
 
     public $comisiones_efectivas_estado;
     public $comisiones_retenidas_estado;
-    public $vendedor;
     public $fecha_inicio;
     public $fecha_fin;
     public $talonario;
@@ -23,6 +22,9 @@ Class Vendedor{
     public $numero_pagina;
     public $total_pagina;
 
+    public $venta;
+    public $vendedor;
+    public $monto;
 
     public function __construct($db){
         $this->conn = $db;
@@ -144,6 +146,32 @@ Class Vendedor{
         $this->total_resultado=$row['total'];
 
         return $this->total_resultado;
+    }
+
+    function  create_comision()
+    {
+        $query = "CALL sp_crearvendedorcomision(
+            :prventa,
+            :prvendedor,
+            :prmonto
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prventa", $this->venta);
+        $result->bindParam(":prvendedor", $this->vendedor);
+        $result->bindParam(":prmonto", $this->monto);
+
+        $this->venta=htmlspecialchars(strip_tags($this->venta));
+        $this->vendedor=htmlspecialchars(strip_tags($this->vendedor));
+        $this->monto=htmlspecialchars(strip_tags($this->monto));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        
+        return false;
     }
 
 }

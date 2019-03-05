@@ -68,8 +68,6 @@ export class VentaService {
     .set('prpdfautorizacion',pdfautorizacion)
     .set('probservaciones',observaciones)
 
-    console.log(params);
-
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'venta/create.php', params, {headers: headers});
@@ -79,12 +77,14 @@ export class VentaService {
     venta:number,
     monto:number,
     vencimiento:Date,
+    estado:number
   ): Observable<any> {
 
     let params = new HttpParams()
     .set('prventa',venta.toString())
     .set('prmonto',monto.toString())
     .set('prvencimiento',moment(vencimiento).format("YYYY-MM-DD"))
+    .set('prestado',estado.toString())
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -105,6 +105,34 @@ export class VentaService {
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'venta/create-productos.php', params, {headers: headers});
+  }
+
+  CrearComisionVendedor(
+    id_venta:number,
+    id_vendedor:number,
+    monto_venta:number,
+  ): Observable<any>{
+    let params = new HttpParams()
+    .set('prventa',id_venta.toString())
+    .set('prvendedor',id_vendedor.toString())
+    .set('prmonto',monto_venta.toString())
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'vendedor/create-comision.php', params, {headers: headers});
+  }
+
+  CrearCanje(
+    id_venta_nueva:number,
+    id_venta_antigua:number,
+  ): Observable<any>{
+    let params = new HttpParams()
+    .set('prventanueva',id_venta_nueva.toString())
+    .set('prventaanterior',id_venta_antigua.toString())
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'venta/create-canje.php', params, {headers: headers});
   }
 
   SeleccionarVenta(

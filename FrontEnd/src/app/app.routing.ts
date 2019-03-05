@@ -43,11 +43,11 @@ const appRoutes: Routes = [
   {path: 'comisiones', component: ComisionesComponent},
   {path: 'clientes', component: ClientesComponent},
   {path: 'ventas', component: VentasListarComponent},
-  {path: 'ventas/nueva', component: VentasComponent},
   {path: 'usuarios', component: UsuariosComponent},
   {path: 'proveedores', component: ProveedoresComponent},
   {path: 'direcciones', component: DireccionesComponent},
-  {path: 'ventas/nueva/:id', component: VentasComponent},
+  {path: 'ventas/nueva/:idcliente', component: VentasComponent},
+  {path: 'ventas/nueva/:idventacanje/:idcliente', component: VentasComponent},
   {path: 'ventas/:idventa', component: VentasComponent},
   {path : 'detalleproductos', component: DetalleProductosComponent},
   {path : 'evaluacion-reglas', component: ReglasEvaluacionComponent}
