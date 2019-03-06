@@ -27,13 +27,14 @@ constructor(private Servicio: VentasServicio) { }
     tipo_venta:number,
     fecha_inicio:Date,
     fecha_fin:Date,
+    estado:number,
     pagina_inicio:number,
     pagina_final:number,
     orden:string
   ) {
   this.CargandoInformacion.next(true);
 
-  this.Servicio.Listado(cliente,tipo_venta,fecha_inicio,fecha_fin,pagina_inicio,pagina_final,orden)
+  this.Servicio.Listado(cliente,tipo_venta,fecha_inicio,fecha_fin,estado,pagina_inicio,pagina_final,orden)
   .pipe(
     catchError(() => of([])),
     finalize(() => this.CargandoInformacion.next(false))

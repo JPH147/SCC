@@ -18,6 +18,7 @@ export class VentasServicio {
     tipo_venta:number,
     fecha_inicio:Date,
     fecha_fin:Date,
+    estado:number,
     pagina_inicio:number,
     pagina_final:number,
     orden:string
@@ -49,6 +50,7 @@ export class VentasServicio {
       .set('prtipo_venta',Tipo)
       .set('prfecha_inicio',Finicio)
       .set('prfecha_fin',Ffin)
+      .set('prestado',estado.toString())
       .set('prpagina',pagina_inicio.toString())
       .set('prtotalpagina',pagina_final.toString())
       .set('prorden',orden)

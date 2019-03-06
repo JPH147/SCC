@@ -57,6 +57,10 @@
 			"autorizacion_pdf"=>$venta->autorizacion_pdf,
 			"observacion"=>$venta->observacion,
 			"lugar_venta"=>$venta->lugar_venta,
+			"estado"=>$venta->estado,
+			"id_venta_canje"=>$venta->id_venta_canje,
+			"canje_talonario_serie"=>$venta->canje_talonario_serie,
+			"canje_talonario_contrato"=>$venta->canje_talonario_contrato,
 			"cronograma"=>$venta->cronograma,
 			"productos"=>$venta->productos,
 	    );

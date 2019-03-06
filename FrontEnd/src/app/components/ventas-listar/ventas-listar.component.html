@@ -41,10 +41,19 @@
         <mat-datepicker #fin disabled="false"></mat-datepicker>
       </mat-form-field>
     </mat-grid-tile>
-<!-- 
+
     <mat-grid-tile>
+      <mat-form-field>
+        <mat-select #InputEstado placeholder="Estado" [value]=1 (selectionChange)="CambioFiltro()">
+          <mat-option [value]="0">Todas</mat-option>
+          <mat-option [value]="1">Activas</mat-option>
+          <mat-option [value]="3">Canjeadas</mat-option>
+          <mat-option [value]="2">Anuladas</mat-option>
+        </mat-select>
+      </mat-form-field>
     </mat-grid-tile>
 
+<!-- 
     <mat-grid-tile>
     </mat-grid-tile>
 
@@ -104,9 +113,9 @@
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let venta">
           <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="[venta.id]"><mat-icon> visibility </mat-icon></button>
-          <button mat-icon-button color="primary" matTooltip="Editar"><mat-icon> edit </mat-icon></button>
-          <button mat-icon-button color="primary" matTooltip="Canjear" [routerLink]="['nueva', venta.id, venta.id_cliente]"><mat-icon> import_export </mat-icon></button>
-          <button mat-icon-button color="primary" matTooltip="Anular"><mat-icon> delete </mat-icon></button>
+          <button mat-icon-button color="primary" matTooltip="Editar" [disabled]="venta.estado!=1"><mat-icon> edit </mat-icon></button>
+          <button mat-icon-button color="primary" matTooltip="Canjear" [routerLink]="['nueva', venta.id, venta.id_cliente]" [disabled]="venta.estado!=1"><mat-icon> import_export </mat-icon></button>
+          <button mat-icon-button color="primary" matTooltip="Anular" [disabled]="venta.estado!=1"><mat-icon> clear </mat-icon></button>
         </mat-cell>
       </ng-container>
 

@@ -135,11 +135,38 @@ export class VentaService {
     return this.http.post(this.url + 'venta/create-canje.php', params, {headers: headers});
   }
 
+  CrearCanjeTransaccion(
+    id_transaccion:number,
+    fecha:Date,
+  ): Observable<any>{
+    let params = new HttpParams()
+    .set('prtransaccion',id_transaccion.toString())
+    .set('prfecha',moment(fecha).format("YYYY-MM-DD"))
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'venta/create-canje-transaccion.php', params, {headers: headers});
+  }
+
+  ListarVentaTransacciones(
+    id_venta:number,
+  ): Observable<any>{
+
+    return this.http.get(this.url + 'venta/read-transaccion.php', {
+    params: new HttpParams()
+    .set('prventa',id_venta.toString())
+    }).pipe(map(res=>{
+      if (res['codigo'] === 0) {
+        return res['data'];
+      } else {
+        console.log('No hay datos que mostrar');
+      }
+    }))
+  }
+
   SeleccionarVenta(
     id_venta:number
   ): Observable<any>{
-
-    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.get(this.url + 'venta/readxId.php', {
       params: new HttpParams()

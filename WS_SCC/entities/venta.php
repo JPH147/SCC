@@ -50,6 +50,11 @@ Class Venta{
     public $estado;
     public $venta_nueva;
     public $venta_anterior;
+    public $id_transaccion;
+    public $transacciones;
+    public $id_venta_canje;
+    public $canje_talonario_serie;
+    public $canje_talonario_contrato;
 
     public $numero_pagina;
     public $total_pagina;
@@ -60,7 +65,7 @@ Class Venta{
 
     function read(){
 
-        $query = "CALL sp_listarventa(?,?,?,?,?,?,?)";
+        $query = "CALL sp_listarventa(?,?,?,?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
@@ -68,9 +73,10 @@ Class Venta{
         $result->bindParam(2, $this->tipo_venta);
         $result->bindParam(3, $this->fecha_inicio);
         $result->bindParam(4, $this->fecha_fin);
-        $result->bindParam(5, $this->numero_pagina);
-        $result->bindParam(6, $this->total_pagina);
-        $result->bindParam(7, $this->orden);
+        $result->bindParam(5, $this->estado);
+        $result->bindParam(6, $this->numero_pagina);
+        $result->bindParam(7, $this->total_pagina);
+        $result->bindParam(8, $this->orden);
 
         $result->execute();
         
@@ -102,6 +108,7 @@ Class Venta{
                 "monto_total"=>$monto_total,
                 "tipo_venta"=>$tipo_venta,
                 "observaciones"=>$observaciones,
+                "estado"=>$estado,
             );
             array_push($venta_list["ventas"],$venta_item);
         }
@@ -111,7 +118,7 @@ Class Venta{
 
     function contar(){
 
-        $query = "CALL sp_listarventacontar(?,?,?,?)";
+        $query = "CALL sp_listarventacontar(?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
@@ -119,6 +126,7 @@ Class Venta{
         $result->bindParam(2, $this->tipo_venta);
         $result->bindParam(3, $this->fecha_inicio);
         $result->bindParam(4, $this->fecha_fin);
+        $result->bindParam(5, $this->estado);
 
         $result->execute();
 
@@ -234,7 +242,7 @@ Class Venta{
 
         $Productos=$this->read_productos($this->id_venta);
         $Cronograma=$this->read_cronograma($this->id_venta);
-        
+
         $result->execute();
     
         $row = $result->fetch(PDO::FETCH_ASSOC);
@@ -275,6 +283,10 @@ Class Venta{
         $this->autorizacion_pdf=$row['autorizacion_pdf'];
         $this->observacion=$row['observacion'];
         $this->lugar_venta=$row['lugar_venta'];
+        $this->estado=$row['estado'];
+        $this->id_venta_canje=$row['id_venta_canje'];
+        $this->canje_talonario_serie=$row['canje_talonario_serie'];
+        $this->canje_talonario_contrato=$row['canje_talonario_contrato'];
         $this->cronograma=$Cronograma;
         $this->productos=$Productos;
     }
@@ -386,6 +398,29 @@ Class Venta{
         return false;
     }
 
+    // El objetivo es que los productos que salieron por venta
+    // retornen al almacen si se canjea la venta
+    function create_canje_transaccion(){
+        $query = "CALL sp_crearventacanjetransaccion(
+            :pridtransaccion,
+            :prfecha
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":pridtransaccion", $this->id_transaccion);
+        $result->bindParam(":prfecha", $this->fecha);
+
+        $this->id_transaccion=htmlspecialchars(strip_tags($this->id_transaccion));
+        $this->fecha=htmlspecialchars(strip_tags($this->fecha));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
+    }
+
     function read_productos(){
 
         $query = "CALL sp_listarventaproductoxId(?)";
@@ -414,6 +449,32 @@ Class Venta{
         }
 
         return $venta_list;
+    }
+
+    function read_transacciones(){
+
+        $query = "CALL sp_listartransaccioncabeceraxventa(?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_venta);
+
+        $result->execute();
+        
+        $transaccion_list=array();
+        $transaccion_list["transaccion"]=array();
+        
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $transaccion_item = array (
+                "id"=>$id,
+                "observacion"=>$observacion
+            );
+            array_push($transaccion_list["transaccion"],$transaccion_item);
+        }
+
+        return $transaccion_list;
     }
 
     function readxcliente(){
@@ -473,5 +534,24 @@ Class Venta{
 
         return $this->total_resultado;
     }
+
+    function delete()
+    {
+        $query = "call sp_eliminarventa(?)";
+        
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_venta);
+
+        if($result->execute())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+    }
+
 }
 ?>

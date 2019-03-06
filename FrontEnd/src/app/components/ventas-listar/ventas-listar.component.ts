@@ -25,6 +25,7 @@ export class VentasListarComponent implements OnInit {
 
   @ViewChild('InputCliente') FiltroCliente: ElementRef;
   @ViewChild('InputTipo') FiltroTipo: MatSelect;
+  @ViewChild('InputEstado') FiltroEstado: MatSelect;
   @ViewChild('fechainicio') FechaInicioFiltro: ElementRef;
   @ViewChild('fechafin') FechaFinFiltro: ElementRef;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -38,7 +39,7 @@ export class VentasListarComponent implements OnInit {
 
   ngOnInit() {
    this.ListadoVentas = new VentaDataSource(this.Servicio);
-   this.ListadoVentas.CargarProductos("",null,null,null,1,10,"serie asc");
+   this.ListadoVentas.CargarProductos("",null,null,null,1,1,10,"serie asc");
  }
 
 // tslint:disable-next-line:use-life-cycle-interface
@@ -74,6 +75,7 @@ ngAfterViewInit () {
      this.FiltroTipo.value,
      this.FechaInicioFiltro.nativeElement.value,
      this.FechaFinFiltro.nativeElement.value,
+     this.FiltroEstado.value,
      this.paginator.pageIndex+1,
      this.paginator.pageSize,
      this.sort.active +" " + this.sort.direction

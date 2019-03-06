@@ -57,6 +57,7 @@ export class VentasComponent implements OnInit {
   public Series: Array<any>;
   public Autorizador: Array<any>;
   public ProductosComprados: Array<any>;
+  public Transacciones: Array<any>;
   public talonario:string;
   public venta_canje:number;
 
@@ -120,7 +121,11 @@ export class VentasComponent implements OnInit {
           this.venta_canje=+params['idventacanje'];
           this.Servicio.SeleccionarVenta(this.venta_canje).subscribe(res=>{
             this.talonario=res.talonario_serie+" - "+res.talonario_contrato;
-          }
+          })
+          // Son las transacciones en el almacén que se tienen que devolver
+          this.Servicio.ListarVentaTransacciones(this.venta_canje).subscribe(res=>{
+            this.Transacciones=res.transaccion
+          })
         }
       }      
       if(params['idventa']){
@@ -365,6 +370,7 @@ export class VentasComponent implements OnInit {
       this.talonario=res.talonario_serie+" - "+res.talonario_contrato;
 
       this.ProductosComprados=res.productos.productos;
+
       this.ListadoVentas.Informacion.next(res.cronograma.cronograma);
 
       this.Cargando.next(false);
@@ -654,6 +660,7 @@ export class VentasComponent implements OnInit {
   }
 
   GrabarVenta(formulario) {
+
     let random=(new Date()).getTime()
 
     return forkJoin(
@@ -705,12 +712,15 @@ export class VentasComponent implements OnInit {
             this.Servicio.CrearVentaCronograma(res['data'],item.monto,item.fecha,1).subscribe()
           });
         }
-
+        
         this.Servicio.CrearComisionVendedor(res['data'], formulario.value.vendedor.id, formulario.value.montototal).subscribe();
          
-        // Si la transacción es producto de un canje
+        // Si la transacción es producto de un canje, se devuelven los productos al almacén
         if (this.venta_canje) {
-          this.Servicio.CrearCanje( res['data'], this.venta_canje).subscribe()   
+          this.Servicio.CrearCanje( res['data'], this.venta_canje).subscribe();
+          this.Transacciones.forEach((item)=>{
+            this.Servicio.CrearCanjeTransaccion(item.id,formulario.value.fechaventa).subscribe()
+          })
         }  
 
         this.router.navigate(['ventas'])
