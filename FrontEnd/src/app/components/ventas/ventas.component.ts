@@ -45,10 +45,10 @@ export class VentasComponent implements OnInit {
   public telefono: Telefono;
   public direccion: Direccion;
   public idcliente: number;
-  private sub: any;
   public states: string[] = ['Activo', 'Finalizado', 'Canjeado', 'Anulado'];
   public contador: number;
   public idventa:number;
+  public idventa_editar:number;
   public Sucursales: Array<any>;
   public sucursal: number;
   public productos: FormArray;
@@ -112,7 +112,8 @@ export class VentasComponent implements OnInit {
     this.ListarTalonarioSerie();
     this.ListarSucursales();
 
-    this.sub = this.route.params.subscribe(params => {
+    this.route.params.subscribe(params => {
+      // Si es una venta nueva
       if(params['idcliente']){
         this.idcliente = +params['idcliente'];
         this.ObtenerClientexId(this.idcliente);
@@ -127,12 +128,18 @@ export class VentasComponent implements OnInit {
             this.Transacciones=res.transaccion
           })
         }
-      }      
+      }
+      // Cuando se ve una venta
       if(params['idventa']){
         this.ListadoVentas = new VentaDataSource(this.Servicio);
         this.Columnas= ['numero', 'monto_cuota','fecha_vencimiento', 'monto_pagado', 'fecha_cancelacion', 'estado', 'opciones'];
         this.idventa = +params['idventa'];
         this.SeleccionarVentaxId(this.idventa);
+      }
+      // Cuando se edita una venta
+      if (params['ideditar']) {
+        this.idventa_editar=params['ideditar'];
+        this.SeleccionarVentaxId(this.idventa_editar)
       }
    });
 
@@ -351,27 +358,41 @@ export class VentasComponent implements OnInit {
       this.VentasForm.get('trabajo').setValue(res.cliente_trabajo);
       this.VentasForm.get('domicilio').setValue(res.cliente_direccion_nombre);
       this.VentasForm.get('telefono').setValue(res.cliente_telefono_numero);
-      this.VentasForm.get('sucursal').setValue(res.nombre_sucursal);
       this.VentasForm.get('tipodoc').setValue(res.documento);
       this.VentasForm.get('lugar').setValue(res.lugar_venta);
-      this.VentasForm.get("vendedor").setValue(res.nombre_vendedor);
-      this.VentasForm.get("autorizador").setValue(res.nombre_autorizador)
       this.VentasForm.get('fechaventa').setValue(res.fecha);
       this.VentasForm.get('fechapago').setValue(res.fecha_inicio_pago);
-      this.VentasForm.get('tipopago').setValue(res.tipo_pago);
       this.VentasForm.get('inicial').setValue(res.monto_inicial);
       this.VentasForm.get('cuotas').setValue(res.numero_cuotas);
       this.VentasForm.get('montototal').setValue(res.monto_total);
-      this.VentasForm.get('observaciones').setValue(res.observacion=="" ? "No hay observaciones" : res.observacion);
 
       this.VentasForm.get('talonario').setValue(res.talonario_serie);
-      this.VentasForm.get('contrato').setValue(res.talonario_contrato);
+
+      if (this.idventa_editar) {
+        this.VentasForm.get('sucursal').setValue(res.id_sucursal);
+        this.ListarVendedor(res.nombre_vendedor);
+        this.VentasForm.get('vendedor').setValue(this.LstVendedor.find(e=>res.id_vendedor=e.id));
+        this.ListarAutorizador(res.nombre_autorizador);
+        this.VentasForm.get('autorizador').setValue(this.LstVendedor3.find(e=>res.id_autorizador=e.id));
+        this.ListarTalonarioNumero(res.talonario_serie);
+        this.VentasForm.get('contrato').setValue(res.id_talonario);
+        this.VentasForm.get('observaciones').setValue(res.observacion);
+        this.VentasForm.get('tipopago').setValue(res.idtipopago);
+      }
+
+      if (this.idventa) {
+        this.ListadoVentas.Informacion.next(res.cronograma.cronograma);
+        this.VentasForm.get('sucursal').setValue(res.nombre_sucursal);
+        this.VentasForm.get("vendedor").setValue(res.nombre_vendedor);
+        this.VentasForm.get("autorizador").setValue(res.nombre_autorizador);
+        this.VentasForm.get('contrato').setValue(res.talonario_contrato);
+        this.VentasForm.get('observaciones').setValue(res.observacion=="" ? "No hay observaciones" : res.observacion);
+        this.VentasForm.get('tipopago').setValue(res.tipo_pago);
+      }
 
       this.talonario=res.talonario_serie+" - "+res.talonario_contrato;
 
       this.ProductosComprados=res.productos.productos;
-
-      this.ListadoVentas.Informacion.next(res.cronograma.cronograma);
 
       this.Cargando.next(false);
 
@@ -605,12 +626,14 @@ export class VentasComponent implements OnInit {
   ListarVendedor(nombre: string) {
     this.ServiciosGenerales.ListarVendedor("",nombre,"",1,5).subscribe( res => {
       this.LstVendedor=res;
+      console.log(res)
     });
   }
 
   ListarAutorizador(nombre: string) {
     this.ServiciosGenerales.ListarVendedor("",nombre,"",1,5).subscribe( res => {
       this.LstVendedor3=res;
+      console.log(res)
     });
   }
 

@@ -64,18 +64,4 @@ export class VentasServicio {
       }
     }));
   }
-
-  // Seleccionar(
-  //   id: number
-  // ): Observable<Producto> {
-  //   return this.http.get(this.url + 'producto/readxId.php?id_producto=' + id)
-  //   .pipe(map(res => {
-  //     if (res['codigo'] === 0) {
-  //         return res['data'];
-  //     }  else {
-  //         console.log('No hay datos que mostrar');
-  //     }
-  //   }));
-  // }
-
 }

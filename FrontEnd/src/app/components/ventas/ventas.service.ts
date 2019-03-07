@@ -73,6 +73,7 @@ export class VentaService {
     return this.http.post(this.url + 'venta/create.php', params, {headers: headers});
   }
 
+  // estado: 1. Por pagar, 2. Pagado
   CrearVentaCronograma(
     venta:number,
     monto:number,
@@ -205,12 +206,17 @@ export class VentaService {
         return res;
       }
     }));
-    // prcliente
-    // prtalonarioseerie
-    // prtalonarionumero
-    // prestado
-    // prpagina
-    // prtotalpagina
+  }
+
+  EliminarVenta(
+    id_venta:number,
+  ): Observable<any>{
+    let params = new HttpParams()
+    .set('prid',id_venta.toString())
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'venta/delete.php', params, {headers: headers});
   }
 
 }

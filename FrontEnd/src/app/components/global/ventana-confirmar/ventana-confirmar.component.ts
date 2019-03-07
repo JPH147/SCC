@@ -8,6 +8,7 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar} from '@angular/material';
 })
 export class VentanaConfirmarComponent implements OnInit {
 
+  public monto:number;
   public mensaje:string;
 
   constructor(
@@ -17,7 +18,8 @@ export class VentanaConfirmarComponent implements OnInit {
   	) { }
 
   ngOnInit() {
-    this.mensaje = this.data.objeto + ' ' + 'se eliminó satisfactoriamente'
+    this.monto=50;
+    this.mensaje = this.data.objeto + ' ' + 'se eliminó satisfactoriamente';
   }
 
   onNoClick(): void {
@@ -25,8 +27,14 @@ export class VentanaConfirmarComponent implements OnInit {
   }
 
   Aceptar(){
-    return true;
+    if (this.data.venta) {
+      this.ventana.close({monto: this.monto, respuesta: true})
+    }else{
+      this.ventana.close(true)
+    }
   }
+
+
 
   Notificacion(message: string, action: string) {
     this.snackBar.open(message, action, {

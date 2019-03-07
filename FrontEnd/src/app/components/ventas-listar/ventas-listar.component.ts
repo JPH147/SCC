@@ -9,13 +9,14 @@ import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
 import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
 import {VentasServicio} from './ventas-listar.service'
 import { ClienteService } from '../clientes/clientes.service';
+import { VentaService } from '../ventas/ventas.service';
 
 
 @Component({
   selector: 'app-ventas-listar',
   templateUrl: './ventas-listar.component.html',
   styleUrls: ['./ventas-listar.component.css'],
-  providers:[VentasServicio,ProductoService, ClienteService]
+  providers:[VentasServicio,ProductoService, ClienteService, VentaService]
 })
 export class VentasListarComponent implements OnInit {
  
@@ -33,8 +34,9 @@ export class VentasListarComponent implements OnInit {
 
   constructor(
     //private Servicio: ProductoService,
-    public DialogoProductos: MatDialog,
-    private Servicio:VentasServicio
+    public Dialogo: MatDialog,
+    private Servicio:VentasServicio,
+    private VServicio: VentaService
   ) {}
 
   ngOnInit() {
@@ -43,90 +45,64 @@ export class VentasListarComponent implements OnInit {
  }
 
 // tslint:disable-next-line:use-life-cycle-interface
-ngAfterViewInit () {
+  ngAfterViewInit () {
 
-  this.sort.sortChange.subscribe(res => {
-    this.paginator.pageIndex = 0;
-  });
+    this.sort.sortChange.subscribe(res => {
+      this.paginator.pageIndex = 0;
+    });
 
-  merge(
-    this.paginator.page,
-    this.sort.sortChange
-  )
-  .pipe(
-    tap(() => this.CargarData())
-  ).subscribe();
-
-  fromEvent(this.FiltroCliente.nativeElement, 'keyup')
-  .pipe(
-     debounceTime(200),
-     distinctUntilChanged(),
-     tap(() => {
-       this.paginator.pageIndex = 0;
-       this.CargarData();
-     })
+    merge(
+      this.paginator.page,
+      this.sort.sortChange
+    ).pipe(
+      tap(() => this.CargarData())
     ).subscribe();
- }
 
- CargarData() {
+    fromEvent(this.FiltroCliente.nativeElement, 'keyup')
+    .pipe(
+       debounceTime(200),
+       distinctUntilChanged(),
+       tap(() => {
+         this.paginator.pageIndex = 0;
+         this.CargarData();
+       })
+    ).subscribe();
+  }
 
-   this.ListadoVentas.CargarProductos(
-     this.FiltroCliente.nativeElement.value,
-     this.FiltroTipo.value,
-     this.FechaInicioFiltro.nativeElement.value,
-     this.FechaFinFiltro.nativeElement.value,
-     this.FiltroEstado.value,
-     this.paginator.pageIndex+1,
-     this.paginator.pageSize,
-     this.sort.active +" " + this.sort.direction
-   );
- }
+  CargarData() {
+    this.ListadoVentas.CargarProductos(
+      this.FiltroCliente.nativeElement.value,
+      this.FiltroTipo.value,
+      this.FechaInicioFiltro.nativeElement.value,
+      this.FechaFinFiltro.nativeElement.value,
+      this.FiltroEstado.value,
+      this.paginator.pageIndex+1,
+      this.paginator.pageSize,
+      this.sort.active +" " + this.sort.direction
+    );
+  }
 
- CambioFiltro(){
-   this.paginator.pageIndex = 0;
-   this.CargarData()
- }
+  AnularVenta(venta){
+    let Dialogo = this.Dialogo.open(VentanaConfirmarComponent,{
+      data: {objeto: "la venta", valor: venta.serie+"-"+venta.contrato, venta:true}
+    })
 
-//  /* Agregar productos */
-//  Agregar() {
-//    // tslint:disable-next-line:prefer-const
-//    let VentanaProductos = this.DialogoProductos.open(VentanaEmergenteProductos, {
-//      width: '800px'
-//    });
+    Dialogo.afterClosed().subscribe(res=>{
+      if (res) {
+        if (res.respuesta) {
+          this.VServicio.EliminarVenta(venta.id).subscribe(respuesta=>{
+            if (res.monto>0) {
+              this.VServicio.CrearVentaCronograma(venta.id,res.monto,new Date(), 1).subscribe()
+            }
+          });
+        }
+      }
+    })
 
-//    VentanaProductos.afterClosed().subscribe(res => {
-//      this.CargarData();
-//    });
-//  }
+  }
 
-//  /* Eliminar productos */
-//  Eliminar(producto) {
-//   const VentanaConfirmar = this.DialogoProductos.open(VentanaConfirmarComponent, {
-//     width: '400px',
-//     data: {objeto: 'el producto', valor: producto.descripcion}
-//   });
-//   VentanaConfirmar.afterClosed().subscribe(res => {
-//     if (res === true) {
-//      // tslint:disable-next-line:no-shadowed-variable
-//       this.Servicio.Eliminar(producto.id).subscribe(res => {
-//       this.CargarData();
-//      });
-//     }
-//   });
-//  }
-
-//  /* Editar productos */
-//  Editar(id) {
-//    this.Servicio.Seleccionar(id).subscribe(res => {
-//      // tslint:disable-next-line:prefer-const
-//      let VentanaProductos = this.DialogoProductos.open(VentanaEmergenteProductos, {
-//        width: '800px',
-//        data: res
-//      });
-//      // tslint:disable-next-line:no-shadowed-variable
-//      VentanaProductos.afterClosed().subscribe (res => {
-//        this.CargarData();
-//      });
-//    });
-//  }
+  CambioFiltro(){
+    this.paginator.pageIndex = 0;
+    this.CargarData()
+  }
 }
