@@ -415,7 +415,7 @@
               <mat-grid-tile colspan="2" *ngIf="!producto.value.id_producto">
                 <mat-form-field class="columnas-2">
                   <input matInput placeholder="Producto" [matAutocomplete]="autoproducto" #InputProducto>
-                  <mat-autocomplete #autoproducto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="ProductoSeleccionado(producto,$event,i)">
+                  <mat-autocomplete #autoproducto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="ProductoSeleccionado(producto,$event)">
                     <mat-option *ngFor="let producto of Producto" [value]="producto">
                       {{producto.nombre}}
                     </mat-option>

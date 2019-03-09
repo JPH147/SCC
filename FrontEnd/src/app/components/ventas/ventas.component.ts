@@ -39,6 +39,7 @@ export class VentasComponent implements OnInit {
   public VentasForm: FormGroup;
   public LstTipoPago: TipoPago[] = [];
   public LstContrato: Talonario[] = [];
+  public talonario_actual: Talonario;
   public LstVendedor: Array<any> = [];
   public LstVendedor3: Array<any> = [];
   public LstSeries: Serie[] = [];
@@ -107,14 +108,14 @@ export class VentasComponent implements OnInit {
 
     this.ListarTipoDocumento();
     this.ListarTipoPago();
-    this.ListarVendedor("");
-    this.ListarAutorizador("");
     this.ListarTalonarioSerie();
     this.ListarSucursales();
 
     this.route.params.subscribe(params => {
       // Si es una venta nueva
       if(params['idcliente']){
+        this.ListarVendedor("");
+        this.ListarAutorizador("");
         this.idcliente = +params['idcliente'];
         this.ObtenerClientexId(this.idcliente);
         // En caso se trate de un canje de venta
@@ -365,22 +366,34 @@ export class VentasComponent implements OnInit {
       this.VentasForm.get('inicial').setValue(res.monto_inicial);
       this.VentasForm.get('cuotas').setValue(res.numero_cuotas);
       this.VentasForm.get('montototal').setValue(res.monto_total);
-
       this.VentasForm.get('talonario').setValue(res.talonario_serie);
 
       if (this.idventa_editar) {
-        this.VentasForm.get('sucursal').setValue(res.id_sucursal);
-        this.ListarVendedor(res.nombre_vendedor);
-        this.VentasForm.get('vendedor').setValue(this.LstVendedor.find(e=>res.id_vendedor=e.id));
-        this.ListarAutorizador(res.nombre_autorizador);
-        this.VentasForm.get('autorizador').setValue(this.LstVendedor3.find(e=>res.id_autorizador=e.id));
+
+        this.ServiciosGenerales.ListarVendedor("",res.nombre_vendedor,"",1,5).subscribe( res => {
+          this.VentasForm.get('vendedor').setValue(res[0]);
+        });
+        
+        this.ServiciosGenerales.ListarVendedor("",res.nombre_autorizador,"",1,5).subscribe( res => {
+          this.VentasForm.get('autorizador').setValue(res[0]);
+        });
+
+        this.VentasForm.get('sucursal').setValue(res.id_sucursal);        
         this.ListarTalonarioNumero(res.talonario_serie);
+        this.talonario_actual={ id:res.id_talonario, serie: res.talonario_serie, numero: res.talonario_contrato };
         this.VentasForm.get('contrato').setValue(res.id_talonario);
         this.VentasForm.get('observaciones').setValue(res.observacion);
         this.VentasForm.get('tipopago').setValue(res.idtipopago);
+        this.CrearCronograma();
+
+        res.productos.productos.forEach((item=>{
+ 
+        }))
+
       }
 
       if (this.idventa) {
+
         this.ListadoVentas.Informacion.next(res.cronograma.cronograma);
         this.VentasForm.get('sucursal').setValue(res.nombre_sucursal);
         this.VentasForm.get("vendedor").setValue(res.nombre_vendedor);
@@ -388,23 +401,23 @@ export class VentasComponent implements OnInit {
         this.VentasForm.get('contrato').setValue(res.talonario_contrato);
         this.VentasForm.get('observaciones').setValue(res.observacion=="" ? "No hay observaciones" : res.observacion);
         this.VentasForm.get('tipopago').setValue(res.tipo_pago);
+        this.ProductosComprados=res.productos.productos;
+
+        this.talonario=res.talonario_serie+" - "+res.talonario_contrato;
+
+        res.dni_pdf!="" ? this.dni=URLIMAGENES.urlimages+'venta/'+res.dni_pdf : null;
+        res.cip_pdf!="" ? this.cip=URLIMAGENES.urlimages+'venta/'+res.cip_pdf : null;
+        res.contrato_pdf!="" ? this.contrato=URLIMAGENES.urlimages+'venta/'+res.contrato_pdf : null;
+        res.voucher_pdf!="" ? this.transaccion=URLIMAGENES.urlimages+'venta/'+res.voucher_pdf : null;
+        res.planilla_pdf!="" ? this.planilla=URLIMAGENES.urlimages+'venta/'+res.planilla_pdf : null;
+        res.letra_pdf!="" ? this.letra=URLIMAGENES.urlimages+'venta/'+res.letra_pdf : null;
+        res.autorizacion_pdf!="" ? this.autorizacion=URLIMAGENES.urlimages+'venta/'+res.autorizacion_pdf : null;
       }
-
-      this.talonario=res.talonario_serie+" - "+res.talonario_contrato;
-
-      this.ProductosComprados=res.productos.productos;
 
       this.Cargando.next(false);
 
       this.sucursal=res.id_sucursal;
 
-      res.dni_pdf!="" ? this.dni=URLIMAGENES.urlimages+'venta/'+res.dni_pdf : null;
-      res.cip_pdf!="" ? this.cip=URLIMAGENES.urlimages+'venta/'+res.cip_pdf : null;
-      res.contrato_pdf!="" ? this.contrato=URLIMAGENES.urlimages+'venta/'+res.contrato_pdf : null;
-      res.voucher_pdf!="" ? this.transaccion=URLIMAGENES.urlimages+'venta/'+res.voucher_pdf : null;
-      res.planilla_pdf!="" ? this.planilla=URLIMAGENES.urlimages+'venta/'+res.planilla_pdf : null;
-      res.letra_pdf!="" ? this.letra=URLIMAGENES.urlimages+'venta/'+res.letra_pdf : null;
-      res.autorizacion_pdf!="" ? this.autorizacion=URLIMAGENES.urlimages+'venta/'+res.autorizacion_pdf : null;
 
     })
   }
@@ -495,18 +508,6 @@ export class VentasComponent implements OnInit {
     this.ResetearProductosFormArray();
     this.BuscarProducto(this.sucursal,"");
     this.VentasForm.get('autorizador').setValue(null)
-    this.ListarAutorizadores(evento.value);
-  }
-
-  ListarAutorizadores(id_sucursal){
-    this.ServiciosGenerales.ListarAutorizador(id_sucursal,"",1,50).subscribe(res=>{
-      if (res['data']) {
-        this.Autorizador=res['data'].autorizadores
-      }
-      else{
-        this.Autorizador=[]
-      }  
-    })
   }
 
   ResetearProductosFormArray(){
@@ -531,20 +532,16 @@ export class VentasComponent implements OnInit {
     producto:string
   ){
     this.ServiciosGenerales.ListarProductoEnSucursal(sucursal, producto).subscribe(res=>{
-      this.Producto=res
+      this.Producto=res;
+      console.log(res)
     })
   }
 
-  ProductoSeleccionado(form,event,i){
-    // console.log(form,event.option.value)
+  ProductoSeleccionado(form,event){
     form.get('id_producto').setValue(event.option.value.id);
-    // form.get("descripcion").disable()
     form.get('descripcion').setValue(event.option.value.nombre);
     form.get('precio').setValue(event.option.value.precio);
     this.CalcularTotales()
-    // if (i==0) {
-    //   this.VentasForm.get('montototal').setValue(event.option.value.precio);
-    // }
   }
 
   SeleccionarSerie(producto){
@@ -579,7 +576,6 @@ export class VentasComponent implements OnInit {
   ObtenerDireccion() {
     if (this.idcliente) {
         this.DireccionServicio.ListarDireccion( this.idcliente, '1',1,20).subscribe(res => {
-          // console.log(res);
           if (res) {
             this.VentasForm.get('id_direccion').setValue(res['data'].direcciones[0].id);
             this.VentasForm.get('domicilio').setValue(res['data'].direcciones[0].direccioncompleta);
@@ -607,7 +603,10 @@ export class VentasComponent implements OnInit {
 
   ListarTalonarioNumero(pserie: string) {
     this.ServiciosGenerales.ListarNumeroTalonario(pserie).subscribe( res => {
-      this.LstContrato=res
+      this.LstContrato=res;
+      if (this.idventa_editar) {
+        this.LstContrato.push(this.talonario_actual);
+      }
    });
   }
 
@@ -626,14 +625,12 @@ export class VentasComponent implements OnInit {
   ListarVendedor(nombre: string) {
     this.ServiciosGenerales.ListarVendedor("",nombre,"",1,5).subscribe( res => {
       this.LstVendedor=res;
-      console.log(res)
     });
   }
 
   ListarAutorizador(nombre: string) {
     this.ServiciosGenerales.ListarVendedor("",nombre,"",1,5).subscribe( res => {
       this.LstVendedor3=res;
-      console.log(res)
     });
   }
 
