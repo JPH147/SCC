@@ -386,10 +386,20 @@ export class VentasComponent implements OnInit {
         this.VentasForm.get('tipopago').setValue(res.idtipopago);
         this.CrearCronograma();
 
-        res.productos.productos.forEach((item=>{
- 
-        }))
+        let i=0;
 
+        res.productos.productos.forEach((item=>{
+          this.VentasForm.get('productos')['controls'][i].get("id_producto").setValue(item.id_producto);
+          this.VentasForm.get('productos')['controls'][i].get("descripcion").setValue(item.nombre);
+          this.VentasForm.get('productos')['controls'][i].get("id_serie").setValue(item.id_serie);
+          this.VentasForm.get('productos')['controls'][i].get("serie").setValue(item.serie);
+          this.VentasForm.get('productos')['controls'][i].get("precio").setValue(item.precio);
+          i++;
+          this.AgregarProducto();
+          if (i==res.productos.productos.length) {
+            this.productos.removeAt(i);
+          }
+        }))
       }
 
       if (this.idventa) {
@@ -533,7 +543,6 @@ export class VentasComponent implements OnInit {
   ){
     this.ServiciosGenerales.ListarProductoEnSucursal(sucursal, producto).subscribe(res=>{
       this.Producto=res;
-      console.log(res)
     })
   }
 
