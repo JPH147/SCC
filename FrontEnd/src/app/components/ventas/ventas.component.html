@@ -227,8 +227,7 @@
         DOCUMENTOS ADJUNTOS
       </mat-card-subtitle>
 
-      <mat-grid-list cols="7" rowHeight="100px" *ngIf="!idventa">
-
+      <mat-grid-list cols="7" rowHeight="100px" *ngIf="!idventa && !idventa_editar">
         <mat-grid-tile>
           <image-upload #CargarDNI
             class="cargar-imagen"
@@ -315,7 +314,72 @@
         </mat-grid-tile>
       </mat-grid-list>
 
-      <mat-grid-list cols=7 rowHeight="20px" *ngIf=idventa>
+      <mat-grid-list cols=7 rowHeight="60px" *ngIf="idventa_editar">
+        <mat-grid-tile>
+          <button mat-icon-button color="primary" (click)="EditarDni()" [disabled]="!dni" *ngIf="!dni_editar">
+            <mat-icon class="icono-documentos"> edit </mat-icon>
+          </button>
+          <button mat-icon-button color="primary" (click)="NoEditarDni()" *ngIf="dni_editar">
+            <mat-icon class="icono-documentos"> close </mat-icon>
+          </button>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <button mat-icon-button color="primary" (click)="EditarCip()" [disabled]="!cip" *ngIf="!cip_editar">
+            <mat-icon class="icono-documentos"> edit </mat-icon>
+          </button>
+          <button mat-icon-button color="primary" (click)="NoEditarCip()" *ngIf="cip_editar">
+            <mat-icon class="icono-documentos"> close </mat-icon>
+          </button>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <button mat-icon-button color="primary" (click)="EditarContrato()" [disabled]="!contrato" *ngIf="!contrato_editar">
+            <mat-icon class="icono-documentos"> edit </mat-icon>
+          </button>
+          <button mat-icon-button color="primary" (click)="NoEditarContrato()" *ngIf="contrato_editar">
+            <mat-icon class="icono-documentos"> close </mat-icon>
+          </button>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <button mat-icon-button color="primary" (click)="EditarTransaccion()" [disabled]="!transaccion" *ngIf="!transaccion_editar">
+            <mat-icon class="icono-documentos"> edit </mat-icon>
+          </button>
+          <button mat-icon-button color="primary" (click)="NoEditarTransaccion()" *ngIf="transaccion_editar">
+            <mat-icon class="icono-documentos"> close </mat-icon>
+          </button>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <button mat-icon-button color="primary" (click)="EditarPlanilla()" [disabled]="!planilla" *ngIf="!planilla_editar">
+            <mat-icon class="icono-documentos"> edit </mat-icon>
+          </button>
+          <button mat-icon-button color="primary" (click)="NoEditarPlanilla()" *ngIf="planilla_editar">
+            <mat-icon class="icono-documentos"> close </mat-icon>
+          </button>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <button mat-icon-button color="primary" (click)="EditarEditar()" [disabled]="!letra" *ngIf="!letra_editar">
+            <mat-icon class="icono-documentos"> edit </mat-icon>
+          </button>
+          <button mat-icon-button color="primary" (click)="NoEditarEditar()" *ngIf="letra_editar">
+            <mat-icon class="icono-documentos"> close </mat-icon>
+          </button>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <button mat-icon-button color="primary"  (click)="EditarAutorizacion()" [disabled]="!autorizacion" *ngIf="!autorizacion_editar">
+            <mat-icon class="icono-documentos"> edit </mat-icon>
+          </button>
+          <button mat-icon-button color="primary"  (click)="NoEditarAutorizacion()" [disabled]="!autorizacion" *ngIf="autorizacion_editar">
+            <mat-icon class="icono-documentos"> close </mat-icon>
+          </button>
+        </mat-grid-tile>
+      </mat-grid-list>
+
+      <mat-grid-list cols=7 rowHeight="20px" *ngIf="idventa || idventa_editar">
 
         <mat-grid-tile>
           DNI
@@ -347,51 +411,136 @@
 
       </mat-grid-list>
 
-      <mat-grid-list cols=7 rowHeight="60px" *ngIf=idventa>
+      <mat-grid-list cols=7 rowHeight="60px" *ngIf="idventa || idventa_editar">
 
         <mat-grid-tile>
-          <button mat-icon-button color="primary" [disabled]="!dni">
+
+          <button mat-icon-button color="primary" [disabled]="!dni" *ngIf="!dni_editar">
             <mat-icon class="icono-documentos" (click)="AbrirDocumento(dni)"> description </mat-icon>
           </button>
+
+          <image-upload  *ngIf="dni_editar"
+            class="cargar-imagen"
+            [max]="1"
+            [url]="'http://localhost/SCC/WS_SCC/file/upload.php'"
+            [buttonCaption]="'Adjuntar'"
+            [extensions]="['pdf']"
+            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
+            (uploadFinished)="SubirDNI($event)">
+          </image-upload>  
+
         </mat-grid-tile>
 
         <mat-grid-tile>
-          <button mat-icon-button color="primary" [disabled]="!cip">
+
+          <button mat-icon-button color="primary" [disabled]="!cip" *ngIf="!cip_editar">
             <mat-icon class="icono-documentos" (click)="AbrirDocumento(cip)"> description </mat-icon>
           </button>
+
+          <image-upload *ngIf="cip_editar"
+            class="cargar-imagen"
+            [max]="1"
+            [url]="'http://localhost/SCC/WS_SCC/file/upload.php'"
+            [buttonCaption]="'Adjuntar'"
+            [dropBoxMessage]="'o arrastrelo'"
+            [extensions]="['pdf']"
+            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
+            (uploadFinished)="SubirCIP($event)">
+          </image-upload>  
+
         </mat-grid-tile>
 
         <mat-grid-tile>
-          <button mat-icon-button color="primary" [disabled]="!contrato">
+
+          <button mat-icon-button color="primary" [disabled]="!contrato" *ngIf="!contrato_editar">
             <mat-icon class="icono-documentos" (click)="AbrirDocumento(contrato)"> description </mat-icon>
           </button>
+
+          <image-upload *ngIf="contrato_editar"
+            class="cargar-imagen"
+            [max]="1"
+            [url]="'http://localhost/SCC/WS_SCC/file/upload.php'"
+            [buttonCaption]="'Adjuntar'"
+            [extensions]="['pdf']"
+            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
+            (uploadFinished)="SubirContrato($event)">
+          </image-upload>
+
         </mat-grid-tile>
 
         <mat-grid-tile>
-          <button mat-icon-button color="primary" [disabled]="!transaccion">
+
+          <button mat-icon-button color="primary" [disabled]="!transaccion" *ngIf="!transaccion_editar">
             <mat-icon class="icono-documentos" (click)="AbrirDocumento(transaccion)"> description </mat-icon>
           </button>
+
+          <image-upload *ngIf="transaccion_editar"
+            class="cargar-imagen"
+            [max]="1"
+            [url]="'http://localhost/SCC/WS_SCC/file/upload.php'"
+            [buttonCaption]="'Adjuntar'"
+            [extensions]="['pdf']"
+            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
+            (uploadFinished)="SubirTransaccion($event)">
+          </image-upload>  
+
         </mat-grid-tile>
 
         <mat-grid-tile>
-          <button mat-icon-button color="primary" [disabled]="!planilla">
+
+          <button mat-icon-button color="primary" [disabled]="!planilla" *ngIf="!planilla_editar">
             <mat-icon class="icono-documentos" (click)="AbrirDocumento(planilla)"> description </mat-icon>
-          </button>
+          </button> 
+
+          <image-upload *ngIf="planilla_editar"
+            class="cargar-imagen"
+            [max]="1"
+            [url]="'http://localhost/SCC/WS_SCC/file/upload.php'"
+            [buttonCaption]="'Adjuntar'"
+            [extensions]="['pdf']"
+            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
+            (uploadFinished)="SubirPlanilla($event)">
+          </image-upload>  
+
         </mat-grid-tile>
 
         <mat-grid-tile>
-          <button mat-icon-button color="primary" [disabled]="!letra">
+
+          <button mat-icon-button color="primary" [disabled]="!letra" *ngIf="!letra_editar">
             <mat-icon class="icono-documentos" (click)="AbrirDocumento(letra)"> description </mat-icon>
           </button>
+
+          <image-upload *ngIf="letra_editar"
+            class="cargar-imagen"
+            [max]="1"
+            [url]="'http://localhost/SCC/WS_SCC/file/upload.php'"
+            [buttonCaption]="'Adjuntar'"
+            [extensions]="['pdf']"
+            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
+            (uploadFinished)="SubirLetra($event)">
+          </image-upload>  
+
         </mat-grid-tile>
 
         <mat-grid-tile>
-          <button mat-icon-button color="primary" [disabled]="!autorizacion">
+
+          <button mat-icon-button color="primary" [disabled]="!autorizacion" *ngIf="!autorizacion_editar">
             <mat-icon class="icono-documentos" (click)="AbrirDocumento(autorizacion)"> description </mat-icon>
           </button>
-        </mat-grid-tile>
 
+          <image-upload
+            class="cargar-imagen" *ngIf="autorizacion_editar"
+            [max]="1"
+            [url]="'http://localhost/SCC/WS_SCC/file/upload.php'"
+            [buttonCaption]="'Adjuntar'"
+            [extensions]="['pdf']"
+            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
+            (uploadFinished)="SubirAutorizacion($event)">
+          </image-upload>
+
+        </mat-grid-tile>
       </mat-grid-list>
+
     </div>
 
     <div class="seccion">
