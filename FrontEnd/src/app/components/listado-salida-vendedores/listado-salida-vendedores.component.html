@@ -22,7 +22,7 @@
 
     <mat-grid-tile>
       <mat-form-field>
-        <mat-select placeholder="Sucursal" (selectionChange)="CambioFiltro()" #InputSucursal [value]=0>
+        <mat-select placeholder="Sucursal" (selectionChange)="CargarData()" #InputSucursal [value]=0>
           <mat-option [value]=0>Todas</mat-option>
           <mat-option *ngFor="let Sucursal of Sucursales" [value]="Sucursal.id" >{{Sucursal.nombre}}</mat-option>
         </mat-select>
@@ -31,7 +31,7 @@
 
     <mat-grid-tile>
       <mat-form-field>
-        <mat-select placeholder="Estado" (selectionChange)="CambioFiltro()" #InputEstado [value]=0>
+        <mat-select placeholder="Estado" (selectionChange)="CargarData()" #InputEstado [value]=0>
           <mat-option [value]=0>Todos</mat-option>
           <mat-option [value]=1>Pendiente</mat-option>
           <mat-option [value]=2>Cerrada</mat-option>
@@ -60,7 +60,7 @@
 
     <mat-grid-tile>
       <mat-form-field>
-        <input matInput #fechainicio [matDatepicker]="fechainicio" placeholder="Fecha de inicio" (dateChange)="CambioFiltro()">
+        <input matInput #fechainicio [matDatepicker]="fechainicio" placeholder="Fecha de inicio" (dateChange)="CargarData()" [(ngModel)]="fecha_inicio">
         <mat-datepicker-toggle matSuffix [for]="fechainicio"></mat-datepicker-toggle>
         <mat-datepicker #fechainicio></mat-datepicker>
       </mat-form-field>
@@ -68,7 +68,7 @@
 
     <mat-grid-tile>
       <mat-form-field>
-        <input matInput #fechafin [matDatepicker]="fechafin" placeholder="Fecha de fin" (dateChange)="CambioFiltro()">
+        <input matInput #fechafin [matDatepicker]="fechafin" placeholder="Fecha de fin" (dateChange)="CargarData()" [(ngModel)]="fecha_fin">
         <mat-datepicker-toggle matSuffix [for]="fechafin"></mat-datepicker-toggle>
         <mat-datepicker #fechafin></mat-datepicker>
       </mat-form-field>

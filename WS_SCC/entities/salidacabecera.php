@@ -85,11 +85,9 @@ Class SalidaCabecera{
                 "sucursal"=>$sucursal,
                 "fecha"=>$fecha,
                 "destino"=>$destino,
-                "tipo_movilidad"=>$tipo_movilidad,
-                // "movilidad"=>$SMovilidad,
-                // "gasto"=>$SGasto,
-                // "productos"=>$SProducto,
-                // "vendedor"=>$SVendedor,
+                "vehiculo_placa"=>$vehiculo_placa,
+                "chofer_dni"=>$chofer_dni,
+                "chofer_nombre"=>$chofer_nombre,
                 "estado"=>$estado
             );
             array_push($SCabecera_list["salidas"],$salida_item);
@@ -128,7 +126,9 @@ Class SalidaCabecera{
             :prfecha,
             :prdestino,
             :prguia,
-            :prtipomovilidad,
+            :prvehiculo,
+            :prchoferdni,
+            :prchofernombre,
             :probservacion
         )";
 
@@ -139,14 +139,18 @@ Class SalidaCabecera{
         $result->bindParam(":prfecha", $this->fecha);
         $result->bindParam(":prdestino", $this->destino);
         $result->bindParam(":prguia", $this->guia);
-        $result->bindParam(":prtipomovilidad", $this->tipo_movilidad);
         $result->bindParam(":probservacion", $this->observacion);
-//        $result->bindParam("@id", $this->id_salida);
+        $result->bindParam(":prvehiculo", $this->vehiculo);
+        $result->bindParam(":prchoferdni", $this->chofer_dni);
+        $result->bindParam(":prchofernombre", $this->chofer_nombre);
 
         $this->pecosa=htmlspecialchars(strip_tags($this->pecosa));
         $this->id_sucursal=htmlspecialchars(strip_tags($this->id_sucursal));
         $this->fecha=htmlspecialchars(strip_tags($this->fecha));
         $this->destino=htmlspecialchars(strip_tags($this->destino));
+        $this->vehiculo=htmlspecialchars(strip_tags($this->vehiculo));
+        $this->chofer_dni=htmlspecialchars(strip_tags($this->chofer_dni));
+        $this->chofer_nombre=htmlspecialchars(strip_tags($this->chofer_nombre));
 
         if(!empty($this->guia)){
            $this->guia=htmlspecialchars(strip_tags($this->guia)); 
@@ -154,10 +158,6 @@ Class SalidaCabecera{
 
         if(!empty($this->observacion)){
            $this->observacion=htmlspecialchars(strip_tags($this->observacion)); 
-        };
-
-        if(!empty($this->tipo_movilidad)){
-           $this->tipo_movilidad=htmlspecialchars(strip_tags($this->tipo_movilidad));
         };
 
         if($result->execute())
@@ -170,34 +170,6 @@ Class SalidaCabecera{
             return true;
         }
         
-        return false;
-    }
-
-    function create_movilidad(){
-
-        $query = "call sp_crearsalidavendedormovilidad(
-            :pridcabecera,
-            :prvehiculo,
-            :prchoferdni,
-            :prchofernombre
-        )";
-
-        $result = $this->conn->prepare($query);
-
-        $result->bindParam(":pridcabecera", $this->cabecera);
-        $result->bindParam(":prvehiculo", $this->vehiculo);
-        $result->bindParam(":prchoferdni", $this->chofer_dni);
-        $result->bindParam(":prchofernombre", $this->chofer_nombre);
-
-        $this->cabecera=htmlspecialchars(strip_tags($this->cabecera));
-        $this->vehiculo=htmlspecialchars(strip_tags($this->vehiculo));
-        $this->chofer_dni=htmlspecialchars(strip_tags($this->chofer_dni));
-        $this->chofer_nombre=htmlspecialchars(strip_tags($this->chofer_nombre));
-
-        if($result->execute())
-        {
-            return true;
-        }
         return false;
     }
 

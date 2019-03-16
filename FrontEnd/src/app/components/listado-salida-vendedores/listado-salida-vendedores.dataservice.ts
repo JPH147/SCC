@@ -23,7 +23,7 @@ constructor(private Servicio: ListadoSalidaVendedoresService) { }
   }
 
   CargarDatos(
-    pecosa: number,
+    pecosa: string,
     sucursal: number,
     fecha_inicio: Date,
     fecha_fin: Date,

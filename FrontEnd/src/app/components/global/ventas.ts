@@ -63,4 +63,15 @@ export class ServiciosVentas{
 		}))
 	}
 
+	ListarComisionRetenida(){
+		return this.http.get(this.url+'comision-retenida/read.php')
+		.pipe(map(res=>{
+			if(res['codigo']===0){
+				return res=res['data']
+			}else{
+				console.log('No hay datos que mostrar')
+			}
+		}))
+	}
+
 }

@@ -16,7 +16,7 @@
     <div class="seccion">
 
       <mat-card-subtitle class="titulo-seccion">
-        DATOS DEL CLIENTE
+        DATOS DE LA PECOSA
       </mat-card-subtitle>
 
       <mat-grid-list cols="4" rowHeight="70px">
@@ -319,7 +319,7 @@
           <button mat-icon-button color="primary" (click)="EditarDni()" [disabled]="!dni" *ngIf="!dni_editar">
             <mat-icon class="icono-documentos"> edit </mat-icon>
           </button>
-          <button mat-icon-button color="primary" (click)="NoEditarDni()" *ngIf="dni_editar">
+          <button mat-icon-button color="primary" (click)="NoEditarDni()" [disabled]="!dni" *ngIf="dni_editar">
             <mat-icon class="icono-documentos"> close </mat-icon>
           </button>
         </mat-grid-tile>
@@ -328,7 +328,7 @@
           <button mat-icon-button color="primary" (click)="EditarCip()" [disabled]="!cip" *ngIf="!cip_editar">
             <mat-icon class="icono-documentos"> edit </mat-icon>
           </button>
-          <button mat-icon-button color="primary" (click)="NoEditarCip()" *ngIf="cip_editar">
+          <button mat-icon-button color="primary" (click)="NoEditarCip()" [disabled]="!cip" *ngIf="cip_editar">
             <mat-icon class="icono-documentos"> close </mat-icon>
           </button>
         </mat-grid-tile>
@@ -337,7 +337,7 @@
           <button mat-icon-button color="primary" (click)="EditarContrato()" [disabled]="!contrato" *ngIf="!contrato_editar">
             <mat-icon class="icono-documentos"> edit </mat-icon>
           </button>
-          <button mat-icon-button color="primary" (click)="NoEditarContrato()" *ngIf="contrato_editar">
+          <button mat-icon-button color="primary" (click)="NoEditarContrato()" [disabled]="!contrato" *ngIf="contrato_editar">
             <mat-icon class="icono-documentos"> close </mat-icon>
           </button>
         </mat-grid-tile>
@@ -346,7 +346,7 @@
           <button mat-icon-button color="primary" (click)="EditarTransaccion()" [disabled]="!transaccion" *ngIf="!transaccion_editar">
             <mat-icon class="icono-documentos"> edit </mat-icon>
           </button>
-          <button mat-icon-button color="primary" (click)="NoEditarTransaccion()" *ngIf="transaccion_editar">
+          <button mat-icon-button color="primary" (click)="NoEditarTransaccion()" [disabled]="!transaccion" *ngIf="transaccion_editar">
             <mat-icon class="icono-documentos"> close </mat-icon>
           </button>
         </mat-grid-tile>
@@ -355,7 +355,7 @@
           <button mat-icon-button color="primary" (click)="EditarPlanilla()" [disabled]="!planilla" *ngIf="!planilla_editar">
             <mat-icon class="icono-documentos"> edit </mat-icon>
           </button>
-          <button mat-icon-button color="primary" (click)="NoEditarPlanilla()" *ngIf="planilla_editar">
+          <button mat-icon-button color="primary" (click)="NoEditarPlanilla()" [disabled]="!planilla" *ngIf="planilla_editar">
             <mat-icon class="icono-documentos"> close </mat-icon>
           </button>
         </mat-grid-tile>
@@ -364,7 +364,7 @@
           <button mat-icon-button color="primary" (click)="EditarEditar()" [disabled]="!letra" *ngIf="!letra_editar">
             <mat-icon class="icono-documentos"> edit </mat-icon>
           </button>
-          <button mat-icon-button color="primary" (click)="NoEditarEditar()" *ngIf="letra_editar">
+          <button mat-icon-button color="primary" (click)="NoEditarEditar()" [disabled]="!letra" *ngIf="letra_editar">
             <mat-icon class="icono-documentos"> close </mat-icon>
           </button>
         </mat-grid-tile>
@@ -415,8 +415,8 @@
 
         <mat-grid-tile>
 
-          <button mat-icon-button color="primary" [disabled]="!dni" *ngIf="!dni_editar">
-            <mat-icon class="icono-documentos" (click)="AbrirDocumento(dni)"> description </mat-icon>
+          <button mat-icon-button color="primary" [disabled]="!dni"  *ngIf="!dni_editar">
+            <mat-icon class="icono-documentos" (click)="AbrirDocumento(dni)"> visibility </mat-icon>
           </button>
 
           <image-upload  *ngIf="dni_editar"
@@ -434,7 +434,7 @@
         <mat-grid-tile>
 
           <button mat-icon-button color="primary" [disabled]="!cip" *ngIf="!cip_editar">
-            <mat-icon class="icono-documentos" (click)="AbrirDocumento(cip)"> description </mat-icon>
+            <mat-icon class="icono-documentos" (click)="AbrirDocumento(cip)"> visibility </mat-icon>
           </button>
 
           <image-upload *ngIf="cip_editar"
@@ -453,7 +453,7 @@
         <mat-grid-tile>
 
           <button mat-icon-button color="primary" [disabled]="!contrato" *ngIf="!contrato_editar">
-            <mat-icon class="icono-documentos" (click)="AbrirDocumento(contrato)"> description </mat-icon>
+            <mat-icon class="icono-documentos" (click)="AbrirDocumento(contrato)"> visibility </mat-icon>
           </button>
 
           <image-upload *ngIf="contrato_editar"
@@ -471,7 +471,7 @@
         <mat-grid-tile>
 
           <button mat-icon-button color="primary" [disabled]="!transaccion" *ngIf="!transaccion_editar">
-            <mat-icon class="icono-documentos" (click)="AbrirDocumento(transaccion)"> description </mat-icon>
+            <mat-icon class="icono-documentos" (click)="AbrirDocumento(transaccion)"> visibility </mat-icon>
           </button>
 
           <image-upload *ngIf="transaccion_editar"
@@ -489,7 +489,7 @@
         <mat-grid-tile>
 
           <button mat-icon-button color="primary" [disabled]="!planilla" *ngIf="!planilla_editar">
-            <mat-icon class="icono-documentos" (click)="AbrirDocumento(planilla)"> description </mat-icon>
+            <mat-icon class="icono-documentos" (click)="AbrirDocumento(planilla)"> visibility </mat-icon>
           </button> 
 
           <image-upload *ngIf="planilla_editar"
@@ -507,7 +507,7 @@
         <mat-grid-tile>
 
           <button mat-icon-button color="primary" [disabled]="!letra" *ngIf="!letra_editar">
-            <mat-icon class="icono-documentos" (click)="AbrirDocumento(letra)"> description </mat-icon>
+            <mat-icon class="icono-documentos" (click)="AbrirDocumento(letra)"> visibility </mat-icon>
           </button>
 
           <image-upload *ngIf="letra_editar"
@@ -525,7 +525,7 @@
         <mat-grid-tile>
 
           <button mat-icon-button color="primary" [disabled]="!autorizacion" *ngIf="!autorizacion_editar">
-            <mat-icon class="icono-documentos" (click)="AbrirDocumento(autorizacion)"> description </mat-icon>
+            <mat-icon class="icono-documentos" (click)="AbrirDocumento(autorizacion)"> visibility </mat-icon>
           </button>
 
           <image-upload
@@ -739,7 +739,7 @@
     <mat-card-actions *ngIf="!idventa">
       <mat-grid-list cols="1" rowHeight="40px">
         <mat-grid-tile>
-          <button mat-raised-button color="primary" (click)="GrabarVenta(VentasForm)" [disabled]="VentasForm.invalid"> Guardar </button>
+          <button mat-raised-button color="primary" (click)="Guardar(VentasForm)" [disabled]="VentasForm.invalid"> Guardar </button>
         </mat-grid-tile>
       </mat-grid-list>
     </mat-card-actions>

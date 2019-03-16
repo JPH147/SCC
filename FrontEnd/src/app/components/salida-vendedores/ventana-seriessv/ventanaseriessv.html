@@ -11,11 +11,11 @@
       <div formArrayName="series" *ngFor="let serie of SeriesProductosForm['controls'].series['controls'];let i = index">
         <div [formGroupName]="i">
           
-          <mat-grid-list cols=7 rowHeight="70px">
+          <mat-grid-list cols=5 rowHeight="70px">
           
             <mat-grid-tile colspan=2>
               <mat-form-field>
-                <input matInput placeholder="Serie" formControlName="serie">
+                <input matInput placeholder="Serie" formControlName="serie" readonly>
               </mat-form-field>
             </mat-grid-tile>
           
@@ -25,14 +25,8 @@
               </mat-form-field>
             </mat-grid-tile>
           
-            <mat-grid-tile colspan=2>
-              <mat-form-field>
-                <input matInput placeholder="Cantidad" formControlName="cantidad">
-              </mat-form-field>
-            </mat-grid-tile>
-
             <mat-grid-tile colspan=1>
-              <mat-checkbox formControlName="considerar"></mat-checkbox>
+              <mat-checkbox formControlName="considerar" color="primary" formControlName="considerar"></mat-checkbox>
             </mat-grid-tile>
           
           </mat-grid-list>

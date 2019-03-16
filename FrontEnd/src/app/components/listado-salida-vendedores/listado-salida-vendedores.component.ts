@@ -18,111 +18,78 @@ import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
 
 export class ListadoSalidaVendedoresComponent implements OnInit {
 
- @ViewChild('InputPecosa') FiltroPecosa: ElementRef;
- @ViewChild('InputDestino') FiltroDestino: ElementRef;
- @ViewChild('InputSucursal') FiltroSucursal: MatSelect;
- @ViewChild('InputSerie') FiltroSerie: ElementRef;
- @ViewChild('InputVendedor') FiltroVendedor: ElementRef;
- @ViewChild('InputEstado') FiltroEstado: MatSelect;
- @ViewChild('fechainicio') FechaInicioFiltro: ElementRef;
- @ViewChild('fechafin') FechaFinFiltro: ElementRef;
- @ViewChild(MatPaginator) paginator: MatPaginator;
- @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('InputPecosa') FiltroPecosa: ElementRef;
+  @ViewChild('InputDestino') FiltroDestino: ElementRef;
+  @ViewChild('InputSucursal') FiltroSucursal: MatSelect;
+  @ViewChild('InputSerie') FiltroSerie: ElementRef;
+  @ViewChild('InputVendedor') FiltroVendedor: ElementRef;
+  @ViewChild('InputEstado') FiltroEstado: MatSelect;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+  public fecha_inicio:Date;
+  public fecha_fin:Date;
 
- ListadoSalida: ListadoSalidaVendedoresDataSource
+  ListadoSalida: ListadoSalidaVendedoresDataSource
  
- public Sucursales:Array<any>;
+  public Sucursales:Array<any>;
  
- displayedColumns: string[] = ['numero', 'pecosa', 'sucursal', 'fecha', 'destino', 'estado', 'opciones'];
+  displayedColumns: string[] = ['numero', 'pecosa', 'sucursal', 'fecha', 'destino', 'estado', 'opciones'];
  
- constructor(
- public DialogoGasto: MatDialog,
- public Dialogodetalle: MatDialog,
- private Servicio:ListadoSalidaVendedoresService,
- private General: ServiciosGenerales
- ) { }
+  constructor(
+    public DialogoGasto: MatDialog,
+    public Dialogodetalle: MatDialog,
+    private Servicio:ListadoSalidaVendedoresService,
+    private General: ServiciosGenerales
+  ) { }
 
-ngOnInit() {
+  ngOnInit() {
+    this.fecha_inicio= new Date((new Date()).valueOf() - 1000*60*60*24*120);
+    this.fecha_fin= new Date();
 
-  this.General.ListarSucursal(null,"").subscribe(res=>this.Sucursales=res)
+    this.General.ListarSucursal(null,"").subscribe(res=>this.Sucursales=res)
 
-  this.ListadoSalida = new ListadoSalidaVendedoresDataSource(this.Servicio);
-  this.ListadoSalida.CargarDatos(null, null, null, null, "",null,"", null,1, 10, "pecosa");
+    this.ListadoSalida = new ListadoSalidaVendedoresDataSource(this.Servicio);
+    this.ListadoSalida.CargarDatos("", null, this.fecha_inicio, this.fecha_fin, "",null,"", null,1, 10, "pecosa");
 
 }
 
-ngAfterViewInit(){
+  ngAfterViewInit(){
 
-  this.sort.sortChange.subscribe(res => {
-    this.paginator.pageIndex = 0;
-  });
-
-  merge(
-    this.paginator.page,
-    this.sort.sortChange,
-    fromEvent(this.FiltroPecosa.nativeElement,'keyup'),
-    fromEvent(this.FiltroDestino.nativeElement,'keyup'),
-    fromEvent(this.FiltroSerie.nativeElement,'keyup'),
-    fromEvent(this.FiltroVendedor.nativeElement,'keyup')
-  ).pipe(
-     debounceTime(200),
-     distinctUntilChanged(),
-     tap(() => {
+    this.sort.sortChange.subscribe(res => {
       this.paginator.pageIndex = 0;
-      this.CargarData();
-     })
+    });
+
+    merge(
+      this.paginator.page,
+      this.sort.sortChange,
+      fromEvent(this.FiltroPecosa.nativeElement,'keyup'),
+      fromEvent(this.FiltroDestino.nativeElement,'keyup'),
+      fromEvent(this.FiltroVendedor.nativeElement,'keyup')
+    ).pipe(
+       debounceTime(200),
+       distinctUntilChanged(),
+       tap(() => {
+        this.paginator.pageIndex = 0;
+        this.CargarData();
+       })
     ).subscribe();
-}
+  }
 
-CargarData(){
+  CargarData(){
 
-  this.ListadoSalida.CargarDatos(
-    this.FiltroPecosa.nativeElement.value,
-    this.FiltroSucursal.value,
-    this.FechaInicioFiltro.nativeElement.value,
-    this.FechaFinFiltro.nativeElement.value,
-    this.FiltroDestino.nativeElement.value,
-    this.FiltroSerie.nativeElement.value,
-    this.FiltroVendedor.nativeElement.value,
-    this.FiltroEstado.value,
-    this.paginator.pageIndex+1,
-    this.paginator.pageSize,
-    this.sort.active +" " + this.sort.direction  )
-}
-
-CambioFiltro(){
-//   this.paginator.pageIndex = 0;
-   this.CargarData()
-}
-
-// Cargagasto() {
-//   let VentanaGastos = this.DialogoGasto.open(VentanaEmergenteGastos, {
-//     width: '800px'
-//   });
-// }
-
-// Eliminasalida() {
-//  const VentanaConfirmar = this.DialogoGasto.open(VentanaConfirmarComponent, {
-//   width: '400px',
-//   data: {objeto: 'pecosa', valor: ""}
-// });
-
-//   VentanaConfirmar.afterClosed().subscribe(res => {
-//    if (res === true) {
-//     // tslint:disable-next-line:no-shadowed-variable
-//     this.Servicio.Eliminar().subscribe( res => {
-//     //  this.CargarData();
-//        this.snackBar.open('Se eliminó salida satisfactoriamente.', '', {
-//         duration: 2500, verticalPosition: 'bottom'
-//      });
-//      });
-//    }
-//   });
-// }
-//  Detalle() {
-//    const VentanaDetalle = this.Dialogodetalle.open(VentanaEmergenteDet, {
-//      width: '1200px'
-//    });
-//  }
+    this.ListadoSalida.CargarDatos(
+      this.FiltroPecosa.nativeElement.value,
+      this.FiltroSucursal.value,
+      this.fecha_inicio,
+      this.fecha_fin,
+      this.FiltroDestino.nativeElement.value,
+      null,
+      this.FiltroVendedor.nativeElement.value,
+      this.FiltroEstado.value,
+      this.paginator.pageIndex+1,
+      this.paginator.pageSize,
+      this.sort.active +" " + this.sort.direction
+    )
+  }
 
 }

@@ -24,30 +24,49 @@ export class ComisionesService {
 	  contrato: string,
 	  pagina: number,
 	  totalpagina: number
-	  ): Observable<any>  {
+	): Observable<any>  {
 
-			let params = new HttpParams()
-						      .set('prestadoefectivas', estado_comision_efectiva.toString())
-						      .set('prestadoretenidas',estado_comision_retenida.toString())
-						      .set('prvendedor',vendedor)
-						      .set('prfechainicio', moment(fecha_inicio).format("YYYY-MM-DD"))
-						      .set('prfechafin', moment(fecha_fin).format("YYYY-MM-DD"))
-						      .set('prtalonario',talonario)
-						      .set('prcontrato',contrato)
-						      .set('prpagina',pagina.toString())
-						      .set('prtotalpagina',totalpagina.toString())
+		let params = new HttpParams()
+			.set('prestadoefectivas', estado_comision_efectiva.toString())
+			.set('prestadoretenidas',estado_comision_retenida.toString())
+			.set('prvendedor',vendedor)
+			.set('prfechainicio', moment(fecha_inicio).format("YYYY-MM-DD"))
+			.set('prfechafin', moment(fecha_fin).format("YYYY-MM-DD"))
+			.set('prtalonario',talonario)
+			.set('prcontrato',contrato)
+			.set('prpagina',pagina.toString())
+			.set('prtotalpagina',totalpagina.toString())
 
-			// console.log(params)
+	  return this.http.get(this.url + 'vendedor/read-comisiones.php',{params})
+	  .pipe(map(res => {
+		  if (res['codigo'] === 0) {
+		    return res;
+		  }else {
+		    console.log('No hay datos que mostrar');
+		    return res;
+		  }
+	  }));
+  }
 
-	    return this.http.get(this.url + 'vendedor/read-comisiones.php',{params})
-	    .pipe(map(res => {
-		    if (res['codigo'] === 0) {
-		      return res;
-		    }else {
-		      console.log('No hay datos que mostrar');
-		      return res;
-		    }
-	    }));
-  	}
+  ListarComisionesxVendedor(
+  	id_vendedor:number,
+	  pagina: number,
+	  totalpagina: number
+  ){
+		let params = new HttpParams()
+			.set('prid', id_vendedor.toString())
+			.set('prpagina',pagina.toString())
+			.set('prtotalpagina',totalpagina.toString())
+
+	  return this.http.get(this.url + 'vendedor/read-comisionesxvendedor.php',{params})
+	  .pipe(map(res => {
+		  if (res['codigo'] === 0) {
+		    return res;
+		  }else {
+		    console.log('No hay datos que mostrar');
+		    return res;
+		  }
+	  }));
+  }
 
 }

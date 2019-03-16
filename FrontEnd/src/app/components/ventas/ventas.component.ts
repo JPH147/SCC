@@ -63,6 +63,9 @@ export class VentasComponent implements OnInit {
   public venta_canje:number;
   public edicion_productos:Array<any>;
   public edicion_sucursal:number;
+  public id_cliente_editar:number;
+  public id_talonario_editar:number;
+  public talonario_serie_editar:string;
 
   public dni: string;
   public cip: string;
@@ -79,6 +82,14 @@ export class VentasComponent implements OnInit {
   public planilla_nuevo: string;
   public letra_nuevo: string;
   public autorizacion_nuevo: string;
+
+  public dni_antiguo: string;
+  public cip_antiguo: string;
+  public contrato_antiguo: string;
+  public transaccion_antiguo: string;
+  public planilla_antiguo: string;
+  public letra_antiguo: string;
+  public autorizacion_antiguo: string;
 
   public dni_editar: boolean= false;
   public cip_editar: boolean= false;
@@ -393,6 +404,10 @@ export class VentasComponent implements OnInit {
 
         this.VentasForm.get('sucursal').setValue(res.id_sucursal);
         this.edicion_sucursal=res.id_sucursal;
+
+        this.id_talonario_editar=res.id_talonario;
+        this.talonario_serie_editar=res.talonario_serie;
+
         this.ListarTalonarioNumero(res.talonario_serie);
         this.talonario_actual={ id:res.id_talonario, serie: res.talonario_serie, numero: res.talonario_contrato };
         this.VentasForm.get('contrato').setValue(res.id_talonario);
@@ -402,15 +417,40 @@ export class VentasComponent implements OnInit {
 
         this.edicion_productos=res.productos.productos;
 
-        this.Restaurar_productos();
+        this.edicion_productos.forEach((item)=>{
+          this.Series.push(item.id_serie);
+        })
 
+        this.Restaurar_productos(2);
+
+        this.dni_antiguo=res.dni_pdf;
         res.dni_pdf!="" ? this.dni=URLIMAGENES.urlimages+'venta/'+res.dni_pdf : null;
+        res.dni_pdf!="" ? this.dni_editar=false : this.dni_editar=true;
+
+        this.cip_antiguo=res.cip_pdf;
         res.cip_pdf!="" ? this.cip=URLIMAGENES.urlimages+'venta/'+res.cip_pdf : null;
+        res.cip_pdf!="" ? this.cip_editar=false : this.cip_editar=true;
+
+        this.contrato_antiguo=res.contrato_pdf;
         res.contrato_pdf!="" ? this.contrato=URLIMAGENES.urlimages+'venta/'+res.contrato_pdf : null;
+        res.contrato_pdf!="" ? this.contrato_editar=false : this.contrato_editar=true;
+
+        this.transaccion_antiguo=res.voucher_pdf;
         res.voucher_pdf!="" ? this.transaccion=URLIMAGENES.urlimages+'venta/'+res.voucher_pdf : null;
+        res.voucher_pdf!="" ? this.transaccion_editar=false : this.transaccion_editar=true;
+
+        this.planilla_antiguo=res.planilla_pdf;
         res.planilla_pdf!="" ? this.planilla=URLIMAGENES.urlimages+'venta/'+res.planilla_pdf : null;
+        res.planilla_pdf!="" ? this.planilla_editar=false : this.planilla_editar=true;
+
+        this.letra_antiguo=res.letra_pdf;
         res.letra_pdf!="" ? this.letra=URLIMAGENES.urlimages+'venta/'+res.letra_pdf : null;
+        res.letra_pdf!="" ? this.letra_editar=false : this.letra_editar=true;
+
+        this.autorizacion_antiguo=res.autorizacion_pdf;
         res.autorizacion_pdf!="" ? this.autorizacion=URLIMAGENES.urlimages+'venta/'+res.autorizacion_pdf : null;
+        res.autorizacion_pdf!="" ? this.autorizacion_editar=false : this.autorizacion_editar=true;
+
 
       }
 
@@ -444,7 +484,7 @@ export class VentasComponent implements OnInit {
   }
 
   // Coloca los productos editados como inicialmente estaban
-  Restaurar_productos(){
+  Restaurar_productos(estado){
 
     let i=0;
 
@@ -454,7 +494,7 @@ export class VentasComponent implements OnInit {
       this.VentasForm.get('productos')['controls'][i].get("id_serie").setValue(item.id_serie);
       this.VentasForm.get('productos')['controls'][i].get("serie").setValue(item.serie);
       this.VentasForm.get('productos')['controls'][i].get("precio").setValue(item.precio);
-      this.VentasForm.get('productos')['controls'][i].get("estado").setValue(2);
+      this.VentasForm.get('productos')['controls'][i].get("estado").setValue(estado);
       i++;
       this.AgregarProducto();
       if (i==this.edicion_productos.length) {
@@ -548,10 +588,12 @@ export class VentasComponent implements OnInit {
     this.sucursal=evento.value;
     this.ResetearProductosFormArray();
     this.BuscarProducto(this.sucursal,"");
-    this.VentasForm.get('autorizador').setValue(null);
-
-    if (this.idventa_editar && evento.value==this.edicion_sucursal) {
-      this.Restaurar_productos();
+    if (this.idventa_editar){
+      if (evento.value==this.edicion_sucursal) {
+        this.Restaurar_productos(2);
+      }else{
+        this.Restaurar_productos(3);
+      }
     }
   }
 
@@ -567,7 +609,9 @@ export class VentasComponent implements OnInit {
   CalcularTotales(){
     this.VentasForm.get('montototal').setValue(0)
     this.VentasForm['controls'].productos['controls'].forEach((item)=>{
-      this.VentasForm.get('montototal').setValue(this.VentasForm.value.montototal*1+item.value.precio*1)
+      if(item.value.precio && item.value.estado!=3){
+        this.VentasForm.get('montototal').setValue(this.VentasForm.value.montototal*1+item.value.precio*1)
+      }
     })
     this.CrearCronograma()
   }
@@ -607,7 +651,6 @@ export class VentasComponent implements OnInit {
     if (producto.value.estado==1) {
       this.productos.removeAt(index);
       this.Series.splice( this.Series.indexOf(producto.value.id_serie), 1 );
-      this.CalcularTotales();
     }
     if (producto.value.estado==2) {
       this.productos['controls'][index].get('descripcion').disable()
@@ -615,6 +658,7 @@ export class VentasComponent implements OnInit {
       this.productos['controls'][index].get('precio').disable()
       this.productos['controls'][index].get('estado').setValue(3);
     }
+      this.CalcularTotales();
   }
 
   ListarClientes(inst: string, sede: string, subsede: string, dni: string, nombre: string, prpagina: number, prtotal: number) {
@@ -654,7 +698,7 @@ export class VentasComponent implements OnInit {
   ListarTalonarioNumero(pserie: string) {
     this.ServiciosGenerales.ListarNumeroTalonario(pserie).subscribe( res => {
       this.LstContrato=res;
-      if (this.idventa_editar) {
+      if (this.idventa_editar && this.talonario_serie_editar==pserie) {
         this.LstContrato.push(this.talonario_actual);
       }
    });
@@ -685,31 +729,59 @@ export class VentasComponent implements OnInit {
   }
 
   SubirDNI(evento){
-    this.dni=evento.serverResponse.response._body;
+    if (!this.idventa_editar) {
+      this.dni=evento.serverResponse.response._body;
+    }else{
+      this.dni_nuevo=evento.serverResponse.response._body;
+    }
   }
 
   SubirCIP(evento){
-    this.cip=evento.serverResponse.response._body;
+    if (!this.idventa_editar) {
+      this.cip=evento.serverResponse.response._body;
+    }else{
+      this.cip_nuevo=evento.serverResponse.response._body;
+    }
   }
 
   SubirContrato(evento){
-    this.contrato=evento.serverResponse.response._body;
+    if (!this.idventa_editar) {
+      this.contrato=evento.serverResponse.response._body;
+    }else{
+      this.contrato_nuevo=evento.serverResponse.response._body;
+    }
   }
 
   SubirTransaccion(evento){
-    this.transaccion=evento.serverResponse.response._body;
+    if (!this.idventa_editar) {
+      this.transaccion=evento.serverResponse.response._body;
+    }else{
+      this.transaccion_nuevo=evento.serverResponse.response._body;
+    }
   }
 
   SubirPlanilla(evento){
-    this.planilla=evento.serverResponse.response._body;
+    if (!this.idventa_editar) {
+      this.planilla=evento.serverResponse.response._body;
+    }else{
+      this.planilla_nuevo=evento.serverResponse.response._body;
+    }
   }
 
   SubirLetra(evento){
-    this.letra=evento.serverResponse.response._body;
+    if (!this.idventa_editar) {
+      this.letra=evento.serverResponse.response._body;
+    }else{
+      this.letra_nuevo=evento.serverResponse.response._body;
+    }
   }
 
   SubirAutorizacion(evento){
-    this.autorizacion=evento.serverResponse.response._body;
+    if (!this.idventa_editar) {
+      this.autorizacion=evento.serverResponse.response._body;
+    }else{
+      this.autorizacion_nuevo=evento.serverResponse.response._body;
+    }
   }
 
   Atras(){
@@ -786,7 +858,15 @@ export class VentasComponent implements OnInit {
     window.open(url, "_blank");
   }
 
-  GrabarVenta(formulario) {
+  Guardar(formulario){
+    if (this.idventa_editar) {
+      this.ActualizarVenta(formulario)
+    }else{
+      this.GuardarVenta(formulario)
+    }
+  }
+
+  GuardarVenta(formulario) {
 
     let random=(new Date()).getTime()
 
@@ -827,6 +907,8 @@ export class VentasComponent implements OnInit {
         resultado[6].mensaje,
         formulario.value.observaciones,
       ).subscribe(res=>{
+
+        // Se crean los productos y se generan los documentos en almacén para cuadrar
         formulario.value.productos.forEach((item)=>{
           this.Servicio.CrearVentaProductos(res['data'],item.id_serie,item.precio).subscribe()
         });
@@ -855,6 +937,89 @@ export class VentasComponent implements OnInit {
       })
     })
   }
+
+  ActualizarVenta(formulario){
+
+    let random=(new Date()).getTime();
+
+    return forkJoin(
+      this.ServiciosGenerales.RenameFile(this.dni_nuevo,'DNI',random.toString(),"venta"),
+      this.ServiciosGenerales.RenameFile(this.cip_nuevo,'CIP',random.toString(),"venta"),
+      this.ServiciosGenerales.RenameFile(this.contrato_nuevo,'CONTRATO',random.toString(),"venta"),
+      this.ServiciosGenerales.RenameFile(this.transaccion_nuevo,'TRANSACCION',random.toString(),"venta"),
+      this.ServiciosGenerales.RenameFile(this.planilla_nuevo,'PLANILLA',random.toString(),"venta"),
+      this.ServiciosGenerales.RenameFile(this.letra_nuevo,'LETRA',random.toString(),"venta"),
+      this.ServiciosGenerales.RenameFile(this.autorizacion_nuevo,'AUTORIZACION',random.toString(),"venta")
+    ).subscribe(resultado=>{
+      console.log(resultado)    
+      this.Servicio.ActualizarVenta(
+        this.idventa_editar,
+        formulario.value.fechaventa,
+        formulario.value.sucursal,
+        formulario.value.contrato,
+        formulario.value.autorizador.id,
+        formulario.value.vendedor.id,
+        formulario.value.tipopago,
+        formulario.value.tipopago==3 ? 0 : formulario.value.inicial,
+        formulario.value.tipopago==3 ? 1 :formulario.value.cuotas,
+        formulario.value.montototal,
+        formulario.value.fechapago,
+        this.dni_editar ? resultado[0].mensaje : this.dni_antiguo,
+        this.cip_editar ? resultado[1].mensaje : this.cip_antiguo,
+        this.contrato_editar ? resultado[2].mensaje : this.contrato_antiguo,
+        this.transaccion_editar ? resultado[3].mensaje : this.transaccion_antiguo,
+        this.planilla_editar ? resultado[4].mensaje : this.planilla_antiguo,
+        this.letra_editar ? resultado[5].mensaje : this.letra_antiguo,
+        this.autorizacion_editar ? resultado[6].mensaje : this.autorizacion_antiguo,
+        formulario.value.observaciones,
+        formulario.value.lugar,
+      ).subscribe(res=>{
+
+        if (formulario.value.contrato!=this.id_talonario_editar) {
+          this.ServiciosGenerales.ActualizarEstadoTalonario(this.id_talonario_editar,1).subscribe();
+        }
+
+        // Se elimina el cronograma anterior
+        this.Servicio.EliminarCronogramaVenta(this.idventa_editar).subscribe()
+
+        // Se elimina el cronograma anterior
+        this.Servicio.EliminarComisionVenta(this.idventa_editar).subscribe()
+
+        // Se crean los productos en el almacén
+        formulario.value.productos.forEach((item)=>{
+          // Si es nuevo, se crean transacciones en almacén
+          if (item.estado==1) {
+            this.Servicio.CrearVentaProductos(res['data'],item.id_serie,item.precio).subscribe()
+          }
+          // Si el producto ya estaba anteriormente, no se hace nada
+          if (item.estado==2) {
+            
+          }
+          // Si el producto se debe eliminar, se elimina
+          if (item.estado==3) {
+            this.Servicio.EliminarProductosVenta(this.idventa_editar,item.id_serie).subscribe(res=>{console.log(this.idventa_editar,item.id_serie,res)})
+          }
+        });
+
+        // No se genera cronograma cuando el pago es al contado
+        if (formulario.value.tipopago==3) { 
+          this.Servicio.CrearVentaCronograma(res['data'],formulario.value.montototal,formulario.value.fechapago,2).subscribe()
+        }else{
+          this.Cronograma.forEach((item)=>{
+            this.Servicio.CrearVentaCronograma(res['data'],item.monto,item.fecha,1).subscribe()
+          });
+        }
+        
+        // Actualizar las comisiones del vendedor
+        this.Servicio.CrearComisionVendedor(res['data'], formulario.value.vendedor.id, formulario.value.montototal).subscribe();
+         
+
+        this.router.navigate(['ventas'])
+        this.Notificacion.Snack("Se actualizó la venta con éxito!","");
+      })
+    })
+  }
+
 
 }
 

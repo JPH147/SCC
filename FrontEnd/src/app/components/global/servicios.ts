@@ -548,6 +548,20 @@ EditarModelo(
       }));
     }
 
+    ActualizarEstadoTalonario(
+      id_talonario:number,
+      estado: number, // 0. Inactivo, 1.Activo, 2. Utilizado, 3. Consignación
+    ){
+
+      let params = new HttpParams()
+      .set('prid',id_talonario.toString())
+      .set('prestado',estado.toString());
+      
+      let headers = new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded');
+  
+      return this.http.post(this.url + 'talonario/update-estado.php', params, {headers: headers});
+    }
+
     SeleccionarTalonario(
       prid: number
     ): Observable <any> {

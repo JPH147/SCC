@@ -78,6 +78,23 @@ class Talonario{
         $this->estado=$row['estado'];
     }
 
+    function update_estado()
+    {
+        $query ="call sp_actualizartalonarioestado(?,?)";
+        
+        $result = $this->conn->prepare($query);
+        
+        $result->bindParam(1, $this->id);
+        $result->bindParam(2, $this->estado);
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
+
+    }
+
 }
 
 ?>

@@ -16,7 +16,7 @@
     try{
         $salida = new SalidaCabecera($db);
 
-        $salida->pecosa = !empty($_GET['prpecosa']) ? trim($_GET['prpecosa']) :null;
+        $salida->pecosa = !empty($_GET['prpecosa']) ? trim($_GET['prpecosa']) :"";
         $salida->id_sucursal = !empty($_GET['prtipo']) ? trim($_GET['prtipo']) :null;
         $salida->fecha_inicio = !empty($_GET['prfechainicio']) ? trim($_GET['prfechainicio'] ): null;
         $salida->fecha_fin = !empty($_GET['prfechafin']) ? trim($_GET['prfechafin'] ): null;
@@ -26,7 +26,7 @@
         $salida->estado = !empty($_GET['prestado']) ? trim($_GET['prestado'] ): null;
         $salida->numero_pagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : 1;
         $salida->total_pagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : 20;
-        $salida->orden = !empty($_GET['orden']) ? trim($_GET['orden']) : 'pecosa desc';
+        $salida->orden = !empty($_GET['orden']) ? trim($_GET['orden']) : 'id desc';
 
         $salida_list = $salida->read();
         $salida_contar = $salida->contar();

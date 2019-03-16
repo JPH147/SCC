@@ -14,32 +14,20 @@ export class ListadoSalidaVendedoresService {
   constructor(private http: HttpClient) {}
 
   Listado(
-  pecosa: number,
-  sucursal: number,
-  fecha_inicio: Date,
-  fecha_fin: Date,
-  destino: string,
-  serie:number,
-  vendedor:string,
-  estado:number,
-  pagina: number,
-  total_pagina: number,
-  orden: string
+    pecosa: string,
+    sucursal: number,
+    fecha_inicio: Date,
+    fecha_fin: Date,
+    destino: string,
+    serie:number,
+    vendedor:string,
+    estado:number,
+    pagina: number,
+    total_pagina: number,
+    orden: string
   ): Observable<any> {
 
     let Pecosa:string, Sucursal:string, Estado:string, Finicio: string ,Ffin: string,Serie:string="";
-
-    if (!fecha_inicio) {
-      Finicio=""
-    }else{
-      Finicio=moment(fecha_inicio,"DD/MM/YYYY").format("YYYY/MM/DD").toString()
-    }
-
-    if (!fecha_fin) {
-      Ffin=""
-    }else{
-      Ffin=moment(fecha_fin,"DD/MM/YYYY").format("YYYY/MM/DD").toString()
-    }
 
     if (pecosa == null) {
       Pecosa=""
@@ -67,8 +55,8 @@ export class ListadoSalidaVendedoresService {
       params: new HttpParams()
       .set('prpecosa', Pecosa)
       .set('prtipo', Sucursal)
-      .set('prfechainicio', Finicio)
-      .set('prfechafin', Ffin)
+      .set('prfechainicio', moment(fecha_inicio,"DD/MM/YYYY").format("YYYY/MM/DD").toString())
+      .set('prfechafin', moment(fecha_fin,"DD/MM/YYYY").format("YYYY/MM/DD").toString())
       .set('prdestino', destino)
       .set('prserie', Serie)
       .set('prvendedor', vendedor)

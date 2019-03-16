@@ -24,7 +24,9 @@
             $salida->fecha = trim($_POST["prfecha"]);
             $salida->destino = trim($_POST["prdestino"]);
             $salida->guia = trim($_POST["prguia"]);
-            $salida->tipo_movilidad = trim($_POST["prmovilidad"]);
+            $salida->vehiculo = trim($_POST["prvehiculo"]);
+            $salida->chofer_dni = trim($_POST["prchoferdni"]);
+            $salida->chofer_nombre = trim($_POST["prchofernombre"]);
             $salida->observacion = !empty($_POST["probservacion"]) ? trim($_POST["probservacion"]) : '';
 
             if($salida->create())

@@ -85,19 +85,19 @@
 
       <ng-container matColumnDef="comision_efectiva">
         <mat-header-cell *matHeaderCellDef> Comisiones efectivas </mat-header-cell>
-        <mat-cell *matCellDef="let comision"> {{comision.comision_efectiva}} </mat-cell>
+        <mat-cell *matCellDef="let comision"> {{comision.comision_efectiva | currency:'S/.'}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="comision_retenida">
         <mat-header-cell *matHeaderCellDef> Comisiones retenidas </mat-header-cell>
-        <mat-cell *matCellDef="let comision"> {{comision.comision_retenida}} </mat-cell>
+        <mat-cell *matCellDef="let comision"> {{comision.comision_retenida | currency:'S/.'}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
-        <mat-cell *matCellDef="let commision">
-          <button mat-icon-button matTooltip="Ver detalle" color="primary" (click)="Editar(commision.id_vendedor)"><mat-icon> visibility </mat-icon></button>
-          <button mat-icon-button matTooltip="Registrar pago" color="primary" (click)="Registrar(comision)"><mat-icon> attach_money </mat-icon></button>
+        <mat-cell *matCellDef="let comision">
+          <button mat-icon-button matTooltip="Ver detalle" color="primary" (click)="VerDetalle(comision.id_vendedor, comision.nombre_vendedor)"><mat-icon> visibility </mat-icon></button>
+          <!-- <button mat-icon-button matTooltip="Registrar pago" color="primary" (click)="Registrar(comision)"><mat-icon> attach_money </mat-icon></button> -->
         </mat-cell>
       </ng-container>
 

@@ -84,15 +84,15 @@ export class ObservacionesDataSource implements DataSource<any> {
   public Cargando = this.CargandoInformacion.asObservable();
   public TotalResultados = new BehaviorSubject<number>(0);
 
-constructor(private Servicio: ClienteService) { }
+  constructor(private Servicio: ClienteService) { }
 
-connect(collectionViewer: CollectionViewer): Observable<any[]> {
-  return this.InformacionClientes.asObservable();
-}
+  connect(collectionViewer: CollectionViewer): Observable<any[]> {
+    return this.InformacionClientes.asObservable();
+  }
 
-disconnect(){
-this.InformacionClientes.complete();
-this.CargandoInformacion.complete();
+  disconnect(){
+    this.InformacionClientes.complete();
+    this.CargandoInformacion.complete();
   }
 
   CargarClientes(

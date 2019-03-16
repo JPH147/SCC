@@ -19,31 +19,21 @@ export class SalidaVendedoresService {
     fecha: Date,
     destino:string,
     guia: string,
-    movilidad:boolean,
+    placa: string,
+    dni: string,
+    nombre:string,
     observacion:string
-    ): Observable<any> {
-
-    let TM:string, Fecha:string;
-
-    if (movilidad) {
-        TM = '1';
-    } else {
-        TM = '0';
-    }
-
-    if (fecha) {
-      Fecha=moment(fecha).format("YYYY/MM/DD").toString()
-    }else{
-      Fecha=''
-    }
+  ): Observable<any> {
 
     let params = new HttpParams()
    				.set('prpecosa', pecosa.toString())
    				.set('prsucursal', prsucursal.toString())
-   				.set('prfecha', Fecha)
+   				.set('prfecha', moment(fecha).format("YYYY/MM/DD").toString())
    				.set('prdestino', destino)
    				.set('prguia', guia)
-   				.set('prmovilidad', TM)
+          .set('prvehiculo', placa)
+          .set('prchoferdni', dni)
+          .set('prchofernombre', nombre)
           .set('observacion', observacion)
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
@@ -51,23 +41,6 @@ export class SalidaVendedoresService {
     return this.http.post(this.url + 'salidacabecera/create.php', params, {headers: headers});
   }
 
-  AgregarMovilidad(
-    cabecera: number,
-    placa: string,
-    dni: string,
-    nombre:string
-    ): Observable<any> {
-
-    let params = new HttpParams()
-           .set('prcabecera', cabecera.toString())
-           .set('prvehiculo', placa)
-           .set('prchoferdni', dni)
-           .set('prchofernombre', nombre)
-
-    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-
-    return this.http.post(this.url + 'salidacabecera/create-movilidad.php', params, {headers: headers});
-  }
 
   AgregarProducto(
     cabecera: number,

@@ -1,3 +1,18 @@
-.agregar{
-	float: right
+.card{
+   padding: 0px;
+   overflow: hidden;
+}
+
+.mat-column-numero{
+	max-width: 5%
+}
+
+.mat-column-opciones{
+	max-width: 10%
+}
+
+mat-card-content{
+	width: 95%;
+	margin-left: auto;
+	margin-right: auto;
 }

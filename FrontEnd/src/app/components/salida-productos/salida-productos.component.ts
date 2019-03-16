@@ -100,7 +100,7 @@ export class SalidaProductosComponent implements OnInit {
 
     fromEvent(this.FiltroDocumento.nativeElement,'keyup')
     .pipe(
-      debounceTime(100),
+      debounceTime(200),
       distinctUntilChanged(),
       tap(()=>{
         this.ValidarDocumento()

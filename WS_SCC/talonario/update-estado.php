@@ -6,7 +6,7 @@
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
  
     include_once '../config/database.php';
-    include_once '../entities/salidacabecera.php';
+    include_once '../entities/talonario.php';
     include_once '../shared/utilities.php';
 
     $database = new Database();
@@ -14,23 +14,23 @@
 
     try
     {
-        $salida = new SalidaCabecera($db);
+        $talonario = new Talonario($db);
         $data = json_decode(file_get_contents('php://input'), true);
 
-        if (($_POST["prcabecera"])!=null)
+        
+        if (($_POST["prid"])!=null)
         {
-            $salida->cabecera = trim($_POST["prcabecera"]);
-            $salida->vehiculo = trim($_POST["prvehiculo"]);
-            $salida->chofer_dni = trim($_POST["prchoferdni"]);
-            $salida->chofer_nombre = trim($_POST["prchofernombre"]);
 
-            if($salida->create_movilidad())
+            $talonario->id=trim($_POST["prid"]);
+            $talonario->estado=trim($_POST["prestado"]);
+
+            if($talonario->update_estado())
             {
-                print_json("0000", "Se creó la salida satisfactoriamente.", "");
+                print_json("0000", "Se actualizó el talonario satisfactoriamente.", "");
             }
             else
             {
-                print_json("9999", "Ocurrió un error al crear la salida.", "");
+                print_json("9999", "Ocurrió un error al actualizar el talonario.", "");
             }
         }
         else
@@ -40,7 +40,7 @@
     }
     catch(Exception $exception)
     {
-        print_json("9999", "Ocurrió un error al crear la salida.", $exception->getMessage());
+        print_json("9999", "Ocurrió un error al actualizar el talonario.", $exception->getMessage());
     }
 
 ?>

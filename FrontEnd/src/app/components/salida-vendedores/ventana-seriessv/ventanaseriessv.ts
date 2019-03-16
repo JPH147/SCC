@@ -56,8 +56,9 @@ export class ventanaseriessv  implements OnInit {
       }  
       else{
         /*Si no hay series para el producto, trae los datos*/
-        this.Series.Listado(this.data.almacen,this.data.id_producto,1,5).subscribe(res=>{
-          this.ListadoSeries(res);
+        this.Series.Listado(this.data.almacen,this.data.id_producto,1,20).subscribe(res=>{
+          console.log(res['data'].producto_series);
+          this.ListadoSeries(res['data'].producto_series);
         })
       }
     }
@@ -74,6 +75,8 @@ export class ventanaseriessv  implements OnInit {
       'serie':[{value:null, disabled:false},[
       ]],
       'precio':[{value:null, disabled:false},[
+        Validators.pattern('[0-9]+'),
+        Validators.min(0)
       ]],
       'cantidad':[{value:null, disabled:false},[
       ]],
@@ -87,11 +90,11 @@ export class ventanaseriessv  implements OnInit {
       this.SeriesProductosForm.get('series')['controls'][i].get('id_producto').setValue(this.data.id_producto);
       this.SeriesProductosForm.get('series')['controls'][i].get('id_serie').setValue(object[i].id_serie);
       this.SeriesProductosForm.get('series')['controls'][i].get('serie').setValue(object[i].serie);
-      this.SeriesProductosForm.get('series')['controls'][i].get('precio').setValue(this.data.precio);
+      this.SeriesProductosForm.get('series')['controls'][i].get('precio').setValue(this.data.precio ? this.data.precio : object[i].precio);
       this.SeriesProductosForm.get('series')['controls'][i].get('cantidad').setValue(object[i].cantidad);
       this.AgregarSerie();
     }
-    this.EliminarSerie(Object.keys(object).length)    
+    this.EliminarSerie(object.length)    
   }
   
   AgregarSerie():void{

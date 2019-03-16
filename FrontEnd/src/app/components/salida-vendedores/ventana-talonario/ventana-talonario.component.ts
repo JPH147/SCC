@@ -1,7 +1,9 @@
 import { Component, OnInit, Inject } from '@angular/core';
+import { CollectionViewer, DataSource } from '@angular/cdk/collections';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { MatCard, MatInputModule, MatButton, MatDatepicker, MatTableModule } from '@angular/material';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-import {FormControl, FormGroup, FormBuilder, FormArray,Validators} from '@angular/forms';
+import {FormControl, FormGroup, FormBuilder, FormArray,Validators, AbstractControl} from '@angular/forms';
 import {ServiciosVentas} from '../../global/ventas';
 
 @Component({
@@ -16,6 +18,10 @@ export class VentanaTalonarioComponent implements OnInit {
   public talonarios: FormArray;
   public Series: Array<any>;
   public Numeros: Array<any>;
+  public Talonarios:Array<any>;
+
+  ListadoTalonario: TalonariosDataSource;
+  Columnas: string[] = [ 'numero','serie', 'inicio', 'fin', 'opciones'];
 
   constructor(
      @Inject(MAT_DIALOG_DATA) public data,
@@ -25,52 +31,52 @@ export class VentanaTalonarioComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+
+    this.data ? this.Talonarios=this.data : this.Talonarios=[];
+
+    this.ListarTalonarioSerie();
+
+    this.ListadoTalonario = new TalonariosDataSource();
+    this.ListadoTalonario.AgregarInformacion(this.data);
+
     this.TalonariosForm = this.FormBuilder.group({
-      talonarios: this.FormBuilder.array([this.CrearTalonario()])
-    })
-
-    this.Ventas.ListarTalonarioSerie().subscribe(res=>
-    	this.Series=res
-    )
-
-    // if (this.data){
-    //   this.ListadoSeries(this.data)
-    //   this.EliminarSerie(Object.keys(this.data.IMEI).length)
-    // }
-
-  }
-
-  CrearTalonario():FormGroup{
-    return this.FormBuilder.group({
       'serie':[{value:null, disabled:false},[
+        Validators.required,
       ]],
       'numero_inicio':[{value:null, disabled:false},[
+        Validators.required,
       ]],
       'numero_fin':[{value:null, disabled:false},[
+        Validators.required,
+      ]],
+      'id_numero_inicio':[{value:null, disabled:false},[
+      ]],
+      'id_numero_fin':[{value:null, disabled:false},[
       ]]
     })
   }
 
-  // ListadoSeries(object){
-  //   for (let i in object.IMEI) {
-  //     this.SeriesProductosForm.get('talonarios')['controls'][i].get('serie').setValue(object.IMEI[i].serie);
-  //     this.SeriesProductosForm.get('talonarios')['controls'][i].get('precio').setValue(object.precio);
-  //     this.SeriesProductosForm.get('talonarios')['controls'][i].get('cantidad').setValue(1)
-  //     this.AgregarSerie();
-  //   }
-  // }
+  MinimoSeleccionado(){
+    this.TalonariosForm.get('numero_fin').setValidators([(control: AbstractControl) => Validators.min(this.TalonariosForm.value.numero_inicio)(control)]);
+  }
   
-  AgregarTalonario():void{
+  MaximoSeleccionado(){
+   this.TalonariosForm.get('numero_inicio').setValidators([(control: AbstractControl) => Validators.max(this.TalonariosForm.value.numero_fin)(control)]);
+  }
 
-    // for (let i in this.Series) {
-    //   this.TalonariosForm.get('talonarios')['controls'][i].get('serie').setValue(object.IMEI[i].serie);
-    //   this.TalonariosForm.get('talonarios')['controls'][i].get('precio').setValue(object.precio);
-    //   this.TalonariosForm.get('talonarios')['controls'][i].get('cantidad').setValue(1);
-    // }
+  ListarTalonarioSerie(){
+    this.Ventas.ListarTalonarioSerie().subscribe(res=>{
 
-    this.talonarios = this.TalonariosForm.get('talonarios') as FormArray;
-    this.talonarios.push(this.CrearTalonario())
-  };
+      if (this.Talonarios.length>0) {
+        this.Talonarios.forEach((item)=>{
+          console.log(item)
+          this.Series=res.filter(e=>e.serie!=item.serie)
+        })
+      }else{
+        this.Series=res;
+      }
+    })
+  }
 
   EliminarTalonario(index){
     this.talonarios.removeAt(index);
@@ -79,8 +85,43 @@ export class VentanaTalonarioComponent implements OnInit {
   AgregarNumeros(event){
   	this.Ventas.ListarTalonarioNumero(event.value).subscribe(res=>{
   		this.Numeros=res;
-  		console.log(res)
   	})
+  }
+
+  AgregarTalonario(formulario){
+    
+    this.Talonarios.push({
+      numero:this.Talonarios.length+1,
+      serie:formulario.value.serie,
+      numero_inicio:formulario.value.numero_inicio.numero,
+      numero_fin:formulario.value.numero_fin.numero,
+      id_numero_inicio:formulario.value.numero_inicio.id,
+      id_numero_fin:formulario.value.numero_fin.id
+    })
+
+    this.TalonariosForm.reset();
+    this.ListadoTalonario.AgregarInformacion(this.Talonarios);
+    this.ListarTalonarioSerie()
+  }
+
+}
+
+export class TalonariosDataSource implements DataSource<any> {
+
+  public InformacionTalonarios = new BehaviorSubject<any[]>([]);
+
+  constructor() { }
+
+  connect(collectionViewer: CollectionViewer): Observable<any[]> {
+    return this.InformacionTalonarios.asObservable();
+  }
+
+  disconnect(){
+    this.InformacionTalonarios.complete();
+  }
+
+  AgregarInformacion(array){
+    this.InformacionTalonarios.next(array)
   }
 
 }

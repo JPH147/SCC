@@ -1,0 +1,60 @@
+<mat-card class="card">
+
+  <mat-toolbar color="primary">
+    <mat-toolbar-row>{{data.nombre}}</mat-toolbar-row>
+  </mat-toolbar>
+
+	<mat-card-content>
+
+    <div class = "spinner-container" *ngIf = "ListadoComisiones.Cargando| async">
+      <mat-spinner></mat-spinner>
+    </div>
+
+    <mat-table [dataSource]="ListadoComisiones" class="mat-elevation-z8">
+
+      <ng-container matColumnDef="numero">
+        <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+        <mat-cell *matCellDef="let comision"> {{comision.numero}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="fecha">
+        <mat-header-cell *matHeaderCellDef> Fecha </mat-header-cell>
+        <mat-cell *matCellDef="let comision"> {{comision.fecha}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="talonario">
+        <mat-header-cell *matHeaderCellDef> Talonario </mat-header-cell>
+        <mat-cell *matCellDef="let comision"> {{comision.talonario}} </mat-cell>
+    	</ng-container>
+
+      <ng-container matColumnDef="comision_efectiva">
+        <mat-header-cell *matHeaderCellDef> Comisiones retenidas </mat-header-cell>
+        <mat-cell *matCellDef="let comision"> {{comision.comision_efectiva | currency:'S/.'}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="comision_efectiva_estado">
+        <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
+        <mat-cell *matCellDef="let comision"> {{comision.comision_efectiva_estado}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="comision_retenida">
+        <mat-header-cell *matHeaderCellDef> Comisiones retenidas </mat-header-cell>
+        <mat-cell *matCellDef="let comision"> {{comision.comision_retenida | currency:'S/.'}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="comision_retenida_estado">
+        <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
+        <mat-cell *matCellDef="let comision"> {{comision.comision_retenida_estado}} </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: Columnas;"></mat-row>
+
+    </mat-table>
+
+    <mat-paginator [length]="ListadoComisiones.TotalResultados | async" [pageSize]="5"></mat-paginator>
+    
+  </mat-card-content>
+
+
+</mat-card>

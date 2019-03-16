@@ -32,7 +32,7 @@ mat-card{
  max-width: 5%; 
 }
 
-.comision_efectiva,
-.comision_retenida{
+.mat-column-comision_efectiva,
+.mat-column-comision_retenida{
   max-width: 15%
 }

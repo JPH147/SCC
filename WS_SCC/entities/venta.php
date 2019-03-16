@@ -232,6 +232,87 @@ Class Venta{
         return false;
     }
 
+    function update(){
+
+        $query = "CALL sp_actualizarventa(
+            :prid,
+            :prfecha,
+            :prsucursal,
+            :prtalonario,
+            :prautorizador,
+            :prvendedor,
+            :prtipopago,
+            :prinicial,
+            :prcuotas,
+            :prtotal,
+            :prfechainicio,
+            :prpdfcontrato,
+            :prpdfdni,
+            :prpdfcip,
+            :prpdfplanilla,
+            :prpdfletra,
+            :prpdfvoucher,
+            :prpdfautorizacion,
+            :probservaciones,
+            :prlugar
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prid", $this->id_venta);
+        $result->bindParam(":prfecha", $this->fecha);
+        $result->bindParam(":prsucursal", $this->sucursal);
+        $result->bindParam(":prtalonario", $this->talonario);
+        $result->bindParam(":prautorizador", $this->id_autorizador);
+        $result->bindParam(":prvendedor", $this->vendedor);
+        $result->bindParam(":prtipopago", $this->tipopago);
+        $result->bindParam(":prinicial", $this->inicial);
+        $result->bindParam(":prcuotas", $this->cuotas);
+        $result->bindParam(":prtotal", $this->total);
+        $result->bindParam(":prfechainicio", $this->fechainicio);
+        $result->bindParam(":prpdfcontrato", $this->pdfcontrato);
+        $result->bindParam(":prpdfdni", $this->pdfdni);
+        $result->bindParam(":prpdfcip", $this->pdfcip);
+        $result->bindParam(":prpdfplanilla", $this->pdfplanilla);
+        $result->bindParam(":prpdfletra", $this->pdfletra);
+        $result->bindParam(":prpdfvoucher", $this->pdfvoucher);
+        $result->bindParam(":prpdfautorizacion", $this->pdfautorizacion);
+        $result->bindParam(":probservaciones", $this->observaciones);
+        $result->bindParam(":prlugar", $this->lugar);
+
+        $this->id_venta=htmlspecialchars(strip_tags($this->id_venta));
+        $this->fecha=htmlspecialchars(strip_tags($this->fecha));
+        $this->sucursal=htmlspecialchars(strip_tags($this->sucursal));
+        $this->talonario=htmlspecialchars(strip_tags($this->talonario));
+        $this->id_autorizador=htmlspecialchars(strip_tags($this->id_autorizador));
+        $this->vendedor=htmlspecialchars(strip_tags($this->vendedor));
+        $this->tipopago=htmlspecialchars(strip_tags($this->tipopago));
+        $this->inicial=htmlspecialchars(strip_tags($this->inicial));
+        $this->cuotas=htmlspecialchars(strip_tags($this->cuotas));
+        $this->total=htmlspecialchars(strip_tags($this->total));
+        $this->fechainicio=htmlspecialchars(strip_tags($this->fechainicio));
+        $this->pdfcontrato=htmlspecialchars(strip_tags($this->pdfcontrato));
+        $this->pdfdni=htmlspecialchars(strip_tags($this->pdfdni));
+        $this->pdfcip=htmlspecialchars(strip_tags($this->pdfcip));
+        $this->pdfplanilla=htmlspecialchars(strip_tags($this->pdfplanilla));
+        $this->pdfletra=htmlspecialchars(strip_tags($this->pdfletra));
+        $this->pdfvoucher=htmlspecialchars(strip_tags($this->pdfvoucher));
+        $this->pdfautorizacion=htmlspecialchars(strip_tags($this->pdfautorizacion));
+        $this->observaciones=htmlspecialchars(strip_tags($this->observaciones));
+        $this->lugar=htmlspecialchars(strip_tags($this->lugar));
+
+        if($result->execute())
+        {
+            while($row = $result->fetch(PDO::FETCH_ASSOC))
+            {
+                extract($row);
+                $this->id_venta=$id;
+            }
+            return true;
+        }
+        return false;
+    }
+
     function readxId()
     {
         $query ="call sp_listarventaxId(?)";
@@ -544,13 +625,68 @@ Class Venta{
         $result->bindParam(1, $this->id_venta);
 
         if($result->execute())
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    function delete_productos()
+    {
+        $query = "call sp_eliminarventaproductos(?,?)";
+        
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_venta);
+        $result->bindParam(2, $this->producto_serie);
+
+        if($result->execute())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    function delete_comision()
+    {
+        $query = "call sp_eliminarventacomision(?)";
+        
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_venta);
+
+        if($result->execute())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    function delete_cronograma()
+    {
+        $query = "call sp_eliminarventacronograma(?)";
+        
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_venta);
+
+        if($result->execute())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
 }

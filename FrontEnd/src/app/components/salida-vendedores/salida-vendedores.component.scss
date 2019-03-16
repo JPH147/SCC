@@ -1,7 +1,6 @@
-/* Structure */
-.example-container {
-  position: relative;
-}
+@import '../../../tema.scss';
+
+$primary: map-get($theme, primary);
 
 #container-principal{
   padding: 25px;
@@ -175,4 +174,32 @@ example-button-row {
 
 .formulario-principal{
   width: 80%
+}
+
+.formulario-principal-3{
+  width: 93.33%
+}
+
+.seccion{
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border-color: mat-color($primary);
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 5px;
+}
+
+.titulo-seccion{
+  height: 30px;
+  font-size: 16px;
+  background-color: mat-color($primary);
+  color: white !important;
+  padding-top: 15px;
+  padding-left: 2.5%;
+}
+
+mat-table{
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
 }

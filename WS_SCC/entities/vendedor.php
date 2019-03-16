@@ -13,6 +13,12 @@ Class Vendedor{
     public $vnd_comision;
     public $vnd_estado;
 
+    public $fecha;
+    public $comision_efectiva_porcentaje;
+    public $comision_retenida_porcentaje;
+    public $comision_efectiva_estado;
+    public $comision_retenida_estado;
+
     public $comisiones_efectivas_estado;
     public $comisiones_retenidas_estado;
     public $fecha_inicio;
@@ -147,6 +153,64 @@ Class Vendedor{
 
         return $this->total_resultado;
     }
+
+    function read_comisiones_vendedor(){
+
+        $query = "CALL sp_listarcomisionesxvendedor(?,?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_vendedor);
+        $result->bindParam(2, $this->numero_pagina);
+        $result->bindParam(3, $this->total_pagina);
+
+        $result->execute();
+        
+        $vendedor_list=array();
+        $vendedor_list["vendedores"]=array();
+
+        $contador = $this->total_pagina*($this->numero_pagina-1);
+
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $contador=$contador+1;
+            $vendedor_item = array (
+                "numero"=>$contador,
+                "id"=>$id,
+                "id_venta"=>$id_venta,
+                "fecha"=>$fecha,
+                "talonario"=>$talonario,
+                "comision_efectiva"=>$comision_efectiva,
+                "comision_retenida"=>$comision_retenida,
+                "comision_efectiva_porcentaje"=>$comision_efectiva_porcentaje,
+                "comision_retenida_porcentaje"=>$comision_retenida_porcentaje,
+                "comision_efectiva_estado"=>$comision_efectiva_estado,
+                "comision_retenida_estado"=>$comision_retenida_estado,
+            );
+            array_push($vendedor_list["vendedores"],$vendedor_item);
+        }
+
+        return $vendedor_list;
+    }
+
+    function read_comisiones_vendedor_contar(){
+
+        $query = "CALL sp_listarcomisionesxvendedorcontar(?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_vendedor);
+
+        $result->execute();
+
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        $this->total_resultado=$row['total'];
+
+        return $this->total_resultado;
+    }
+
 
     function  create_comision()
     {

@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams, HttpHeaders} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {URL} from '../global/url';
 import * as moment from 'moment';
@@ -31,12 +31,12 @@ export class VentaService {
     cuotas:number,
     total:number,
     fechainicio:Date,
-    pdfcontrato:string,
     pdfdni:string,
     pdfcip:string,
+    pdfcontrato:string,
+    pdfvoucher:string,
     pdfplanilla:string,
     pdfletra:string,
-    pdfvoucher:string,
     pdfautorizacion:string,
     observaciones:string,
   ): Observable<any> {
@@ -59,18 +59,70 @@ export class VentaService {
     .set('prcuotas',cuotas.toString())
     .set('prtotal',total.toString())
     .set('prfechainicio',moment(fechainicio).format("YYYY-MM-DD"))
-    .set('prpdfcontrato',pdfcontrato)
     .set('prpdfdni',pdfdni)
     .set('prpdfcip',pdfcip)
+    .set('prpdfcontrato',pdfcontrato)
+    .set('prpdfvoucher',pdfvoucher)
     .set('prpdfplanilla',pdfplanilla)
     .set('prpdfletra',pdfletra)
-    .set('prpdfvoucher',pdfvoucher)
     .set('prpdfautorizacion',pdfautorizacion)
     .set('probservaciones',observaciones)
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'venta/create.php', params, {headers: headers});
+  }
+
+
+  ActualizarVenta(
+    id:number,
+    fecha:Date,
+    sucursal:number,
+    talonario:number,
+    autorizador:number,
+    vendedor:number,
+    tipo_pago:number,
+    inicial:number,
+    cuotas:number,
+    total:number,
+    fechainicio:Date,
+    pdfdni:string,
+    pdfcip:string,
+    pdfcontrato:string,
+    pdfvoucher:string,
+    pdfplanilla:string,
+    pdfletra:string,
+    pdfautorizacion:string,
+    observaciones:string,
+    lugar:string,
+  ): Observable<any> {
+    let params = new HttpParams()
+    .set('prid',id.toString())
+    .set('prfecha',moment(fecha).format("YYYY-MM-DD"))
+    .set('prsucursal',sucursal.toString())
+    .set('prtalonario',talonario.toString())
+    .set('prautorizador',autorizador.toString())
+    .set('prvendedor',vendedor.toString())
+    .set('prtipopago',tipo_pago.toString())
+    .set('prinicial',inicial.toString())
+    .set('prcuotas',cuotas.toString())
+    .set('prtotal',total.toString())
+    .set('prfechainicio',moment(fechainicio).format("YYYY-MM-DD"))
+    .set('prpdfdni',pdfdni)
+    .set('prpdfcip',pdfcip)
+    .set('prpdfcontrato',pdfcontrato)
+    .set('prpdfvoucher',pdfvoucher)
+    .set('prpdfplanilla',pdfplanilla)
+    .set('prpdfletra',pdfletra)
+    .set('prpdfautorizacion',pdfautorizacion)
+    .set('probservaciones',observaciones)
+    .set('prlugar',lugar)
+
+    console.log(params)
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'venta/update.php', params, {headers: headers}); 
   }
 
   // estado: 1. Por pagar, 2. Pagado
@@ -217,6 +269,41 @@ export class VentaService {
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'venta/delete.php', params, {headers: headers});
+  }
+
+  EliminarProductosVenta(
+    id_venta:number,
+    id_serie:number,
+  ): Observable<any>{
+    let params = new HttpParams()
+    .set('prid',id_venta.toString())
+    .set('prserie',id_serie.toString())
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'venta/delete-producto.php', params, {headers: headers});
+  }
+
+  EliminarComisionVenta(
+    id_venta:number,
+  ): Observable<any>{
+    let params = new HttpParams()
+    .set('prid',id_venta.toString())
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'venta/delete-comision.php', params, {headers: headers});
+  }
+
+  EliminarCronogramaVenta(
+    id_venta:number,
+  ): Observable<any>{
+    let params = new HttpParams()
+    .set('prid',id_venta.toString())
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'venta/delete-cronograma.php', params, {headers: headers});
   }
 
 }
