@@ -14,6 +14,7 @@ import {StockService} from '../stock/stock.service';
 import {ServiciosProductoSerie} from '../global/productoserie';
 import {SalidaProductosService} from '../salida-productos/salida-productos.service';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-salida-vendedores',
@@ -40,6 +41,8 @@ export class SalidaVendedoresComponent implements OnInit {
   public talonarios: Array<any>;
   public comision_retenida:number;
 
+  public Hoy= new Date();
+
   // Tabla de vendedores
   ListadoVendedores: VendedoresDataSource;
   Columnas: string[] = [ 'numero','nombre', 'comision_efectiva', 'comision_retenida', 'opciones'];
@@ -57,7 +60,8 @@ export class SalidaVendedoresComponent implements OnInit {
     private Articulos: StockService,
     private SSeries:ServiciosProductoSerie,
     private TransaccionService: SalidaProductosService,
-    ) { }
+    private location: Location
+  ) { }
 
  ngOnInit() {
 
@@ -95,20 +99,20 @@ export class SalidaVendedoresComponent implements OnInit {
       guia_remision: [null, [
         Validators.required
       ]],
-      tipo_movilidad: [false, [
+      almacen: [false, [
         Validators.required
       ]],
       placa: [{value:null, disabled:false}, [
-        Validators.required,
-        Validators.minLength(7)
+        // Validators.required,
+        // Validators.minLength(7)
       ]],
       dni: [{value:null, disabled:false}, [
-        Validators.required,
-        Validators.pattern ('[0-9- ]+'),
-        Validators.minLength(8)
+        // Validators.required,
+        // Validators.pattern ('[0-9- ]+'),
+        // Validators.minLength(8)
       ]],
       chofer: [{value:null, disabled:false}, [
-        Validators.required
+        // Validators.required
       ]],
       observacion: [{value:null, disabled:false}, [
       ]],
@@ -119,7 +123,13 @@ export class SalidaVendedoresComponent implements OnInit {
       vendedor_comision_retenida:[{value:this.comision_retenida,disabled:false},[
       ]],
       // vendedores: this.FormBuilder.array([this.CrearVendedor()]),
-      productos: this.FormBuilder.array([this.CrearProducto()])
+      productos: this.FormBuilder.array([this.CrearProducto()]),
+      talonarios: [{value:null, disabled:false}, [
+        Validators.required
+      ]],
+      vendedores: [{value:null, disabled:false}, [
+        Validators.required
+      ]],
     });
   }
 
@@ -201,6 +211,18 @@ export class SalidaVendedoresComponent implements OnInit {
 
   AgregarVendedor(){
       // console.log(this.SalidaVendedoresForm)
+    if(this.Vendedores.length>0){
+      if(!this.Vendedores.some(e=>e.id==this.SalidaVendedoresForm.value.vendedor_nombre.id)){
+        this.AgregarVendedorEnVerdad()
+      }else{
+        this.ResetearVendedor();
+      }
+    }else{
+      this.AgregarVendedorEnVerdad()
+    }
+  }
+
+  AgregarVendedorEnVerdad(){
     this.Vendedores.push({
       numero: this.Vendedores.length+1,
       vendedor: this.SalidaVendedoresForm.value.vendedor_nombre,
@@ -208,8 +230,28 @@ export class SalidaVendedoresComponent implements OnInit {
       nombre: this.SalidaVendedoresForm.value.vendedor_nombre.nombre,
       comision_efectiva: this.SalidaVendedoresForm.value.vendedor_comision_efectiva,
       comision_retenida: this.SalidaVendedoresForm.value.vendedor_comision_retenida
-    });
+    }); 
 
+    this.ResetearVendedor()
+
+    this.SalidaVendedoresForm.get("vendedores").setValue(this.Vendedores);
+    this.ListadoVendedores.AgregarInformacion(this.Vendedores);
+  }
+
+  ResetearVendedor(){
+    this.SalidaVendedoresForm.get('vendedor_nombre').setValue("");
+    this.SalidaVendedoresForm.get('vendedor_comision_efectiva').setValue(null);
+    this.SalidaVendedoresForm.get('vendedor_comision_retenida').setValue(this.comision_retenida);
+  }
+
+  EliminarVendedor(id_vendedor){
+    this.Vendedores.forEach((item,index)=>{
+      if(item.id==id_vendedor){
+        this.Vendedores.splice(index,1);
+        // console.log("a")
+      }
+    })
+    // this.Vendedores.filter( e => e.id !== id_vendedor);
     this.ListadoVendedores.AgregarInformacion(this.Vendedores);
   }
 
@@ -235,7 +277,7 @@ export class SalidaVendedoresComponent implements OnInit {
     this.productos.removeAt(i);
   };
 
-  VendedorSeleccionado(event,index){
+  VendedorSeleccionado(event){
     this.SalidaVendedoresForm.get('vendedor_comision_efectiva').setValue(event.option.value.comision)
     this.ListarVendedor("");
   }
@@ -289,17 +331,26 @@ export class SalidaVendedoresComponent implements OnInit {
     serieventana.afterClosed().subscribe(res=>{
       if (res) {
         this.EliminarElemento(this.Series,res[0].id_producto);
+
+        let ip:number=0;
+        res.forEach((item,index)=>{
+          this.Series.push({
+            id_producto:item.id_producto,
+            id_serie: item.id_serie,
+            serie: item.serie,
+            precio: item.precio,
+            cantidad:item.cantidad,
+            considerar:item.considerar
+          })
+          if(item.considerar){
+            ip++
+          }
+          if(res.length==index+1){
+            // this.SalidaVendedoresForm.get('productos')['controls'][index].get('cantidad').setValue(ip)
+            producto.get('cantidad').setValue(ip)
+          }
+        }) 
       }
-      let ip:number=0;
-      for (let i in res) {
-        this.Series.push({id_producto:res[i].id_producto,id_serie:res[i].id_serie, serie:res[i].serie,precio:res[i].precio, cantidad:res[i].cantidad, considerar:res[i].considerar})
-        // Saber cuántos elementos de RES son del producto
-        if (res[i].id_producto=producto.id_producto && res[i].considerar==true) {
-          ip++
-        }
-      }
-      // console.log(this.Series);
-      this.SalidaVendedoresForm.get('productos')['controls'][index].get('cantidad').setValue(ip)
     })
   }
 
@@ -311,6 +362,7 @@ export class SalidaVendedoresComponent implements OnInit {
 
     VentanaTalonarios.afterClosed().subscribe(res=>{
       this.talonarios=res;
+      this.SalidaVendedoresForm.get("talonarios").setValue(res);
     })
 
   }
@@ -319,7 +371,6 @@ export class SalidaVendedoresComponent implements OnInit {
     this.ResetearFormArray(this.productos);
     this.Series=[];
     this.Articulos.ListarStock(event.value, '', '', '', '', 1, 20, 'descripcion asc').subscribe(res=>{
-      // console.log(res)
       this.Producto=res['data'].stock
     })
   }
@@ -333,7 +384,12 @@ export class SalidaVendedoresComponent implements OnInit {
     }
   }
 
+  Atras(){
+    this.location.back()
+  }
+
   Guardar(formulario){
+
     let destinos:string="";
     let id_cabecera:number;
 
@@ -353,50 +409,44 @@ export class SalidaVendedoresComponent implements OnInit {
       formulario.value.observacion
     ).subscribe(res=>{
 
-        // Crear transaccion en el almacen
-        this.TransaccionService.SalidaTransferenciaAlmacenVendedores(
-          this.FiltroAlmacen.value.id,
-          res.data,
-          formulario.value.fecha_salida,
-          formulario.value.pecosa
-         ).subscribe(res=>{
-           id_cabecera=res.data
-         })
+      console.log(res);
 
-        // Grabar datos de vendedor
-        for (let i of formulario.value.vendedores) {
-          this.Servicio.AgregarVendedor(
+      // Crear transaccion en el almacen
+      this.Series.forEach((item)=>{
+        if(item.considerar){
+          this.Servicio.AgregarProducto(
             res.data,
-            i.nombre.id,
-            this.SalidaVendedoresForm.get('comision').value
-          ).subscribe()
+            item.id_serie,
+            item.precio,
+            1
+          ).subscribe(res2=>console.log(res2))
         }
+      })
 
-        // Grabar datos de productos
-        for (let i of this.Series) {
-          if (i.considerar) {
-            this.Servicio.AgregarProducto(
-              res.data,
-              i.id_serie,
-              i.precio,
-              i.cantidad
-            ).subscribe(res=>{
-                this.TransaccionService.AgregarProducto(
-                  id_cabecera,
-                  i.id_serie,
-                  i.precio,
-                  i.cantidad
-                ).subscribe(res=>{
-                  this.SSeries.RegistrarProductoOUT(i.id_serie).subscribe()
-                })
-            })
-          }
+      // Grabar datos de vendedor
+      this.Vendedores.forEach((item)=>{
+        this.Servicio.AgregarVendedor(
+          res.data,
+          item.id,
+          item.comision_efectiva,
+          item.comision_retenida
+        ).subscribe(res2=>console.log(res2))
+      })
+
+      // Grabar datos de los talonarios
+      this.talonarios.forEach((item)=>{
+        for(let i=item.id_numero_inicio; i<=item.id_numero_fin; i++){
+          this.Servicio.AgregarTalonarios(
+            res.data,
+            i
+          ).subscribe(res2=>console.log(res2))
         }
+      })
 
-        this.snackBar.open("El producto se guardó satisfactoriamente", '', {
-          duration: 2000,
-        });
+      this.snackBar.open("La salida se guardó satisfactoriamente", '', {
+        duration: 2000,
       });
+    });
   }
 }
 

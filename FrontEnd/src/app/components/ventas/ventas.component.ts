@@ -1013,7 +1013,6 @@ export class VentasComponent implements OnInit {
         // Actualizar las comisiones del vendedor
         this.Servicio.CrearComisionVendedor(res['data'], formulario.value.vendedor.id, formulario.value.montototal).subscribe();
          
-
         this.router.navigate(['ventas'])
         this.Notificacion.Snack("Se actualizó la venta con éxito!","");
       })

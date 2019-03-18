@@ -65,7 +65,7 @@
         <ng-container matColumnDef="opciones">
           <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
           <mat-cell *matCellDef="let talonario">
-            <button mat-icon-button matTooltip="Eliminar" color="primary" (click)="Eliminar(talonario.id)"><mat-icon> delete </mat-icon></button>
+            <button mat-icon-button matTooltip="Eliminar" color="primary" (click)="EliminarTalonario(talonario.serie)"><mat-icon> delete </mat-icon></button>
           </mat-cell>
         </ng-container>
 

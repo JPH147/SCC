@@ -86,7 +86,7 @@
     <mat-spinner></mat-spinner>
   </div>
 
-  <mat-table mat-table [dataSource]="ListadoSalida" class="mat-elevation-z8"  matSort matSortActive="pecosa" matSortDirection="asc" matSortDisableClear>
+  <mat-table mat-table [dataSource]="ListadoSalida" class="mat-elevation-z8"  matSort matSortActive="fecha" matSortDirection="desc" matSortDisableClear>
      
      <ng-container matColumnDef="numero">
        <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
@@ -120,11 +120,11 @@
      
      <ng-container matColumnDef="opciones">
        <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
-       <mat-cell *matCellDef="let producto">
-         <button  matTooltip="Rendición Salida Vendedor" mat-icon-button color="primary" [routerLink]="['retorno']"><mat-icon>assignment_return </mat-icon></button>
-         <button matTooltip="Agegar Viatico Vendedor" mat-icon-button color="primary" (click)="Cargagasto()"><mat-icon>attach_money </mat-icon></button>
-         <button matTooltip="Ver Salida Vendedor" mat-icon-button color="primary" [routerLink]="['ingreso']"><mat-icon>visibility</mat-icon></button>
-         <button matTooltip="Eliminar Salida Vendedor" mat-icon-button color="primary" (click)= "Eliminasalida()"><mat-icon> delete </mat-icon></button>
+       <mat-cell *matCellDef="let salida">
+         <button  matTooltip="Rendición Salida Vendedor" mat-icon-button color="primary" [routerLink]="['retorno',salida.id]"><mat-icon>assignment_return </mat-icon></button>
+         <button matTooltip="Agegar Viatico Vendedor" mat-icon-button color="primary" (click)="Cargagasto()" disabled><mat-icon>attach_money </mat-icon></button>
+         <button matTooltip="Ver Salida Vendedor" mat-icon-button color="primary" [routerLink]="['ingreso']" disabled><mat-icon>visibility</mat-icon></button>
+         <button matTooltip="Eliminar Salida Vendedor" mat-icon-button color="primary" (click)= "Eliminasalida()" disabled><mat-icon> delete </mat-icon></button>
        </mat-cell>
      </ng-container>
      

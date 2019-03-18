@@ -38,7 +38,7 @@ const appRoutes: Routes = [
   {path: 'stock/salidaproductos', component: SalidaProductosComponent},
   {path: 'salidavendedores', component: ListadoSalidaVendedoresComponent},
   {path: 'salidavendedores/ingreso', component: SalidaVendedoresComponent},
-  {path: 'salidavendedores/retorno', component: RetornoVendedoresComponent},
+  {path: 'salidavendedores/retorno/:idsalida', component: RetornoVendedoresComponent},
   {path: 'retornovendedores', component: RetornoVendedoresComponent},
   {path: 'comisiones', component: ComisionesComponent},
   {path: 'clientes', component: ClientesComponent},

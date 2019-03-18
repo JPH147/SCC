@@ -1,13 +1,12 @@
 <?php
 
-
-
 Class SalidaCabecera{
 
     private $conn;
     private $detalle;
 
     public $id_salida;
+    public $id;
     public $pecosa;
     public $id_sucursal;
     public $sucursal;
@@ -27,6 +26,7 @@ Class SalidaCabecera{
 
     public $cabecera;
     public $vehiculo;
+    public $vehiculo_placa;
     public $chofer_dni;
     public $chofer_nombre;
     public $serie;
@@ -35,6 +35,14 @@ Class SalidaCabecera{
     public $vendedor;
     public $comisiones;
 
+    public $talonarios;
+    public $productos;
+    public $vendores;
+
+    public $comision_efectiva;
+    public $comision_retenida;
+    public $talonario;
+    
     public $fecha_inicio;
     public $fecha_fin;
 
@@ -206,24 +214,167 @@ Class SalidaCabecera{
         $query = "call sp_crearsalidavendedorvendedor(
             :pridcabecera,
             :prvendedor,
-            :prcomision
+            :prcomisionefectiva,
+            :prcomisionretenida
         )";
 
         $result = $this->conn->prepare($query);
 
         $result->bindParam(":pridcabecera", $this->cabecera);
         $result->bindParam(":prvendedor", $this->vendedor);
-        $result->bindParam(":prcomision", $this->comision);
+        $result->bindParam(":prcomisionefectiva", $this->comision_efectiva);
+        $result->bindParam(":prcomisionretenida", $this->comision_retenida);
 
         $this->cabecera=htmlspecialchars(strip_tags($this->cabecera));
         $this->vendedor=htmlspecialchars(strip_tags($this->vendedor));
-        $this->comision=htmlspecialchars(strip_tags($this->comision));
+        $this->comision_efectiva=htmlspecialchars(strip_tags($this->comision_efectiva));
+        $this->comision_retenida=htmlspecialchars(strip_tags($this->comision_retenida));
 
         if($result->execute())
         {
             return true;
         }
         return false;
+    }
+
+    function create_talonario(){
+
+        $query = "call sp_crearsalidatalonario(
+            :prtalonario,
+            :pridcabecera
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prtalonario", $this->talonario);
+        $result->bindParam(":pridcabecera", $this->cabecera);
+
+        $this->talonario=htmlspecialchars(strip_tags($this->talonario));
+        $this->cabecera=htmlspecialchars(strip_tags($this->cabecera));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    function readxId()
+    {
+        $query ="call sp_listarsalidacabeceraxId(?)";
+        
+        $result = $this->conn->prepare($query);
+        
+        $result->bindParam(1, $this->id_salida);
+
+        $Productos=$this->read_productos($this->id_salida);
+        $Talonarios=$this->read_talonarios($this->id_salida);
+        $Vendedores=$this->read_vendedores($this->id_salida);
+
+        $result->execute();
+    
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+      
+        $this->id=$row['id'];
+        $this->pecosa=$row['pecosa'];
+        $this->sucursal=$row['sucursal'];
+        $this->fecha=$row['fecha'];
+        $this->destino=$row['destino'];
+        $this->guia=$row['guia'];
+        $this->vehiculo_placa=$row['vehiculo_placa'];
+        $this->chofer_dni=$row['chofer_dni'];
+        $this->chofer_nombre=$row['chofer_nombre'];
+        $this->observacion=$row['observacion'];
+        $this->estado=$row['estado'];
+        $this->productos=$Productos;
+        $this->talonarios=$Talonarios;
+        $this->vendores=$Vendedores;
+    }
+
+    function read_productos(){
+
+        $query = "CALL sp_listarsalidadetalleproductoxcabecera(?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_salida);
+
+        $result->execute();
+        
+        $venta_list=array();
+        $venta_list["productos"]=array();
+        
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $venta_item = array (
+                "id"=>$id,
+                "cabecera"=>$cabecera,
+                "producto"=>$producto,
+                "serie"=>$serie,
+                "precio"=>$precio,
+                "cantidad"=>$cantidad,
+            );
+            array_push($venta_list["productos"],$venta_item);
+        }
+
+        return $venta_list;
+    }
+
+    function read_talonarios(){
+
+        $query = "CALL sp_listarsalidadetalletalonarioxcabecera(?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_salida);
+
+        $result->execute();
+        
+        $venta_list=array();
+        $venta_list["talonarios"]=array();
+        
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $venta_item = array (
+                "id"=>$id,
+                "serie"=>$serie,
+                "numero"=>$numero,
+                "estado"=>$estado,
+            );
+            array_push($venta_list["talonarios"],$venta_item);
+        }
+
+        return $venta_list;
+    }
+
+    function read_vendedores(){
+
+        $query = "CALL sp_listarsalidadetallevendedorxcabecera(?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_salida);
+
+        $result->execute();
+        
+        $venta_list=array();
+        $venta_list["vendedores"]=array();
+        
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $venta_item = array (
+                "id"=>$id,
+                "vendedor"=>$vendedor,
+                "comision_efectiva"=>$comision_efectiva,
+                "comision_retenida"=>$comision_retenida,
+            );
+            array_push($venta_list["vendedores"],$venta_item);
+        }
+
+        return $venta_list;
     }
 
 }

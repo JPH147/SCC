@@ -69,7 +69,7 @@ export class VentanaTalonarioComponent implements OnInit {
 
       if (this.Talonarios.length>0) {
         this.Talonarios.forEach((item)=>{
-          console.log(item)
+          // console.log(item)
           this.Series=res.filter(e=>e.serie!=item.serie)
         })
       }else{
@@ -78,8 +78,10 @@ export class VentanaTalonarioComponent implements OnInit {
     })
   }
 
-  EliminarTalonario(index){
-    this.talonarios.removeAt(index);
+  EliminarTalonario(serie){
+    this.Talonarios=this.Talonarios.filter(e=>e.serie!=serie);
+    this.ListadoTalonario.AgregarInformacion(this.Talonarios);
+    this.ListarTalonarioSerie()
   };
 
   AgregarNumeros(event){

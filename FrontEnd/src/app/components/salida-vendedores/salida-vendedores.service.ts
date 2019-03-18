@@ -26,34 +26,35 @@ export class SalidaVendedoresService {
   ): Observable<any> {
 
     let params = new HttpParams()
-   				.set('prpecosa', pecosa.toString())
-   				.set('prsucursal', prsucursal.toString())
-   				.set('prfecha', moment(fecha).format("YYYY/MM/DD").toString())
-   				.set('prdestino', destino)
-   				.set('prguia', guia)
-          .set('prvehiculo', placa)
-          .set('prchoferdni', dni)
-          .set('prchofernombre', nombre)
-          .set('observacion', observacion)
+   		.set('prpecosa', pecosa.toString())
+   		.set('prsucursal', prsucursal.toString())
+   		.set('prfecha', moment(fecha).format("YYYY/MM/DD").toString())
+   		.set('prdestino', destino)
+   		.set('prguia', guia)
+      .set('prvehiculo', placa)
+      .set('prchoferdni', dni)
+      .set('prchofernombre', nombre)
+      .set('observacion', observacion)
+
+    console.log(params);
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'salidacabecera/create.php', params, {headers: headers});
   }
 
-
   AgregarProducto(
     cabecera: number,
     serie: number,
     precio: number,
     cantidad:number
-    ): Observable<any> {
+  ): Observable<any> {
 
     let params = new HttpParams()
-           .set('prcabecera', cabecera.toString())
-           .set('prserie', serie.toString())
-           .set('prprecio', precio.toString())
-           .set('prcantidad', cantidad.toString())
+      .set('prcabecera', cabecera.toString())
+      .set('prserie', serie.toString())
+      .set('prprecio', precio.toString())
+      .set('prcantidad', cantidad.toString())
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -63,17 +64,54 @@ export class SalidaVendedoresService {
   AgregarVendedor(
     cabecera: number,
     vendedor: number,
-    comision: number
-    ): Observable<any> {
+    comision_efectiva: number,
+    comision_retenida: number
+  ): Observable<any> {
 
     let params = new HttpParams()
            .set('prcabecera', cabecera.toString())
            .set('prvendedor', vendedor.toString())
-           .set('prcomision', comision.toString())
+           .set('prcomisionefectiva', comision_efectiva.toString())
+           .set('prcomisionretenida', comision_retenida.toString())
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'salidacabecera/create-vendedor.php', params, {headers: headers});
   }
+
+  AgregarTalonarios(
+    cabecera: number,
+    talonario: number
+  ): Observable<any> {
+
+    let params = new HttpParams()
+      .set('prtalonario', talonario.toString())
+      .set('prcabecera', cabecera.toString())
+
+    console.log(params);
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'salidacabecera/create-talonario.php', params, {headers: headers});
+  }
+
+  SeleccionarSalida(
+    id:number,
+  ): Observable<any> {
+
+    return this.http.get(this.url + 'salidacabecera/readxId.php', {
+      params: new HttpParams()
+      .set('prid', id.toString())
+    })
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+          return res;
+      }  else {
+          console.log('No hay datos que mostrar');
+          return res;
+      }
+    }));
+  }
+
 }
 

@@ -21,8 +21,9 @@
         {
             $salida->cabecera = $_POST["prcabecera"];
             $salida->vendedor = $_POST["prvendedor"];
-            $salida->comision = $_POST["prcomision"];
-
+            $salida->comision_efectiva = $_POST["prcomisionefectiva"];
+            $salida->comision_retenida = $_POST["prcomisionretenida"];
+            
             if($salida->create_vendedor())
             {
                 print_json("0000", "Se creó la salida satisfactoriamente.", "");

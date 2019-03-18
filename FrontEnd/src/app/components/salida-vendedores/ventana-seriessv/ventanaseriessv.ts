@@ -57,7 +57,7 @@ export class ventanaseriessv  implements OnInit {
       else{
         /*Si no hay series para el producto, trae los datos*/
         this.Series.Listado(this.data.almacen,this.data.id_producto,1,20).subscribe(res=>{
-          console.log(res['data'].producto_series);
+          // console.log(res['data'].producto_series);
           this.ListadoSeries(res['data'].producto_series);
         })
       }
