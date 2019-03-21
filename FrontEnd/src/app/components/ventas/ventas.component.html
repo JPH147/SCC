@@ -151,11 +151,18 @@
           </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile colspan=2>
+<!--         <mat-grid-tile colspan=2 *ngIf="idventa">
           <mat-form-field class="columnas-2">
             <input matInput placeholder="Lugar de Venta" formControlName="lugar" [readonly]="idventa">
           </mat-form-field>
-        </mat-grid-tile> 
+        </mat-grid-tile>  -->
+
+
+        <mat-grid-tile colspan="4">
+          <mat-form-field class="columnas-4">
+             <input matInput placeholder="Observaciones" formControlName="observaciones" [readonly]="idventa">
+          </mat-form-field>
+        </mat-grid-tile>
 
       </mat-grid-list>
     </div>
@@ -205,12 +212,6 @@
           </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile colspan="3">
-          <mat-form-field class="columnas-3">
-             <input matInput placeholder="Observaciones" formControlName="observaciones" [readonly]="idventa">
-          </mat-form-field>
-        </mat-grid-tile>
-
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
             <input matInput placeholder="Monto total" formControlName="montototal" readonly>
@@ -219,6 +220,94 @@
         </mat-grid-tile>
 
       </mat-grid-list>
+    </div>
+
+    <div class="seccion">
+
+      <mat-card-subtitle class="titulo-seccion">
+        PRODUCTOS
+      </mat-card-subtitle>
+
+      <mat-grid-list cols="4" rowHeight="50px" *ngIf="!idventa">
+        <mat-grid-tile colspan="4">
+          <button mat-mini-fab color="primary" (click)="AgregarProducto()" matTooltip="Agregar productos" type="button" [disabled]="!this.sucursal"><mat-icon>add</mat-icon></button>
+        </mat-grid-tile>
+      </mat-grid-list>
+
+      <ng-container *ngIf="this.sucursal && !idventa">
+        <div formArrayName="productos" *ngFor="let producto of VentasForm['controls'].productos['controls']; let i = index">
+          <div [formGroupName]="i">
+
+            <mat-grid-list cols="5" rowHeight="70px">
+
+              <mat-grid-tile colspan="2" *ngIf="!producto.value.id_producto">
+                <mat-form-field class="columnas-2">
+                  <input matInput placeholder="Producto" [matAutocomplete]="autoproducto" #InputProducto>
+                  <mat-autocomplete #autoproducto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="ProductoSeleccionado(producto,$event)">
+                    <mat-option *ngFor="let producto of Producto" [value]="producto">
+                      {{producto.nombre}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </mat-grid-tile>
+
+              <mat-grid-tile colspan="2" *ngIf="producto.value.id_producto">
+                <mat-form-field class="columnas-2">
+                   <input matInput placeholder="Producto" formControlName="descripcion" readonly>
+                </mat-form-field>
+              </mat-grid-tile>
+
+              <mat-grid-tile *ngIf="!producto.value.id_serie">
+                <button mat-icon-button color="primary" type="button" matTooltip="Seleccionar serie" (click)="SeleccionarSerie(producto)" [disabled]="!producto.value.id_producto"><mat-icon>search</mat-icon></button>
+              </mat-grid-tile>
+
+              <mat-grid-tile *ngIf="producto.value.id_serie">
+                <mat-form-field class="columnas-1">
+                   <input matInput placeholder="IMEI" formControlName="serie" readonly>
+                </mat-form-field>
+              </mat-grid-tile>
+
+              <mat-grid-tile>
+                <mat-form-field class="columnas-1">
+                  <input matInput placeholder="Precio" formControlName="precio" #InputPrecio>
+                  <mat-error>Solo puede ingresar números</mat-error>
+                  <span matPrefix>S/ &nbsp;</span>
+                </mat-form-field>
+              </mat-grid-tile>
+
+              <mat-grid-tile>
+                <button  mat-icon-button type="button" color="primary" class="boton" matTooltip="Eliminar producto" (click)="EliminarProductos(i,producto)" [disabled]="VentasForm['controls'].productos['controls'].length==1"><mat-icon>delete</mat-icon></button>
+              </mat-grid-tile>
+
+            </mat-grid-list>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="idventa">
+        <mat-grid-list cols="5" rowHeight="70px" *ngFor="let producto of ProductosComprados">
+
+          <mat-grid-tile colspan="2">
+            <mat-form-field class="columnas-2">
+               <input matInput placeholder="Producto" [value]="producto.nombre" readonly>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile colspan="2">
+            <mat-form-field class="columnas-2">
+               <input matInput placeholder="IMEI" [value]="producto.serie" readonly>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <mat-form-field class="columnas-1">
+              <input matInput placeholder="Precio" [value]="producto.precio" readonly>
+              <span matPrefix>S/ &nbsp;</span>
+            </mat-form-field>
+          </mat-grid-tile>
+
+        </mat-grid-list>
+      </ng-container>
     </div>
 
     <div class="seccion">
@@ -540,95 +629,6 @@
 
         </mat-grid-tile>
       </mat-grid-list>
-
-    </div>
-
-    <div class="seccion">
-
-      <mat-card-subtitle class="titulo-seccion">
-        PRODUCTOS
-      </mat-card-subtitle>
-
-      <mat-grid-list cols="4" rowHeight="50px" *ngIf="!idventa">
-        <mat-grid-tile colspan="4">
-          <button mat-mini-fab color="primary" (click)="AgregarProducto()" matTooltip="Agregar productos" type="button" [disabled]="!this.sucursal"><mat-icon>add</mat-icon></button>
-        </mat-grid-tile>
-      </mat-grid-list>
-
-      <ng-container *ngIf="this.sucursal && !idventa">
-        <div formArrayName="productos" *ngFor="let producto of VentasForm['controls'].productos['controls']; let i = index">
-          <div [formGroupName]="i">
-
-            <mat-grid-list cols="5" rowHeight="70px">
-
-              <mat-grid-tile colspan="2" *ngIf="!producto.value.id_producto">
-                <mat-form-field class="columnas-2">
-                  <input matInput placeholder="Producto" [matAutocomplete]="autoproducto" #InputProducto>
-                  <mat-autocomplete #autoproducto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="ProductoSeleccionado(producto,$event)">
-                    <mat-option *ngFor="let producto of Producto" [value]="producto">
-                      {{producto.nombre}}
-                    </mat-option>
-                  </mat-autocomplete>
-                </mat-form-field>
-              </mat-grid-tile>
-
-              <mat-grid-tile colspan="2" *ngIf="producto.value.id_producto">
-                <mat-form-field class="columnas-2">
-                   <input matInput placeholder="Producto" formControlName="descripcion" readonly>
-                </mat-form-field>
-              </mat-grid-tile>
-
-              <mat-grid-tile *ngIf="!producto.value.id_serie">
-                <button mat-icon-button color="primary" type="button" matTooltip="Seleccionar serie" (click)="SeleccionarSerie(producto)" [disabled]="!producto.value.id_producto"><mat-icon>search</mat-icon></button>
-              </mat-grid-tile>
-
-              <mat-grid-tile *ngIf="producto.value.id_serie">
-                <mat-form-field class="columnas-1">
-                   <input matInput placeholder="IMEI" formControlName="serie" readonly>
-                </mat-form-field>
-              </mat-grid-tile>
-
-              <mat-grid-tile>
-                <mat-form-field class="columnas-1">
-                  <input matInput placeholder="Precio" formControlName="precio" #InputPrecio>
-                  <mat-error>Solo puede ingresar números</mat-error>
-                  <span matPrefix>S/ &nbsp;</span>
-                </mat-form-field>
-              </mat-grid-tile>
-
-              <mat-grid-tile>
-                <button  mat-icon-button type="button" color="primary" class="boton" matTooltip="Eliminar producto" (click)="EliminarProductos(i,producto)" [disabled]="VentasForm['controls'].productos['controls'].length==1"><mat-icon>delete</mat-icon></button>
-              </mat-grid-tile>
-
-            </mat-grid-list>
-          </div>
-        </div>
-      </ng-container>
-
-      <ng-container *ngIf="idventa">
-        <mat-grid-list cols="5" rowHeight="70px" *ngFor="let producto of ProductosComprados">
-
-          <mat-grid-tile colspan="2">
-            <mat-form-field class="columnas-2">
-               <input matInput placeholder="Producto" [value]="producto.nombre" readonly>
-            </mat-form-field>
-          </mat-grid-tile>
-
-          <mat-grid-tile colspan="2">
-            <mat-form-field class="columnas-2">
-               <input matInput placeholder="IMEI" [value]="producto.serie" readonly>
-            </mat-form-field>
-          </mat-grid-tile>
-
-          <mat-grid-tile>
-            <mat-form-field class="columnas-1">
-              <input matInput placeholder="Precio" [value]="producto.precio" readonly>
-              <span matPrefix>S/ &nbsp;</span>
-            </mat-form-field>
-          </mat-grid-tile>
-
-        </mat-grid-list>
-      </ng-container>
     </div>
 
     <div class="seccion" *ngIf="VentasForm.value.tipopago!=3 && VentasForm.value.tipopago!='Contado'">
@@ -637,60 +637,8 @@
         CRONOGRAMA
       </mat-card-subtitle>
 
-      <ng-container *ngIf="!idventa">
-        <mat-grid-list cols="7" rowHeight="70px">
-
-          <mat-grid-tile>
-            <strong>N°</strong>
-          </mat-grid-tile>
-
-          <mat-grid-tile>
-            <strong>Periodo</strong>
-          </mat-grid-tile>
-
-          <mat-grid-tile>
-            <strong>Monto</strong>
-          </mat-grid-tile>
-
-          <mat-grid-tile>
-          </mat-grid-tile>
-
-          <mat-grid-tile>
-            <strong>N°</strong>
-          </mat-grid-tile>
-
-          <mat-grid-tile>
-            <strong>Periodo</strong>
-          </mat-grid-tile>
-
-          <mat-grid-tile>
-            <strong>Monto</strong>
-          </mat-grid-tile>
-
-          <ng-container *ngFor="let pago of Cronograma">
-
-          <mat-grid-tile>
-            {{pago.numero}}
-          </mat-grid-tile>
-
-          <mat-grid-tile>
-            {{pago.fecha | date: 'MM/yyyy'}}
-          </mat-grid-tile>
-
-          <mat-grid-tile>
-            {{pago.monto}}
-          </mat-grid-tile>
-
-          <mat-grid-tile *ngIf="pago.numero%2==1">
-          </mat-grid-tile>
-
-          </ng-container>
-
-        </mat-grid-list>
-      </ng-container>
-
-      <ng-container *ngIf="idventa">
-        <mat-table [dataSource]="ListadoVentas">
+      <ng-container>
+        <mat-table [dataSource]="ListadoVentas" class="mat-elevation-z8" >
 
           <ng-container matColumnDef="numero">
             <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
@@ -699,12 +647,12 @@
 
           <ng-container matColumnDef="monto_cuota">
             <mat-header-cell *matHeaderCellDef> Monto </mat-header-cell>
-            <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_cuota }} </mat-cell>
+            <mat-cell *matCellDef="let cronograma"> S/. {{cronograma.monto_cuota }} </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="fecha_vencimiento">
             <mat-header-cell *matHeaderCellDef> Vencimiento </mat-header-cell>
-            <mat-cell *matCellDef="let cronograma"> {{cronograma.fecha_vencimiento}} </mat-cell>
+            <mat-cell *matCellDef="let cronograma"> {{cronograma.fecha_vencimiento | date: 'dd/MM/yyyy'}} </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="monto_pagado">
@@ -725,7 +673,7 @@
           <ng-container matColumnDef="opciones">
             <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
             <mat-cell *matCellDef="let cronograma">
-
+              <button mat-icon-button color="primary" (click)="VerDetallePagos(cronograma.id_cronograma)" > <mat-icon> visibility </mat-icon> </button>
             </mat-cell>
           </ng-container>
 

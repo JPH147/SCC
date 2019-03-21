@@ -114,6 +114,7 @@ import { VentanaObservacionesComponent } from './components/clientes/ventana-obs
 import { VentanaFotoComponent } from './components/clientes/ventana-foto/ventana-foto.component';
 import { VentanaVentasComponent } from './components/clientes/ventana-ventas/ventana-ventas.component';
 import { ComisionesDetalleComponent } from './components/comisiones/comisiones-detalle/comisiones-detalle.component';
+import { VentanaCromogramaComponent } from './components/ventas/ventana-cromograma/ventana-cromograma.component';
 
 @NgModule({
   imports: [
@@ -232,7 +233,8 @@ import { ComisionesDetalleComponent } from './components/comisiones/comisiones-d
     VentanaObservacionesComponent,
     VentanaFotoComponent,
     VentanaVentasComponent,
-    ComisionesDetalleComponent
+    ComisionesDetalleComponent,
+    VentanaCromogramaComponent
    ],
   entryComponents: [
     AppComponent,

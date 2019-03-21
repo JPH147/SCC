@@ -1,12 +1,10 @@
 import { VentanaEmergenteProductos } from './ventana-emergente/ventanaemergente';
 import {Component, OnInit, ViewChild, AfterViewInit, ElementRef} from '@angular/core';
 import { MatPaginator, MatSort, MatDialog,MatSelect,MatSnackBar } from '@angular/material';
-import {merge, Observable} from 'rxjs';
-import {catchError, map, startWith, switchMap} from 'rxjs/operators';
+import {merge, Observable, fromEvent} from 'rxjs';
+import {catchError, map, startWith, switchMap, debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
 import {ProductoService} from './productos.service';
 import {ProductoDataSource} from './productos.dataservice';
-import {fromEvent} from 'rxjs';
-import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
 import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
 import {ImagenProductoComponent} from './imagen-producto/imagen-producto.component'
 

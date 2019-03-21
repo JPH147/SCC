@@ -141,8 +141,11 @@ export class VentasComponent implements OnInit {
     this.ListarSucursales();
 
     this.route.params.subscribe(params => {
+      this.ListadoVentas = new VentaDataSource(this.Servicio);
+
       // Si es una venta nueva
       if(params['idcliente']){
+        this.Columnas= ['numero', 'fecha_vencimiento', 'monto_cuota'];
         this.ListarVendedor("");
         this.ListarAutorizador("");
         this.idcliente = +params['idcliente'];
@@ -159,15 +162,17 @@ export class VentasComponent implements OnInit {
           })
         }
       }
+
       // Cuando se ve una venta
       if(params['idventa']){
-        this.ListadoVentas = new VentaDataSource(this.Servicio);
         this.Columnas= ['numero', 'monto_cuota','fecha_vencimiento', 'monto_pagado', 'fecha_cancelacion', 'estado', 'opciones'];
         this.idventa = +params['idventa'];
         this.SeleccionarVentaxId(this.idventa);
       }
+
       // Cuando se edita una venta
       if (params['ideditar']) {
+        this.Columnas= ['numero', 'fecha_vencimiento', 'monto_cuota'];
         this.idventa_editar=params['ideditar'];
         this.SeleccionarVentaxId(this.idventa_editar)
       }
@@ -204,7 +209,7 @@ export class VentasComponent implements OnInit {
       'sucursal': [null, [
         Validators.required
       ]],
-      'lugar': [null, [
+      'lugar': ["", [
         Validators.required
       ]],
       'id_telefono': [null, [
@@ -233,7 +238,7 @@ export class VentasComponent implements OnInit {
         Validators.required,
         Validators.pattern('[0-9- ]+')
       ]],
-      'inicial': [null, [
+      'inicial': [0, [
         Validators.required,
         Validators.pattern('[0-9- ]+')
       ]],
@@ -329,7 +334,6 @@ export class VentasComponent implements OnInit {
                 if (this.FiltroPrecio['_results'][i].nativeElement.value) {
                   // this.VentasForm.get('montototal').setValue(0);
                   this.CalcularTotales();
-                  this.CrearCronograma()
                 }
               }
             })
@@ -539,9 +543,11 @@ export class VentasComponent implements OnInit {
 
       this.Cronograma.push({
         numero: i,
-        fecha: fecha,
-        monto: monto
+        fecha_vencimiento: fecha,
+        monto_cuota: monto
       })
+
+      this.ListadoVentas.Informacion.next(this.Cronograma);
 
     }
   }
@@ -866,6 +872,10 @@ export class VentasComponent implements OnInit {
     }
   }
 
+  VerDetallePagos(id){
+      
+  }
+
   GuardarVenta(formulario) {
 
     let random=(new Date()).getTime()
@@ -889,7 +899,7 @@ export class VentasComponent implements OnInit {
         formulario.value.id_direccion,
         formulario.value.id_telefono,
         formulario.value.cargo,
-        formulario.value.lugar,
+        "OFICINA",
         formulario.value.vendedor.id,
         1,
         formulario.value.tipodoc,
@@ -972,7 +982,7 @@ export class VentasComponent implements OnInit {
         this.letra_editar ? resultado[5].mensaje : this.letra_antiguo,
         this.autorizacion_editar ? resultado[6].mensaje : this.autorizacion_antiguo,
         formulario.value.observaciones,
-        formulario.value.lugar,
+        "OFICINA",
       ).subscribe(res=>{
 
         if (formulario.value.contrato!=this.id_talonario_editar) {
@@ -982,7 +992,7 @@ export class VentasComponent implements OnInit {
         // Se elimina el cronograma anterior
         this.Servicio.EliminarCronogramaVenta(this.idventa_editar).subscribe()
 
-        // Se elimina el cronograma anterior
+        // Se eliminan las comisiones
         this.Servicio.EliminarComisionVenta(this.idventa_editar).subscribe()
 
         // Se crean los productos en el almacén
@@ -1006,7 +1016,7 @@ export class VentasComponent implements OnInit {
           this.Servicio.CrearVentaCronograma(res['data'],formulario.value.montototal,formulario.value.fechapago,2).subscribe()
         }else{
           this.Cronograma.forEach((item)=>{
-            this.Servicio.CrearVentaCronograma(res['data'],item.monto,item.fecha,1).subscribe()
+            this.Servicio.CrearVentaCronograma(res['data'],item.monto_cuota,item.fecha_vencimiento,1).subscribe()
           });
         }
         
@@ -1037,14 +1047,4 @@ export class VentaDataSource implements DataSource<any>{
   disconnect(){
     this.Informacion.complete()
   }
-
-  // CargarInformacion(
-  //   ruc:string,
-  //   nombre:string
-  // ){
-  //   this.Servicio.ListarEmpresa(ruc,nombre).subscribe(res=>{
-  //     this.Informacion.next(res)
-  //   })
-  // }
-
 }

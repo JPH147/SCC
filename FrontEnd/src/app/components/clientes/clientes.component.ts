@@ -1,12 +1,10 @@
 import { VentanaEmergenteClientes } from './ventana-emergente/ventanaemergente';
 import {Component, OnInit, ViewChild, AfterViewInit, ElementRef} from '@angular/core';
 import { MatPaginator, MatSort, MatDialog, MatSnackBar } from '@angular/material';
-import {merge, Observable, of as observableOf} from 'rxjs';
-import {catchError, map, startWith, switchMap} from 'rxjs/operators';
+import {merge, Observable, of as observableOf, fromEvent, forkJoin } from 'rxjs';
+import {catchError, map, startWith, switchMap, debounceTime, distinctUntilChanged, tap, delay, finalize} from 'rxjs/operators';
 import {ClienteService} from './clientes.service';
 import {ClienteDataSource} from './clientes.dataservice';
-import {fromEvent, forkJoin } from 'rxjs';
-import {debounceTime, distinctUntilChanged, tap, delay, finalize} from 'rxjs/operators';
 import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
 import { FileUpload } from './file-upload/fileupload';
 import { Router } from '@angular/router';

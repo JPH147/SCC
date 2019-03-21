@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {CollectionViewer, DataSource } from '@angular/cdk/collections';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import {catchError, finalize} from 'rxjs/operators';
-import {of} from 'rxjs';
 import {ReglasEvaluacionService} from './reglas-evaluacion.service';
 
 @Component({

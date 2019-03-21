@@ -2,10 +2,9 @@ import { VentanaEmergenteProductos } from '../productos/ventana-emergente/ventan
 import {Component, OnInit, ViewChild, AfterViewInit, ElementRef} from '@angular/core';
 import { MatPaginator, MatSort, MatDialog, MatSelect } from '@angular/material';
 import {merge, Observable, fromEvent} from 'rxjs';
-import {catchError, map, startWith, switchMap} from 'rxjs/operators';
+import {catchError, map, startWith, switchMap, debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
 import {ProductoService} from '../productos/productos.service';
 import {VentaDataSource} from './ventas-listar.dataservice';
-import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
 import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
 import {VentasServicio} from './ventas-listar.service'
 import { ClienteService } from '../clientes/clientes.service';

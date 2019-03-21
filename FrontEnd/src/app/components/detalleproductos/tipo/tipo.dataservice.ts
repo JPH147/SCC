@@ -1,8 +1,7 @@
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {ServiciosGenerales} from '../../global/servicios';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import {catchError, finalize} from 'rxjs/operators';
-import {of} from 'rxjs';
 
 export class TipoDataSource implements DataSource<any> {
 

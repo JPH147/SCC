@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {stock, StockService } from './stock.service';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import {catchError, finalize, subscribeOn} from 'rxjs/operators';
-import {of} from 'rxjs';
 import { ReturnStatement } from '@angular/compiler';
 import {ServiciosProductoSerie} from '../global/productoserie';
 

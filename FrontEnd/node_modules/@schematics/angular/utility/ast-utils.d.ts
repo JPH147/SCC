@@ -8,6 +8,16 @@
 import * as ts from 'typescript';
 import { Change } from './change';
 /**
+ * Add Import `import { symbolName } from fileName` if the import doesn't exit
+ * already. Assumes fileToEdit can be resolved and accessed.
+ * @param fileToEdit (file we want to add import to)
+ * @param symbolName (item to import)
+ * @param fileName (path to the file)
+ * @param isDefault (if true, import follows style for importing default exports)
+ * @return Change
+ */
+export declare function insertImport(source: ts.SourceFile, fileToEdit: string, symbolName: string, fileName: string, isDefault?: boolean): Change;
+/**
  * Find all nodes from the AST in the subtree of node of SyntaxKind kind.
  * @param node
  * @param kind
@@ -67,6 +77,10 @@ export declare function addExportToModule(source: ts.SourceFile, modulePath: str
  * Custom function to insert an export into NgModule. It also imports it.
  */
 export declare function addBootstrapToModule(source: ts.SourceFile, modulePath: string, classifiedName: string, importPath: string): Change[];
+/**
+ * Custom function to insert an entryComponent into NgModule. It also imports it.
+ */
+export declare function addEntryComponentToModule(source: ts.SourceFile, modulePath: string, classifiedName: string, importPath: string): Change[];
 /**
  * Determine if an import already exists.
  */
