@@ -306,4 +306,44 @@ export class VentaService {
     return this.http.post(this.url + 'venta/delete-cronograma.php', params, {headers: headers});
   }
 
+  ListarCronograma(
+    id_venta:number,
+    proden:string,
+  ){
+    return this.http.get(this.url + 'venta/read-cronograma.php', {
+      params: new HttpParams()
+      .set('prventa',id_venta.toString())
+      .set('prorden',proden)
+    })
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res;
+      }  else {
+        console.log('No hay datos que mostrar');
+        return res;
+      }
+    }));
+  }
+
+  ListarPagosCronograma(
+    id_cronograma:number,
+    pagina_inicio:number,
+    pagina_final:number
+  ){
+    return this.http.get(this.url + 'venta/read-cronograma-pagos.php', {
+      params: new HttpParams()
+      .set('prcronograma',id_cronograma.toString())
+      .set('prpagina',pagina_inicio.toString())
+      .set('prtotalpagina',pagina_final.toString())
+    })
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res;
+      }  else {
+        console.log('No hay datos que mostrar');
+        return res;
+      }
+    }));
+  }
+
 }

@@ -89,7 +89,11 @@ mat-card{
   padding-left: 2.5%;
 }
 
-.mat-column-numero,
+
+.mat-column-numero{
+  max-width: 5%
+}
+
 .mat-column-estado,
 .mat-column-opciones{
   max-width: 10%;

@@ -1,0 +1,48 @@
+<mat-card class="card">
+
+  <mat-toolbar color="primary">
+    <mat-toolbar-row>Cuota N° {{data.numero}}</mat-toolbar-row>
+  </mat-toolbar>
+
+  <div class = "spinner-container" *ngIf = "ListadoPagos.Cargando| async">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <mat-table [dataSource]="ListadoPagos" class="mat-elevation-z8">
+
+    <ng-container matColumnDef="numero">
+      <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+      <mat-cell *matCellDef="let pago"> {{pago.numero}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="pago">
+      <mat-header-cell *matHeaderCellDef> Pago </mat-header-cell>
+      <mat-cell *matCellDef="let pago"> {{pago.pago | currency:'S/.'}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="fecha">
+      <mat-header-cell *matHeaderCellDef> Fecha </mat-header-cell>
+      <mat-cell *matCellDef="let pago"> {{pago.fecha | date:"dd/MM/yyyy"}} </mat-cell>
+	  </ng-container>
+
+    <ng-container matColumnDef="tipo_pago">
+      <mat-header-cell *matHeaderCellDef> Tipo de pago </mat-header-cell>
+      <mat-cell *matCellDef="let pago"> {{pago.tipo_pago}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="comprobante">
+      <mat-header-cell *matHeaderCellDef> Comprobante </mat-header-cell>
+      <mat-cell *matCellDef="let pago">
+        <button mat-icon-button color="primary" [disabled]="pago.comprobante">
+          <mat-icon>visibility</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: Columnas;"></mat-row>
+  </mat-table>
+
+  <mat-paginator [length]="ListadoPagos.TotalResultados | async" [pageSize]="5"></mat-paginator>
+
+</mat-card>

@@ -32,9 +32,7 @@ export class VentanaEmergenteArchivos {
 
 
   ngOnInit() {
-
     if (this.data) {
-      console.log(this.data)
       this.dni=this.data.dni
     }
 

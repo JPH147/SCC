@@ -3,7 +3,7 @@ import {CollectionViewer, DataSource} from "@angular/cdk/collections";
 import { Component, OnInit, ViewChild, ElementRef, Inject, ViewChildren, QueryList, Optional } from '@angular/core';
 import {FormArray, FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {VentaService} from './ventas.service';
-import { MatDialog, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialog, MAT_DIALOG_DATA, MatSort } from '@angular/material';
 import {ServiciosTipoDocumento, TipoDocumento} from '../global/tipodocumento';
 import {ServiciosTipoPago, TipoPago} from '../global/tipopago';
 import {ClienteService, Cliente} from '../clientes/clientes.service';
@@ -20,6 +20,7 @@ import * as moment from 'moment';
 import {Location} from '@angular/common';
 import {Notificaciones} from '../global/notificacion';
 import {URLIMAGENES} from '../global/url'
+import {VentanaCronogramaComponent} from './ventana-cronograma/ventana-cronograma.component';
 
 @Component({
   selector: 'app-ventas',
@@ -108,6 +109,7 @@ export class VentasComponent implements OnInit {
   @ViewChildren('InputProducto') FiltroProducto:QueryList<any>;
   @ViewChildren('InputPrecio') FiltroPrecio:QueryList<any>;
   @ViewChild('CargarDNI') DocumentoDNI: ElementRef;
+  @ViewChild(MatSort) sort: MatSort;
 
   public ListadoVentas: VentaDataSource;
   public Columnas: string[];
@@ -134,6 +136,7 @@ export class VentasComponent implements OnInit {
 
     this.contador = 1;
     this.Series=[];
+    this.Cronograma=[];
 
     this.ListarTipoDocumento();
     this.ListarTipoPago();
@@ -145,7 +148,7 @@ export class VentasComponent implements OnInit {
 
       // Si es una venta nueva
       if(params['idcliente']){
-        this.Columnas= ['numero', 'fecha_vencimiento', 'monto_cuota'];
+        this.Columnas= ['numero', 'fecha_vencimiento_ver', 'monto_cuota_ver'];
         this.ListarVendedor("");
         this.ListarAutorizador("");
         this.idcliente = +params['idcliente'];
@@ -165,14 +168,14 @@ export class VentasComponent implements OnInit {
 
       // Cuando se ve una venta
       if(params['idventa']){
-        this.Columnas= ['numero', 'monto_cuota','fecha_vencimiento', 'monto_pagado', 'fecha_cancelacion', 'estado', 'opciones'];
+        this.Columnas= ['numero', 'monto_cuota','fecha_vencimiento', 'monto_interes','monto_pagado', 'fecha_cancelacion', 'monto_pendiente','estado', 'opciones'];
         this.idventa = +params['idventa'];
         this.SeleccionarVentaxId(this.idventa);
       }
 
       // Cuando se edita una venta
       if (params['ideditar']) {
-        this.Columnas= ['numero', 'fecha_vencimiento', 'monto_cuota'];
+        this.Columnas= ['numero', 'fecha_vencimiento_ver', 'monto_cuota_ver'];
         this.idventa_editar=params['ideditar'];
         this.SeleccionarVentaxId(this.idventa_editar)
       }
@@ -277,6 +280,15 @@ export class VentasComponent implements OnInit {
 
   // tslint:disable-next-line:use-life-cycle-interface
   ngAfterViewInit() {
+
+      if (this.idventa) {
+        this.sort.sortChange
+      .pipe(
+        tap(() =>{
+          this.ActualizarOrdenCronograma(this.idventa, this.sort.active + " " + this.sort.direction)
+        })
+      ).subscribe();
+    }
 
     if (!this.idventa) {
       fromEvent(this.ClienteAutoComplete.nativeElement, 'keyup')
@@ -417,7 +429,9 @@ export class VentasComponent implements OnInit {
         this.VentasForm.get('contrato').setValue(res.id_talonario);
         this.VentasForm.get('observaciones').setValue(res.observacion);
         this.VentasForm.get('tipopago').setValue(res.idtipopago);
-        this.CrearCronograma();
+        
+        this.Cronograma=res.cronograma.cronograma;
+        this.ListadoVentas.Informacion.next(this.Cronograma);
 
         this.edicion_productos=res.productos.productos;
 
@@ -460,7 +474,8 @@ export class VentasComponent implements OnInit {
 
       if (this.idventa) {
 
-        this.ListadoVentas.Informacion.next(res.cronograma.cronograma);
+        this.ActualizarOrdenCronograma(this.idventa,"fecha_vencimiento asc");
+
         this.VentasForm.get('sucursal').setValue(res.nombre_sucursal);
         this.VentasForm.get("vendedor").setValue(res.nombre_vendedor);
         this.VentasForm.get("autorizador").setValue(res.nombre_autorizador);
@@ -484,6 +499,13 @@ export class VentasComponent implements OnInit {
 
       this.sucursal=res.id_sucursal;
 
+    })
+  }
+
+  // Cuando se cambia el orden del cronograma
+  ActualizarOrdenCronograma(id, orden){
+    this.Servicio.ListarCronograma(id, orden).subscribe(res=>{
+      this.ListadoVentas.Informacion.next(res['data'].cronograma);
     })
   }
 
@@ -531,15 +553,21 @@ export class VentasComponent implements OnInit {
 
   /*Cronograma */
   CrearCronograma() {
-    
-    this.Cronograma=[];
-    let fecha:Date = new Date(this.VentasForm.value.fechapago);
+
+    let year = moment(this.VentasForm.value.fechapago).year();
+    let month = moment(this.VentasForm.value.fechapago).month();
+
+    let fecha_corregida:Date = new Date(year, month-1,27);
+
+    let fecha:Date;
+
+    console.log(year, month, fecha_corregida)
 
     let monto=Math.round((this.VentasForm.value.montototal-this.FiltroInicial.nativeElement.value)*100/this.FiltroCuota.nativeElement.value)/100
 
     for (var i = 1; i<=this.FiltroCuota.nativeElement.value; i++) {
 
-      fecha=moment(this.VentasForm.value.fechapago).add(i-1, 'months').toDate();
+      fecha=moment(fecha_corregida).add(i-1, 'months').toDate();
 
       this.Cronograma.push({
         numero: i,
@@ -872,8 +900,11 @@ export class VentasComponent implements OnInit {
     }
   }
 
-  VerDetallePagos(id){
-      
+  VerDetallePagos(cronograma){
+    let Ventana = this.Dialogo.open(VentanaCronogramaComponent,{
+      width: '900px',
+      data: {numero: cronograma.numero, id:cronograma.id_cronograma}
+    })
   }
 
   GuardarVenta(formulario) {

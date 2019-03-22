@@ -638,42 +638,65 @@
       </mat-card-subtitle>
 
       <ng-container>
-        <mat-table [dataSource]="ListadoVentas" class="mat-elevation-z8" >
+        <mat-table [dataSource]="ListadoVentas" class="mat-elevation-z8" matSort matSortActive="fecha_vencimiento" matSortDirection="asc" matSortDisableClear>
 
           <ng-container matColumnDef="numero">
             <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
             <mat-cell *matCellDef="let cronograma"> {{cronograma.numero}} </mat-cell>
           </ng-container>
 
-          <ng-container matColumnDef="monto_cuota">
+          <!-- Sin el sort -->
+          <ng-container matColumnDef="monto_cuota_ver">
             <mat-header-cell *matHeaderCellDef> Monto </mat-header-cell>
-            <mat-cell *matCellDef="let cronograma"> S/. {{cronograma.monto_cuota }} </mat-cell>
+            <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_cuota | currency:'S/.' }} </mat-cell>
           </ng-container>
 
-          <ng-container matColumnDef="fecha_vencimiento">
+          <ng-container matColumnDef="fecha_vencimiento_ver">
             <mat-header-cell *matHeaderCellDef> Vencimiento </mat-header-cell>
             <mat-cell *matCellDef="let cronograma"> {{cronograma.fecha_vencimiento | date: 'dd/MM/yyyy'}} </mat-cell>
           </ng-container>
 
+          <!-- Con el sort -->
+
+          <ng-container matColumnDef="monto_cuota">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Monto </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_cuota | currency:'S/.' }} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="fecha_vencimiento">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Vencimiento </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma"> {{cronograma.fecha_vencimiento | date: 'dd/MM/yyyy'}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="monto_interes">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Interés </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_interes | currency:'S/.'}}</mat-cell>
+          </ng-container>
+
           <ng-container matColumnDef="monto_pagado">
-            <mat-header-cell *matHeaderCellDef> Total pagado </mat-header-cell>
-            <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_pagado ? cronograma.monto_pagado : 0}}</mat-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Total pagado </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_pagado | currency:'S/.'}}</mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="fecha_cancelacion">
-            <mat-header-cell *matHeaderCellDef> Fecha de cancelación </mat-header-cell>
-            <mat-cell *matCellDef="let cronograma"> {{cronograma.fecha_cancelacion}} </mat-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de cancelación </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma"> {{cronograma.fecha_cancelacion | date: 'dd/MM/yyyy'}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="monto_pendiente">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Pendiente de pago </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_pendiente | currency:'S/.'}}</mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="estado">
-            <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
             <mat-cell *matCellDef="let cronograma"> {{cronograma.estado==1 ? "Por pagar" : "Pagado" }} </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="opciones">
             <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
             <mat-cell *matCellDef="let cronograma">
-              <button mat-icon-button color="primary" (click)="VerDetallePagos(cronograma.id_cronograma)" > <mat-icon> visibility </mat-icon> </button>
+              <button mat-icon-button color="primary" (click)="VerDetallePagos(cronograma)" > <mat-icon> visibility </mat-icon> </button>
             </mat-cell>
           </ng-container>
 
