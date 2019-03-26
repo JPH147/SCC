@@ -3,12 +3,14 @@ import {FormArray, FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {ServiciosTipoPago} from '../../global/tipopago';
 import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material';
 import {SeleccionarClienteComponent} from '../seleccionar-cliente/seleccionar-cliente.component';
+import {ServiciosTelefonos} from '../../global/telefonos';
+import {ServiciosDirecciones} from '../../global/direcciones';
 
 @Component({
   selector: 'app-agregar-venta',
   templateUrl: './agregar-venta.component.html',
   styleUrls: ['./agregar-venta.component.css'],
-  providers: [ServiciosTipoPago]
+  providers: [ServiciosTipoPago, ServiciosTelefonos, ServiciosDirecciones]
 })
 export class AgregarVentaComponent implements OnInit {
 
@@ -26,6 +28,8 @@ export class AgregarVentaComponent implements OnInit {
     public ventana: MatDialogRef<AgregarVentaComponent>,
     private Builder: FormBuilder,
     private ServicioTipoPago: ServiciosTipoPago,
+    private TelefonoServicio: ServiciosTelefonos,
+    private DireccionServicio: ServiciosDirecciones,
     private Dialogo: MatDialog
   ) { }
 
@@ -38,7 +42,10 @@ export class AgregarVentaComponent implements OnInit {
   CrearFormularios(){
 
     this.ClienteForm=this.Builder.group({
-      cliente: [null, [
+      id: [null, [
+        Validators.required
+      ]],
+      nombre: [null, [
         Validators.required
       ]],
       cargo: [null, [
@@ -129,8 +136,31 @@ export class AgregarVentaComponent implements OnInit {
     Ventana.afterClosed().subscribe(res=>{
       console.log(res);
       this.cliente=res;
+      this.ClienteForm.get('id').setValue(res.id);
+      this.ClienteForm.get('nombre').setValue(res.nombre);
+      this.ClienteForm.get('cargo').setValue(res.cargo);
+      this.ClienteForm.get('trabajo').setValue(res.trabajo);
+      this.ObtenerDireccion(res.id);
+      this.ObtenerTelefono(res.id);
     })
+  }
 
+  ObtenerDireccion(id_cliente) {
+    this.DireccionServicio.ListarDireccion( id_cliente, '1',1,20).subscribe(res => {
+      if (res) {
+        this.ClienteForm.get('id_direccion').setValue(res['data'].direcciones[0].id);
+        this.ClienteForm.get('domicilio').setValue(res['data'].direcciones[0].direccioncompleta);
+      }
+    });
+  }
+
+  ObtenerTelefono(id_cliente) {
+    this.TelefonoServicio.ListarTelefono( id_cliente , '1',1,20).subscribe(res => {
+      if (res) {
+        this.ClienteForm.get('id_telefono').setValue(res['data'].telefonos[0].id);
+        this.ClienteForm.get('telefono').setValue(res['data'].telefonos[0].tlf_numero);
+      }
+    });
   }
 
 }

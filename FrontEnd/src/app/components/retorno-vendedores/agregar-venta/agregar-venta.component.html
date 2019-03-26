@@ -16,15 +16,15 @@
 
           <mat-grid-list cols="4" rowHeight="70px">
 
-            <mat-grid-tile colspan="2" *ngIf="!cliente">
+            <mat-grid-tile colspan="2" *ngIf="!ClienteForm.value.id">
                 <button mat-icon-button color="primary" matTooltip="Seleccionar cliente" (click)="SeleccionarCliente()">
                   <mat-icon>add_circle</mat-icon>
                 </button>
             </mat-grid-tile>
 
-            <mat-grid-tile colspan="2" *ngIf="cliente">
+            <mat-grid-tile colspan="2" *ngIf="ClienteForm.value.id">
               <mat-form-field class="columnas-2">
-                <input placeholder="Cliente" matInput formControlName="cliente">
+                <input placeholder="Cliente" matInput formControlName="nombre" readonly>
               </mat-form-field>
             </mat-grid-tile>
     
