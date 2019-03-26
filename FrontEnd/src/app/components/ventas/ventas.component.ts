@@ -662,7 +662,7 @@ export class VentasComponent implements OnInit {
       for (let i in res) {
         this.LstTipoPago.push ( res[i] );
       }
-   });
+    });
   }
 
   ListarTipoDocumento() {

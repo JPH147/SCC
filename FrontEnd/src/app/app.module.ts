@@ -276,7 +276,8 @@ import { AgregarVentaComponent } from './components/retorno-vendedores/agregar-v
     VentanaFotoComponent,
     VentanaVentasComponent,
     ComisionesDetalleComponent,
-    VentanaCronogramaComponent
+    VentanaCronogramaComponent,
+    AgregarVentaComponent
   ],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider, {provide: MAT_DATE_LOCALE, useValue: 'en-GB'}]

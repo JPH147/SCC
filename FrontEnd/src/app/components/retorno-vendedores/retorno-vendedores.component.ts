@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {MatDialog } from '@angular/material';
-import {VentasComponent} from '../ventas/ventas.component'
 import {Location} from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import {SalidaVendedoresService} from '../salida-vendedores/salida-vendedores.service';
+import {AgregarVentaComponent} from './agregar-venta/agregar-venta.component';
+
 
 @Component({
   selector: 'app-retorno-vendedores',
@@ -21,6 +22,7 @@ export class RetornoVendedoresComponent implements OnInit {
   public destino:string;
   public observacion:string;
   public Vendedores: Array<any>;
+  public Talonarios: Array<any>;
 
   constructor(
     private location: Location,
@@ -41,15 +43,16 @@ export class RetornoVendedoresComponent implements OnInit {
           this.destino=res['data'].destino;
           this.observacion=res['data'].observacion=="" ? "No hay observaciones" : res['data'].observacion;
           this.Vendedores=res['data'].vendedores.vendedores;
-          console.log(this.Vendedores)
+          this.Talonarios=res['data'].talonarios.talonarios
         })
       }
     })
   }
 
   RegistrarVenta(){
-    const serieventana = this.DialogoAgregar.open(VentasComponent, {
-      width: '1200px'
+    const serieventana = this.DialogoAgregar.open(AgregarVentaComponent, {
+      width: '1200px',
+      data: {talonarios: this.Talonarios}
     });
   }
     
