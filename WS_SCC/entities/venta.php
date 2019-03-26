@@ -15,6 +15,7 @@ Class Venta{
     public $id_vendedor;
     public $nombre_vendedor;
     public $nombre_autorizador;
+    public $foto;
     public $vnt_contrato_pdf;
     public $tipo_documento;
     public $vnt_dni_pdf;
@@ -39,6 +40,7 @@ Class Venta{
     public $producto_serie;
     public $precio;
     public $productos;
+    public $garantes;
     public $cronograma;
     public $talonario_serie;
     public $talonario_numero;
@@ -55,6 +57,8 @@ Class Venta{
     public $id_venta_canje;
     public $canje_talonario_serie;
     public $canje_talonario_contrato;
+    public $anulacion_observacion;
+    public $anulacion_monto;
 
     public $numero_pagina;
     public $total_pagina;
@@ -157,6 +161,7 @@ Class Venta{
         :prcuotas,
         :prtotal,
         :prfechainicio,
+        :prfoto,
         :prpdfcontrato,
         :prpdfdni,
         :prpdfcip,
@@ -185,6 +190,7 @@ Class Venta{
         $result->bindParam(":prcuotas", $this->cuotas);
         $result->bindParam(":prtotal", $this->total);
         $result->bindParam(":prfechainicio", $this->fechainicio);
+        $result->bindParam(":prfoto", $this->foto);
         $result->bindParam(":prpdfcontrato", $this->pdfcontrato);
         $result->bindParam(":prpdfdni", $this->pdfdni);
         $result->bindParam(":prpdfcip", $this->pdfcip);
@@ -211,6 +217,7 @@ Class Venta{
         $this->cuotas=htmlspecialchars(strip_tags($this->cuotas));
         $this->total=htmlspecialchars(strip_tags($this->total));
         $this->fechainicio=htmlspecialchars(strip_tags($this->fechainicio));
+        $this->foto=htmlspecialchars(strip_tags($this->foto));
         $this->pdfcontrato=htmlspecialchars(strip_tags($this->pdfcontrato));
         $this->pdfdni=htmlspecialchars(strip_tags($this->pdfdni));
         $this->pdfcip=htmlspecialchars(strip_tags($this->pdfcip));
@@ -246,6 +253,7 @@ Class Venta{
             :prcuotas,
             :prtotal,
             :prfechainicio,
+            :prfoto,
             :prpdfcontrato,
             :prpdfdni,
             :prpdfcip,
@@ -270,6 +278,7 @@ Class Venta{
         $result->bindParam(":prcuotas", $this->cuotas);
         $result->bindParam(":prtotal", $this->total);
         $result->bindParam(":prfechainicio", $this->fechainicio);
+        $result->bindParam(":prfoto", $this->foto);
         $result->bindParam(":prpdfcontrato", $this->pdfcontrato);
         $result->bindParam(":prpdfdni", $this->pdfdni);
         $result->bindParam(":prpdfcip", $this->pdfcip);
@@ -291,6 +300,7 @@ Class Venta{
         $this->cuotas=htmlspecialchars(strip_tags($this->cuotas));
         $this->total=htmlspecialchars(strip_tags($this->total));
         $this->fechainicio=htmlspecialchars(strip_tags($this->fechainicio));
+        $this->foto=htmlspecialchars(strip_tags($this->foto));
         $this->pdfcontrato=htmlspecialchars(strip_tags($this->pdfcontrato));
         $this->pdfdni=htmlspecialchars(strip_tags($this->pdfdni));
         $this->pdfcip=htmlspecialchars(strip_tags($this->pdfcip));
@@ -323,6 +333,7 @@ Class Venta{
 
         $Productos=$this->read_productos($this->id_venta);
         $Cronograma=$this->read_cronograma($this->id_venta);
+        $Garantes=$this->read_garantes($this->id_venta);
 
         $result->execute();
     
@@ -355,6 +366,7 @@ Class Venta{
         $this->numero_cuotas=$row['numero_cuotas'];
         $this->monto_total=$row['monto_total'];
         $this->fecha_inicio_pago=$row['fecha_inicio_pago'];
+        $this->foto=$row['foto'];
         $this->contrato_pdf=$row['contrato_pdf'];
         $this->dni_pdf=$row['dni_pdf'];
         $this->cip_pdf=$row['cip_pdf'];
@@ -368,8 +380,11 @@ Class Venta{
         $this->id_venta_canje=$row['id_venta_canje'];
         $this->canje_talonario_serie=$row['canje_talonario_serie'];
         $this->canje_talonario_contrato=$row['canje_talonario_contrato'];
+        $this->anulacion_observacion=$row['anulacion_observacion'];
+        $this->anulacion_monto=$row['anulacion_monto'];
         $this->cronograma=$Cronograma;
         $this->productos=$Productos;
+        $this->garantes=$Garantes;
     }
 
     function create_cronograma(){
@@ -423,14 +438,104 @@ Class Venta{
                 "id_cronograma"=>$id_cronograma,
                 "monto_cuota"=>$monto_cuota,
                 "fecha_vencimiento"=>$fecha_vencimiento,
+                "monto_interes"=>$monto_interes,
                 "monto_pagado"=>$monto_pagado,
                 "fecha_cancelacion"=>$fecha_cancelacion,
+                "monto_pendiente"=>$monto_pendiente,
                 "estado"=>$estado,
             );
             array_push($venta_list["cronograma"],$venta_item);
         }
 
         return $venta_list;
+    }
+
+    function read_cronograma_externo(){
+
+        $query = "CALL sp_listarventacronograma(?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_venta);
+        $result->bindParam(2, $this->orden);
+
+        $result->execute();
+        
+        $venta_list=array();
+        $venta_list["cronograma"]=array();
+        $contador = 0;
+
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $contador=$contador+1;
+            $venta_item = array (
+                "numero"=>$contador,
+                "id_cronograma"=>$id_cronograma,
+                "monto_cuota"=>$monto_cuota,
+                "fecha_vencimiento"=>$fecha_vencimiento,
+                "monto_interes"=>$monto_interes,
+                "monto_pagado"=>$monto_pagado,
+                "fecha_cancelacion"=>$fecha_cancelacion,
+                "monto_pendiente"=>$monto_pendiente,
+                "estado"=>$estado,
+            );
+            array_push($venta_list["cronograma"],$venta_item);
+        }
+
+        return $venta_list;
+    }
+
+    function read_cronograma_pagos(){
+
+        $query = "CALL sp_listarcronogramapago(?,?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_cronograma);
+        $result->bindParam(2, $this->numero_pagina);
+        $result->bindParam(3, $this->total_pagina);
+
+        $result->execute();
+        
+        $venta_list=array();
+        $venta_list["cronograma_pagos"]=array();
+        $contador = 0;
+
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $contador=$contador+1;
+            $venta_item = array (
+                "numero"=>$contador,
+                "id"=>$id,
+                "id_cronograma"=>$id_cronograma,
+                "pago"=>$pago,
+                "fecha"=>$fecha,
+                "tipo_pago"=>$tipo_pago,
+                "comprobante"=>$comprobante,
+            );
+            array_push($venta_list["cronograma_pagos"],$venta_item);
+        }
+
+        return $venta_list;
+    }
+
+    function read_cronograma_pagos_contar(){
+
+        $query = "CALL sp_listarcronogramapagocontar(?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_cronograma);
+
+        $result->execute();
+
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        $this->total_resultado=$row['total'];
+
+        return $this->total_resultado;
     }
 
     function create_productos(){
@@ -502,6 +607,43 @@ Class Venta{
         return false;
     }
 
+    function create_garante(){
+        
+        $query = "CALL sp_crearventagarante(
+            :prventa,
+            :prcliente,
+            :prdni,
+            :prcip,
+            :prplanilla,
+            :prletra,
+            :prvoucher
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prventa", $this->venta);
+        $result->bindParam(":prcliente", $this->id_cliente);
+        $result->bindParam(":prdni", $this->pdfdni);
+        $result->bindParam(":prcip", $this->pdfcip);
+        $result->bindParam(":prplanilla", $this->pdfplanilla);
+        $result->bindParam(":prletra", $this->pdfletra);
+        $result->bindParam(":prvoucher", $this->pdfvoucher);
+
+        $this->venta=htmlspecialchars(strip_tags($this->venta));
+        $this->id_cliente=htmlspecialchars(strip_tags($this->id_cliente));
+        $this->pdfdni=htmlspecialchars(strip_tags($this->pdfdni));
+        $this->pdfcip=htmlspecialchars(strip_tags($this->pdfcip));
+        $this->pdfplanilla=htmlspecialchars(strip_tags($this->pdfplanilla));
+        $this->pdfletra=htmlspecialchars(strip_tags($this->pdfletra));
+        $this->pdfvoucher=htmlspecialchars(strip_tags($this->pdfvoucher));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
+    }
+
     function read_productos(){
 
         $query = "CALL sp_listarventaproductoxId(?)";
@@ -553,6 +695,39 @@ Class Venta{
                 "observacion"=>$observacion
             );
             array_push($transaccion_list["transaccion"],$transaccion_item);
+        }
+
+        return $transaccion_list;
+    }
+
+    function read_garantes(){
+
+        $query = "CALL sp_listarventagarante(?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_venta);
+
+        $result->execute();
+        
+        $transaccion_list=array();
+        $transaccion_list["garantes"]=array();
+        
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $transaccion_item = array (
+                "id"=>$id,
+                "id_cliente"=>$id_cliente,
+                "cliente_dni"=>$cliente_dni,
+                "cliente_nombre"=>$cliente_nombre,
+                "dni_pdf"=>$dni_pdf,
+                "cip_pdf"=>$cip_pdf,
+                "planilla_pdf"=>$planilla_pdf,
+                "letra_pdf"=>$letra_pdf,
+                "voucher_pdf"=>$voucher_pdf
+            );
+            array_push($transaccion_list["garantes"],$transaccion_item);
         }
 
         return $transaccion_list;
@@ -618,11 +793,13 @@ Class Venta{
 
     function delete()
     {
-        $query = "call sp_eliminarventa(?)";
+        $query = "call sp_eliminarventa(?,?,?)";
         
         $result = $this->conn->prepare($query);
 
         $result->bindParam(1, $this->id_venta);
+        $result->bindParam(2, $this->anulacion_observacion);
+        $result->bindParam(3, $this->anulacion_monto);
 
         if($result->execute())
         {
@@ -674,6 +851,24 @@ Class Venta{
     function delete_cronograma()
     {
         $query = "call sp_eliminarventacronograma(?)";
+        
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_venta);
+
+        if($result->execute())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    function delete_garante()
+    {
+        $query = "call sp_eliminarventagarante(?)";
         
         $result = $this->conn->prepare($query);
 

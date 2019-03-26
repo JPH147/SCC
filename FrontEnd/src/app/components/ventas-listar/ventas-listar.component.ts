@@ -89,7 +89,7 @@ export class VentasListarComponent implements OnInit {
     Dialogo.afterClosed().subscribe(res=>{
       if (res) {
         if (res.respuesta) {
-          this.VServicio.EliminarVenta(venta.id).subscribe(respuesta=>{
+          this.VServicio.EliminarVenta(venta.id, res.comentarios, res.monto).subscribe(respuesta=>{
             if (res.monto>0) {
               this.VServicio.CrearVentaCronograma(venta.id,res.monto,new Date(), 1).subscribe()
             }

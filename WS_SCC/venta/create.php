@@ -38,6 +38,7 @@
             $venta->cuotas=trim($_POST["prcuotas"]);
             $venta->total=trim($_POST["prtotal"]);
             $venta->fechainicio=trim($_POST["prfechainicio"]);
+            $venta->foto=trim($_POST["prfoto"]);
             $venta->pdfcontrato=trim($_POST["prpdfcontrato"]);
             $venta->pdfdni=trim($_POST["prpdfdni"]);
             $venta->pdfcip=trim($_POST["prpdfcip"]);

@@ -34,7 +34,7 @@
 			"estado"=>$venta->estado,
 			"productos"=>$venta->productos,
 			"talonarios"=>$venta->talonarios,
-			"vendores"=>$venta->vendores
+			"vendedores"=>$venta->vendedores
 	    );
 
 	    if(trim($venta->id)!= ''){

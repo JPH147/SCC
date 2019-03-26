@@ -21,6 +21,7 @@ import {Location} from '@angular/common';
 import {Notificaciones} from '../global/notificacion';
 import {URLIMAGENES} from '../global/url'
 import {VentanaCronogramaComponent} from './ventana-cronograma/ventana-cronograma.component';
+import {URL} from '../global/url';
 
 @Component({
   selector: 'app-ventas',
@@ -33,6 +34,8 @@ export class VentasComponent implements OnInit {
 
   public Cargando = new BehaviorSubject<boolean>(false);
 
+  public editar_cronograma:number;
+  public ruta:string;
   public ListadoCliente: ClienteDataSource;
   public LstTipoDocumento: TipoDocumento[] = [];
   public LstCliente: Array<any> = [];
@@ -67,7 +70,12 @@ export class VentasComponent implements OnInit {
   public id_cliente_editar:number;
   public id_talonario_editar:number;
   public talonario_serie_editar:string;
+  public total_cronograma_editado:number;
+  public monto_inicial_canje: number;
+  public anulacion_observacion: string;
+  public anulacion_monto: string;
 
+  public foto: string;
   public dni: string;
   public cip: string;
   public contrato: string;
@@ -76,6 +84,7 @@ export class VentasComponent implements OnInit {
   public letra: string;
   public autorizacion: string;
 
+  public foto_nuevo: string;
   public dni_nuevo: string;
   public cip_nuevo: string;
   public contrato_nuevo: string;
@@ -84,6 +93,7 @@ export class VentasComponent implements OnInit {
   public letra_nuevo: string;
   public autorizacion_nuevo: string;
 
+  public foto_antiguo: string;
   public dni_antiguo: string;
   public cip_antiguo: string;
   public contrato_antiguo: string;
@@ -92,6 +102,7 @@ export class VentasComponent implements OnInit {
   public letra_antiguo: string;
   public autorizacion_antiguo: string;
 
+  public foto_editar: boolean= false;
   public dni_editar: boolean= false;
   public cip_editar: boolean= false;
   public contrato_editar: boolean= false;
@@ -108,7 +119,6 @@ export class VentasComponent implements OnInit {
   @ViewChild('Autorizador') AutorizadorAutoComplete: ElementRef;
   @ViewChildren('InputProducto') FiltroProducto:QueryList<any>;
   @ViewChildren('InputPrecio') FiltroPrecio:QueryList<any>;
-  @ViewChild('CargarDNI') DocumentoDNI: ElementRef;
   @ViewChild(MatSort) sort: MatSort;
 
   public ListadoVentas: VentaDataSource;
@@ -137,6 +147,10 @@ export class VentasComponent implements OnInit {
     this.contador = 1;
     this.Series=[];
     this.Cronograma=[];
+    this.editar_cronograma=3;
+
+    this.ruta=URL.url+"file/upload.php";
+    // console.log(this.ruta);
 
     this.ListarTipoDocumento();
     this.ListarTipoPago();
@@ -158,6 +172,7 @@ export class VentasComponent implements OnInit {
           this.venta_canje=+params['idventacanje'];
           this.Servicio.SeleccionarVenta(this.venta_canje).subscribe(res=>{
             this.talonario=res.talonario_serie+" - "+res.talonario_contrato;
+            this.monto_inicial_canje=res.monto_inicial;
           })
           // Son las transacciones en el almacén que se tienen que devolver
           this.Servicio.ListarVentaTransacciones(this.venta_canje).subscribe(res=>{
@@ -181,7 +196,7 @@ export class VentasComponent implements OnInit {
       }
    });
 
-    this.ListarClientes('', '', '', this.ClienteAutoComplete.nativeElement.value , '', 1, 10);
+    // this.ListarClientes('', '', '', this.ClienteAutoComplete.nativeElement.value , '', 1, 10);
 
     this.CrearFormulario();
   }
@@ -291,14 +306,14 @@ export class VentasComponent implements OnInit {
     }
 
     if (!this.idventa) {
-      fromEvent(this.ClienteAutoComplete.nativeElement, 'keyup')
-      .pipe(
-        debounceTime(10),
-        distinctUntilChanged(),
-        tap(() => {
-          this.ListarClientes('', '', '', '', this.ClienteAutoComplete.nativeElement.value , 1, 5);
-        })
-       ).subscribe();
+      // fromEvent(this.ClienteAutoComplete.nativeElement, 'keyup')
+      // .pipe(
+      //   debounceTime(10),
+      //   distinctUntilChanged(),
+      //   tap(() => {
+      //     this.ListarClientes('', '', '', '', this.ClienteAutoComplete.nativeElement.value , 1, 5);
+      //   })
+      //  ).subscribe();
 
        fromEvent(this.VendedorAutoComplete.nativeElement, 'keyup')
       .pipe(
@@ -392,6 +407,9 @@ export class VentasComponent implements OnInit {
   }
 
   SeleccionarVentaxId(id_venta){
+
+    let cuota_0;
+
     this.Servicio.SeleccionarVenta(id_venta).subscribe(res=>{
 
       this.ObtenerClientexId(res.id_cliente);
@@ -407,6 +425,10 @@ export class VentasComponent implements OnInit {
       this.VentasForm.get('cuotas').setValue(res.numero_cuotas);
       this.VentasForm.get('montototal').setValue(res.monto_total);
       this.VentasForm.get('talonario').setValue(res.talonario_serie);
+      
+      this.anulacion_observacion=res.anulacion_observacion;
+      this.anulacion_monto=res.anulacion_monto;
+
 
       if (this.idventa_editar) {
 
@@ -429,8 +451,22 @@ export class VentasComponent implements OnInit {
         this.VentasForm.get('contrato').setValue(res.id_talonario);
         this.VentasForm.get('observaciones').setValue(res.observacion);
         this.VentasForm.get('tipopago').setValue(res.idtipopago);
-        
+
         this.Cronograma=res.cronograma.cronograma;
+
+        if (this.VentasForm.value.inicial>0) {
+          cuota_0={
+            numero:0,
+            fecha_vencimiento:this.VentasForm.value.fechaventa,
+            monto_cuota:this.VentasForm.value.inicial,
+            monto_pagado:this.VentasForm.value.inicial,
+            fecha_cancelacion:this.VentasForm.value.fechaventa,
+            monto_pendiente:0
+          }
+        }
+
+        this.Cronograma.splice(0,0,cuota_0);
+
         this.ListadoVentas.Informacion.next(this.Cronograma);
 
         this.edicion_productos=res.productos.productos;
@@ -440,6 +476,10 @@ export class VentasComponent implements OnInit {
         })
 
         this.Restaurar_productos(2);
+
+        this.foto_antiguo=res.foto;
+        res.foto!="" ? this.foto=URLIMAGENES.urlimages+'venta/'+res.foto : null;
+        res.foto!="" ? this.foto_editar=false : this.foto_editar=true;
 
         this.dni_antiguo=res.dni_pdf;
         res.dni_pdf!="" ? this.dni=URLIMAGENES.urlimages+'venta/'+res.dni_pdf : null;
@@ -486,6 +526,7 @@ export class VentasComponent implements OnInit {
 
         this.talonario=res.talonario_serie+" - "+res.talonario_contrato;
 
+        res.foto!="" ? this.foto=URLIMAGENES.urlimages+'venta/'+res.foto : null;
         res.dni_pdf!="" ? this.dni=URLIMAGENES.urlimages+'venta/'+res.dni_pdf : null;
         res.cip_pdf!="" ? this.cip=URLIMAGENES.urlimages+'venta/'+res.cip_pdf : null;
         res.contrato_pdf!="" ? this.contrato=URLIMAGENES.urlimages+'venta/'+res.contrato_pdf : null;
@@ -552,7 +593,7 @@ export class VentasComponent implements OnInit {
   }
 
   /*Cronograma */
-  CrearCronograma() {
+  CrearCronograma(){
 
     let year = moment(this.VentasForm.value.fechapago).year();
     let month = moment(this.VentasForm.value.fechapago).month();
@@ -569,6 +610,14 @@ export class VentasComponent implements OnInit {
 
       fecha=moment(fecha_corregida).add(i-1, 'months').toDate();
 
+      if (this.VentasForm.value.inicial>0) {
+        this.Cronograma.push({
+          numero:0,
+          fecha_vencimiento: this.VentasForm.value.fechafechaventa,
+          monto_cuota:this.VentasForm.value.inicial
+        })
+      }
+
       this.Cronograma.push({
         numero: i,
         fecha_vencimiento: fecha,
@@ -576,8 +625,22 @@ export class VentasComponent implements OnInit {
       })
 
       this.ListadoVentas.Informacion.next(this.Cronograma);
-
     }
+
+    this.CalcularTotalCronograma()
+
+  }
+
+  EditarCronograma(bool:number){
+    this.editar_cronograma=bool;
+    this.CalcularTotalCronograma();
+  }
+
+  CalcularTotalCronograma(){
+    this.total_cronograma_editado=0;
+    this.Cronograma.forEach((item)=>{
+      this.total_cronograma_editado=this.total_cronograma_editado+item.monto_cuota*1;
+    })
   }
 
   TipoPagoSeleccionado(){
@@ -695,11 +758,11 @@ export class VentasComponent implements OnInit {
       this.CalcularTotales();
   }
 
-  ListarClientes(inst: string, sede: string, subsede: string, dni: string, nombre: string, prpagina: number, prtotal: number) {
-    this.ClienteServicio.Listado(inst, sede, subsede, '','',dni, nombre, prpagina, prtotal).subscribe( res => {
-      this.LstCliente = res['data'].clientes;
-    });
-  }
+  // ListarClientes(inst: string, sede: string, subsede: string, dni: string, nombre: string, prpagina: number, prtotal: number) {
+  //   this.ClienteServicio.Listado(inst, sede, subsede, '','',dni, nombre, prpagina, prtotal).subscribe( res => {
+  //     this.LstCliente = res['data'].clientes;
+  //   });
+  // }
 
   ObtenerDireccion() {
     if (this.idcliente) {
@@ -760,6 +823,15 @@ export class VentasComponent implements OnInit {
     this.ServiciosGenerales.ListarVendedor("",nombre,"",1,5).subscribe( res => {
       this.LstVendedor3=res;
     });
+  }
+
+  SubirFoto(evento){
+    console.log(evento)
+    if (!this.idventa_editar) {
+      this.foto=evento.serverResponse.response._body;
+    }else{
+      this.foto_nuevo=evento.serverResponse.response._body;
+    }
   }
 
   SubirDNI(evento){
@@ -828,6 +900,14 @@ export class VentasComponent implements OnInit {
 
   NoEditarContrato(){
     this.contrato_editar=false
+  }
+
+  EditarFoto(){
+    this.foto_editar=true;
+  }
+
+  NoEditarFoto(){
+    this.foto_editar=false;
   }
 
   EditarDni(){
@@ -912,6 +992,7 @@ export class VentasComponent implements OnInit {
     let random=(new Date()).getTime()
 
     return forkJoin(
+      this.ServiciosGenerales.RenameFile(this.foto,'FOTO',random.toString(),"venta"),
       this.ServiciosGenerales.RenameFile(this.dni,'DNI',random.toString(),"venta"),
       this.ServiciosGenerales.RenameFile(this.cip,'CIP',random.toString(),"venta"),
       this.ServiciosGenerales.RenameFile(this.contrato,'CONTRATO',random.toString(),"venta"),
@@ -946,6 +1027,7 @@ export class VentasComponent implements OnInit {
         resultado[4].mensaje,
         resultado[5].mensaje,
         resultado[6].mensaje,
+        resultado[7].mensaje,
         formulario.value.observaciones,
       ).subscribe(res=>{
 
@@ -984,6 +1066,7 @@ export class VentasComponent implements OnInit {
     let random=(new Date()).getTime();
 
     return forkJoin(
+      this.ServiciosGenerales.RenameFile(this.foto_nuevo,'DNI',random.toString(),"venta"),
       this.ServiciosGenerales.RenameFile(this.dni_nuevo,'DNI',random.toString(),"venta"),
       this.ServiciosGenerales.RenameFile(this.cip_nuevo,'CIP',random.toString(),"venta"),
       this.ServiciosGenerales.RenameFile(this.contrato_nuevo,'CONTRATO',random.toString(),"venta"),
@@ -1005,13 +1088,14 @@ export class VentasComponent implements OnInit {
         formulario.value.tipopago==3 ? 1 :formulario.value.cuotas,
         formulario.value.montototal,
         formulario.value.fechapago,
-        this.dni_editar ? resultado[0].mensaje : this.dni_antiguo,
-        this.cip_editar ? resultado[1].mensaje : this.cip_antiguo,
-        this.contrato_editar ? resultado[2].mensaje : this.contrato_antiguo,
-        this.transaccion_editar ? resultado[3].mensaje : this.transaccion_antiguo,
-        this.planilla_editar ? resultado[4].mensaje : this.planilla_antiguo,
-        this.letra_editar ? resultado[5].mensaje : this.letra_antiguo,
-        this.autorizacion_editar ? resultado[6].mensaje : this.autorizacion_antiguo,
+        this.foto_editar ? resultado[0].mensaje : this.foto_antiguo,
+        this.dni_editar ? resultado[1].mensaje : this.dni_antiguo,
+        this.cip_editar ? resultado[2].mensaje : this.cip_antiguo,
+        this.contrato_editar ? resultado[3].mensaje : this.contrato_antiguo,
+        this.transaccion_editar ? resultado[4].mensaje : this.transaccion_antiguo,
+        this.planilla_editar ? resultado[5].mensaje : this.planilla_antiguo,
+        this.letra_editar ? resultado[6].mensaje : this.letra_antiguo,
+        this.autorizacion_editar ? resultado[7].mensaje : this.autorizacion_antiguo,
         formulario.value.observaciones,
         "OFICINA",
       ).subscribe(res=>{
@@ -1047,7 +1131,9 @@ export class VentasComponent implements OnInit {
           this.Servicio.CrearVentaCronograma(res['data'],formulario.value.montototal,formulario.value.fechapago,2).subscribe()
         }else{
           this.Cronograma.forEach((item)=>{
-            this.Servicio.CrearVentaCronograma(res['data'],item.monto_cuota,item.fecha_vencimiento,1).subscribe()
+            if (item.numero>0) {
+              this.Servicio.CrearVentaCronograma(res['data'],item.monto_cuota,item.fecha_vencimiento,1).subscribe()
+            }
           });
         }
         

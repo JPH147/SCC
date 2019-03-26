@@ -10,6 +10,7 @@ export class VentanaConfirmarComponent implements OnInit {
 
   public monto:number;
   public mensaje:string;
+  public comentarios:string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
@@ -28,7 +29,7 @@ export class VentanaConfirmarComponent implements OnInit {
 
   Aceptar(){
     if (this.data.venta) {
-      this.ventana.close({monto: this.monto, respuesta: true})
+      this.ventana.close({monto: this.monto, comentarios: this.comentarios, respuesta: true})
     }else{
       this.ventana.close(true)
     }

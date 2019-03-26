@@ -115,6 +115,7 @@ import { VentanaFotoComponent } from './components/clientes/ventana-foto/ventana
 import { VentanaVentasComponent } from './components/clientes/ventana-ventas/ventana-ventas.component';
 import { ComisionesDetalleComponent } from './components/comisiones/comisiones-detalle/comisiones-detalle.component';
 import { VentanaCronogramaComponent } from './components/ventas/ventana-cronograma/ventana-cronograma.component';
+import { AgregarVentaComponent } from './components/retorno-vendedores/agregar-venta/agregar-venta.component';
 
 @NgModule({
   imports: [
@@ -234,7 +235,8 @@ import { VentanaCronogramaComponent } from './components/ventas/ventana-cronogra
     VentanaFotoComponent,
     VentanaVentasComponent,
     ComisionesDetalleComponent,
-    VentanaCronogramaComponent
+    VentanaCronogramaComponent,
+    AgregarVentaComponent
    ],
   entryComponents: [
     AppComponent,

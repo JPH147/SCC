@@ -20,6 +20,7 @@ export class RetornoVendedoresComponent implements OnInit {
   public fecha_retorno:Date;
   public destino:string;
   public observacion:string;
+  public Vendedores: Array<any>;
 
   constructor(
     private location: Location,
@@ -39,6 +40,8 @@ export class RetornoVendedoresComponent implements OnInit {
           this.fecha_retorno=new Date();
           this.destino=res['data'].destino;
           this.observacion=res['data'].observacion=="" ? "No hay observaciones" : res['data'].observacion;
+          this.Vendedores=res['data'].vendedores.vendedores;
+          console.log(this.Vendedores)
         })
       }
     })

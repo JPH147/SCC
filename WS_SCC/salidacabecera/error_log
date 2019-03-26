@@ -1,6 +1,0 @@
-[18-Mar-2019 02:11:09 UTC] PHP Notice:  Undefined variable: Cronograma in /home/genus/public_html/SCC/WS_SCC/entities/salidacabecera.php on line 290
-[18-Mar-2019 02:12:10 UTC] PHP Notice:  Undefined variable: Cronograma in /home/genus/public_html/SCC/WS_SCC/entities/salidacabecera.php on line 289
-[18-Mar-2019 02:13:15 UTC] PHP Notice:  Undefined property: SalidaCabecera::$cronograma in /home/genus/public_html/SCC/WS_SCC/salidacabecera/readxId.php on line 35
-[18-Mar-2019 02:13:17 UTC] PHP Notice:  Undefined property: SalidaCabecera::$cronograma in /home/genus/public_html/SCC/WS_SCC/salidacabecera/readxId.php on line 35
-[18-Mar-2019 02:13:18 UTC] PHP Notice:  Undefined property: SalidaCabecera::$cronograma in /home/genus/public_html/SCC/WS_SCC/salidacabecera/readxId.php on line 35
-[18-Mar-2019 02:13:19 UTC] PHP Notice:  Undefined property: SalidaCabecera::$cronograma in /home/genus/public_html/SCC/WS_SCC/salidacabecera/readxId.php on line 35

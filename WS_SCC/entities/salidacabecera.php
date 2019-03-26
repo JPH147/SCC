@@ -37,7 +37,7 @@ Class SalidaCabecera{
 
     public $talonarios;
     public $productos;
-    public $vendores;
+    public $vendedores;
 
     public $comision_efectiva;
     public $comision_retenida;
@@ -288,7 +288,7 @@ Class SalidaCabecera{
         $this->estado=$row['estado'];
         $this->productos=$Productos;
         $this->talonarios=$Talonarios;
-        $this->vendores=$Vendedores;
+        $this->vendedores=$Vendedores;
     }
 
     function read_productos(){

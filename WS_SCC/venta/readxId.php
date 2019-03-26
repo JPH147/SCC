@@ -48,6 +48,7 @@
 			"numero_cuotas"=>$venta->numero_cuotas,
 			"monto_total"=>$venta->monto_total,
 			"fecha_inicio_pago"=>$venta->fecha_inicio_pago,
+			"foto"=>$venta->foto,
 			"contrato_pdf"=>$venta->contrato_pdf,
 			"dni_pdf"=>$venta->dni_pdf,
 			"cip_pdf"=>$venta->cip_pdf,
@@ -61,8 +62,11 @@
 			"id_venta_canje"=>$venta->id_venta_canje,
 			"canje_talonario_serie"=>$venta->canje_talonario_serie,
 			"canje_talonario_contrato"=>$venta->canje_talonario_contrato,
+			"anulacion_observacion"=>$venta->anulacion_observacion,
+			"anulacion_monto"=>$venta->anulacion_monto,
 			"cronograma"=>$venta->cronograma,
 			"productos"=>$venta->productos,
+			"garantes"=>$venta->garantes,
 	    );
 
 	    if(trim($venta->id)!= ''){

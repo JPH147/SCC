@@ -20,16 +20,14 @@
     	if(trim($_POST["prid"])!=null)
     	{
     		$venta->id_venta = trim($_POST["prid"]);
-            $venta->anulacion_observacion = trim($_POST["probservacion"]);
-            $venta->anulacion_monto = trim($_POST["prmonto"]);
 
-	    	if($venta->delete())
+	    	if($venta->delete_garante())
 	        {
-	            print_json("0000", "Se eliminó la venta satisfactoriamente.", "");
+	            print_json("0000", "Se eliminó el garante satisfactoriamente.", "");
 	        }
 	        else
 	        {
-	            print_json("9999", "Ocurrió un error al eliminar la venta.", "");
+	            print_json("9999", "Ocurrió un error al eliminar el garante.", "");
 	        }
 	    }
     	else
@@ -39,7 +37,7 @@
     }
     catch(Exception $exception)
     {
-        print_json("9999", "Ocurrió un error al eliminar la venta.", $exception->getMessage());
+        print_json("9999", "Ocurrió un error al eliminar el garante.", $exception->getMessage());
     }
 
 ?>
