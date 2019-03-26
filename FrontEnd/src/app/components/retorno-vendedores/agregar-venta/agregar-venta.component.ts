@@ -1,7 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import {FormArray, FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {ServiciosTipoPago} from '../../global/tipopago';
-import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material';
+import {SeleccionarClienteComponent} from '../seleccionar-cliente/seleccionar-cliente.component';
 
 @Component({
   selector: 'app-agregar-venta',
@@ -18,20 +19,20 @@ export class AgregarVentaComponent implements OnInit {
   public productos: FormArray;
   public LstTipoPago: Array<any>;
   public LstContrato: Array<any>;
+  public cliente:any;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
     public ventana: MatDialogRef<AgregarVentaComponent>,
     private Builder: FormBuilder,
     private ServicioTipoPago: ServiciosTipoPago,
+    private Dialogo: MatDialog
   ) { }
 
   ngOnInit() {
-
     this.ListarTipoPago();
     this.LstContrato=this.data.talonario;
     this.CrearFormularios();
-
   }
 
   CrearFormularios(){
@@ -118,6 +119,18 @@ export class AgregarVentaComponent implements OnInit {
         this.LstTipoPago.push ( res[i] );
       }
     });
+  }
+
+  SeleccionarCliente(){
+    let Ventana = this.Dialogo.open(SeleccionarClienteComponent,{
+      width: "1200px"
+    })
+
+    Ventana.afterClosed().subscribe(res=>{
+      console.log(res);
+      this.cliente=res;
+    })
+
   }
 
 }

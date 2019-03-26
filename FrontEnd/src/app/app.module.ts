@@ -116,6 +116,7 @@ import { VentanaVentasComponent } from './components/clientes/ventana-ventas/ven
 import { ComisionesDetalleComponent } from './components/comisiones/comisiones-detalle/comisiones-detalle.component';
 import { VentanaCronogramaComponent } from './components/ventas/ventana-cronograma/ventana-cronograma.component';
 import { AgregarVentaComponent } from './components/retorno-vendedores/agregar-venta/agregar-venta.component';
+import { SeleccionarClienteComponent } from './components/retorno-vendedores/seleccionar-cliente/seleccionar-cliente.component';
 
 @NgModule({
   imports: [
@@ -236,7 +237,8 @@ import { AgregarVentaComponent } from './components/retorno-vendedores/agregar-v
     VentanaVentasComponent,
     ComisionesDetalleComponent,
     VentanaCronogramaComponent,
-    AgregarVentaComponent
+    AgregarVentaComponent,
+    SeleccionarClienteComponent
    ],
   entryComponents: [
     AppComponent,
@@ -277,7 +279,8 @@ import { AgregarVentaComponent } from './components/retorno-vendedores/agregar-v
     VentanaVentasComponent,
     ComisionesDetalleComponent,
     VentanaCronogramaComponent,
-    AgregarVentaComponent
+    AgregarVentaComponent,
+    SeleccionarClienteComponent
   ],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider, {provide: MAT_DATE_LOCALE, useValue: 'en-GB'}]

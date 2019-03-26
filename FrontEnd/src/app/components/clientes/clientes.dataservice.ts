@@ -10,7 +10,9 @@ export class ClienteDataSource implements DataSource<Cliente> {
   public Cargando = this.CargandoInformacion.asObservable();
   public TotalResultados = new BehaviorSubject<number>(0);
 
-constructor(private Servicio: ClienteService) { }
+  constructor(
+    private Servicio: ClienteService
+  ) {}
 
   connect(collectionViewer: CollectionViewer): Observable<Cliente[]> {
     return this.InformacionClientes.asObservable();

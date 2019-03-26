@@ -5,7 +5,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {SalidaVendedoresService} from '../salida-vendedores/salida-vendedores.service';
 import {AgregarVentaComponent} from './agregar-venta/agregar-venta.component';
 
-
 @Component({
   selector: 'app-retorno-vendedores',
   templateUrl: './retorno-vendedores.component.html',

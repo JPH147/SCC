@@ -1,7 +1,6 @@
-import { VentanaEmergenteClientes } from './ventana-emergente/ventanaemergente';
 import {Component, OnInit, ViewChild, AfterViewInit, ElementRef} from '@angular/core';
 import { MatPaginator, MatSort, MatDialog, MatSnackBar } from '@angular/material';
-import {merge, Observable, of as observableOf, fromEvent, forkJoin } from 'rxjs';
+import {merge, Observable, of , fromEvent, forkJoin } from 'rxjs';
 import {catchError, map, startWith, switchMap, debounceTime, distinctUntilChanged, tap, delay, finalize} from 'rxjs/operators';
 import {ClienteService} from './clientes.service';
 import {ClienteDataSource} from './clientes.dataservice';
@@ -10,6 +9,7 @@ import { FileUpload } from './file-upload/fileupload';
 import { Router } from '@angular/router';
 import { VentanaEmergenteContacto} from './ventana-emergentecontacto/ventanaemergentecontacto';
 import { VentanaObservacionesComponent} from './ventana-observaciones/ventana-observaciones.component';
+import { VentanaEmergenteClientes } from './ventana-emergente/ventanaemergente';
 import {ServiciosTelefonos} from '../global/telefonos';
 import {ServiciosDirecciones} from '../global/direcciones';
 import { Notificaciones } from '../global/notificacion';
@@ -55,7 +55,6 @@ export class ClientesComponent implements OnInit {
    this.ListadoCliente.CargarClientes('', '', '', '', '', '','',1, 10);
   }
 
-   // tslint:disable-next-line:use-life-cycle-interface
   ngAfterViewInit() {
     merge(
       fromEvent(this.FiltroDni.nativeElement, 'keyup'),

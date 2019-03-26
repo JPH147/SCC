@@ -1,3 +1,6 @@
 {
-    "tslint.enable": false
+    "tslint.enable": false,
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#004D40",
+    }
 }
