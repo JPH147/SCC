@@ -29,6 +29,7 @@ Class SalidaCabecera{
     public $vehiculo_placa;
     public $chofer_dni;
     public $chofer_nombre;
+    public $id_producto;
     public $serie;
     public $precio;
     public $cantidad;
@@ -310,6 +311,7 @@ Class SalidaCabecera{
             $venta_item = array (
                 "id"=>$id,
                 "cabecera"=>$cabecera,
+                "id_producto"=>$id_producto,
                 "producto"=>$producto,
                 "serie"=>$serie,
                 "precio"=>$precio,

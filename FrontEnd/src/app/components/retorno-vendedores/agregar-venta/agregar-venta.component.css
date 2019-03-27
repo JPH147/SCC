@@ -18,3 +18,19 @@
 .columnas-4{
   width: 95%
 }
+
+mat-table{
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
+}
+
+.mat-column-numero{
+  max-width: 10%;
+}
+
+.mat-column-precio_venta,
+.mat-column-opciones{
+  max-width: 15%;
+}

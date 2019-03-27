@@ -4,6 +4,7 @@ import {Location} from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import {SalidaVendedoresService} from '../salida-vendedores/salida-vendedores.service';
 import {AgregarVentaComponent} from './agregar-venta/agregar-venta.component';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-retorno-vendedores',
@@ -14,6 +15,7 @@ import {AgregarVentaComponent} from './agregar-venta/agregar-venta.component';
 
 export class RetornoVendedoresComponent implements OnInit {
 
+  public Cargando = new BehaviorSubject<boolean>(true);
   public pecosa:string;
   public guia:string;
   public fecha_salida:Date;
@@ -22,6 +24,7 @@ export class RetornoVendedoresComponent implements OnInit {
   public observacion:string;
   public Vendedores: Array<any>;
   public Talonarios: Array<any>;
+  public Productos: Array<any>;
 
   constructor(
     private location: Location,
@@ -34,6 +37,7 @@ export class RetornoVendedoresComponent implements OnInit {
     this.route.params.subscribe(params => {
       if(params['idsalida']){
         this.Servicio.SeleccionarSalida(params['idsalida']).subscribe(res=>{
+          this.Cargando.next(false);
           console.log(res)
           this.pecosa=res['data'].pecosa;
           this.guia=res['data'].guia;
@@ -42,7 +46,8 @@ export class RetornoVendedoresComponent implements OnInit {
           this.destino=res['data'].destino;
           this.observacion=res['data'].observacion=="" ? "No hay observaciones" : res['data'].observacion;
           this.Vendedores=res['data'].vendedores.vendedores;
-          this.Talonarios=res['data'].talonarios.talonarios
+          this.Productos=res['data'].productos.productos;
+          this.Talonarios=res['data'].talonarios.talonarios;
         })
       }
     })
@@ -51,7 +56,7 @@ export class RetornoVendedoresComponent implements OnInit {
   RegistrarVenta(){
     const serieventana = this.DialogoAgregar.open(AgregarVentaComponent, {
       width: '1200px',
-      data: {talonarios: this.Talonarios}
+      data: {talonarios: this.Talonarios, productos: this.Productos}
     });
   }
     

@@ -6,6 +6,10 @@
     <div id = "tituloProd"> Rendicion de la salida de ventas</div>
   </mat-card-title>
 
+  <div class = "spinner-container" *ngIf = "Cargando | async">
+    <mat-spinner></mat-spinner>
+  </div>
+
   <div class="seccion">
 
     <mat-card-subtitle class="titulo-seccion">

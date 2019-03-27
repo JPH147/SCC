@@ -1,9 +1,9 @@
 import { Component, OnInit, Inject, ViewChild, ElementRef, ViewChildren, QueryList } from '@angular/core';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatChipInputEvent, MatSelect, MatSnackBar} from '@angular/material';
-import {FormControl, FormGroup, FormBuilder, FormArray,Validators} from '@angular/forms';
+import {MatDialog, MatChipInputEvent, MatSelect, MatSnackBar} from '@angular/material';
+import { FormGroup, FormBuilder, FormArray,Validators} from '@angular/forms';
 import {Observable, fromEvent, BehaviorSubject} from 'rxjs';
 import {COMMA, SPACE} from '@angular/cdk/keycodes';
-import {map, startWith, tap, debounceTime, distinctUntilChanged} from 'rxjs/operators';
+import { tap, debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {SalidaVendedoresService} from './salida-vendedores.service';
 import {ServiciosGenerales, Almacen} from '../global/servicios';
 import {ServiciosVentas} from '../global/ventas';

@@ -17,41 +17,47 @@
           <mat-grid-list cols="4" rowHeight="70px">
 
             <mat-grid-tile colspan="2" *ngIf="!ClienteForm.value.id">
-                <button mat-icon-button color="primary" matTooltip="Seleccionar cliente" (click)="SeleccionarCliente()">
-                  <mat-icon>add_circle</mat-icon>
-                </button>
+              <button mat-icon-button color="primary" matTooltip="Seleccionar cliente" (click)="SeleccionarCliente()">
+                <mat-icon>add_circle</mat-icon>
+              </button>
             </mat-grid-tile>
 
             <mat-grid-tile colspan="2" *ngIf="ClienteForm.value.id">
               <mat-form-field class="columnas-2">
-                <input placeholder="Cliente" matInput formControlName="nombre" readonly>
+                <input placeholder="Cliente" matInput formControlName="nombre" readonly requried>
               </mat-form-field>
             </mat-grid-tile>
     
             <mat-grid-tile>
               <mat-form-field class="columnas-1">
-                <input matInput placeholder="Cargo" formControlName="cargo">
+                <input matInput placeholder="Cargo" formControlName="cargo" readonly requried>
               </mat-form-field>
             </mat-grid-tile>
     
             <mat-grid-tile>
               <mat-form-field class="columnas-1">
-                <input matInput placeholder="Centro de Trabajo" formControlName="trabajo">
+                <input matInput placeholder="Centro de Trabajo" formControlName="trabajo" readonly requried>
               </mat-form-field>
             </mat-grid-tile>
     
             <mat-grid-tile colspan="2">
               <mat-form-field class="columnas-2">
-                <input matInput placeholder="Domicilio" formControlName="domicilio">
+                <input matInput placeholder="Domicilio" formControlName="domicilio" readonly requried>
               </mat-form-field>
             </mat-grid-tile>
     
             <mat-grid-tile>
               <mat-form-field class="columnas-1">
-                <input matInput placeholder="Teléfono" formControlName="telefono">
+                <input matInput placeholder="Teléfono" formControlName="telefono" readonly requried>
               </mat-form-field>
             </mat-grid-tile>
-    
+            
+            <mat-grid-tile>
+              <button mat-icon-button color="primary" matTooltip="Editar datos de contacto" (click)="EditarContacto()" [disabled]="!ClienteForm.value.id">
+                <mat-icon>edit</mat-icon>
+              </button>
+            </mat-grid-tile>
+
           </mat-grid-list>
 
           <button mat-button matStepperNext [disabled]="ClienteForm.invalid" >Siguiente</button>
@@ -82,7 +88,7 @@
               </mat-form-field>
             </mat-grid-tile>
 
-            <mat-grid-tile colspan="4">
+            <mat-grid-tile colspan="2">
               <mat-form-field class="columnas-2">
                 <input matInput placeholder="Lugar de venta" formControlName="lugar">
               </mat-form-field>
@@ -96,33 +102,25 @@
           </mat-grid-list>
 
           <button mat-button matStepperPrevious>Anterior</button>
-          <button mat-button matStepperNext [disabled]="VentaForm.disabled">Siguiente</button>
+          <button mat-button matStepperNext [disabled]="VentaForm.invalid">Siguiente</button>
 
         </form>
       </mat-step>
 
       <!-- Datos del los productos -->
-      <mat-step [stepControl]="ProductoForm">
+      <mat-step>
         <form [formGroup]="ProductoForm">
           <ng-template matStepLabel>Datos de los productos</ng-template>
           <mat-grid-list cols="4" rowHeight="70px">
 
-            <mat-grid-tile>
-              <mat-form-field class="columnas-1">
-                <mat-select formControlName="id_producto">
-                  <mat-option value="1">Producto 1</mat-option>
+            <mat-grid-tile colspan=2>
+              <mat-form-field class="columnas-2">
+                <mat-select formControlName="producto">
+                  <mat-option *ngFor="let producto of LstProducto" [value]="producto"> {{producto.producto}} -> {{producto.serie}} </mat-option>
                 </mat-select>
               </mat-form-field>
             </mat-grid-tile>
             
-            <mat-grid-tile>
-              <mat-form-field class="columnas-1">
-                <mat-select formControlName="id_serie">
-                  <mat-option value="1">Serie 1</mat-option>
-                </mat-select>
-              </mat-form-field>
-            </mat-grid-tile>
-        
             <mat-grid-tile>
               <mat-form-field class="columnas-1">
                 <input matInput placeholder="Precio" formControlName="precio">
@@ -130,15 +128,49 @@
             </mat-grid-tile>
 
             <mat-grid-tile>
-              <button mat-raised-button color="primary">Agregar</button>
+              <button mat-raised-button color="primary" (click)="AgregarProducto()" [disabled]="ProductoForm.invalid">Agregar</button>
             </mat-grid-tile>
 
           </mat-grid-list>
 
-          <button mat-button matStepperPrevious>Anterior</button>
-          <button mat-button matStepperNext [disabled]="ProductoForm.disabled">Siguiente</button>
-  
         </form>
+
+        <mat-table [dataSource]="ListadoProductos" class="mat-elevation-z8" *ngIf="Productos.length>0">
+
+            <ng-container matColumnDef="numero">
+              <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+              <mat-cell *matCellDef="let producto"> {{producto.numero}} </mat-cell>
+            </ng-container>
+  
+            <ng-container matColumnDef="nombre">
+              <mat-header-cell *matHeaderCellDef> Producto </mat-header-cell>
+              <mat-cell *matCellDef="let producto"> {{producto.nombre}} </mat-cell>
+            </ng-container>
+  
+            <ng-container matColumnDef="serie">
+              <mat-header-cell *matHeaderCellDef> Serie </mat-header-cell>
+              <mat-cell *matCellDef="let producto">{{producto.serie}} </mat-cell>
+            </ng-container>
+  
+            <ng-container matColumnDef="precio_venta">
+              <mat-header-cell *matHeaderCellDef> Precio </mat-header-cell>
+              <mat-cell *matCellDef="let producto">S/. {{producto.precio_venta}} </mat-cell>
+            </ng-container>
+  
+            <ng-container matColumnDef="opciones">
+              <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
+              <mat-cell *matCellDef="let producto">
+                <button mat-icon-button matTooltip="Eliminar" color="primary" (click)="EliminarProducto(producto.id)"><mat-icon> delete </mat-icon></button>
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: Columnas;"></mat-row>
+          </mat-table>
+
+        <button mat-button matStepperPrevious>Anterior</button>
+        <button mat-button matStepperNext [disabled]="Productos.length==0">Siguiente</button>
+
       </mat-step>
 
       <!-- Datos del documento -->
@@ -149,7 +181,7 @@
 
             <mat-grid-tile>
               <mat-form-field class="columnas-1">
-                <input matInput [matDatepicker]="InputFechaPago" placeholder="Inicio de pagos" [min]="VentaForm.value.fecha" formControlName="fechapago" (dateChange)="CrearCronograma()">
+                <input matInput [matDatepicker]="InputFechaPago" placeholder="Inicio de pagos" [min]="VentaForm.value.fecha" formControlName="fechapago">
                 <mat-datepicker-toggle matSuffix [for]="InputFechaPago"></mat-datepicker-toggle>
                 <mat-datepicker #InputFechaPago [disabled]=false></mat-datepicker>
               </mat-form-field>
@@ -157,7 +189,7 @@
         
             <mat-grid-tile>
               <mat-form-field class="columnas-1">
-                <mat-select placeholder='Tipo de pago' formControlName="tipopago" (selectionChange)="TipoPagoSeleccionado()">
+                <mat-select placeholder='Tipo de pago' formControlName="tipopago">
                   <mat-option *ngFor="let tipopago of LstTipoPago" [value] = "tipopago.id"> {{tipopago.nombre}} </mat-option>
                 </mat-select>
               </mat-form-field>
@@ -168,7 +200,6 @@
                 <input matInput placeholder="Cuota inicial" formControlName="inicial" #InputInicial>
                 <mat-error>Solo debe ingresar valores númericos</mat-error>
                 <span matPrefix>S/ &nbsp;</span>
-                <mat-hint *ngIf="monto_inicial_canje">Se dejó a cuenta S/. {{monto_inicial_canje}}</mat-hint>
               </mat-form-field>
             </mat-grid-tile>
         
@@ -187,8 +218,8 @@
             </mat-grid-tile>
           </mat-grid-list>
 
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button matStepperNext [disabled]="DocumentoForm.invalid">Next</button>
+          <button mat-button matStepperPrevious>Anterior</button>
+          <button mat-button [disabled]="DocumentoForm.invalid" (click)="GuardarVenta()" >Guardar</button>
 
         </form>
       </mat-step>

@@ -56,3 +56,9 @@ mat-form-field{
 .grande{
 	width: 86.67%
 }
+
+.card{
+  padding: 0px;
+  overflow: hidden;
+  padding-bottom: 30px
+}

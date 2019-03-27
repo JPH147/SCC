@@ -49,7 +49,6 @@ $primary: map-get($theme, primary);
 
 table {
   width: 100%;
-
 }
 
 .example-loading-shade {
@@ -210,6 +209,16 @@ mat-header-cell {
 
 .columnas-3{
   width: 93.33%;
+}
+
+.spinner-container{
+  position: absolute;
+  top: 300px;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .seccion{
