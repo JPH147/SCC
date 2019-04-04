@@ -81,8 +81,7 @@ import {VentanaEmergenteDistrito } from './components/direcciones/distrito/venta
 import { ProvinciaComponent } from './components/direcciones/provincia/provincia.component';
 import { DistritoComponent } from './components/direcciones/distrito/distrito.component';
 import { VentanaConfirmarComponent } from './components/global/ventana-confirmar/ventana-confirmar.component';
-import { VentanaEmergenteGastos } from './components/listado-salida-vendedores/ventana-emergente/ventanaemergente';
-import { VentanaEmergenteDet} from './components/listado-salida-vendedores/ventana-emergentedet/ventanaemergentedet';
+import { VentanaEmergenteGastos } from './components/listado-salida-vendedores/ventana-emergente-gastos/ventanaemergente-gastos';
 import { ImageUploadModule } from 'angular2-image-upload';
 import {FileUpload} from './components/clientes/file-upload/fileupload';
 import {VentanaEmergenteContacto} from './components/clientes/ventana-emergentecontacto/ventanaemergentecontacto';
@@ -199,7 +198,6 @@ import { SeleccionarClienteComponent } from './components/retorno-vendedores/sel
     VentanaEmergenteProvincia,
     VentanaEmergenteDistrito,
     VentanaEmergenteGastos,
-    VentanaEmergenteDet,
     FileUpload,
     VentanaEmergenteContacto,
     VentanaEmergenteStock,
@@ -255,7 +253,6 @@ import { SeleccionarClienteComponent } from './components/retorno-vendedores/sel
     VentanaEmergenteProvincia,
     VentanaEmergenteDistrito,
     VentanaEmergenteGastos,
-    VentanaEmergenteDet,
     FileUpload,
     VentanaEmergenteContacto,
     VentanaEmergenteStock,

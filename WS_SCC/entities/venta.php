@@ -30,6 +30,7 @@ Class Venta{
     public $id_tipopago;
     public $vnt_total;
     public $vnt_tipoventa;
+    public $salida_venta;
     public $id_tipoventa_referencia;
     public $vnt_observaciones;
     public $vnt_estado;
@@ -96,15 +97,12 @@ Class Venta{
             $venta_item = array (
                 "numero"=>$contador,
                 "id"=>$id,
-                "serie"=>$serie,
                 "contrato"=>$contrato,
                 "sede"=>$sede,
                 "subsede"=>$subsede,
-                "autorizador_nombre"=>$autorizador_nombre,
                 "id_cliente"=>$id_cliente,
                 "cliente_nombre"=>$cliente_nombre,
                 "fecha"=>$fecha,
-                "vendedor"=>$vendedor,
                 "fecha_inicio"=>$fecha_inicio,
                 "monto_inicial"=>$monto_inicial,
                 "numero_coutas"=>$numero_coutas,
@@ -155,6 +153,7 @@ Class Venta{
         :prlugar,
         :prvendedor,
         :prtipoventa,
+        :prsalida_venta,
         :prtipodocumento,
         :prtipopago,
         :prinicial,
@@ -184,6 +183,7 @@ Class Venta{
         $result->bindParam(":prlugar", $this->lugar);
         $result->bindParam(":prvendedor", $this->vendedor);
         $result->bindParam(":prtipoventa", $this->tipoventa);
+        $result->bindParam(":prsalida_venta", $this->salida_venta);
         $result->bindParam(":prtipodocumento", $this->tipo_documento);
         $result->bindParam(":prtipopago", $this->tipopago);
         $result->bindParam(":prinicial", $this->inicial);
@@ -211,6 +211,7 @@ Class Venta{
         $this->lugar=htmlspecialchars(strip_tags($this->lugar));
         $this->vendedor=htmlspecialchars(strip_tags($this->vendedor));
         $this->tipoventa=htmlspecialchars(strip_tags($this->tipoventa));
+        $this->salida_venta=htmlspecialchars(strip_tags($this->salida_venta));
         $this->tipo_documento=htmlspecialchars(strip_tags($this->tipo_documento));
         $this->tipopago=htmlspecialchars(strip_tags($this->tipopago));
         $this->inicial=htmlspecialchars(strip_tags($this->inicial));

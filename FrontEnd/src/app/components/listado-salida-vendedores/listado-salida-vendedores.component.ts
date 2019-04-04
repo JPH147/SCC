@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { VentanaEmergenteGastos} from './ventana-emergente/ventanaemergente';
-import { VentanaEmergenteDet } from './ventana-emergentedet/ventanaemergentedet';
+import { VentanaEmergenteGastos} from './ventana-emergente-gastos/ventanaemergente-gastos';
 import {MatSelect, MatPaginator, MatSort,MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
 import {ListadoSalidaVendedoresService} from './listado-salida-vendedores.service';
@@ -36,8 +35,7 @@ export class ListadoSalidaVendedoresComponent implements OnInit {
   displayedColumns: string[] = ['numero', 'pecosa', 'sucursal', 'fecha', 'destino', 'estado', 'opciones'];
  
   constructor(
-    public DialogoGasto: MatDialog,
-    public Dialogodetalle: MatDialog,
+    public Dialogo: MatDialog,
     private Servicio:ListadoSalidaVendedoresService,
     private General: ServiciosGenerales
   ) { }
@@ -75,8 +73,29 @@ export class ListadoSalidaVendedoresComponent implements OnInit {
     ).subscribe();
   }
 
-  CargarData(){
+  CargarGastos(salida){
+    let Ventana = this.Dialogo.open(VentanaEmergenteGastos,{
+      width: '1200px',
+      data: salida
+    })
+  }
 
+  AnularSalida(salida){
+    let Dialogo = this.Dialogo.open(VentanaConfirmarComponent,{
+      data: {objeto: "la salida", valor: salida.pecosa}
+    })
+  
+    Dialogo.afterClosed().subscribe(res=>{
+      if (res) {
+        this.Servicio.EliminarSalida(salida.id).subscribe(respuesta=>{
+          console.log(respuesta)
+          this.CargarData()
+        });
+      }
+    })
+  }
+
+  CargarData(){
     this.ListadoSalida.CargarDatos(
       this.FiltroPecosa.nativeElement.value,
       this.FiltroSucursal.value,

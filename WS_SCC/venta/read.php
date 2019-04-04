@@ -15,13 +15,13 @@
         $venta = new Venta($db);
 
         $venta->cliente = !empty($_GET['prcliente']) ? trim($_GET['prcliente']) :'';
-        $venta->tipo_venta = !empty($_GET['prtipo_venta']) ? trim($_GET['prtipo_venta']) : null;
+        $venta->tipo_venta = !empty($_GET['prtipo_venta']) ? trim($_GET['prtipo_venta']) : 0;
         $venta->fecha_inicio = !empty($_GET['prfecha_inicio']) ? trim($_GET['prfecha_inicio']) : null;
         $venta->fecha_fin = !empty($_GET['prfecha_fin']) ? trim($_GET['prfecha_fin']) : null;
         $venta->estado = !empty($_GET['prestado']) ? trim($_GET['prestado']) : 0;
         $venta->numero_pagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : 1;
         $venta->total_pagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : 20;
-        $venta->orden = !empty($_GET['prorden']) ? trim($_GET['prorden']) : 'serie asc';
+        $venta->orden = !empty($_GET['prorden']) ? trim($_GET['prorden']) : 'id asc';
 
         $venta_list = $venta->read();
         $venta_contar = $venta->contar();

@@ -1,4 +1,3 @@
-// import { VentanaEmergenteArchivos } from './ventana-emergente/ventanaemergente';
 import {CollectionViewer, DataSource} from "@angular/cdk/collections";
 import { Component, OnInit, ViewChild, ElementRef, Inject, ViewChildren, QueryList, Optional } from '@angular/core';
 import {FormArray, FormGroup, FormBuilder, Validators} from '@angular/forms';
@@ -1014,6 +1013,7 @@ export class VentasComponent implements OnInit {
         "OFICINA",
         formulario.value.vendedor.id,
         1,
+        0, // Porque no pertenece a ninguna salida de ventas
         formulario.value.tipodoc,
         formulario.value.tipopago,
         formulario.value.tipopago==3 ? 0 : formulario.value.inicial,

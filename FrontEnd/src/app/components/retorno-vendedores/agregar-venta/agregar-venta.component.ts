@@ -8,12 +8,14 @@ import {ServiciosDirecciones} from '../../global/direcciones';
 import { VentanaEmergenteContacto} from '../../clientes/ventana-emergentecontacto/ventanaemergentecontacto';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import {BehaviorSubject, Observable} from 'rxjs';
+import {VentaService} from '../../ventas/ventas.service';
+import {SalidaVendedoresService} from '../../salida-vendedores/salida-vendedores.service';
 
 @Component({
   selector: 'app-agregar-venta',
   templateUrl: './agregar-venta.component.html',
   styleUrls: ['./agregar-venta.component.css'],
-  providers: [ServiciosTipoPago, ServiciosTelefonos, ServiciosDirecciones]
+  providers: [SalidaVendedoresService,ServiciosTipoPago, ServiciosTelefonos, ServiciosDirecciones, VentaService]
 })
 export class AgregarVentaComponent implements OnInit {
 
@@ -35,6 +37,8 @@ export class AgregarVentaComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data,
     public ventana: MatDialogRef<AgregarVentaComponent>,
     private Builder: FormBuilder,
+    private Servicio: SalidaVendedoresService,
+    private VentaServicio: VentaService,
     private ServicioTipoPago: ServiciosTipoPago,
     private TelefonoServicio: ServiciosTelefonos,
     private DireccionServicio: ServiciosDirecciones,
@@ -49,8 +53,8 @@ export class AgregarVentaComponent implements OnInit {
 
     console.log(this.data);
     this.ListadoProductos = new ProductosDataSource();
-    this.LstContrato=this.data.talonarios;
-    this.LstProducto=this.data.productos;
+    
+    this.ListarProductos();
     this.Productos=[];
   }
 
@@ -84,7 +88,10 @@ export class AgregarVentaComponent implements OnInit {
         Validators.required,
         Validators.required
       ]],
-      contrato:[null,[
+      id_contrato:[this.data.talonario.id_talonario,[
+        Validators.required
+      ]],
+      contrato:[this.data.talonario.contrato,[
         Validators.required
       ]],
       lugar:["",[
@@ -101,11 +108,11 @@ export class AgregarVentaComponent implements OnInit {
       tipopago: [null, [
         Validators.required
       ]],
-      montototal: [0, [
+      cuotas: [1, [
         Validators.required,
         Validators.pattern('[0-9- ]+')
       ]],
-      cuotas: [null, [
+      montototal: [null, [
         Validators.required,
         Validators.pattern('[0-9- ]+')
       ]],
@@ -124,6 +131,12 @@ export class AgregarVentaComponent implements OnInit {
         Validators.min(1),
         Validators.pattern ('[0-9- ]+')
       ]],
+    })
+  }
+
+  ListarProductos(){
+    this.Servicio.ListarSalidaProductos(this.data.salida, 1).subscribe(res=>{
+      this.LstProducto=res['data'].productos
     })
   }
 
@@ -224,6 +237,42 @@ export class AgregarVentaComponent implements OnInit {
       this.DocumentoForm.get('montototal').setValue(item.precio_venta+this.DocumentoForm.value.montototal)
     });
     this.DocumentoForm.get('inicial').setValidators([(control: AbstractControl) => Validators.max(this.DocumentoForm.value.montototal)(control)]);
+  }
+
+  GuardarVenta(){
+
+    this.VentaServicio.CrearVenta(
+      this.VentaForm.value.fecha,
+      0,
+      this.VentaForm.value.id_contrato,
+      0,
+      this.ClienteForm.value.id,
+      this.ClienteForm.value.id_direccion,
+      this.ClienteForm.value.id_telefono,
+      this.ClienteForm.value.cargo,
+      this.VentaForm.value.lugar,
+      0,
+      2,
+      this.data.salida,
+      6,
+      this.DocumentoForm.value.tipopago,
+      this.DocumentoForm.value.inicial,
+      this.DocumentoForm.value.cuotas,
+      this.DocumentoForm.value.montototal,
+      this.DocumentoForm.value.fechapago,
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      this.VentaForm.value.observaciones
+    ).subscribe(res=>{
+      console.log(res)
+      this.Servicio.ActualizarSalidaTalonarios(this.data.talonario.id, res['data'])
+    })
   }
 
 }

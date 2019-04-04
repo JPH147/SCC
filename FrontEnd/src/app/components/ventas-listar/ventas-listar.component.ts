@@ -18,16 +18,16 @@ import { VentaService } from '../ventas/ventas.service';
   providers:[VentasServicio,ProductoService, ClienteService, VentaService]
 })
 export class VentasListarComponent implements OnInit {
- 
+
+  public fecha_inicio: Date;
+  public fecha_fin: Date;
 
   ListadoVentas: VentaDataSource;
-  Columnas: string[] = ['numero', 'serie','contrato', 'cliente_nombre', 'tipo_venta', 'monto_total', 'fecha', 'opciones'];
+  Columnas: string[] = ['numero', 'contrato', 'cliente_nombre', 'tipo_venta', 'monto_total', 'fecha', 'opciones'];
 
   @ViewChild('InputCliente') FiltroCliente: ElementRef;
   @ViewChild('InputTipo') FiltroTipo: MatSelect;
   @ViewChild('InputEstado') FiltroEstado: MatSelect;
-  @ViewChild('fechainicio') FechaInicioFiltro: ElementRef;
-  @ViewChild('fechafin') FechaFinFiltro: ElementRef;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
@@ -39,8 +39,12 @@ export class VentasListarComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-   this.ListadoVentas = new VentaDataSource(this.Servicio);
-   this.ListadoVentas.CargarProductos("",null,null,null,1,1,10,"serie asc");
+
+    this.fecha_inicio= new Date((new Date()).valueOf() - 1000*60*60*24*120)
+    this.fecha_fin=new Date()
+
+    this.ListadoVentas = new VentaDataSource(this.Servicio);
+    this.ListadoVentas.CargarVentas("",0,this.fecha_inicio,this.fecha_fin,1,1,10,"contrato desc");
  }
 
 // tslint:disable-next-line:use-life-cycle-interface
@@ -69,11 +73,11 @@ export class VentasListarComponent implements OnInit {
   }
 
   CargarData() {
-    this.ListadoVentas.CargarProductos(
+    this.ListadoVentas.CargarVentas(
       this.FiltroCliente.nativeElement.value,
       this.FiltroTipo.value,
-      this.FechaInicioFiltro.nativeElement.value,
-      this.FechaFinFiltro.nativeElement.value,
+      this.fecha_inicio,
+      this.fecha_fin,
       this.FiltroEstado.value,
       this.paginator.pageIndex+1,
       this.paginator.pageSize,

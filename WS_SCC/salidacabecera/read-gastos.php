@@ -16,20 +16,12 @@
     try{
         $salida = new SalidaCabecera($db);
 
-        $salida->pecosa = !empty($_GET['prpecosa']) ? trim($_GET['prpecosa']) :"";
-        $salida->id_sucursal = !empty($_GET['prtipo']) ? trim($_GET['prtipo']) :null;
-        $salida->fecha_inicio = !empty($_GET['prfechainicio']) ? trim($_GET['prfechainicio'] ): null;
-        $salida->fecha_fin = !empty($_GET['prfechafin']) ? trim($_GET['prfechafin'] ): null;
-        $salida->destino = !empty($_GET['prdestino']) ? trim($_GET['prdestino']) : '';
-        $salida->serie = !empty($_GET['prserie']) ? trim($_GET['prserie'] ): null;
-        $salida->vendedor = !empty($_GET['prvendedor']) ? trim($_GET['prvendedor']) : '';
-        $salida->estado = !empty($_GET['prestado']) ? trim($_GET['prestado'] ): 0;
+        $salida->id_salida = !empty($_GET['prid']) ? trim($_GET['prid']) :"";
         $salida->numero_pagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : 1;
         $salida->total_pagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : 20;
-        $salida->orden = !empty($_GET['orden']) ? trim($_GET['orden']) : 'id desc';
 
-        $salida_list = $salida->read();
-        $salida_contar = $salida->contar();
+        $salida_list = $salida->read_gasto();
+        $salida_contar = $salida->read_gasto_contar();
 
         if (count(array_filter($salida_list))>0)
         { 

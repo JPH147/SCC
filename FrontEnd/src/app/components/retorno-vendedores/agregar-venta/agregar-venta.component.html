@@ -1,7 +1,7 @@
 <mat-card class="card">
 
   <mat-toolbar color="primary">
-    <mat-toolbar-row>Observaciones</mat-toolbar-row>
+    <mat-toolbar-row>Contrato {{data.talonario.contrato}}</mat-toolbar-row>
   </mat-toolbar>
 
   <mat-card-content>
@@ -82,9 +82,7 @@
             
             <mat-grid-tile *ngIf="!idventa">
               <mat-form-field class="columnas-1">
-                <mat-select placeholder='Contrato' formControlName="contrato">
-                  <mat-option *ngFor="let contrato of LstContrato" [value] = "contrato.id"> {{contrato.serie}}-{{contrato.numero}} </mat-option>
-                </mat-select>
+                <input type="text" matInput placeholder="Contrato" formControlName="contrato" readonly>
               </mat-form-field>
             </mat-grid-tile>
 
@@ -124,6 +122,7 @@
             <mat-grid-tile>
               <mat-form-field class="columnas-1">
                 <input matInput placeholder="Precio" formControlName="precio">
+                <mat-error *ngIf="ProductoForm.get('precio').invalid">Debe ingresar solo números</mat-error>
               </mat-form-field>
             </mat-grid-tile>
 

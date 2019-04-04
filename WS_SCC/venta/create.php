@@ -32,6 +32,7 @@
             $venta->lugar=trim($_POST["prlugar"]);
             $venta->vendedor=trim($_POST["prvendedor"]);
             $venta->tipoventa=trim($_POST["prtipoventa"]);
+            $venta->salida_venta=trim($_POST["prsalida"]);
             $venta->tipo_documento=trim($_POST["prtipodocumento"]);
             $venta->tipopago=trim($_POST["prtipopago"]);
             $venta->inicial=trim($_POST["prinicial"]);

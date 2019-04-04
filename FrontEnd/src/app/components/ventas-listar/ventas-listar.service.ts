@@ -24,32 +24,12 @@ export class VentasServicio {
     orden:string
   ): Observable<any> {
 
-    let Tipo:string, Finicio: string ,Ffin: string, Orden:string;
-
-    if (!fecha_inicio) {
-      Finicio=""
-    }else{
-      Finicio=moment(fecha_inicio,"DD/MM/YYYY").format("YYYY/MM/DD").toString()
-    }
-
-    if (!fecha_fin) {
-      Ffin=""
-    }else{
-      Ffin=moment(fecha_fin,"DD/MM/YYYY").format("YYYY/MM/DD").toString()
-    }
-
-    if (tipo_venta == null) {
-      Tipo=""
-    }else{
-      Tipo=tipo_venta.toString()
-    }
-
     return this.http.get(this.url + 'venta/read.php', {
       params: new HttpParams()
       .set('prcliente',cliente)
-      .set('prtipo_venta',Tipo)
-      .set('prfecha_inicio',Finicio)
-      .set('prfecha_fin',Ffin)
+      .set('prtipo_venta',tipo_venta.toString())
+      .set('prfecha_inicio',moment(fecha_inicio).format('YYYY-MM-DD'))
+      .set('prfecha_fin',moment(fecha_fin).format('YYYY-MM-DD'))
       .set('prestado',estado.toString())
       .set('prpagina',pagina_inicio.toString())
       .set('prtotalpagina',pagina_final.toString())

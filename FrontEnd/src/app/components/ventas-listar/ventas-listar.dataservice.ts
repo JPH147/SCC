@@ -21,7 +21,7 @@ constructor(private Servicio: VentasServicio) { }
   this.CargandoInformacion.complete();
   }
 
-  CargarProductos(
+  CargarVentas(
     cliente:string,
     tipo_venta:number,
     fecha_inicio:Date,

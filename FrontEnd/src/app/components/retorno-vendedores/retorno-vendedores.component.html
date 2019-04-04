@@ -2,9 +2,7 @@
 
   <button mat-mini-fab type="button" color="primary" (click)="Atras()"><mat-icon>keyboard_arrow_left</mat-icon></button>
 
-  <mat-card-title>
-    <div id = "tituloProd"> Rendicion de la salida de ventas</div>
-  </mat-card-title>
+  <mat-card-title class="tituloProd"> Rendicion de la salida {{pecosa}} </mat-card-title>
 
   <div class = "spinner-container" *ngIf = "Cargando | async">
     <mat-spinner></mat-spinner>
@@ -58,39 +56,7 @@
 
     </mat-grid-list>
   </div>
-
-  <div class="seccion">
-
-    <mat-card-subtitle class="titulo-seccion">
-      DATOS DE LOS VENDEDORES
-    </mat-card-subtitle>
-
-    <mat-grid-list cols="4"  rowHeight="70px" *ngFor="let vendedor of Vendedores">
-
-      <mat-grid-tile colspan=2>
-        <mat-form-field class="columnas-2">
-          <input matInput type="text" placeholder="Vendedor" [value]="vendedor.vendedor" readonly>
-        </mat-form-field>
-      </mat-grid-tile>
-
-      <mat-grid-tile>
-        <mat-form-field class="columnas-1">
-          <input matInput type="text" placeholder="Comisión efectiva" [value]="vendedor.comision_efectiva" readonly>
-          <span matSuffix>%</span>
-        </mat-form-field>
-      </mat-grid-tile>
-
-      <mat-grid-tile>
-        <mat-form-field class="columnas-1">
-          <input matInput type="text" placeholder="Comisión retenida" [value]="vendedor.comision_retenida" readonly>
-          <span matSuffix>%</span>
-        </mat-form-field>
-      </mat-grid-tile>
-
-    </mat-grid-list>
-
-  </div>
-
+<!--   
   <div class="seccion">
 
     <mat-card-subtitle class="titulo-seccion">
@@ -103,14 +69,133 @@
       </mat-grid-tile>
     </mat-grid-list>
 
+  </div> -->
+
+  <div class="seccion">
+
+    <mat-card-subtitle class="titulo-seccion">
+      DATOS DE LOS VENDEDORES
+      <button mat-icon-button class="icono" (click)="VerVendedores()" *ngIf="!ver_vendedores"><mat-icon>add</mat-icon></button>
+      <button mat-icon-button class="icono" (click)="NoVerVendedores()" *ngIf="ver_vendedores"><mat-icon>remove</mat-icon></button>
+    </mat-card-subtitle>
+
+    <ng-container *ngIf="ver_vendedores">
+      <mat-grid-list cols="4"  rowHeight="70px" *ngFor="let vendedor of Vendedores">
+  
+        <mat-grid-tile colspan=2>
+          <mat-form-field class="columnas-2">
+            <input matInput type="text" placeholder="Vendedor" [value]="vendedor.vendedor" readonly>
+          </mat-form-field>
+        </mat-grid-tile>
+  
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput type="text" placeholder="Comisión efectiva" [value]="vendedor.comision_efectiva" readonly>
+            <span matSuffix>%</span>
+          </mat-form-field>
+        </mat-grid-tile>
+  
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput type="text" placeholder="Comisión retenida" [value]="vendedor.comision_retenida" readonly>
+            <span matSuffix>%</span>
+          </mat-form-field>
+        </mat-grid-tile>
+  
+      </mat-grid-list>
+    </ng-container>
+
   </div>
 
-  <mat-card-actions>
-    <mat-grid-list cols="1"  rowHeight="55px">
-      <mat-grid-tile>
-        <button mat-raised-button color="primary">Grabar</button>
-      </mat-grid-tile>
-    </mat-grid-list>
-  </mat-card-actions>
+  <div class="seccion">
+
+    <mat-card-subtitle class="titulo-seccion">
+      DATOS DE LOS TALONARIOS
+      <button mat-icon-button class="icono" (click)="VerTalonarios()" *ngIf="!ver_talonarios"><mat-icon>add</mat-icon></button>
+      <button mat-icon-button class="icono" (click)="NoVerTalonarios()" *ngIf="ver_talonarios"><mat-icon>remove</mat-icon></button>
+    </mat-card-subtitle>
+
+    <ng-container *ngIf="ver_talonarios">
+      <mat-table [dataSource]="ListadoTalonarios" class="mat-elevation-z8">
+
+        <ng-container matColumnDef="numero">
+          <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+          <mat-cell *matCellDef="let talonario"> {{talonario.numero}} </mat-cell>
+        </ng-container>
+  
+        <ng-container matColumnDef="contrato">
+          <mat-header-cell *matHeaderCellDef> Contrato </mat-header-cell>
+          <mat-cell *matCellDef="let talonario"> {{talonario.contrato}} </mat-cell>
+        </ng-container>
+  
+        <ng-container matColumnDef="estado">
+          <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
+          <mat-cell *matCellDef="let talonario"> {{talonario.estado }}</mat-cell>
+        </ng-container>
+  
+        <ng-container matColumnDef="opciones">
+          <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
+          <mat-cell *matCellDef="let talonario">
+            <button mat-icon-button color="primary" matTooltip="Hacer venta" [disabled]="talonario.id_venta" (click)="RegistrarVenta(talonario)"><mat-icon> attach_money </mat-icon></button>
+            <button mat-icon-button color="primary" matTooltip="Ver documento" [disabled]="!talonario.id_venta"><mat-icon> visibility </mat-icon></button>
+            <button mat-icon-button color="primary" matTooltip="Editar documento" [disabled]="!talonario.id_venta"><mat-icon> edit </mat-icon></button>
+            <button mat-icon-button color="primary" [matTooltip]="talonario.id_venta ? 'Anular venta' : 'Anular talonario'"><mat-icon> delete </mat-icon></button>
+          </mat-cell>
+        </ng-container>
+  
+        <mat-header-row *matHeaderRowDef="ColumnasTalonarios"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: ColumnasTalonarios;"></mat-row>
+      </mat-table>
+    </ng-container>
+
+  </div>
+
+  <div class="seccion">
+
+    <mat-card-subtitle class="titulo-seccion">
+      DATOS DE LOS PRODUCTOS
+      <button mat-icon-button class="icono" (click)="VerProductos()" *ngIf="!ver_productos"><mat-icon>add</mat-icon></button>
+      <button mat-icon-button class="icono" (click)="NoVerProductos()" *ngIf="ver_productos"><mat-icon>remove</mat-icon></button>
+    </mat-card-subtitle>
+
+    <ng-container *ngIf="ver_productos">
+      <mat-table [dataSource]="ListadoProductos" class="mat-elevation-z8">
+
+        <ng-container matColumnDef="numero">
+          <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+          <mat-cell *matCellDef="let producto"> {{producto.numero}} </mat-cell>
+        </ng-container>
+  
+        <ng-container matColumnDef="producto">
+          <mat-header-cell *matHeaderCellDef> Producto </mat-header-cell>
+          <mat-cell *matCellDef="let producto"> {{producto.producto}} </mat-cell>
+        </ng-container>
+  
+        <ng-container matColumnDef="serie">
+          <mat-header-cell *matHeaderCellDef> Serie </mat-header-cell>
+          <mat-cell *matCellDef="let producto"> {{producto.serie }}</mat-cell>
+        </ng-container>
+  
+        <ng-container matColumnDef="precio_venta">
+          <mat-header-cell *matHeaderCellDef> Precio vendido </mat-header-cell>
+          <mat-cell *matCellDef="let producto"> S/. {{producto.precio_venta ? producto.precio_venta : '-' }} / {{producto.precio_minimo}} </mat-cell>
+        </ng-container>
+  
+        <ng-container matColumnDef="contrato_venta">
+          <mat-header-cell *matHeaderCellDef> Contrato </mat-header-cell>
+          <mat-cell *matCellDef="let producto"> {{producto.contrato }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="estado_producto">
+          <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
+          <mat-cell *matCellDef="let producto"> {{producto.estado }}</mat-cell>
+        </ng-container>
+  
+        <mat-header-row *matHeaderRowDef="ColumnasProductos"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: ColumnasProductos;"></mat-row>
+      </mat-table>
+    </ng-container>
+
+  </div>
 
  </mat-card>

@@ -25,6 +25,7 @@ export class VentaService {
     lugar:string,
     vendedor:number,
     tipo_venta:number,
+    id_salida_ventas:number,
     tipo_documento:number,
     tipo_pago:number,
     inicial:number,
@@ -43,32 +44,33 @@ export class VentaService {
   ): Observable<any> {
 
     let params = new HttpParams()
-    .set('prfecha',moment(fecha).format("YYYY-MM-DD"))
-    .set('prsucursal',sucursal.toString())
-    .set('prtalonario',talonario.toString())
-    .set('prautorizador',autorizador.toString())
-    .set('prcliente',cliente.toString())
-    .set('prclientedireccion',cliente_direccion.toString())
-    .set('prclientetelefono',cliente_telefono.toString())
-    .set('prclientecargo',cliente_cargo)
-    .set('prlugar',lugar)
-    .set('prvendedor',vendedor.toString())
-    .set('prtipoventa',tipo_venta.toString())
-    .set('prtipodocumento',tipo_documento.toString())
-    .set('prtipopago',tipo_pago.toString())
-    .set('prinicial',inicial.toString())
-    .set('prcuotas',cuotas.toString())
-    .set('prtotal',total.toString())
-    .set('prfechainicio',moment(fechainicio).format("YYYY-MM-DD"))
-    .set('prfoto',foto)
-    .set('prpdfdni',pdfdni)
-    .set('prpdfcip',pdfcip)
-    .set('prpdfcontrato',pdfcontrato)
-    .set('prpdfvoucher',pdfvoucher)
-    .set('prpdfplanilla',pdfplanilla)
-    .set('prpdfletra',pdfletra)
-    .set('prpdfautorizacion',pdfautorizacion)
-    .set('probservaciones',observaciones)
+      .set('prfecha',moment(fecha).format("YYYY-MM-DD"))
+      .set('prsucursal',sucursal.toString())
+      .set('prtalonario',talonario.toString())
+      .set('prautorizador',autorizador.toString())
+      .set('prcliente',cliente.toString())
+      .set('prclientedireccion',cliente_direccion.toString())
+      .set('prclientetelefono',cliente_telefono.toString())
+      .set('prclientecargo',cliente_cargo)
+      .set('prlugar',lugar)
+      .set('prvendedor',vendedor.toString())
+      .set('prtipoventa',tipo_venta.toString())
+      .set('prsalida',tipo_venta.toString())
+      .set('prtipodocumento',tipo_documento.toString())
+      .set('prtipopago',tipo_pago.toString())
+      .set('prinicial',inicial.toString())
+      .set('prcuotas',cuotas.toString())
+      .set('prtotal',total.toString())
+      .set('prfechainicio',moment(fechainicio).format("YYYY-MM-DD"))
+      .set('prfoto',foto)
+      .set('prpdfdni',pdfdni)
+      .set('prpdfcip',pdfcip)
+      .set('prpdfcontrato',pdfcontrato)
+      .set('prpdfvoucher',pdfvoucher)
+      .set('prpdfplanilla',pdfplanilla)
+      .set('prpdfletra',pdfletra)
+      .set('prpdfautorizacion',pdfautorizacion)
+      .set('probservaciones',observaciones)
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 

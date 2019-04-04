@@ -1,0 +1,104 @@
+<mat-card class="card">
+
+  <mat-toolbar color="primary">
+    <mat-toolbar-row>Pecosa N° {{data.pecosa}}</mat-toolbar-row>
+  </mat-toolbar>
+
+  <mat-grid-list cols=3 rowHeight="70px" class="filtros">
+    
+    <mat-grid-tile>
+      <mat-form-field>
+        <mat-select placeholder="Vendedor" [(ngModel)]="vendedor">
+          <mat-option *ngFor="let vendedor of Vendedores" [value]="vendedor.id_vendedor">{{vendedor.vendedor}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </mat-grid-tile>
+
+    <mat-grid-tile>
+      <mat-form-field>
+        <input matInput type="number" placeholder="Monto" [(ngModel)]="monto">
+      </mat-form-field>
+    </mat-grid-tile>
+
+    <mat-grid-tile>
+      <mat-form-field>
+        <input matInput #fechainicio [matDatepicker]="fechainicio" placeholder="Fecha" [(ngModel)]="fecha">
+        <mat-datepicker-toggle matSuffix [for]="fechainicio"></mat-datepicker-toggle>
+        <mat-datepicker #fechainicio></mat-datepicker>
+      </mat-form-field>
+    </mat-grid-tile>
+    
+    <mat-grid-tile>
+      <mat-form-field>
+        <mat-select placeholder="Tipo" [(ngModel)]="tipo">
+          <mat-option [value]=1>Grupal</mat-option>
+          <mat-option [value]=2>Personal</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </mat-grid-tile>
+
+    <mat-grid-tile>
+      <mat-form-field>
+        <input matInput placeholder="Observacion" [(ngModel)]="observacion">
+      </mat-form-field>
+    </mat-grid-tile>
+
+    <mat-grid-tile>
+      <button mat-raised-button color="primary" (click)="AgregarGasto()">Agregar</button>
+    </mat-grid-tile>
+
+  </mat-grid-list>
+
+
+  <div class = "spinner-container" *ngIf = "ListadoGastos.Cargando| async">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <mat-card-content>
+    <mat-table [dataSource]="ListadoGastos" class="mat-elevation-z8">
+
+      <ng-container matColumnDef="numero">
+        <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+        <mat-cell *matCellDef="let gasto"> {{gasto.numero}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="fecha">
+        <mat-header-cell *matHeaderCellDef> Fecha </mat-header-cell>
+        <mat-cell *matCellDef="let gasto"> {{gasto.fecha | date:"dd/MM/yyyy"}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="vendedor">
+        <mat-header-cell *matHeaderCellDef> Vendedor </mat-header-cell>
+        <mat-cell *matCellDef="let gasto"> {{gasto.vendedor }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="monto">
+        <mat-header-cell *matHeaderCellDef> Monto </mat-header-cell>
+        <mat-cell *matCellDef="let gasto"> S/. {{gasto.monto }}</mat-cell>
+      </ng-container>
+      
+      <ng-container matColumnDef="tipo">
+        <mat-header-cell *matHeaderCellDef> Tipo </mat-header-cell>
+        <mat-cell *matCellDef="let gasto"> {{gasto.tipo }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="observacion">
+        <mat-header-cell *matHeaderCellDef> Observación </mat-header-cell>
+        <mat-cell *matCellDef="let gasto"> {{gasto.observacion }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="opciones">
+        <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
+        <mat-cell *matCellDef="let gasto">
+          <button mat-icon-button matTooltip="Eliminar" color="primary" (click)="Eliminar(gasto.id)"><mat-icon> delete </mat-icon></button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: Columnas;"></mat-row>
+    </mat-table>
+
+    <mat-paginator [length]="ListadoGastos.TotalResultados | async" [pageSize]="5"></mat-paginator>
+
+  </mat-card-content>
+</mat-card>

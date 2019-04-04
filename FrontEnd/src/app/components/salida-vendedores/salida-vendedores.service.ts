@@ -113,5 +113,73 @@ export class SalidaVendedoresService {
     }));
   }
 
+  ListarSalidaProductos(
+    id_salida:number,
+    estado:number
+  ): Observable<any> {
+
+    return this.http.get(this.url + 'salidacabecera/read-productos.php', {
+      params: new HttpParams()
+      .set('prid', id_salida.toString())
+      .set('prestado', estado.toString())
+    })
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+          return res;
+      }  else {
+          console.log('No hay datos que mostrar');
+          return res;
+      }
+    }));
+  }
+
+  ListarSalidaTalonarios(
+    id_salida:number,
+  ): Observable<any> {
+
+    return this.http.get(this.url + 'salidacabecera/read-talonarios.php', {
+      params: new HttpParams()
+      .set('prid', id_salida.toString())
+    })
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+          return res;
+      }  else {
+          console.log('No hay datos que mostrar');
+          return res;
+      }
+    }));
+  }
+
+  ActualizarSalidaProductos(
+    id_detalle: number,
+    id_venta: number,
+    precio: number
+  ): Observable<any> {
+
+    let params = new HttpParams()
+           .set('prid', id_detalle.toString())
+           .set('prventa', id_venta.toString())
+           .set('prprecio', precio.toString())
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'salidacabecera/update-producto.php', params, {headers: headers});
+  }
+
+  ActualizarSalidaTalonarios(
+    id_detalle: number,
+    id_venta: number
+  ): Observable<any> {
+
+    let params = new HttpParams()
+           .set('prid', id_detalle.toString())
+           .set('prventa', id_venta.toString())
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'salidacabecera/update-talonario.php', params, {headers: headers});
+  }
+
 }
 

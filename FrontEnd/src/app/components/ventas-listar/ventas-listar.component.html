@@ -18,8 +18,8 @@
     <mat-grid-tile>
       <mat-icon>search</mat-icon>
       <mat-form-field>
-        <mat-select #InputTipo placeholder="Tipo de venta" (selectionChange)="CambioFiltro()">
-          <mat-option [value]=null>Todas</mat-option>
+        <mat-select #InputTipo placeholder="Tipo de venta" (selectionChange)="CambioFiltro()" [value]=0>
+          <mat-option [value]=0>Todas</mat-option>
           <mat-option [value]="1">Directa</mat-option>
           <mat-option [value]="2">Salida de vendedores</mat-option>
         </mat-select>
@@ -28,7 +28,7 @@
 
     <mat-grid-tile>
       <mat-form-field>
-        <input matInput [matDatepicker]="inicio" placeholder="Fecha de inicio" #fechainicio (dateChange)="CambioFiltro()">
+        <input matInput [matDatepicker]="inicio" placeholder="Fecha de inicio" [(ngModel)]="fecha_inicio" (dateChange)="CambioFiltro()">
         <mat-datepicker-toggle matSuffix [for]="inicio"></mat-datepicker-toggle>
         <mat-datepicker #inicio disabled="false"></mat-datepicker>
       </mat-form-field>
@@ -36,7 +36,7 @@
 
     <mat-grid-tile>
       <mat-form-field>
-        <input matInput [matDatepicker]="fin" placeholder="Fecha de fin" #fechafin (dateChange)="CambioFiltro()">
+        <input matInput [matDatepicker]="fin" placeholder="Fecha de fin" [(ngModel)]="fecha_fin" (dateChange)="CambioFiltro()">
         <mat-datepicker-toggle matSuffix [for]="fin"></mat-datepicker-toggle>
         <mat-datepicker #fin disabled="false"></mat-datepicker>
       </mat-form-field>
@@ -72,16 +72,11 @@
       <mat-spinner></mat-spinner>
     </div>
 
-    <mat-table [dataSource]="ListadoVentas" class="mat-elevation-z8" matSort matSortActive="serie" matSortDirection="asc" matSortDisableClear>
+    <mat-table [dataSource]="ListadoVentas" class="mat-elevation-z8" matSort matSortActive="contrato" matSortDirection="desc" matSortDisableClear>
 
       <ng-container matColumnDef="numero">
         <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
         <mat-cell *matCellDef="let venta"> {{venta.numero}} </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="serie">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Serie </mat-header-cell>
-        <mat-cell *matCellDef="let venta"> {{venta.serie }} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="contrato">

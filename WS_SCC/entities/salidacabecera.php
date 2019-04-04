@@ -14,6 +14,8 @@ Class SalidaCabecera{
     public $destino;
     public $id_tipo_movilidad;
     public $estado;
+    public $tipo;
+    public $monto;
 
     public $numero_pagina;
     public $total_pagina;
@@ -33,8 +35,15 @@ Class SalidaCabecera{
     public $serie;
     public $precio;
     public $cantidad;
+    public $id_vendedor;
     public $vendedor;
     public $comisiones;
+
+    public $id_serie;
+    public $precio_minimo;
+    public $precio_venta;
+    public $id_venta;
+    public $contrato;
 
     public $talonarios;
     public $productos;
@@ -49,10 +58,7 @@ Class SalidaCabecera{
 
     public function __construct($db){
         $this->conn = $db;
-        include_once 'salidadetalle.php';
-        $this->detalle = new SalidaDetalle($db);
     }
-
 
     function read(){
 
@@ -83,10 +89,6 @@ Class SalidaCabecera{
 		{
 			extract($row);
             $contador=$contador+1;
-            // $SGasto=$this->detalle->read_gasto($id);
-            // $SMovilidad=$this->detalle->read_movilidad($id);
-            // $SVendedor=$this->detalle->read_vendedor($id);
-            // $SProducto=$this->detalle->read_producto($id);
             $salida_item = array (
                 "numero"=>$contador,
                 "id"=>$id,
@@ -268,8 +270,8 @@ Class SalidaCabecera{
         
         $result->bindParam(1, $this->id_salida);
 
-        $Productos=$this->read_productos($this->id_salida);
-        $Talonarios=$this->read_talonarios($this->id_salida);
+        // $Productos=$this->read_productos($this->id_salida);
+        // $Talonarios=$this->read_talonarios($this->id_salida);
         $Vendedores=$this->read_vendedores($this->id_salida);
 
         $result->execute();
@@ -287,35 +289,41 @@ Class SalidaCabecera{
         $this->chofer_nombre=$row['chofer_nombre'];
         $this->observacion=$row['observacion'];
         $this->estado=$row['estado'];
-        $this->productos=$Productos;
-        $this->talonarios=$Talonarios;
+        // $this->productos=$Productos;
+        // $this->talonarios=$Talonarios;
         $this->vendedores=$Vendedores;
     }
 
     function read_productos(){
 
-        $query = "CALL sp_listarsalidadetalleproductoxcabecera(?)";
+        $query = "CALL sp_listarsalidadetalleproductoxcabecera(?,?)";
 
         $result = $this->conn->prepare($query);
 
         $result->bindParam(1, $this->id_salida);
+        $result->bindParam(2, $this->estado);
 
         $result->execute();
         
         $venta_list=array();
         $venta_list["productos"]=array();
+        $numero=0;
         
         while($row = $result->fetch(PDO::FETCH_ASSOC))
         {
             extract($row);
+            $numero=$numero+1;
             $venta_item = array (
+                "numero"=>$numero,
                 "id"=>$id,
-                "cabecera"=>$cabecera,
-                "id_producto"=>$id_producto,
-                "producto"=>$producto,
+                "id_serie"=>$id_serie,
                 "serie"=>$serie,
-                "precio"=>$precio,
-                "cantidad"=>$cantidad,
+                "producto"=>$producto,
+                "precio_minimo"=>$precio_minimo,
+                "precio_venta"=>$precio_venta,
+                "id_venta"=>$id_venta,
+                "contrato"=>$contrato,
+                "estado"=>$estado
             );
             array_push($venta_list["productos"],$venta_item);
         }
@@ -335,14 +343,18 @@ Class SalidaCabecera{
         
         $venta_list=array();
         $venta_list["talonarios"]=array();
-        
+        $numero=0;
+
         while($row = $result->fetch(PDO::FETCH_ASSOC))
         {
             extract($row);
+            $numero=$numero+1;
             $venta_item = array (
-                "id"=>$id,
-                "serie"=>$serie,
                 "numero"=>$numero,
+                "id"=>$id,
+                "id_talonario"=>$id_talonario,
+                "contrato"=>$contrato,
+                "id_venta"=>$id_venta,
                 "estado"=>$estado,
             );
             array_push($venta_list["talonarios"],$venta_item);
@@ -369,6 +381,7 @@ Class SalidaCabecera{
             extract($row);
             $venta_item = array (
                 "id"=>$id,
+                "id_vendedor"=>$id_vendedor,
                 "vendedor"=>$vendedor,
                 "comision_efectiva"=>$comision_efectiva,
                 "comision_retenida"=>$comision_retenida,
@@ -377,6 +390,178 @@ Class SalidaCabecera{
         }
 
         return $venta_list;
+    }
+
+    function read_gasto(){
+
+        $query = "CALL sp_listarsalidadetallegastoxcabecera(?,?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_salida);
+        $result->bindParam(2, $this->numero_pagina);
+        $result->bindParam(3, $this->total_pagina);
+
+        $result->execute();
+        
+        $venta_list=array();
+        $venta_list["gastos"]=array();
+        $contador = $this->total_pagina*($this->numero_pagina-1);
+        
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            $contador = $contador+1;
+            extract($row);
+            $venta_item = array (
+                "numero"=>$contador,
+                "id"=>$id,
+                "fecha"=>$fecha,
+                "id_vendedor"=>$id_vendedor,
+                "vendedor"=>$vendedor,
+                "monto"=>$monto,
+                "tipo"=>$tipo,
+                "observacion"=>$observacion,
+            );
+            array_push($venta_list["gastos"],$venta_item);
+        }
+
+        return $venta_list;
+    }
+
+    function read_gasto_contar(){
+
+        $query = "CALL sp_listarsalidadetallegastoxcabeceracontar(?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_salida);
+
+        $result->execute();
+
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        $this->total_resultado=$row['total'];
+
+        return $this->total_resultado;
+    }
+
+    function create_gasto(){
+
+        $query = "call sp_crearsalidavendedorgasto(
+            :cabecera,
+            :fecha,
+            :vendedor,
+            :monto,
+            :tipo,
+            :observacion
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":cabecera", $this->id_salida);
+        $result->bindParam(":fecha", $this->fecha);
+        $result->bindParam(":vendedor", $this->vendedor);
+        $result->bindParam(":monto", $this->monto);
+        $result->bindParam(":tipo", $this->tipo);
+        $result->bindParam(":observacion", $this->observacion);
+
+        $this->id_salida=htmlspecialchars(strip_tags($this->id_salida));
+        $this->fecha=htmlspecialchars(strip_tags($this->fecha));
+        $this->vendedor=htmlspecialchars(strip_tags($this->vendedor));
+        $this->monto=htmlspecialchars(strip_tags($this->monto));
+        $this->tipo=htmlspecialchars(strip_tags($this->tipo));
+        $this->observacion=htmlspecialchars(strip_tags($this->observacion));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        
+        return false;
+    }
+
+    function delete_gasto(){
+
+        $query = "call sp_eliminarsalidadetallegasto(
+            :id_detalle
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":id_detalle", $this->id);
+
+        $this->id=htmlspecialchars(strip_tags($this->id));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    function delete(){
+
+        $query = "call sp_eliminarsalida(
+            :id_salida
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":id_salida", $this->id_salida);
+
+        $this->id_salida=htmlspecialchars(strip_tags($this->id_salida));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    function update_productos(){
+
+        $query = "call sp_actualizarsalidadetalleproducto(
+            :id_detalle_producto,
+            :id_venta,
+            :id_precio,
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":id_detalle_producto", $this->id);
+        $result->bindParam(":id_venta", $this->id_venta);
+        $result->bindParam(":id_precio", $this->precio_venta);
+
+        $this->id=htmlspecialchars(strip_tags($this->id));
+        $this->id_venta=htmlspecialchars(strip_tags($this->id_venta));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    function update_talonarios(){
+
+        $query = "call sp_actualizarsalidadetalleproducto(
+            :id_detalle_talonario,
+            :id_venta,
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":id_detalle_talonario", $this->id);
+        $result->bindParam(":id_venta", $this->id_venta);
+
+        $this->id=htmlspecialchars(strip_tags($this->id));
+        $this->id_venta=htmlspecialchars(strip_tags($this->id_venta));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
     }
 
 }
