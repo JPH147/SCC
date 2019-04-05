@@ -23,6 +23,7 @@ import { DetalleProductosComponent } from './components/detalleproductos/detalle
 import { DetalleDocumentoAlmacenComponent } from './components/detalle-documento-almacen/detalle-documento-almacen.component';
 import { EvaluacionComponent } from './components/evaluacion/evaluacion.component';
 import { ReglasEvaluacionComponent } from './components/tablas-maestras/reglas-evaluacion/reglas-evaluacion.component';
+import { RetornoVendedoresCierreComponent } from './components/retorno-vendedores-cierre/retorno-vendedores-cierre.component';
 
 const appRoutes: Routes = [
   // {path: '', component: EvaluacionComponent}, //prueba
@@ -38,8 +39,8 @@ const appRoutes: Routes = [
   {path: 'stock/salidaproductos', component: SalidaProductosComponent},
   {path: 'salidavendedores', component: ListadoSalidaVendedoresComponent},
   {path: 'salidavendedores/ingreso', component: SalidaVendedoresComponent},
-  {path: 'salidavendedores/retorno/:idsalida', component: RetornoVendedoresComponent},
-  {path: 'retornovendedores', component: RetornoVendedoresComponent},
+  {path: 'salidavendedores/rendicion/:idsalida', component: RetornoVendedoresComponent},
+  {path: 'salidavendedores/retorno/:idsalida', component: RetornoVendedoresCierreComponent},
   {path: 'comisiones', component: ComisionesComponent},
   {path: 'clientes', component: ClientesComponent},
   {path: 'ventas', component: VentasListarComponent},

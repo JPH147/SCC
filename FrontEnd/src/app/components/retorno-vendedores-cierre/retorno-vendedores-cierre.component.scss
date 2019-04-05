@@ -19,18 +19,6 @@ $primary: map-get($theme, primary);
   font-family: sans-serif;
 }
 
-.columnas-1{
-  width: 80%;
-}
-
-.columnas-2{
-  width: 90%;
-}
-
-.columnas-3{
-  width: 93.33%;
-}
-
 .spinner-container{
   position: absolute;
   top: 300px;
@@ -59,26 +47,18 @@ $primary: map-get($theme, primary);
   padding-left: 2.5%;
 }
 
-.icono{
-  float: right;
-  transform: translate(-20px, -12.5px);
+.columnas-1{
+  width: 80%;
+}
+  
+.columnas-2{
+  width: 90%;
+}
+  
+.columnas-3{
+  width: 93.33%;
 }
 
 .mat-column-numero{
-  max-width: 5%;
-}
-
-.mat-column-opciones{
-  max-width: 15%;
-}
-
-.mat-column-opciones_producto{
-  max-width: 7%;
-}
-
-.mat-column-serie,
-.mat-column-precio_venta,
-.mat-column-contrato_venta,
-.mat-column-estado_producto{
-  max-width: 15%
+  max-width: 10%
 }

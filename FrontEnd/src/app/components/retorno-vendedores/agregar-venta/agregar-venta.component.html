@@ -188,7 +188,7 @@
         
             <mat-grid-tile>
               <mat-form-field class="columnas-1">
-                <mat-select placeholder='Tipo de pago' formControlName="tipopago">
+                <mat-select placeholder='Tipo de pago' formControlName="tipopago" (selectionChange)="TipoPagoSeleccionado()">
                   <mat-option *ngFor="let tipopago of LstTipoPago" [value] = "tipopago.id"> {{tipopago.nombre}} </mat-option>
                 </mat-select>
               </mat-form-field>

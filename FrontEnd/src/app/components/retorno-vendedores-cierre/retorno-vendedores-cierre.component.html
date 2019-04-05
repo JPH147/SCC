@@ -1,0 +1,163 @@
+<mat-card class="card-principal">
+
+  <button mat-mini-fab type="button" color="primary" (click)="Atras()"><mat-icon>keyboard_arrow_left</mat-icon></button>
+
+  <mat-card-title class="tituloProd"> Rendicion de la salida {{pecosa}} </mat-card-title>
+
+  <div class = "spinner-container" *ngIf = "Cargando | async">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <div class="seccion">
+
+    <mat-card-subtitle class="titulo-seccion">
+      DATOS DE LA PECOSA
+    </mat-card-subtitle>
+
+    <mat-grid-list cols="3" rowHeight="70px">
+          
+      <mat-grid-tile>
+        <mat-form-field class="columnas-1">
+          <input matInput type="text" placeholder="Pecosa" [(ngModel)]="pecosa" readonly>
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <mat-form-field class="columnas-1">
+          <input matInput type="text" placeholder="Guía" [(ngModel)]="guia" readonly>
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <mat-form-field class="columnas-1">
+          <input matInput type="text" placeholder="Fecha de salida" [(ngModel)]="fecha_salida" readonly>
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile colspan=2>
+        <mat-form-field class="columnas-2">
+          <input matInput type="text" placeholder="Destino" [(ngModel)]="destino" readonly>
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <mat-form-field class="columnas-1">
+          <input matInput [matDatepicker]="picker" placeholder="Fecha de retorno" [(ngModel)]="fecha_retorno" readonly>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker disabled=false></mat-datepicker>
+         </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile colspan=3>
+        <mat-form-field class="columnas-3">
+          <input matInput type="text" placeholder="Observaciones" [(ngModel)]="observacion" readonly>
+        </mat-form-field>
+      </mat-grid-tile>
+
+    </mat-grid-list>
+
+  </div>
+
+  <div class="seccion">
+
+    <mat-card-subtitle class="titulo-seccion">
+      VENTAS TOTALES
+    </mat-card-subtitle>
+
+    <mat-table [dataSource]="ListadoVentas" class="mat-elevation-z8">
+
+      <ng-container matColumnDef="numero">
+        <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+        <mat-cell *matCellDef="let venta"> {{venta.numero}} </mat-cell>
+        <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="contrato">
+        <mat-header-cell *matHeaderCellDef> Contrato </mat-header-cell>
+        <mat-cell *matCellDef="let venta"> {{venta.contrato}} </mat-cell>
+        <mat-footer-cell *matFooterCellDef>Total</mat-footer-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="total">
+        <mat-header-cell *matHeaderCellDef> Monto total </mat-header-cell>
+        <mat-cell *matCellDef="let venta"> S/. {{venta.total }}</mat-cell>
+        <mat-footer-cell *matFooterCellDef>S/. {{ListadoVentas.Total | async}}</mat-footer-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="comision">
+        <mat-header-cell *matHeaderCellDef> Monto para comisiones </mat-header-cell>
+        <mat-cell *matCellDef="let venta"> S/. {{venta.comision}} </mat-cell>
+        <mat-footer-cell *matFooterCellDef>S/. {{ListadoVentas.Comision | async}}</mat-footer-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="ColumnasVentas"></mat-header-row>
+      <mat-footer-row *matFooterRowDef="ColumnasVentas"></mat-footer-row>
+      <mat-row *matRowDef="let row; columns: ColumnasVentas;"></mat-row>
+    </mat-table>
+
+  </div>
+
+  <div class="seccion">
+
+    <mat-card-subtitle class="titulo-seccion">
+      COMISIONES A LOS VENDEDORES
+    </mat-card-subtitle>
+
+  </div>
+
+  <div class="seccion">
+
+    <mat-card-subtitle class="titulo-seccion">
+      PRODUCTOS POR DEVOLVER
+    </mat-card-subtitle>
+
+    <mat-table [dataSource]="ListadoProductos" class="mat-elevation-z8">
+
+      <ng-container matColumnDef="numero">
+        <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+        <mat-cell *matCellDef="let producto"> {{producto.numero}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="producto">
+        <mat-header-cell *matHeaderCellDef> Producto </mat-header-cell>
+        <mat-cell *matCellDef="let producto"> {{producto.producto}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="serie">
+        <mat-header-cell *matHeaderCellDef> Serie </mat-header-cell>
+        <mat-cell *matCellDef="let producto"> {{producto.serie}} </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="ColumnasProductos"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: ColumnasProductos;"></mat-row>
+
+    </mat-table>
+
+  </div>
+
+  <div class="seccion">
+
+    <mat-card-subtitle class="titulo-seccion">
+      TALONARIOS POR DEVOLVER
+    </mat-card-subtitle>
+
+    <mat-table [dataSource]="ListadoTalonarios" class="mat-elevation-z8">
+
+      <ng-container matColumnDef="numero">
+        <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+        <mat-cell *matCellDef="let talonario"> {{talonario.numero}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="contrato">
+        <mat-header-cell *matHeaderCellDef> Contrato </mat-header-cell>
+        <mat-cell *matCellDef="let talonario"> {{talonario.contrato}} </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="ColumnasTalonarios"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: ColumnasTalonarios;"></mat-row>
+      
+    </mat-table>
+
+  </div>
+
+</mat-card>

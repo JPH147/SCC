@@ -121,8 +121,8 @@
      <ng-container matColumnDef="opciones">
        <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
        <mat-cell *matCellDef="let salida">
-         <button  matTooltip="Hacer rendidicón" mat-icon-button color="primary" [routerLink]="['retorno',salida.id]"><mat-icon>assignment_return </mat-icon></button>
-         <button matTooltip="Agegar viaticos" mat-icon-button color="primary" (click)="CargarGastos(salida)"><mat-icon>attach_money </mat-icon></button>
+         <button  matTooltip="Hacer rendidicón" mat-icon-button color="primary" [routerLink]="['rendicion',salida.id]"><mat-icon>assignment_return </mat-icon></button>
+         <button matTooltip="Agegar viaticos" mat-icon-button color="primary" (click)="CargarGastos(salida)"><mat-icon>card_travel </mat-icon></button>
          <button matTooltip="Ver" mat-icon-button color="primary" [routerLink]="['ingreso']" disabled><mat-icon>visibility</mat-icon></button>
          <button matTooltip="Anular" mat-icon-button color="primary" (click)= "AnularSalida(salida)"><mat-icon> delete </mat-icon></button>
        </mat-cell>

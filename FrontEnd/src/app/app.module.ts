@@ -49,6 +49,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { LayoutModule } from '@angular/cdk/layout';
 
 import {routing, appRoutingProvider} from './app.routing';
+import {Notificaciones} from './components/global/notificacion';
 
 /* Imports del software */
 import {AppComponent} from './app.component';
@@ -116,6 +117,7 @@ import { ComisionesDetalleComponent } from './components/comisiones/comisiones-d
 import { VentanaCronogramaComponent } from './components/ventas/ventana-cronograma/ventana-cronograma.component';
 import { AgregarVentaComponent } from './components/retorno-vendedores/agregar-venta/agregar-venta.component';
 import { SeleccionarClienteComponent } from './components/retorno-vendedores/seleccionar-cliente/seleccionar-cliente.component';
+import { RetornoVendedoresCierreComponent } from './components/retorno-vendedores-cierre/retorno-vendedores-cierre.component';
 
 @NgModule({
   imports: [
@@ -236,7 +238,8 @@ import { SeleccionarClienteComponent } from './components/retorno-vendedores/sel
     ComisionesDetalleComponent,
     VentanaCronogramaComponent,
     AgregarVentaComponent,
-    SeleccionarClienteComponent
+    SeleccionarClienteComponent,
+    RetornoVendedoresCierreComponent
    ],
   entryComponents: [
     AppComponent,
@@ -280,7 +283,7 @@ import { SeleccionarClienteComponent } from './components/retorno-vendedores/sel
     SeleccionarClienteComponent
   ],
   bootstrap: [AppComponent],
-  providers: [appRoutingProvider, {provide: MAT_DATE_LOCALE, useValue: 'en-GB'}]
+  providers: [appRoutingProvider, Notificaciones,{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}]
 })
 
 export class AppModule {}

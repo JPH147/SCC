@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import {CollectionViewer, DataSource} from "@angular/cdk/collections";
 import {MatDialog } from '@angular/material';
 import {Location} from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import {SalidaVendedoresService} from '../salida-vendedores/salida-vendedores.service';
 import {AgregarVentaComponent} from './agregar-venta/agregar-venta.component';
 import { BehaviorSubject } from 'rxjs';
-import {CollectionViewer, DataSource} from "@angular/cdk/collections";
+import { VentanaEmergenteGastos} from '../listado-salida-vendedores/ventana-emergente-gastos/ventanaemergente-gastos';
 
 @Component({
   selector: 'app-retorno-vendedores',
@@ -21,8 +22,8 @@ export class RetornoVendedoresComponent implements OnInit {
   public ListadoTalonarios: TalonariosDataSource;
   public ListadoProductos: ProductosDataSource;
 
-  public ColumnasTalonarios:string[]=['numero', 'contrato', 'estado', 'opciones']
-  public ColumnasProductos:string[]=['numero', 'producto', 'serie', 'precio_venta', 'contrato_venta', 'estado_producto']
+  public ColumnasTalonarios:string[]=['numero', 'contrato', 'estado', 'observaciones','opciones']
+  public ColumnasProductos:string[]=['numero', 'producto', 'serie', 'precio_venta', 'contrato_venta', 'estado_producto','opciones_producto']
 
   public id_salida:number;
   public pecosa:string;
@@ -31,7 +32,7 @@ export class RetornoVendedoresComponent implements OnInit {
   public fecha_retorno:Date;
   public destino:string;
   public observacion:string;
-  public Vendedores: Array<any>;
+  // public Vendedores: Array<any>;
   public Talonarios: Array<any>;
   public Productos: Array<any>;
   public ver_vendedores: boolean;
@@ -40,7 +41,7 @@ export class RetornoVendedoresComponent implements OnInit {
 
   constructor(
     private location: Location,
-    private DialogoAgregar: MatDialog,
+    private Dialogo: MatDialog,
     private route: ActivatedRoute,
     private Servicio: SalidaVendedoresService
   ) { }
@@ -58,8 +59,6 @@ export class RetornoVendedoresComponent implements OnInit {
       if(params['idsalida']){
         this.id_salida=params['idsalida'];
         this.SeleccionarSalida();
-        // this.ListarProductos();
-        // this.ListarTalonarios();
       }
     })
   }
@@ -73,33 +72,54 @@ export class RetornoVendedoresComponent implements OnInit {
       this.fecha_retorno=new Date();
       this.destino=res['data'].destino;
       this.observacion=res['data'].observacion=="" ? "No hay observaciones" : res['data'].observacion;
-      this.Vendedores=res['data'].vendedores.vendedores;
+      // this.Vendedores=res['data'].vendedores.vendedores;
     })
 
-    this.ListadoTalonarios.CargarInformacion(this.id_salida);
-    this.ListadoProductos.CargarInformacion(this.id_salida);
+    this.ListadoTalonarios.CargarInformacion(this.id_salida,0);
+    this.ListadoProductos.CargarInformacion(this.id_salida,0);
 
   }
 
-  // ListarProductos(){
-  //   this.Servicio.ListarSalidaProductos(this.id_salida,0).subscribe(res=>{
-  //     this.Productos=res['data'].productos;
-  //   })
-  // }
-
-  // ListarTalonarios(){
-  //   this.Servicio.ListarSalidaTalonarios(this.id_salida).subscribe(res=>{
-  //     this.Talonarios=res['data'].talonarios;
-  //   })
-  // }
-
   RegistrarVenta(talonario){
-    const serieventana = this.DialogoAgregar.open(AgregarVentaComponent, {
+    const Ventana = this.Dialogo.open(AgregarVentaComponent, {
       width: '1200px',
       data: {salida: this.id_salida, talonario: talonario, productos: this.Productos}
     });
+
+    Ventana.afterClosed().subscribe(res=>{
+      if(res){
+        this.ListadoTalonarios.CargarInformacion(this.id_salida,0);
+        this.ListadoProductos.CargarInformacion(this.id_salida,0);
+      }
+    })
   }
-    
+  
+  AnularTalonario(id,estado){
+    this.Servicio.AnularSalidaTalonario(id,estado).subscribe(res=>{
+      this.ListadoTalonarios.CargarInformacion(this.id_salida,0);
+    })
+  }
+
+  AnularProducto(producto){
+    let ventana = this.Dialogo.open(VentanaEmergenteGastos,{
+      width: '1200px',
+      data: {id: this.id_salida, pecosa: this.pecosa, monto: producto.precio_minimo, serie:producto.serie}
+    })
+
+    ventana.afterClosed().subscribe(res=>{
+      this.ListadoProductos.CargarInformacion(this.id_salida,0);
+      if(res){
+        this.Servicio.AnularSalidaProducto(producto.id,3).subscribe()
+      }
+    })
+  }
+
+  NoAnularProducto(producto){
+    this.Servicio.AnularSalidaProducto(producto.id,1).subscribe(res=>{
+      this.ListadoProductos.CargarInformacion(this.id_salida,0);
+    })
+  }
+
   VerVendedores(){
     this.ver_vendedores=true;
   }
@@ -146,8 +166,8 @@ export class ProductosDataSource implements DataSource<any>{
     this.Informacion.complete()
   }
 
-  CargarInformacion(id_salida){
-    this.Servicio.ListarSalidaProductos(id_salida,0).subscribe(res=>{
+  CargarInformacion(id_salida,estado){
+    this.Servicio.ListarSalidaProductos(id_salida,estado).subscribe(res=>{
       this.Informacion.next(res['data'].productos);
     })
   }
@@ -169,9 +189,37 @@ export class TalonariosDataSource implements DataSource<any>{
     this.Informacion.complete()
   }
 
-  CargarInformacion(id_salida){
-    this.Servicio.ListarSalidaTalonarios(id_salida).subscribe(res=>{
+  CargarInformacion(id_salida,estado){
+    this.Servicio.ListarSalidaTalonarios(id_salida,estado).subscribe(res=>{
       this.Informacion.next(res['data'].talonarios);
+    })
+  }
+
+}
+
+export class VentasDataSource implements DataSource<any>{
+
+  public Informacion = new BehaviorSubject<any>([])
+  public Total=new BehaviorSubject<any>(0)
+  public Comision=new BehaviorSubject<any>(0)
+
+  constructor(
+    private Servicio: SalidaVendedoresService
+  ){ }
+
+  connect(collectionViewer: CollectionViewer){
+    return this.Informacion.asObservable()
+  }
+
+  disconnect(){
+    this.Informacion.complete()
+  }
+
+  CargarInformacion(id_salida){
+    this.Servicio.ListarVentas(id_salida).subscribe(res=>{
+      this.Informacion.next(res.array);
+      this.Total.next(res.total)
+      this.Comision.next(res.comision)
     })
   }
 

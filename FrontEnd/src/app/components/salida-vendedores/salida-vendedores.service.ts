@@ -113,6 +113,28 @@ export class SalidaVendedoresService {
     }));
   }
 
+  ListarVentas(
+    id_cabecera:number
+  ): Observable<any>{
+    return this.http.get(this.url + 'salidacabecera/read-ventas.php', {
+      params: new HttpParams()
+      .set('prid', id_cabecera.toString())
+  })
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        let total=0, total_comision=0;
+        res['data'].ventas.forEach(item => {
+          total=total+item.total;
+          total_comision=total_comision+item.comision;
+        });
+        return ({array:res['data'].ventas, total:total, comision:total_comision})
+      }else {
+        console.log('No hay datos que mostrar');
+        return res;
+      }
+    }));
+  }
+
   ListarSalidaProductos(
     id_salida:number,
     estado:number
@@ -135,11 +157,13 @@ export class SalidaVendedoresService {
 
   ListarSalidaTalonarios(
     id_salida:number,
+    estado:number
   ): Observable<any> {
 
     return this.http.get(this.url + 'salidacabecera/read-talonarios.php', {
       params: new HttpParams()
       .set('prid', id_salida.toString())
+      .set('prestado', estado.toString())
     })
     .pipe(map(res => {
       if (res['codigo'] === 0) {
@@ -158,9 +182,9 @@ export class SalidaVendedoresService {
   ): Observable<any> {
 
     let params = new HttpParams()
-           .set('prid', id_detalle.toString())
-           .set('prventa', id_venta.toString())
-           .set('prprecio', precio.toString())
+      .set('prid', id_detalle.toString())
+      .set('prventa', id_venta.toString())
+      .set('prprecio', precio.toString())
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -173,12 +197,40 @@ export class SalidaVendedoresService {
   ): Observable<any> {
 
     let params = new HttpParams()
-           .set('prid', id_detalle.toString())
-           .set('prventa', id_venta.toString())
+      .set('prid', id_detalle.toString())
+      .set('prventa', id_venta.toString())
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'salidacabecera/update-talonario.php', params, {headers: headers});
+  }
+
+  AnularSalidaProducto(
+    id_detalle: number,
+    estado: number
+  ): Observable<any> {
+
+    let params = new HttpParams()
+      .set('prid', id_detalle.toString())
+      .set('prestado', estado.toString())
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'salidacabecera/update-producto-anular.php', params, {headers: headers});
+  }
+
+  AnularSalidaTalonario(
+    id_detalle: number,
+    estado: number
+  ): Observable<any> {
+
+    let params = new HttpParams()
+      .set('prid', id_detalle.toString())
+      .set('prestado', estado.toString())
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'salidacabecera/update-talonario-anular.php', params, {headers: headers});
   }
 
 }

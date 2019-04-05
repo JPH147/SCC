@@ -40,8 +40,14 @@ export class VentanaEmergenteGastos {
     this.ListadoGastos.GargarGatos(this.data.id, 1, 5);
 
     this.fecha=new Date();
-    this.monto=0;
-    this.observacion="";
+    
+    if(this.data.monto){
+      this.monto=this.data.monto;
+      this.observacion="Extravío de producto "+this.data.serie;
+    }else{
+      this.monto=0;
+      this.observacion="";
+    }
     
   }
 
@@ -63,6 +69,9 @@ export class VentanaEmergenteGastos {
       this.observacion
     ).subscribe(res=>{
       this.ListadoGastos.GargarGatos(this.data.id, 1, 5);
+      if(this.data.monto){
+        this.ventana.close(true)
+      }
     })
   }
 

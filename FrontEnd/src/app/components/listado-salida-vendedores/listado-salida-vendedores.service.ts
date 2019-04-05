@@ -19,7 +19,6 @@ export class ListadoSalidaVendedoresService {
     fecha_inicio: Date,
     fecha_fin: Date,
     destino: string,
-    serie:number,
     vendedor:string,
     estado:number,
     pagina: number,
@@ -27,13 +26,7 @@ export class ListadoSalidaVendedoresService {
     orden: string
   ): Observable<any> {
 
-    let Pecosa:string, Sucursal:string, Estado:string, Finicio: string ,Ffin: string,Serie:string="";
-
-    if (pecosa == null) {
-      Pecosa=""
-    }else{
-      Pecosa=pecosa.toString()
-    }
+    let Sucursal:string;
 
     if (sucursal == null) {
       Sucursal=""
@@ -41,32 +34,20 @@ export class ListadoSalidaVendedoresService {
       Sucursal=sucursal.toString()
     }
 
-    if(serie!=null){
-      Serie=serie.toString()
-    }
-
-    if (estado == null) {
-      Estado=""
-    }else{
-      Estado=estado.toString()
-    }    
-
-  return this.http.get(this.url + 'salidacabecera/read.php', {
-      params: new HttpParams()
-      .set('prpecosa', Pecosa)
-      .set('prtipo', Sucursal)
-      .set('prfechainicio', moment(fecha_inicio,"DD/MM/YYYY").format("YYYY/MM/DD").toString())
-      .set('prfechafin', moment(fecha_fin,"DD/MM/YYYY").format("YYYY/MM/DD").toString())
-      .set('prdestino', destino)
-      .set('prserie', Serie)
-      .set('prvendedor', vendedor)
-      .set('prestado', Estado)
-      .set('prpagina', pagina.toString())
-      .set('prtotalpagina', total_pagina.toString())
-      .set('orden', orden)
-  })
+    return this.http.get(this.url + 'salidacabecera/read.php', {
+        params: new HttpParams()
+        .set('prpecosa', pecosa)
+        .set('prtipo', Sucursal)
+        .set('prfechainicio', moment(fecha_inicio,"DD/MM/YYYY").format("YYYY/MM/DD").toString())
+        .set('prfechafin', moment(fecha_fin,"DD/MM/YYYY").format("YYYY/MM/DD").toString())
+        .set('prdestino', destino)
+        .set('prvendedor', vendedor)
+        .set('prestado', estado.toString())
+        .set('prpagina', pagina.toString())
+        .set('prtotalpagina', total_pagina.toString())
+        .set('orden', orden)
+    })
     .pipe(map(res => {
-
       if (res['codigo'] === 0) {
           return res;
       }  else {
@@ -75,7 +56,7 @@ export class ListadoSalidaVendedoresService {
       }
     }));
   }
-  
+
   ListarGastos(
     id_cabecera:number,
     pagina: number,

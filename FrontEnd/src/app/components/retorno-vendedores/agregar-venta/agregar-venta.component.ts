@@ -7,10 +7,11 @@ import {ServiciosTelefonos} from '../../global/telefonos';
 import {ServiciosDirecciones} from '../../global/direcciones';
 import { VentanaEmergenteContacto} from '../../clientes/ventana-emergentecontacto/ventanaemergentecontacto';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, Observable, forkJoin} from 'rxjs';
 import {VentaService} from '../../ventas/ventas.service';
 import {SalidaVendedoresService} from '../../salida-vendedores/salida-vendedores.service';
-
+import {Notificaciones} from '../../global/notificacion';
+import * as moment from 'moment';
 @Component({
   selector: 'app-agregar-venta',
   templateUrl: './agregar-venta.component.html',
@@ -32,10 +33,12 @@ export class AgregarVentaComponent implements OnInit {
   public LstProducto: Array<any>;
   public cliente:any;
   public Productos: Array<any>; // Este será el array que contenga los productos seleccionados
+  public Cronograma: Array<any>;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
     public ventana: MatDialogRef<AgregarVentaComponent>,
+    private Notificacion: Notificaciones,
     private Builder: FormBuilder,
     private Servicio: SalidaVendedoresService,
     private VentaServicio: VentaService,
@@ -136,6 +139,7 @@ export class AgregarVentaComponent implements OnInit {
 
   ListarProductos(){
     this.Servicio.ListarSalidaProductos(this.data.salida, 1).subscribe(res=>{
+      // console.log(res);
       this.LstProducto=res['data'].productos
     })
   }
@@ -207,13 +211,26 @@ export class AgregarVentaComponent implements OnInit {
     }
   }
 
+  TipoPagoSeleccionado(){
+    if (this.DocumentoForm.value.tipopago==3) {
+      this.DocumentoForm.get('cuotas').setValue(1);
+      this.DocumentoForm.get('cuotas').disable();
+      this.DocumentoForm.get('inicial').setValue(0);
+      this.DocumentoForm.get('inicial').disable();
+    }else{
+      this.DocumentoForm.get('cuotas').enable();
+      this.DocumentoForm.get('inicial').enable();
+    }
+  }
+
   AgregarProductoEnVerdad(){
     this.Productos.push({
       numero: this.Productos.length+1,
       id: this.ProductoForm.value.producto.id,
-      nombre: this.ProductoForm.value.producto.producto,
+      id_serie: this.ProductoForm.value.producto.id_serie,
       serie: this.ProductoForm.value.producto.serie,
-      precio_minimo: this.ProductoForm.value.producto.precio,
+      nombre: this.ProductoForm.value.producto.producto,
+      precio_minimo: this.ProductoForm.value.producto.precio_minimo,
       precio_venta: this.ProductoForm.value.precio*1,
     })
     this.ProductoForm.reset();
@@ -239,7 +256,37 @@ export class AgregarVentaComponent implements OnInit {
     this.DocumentoForm.get('inicial').setValidators([(control: AbstractControl) => Validators.max(this.DocumentoForm.value.montototal)(control)]);
   }
 
+  CrearCronograma(){
+
+    let year = moment(this.DocumentoForm.value.fechapago).year();
+    let month = moment(this.DocumentoForm.value.fechapago).month();
+
+    let fecha_corregida:Date = new Date(year, month-1,27);
+
+    let fecha:Date;
+
+    console.log(year, month, fecha_corregida)
+
+    let monto=Math.round((this.DocumentoForm.value.montototal-this.DocumentoForm.value.inicial)*100/this.DocumentoForm.value.cuotas)/100
+
+    for (var i = 1; i<=this.DocumentoForm.value.cuotas; i++) {
+
+      fecha=moment(fecha_corregida).add(i-1, 'months').toDate();
+
+      this.Cronograma.push({
+        numero: i,
+        fecha_vencimiento: fecha,
+        monto_cuota: monto
+      })
+
+    }
+
+  }
+
   GuardarVenta(){
+
+    this.CrearCronograma();
+    // console.log(this.Productos,this.data.talonario.id)
 
     this.VentaServicio.CrearVenta(
       this.VentaForm.value.fecha,
@@ -256,8 +303,8 @@ export class AgregarVentaComponent implements OnInit {
       this.data.salida,
       6,
       this.DocumentoForm.value.tipopago,
-      this.DocumentoForm.value.inicial,
-      this.DocumentoForm.value.cuotas,
+      this.DocumentoForm.value.tipopago==3 ? 0 : this.DocumentoForm.value.inicial,
+      this.DocumentoForm.value.tipopago==3 ? 1 :this.DocumentoForm.value.cuotas,
       this.DocumentoForm.value.montototal,
       this.DocumentoForm.value.fechapago,
       "",
@@ -271,7 +318,35 @@ export class AgregarVentaComponent implements OnInit {
       this.VentaForm.value.observaciones
     ).subscribe(res=>{
       console.log(res)
-      this.Servicio.ActualizarSalidaTalonarios(this.data.talonario.id, res['data'])
+
+      // En las tablas de SALIDA ---------------------------------------->
+      // Se registra la venta realizada en el talonario
+      this.Servicio.ActualizarSalidaTalonarios(this.data.talonario.id, res['data']).subscribe();
+      // Se registra que los productos se vendieron
+      this.Productos.forEach((item)=>{
+        this.Servicio.ActualizarSalidaProductos(item.id,res['data'],item.precio_venta).subscribe();
+      })
+      // ---------------------------------------------------------------->
+
+      // En las tablas de ventas ---------------------------------------->
+      // Se crea el cronograma
+      if (this.DocumentoForm.value.tipopago==3) { 
+        this.VentaServicio.CrearVentaCronograma(res['data'],this.DocumentoForm.value.montototal,this.DocumentoForm.value.fechapago,2).subscribe(res=>console.log(res))
+      }else{
+        this.Cronograma.forEach((item)=>{
+          this.VentaServicio.CrearVentaCronograma(res['data'],item.monto,item.fecha,1).subscribe(res=>console.log(res))
+        });
+      }
+      // Se crean los productos y los descargos
+      this.Productos.forEach((item)=>{
+        this.VentaServicio.CrearVentaProductos(res['data'],item.id_serie,item.precio).subscribe(res=>console.log(res))
+      });
+      // ---------------------------------------------------------------->
+
+      this.ventana.close(true);
+      if(res['codigo']=0){
+        this.Notificacion.Snack("Se agregó la venta con éxito!","");
+      }
     })
   }
 

@@ -1045,7 +1045,7 @@ export class VentasComponent implements OnInit {
           });
         }
         
-        this.Servicio.CrearComisionVendedor(res['data'], formulario.value.vendedor.id, formulario.value.montototal).subscribe();
+        // this.Servicio.CrearComisionVendedor(res['data'], formulario.value.vendedor.id, formulario.value.montototal).subscribe();
          
         // Si la transacción es producto de un canje, se devuelven los productos al almacén
         if (this.venta_canje) {
@@ -1138,7 +1138,7 @@ export class VentasComponent implements OnInit {
         }
         
         // Actualizar las comisiones del vendedor
-        this.Servicio.CrearComisionVendedor(res['data'], formulario.value.vendedor.id, formulario.value.montototal).subscribe();
+        // this.Servicio.CrearComisionVendedor(res['data'], formulario.value.vendedor.id, formulario.value.montototal).subscribe();
          
         this.router.navigate(['ventas'])
         this.Notificacion.Snack("Se actualizó la venta con éxito!","");

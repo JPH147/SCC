@@ -47,7 +47,7 @@ export class ListadoSalidaVendedoresComponent implements OnInit {
     this.General.ListarSucursal(null,"").subscribe(res=>this.Sucursales=res)
 
     this.ListadoSalida = new ListadoSalidaVendedoresDataSource(this.Servicio);
-    this.ListadoSalida.CargarDatos("", null, this.fecha_inicio, this.fecha_fin, "",null,"", null,1, 10, "fecha desc");
+    this.ListadoSalida.CargarDatos("", null, this.fecha_inicio, this.fecha_fin, "","", 0,1, 10, "fecha desc");
 
 }
 
@@ -102,7 +102,6 @@ export class ListadoSalidaVendedoresComponent implements OnInit {
       this.fecha_inicio,
       this.fecha_fin,
       this.FiltroDestino.nativeElement.value,
-      null,
       this.FiltroVendedor.nativeElement.value,
       this.FiltroEstado.value,
       this.paginator.pageIndex+1,
