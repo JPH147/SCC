@@ -32,7 +32,6 @@ export class RetornoVendedoresComponent implements OnInit {
   public fecha_retorno:Date;
   public destino:string;
   public observacion:string;
-  // public Vendedores: Array<any>;
   public Talonarios: Array<any>;
   public Productos: Array<any>;
   public ver_vendedores: boolean;
@@ -72,7 +71,6 @@ export class RetornoVendedoresComponent implements OnInit {
       this.fecha_retorno=new Date();
       this.destino=res['data'].destino;
       this.observacion=res['data'].observacion=="" ? "No hay observaciones" : res['data'].observacion;
-      // this.Vendedores=res['data'].vendedores.vendedores;
     })
 
     this.ListadoTalonarios.CargarInformacion(this.id_salida,0);

@@ -2,7 +2,7 @@
 
   <button mat-mini-fab type="button" color="primary" (click)="Atras()"><mat-icon>keyboard_arrow_left</mat-icon></button>
 
-  <mat-card-title class="tituloProd"> Rendicion de la salida {{pecosa}} </mat-card-title>
+  <mat-card-title class="tituloProd"> Liquidación de la salida {{pecosa}} </mat-card-title>
 
   <div class = "spinner-container" *ngIf = "Cargando | async">
     <mat-spinner></mat-spinner>
@@ -102,6 +102,38 @@
     <mat-card-subtitle class="titulo-seccion">
       COMISIONES A LOS VENDEDORES
     </mat-card-subtitle>
+
+    <mat-table [dataSource]="ListadoVendedores" class="mat-elevation-z8">
+
+      <ng-container matColumnDef="numero">
+        <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+        <mat-cell *matCellDef="let vendedor"> {{vendedor.numero}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="nombre">
+        <mat-header-cell *matHeaderCellDef> Vendedor </mat-header-cell>
+        <mat-cell *matCellDef="let vendedor"> {{vendedor.vendedor}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="comision_total">
+        <mat-header-cell *matHeaderCellDef> Ganancia total </mat-header-cell>
+        <mat-cell *matCellDef="let vendedor"> S/. {{vendedor.comision_total}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="comision_efectiva">
+        <mat-header-cell *matHeaderCellDef> Ahorro del vendedor </mat-header-cell>
+        <mat-cell *matCellDef="let vendedor"> S/. {{vendedor.comision_total_efectiva}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="comision_retenida">
+        <mat-header-cell *matHeaderCellDef> Ganancia del vendedor </mat-header-cell>
+        <mat-cell *matCellDef="let vendedor"> S/. {{vendedor.comision_total_retenida}} </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="ColumnasVendedores"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: ColumnasVendedores;"></mat-row>
+
+    </mat-table>
 
   </div>
 

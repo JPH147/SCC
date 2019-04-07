@@ -17,9 +17,8 @@
         $salida = new SalidaCabecera($db);
 
         $salida->id_salida = !empty($_GET['prid']) ? trim($_GET['prid']) : "";
-        $salida->estado = !empty($_GET['prestado']) ? trim($_GET['prestado']) : 0;
 
-        $salida_list = $salida->read_talonarios();
+        $salida_list = $salida->read_ventas();
 
         if (count(array_filter($salida_list))>0)
         { 

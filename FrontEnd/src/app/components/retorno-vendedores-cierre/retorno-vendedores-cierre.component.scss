@@ -47,6 +47,13 @@ $primary: map-get($theme, primary);
   padding-left: 2.5%;
 }
 
+mat-table{
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
+}
+
 .columnas-1{
   width: 80%;
 }
@@ -61,4 +68,14 @@ $primary: map-get($theme, primary);
 
 .mat-column-numero{
   max-width: 10%
+}
+
+mat-footer-cell{
+  font-weight: bold;
+}
+
+.mat-column-comision_total,
+.mat-column-comision_efectiva,
+.mat-column-comision_retenida{
+  max-width: 15%
 }

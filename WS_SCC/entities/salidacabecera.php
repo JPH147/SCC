@@ -62,7 +62,7 @@ Class SalidaCabecera{
 
     function read(){
 
-        $query = "CALL sp_listarsalidacabecera(?,?,?,?,?,?,?,?,?,?,?)";
+        $query = "CALL sp_listarsalidacabecera(?,?,?,?,?,?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
@@ -71,12 +71,11 @@ Class SalidaCabecera{
         $result->bindParam(3, $this->fecha_inicio);
         $result->bindParam(4, $this->fecha_fin);
         $result->bindParam(5, $this->destino);
-        $result->bindParam(6, $this->serie);
-        $result->bindParam(7, $this->vendedor);
-        $result->bindParam(8, $this->estado);
-        $result->bindParam(9, $this->numero_pagina);
-        $result->bindParam(10, $this->total_pagina);
-        $result->bindParam(11, $this->orden);
+        $result->bindParam(6, $this->vendedor);
+        $result->bindParam(7, $this->estado);
+        $result->bindParam(8, $this->numero_pagina);
+        $result->bindParam(9, $this->total_pagina);
+        $result->bindParam(10, $this->orden);
 
         $result->execute();
         
@@ -109,7 +108,7 @@ Class SalidaCabecera{
 
     function contar(){
 
-        $query = "CALL sp_listarsalidacabeceracontar(?,?,?,?,?,?)";
+        $query = "CALL sp_listarsalidacabeceracontar(?,?,?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
@@ -118,7 +117,8 @@ Class SalidaCabecera{
         $result->bindParam(3, $this->fecha_inicio);
         $result->bindParam(4, $this->fecha_fin);
         $result->bindParam(5, $this->destino);
-        $result->bindParam(6, $this->estado);
+        $result->bindParam(6, $this->vendedor);
+        $result->bindParam(7, $this->estado);
 
         $result->execute();
 
@@ -294,6 +294,68 @@ Class SalidaCabecera{
         $this->vendedores=$Vendedores;
     }
 
+    function read_ventas(){
+
+        $query = "CALL sp_listarsalidacabeceraventas(?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_salida);
+
+        $result->execute();
+        
+        $venta_list=array();
+        $venta_list["ventas"]=array();
+        $numero=0;
+        
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $numero=$numero+1;
+            $venta_item = array (
+                "numero"=>$numero,
+                "id"=>$id,
+                "contrato"=>$contrato,
+                "total"=>$total,
+                "comision"=>$comision,
+            );
+            array_push($venta_list["ventas"],$venta_item);
+        }
+
+        return $venta_list;
+    }
+
+    function read_viaticos(){
+
+        $query = "CALL sp_listarsalidaviaticoxcabecera(?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_salida);
+
+        $result->execute();
+        
+        $venta_list=array();
+        $venta_list["ventas"]=array();
+        $numero=0;
+        
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $numero=$numero+1;
+            $venta_item = array (
+                "id"=>$id,
+                "id_vendedor"=>$id_vendedor,
+                "vendedor"=>$vendedor,
+                "monto_grupal"=>$monto_grupal,
+                "monto_individual"=>$monto_individual,
+            );
+            array_push($venta_list["ventas"],$venta_item);
+        }
+
+        return $venta_list;
+    }
+
     function read_productos(){
 
         $query = "CALL sp_listarsalidadetalleproductoxcabecera(?,?)";
@@ -323,6 +385,7 @@ Class SalidaCabecera{
                 "precio_venta"=>$precio_venta,
                 "id_venta"=>$id_venta,
                 "contrato"=>$contrato,
+                "id_estado"=>$id_estado,
                 "estado"=>$estado
             );
             array_push($venta_list["productos"],$venta_item);
@@ -333,11 +396,12 @@ Class SalidaCabecera{
 
     function read_talonarios(){
 
-        $query = "CALL sp_listarsalidadetalletalonarioxcabecera(?)";
+        $query = "CALL sp_listarsalidadetalletalonarioxcabecera(?,?)";
 
         $result = $this->conn->prepare($query);
 
         $result->bindParam(1, $this->id_salida);
+        $result->bindParam(2, $this->estado);
 
         $result->execute();
         
@@ -354,7 +418,9 @@ Class SalidaCabecera{
                 "id"=>$id,
                 "id_talonario"=>$id_talonario,
                 "contrato"=>$contrato,
+                "observacion"=>$observacion,
                 "id_venta"=>$id_venta,
+                "id_estado"=>$id_estado,
                 "estado"=>$estado,
             );
             array_push($venta_list["talonarios"],$venta_item);
@@ -375,11 +441,14 @@ Class SalidaCabecera{
         
         $venta_list=array();
         $venta_list["vendedores"]=array();
-        
+        $numero=0;
+
         while($row = $result->fetch(PDO::FETCH_ASSOC))
         {
+            $numero=$numero+1;
             extract($row);
             $venta_item = array (
+                "numero"=>$numero,
                 "id"=>$id,
                 "id_vendedor"=>$id_vendedor,
                 "vendedor"=>$vendedor,
@@ -518,12 +587,12 @@ Class SalidaCabecera{
         return false;
     }
 
-    function update_productos(){
+    function update_productos_venta(){
 
-        $query = "call sp_actualizarsalidadetalleproducto(
+        $query = "call sp_actualizarsalidadetalleproducto_venta(
             :id_detalle_producto,
             :id_venta,
-            :id_precio,
+            :id_precio
         )";
 
         $result = $this->conn->prepare($query);
@@ -534,6 +603,7 @@ Class SalidaCabecera{
 
         $this->id=htmlspecialchars(strip_tags($this->id));
         $this->id_venta=htmlspecialchars(strip_tags($this->id_venta));
+        $this->precio_venta=htmlspecialchars(strip_tags($this->precio_venta));
 
         if($result->execute())
         {
@@ -542,11 +612,33 @@ Class SalidaCabecera{
         return false;
     }
 
-    function update_talonarios(){
+    function update_productos_anular(){
 
-        $query = "call sp_actualizarsalidadetalleproducto(
+        $query = "call sp_actualizarsalidadetalleproducto_anular(
+            :id_detalle_producto,
+            :prestado
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":id_detalle_producto", $this->id);
+        $result->bindParam(":prestado", $this->estado);
+
+        $this->id=htmlspecialchars(strip_tags($this->id));
+        $this->estado=htmlspecialchars(strip_tags($this->estado));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    function update_talonarios_venta(){
+
+        $query = "call sp_actualizarsalidadetalleproducto_venta(
             :id_detalle_talonario,
-            :id_venta,
+            :id_venta
         )";
 
         $result = $this->conn->prepare($query);
@@ -564,5 +656,26 @@ Class SalidaCabecera{
         return false;
     }
 
+    function update_talonarios_anular(){
+
+        $query = "call sp_actualizarsalidadetalletalonario_anular(
+            :id_detalle_talonario,
+            :prestado
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":id_detalle_talonario", $this->id);
+        $result->bindParam(":prestado", $this->estado);
+
+        $this->id=htmlspecialchars(strip_tags($this->id));
+        $this->estado=htmlspecialchars(strip_tags($this->estado));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
+    }
 }
 ?>

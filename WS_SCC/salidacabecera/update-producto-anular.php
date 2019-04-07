@@ -20,15 +20,15 @@
         if (($_POST["prid"])!=null)
         {
             $salida->id = trim($_POST["prid"]);
-            $salida->id_venta = trim($_POST["prventa"]);
+            $salida->estado = trim($_POST["prestado"]);
 
-            if($salida->update_talonarios_venta())
+            if($salida->update_productos_anular())
             {
-                print_json("0000", "Se actualizó el talonario satisfactoriamente.", $salida->id);
+                print_json("0000", "Se anuló el producto satisfactoriamente.", $salida->id);
             }
             else
             {
-                print_json("9999", "Ocurrió un error al actualizar el talonario.", "");
+                print_json("9999", "Ocurrió un error al anular el producto.", "");
             }
         }
         else
@@ -38,7 +38,7 @@
     }
     catch(Exception $exception)
     {
-        print_json("9999", "Ocurrió un error al actualizar el talonario.", $exception->getMessage());
+        print_json("9999", "Ocurrió un error al anular el producto.", $exception->getMessage());
     }
 
 ?>

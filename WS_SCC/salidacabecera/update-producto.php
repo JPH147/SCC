@@ -23,7 +23,7 @@
             $salida->id_venta = trim($_POST["prventa"]);
             $salida->precio_venta = trim($_POST["prprecio"]);
 
-            if($salida->update_productos())
+            if($salida->update_productos_venta())
             {
                 print_json("0000", "Se actualizó el producto satisfactoriamente.", $salida->id);
             }
