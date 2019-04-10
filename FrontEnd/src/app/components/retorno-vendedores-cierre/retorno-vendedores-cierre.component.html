@@ -50,7 +50,13 @@
 
       <mat-grid-tile colspan=3>
         <mat-form-field class="columnas-3">
-          <input matInput type="text" placeholder="Observaciones" [(ngModel)]="observacion" readonly>
+          <input matInput type="text" placeholder="Observaciones de la salida" [(ngModel)]="observacion" readonly>
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile colspan=3>
+        <mat-form-field class="columnas-3">
+          <input matInput type="text" placeholder="Observaciones de la llegada" [(ngModel)]="observacion_llegada">
         </mat-form-field>
       </mat-grid-tile>
 
@@ -100,6 +106,40 @@
   <div class="seccion">
 
     <mat-card-subtitle class="titulo-seccion">
+      ViÁTICOS TOTALES
+    </mat-card-subtitle>
+
+    <mat-table [dataSource]="ListadoViaticos" class="mat-elevation-z8">
+
+      <ng-container matColumnDef="numero">
+        <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+        <mat-cell *matCellDef="let viatico"> {{viatico.numero}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="vendedor">
+        <mat-header-cell *matHeaderCellDef> Contrato </mat-header-cell>
+        <mat-cell *matCellDef="let viatico"> {{viatico.vendedor}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="monto_grupal">
+        <mat-header-cell *matHeaderCellDef> Viáticos grupales </mat-header-cell>
+        <mat-cell *matCellDef="let viatico"> S/. {{viatico.monto_grupal }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="monto_individual">
+        <mat-header-cell *matHeaderCellDef> Viáticos individuales </mat-header-cell>
+        <mat-cell *matCellDef="let viatico"> S/. {{viatico.monto_individual}} </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="ColumnasViaticos"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: ColumnasViaticos;"></mat-row>
+    </mat-table>
+
+  </div>
+
+  <div class="seccion">
+
+    <mat-card-subtitle class="titulo-seccion">
       COMISIONES A LOS VENDEDORES
     </mat-card-subtitle>
 
@@ -116,8 +156,18 @@
       </ng-container>
 
       <ng-container matColumnDef="comision_total">
-        <mat-header-cell *matHeaderCellDef> Ganancia total </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef> Total de comisiones </mat-header-cell>
         <mat-cell *matCellDef="let vendedor"> S/. {{vendedor.comision_total}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="viaticos_totales">
+        <mat-header-cell *matHeaderCellDef> Total de viáticos </mat-header-cell>
+        <mat-cell *matCellDef="let vendedor"> S/. {{vendedor.viaticos_totales}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="total_pagar">
+        <mat-header-cell *matHeaderCellDef> Ganancia total </mat-header-cell>
+        <mat-cell *matCellDef="let vendedor"> S/. {{vendedor.total_pagar}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="comision_efectiva">
@@ -142,6 +192,17 @@
     <mat-card-subtitle class="titulo-seccion">
       PRODUCTOS POR DEVOLVER
     </mat-card-subtitle>
+
+
+    <mat-grid-list cols=3 rowHeight="70px">
+      <mat-grid-tile colspan=1>
+        <mat-form-field class="columnas-1">
+          <mat-select placeholder="Almacén de retorno" [(ngModel)]="almacen_retorno">
+            <mat-option *ngFor="let almacen of Almacenes" [value]="almacen.id"> {{almacen.nombre}} </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-grid-tile>
+    </mat-grid-list>
 
     <mat-table [dataSource]="ListadoProductos" class="mat-elevation-z8">
 
@@ -191,5 +252,13 @@
     </mat-table>
 
   </div>
+
+  <mat-card-actions>
+    <mat-grid-list cols=1 rowHeight="40px">
+      <mat-grid-tile>
+        <button mat-raised-button color="primary" (click)="CerrarSalida()" [disabled]="!almacen_retorno"> Guardar </button>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-card-actions>
 
 </mat-card>

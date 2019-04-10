@@ -8,7 +8,7 @@ Class Almacen{
     public $alm_nombre;
     public $alm_descripcion;
     public $alm_estado;
-
+    public $id_sucursal;
 
     public function __construct($db){
         $this->conn = $db;
@@ -60,6 +60,7 @@ Class Almacen{
         
         return false;
     }
+
     function readxId()
     {
         $query ="CALL sp_listaralmacenxId (?)";
@@ -72,7 +73,31 @@ Class Almacen{
         $this->alm_nombre=$row['alm_nombre'];
         $this->alm_descripcion=$row['alm_descripcion'];
         $this->alm_estado=$row['alm_estado'];
+    }
 
+    function read_sucursal(){
+        $query = "CALL sp_listaralmacenxsucursal(?)";
+
+        $result = $this->conn->prepare($query);
+    
+        $result->bindParam(1, $this->id_sucursal);
+    
+        $result->execute();
+    
+        $almacen_list=array();
+        $almacen_list["almacenes"]=array();
+
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $almacen_item = array (
+                "id"=>$id,
+                "nombre"=>$nombre
+            );
+
+            array_push($almacen_list["almacenes"],$almacen_item);
+        }
+        return $almacen_list;
     }
 
     function update()

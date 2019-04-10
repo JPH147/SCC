@@ -202,8 +202,23 @@ export class ServiciosProductoSerie {
           this.Validacion.next(duplicados)
         }
       })
-      
     })
+  }
+
+  ListarAlmacenSucursal(
+    id_sucursal:number
+  ){
+    return this.http.get(this.url+'almacen/read-sucursal.php', {
+      params: new HttpParams()
+      .set('prsucursal', id_sucursal.toString())
+    })
+    .pipe(map(res=>{
+        if (res['codigo'] === 0) {
+          return res['data'].almacenes;
+        } else {
+          console.log ('No hay datos que mostrar');
+        }
+    }))
   }
 
 }

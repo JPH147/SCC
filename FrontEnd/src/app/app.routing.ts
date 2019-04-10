@@ -38,6 +38,7 @@ const appRoutes: Routes = [
   {path: 'stock/ingresoproductos', component: IngresoProductosComponent},
   {path: 'stock/salidaproductos', component: SalidaProductosComponent},
   {path: 'salidavendedores', component: ListadoSalidaVendedoresComponent},
+  {path: 'salidavendedores/ver/:idsalida', component: SalidaVendedoresComponent},
   {path: 'salidavendedores/ingreso', component: SalidaVendedoresComponent},
   {path: 'salidavendedores/rendicion/:idsalida', component: RetornoVendedoresComponent},
   {path: 'salidavendedores/retorno/:idsalida', component: RetornoVendedoresCierreComponent},
@@ -52,7 +53,8 @@ const appRoutes: Routes = [
   {path: 'proveedores', component: ProveedoresComponent},
   {path: 'direcciones', component: DireccionesComponent},
   {path : 'detalleproductos', component: DetalleProductosComponent},
-  {path : 'evaluacion-reglas', component: ReglasEvaluacionComponent}
+  {path : 'evaluacion-reglas', component: ReglasEvaluacionComponent},
+  {path: 'prueba', component: SalidaVendedoresComponent}
 ];
 
 export const appRoutingProvider: any[] = [];

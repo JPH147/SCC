@@ -338,9 +338,9 @@ export class AgregarVentaComponent implements OnInit {
         });
       }
       // Se crean los productos y los descargos
-      this.Productos.forEach((item)=>{
-        this.VentaServicio.CrearVentaProductos(res['data'],item.id_serie,item.precio).subscribe(res=>console.log(res))
-      });
+      // this.Productos.forEach((item)=>{
+      //   this.VentaServicio.CrearVentaProductos(res['data'],item.id_serie,item.precio).subscribe(res=>console.log(res))
+      // });
       // ---------------------------------------------------------------->
 
       this.ventana.close(true);

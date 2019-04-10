@@ -19,9 +19,12 @@
 
         if (trim($_POST["prventa"])!=null)
         {
-            $vendedor->venta = trim($_POST["prventa"]);
+            $vendedor->salida = trim($_POST["prsalida"]);
             $vendedor->vendedor = trim($_POST["prvendedor"]);
-            $vendedor->monto = trim($_POST["prmonto"]);
+            $vendedor->comision_efectiva_porcentaje = trim($_POST["prcomisionefectivaporcentaje"]);
+            $vendedor->comision_efectiva = trim($_POST["prcomisionefectiva"]);
+            $vendedor->comision_retenida_porcentaje = trim($_POST["prcomisionretenidaporcentaje"]);
+            $vendedor->comision_retenida = trim($_POST["prcomisionretenida"]);
 
             if($vendedor->create_comision())
             {

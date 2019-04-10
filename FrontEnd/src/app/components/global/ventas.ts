@@ -74,4 +74,25 @@ export class ServiciosVentas{
 		}))
 	}
 
+	CrearComisionVendedor(
+		id_salida:number,
+		vendedor:number,
+		comision_efectiva_porcentaje:number,
+		comision_efectiva:number,
+		comision_retenida_porcentaje:number,
+		comision_retenida:number,
+	  ): Observable<any>{
+		let params = new HttpParams()
+		.set('prsalida',id_salida.toString())
+		.set('prvendedor',vendedor.toString())
+		.set('prcomisionefectivaporcentaje',comision_efectiva_porcentaje.toString())
+		.set('prcomisionefectiva',comision_efectiva.toString())
+		.set('prcomisionretenidaporcentaje',comision_retenida_porcentaje.toString())
+		.set('prcomisionretenida',comision_retenida.toString())
+	
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+	
+		return this.http.post(this.url + 'vendedor/create-comision.php', params, {headers: headers});
+	  }
+
 }

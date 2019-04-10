@@ -190,21 +190,6 @@ export class VentaService {
     return this.http.post(this.url + 'venta/create-garante.php', params, {headers: headers});
   }
 
-  CrearComisionVendedor(
-    id_venta:number,
-    id_vendedor:number,
-    monto_venta:number,
-  ): Observable<any>{
-    let params = new HttpParams()
-    .set('prventa',id_venta.toString())
-    .set('prvendedor',id_vendedor.toString())
-    .set('prmonto',monto_venta.toString())
-
-    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-
-    return this.http.post(this.url + 'vendedor/create-comision.php', params, {headers: headers});
-  }
-
   CrearCanje(
     id_venta_nueva:number,
     id_venta_antigua:number,

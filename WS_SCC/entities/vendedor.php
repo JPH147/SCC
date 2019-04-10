@@ -14,6 +14,8 @@ Class Vendedor{
     public $vnd_estado;
 
     public $fecha;
+    public $comision_efectiva;
+    public $comision_retenida;
     public $comision_efectiva_porcentaje;
     public $comision_retenida_porcentaje;
     public $comision_efectiva_estado;
@@ -29,6 +31,7 @@ Class Vendedor{
     public $total_pagina;
 
     public $venta;
+    public $salida;
     public $vendedor;
     public $monto;
 
@@ -211,24 +214,32 @@ Class Vendedor{
         return $this->total_resultado;
     }
 
-
     function  create_comision()
     {
         $query = "CALL sp_crearvendedorcomision(
-            :prventa,
+            :prsalida,
             :prvendedor,
-            :prmonto
+            :prcomisionefectivaporcentaje,
+            :prcomisionefectiva,
+            :prcomisionretenidaporcentaje,
+            :prcomisionretenida
         )";
 
         $result = $this->conn->prepare($query);
 
-        $result->bindParam(":prventa", $this->venta);
+        $result->bindParam(":prsalida", $this->salida);
         $result->bindParam(":prvendedor", $this->vendedor);
-        $result->bindParam(":prmonto", $this->monto);
+        $result->bindParam(":prcomisionefectivaporcentaje", $this->comision_efectiva_porcentaje);
+        $result->bindParam(":prcomisionefectiva", $this->comision_efectiva);
+        $result->bindParam(":prcomisionretenidaporcentaje", $this->comision_retenida_porcentaje);
+        $result->bindParam(":prcomisionretenida", $this->comision_retenida);
 
-        $this->venta=htmlspecialchars(strip_tags($this->venta));
+        $this->salida=htmlspecialchars(strip_tags($this->salida));
         $this->vendedor=htmlspecialchars(strip_tags($this->vendedor));
-        $this->monto=htmlspecialchars(strip_tags($this->monto));
+        $this->comision_efectiva_porcentaje=htmlspecialchars(strip_tags($this->comision_efectiva_porcentaje));
+        $this->comision_efectiva=htmlspecialchars(strip_tags($this->comision_efectiva));
+        $this->comision_retenida_porcentaje=htmlspecialchars(strip_tags($this->comision_retenida_porcentaje));
+        $this->comision_retenida=htmlspecialchars(strip_tags($this->comision_retenida));
 
         if($result->execute())
         {

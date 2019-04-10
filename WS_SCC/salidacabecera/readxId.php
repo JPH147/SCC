@@ -24,6 +24,7 @@
             "id"=>$venta->id,
 			"pecosa"=>$venta->pecosa,
 			"sucursal"=>$venta->sucursal,
+			"id_sucursal"=>$venta->id_sucursal,
 			"fecha"=>$venta->fecha,
 			"destino"=>$venta->destino,
 			"guia"=>$venta->guia,

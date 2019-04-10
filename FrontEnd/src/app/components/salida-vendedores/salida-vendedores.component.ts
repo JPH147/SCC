@@ -1,11 +1,11 @@
-import { Component, OnInit, Inject, ViewChild, ElementRef, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild, ElementRef, ViewChildren, QueryList, Optional } from '@angular/core';
 import {MatDialog, MatChipInputEvent, MatSelect, MatSnackBar} from '@angular/material';
 import { FormGroup, FormBuilder, FormArray,Validators} from '@angular/forms';
 import {Observable, fromEvent, BehaviorSubject} from 'rxjs';
 import {COMMA, SPACE} from '@angular/cdk/keycodes';
 import { tap, debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {SalidaVendedoresService} from './salida-vendedores.service';
-import {ServiciosGenerales, Almacen} from '../global/servicios';
+import {ServiciosGenerales, Almacen, Talonario} from '../global/servicios';
 import {ServiciosVentas} from '../global/ventas';
 import {ProductoService} from '../productos/productos.service';
 import {VentanaTalonarioComponent} from './ventana-talonario/ventana-talonario.component';
@@ -15,6 +15,10 @@ import {ServiciosProductoSerie} from '../global/productoserie';
 import {SalidaProductosService} from '../salida-productos/salida-productos.service';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import {Location} from '@angular/common';
+import { ActivatedRoute} from '@angular/router';
+import * as moment from 'moment';
+import {ProductosDataSource , TalonariosDataSource } from '../retorno-vendedores/retorno-vendedores.component';
+import {ViaticosDataSource} from '../retorno-vendedores-cierre/retorno-vendedores-cierre.component';
 
 @Component({
   selector: 'app-salida-vendedores',
@@ -25,6 +29,8 @@ import {Location} from '@angular/common';
 
 export class SalidaVendedoresComponent implements OnInit {
   
+  public Cargando = new BehaviorSubject<boolean>(true);
+
   @ViewChild('InputVendedor') FiltroVendedor: ElementRef;
   @ViewChildren('InputProducto') FiltroProducto: QueryList<any>;
   @ViewChild('InputAlmacen') FiltroAlmacen: MatSelect;
@@ -34,51 +40,74 @@ export class SalidaVendedoresComponent implements OnInit {
   public Almacenes:Almacen[];
   public Producto: Array<any>;
   public productos: FormArray;
+  public Hoy= new Date();
   readonly separatorKeysCodes: number[] = [SPACE,COMMA];
   departamentos: any[] = [];
+
+  // Para ver la salida
+  public id_salida:number;
 
   public Series: Array<any>;
   public talonarios: Array<any>;
   public comision_retenida:number;
-
-  public Hoy= new Date();
 
   // Tabla de vendedores
   ListadoVendedores: VendedoresDataSource;
   Columnas: string[] = [ 'numero','nombre', 'comision_efectiva', 'comision_retenida', 'opciones'];
   public Vendedores: Array<any> = [];
 
+  // Tabla de productos
+  ListadoProductos: ProductosDataSource;
+  ColumnasProductos: string[] = [ 'numero','producto', 'serie', 'precio', 'estado'];
+
+  // Tabla de talonarios
+  ListadoTalonarios: TalonariosDataSource;
+  ColumnasTalonarios: string[] = ['numero', 'contrato', 'estado', 'observaciones', 'opciones']
+
+  // Tabla de viáticos
+  ListadoViaticos: ViaticosDataSource;
+  ColumnasViaticos: string[] = ['numero', 'vendedor', 'monto_grupal', 'monto_individual']
+
+
   constructor(
-    public snackBar: MatSnackBar,
-    public dialog: MatDialog,
-    public DialogoSerie: MatDialog,
-    public Dialogotalon: MatDialog,
+    private snackBar: MatSnackBar,
+    private DialogoSerie: MatDialog,
+    private Dialogotalon: MatDialog,
     private Servicio: SalidaVendedoresService,
     private FormBuilder: FormBuilder,
     private Global: ServiciosGenerales,
     private Ventas:ServiciosVentas,
     private Articulos: StockService,
-    private SSeries:ServiciosProductoSerie,
-    private TransaccionService: SalidaProductosService,
+    private route: ActivatedRoute,
     private location: Location
   ) { }
 
  ngOnInit() {
+
+    this.id_salida=62;
+    this.SeleccionarSalida();
+    this.ListadoProductos = new ProductosDataSource(this.Servicio);
+    this.ListadoTalonarios = new TalonariosDataSource(this.Servicio);
+    this.ListadoViaticos = new ViaticosDataSource(this.Servicio);
 
     this.talonarios=[];
     this.ListarVendedor("");
 
     this.ListadoVendedores = new VendedoresDataSource();
 
-    // this.ListadoVendedores.AgregarInformacion();
-
     this.ConsultarComisionRetenida();
 
     this.Global.ListarSucursal(null,"").subscribe(res=>this.Sucursales=res);
     this.Global.ListarAlmacen().subscribe(res=>this.Almacenes=res);
 
-    // El formulario se crea luego de que se obtiene la Comiión retenida actual
     this.CrearFormulario();
+
+    // this.route.params.subscribe(params => {
+    //   if(params['idsalida']){
+    //     this.id_salida=params['idsalida'];
+    //     this.SeleccionarSalida();
+    //   }
+    // })
   }
 
   CrearFormulario(){
@@ -93,28 +122,22 @@ export class SalidaVendedoresComponent implements OnInit {
       fecha_salida: [new Date(), [
         Validators.required
       ]],
-      destino: [null, [
+      destino: ["", [
         Validators.required,
       ]],
-      guia_remision: [null, [
+      guia_remision: ["", [
         Validators.required
       ]],
       almacen: [false, [
         Validators.required
       ]],
-      placa: [{value:null, disabled:false}, [
-        // Validators.required,
-        // Validators.minLength(7)
+      placa: [{value:"", disabled:false}, [
       ]],
-      dni: [{value:null, disabled:false}, [
-        // Validators.required,
-        // Validators.pattern ('[0-9- ]+'),
-        // Validators.minLength(8)
+      dni: [{value:"", disabled:false}, [
       ]],
-      chofer: [{value:null, disabled:false}, [
-        // Validators.required
+      chofer: [{value:"", disabled:false}, [
       ]],
-      observacion: [{value:null, disabled:false}, [
+      observacion: [{value:"", disabled:false}, [
       ]],
       vendedor_nombre: [{value:null, disabled:false}, [
       ]],
@@ -122,7 +145,6 @@ export class SalidaVendedoresComponent implements OnInit {
       ]],
       vendedor_comision_retenida:[{value:this.comision_retenida,disabled:false},[
       ]],
-      // vendedores: this.FormBuilder.array([this.CrearVendedor()]),
       productos: this.FormBuilder.array([this.CrearProducto()]),
       talonarios: [{value:null, disabled:false}, [
         Validators.required
@@ -133,22 +155,45 @@ export class SalidaVendedoresComponent implements OnInit {
     });
   }
 
+  SeleccionarSalida(){
+    this.Servicio.SeleccionarSalida(this.id_salida).subscribe(res=>{
+      this.Cargando.next(false);
+      this.SalidaVendedoresForm.get('pecosa').setValue(res['data'].pecosa);
+      this.SalidaVendedoresForm.get('sucursal').setValue(res['data'].sucursal);
+      this.SalidaVendedoresForm.get('guia_remision').setValue(res['data'].guia);
+      this.SalidaVendedoresForm.get('fecha_salida').setValue(moment(res['data'].fecha).format('dd/mm/yyyy'));
+      this.SalidaVendedoresForm.get('destino').setValue(res['data'].destino);
+      this.SalidaVendedoresForm.get('observacion').setValue(res['data'].observacion ? res['data'].observacion : "No hay observaciones");
+      this.SalidaVendedoresForm.get('placa').setValue(res['data'].vehiculo_placa);
+      this.SalidaVendedoresForm.get('dni').setValue(res['data'].chofer_dni);
+      this.SalidaVendedoresForm.get('chofer').setValue(res['data'].chofer_nombre);
+
+      this.Vendedores=res['data'].vendedores.vendedores;
+      this.Columnas = [ 'numero','nombre', 'comision_efectiva', 'comision_retenida']
+      this.ListadoVendedores.AgregarInformacion(this.Vendedores)
+
+      this.ListadoProductos.CargarInformacion(this.id_salida,0);
+      this.ListadoTalonarios.CargarInformacion(this.id_salida, 0);
+      this.ListadoViaticos.CargarInformacion(this.id_salida);
+    })
+    
+  }
+
   ngAfterViewInit(){
-
-    fromEvent(this.FiltroVendedor.nativeElement,'keyup')
-    .pipe(
-      distinctUntilChanged(),
-      debounceTime(200),
-      tap(()=>{
-        this.ListarVendedor(this.FiltroVendedor.nativeElement.value)
-      })
-    ).subscribe()
-
-    this.FiltroProducto.changes.subscribe(res=>{
-       // console.log(this.FiltroVendedor['_results'])
-      for (let i in this.FiltroProducto['_results']) {
-        fromEvent(this.FiltroProducto['_results'][i].nativeElement,'keyup')
-        .pipe(
+    if(!this.id_salida){
+      fromEvent(this.FiltroVendedor.nativeElement,'keyup')
+      .pipe(
+        distinctUntilChanged(),
+        debounceTime(200),
+        tap(()=>{
+          this.ListarVendedor(this.FiltroVendedor.nativeElement.value)
+        })
+      ).subscribe()
+  
+      this.FiltroProducto.changes.subscribe(res=>{
+        for (let i in this.FiltroProducto['_results']) {
+          fromEvent(this.FiltroProducto['_results'][i].nativeElement,'keyup')
+          .pipe(
             debounceTime(100),
             distinctUntilChanged(),
             tap(()=>{
@@ -157,15 +202,16 @@ export class SalidaVendedoresComponent implements OnInit {
               }
             })
           ).subscribe()
-      }
-    })
+        }
+      })
+    }
   }
 
   ConsultarComisionRetenida(){
-     this.Ventas.ListarComisionRetenida().subscribe(res=>{
-       this.comision_retenida=res[0].comision;
-       this.SalidaVendedoresForm.get('vendedor_comision_retenida').setValue(this.comision_retenida);
-     })
+    this.Ventas.ListarComisionRetenida().subscribe(res=>{
+      this.comision_retenida=res[0].comision;
+      this.SalidaVendedoresForm.get('vendedor_comision_retenida').setValue(this.comision_retenida);
+    })
   }
 
   /*******************/
@@ -412,18 +458,19 @@ export class SalidaVendedoresComponent implements OnInit {
       console.log(res);
 
       // Crear transaccion en el almacen
+      console.log(this.Series)
       this.Series.forEach((item)=>{
         if(item.considerar){
           this.Servicio.AgregarProducto(
             res.data,
             item.id_serie,
-            item.precio,
-            1
+            item.precio
           ).subscribe(res2=>console.log(res2))
         }
       })
 
       // Grabar datos de vendedor
+      console.log(this.Vendedores);
       this.Vendedores.forEach((item)=>{
         this.Servicio.AgregarVendedor(
           res.data,
@@ -446,6 +493,11 @@ export class SalidaVendedoresComponent implements OnInit {
       this.snackBar.open("La salida se guardó satisfactoriamente", '', {
         duration: 2000,
       });
+
+      setTimeout(()=>{
+        this.Atras()
+      },1000)
+
     });
   }
 }

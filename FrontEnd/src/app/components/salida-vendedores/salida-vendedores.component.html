@@ -19,12 +19,12 @@
 
         <mat-grid-tile>
           <mat-form-field class="formulario-principal">
-            <input matInput placeholder="Pecosa" formControlName="pecosa">
+            <input matInput placeholder="Pecosa" formControlName="pecosa" [readonly]="id_salida">
             <mat-error>Solo se permiten números</mat-error>
           </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile>
+        <mat-grid-tile *ngIf="!id_salida">
           <mat-form-field class="formulario-principal">
             <mat-select placeholder="Sucursal" formControlName="sucursal">
               <mat-option *ngFor="let sucursal of Sucursales" [value]="sucursal.id">{{sucursal.nombre}}</mat-option>
@@ -32,7 +32,13 @@
           </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile>
+        <mat-grid-tile *ngIf="id_salida">
+          <mat-form-field class="formulario-principal">
+            <input matInput type="text" placeholder="Sucursal" formControlName="sucursal" readonly>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile *ngIf="!id_salida">
           <mat-form-field class="formulario-principal">
             <input matInput [matDatepicker]="picker" [max]="Hoy" placeholder="Fecha de Salida"  formControlName="fecha_salida">
             <mat-datepicker-toggle matSuffix [for]="picker" ></mat-datepicker-toggle>
@@ -40,36 +46,48 @@
           </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile>
+        <mat-grid-tile *ngIf="id_salida">
+          <mat-form-field class="formulario-principal">
+            <input matInput type="text" placeholder="Fecha de Salida"  formControlName="fecha_salida" readonly>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile *ngIf=!id_salida>
           <mat-form-field class="formulario-principal">
             <mat-chip-list #chipList>
-             <mat-chip *ngFor="let departamento of departamentos" [selectable]="true" [removable]="true" (removed)="remove(departamento)">
-               {{departamento.name}}
-               <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-             </mat-chip>
-             <input placeholder="Destino"
-                    formControlName="destino"
-                    [matChipInputFor]="chipList"
-                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                    [matChipInputAddOnBlur]="true"
-                    (matChipInputTokenEnd)="add($event)">
+              <mat-chip *ngFor="let departamento of departamentos" [selectable]="true" [removable]="true" (removed)="remove(departamento)">
+                {{departamento.name}}
+                <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+              </mat-chip>
+              <input placeholder="Destino"
+              formControlName="destino"
+              [matChipInputFor]="chipList"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              [matChipInputAddOnBlur]="true"
+              (matChipInputTokenEnd)="add($event)">
             </mat-chip-list>
           </mat-form-field>
         </mat-grid-tile>
-
-        <mat-grid-tile>
+        
+        <mat-grid-tile *ngIf="id_salida">
           <mat-form-field class="formulario-principal">
-            <input matInput #message maxlength="15" placeholder="Guia de remisión" formControlName="guia_remision">
+            <input matInput placeholder="Destino"  formControlName="destino" readonly>
           </mat-form-field>
         </mat-grid-tile>
 
         <mat-grid-tile>
+          <mat-form-field class="formulario-principal">
+            <input matInput #message maxlength="15" placeholder="Guia de remisión" formControlName="guia_remision" [readonly]="id_salida">
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile *ngIf="!id_salida">
           <button type="button" mat-raised-button color="primary" (click)="AgregarTalonario()"> Agregar talonarios </button>
         </mat-grid-tile>
 
         <mat-grid-tile colspan=3>
           <mat-form-field class="formulario-principal-3">
-            <input matInput placeholder="Observaciones" formControlName="observacion">
+            <input matInput placeholder="Observaciones" formControlName="observacion" [readonly]="id_salida">
           </mat-form-field>
         </mat-grid-tile>
 
@@ -77,7 +95,7 @@
 
     </div>
 
-    <div class="seccion">
+    <div class="seccion" *ngIf="!id_salida || (id_salida && SalidaVendedoresForm.value.vehiculo_placa)">
 
       <mat-card-subtitle class="titulo-seccion">
         DATOS DEL VEHICULO
@@ -87,21 +105,21 @@
 
         <mat-grid-tile>
           <mat-form-field class="formulario-principal">
-            <input matInput maxlength="10" placeholder="Placa" formControlName="placa" #InputPlaca>
+            <input matInput maxlength="10" placeholder="Placa" formControlName="placa" #InputPlaca [readonly]="id_salida">
             <mat-hint align="end">{{InputPlaca.value.length}} / 7</mat-hint>
           </mat-form-field>
         </mat-grid-tile>
 
         <mat-grid-tile>
           <mat-form-field class="formulario-principal">
-            <input matInput maxlength="8" placeholder="DNI" formControlName="dni" #InputDNI>
+            <input matInput maxlength="8" placeholder="DNI" formControlName="dni" #InputDNI [readonly]="id_salida">
             <mat-hint align="end">{{InputDNI.value.length}} / 8</mat-hint>
           </mat-form-field>
         </mat-grid-tile>
 
         <mat-grid-tile>
           <mat-form-field class="formulario-principal">
-            <input matInput placeholder="Chofer" formControlName="chofer">
+            <input matInput placeholder="Chofer" formControlName="chofer" [readonly]="id_salida">
           </mat-form-field>
         </mat-grid-tile>
 
@@ -115,43 +133,46 @@
         DATOS DE LOS VENDEDORES
       </mat-card-subtitle>
 
-      <mat-grid-tile>
-        <button mat-mini-fab type="button" color="primary" matTooltip="Agrega Vendedor" (click)="AgregarVendedor()"><mat-icon>add</mat-icon></button>
-      </mat-grid-tile>
-
-
-      <mat-grid-list cols="5" rowHeight="70px"> 
-
-        <mat-grid-tile colspan="2">
-          <mat-form-field class="formulario-principal">
-            <input matInput placeholder="Vendedor" [matAutocomplete]="autovendedor" #InputVendedor formControlName="vendedor_nombre">
-            <mat-autocomplete #autovendedor="matAutocomplete" [displayWith]="displayFn" (optionSelected)="VendedorSeleccionado($event)">
-              <mat-option *ngFor="let vendedor of Vendedor" [value]="vendedor">
-                {{vendedor.nombre}}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
-        </mat-grid-tile>
+      <ng-container *ngIf="!id_salida">
 
         <mat-grid-tile>
-          <mat-form-field class="formulario-principal">
-            <input matInput placeholder="Comision efectiva" formControlName="vendedor_comision_efectiva">
-            <span matSuffix>%</span>
-          </mat-form-field>
+          <button mat-mini-fab type="button" color="primary" matTooltip="Agrega Vendedor" (click)="AgregarVendedor()"><mat-icon>add</mat-icon></button>
         </mat-grid-tile>
+  
+        <mat-grid-list cols="5" rowHeight="70px"> 
+  
+          <mat-grid-tile colspan="2">
+            <mat-form-field class="formulario-principal">
+              <input matInput placeholder="Vendedor" [matAutocomplete]="autovendedor" #InputVendedor formControlName="vendedor_nombre">
+              <mat-autocomplete #autovendedor="matAutocomplete" [displayWith]="displayFn" (optionSelected)="VendedorSeleccionado($event)">
+                <mat-option *ngFor="let vendedor of Vendedor" [value]="vendedor">
+                  {{vendedor.nombre}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </mat-grid-tile>
+  
+          <mat-grid-tile>
+            <mat-form-field class="formulario-principal">
+              <input matInput placeholder="Comision efectiva" formControlName="vendedor_comision_efectiva">
+              <span matSuffix>%</span>
+            </mat-form-field>
+          </mat-grid-tile>
+  
+          <mat-grid-tile>
+            <mat-form-field>
+              <input matInput placeholder="Comision retenida" formControlName="vendedor_comision_retenida">
+              <span matSuffix>%</span>
+            </mat-form-field>
+          </mat-grid-tile>
+  
+          <mat-grid-tile>
+            <button mat-raised-button type="button" color="primary" matTooltip="Agrega Vendedor" (click)="AgregarVendedor()">Agregar</button>
+          </mat-grid-tile>
+  
+        </mat-grid-list>
 
-        <mat-grid-tile>
-          <mat-form-field>
-            <input matInput placeholder="Comision retenida" formControlName="vendedor_comision_retenida">
-            <span matSuffix>%</span>
-          </mat-form-field>
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          <button mat-raised-button type="button" color="primary" matTooltip="Agrega Vendedor" (click)="AgregarVendedor()">Agregar</button>
-        </mat-grid-tile>
-
-      </mat-grid-list>
+      </ng-container>
 
       <mat-table [dataSource]="ListadoVendedores" class="mat-elevation-z8" *ngIf="Vendedores.length>0">
 
@@ -162,7 +183,8 @@
 
         <ng-container matColumnDef="nombre">
           <mat-header-cell *matHeaderCellDef> Vendedor </mat-header-cell>
-          <mat-cell *matCellDef="let vendedor"> {{vendedor.nombre}} </mat-cell>
+          <!-- Se coloca vendedor.nombre cuando se agrega una salida y vendedor.vendedor cuando se ve el detalle -->
+          <mat-cell *matCellDef="let vendedor"> {{vendedor.nombre}}{{vendedor.vendedor}} </mat-cell> 
         </ng-container>
 
         <ng-container matColumnDef="comision_efectiva">
@@ -189,76 +211,193 @@
 
     </div>
 
+    <div class="seccion" *ngIf="id_salida">
+
+      <mat-card-subtitle class="titulo-seccion">
+        DATOS DE LOS VIATICOS
+      </mat-card-subtitle>
+
+      <mat-table [dataSource]="ListadoViaticos" class="mat-elevation-z8" *ngIf="Vendedores.length>0">
+
+        <ng-container matColumnDef="numero">
+          <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+          <mat-cell *matCellDef="let talonario"> {{talonario.numero}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="vendedor">
+          <mat-header-cell *matHeaderCellDef> Contrato </mat-header-cell>
+          <mat-cell *matCellDef="let talonario"> {{talonario.vendedor}} </mat-cell> 
+        </ng-container>
+
+        <ng-container matColumnDef="monto_grupal">
+          <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
+          <mat-cell *matCellDef="let talonario"> {{talonario.monto_grupal | currency:'S/.'}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="monto_individual">
+          <mat-header-cell *matHeaderCellDef> Observaciones </mat-header-cell>
+          <mat-cell *matCellDef="let talonario"> {{talonario.monto_individual | currency:'S/.'}}</mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="ColumnasViaticos"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: ColumnasViaticos;"></mat-row>
+
+      </mat-table>
+
+    </div>
+
+    <div class="seccion" *ngIf="id_salida">
+
+      <mat-card-subtitle class="titulo-seccion">
+        DATOS DE LOS TALONARIOS
+      </mat-card-subtitle>
+
+      <mat-table [dataSource]="ListadoTalonarios" class="mat-elevation-z8" *ngIf="Vendedores.length>0">
+
+        <ng-container matColumnDef="numero">
+          <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+          <mat-cell *matCellDef="let talonario"> {{talonario.numero}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="contrato">
+          <mat-header-cell *matHeaderCellDef> Contrato </mat-header-cell>
+          <mat-cell *matCellDef="let talonario"> {{talonario.contrato}} </mat-cell> 
+        </ng-container>
+
+        <ng-container matColumnDef="estado">
+          <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
+          <mat-cell *matCellDef="let talonario"> {{talonario.estado}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="observaciones">
+          <mat-header-cell *matHeaderCellDef> Observaciones </mat-header-cell>
+          <mat-cell *matCellDef="let talonario"> {{talonario.observacion}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="opciones">
+          <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
+          <mat-cell *matCellDef="let talonario">
+            <button mat-icon-button type="button" matTooltip="Ver venta" color="primary"><mat-icon> visibility </mat-icon></button>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="ColumnasTalonarios"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: ColumnasTalonarios;"></mat-row>
+
+      </mat-table>
+
+    </div>
+  
     <div class="seccion">
 
       <mat-card-subtitle class="titulo-seccion">
         DATOS DE LOS PRODUCTOS
       </mat-card-subtitle>
 
-      <mat-grid-list cols="5" rowHeight="70px">
+      <ng-container *ngIf="!id_salida">
+      
+        <mat-grid-list cols="5" rowHeight="70px">
 
-        <mat-grid-tile colspan=2>
-          <mat-form-field class="formulario-principal">
-            <mat-select placeholder="Almacen" #InputAlmacen (selectionChange)="ResetearForm($event)" formControlName="almacen">
-              <mat-option *ngFor="let almacen of Almacenes" [value]="almacen">
-                {{almacen.nombre}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </mat-grid-tile>
-        
-        <mat-grid-tile>
-        </mat-grid-tile>
-        
-        <mat-grid-tile>
-          <button mat-mini-fab type="button" color="primary" matTooltip="Agrega Producto" (click)="AgregarProducto()"><mat-icon>add</mat-icon></button>
-        </mat-grid-tile>
+          <mat-grid-tile colspan=2>
+            <mat-form-field class="formulario-principal">
+              <mat-select placeholder="Almacen" #InputAlmacen (selectionChange)="ResetearForm($event)" formControlName="almacen">
+                <mat-option *ngFor="let almacen of Almacenes" [value]="almacen">
+                  {{almacen.nombre}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-grid-tile>
+          
+          <mat-grid-tile>
+          </mat-grid-tile>
+          
+          <mat-grid-tile>
+            <button mat-mini-fab type="button" color="primary" matTooltip="Agrega Producto" (click)="AgregarProducto()"><mat-icon>add</mat-icon></button>
+          </mat-grid-tile>
 
-      </mat-grid-list>
+        </mat-grid-list>
 
-      <ng-container *ngIf="SalidaVendedoresForm.value.almacen">
+        <ng-container *ngIf="SalidaVendedoresForm.value.almacen">
 
-        <div formArrayName="productos" *ngFor="let producto of SalidaVendedoresForm['controls'].productos['controls']; let i = index">
-          <div [formGroupName]="i">
-            <mat-grid-list cols="3" rowHeight="70px">
-            
-              <mat-grid-tile *ngIf="!producto.value.id">
-                <mat-form-field class="formulario-principal">
-                  <input matInput placeholder="Producto" [matAutocomplete]="autoproducto" #InputProducto formControlName="producto">
-                  <mat-autocomplete #autoproducto="matAutocomplete" [displayWith]="displayFn2" (optionSelected)="ProductoSeleccionado($event,i)">
-                    <mat-option *ngFor="let producto of Producto" [value]="producto">
-                      {{producto.descripcion}}
-                    </mat-option>
-                  </mat-autocomplete>
-                </mat-form-field>
-              </mat-grid-tile>
-  
-              <mat-grid-tile *ngIf="producto.value.id">
-                <mat-form-field class="formulario-principal">
-                  <input matInput placeholder="Producto" formControlName="descripcion" readonly="">
-                </mat-form-field>
-              </mat-grid-tile>
-  
-              <mat-grid-tile>
-                <mat-form-field class="formulario-principal">
-                  <input matInput placeholder="Cantidad" formControlName="cantidad">
-                </mat-form-field>
-              </mat-grid-tile>
-            
-              <mat-grid-tile>
-                <button mat-mini-fab type="button" color="primary" matTooltip="Agregar series" (click)="AgregarSerieSalidaV(producto,i)" [disabled]="!producto.value.producto"><mat-icon>reorder</mat-icon></button>
-                <button mat-mini-fab type="button" color="primary" matTooltip="Eliminar producto" (click)="EliminarProducto(producto.value.producto,i)"matTooltip="Eliminar Producto" ><mat-icon>delete</mat-icon></button>
-              </mat-grid-tile>
-            
-            </mat-grid-list>
+          <div formArrayName="productos" *ngFor="let producto of SalidaVendedoresForm['controls'].productos['controls']; let i = index">
+            <div [formGroupName]="i">
+              <mat-grid-list cols="3" rowHeight="70px">
+              
+                <mat-grid-tile *ngIf="!producto.value.id">
+                  <mat-form-field class="formulario-principal">
+                    <input matInput placeholder="Producto" [matAutocomplete]="autoproducto" #InputProducto formControlName="producto">
+                    <mat-autocomplete #autoproducto="matAutocomplete" [displayWith]="displayFn2" (optionSelected)="ProductoSeleccionado($event,i)">
+                      <mat-option *ngFor="let producto of Producto" [value]="producto">
+                        {{producto.descripcion}}
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </mat-grid-tile>
+    
+                <mat-grid-tile *ngIf="producto.value.id">
+                  <mat-form-field class="formulario-principal">
+                    <input matInput placeholder="Producto" formControlName="descripcion" readonly="">
+                  </mat-form-field>
+                </mat-grid-tile>
+    
+                <mat-grid-tile>
+                  <mat-form-field class="formulario-principal">
+                    <input matInput placeholder="Cantidad" formControlName="cantidad" readonly>
+                  </mat-form-field>
+                </mat-grid-tile>
+              
+                <mat-grid-tile>
+                  <button mat-mini-fab type="button" color="primary" matTooltip="Agregar series" (click)="AgregarSerieSalidaV(producto,i)" [disabled]="!producto.value.producto"><mat-icon>reorder</mat-icon></button>
+                  <button mat-mini-fab type="button" color="primary" matTooltip="Eliminar producto" (click)="EliminarProducto(producto.value.producto,i)"matTooltip="Eliminar Producto" ><mat-icon>delete</mat-icon></button>
+                </mat-grid-tile>
+              
+              </mat-grid-list>
+            </div>
           </div>
-        </div>
+        </ng-container>
+              
+      </ng-container>
+
+      <ng-container *ngIf="id_salida">
+
+        <mat-table [dataSource]="ListadoProductos" class="mat-elevation-z8">
+
+          <ng-container matColumnDef="numero">
+            <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+            <mat-cell *matCellDef="let producto"> {{producto.numero}} </mat-cell>
+          </ng-container>
+  
+          <ng-container matColumnDef="producto">
+            <mat-header-cell *matHeaderCellDef> Producto </mat-header-cell>
+            <mat-cell *matCellDef="let producto"> {{producto.producto}} </mat-cell> 
+          </ng-container>
+  
+          <ng-container matColumnDef="serie">
+            <mat-header-cell *matHeaderCellDef> Serie </mat-header-cell>
+            <mat-cell *matCellDef="let producto"> {{producto.serie}} </mat-cell>
+          </ng-container>
+  
+          <ng-container matColumnDef="precio">
+            <mat-header-cell *matHeaderCellDef> Precio mínmo </mat-header-cell>
+            <mat-cell *matCellDef="let producto"> {{producto.precio_minimo}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="estado">
+            <mat-header-cell *matHeaderCellDef> Precio mínmo </mat-header-cell>
+            <mat-cell *matCellDef="let producto"> {{producto.estado}} </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="ColumnasProductos"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: ColumnasProductos;"></mat-row>
+  
+        </mat-table>
+
       </ng-container>
       
+
     </div>
 
-    <mat-card-actions>
-
+    <mat-card-actions *ngIf="!id_salida">
       <mat-grid-list cols="1" rowHeight="65px">
         <mat-grid-tile> 
           <button mat-raised-button color="primary" (click)="Guardar(SalidaVendedoresForm)"> Guardar </button>

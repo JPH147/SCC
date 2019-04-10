@@ -46,15 +46,13 @@ export class SalidaVendedoresService {
   AgregarProducto(
     cabecera: number,
     serie: number,
-    precio: number,
-    cantidad:number
+    precio: SVGAnimatedNumber
   ): Observable<any> {
 
     let params = new HttpParams()
       .set('prcabecera', cabecera.toString())
       .set('prserie', serie.toString())
       .set('prprecio', precio.toString())
-      .set('prcantidad', cantidad.toString())
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -93,6 +91,61 @@ export class SalidaVendedoresService {
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'salidacabecera/create-talonario.php', params, {headers: headers});
+  }
+
+  CrearLlegada(
+    id_cabecera: number,
+    fecha: Date,
+    observacion: string
+  ){
+    let params = new HttpParams()
+      .set('prid', id_cabecera.toString())
+      .set('prfecha', moment(fecha).format("YYYY-MM-DD"))
+      .set('probservacion', observacion)
+      
+    // console.log(params);
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'salidacabecera/create-llegada.php', params, {headers: headers});
+  }
+
+  CrearLlegadaTalonarios(
+    id_talonario: number,
+    estado: number
+  ){
+    let params = new HttpParams()
+      .set('prtalonario', id_talonario.toString())
+      .set('prestado', estado.toString())
+      
+    console.log(params)
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    
+    return this.http.post(this.url + 'salidacabecera/create-llegada-talonario.php', params, {headers: headers});
+  }
+
+  CrearLlegadaProducto(
+    serie:number,
+    salida:number,
+    almacen:number,
+    precio:number,
+    fecha:Date,
+    documento:string
+  ){
+    let params = new HttpParams()
+      .set('prserie', serie.toString())
+      .set('prsalida', salida.toString())
+      .set('pralmacen', almacen.toString())
+      .set('prprecio', precio.toString())
+      .set('prfecha', moment(fecha).format("YYYY-MM-DD"))
+      .set('prdocumento', documento)
+      
+    console.log(params)
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'salidacabecera/create-llegada-producto.php', params, {headers: headers});
   }
 
   SeleccionarSalida(
@@ -144,6 +197,24 @@ export class SalidaVendedoresService {
       params: new HttpParams()
       .set('prid', id_salida.toString())
       .set('prestado', estado.toString())
+    })
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+          return res;
+      }  else {
+          console.log('No hay datos que mostrar');
+          return res;
+      }
+    }));
+  }
+
+  ListarSalidaViaticos(
+    id_salida:number
+  ): Observable<any> {
+
+    return this.http.get(this.url + 'salidacabecera/read-viaticos.php', {
+      params: new HttpParams()
+      .set('prid', id_salida.toString())
     })
     .pipe(map(res => {
       if (res['codigo'] === 0) {

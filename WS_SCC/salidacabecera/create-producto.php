@@ -22,7 +22,6 @@
             $salida->cabecera = trim($_POST["prcabecera"]);
             $salida->serie = trim($_POST["prserie"]);
             $salida->precio = trim($_POST["prprecio"]);
-            $salida->cantidad = trim($_POST["prcantidad"]);
 
             if($salida->create_producto())
             {

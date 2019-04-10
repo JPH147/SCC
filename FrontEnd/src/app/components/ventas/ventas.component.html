@@ -772,7 +772,7 @@
 
           <ng-container matColumnDef="fecha_vencimiento">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Vencimiento </mat-header-cell>
-            <mat-cell *matCellDef="let cronograma"> {{cronograma.fecha_vencimiento | date: 'dd/MM/yyyy'}} </mat-cell>
+            <mat-cell *matCellDef="let cronograma"> {{cronograma.fecha_vencimiento | date: 'MM/yyyy'}} </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="monto_interes">

@@ -66,16 +66,18 @@ mat-table{
   width: 93.33%;
 }
 
-.mat-column-numero{
-  max-width: 10%
-}
-
 mat-footer-cell{
   font-weight: bold;
 }
 
+.mat-column-numero{
+  max-width: 5%;
+}
+
 .mat-column-comision_total,
+.mat-column-viaticos_totales,
+.mat-column-total_pagar,
 .mat-column-comision_efectiva,
 .mat-column-comision_retenida{
-  max-width: 15%
+  max-width: 12%
 }

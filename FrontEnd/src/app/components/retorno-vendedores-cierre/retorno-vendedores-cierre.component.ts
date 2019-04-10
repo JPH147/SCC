@@ -6,12 +6,14 @@ import { ActivatedRoute } from '@angular/router';
 import {SalidaVendedoresService} from '../salida-vendedores/salida-vendedores.service';
 import { BehaviorSubject } from 'rxjs';
 import {ProductosDataSource, TalonariosDataSource, VentasDataSource} from '../retorno-vendedores/retorno-vendedores.component';
+import {ServiciosVentas} from '../global/ventas';
+import {ServiciosProductoSerie} from '../global/productoserie';
 
 @Component({
   selector: 'app-retorno-vendedores-cierre',
   templateUrl: './retorno-vendedores-cierre.component.html',
   styleUrls: ['./retorno-vendedores-cierre.component.scss'],
-  providers: [SalidaVendedoresService]
+  providers: [SalidaVendedoresService, ServiciosVentas,ServiciosProductoSerie]
 })
 export class RetornoVendedoresCierreComponent implements OnInit {
 
@@ -19,11 +21,13 @@ export class RetornoVendedoresCierreComponent implements OnInit {
   public ListadoProductos: ProductosDataSource;
   public ListadoVentas: VentasDataSource;
   public ListadoVendedores: VendedorDataSource;
+  public ListadoViaticos: ViaticosDataSource;
 
-  public ColumnasTalonarios:string[]=['numero', 'contrato']
-  public ColumnasProductos:string[]=['numero', 'producto', 'serie']
-  public ColumnasVentas:string[]=['numero', 'contrato', 'total', 'comision']
-  public ColumnasVendedores:string[]=['numero', 'nombre', 'comision_total', 'comision_efectiva', 'comision_retenida']
+  public ColumnasTalonarios:string[]=['numero', 'contrato'];
+  public ColumnasProductos:string[]=['numero', 'producto', 'serie'];;
+  public ColumnasVentas:string[]=['numero', 'contrato', 'total', 'comision'];
+  public ColumnasVendedores:string[]=['numero', 'nombre', 'comision_total', 'viaticos_totales', 'total_pagar','comision_efectiva', 'comision_retenida'];
+  public ColumnasViaticos:string[]=['numero', 'vendedor', 'monto_grupal', 'monto_individual'];
 
   public id_salida: number;
   public Cargando = new BehaviorSubject<any>(true);
@@ -33,24 +37,35 @@ export class RetornoVendedoresCierreComponent implements OnInit {
   public fecha_retorno:Date;
   public destino:string;
   public observacion:string;
+  public observacion_llegada:string;
   public Vendedores: any = {};
+  public Almacenes : Array<any>;
+  public Productos: Array<any>;
+  public Talonarios: Array<any>;
+  public almacen_retorno:number;
 
   constructor(
     private location: Location,
     private Dialogo: MatDialog,
     private route: ActivatedRoute,
-    private Servicio: SalidaVendedoresService
+    private Servicio: SalidaVendedoresService,
+    private VServicios: ServiciosVentas,
+    private PServicio: ServiciosProductoSerie
   ) { }
 
   ngOnInit() {
     this.ListadoTalonarios = new TalonariosDataSource(this.Servicio);
     this.ListadoProductos = new ProductosDataSource(this.Servicio);
     this.ListadoVentas = new VentasDataSource(this.Servicio);
-    this.ListadoVendedores = new VendedorDataSource(this.Servicio);
+    this.ListadoVendedores = new VendedorDataSource();
+    this.ListadoViaticos = new ViaticosDataSource(this.Servicio);
 
     this.route.params.subscribe(params => {
       if(params['idsalida']){
         this.id_salida=params['idsalida'];
+        this.SeleccionarSalida();
+      }else{
+        this.id_salida=62;
         this.SeleccionarSalida();
       }
     })
@@ -67,29 +82,55 @@ export class RetornoVendedoresCierreComponent implements OnInit {
       this.observacion=res['data'].observacion=="" ? "No hay observaciones" : res['data'].observacion;
       this.Vendedores=res['data'].vendedores.vendedores;
 
+      this.ListarAlmacenesxSucursal(res['data'].id_sucursal);
       this.CalcularComisiones()
+
+      this.ListarProductos(this.id_salida);
+      this.ListarTalonarios(this.id_salida);
 
     })
 
-    this.ListadoTalonarios.CargarInformacion(this.id_salida,1)
-    this.ListadoProductos.CargarInformacion(this.id_salida,1)
-    this.ListadoVentas.CargarInformacion(this.id_salida)
+    this.ListadoTalonarios.CargarInformacion(this.id_salida,1);
+    this.ListadoProductos.CargarInformacion(this.id_salida,1);
+    this.ListadoVentas.CargarInformacion(this.id_salida);
     this.ListadoVendedores.CargarInformacion([]);
+    this.ListadoViaticos.CargarInformacion(this.id_salida);
+  }
+
+  ListarAlmacenesxSucursal(id_sucursal:number){
+    this.PServicio.ListarAlmacenSucursal(id_sucursal).subscribe(res=>{
+      this.Almacenes=res;
+    })
+  }
+
+  ListarProductos(id_salida:number){
+    this.Servicio.ListarSalidaProductos(id_salida,0).subscribe(res=>{
+      this.Productos=res['data'].productos;
+    })
+  }
+  
+  ListarTalonarios(id_salida:number){
+    this.Servicio.ListarSalidaTalonarios(id_salida, 0).subscribe(res=>{
+      this.Talonarios=res['data'].talonarios
+    })
   }
 
   CalcularComisiones(){
     let total_vendedores=+this.Vendedores.length;
     let total_comisiones=+this.ListadoVentas.Comision.value;
     
-    // console.log(total_vendedores,total_comisiones);
     let monto_base=total_comisiones/total_vendedores;
     let i=0;
 
     this.Vendedores.forEach((item)=>{
       item.comision_total=monto_base*(item.comision_efectiva/100);
-      item.comision_total_retenida=item.comision_total*(item.comision_retenida/100);
-      item.comision_total_efectiva=item.comision_total-item.comision_total_retenida
+      item.viaticos_totales=item.viatico_personal+item.viatico_grupal;
+      item.total_pagar=item.comision_total-item.viaticos_totales;
+
+      item.total_pagar>0 ? item.comision_total_retenida=item.total_pagar*(item.comision_retenida/100) : item.comision_total_retenida=0;
+      item.total_pagar>0 ? item.comision_total_efectiva=item.total_pagar-item.comision_total_retenida : item.comision_total_efectiva=0;
       i++;
+      
       if(i==this.Vendedores.length){
         this.ListadoVendedores.CargarInformacion(this.Vendedores);
       }
@@ -100,9 +141,81 @@ export class RetornoVendedoresCierreComponent implements OnInit {
     this.location.back()
   }
 
+  CerrarSalida(){
+
+    console.log(this.Vendedores)
+
+    this.Servicio.CrearLlegada(
+      this.id_salida,
+      this.fecha_retorno,
+      this.observacion_llegada
+    ).subscribe(res=>{
+      console.log(res)
+      
+      // Se crean las comisiones para el vendedor
+      this.Vendedores.forEach((item)=>{
+        if(item.total_pagar>0){
+          this.VServicios.CrearComisionVendedor(
+            this.id_salida,
+            item.id_vendedor,
+            item.comision_efectiva,
+            item.comision_total_efectiva,
+            item.comision_retenida,
+            item.comision_total_retenida
+          ).subscribe(res1=>console.log(res1))
+        }
+      })
+
+      // Los productos regresan al almacén
+      this.Productos.forEach((item)=>{
+      // Los productos que no se vendieron, regresan
+        if(item.id_estado==1){
+          this.Servicio.CrearLlegadaProducto(
+            item.id_serie,
+            this.id_salida,
+            this.almacen_retorno,
+            item.precio_minimo,
+            this.fecha_retorno,
+            this.pecosa
+          ).subscribe(res1=>console.log(res1))
+        }
+      })
+
+      // Los talonarios estarán disponibles nuevamente
+      this.Talonarios.forEach((item)=>{
+        this.Servicio.CrearLlegadaTalonarios(
+          item.id_talonario,
+          item.id_estado==3 ? 0 : item.id_estado
+        ).subscribe(res1=>console.log(res1))
+      })
+
+    })
+  }
+
 }
 
 export class VendedorDataSource implements DataSource<any>{
+
+  private Informacion = new BehaviorSubject<any>([])
+
+  constructor(
+  ){ }
+
+  connect(collectionViewer: CollectionViewer){
+    return this.Informacion.asObservable()
+  }
+
+  disconnect(){
+    this.Informacion.complete()
+  }
+
+  CargarInformacion(array){
+    // console.log(array)
+    this.Informacion.next(array);
+  }
+}
+
+export class ViaticosDataSource implements DataSource<any>{
 
   private Informacion = new BehaviorSubject<any>([])
 
@@ -118,9 +231,11 @@ export class VendedorDataSource implements DataSource<any>{
     this.Informacion.complete()
   }
 
-  CargarInformacion(array){
-    console.log(array)
-    this.Informacion.next(array);
+  CargarInformacion(
+    id_salida: number
+  ){
+    this.Servicio.ListarSalidaViaticos(id_salida).subscribe(res=>{
+      this.Informacion.next(res['data'].viaticos)
+    })
   }
-
 }

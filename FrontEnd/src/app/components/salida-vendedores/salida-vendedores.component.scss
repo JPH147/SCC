@@ -214,6 +214,10 @@ mat-table{
 }
 
 .mat-column-comision_efectiva,
-.mat-column-comision_retenida{
+.mat-column-comision_retenida,
+.mat-column-monto_grupal,
+.mat-column-monto_individual,
+.mat-column-serie,
+.mat-column-precio{
   max-width: 20%;
 }
