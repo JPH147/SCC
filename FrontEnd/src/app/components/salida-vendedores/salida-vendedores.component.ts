@@ -58,7 +58,7 @@ export class SalidaVendedoresComponent implements OnInit {
 
   // Tabla de productos
   ListadoProductos: ProductosDataSource;
-  ColumnasProductos: string[] = [ 'numero','producto', 'serie', 'precio', 'estado'];
+  ColumnasProductos: string[] = [ 'numero','producto', 'serie', 'precio', 'estado', 'opciones'];
 
   // Tabla de talonarios
   ListadoTalonarios: TalonariosDataSource;
@@ -79,7 +79,7 @@ export class SalidaVendedoresComponent implements OnInit {
     private Ventas:ServiciosVentas,
     private Articulos: StockService,
     private route: ActivatedRoute,
-    private location: Location
+    private location: Location,
   ) { }
 
  ngOnInit() {
@@ -158,10 +158,11 @@ export class SalidaVendedoresComponent implements OnInit {
   SeleccionarSalida(){
     this.Servicio.SeleccionarSalida(this.id_salida).subscribe(res=>{
       this.Cargando.next(false);
+      let fecha=moment(res['data'].fecha).format('DD/17/YYYY');
       this.SalidaVendedoresForm.get('pecosa').setValue(res['data'].pecosa);
       this.SalidaVendedoresForm.get('sucursal').setValue(res['data'].sucursal);
       this.SalidaVendedoresForm.get('guia_remision').setValue(res['data'].guia);
-      this.SalidaVendedoresForm.get('fecha_salida').setValue(moment(res['data'].fecha).format('dd/mm/yyyy'));
+      this.SalidaVendedoresForm.get('fecha_salida').setValue(fecha);
       this.SalidaVendedoresForm.get('destino').setValue(res['data'].destino);
       this.SalidaVendedoresForm.get('observacion').setValue(res['data'].observacion ? res['data'].observacion : "No hay observaciones");
       this.SalidaVendedoresForm.get('placa').setValue(res['data'].vehiculo_placa);

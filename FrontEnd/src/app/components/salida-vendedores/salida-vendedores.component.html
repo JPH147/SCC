@@ -6,8 +6,11 @@
     <div id = "tituloProd"> Salida de Vendedores </div>
   </mat-card-title>
 
-  <form [formGroup]="SalidaVendedoresForm">
+  <div class = "spinner-container" *ngIf = "Cargando | async">
+    <mat-spinner></mat-spinner>
+  </div>
 
+  <form [formGroup]="SalidaVendedoresForm">
 
     <div class="seccion">
 
@@ -379,12 +382,19 @@
   
           <ng-container matColumnDef="precio">
             <mat-header-cell *matHeaderCellDef> Precio mínmo </mat-header-cell>
-            <mat-cell *matCellDef="let producto"> {{producto.precio_minimo}} </mat-cell>
+            <mat-cell *matCellDef="let producto"> {{producto.precio_minimo | currency:'S/.'}} </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="estado">
-            <mat-header-cell *matHeaderCellDef> Precio mínmo </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
             <mat-cell *matCellDef="let producto"> {{producto.estado}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="opciones">
+            <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
+            <mat-cell *matCellDef="let producto">
+              <button mat-icon-button type="button" matTooltip="Ver venta" color="primary"><mat-icon> visibility </mat-icon></button>
+            </mat-cell>
           </ng-container>
 
           <mat-header-row *matHeaderRowDef="ColumnasProductos"></mat-header-row>
