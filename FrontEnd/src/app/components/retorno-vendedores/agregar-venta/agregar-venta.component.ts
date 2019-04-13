@@ -258,6 +258,8 @@ export class AgregarVentaComponent implements OnInit {
 
   CrearCronograma(){
 
+    this.Cronograma=[];
+
     let year = moment(this.DocumentoForm.value.fechapago).year();
     let month = moment(this.DocumentoForm.value.fechapago).month();
 
@@ -334,7 +336,7 @@ export class AgregarVentaComponent implements OnInit {
         this.VentaServicio.CrearVentaCronograma(res['data'],this.DocumentoForm.value.montototal,this.DocumentoForm.value.fechapago,2).subscribe(res=>console.log(res))
       }else{
         this.Cronograma.forEach((item)=>{
-          this.VentaServicio.CrearVentaCronograma(res['data'],item.monto,item.fecha,1).subscribe(res=>console.log(res))
+          this.VentaServicio.CrearVentaCronograma(res['data'],item.monto_cuota,item.fecha,1).subscribe(res=>console.log(res))
         });
       }
       // Se crean los productos y los descargos

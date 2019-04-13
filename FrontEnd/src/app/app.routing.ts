@@ -12,9 +12,7 @@ import { ComisionesComponent } from './components/comisiones/comisiones.componen
 import { ClientesComponent } from './components/clientes/clientes.component';
 import { VentasComponent } from './components/ventas/ventas.component';
 import { ListadoSalidaVendedoresComponent } from './components/listado-salida-vendedores/listado-salida-vendedores.component';
-import { ventanaseries } from './components/ingreso-productos/ventana-series/ventanaseries';
 import { ProveedoresComponent } from './components/proveedores/proveedores.component';
-import { ventanaseriessv } from './components/salida-vendedores/ventana-seriessv/ventanaseriessv';
 import { DireccionesComponent } from './components/direcciones/direcciones.component';
 import { VentasListarComponent } from './components/ventas-listar/ventas-listar.component';
 import { HistorialSerieComponent } from './components/historial-serie/historial-serie.component';
@@ -24,6 +22,7 @@ import { DetalleDocumentoAlmacenComponent } from './components/detalle-documento
 import { EvaluacionComponent } from './components/evaluacion/evaluacion.component';
 import { ReglasEvaluacionComponent } from './components/tablas-maestras/reglas-evaluacion/reglas-evaluacion.component';
 import { RetornoVendedoresCierreComponent } from './components/retorno-vendedores-cierre/retorno-vendedores-cierre.component';
+import { VentasSalidaComponent } from './components/ventas-salida/ventas-salida.component';
 
 const appRoutes: Routes = [
   // {path: '', component: EvaluacionComponent}, //prueba
@@ -49,12 +48,13 @@ const appRoutes: Routes = [
   {path: 'ventas/nueva/:idventacanje/:idcliente', component: VentasComponent},
   {path: 'ventas/editar/:ideditar', component: VentasComponent},
   {path: 'ventas/:idventa', component: VentasComponent},
+  {path: 'ventas/salida/:idventa', component: VentasSalidaComponent},
   {path: 'usuarios', component: UsuariosComponent},
   {path: 'proveedores', component: ProveedoresComponent},
   {path: 'direcciones', component: DireccionesComponent},
   {path : 'detalleproductos', component: DetalleProductosComponent},
   {path : 'evaluacion-reglas', component: ReglasEvaluacionComponent},
-  {path: 'prueba', component: SalidaVendedoresComponent}
+  {path: 'prueba', component: VentasSalidaComponent}
 ];
 
 export const appRoutingProvider: any[] = [];

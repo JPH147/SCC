@@ -118,6 +118,7 @@ import { VentanaCronogramaComponent } from './components/ventas/ventana-cronogra
 import { AgregarVentaComponent } from './components/retorno-vendedores/agregar-venta/agregar-venta.component';
 import { SeleccionarClienteComponent } from './components/retorno-vendedores/seleccionar-cliente/seleccionar-cliente.component';
 import { RetornoVendedoresCierreComponent } from './components/retorno-vendedores-cierre/retorno-vendedores-cierre.component';
+import { VentasSalidaComponent } from './components/ventas-salida/ventas-salida.component';
 
 @NgModule({
   imports: [
@@ -239,7 +240,8 @@ import { RetornoVendedoresCierreComponent } from './components/retorno-vendedore
     VentanaCronogramaComponent,
     AgregarVentaComponent,
     SeleccionarClienteComponent,
-    RetornoVendedoresCierreComponent
+    RetornoVendedoresCierreComponent,
+    VentasSalidaComponent
    ],
   entryComponents: [
     AppComponent,

@@ -54,7 +54,7 @@ export class VentaService {
       .set('prclientecargo',cliente_cargo)
       .set('prlugar',lugar)
       .set('prvendedor',vendedor.toString())
-      .set('prtipoventa',tipo_venta.toString())
+      .set('prtipoventa',id_salida_ventas.toString())
       .set('prsalida',tipo_venta.toString())
       .set('prtipodocumento',tipo_documento.toString())
       .set('prtipopago',tipo_pago.toString())
@@ -237,6 +237,21 @@ export class VentaService {
   ): Observable<any>{
 
     return this.http.get(this.url + 'venta/readxId.php', {
+      params: new HttpParams()
+      .set('prid',id_venta.toString())
+    }).pipe(map(res=>{
+      if (res['codigo'] === 0) {
+        return res['data'];
+      } else {
+        console.log('No hay datos que mostrar');
+      }
+    }))
+  }
+
+  SeleccionarVentaSalida(
+    id_venta:number
+  ): Observable<any>{
+    return this.http.get(this.url + 'venta/readxId-salida.php', {
       params: new HttpParams()
       .set('prid',id_venta.toString())
     }).pipe(map(res=>{

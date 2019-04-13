@@ -53,17 +53,6 @@
       </mat-form-field>
     </mat-grid-tile>
 
-<!-- 
-    <mat-grid-tile>
-    </mat-grid-tile>
-
-    <mat-grid-tile>
-    </mat-grid-tile>
-
-    <mat-grid-tile>
-      <button mat-raised-button matTooltip="Agregar venta" [routerLink]="['nueva']" color="primary"> Agregar </button>
-    </mat-grid-tile> -->
-
   </mat-grid-list>
 
   <mat-card-content>
@@ -107,7 +96,8 @@
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let venta">
-          <button mat-icon-button color="primary" matTooltip="Ver documento" [disabled]="venta.tipo_venta=='Salida'" [routerLink]="[venta.id]"><mat-icon> visibility </mat-icon></button>
+          <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="[venta.id]" *ngIf="venta.tipo_venta!='Salida'"><mat-icon> visibility </mat-icon></button>
+          <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="['salida', venta.id]" *ngIf="venta.tipo_venta=='Salida'"><mat-icon> visibility </mat-icon></button>
           <button mat-icon-button color="primary" matTooltip="Editar" [disabled]="venta.estado==2 || venta.tipo_venta=='Salida'" [routerLink]="['editar', venta.id]"><mat-icon> edit </mat-icon></button>
           <button mat-icon-button color="primary" matTooltip="Canjear" [disabled]="venta.estado!=1 || venta.tipo_venta=='Salida'" [routerLink]="['nueva', venta.id, venta.id_cliente]"><mat-icon> import_export </mat-icon></button>
           <button mat-icon-button color="primary" matTooltip="Anular" [disabled]="venta.estado!=1 || venta.tipo_venta=='Salida'" (click)="AnularVenta(venta)"><mat-icon> delete </mat-icon></button>

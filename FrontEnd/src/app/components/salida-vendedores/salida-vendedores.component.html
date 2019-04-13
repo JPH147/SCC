@@ -77,15 +77,21 @@
             <input matInput placeholder="Destino"  formControlName="destino" readonly>
           </mat-form-field>
         </mat-grid-tile>
-
+        
         <mat-grid-tile>
           <mat-form-field class="formulario-principal">
             <input matInput #message maxlength="15" placeholder="Guia de remisión" formControlName="guia_remision" [readonly]="id_salida">
           </mat-form-field>
         </mat-grid-tile>
-
+        
         <mat-grid-tile *ngIf="!id_salida">
           <button type="button" mat-raised-button color="primary" (click)="AgregarTalonario()"> Agregar talonarios </button>
+        </mat-grid-tile>
+        
+        <mat-grid-tile *ngIf="id_salida">
+          <mat-form-field class="formulario-principal">
+            <input matInput placeholder="Estado"  formControlName="estado" readonly>
+          </mat-form-field>
         </mat-grid-tile>
 
         <mat-grid-tile colspan=3>

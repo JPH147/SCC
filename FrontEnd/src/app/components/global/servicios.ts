@@ -595,14 +595,14 @@ EditarModelo(
       .set('tipodoc', tipodoc.trim())
       .set('numdoc', numdoc.trim())
       .set('prgrupo',grupo.trim())
-    })
-    .pipe(map(res => {
-      if (res['codigo'] === 0) {
-        return res;
-      } else {
-          // console.log ('No hay datos que mostrar');
-      }
-  }));
+      })
+      .pipe(map(res => {
+        if (res['codigo'] === 0) {
+          return res;
+        } else {
+          console.log ('No hay datos que mostrar');
+        }
+      }));
     }
 
   }

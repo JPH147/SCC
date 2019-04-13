@@ -42,7 +42,7 @@ export class FileUpload {
       
     SubirFoto() {
       if (this.file) {
-        this.Servicios.RenameFile(this.file.serverResponse.response.body, 'CLIENTE', this.data.dni+ "-"+Math.floor(Math.random() * 100000),"cliente").subscribe( res => {
+        this.Servicios.RenameFile(this.file.serverResponse.response.body.data, 'CLIENTE', this.data.dni+ "-"+Math.floor(Math.random() * 100000),"cliente").subscribe( res => {
           if (res) {
               this.ClienteServicios.ActualizarFoto(this.data.id, res.mensaje).subscribe( res2 => {
                 this.ventana.close()

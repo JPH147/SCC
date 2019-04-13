@@ -84,8 +84,8 @@ export class SalidaVendedoresComponent implements OnInit {
 
  ngOnInit() {
 
-    this.id_salida=62;
-    this.SeleccionarSalida();
+    // this.id_salida=62;
+    // this.SeleccionarSalida();
     this.ListadoProductos = new ProductosDataSource(this.Servicio);
     this.ListadoTalonarios = new TalonariosDataSource(this.Servicio);
     this.ListadoViaticos = new ViaticosDataSource(this.Servicio);
@@ -102,12 +102,12 @@ export class SalidaVendedoresComponent implements OnInit {
 
     this.CrearFormulario();
 
-    // this.route.params.subscribe(params => {
-    //   if(params['idsalida']){
-    //     this.id_salida=params['idsalida'];
-    //     this.SeleccionarSalida();
-    //   }
-    // })
+    this.route.params.subscribe(params => {
+      if(params['idsalida']){
+        this.id_salida=params['idsalida'];
+        this.SeleccionarSalida();
+      }
+    })
   }
 
   CrearFormulario(){
@@ -152,22 +152,25 @@ export class SalidaVendedoresComponent implements OnInit {
       vendedores: [{value:null, disabled:false}, [
         Validators.required
       ]],
+      estado: [{value:"", disabled:false}, [
+        Validators.required
+      ]],
     });
   }
 
   SeleccionarSalida(){
     this.Servicio.SeleccionarSalida(this.id_salida).subscribe(res=>{
       this.Cargando.next(false);
-      let fecha=moment(res['data'].fecha).format('DD/17/YYYY');
       this.SalidaVendedoresForm.get('pecosa').setValue(res['data'].pecosa);
       this.SalidaVendedoresForm.get('sucursal').setValue(res['data'].sucursal);
       this.SalidaVendedoresForm.get('guia_remision').setValue(res['data'].guia);
-      this.SalidaVendedoresForm.get('fecha_salida').setValue(fecha);
+      this.SalidaVendedoresForm.get('fecha_salida').setValue(moment(res['data'].fecha).format('DD/MM/YYYY'));
       this.SalidaVendedoresForm.get('destino').setValue(res['data'].destino);
       this.SalidaVendedoresForm.get('observacion').setValue(res['data'].observacion ? res['data'].observacion : "No hay observaciones");
       this.SalidaVendedoresForm.get('placa').setValue(res['data'].vehiculo_placa);
       this.SalidaVendedoresForm.get('dni').setValue(res['data'].chofer_dni);
       this.SalidaVendedoresForm.get('chofer').setValue(res['data'].chofer_nombre);
+      this.SalidaVendedoresForm.get('estado').setValue(res['data'].estado);
 
       this.Vendedores=res['data'].vendedores.vendedores;
       this.Columnas = [ 'numero','nombre', 'comision_efectiva', 'comision_retenida']

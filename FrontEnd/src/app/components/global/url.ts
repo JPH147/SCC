@@ -8,5 +8,6 @@ export var URL = {
 };
 
 export var URLIMAGENES = {
-  urlimages: URL.url+'uploads/'
+  urlimages: URL.url+'file/upload.php',
+  carpeta: URL.url+'uploads/',
 };
