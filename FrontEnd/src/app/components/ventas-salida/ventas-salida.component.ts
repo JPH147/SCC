@@ -37,9 +37,46 @@ export class VentasSalidaComponent implements OnInit {
   public VentasSalidaForm:FormGroup;
   public ListadoVentas: VentaDataSource;
   public Columnas: string[];
+  public ruta:string;
 
   @ViewChild('InputInicial') FiltroInicial: ElementRef;
   @ViewChild('InputCuota') FiltroCuota: ElementRef;
+
+  public foto: string;
+  public dni: string;
+  public cip: string;
+  public contrato: string;
+  public transaccion: string;
+  public planilla: string;
+  public letra: string;
+  public autorizacion: string;
+
+  public foto_nuevo: string;
+  public dni_nuevo: string;
+  public cip_nuevo: string;
+  public contrato_nuevo: string;
+  public transaccion_nuevo: string;
+  public planilla_nuevo: string;
+  public letra_nuevo: string;
+  public autorizacion_nuevo: string;
+
+  public foto_antiguo: string;
+  public dni_antiguo: string;
+  public cip_antiguo: string;
+  public contrato_antiguo: string;
+  public transaccion_antiguo: string;
+  public planilla_antiguo: string;
+  public letra_antiguo: string;
+  public autorizacion_antiguo: string;
+
+  public foto_editar: boolean= false;
+  public dni_editar: boolean= false;
+  public cip_editar: boolean= false;
+  public contrato_editar: boolean= false;
+  public transaccion_editar: boolean= false;
+  public planilla_editar: boolean= false;
+  public letra_editar: boolean= false;
+  public autorizacion_editar: boolean= false;
 
   constructor(
     private Servicio: VentaService,
@@ -60,7 +97,7 @@ export class VentasSalidaComponent implements OnInit {
   ngOnInit() {
 
     this.id_venta=50;
-
+    this.ruta=URLIMAGENES.urlimages;
     // this.route.params.subscribe(params => {
     //   if(params['idventa']){
         this.Columnas= ['numero', 'monto_cuota','fecha_vencimiento', 'monto_interes','monto_pagado', 'fecha_cancelacion', 'monto_pendiente','estado', 'opciones'];
@@ -91,6 +128,9 @@ export class VentasSalidaComponent implements OnInit {
       'id_direccion': [null, [
       ]],
       'domicilio': [null, [
+      ]],
+      'garante': [false, [
+        Validators.required
       ]],
       'pecosa': [null, [
         Validators.required
@@ -304,6 +344,69 @@ export class VentasSalidaComponent implements OnInit {
 
   }
 
+  SubirFoto(evento){
+    // if (!this.idventa_editar) {
+    //   this.foto=evento.serverResponse.response.body.data;
+    // }else{
+    //   this.foto_nuevo=evento.serverResponse.response.body.data;
+    // }
+  }
+
+  SubirDNI(evento){
+    // if (!this.idventa_editar) {
+    //   this.dni=evento.serverResponse.response.body.data;
+    // }else{
+    //   this.dni_nuevo=evento.serverResponse.response.body.data;
+    // }
+  }
+
+  SubirCIP(evento){
+    // if (!this.idventa_editar) {
+    //   this.cip=evento.serverResponse.response.body.data;
+    // }else{
+    //   this.cip_nuevo=evento.serverResponse.response.body.data;
+    // }
+  }
+
+  SubirContrato(evento){
+    // if (!this.idventa_editar) {
+    //   this.contrato=evento.serverResponse.response.body.data;
+    // }else{
+    //   this.contrato_nuevo=evento.serverResponse.response.body.data;
+    // }
+  }
+
+  SubirTransaccion(evento){
+    // if (!this.idventa_editar) {
+    //   this.transaccion=evento.serverResponse.response.body.data;
+    // }else{
+    //   this.transaccion_nuevo=evento.serverResponse.response.body.data;
+    // }
+  }
+
+  SubirPlanilla(evento){
+    // if (!this.idventa_editar) {
+    //   this.planilla=evento.serverResponse.response.body.data;
+    // }else{
+    //   this.planilla_nuevo=evento.serverResponse.response.body.data;
+    // }
+  }
+
+  SubirLetra(evento){
+    // if (!this.idventa_editar) {
+    //   this.letra=evento.serverResponse.response.body.data;
+    // }else{
+    //   this.letra_nuevo=evento.serverResponse.response.body.data;
+    // }
+  }
+
+  SubirAutorizacion(evento){
+    // if (!this.idventa_editar) {
+    //   this.autorizacion=evento.serverResponse.response.body.data;
+    // }else{
+    //   this.autorizacion_nuevo=evento.serverResponse.response.body.data;
+    // }
+  }
 
   // CalcularTotalCronograma(){
   //   this.total_cronograma_editado=0;

@@ -44,6 +44,7 @@ const appRoutes: Routes = [
   {path: 'comisiones', component: ComisionesComponent},
   {path: 'clientes', component: ClientesComponent},
   {path: 'ventas', component: VentasListarComponent},
+  {path: 'ventas/nueva', component: VentasComponent},
   {path: 'ventas/nueva/:idcliente', component: VentasComponent},
   {path: 'ventas/nueva/:idventacanje/:idcliente', component: VentasComponent},
   {path: 'ventas/editar/:ideditar', component: VentasComponent},
@@ -54,7 +55,7 @@ const appRoutes: Routes = [
   {path: 'direcciones', component: DireccionesComponent},
   {path : 'detalleproductos', component: DetalleProductosComponent},
   {path : 'evaluacion-reglas', component: ReglasEvaluacionComponent},
-  {path: 'prueba', component: VentasSalidaComponent}
+  {path: 'prueba', component: VentasComponent}
 ];
 
 export const appRoutingProvider: any[] = [];

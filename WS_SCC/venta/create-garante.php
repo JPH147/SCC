@@ -21,6 +21,8 @@
         {
             $venta->venta=trim($_POST["prventa"]);
             $venta->id_cliente=trim($_POST["prcliente"]);
+            $venta->telefono=trim($_POST["prtelefono"]);
+            $venta->direccion=trim($_POST["prdireccion"]);
             $venta->pdfdni=trim($_POST["prdni"]);
             $venta->pdfcip=trim($_POST["prcip"]);
             $venta->pdfplanilla=trim($_POST["prplanilla"]);

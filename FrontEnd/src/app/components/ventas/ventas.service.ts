@@ -47,15 +47,15 @@ export class VentaService {
       .set('prfecha',moment(fecha).format("YYYY-MM-DD"))
       .set('prsucursal',sucursal.toString())
       .set('prtalonario',talonario.toString())
-      .set('prautorizador',autorizador.toString())
+      .set('prautorizador',autorizador ? autorizador.toString() : "0")
       .set('prcliente',cliente.toString())
       .set('prclientedireccion',cliente_direccion.toString())
       .set('prclientetelefono',cliente_telefono.toString())
       .set('prclientecargo',cliente_cargo)
       .set('prlugar',lugar)
       .set('prvendedor',vendedor.toString())
-      .set('prtipoventa',id_salida_ventas.toString())
-      .set('prsalida',tipo_venta.toString())
+      .set('prtipoventa',tipo_venta.toString())
+      .set('prsalida',id_salida_ventas.toString())
       .set('prtipodocumento',tipo_documento.toString())
       .set('prtipopago',tipo_pago.toString())
       .set('prinicial',inicial.toString())
@@ -71,6 +71,8 @@ export class VentaService {
       .set('prpdfletra',pdfletra)
       .set('prpdfautorizacion',pdfautorizacion)
       .set('probservaciones',observaciones)
+
+    console.log(params);
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -169,6 +171,8 @@ export class VentaService {
   CrearVentaGarante(
     venta:number,
     cliente:number,
+    direccion:string,
+    telefono:string,
     dni:string,
     cip:string,
     planilla:string,
@@ -179,11 +183,15 @@ export class VentaService {
     let params = new HttpParams()
     .set('prventa',venta.toString())
     .set('prcliente',cliente.toString())
+    .set('prdireccion',direccion)
+    .set('prtelefono',telefono)
     .set('prdni',dni)
     .set('prcip',cip)
     .set('prplanilla',planilla)
     .set('prletra',letra)
     .set('prvoucher',voucher)
+
+    console.log(params)
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 

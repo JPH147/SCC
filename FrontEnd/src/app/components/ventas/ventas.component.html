@@ -24,14 +24,13 @@
 
       <mat-grid-list cols="4" rowHeight="70px">
 
-        <mat-grid-tile colspan="2">
+        <mat-grid-tile colspan="2" *ngIf="!idcliente && !idventa">
+          <button type="button" mat-icon-button color="primary" (click)="SeleccionarCliente()"> <mat-icon> person_add </mat-icon>  </button>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan="2" *ngIf="idcliente || idventa">
           <mat-form-field class="columnas-2">
-            <input #Cliente placeholder="Cliente" matInput [matAutocomplete]="auto2" formControlName="cliente" readonly>
-            <mat-autocomplete #auto2="matAutocomplete" [displayWith] = "displayCliente">
-              <mat-option *ngFor="let cliente of LstCliente" [value]="cliente">
-                {{cliente.nombre}}
-              </mat-option>
-            </mat-autocomplete>
+            <input #Cliente placeholder="Cliente" matInput formControlName="cliente" readonly>
           </mat-form-field>
         </mat-grid-tile>
 
@@ -59,40 +58,70 @@
           </mat-form-field>
         </mat-grid-tile>
 
+        <mat-grid-tile *ngIf="!idventa">
+          <button type="button" mat-icon-button color="primary" (click)="EditarContactoCliente()"> <mat-icon> edit </mat-icon>  </button>
+          <mat-checkbox color="primary" formControlName="garante" (change)="HayGarante($event)">Garante</mat-checkbox>
+        </mat-grid-tile>
+
       </mat-grid-list>
     </div>
 
     <!-- Garante -->
-    <div class="seccion">
-
+    <div class="seccion" *ngIf="VentasForm.value.garante">
+      
       <mat-card-subtitle class="titulo-seccion">
         DATOS DEL GARANTE
       </mat-card-subtitle>
 
       <mat-grid-list cols="1" rowHeight="50px" *ngIf="!idventa">
         <mat-grid-tile colspan="1">
-          <button mat-mini-fab color="primary" (click)="AgregarGarante()" matTooltip="Agregar aval" type="button"><mat-icon>add</mat-icon></button>
+          <button mat-mini-fab color="primary" (click)="AgregarGarante()" matTooltip="Agregar aval" type="button" [disabled]="VentasForm['controls'].garantes['controls'].length>1"><mat-icon>add</mat-icon></button>
         </mat-grid-tile>
       </mat-grid-list>
 
       <div formArrayName="garantes" *ngFor="let garante of VentasForm['controls'].garantes['controls']; let i = index">
-        <div [formGroupName]="i">
-          
-          <mat-grid-list cols="5" rowHeight="70px">
+                  
+        <mat-list *ngIf="i>0">
+          <mat-divider></mat-divider>
+        </mat-list>
 
-            <mat-grid-tile colspan="3" *ngIf="!garante.value.id_cliente">
-              <button type="button" mat-icon-button color="primary" (click)="SeleccionarGarante(i)"> <mat-icon> edit </mat-icon>  </button>
+        <div [formGroupName]="i">
+
+          <mat-grid-list cols="4" rowHeight="70px">
+
+            <mat-grid-tile colspan="2" *ngIf="!garante.value.id_cliente">
+              <button type="button" mat-icon-button color="primary" (click)="SeleccionarGarante(i)"> <mat-icon> person_add </mat-icon>  </button>
             </mat-grid-tile>
 
-            <mat-grid-tile colspan="3" *ngIf="garante.value.id_cliente">
+            <mat-grid-tile colspan="2" *ngIf="garante.value.id_cliente">
               <mat-form-field class="columnas-2">
-                <input matInput placeholder="Garante" formControlName="nombre">
+                <input matInput placeholder="Garante" formControlName="nombre" readonly>
               </mat-form-field>
             </mat-grid-tile>
 
             <mat-grid-tile colspan="2">
-              <button type="button" mat-icon-button color="primary" (click)="EliminarGarante(i)"> <mat-icon> delete </mat-icon>  </button>
+              <button *ngIf="!idventa" type="button" mat-icon-button color="primary" (click)="EliminarGarante(i)" [disabled]="VentasForm['controls'].garantes['controls'].length<2"> <mat-icon> delete </mat-icon>  </button>
             </mat-grid-tile>
+
+            <mat-grid-tile colspan="2" *ngIf="garante.value.id_cliente">
+              <mat-form-field class="columnas-2">
+                <input matInput placeholder="Dirección" formControlName="direccion" readonly>
+              </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile colspan="1" *ngIf="garante.value.id_cliente">
+              <mat-form-field class="columnas-1">
+                <input matInput placeholder="Teléfono" formControlName="telefono" readonly>
+              </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile colspan="1" *ngIf="garante.value.id_cliente">
+              <button *ngIf="!idventa" type="button" mat-icon-button color="primary" (click)="EditarContactoGarante(garante.value.id_cliente, i)"> <mat-icon> edit </mat-icon>  </button>
+            </mat-grid-tile>
+
+          </mat-grid-list>
+
+          <mat-grid-list cols="5" rowHeight="70px">
 
             <mat-grid-tile>
               <image-upload
@@ -102,7 +131,7 @@
                 [buttonCaption]="'DNI'"
                 [extensions]="['png, jpg, jpeg']"
                 [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
-                (uploadFinished)="SubirDNIAval($event)">
+                (uploadFinished)="SubirDNIAval($event, i)">
               </image-upload>  
             </mat-grid-tile>
 
@@ -114,7 +143,7 @@
                 [buttonCaption]="'CIP'"
                 [extensions]="['png, jpg, jpeg']"
                 [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
-                (uploadFinished)="SubirCIPAval($event)">
+                (uploadFinished)="SubirCIPAval($event, i)">
               </image-upload>  
             </mat-grid-tile>
 
@@ -126,7 +155,7 @@
                 [buttonCaption]="'Planilla'"
                 [extensions]="['png, jpg, jpeg']"
                 [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
-                (uploadFinished)="SubirPlanillaAval($event)">
+                (uploadFinished)="SubirPlanillaAval($event, i)">
               </image-upload>  
             </mat-grid-tile>
 
@@ -138,7 +167,7 @@
                 [buttonCaption]="'Letra'"
                 [extensions]="['png, jpg, jpeg']"
                 [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
-                (uploadFinished)="SubirLetraAval($event)">
+                (uploadFinished)="SubirLetraAval($event, i)">
               </image-upload>  
             </mat-grid-tile>
 
@@ -147,10 +176,10 @@
                 class="cargar-imagen"
                 [max]="1"
                 url="{{ruta}}"
-                [buttonCaption]="'Voucher'"
+                [buttonCaption]="'Transaccion'"
                 [extensions]="['png, jpg, jpeg']"
                 [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
-                (uploadFinished)="SubirVoucherAval($event)">
+                (uploadFinished)="SubirTransaccionAval($event, i)">
               </image-upload>  
             </mat-grid-tile>
 
@@ -220,10 +249,10 @@
           </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile colspan=2 *ngIf="!idventa">
+        <mat-grid-tile colspan=2 *ngIf="!idventa && !VentasForm.value.id_vendedor">
           <mat-form-field class="columnas-2">
             <input placeholder="Vendedor" matInput [matAutocomplete]="auto" formControlName=vendedor #Vendedor>
-            <mat-autocomplete #auto="matAutocomplete" [displayWith] = "displayVendedor">
+            <mat-autocomplete #auto="matAutocomplete" [displayWith] = "displayVendedor" (optionSelected)="VendedorSeleccionado()">
               <mat-option *ngFor="let vendedor of LstVendedor" [value]="vendedor">
                 {{vendedor.nombre}}
               </mat-option>
@@ -231,16 +260,17 @@
           </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile colspan=2 *ngIf="idventa">
+        <mat-grid-tile colspan=2 *ngIf="idventa || VentasForm.value.id_vendedor">
           <mat-form-field class="columnas-2">
-            <input matInput type="text" placeholder="Vendedor" formControlName="vendedor" [readonly]="idventa" #Vendedor>
+            <input matInput type="text" placeholder="Vendedor" formControlName="vendedor" readonly #Vendedor>
+            <mat-icon color="primary" matSuffix (click)="RemoverVendedor()" *ngIf="!idventa"> remove_circle </mat-icon>
           </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile colspan=2 *ngIf="!idventa">
+        <mat-grid-tile colspan=2 *ngIf="!idventa && !VentasForm.value.id_autorizador">
           <mat-form-field class="columnas-2">
             <input placeholder="Autorizador" matInput [matAutocomplete]="auto3" formControlName=autorizador #Autorizador>
-            <mat-autocomplete #auto3="matAutocomplete" [displayWith] = "displayVendedor">
+            <mat-autocomplete #auto3="matAutocomplete" [displayWith] = "displayVendedor" (optionSelected)="AutorizadorSeleccionado()">
               <mat-option *ngFor="let autorizador of LstVendedor3" [value]="autorizador">
                 {{autorizador.nombre}}
               </mat-option>
@@ -248,9 +278,10 @@
           </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile colspan=2 *ngIf="idventa">
+        <mat-grid-tile colspan=2 *ngIf="idventa || VentasForm.value.id_autorizador">
           <mat-form-field class="columnas-2">
-            <input matInput type="text" placeholder="Autorizador" formControlName="autorizador" [readonly]="idventa" #Autorizador>
+            <input matInput type="text" placeholder="Autorizador" formControlName="autorizador" readonly #Autorizador>
+            <mat-icon color="primary" matSuffix (click)="RemoverAutorizador()" *ngIf="!idventa"> remove_circle </mat-icon>
           </mat-form-field>
         </mat-grid-tile>
 
@@ -448,7 +479,6 @@
             [max]="1"
             url="{{ruta}}"
             [buttonCaption]="'CIP'"
-            [dropBoxMessage]="'o arrastrelo'"
             [extensions]="['pdf']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
             (uploadFinished)="SubirCIP($event)">
@@ -777,7 +807,7 @@
     </div>
 
     <!-- Cronograma -->
-    <div class="seccion" *ngIf="VentasForm.value.tipopago!=3 && VentasForm.value.tipopago!='Contado'">
+    <div class="seccion">
 
       <mat-card-subtitle class="titulo-seccion">
         CRONOGRAMA
@@ -798,10 +828,10 @@
             <mat-header-cell *matHeaderCellDef> Monto </mat-header-cell>
             <mat-cell *matCellDef="let cronograma">
 
-              <ng-container *ngIf="editar_cronograma>1">
+              <ng-container *ngIf="editar_cronograma>1 || cronograma.numero==0">
                 {{ cronograma.monto_cuota | currency:'S/.' }}
               </ng-container>
-              <ng-container *ngIf="editar_cronograma==1">
+              <ng-container *ngIf="editar_cronograma==1 && cronograma.numero>0">
                 <input type="text" [(ngModel)]="cronograma.monto_cuota" [ngModelOptions]="{standalone: true}">
               </ng-container>
 
@@ -865,17 +895,20 @@
         </mat-table>
       </ng-container>
 
-      <mat-error class="error-monto" *ngIf="total_cronograma_editado!=VentasForm.value.montototal && editar_cronograma<3">Las cuotas deben sumar {{VentasForm.value.montototal}}</mat-error>
+      <mat-error class="error-monto" *ngIf="total_cronograma_editado!=VentasForm.value.montototal && editar_cronograma<3">Las cuotas deben sumar {{VentasForm.value.montototal}}. Falta {{diferencia}}. </mat-error>
 
     </div>
 
     <mat-card-actions *ngIf="!idventa">
       <mat-grid-list cols="1" rowHeight="40px">
         <mat-grid-tile>
-          <button mat-raised-button color="primary" (click)="Guardar(VentasForm)"
-          [disabled]="VentasForm.invalid || editar_cronograma==1 || total_cronograma_editado!=VentasForm.value.montototal"
-
+          <button mat-raised-button color="primary"
+          (click)="Guardar(VentasForm)"
+          [disabled]="VentasForm.invalid || 
+                      editar_cronograma==1 ||
+                      total_cronograma_editado!=VentasForm.value.montototal"
           > Guardar </button>
+          <button mat-raised-button (click)="Guardar(VentasForm)"> print </button>
         </mat-grid-tile>
       </mat-grid-list>
     </mat-card-actions>

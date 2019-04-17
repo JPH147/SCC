@@ -32,9 +32,8 @@
 			"chofer_dni"=>$venta->chofer_dni,
 			"chofer_nombre"=>$venta->chofer_nombre,
 			"observacion"=>$venta->observacion,
+			"id_estado"=>$venta->id_estado,
 			"estado"=>$venta->estado,
-			"productos"=>$venta->productos,
-			"talonarios"=>$venta->talonarios,
 			"vendedores"=>$venta->vendedores
 	    );
 

@@ -59,7 +59,7 @@ export class ProductoService {
     .pipe(map(res => {
       if (res['codigo'] === 0) {
         for (let i in res['data'].productos) {
-          res['data'].productos[i].foto = URLIMAGENES.urlimages+"producto/"+ res['data'].productos[i].foto;
+          res['data'].productos[i].foto = URLIMAGENES.carpeta+"producto/"+ res['data'].productos[i].foto;
         }
         return res;
       }else {

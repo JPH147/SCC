@@ -2,7 +2,7 @@
 
   <button mat-mini-fab type="button" color="primary" (click)="Atras()"><mat-icon>keyboard_arrow_left</mat-icon></button>
 
-  <mat-card-title class="tituloProd" *ngIf="idventa">Venta {{talonario}}</mat-card-title>
+  <mat-card-title class="tituloProd">Venta {{VentasSalidaForm.value.pecosa}}</mat-card-title>
 
   <form [formGroup]="VentasSalidaForm">
 
@@ -49,11 +49,15 @@
           </mat-form-field>
         </mat-grid-tile>
 
+        <mat-grid-tile>
+          <mat-checkbox color="primary" formControlName="garante">Garante</mat-checkbox>
+        </mat-grid-tile>
+
       </mat-grid-list>
     </div>
 
     <!-- Garante -->
-    <div class="seccion">
+    <div class="seccion" *ngIf="VentasSalidaForm.value.garante">
 
       <mat-card-subtitle class="titulo-seccion">
         DATOS DEL GARANTE
@@ -144,7 +148,7 @@
         PRODUCTOS
       </mat-card-subtitle>
 
-      <ng-container *ngIf="idventa">
+      <ng-container>
         <mat-grid-list cols="5" rowHeight="70px" *ngFor="let producto of Productos">
 
           <mat-grid-tile colspan="2">
@@ -198,7 +202,6 @@
             <input matInput placeholder="Cuota inicial" formControlName="inicial" #InputInicial readonly>
             <mat-error>Solo debe ingresar valores númericos</mat-error>
             <span matPrefix>S/ &nbsp;</span>
-            <mat-hint *ngIf="monto_inicial_canje">Se dejó a cuenta S/. {{monto_inicial_canje}}</mat-hint>
           </mat-form-field>
         </mat-grid-tile>
 
@@ -226,7 +229,7 @@
         DOCUMENTOS ADJUNTOS
       </mat-card-subtitle>
 
-      <mat-grid-list cols="8" rowHeight="100px" *ngIf="!idventa && !idventa_editar">
+      <mat-grid-list cols="8" rowHeight="100px">
 
         <mat-grid-tile>
           <image-upload
@@ -326,7 +329,7 @@
         </mat-grid-tile>
       </mat-grid-list>
 
-      <mat-grid-list cols=8 rowHeight="60px" *ngIf="idventa_editar">
+      <mat-grid-list cols=8 rowHeight="60px">
 
         <mat-grid-tile>
           <button mat-icon-button color="primary" (click)="EditarFoto()" [disabled]="!foto" *ngIf="!foto_editar">
@@ -401,7 +404,7 @@
         </mat-grid-tile>
       </mat-grid-list>
 
-      <mat-grid-list cols=8 rowHeight="20px" *ngIf="idventa || idventa_editar">
+      <mat-grid-list cols=8 rowHeight="20px">
 
         <mat-grid-tile>
           Foto
@@ -437,7 +440,7 @@
 
       </mat-grid-list>
 
-      <mat-grid-list cols=8 rowHeight="60px" *ngIf="idventa || idventa_editar">
+      <mat-grid-list cols=8 rowHeight="60px">
 
         <mat-grid-tile>
 
@@ -655,13 +658,13 @@
 
     </div>
 
-    <mat-card-actions>
+    <!-- <mat-card-actions>
       <mat-grid-list cols="1" rowHeight="40px">
         <mat-grid-tile>
-          <button mat-raised-button color="primary" (click)="Guardar(VentasSalidaForm)"> Guardar </button>
+          <button mat-raised-button color="primary"> Guardar </button>
         </mat-grid-tile>
       </mat-grid-list>
-    </mat-card-actions>
+    </mat-card-actions> -->
 
   </form>
 </mat-card>

@@ -7,20 +7,20 @@ import {ServiciosTipoDocumento, TipoDocumento} from '../global/tipodocumento';
 import {ServiciosTipoPago, TipoPago} from '../global/tipopago';
 import {ClienteService } from '../clientes/clientes.service';
 import {ClienteDataSource} from '../clientes/clientes.dataservice';
-import {Observable, forkJoin,fromEvent, merge, BehaviorSubject} from 'rxjs';
+import { forkJoin,fromEvent, merge, BehaviorSubject} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import {ServiciosTelefonos, Telefono} from '../global/telefonos';
 import {ServiciosDirecciones, Direccion} from '../global/direcciones';
 import {ServiciosGenerales, Talonario, Serie, ListarVendedor} from '../global/servicios';
 import {VentanaProductosComponent} from './ventana-productos/ventana-productos.component';
-import { FileHolder } from 'angular2-image-upload';
 import * as moment from 'moment';
 import {Location} from '@angular/common';
 import {Notificaciones} from '../global/notificacion';
 import {URLIMAGENES} from '../global/url'
 import {VentanaCronogramaComponent} from './ventana-cronograma/ventana-cronograma.component';
 import {SeleccionarClienteComponent} from '../retorno-vendedores/seleccionar-cliente/seleccionar-cliente.component';
+import { VentanaEmergenteContacto} from '../clientes/ventana-emergentecontacto/ventanaemergentecontacto';
 
 @Component({
   selector: 'app-ventas',
@@ -31,7 +31,7 @@ import {SeleccionarClienteComponent} from '../retorno-vendedores/seleccionar-cli
 
 export class VentasComponent implements OnInit {
 
-  public Cargando = new BehaviorSubject<boolean>(true);
+  public Cargando: BehaviorSubject<boolean>=new BehaviorSubject<boolean>(false);
 
   public editar_cronograma:number;
   public ruta:string;
@@ -71,9 +71,11 @@ export class VentasComponent implements OnInit {
   public id_talonario_editar:number;
   public talonario_serie_editar:string;
   public total_cronograma_editado:number;
+  public diferencia: number;
   public monto_inicial_canje: number;
   public anulacion_observacion: string;
   public anulacion_monto: string;
+  public existe_garante:boolean = false;
 
   public foto: string;
   public dni: string;
@@ -147,6 +149,8 @@ export class VentasComponent implements OnInit {
     this.Cronograma=[];
     this.editar_cronograma=3;
 
+    this.ListadoVentas = new VentaDataSource(this.Servicio);
+
     this.ruta=URLIMAGENES.urlimages;
     // console.log(this.ruta);
 
@@ -155,42 +159,48 @@ export class VentasComponent implements OnInit {
     this.ListarTalonarioSerie();
     this.ListarSucursales();
 
+    this.Columnas= ['numero', 'fecha_vencimiento_ver', 'monto_cuota_ver'];
+    this.ListarVendedor("");
+    this.ListarAutorizador("");
+
+
     this.route.params.subscribe(params => {
-      this.ListadoVentas = new VentaDataSource(this.Servicio);
-
-      // Si es una venta nueva
-      if(params['idcliente']){
-        this.Columnas= ['numero', 'fecha_vencimiento_ver', 'monto_cuota_ver'];
-        this.ListarVendedor("");
-        this.ListarAutorizador("");
-        this.idcliente = +params['idcliente'];
-        this.ObtenerClientexId(this.idcliente);
-        // En caso se trate de un canje de venta
-        if (params['idventacanje']) {
-          this.venta_canje=+params['idventacanje'];
-          this.Servicio.SeleccionarVenta(this.venta_canje).subscribe(res=>{
-            this.talonario=res.talonario_serie+" - "+res.talonario_contrato;
-            this.monto_inicial_canje=res.monto_inicial;
-          })
-          // Son las transacciones en el almacén que se tienen que devolver
-          this.Servicio.ListarVentaTransacciones(this.venta_canje).subscribe(res=>{
-            this.Transacciones=res.transaccion
-          })
+      if(Object.keys(params).length>0){
+        
+        // Si hay parámetros, se muestra el indicador de carga de la página.
+        this.Cargando.next(true);
+  
+        // Si es una venta nueva
+        if(params['idcliente']){
+          this.idcliente = +params['idcliente'];
+          this.ObtenerClientexId(this.idcliente);
+          // En caso se trate de un canje de venta
+          if (params['idventacanje']) {
+            this.venta_canje=+params['idventacanje'];
+            this.Servicio.SeleccionarVenta(this.venta_canje).subscribe(res=>{
+              this.talonario=res.talonario_serie+" - "+res.talonario_contrato;
+              this.monto_inicial_canje=res.monto_inicial;
+            })
+            // Son las transacciones en el almacén que se tienen que devolver
+            this.Servicio.ListarVentaTransacciones(this.venta_canje).subscribe(res=>{
+              this.Transacciones=res.transaccion
+            })
+          }
         }
-      }
-
-      // Cuando se ve una venta
-      if(params['idventa']){
-        this.Columnas= ['numero', 'monto_cuota','fecha_vencimiento', 'monto_interes','monto_pagado', 'fecha_cancelacion', 'monto_pendiente','estado', 'opciones'];
-        this.idventa = +params['idventa'];
-        this.SeleccionarVentaxId(this.idventa);
-      }
-
-      // Cuando se edita una venta
-      if (params['ideditar']) {
-        this.Columnas= ['numero', 'fecha_vencimiento_ver', 'monto_cuota_ver'];
-        this.idventa_editar=params['ideditar'];
-        this.SeleccionarVentaxId(this.idventa_editar)
+  
+        // Cuando se ve una venta
+        if(params['idventa']){
+          this.Columnas= ['numero', 'monto_cuota','fecha_vencimiento', 'monto_interes','monto_pagado', 'fecha_cancelacion', 'monto_pendiente','estado', 'opciones'];
+          this.idventa = +params['idventa'];
+          this.SeleccionarVentaxId(this.idventa);
+        }
+  
+        // Cuando se edita una venta
+        if (params['ideditar']) {
+          this.Columnas= ['numero', 'fecha_vencimiento_ver', 'monto_cuota_ver'];
+          this.idventa_editar=params['ideditar'];
+          this.SeleccionarVentaxId(this.idventa_editar)
+        }
       }
    });
 
@@ -211,7 +221,7 @@ export class VentasComponent implements OnInit {
       'tipodoc': [6, [
         Validators.required
       ]],
-      'cliente': [null, [
+      'cliente': ["", [
         Validators.required
       ]],
       'cargo': [null, [
@@ -222,17 +232,24 @@ export class VentasComponent implements OnInit {
       ]],
       'domicilio': [null, [
       ]],
+      'garante': [false, [
+        Validators.required
+      ]],
       'sucursal': [null, [
         Validators.required
       ]],
       'lugar': ["", [
-        Validators.required
       ]],
       'id_telefono': [null, [
       ]],
       'telefono': [null, [
       ]],
+      'id_autorizador': [null, [
+      ]],
       'autorizador': [null, [
+      ]],
+      'id_vendedor': [null, [
+        Validators.required
       ]],
       'vendedor': [null, [
         Validators.required
@@ -261,7 +278,7 @@ export class VentasComponent implements OnInit {
       'observaciones': ["", [
       ]],
       productos: this.FormBuilder.array([this.CrearProducto()]),
-      garantes: this.FormBuilder.array([this.CrearGarante()]),
+      garantes: this.FormBuilder.array([]),
     });
   }
 
@@ -300,6 +317,12 @@ export class VentasComponent implements OnInit {
       'nombre': [{value: null, disabled: false}, [
         Validators.required
       ]],
+      'direccion': [{value: null, disabled: false}, [
+        Validators.required
+      ]],
+      'telefono': [{value: null, disabled: false}, [
+        Validators.required
+      ]],
       'dni_pdf': [{value: null, disabled: false}, [
       ]],
       'cip_pdf': [{value: null, disabled: false}, [
@@ -308,7 +331,7 @@ export class VentasComponent implements OnInit {
       ]],
       'letra_pdf': [{value: null, disabled: false}, [
       ]],
-      'voucher_pdf': [{value:null, disabled: false}, [
+      'transaccion_pdf': [{value:null, disabled: false}, [
       ]],
       'estado': [{value:1, disabled: false}, [
       ]],
@@ -346,7 +369,6 @@ export class VentasComponent implements OnInit {
     // }
   }
 
-  // tslint:disable-next-line:use-life-cycle-interface
   ngAfterViewInit() {
 
       if (this.idventa) {
@@ -359,14 +381,6 @@ export class VentasComponent implements OnInit {
     }
 
     if (!this.idventa) {
-      // fromEvent(this.ClienteAutoComplete.nativeElement, 'keyup')
-      // .pipe(
-      //   debounceTime(10),
-      //   distinctUntilChanged(),
-      //   tap(() => {
-      //     this.ListarClientes('', '', '', '', this.ClienteAutoComplete.nativeElement.value , 1, 5);
-      //   })
-      //  ).subscribe();
 
        fromEvent(this.VendedorAutoComplete.nativeElement, 'keyup')
       .pipe(
@@ -438,12 +452,6 @@ export class VentasComponent implements OnInit {
           }
         })
       ).subscribe()
-    }
-  }
-
-  displayCliente(cliente?: any): string | undefined {
-    if (cliente) {
-      return (cliente.nombre) ;
     }
   }
 
@@ -585,6 +593,30 @@ export class VentasComponent implements OnInit {
         res.planilla_pdf!="" ? this.planilla=URLIMAGENES.carpeta+'venta/'+res.planilla_pdf : null;
         res.letra_pdf!="" ? this.letra=URLIMAGENES.carpeta+'venta/'+res.letra_pdf : null;
         res.autorizacion_pdf!="" ? this.autorizacion=URLIMAGENES.carpeta+'venta/'+res.autorizacion_pdf : null;
+
+        if(res['garantes'].garantes.length>0){
+          this.VentasForm.get('garante').setValue(true);
+          res['garantes'].garantes.forEach((item,index)=>{
+            this.AgregarGarante();
+
+            let dni = item.dni_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.voucher_pdf : null ;
+            let cip = item.cip_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.voucher_pdf : null ;
+            let planilla = item.planilla_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.voucher_pdf : null ;
+            let letra = item.letra_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.voucher_pdf : null ;
+            let voucher = item.voucher_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.voucher_pdf : null ;
+
+            this.VentasForm['controls'].garantes['controls'][index].get('id_cliente').setValue(item.id_cliente);
+            this.VentasForm['controls'].garantes['controls'][index].get('nombre').setValue(item.cliente_nombre);
+            this.VentasForm['controls'].garantes['controls'][index].get('direccion').setValue(item.cliente_direccion);
+            this.VentasForm['controls'].garantes['controls'][index].get('telefono').setValue(item.cliente_telefono);
+            this.VentasForm['controls'].garantes['controls'][index].get('dni_pdf').setValue(dni);
+            this.VentasForm['controls'].garantes['controls'][index].get('cip_pdf').setValue(cip);
+            this.VentasForm['controls'].garantes['controls'][index].get('planilla_pdf').setValue(planilla);
+            this.VentasForm['controls'].garantes['controls'][index].get('letra_pdf').setValue(letra);
+            this.VentasForm['controls'].garantes['controls'][index].get('transaccion_pdf').setValue(voucher);
+          })
+        }
+
       }
 
       this.Cargando.next(false);
@@ -630,11 +662,11 @@ export class VentasComponent implements OnInit {
     this.ClienteServicio.Seleccionar(id_cliente).subscribe(res => {
       if (res) {
         // console.log(res)
-        this.VentasForm.get('cliente').setValue(res);
+        this.VentasForm.get('cliente').setValue(res.nombre);
         if (!this.idventa) {
+          this.idcliente=res.id;
           this.VentasForm.get('cargo').setValue(res.cargo);
           this.VentasForm.get('trabajo').setValue(res.trabajo);
-          this.idcliente =res.id;
           this.ObtenerDireccion();
           this.ObtenerTelefono();  
         }
@@ -651,25 +683,23 @@ export class VentasComponent implements OnInit {
     let year = moment(this.VentasForm.value.fechapago).year();
     let month = moment(this.VentasForm.value.fechapago).month();
 
-    let fecha_corregida:Date = new Date(year, month-1,27);
+    let fecha_corregida:Date = new Date(year, month+1,27);
 
     let fecha:Date;
 
-    console.log(year, month, fecha_corregida)
+    if (this.VentasForm.value.inicial>0) {
+      this.Cronograma.push({
+        numero:0,
+        fecha_vencimiento: this.VentasForm.value.fechaventa,
+        monto_cuota:this.VentasForm.value.inicial
+      })
+    }
 
     let monto=Math.round((this.VentasForm.value.montototal-this.FiltroInicial.nativeElement.value)*100/this.FiltroCuota.nativeElement.value)/100
 
     for (var i = 1; i<=this.FiltroCuota.nativeElement.value; i++) {
 
       fecha=moment(fecha_corregida).add(i-1, 'months').toDate();
-
-      if (this.VentasForm.value.inicial>0) {
-        this.Cronograma.push({
-          numero:0,
-          fecha_vencimiento: this.VentasForm.value.fechafechaventa,
-          monto_cuota:this.VentasForm.value.inicial
-        })
-      }
 
       this.Cronograma.push({
         numero: i,
@@ -684,8 +714,8 @@ export class VentasComponent implements OnInit {
 
   }
 
-  EditarCronograma(bool:number){
-    this.editar_cronograma=bool;
+  EditarCronograma(estado){
+    this.editar_cronograma=estado;
     this.CalcularTotalCronograma();
   }
 
@@ -694,9 +724,11 @@ export class VentasComponent implements OnInit {
     this.Cronograma.forEach((item)=>{
       this.total_cronograma_editado=this.total_cronograma_editado+item.monto_cuota*1;
     })
+    this.diferencia=this.VentasForm.value.montototal-this.total_cronograma_editado
   }
 
   TipoPagoSeleccionado(){
+    console.log(this.VentasForm.value.tipopago);
     if (this.VentasForm.value.tipopago==3 && !this.idventa) {
       this.VentasForm.get('cuotas').setValue(1);
       this.VentasForm.get('cuotas').disable();
@@ -766,10 +798,7 @@ export class VentasComponent implements OnInit {
     this.CrearCronograma()
   }
 
-  BuscarProducto(
-    sucursal:number,
-    producto:string
-  ){
+  BuscarProducto(sucursal:number, producto:string){
     this.ServiciosGenerales.ListarProductoEnSucursal(sucursal, producto).subscribe(res=>{
       this.Producto=res;
     })
@@ -797,32 +826,42 @@ export class VentasComponent implements OnInit {
     })
   }
 
-  // ListarClientes(inst: string, sede: string, subsede: string, dni: string, nombre: string, prpagina: number, prtotal: number) {
-  //   this.ClienteServicio.Listado(inst, sede, subsede, '','',dni, nombre, prpagina, prtotal).subscribe( res => {
-  //     this.LstCliente = res['data'].clientes;
-  //   });
-  // }
-
   ObtenerDireccion() {
     if (this.idcliente) {
-        this.DireccionServicio.ListarDireccion( this.idcliente, '1',1,20).subscribe(res => {
-          if (res) {
-            this.VentasForm.get('id_direccion').setValue(res['data'].direcciones[0].id);
-            this.VentasForm.get('domicilio').setValue(res['data'].direcciones[0].direccioncompleta);
-          }
-        });
+      this.DireccionServicio.ListarDireccion( this.idcliente, '1',1,20).subscribe(res => {
+        if (res['data']) {
+          this.VentasForm.get('id_direccion').setValue(res['data'].direcciones[0].id);
+          this.VentasForm.get('domicilio').setValue(res['data'].direcciones[0].direccioncompleta);
+        }
+      });
     }
   }
 
   ObtenerTelefono() {
     if (this.idcliente) {
       this.TelefonoServicio.ListarTelefono( this.idcliente , '1',1,20).subscribe(res => {
-        if (res) {
+        if (res['data']) {
           this.VentasForm.get('id_telefono').setValue(res['data'].telefonos[0].id);
           this.VentasForm.get('telefono').setValue(res['data'].telefonos[0].tlf_numero);
         }
       });
     }
+  }
+
+  ObtenerDireccionGarante(id_cliente, index) {
+    this.DireccionServicio.ListarDireccion( id_cliente, '1',1,20).subscribe(res => {
+      if (res['data']) {
+        this.VentasForm['controls'].garantes['controls'][index].get('direccion').setValue(res['data'].direcciones[0].direccioncompleta)
+      }
+    });
+  }
+
+  ObtenerTelefonoGarante(id_cliente, index) {
+    this.TelefonoServicio.ListarTelefono( id_cliente , '1',1,20).subscribe(res => {
+      if (res['data']) {
+        this.VentasForm['controls'].garantes['controls'][index].get('telefono').setValue(res['data'].telefonos[0].tlf_numero)
+      }
+    });
   }
 
   ListarTalonarioSerie() {
@@ -858,10 +897,32 @@ export class VentasComponent implements OnInit {
     });
   }
 
+  VendedorSeleccionado(){
+    let nombre_vendedor= this.VentasForm.value.vendedor.nombre;
+    this.VentasForm.get('id_vendedor').setValue(this.VentasForm.value.vendedor.id);
+    this.VentasForm.get('vendedor').setValue(nombre_vendedor);
+  }
+  
+  RemoverVendedor(){
+    this.VentasForm.get('id_vendedor').setValue(null);
+    this.VentasForm.get('vendedor').setValue("");
+  }
+
   ListarAutorizador(nombre: string) {
     this.ServiciosGenerales.ListarVendedor("",nombre,"",1,5).subscribe( res => {
       this.LstVendedor3=res;
     });
+  }
+
+  AutorizadorSeleccionado(){
+    let nombre_auorizador= this.VentasForm.value.autorizador.nombre;
+    this.VentasForm.get('id_autorizador').setValue(this.VentasForm.value.autorizador.id);
+    this.VentasForm.get('autorizador').setValue(nombre_auorizador);
+  }
+
+  RemoverAutorizador(){
+    this.VentasForm.get('id_autorizador').setValue(null);
+    this.VentasForm.get('autorizador').setValue("");
   }
 
   SubirFoto(evento){
@@ -998,27 +1059,29 @@ export class VentasComponent implements OnInit {
     this.autorizacion_editar=false;
   }
 
-  SubirDNIAval(evento){
-
+  SubirDNIAval(evento, index){
+    // if (!this.idventa_editar) {
+      this.VentasForm['controls'].garantes['controls'][index].get('dni_pdf').setValue(evento.serverResponse.response.body.data);
+    // }else{
+    //   this.autorizacion_nuevo=evento.serverResponse.response.body.data;
+    // }
   }
 
-  SubirCIPAval(evento){
-
+  SubirCIPAval(evento, index){
+    this.VentasForm['controls'].garantes['controls'][index].get('cip_pdf').setValue(evento.serverResponse.response.body.data);
   }
 
-  SubirPlanillaAval(evento){
-
+  SubirPlanillaAval(evento, index){
+    this.VentasForm['controls'].garantes['controls'][index].get('planilla_pdf').setValue(evento.serverResponse.response.body.data);
   }
 
-  SubirLetraAval(evento){
-
+  SubirLetraAval(evento, index){
+    this.VentasForm['controls'].garantes['controls'][index].get('letra_pdf').setValue(evento.serverResponse.response.body.data);
   }
 
-  SubirVoucherAval(evento){
-
+  SubirTransaccionAval(evento, index){
+    this.VentasForm['controls'].garantes['controls'][index].get('transaccion_pdf').setValue(evento.serverResponse.response.body.data);
   }
-
-
 
   ResetearFormArray(formArray){
     if (formArray) {
@@ -1040,16 +1103,73 @@ export class VentasComponent implements OnInit {
     })
   }
 
+  SeleccionarCliente(){
+    let Ventana = this.Dialogo.open(SeleccionarClienteComponent,{
+      width: "1200px"
+    })
+
+    Ventana.afterClosed().subscribe(res=>{
+      if(res){
+        this.idcliente=res.id;
+        this.ObtenerClientexId(res.id);
+      }
+    })
+  }
+
+  EditarContactoCliente(){
+    let VentanaContacto = this.Dialogo.open(VentanaEmergenteContacto, {
+      width: '1200px',
+      data: this.idcliente
+    });
+
+    VentanaContacto.afterClosed().subscribe(res=>{
+      this.ObtenerDireccion();
+      this.ObtenerTelefono();
+    })
+  }
+
+  HayGarante(evento){
+    if(evento.checked){
+      this.AgregarGarante()
+    }else{
+      if(this.VentasForm['controls'].garantes['controls'].length>1){
+        this.EliminarGarante(1);
+        this.EliminarGarante(0);
+      }else{
+        this.EliminarGarante(0);
+      }
+      // this.VentasForm['controls'].garantes['controls'].forEach((item,index)=>{
+      //   this.EliminarGarante(index)
+      // })
+    }
+  }
+
   SeleccionarGarante(index){
     let Ventana = this.Dialogo.open(SeleccionarClienteComponent,{
       width: "1200px"
     })
 
     Ventana.afterClosed().subscribe(res=>{
-      this.VentasForm['controls'].garantes['controls'][index].get('id_cliente').setValue(res.id)
-      this.VentasForm['controls'].garantes['controls'][index].get('nombre').setValue(res.nombre)
+      if(res){
+        this.VentasForm['controls'].garantes['controls'][index].get('id_cliente').setValue(res.id)
+        this.VentasForm['controls'].garantes['controls'][index].get('nombre').setValue(res.nombre)
+        this.ObtenerDireccionGarante(res.id,index);
+        this.ObtenerTelefonoGarante(res.id,index);
+      }
     })
 
+  }
+
+  EditarContactoGarante(id_cliente, index){
+    let VentanaContacto = this.Dialogo.open(VentanaEmergenteContacto, {
+      width: '1200px',
+      data: id_cliente
+    });
+
+    VentanaContacto.afterClosed().subscribe(res=>{
+      this.ObtenerDireccionGarante(id_cliente,index);
+      this.ObtenerTelefonoGarante(id_cliente,index);
+    })
   }
 
   Guardar(formulario){
@@ -1079,13 +1199,13 @@ export class VentasComponent implements OnInit {
         formulario.value.fechaventa,
         formulario.value.sucursal,
         formulario.value.contrato,
-        formulario.value.autorizador.id,
+        formulario.value.id_autorizador,
         this.idcliente,
         formulario.value.id_direccion,
         formulario.value.id_telefono,
         formulario.value.cargo,
         "OFICINA",
-        formulario.value.vendedor.id,
+        formulario.value.id_vendedor,
         1,
         0, // Porque no pertenece a ninguna salida de ventas
         formulario.value.tipodoc,
@@ -1105,19 +1225,21 @@ export class VentasComponent implements OnInit {
         formulario.value.observaciones,
       ).subscribe(res=>{
 
+        console.log(res);
+
         // Se crean los productos y se generan los documentos en almacén para cuadrar
         formulario.value.productos.forEach((item)=>{
           this.Servicio.CrearVentaProductos(res['data'],item.id_serie,item.precio).subscribe()
         });
 
-        // No se genera cronograma cuando el pago es al contado
-        if (formulario.value.tipopago==3) { 
-          this.Servicio.CrearVentaCronograma(res['data'],formulario.value.montototal,formulario.value.fechapago,2).subscribe()
-        }else{
-          this.Cronograma.forEach((item)=>{
-            this.Servicio.CrearVentaCronograma(res['data'],item.monto,item.fecha,1).subscribe()
-          });
-        }
+        // Se genera el cronograma
+        this.Cronograma.forEach((item)=>{
+          if(item.numero==0){
+            this.Servicio.CrearVentaCronograma(res['data'],item.monto_cuota,item.fecha_vencimiento,1).subscribe()
+          }else{
+            this.Servicio.CrearVentaCronograma(res['data'],item.monto_cuota,item.fecha_vencimiento,1).subscribe()
+          }
+        });
         
         // this.Servicio.CrearComisionVendedor(res['data'], formulario.value.vendedor.id, formulario.value.montototal).subscribe();
          
@@ -1129,8 +1251,41 @@ export class VentasComponent implements OnInit {
           })
         }  
 
-        this.router.navigate(['ventas'])
-        this.Notificacion.Snack("Se agregó la venta con éxito!","");
+        // Si la venta tiene garante, se los agrega
+        if( this.VentasForm.value.garante ){
+
+          this.VentasForm['controls'].garantes['controls'].forEach((item, index)=>{
+            return forkJoin(
+              this.ServiciosGenerales.RenameFile(item.value.dni_pdf,`DNI_GARANTE_+${index+1}`,random.toString(),"venta"),
+              this.ServiciosGenerales.RenameFile(item.value.cip_pdf,`CIP_GARANTE_+${index+1}`,random.toString(),"venta"),
+              this.ServiciosGenerales.RenameFile(item.value.planilla_pdf,`PLANILLA_GARANTE_+${index+1}`,random.toString(),"venta"),
+              this.ServiciosGenerales.RenameFile(item.value.letra_pdf,`LETRA_GARANTE_+${index+1}`,random.toString(),"venta"),
+              this.ServiciosGenerales.RenameFile(item.value.transaccion_pdf,`TRANSACCION_GARANTE_+${index+1}`,random.toString(),"venta"),
+            ).subscribe(response=>{
+              this.Servicio.CrearVentaGarante(
+                res['data'],
+                item.value.id_cliente,
+                item.value.direccion,
+                item.value.telefono,
+                response[0].mensaje,
+                response[1].mensaje,
+                response[2].mensaje,
+                response[3].mensaje,
+                response[4].mensaje
+              ).subscribe(res=>console.log(res))
+            })
+          })
+
+        }
+
+        this.router.navigate(['/ventas']);
+
+        if(res['codigo']==0){
+          this.Notificacion.Snack("Se agregó la venta con éxito!","");
+        }else{
+          this.Notificacion.Snack("Ocurrió un error al crear la venta","");
+        }
+
       })
     })
   }
@@ -1220,6 +1375,9 @@ export class VentasComponent implements OnInit {
     })
   }
 
+  ImprimirFormulario(){
+    console.log(this.VentasForm)
+  }
 
 }
 

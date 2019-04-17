@@ -13,6 +13,7 @@ Class SalidaCabecera{
 
     public $destino;
     public $id_tipo_movilidad;
+    public $id_estado;
     public $estado;
     public $tipo;
     public $monto;
@@ -288,6 +289,7 @@ Class SalidaCabecera{
         $this->chofer_dni=$row['chofer_dni'];
         $this->chofer_nombre=$row['chofer_nombre'];
         $this->observacion=$row['observacion'];
+        $this->id_estado=$row['id_estado'];
         $this->estado=$row['estado'];
         // $this->productos=$Productos;
         // $this->talonarios=$Talonarios;

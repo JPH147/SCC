@@ -7,6 +7,12 @@ class Database {
     private $username = "genus_jpr";
     private $password = "genus_jpr";
 
+    // private $server = "localhost";
+    // private $port = "3306";
+    // private $db_name = "genus_scc";
+    // private $username = "genus";
+    // private $password = "";
+
     public $conn;
 
     public function getConnection(){

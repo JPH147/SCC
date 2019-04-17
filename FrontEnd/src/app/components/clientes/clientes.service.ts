@@ -38,7 +38,7 @@ export class ClienteService {
      }).pipe(map(res => {
       if (res['codigo'] === 0) {
         res['data'].clientes.forEach((item)=>{
-          item.foto= URLIMAGENES.urlimages + 'cliente/' + item.foto;
+          item.foto= URLIMAGENES.carpeta + 'cliente/' + item.foto;
         })
         return res;
       }else {

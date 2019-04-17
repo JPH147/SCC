@@ -12,6 +12,7 @@ import {VentaService} from '../../ventas/ventas.service';
 import {SalidaVendedoresService} from '../../salida-vendedores/salida-vendedores.service';
 import {Notificaciones} from '../../global/notificacion';
 import * as moment from 'moment';
+
 @Component({
   selector: 'app-agregar-venta',
   templateUrl: './agregar-venta.component.html',
