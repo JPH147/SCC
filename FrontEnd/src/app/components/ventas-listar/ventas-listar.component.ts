@@ -86,6 +86,14 @@ export class VentasListarComponent implements OnInit {
   }
 
   AnularVenta(venta){
+    
+    let Transacciones: Array<any>;
+    
+    // Se listan las transacciones que pertenecen a esa venta
+    this.VServicio.ListarVentaTransacciones(venta.id).subscribe(res=>{
+      Transacciones=res.transaccion
+    });
+
     let Dialogo = this.Dialogo.open(VentanaConfirmarComponent,{
       data: {objeto: "la venta", valor: venta.serie+"-"+venta.contrato, venta:true}
     })
@@ -94,6 +102,9 @@ export class VentasListarComponent implements OnInit {
       if (res) {
         if (res.respuesta) {
           this.VServicio.EliminarVenta(venta.id, res.comentarios, res.monto).subscribe(respuesta=>{
+            Transacciones.forEach((item)=>{
+              this.VServicio.CrearCanjeTransaccion(item.id,new Date(),"AJUSTE POR ANULACION").subscribe()
+            })
             if (res.monto>0) {
               this.VServicio.CrearVentaCronograma(venta.id,res.monto,new Date(), 1).subscribe()
             }

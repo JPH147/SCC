@@ -19,14 +19,14 @@ export class VentaService {
     talonario:number,
     autorizador:number,
     cliente:number,
-    cliente_direccion:number,
-    cliente_telefono:number,
+    cliente_direccion:string,
+    cliente_telefono:string,
     cliente_cargo:string,
+    cliente_trabajo:string,
     lugar:string,
     vendedor:number,
     tipo_venta:number,
     id_salida_ventas:number,
-    tipo_documento:number,
     tipo_pago:number,
     inicial:number,
     cuotas:number,
@@ -49,14 +49,14 @@ export class VentaService {
       .set('prtalonario',talonario.toString())
       .set('prautorizador',autorizador ? autorizador.toString() : "0")
       .set('prcliente',cliente.toString())
-      .set('prclientedireccion',cliente_direccion.toString())
-      .set('prclientetelefono',cliente_telefono.toString())
+      .set('prclientedireccion',cliente_direccion)
+      .set('prclientetelefono',cliente_telefono)
       .set('prclientecargo',cliente_cargo)
+      .set('prclientetrabajo',cliente_trabajo)
       .set('prlugar',lugar)
       .set('prvendedor',vendedor.toString())
       .set('prtipoventa',tipo_venta.toString())
       .set('prsalida',id_salida_ventas.toString())
-      .set('prtipodocumento',tipo_documento.toString())
       .set('prtipopago',tipo_pago.toString())
       .set('prinicial',inicial.toString())
       .set('prcuotas',cuotas.toString())
@@ -79,14 +79,23 @@ export class VentaService {
     return this.http.post(this.url + 'venta/create.php', params, {headers: headers});
   }
 
-
+  // Cuando se actualiza la venta, en el procedimiento
+  // se eliminan el cronograma actual y los garantes
   ActualizarVenta(
     id:number,
     fecha:Date,
     sucursal:number,
     talonario:number,
     autorizador:number,
+    cliente:number,
+    cliente_direccion:string,
+    cliente_telefono:string,
+    cliente_cargo:string,
+    cliente_trabajo:string,
+    lugar:string,
     vendedor:number,
+    tipo_venta:number,
+    id_salida_ventas:number,
     tipo_pago:number,
     inicial:number,
     cuotas:number,
@@ -101,15 +110,22 @@ export class VentaService {
     pdfletra:string,
     pdfautorizacion:string,
     observaciones:string,
-    lugar:string,
   ): Observable<any> {
     let params = new HttpParams()
     .set('prid',id.toString())
     .set('prfecha',moment(fecha).format("YYYY-MM-DD"))
     .set('prsucursal',sucursal.toString())
     .set('prtalonario',talonario.toString())
-    .set('prautorizador',autorizador.toString())
+    .set('prautorizador',autorizador ? autorizador.toString() : "0")
+    .set('prcliente',cliente.toString())
+    .set('prclientedireccion',cliente_direccion)
+    .set('prclientetelefono',cliente_telefono)
+    .set('prclientecargo',cliente_cargo)
+    .set('prclientetrabajo',cliente_trabajo)
+    .set('prlugar',lugar)
     .set('prvendedor',vendedor.toString())
+    .set('prtipoventa',tipo_venta.toString())
+    .set('prsalida',id_salida_ventas.toString())
     .set('prtipopago',tipo_pago.toString())
     .set('prinicial',inicial.toString())
     .set('prcuotas',cuotas.toString())
@@ -124,7 +140,6 @@ export class VentaService {
     .set('prpdfletra',pdfletra)
     .set('prpdfautorizacion',pdfautorizacion)
     .set('probservaciones',observaciones)
-    .set('prlugar',lugar)
 
     console.log(params)
 
@@ -214,10 +229,12 @@ export class VentaService {
   CrearCanjeTransaccion(
     id_transaccion:number,
     fecha:Date,
+    observacion:string
   ): Observable<any>{
     let params = new HttpParams()
     .set('prtransaccion',id_transaccion.toString())
     .set('prfecha',moment(fecha).format("YYYY-MM-DD"))
+    .set('probservacion',observacion)
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
