@@ -485,7 +485,11 @@
 
         <ng-container matColumnDef="observaciones">
           <mat-header-cell *matHeaderCellDef> Observaciones </mat-header-cell>
-          <mat-cell *matCellDef="let talonario"> {{talonario.observacion}}</mat-cell>
+          <mat-cell *matCellDef="let talonario"> {{talonario.estado_documentos}}
+            <span *ngIf="talonario.estado_documentos != '-'">
+              &nbsp; ({{ talonario.documentos_adjuntos }} / {{ talonario.documentos_totales }})
+            </span>
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="opciones">

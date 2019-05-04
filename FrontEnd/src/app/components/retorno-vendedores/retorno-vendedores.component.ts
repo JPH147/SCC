@@ -37,6 +37,7 @@ export class RetornoVendedoresComponent implements OnInit {
   public ver_vendedores: boolean;
   public ver_productos: boolean;
   public ver_talonarios: boolean;
+  public estado_ventas:number;
 
   constructor(
     private location: Location,
@@ -50,16 +51,18 @@ export class RetornoVendedoresComponent implements OnInit {
     this.ver_vendedores=true
     this.ver_productos=true;
     this.ver_talonarios=true;
+    this.estado_ventas=0;
 
     this.ListadoTalonarios= new TalonariosDataSource(this.Servicio);
     this.ListadoProductos= new ProductosDataSource(this.Servicio);
 
-    this.route.params.subscribe(params => {
-      if(params['idsalida']){
-        this.id_salida=params['idsalida'];
+    // this.route.params.subscribe(params => {
+    //   if(params['idsalida']){
+        // this.id_salida=params['idsalida'];
+        this.id_salida=65;
         this.SeleccionarSalida();
-      }
-    })
+      // }
+    // })
   }
 
   SeleccionarSalida(){
@@ -75,6 +78,8 @@ export class RetornoVendedoresComponent implements OnInit {
 
     this.ListadoTalonarios.CargarInformacion(this.id_salida,0);
     this.ListadoProductos.CargarInformacion(this.id_salida,0);
+
+    this.VerificarEstadoVentas();
 
   }
 
@@ -142,6 +147,16 @@ export class RetornoVendedoresComponent implements OnInit {
     this.ver_talonarios=false;
   }
 
+  VerificarEstadoVentas(){
+    this.Servicio.ListarSalidaTalonarios(this.id_salida,2).subscribe(res=>{
+      res['data'].talonarios.forEach((item)=>{
+        if(item.documentos_adjuntos < item.documentos_totales){
+          this.estado_ventas++;
+        }
+      })
+    })
+  }
+
   Atras(){
     this.location.back()
   }
@@ -166,7 +181,6 @@ export class ProductosDataSource implements DataSource<any>{
 
   CargarInformacion(id_salida,estado){
     this.Servicio.ListarSalidaProductos(id_salida,estado).subscribe(res=>{
-      // console.log(res)
       this.Informacion.next(res['data'].productos);
     })
   }

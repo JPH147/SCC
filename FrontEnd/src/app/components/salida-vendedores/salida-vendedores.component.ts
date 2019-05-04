@@ -129,27 +129,27 @@ export class SalidaVendedoresComponent implements OnInit {
 
     this.CrearFormulario();
 
-    // this.route.params.subscribe(params => {
-    //   // Verifica si 'params' tiene datos
-    //   if(Object.keys(params).length>0){
+    this.route.params.subscribe(params => {
+      // Verifica si 'params' tiene datos
+      if(Object.keys(params).length>0){
 
-    //     this.Cargando.next(true);
+        this.Cargando.next(true);
 
-    //     if(params['idsalida']){
-    //       this.id_salida=params['idsalida'];
-    //       this.SeleccionarSalida(this.id_salida);
-    //     }
+        if(params['idsalida']){
+          this.id_salida=params['idsalida'];
+          this.SeleccionarSalida(this.id_salida);
+        }
 
-    //     if(params['idsalidaeditar']){
-    //       this.id_salida_editar=params['idsalidaeditar'];
+        if(params['idsalidaeditar']){
+          this.id_salida_editar=params['idsalidaeditar'];
           this.id_salida_editar=65;
           this.SeleccionarSalida(this.id_salida_editar);
-    //     }
+        }
 
-    //   }else{
-    //    this.NuevaSalida();
-    //   }
-    // })
+      }else{
+       this.NuevaSalida();
+      }
+    })
   }
 
   CrearFormulario(){

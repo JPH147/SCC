@@ -79,7 +79,12 @@
 
         <ng-container matColumnDef="observaciones">
           <mat-header-cell *matHeaderCellDef> Observaciones </mat-header-cell>
-          <mat-cell *matCellDef="let talonario"> {{talonario.observacion }}</mat-cell>
+          <mat-cell *matCellDef="let talonario">
+            {{ talonario.estado_documentos }}
+            <span *ngIf="talonario.estado_documentos != '-'">
+              &nbsp; ({{ talonario.documentos_adjuntos }} / {{ talonario.documentos_totales }})
+            </span>
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="opciones">
@@ -158,11 +163,19 @@
   </div>
 
   <mat-card-actions>
+    
     <mat-grid-list cols=1 rowHeight="40px">
-      <mat-grid-tile>
-        <button mat-raised-button color="primary" [routerLink]="['../../retorno', id_salida]"> Finalizar salida </button>
+
+      <mat-grid-tile *ngIf="estado_ventas>0">
+        <mat-error> Faltan completar los documentos de {{ estado_ventas }} {{ estado_ventas==1 ? 'venta' : 'ventas' }}</mat-error>
       </mat-grid-tile>
+
+      <mat-grid-tile>
+        <button mat-raised-button color="primary" [routerLink]="['../../retorno', id_salida]" [disabled]="estado_ventas>0"> Finalizar salida </button>
+      </mat-grid-tile>
+      
     </mat-grid-list>
+
   </mat-card-actions>
 
  </mat-card>
