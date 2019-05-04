@@ -2,7 +2,7 @@
 
   <button mat-mini-fab type="button" color="primary" (click)="Atras()"><mat-icon>keyboard_arrow_left</mat-icon></button>
 
-  <mat-card-title class="tituloProd">Venta {{VentasSalidaForm.value.pecosa}}</mat-card-title>
+  <mat-card-title class="tituloProd">Venta {{VentasSalidaForm.value.contrato}}</mat-card-title>
 
   <form [formGroup]="VentasSalidaForm">
 
@@ -49,7 +49,7 @@
           </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile>
+        <mat-grid-tile *ngIf="!id_venta">
           <mat-checkbox color="primary" formControlName="garante">Garante</mat-checkbox>
         </mat-grid-tile>
 
@@ -229,7 +229,7 @@
         DOCUMENTOS ADJUNTOS
       </mat-card-subtitle>
 
-      <mat-grid-list cols="8" rowHeight="100px">
+      <mat-grid-list cols="8" rowHeight="100px" *ngIf="!id_venta">
 
         <mat-grid-tile>
           <image-upload
@@ -329,7 +329,7 @@
         </mat-grid-tile>
       </mat-grid-list>
 
-      <mat-grid-list cols=8 rowHeight="60px">
+      <mat-grid-list cols=8 rowHeight="60px" *ngIf="!id_venta">
 
         <mat-grid-tile>
           <button mat-icon-button color="primary" (click)="EditarFoto()" [disabled]="!foto" *ngIf="!foto_editar">
@@ -404,7 +404,7 @@
         </mat-grid-tile>
       </mat-grid-list>
 
-      <mat-grid-list cols=8 rowHeight="20px">
+      <mat-grid-list cols=8 rowHeight="20px" *ngIf="id_venta">
 
         <mat-grid-tile>
           Foto
@@ -440,7 +440,7 @@
 
       </mat-grid-list>
 
-      <mat-grid-list cols=8 rowHeight="60px">
+      <mat-grid-list cols=8 rowHeight="60px" *ngIf="id_venta">
 
         <mat-grid-tile>
 
@@ -594,8 +594,8 @@
 
       <mat-card-subtitle class="titulo-seccion">
         CRONOGRAMA
-        <!-- <button mat-icon-button class="icono" *ngIf="!idventa && editar_cronograma>1" (click)="EditarCronograma(1)"><mat-icon>edit</mat-icon></button>
-        <button mat-icon-button class="icono" *ngIf="!idventa && editar_cronograma==1" (click)="EditarCronograma(2)"><mat-icon>check</mat-icon></button> -->
+        <!-- <button mat-icon-button class="icono" *ngIf="!id_venta && editar_cronograma>1" (click)="EditarCronograma(1)"><mat-icon>edit</mat-icon></button>
+        <button mat-icon-button class="icono" *ngIf="!id_venta && editar_cronograma==1" (click)="EditarCronograma(2)"><mat-icon>check</mat-icon></button> -->
       </mat-card-subtitle>
 
       <ng-container>
@@ -613,7 +613,7 @@
 
           <ng-container matColumnDef="fecha_vencimiento">
             <mat-header-cell *matHeaderCellDef> Vencimiento </mat-header-cell>
-            <mat-cell *matCellDef="let cronograma"> {{cronograma.fecha_vencimiento | date: 'MM/yyyy'}} </mat-cell>
+            <mat-cell *matCellDef="let cronograma"> {{cronograma.fecha_vencimiento | date: 'dd/MM/yyyy'}} </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="monto_interes">
@@ -644,7 +644,7 @@
           <ng-container matColumnDef="opciones">
             <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
             <mat-cell *matCellDef="let cronograma">
-              <button mat-icon-button color="primary" (click)="VerDetallePagos(cronograma)" [disabled]="cronograma.numero==0"> <mat-icon> visibility </mat-icon> </button>
+              <button mat-icon-button color="primary" [disabled]="cronograma.monto_pagado==0" (click)="VerDetallePagos(cronograma)"> <mat-icon> visibility </mat-icon> </button>
             </mat-cell>
           </ng-container>
 

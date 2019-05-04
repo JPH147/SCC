@@ -166,6 +166,7 @@ export class ProductosDataSource implements DataSource<any>{
 
   CargarInformacion(id_salida,estado){
     this.Servicio.ListarSalidaProductos(id_salida,estado).subscribe(res=>{
+      // console.log(res)
       this.Informacion.next(res['data'].productos);
     })
   }
@@ -189,6 +190,7 @@ export class TalonariosDataSource implements DataSource<any>{
 
   CargarInformacion(id_salida,estado){
     this.Servicio.ListarSalidaTalonarios(id_salida,estado).subscribe(res=>{
+      // console.log(res)
       this.Informacion.next(res['data'].talonarios);
     })
   }

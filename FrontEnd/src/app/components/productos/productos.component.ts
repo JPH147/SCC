@@ -45,53 +45,54 @@ export class ProductosComponent implements OnInit {
  }
 
 // tslint:disable-next-line:use-life-cycle-interface
-ngAfterViewInit () {
+  ngAfterViewInit () {
 
-  this.sort.sortChange.subscribe(res => {
-    this.paginator.pageIndex = 0;
-  });
+    this.sort.sortChange.subscribe(res => {
+      this.paginator.pageIndex = 0;
+    });
 
-  merge(
-    this.paginator.page,
-    this.sort.sortChange
-  )
-  .pipe(
-    tap(() => this.CargarData())
-  ).subscribe();
-
-  merge(
-   fromEvent(this.FiltroProductos.nativeElement, 'keyup'),
-   fromEvent(this.FiltroTipo.nativeElement, 'keyup'),
-   fromEvent(this.FiltroMarca.nativeElement, 'keyup'),
-   fromEvent(this.FiltroModelo.nativeElement, 'keyup'),
-   fromEvent(this.FiltroPMinimo.nativeElement, 'keyup'),
-   fromEvent(this.FiltroPMaximo.nativeElement, 'keyup'),
-   this.FiltroEstado.selectionChange
-  )
-  .pipe(
-     debounceTime(200),
-     distinctUntilChanged(),
-     tap(() => {
-       this.paginator.pageIndex = 0;
-       this.CargarData();
-     })
+    merge(
+      this.paginator.page,
+      this.sort.sortChange
+    )
+    .pipe(
+      tap(() => this.CargarData())
     ).subscribe();
- }
 
- CargarData() {
-   this.ListadoProductos.CargarProductos(this.FiltroTipo.nativeElement.value,
-   this.FiltroMarca.nativeElement.value,
-   this.FiltroModelo.nativeElement.value,
-   this.FiltroProductos.nativeElement.value,
-   this.FiltroPMinimo.nativeElement.value,
-   this.FiltroPMaximo.nativeElement.value,
-   this.paginator.pageIndex + 1,
-   this.paginator.pageSize,
-   this.sort.active,
-   this.sort.direction,
-   this.FiltroEstado.value
-   );
- }
+    merge(
+    fromEvent(this.FiltroProductos.nativeElement, 'keyup'),
+    fromEvent(this.FiltroTipo.nativeElement, 'keyup'),
+    fromEvent(this.FiltroMarca.nativeElement, 'keyup'),
+    fromEvent(this.FiltroModelo.nativeElement, 'keyup'),
+    fromEvent(this.FiltroPMinimo.nativeElement, 'keyup'),
+    fromEvent(this.FiltroPMaximo.nativeElement, 'keyup'),
+    this.FiltroEstado.selectionChange
+    )
+    .pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      tap(() => {
+        this.paginator.pageIndex = 0;
+        this.CargarData();
+      })
+      ).subscribe();
+  }
+
+  CargarData() {
+    this.ListadoProductos.CargarProductos(
+      this.FiltroTipo.nativeElement.value,
+      this.FiltroMarca.nativeElement.value,
+      this.FiltroModelo.nativeElement.value,
+      this.FiltroProductos.nativeElement.value,
+      this.FiltroPMinimo.nativeElement.value,
+      this.FiltroPMaximo.nativeElement.value,
+      this.paginator.pageIndex + 1,
+      this.paginator.pageSize,
+      this.sort.active,
+      this.sort.direction,
+      this.FiltroEstado.value
+    );
+  }
 
 
  /* Agregar productos */

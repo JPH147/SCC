@@ -95,19 +95,25 @@ export class VentasListarComponent implements OnInit {
     });
 
     let Dialogo = this.Dialogo.open(VentanaConfirmarComponent,{
-      data: {objeto: "la venta", valor: venta.serie+"-"+venta.contrato, venta:true}
+      data: {objeto: "la venta", valor: venta.contrato, venta:true}
     })
 
     Dialogo.afterClosed().subscribe(res=>{
       if (res) {
         if (res.respuesta) {
           this.VServicio.EliminarVenta(venta.id, res.comentarios, res.monto).subscribe(respuesta=>{
+            
+            console.log(respuesta);
             Transacciones.forEach((item)=>{
               this.VServicio.CrearCanjeTransaccion(item.id,new Date(),"AJUSTE POR ANULACION").subscribe()
             })
+
             if (res.monto>0) {
               this.VServicio.CrearVentaCronograma(venta.id,res.monto,new Date(), 1).subscribe()
             }
+
+            this.CargarData()
+
           });
         }
       }

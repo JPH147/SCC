@@ -20,13 +20,13 @@
 		</mat-form-field>
 
 		<mat-form-field *ngIf="data.venta">
-			<input matInput placeholder="Monto a pagar por cancelación" [(ngModel)]="monto">
+			<input matInput type="number" placeholder="Monto a pagar por cancelación" [(ngModel)]="monto">
 			<span matPrefix>S/. &nbsp;</span>
 		</mat-form-field>
 
 		<mat-grid-list cols=1 rowHeight="40px">
 			<mat-grid-tile>
-				<button type="submit" mat-raised-button color="primary" (click)="Aceptar() ;Notificacion(mensaje,'')">Aceptar</button>
+				<button type="submit" mat-raised-button color="primary" [disabled]="comentarios==''" (click)="Aceptar() ;Notificacion(mensaje,'')">Aceptar</button>
 			</mat-grid-tile>
 		</mat-grid-list>
 

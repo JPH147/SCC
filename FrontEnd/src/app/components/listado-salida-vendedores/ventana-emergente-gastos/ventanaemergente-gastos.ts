@@ -37,7 +37,7 @@ export class VentanaEmergenteGastos {
     this.ListarVendedores();
 
     this.ListadoGastos = new GastosSalidaDataSource(this.Servicio);
-    this.ListadoGastos.GargarGatos(this.data.id, 1, 5);
+    this.ListadoGastos.GargarGastos(this.data.id, 1, 5);
 
     this.fecha=new Date();
     
@@ -68,7 +68,7 @@ export class VentanaEmergenteGastos {
       this.tipo,
       this.observacion
     ).subscribe(res=>{
-      this.ListadoGastos.GargarGatos(this.data.id, 1, 5);
+      this.ListadoGastos.GargarGastos(this.data.id, 1, 5);
       if(this.data.monto){
         this.ventana.close(true)
       }
@@ -77,7 +77,7 @@ export class VentanaEmergenteGastos {
 
   Eliminar(id){
     this.Servicio.EliminarGasto(id).subscribe(res=>{
-      this.ListadoGastos.GargarGatos(this.data.id, 1, 5);
+      this.ListadoGastos.GargarGastos(this.data.id, 1, 5);
     })
   }
 
@@ -104,7 +104,7 @@ export class GastosSalidaDataSource implements DataSource<any> {
     this.CargandoInformacion.complete();
   }
 
-  GargarGatos(
+  GargarGastos(
     id_cabecera: number,
     pagina: number,
     total_pagina: number

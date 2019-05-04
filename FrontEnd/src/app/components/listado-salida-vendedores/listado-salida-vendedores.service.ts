@@ -69,7 +69,7 @@ export class ListadoSalidaVendedoresService {
       .set('prtotalpagina', total_pagina.toString())
   })
     .pipe(map(res => {
-      console.log(res)
+      // console.log(res)
       if (res['codigo'] === 0) {
         return res;
       }else {

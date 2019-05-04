@@ -100,6 +100,10 @@ mat-table{
   margin-bottom: 20px;
 }
 
+.formulario{
+  width: 80%;
+}
+
 .mat-column-numero{
   max-width: 5%;
 }
@@ -115,4 +119,15 @@ mat-table{
 .mat-column-serie,
 .mat-column-precio{
   max-width: 20%;
+}
+
+.mat-column-fecha,
+.mat-column-monto,
+.mat-column-tipo{
+  max-width: 10%;
+}
+
+.mat-column-cantidad,
+.mat-column-fecha_grande{
+  max-width: 15%
 }

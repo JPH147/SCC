@@ -32,7 +32,8 @@ export class ventanaseriessv  implements OnInit {
     })
 
     if (this.data.series) {
-      this.data.series.forEach((item,index)=>{
+      this.data.series.forEach((item)=>{
+        // console.log(item,this.data.id_producto)
         if (item.id_producto==this.data.id_producto) {
           this.contador++
         }
@@ -40,7 +41,7 @@ export class ventanaseriessv  implements OnInit {
       if (this.contador>0) {
         /*Si hay series para el producto, muestra los datos*/
         let i:number=0;
-        this.data.series.forEach((item,index)=>{
+        this.data.series.forEach((item)=>{
           if (item.id_producto==this.data.id_producto) {
             this.SeriesProductosForm.get('series')['controls'][i].get('id_producto').setValue(item.id_producto);
             this.SeriesProductosForm.get('series')['controls'][i].get('id_serie').setValue(item.id_serie);
@@ -53,8 +54,9 @@ export class ventanaseriessv  implements OnInit {
           }
         })
         this.EliminarSerie(i)
-      }  
+      }
       else{
+        // console.log("Estamos aquí")
         /*Si no hay series para el producto, trae los datos*/
         this.Series.Listado(this.data.almacen,this.data.id_producto,1,20).subscribe(res=>{
           // console.log(res['data'].producto_series);

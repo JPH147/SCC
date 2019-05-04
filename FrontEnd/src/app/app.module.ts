@@ -88,7 +88,6 @@ import {FileUpload} from './components/clientes/file-upload/fileupload';
 import {VentanaEmergenteContacto} from './components/clientes/ventana-emergentecontacto/ventanaemergentecontacto';
 import {VentanaEmergenteStock } from './components/stock/ventana-emergentestock/ventanaemergentestock';
 import { VentasListarComponent } from './components/ventas-listar/ventas-listar.component';
-import { VentanaTalonarioComponent } from './components/salida-vendedores/ventana-talonario/ventana-talonario.component';
 import {ImagenProductoComponent} from './components/productos/imagen-producto/imagen-producto.component';
 import { HistorialSerieComponent } from './components/historial-serie/historial-serie.component';
 import { ProveedoresMovimientosComponent } from './components/proveedores/proveedores-movimientos/proveedores-movimientos.component';
@@ -205,7 +204,6 @@ import { VentasSalidaComponent } from './components/ventas-salida/ventas-salida.
     VentanaEmergenteContacto,
     VentanaEmergenteStock,
     VentasListarComponent,
-    VentanaTalonarioComponent,
     ImagenProductoComponent,
     HistorialSerieComponent,
     ProveedoresMovimientosComponent,
@@ -261,7 +259,6 @@ import { VentasSalidaComponent } from './components/ventas-salida/ventas-salida.
     FileUpload,
     VentanaEmergenteContacto,
     VentanaEmergenteStock,
-    VentanaTalonarioComponent,
     VentasComponent,
     ImagenProductoComponent,
     ProveedoresMovimientosComponent,

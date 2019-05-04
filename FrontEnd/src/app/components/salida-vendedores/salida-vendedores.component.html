@@ -12,6 +12,7 @@
 
   <form [formGroup]="SalidaVendedoresForm">
 
+    <!-- Generales -->
     <div class="seccion">
 
       <mat-card-subtitle class="titulo-seccion">
@@ -27,17 +28,17 @@
           </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile *ngIf="!id_salida">
+        <mat-grid-tile *ngIf="!id_salida && !id_salida_editar">
           <mat-form-field class="formulario-principal">
-            <mat-select placeholder="Sucursal" formControlName="sucursal">
+            <mat-select placeholder="Sucursal" formControlName="sucursal" (selectionChange)="SucursalSeleccionada($event)">
               <mat-option *ngFor="let sucursal of Sucursales" [value]="sucursal.id">{{sucursal.nombre}}</mat-option>
             </mat-select>
           </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile *ngIf="id_salida">
+        <mat-grid-tile *ngIf="id_salida || id_salida_editar">
           <mat-form-field class="formulario-principal">
-            <input matInput type="text" placeholder="Sucursal" formControlName="sucursal" readonly>
+            <input matInput type="text" placeholder="Sucursal" formControlName="sucursal" [readonly]="id_salida">
           </mat-form-field>
         </mat-grid-tile>
 
@@ -85,7 +86,9 @@
         </mat-grid-tile>
         
         <mat-grid-tile *ngIf="!id_salida">
-          <button type="button" mat-raised-button color="primary" (click)="AgregarTalonario()"> Agregar talonarios </button>
+          <mat-checkbox color="primary" formControlName="movilidad_propia"
+            (change)="CambioMovilidad($event)"
+          >Movilidad de la cooperativa</mat-checkbox>
         </mat-grid-tile>
         
         <mat-grid-tile *ngIf="id_salida">
@@ -104,7 +107,8 @@
 
     </div>
 
-    <div class="seccion" *ngIf="!id_salida || (id_salida && SalidaVendedoresForm.value.vehiculo_placa)">
+    <!-- Vehículo -->
+    <div class="seccion" *ngIf="SalidaVendedoresForm.value.movilidad_propia">
 
       <mat-card-subtitle class="titulo-seccion">
         DATOS DEL VEHICULO
@@ -136,6 +140,7 @@
 
     </div>
 
+    <!-- Vendedores -->
     <div class="seccion">
 
       <mat-card-subtitle class="titulo-seccion">
@@ -143,16 +148,12 @@
       </mat-card-subtitle>
 
       <ng-container *ngIf="!id_salida">
-
-        <mat-grid-tile>
-          <button mat-mini-fab type="button" color="primary" matTooltip="Agrega Vendedor" (click)="AgregarVendedor()"><mat-icon>add</mat-icon></button>
-        </mat-grid-tile>
   
         <mat-grid-list cols="5" rowHeight="70px"> 
   
-          <mat-grid-tile colspan="2">
+          <mat-grid-tile colspan="2" *ngIf="!SalidaVendedoresForm.value.vendedor_nombre && !id_salida_editar">
             <mat-form-field class="formulario-principal">
-              <input matInput placeholder="Vendedor" [matAutocomplete]="autovendedor" #InputVendedor formControlName="vendedor_nombre">
+              <input matInput placeholder="Vendedor" [matAutocomplete]="autovendedor" #InputVendedor formControlName="vendedor">
               <mat-autocomplete #autovendedor="matAutocomplete" [displayWith]="displayFn" (optionSelected)="VendedorSeleccionado($event)">
                 <mat-option *ngFor="let vendedor of Vendedor" [value]="vendedor">
                   {{vendedor.nombre}}
@@ -161,6 +162,13 @@
             </mat-form-field>
           </mat-grid-tile>
   
+          <mat-grid-tile colspan="2" *ngIf="SalidaVendedoresForm.value.vendedor_nombre || id_salida_editar">
+            <mat-form-field class="formulario-principal">
+              <input matInput placeholder="Vendedor" formControlName="vendedor_nombre" readonly>
+              <mat-icon color="primary" matSuffix (click)="RemoverVendedor()" *ngIf="!id_salida_editar"> remove_circle </mat-icon>
+            </mat-form-field>
+          </mat-grid-tile>
+
           <mat-grid-tile>
             <mat-form-field class="formulario-principal">
               <input matInput placeholder="Comision efectiva" formControlName="vendedor_comision_efectiva">
@@ -176,7 +184,8 @@
           </mat-grid-tile>
   
           <mat-grid-tile>
-            <button mat-raised-button type="button" color="primary" matTooltip="Agrega Vendedor" (click)="AgregarVendedor()">Agregar</button>
+            <button mat-raised-button type="button" color="primary" matTooltip="Agrega vendedor" (click)="AgregarVendedor()" [disabled]="!SalidaVendedoresForm.value.vendedor_nombre" *ngIf="!id_salida_editar">Agregar</button>
+            <button mat-raised-button type="button" color="primary" matTooltip="Actualizar vendedor" (click)="ActualizarVendedor()" [disabled]="!SalidaVendedoresForm.value.vendedor_id" *ngIf="id_salida_editar">Actualizar</button>
           </mat-grid-tile>
   
         </mat-grid-list>
@@ -192,8 +201,7 @@
 
         <ng-container matColumnDef="nombre">
           <mat-header-cell *matHeaderCellDef> Vendedor </mat-header-cell>
-          <!-- Se coloca vendedor.nombre cuando se agrega una salida y vendedor.vendedor cuando se ve el detalle -->
-          <mat-cell *matCellDef="let vendedor"> {{vendedor.nombre}}{{vendedor.vendedor}} </mat-cell> 
+          <mat-cell *matCellDef="let vendedor"> {{ (id_salida || id_salida_editar) ? vendedor.vendedor : vendedor.nombre }} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="comision_efectiva">
@@ -209,7 +217,8 @@
         <ng-container matColumnDef="opciones">
           <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
           <mat-cell *matCellDef="let vendedor">
-            <button mat-icon-button type="button" matTooltip="Eliminar" color="primary" (click)="EliminarVendedor(vendedor.id)"><mat-icon> delete </mat-icon></button>
+            <button mat-icon-button type="button" matTooltip="Editar" color="primary" (click)="EditarVendedor(vendedor)" *ngIf="id_salida_editar"><mat-icon> edit </mat-icon></button>
+            <button mat-icon-button type="button" matTooltip="Eliminar" color="primary" (click)="EliminarVendedor(vendedor.id)" *ngIf="!id_salida && !id_salida_editar"><mat-icon> delete </mat-icon></button>
           </mat-cell>
         </ng-container>
 
@@ -220,6 +229,7 @@
 
     </div>
 
+    <!-- Viáticos -->
     <div class="seccion" *ngIf="id_salida">
 
       <mat-card-subtitle class="titulo-seccion">
@@ -234,17 +244,17 @@
         </ng-container>
 
         <ng-container matColumnDef="vendedor">
-          <mat-header-cell *matHeaderCellDef> Contrato </mat-header-cell>
+          <mat-header-cell *matHeaderCellDef> Vendedor </mat-header-cell>
           <mat-cell *matCellDef="let talonario"> {{talonario.vendedor}} </mat-cell> 
         </ng-container>
 
         <ng-container matColumnDef="monto_grupal">
-          <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
+          <mat-header-cell *matHeaderCellDef> Monto grupal </mat-header-cell>
           <mat-cell *matCellDef="let talonario"> {{talonario.monto_grupal | currency:'S/.'}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="monto_individual">
-          <mat-header-cell *matHeaderCellDef> Observaciones </mat-header-cell>
+          <mat-header-cell *matHeaderCellDef> Monto individual </mat-header-cell>
           <mat-cell *matCellDef="let talonario"> {{talonario.monto_individual | currency:'S/.'}}</mat-cell>
         </ng-container>
 
@@ -252,6 +262,201 @@
         <mat-row *matRowDef="let row; columns: ColumnasViaticos;"></mat-row>
 
       </mat-table>
+
+    </div>
+
+    <div class="seccion" *ngIf="id_salida_editar">
+
+      <mat-card-subtitle class="titulo-seccion">
+          DATOS DE LOS VIATICOS
+      </mat-card-subtitle>
+
+      <mat-grid-list cols=3 rowHeight="70px" class="filtros">
+
+        <mat-grid-tile>
+          <mat-form-field class="formulario">
+            <mat-select placeholder="Vendedor" formControlName="gasto_vendedor" (selectionChange)="ViaticoSeleccionado($event)">
+              <mat-option [value]=0>Ninguno</mat-option>
+              <mat-option *ngFor="let vendedor of VendedoresViaticos" [value]="vendedor">{{vendedor.vendedor}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+    
+        <mat-grid-tile>
+          <mat-form-field class="formulario">
+            <input matInput type="number" placeholder="Monto" formControlName="gasto_monto">
+          </mat-form-field>
+        </mat-grid-tile>
+    
+        <mat-grid-tile>
+          <mat-form-field class="formulario">
+            <input matInput #fechainicio [matDatepicker]="fechainicio" placeholder="Fecha" formControlName="gasto_fecha">
+            <mat-datepicker-toggle matSuffix [for]="fechainicio"></mat-datepicker-toggle>
+            <mat-datepicker #fechainicio></mat-datepicker>
+          </mat-form-field>
+        </mat-grid-tile>
+        
+        <mat-grid-tile>
+          <mat-form-field class="formulario">
+            <mat-select placeholder="Tipo" formControlName="gasto_tipo">
+              <mat-option [value]="{id:1, nombre:'Grupal'}">Grupal</mat-option>
+              <mat-option [value]="{id:2, nombre:'Personal'}">Personal</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+    
+        <mat-grid-tile>
+          <mat-form-field class="formulario">
+            <input matInput placeholder="Observacion" formControlName="gasto_observacion">
+          </mat-form-field>
+        </mat-grid-tile>
+    
+        <mat-grid-tile>
+          <button mat-raised-button color="primary" (click)="AgregarGasto()"
+          [disabled]="SalidaVendedoresForm.value.gasto_vendedor==0 || SalidaVendedoresForm.get('gasto_monto').invalid || SalidaVendedoresForm.get('gasto_tipo').invalid"
+          >Agregar</button>
+        </mat-grid-tile>
+    
+      </mat-grid-list>
+    
+      <mat-card-content>
+        <mat-table [dataSource]="ListadoGastos" class="mat-elevation-z8">
+    
+          <ng-container matColumnDef="numero">
+            <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+            <mat-cell *matCellDef="let gasto"> {{gasto.numero}} </mat-cell>
+          </ng-container>
+    
+          <ng-container matColumnDef="fecha">
+            <mat-header-cell *matHeaderCellDef> Fecha </mat-header-cell>
+            <mat-cell *matCellDef="let gasto"> {{gasto.fecha | date:"dd/MM/yyyy"}} </mat-cell>
+          </ng-container>
+    
+          <ng-container matColumnDef="vendedor">
+            <mat-header-cell *matHeaderCellDef> Vendedor </mat-header-cell>
+            <mat-cell *matCellDef="let gasto"> {{gasto.vendedor }} </mat-cell>
+          </ng-container>
+    
+          <ng-container matColumnDef="monto">
+            <mat-header-cell *matHeaderCellDef> Monto </mat-header-cell>
+            <mat-cell *matCellDef="let gasto"> S/. {{gasto.monto }}</mat-cell>
+          </ng-container>
+          
+          <ng-container matColumnDef="tipo">
+            <mat-header-cell *matHeaderCellDef> Tipo </mat-header-cell>
+            <mat-cell *matCellDef="let gasto"> {{gasto.tipo }}</mat-cell>
+          </ng-container>
+    
+          <ng-container matColumnDef="observacion">
+            <mat-header-cell *matHeaderCellDef> Observación </mat-header-cell>
+            <mat-cell *matCellDef="let gasto"> {{gasto.observacion }}</mat-cell>
+          </ng-container>
+    
+          <ng-container matColumnDef="opciones">
+            <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
+            <mat-cell *matCellDef="let gasto">
+              <button mat-icon-button matTooltip="Eliminar" color="primary" (click)="EliminarGasto(gasto)" [disabled]="!gasto.nuevo"><mat-icon> delete </mat-icon></button>
+            </mat-cell>
+          </ng-container>
+    
+          <mat-header-row *matHeaderRowDef="GastosColumnas"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: GastosColumnas;"></mat-row>
+        </mat-table>
+    
+      </mat-card-content>
+    </div>
+
+    <!-- Talonarios -->
+    <div class="seccion" *ngIf="!id_salida">
+
+      <mat-card-subtitle class="titulo-seccion">
+        DATOS DE LOS TALONARIOS
+      </mat-card-subtitle>
+
+        <mat-grid-list [cols]="id_salida_editar ? 5 : 4" rowHeight="70px">
+          
+          <mat-grid-tile>
+            <mat-form-field class="formulario">
+              <mat-select placeholder="Serie" (selectionChange)="AgregarNumeros($event)" formControlName="serie" (selectionChange)="SerieSeleccionada($event)">
+                <mat-option [value]=0> Ninguna </mat-option>
+                <mat-option *ngFor="let serie of TalonarioSeries" [value]="serie.serie"> {{serie.serie}} </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-grid-tile>
+            
+          <mat-grid-tile>
+            <mat-form-field class="formulario">
+              <mat-select placeholder="Desde" formControlName="numero_inicio" (selectionChange)="MinimoSeleccionado()">
+                <mat-option *ngFor="let numero of Numeros" [value]="numero"> {{numero.numero}} </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-grid-tile>
+            
+          <mat-grid-tile>
+            <mat-form-field class="formulario">
+              <mat-select placeholder="Hasta" formControlName="numero_fin" (selectionChange)="MaximoSeleccionado()">
+                <mat-option *ngFor="let numero of Numeros" [value]="numero"> {{numero.numero}} </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile *ngIf="id_salida_editar">
+            <mat-form-field class="formulario">
+              <input matInput #fecha_talonarios [matDatepicker]="fecha_talonarios" placeholder="Fecha de entrega" formControlName="fecha_talonarios">
+              <mat-datepicker-toggle matSuffix [for]="fecha_talonarios"></mat-datepicker-toggle>
+              <mat-datepicker #fecha_talonarios></mat-datepicker>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <button mat-raised-button type="button" color="primary" (click)="AgregarTalonario()"
+            [disabled]="
+              SalidaVendedoresForm.value.serie==0 ||
+              SalidaVendedoresForm.get('numero_inicio').invalid ||
+              SalidaVendedoresForm.get('numero_fin').invalid
+            ">Agregar</button>
+          </mat-grid-tile>
+  
+        </mat-grid-list>
+  
+        <mat-table [dataSource]="ListadoTalonario" class="mat-elevation-z8" *ngIf="SalidaVendedoresForm.value.talonarios>0">
+  
+          <ng-container matColumnDef="numero">
+            <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+            <mat-cell *matCellDef="let talonario"> {{talonario.numero}} </mat-cell>
+          </ng-container>
+  
+          <ng-container matColumnDef="serie">
+            <mat-header-cell *matHeaderCellDef> Talonario </mat-header-cell>
+            <mat-cell *matCellDef="let talonario"> {{talonario.serie}} </mat-cell>
+          </ng-container>
+  
+          <ng-container matColumnDef="inicio">
+            <mat-header-cell *matHeaderCellDef> Inicio </mat-header-cell>
+            <mat-cell *matCellDef="let talonario"> {{talonario.numero_inicio}} </mat-cell>
+          </ng-container>
+  
+          <ng-container matColumnDef="fin">
+            <mat-header-cell *matHeaderCellDef> Fin </mat-header-cell>
+            <mat-cell *matCellDef="let talonario"> {{talonario.numero_fin}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="fecha_talonario">
+            <mat-header-cell *matHeaderCellDef> Fecha de entrega </mat-header-cell>
+            <mat-cell *matCellDef="let talonario"> {{talonario.fecha | date:'dd/MM/yyyy'}} </mat-cell>
+          </ng-container>
+  
+          <ng-container matColumnDef="opciones">
+            <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
+            <mat-cell *matCellDef="let talonario">
+              <button mat-icon-button matTooltip="Eliminar" color="primary" (click)="EliminarTalonario(talonario.serie)" [disabled]="!talonario.nuevo" ><mat-icon> delete </mat-icon></button>
+            </mat-cell>
+          </ng-container>
+  
+          <mat-header-row *matHeaderRowDef="ColumnasTalonario"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: ColumnasTalonario;"></mat-row>
+  
+        </mat-table>
 
     </div>
 
@@ -286,7 +491,7 @@
         <ng-container matColumnDef="opciones">
           <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
           <mat-cell *matCellDef="let talonario">
-            <button mat-icon-button type="button" matTooltip="Ver venta" color="primary"><mat-icon> visibility </mat-icon></button>
+            <button mat-icon-button type="button" matTooltip="Ver venta" color="primary" [disabled]="talonario.id_estado==3 || !talonario.id_venta" [routerLink]="['/ventas','salida', talonario.id_venta]"><mat-icon> visibility </mat-icon></button>
           </mat-cell>
         </ng-container>
 
@@ -297,13 +502,14 @@
 
     </div>
   
+    <!-- Productos -->
     <div class="seccion">
 
       <mat-card-subtitle class="titulo-seccion">
         DATOS DE LOS PRODUCTOS
       </mat-card-subtitle>
 
-      <ng-container *ngIf="!id_salida">
+      <ng-container *ngIf="!id_salida && !id_salida_editar">
       
         <mat-grid-list cols="5" rowHeight="70px">
 
@@ -316,12 +522,12 @@
               </mat-select>
             </mat-form-field>
           </mat-grid-tile>
-          
+
           <mat-grid-tile>
           </mat-grid-tile>
           
           <mat-grid-tile>
-            <button mat-mini-fab type="button" color="primary" matTooltip="Agrega Producto" (click)="AgregarProducto()"><mat-icon>add</mat-icon></button>
+            <button mat-mini-fab type="button" color="primary" matTooltip="Agregar producto" (click)="AgregarProducto()"><mat-icon>add</mat-icon></button>
           </mat-grid-tile>
 
         </mat-grid-list>
@@ -345,7 +551,7 @@
     
                 <mat-grid-tile *ngIf="producto.value.id">
                   <mat-form-field class="formulario-principal">
-                    <input matInput placeholder="Producto" formControlName="descripcion" readonly="">
+                    <input matInput placeholder="Producto" formControlName="descripcion" readonly>
                   </mat-form-field>
                 </mat-grid-tile>
     
@@ -356,7 +562,7 @@
                 </mat-grid-tile>
               
                 <mat-grid-tile>
-                  <button mat-mini-fab type="button" color="primary" matTooltip="Agregar series" (click)="AgregarSerieSalidaV(producto,i)" [disabled]="!producto.value.producto"><mat-icon>reorder</mat-icon></button>
+                  <button mat-mini-fab type="button" color="primary" matTooltip="Seleccionar series" (click)="AgregarSerieSalidaV(producto,i)" [disabled]="!producto.value.producto"><mat-icon>reorder</mat-icon></button>
                   <button mat-mini-fab type="button" color="primary" matTooltip="Eliminar producto" (click)="EliminarProducto(producto.value.producto,i)"matTooltip="Eliminar Producto" ><mat-icon>delete</mat-icon></button>
                 </mat-grid-tile>
               
@@ -399,7 +605,7 @@
           <ng-container matColumnDef="opciones">
             <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
             <mat-cell *matCellDef="let producto">
-              <button mat-icon-button type="button" matTooltip="Ver venta" color="primary"><mat-icon> visibility </mat-icon></button>
+              <button mat-icon-button type="button" matTooltip="Ver venta" color="primary" [disabled]="!producto.id_venta" [routerLink]="['/ventas','salida', producto.id_venta]"><mat-icon> visibility </mat-icon></button>
             </mat-cell>
           </ng-container>
 
@@ -409,14 +615,92 @@
         </mat-table>
 
       </ng-container>
-      
 
+      <ng-container *ngIf="id_salida_editar">
+
+        <mat-grid-list cols="3" rowHeight="70px">
+
+          <mat-grid-tile *ngIf="!SalidaVendedoresForm.value.id_producto_editar">
+            <mat-form-field class="formulario-principal">
+              <input matInput placeholder="Producto" [matAutocomplete]="autoproductoeditar" #InputProductoEditar formControlName="producto_editar">
+              <mat-autocomplete #autoproductoeditar="matAutocomplete" [displayWith]="displayFn2" (optionSelected)="ProductoSeleccionadoEditar($event)">
+                <mat-option *ngFor="let producto of Producto" [value]="producto">
+                  {{producto.descripcion}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile *ngIf="SalidaVendedoresForm.value.id_producto_editar">
+            <mat-form-field class="formulario-principal">
+              <input matInput placeholder="Producto" formControlName="descripcion_editar" readonly>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <!-- <mat-grid-tile>
+            <mat-form-field>
+              <input matInput type="text" placeholder="Cantidad" formControlName="cantidad_editar" readonly>
+            </mat-form-field>
+          </mat-grid-tile> -->
+
+          <mat-grid-tile>
+            <mat-form-field>
+                <input matInput #fechaproducto [matDatepicker]="fechaproducto" placeholder="Fecha" formControlName="fecha_productos">
+                <mat-datepicker-toggle matSuffix [for]="fechaproducto"></mat-datepicker-toggle>
+                <mat-datepicker #fechaproducto></mat-datepicker>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <button mat-mini-fab type="button" color="primary" matTooltip="Seleccionar series" (click)="AgregarSerieSalidaVEditar()" [disabled]="!SalidaVendedoresForm.value.id_producto_editar"><mat-icon>reorder</mat-icon></button>
+          </mat-grid-tile>
+
+        </mat-grid-list>
+
+        <mat-table [dataSource]="ListadoProducto" class="mat-elevation-z8">
+
+          <ng-container matColumnDef="numero">
+            <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+            <mat-cell *matCellDef="let producto"> {{producto.numero}} </mat-cell>
+          </ng-container>
+  
+          <ng-container matColumnDef="descripcion">
+            <mat-header-cell *matHeaderCellDef> Descripción </mat-header-cell>
+            <mat-cell *matCellDef="let producto"> {{producto.descripcion}} </mat-cell>
+          </ng-container>
+  
+          <ng-container matColumnDef="cantidad">
+            <mat-header-cell *matHeaderCellDef> Cantidad </mat-header-cell>
+            <mat-cell *matCellDef="let producto"> {{producto.cantidad}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="fecha_grande">
+            <mat-header-cell *matHeaderCellDef> Fecha </mat-header-cell>
+            <mat-cell *matCellDef="let producto"> {{producto.fecha | date:'dd/MM/yyyy'}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="opciones">
+            <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
+            <mat-cell *matCellDef="let producto">
+              <button mat-icon-button type="button" matTooltip="Editar series" color="primary" (click)="EditarSeries(producto.id_producto, producto.descripcion, producto.fecha)" [disabled]="!producto.nuevo"><mat-icon> edit </mat-icon></button>
+              <button mat-icon-button type="button" matTooltip="Eliminar" color="primary" (click)="EliminarProductoEditar(producto.id_producto)" [disabled]="!producto.nuevo"><mat-icon> delete </mat-icon></button>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="ColumnasProducto"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: ColumnasProducto;"></mat-row>
+  
+        </mat-table>
+    
+      </ng-container>
+        
     </div>
 
     <mat-card-actions *ngIf="!id_salida">
       <mat-grid-list cols="1" rowHeight="65px">
         <mat-grid-tile> 
-          <button mat-raised-button color="primary" (click)="Guardar(SalidaVendedoresForm)"> Guardar </button>
+          <button mat-raised-button type="button" color="primary" (click)="Guardar(SalidaVendedoresForm)" [disabled]="SalidaVendedoresForm.invalid"> Guardar </button>
+          <button mat-raised-button type="button" (click)="ImprimirFormulario()"> Guardar </button>
         </mat-grid-tile>
       </mat-grid-list>
     </mat-card-actions>

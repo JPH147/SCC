@@ -10,7 +10,7 @@ export class VentanaConfirmarComponent implements OnInit {
 
   public monto:number;
   public mensaje:string;
-  public comentarios:string;
+  public comentarios:string="";
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
@@ -34,8 +34,6 @@ export class VentanaConfirmarComponent implements OnInit {
       this.ventana.close(true)
     }
   }
-
-
 
   Notificacion(message: string, action: string) {
     this.snackBar.open(message, action, {

@@ -1,3 +1,8 @@
 .boton {
-float: right;
+	float: right;
+}
+
+.card{
+	padding: 0px;
+	overflow: hidden;
 }

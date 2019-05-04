@@ -304,6 +304,20 @@ export class VentasComponent implements OnInit {
     this.productos.push(this.CrearProducto());
   };
 
+  EliminarProductos(index,producto){
+    if (producto.value.estado==1) {
+      this.productos.removeAt(index);
+      this.Series.splice( this.Series.indexOf(producto.value.id_serie), 1 );
+    }
+    if (producto.value.estado==2) {
+      this.productos['controls'][index].get('descripcion').disable()
+      this.productos['controls'][index].get('serie').disable()
+      this.productos['controls'][index].get('precio').disable()
+      this.productos['controls'][index].get('estado').setValue(3);
+    }
+      this.CalcularTotales();
+  }
+
   CrearGarante(bool): FormGroup{
     return this.FormBuilder.group({
       'id_cliente': [{value: null, disabled: false}, [
@@ -363,20 +377,6 @@ export class VentasComponent implements OnInit {
     })
   }
 
-  EliminarProductos(index,producto){
-    if (producto.value.estado==1) {
-      this.productos.removeAt(index);
-      this.Series.splice( this.Series.indexOf(producto.value.id_serie), 1 );
-    }
-    if (producto.value.estado==2) {
-      this.productos['controls'][index].get('descripcion').disable()
-      this.productos['controls'][index].get('serie').disable()
-      this.productos['controls'][index].get('precio').disable()
-      this.productos['controls'][index].get('estado').setValue(3);
-    }
-      this.CalcularTotales();
-  }
-
   AgregarGarante(bool):void{
     this.garantes = this.VentasForm.get('garantes') as FormArray;
     this.garantes.push(this.CrearGarante(bool));
@@ -386,15 +386,7 @@ export class VentasComponent implements OnInit {
   };
 
   EliminarGarante(index){
-    // if (producto.value.estado==1) {
-      this.garantes.removeAt(index);
-    // }
-    // if (producto.value.estado==2) {
-    //   this.productos['controls'][index].get('descripcion').disable()
-    //   this.productos['controls'][index].get('serie').disable()
-    //   this.productos['controls'][index].get('precio').disable()
-    //   this.productos['controls'][index].get('estado').setValue(3);
-    // }
+    this.garantes.removeAt(index);
   }
 
   ngAfterViewInit() {
@@ -734,8 +726,11 @@ export class VentasComponent implements OnInit {
 
     let year = moment(this.VentasForm.value.fechapago).year();
     let month = moment(this.VentasForm.value.fechapago).month();
+    let day = moment(this.VentasForm.value.fechapago).date();
 
-    let fecha_corregida:Date = new Date(year, month+1,27);
+    let fecha_corregida:Date = new Date(year, month, day);
+
+    console.log(fecha_corregida, day)
 
     let fecha:Date;
 
