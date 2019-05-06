@@ -62,7 +62,7 @@ export class SalidaVendedoresComponent implements OnInit {
 
   // Tabla de vendedores
   public ListadoVendedores: VendedoresDataSource;
-  public Columnas: string[] = [ 'numero','nombre', 'comision_efectiva', 'comision_retenida', 'opciones'];
+  public Columnas: string[];
   public Vendedores: Array<any> = [];
 
   // Tabla de productos cuando para ver la salida
@@ -306,7 +306,7 @@ export class SalidaVendedoresComponent implements OnInit {
       this.Vendedores=res['data'].vendedores.vendedores;
       this.VendedoresViaticos=res['data'].vendedores.vendedores;
       // console.log(this.VendedoresViaticos);
-      this.ListadoVendedores.AgregarInformacion(this.Vendedores)
+      // this.ListadoVendedores.AgregarInformacion(this.Vendedores)
       
       this.ListadoProductos.CargarInformacion(id_salida,0);
       this.ListadoTalonarios.CargarInformacion(id_salida, 0);
@@ -319,6 +319,15 @@ export class SalidaVendedoresComponent implements OnInit {
 
         this.SalidaVendedoresForm.get('fecha_salida').setValue(moment(res['data'].fecha).format('DD/MM/YYYY'));
         this.SalidaVendedoresForm.get('observacion').setValue(res['data'].observacion ? res['data'].observacion : "No hay observaciones");
+
+        if(res['data'].id_estado == 2){
+          this.Servicio.ListarComisiones(this.id_salida).subscribe(res=>{
+            this.ListadoVendedores.AgregarInformacion(res);
+          })
+        }else{
+          this.ListadoVendedores.AgregarInformacion(this.Vendedores);
+        }
+
       }
       
       if(this.id_salida_editar){
@@ -327,6 +336,7 @@ export class SalidaVendedoresComponent implements OnInit {
         
         // Para los vendedores
         this.Columnas = [ 'numero','nombre', 'comision_efectiva', 'comision_retenida', 'opciones']
+        this.ListadoVendedores.AgregarInformacion(this.Vendedores);
         this.ColumnasTalonario= [ 'numero','serie', 'inicio', 'fin', 'fecha_talonario','opciones'];
 
         // Datos que no se cambian

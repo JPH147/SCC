@@ -54,6 +54,8 @@ export class RetornoVendedoresCierreComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.observacion_llegada = "";
+    
     this.ListadoTalonarios = new TalonariosDataSource(this.Servicio);
     this.ListadoProductos = new ProductosDataSource(this.Servicio);
     this.ListadoVentas = new VentasDataSource(this.Servicio);

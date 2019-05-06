@@ -25,6 +25,8 @@
 			"pecosa"=>$venta->pecosa,
 			"sucursal"=>$venta->sucursal,
 			"id_sucursal"=>$venta->id_sucursal,
+			"almacen"=>$venta->almacen,
+			"id_almacen"=>$venta->id_almacen,
 			"fecha"=>$venta->fecha,
 			"destino"=>$venta->destino,
 			"guia"=>$venta->guia,
@@ -34,7 +36,10 @@
 			"observacion"=>$venta->observacion,
 			"id_estado"=>$venta->id_estado,
 			"estado"=>$venta->estado,
-			"vendedores"=>$venta->vendedores
+			"talonarios"=>$venta->talonarios,
+			"vendedores"=>$venta->vendedores,
+			"productos"=>$venta->productos,
+			"viaticos"=>$venta->viaticos
 	    );
 
 	    if(trim($venta->id)!= ''){
@@ -47,6 +52,6 @@
 
 	}
 	catch(Exception $exception){
-	    print_json("9999", "Ocurri贸 un error.", $exception->getMessage());
+	    print_json("9999", "Ocurrió un error.", $exception->getMessage());
 	}
 ?>

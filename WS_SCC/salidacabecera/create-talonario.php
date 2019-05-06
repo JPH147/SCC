@@ -21,24 +21,25 @@
         {
             $salida->cabecera = $_POST["prcabecera"];
             $salida->talonario = $_POST["prtalonario"];
+            $salida->fecha = $_POST["prfecha"];
             
             if($salida->create_talonario())
             {
-                print_json("0000", "Se cre贸 la salida satisfactoriamente.", "");
+                print_json("0000", "Se creó el talonario satisfactoriamente.", "");
             }
             else
             {
-                print_json("9999", "Ocurri贸 un error al crear la salida.", "");
+                print_json("9999", "Ocurrió un error al crear el talonario.", "");
             }
         }
         else
         {
-            print_json("9999", "Los campos no pueden estar vac铆os.", "");
+            print_json("9999", "Los campos no pueden estar vacíos.", "");
         }
     }
     catch(Exception $exception)
     {
-        print_json("9999", "Ocurri贸 un error al crear la salida.", $exception->getMessage());
+        print_json("9999", "Ocurrió un error al crear el talonario.", $exception->getMessage());
     }
 
 ?>

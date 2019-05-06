@@ -3,7 +3,7 @@
   <button mat-mini-fab type="button" color="primary" (click)="Atras()"><mat-icon>keyboard_arrow_left</mat-icon></button>
 
   <mat-card-title>
-    <div id = "tituloProd"> Salida de Vendedores </div>
+    <div id = "tituloProd"> Salida de vendedores </div>
   </mat-card-title>
 
   <div class = "spinner-container" *ngIf = "Cargando | async">
@@ -206,12 +206,22 @@
 
         <ng-container matColumnDef="comision_efectiva">
           <mat-header-cell *matHeaderCellDef> Comisión efectiva </mat-header-cell>
-          <mat-cell *matCellDef="let vendedor"> {{vendedor.comision_efectiva}} %</mat-cell>
+          <mat-cell *matCellDef="let vendedor">
+             S/. {{vendedor.comision_efectiva}}
+             <span *ngIf="SalidaVendedoresForm.value.estado == 'Cerrada'">
+              &nbsp; ({{ vendedor.comision_efectiva_porcentaje }} %)
+             </span>
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="comision_retenida">
           <mat-header-cell *matHeaderCellDef> Comisión retenida </mat-header-cell>
-          <mat-cell *matCellDef="let vendedor"> {{vendedor.comision_retenida}} %</mat-cell>
+          <mat-cell *matCellDef="let vendedor">
+              S/. {{vendedor.comision_retenida}}
+              <span *ngIf="SalidaVendedoresForm.value.estado == 'Cerrada'">
+               &nbsp; ({{ vendedor.comision_retenida_porcentaje }} %)
+              </span>
+           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="opciones">

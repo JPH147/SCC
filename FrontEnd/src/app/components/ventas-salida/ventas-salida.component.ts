@@ -21,16 +21,21 @@ import {Notificaciones} from '../global/notificacion';
 import {URLIMAGENES} from '../global/url'
 import {VentanaCronogramaComponent} from '../ventas/ventana-cronograma/ventana-cronograma.component';
 import {URL} from '../global/url';
+import { SalidaVendedoresService } from "../salida-vendedores/salida-vendedores.service";
+
 @Component({
   selector: 'app-ventas-salida',
   templateUrl: './ventas-salida.component.html',
   styleUrls: ['./ventas-salida.component.scss'],
-  providers: [VentaService, ServiciosTipoDocumento, ServiciosTipoPago, ClienteService,ServiciosTelefonos, ServiciosDirecciones, ServiciosGenerales, Notificaciones]
+  providers: [VentaService, ServiciosTipoDocumento, ServiciosTipoPago, ClienteService, ServiciosTelefonos, ServiciosDirecciones, ServiciosGenerales, Notificaciones, SalidaVendedoresService]
 })
+
 export class VentasSalidaComponent implements OnInit {
 
   public Cargando = new BehaviorSubject<boolean>(true);
   public id_venta: number;
+  public id_venta_editar: number;
+  public id_salida: number;
   public productos: FormArray;
   public garantes: FormArray;
   public Productos:Array<any>;
@@ -40,6 +45,8 @@ export class VentasSalidaComponent implements OnInit {
   public Columnas: string[];
   public ruta:string;
   public ProductosComprados: Array<any>;
+  public ListadoTipoPago: Array<any>;
+  public ListadoProductos: Array<any>;
 
   @ViewChild('InputInicial') FiltroInicial: ElementRef;
   @ViewChild('InputCuota') FiltroCuota: ElementRef;
@@ -90,6 +97,7 @@ export class VentasSalidaComponent implements OnInit {
     private FormBuilder: FormBuilder,
     private ServicioTipoDocumento: ServiciosTipoDocumento,
     private ServicioTipoPago: ServiciosTipoPago,
+    private SServicio: SalidaVendedoresService,
     private route: ActivatedRoute,
     private location: Location,
     private Notificacion: Notificaciones,
@@ -98,15 +106,21 @@ export class VentasSalidaComponent implements OnInit {
 
   ngOnInit() {
 
-    this.id_venta=45;
-    this.ruta=URLIMAGENES.urlimages;
+    this.id_venta_editar=50;
     
     // this.route.params.subscribe(params => {
+    //   console.log(params)
     //   if(params['idventa']){
-        this.Columnas= ['numero', 'monto_cuota','fecha_vencimiento', 'monto_interes','monto_pagado', 'fecha_cancelacion', 'monto_pendiente','estado', 'opciones'];
-        // this.id_venta = +params['idventa'];
-        this.SeleccionarVentaxId(this.id_venta);
+    //     this.Columnas= ['numero', 'monto_cuota','fecha_vencimiento', 'monto_interes','monto_pagado', 'fecha_cancelacion', 'monto_pendiente','estado', 'opciones'];
+    //     this.id_venta = +params['idventa'];
+    //     this.SeleccionarVentaxId(this.id_venta);
     //   }
+    //   if(params['idventaeditar']){
+        this.Columnas= ['numero', 'monto_cuota','fecha_vencimiento', 'monto_interes','monto_pagado', 'fecha_cancelacion', 'monto_pendiente','estado', 'opciones'];
+        // this.id_venta_editar = +params['idventa'];
+        this.SeleccionarVentaxId(this.id_venta_editar);
+      // }
+    // 
     // })
 
     this.CrearFormulario();
@@ -116,7 +130,7 @@ export class VentasSalidaComponent implements OnInit {
   CrearFormulario(){
 
     this.VentasSalidaForm = this.FormBuilder.group({
-      'contrato': [null, [
+      'contrato': [{value: null, disabled: false}, [
         Validators.required
       ]],
       'tipodoc': [6, [
@@ -136,7 +150,7 @@ export class VentasSalidaComponent implements OnInit {
       'garante': [false, [
         Validators.required
       ]],
-      'pecosa': [null, [
+      'pecosa': [{value: null, disabled: false}, [
         Validators.required
       ]],
       'lugar': ["", [
@@ -169,22 +183,14 @@ export class VentasSalidaComponent implements OnInit {
       ]],
       'observaciones': ["", [
       ]],
-      productos: this.FormBuilder.array([this.CrearProducto()]),
+      productos: this.FormBuilder.array([]),
       garantes: this.FormBuilder.array([]),
     });
   }
 
   CrearProducto(): FormGroup{
     return this.FormBuilder.group({
-      'id_producto': [{value: null, disabled: false}, [
-        Validators.required
-      ]],
-      'descripcion': [{value: null, disabled: false}, [
-      ]],
-      'id_serie': [{value: null, disabled: false}, [
-        Validators.required
-      ]],
-      'serie': [{value: null, disabled: false}, [
+      'producto': [{value: null, disabled: false}, [
       ]],
       'precio': [{value:null, disabled: false}, [
         Validators.required,
@@ -200,20 +206,6 @@ export class VentasSalidaComponent implements OnInit {
     this.productos = this.VentasSalidaForm.get('productos') as FormArray;
     this.productos.push(this.CrearProducto());
   };
-
-  // EliminarProductos(index,producto){
-  //   if (producto.value.estado==1) {
-  //     this.productos.removeAt(index);
-  //     this.Series.splice( this.Series.indexOf(producto.value.id_serie), 1 );
-  //   }
-  //   if (producto.value.estado==2) {
-  //     this.productos['controls'][index].get('descripcion').disable()
-  //     this.productos['controls'][index].get('serie').disable()
-  //     this.productos['controls'][index].get('precio').disable()
-  //     this.productos['controls'][index].get('estado').setValue(3);
-  //   }
-  //     this.CalcularTotales();
-  // }
 
   CrearGarante(bool): FormGroup{
     return this.FormBuilder.group({
@@ -292,6 +284,8 @@ export class VentasSalidaComponent implements OnInit {
 
     this.Servicio.SeleccionarVentaSalida(id_venta).subscribe(res=>{
       
+      this.id_salida = res.id_salida;
+
       this.VentasSalidaForm.get('cliente').setValue(res.cliente_nombre);
       this.VentasSalidaForm.get('cargo').setValue(res.cliente_cargo_nombre);
       this.VentasSalidaForm.get('trabajo').setValue(res.cliente_trabajo);
@@ -305,18 +299,17 @@ export class VentasSalidaComponent implements OnInit {
       this.VentasSalidaForm.get('cuotas').setValue(res.numero_cuotas);
       this.VentasSalidaForm.get('montototal').setValue(res.monto_total);
       this.VentasSalidaForm.get('contrato').setValue(res.contrato);
-      this.VentasSalidaForm.get('tipopago').setValue(res.tipo_pago);
       
       this.Productos=res.productos.productos
-
+      
       this.Cronograma=res.cronograma.cronograma;
-
+      
       this.ListadoVentas.Informacion.next(this.Cronograma);
-
+      
       if(res['garantes'].garantes.length>0){
-
+        
         this.VentasSalidaForm.get('garante').setValue(true);
-
+        
         res['garantes'].garantes.forEach((item,index)=>{
           this.AgregarGarante(false);
           this.VentasSalidaForm['controls'].garantes['controls'][index].get('id_cliente').setValue(item.id_cliente);
@@ -325,14 +318,16 @@ export class VentasSalidaComponent implements OnInit {
           this.VentasSalidaForm['controls'].garantes['controls'][index].get('telefono').setValue(item.cliente_telefono);
         })
       }
-
+      
       if (this.id_venta) {
 
-        this.ActualizarOrdenCronograma(this.id_venta,"fecha_vencimiento asc");
-
+        // Ajustes visuales
         this.VentasSalidaForm.get('observaciones').setValue(res.observacion=="" ? "No hay observaciones" : res.observacion);
 
-        console.log(res)
+        // Datos diferentes
+        this.VentasSalidaForm.get('tipopago').setValue(res.tipo_pago);
+
+        this.ActualizarOrdenCronograma(this.id_venta,"fecha_vencimiento asc");
 
         this.foto = res.foto!="" ? URLIMAGENES.carpeta+'venta/'+res.foto : null;
         this.dni = res.dni_pdf!="" ? URLIMAGENES.carpeta+'venta/'+res.dni_pdf : null;
@@ -360,6 +355,21 @@ export class VentasSalidaComponent implements OnInit {
             this.VentasSalidaForm['controls'].garantes['controls'][index].get('transaccion_pdf').setValue(voucher);
           })
         }
+
+      }
+
+      if(this.id_venta_editar){
+
+        // Funciones importantes
+        this.ListarTipoPago();
+        this.ListarProductos();
+
+        // AJustes visuales        
+        this.VentasSalidaForm.get('pecosa').disable();
+        this.VentasSalidaForm.get('contrato').disable();
+
+        // Datos diferentes
+        this.VentasSalidaForm.get('tipopago').setValue(res.idtipopago);
 
       }
       
@@ -483,6 +493,72 @@ export class VentasSalidaComponent implements OnInit {
   //     this.total_cronograma_editado=this.total_cronograma_editado+item.monto_cuota*1;
   //   })
   // }
+
+  ListarTipoPago() {
+    this.ServicioTipoPago.ListarTipoPago().subscribe( res => {
+      this.ListadoTipoPago = res;
+    });
+  }
+
+  TipoPagoSeleccionado(){
+    console.log(this.VentasSalidaForm.value.tipopago);
+    if (this.VentasSalidaForm.value.tipopago==3 && !this.id_venta) {
+      this.VentasSalidaForm.get('cuotas').setValue(1);
+      this.VentasSalidaForm.get('cuotas').disable();
+      this.VentasSalidaForm.get('inicial').setValue(0);
+      this.VentasSalidaForm.get('inicial').disable();
+    }else{
+      this.VentasSalidaForm.get('cuotas').enable();
+      this.VentasSalidaForm.get('inicial').enable();
+    }
+  }
+
+  ListarProductos(){
+    this.SServicio.ListarSalidaProductos(this.id_salida,1).subscribe(res=>{
+      // console.log(res['data'].productos);
+      this.ListadoProductos=res['data'].productos;
+    })
+  }
+
+  DesactivarProducto(producto){
+    producto['eliminar'] = true;
+    this.CalcularTotales();
+  }
+
+  ActivarProducto(producto){
+    producto['eliminar'] = false;
+    this.CalcularTotales();
+  }
+  
+  EliminarProducto(index){
+    this.productos.removeAt(index);
+    this.CalcularTotales();
+  }
+
+  ProductoSeleccionado(evento, index){
+    this.VentasSalidaForm['controls'].productos['controls'][index].get('precio').setValue(evento.value.precio_minimo)
+  }
+
+  CalcularTotales(){
+    
+    let total_productos_antiguos: number = 0;
+    let total_productos_nuevos: number = 0;
+
+    this.Productos.forEach((item)=>{
+      if(!item.eliminar){
+        total_productos_antiguos = total_productos_antiguos + item.precio*1;
+        console.log(item);
+      }
+    })
+
+    this.VentasSalidaForm['controls'].productos['controls'].forEach((item)=>{
+      console.log(item);
+      total_productos_nuevos = total_productos_nuevos + item.value.precio*1;
+    })
+
+    this.VentasSalidaForm.get('montototal').setValue(total_productos_antiguos+ total_productos_nuevos);
+
+  }
 
   AbrirDocumento(url){
     if(url){

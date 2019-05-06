@@ -13,6 +13,7 @@ Class Venta{
     public $direccion;
     public $telefono;
     public $clientecargo;
+    public $clientetrabajo;
     public $vnt_fecha;
     public $id_vendedor;
     public $nombre_vendedor;
@@ -64,6 +65,7 @@ Class Venta{
     public $anulacion_monto;
     public $id_salida;
     public $pecosa;
+    public $observacion;
     public $numero_pagina;
     public $total_pagina;
 
@@ -145,33 +147,34 @@ Class Venta{
     function create(){
 
         $query = "CALL sp_crearventa(
-        :prfecha,
-        :prsucursal,
-        :prtalonario,
-        :prautorizador,
-        :prcliente,
-        :prclientedireccion,
-        :prclientetelefono,
-        :prclientecargo,
-        :prlugar,
-        :prvendedor,
-        :prtipoventa,
-        :prsalida_venta,
-        :prtipodocumento,
-        :prtipopago,
-        :prinicial,
-        :prcuotas,
-        :prtotal,
-        :prfechainicio,
-        :prfoto,
-        :prpdfcontrato,
-        :prpdfdni,
-        :prpdfcip,
-        :prpdfplanilla,
-        :prpdfletra,
-        :prpdfvoucher,
-        :prpdfautorizacion,
-        :probservaciones)";
+            :prfecha,
+            :prtipoventa,
+            :prsucursal,
+            :prsalida_venta,
+            :prtalonario,
+            :prcliente,
+            :prclientedireccion,
+            :prclientetelefono,
+            :prclientecargo,
+            :prclientetrabajo,
+            :prlugar,
+            :prvendedor,
+            :prautorizador,
+            :prtipopago,
+            :prinicial,
+            :prcuotas,
+            :prtotal,
+            :prfechainicio,
+            :prfoto,
+            :prpdfcontrato,
+            :prpdfdni,
+            :prpdfcip,
+            :prpdfplanilla,
+            :prpdfletra,
+            :prpdfvoucher,
+            :prpdfautorizacion,
+            :probservaciones
+        )";
 
         $result = $this->conn->prepare($query);
 
@@ -183,11 +186,11 @@ Class Venta{
         $result->bindParam(":prclientedireccion", $this->id_clientedireccion);
         $result->bindParam(":prclientetelefono", $this->id_clientetelefono);
         $result->bindParam(":prclientecargo", $this->clientecargo);
+        $result->bindParam(":prclientetrabajo", $this->clientetrabajo);
         $result->bindParam(":prlugar", $this->lugar);
         $result->bindParam(":prvendedor", $this->vendedor);
         $result->bindParam(":prtipoventa", $this->tipoventa);
         $result->bindParam(":prsalida_venta", $this->salida_venta);
-        $result->bindParam(":prtipodocumento", $this->tipo_documento);
         $result->bindParam(":prtipopago", $this->tipopago);
         $result->bindParam(":prinicial", $this->inicial);
         $result->bindParam(":prcuotas", $this->cuotas);
@@ -211,11 +214,11 @@ Class Venta{
         $this->id_clientedireccion=htmlspecialchars(strip_tags($this->id_clientedireccion));
         $this->id_clientetelefono=htmlspecialchars(strip_tags($this->id_clientetelefono));
         $this->clientecargo=htmlspecialchars(strip_tags($this->clientecargo));
+        $this->clientetrabajo=htmlspecialchars(strip_tags($this->clientetrabajo));
         $this->lugar=htmlspecialchars(strip_tags($this->lugar));
         $this->vendedor=htmlspecialchars(strip_tags($this->vendedor));
         $this->tipoventa=htmlspecialchars(strip_tags($this->tipoventa));
         $this->salida_venta=htmlspecialchars(strip_tags($this->salida_venta));
-        $this->tipo_documento=htmlspecialchars(strip_tags($this->tipo_documento));
         $this->tipopago=htmlspecialchars(strip_tags($this->tipopago));
         $this->inicial=htmlspecialchars(strip_tags($this->inicial));
         $this->cuotas=htmlspecialchars(strip_tags($this->cuotas));
@@ -248,10 +251,18 @@ Class Venta{
         $query = "CALL sp_actualizarventa(
             :prid,
             :prfecha,
+            :prtipoventa,
             :prsucursal,
+            :prsalida_venta,
             :prtalonario,
-            :prautorizador,
+            :prcliente,
+            :prclientedireccion,
+            :prclientetelefono,
+            :prclientecargo,
+            :prclientetrabajo,
+            :prlugar,
             :prvendedor,
+            :prautorizador,
             :prtipopago,
             :prinicial,
             :prcuotas,
@@ -265,8 +276,7 @@ Class Venta{
             :prpdfletra,
             :prpdfvoucher,
             :prpdfautorizacion,
-            :probservaciones,
-            :prlugar
+            :probservaciones
         )";
 
         $result = $this->conn->prepare($query);
@@ -276,7 +286,15 @@ Class Venta{
         $result->bindParam(":prsucursal", $this->sucursal);
         $result->bindParam(":prtalonario", $this->talonario);
         $result->bindParam(":prautorizador", $this->id_autorizador);
+        $result->bindParam(":prcliente", $this->id_cliente);
+        $result->bindParam(":prclientedireccion", $this->id_clientedireccion);
+        $result->bindParam(":prclientetelefono", $this->id_clientetelefono);
+        $result->bindParam(":prclientecargo", $this->clientecargo);
+        $result->bindParam(":prclientetrabajo", $this->clientetrabajo);
+        $result->bindParam(":prlugar", $this->lugar);
         $result->bindParam(":prvendedor", $this->vendedor);
+        $result->bindParam(":prtipoventa", $this->tipoventa);
+        $result->bindParam(":prsalida_venta", $this->salida_venta);
         $result->bindParam(":prtipopago", $this->tipopago);
         $result->bindParam(":prinicial", $this->inicial);
         $result->bindParam(":prcuotas", $this->cuotas);
@@ -291,14 +309,21 @@ Class Venta{
         $result->bindParam(":prpdfvoucher", $this->pdfvoucher);
         $result->bindParam(":prpdfautorizacion", $this->pdfautorizacion);
         $result->bindParam(":probservaciones", $this->observaciones);
-        $result->bindParam(":prlugar", $this->lugar);
 
         $this->id_venta=htmlspecialchars(strip_tags($this->id_venta));
         $this->fecha=htmlspecialchars(strip_tags($this->fecha));
         $this->sucursal=htmlspecialchars(strip_tags($this->sucursal));
         $this->talonario=htmlspecialchars(strip_tags($this->talonario));
         $this->id_autorizador=htmlspecialchars(strip_tags($this->id_autorizador));
+        $this->id_cliente=htmlspecialchars(strip_tags($this->id_cliente));
+        $this->id_clientedireccion=htmlspecialchars(strip_tags($this->id_clientedireccion));
+        $this->id_clientetelefono=htmlspecialchars(strip_tags($this->id_clientetelefono));
+        $this->clientecargo=htmlspecialchars(strip_tags($this->clientecargo));
+        $this->clientetrabajo=htmlspecialchars(strip_tags($this->clientetrabajo));
+        $this->lugar=htmlspecialchars(strip_tags($this->lugar));
         $this->vendedor=htmlspecialchars(strip_tags($this->vendedor));
+        $this->tipoventa=htmlspecialchars(strip_tags($this->tipoventa));
+        $this->salida_venta=htmlspecialchars(strip_tags($this->salida_venta));
         $this->tipopago=htmlspecialchars(strip_tags($this->tipopago));
         $this->inicial=htmlspecialchars(strip_tags($this->inicial));
         $this->cuotas=htmlspecialchars(strip_tags($this->cuotas));
@@ -313,7 +338,6 @@ Class Venta{
         $this->pdfvoucher=htmlspecialchars(strip_tags($this->pdfvoucher));
         $this->pdfautorizacion=htmlspecialchars(strip_tags($this->pdfautorizacion));
         $this->observaciones=htmlspecialchars(strip_tags($this->observaciones));
-        $this->lugar=htmlspecialchars(strip_tags($this->lugar));
 
         if($result->execute())
         {
@@ -355,9 +379,7 @@ Class Venta{
         $this->cliente_nombre=$row['cliente_nombre'];
         $this->cliente_trabajo=$row['cliente_trabajo'];
         $this->cliente_cargo_nombre=$row['cliente_cargo_nombre'];
-        $this->id_cliente_direccion=$row['id_cliente_direccion'];
         $this->cliente_direccion_nombre=$row['cliente_direccion_nombre'];
-        $this->id_cliente_telefono=$row['id_cliente_telefono'];
         $this->cliente_telefono_numero=$row['cliente_telefono_numero'];
         $this->id_vendedor=$row['id_vendedor'];
         $this->nombre_vendedor=$row['nombre_vendedor'];
@@ -365,7 +387,6 @@ Class Venta{
         $this->nombre_autorizador=$row['nombre_autorizador'];
         $this->idtipopago=$row['idtipopago'];
         $this->tipo_pago=$row['tipo_pago'];
-        $this->documento=$row['documento'];
         $this->monto_inicial=$row['monto_inicial'];
         $this->numero_cuotas=$row['numero_cuotas'];
         $this->monto_total=$row['monto_total'];
@@ -418,9 +439,7 @@ Class Venta{
         $this->cliente_nombre=$row['cliente_nombre'];
         $this->cliente_trabajo=$row['cliente_trabajo'];
         $this->cliente_cargo_nombre=$row['cliente_cargo_nombre'];
-        $this->id_cliente_direccion=$row['id_cliente_direccion'];
         $this->cliente_direccion_nombre=$row['cliente_direccion_nombre'];
-        $this->id_cliente_telefono=$row['id_cliente_telefono'];
         $this->cliente_telefono_numero=$row['cliente_telefono_numero'];
         $this->idtipopago=$row['idtipopago'];
         $this->tipo_pago=$row['tipo_pago'];
@@ -651,16 +670,19 @@ Class Venta{
     function create_canje_transaccion(){
         $query = "CALL sp_crearventacanjetransaccion(
             :pridtransaccion,
-            :prfecha
+            :prfecha,
+            :probservacion
         )";
 
         $result = $this->conn->prepare($query);
 
         $result->bindParam(":pridtransaccion", $this->id_transaccion);
         $result->bindParam(":prfecha", $this->fecha);
+        $result->bindParam(":probservacion", $this->observacion);
 
         $this->id_transaccion=htmlspecialchars(strip_tags($this->id_transaccion));
         $this->fecha=htmlspecialchars(strip_tags($this->fecha));
+        $this->observacion=htmlspecialchars(strip_tags($this->observacion));
 
         if($result->execute())
         {

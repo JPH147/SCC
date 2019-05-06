@@ -51,12 +51,13 @@ const appRoutes: Routes = [
   {path: 'ventas/editar/:ideditar', component: VentasComponent},
   {path: 'ventas/:idventa', component: VentasComponent},
   {path: 'ventas/salida/:idventa', component: VentasSalidaComponent},
+  {path: 'ventas/salida/editar/:idventaeditar', component: VentasSalidaComponent},
   {path: 'usuarios', component: UsuariosComponent},
   {path: 'proveedores', component: ProveedoresComponent},
   {path: 'direcciones', component: DireccionesComponent},
-  {path : 'detalleproductos', component: DetalleProductosComponent},
-  {path : 'evaluacion-reglas', component: ReglasEvaluacionComponent},
-  {path: 'prueba', component: RetornoVendedoresComponent}
+  {path: 'detalleproductos', component: DetalleProductosComponent},
+  {path: 'evaluacion-reglas', component: ReglasEvaluacionComponent},
+  {path: 'prueba', component: VentasSalidaComponent}
 ];
 
 export const appRoutingProvider: any[] = [];

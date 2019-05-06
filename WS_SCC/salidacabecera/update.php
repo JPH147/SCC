@@ -17,11 +17,9 @@
         $salida = new SalidaCabecera($db);
         $data = json_decode(file_get_contents('php://input'), true);
 
-        if (($_POST["prpecosa"])!=null)
+        if (($_POST["prid"])!=null)
         {
-            $salida->pecosa = trim($_POST["prpecosa"]);
-            $salida->id_sucursal = trim($_POST["prsucursal"]);
-            $salida->id_almacen = trim($_POST["pralmacen"]);
+            $salida->cabecera = trim($_POST["prid"]);
             $salida->fecha = trim($_POST["prfecha"]);
             $salida->destino = trim($_POST["prdestino"]);
             $salida->guia = trim($_POST["prguia"]);
@@ -30,13 +28,13 @@
             $salida->chofer_nombre = trim($_POST["prchofernombre"]);
             $salida->observacion = trim($_POST["probservacion"]);
 
-            if($salida->create())
+            if($salida->update())
             {
-                print_json("0000", "Se creó la salida satisfactoriamente.", $salida->id);
+                print_json("0000", "Se actualizó la salida satisfactoriamente.", $salida->cabecera);
             }
             else
             {
-                print_json("9999", "Ocurrió un error al crear la salida.", "");
+                print_json("9999", "Ocurrió un error al actualizar la salida.", "");
             }
         }
         else
@@ -46,7 +44,7 @@
     }
     catch(Exception $exception)
     {
-        print_json("9999", "Ocurrió un error al crear la salida.", $exception->getMessage());
+        print_json("9999", "Ocurrió un actualizar al crear la salida.", $exception->getMessage());
     }
 
 ?>

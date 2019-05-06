@@ -295,6 +295,23 @@ export class SalidaVendedoresService {
     }));
   }
 
+  ListarComisiones(
+    id_salida: number
+  ) : Observable <any> {
+    return this.http.get(this.url + 'salidacabecera/read-comisiones.php', {
+      params: new HttpParams()
+      .set('prid', id_salida.toString())
+    })
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+          return res['data'].comisiones;
+      }  else {
+          console.log('No hay datos que mostrar');
+          return res;
+      }
+    }));
+  }
+
   ActualizarSalidaProductos(
     id_detalle: number,
     id_venta: number,

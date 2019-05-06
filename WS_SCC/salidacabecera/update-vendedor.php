@@ -6,7 +6,7 @@
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
  
     include_once '../config/database.php';
-    include_once '../entities/venta.php';
+    include_once '../entities/salidacabecera.php';
     include_once '../shared/utilities.php';
 
     $database = new Database();
@@ -14,23 +14,23 @@
 
     try
     {
-        $venta = new Venta($db);
+        $salida = new SalidaCabecera($db);
         $data = json_decode(file_get_contents('php://input'), true);
 
-        if (($_POST["prtransaccion"])!=null)
+        if (($_POST["prid"])!=null)
         {
 
-            $venta->id_transaccion=trim($_POST["prtransaccion"]);
-            $venta->fecha=trim($_POST["prfecha"]);
-            $venta->observacion=trim($_POST["probservacion"]);
+            $salida->id = trim($_POST["prid"]);
+            $salida->comision_efectiva = trim($_POST["prcomisionefectiva"]);
+            $salida->comision_retenida = trim($_POST["prcomisionretenida"]);
 
-            if($venta->create_canje_transaccion())
+            if($salida->update_vendedores())
             {
-                print_json("0000", "Se creó la transacción satisfactoriamente.", "");
+                print_json("0000", "Se actualizó el vendedor satisfactoriamente.", $salida->id);
             }
             else
             {
-                print_json("9999", "Ocurrió un error al crear la transacción.", "");
+                print_json("9999", "Ocurrió un error al actualizar el vendedor.", "");
             }
         }
         else
@@ -40,7 +40,7 @@
     }
     catch(Exception $exception)
     {
-        print_json("9999", "Ocurrió un error al eliminar la transacción.", $exception->getMessage());
+        print_json("9999", "Ocurrió un error al actualizar el vendedor.", $exception->getMessage());
     }
 
 ?>
