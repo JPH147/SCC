@@ -31,7 +31,7 @@
         <mat-grid-tile colspan="2" *ngIf="VentasForm.value.id_cliente || idventa || idcliente">
           <mat-form-field class="columnas-2">
             <input #Cliente placeholder="Cliente" matInput formControlName="cliente" readonly>
-            <mat-icon color="primary" matSuffix (click)="RemoverCliente()" *ngIf="!idcliente &&!idventa"> remove_circle </mat-icon>
+            <mat-icon color="primary" matSuffix (click)="RemoverCliente()" *ngIf="!idcliente && !idventa"> remove_circle </mat-icon>
           </mat-form-field>
         </mat-grid-tile>
 

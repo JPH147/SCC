@@ -1,5 +1,5 @@
 import {CollectionViewer, DataSource} from "@angular/cdk/collections";
-import { Component, OnInit, ViewChild, ElementRef, Inject, ViewChildren, QueryList, Optional } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList } from '@angular/core';
 import {FormArray, FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {VentaService} from './ventas.service';
 import { MatDialog, MatSort } from '@angular/material';
@@ -8,11 +8,11 @@ import {ServiciosTipoPago, TipoPago} from '../global/tipopago';
 import {ClienteService } from '../clientes/clientes.service';
 import {ClienteDataSource} from '../clientes/clientes.dataservice';
 import { forkJoin,fromEvent, merge, BehaviorSubject} from 'rxjs';
-import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import {ServiciosTelefonos, Telefono} from '../global/telefonos';
 import {ServiciosDirecciones, Direccion} from '../global/direcciones';
-import {ServiciosGenerales, Talonario, Serie, ListarVendedor} from '../global/servicios';
+import {ServiciosGenerales, Talonario, Serie} from '../global/servicios';
 import {VentanaProductosComponent} from './ventana-productos/ventana-productos.component';
 import * as moment from 'moment';
 import {Location} from '@angular/common';
@@ -207,285 +207,92 @@ export class VentasComponent implements OnInit {
 
     this.CrearFormulario();
   }
-
-  CrearFormulario(){
-
-    this.VentasForm = this.FormBuilder.group({
-      'talonario': [null, [
-        Validators.required
-      ]],
-      'contrato': [null, [
-        Validators.required
-      ]],
-      'id_cliente': [null, [
-        Validators.required
-      ]],
-      'cliente': ["", [
-        Validators.required
-      ]],
-      'cargo': ["", [
-      ]],
-      'trabajo': ["", [
-      ]],
-      'direccion': ["", [
-      ]],
-      'telefono': ["", [
-      ]],
-      'garante': [false, [
-        Validators.required
-      ]],
-      'sucursal': [null, [
-        Validators.required
-      ]],
-      'lugar': ["", [
-      ]],
-      'id_autorizador': [null, [
-      ]],
-      'autorizador': [null, [
-      ]],
-      'id_vendedor': [null, [
-        Validators.required
-      ]],
-      'vendedor': [null, [
-        Validators.required
-      ]],
-      'fechaventa': [{value: new Date(), disabled: false}, [
-        Validators.required
-      ]],
-      'fechapago': [{value: new Date((new Date()).valueOf() + 1000*60*60*24*30), disabled: false}, [
-        Validators.required
-      ]],
-      'tipopago': [null, [
-        Validators.required
-      ]],
-      'montototal': [0, [
-        Validators.required,
-        Validators.pattern('[0-9- ]+')
-      ]],
-      'cuotas': [null, [
-        Validators.required,
-        Validators.pattern('[0-9- ]+')
-      ]],
-      'inicial': [0, [
-        Validators.required,
-        Validators.pattern('[0-9- ]+')
-      ]],
-      'observaciones': ["", [
-      ]],
-      productos: this.FormBuilder.array([this.CrearProducto()]),
-      garantes: this.FormBuilder.array([]),
-    });
-  }
-
-  CrearProducto(): FormGroup{
-    return this.FormBuilder.group({
-      'id_producto': [{value: null, disabled: false}, [
-        Validators.required
-      ]],
-      'descripcion': [{value: null, disabled: false}, [
-      ]],
-      'id_serie': [{value: null, disabled: false}, [
-        Validators.required
-      ]],
-      'serie': [{value: null, disabled: false}, [
-      ]],
-      'precio': [{value:null, disabled: false}, [
-        Validators.required,
-        Validators.min(1),
-        Validators.pattern ('[0-9- ]+')
-      ]],
-      'estado': [{value:1, disabled: false}, [
-      ]],
-    })
-  }
-
-  AgregarProducto():void{
-    this.productos = this.VentasForm.get('productos') as FormArray;
-    this.productos.push(this.CrearProducto());
-  };
-
-  EliminarProductos(index,producto){
-    if (producto.value.estado==1) {
-      this.productos.removeAt(index);
-      this.Series.splice( this.Series.indexOf(producto.value.id_serie), 1 );
-    }
-    if (producto.value.estado==2) {
-      this.productos['controls'][index].get('descripcion').disable()
-      this.productos['controls'][index].get('serie').disable()
-      this.productos['controls'][index].get('precio').disable()
-      this.productos['controls'][index].get('estado').setValue(3);
-    }
-      this.CalcularTotales();
-  }
-
-  CrearGarante(bool): FormGroup{
-    return this.FormBuilder.group({
-      'id_cliente': [{value: null, disabled: false}, [
-        Validators.required
-      ]],
-      'nombre': [{value: null, disabled: false}, [
-        Validators.required
-      ]],
-      'direccion': [{value: null, disabled: false}, [
-        Validators.required
-      ]],
-      'telefono': [{value: null, disabled: false}, [
-        Validators.required
-      ]],
-      'dni_pdf': [{value: null, disabled: false}, [
-      ]],
-      'cip_pdf': [{value: null, disabled: false}, [
-      ]],
-      'planilla_pdf': [{value:null, disabled: false}, [
-      ]],
-      'letra_pdf': [{value: null, disabled: false}, [
-      ]],
-      'transaccion_pdf': [{value:null, disabled: false}, [
-      ]],
-      'dni_editar': [{value: bool, disabled: false}, [
-      ]],
-      'cip_editar': [{value: bool, disabled: false}, [
-      ]],
-      'planilla_editar': [{value:bool, disabled: false}, [
-      ]],
-      'letra_editar': [{value: bool, disabled: false}, [
-      ]],
-      'transaccion_editar': [{value:bool, disabled: false}, [
-      ]],
-      'dni_pdf_antiguo': [{value: null, disabled: false}, [
-      ]],
-      'cip_pdf_antiguo': [{value: null, disabled: false}, [
-      ]],
-      'planilla_pdf_antiguo': [{value:null, disabled: false}, [
-      ]],
-      'letra_pdf_antiguo': [{value: null, disabled: false}, [
-      ]],
-      'transaccion_pdf_antiguo': [{value:null, disabled: false}, [
-      ]],
-      'dni_pdf_nuevo': [{value: null, disabled: false}, [
-      ]],
-      'cip_pdf_nuevo': [{value: null, disabled: false}, [
-      ]],
-      'planilla_pdf_nuevo': [{value:null, disabled: false}, [
-      ]],
-      'letra_pdf_nuevo': [{value: null, disabled: false}, [
-      ]],
-      'transaccion_pdf_nuevo': [{value:null, disabled: false}, [
-      ]],
-      'estado': [{value:1, disabled: false}, [
-      ]],
-    })
-  }
-
-  AgregarGarante(bool):void{
-    this.garantes = this.VentasForm.get('garantes') as FormArray;
-    this.garantes.push(this.CrearGarante(bool));
-    // this.VentasForm['controls'].garantes['controls'].forEach((item, index)=>{
-    //   console.log(item.dni_editar)
-    // })
-  };
-
-  EliminarGarante(index){
-    this.garantes.removeAt(index);
-  }
-
+  
   ngAfterViewInit() {
 
-      if (this.idventa) {
-        this.sort.sortChange
-      .pipe(
-        tap(() =>{
-          this.ActualizarOrdenCronograma(this.idventa, this.sort.active + " " + this.sort.direction)
-        })
-      ).subscribe();
-    }
+    if (this.idventa) {
+      this.sort.sortChange
+    .pipe(
+      tap(() =>{
+        this.ActualizarOrdenCronograma(this.idventa, this.sort.active + " " + this.sort.direction)
+      })
+    ).subscribe();
+  }
 
-    if (!this.idventa) {
+  if (!this.idventa) {
 
-       fromEvent(this.VendedorAutoComplete.nativeElement, 'keyup')
-      .pipe(
-        debounceTime(10),
-        distinctUntilChanged(),
-        tap(() => {
-          this.ListarVendedor(this.VentasForm.value.vendedor);
-        })
-       ).subscribe();
+     fromEvent(this.VendedorAutoComplete.nativeElement, 'keyup')
+    .pipe(
+      debounceTime(10),
+      distinctUntilChanged(),
+      tap(() => {
+        this.ListarVendedor(this.VentasForm.value.vendedor);
+      })
+     ).subscribe();
 
-       fromEvent(this.AutorizadorAutoComplete.nativeElement, 'keyup')
-      .pipe(
-        debounceTime(10),
-        distinctUntilChanged(),
-        tap(() => {
-          this.ListarAutorizador(this.VentasForm.value.autorizador);
-        })
-       ).subscribe();
+     fromEvent(this.AutorizadorAutoComplete.nativeElement, 'keyup')
+    .pipe(
+      debounceTime(10),
+      distinctUntilChanged(),
+      tap(() => {
+        this.ListarAutorizador(this.VentasForm.value.autorizador);
+      })
+     ).subscribe();
 
-      this.FiltroProducto.changes.subscribe(res=>{
-        for (let i in this.FiltroProducto['_results']) {
-          fromEvent(this.FiltroProducto['_results'][i].nativeElement,'keyup')
-          .pipe(
-            debounceTime(100),
-            distinctUntilChanged(),
-            tap(()=>{
-              if (this.FiltroProducto['_results'][i]) {
-                if (this.FiltroProducto['_results'][i].nativeElement.value) {
-                  this.BuscarProducto(this.sucursal,this.FiltroProducto['_results'][i].nativeElement.value)
-                }
+    this.FiltroProducto.changes.subscribe(res=>{
+      for (let i in this.FiltroProducto['_results']) {
+        fromEvent(this.FiltroProducto['_results'][i].nativeElement,'keyup')
+        .pipe(
+          debounceTime(100),
+          distinctUntilChanged(),
+          tap(()=>{
+            if (this.FiltroProducto['_results'][i]) {
+              if (this.FiltroProducto['_results'][i].nativeElement.value) {
+                this.BuscarProducto(this.sucursal,this.FiltroProducto['_results'][i].nativeElement.value)
               }
-            })
-          ).subscribe()
+            }
+          })
+        ).subscribe()
+      }
+    })
+
+    this.FiltroPrecio.changes.subscribe(res=>{
+      for (let i in this.FiltroPrecio['_results']) {
+        fromEvent(this.FiltroPrecio['_results'][i].nativeElement,'keyup')
+        .pipe(
+          debounceTime(100),
+          distinctUntilChanged(),
+          tap(()=>{
+            if (this.FiltroPrecio['_results'][i]) {
+              if (this.FiltroPrecio['_results'][i].nativeElement.value) {
+                // this.VentasForm.get('montototal').setValue(0);
+                this.CalcularTotales();
+              }
+            }
+          })
+        ).subscribe()
+      }
+    })
+
+    merge(
+      fromEvent(this.FiltroInicial.nativeElement,'keyup'),
+      fromEvent(this.FiltroCuota.nativeElement,'keyup')
+    ).pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      tap(()=>{
+        if (
+          // this.FiltroMonto.nativeElement.value &&
+          this.FiltroInicial.nativeElement.value &&
+          this.FiltroCuota.nativeElement.value &&
+          this.VentasForm.value.fechapago
+        ) {
+          this.CrearCronograma()
         }
       })
-
-      this.FiltroPrecio.changes.subscribe(res=>{
-        for (let i in this.FiltroPrecio['_results']) {
-          fromEvent(this.FiltroPrecio['_results'][i].nativeElement,'keyup')
-          .pipe(
-            debounceTime(100),
-            distinctUntilChanged(),
-            tap(()=>{
-              if (this.FiltroPrecio['_results'][i]) {
-                if (this.FiltroPrecio['_results'][i].nativeElement.value) {
-                  // this.VentasForm.get('montototal').setValue(0);
-                  this.CalcularTotales();
-                }
-              }
-            })
-          ).subscribe()
-        }
-      })
-
-      merge(
-        fromEvent(this.FiltroInicial.nativeElement,'keyup'),
-        fromEvent(this.FiltroCuota.nativeElement,'keyup')
-      ).pipe(
-        debounceTime(200),
-        distinctUntilChanged(),
-        tap(()=>{
-          if (
-            // this.FiltroMonto.nativeElement.value &&
-            this.FiltroInicial.nativeElement.value &&
-            this.FiltroCuota.nativeElement.value &&
-            this.VentasForm.value.fechapago
-          ) {
-            this.CrearCronograma()
-          }
-        })
-      ).subscribe()
-    }
+    ).subscribe()
   }
-
-  displayVendedor(vendedor?: any): string | undefined {
-    return vendedor ? vendedor.nombre : undefined;
-  }
-
-  displayFn(producto) {
-    if (producto){
-      return producto.nombre 
-    }else{
-      return ""
-    }
-  }
+}
 
   SeleccionarVentaxId(id_venta){
 
@@ -674,6 +481,199 @@ export class VentasComponent implements OnInit {
     })
   }
 
+  CrearFormulario(){
+
+    this.VentasForm = this.FormBuilder.group({
+      'talonario': [null, [
+        Validators.required
+      ]],
+      'contrato': [null, [
+        Validators.required
+      ]],
+      'id_cliente': [null, [
+        Validators.required
+      ]],
+      'cliente': ["", [
+        Validators.required
+      ]],
+      'cargo': ["", [
+      ]],
+      'trabajo': ["", [
+      ]],
+      'direccion': ["", [
+      ]],
+      'telefono': ["", [
+      ]],
+      'garante': [false, [
+        Validators.required
+      ]],
+      'sucursal': [null, [
+        Validators.required
+      ]],
+      'lugar': ["", [
+      ]],
+      'id_autorizador': [null, [
+      ]],
+      'autorizador': [null, [
+      ]],
+      'id_vendedor': [null, [
+        Validators.required
+      ]],
+      'vendedor': [null, [
+        Validators.required
+      ]],
+      'fechaventa': [{value: new Date(), disabled: false}, [
+        Validators.required
+      ]],
+      'fechapago': [{value: new Date((new Date()).valueOf() + 1000*60*60*24*30), disabled: false}, [
+        Validators.required
+      ]],
+      'tipopago': [null, [
+        Validators.required
+      ]],
+      'montototal': [0, [
+        Validators.required,
+        Validators.pattern('[0-9- ]+')
+      ]],
+      'cuotas': [null, [
+        Validators.required,
+        Validators.pattern('[0-9- ]+')
+      ]],
+      'inicial': [0, [
+        Validators.required,
+        Validators.pattern('[0-9- ]+')
+      ]],
+      'observaciones': ["", [
+      ]],
+      productos: this.FormBuilder.array([this.CrearProducto()]),
+      garantes: this.FormBuilder.array([]),
+    });
+  }
+
+  CrearProducto(): FormGroup{
+    return this.FormBuilder.group({
+      'id_producto': [{value: null, disabled: false}, [
+        Validators.required
+      ]],
+      'descripcion': [{value: null, disabled: false}, [
+      ]],
+      'id_serie': [{value: null, disabled: false}, [
+        Validators.required
+      ]],
+      'serie': [{value: null, disabled: false}, [
+      ]],
+      'precio': [{value:null, disabled: false}, [
+        Validators.required,
+        Validators.min(1),
+        Validators.pattern ('[0-9- ]+')
+      ]],
+      'estado': [{value:1, disabled: false}, [
+      ]],
+    })
+  }
+
+  AgregarProducto():void{
+    this.productos = this.VentasForm.get('productos') as FormArray;
+    this.productos.push(this.CrearProducto());
+  };
+
+  EliminarProductos(index,producto){
+    if (producto.value.estado==1) {
+      this.productos.removeAt(index);
+      this.Series.splice( this.Series.indexOf(producto.value.id_serie), 1 );
+    }
+    if (producto.value.estado==2) {
+      this.productos['controls'][index].get('descripcion').disable()
+      this.productos['controls'][index].get('serie').disable()
+      this.productos['controls'][index].get('precio').disable()
+      this.productos['controls'][index].get('estado').setValue(3);
+    }
+      this.CalcularTotales();
+  }
+
+  CrearGarante(bool): FormGroup{
+    return this.FormBuilder.group({
+      'id_cliente': [{value: null, disabled: false}, [
+        Validators.required
+      ]],
+      'nombre': [{value: null, disabled: false}, [
+        Validators.required
+      ]],
+      'direccion': [{value: null, disabled: false}, [
+        Validators.required
+      ]],
+      'telefono': [{value: null, disabled: false}, [
+        Validators.required
+      ]],
+      'dni_pdf': [{value: null, disabled: false}, [
+      ]],
+      'cip_pdf': [{value: null, disabled: false}, [
+      ]],
+      'planilla_pdf': [{value:null, disabled: false}, [
+      ]],
+      'letra_pdf': [{value: null, disabled: false}, [
+      ]],
+      'transaccion_pdf': [{value:null, disabled: false}, [
+      ]],
+      'dni_editar': [{value: bool, disabled: false}, [
+      ]],
+      'cip_editar': [{value: bool, disabled: false}, [
+      ]],
+      'planilla_editar': [{value:bool, disabled: false}, [
+      ]],
+      'letra_editar': [{value: bool, disabled: false}, [
+      ]],
+      'transaccion_editar': [{value:bool, disabled: false}, [
+      ]],
+      'dni_pdf_antiguo': [{value: null, disabled: false}, [
+      ]],
+      'cip_pdf_antiguo': [{value: null, disabled: false}, [
+      ]],
+      'planilla_pdf_antiguo': [{value:null, disabled: false}, [
+      ]],
+      'letra_pdf_antiguo': [{value: null, disabled: false}, [
+      ]],
+      'transaccion_pdf_antiguo': [{value:null, disabled: false}, [
+      ]],
+      'dni_pdf_nuevo': [{value: null, disabled: false}, [
+      ]],
+      'cip_pdf_nuevo': [{value: null, disabled: false}, [
+      ]],
+      'planilla_pdf_nuevo': [{value:null, disabled: false}, [
+      ]],
+      'letra_pdf_nuevo': [{value: null, disabled: false}, [
+      ]],
+      'transaccion_pdf_nuevo': [{value:null, disabled: false}, [
+      ]],
+      'estado': [{value:1, disabled: false}, [
+      ]],
+    })
+  }
+
+  AgregarGarante(bool):void{
+    this.garantes = this.VentasForm.get('garantes') as FormArray;
+    this.garantes.push(this.CrearGarante(bool));
+    // this.VentasForm['controls'].garantes['controls'].forEach((item, index)=>{
+    //   console.log(item.dni_editar)
+    // })
+  };
+
+  EliminarGarante(index){
+    this.garantes.removeAt(index);
+  }
+
+  displayVendedor(vendedor?: any): string | undefined {
+    return vendedor ? vendedor.nombre : undefined;
+  }
+
+  displayFn(producto) {
+    if (producto){
+      return producto.nombre 
+    }else{
+      return ""
+    }
+  }
+
   // Cuando se cambia el orden del cronograma
   ActualizarOrdenCronograma(id, orden){
     this.Servicio.ListarCronograma(id, orden).subscribe(res=>{
@@ -729,8 +729,6 @@ export class VentasComponent implements OnInit {
     let day = moment(this.VentasForm.value.fechapago).date();
 
     let fecha_corregida:Date = new Date(year, month, day);
-
-    console.log(fecha_corregida, day)
 
     let fecha:Date;
 

@@ -1,5 +1,5 @@
 import {CollectionViewer, DataSource} from "@angular/cdk/collections";
-import { Component, OnInit, ViewChild, ElementRef, Inject, ViewChildren, QueryList, Optional } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit,Inject, ViewChildren, QueryList, Optional } from '@angular/core';
 import {FormArray, FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {VentaService} from '../ventas/ventas.service';
 import { MatDialog, MatSort } from '@angular/material';
@@ -22,6 +22,8 @@ import {URLIMAGENES} from '../global/url'
 import {VentanaCronogramaComponent} from '../ventas/ventana-cronograma/ventana-cronograma.component';
 import {URL} from '../global/url';
 import { SalidaVendedoresService } from "../salida-vendedores/salida-vendedores.service";
+import { VentanaEmergenteContacto} from '../clientes/ventana-emergentecontacto/ventanaemergentecontacto';
+import {SeleccionarClienteComponent} from '../retorno-vendedores/seleccionar-cliente/seleccionar-cliente.component';
 
 @Component({
   selector: 'app-ventas-salida',
@@ -30,7 +32,7 @@ import { SalidaVendedoresService } from "../salida-vendedores/salida-vendedores.
   providers: [VentaService, ServiciosTipoDocumento, ServiciosTipoPago, ClienteService, ServiciosTelefonos, ServiciosDirecciones, ServiciosGenerales, Notificaciones, SalidaVendedoresService]
 })
 
-export class VentasSalidaComponent implements OnInit {
+export class VentasSalidaComponent implements OnInit, AfterViewInit {
 
   public Cargando = new BehaviorSubject<boolean>(true);
   public id_venta: number;
@@ -47,9 +49,12 @@ export class VentasSalidaComponent implements OnInit {
   public ProductosComprados: Array<any>;
   public ListadoTipoPago: Array<any>;
   public ListadoProductos: Array<any>;
+  public ListadoProductosOriginal: Array<any>; // Usado como referencia para restaurar elementos que se eliminen en el arreglo anterior
+  public diferencia : number = 0;
 
   @ViewChild('InputInicial') FiltroInicial: ElementRef;
   @ViewChild('InputCuota') FiltroCuota: ElementRef;
+  @ViewChildren('InputPrecio') FiltroPrecio:QueryList<any>;
 
   public foto: string;
   public dni: string;
@@ -127,6 +132,46 @@ export class VentasSalidaComponent implements OnInit {
     this.ListadoVentas = new VentaDataSource(this.Servicio)
   }
 
+  ngAfterViewInit(): void {
+    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
+    //Add 'implements AfterViewInit' to the class.
+    this.FiltroPrecio.changes.subscribe(res=>{
+      for (let i in this.FiltroPrecio['_results']) {
+        fromEvent(this.FiltroPrecio['_results'][i].nativeElement,'keyup')
+        .pipe(
+          debounceTime(100),
+          distinctUntilChanged(),
+          tap(()=>{
+            if (this.FiltroPrecio['_results'][i]) {
+              if (this.FiltroPrecio['_results'][i].nativeElement.value) {
+                // this.VentasForm.get('montototal').setValue(0);
+                this.CalcularTotales();
+              }
+            }
+          })
+        ).subscribe()
+      }
+    })
+
+    merge(
+      fromEvent(this.FiltroInicial.nativeElement,'keyup'),
+      fromEvent(this.FiltroCuota.nativeElement,'keyup')
+    ).pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      tap(()=>{
+        if (
+          this.FiltroInicial.nativeElement.value &&
+          this.FiltroCuota.nativeElement.value &&
+          this.VentasSalidaForm.value.fechapago
+        ) {
+          this.CrearCronograma()
+        }
+      })
+    ).subscribe()
+
+  }
+
   CrearFormulario(){
 
     this.VentasSalidaForm = this.FormBuilder.group({
@@ -136,6 +181,9 @@ export class VentasSalidaComponent implements OnInit {
       'tipodoc': [6, [
         Validators.required
       ]],
+      'id_cliente': [null, [
+        Validators.required
+      ]],
       'cliente': [null, [
         Validators.required
       ]],
@@ -143,9 +191,9 @@ export class VentasSalidaComponent implements OnInit {
       ]],
       'trabajo': [null, [
       ]],
-      'id_direccion': [null, [
+      'direccion': [null, [
       ]],
-      'domicilio': [null, [
+      'telefono': [null, [
       ]],
       'garante': [false, [
         Validators.required
@@ -155,10 +203,6 @@ export class VentasSalidaComponent implements OnInit {
       ]],
       'lugar': ["", [
         Validators.required
-      ]],
-      'id_telefono': [null, [
-      ]],
-      'telefono': [null, [
       ]],
       'fechaventa': [{value: new Date(), disabled: false}, [
         Validators.required
@@ -188,9 +232,186 @@ export class VentasSalidaComponent implements OnInit {
     });
   }
 
+  SeleccionarVentaxId(id_venta){
+
+    let cuota_0;
+
+    this.Servicio.SeleccionarVentaSalida(id_venta).subscribe(res=>{
+      
+      this.id_salida = res.id_salida;
+
+      this.VentasSalidaForm.get('id_cliente').setValue(res.id_cliente);
+      this.VentasSalidaForm.get('cliente').setValue(res.cliente_nombre);
+      this.VentasSalidaForm.get('cargo').setValue(res.cliente_cargo_nombre);
+      this.VentasSalidaForm.get('trabajo').setValue(res.cliente_trabajo);
+      this.VentasSalidaForm.get('direccion').setValue(res.cliente_direccion_nombre);
+      this.VentasSalidaForm.get('telefono').setValue(res.cliente_telefono_numero);
+      this.VentasSalidaForm.get('pecosa').setValue(res.pecosa);
+      this.VentasSalidaForm.get('lugar').setValue(res.lugar_venta);
+      this.VentasSalidaForm.get('fechaventa').setValue(res.fecha);
+      this.VentasSalidaForm.get('fechapago').setValue(res.fecha_inicio_pago);
+      this.VentasSalidaForm.get('inicial').setValue(res.monto_inicial);
+      this.VentasSalidaForm.get('cuotas').setValue(res.numero_cuotas);
+      this.VentasSalidaForm.get('montototal').setValue(res.monto_total);
+      this.VentasSalidaForm.get('contrato').setValue(res.contrato);
+      
+      this.Productos=res.productos.productos
+      
+      this.Cronograma=res.cronograma.cronograma;
+      
+      this.ListadoVentas.Informacion.next(this.Cronograma);
+      
+      if(res['garantes'].garantes.length>0){
+        
+        this.VentasSalidaForm.get('garante').setValue(true);
+        
+        res['garantes'].garantes.forEach((item,index)=>{
+          this.AgregarGarante(false);
+          this.VentasSalidaForm['controls'].garantes['controls'][index].get('id_cliente').setValue(item.id_cliente);
+          this.VentasSalidaForm['controls'].garantes['controls'][index].get('nombre').setValue(item.cliente_nombre);
+          this.VentasSalidaForm['controls'].garantes['controls'][index].get('direccion').setValue(item.cliente_direccion);
+          this.VentasSalidaForm['controls'].garantes['controls'][index].get('telefono').setValue(item.cliente_telefono);
+        })
+      }
+      
+      if (this.id_venta) {
+
+        // Ajustes visuales
+        this.VentasSalidaForm.get('observaciones').setValue(res.observacion=="" ? "No hay observaciones" : res.observacion);
+
+        // Datos diferentes
+        this.VentasSalidaForm.get('tipopago').setValue(res.tipo_pago);
+
+        this.ActualizarOrdenCronograma(this.id_venta,"fecha_vencimiento asc");
+
+        this.foto = res.foto!="" ? URLIMAGENES.carpeta+'venta/'+res.foto : null;
+        this.dni = res.dni_pdf!="" ? URLIMAGENES.carpeta+'venta/'+res.dni_pdf : null;
+        this.cip = res.cip_pdf!="" ? URLIMAGENES.carpeta+'venta/'+res.cip_pdf : null;
+        this.contrato = res.contrato_pdf!="" ? URLIMAGENES.carpeta+'venta/'+res.contrato_pdf : null;
+        this.transaccion = res.voucher_pdf!="" ? URLIMAGENES.carpeta+'venta/'+res.voucher_pdf : null;
+        this.planilla = res.planilla_pdf!="" ? URLIMAGENES.carpeta+'venta/'+res.planilla_pdf : null;
+        this.letra = res.letra_pdf!="" ? URLIMAGENES.carpeta+'venta/'+res.letra_pdf : null;
+        this.autorizacion = res.autorizacion_pdf!="" ? URLIMAGENES.carpeta+'venta/'+res.autorizacion_pdf : null;
+
+        if(res['garantes'].garantes.length>0){
+
+          res['garantes'].garantes.forEach((item,index)=>{
+  
+            let dni = item.dni_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.dni_pdf : null ;
+            let cip = item.cip_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.cip_pdf : null ;
+            let planilla = item.planilla_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.planilla_pdf : null ;
+            let letra = item.letra_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.letra_pdf : null ;
+            let voucher = item.voucher_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.voucher_pdf : null ;
+  
+            this.VentasSalidaForm['controls'].garantes['controls'][index].get('dni_pdf').setValue(dni);
+            this.VentasSalidaForm['controls'].garantes['controls'][index].get('cip_pdf').setValue(cip);
+            this.VentasSalidaForm['controls'].garantes['controls'][index].get('planilla_pdf').setValue(planilla);
+            this.VentasSalidaForm['controls'].garantes['controls'][index].get('letra_pdf').setValue(letra);
+            this.VentasSalidaForm['controls'].garantes['controls'][index].get('transaccion_pdf').setValue(voucher);
+          })
+        }
+
+      }
+
+      if(this.id_venta_editar){
+
+        // Funciones importantes
+        this.ListarTipoPago();
+        this.ListarProductos();
+
+        // AJustes visuales        
+        this.VentasSalidaForm.get('pecosa').disable();
+        this.VentasSalidaForm.get('contrato').disable();
+
+        // Datos diferentes
+        this.VentasSalidaForm.get('tipopago').setValue(res.idtipopago);
+
+        // Sobre los documentos adjuntos
+        this.foto_antiguo=res.foto;
+        res.foto!="" ? this.foto=URLIMAGENES.carpeta+'venta/'+res.foto : null;
+        res.foto!="" ? this.foto_editar=false : this.foto_editar=true;
+
+        this.dni_antiguo=res.dni_pdf;
+        res.dni_pdf!="" ? this.dni=URLIMAGENES.carpeta+'venta/'+res.dni_pdf : null;
+        res.dni_pdf!="" ? this.dni_editar=false : this.dni_editar=true;
+
+        this.cip_antiguo=res.cip_pdf;
+        res.cip_pdf!="" ? this.cip=URLIMAGENES.carpeta+'venta/'+res.cip_pdf : null;
+        res.cip_pdf!="" ? this.cip_editar=false : this.cip_editar=true;
+
+        this.contrato_antiguo=res.contrato_pdf;
+        res.contrato_pdf!="" ? this.contrato=URLIMAGENES.carpeta+'venta/'+res.contrato_pdf : null;
+        res.contrato_pdf!="" ? this.contrato_editar=false : this.contrato_editar=true;
+
+        this.transaccion_antiguo=res.voucher_pdf;
+        res.voucher_pdf!="" ? this.transaccion=URLIMAGENES.carpeta+'venta/'+res.voucher_pdf : null;
+        res.voucher_pdf!="" ? this.transaccion_editar=false : this.transaccion_editar=true;
+
+        this.planilla_antiguo=res.planilla_pdf;
+        res.planilla_pdf!="" ? this.planilla=URLIMAGENES.carpeta+'venta/'+res.planilla_pdf : null;
+        res.planilla_pdf!="" ? this.planilla_editar=false : this.planilla_editar=true;
+
+        this.letra_antiguo=res.letra_pdf;
+        res.letra_pdf!="" ? this.letra=URLIMAGENES.carpeta+'venta/'+res.letra_pdf : null;
+        res.letra_pdf!="" ? this.letra_editar=false : this.letra_editar=true;
+
+        this.autorizacion_antiguo=res.autorizacion_pdf;
+        res.autorizacion_pdf!="" ? this.autorizacion=URLIMAGENES.carpeta+'venta/'+res.autorizacion_pdf : null;
+        res.autorizacion_pdf!="" ? this.autorizacion_editar=false : this.autorizacion_editar=true;
+
+        if(res['garantes'].garantes.length>0){
+
+          res['garantes'].garantes.forEach((item,index)=>{
+
+            this.VentasSalidaForm['controls'].garantes['controls'][index].get('dni_pdf_antiguo').setValue(item.dni_pdf);
+            this.VentasSalidaForm['controls'].garantes['controls'][index].get('cip_pdf_antiguo').setValue(item.cip_pdf);
+            this.VentasSalidaForm['controls'].garantes['controls'][index].get('planilla_pdf_antiguo').setValue(item.planilla_pdf);
+            this.VentasSalidaForm['controls'].garantes['controls'][index].get('letra_pdf_antiguo').setValue(item.letra_pdf);
+            this.VentasSalidaForm['controls'].garantes['controls'][index].get('transaccion_pdf_antiguo').setValue(item.voucher_pdf);
+            
+            let dni_editar = item.dni_pdf == "" ? true : false;
+            let cip_editar = item.cip_pdf == "" ? true : false;
+            let planilla_editar = item.planilla_pdf == "" ? true : false;
+            let letra_editar = item.letra_pdf == "" ? true : false;
+            let transaccion_editar = item.voucher_pdf == "" ? true : false;
+
+            this.VentasSalidaForm['controls'].garantes['controls'][index].get('dni_editar').setValue(dni_editar);
+            this.VentasSalidaForm['controls'].garantes['controls'][index].get('cip_editar').setValue(cip_editar);
+            this.VentasSalidaForm['controls'].garantes['controls'][index].get('planilla_editar').setValue(planilla_editar);
+            this.VentasSalidaForm['controls'].garantes['controls'][index].get('letra_editar').setValue(letra_editar);
+            this.VentasSalidaForm['controls'].garantes['controls'][index].get('transaccion_editar').setValue(transaccion_editar);
+
+            let dni = item.dni_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.dni_pdf : null ;
+            let cip = item.cip_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.cip_pdf : null ;
+            let planilla = item.planilla_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.planilla_pdf : null ;
+            let letra = item.letra_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.letra_pdf : null ;
+            let voucher = item.voucher_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.voucher_pdf : null ;
+  
+            this.VentasSalidaForm['controls'].garantes['controls'][index].get('dni_pdf').setValue(dni);
+            this.VentasSalidaForm['controls'].garantes['controls'][index].get('cip_pdf').setValue(cip);
+            this.VentasSalidaForm['controls'].garantes['controls'][index].get('planilla_pdf').setValue(planilla);
+            this.VentasSalidaForm['controls'].garantes['controls'][index].get('letra_pdf').setValue(letra);
+            this.VentasSalidaForm['controls'].garantes['controls'][index].get('transaccion_pdf').setValue(voucher);
+
+          })
+        }
+
+      }
+      
+      this.Cargando.next(false);
+    })
+
+  }
+
   CrearProducto(): FormGroup{
     return this.FormBuilder.group({
       'producto': [{value: null, disabled: false}, [
+      ]],
+      'producto_descripcion': [{value: null, disabled: false}, [
+      ]],
+      'id_serie': [{value: null, disabled: false}, [
+      ]],
+      'id_salida_producto': [{value: null, disabled: false}, [
       ]],
       'precio': [{value:null, disabled: false}, [
         Validators.required,
@@ -274,134 +495,131 @@ export class VentasSalidaComponent implements OnInit {
     // })
   };
 
+  SeleccionarCliente(){
+    let Ventana = this.Dialogo.open(SeleccionarClienteComponent,{
+      width: "1200px"
+    })
+
+    Ventana.afterClosed().subscribe(res=>{
+      if(res){
+        this.VentasSalidaForm.get('id_cliente').setValue(res.id);
+        this.ObtenerClientexId(res.id);
+        this.ObtenerDireccion(res.id);
+        this.ObtenerTelefono(res.id);
+      }
+    })
+  }
+
+  ObtenerClientexId(id_cliente) {
+
+    this.ClienteServicio.Seleccionar(id_cliente).subscribe(res => {
+      if (res) {
+        // console.log(res)
+        this.VentasSalidaForm.get('cliente').setValue(res.nombre);
+        this.VentasSalidaForm.get('cargo').setValue(res.cargo);
+        this.VentasSalidaForm.get('trabajo').setValue(res.trabajo);
+        this.Cargando.next(false);
+      }
+    });
+  }
+
+  ObtenerDireccion(id_cliente) {
+    this.DireccionServicio.ListarDireccion( id_cliente, '1',1,20).subscribe(res => {
+      if (res['data']) {
+        this.VentasSalidaForm.get('direccion').setValue(res['data'].direcciones[0].direccioncompleta);
+      }
+    });
+  }
+
+  ObtenerTelefono(id_cliente) {
+    this.TelefonoServicio.ListarTelefono( id_cliente , '1',1,20).subscribe(res => {
+      if (res['data']) {
+        this.VentasSalidaForm.get('telefono').setValue(res['data'].telefonos[0].tlf_numero);
+      }
+    });
+  }
+
+  RemoverCliente(){
+    this.VentasSalidaForm.get('id_cliente').setValue(null);
+    this.VentasSalidaForm.get('cliente').setValue(null);
+    this.VentasSalidaForm.get('cargo').setValue("");
+    this.VentasSalidaForm.get('trabajo').setValue("");
+    this.VentasSalidaForm.get('direccion').setValue("");
+    this.VentasSalidaForm.get('telefono').setValue("");
+  }
+
+  EditarContactoCliente(){
+
+    let id_cliente = this.VentasSalidaForm.value.id_cliente;
+
+    let VentanaContacto = this.Dialogo.open(VentanaEmergenteContacto, {
+      width: '1200px',
+      data: id_cliente
+    });
+
+    VentanaContacto.afterClosed().subscribe(res=>{
+      this.ObtenerDireccion(id_cliente);
+      this.ObtenerTelefono(id_cliente);
+    })
+  }
+
+  ObtenerDireccionGarante(id_cliente, index) {
+    this.DireccionServicio.ListarDireccion( id_cliente, '1',1,20).subscribe(res => {
+      if (res['data']) {
+        this.VentasSalidaForm['controls'].garantes['controls'][index].get('direccion').setValue(res['data'].direcciones[0].direccioncompleta)
+      }
+    });
+  }
+
+  ObtenerTelefonoGarante(id_cliente, index) {
+    this.TelefonoServicio.ListarTelefono( id_cliente , '1',1,20).subscribe(res => {
+      if (res['data']) {
+        this.VentasSalidaForm['controls'].garantes['controls'][index].get('telefono').setValue(res['data'].telefonos[0].tlf_numero)
+      }
+    });
+  }
+
   EliminarGarante(index){
     this.garantes.removeAt(index);
   }
 
-  SeleccionarVentaxId(id_venta){
+  EditarContactoGarante(id_cliente, index){
+    let VentanaContacto = this.Dialogo.open(VentanaEmergenteContacto, {
+      width: '1200px',
+      data: id_cliente
+    });
 
-    let cuota_0;
-
-    this.Servicio.SeleccionarVentaSalida(id_venta).subscribe(res=>{
-      
-      this.id_salida = res.id_salida;
-
-      this.VentasSalidaForm.get('cliente').setValue(res.cliente_nombre);
-      this.VentasSalidaForm.get('cargo').setValue(res.cliente_cargo_nombre);
-      this.VentasSalidaForm.get('trabajo').setValue(res.cliente_trabajo);
-      this.VentasSalidaForm.get('domicilio').setValue(res.cliente_direccion_nombre);
-      this.VentasSalidaForm.get('telefono').setValue(res.cliente_telefono_numero);
-      this.VentasSalidaForm.get('pecosa').setValue(res.pecosa);
-      this.VentasSalidaForm.get('lugar').setValue(res.lugar_venta);
-      this.VentasSalidaForm.get('fechaventa').setValue(res.fecha);
-      this.VentasSalidaForm.get('fechapago').setValue(res.fecha_inicio_pago);
-      this.VentasSalidaForm.get('inicial').setValue(res.monto_inicial);
-      this.VentasSalidaForm.get('cuotas').setValue(res.numero_cuotas);
-      this.VentasSalidaForm.get('montototal').setValue(res.monto_total);
-      this.VentasSalidaForm.get('contrato').setValue(res.contrato);
-      
-      this.Productos=res.productos.productos
-      
-      this.Cronograma=res.cronograma.cronograma;
-      
-      this.ListadoVentas.Informacion.next(this.Cronograma);
-      
-      if(res['garantes'].garantes.length>0){
-        
-        this.VentasSalidaForm.get('garante').setValue(true);
-        
-        res['garantes'].garantes.forEach((item,index)=>{
-          this.AgregarGarante(false);
-          this.VentasSalidaForm['controls'].garantes['controls'][index].get('id_cliente').setValue(item.id_cliente);
-          this.VentasSalidaForm['controls'].garantes['controls'][index].get('nombre').setValue(item.cliente_nombre);
-          this.VentasSalidaForm['controls'].garantes['controls'][index].get('direccion').setValue(item.cliente_direccion);
-          this.VentasSalidaForm['controls'].garantes['controls'][index].get('telefono').setValue(item.cliente_telefono);
-        })
-      }
-      
-      if (this.id_venta) {
-
-        // Ajustes visuales
-        this.VentasSalidaForm.get('observaciones').setValue(res.observacion=="" ? "No hay observaciones" : res.observacion);
-
-        // Datos diferentes
-        this.VentasSalidaForm.get('tipopago').setValue(res.tipo_pago);
-
-        this.ActualizarOrdenCronograma(this.id_venta,"fecha_vencimiento asc");
-
-        this.foto = res.foto!="" ? URLIMAGENES.carpeta+'venta/'+res.foto : null;
-        this.dni = res.dni_pdf!="" ? URLIMAGENES.carpeta+'venta/'+res.dni_pdf : null;
-        this.cip = res.cip_pdf!="" ? URLIMAGENES.carpeta+'venta/'+res.cip_pdf : null;
-        this.contrato = res.contrato_pdf!="" ? URLIMAGENES.carpeta+'venta/'+res.contrato_pdf : null;
-        this.transaccion = res.voucher_pdf!="" ? URLIMAGENES.carpeta+'venta/'+res.voucher_pdf : null;
-        this.planilla = res.planilla_pdf!="" ? URLIMAGENES.carpeta+'venta/'+res.planilla_pdf : null;
-        this.letra = res.letra_pdf!="" ? URLIMAGENES.carpeta+'venta/'+res.letra_pdf : null;
-        this.autorizacion = res.autorizacion_pdf!="" ? URLIMAGENES.carpeta+'venta/'+res.autorizacion_pdf : null;
-
-        if(res['garantes'].garantes.length>0){
-
-          res['garantes'].garantes.forEach((item,index)=>{
-  
-            let dni = item.dni_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.dni_pdf : null ;
-            let cip = item.cip_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.cip_pdf : null ;
-            let planilla = item.planilla_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.planilla_pdf : null ;
-            let letra = item.letra_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.letra_pdf : null ;
-            let voucher = item.voucher_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.voucher_pdf : null ;
-  
-            this.VentasSalidaForm['controls'].garantes['controls'][index].get('dni_pdf').setValue(dni);
-            this.VentasSalidaForm['controls'].garantes['controls'][index].get('cip_pdf').setValue(cip);
-            this.VentasSalidaForm['controls'].garantes['controls'][index].get('planilla_pdf').setValue(planilla);
-            this.VentasSalidaForm['controls'].garantes['controls'][index].get('letra_pdf').setValue(letra);
-            this.VentasSalidaForm['controls'].garantes['controls'][index].get('transaccion_pdf').setValue(voucher);
-          })
-        }
-
-      }
-
-      if(this.id_venta_editar){
-
-        // Funciones importantes
-        this.ListarTipoPago();
-        this.ListarProductos();
-
-        // AJustes visuales        
-        this.VentasSalidaForm.get('pecosa').disable();
-        this.VentasSalidaForm.get('contrato').disable();
-
-        // Datos diferentes
-        this.VentasSalidaForm.get('tipopago').setValue(res.idtipopago);
-
-      }
-      
-      this.Cargando.next(false);
+    VentanaContacto.afterClosed().subscribe(res=>{
+      this.ObtenerDireccionGarante(id_cliente,index);
+      this.ObtenerTelefonoGarante(id_cliente,index);
     })
-
   }
 
   CrearCronograma(){
 
+    this.Cronograma = [];
+
     let year = moment(this.VentasSalidaForm.value.fechapago).year();
     let month = moment(this.VentasSalidaForm.value.fechapago).month();
+    let day = moment(this.VentasSalidaForm.value.fechapago).date();
 
-    let fecha_corregida:Date = new Date(year, month-1,27);
+    let fecha_corregida:Date = new Date(year, month, day);
 
     let fecha:Date;
 
-    console.log(year, month, fecha_corregida)
+    if (this.VentasSalidaForm.value.inicial>0) {
+      this.Cronograma.push({
+        numero:0,
+        fecha_vencimiento: this.VentasSalidaForm.value.fechafechaventa,
+        monto_cuota:this.VentasSalidaForm.value.inicial
+      })
+    }
 
     let monto=Math.round((this.VentasSalidaForm.value.montototal-this.FiltroInicial.nativeElement.value)*100/this.FiltroCuota.nativeElement.value)/100
 
     for (var i = 1; i<=this.FiltroCuota.nativeElement.value; i++) {
 
       fecha=moment(fecha_corregida).add(i-1, 'months').toDate();
-
-      if (this.VentasSalidaForm.value.inicial>0) {
-        this.Cronograma.push({
-          numero:0,
-          fecha_vencimiento: this.VentasSalidaForm.value.fechafechaventa,
-          monto_cuota:this.VentasSalidaForm.value.inicial
-        })
-      }
 
       this.Cronograma.push({
         numero: i,
@@ -412,8 +630,16 @@ export class VentasSalidaComponent implements OnInit {
       this.ListadoVentas.Informacion.next(this.Cronograma);
     }
 
-    // this.CalcularTotalCronograma()
+    this.CalcularTotalCronograma()
 
+  }
+
+  CalcularTotalCronograma(){
+    let total_cronograma_editado: number = 0;
+    this.Cronograma.forEach((item)=>{
+      total_cronograma_editado=total_cronograma_editado+item.monto_cuota*1;
+    })
+    this.diferencia=this.VentasSalidaForm.value.montototal-total_cronograma_editado
   }
 
   // Cuando se cambia el orden del cronograma
@@ -424,75 +650,108 @@ export class VentasSalidaComponent implements OnInit {
   }
 
   SubirFoto(evento){
-    // if (!this.idventa_editar) {
-    //   this.foto=evento.serverResponse.response.body.data;
-    // }else{
-    //   this.foto_nuevo=evento.serverResponse.response.body.data;
-    // }
+    if (!this.id_venta_editar) {
+      this.foto=evento.serverResponse.response.body.data;
+    }else{
+      this.foto_nuevo=evento.serverResponse.response.body.data;
+    }
   }
 
   SubirDNI(evento){
-    // if (!this.idventa_editar) {
-    //   this.dni=evento.serverResponse.response.body.data;
-    // }else{
-    //   this.dni_nuevo=evento.serverResponse.response.body.data;
-    // }
+    if (!this.id_venta_editar) {
+      this.dni=evento.serverResponse.response.body.data;
+    }else{
+      this.dni_nuevo=evento.serverResponse.response.body.data;
+    }
   }
 
   SubirCIP(evento){
-    // if (!this.idventa_editar) {
-    //   this.cip=evento.serverResponse.response.body.data;
-    // }else{
-    //   this.cip_nuevo=evento.serverResponse.response.body.data;
-    // }
+    if (!this.id_venta_editar) {
+      this.cip=evento.serverResponse.response.body.data;
+    }else{
+      this.cip_nuevo=evento.serverResponse.response.body.data;
+    }
   }
 
   SubirContrato(evento){
-    // if (!this.idventa_editar) {
-    //   this.contrato=evento.serverResponse.response.body.data;
-    // }else{
-    //   this.contrato_nuevo=evento.serverResponse.response.body.data;
-    // }
+    if (!this.id_venta_editar) {
+      this.contrato=evento.serverResponse.response.body.data;
+    }else{
+      this.contrato_nuevo=evento.serverResponse.response.body.data;
+    }
   }
 
   SubirTransaccion(evento){
-    // if (!this.idventa_editar) {
-    //   this.transaccion=evento.serverResponse.response.body.data;
-    // }else{
-    //   this.transaccion_nuevo=evento.serverResponse.response.body.data;
-    // }
+    if (!this.id_venta_editar) {
+      this.transaccion=evento.serverResponse.response.body.data;
+    }else{
+      this.transaccion_nuevo=evento.serverResponse.response.body.data;
+    }
   }
 
   SubirPlanilla(evento){
-    // if (!this.idventa_editar) {
-    //   this.planilla=evento.serverResponse.response.body.data;
-    // }else{
-    //   this.planilla_nuevo=evento.serverResponse.response.body.data;
-    // }
+    if (!this.id_venta_editar) {
+      this.planilla=evento.serverResponse.response.body.data;
+    }else{
+      this.planilla_nuevo=evento.serverResponse.response.body.data;
+    }
   }
 
   SubirLetra(evento){
-    // if (!this.idventa_editar) {
-    //   this.letra=evento.serverResponse.response.body.data;
-    // }else{
-    //   this.letra_nuevo=evento.serverResponse.response.body.data;
-    // }
+    if (!this.id_venta_editar) {
+      this.letra=evento.serverResponse.response.body.data;
+    }else{
+      this.letra_nuevo=evento.serverResponse.response.body.data;
+    }
   }
 
   SubirAutorizacion(evento){
-    // if (!this.idventa_editar) {
-    //   this.autorizacion=evento.serverResponse.response.body.data;
-    // }else{
-    //   this.autorizacion_nuevo=evento.serverResponse.response.body.data;
-    // }
+    if (!this.id_venta_editar) {
+      this.autorizacion=evento.serverResponse.response.body.data;
+    }else{
+      this.autorizacion_nuevo=evento.serverResponse.response.body.data;
+    }
   }
 
-  // CalcularTotalCronograma(){
-  //   this.total_cronograma_editado=0;
-  //   this.Cronograma.forEach((item)=>{
-  //     this.total_cronograma_editado=this.total_cronograma_editado+item.monto_cuota*1;
-  //   })
-  // }
+  SubirDNIAval(evento, index){
+    if (!this.id_venta_editar) {
+      this.VentasSalidaForm['controls'].garantes['controls'][index].get('dni_pdf').setValue(evento.serverResponse.response.body.data);
+    }else{
+      this.VentasSalidaForm['controls'].garantes['controls'][index].get('dni_pdf_nuevo').setValue(evento.serverResponse.response.body.data);
+    }
+  }
+
+  SubirCIPAval(evento, index){
+    if (!this.id_venta_editar) {
+      this.VentasSalidaForm['controls'].garantes['controls'][index].get('cip_pdf').setValue(evento.serverResponse.response.body.data);
+    }else{
+      this.VentasSalidaForm['controls'].garantes['controls'][index].get('cip_pdf_nuevo').setValue(evento.serverResponse.response.body.data);
+    }
+  }
+
+  SubirPlanillaAval(evento, index){
+    if (!this.id_venta_editar) {
+      this.VentasSalidaForm['controls'].garantes['controls'][index].get('planilla_pdf').setValue(evento.serverResponse.response.body.data);
+    }else{
+      this.VentasSalidaForm['controls'].garantes['controls'][index].get('planilla_pdf_nuevo').setValue(evento.serverResponse.response.body.data);
+    }
+  }
+
+  SubirLetraAval(evento, index){
+    if (!this.id_venta_editar) {
+      this.VentasSalidaForm['controls'].garantes['controls'][index].get('letra_pdf').setValue(evento.serverResponse.response.body.data);
+    }else{
+      this.VentasSalidaForm['controls'].garantes['controls'][index].get('letra_pdf_nuevo').setValue(evento.serverResponse.response.body.data);
+    }
+  }
+
+  SubirTransaccionAval(evento, index){
+    if (!this.id_venta_editar) {
+      this.VentasSalidaForm['controls'].garantes['controls'][index].get('transaccion_pdf').setValue(evento.serverResponse.response.body.data);
+    }else{
+      this.VentasSalidaForm['controls'].garantes['controls'][index].get('transaccion_pdf_nuevo').setValue(evento.serverResponse.response.body.data);
+    }
+  }
 
   ListarTipoPago() {
     this.ServicioTipoPago.ListarTipoPago().subscribe( res => {
@@ -517,6 +776,27 @@ export class VentasSalidaComponent implements OnInit {
     this.SServicio.ListarSalidaProductos(this.id_salida,1).subscribe(res=>{
       // console.log(res['data'].productos);
       this.ListadoProductos=res['data'].productos;
+      this.ListadoProductosOriginal=res['data'].productos;
+    })
+  }
+
+  ProductoSeleccionado(evento, index){
+    this.VentasSalidaForm['controls'].productos['controls'][index].get('precio').setValue(evento.value.precio_minimo);
+    this.VentasSalidaForm['controls'].productos['controls'][index].get('producto_descripcion').setValue(evento.value.producto+" ---> "+evento.value.serie);
+    this.VentasSalidaForm['controls'].productos['controls'][index].get('id_serie').setValue(evento.value.id_serie);
+    this.VentasSalidaForm['controls'].productos['controls'][index].get('id_salida_producto').setValue(evento.value.id);
+    this.EliminarDuplicados();
+    this.CalcularTotales();
+  }
+
+  EliminarDuplicados(){
+    
+    this.ListadoProductos = this.ListadoProductosOriginal;
+
+    this.VentasSalidaForm['controls'].productos['controls'].forEach((item)=>{
+      if(item.value.producto){
+        this.ListadoProductos = this.ListadoProductos.filter(e => e.id != item.value.producto.id)
+      }
     })
   }
 
@@ -533,10 +813,7 @@ export class VentasSalidaComponent implements OnInit {
   EliminarProducto(index){
     this.productos.removeAt(index);
     this.CalcularTotales();
-  }
-
-  ProductoSeleccionado(evento, index){
-    this.VentasSalidaForm['controls'].productos['controls'][index].get('precio').setValue(evento.value.precio_minimo)
+    this.EliminarDuplicados()
   }
 
   CalcularTotales(){
@@ -547,7 +824,6 @@ export class VentasSalidaComponent implements OnInit {
     this.Productos.forEach((item)=>{
       if(!item.eliminar){
         total_productos_antiguos = total_productos_antiguos + item.precio*1;
-        console.log(item);
       }
     })
 
@@ -557,6 +833,8 @@ export class VentasSalidaComponent implements OnInit {
     })
 
     this.VentasSalidaForm.get('montototal').setValue(total_productos_antiguos+ total_productos_nuevos);
+
+    this.CrearCronograma();
 
   }
 
