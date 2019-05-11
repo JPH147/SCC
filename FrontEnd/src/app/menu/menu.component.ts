@@ -15,15 +15,9 @@ export class MenuComponent implements OnInit{
 
   ngOnInit(){
     this.menu=[
-      // {
-      //   nombre: "Inicio",
-      //   icono: "home",
-      //   disabled:false,
-      //   submenu:[]
-      // },
       {
-        nombre: "Ventas",
-        icono: "store_mall_directory",
+        nombre: "Clientes",
+        icono: "person",
         disabled:false,
         submenu:[
           {
@@ -35,13 +29,21 @@ export class MenuComponent implements OnInit{
             path: "evaluacion"
           },
           {
+            nombre: "Generador de archivos",
+            path: ""
+          },
+        ]
+      },
+      {
+        nombre: "Ventas",
+        icono: "store_mall_directory",
+        disabled:false,
+        submenu:[
+
+          {
             nombre: "Ventas",
             path: "ventas"
           },
-          // {
-          //   nombre: "Devoluciones",
-          //   path: "devoluciones"
-          // },
           {
             nombre: "Salida de ventas",
             path: "salidavendedores"
@@ -78,8 +80,13 @@ export class MenuComponent implements OnInit{
       {
         nombre: "Créditos",
         icono: "account_balance",
-        disabled:true,
-        submenu:[]
+        disabled:false,
+        submenu:[
+          {
+            nombre: "Créditos",
+            path: "creditos"
+          },
+        ]
       },
       {
         nombre: "Cobranzas",

@@ -19,12 +19,12 @@
 
       <ng-container matColumnDef="fecha">
         <mat-header-cell *matHeaderCellDef> Fecha </mat-header-cell>
-        <mat-cell *matCellDef="let comision"> {{comision.fecha}} </mat-cell>
+        <mat-cell *matCellDef="let comision"> {{comision.fecha_salida | date: 'dd/MM/yyyy'}} - {{comision.fecha_retorno | date: 'dd/MM/yyyy'}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="talonario">
         <mat-header-cell *matHeaderCellDef> Talonario </mat-header-cell>
-        <mat-cell *matCellDef="let comision"> {{comision.talonario}} </mat-cell>
+        <mat-cell *matCellDef="let comision"> {{comision.pecosa}} </mat-cell>
     	</ng-container>
 
       <ng-container matColumnDef="comision_efectiva">

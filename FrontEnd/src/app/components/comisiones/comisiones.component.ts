@@ -19,8 +19,7 @@ export class ComisionesComponent implements OnInit {
 	@ViewChild('InputEfectivas') FiltroEfectivas: MatSelect;
 	@ViewChild('InputRetenidas') FiltroRetenidas: MatSelect;
 	@ViewChild('InputVendedor') FiltroVendedor: ElementRef;
-	@ViewChild('InputTalonario') FiltroTalonario: ElementRef;
-	@ViewChild('InputContrato') FiltroContrato: ElementRef;
+	@ViewChild('InputPecosa') FiltroPecosa: ElementRef;
 
 	@ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -34,7 +33,7 @@ export class ComisionesComponent implements OnInit {
 
   ngOnInit() {
    	this.ListadoComisiones = new ComisionesDataSource(this.Servicio);
-  	this.ListadoComisiones.CargarComisiones( 1, 1, '', this.fecha_inicio, this.fecha_fin, '', '',1, 10);
+  	this.ListadoComisiones.CargarComisiones( 1, 1, '', this.fecha_inicio, this.fecha_fin, '',1, 10);
   }
 
   ngAfterViewInit(){
@@ -45,8 +44,7 @@ export class ComisionesComponent implements OnInit {
 
   	merge(
   		fromEvent(this.FiltroVendedor.nativeElement, 'keyup'),
-			fromEvent(this.FiltroTalonario.nativeElement, 'keyup'),
-			fromEvent(this.FiltroContrato.nativeElement, 'keyup'),
+			fromEvent(this.FiltroPecosa.nativeElement, 'keyup'),
   	).pipe(
   		debounceTime(200),
   		distinctUntilChanged(),
@@ -70,8 +68,7 @@ export class ComisionesComponent implements OnInit {
 			this.FiltroVendedor.nativeElement.value,
 			this.fecha_inicio,
 			this.fecha_fin,
-			this.FiltroTalonario.nativeElement.value,
-			this.FiltroContrato.nativeElement.value,
+			this.FiltroPecosa.nativeElement.value,
 			this.paginator.pageIndex+1,
 			this.paginator.pageSize,
   	)
@@ -103,19 +100,18 @@ export class ComisionesDataSource implements DataSource<any> {
     vendedor: string,
     fecha_inicio:Date,
     fecha_fin:Date,
-    talonario: string,
-    contrato: string,
+    pecosa: string,
     pagina: number,
     totalpagina: number
   ){
   this.CargandoInformacion.next(true);
 
-  this.Servicio.ComisionesListado(estado_comision_efectiva, estado_comision_retenida , vendedor, fecha_inicio, fecha_fin, talonario, contrato, pagina, totalpagina)
+  this.Servicio.ComisionesListado(estado_comision_efectiva, estado_comision_retenida , vendedor, fecha_inicio, fecha_fin, pecosa, pagina, totalpagina)
   .pipe(catchError(() => of([])),
   finalize(() => this.CargandoInformacion.next(false))
   )
   .subscribe(res => {
-  		// console.log(res)
+  		console.log(res)
       this.TotalResultados.next(res['mensaje']);
       this.InformacionClientes.next(res['data'].vendedores);
     });

@@ -23,6 +23,8 @@ import { EvaluacionComponent } from './components/evaluacion/evaluacion.componen
 import { ReglasEvaluacionComponent } from './components/tablas-maestras/reglas-evaluacion/reglas-evaluacion.component';
 import { RetornoVendedoresCierreComponent } from './components/retorno-vendedores-cierre/retorno-vendedores-cierre.component';
 import { VentasSalidaComponent } from './components/ventas-salida/ventas-salida.component';
+import { CreditosListarComponent } from './components/creditos-listar/creditos-listar.component';
+import { CreditosComponent } from './components/creditos/creditos.component';
 
 const appRoutes: Routes = [
   // {path: '', component: EvaluacionComponent}, //prueba
@@ -52,12 +54,14 @@ const appRoutes: Routes = [
   {path: 'ventas/:idventa', component: VentasComponent},
   {path: 'ventas/salida/:idventa', component: VentasSalidaComponent},
   {path: 'ventas/salida/editar/:idventaeditar', component: VentasSalidaComponent},
+  {path: 'creditos', component: CreditosListarComponent},
+  {path: 'creditos/nuevo', component: CreditosComponent},
   {path: 'usuarios', component: UsuariosComponent},
   {path: 'proveedores', component: ProveedoresComponent},
   {path: 'direcciones', component: DireccionesComponent},
   {path: 'detalleproductos', component: DetalleProductosComponent},
   {path: 'evaluacion-reglas', component: ReglasEvaluacionComponent},
-  {path: 'prueba', component: VentasSalidaComponent}
+  {path: 'prueba', component: CreditosComponent}
 ];
 
 export const appRoutingProvider: any[] = [];

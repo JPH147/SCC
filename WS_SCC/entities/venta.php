@@ -59,6 +59,7 @@ Class Venta{
     public $id_transaccion;
     public $transacciones;
     public $id_venta_canje;
+    public $id_venta_producto;
     public $canje_talonario_serie;
     public $canje_talonario_contrato;
     public $anulacion_observacion;
@@ -911,6 +912,26 @@ Class Venta{
 
         $result->bindParam(1, $this->id_venta);
         $result->bindParam(2, $this->producto_serie);
+
+        if($result->execute())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    function delete_productos_salida()
+    {
+        $query = "call sp_eliminarventasalidaproductos(?,?,?)";
+        
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_salida);
+        $result->bindParam(2, $this->id_venta_producto);
+        $result->bindParam(3, $this->producto_serie);
 
         if($result->execute())
         {

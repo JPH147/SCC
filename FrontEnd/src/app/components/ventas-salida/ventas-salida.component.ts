@@ -2,17 +2,16 @@ import {CollectionViewer, DataSource} from "@angular/cdk/collections";
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit,Inject, ViewChildren, QueryList, Optional } from '@angular/core';
 import {FormArray, FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {VentaService} from '../ventas/ventas.service';
-import { MatDialog, MatSort } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import {ServiciosTipoDocumento, TipoDocumento} from '../global/tipodocumento';
 import {ServiciosTipoPago, TipoPago} from '../global/tipopago';
 import {ClienteService } from '../clientes/clientes.service';
-import {ClienteDataSource} from '../clientes/clientes.dataservice';
-import {Observable, forkJoin,fromEvent, merge, BehaviorSubject} from 'rxjs';
+import { forkJoin,fromEvent, merge, BehaviorSubject} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
-import {ServiciosTelefonos, Telefono} from '../global/telefonos';
-import {ServiciosDirecciones, Direccion} from '../global/direcciones';
-import {ServiciosGenerales, Talonario, Serie, ListarVendedor} from '../global/servicios';
+import {ServiciosTelefonos} from '../global/telefonos';
+import {ServiciosDirecciones} from '../global/direcciones';
+import {ServiciosGenerales} from '../global/servicios';
 // import {VentanaProductosComponent} from './ventana-productos/ventana-productos.component';
 import { FileHolder } from 'angular2-image-upload';
 import * as moment from 'moment';
@@ -20,7 +19,6 @@ import {Location} from '@angular/common';
 import {Notificaciones} from '../global/notificacion';
 import {URLIMAGENES} from '../global/url'
 import {VentanaCronogramaComponent} from '../ventas/ventana-cronograma/ventana-cronograma.component';
-import {URL} from '../global/url';
 import { SalidaVendedoresService } from "../salida-vendedores/salida-vendedores.service";
 import { VentanaEmergenteContacto} from '../clientes/ventana-emergentecontacto/ventanaemergentecontacto';
 import {SeleccionarClienteComponent} from '../retorno-vendedores/seleccionar-cliente/seleccionar-cliente.component';
@@ -51,6 +49,9 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   public ListadoProductos: Array<any>;
   public ListadoProductosOriginal: Array<any>; // Usado como referencia para restaurar elementos que se eliminen en el arreglo anterior
   public diferencia : number = 0;
+  public editar_cronograma : number = 0;
+
+  public numero_contrato: string;
 
   @ViewChild('InputInicial') FiltroInicial: ElementRef;
   @ViewChild('InputCuota') FiltroCuota: ElementRef;
@@ -112,7 +113,10 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   ngOnInit() {
 
     this.id_venta_editar=50;
-    
+    this.editar_cronograma=3;
+
+    this.ruta=URLIMAGENES.urlimages;
+
     // this.route.params.subscribe(params => {
     //   console.log(params)
     //   if(params['idventa']){
@@ -175,6 +179,10 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   CrearFormulario(){
 
     this.VentasSalidaForm = this.FormBuilder.group({
+      'id_salida': [{value: null, disabled: false}, [
+      ]],
+      'id_contrato': [{value: null, disabled: false}, [
+      ]],
       'contrato': [{value: null, disabled: false}, [
         Validators.required
       ]],
@@ -240,7 +248,11 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       
       this.id_salida = res.id_salida;
 
+      this.numero_contrato=res.contrato;
+
+      this.VentasSalidaForm.get('id_salida').setValue(res.id_salida);
       this.VentasSalidaForm.get('id_cliente').setValue(res.id_cliente);
+      this.VentasSalidaForm.get('id_contrato').setValue(res.id_talonario);
       this.VentasSalidaForm.get('cliente').setValue(res.cliente_nombre);
       this.VentasSalidaForm.get('cargo').setValue(res.cliente_cargo_nombre);
       this.VentasSalidaForm.get('trabajo').setValue(res.cliente_trabajo);
@@ -325,6 +337,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
 
         // Datos diferentes
         this.VentasSalidaForm.get('tipopago').setValue(res.idtipopago);
+        this.Columnas= ['numero', 'fecha_vencimiento_ver', 'monto_cuota_ver'];
 
         // Sobre los documentos adjuntos
         this.foto_antiguo=res.foto;
@@ -563,6 +576,22 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
     })
   }
 
+  SeleccionarGarante(index){
+    let Ventana = this.Dialogo.open(SeleccionarClienteComponent,{
+      width: "1200px"
+    })
+
+    Ventana.afterClosed().subscribe(res=>{
+      if(res){
+        this.VentasSalidaForm['controls'].garantes['controls'][index].get('id_cliente').setValue(res.id)
+        this.VentasSalidaForm['controls'].garantes['controls'][index].get('nombre').setValue(res.nombre)
+        this.ObtenerDireccionGarante(res.id,index);
+        this.ObtenerTelefonoGarante(res.id,index);
+      }
+    })
+
+  }
+
   ObtenerDireccionGarante(id_cliente, index) {
     this.DireccionServicio.ListarDireccion( id_cliente, '1',1,20).subscribe(res => {
       if (res['data']) {
@@ -581,6 +610,26 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
 
   EliminarGarante(index){
     this.garantes.removeAt(index);
+  }
+
+  HayGarante(evento){
+    if(evento.checked){
+      if(this.id_venta_editar){
+        this.AgregarGarante(true)
+      }else{
+        this.AgregarGarante(false)
+      }
+    }else{
+      if(this.VentasSalidaForm['controls'].garantes['controls'].length>1){
+        this.EliminarGarante(1);
+        this.EliminarGarante(0);
+      }else{
+        this.EliminarGarante(0);
+      }
+      // this.VentasForm['controls'].garantes['controls'].forEach((item,index)=>{
+      //   this.EliminarGarante(index)
+      // })
+    }
   }
 
   EditarContactoGarante(id_cliente, index){
@@ -610,7 +659,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
     if (this.VentasSalidaForm.value.inicial>0) {
       this.Cronograma.push({
         numero:0,
-        fecha_vencimiento: this.VentasSalidaForm.value.fechafechaventa,
+        fecha_vencimiento: this.VentasSalidaForm.value.fechaventa,
         monto_cuota:this.VentasSalidaForm.value.inicial
       })
     }
@@ -640,6 +689,11 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       total_cronograma_editado=total_cronograma_editado+item.monto_cuota*1;
     })
     this.diferencia=this.VentasSalidaForm.value.montototal-total_cronograma_editado
+  }
+
+  EditarCronograma(estado){
+    this.editar_cronograma=estado;
+    this.CalcularTotalCronograma();
   }
 
   // Cuando se cambia el orden del cronograma
@@ -828,7 +882,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
     })
 
     this.VentasSalidaForm['controls'].productos['controls'].forEach((item)=>{
-      console.log(item);
+      // console.log(item);
       total_productos_nuevos = total_productos_nuevos + item.value.precio*1;
     })
 
@@ -853,6 +907,126 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
 
   Atras(){
     this.location.back()
+  }
+
+  GuardarVenta(formulario){
+    if(this.id_venta_editar){
+      this.ActualizarVenta(formulario)
+    }
+  }
+
+  ActualizarVenta(formulario){
+
+    let random=(new Date()).getTime();
+
+    return forkJoin(
+      this.ServiciosGenerales.RenameFile(this.foto_nuevo,'DNI',random.toString(),"venta"),
+      this.ServiciosGenerales.RenameFile(this.dni_nuevo,'DNI',random.toString(),"venta"),
+      this.ServiciosGenerales.RenameFile(this.cip_nuevo,'CIP',random.toString(),"venta"),
+      this.ServiciosGenerales.RenameFile(this.contrato_nuevo,'CONTRATO',random.toString(),"venta"),
+      this.ServiciosGenerales.RenameFile(this.transaccion_nuevo,'TRANSACCION',random.toString(),"venta"),
+      this.ServiciosGenerales.RenameFile(this.planilla_nuevo,'PLANILLA',random.toString(),"venta"),
+      this.ServiciosGenerales.RenameFile(this.letra_nuevo,'LETRA',random.toString(),"venta"),
+      this.ServiciosGenerales.RenameFile(this.autorizacion_nuevo,'AUTORIZACION',random.toString(),"venta")
+    ).subscribe(resultado=>{
+
+      // Cuando se actualiza la venta, en el procedimiento
+      // se eliminan el cronograma actual y los garantes
+
+      this.Servicio.ActualizarVenta(
+        this.id_venta_editar,
+        formulario.value.fechaventa,
+        0,
+        formulario.value.id_contrato,
+        0,
+        formulario.value.id_cliente,
+        formulario.value.direccion,
+        formulario.value.telefono,
+        formulario.value.cargo,
+        formulario.value.trabajo,
+        formulario.value.lugar,
+        0,
+        2,
+        formulario.value.id_salida, // Porque no pertenece a ninguna salida de ventas
+        formulario.value.tipopago,
+        formulario.value.tipopago==3 ? 0 : formulario.value.inicial,
+        formulario.value.tipopago==3 ? 1 :formulario.value.cuotas,
+        formulario.value.montototal,
+        formulario.value.fechapago,
+        this.foto_editar ? resultado[0].mensaje : this.foto_antiguo,
+        this.dni_editar ? resultado[1].mensaje : this.dni_antiguo,
+        this.cip_editar ? resultado[2].mensaje : this.cip_antiguo,
+        this.contrato_editar ? resultado[3].mensaje : this.contrato_antiguo,
+        this.transaccion_editar ? resultado[4].mensaje : this.transaccion_antiguo,
+        this.planilla_editar ? resultado[5].mensaje : this.planilla_antiguo,
+        this.letra_editar ? resultado[6].mensaje : this.letra_antiguo,
+        this.autorizacion_editar ? resultado[7].mensaje : this.autorizacion_antiguo,
+        formulario.value.observaciones
+      ).subscribe(res=>{
+
+        // Productos antiguos
+        this.Productos.forEach((item)=>{
+          // Si se tienen que eliminar, se elimina
+          if(item.eliminar){
+            this.Servicio.EliminarProductosSalidaVenta(formulario.value.id_salida, item.id, item.id_serie).subscribe()
+          }
+        })
+
+        // Productos nuevos que se van a agregar
+        console.log(formulario.value.productos)
+        formulario.value.productos.forEach((item)=>{
+          console.log(item.id_salida_producto, this.id_venta_editar, item.precio);
+          this.SServicio.ActualizarSalidaProductos(item.id_salida_producto, this.id_venta_editar, item.precio).subscribe(res=>console.log(res));
+        })
+
+        // Se genera el cronograma
+        this.Cronograma.forEach((item)=>{
+          if(item.numero==0){
+            this.Servicio.CrearVentaCronograma(res['data'],item.monto_cuota,item.fecha_vencimiento,1).subscribe()
+          }else{
+            this.Servicio.CrearVentaCronograma(res['data'],item.monto_cuota,item.fecha_vencimiento,1).subscribe()
+          }
+        });
+        
+        // Si la venta tiene garante, se los agrega
+        if( this.VentasSalidaForm.value.garante ){
+
+          this.VentasSalidaForm['controls'].garantes['controls'].forEach((item, index)=>{
+            return forkJoin(
+              this.ServiciosGenerales.RenameFile(item.value.dni_pdf_nuevo,'DNI_GARANTE_'+(index+1),random.toString(),"venta"),
+              this.ServiciosGenerales.RenameFile(item.value.cip_pdf_nuevo,'CIP_GARANTE_'+(index+1),random.toString(),"venta"),
+              this.ServiciosGenerales.RenameFile(item.value.planilla_pdf_nuevo,'PLANILLA_GARANTE_'+(index+1),random.toString(),"venta"),
+              this.ServiciosGenerales.RenameFile(item.value.letra_pdf_nuevo,'LETRA_GARANTE_'+(index+1),random.toString(),"venta"),
+              this.ServiciosGenerales.RenameFile(item.value.transaccion_pdf_nuevo,'TRANSACCION_GARANTE_'+(index+1),random.toString(),"venta"),
+            ).subscribe(response=>{
+              this.Servicio.CrearVentaGarante(
+                res['data'],
+                item.value.id_cliente,
+                item.value.direccion,
+                item.value.telefono,
+                item.value.dni_editar ? response[0].mensaje : item.value.dni_pdf_antiguo,
+                item.value.cip_editar ? response[1].mensaje : item.value.cip_pdf_antiguo,
+                item.value.planilla_editar ? response[2].mensaje : item.value.planilla_pdf_antiguo,
+                item.value.letra_editar ? response[3].mensaje : item.value.letra_pdf_antiguo,
+                item.value.transaccion_editar ? response[4].mensaje : item.value.transaccion_pdf_antiguo
+              ).subscribe()
+            })
+          })
+
+        }
+
+        setTimeout(()=>{
+          this.router.navigate(['/ventas']);
+  
+          if(res['codigo']==0){
+            this.Notificacion.Snack("Se editó la venta con éxito!","");
+          }else{
+            this.Notificacion.Snack("Ocurrió un error al editar la venta","");
+          }
+        }, 1000)
+
+      })
+    })
   }
 
 }

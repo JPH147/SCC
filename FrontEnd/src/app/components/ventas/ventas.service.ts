@@ -141,7 +141,7 @@ export class VentaService {
     .set('prpdfautorizacion',pdfautorizacion)
     .set('probservaciones',observaciones)
 
-    console.log(params)
+    // console.log(params)
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -343,6 +343,21 @@ export class VentaService {
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'venta/delete-producto.php', params, {headers: headers});
+  }
+
+  EliminarProductosSalidaVenta(
+    id_salida:number,
+    id_venta_producto:number,
+    id_serie:number,
+  ): Observable<any>{
+    let params = new HttpParams()
+    .set('prsalida',id_salida.toString())
+    .set('prventaproducto',id_venta_producto.toString())
+    .set('prserie',id_serie.toString())
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'venta/delete-producto-salida.php', params, {headers: headers});
   }
 
   EliminarComisionVenta(

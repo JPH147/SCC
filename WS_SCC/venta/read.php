@@ -21,7 +21,7 @@
         $venta->estado = !empty($_GET['prestado']) ? trim($_GET['prestado']) : 0;
         $venta->numero_pagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : 1;
         $venta->total_pagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : 20;
-        $venta->orden = !empty($_GET['prorden']) ? trim($_GET['prorden']) : 'id asc';
+        $venta->orden = !empty($_GET['prorden']) ? trim($_GET['prorden']) : 'id desc';
 
         $venta_list = $venta->read();
         $venta_contar = $venta->contar();

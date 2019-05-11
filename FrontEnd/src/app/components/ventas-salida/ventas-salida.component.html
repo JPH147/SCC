@@ -2,7 +2,7 @@
 
   <button mat-mini-fab type="button" color="primary" (click)="Atras()"><mat-icon>keyboard_arrow_left</mat-icon></button>
 
-  <mat-card-title class="tituloProd">Venta {{VentasSalidaForm.value.contrato}}</mat-card-title>
+  <mat-card-title class="tituloProd">Venta {{numero_contrato}}</mat-card-title>
 
   <form [formGroup]="VentasSalidaForm">
 
@@ -286,7 +286,7 @@
         </div>
       </div>
   
-      </div>
+    </div>
 
     <!-- Venta -->
     <div class="seccion">
@@ -317,8 +317,14 @@
           </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile colspan="4">
-          <mat-form-field class="columnas-4">
+        <mat-grid-tile colspan="2">
+          <mat-form-field class="columnas-2">
+             <input matInput placeholder="Lugar de venta" formControlName="lugar" [readonly]="id_venta">
+          </mat-form-field>
+        </mat-grid-tile>
+        
+        <mat-grid-tile colspan="2">
+          <mat-form-field class="columnas-2">
              <input matInput placeholder="Observaciones" formControlName="observaciones" [readonly]="id_venta">
           </mat-form-field>
         </mat-grid-tile>
@@ -932,8 +938,8 @@
 
       <mat-card-subtitle class="titulo-seccion">
         CRONOGRAMA
-        <!-- <button mat-icon-button class="icono" *ngIf="!id_venta && editar_cronograma>1" (click)="EditarCronograma(1)"><mat-icon>edit</mat-icon></button>
-        <button mat-icon-button class="icono" *ngIf="!id_venta && editar_cronograma==1" (click)="EditarCronograma(2)"><mat-icon>check</mat-icon></button> -->
+        <button mat-icon-button class="icono" *ngIf="id_venta_editar && editar_cronograma>1" (click)="EditarCronograma(1)"><mat-icon>edit</mat-icon></button>
+        <button mat-icon-button class="icono" *ngIf="id_venta_editar && editar_cronograma==1" (click)="EditarCronograma(2)"><mat-icon>check</mat-icon></button>
       </mat-card-subtitle>
 
       <ng-container>
@@ -943,6 +949,29 @@
             <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
             <mat-cell *matCellDef="let cronograma"> {{cronograma.numero}} </mat-cell>
           </ng-container>
+
+          <!-- Sin el sort -->
+          <ng-container matColumnDef="monto_cuota_ver">
+            <mat-header-cell *matHeaderCellDef> Monto </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma">
+
+              <ng-container *ngIf="editar_cronograma>1 || cronograma.numero==0">
+                {{ cronograma.monto_cuota | currency:'S/.' }}
+              </ng-container>
+              <ng-container *ngIf="editar_cronograma==1 && cronograma.numero>0">
+                <input type="text" [(ngModel)]="cronograma.monto_cuota" [ngModelOptions]="{standalone: true}">
+              </ng-container>
+
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="fecha_vencimiento_ver">
+            <mat-header-cell *matHeaderCellDef> Vencimiento </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma">
+              {{ cronograma.fecha_vencimiento | date: 'dd/MM/yyyy' }}
+            </mat-cell>
+          </ng-container>
+
 
           <ng-container matColumnDef="monto_cuota">
             <mat-header-cell *matHeaderCellDef> Monto </mat-header-cell>
@@ -992,17 +1021,17 @@
         </mat-table>
       </ng-container>
 
-      <mat-error class="error-monto" *ngIf="diferencia>0">Las cuotas deben sumar {{VentasSalidaForm.value.montototal}}</mat-error>
+      <mat-error class="error-monto" *ngIf="diferencia>0.1">Las cuotas deben sumar {{VentasSalidaForm.value.montototal}}</mat-error>
 
     </div>
 
-    <!-- <mat-card-actions>
+    <mat-card-actions *ngIf="id_venta_editar">
       <mat-grid-list cols="1" rowHeight="40px">
         <mat-grid-tile>
-          <button mat-raised-button color="primary"> Guardar </button>
+          <button mat-raised-button color="primary" (click)="GuardarVenta(VentasSalidaForm)"> Guardar </button>
         </mat-grid-tile>
       </mat-grid-list>
-    </mat-card-actions> -->
+    </mat-card-actions>
 
   </form>
 </mat-card>

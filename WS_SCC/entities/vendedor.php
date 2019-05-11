@@ -94,7 +94,7 @@ Class Vendedor{
 
     function read_comisiones(){
 
-        $query = "CALL sp_listarcomisiones(?,?,?,?,?,?,?,?,?)";
+        $query = "CALL sp_listarcomisiones(?,?,?,?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
@@ -103,10 +103,9 @@ Class Vendedor{
         $result->bindParam(3, $this->vendedor);
         $result->bindParam(4, $this->fecha_inicio);
         $result->bindParam(5, $this->fecha_fin);
-        $result->bindParam(6, $this->talonario);
-        $result->bindParam(7, $this->contrato);
-        $result->bindParam(8, $this->numero_pagina);
-        $result->bindParam(9, $this->total_pagina);
+        $result->bindParam(6, $this->pecosa);
+        $result->bindParam(7, $this->numero_pagina);
+        $result->bindParam(8, $this->total_pagina);
 
         $result->execute();
         
@@ -122,7 +121,10 @@ Class Vendedor{
             $vendedor_item = array (
                 "numero"=>$contador,
                 "id"=>$id,
-                "id_venta"=>$id_venta,
+                "id_salida"=>$id_salida,
+                "pecosa"=>$pecosa,
+                "fecha_salida"=>$fecha_salida,
+                "fecha_retorno"=>$fecha_retorno,
                 "id_vendedor"=>$id_vendedor,
                 "nombre_vendedor"=>$nombre_vendedor,
                 "comision_efectiva"=>$comision_efectiva,
@@ -136,7 +138,7 @@ Class Vendedor{
 
     function read_comisiones_contar(){
 
-        $query = "CALL sp_listarcomisionescontar(?,?,?,?,?,?,?)";
+        $query = "CALL sp_listarcomisionescontar(?,?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
@@ -145,8 +147,7 @@ Class Vendedor{
         $result->bindParam(3, $this->vendedor);
         $result->bindParam(4, $this->fecha_inicio);
         $result->bindParam(5, $this->fecha_fin);
-        $result->bindParam(6, $this->talonario);
-        $result->bindParam(7, $this->contrato);
+        $result->bindParam(6, $this->pecosa);
 
         $result->execute();
 
@@ -181,9 +182,10 @@ Class Vendedor{
             $vendedor_item = array (
                 "numero"=>$contador,
                 "id"=>$id,
-                "id_venta"=>$id_venta,
-                "fecha"=>$fecha,
-                "talonario"=>$talonario,
+                "id_salida"=>$id_salida,
+                "pecosa"=>$pecosa,
+                "fecha_salida"=>$fecha_salida,
+                "fecha_retorno"=>$fecha_retorno,
                 "comision_efectiva"=>$comision_efectiva,
                 "comision_retenida"=>$comision_retenida,
                 "comision_efectiva_porcentaje"=>$comision_efectiva_porcentaje,

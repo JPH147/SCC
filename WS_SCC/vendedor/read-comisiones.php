@@ -21,8 +21,7 @@
         $vendedor->vendedor = !empty($_GET['prvendedor']) ? trim($_GET['prvendedor']) : "";
         $vendedor->fecha_inicio = !empty($_GET['prfechainicio']) ? trim($_GET['prfechainicio']) : null;
         $vendedor->fecha_fin = !empty($_GET['prfechafin']) ? trim($_GET['prfechafin']) : null;
-        $vendedor->talonario = !empty($_GET['prtalonario']) ? trim($_GET['prtalonario']) : "";
-        $vendedor->contrato = !empty($_GET['prcontrato']) ? trim($_GET['prcontrato']) : "";
+        $vendedor->pecosa = !empty($_GET['prpecosa']) ? trim($_GET['prpecosa']) : "";
         $vendedor->numero_pagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : 1;
         $vendedor->total_pagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : 10;
 

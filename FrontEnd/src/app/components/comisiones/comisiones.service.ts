@@ -20,8 +20,7 @@ export class ComisionesService {
 	  vendedor: string,
 	  fecha_inicio:Date,
 	  fecha_fin:Date,
-	  talonario: string,
-	  contrato: string,
+	  pecosa: string,
 	  pagina: number,
 	  totalpagina: number
 	): Observable<any>  {
@@ -32,10 +31,11 @@ export class ComisionesService {
 			.set('prvendedor',vendedor)
 			.set('prfechainicio', moment(fecha_inicio).format("YYYY-MM-DD"))
 			.set('prfechafin', moment(fecha_fin).format("YYYY-MM-DD"))
-			.set('prtalonario',talonario)
-			.set('prcontrato',contrato)
+			.set('prpecosa',pecosa)
 			.set('prpagina',pagina.toString())
 			.set('prtotalpagina',totalpagina.toString())
+
+		console.log(params);
 
 	  return this.http.get(this.url + 'vendedor/read-comisiones.php',{params})
 	  .pipe(map(res => {
@@ -57,6 +57,8 @@ export class ComisionesService {
 			.set('prid', id_vendedor.toString())
 			.set('prpagina',pagina.toString())
 			.set('prtotalpagina',totalpagina.toString())
+
+		console.log(params)
 
 	  return this.http.get(this.url + 'vendedor/read-comisionesxvendedor.php',{params})
 	  .pipe(map(res => {

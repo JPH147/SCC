@@ -118,6 +118,8 @@ import { AgregarVentaComponent } from './components/retorno-vendedores/agregar-v
 import { SeleccionarClienteComponent } from './components/retorno-vendedores/seleccionar-cliente/seleccionar-cliente.component';
 import { RetornoVendedoresCierreComponent } from './components/retorno-vendedores-cierre/retorno-vendedores-cierre.component';
 import { VentasSalidaComponent } from './components/ventas-salida/ventas-salida.component';
+import { CreditosComponent } from './components/creditos/creditos.component';
+import { CreditosListarComponent } from './components/creditos-listar/creditos-listar.component';
 
 @NgModule({
   imports: [
@@ -239,7 +241,9 @@ import { VentasSalidaComponent } from './components/ventas-salida/ventas-salida.
     AgregarVentaComponent,
     SeleccionarClienteComponent,
     RetornoVendedoresCierreComponent,
-    VentasSalidaComponent
+    VentasSalidaComponent,
+    CreditosComponent,
+    CreditosListarComponent
    ],
   entryComponents: [
     AppComponent,

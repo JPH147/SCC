@@ -59,9 +59,9 @@ export class SeleccionarClienteComponent implements OnInit {
 
   CargarData(){
   	this.ListadoCliente.CargarClientes(
+			this.FiltroCodigo.nativeElement.value,
 			this.FiltroDni.nativeElement.value,
 			this.FiltroNombre.nativeElement.value,
-			this.FiltroCodigo.nativeElement.value,
     	this.paginator.pageIndex+1
   	)
   }
@@ -101,7 +101,11 @@ export class ClienteDataSource implements DataSource<any> {
   ).subscribe(res => {
       // console.log(res);
       this.TotalResultados.next(res['mensaje']);
-      this.InformacionClientes.next(res['data'].clientes);
+      if(res['data']){
+        this.InformacionClientes.next(res['data'].clientes);
+      }else{
+        this.InformacionClientes.next([])
+      }
     });
   }
 
