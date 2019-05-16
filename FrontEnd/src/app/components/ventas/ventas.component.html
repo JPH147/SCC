@@ -1063,7 +1063,7 @@
         </mat-table>
       </ng-container>
 
-      <mat-error class="error-monto" *ngIf="total_cronograma_editado!=VentasForm.value.montototal && editar_cronograma<3">Las cuotas deben sumar {{VentasForm.value.montototal}}. Falta {{diferencia}}. </mat-error>
+      <mat-error class="error-monto" *ngIf="diferencia>0.2  && editar_cronograma<3">Las cuotas deben sumar {{VentasForm.value.montototal}}. Falta {{diferencia}}. </mat-error>
 
     </div>
 
@@ -1074,7 +1074,7 @@
           (click)="Guardar(VentasForm)"
           [disabled]="VentasForm.invalid || 
                       editar_cronograma==1 ||
-                      total_cronograma_editado!=VentasForm.value.montototal"
+                      diferencia>0.2 "
           > Guardar </button>
           <!-- <button mat-raised-button (click)="ImprimirFormulario()"> print </button> -->
         </mat-grid-tile>

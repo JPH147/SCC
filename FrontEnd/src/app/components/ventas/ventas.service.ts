@@ -433,4 +433,20 @@ export class VentaService {
     }));
   }
 
+  ActualizarProductoSalida(
+    id_venta: number,
+    id_producto_serie: number,
+    monto: number,
+  ) : Observable <any> {
+
+    let params = new HttpParams()
+      .set('prventa',id_venta.toString())
+      .set('prserie',id_producto_serie.toString())
+      .set('prmonto',monto.toString())
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'venta/update-producto-salida.php', params, {headers: headers});
+  }
+
 }

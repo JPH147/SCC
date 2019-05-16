@@ -74,40 +74,40 @@
 
       <ng-container matColumnDef="numero">
         <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
-        <mat-cell *matCellDef="let venta"> {{venta.numero}} </mat-cell>
+        <mat-cell *matCellDef="let credito"> {{credito.numero}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="codigo">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Código </mat-header-cell>
-        <mat-cell *matCellDef="let venta"> {{venta.codigo}} </mat-cell>
+        <mat-cell *matCellDef="let credito"> {{credito.codigo}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="cliente_nombre">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Cliente </mat-header-cell>
-        <mat-cell *matCellDef="let venta"> {{venta.cliente_nombre}}</mat-cell>
+        <mat-cell *matCellDef="let credito"> {{credito.cliente_nombre}}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="tipo_credito">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo de Crédito </mat-header-cell>
-        <mat-cell *matCellDef="let venta"> {{venta.tipo_credito}} </mat-cell>
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo de crédito </mat-header-cell>
+        <mat-cell *matCellDef="let credito"> {{credito.tipo_credito}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="monto_total">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Monto</mat-header-cell>
-        <mat-cell *matCellDef="let venta"> {{venta.monto_total | currency:'S/.' }} </mat-cell>
+        <mat-cell *matCellDef="let credito"> {{credito.monto_total | currency:'S/.' }} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="fecha">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha</mat-header-cell>
-        <mat-cell *matCellDef="let venta"> {{venta.fecha | date:'dd/MM/yyyy'}} </mat-cell>
+        <mat-cell *matCellDef="let credito"> {{credito.fecha | date:'dd/MM/yyyy'}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
-        <mat-cell *matCellDef="let venta">
-          <!-- <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="[venta.id]" *ngIf="venta.tipo_venta!='Salida'"><mat-icon> visibility </mat-icon></button>
-          <button mat-icon-button color="primary" matTooltip="Editar" [disabled]="venta.estado==2" [routerLink]="['editar', venta.id]" *ngIf="venta.tipo_venta!='Salida'"><mat-icon> edit </mat-icon></button>
-          <button mat-icon-button color="primary" matTooltip="Canjear" [disabled]="venta.estado!=1" [routerLink]="['nueva', venta.id, venta.id_cliente]" *ngIf="venta.tipo_venta!='Salida'"><mat-icon> import_export </mat-icon></button>
+        <mat-cell *matCellDef="let credito">
+          <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="[credito.id]"><mat-icon> visibility </mat-icon></button>
+          <button mat-icon-button color="primary" matTooltip="Editar" [disabled]="credito.estado==2" [routerLink]="['editar', credito.id]"><mat-icon> edit </mat-icon></button>
+          <!--<button mat-icon-button color="primary" matTooltip="Canjear" [disabled]="venta.estado!=1" [routerLink]="['nueva', venta.id, venta.id_cliente]" *ngIf="venta.tipo_venta!='Salida'"><mat-icon> import_export </mat-icon></button>
           <button mat-icon-button color="primary" matTooltip="Anular" [disabled]="venta.estado!=1" (click)="AnularVenta(venta)" *ngIf="venta.tipo_venta!='Salida'"><mat-icon> delete </mat-icon></button> -->
         </mat-cell>
       </ng-container>

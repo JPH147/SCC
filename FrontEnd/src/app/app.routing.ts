@@ -55,6 +55,8 @@ const appRoutes: Routes = [
   {path: 'ventas/salida/:idventa', component: VentasSalidaComponent},
   {path: 'ventas/salida/editar/:idventaeditar', component: VentasSalidaComponent},
   {path: 'creditos', component: CreditosListarComponent},
+  {path: 'creditos/:idcredito', component: CreditosComponent},
+  {path: 'creditos/editar/:idcreditoeditar', component: CreditosComponent},
   {path: 'creditos/nuevo', component: CreditosComponent},
   {path: 'usuarios', component: UsuariosComponent},
   {path: 'proveedores', component: ProveedoresComponent},

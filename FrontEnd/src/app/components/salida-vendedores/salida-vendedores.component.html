@@ -207,7 +207,7 @@
         <ng-container matColumnDef="comision_efectiva">
           <mat-header-cell *matHeaderCellDef> Comisión efectiva </mat-header-cell>
           <mat-cell *matCellDef="let vendedor">
-             S/. {{vendedor.comision_efectiva}}
+             {{vendedor.comision_efectiva}} %
              <span *ngIf="SalidaVendedoresForm.value.estado == 'Cerrada'">
               &nbsp; ({{ vendedor.comision_efectiva_porcentaje }} %)
              </span>
@@ -217,7 +217,7 @@
         <ng-container matColumnDef="comision_retenida">
           <mat-header-cell *matHeaderCellDef> Comisión retenida </mat-header-cell>
           <mat-cell *matCellDef="let vendedor">
-              S/. {{vendedor.comision_retenida}}
+              {{vendedor.comision_retenida}} %
               <span *ngIf="SalidaVendedoresForm.value.estado == 'Cerrada'">
                &nbsp; ({{ vendedor.comision_retenida_porcentaje }} %)
               </span>
@@ -659,7 +659,7 @@
 
           <mat-grid-tile>
             <mat-form-field>
-                <input matInput #fechaproducto [matDatepicker]="fechaproducto" placeholder="Fecha" formControlName="fecha_productos">
+                <input matInput #fechaproducto [matDatepicker]="fechaproducto" placeholder="Fecha de entrega" formControlName="fecha_productos">
                 <mat-datepicker-toggle matSuffix [for]="fechaproducto"></mat-datepicker-toggle>
                 <mat-datepicker #fechaproducto></mat-datepicker>
             </mat-form-field>
@@ -714,7 +714,7 @@
       <mat-grid-list cols="1" rowHeight="65px">
         <mat-grid-tile> 
           <button mat-raised-button type="button" color="primary" (click)="Guardar(SalidaVendedoresForm)" [disabled]="SalidaVendedoresForm.invalid"> Guardar </button>
-          <button mat-raised-button type="button" (click)="ImprimirFormulario()"> Guardar </button>
+          <!-- <button mat-raised-button type="button" (click)="ImprimirFormulario()"> Guardar </button> -->
         </mat-grid-tile>
       </mat-grid-list>
     </mat-card-actions>

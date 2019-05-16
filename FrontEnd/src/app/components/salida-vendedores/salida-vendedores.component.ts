@@ -2,7 +2,7 @@ import { Component, OnInit,  ViewChild, ElementRef, ViewChildren, QueryList } fr
 import {MatDialog, MatChipInputEvent, MatSelect, MatSnackBar} from '@angular/material';
 import { FormGroup, FormBuilder, FormArray, Validators, AbstractControl} from '@angular/forms';
 import {Observable, fromEvent, BehaviorSubject} from 'rxjs';
-import {COMMA, SPACE} from '@angular/cdk/keycodes';
+import {COMMA} from '@angular/cdk/keycodes';
 import { tap, debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {SalidaVendedoresService} from './salida-vendedores.service';
 import {ServiciosGenerales, Almacen} from '../global/servicios';
@@ -45,7 +45,7 @@ export class SalidaVendedoresComponent implements OnInit {
   public productos: FormArray;
   public Hoy= new Date();
   public editar_productos: boolean;
-  readonly separatorKeysCodes: number[] = [SPACE,COMMA];
+  readonly separatorKeysCodes: number[] = [ COMMA];
   public departamentos: any[] = [];
 
   // Ver la salida
@@ -261,6 +261,8 @@ export class SalidaVendedoresComponent implements OnInit {
   NuevaSalida(){
     this.ProximoNumero();
     this.SalidaVendedoresForm.get('fecha_salida').setValue(new Date());
+    this.Columnas = ["numero", "nombre", "comision_efectiva", "comision_retenida", "opciones"];
+    this.ColumnasTalonario= [ 'numero','serie', 'inicio', 'fin', 'fecha_talonario','opciones'];
   }
 
   ProximoNumero(){
@@ -553,6 +555,7 @@ export class SalidaVendedoresComponent implements OnInit {
 
   ResetearVendedor(){
     this.SalidaVendedoresForm.get('vendedor_id').setValue(null);
+    this.SalidaVendedoresForm.get('vendedor').setValue(null);
     this.SalidaVendedoresForm.get('vendedor_nombre').setValue("");
     this.SalidaVendedoresForm.get('vendedor_comision_efectiva').setValue(null);
     this.SalidaVendedoresForm.get('vendedor_comision_retenida').setValue(this.comision_retenida);
@@ -576,6 +579,7 @@ export class SalidaVendedoresComponent implements OnInit {
     this.Vendedores.push({
       numero: this.Vendedores.length+1,
       id_salida_vendedor: this.SalidaVendedoresForm.value.vendedor_id,
+      id: 147, // Se coloca para que no haya problemas con el botón de actualizar que se desactiva
       vendedor: this.SalidaVendedoresForm.value.vendedor_nombre,
       comision_efectiva: this.SalidaVendedoresForm.value.vendedor_comision_efectiva,
       comision_retenida: this.SalidaVendedoresForm.value.vendedor_comision_retenida,

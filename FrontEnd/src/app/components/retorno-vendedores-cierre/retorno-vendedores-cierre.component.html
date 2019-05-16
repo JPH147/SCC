@@ -86,14 +86,14 @@
 
       <ng-container matColumnDef="total">
         <mat-header-cell *matHeaderCellDef> Monto total </mat-header-cell>
-        <mat-cell *matCellDef="let venta"> S/. {{venta.total }}</mat-cell>
-        <mat-footer-cell *matFooterCellDef>S/. {{ListadoVentas.Total | async}}</mat-footer-cell>
+        <mat-cell *matCellDef="let venta"> {{venta.total   | currency:'S/.'}}</mat-cell>
+        <mat-footer-cell *matFooterCellDef>{{ListadoVentas.Total | async  | currency:'S/.'}}</mat-footer-cell>
       </ng-container>
 
       <ng-container matColumnDef="comision">
         <mat-header-cell *matHeaderCellDef> Monto para comisiones </mat-header-cell>
-        <mat-cell *matCellDef="let venta"> S/. {{venta.comision}} </mat-cell>
-        <mat-footer-cell *matFooterCellDef>S/. {{ListadoVentas.Comision | async}}</mat-footer-cell>
+        <mat-cell *matCellDef="let venta"> {{venta.comision  | currency:'S/.'}} </mat-cell>
+        <mat-footer-cell *matFooterCellDef>{{ListadoVentas.Comision | async  | currency:'S/.'}}</mat-footer-cell>
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="ColumnasVentas"></mat-header-row>
@@ -123,12 +123,12 @@
 
       <ng-container matColumnDef="monto_grupal">
         <mat-header-cell *matHeaderCellDef> Viáticos grupales </mat-header-cell>
-        <mat-cell *matCellDef="let viatico"> S/. {{viatico.monto_grupal }}</mat-cell>
+        <mat-cell *matCellDef="let viatico"> {{viatico.monto_grupal  | currency:'S/.'}}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="monto_individual">
         <mat-header-cell *matHeaderCellDef> Viáticos individuales </mat-header-cell>
-        <mat-cell *matCellDef="let viatico"> S/. {{viatico.monto_individual}} </mat-cell>
+        <mat-cell *matCellDef="let viatico"> {{viatico.monto_individual | currency:'S/.'}} </mat-cell>
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="ColumnasViaticos"></mat-header-row>
@@ -157,27 +157,27 @@
 
       <ng-container matColumnDef="comision_total">
         <mat-header-cell *matHeaderCellDef> Total de comisiones </mat-header-cell>
-        <mat-cell *matCellDef="let vendedor"> S/. {{vendedor.comision_total}} </mat-cell>
+        <mat-cell *matCellDef="let vendedor"> {{vendedor.comision_total  | currency:'S/.' }} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="viaticos_totales">
         <mat-header-cell *matHeaderCellDef> Total de viáticos </mat-header-cell>
-        <mat-cell *matCellDef="let vendedor"> S/. {{vendedor.viaticos_totales}} </mat-cell>
+        <mat-cell *matCellDef="let vendedor"> {{vendedor.viaticos_totales  | currency:'S/.' }} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="total_pagar">
         <mat-header-cell *matHeaderCellDef> Ganancia total </mat-header-cell>
-        <mat-cell *matCellDef="let vendedor"> S/. {{vendedor.total_pagar}} </mat-cell>
+        <mat-cell *matCellDef="let vendedor"> {{vendedor.total_pagar  | currency:'S/.' }} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="comision_efectiva">
         <mat-header-cell *matHeaderCellDef> Ahorro del vendedor </mat-header-cell>
-        <mat-cell *matCellDef="let vendedor"> S/. {{vendedor.comision_total_efectiva}} </mat-cell>
+        <mat-cell *matCellDef="let vendedor"> {{vendedor.comision_total_efectiva  | currency:'S/.' }} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="comision_retenida">
         <mat-header-cell *matHeaderCellDef> Ganancia del vendedor </mat-header-cell>
-        <mat-cell *matCellDef="let vendedor"> S/. {{vendedor.comision_total_retenida}} </mat-cell>
+        <mat-cell *matCellDef="let vendedor"> {{vendedor.comision_total_retenida  | currency:'S/.' }} </mat-cell>
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="ColumnasVendedores"></mat-header-row>

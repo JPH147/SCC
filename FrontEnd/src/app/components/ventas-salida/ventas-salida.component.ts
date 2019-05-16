@@ -2,7 +2,7 @@ import {CollectionViewer, DataSource} from "@angular/cdk/collections";
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit,Inject, ViewChildren, QueryList, Optional } from '@angular/core';
 import {FormArray, FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {VentaService} from '../ventas/ventas.service';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatSort } from '@angular/material';
 import {ServiciosTipoDocumento, TipoDocumento} from '../global/tipodocumento';
 import {ServiciosTipoPago, TipoPago} from '../global/tipopago';
 import {ClienteService } from '../clientes/clientes.service';
@@ -56,6 +56,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   @ViewChild('InputInicial') FiltroInicial: ElementRef;
   @ViewChild('InputCuota') FiltroCuota: ElementRef;
   @ViewChildren('InputPrecio') FiltroPrecio:QueryList<any>;
+  @ViewChild(MatSort) sort: MatSort;
 
   public foto: string;
   public dni: string;
@@ -117,63 +118,74 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
 
     this.ruta=URLIMAGENES.urlimages;
 
-    // this.route.params.subscribe(params => {
-    //   console.log(params)
-    //   if(params['idventa']){
-    //     this.Columnas= ['numero', 'monto_cuota','fecha_vencimiento', 'monto_interes','monto_pagado', 'fecha_cancelacion', 'monto_pendiente','estado', 'opciones'];
-    //     this.id_venta = +params['idventa'];
-    //     this.SeleccionarVentaxId(this.id_venta);
-    //   }
-    //   if(params['idventaeditar']){
+    this.route.params.subscribe(params => {
+      // console.log(params)
+      if(params['idventa']){
         this.Columnas= ['numero', 'monto_cuota','fecha_vencimiento', 'monto_interes','monto_pagado', 'fecha_cancelacion', 'monto_pendiente','estado', 'opciones'];
-        // this.id_venta_editar = +params['idventa'];
+        this.id_venta = +params['idventa'];
+        this.SeleccionarVentaxId(this.id_venta);
+      }
+      if(params['idventaeditar']){
+        this.Columnas= ['numero', 'fecha_vencimiento_ver', 'monto_cuota_ver'];
+        this.id_venta_editar = +params['idventaeditar'];
         this.SeleccionarVentaxId(this.id_venta_editar);
-      // }
-    // 
-    // })
+      }
+    
+    })
 
     this.CrearFormulario();
     this.ListadoVentas = new VentaDataSource(this.Servicio)
   }
 
   ngAfterViewInit(): void {
-    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
-    //Add 'implements AfterViewInit' to the class.
-    this.FiltroPrecio.changes.subscribe(res=>{
-      for (let i in this.FiltroPrecio['_results']) {
-        fromEvent(this.FiltroPrecio['_results'][i].nativeElement,'keyup')
-        .pipe(
-          debounceTime(100),
-          distinctUntilChanged(),
-          tap(()=>{
-            if (this.FiltroPrecio['_results'][i]) {
-              if (this.FiltroPrecio['_results'][i].nativeElement.value) {
-                // this.VentasForm.get('montototal').setValue(0);
-                this.CalcularTotales();
-              }
-            }
-          })
-        ).subscribe()
-      }
-    })
 
-    merge(
-      fromEvent(this.FiltroInicial.nativeElement,'keyup'),
-      fromEvent(this.FiltroCuota.nativeElement,'keyup')
-    ).pipe(
-      debounceTime(200),
-      distinctUntilChanged(),
-      tap(()=>{
-        if (
-          this.FiltroInicial.nativeElement.value &&
-          this.FiltroCuota.nativeElement.value &&
-          this.VentasSalidaForm.value.fechapago
-        ) {
-          this.CrearCronograma()
+    if (this.id_venta) {
+      this.sort.sortChange
+      .pipe(
+        tap(() =>{
+          this.ActualizarOrdenCronograma(this.id_venta, this.sort.active + " " + this.sort.direction)
+        })
+      ).subscribe();
+    }
+
+    if(!this.id_venta){
+
+      this.FiltroPrecio.changes.subscribe(res=>{
+        for (let i in this.FiltroPrecio['_results']) {
+          fromEvent(this.FiltroPrecio['_results'][i].nativeElement,'keyup')
+          .pipe(
+            debounceTime(100),
+            distinctUntilChanged(),
+            tap(()=>{
+              if (this.FiltroPrecio['_results'][i]) {
+                if (this.FiltroPrecio['_results'][i].nativeElement.value) {
+                  // this.VentasForm.get('montototal').setValue(0);
+                  this.CalcularTotales();
+                }
+              }
+            })
+          ).subscribe()
         }
       })
-    ).subscribe()
-
+  
+      merge(
+        fromEvent(this.FiltroInicial.nativeElement,'keyup'),
+        fromEvent(this.FiltroCuota.nativeElement,'keyup')
+      ).pipe(
+        debounceTime(200),
+        distinctUntilChanged(),
+        tap(()=>{
+          if (
+            this.FiltroInicial.nativeElement.value &&
+            this.FiltroCuota.nativeElement.value &&
+            this.VentasSalidaForm.value.fechapago
+          ) {
+            this.CrearCronograma()
+          }
+        })
+      ).subscribe()
+    }
+    
   }
 
   CrearFormulario(){
@@ -193,7 +205,6 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
         Validators.required
       ]],
       'cliente': [null, [
-        Validators.required
       ]],
       'cargo': [null, [
       ]],
@@ -241,8 +252,6 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   }
 
   SeleccionarVentaxId(id_venta){
-
-    let cuota_0;
 
     this.Servicio.SeleccionarVentaSalida(id_venta).subscribe(res=>{
       
@@ -337,7 +346,6 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
 
         // Datos diferentes
         this.VentasSalidaForm.get('tipopago').setValue(res.idtipopago);
-        this.Columnas= ['numero', 'fecha_vencimiento_ver', 'monto_cuota_ver'];
 
         // Sobre los documentos adjuntos
         this.foto_antiguo=res.foto;
@@ -966,6 +974,10 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
 
         // Productos antiguos
         this.Productos.forEach((item)=>{
+          console.log(item)
+          if(!item.eliminar){
+            this.Servicio.ActualizarProductoSalida(this.id_venta_editar, item.id_serie, item.precio).subscribe()
+          }
           // Si se tienen que eliminar, se elimina
           if(item.eliminar){
             this.Servicio.EliminarProductosSalidaVenta(formulario.value.id_salida, item.id, item.id_serie).subscribe()
@@ -973,9 +985,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
         })
 
         // Productos nuevos que se van a agregar
-        console.log(formulario.value.productos)
         formulario.value.productos.forEach((item)=>{
-          console.log(item.id_salida_producto, this.id_venta_editar, item.precio);
           this.SServicio.ActualizarSalidaProductos(item.id_salida_producto, this.id_venta_editar, item.precio).subscribe(res=>console.log(res));
         })
 

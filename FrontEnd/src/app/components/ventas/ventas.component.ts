@@ -212,12 +212,12 @@ export class VentasComponent implements OnInit {
 
     if (this.idventa) {
       this.sort.sortChange
-    .pipe(
-      tap(() =>{
-        this.ActualizarOrdenCronograma(this.idventa, this.sort.active + " " + this.sort.direction)
-      })
-    ).subscribe();
-  }
+      .pipe(
+        tap(() =>{
+          this.ActualizarOrdenCronograma(this.idventa, this.sort.active + " " + this.sort.direction)
+        })
+      ).subscribe();
+    }
 
   if (!this.idventa) {
 

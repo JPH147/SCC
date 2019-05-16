@@ -3,7 +3,7 @@
   <button mat-mini-fab type="button" color="primary" (click)="Atras()"><mat-icon>keyboard_arrow_left</mat-icon></button>
 
   <mat-card-title class="tituloProd" *ngIf="!id_credito && !id_credito_editar">Nuevo crédito</mat-card-title>
-  <!-- <mat-card-title class="tituloProd" *ngIf="id_credito || id_credito_editar">Crédito {{talonario}}</mat-card-title> -->
+  <mat-card-title class="tituloProd" *ngIf="id_credito || id_credito_editar">Crédito {{CreditosForm.getRawValue().codigo}}</mat-card-title>
   
   <form [formGroup]="CreditosForm">
 
@@ -364,7 +364,7 @@
 
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
-             <input matInput [matDatepicker]="picker" placeholder="Fecha del crédito" formControlName="fecha_credito" [readonly]="id_credito">
+             <input matInput [matDatepicker]="picker" placeholder="Fecha del crédito" formControlName="fecha_credito" (dateChange)="CrearCronograma()" [readonly]="id_credito">
              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
              <mat-datepicker #picker [disabled]="id_credito"></mat-datepicker>
           </mat-form-field>
@@ -386,48 +386,12 @@
 
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
-            <input matInput placeholder="Código" formControlName="codigo" [readonly]="id_credito">
+            <input matInput placeholder="Código" formControlName="codigo" readonly>
           </mat-form-field>
         </mat-grid-tile>
 
         <mat-grid-tile>
         </mat-grid-tile>
-
-        <mat-grid-tile>
-          <mat-form-field class="columnas-1">
-             <input matInput [matDatepicker]="InputFechaPago" placeholder="Inicio de pagos" [min]="CreditosForm.value.fechaventa" formControlName="fecha_pago" (dateChange)="CrearCronograma()"  [readonly]="id_credito">
-             <mat-datepicker-toggle matSuffix [for]="InputFechaPago"></mat-datepicker-toggle>
-             <mat-datepicker #InputFechaPago [disabled]="id_credito"></mat-datepicker>
-          </mat-form-field>
-        </mat-grid-tile>
-
-        <mat-grid-tile *ngIf="!id_credito">
-          <mat-form-field class="columnas-1">
-            <mat-select placeholder='Tipo de pago' formControlName="tipo_pago">
-              <mat-option *ngFor="let tipopago of ListadoTipoPago" [value] = "tipopago.id"> {{tipopago.nombre}} </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </mat-grid-tile>
-
-        <mat-grid-tile *ngIf="id_credito">
-          <mat-form-field class="columnas-1">
-            <input matInput type="text" placeholder="Tipo de pago" formControlName="tipo_pago" [readonly]="id_credito">
-          </mat-form-field>
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          <mat-form-field class="columnas-1">
-            <input matInput placeholder="N° de cuotas" maxlength=3 formControlName="cuotas" #InputCuota [readonly]="id_credito">
-            <mat-error>Solo debe ingresar valores númericos</mat-error>
-          </mat-form-field>
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          <mat-form-field class="columnas-1">
-            <input matInput placeholder="Monto total" #InputTotal formControlName="total">
-            <span matPrefix>S/ &nbsp;</span>
-          </mat-form-field>
-        </mat-grid-tile>          
 
         <mat-grid-tile colspan=2 *ngIf="!id_credito && !CreditosForm.value.id_vendedor">
           <mat-form-field class="columnas-2">
@@ -475,13 +439,13 @@
     </div>
 
     <!-- Adjuntos -->
-    <!-- <div class="seccion">
+    <div class="seccion">
  
       <mat-card-subtitle class="titulo-seccion">
         DOCUMENTOS ADJUNTOS
       </mat-card-subtitle>
 
-      <mat-grid-list cols="8" rowHeight="100px" *ngIf="!id_credito && !id_credito_editar">
+      <mat-grid-list cols="7" rowHeight="100px" *ngIf="!id_credito && !id_credito_editar">
 
         <mat-grid-tile>
           <image-upload
@@ -491,7 +455,7 @@
             [buttonCaption]="'Foto'"
             [extensions]="['png, jpg, jpeg']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
-            (uploadFinished)="SubirFoto($event)">
+            (uploadFinished)="SubirArchivo($event, 1)">
           </image-upload>  
         </mat-grid-tile>
 
@@ -501,9 +465,9 @@
             [max]="1"
             url="{{ruta}}"
             [buttonCaption]="'DNI'"
-            [extensions]="['pdf']"
+            [extensions]="['png, jpg, jpeg']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
-            (uploadFinished)="SubirDNI($event)">
+            (uploadFinished)="SubirArchivo($event, 2)">
           </image-upload>  
         </mat-grid-tile>
 
@@ -513,33 +477,9 @@
             [max]="1"
             url="{{ruta}}"
             [buttonCaption]="'CIP'"
-            [extensions]="['pdf']"
+            [extensions]="['png, jpg, jpeg']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
-            (uploadFinished)="SubirCIP($event)">
-          </image-upload>  
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          <image-upload
-            class="cargar-imagen"
-            [max]="1"
-            url="{{ruta}}"
-            [buttonCaption]="'Contrato'"
-            [extensions]="['pdf']"
-            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
-            (uploadFinished)="SubirContrato($event)">
-          </image-upload>  
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          <image-upload
-            class="cargar-imagen"
-            [max]="1"
-            url="{{ruta}}"
-            [buttonCaption]="'Transacción'"
-            [extensions]="['pdf']"
-            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
-            (uploadFinished)="SubirTransaccion($event)">
+            (uploadFinished)="SubirArchivo($event, 3)">
           </image-upload>  
         </mat-grid-tile>
 
@@ -549,9 +489,93 @@
             [max]="1"
             url="{{ruta}}"
             [buttonCaption]="'Planilla'"
-            [extensions]="['pdf']"
+            [extensions]="['png, jpg, jpeg']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
-            (uploadFinished)="SubirPlanilla($event)">
+            (uploadFinished)="SubirArchivo($event, 4)">
+          </image-upload>  
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <image-upload
+            class="cargar-imagen"
+            [max]="1"
+            url="{{ruta}}"
+            [buttonCaption]="'Voucher'"
+            [extensions]="['png, jpg, jpeg']"
+            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
+            (uploadFinished)="SubirArchivo($event, 5)">
+          </image-upload>  
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <image-upload
+            class="cargar-imagen"
+            [max]="1"
+            url="{{ruta}}"
+            [buttonCaption]="'Recibos'"
+            [extensions]="['png, jpg, jpeg']"
+            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
+            (uploadFinished)="SubirArchivo($event, 6)">
+          </image-upload>  
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <image-upload
+            class="cargar-imagen"
+            [max]="1"
+            url="{{ruta}}"
+            [buttonCaption]="'Casilla'"
+            [extensions]="['png, jpg, jpeg']"
+            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
+            (uploadFinished)="SubirArchivo($event, 7)">
+          </image-upload>  
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <image-upload
+            class="cargar-imagen"
+            [max]="1"
+            url="{{ruta}}"
+            [buttonCaption]="'Transaccion'"
+            [extensions]="['png, jpg, jpeg']"
+            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
+            (uploadFinished)="SubirArchivo($event, 8)">
+          </image-upload>  
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <image-upload
+            class="cargar-imagen"
+            [max]="1"
+            url="{{ruta}}"
+            [buttonCaption]="'Autorizacion'"
+            [extensions]="['png, jpg, jpeg']"
+            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
+            (uploadFinished)="SubirArchivo($event, 9)">
+          </image-upload>  
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <image-upload
+            class="cargar-imagen"
+            [max]="1"
+            url="{{ruta}}"
+            [buttonCaption]="'Tarjeta de socio'"
+            [extensions]="['png, jpg, jpeg']"
+            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
+            (uploadFinished)="SubirArchivo($event, 10)">
+          </image-upload>  
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <image-upload
+            class="cargar-imagen"
+            [max]="1"
+            url="{{ruta}}"
+            [buttonCaption]="'Compromiso'"
+            [extensions]="['png, jpg, jpeg']"
+            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
+            (uploadFinished)="SubirArchivo($event, 11)">
           </image-upload>  
         </mat-grid-tile>
 
@@ -561,9 +585,9 @@
             [max]="1"
             url="{{ruta}}"
             [buttonCaption]="'Letra'"
-            [extensions]="['pdf']"
+            [extensions]="['png, jpg, jpeg']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
-            (uploadFinished)="SubirLetra($event)">
+            (uploadFinished)="SubirArchivo($event, 12)">
           </image-upload>  
         </mat-grid-tile>
 
@@ -572,15 +596,18 @@
             class="cargar-imagen"
             [max]="1"
             url="{{ruta}}"
-            [buttonCaption]="'Autorización'"
-            [extensions]="['pdf']"
+            [buttonCaption]="'Declaración'"
+            [extensions]="['png, jpg, jpeg']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
-            (uploadFinished)="SubirAutorizacion($event)">
+            (uploadFinished)="SubirArchivo($event, 13)">
           </image-upload>  
         </mat-grid-tile>
+
+
+
       </mat-grid-list>
 
-      <mat-grid-list cols=8 rowHeight="60px" *ngIf="id_credito_editar">
+      <!-- <mat-grid-list cols=8 rowHeight="60px" *ngIf="id_credito_editar">
 
         <mat-grid-tile>
           <button mat-icon-button color="primary" (click)="EditarFoto()" [disabled]="!foto" *ngIf="!foto_editar">
@@ -653,9 +680,9 @@
             <mat-icon class="icono-documentos"> close </mat-icon>
           </button>
         </mat-grid-tile>
-      </mat-grid-list>
+      </mat-grid-list> -->
 
-      <mat-grid-list cols=8 rowHeight="20px" *ngIf="id_credito || id_credito_editar">
+      <!-- <mat-grid-list cols=8 rowHeight="20px" *ngIf="id_credito || id_credito_editar">
 
         <mat-grid-tile>
           Foto
@@ -689,9 +716,9 @@
           Autorización
         </mat-grid-tile>
 
-      </mat-grid-list>
+      </mat-grid-list> -->
 
-      <mat-grid-list cols=8 rowHeight="60px" *ngIf="id_credito || id_credito_editar">
+      <!-- <mat-grid-list cols=8 rowHeight="60px" *ngIf="id_credito || id_credito_editar">
 
         <mat-grid-tile>
 
@@ -706,7 +733,7 @@
             [buttonCaption]="'Adjuntar'"
             [extensions]="['png, jpg, jpeg']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
-            (uploadFinished)="SubirFoto($event)">
+            (uploadFinished)="SubirArchivo($event)">
           </image-upload>  
 
         </mat-grid-tile>
@@ -837,9 +864,73 @@
           </image-upload>
 
         </mat-grid-tile>
-      </mat-grid-list>
+      </mat-grid-list> -->
 
-    </div> -->
+    </div>
+
+    <div class="seccion">
+
+      <mat-card-subtitle class="titulo-seccion">
+        DATOS DEL DOCUMENTO
+      </mat-card-subtitle>
+  
+      <mat-grid-list cols="3" rowHeight="70px">
+
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput [matDatepicker]="InputFechaPago" placeholder="Inicio de pagos" [min]="CreditosForm.value.fechaventa" formControlName="fecha_pago" (dateChange)="CrearCronograma()"  [readonly]="id_credito">
+            <mat-datepicker-toggle matSuffix [for]="InputFechaPago"></mat-datepicker-toggle>
+            <mat-datepicker #InputFechaPago [disabled]="id_credito"></mat-datepicker>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile *ngIf="!id_credito">
+          <mat-form-field class="columnas-1">
+            <mat-select placeholder='Tipo de pago' formControlName="tipo_pago">
+              <mat-option *ngFor="let tipopago of ListadoTipoPago" [value] = "tipopago.id"> {{tipopago.nombre}} </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile *ngIf="id_credito">
+          <mat-form-field class="columnas-1">
+            <input matInput type="text" placeholder="Tipo de pago" formControlName="tipo_pago" [readonly]="id_credito">
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput type="number" placeholder="Interés" formControlName="interes" readonly>
+            <span matSuffix> % </span>
+          </mat-form-field>
+        </mat-grid-tile>
+        
+        <!-- <mat-grid-tile>
+        </mat-grid-tile> -->
+
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput placeholder="Capital" formControlName="capital" #InputCapital [readonly]="id_credito">
+            <span matPrefix>S/ &nbsp;</span>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput type="number" placeholder="N° de cuotas" maxlength=3 formControlName="cuotas" #InputCuota [readonly]="id_credito">
+            <mat-error>Solo debe ingresar valores númericos</mat-error>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput placeholder="Monto total" formControlName="total" readonly>
+            <span matPrefix>S/ &nbsp;</span>
+          </mat-form-field>
+        </mat-grid-tile>
+
+      </mat-grid-list>
+    </div>
 
     <!-- Cronograma -->
     <div class="seccion">
@@ -882,6 +973,48 @@
           </ng-container>
 
           <!-- Con el sort -->
+
+          <ng-container matColumnDef="monto_cuota">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Monto </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_cuota | currency:'S/.' }} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="fecha_vencimiento">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Vencimiento </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma"> {{cronograma.fecha_vencimiento | date: 'dd/MM/yyyy'}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="monto_interes">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Interés </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_interes | currency:'S/.'}}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="monto_pagado">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Total pagado </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_pagado | currency:'S/.'}}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="fecha_cancelacion">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de cancelación </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma"> {{cronograma.fecha_cancelacion | date: 'dd/MM/yyyy'}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="monto_pendiente">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Pendiente de pago </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_pendiente | currency:'S/.'}}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="estado">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma"> {{cronograma.estado==1 ? "Por pagar" : "Pagado" }} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="opciones">
+            <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma">
+              <button mat-icon-button color="primary" [disabled]="cronograma.monto_pagado==0" (click)="VerDetallePagos(cronograma)"> <mat-icon> visibility </mat-icon> </button>
+            </mat-cell>
+          </ng-container>
 
           <!-- <ng-container matColumnDef="monto_cuota">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Monto </mat-header-cell>
@@ -931,22 +1064,23 @@
         </mat-table>
       </ng-container>
 
-      <mat-error class="error-monto" *ngIf="total_cronograma_editado != CreditosForm.value.total && editar_cronograma<3">Las cuotas deben sumar {{CreditosForm.value.total}}. Falta {{diferencia}}. </mat-error>
+      <mat-error class="error-monto" *ngIf="diferencia>0.2 && editar_cronograma<3">Las cuotas deben sumar {{CreditosForm.value.total}}. Falta {{diferencia}}. </mat-error>
 
     </div>
 
-    <!-- <mat-card-actions *ngIf="!id_credito">
+    <mat-card-actions *ngIf="!id_credito">
       <mat-grid-list cols="1" rowHeight="40px">
         <mat-grid-tile>
           <button mat-raised-button color="primary"
-          (click)="Guardar(CreditosForm)"
+          (click)="Guardar()"
           [disabled]="CreditosForm.invalid || 
                       editar_cronograma==1 ||
-                      total_cronograma_editado!=CreditosForm.value.montototal"
+                      diferencia>0.2"
           > Guardar </button>
+          <!-- <button  mat-raised-button (click)="Guardar()"> Guardar </button> -->
         </mat-grid-tile>
       </mat-grid-list>
-    </mat-card-actions> -->
+    </mat-card-actions>
 
   </form>
 </mat-card>
