@@ -24,7 +24,7 @@
           <button type="button" mat-icon-button color="primary" (click)="SeleccionarCliente()"> <mat-icon> person_add </mat-icon>  </button>
         </mat-grid-tile>
 
-        <mat-grid-tile colspan="2" *ngIf="CreditosForm.value.id_cliente || id_credito || id_cliente">
+        <mat-grid-tile colspan="2" *ngIf="(CreditosForm.value.id_cliente || id_credito || id_cliente)">
           <mat-form-field class="columnas-2">
             <input #Cliente placeholder="Cliente" matInput formControlName="cliente" readonly>
             <mat-icon color="primary" matSuffix (click)="RemoverCliente()" *ngIf="!id_cliente && !id_credito"> remove_circle </mat-icon>
@@ -439,7 +439,7 @@
     </div>
 
     <!-- Adjuntos -->
-    <div class="seccion">
+    <div class="seccion">SubirArchivo
  
       <mat-card-subtitle class="titulo-seccion">
         DOCUMENTOS ADJUNTOS
@@ -603,86 +603,76 @@
           </image-upload>  
         </mat-grid-tile>
 
-
-
       </mat-grid-list>
 
-      <!-- <mat-grid-list cols=8 rowHeight="60px" *ngIf="id_credito_editar">
+      <mat-grid-list cols=7 rowHeight="60px" *ngIf="id_credito_editar">
 
         <mat-grid-tile>
-          <button mat-icon-button color="primary" (click)="EditarFoto()" [disabled]="!foto" *ngIf="!foto_editar">
+          <button mat-icon-button color="primary" (click)="foto_editar = true" [disabled]="!foto" *ngIf="!foto_editar">
             <mat-icon class="icono-documentos"> edit </mat-icon>
           </button>
-          <button mat-icon-button color="primary" (click)="NoEditarFoto()" [disabled]="!foto" *ngIf="foto_editar">
+          <button mat-icon-button color="primary" (click)="foto_editar = false" [disabled]="!foto" *ngIf="foto_editar">
             <mat-icon class="icono-documentos"> close </mat-icon>
           </button>
         </mat-grid-tile>
 
         <mat-grid-tile>
-          <button mat-icon-button color="primary" (click)="EditarDni()" [disabled]="!dni" *ngIf="!dni_editar">
+          <button mat-icon-button color="primary" (click)="dni_editar = true" [disabled]="!dni" *ngIf="!dni_editar">
             <mat-icon class="icono-documentos"> edit </mat-icon>
           </button>
-          <button mat-icon-button color="primary" (click)="NoEditarDni()" [disabled]="!dni" *ngIf="dni_editar">
+          <button mat-icon-button color="primary" (click)="dni_editar = false" [disabled]="!dni" *ngIf="dni_editar">
             <mat-icon class="icono-documentos"> close </mat-icon>
           </button>
         </mat-grid-tile>
 
         <mat-grid-tile>
-          <button mat-icon-button color="primary" (click)="EditarCip()" [disabled]="!cip" *ngIf="!cip_editar">
+          <button mat-icon-button color="primary" (click)="cip_editar = true" [disabled]="!cip" *ngIf="!cip_editar">
             <mat-icon class="icono-documentos"> edit </mat-icon>
           </button>
-          <button mat-icon-button color="primary" (click)="NoEditarCip()" [disabled]="!cip" *ngIf="cip_editar">
+          <button mat-icon-button color="primary" (click)="cip_editar = false" [disabled]="!cip" *ngIf="cip_editar">
             <mat-icon class="icono-documentos"> close </mat-icon>
           </button>
         </mat-grid-tile>
 
         <mat-grid-tile>
-          <button mat-icon-button color="primary" (click)="EditarContrato()" [disabled]="!contrato" *ngIf="!contrato_editar">
+          <button mat-icon-button color="primary" (click)="planilla_editar = true" [disabled]="!planilla" *ngIf="!planilla_editar">
             <mat-icon class="icono-documentos"> edit </mat-icon>
           </button>
-          <button mat-icon-button color="primary" (click)="NoEditarContrato()" [disabled]="!contrato" *ngIf="contrato_editar">
+          <button mat-icon-button color="primary" (click)="planilla_editar = false" [disabled]="!planilla" *ngIf="planilla_editar">
             <mat-icon class="icono-documentos"> close </mat-icon>
           </button>
         </mat-grid-tile>
 
         <mat-grid-tile>
-          <button mat-icon-button color="primary" (click)="EditarTransaccion()" [disabled]="!transaccion" *ngIf="!transaccion_editar">
+          <button mat-icon-button color="primary" (click)="voucher_editar = true" [disabled]="!voucher" *ngIf="!voucher_editar">
             <mat-icon class="icono-documentos"> edit </mat-icon>
           </button>
-          <button mat-icon-button color="primary" (click)="NoEditarTransaccion()" [disabled]="!transaccion" *ngIf="transaccion_editar">
+          <button mat-icon-button color="primary" (click)="voucher_editar = false" [disabled]="!voucher" *ngIf="voucher_editar">
             <mat-icon class="icono-documentos"> close </mat-icon>
           </button>
         </mat-grid-tile>
 
         <mat-grid-tile>
-          <button mat-icon-button color="primary" (click)="EditarPlanilla()" [disabled]="!planilla" *ngIf="!planilla_editar">
+          <button mat-icon-button color="primary" (click)="recibo_editar = true" [disabled]="!recibo" *ngIf="!recibo_editar">
             <mat-icon class="icono-documentos"> edit </mat-icon>
           </button>
-          <button mat-icon-button color="primary" (click)="NoEditarPlanilla()" [disabled]="!planilla" *ngIf="planilla_editar">
+          <button mat-icon-button color="primary" (click)="recibo_editar = false" [disabled]="!recibo" *ngIf="recibo_editar">
             <mat-icon class="icono-documentos"> close </mat-icon>
           </button>
         </mat-grid-tile>
 
         <mat-grid-tile>
-          <button mat-icon-button color="primary" (click)="EditarEditar()" [disabled]="!letra" *ngIf="!letra_editar">
+          <button mat-icon-button color="primary" (click)="casilla_editar = true" [disabled]="!casilla" *ngIf="!casilla_editar">
             <mat-icon class="icono-documentos"> edit </mat-icon>
           </button>
-          <button mat-icon-button color="primary" (click)="NoEditarEditar()" [disabled]="!letra" *ngIf="letra_editar">
+          <button mat-icon-button color="primary" (click)="casilla_editar = false" [disabled]="!casilla" *ngIf="casilla_editar">
             <mat-icon class="icono-documentos"> close </mat-icon>
           </button>
         </mat-grid-tile>
+        
+      </mat-grid-list>
 
-        <mat-grid-tile>
-          <button mat-icon-button color="primary"  (click)="EditarAutorizacion()" [disabled]="!autorizacion" *ngIf="!autorizacion_editar">
-            <mat-icon class="icono-documentos"> edit </mat-icon>
-          </button>
-          <button mat-icon-button color="primary"  (click)="NoEditarAutorizacion()" [disabled]="!autorizacion" *ngIf="autorizacion_editar">
-            <mat-icon class="icono-documentos"> close </mat-icon>
-          </button>
-        </mat-grid-tile>
-      </mat-grid-list> -->
-
-      <!-- <mat-grid-list cols=8 rowHeight="20px" *ngIf="id_credito || id_credito_editar">
+      <mat-grid-list cols=7 rowHeight="20px" *ngIf="id_credito || id_credito_editar">
 
         <mat-grid-tile>
           Foto
@@ -697,28 +687,24 @@
         </mat-grid-tile>
 
         <mat-grid-tile>
-          Contrato
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          Transacción
-        </mat-grid-tile>
-
-        <mat-grid-tile>
           Planilla
         </mat-grid-tile>
 
         <mat-grid-tile>
-          Letra
+          Voucher
         </mat-grid-tile>
 
         <mat-grid-tile>
-          Autorización
+          Recibos
         </mat-grid-tile>
 
-      </mat-grid-list> -->
+        <mat-grid-tile>
+          Casilla
+        </mat-grid-tile>
 
-      <!-- <mat-grid-list cols=8 rowHeight="60px" *ngIf="id_credito || id_credito_editar">
+      </mat-grid-list>
+
+      <mat-grid-list cols=7 rowHeight="60px" *ngIf="id_credito || id_credito_editar">
 
         <mat-grid-tile>
 
@@ -733,7 +719,7 @@
             [buttonCaption]="'Adjuntar'"
             [extensions]="['png, jpg, jpeg']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
-            (uploadFinished)="SubirArchivo($event)">
+            (uploadFinished)="SubirArchivo($event, 1)">
           </image-upload>  
 
         </mat-grid-tile>
@@ -751,7 +737,7 @@
             [buttonCaption]="'Adjuntar'"
             [extensions]="['pdf']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
-            (uploadFinished)="SubirDNI($event)">
+            (uploadFinished)="SubirArchivo($event, 2)">
           </image-upload>  
 
         </mat-grid-tile>
@@ -770,43 +756,7 @@
             [dropBoxMessage]="'o arrastrelo'"
             [extensions]="['pdf']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
-            (uploadFinished)="SubirCIP($event)">
-          </image-upload>  
-
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-
-          <button mat-icon-button color="primary" [disabled]="!contrato" *ngIf="!contrato_editar">
-            <mat-icon class="icono-documentos" (click)="AbrirDocumento(contrato)"> visibility </mat-icon>
-          </button>
-
-          <image-upload *ngIf="contrato_editar"
-            class="cargar-imagen"
-            [max]="1"
-            url="{{ruta}}"
-            [buttonCaption]="'Adjuntar'"
-            [extensions]="['pdf']"
-            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
-            (uploadFinished)="SubirContrato($event)">
-          </image-upload>
-
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-
-          <button mat-icon-button color="primary" [disabled]="!transaccion" *ngIf="!transaccion_editar">
-            <mat-icon class="icono-documentos" (click)="AbrirDocumento(transaccion)"> visibility </mat-icon>
-          </button>
-
-          <image-upload *ngIf="transaccion_editar"
-            class="cargar-imagen"
-            [max]="1"
-            url="{{ruta}}"
-            [buttonCaption]="'Adjuntar'"
-            [extensions]="['pdf']"
-            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
-            (uploadFinished)="SubirTransaccion($event)">
+            (uploadFinished)="SubirArchivo($event, 3)">
           </image-upload>  
 
         </mat-grid-tile>
@@ -815,7 +765,7 @@
 
           <button mat-icon-button color="primary" [disabled]="!planilla" *ngIf="!planilla_editar">
             <mat-icon class="icono-documentos" (click)="AbrirDocumento(planilla)"> visibility </mat-icon>
-          </button> 
+          </button>
 
           <image-upload *ngIf="planilla_editar"
             class="cargar-imagen"
@@ -824,26 +774,175 @@
             [buttonCaption]="'Adjuntar'"
             [extensions]="['pdf']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
-            (uploadFinished)="SubirPlanilla($event)">
-          </image-upload>  
+            (uploadFinished)="SubirArchivo($event, 4)">
+          </image-upload>
 
         </mat-grid-tile>
 
         <mat-grid-tile>
 
-          <button mat-icon-button color="primary" [disabled]="!letra" *ngIf="!letra_editar">
-            <mat-icon class="icono-documentos" (click)="AbrirDocumento(letra)"> visibility </mat-icon>
+          <button mat-icon-button color="primary" [disabled]="!voucher" *ngIf="!voucher_editar">
+            <mat-icon class="icono-documentos" (click)="AbrirDocumento(voucher)"> visibility </mat-icon>
           </button>
 
-          <image-upload *ngIf="letra_editar"
+          <image-upload *ngIf="voucher_editar"
             class="cargar-imagen"
             [max]="1"
             url="{{ruta}}"
             [buttonCaption]="'Adjuntar'"
             [extensions]="['pdf']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
-            (uploadFinished)="SubirLetra($event)">
+            (uploadFinished)="SubirArchivo($event, 5)">
           </image-upload>  
+
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+
+          <button mat-icon-button color="primary" [disabled]="!recibo" *ngIf="!recibo_editar">
+            <mat-icon class="icono-documentos" (click)="AbrirDocumento(recibo)"> visibility </mat-icon>
+          </button> 
+
+          <image-upload *ngIf="recibo_editar"
+            class="cargar-imagen"
+            [max]="1"
+            url="{{ruta}}"
+            [buttonCaption]="'Adjuntar'"
+            [extensions]="['pdf']"
+            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
+            (uploadFinished)="SubirArchivo($event, 6)">
+          </image-upload>  
+
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+
+          <button mat-icon-button color="primary" [disabled]="!casilla" *ngIf="!casilla_editar">
+            <mat-icon class="icono-documentos" (click)="AbrirDocumento(casilla)"> visibility </mat-icon>
+          </button>
+
+          <image-upload *ngIf="casilla_editar"
+            class="cargar-imagen"
+            [max]="1"
+            url="{{ruta}}"
+            [buttonCaption]="'Adjuntar'"
+            [extensions]="['pdf']"
+            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
+            (uploadFinished)="SubirArchivo($event, 7)">
+          </image-upload>  
+
+        </mat-grid-tile>
+
+      </mat-grid-list>
+
+      <!-- Solo para dar la sensación de espacio -->
+      <mat-list *ngIf="id_credito || id_credito_editar">
+        <mat-divider></mat-divider>
+      </mat-list>
+
+      <mat-grid-list cols=7 rowHeight="60px" *ngIf="id_credito_editar">
+
+        <mat-grid-tile>
+          <button mat-icon-button color="primary"  (click)="transaccion_editar = true" [disabled]="!transaccion" *ngIf="!transaccion_editar">
+            <mat-icon class="icono-documentos"> edit </mat-icon>
+          </button>
+          <button mat-icon-button color="primary"  (click)="transaccion_editar = false" [disabled]="!transaccion" *ngIf="transaccion_editar">
+            <mat-icon class="icono-documentos"> close </mat-icon>
+          </button>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <button mat-icon-button color="primary"  (click)="autorizacion_editar = true" [disabled]="!autorizacion" *ngIf="!autorizacion_editar">
+            <mat-icon class="icono-documentos"> edit </mat-icon>
+          </button>
+          <button mat-icon-button color="primary"  (click)="autorizacion_editar = false" [disabled]="!autorizacion" *ngIf="autorizacion_editar">
+            <mat-icon class="icono-documentos"> close </mat-icon>
+          </button>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <button mat-icon-button color="primary"  (click)="tarjeta_editar = true" [disabled]="!tarjeta" *ngIf="!tarjeta_editar">
+            <mat-icon class="icono-documentos"> edit </mat-icon>
+          </button>
+          <button mat-icon-button color="primary"  (click)="tarjeta_editar = false" [disabled]="!tarjeta" *ngIf="tarjeta_editar">
+            <mat-icon class="icono-documentos"> close </mat-icon>
+          </button>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <button mat-icon-button color="primary"  (click)="compromiso_editar = true" [disabled]="!compromiso" *ngIf="!compromiso_editar">
+            <mat-icon class="icono-documentos"> edit </mat-icon>
+          </button>
+          <button mat-icon-button color="primary"  (click)="compromiso_editar = false" [disabled]="!compromiso" *ngIf="compromiso_editar">
+            <mat-icon class="icono-documentos"> close </mat-icon>
+          </button>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <button mat-icon-button color="primary"  (click)="letra_editar = true" [disabled]="!letra" *ngIf="!letra_editar">
+            <mat-icon class="icono-documentos"> edit </mat-icon>
+          </button>
+          <button mat-icon-button color="primary"  (click)="letra_editar = false" [disabled]="!letra" *ngIf="letra_editar">
+            <mat-icon class="icono-documentos"> close </mat-icon>
+          </button>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <button mat-icon-button color="primary"  (click)="ddjj_editar = true" [disabled]="!ddjj" *ngIf="!ddjj_editar">
+            <mat-icon class="icono-documentos"> edit </mat-icon>
+          </button>
+          <button mat-icon-button color="primary"  (click)="ddjj_editar = false" [disabled]="!ddjj" *ngIf="ddjj_editar">
+            <mat-icon class="icono-documentos"> close </mat-icon>
+          </button>
+        </mat-grid-tile>
+
+      </mat-grid-list>
+
+      <mat-grid-list cols=7 rowHeight="20px" *ngIf="id_credito || id_credito_editar">
+
+        <mat-grid-tile>
+          Transaccion
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          Autorizacion
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          Tarjeta de socio
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          Compromiso
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          Letra
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          Declaración
+        </mat-grid-tile>
+
+      </mat-grid-list>
+
+      <mat-grid-list cols=7 rowHeight="60px" *ngIf="id_credito || id_credito_editar">
+
+        <mat-grid-tile>
+
+          <button mat-icon-button color="primary" [disabled]="!transaccion" *ngIf="!transaccion_editar">
+            <mat-icon class="icono-documentos" (click)="AbrirDocumento(transaccion)"> visibility </mat-icon>
+          </button>
+
+          <image-upload
+            class="cargar-imagen" *ngIf="transaccion_editar"
+            [max]="1"
+            url="{{ruta}}"
+            [buttonCaption]="'Adjuntar'"
+            [extensions]="['pdf']"
+            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
+            (uploadFinished)="SubirArchivo($event, 8)">
+          </image-upload>
 
         </mat-grid-tile>
 
@@ -860,11 +959,84 @@
             [buttonCaption]="'Adjuntar'"
             [extensions]="['pdf']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
-            (uploadFinished)="SubirAutorizacion($event)">
+            (uploadFinished)="SubirArchivo($event, 9)">
           </image-upload>
 
         </mat-grid-tile>
-      </mat-grid-list> -->
+
+        <mat-grid-tile>
+
+          <button mat-icon-button color="primary" [disabled]="!tarjeta" *ngIf="!tarjeta_editar">
+            <mat-icon class="icono-documentos" (click)="AbrirDocumento(tarjeta)"> visibility </mat-icon>
+          </button>
+
+          <image-upload
+            class="cargar-imagen" *ngIf="tarjeta_editar"
+            [max]="1"
+            url="{{ruta}}"
+            [buttonCaption]="'Adjuntar'"
+            [extensions]="['pdf']"
+            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
+            (uploadFinished)="SubirArchivo($event, 10)">
+          </image-upload>
+
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+
+          <button mat-icon-button color="primary" [disabled]="!compromiso" *ngIf="!compromiso_editar">
+            <mat-icon class="icono-documentos" (click)="AbrirDocumento(compromiso)"> visibility </mat-icon>
+          </button>
+
+          <image-upload
+            class="cargar-imagen" *ngIf="compromiso_editar"
+            [max]="1"
+            url="{{ruta}}"
+            [buttonCaption]="'Adjuntar'"
+            [extensions]="['pdf']"
+            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
+            (uploadFinished)="SubirArchivo($event, 11)">
+          </image-upload>
+
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+
+          <button mat-icon-button color="primary" [disabled]="!letra" *ngIf="!letra_editar">
+            <mat-icon class="icono-documentos" (click)="AbrirDocumento(letra)"> visibility </mat-icon>
+          </button>
+
+          <image-upload
+            class="cargar-imagen" *ngIf="letra_editar"
+            [max]="1"
+            url="{{ruta}}"
+            [buttonCaption]="'Adjuntar'"
+            [extensions]="['pdf']"
+            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
+            (uploadFinished)="SubirArchivo($event, 12)">
+          </image-upload>
+
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+
+          <button mat-icon-button color="primary" [disabled]="!ddjj" *ngIf="!ddjj_editar">
+            <mat-icon class="icono-documentos" (click)="AbrirDocumento(ddjj)"> visibility </mat-icon>
+          </button>
+
+          <image-upload
+            class="cargar-imagen" *ngIf="ddjj_editar"
+            [max]="1"
+            url="{{ruta}}"
+            [buttonCaption]="'Adjuntar'"
+            [extensions]="['pdf']"
+            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
+            (uploadFinished)="SubirArchivo($event, 13)">
+          </image-upload>
+
+        </mat-grid-tile>
+
+      </mat-grid-list>
 
     </div>
 
@@ -1064,7 +1236,9 @@
         </mat-table>
       </ng-container>
 
-      <mat-error class="error-monto" *ngIf="diferencia>0.2 && editar_cronograma<3">Las cuotas deben sumar {{CreditosForm.value.total}}. Falta {{diferencia}}. </mat-error>
+      <mat-error class="error-monto" *ngIf="diferencia>0.05 && editar_cronograma<3">
+        Las cuotas deben sumar {{CreditosForm.value.total}}. {{ CreditosForm.value.total>this.total_cronograma_editado ? 'Falta:' : 'Excede en:' }} {{diferencia}}.
+      </mat-error>
 
     </div>
 

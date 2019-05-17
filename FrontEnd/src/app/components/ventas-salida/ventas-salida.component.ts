@@ -696,7 +696,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
     this.Cronograma.forEach((item)=>{
       total_cronograma_editado=total_cronograma_editado+item.monto_cuota*1;
     })
-    this.diferencia=this.VentasSalidaForm.value.montototal-total_cronograma_editado
+    this.diferencia= Math.abs(Math.round((this.VentasSalidaForm.value.montototal-total_cronograma_editado)*100)/100);
   }
 
   EditarCronograma(estado){
@@ -1033,7 +1033,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
           }else{
             this.Notificacion.Snack("Ocurrió un error al editar la venta","");
           }
-        }, 1000)
+        }, 300)
 
       })
     })

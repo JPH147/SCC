@@ -352,8 +352,8 @@ Class Venta{
         return false;
     }
 
-    function readxId()
-    {
+    function readxId(){
+
         $query ="call sp_listarventaxId(?)";
         
         $result = $this->conn->prepare($query);
@@ -413,8 +413,7 @@ Class Venta{
         $this->garantes=$Garantes;
     }
 
-    function readxId_salida()
-    {
+    function readxId_salida() {
         $query ="call sp_listarventasalidaxId(?)";
         
         $result = $this->conn->prepare($query);
@@ -884,8 +883,8 @@ Class Venta{
         return $this->total_resultado;
     }
 
-    function delete()
-    {
+    function delete(){
+
         $query = "call sp_eliminarventa(?,?,?)";
         
         $result = $this->conn->prepare($query);
@@ -904,8 +903,8 @@ Class Venta{
         }
     }
 
-    function delete_productos()
-    {
+    function delete_productos(){
+
         $query = "call sp_eliminarventaproductos(?,?)";
         
         $result = $this->conn->prepare($query);
@@ -923,8 +922,8 @@ Class Venta{
         }
     }
 
-    function delete_productos_salida()
-    {
+    function delete_productos_salida(){
+
         $query = "call sp_eliminarventasalidaproductos(?,?,?)";
         
         $result = $this->conn->prepare($query);
@@ -943,8 +942,28 @@ Class Venta{
         }
     }
 
-    function delete_comision()
-    {
+    function update_productos_salida(){
+
+        $query = "call sp_actualizarproductoventasalida(?,?,?)";
+        
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_venta);
+        $result->bindParam(2, $this->producto_serie);
+        $result->bindParam(3, $this->monto);
+
+        if($result->execute())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    function delete_comision(){
+
         $query = "call sp_eliminarventacomision(?)";
         
         $result = $this->conn->prepare($query);
@@ -961,8 +980,8 @@ Class Venta{
         }
     }
 
-    function delete_cronograma()
-    {
+    function delete_cronograma() {
+
         $query = "call sp_eliminarventacronograma(?)";
         
         $result = $this->conn->prepare($query);
@@ -979,8 +998,7 @@ Class Venta{
         }
     }
 
-    function delete_garante()
-    {
+    function delete_garante() {
         $query = "call sp_eliminarventagarante(?)";
         
         $result = $this->conn->prepare($query);

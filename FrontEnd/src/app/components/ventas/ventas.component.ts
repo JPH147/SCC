@@ -292,7 +292,7 @@ export class VentasComponent implements OnInit {
       })
     ).subscribe()
   }
-}
+  }
 
   SeleccionarVentaxId(id_venta){
 
@@ -769,7 +769,7 @@ export class VentasComponent implements OnInit {
     this.Cronograma.forEach((item)=>{
       this.total_cronograma_editado=this.total_cronograma_editado+item.monto_cuota*1;
     })
-    this.diferencia=this.VentasForm.value.montototal-this.total_cronograma_editado
+    this.diferencia= Math.abs(Math.round((this.VentasForm.value.montototal-this.total_cronograma_editado)*100)/100);
   }
 
   TipoPagoSeleccionado(){
@@ -1362,7 +1362,7 @@ export class VentasComponent implements OnInit {
           }else{
             this.Notificacion.Snack("Ocurrió un error al crear la venta","");
           }
-        }, 1000)
+        }, 300)
 
       })
     })
@@ -1487,7 +1487,7 @@ export class VentasComponent implements OnInit {
           }else{
             this.Notificacion.Snack("Ocurrió un error al editar la venta","");
           }
-        }, 1000)
+        }, 300)
 
       })
     })

@@ -205,8 +205,7 @@ Class Cliente{
         return $cliente_list; 
     }
 
-    function create()
-    {
+    function create(){
         $query = "CALL sp_crearcliente(
             :id_sub_sede,
             :id_cargo_estado,
