@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild, AfterViewInit, ElementRef} from '@angular/core';
 import { MatPaginator, MatSort, MatDialog, MatSnackBar } from '@angular/material';
 import {merge, Observable, of , fromEvent, forkJoin } from 'rxjs';
-import {catchError, map, startWith, switchMap, debounceTime, distinctUntilChanged, tap, delay, finalize} from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
 import {ClienteService} from './clientes.service';
 import {ClienteDataSource} from './clientes.dataservice';
 import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
@@ -72,6 +72,7 @@ export class ClientesComponent implements OnInit {
         this.CargarData();
       })
      ).subscribe();
+
      this.paginator.page
      .pipe(
       debounceTime(200),

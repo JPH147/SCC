@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient } from '@angular/common/http';
+import {HttpClient, HttpParams } from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {URL} from './url';
@@ -15,9 +15,15 @@ export class ServiciosTipoPago{
 	){}
 
 	/************************************************************************************************/
-	ListarTipoPago():Observable<any>
+	ListarTipoPago(
+		importancia : number
+	):Observable<any>
 	{
-		return this.http.get(this.url+'tipopago/read.php',{})
+		
+		let params = new HttpParams()
+			.set('primportancia', importancia.toString())
+
+		return this.http.get(this.url+'tipopago/read.php',{params})
 		.pipe(map(res=>{
 			if(res['codigo']===0){
 				return res['data'].tipopago;

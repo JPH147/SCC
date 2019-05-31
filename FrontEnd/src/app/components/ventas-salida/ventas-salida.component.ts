@@ -586,7 +586,8 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
 
   SeleccionarGarante(index){
     let Ventana = this.Dialogo.open(SeleccionarClienteComponent,{
-      width: "1200px"
+      width: "1200px",
+      data: {cliente : this.VentasSalidaForm.value.id_cliente}
     })
 
     Ventana.afterClosed().subscribe(res=>{
@@ -816,7 +817,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   }
 
   ListarTipoPago() {
-    this.ServicioTipoPago.ListarTipoPago().subscribe( res => {
+    this.ServicioTipoPago.ListarTipoPago(2).subscribe( res => {
       this.ListadoTipoPago = res;
     });
   }

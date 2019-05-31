@@ -290,21 +290,24 @@ export class VentaService {
 
   ListarVentasxCliente(
     cliente:number,
-    talonario_serie:string,
-    talonario_numero:string,
-    estado:number,
+    documento:string,
+    fecha: Date,
+    estado:string,
     pagina:number,
     total_pagina:number,
   ){
-    return this.http.get(this.url + 'venta/readxcliente.php', {
-      params: new HttpParams()
+
+    let params = new HttpParams()
       .set('prcliente',cliente.toString())
-      .set('prtalonarioserie',talonario_serie)
-      .set('prtalonarionumero',talonario_numero)
-      .set('prestado',estado.toString())
+      .set('prdocumento',documento)
+      .set('prfecha', moment(fecha).format("YYYY-MM-DD"))
+      .set('prestado',estado)
       .set('prpagina',pagina.toString())
       .set('prtotalpagina',total_pagina.toString())
-    })
+
+    console.log(params, moment(fecha).format("YYYY-MM-DD"), fecha);
+
+    return this.http.get(this.url + 'venta/readxcliente.php', { params })
     .pipe(map(res => {
       if (res['codigo'] === 0) {
         return res;

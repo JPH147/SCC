@@ -25,6 +25,8 @@ import { RetornoVendedoresCierreComponent } from './components/retorno-vendedore
 import { VentasSalidaComponent } from './components/ventas-salida/ventas-salida.component';
 import { CreditosListarComponent } from './components/creditos-listar/creditos-listar.component';
 import { CreditosComponent } from './components/creditos/creditos.component';
+import { CobranzasComponent } from './components/cobranzas/cobranzas.component';
+import { CobranzasListarComponent } from './components/cobranzas-listar/cobranzas-listar.component';
 
 const appRoutes: Routes = [
   // {path: '', component: EvaluacionComponent}, //prueba
@@ -63,7 +65,8 @@ const appRoutes: Routes = [
   {path: 'direcciones', component: DireccionesComponent},
   {path: 'detalleproductos', component: DetalleProductosComponent},
   {path: 'evaluacion-reglas', component: ReglasEvaluacionComponent},
-  {path: 'prueba', component: CreditosComponent}
+  {path: 'cobranzas', component: CobranzasListarComponent},
+  {path: 'prueba', component: CobranzasComponent}
 ];
 
 export const appRoutingProvider: any[] = [];

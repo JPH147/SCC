@@ -786,7 +786,7 @@ export class VentasComponent implements OnInit {
   }
 
   ListarTipoPago() {
-    this.ServicioTipoPago.ListarTipoPago().subscribe( res => {
+    this.ServicioTipoPago.ListarTipoPago(2).subscribe( res => {
       this.LstTipoPago = [];
       // tslint:disable-next-line:forin
       for (let i in res) {
@@ -1219,7 +1219,8 @@ export class VentasComponent implements OnInit {
 
   SeleccionarGarante(index){
     let Ventana = this.Dialogo.open(SeleccionarClienteComponent,{
-      width: "1200px"
+      width: "1200px",
+      data: {cliente : this.VentasForm.value.id_cliente}
     })
 
     Ventana.afterClosed().subscribe(res=>{

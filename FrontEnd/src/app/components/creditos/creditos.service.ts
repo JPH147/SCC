@@ -43,18 +43,18 @@ export class CreditosService {
     return this.http.get(this.url + 'credito/read.php', {params})
     .pipe(map(res => {
       if (res['codigo'] === 0) {
-        let codigo: string;
+        let numero_credito: string;
         let largo:number;
         res['data'].creditos.forEach((item) => {
 
-          codigo = item.codigo.toString();
-          largo = codigo.length;
+          numero_credito = item.numero_credito.toString();
+          largo = numero_credito.length;
 
-          for(let i = largo ; i < 6 ; i++){
-            codigo = "0" + codigo;
+          for(let i = largo ; i < 3 ; i++){
+            numero_credito = "0" + numero_credito;
           }
 
-          item.codigo = codigo
+          item.numero_credito = numero_credito
         });
         return res;
       } else {
@@ -87,7 +87,8 @@ export class CreditosService {
     tipo_credito:number,
     sucursal:number,
     fecha_credito:Date,
-    numero:number,
+    numero_afiliacion:number,
+    numero_credito:number,
     autorizador:number,
     vendedor:number,
     cliente:number,
@@ -121,7 +122,8 @@ export class CreditosService {
       .set('prtipo',tipo_credito.toString())
       .set('prsucursal',sucursal.toString())
       .set('prfecha',moment(fecha_credito).format("YYYY-MM-DD"))
-      .set('prnumero',numero.toString())
+      .set('prcodigo',numero_afiliacion.toString())
+      .set('prnumero',numero_credito.toString())
       .set('prautorizador',autorizador ? autorizador.toString() : "0")
       .set('prvendedor',vendedor.toString())
       .set('prcliente',cliente.toString())
@@ -150,8 +152,6 @@ export class CreditosService {
       .set('prpdfddjj',pdf_ddjj)
       .set('probservacion',observacion)
 
-    console.log(params);
-
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'credito/create.php', params, {headers: headers});
@@ -171,6 +171,46 @@ export class CreditosService {
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'credito/create-cronograma.php', params, {headers: headers});
+  }
+
+  CrearCronogramaAfiliacion(
+    id_credito:number,
+    monto_cuota: number,
+    numero_cuotas: number,
+    fecha_vencimiento: Date
+  ){
+    let params = new HttpParams()
+      .set('prcredito',id_credito.toString())
+      .set('prmonto',monto_cuota.toString())
+      .set('prcuotas',numero_cuotas.toString())
+      .set('prprimeracuota',moment(fecha_vencimiento).format("YYYY-MM-DD"))
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'credito/create-cronograma-afiliacion.php', params, {headers: headers});
+  }
+
+  CrearGarante(
+    credito : number,
+    cliente : number,
+    cliente_telefono : string,
+    cliente_direccion : string,
+    pdfdni : string,
+    pdfcip : string,
+    pdfplanilla : string,
+  ){
+    let params = new HttpParams()
+      .set('prcredito',credito.toString())
+      .set('prcliente',cliente.toString())
+      .set('prclientetelefono',cliente_telefono)
+      .set('prclientedireccion',cliente_direccion)
+      .set('prpdfdni',pdfdni)
+      .set('prpdfcip',pdfcip)
+      .set('prpdfplanilla',pdfplanilla)
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'credito/create-garante.php', params, {headers: headers});
   }
 
   Actualizar(
@@ -246,8 +286,14 @@ export class CreditosService {
 
   }
 
-  Proximo( ) : Observable<any> {
-    return this.http.get(this.url + 'credito/proximo.php')
+  Proximo(
+    id_cliente: number
+  ) : Observable<any> {
+
+    let params = new HttpParams()
+      .set('prcliente', id_cliente.toString())
+
+    return this.http.get(this.url + 'credito/proximo.php', {params})
     .pipe(map(res=>{
       if(res['codigo'] === 0){
         return res['data']
@@ -304,6 +350,19 @@ export class CreditosService {
     .set('prorden', orden)
 
     return this.http.get(this.url + 'credito/read-cronograma.php', {params})
+    .pipe(map(res=>{
+      if(res['codigo'] === 0){
+        return res['data']
+      }else{
+        console.log('No hay datos que mostrar');
+        return [];
+      }
+    }))
+  }
+
+  SeleccionarParametros(){
+
+    return this.http.get(this.url + 'credito/seleccionar-parametros-afiliacion.php')
     .pipe(map(res=>{
       if(res['codigo'] === 0){
         return res['data']

@@ -19,9 +19,9 @@
       <mat-icon>search</mat-icon>
       <mat-form-field>
         <mat-select #InputTipo placeholder="Tipo de crédito" (selectionChange)="CambioFiltro()" [value]=0>
-          <mat-option [value]=0>Todos</mat-option>
-          <mat-option [value]=1>Afiliaciones</mat-option>
-          <mat-option [value]=2>Créditos</mat-option>
+          <mat-option [value]=0> Todos </mat-option>
+          <mat-option [value]=1> Afiliaciones </mat-option>
+          <mat-option [value]=2> Préstamos </mat-option>
         </mat-select>
       </mat-form-field>
     </mat-grid-tile>
@@ -79,7 +79,10 @@
 
       <ng-container matColumnDef="codigo">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Código </mat-header-cell>
-        <mat-cell *matCellDef="let credito"> {{credito.codigo}} </mat-cell>
+        <mat-cell *matCellDef="let credito">
+          <ng-container *ngIf="credito.id_tipo_credito == 1"> {{credito.codigo}} </ng-container>
+          <ng-container *ngIf="credito.id_tipo_credito == 2"> {{credito.codigo}} - {{credito.numero_credito}} </ng-container>
+        </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="cliente_nombre">
@@ -106,7 +109,7 @@
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let credito">
           <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="['ver', credito.id]"><mat-icon> visibility </mat-icon></button>
-          <button mat-icon-button color="primary" matTooltip="Editar" [disabled]="credito.estado==2" [routerLink]="['editar', credito.id]"><mat-icon> edit </mat-icon></button>
+          <button mat-icon-button color="primary" matTooltip="Editar" [disabled]="credito.estado==2 || credito.tipo_credito == 'Aporte de socio'" [routerLink]="['editar', credito.id]"><mat-icon> edit </mat-icon></button>
           <!--<button mat-icon-button color="primary" matTooltip="Canjear" [disabled]="venta.estado!=1" [routerLink]="['nueva', venta.id, venta.id_cliente]" *ngIf="venta.tipo_venta!='Salida'"><mat-icon> import_export </mat-icon></button>
           <button mat-icon-button color="primary" matTooltip="Anular" [disabled]="venta.estado!=1" (click)="AnularVenta(venta)" *ngIf="venta.tipo_venta!='Salida'"><mat-icon> delete </mat-icon></button> -->
         </mat-cell>

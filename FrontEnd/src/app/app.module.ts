@@ -120,6 +120,9 @@ import { RetornoVendedoresCierreComponent } from './components/retorno-vendedore
 import { VentasSalidaComponent } from './components/ventas-salida/ventas-salida.component';
 import { CreditosComponent } from './components/creditos/creditos.component';
 import { CreditosListarComponent } from './components/creditos-listar/creditos-listar.component';
+import { CobranzasComponent } from './components/cobranzas/cobranzas.component';
+import { CobranzaPNPComponent } from './components/cobranza-pnp/cobranza-pnp.component';
+import { CobranzasListarComponent } from './components/cobranzas-listar/cobranzas-listar.component';
 
 @NgModule({
   imports: [
@@ -243,7 +246,10 @@ import { CreditosListarComponent } from './components/creditos-listar/creditos-l
     RetornoVendedoresCierreComponent,
     VentasSalidaComponent,
     CreditosComponent,
-    CreditosListarComponent
+    CreditosListarComponent,
+    CobranzasComponent,
+    CobranzaPNPComponent,
+    CobranzasListarComponent
    ],
   entryComponents: [
     AppComponent,

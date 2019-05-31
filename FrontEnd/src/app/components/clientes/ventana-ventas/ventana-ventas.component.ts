@@ -17,10 +17,10 @@ import { Router } from '@angular/router';
 
 export class VentanaVentasComponent implements OnInit {
 
-  public estado:number;
+  public estado : string;
+  public fecha : Date;
 
-  @ViewChild('InputSerie') FiltroSerie: ElementRef;
-  @ViewChild('InputNumero') FiltroNumero: ElementRef;
+  @ViewChild('InputDocumento') FiltroDocumento: ElementRef;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   ListadoVentas: VentasClienteDataSource;
   Columnas: string[] = [ 'serie', 'fecha', 'total', 'estado', 'opciones'];
@@ -36,16 +36,16 @@ export class VentanaVentasComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.estado=0;
+    this.estado="0";
+    this.fecha = new Date();
     this.ListadoVentas = new VentasClienteDataSource(this.Servicio);
-    this.ListadoVentas.CargarVentas(this.data.id, "", "", 0, 1, 5);
+    this.ListadoVentas.CargarVentas(this.data.id, "", this.fecha, '0', 1, 5);
   }
 
   ngAfterViewInit(){
 
     merge(
-      fromEvent(this.FiltroSerie.nativeElement, 'keyup'),
-      fromEvent(this.FiltroNumero.nativeElement, 'keyup')
+      fromEvent(this.FiltroDocumento.nativeElement, 'keyup')
      ).pipe(
      debounceTime(200),
      distinctUntilChanged(),
@@ -66,25 +66,32 @@ export class VentanaVentasComponent implements OnInit {
   }
 
   CargarData(){
-  	this.ListadoVentas.CargarVentas(this.data.id, this.FiltroSerie.nativeElement.value , this.FiltroNumero.nativeElement.value , this.estado, this.paginator.pageIndex+1, this.paginator.pageSize)
-    console.log(this.data.id, this.FiltroSerie.nativeElement.value , this.FiltroNumero.nativeElement.value, this.estado, this.paginator.pageIndex+1, this.paginator.pageSize)
+  console.log(this.fecha)
+
+  	this.ListadoVentas.CargarVentas(
+      this.data.id,
+      this.FiltroDocumento.nativeElement.value,
+      this.fecha,
+      this.estado,
+      this.paginator.pageIndex+1,
+      this.paginator.pageSize)
   }
 
   HacerVenta(){
-    forkJoin(
-      this.STelefonos.ListarTelefono(this.data.id,"1",1,50),
-      this.SDirecciones.ListarDireccion(this.data.id,"1",1,50)
-    )
-    .subscribe(res=>{
-      if (res[0].mensaje==0 || res[1].mensaje==0) {
-        this.snackBar.open("Debe agregar los datos de contacto para el cliente", "Entendido", {
-          duration: 5000,
-        });
-      }else{
+    // forkJoin(
+    //   this.STelefonos.ListarTelefono(this.data.id,"1",1,50),
+    //   this.SDirecciones.ListarDireccion(this.data.id,"1",1,50)
+    // )
+    // .subscribe(res=>{
+    //   if (res[0].mensaje==0 || res[1].mensaje==0) {
+    //     this.snackBar.open("Debe agregar los datos de contacto para el cliente", "Entendido", {
+    //       duration: 5000,
+    //     });
+    //   }else{
         this.ventana.close();
         this.router.navigate(['/ventas/nueva', this.data.id]);
-      }
-    })
+    //   }
+    // })
   }
 
   onNoClick(): void {
@@ -105,31 +112,33 @@ export class VentasClienteDataSource implements DataSource<any> {
   public Cargando = this.CargandoInformacion.asObservable();
   public TotalResultados = new BehaviorSubject<number>(0);
 
-constructor(private Servicio: VentaService) { }
+  constructor(private Servicio: VentaService) { }
 
-connect(collectionViewer: CollectionViewer): Observable<any[]> {
-  return this.InformacionClientes.asObservable();
-}
+  connect(collectionViewer: CollectionViewer): Observable<any[]> {
+    return this.InformacionClientes.asObservable();
+  }
 
-disconnect(){
-this.InformacionClientes.complete();
-this.CargandoInformacion.complete();
+  disconnect(){
+  this.InformacionClientes.complete();
+  this.CargandoInformacion.complete();
   }
 
   CargarVentas(
     id_cliente: number,
-    talonario_serie:string,
-    talonario_numero:string,
-    estado:number,
+    documento:string,
+    fecha:Date,
+    estado:string,
     pagina: number,
     total_pagina: number
   ){
   	this.CargandoInformacion.next(true);
-	
+  
+    console.log(fecha)
+
   	this.Servicio.ListarVentasxCliente(
   		id_cliente,
-  		talonario_serie,
-  		talonario_numero,
+  		documento,
+  		fecha,
   		estado,
   		pagina ,
   		total_pagina

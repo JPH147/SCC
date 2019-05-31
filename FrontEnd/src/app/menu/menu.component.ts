@@ -91,8 +91,13 @@ export class MenuComponent implements OnInit{
       {
         nombre: "Cobranzas",
         icono: "gavel",
-        disabled:true,
-        submenu:[]
+        disabled:false,
+        submenu:[
+          {
+            nombre: "Cronograma",
+            path: "cobranzas"
+          },
+        ]
       },
       {
         nombre: "Tablas maestras",

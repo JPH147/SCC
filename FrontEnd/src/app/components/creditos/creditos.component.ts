@@ -1,5 +1,5 @@
 import {CollectionViewer, DataSource} from "@angular/cdk/collections";
-import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, AfterViewInit, Optional } from '@angular/core';
 import { CreditosService } from './creditos.service';
 import {FormArray, FormGroup, FormBuilder, Validators} from '@angular/forms';
 import { MatDialog, MatSort } from '@angular/material';
@@ -32,10 +32,16 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   public id_credito: number;
   public id_credito_editar: number;
   public id_cliente: number;
+  public id_tipo : number;
   public garantes: FormArray;
   public editar_cronograma:number;
   public Reglas : Array<any>;
   public ruta: string;
+  public numero_afiliacion : number;
+  public cliente_afiliado : boolean;
+  public numero_cuotas: number;
+  public monto_cuota: number;
+  public total_cronograma : number; // No necesariamente es el mismo que el total del formulario por los intereses diarios
 
   public ListadoCronograma: CronogramaDataSource;
   public ColumnasCronograma: Array<string>;
@@ -142,29 +148,30 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     this.editar_cronograma = 3;
     this.ListadoCronograma = new CronogramaDataSource();
 
+    this.cliente_afiliado = true;
+    this.numero_cuotas = 60;
+    this.monto_cuota = 20;
+
     this.route.params.subscribe(params => {
       // Verifica si 'params' tiene datos
-      console.log(params);
-
       if(Object.keys(params).length>0){
 
         this.Cargando.next(true);
 
         if(params['idcredito']){
           this.id_credito=params['idcredito'];
-          // this.id_credito=7;
+          this.id_credito=13;
           this.SeleccionarCredito(this.id_credito);
         }
 
         if(params['idcreditoeditar']){
-          this.id_credito_editar=params['idsalidaeditar'];
-          // this.id_credito_editar=7;
+          this.id_credito_editar=params['idcreditoeditar'];
+          this.id_credito_editar=14;
           this.SeleccionarCredito(this.id_credito_editar);
         }
 
       }else{
        this.NuevoCredito();
-       console.log(this.CreditosForm.value.id_cliente, this.id_credito, this.id_cliente)
       }
     })
 
@@ -183,23 +190,25 @@ export class CreditosComponent implements OnInit, AfterViewInit {
 
     if(!this.id_credito){
 
-      fromEvent(this.VendedorAutoComplete.nativeElement, 'keyup')
-      .pipe(
-        debounceTime(10),
-        distinctUntilChanged(),
-        tap(() => {
-          this.ListarVendedor(this.CreditosForm.value.vendedor);
-        })
-       ).subscribe();
-  
-       fromEvent(this.AutorizadorAutoComplete.nativeElement, 'keyup')
-      .pipe(
-        debounceTime(10),
-        distinctUntilChanged(),
-        tap(() => {
-          this.ListarAutorizador(this.CreditosForm.value.autorizador);
-        })
-       ).subscribe();
+      if(this.id_tipo==2){
+        fromEvent(this.VendedorAutoComplete.nativeElement, 'keyup')
+        .pipe(
+          debounceTime(10),
+          distinctUntilChanged(),
+          tap(() => {
+            this.ListarVendedor(this.CreditosForm.value.vendedor);
+          })
+         ).subscribe();
+    
+         fromEvent(this.AutorizadorAutoComplete.nativeElement, 'keyup')
+        .pipe(
+          debounceTime(10),
+          distinctUntilChanged(),
+          tap(() => {
+            this.ListarAutorizador(this.CreditosForm.value.autorizador);
+          })
+         ).subscribe();
+      }
   
        merge(
         fromEvent(this.FiltroCuota.nativeElement,'keyup'),
@@ -209,7 +218,6 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         distinctUntilChanged(),
         tap(()=>{
           if (
-            // this.FiltroMonto.nativeElement.value &&
             this.FiltroCapital.nativeElement.value &&
             this.FiltroCuota.nativeElement.value &&
             this.CreditosForm.value.fecha_pago
@@ -241,6 +249,17 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       telefono :[{value: null, disabled: false},[
         Validators.required
       ]],
+      // Sobre la afiliación
+      afiliacion_tiempo :[{value: null, disabled: false},[
+      ]],
+      afiliacion_monto :[{value: null, disabled: false},[
+        Validators.pattern ('[0-9- ]+')
+      ]],
+      afiliacion_tipo_pago :[{value: 1, disabled: false},[
+      ]],
+      afiliacion_fecha_vencimiento :[{value: moment(new Date()).add(1, 'months').endOf('month').toDate(), disabled: false},[
+      ]],
+      /////////////////////////////////////////////////////////////// 
       garante :[{value: false, disabled: false},[
       ]],
       fecha_credito: [{value: new Date(), disabled: false},[
@@ -249,11 +268,13 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       sucursal: [{value: null, disabled: false},[
         Validators.required
       ]],
-      codigo: [{value: null, disabled: false},[
+      codigo: [{value: null, disabled: false},[ // Es lo que se muestra en la vista {{numero_afiliacion + numero_credito}}
         Validators.required
       ]],
+      numero: [{value: null, disabled: false},[ // Es el número del crédito
+      ]],
       fecha_pago: [{value: moment(new Date()).add(1, 'months').toDate(), disabled: false},[
-        Validators.required
+        Validators.required,
       ]],
       ////////
       tipo_pago: [{value: null, disabled: false},[
@@ -261,13 +282,15 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       ]],
       interes: [{value: 0, disabled: false},[
         Validators.required,
-        Validators.min(1)
+        Validators.min(0)
       ]],
       capital: [{value: null, disabled: false},[
         Validators.required
       ]],
       cuotas: [{value: null, disabled: false},[
-        Validators.required
+        Validators.required,
+        Validators.min(0),
+        Validators.max(100)
       ]],
       total: [{value: null, disabled: false},[
         Validators.required
@@ -289,23 +312,24 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   }
 
   NuevoCredito(){
-
+    this.id_tipo=2;
     this.ColumnasCronograma= ['numero', 'fecha_vencimiento_ver', 'monto_cuota_ver'];
-
-    this.ObtenerNumero();
+    this.VerificarCondicionesAfiliacion();
   }
 
-  ObtenerNumero(){
-    this.Servicio.Proximo().subscribe(res=>{
+  ObtenerNumero(cliente:number){
+    this.Servicio.Proximo(cliente).subscribe(res=>{
+
+      this.CreditosForm.get('numero').setValue(res)
 
       let codigo_string: string = res.toString();
       let codigo_string_length: number = res.toString().length;
 
-      for( let i = codigo_string_length ; i < 6 ; i++ ){
+      for( let i = codigo_string_length ; i < 3 ; i++ ){
         codigo_string = "0" + codigo_string;
       }
 
-      this.CreditosForm.get('codigo').setValue(codigo_string);
+      this.CreditosForm.get('codigo').setValue(this.numero_afiliacion + "-" + codigo_string);
     })
   }
 
@@ -323,13 +347,19 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       codigo_string=res.numero.toString();
       codigo_largo=codigo_string.length;
 
-      for(let i = codigo_largo; i < 7; i++){
+      for(let i = codigo_largo; i < 3; i++){
         codigo_string = "0" + codigo_string;
       }
       
-      this.CreditosForm.get('codigo').setValue(codigo_string);
-      this.CreditosForm.get('codigo').disable()
-      /////////////////////////////////////////////////////////
+      this.id_tipo=res.id_tipo;
+      console.log(res.id_tipo)
+
+      if(this.id_tipo==1){
+        this.CreditosForm.get('codigo').setValue(res.codigo)
+      }else{
+        this.CreditosForm.get('codigo').setValue(res.codigo + "-" +codigo_string)
+      }
+      ////////////////////////////
 
       this.CreditosForm.get('id_cliente').setValue(res.id_cliente);
       this.CreditosForm.get('fecha_credito').setValue(res.fecha);
@@ -343,14 +373,13 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       this.CreditosForm.get('capital').setValue(res.capital);
       this.CreditosForm.get('cuotas').setValue(res.numero_cuotas);
       this.CreditosForm.get('total').setValue(res.total);
-
+      
       this.CreditosForm.get('vendedor').setValue(res.vendedor);
       this.CreditosForm.get('id_vendedor').setValue(res.id_vendedor);
       this.CreditosForm.get('autorizador').setValue(res.autorizador);
       this.CreditosForm.get('id_autorizador').setValue(res.id_autorizador);
 
       observacion_corregida = res.observaciones == "" ? "No hay observaciones" : res.observaciones;
-
 
       res.pdf_foto!="" ? this.foto=URLIMAGENES.carpeta+'credito/'+res.pdf_foto : null;
       res.pdf_dni!="" ? this.dni=URLIMAGENES.carpeta+'credito/'+res.pdf_dni : null;
@@ -366,6 +395,18 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       res.pdf_letra!="" ? this.letra=URLIMAGENES.carpeta+'credito/'+res.pdf_letra : null;
       res.pdf_ddjj!="" ? this.ddjj=URLIMAGENES.carpeta+'credito/'+res.pdf_ddjj : null;
 
+
+      if(res['garantes'].garantes.length>0){
+        this.CreditosForm.get('garante').setValue(true);
+        res['garantes'].garantes.forEach((item,index)=>{
+          this.AgregarGarante(false);
+          this.CreditosForm['controls'].garantes['controls'][index].get('id_cliente').setValue(item.id_cliente);
+          this.CreditosForm['controls'].garantes['controls'][index].get('nombre').setValue(item.cliente_nombre);
+          this.CreditosForm['controls'].garantes['controls'][index].get('direccion').setValue(item.cliente_direccion);
+          this.CreditosForm['controls'].garantes['controls'][index].get('telefono').setValue(item.cliente_telefono);
+        })
+      }
+
       if( this.id_credito ) {
 
         this.CreditosForm.get('sucursal').setValue(res.sucursal);
@@ -375,9 +416,30 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         this.ColumnasCronograma= ['numero', 'monto_cuota','fecha_vencimiento', 'monto_interes','monto_pagado', 'fecha_cancelacion', 'monto_pendiente','estado', 'opciones'];
         this.ObtenerCronograma(this.id_credito, "fecha_vencimiento asc");
 
+        if(res['garantes'].garantes.length>0){
+          res['garantes'].garantes.forEach((item,index)=>{
+            let dni = item.dni_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.dni_pdf : null ;
+            let cip = item.cip_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.cip_pdf : null ;
+            let planilla = item.planilla_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.planilla_pdf : null ;
+
+            this.CreditosForm['controls'].garantes['controls'][index].get('dni_pdf').setValue(dni);
+            this.CreditosForm['controls'].garantes['controls'][index].get('cip_pdf').setValue(cip);
+            this.CreditosForm['controls'].garantes['controls'][index].get('planilla_pdf').setValue(planilla);
+          })
+        }
+
       }
 
       if ( this.id_credito_editar ) {
+
+        this.CreditosForm.get('codigo').disable();
+
+        if(this.id_tipo==1){
+          this.CreditosForm.get('vendedor').clearValidators();
+          this.CreditosForm.get('id_vendedor').clearValidators();
+          this.CreditosForm.get('autorizador').clearValidators();
+          this.CreditosForm.get('id_autorizador').clearValidators();
+        }
 
         this.CreditosForm.get('sucursal').setValue(res.id_sucursal);
         this.CreditosForm.get('tipo_pago').setValue(res.id_tipo_pago);
@@ -415,6 +477,29 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         res.pdf_letra!="" ? this.letra_editar=false : this.letra_editar=true;
         res.pdf_ddjj!="" ? this.ddjj_editar=false : this.ddjj_editar=true;
 
+        if(res['garantes'].garantes.length>0){
+          res['garantes'].garantes.forEach((item,index)=>{
+            this.CreditosForm['controls'].garantes['controls'][index].get('dni_pdf_antiguo').setValue(item.dni_pdf);
+            this.CreditosForm['controls'].garantes['controls'][index].get('cip_pdf_antiguo').setValue(item.cip_pdf);
+            this.CreditosForm['controls'].garantes['controls'][index].get('planilla_pdf_antiguo').setValue(item.planilla_pdf);
+
+            let dni_editar = item.dni_pdf == "" ? true : false;
+            let cip_editar = item.cip_pdf == "" ? true : false;
+            let planilla_editar = item.planilla_pdf == "" ? true : false;
+
+            this.CreditosForm['controls'].garantes['controls'][index].get('dni_editar').setValue(dni_editar);
+            this.CreditosForm['controls'].garantes['controls'][index].get('cip_editar').setValue(cip_editar);
+            this.CreditosForm['controls'].garantes['controls'][index].get('planilla_editar').setValue(planilla_editar);
+
+            let dni = item.dni_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.dni_pdf : null ;
+            let cip = item.cip_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.cip_pdf : null ;
+            let planilla = item.planilla_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.planilla_pdf : null ;
+
+            this.CreditosForm['controls'].garantes['controls'][index].get('dni_pdf').setValue(dni);
+            this.CreditosForm['controls'].garantes['controls'][index].get('cip_pdf').setValue(cip);
+            this.CreditosForm['controls'].garantes['controls'][index].get('planilla_pdf').setValue(planilla);
+          })
+        }
       }
 
     })
@@ -441,6 +526,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
 
     Ventana.afterClosed().subscribe(res=>{
       if(res){
+        // console.log(res)
         this.CreditosForm.get('id_cliente').setValue(res.id);
         this.ObtenerClientexId(res.id);
         this.ObtenerDireccion(res.id);
@@ -452,11 +538,13 @@ export class CreditosComponent implements OnInit, AfterViewInit {
 
   VerificarAfiliacion(id_cliente){
     this.Servicio.Verificar_Afiliacion(id_cliente).subscribe(res=>{
-      // console.log(res);
-      if(res['total_pagado']){
+      if(res['codigo_afiliacion']){
+        this.numero_afiliacion=res['codigo_afiliacion'];
         this.VerificarInteres(res['total_pagado']);
+        this.cliente_afiliado=true;
       }else{
         this.VerificarInteres(0);
+        this.cliente_afiliado=false;
       }
     })
   }
@@ -468,7 +556,19 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     })
   }
 
+  VerificarCondicionesAfiliacion(){
+    this.Servicio.SeleccionarParametros().subscribe(res=>{
+      this.numero_afiliacion = res.numero;
+      this.CreditosForm.get('afiliacion_tiempo').setValue(res.tiempo)
+      this.numero_cuotas = +res.tiempo*12;
+      this.CreditosForm.get('afiliacion_monto').setValue(res.monto)
+    })
+  }
+
   ObtenerClientexId(id_cliente) {
+
+    // El número del crédito
+    this.ObtenerNumero(id_cliente);
 
     this.ClienteServicio.Seleccionar(id_cliente).subscribe(res => {
       if (res) {
@@ -503,6 +603,10 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     this.CreditosForm.get('trabajo').setValue("");
     this.CreditosForm.get('direccion').setValue("");
     this.CreditosForm.get('telefono').setValue("");
+
+    this.CreditosForm.get('numero').setValue(null)
+    this.CreditosForm.get('codigo').setValue(null);
+    this.cliente_afiliado=true;
   }
   
   EditarContactoCliente(){
@@ -560,19 +664,11 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       ]],
       'planilla_pdf': [{value:null, disabled: false}, [
       ]],
-      'letra_pdf': [{value: null, disabled: false}, [
-      ]],
-      'transaccion_pdf': [{value:null, disabled: false}, [
-      ]],
       'dni_editar': [{value: bool, disabled: false}, [
       ]],
       'cip_editar': [{value: bool, disabled: false}, [
       ]],
       'planilla_editar': [{value:bool, disabled: false}, [
-      ]],
-      'letra_editar': [{value: bool, disabled: false}, [
-      ]],
-      'transaccion_editar': [{value:bool, disabled: false}, [
       ]],
       'dni_pdf_antiguo': [{value: null, disabled: false}, [
       ]],
@@ -580,23 +676,47 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       ]],
       'planilla_pdf_antiguo': [{value:null, disabled: false}, [
       ]],
-      'letra_pdf_antiguo': [{value: null, disabled: false}, [
-      ]],
-      'transaccion_pdf_antiguo': [{value:null, disabled: false}, [
-      ]],
       'dni_pdf_nuevo': [{value: null, disabled: false}, [
       ]],
       'cip_pdf_nuevo': [{value: null, disabled: false}, [
       ]],
       'planilla_pdf_nuevo': [{value:null, disabled: false}, [
       ]],
-      'letra_pdf_nuevo': [{value: null, disabled: false}, [
-      ]],
-      'transaccion_pdf_nuevo': [{value:null, disabled: false}, [
-      ]],
       'estado': [{value:1, disabled: false}, [
       ]],
     })
+  }
+
+  SeleccionarGarante(index){
+    let Ventana = this.Dialogo.open(SeleccionarClienteComponent,{
+      width: "1200px",
+      data: { cliente : this.CreditosForm.value.id_cliente }
+    })
+
+    Ventana.afterClosed().subscribe(res=>{
+      if(res){
+        this.CreditosForm['controls'].garantes['controls'][index].get('id_cliente').setValue(res.id)
+        this.CreditosForm['controls'].garantes['controls'][index].get('nombre').setValue(res.nombre)
+        this.ObtenerDireccionGarante(res.id,index);
+        this.ObtenerTelefonoGarante(res.id,index);
+      }
+    })
+  }
+
+  ObtenerDireccionGarante(id_cliente, index) {
+    this.DireccionServicio.ListarDireccion( id_cliente, '1',1,20).subscribe(res => {
+      if (res['data']) {
+        this.CreditosForm['controls'].garantes['controls'][index].get('direccion').setValue(res['data'].direcciones[0].direccioncompleta)
+      }
+    });
+  }
+
+  ObtenerTelefonoGarante(id_cliente, index) {
+    this.TelefonoServicio.ListarTelefono( id_cliente , '1',1,20).subscribe(res => {
+      if (res['data']) {
+        this.CreditosForm['controls'].garantes['controls'][index].get('telefono').setValue(res['data'].telefonos[0].tlf_numero)
+      }
+    });
   }
 
   AgregarGarante(bool):void{
@@ -615,7 +735,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   }
 
   ListarTipoPago() {
-    this.ServicioTipoPago.ListarTipoPago().subscribe( res => {
+    this.ServicioTipoPago.ListarTipoPago(1).subscribe( res => {
       this.ListadoTipoPago = res;
     });
   }
@@ -687,39 +807,87 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     }
   }
 
+  SubirArchivoAval(evento, index, orden){
+    if (!this.id_credito_editar) {
+      if(orden==1) this.CreditosForm['controls'].garantes['controls'][index].get('dni_pdf').setValue(evento.serverResponse.response.body.data);
+      if(orden==2) this.CreditosForm['controls'].garantes['controls'][index].get('cip_pdf').setValue(evento.serverResponse.response.body.data);
+      if(orden==3) this.CreditosForm['controls'].garantes['controls'][index].get('planilla_pdf').setValue(evento.serverResponse.response.body.data);
+    } else {
+      if(orden==1) this.CreditosForm['controls'].garantes['controls'][index].get('dni_pdf_nuevo').setValue(evento.serverResponse.response.body.data);
+      if(orden==2) this.CreditosForm['controls'].garantes['controls'][index].get('cip_pdf_nuevo').setValue(evento.serverResponse.response.body.data);
+      if(orden==3) this.CreditosForm['controls'].garantes['controls'][index].get('planilla_pdf_nuevo').setValue(evento.serverResponse.response.body.data);
+    }
+  }
+
   /*Cronograma */
   CrearCronograma(){
 
-    let total : number = Math.round(+this.CreditosForm.value.capital * ( 1 + +this.CreditosForm.value.cuotas * this.CreditosForm.value.interes / 100 ) *100 ) / 100
+    if(this.CreditosForm.get('cuotas').valid && this.CreditosForm.value.interes>0){
+      
+      this.Cronograma=[];
+      let i = 1;
 
-    this.CreditosForm.get('total').setValue( total );
+      //Se calcula el monto total y el interés
+      let interes : number =  Math.round(+this.CreditosForm.value.capital * (this.CreditosForm.value.interes /100 ) *100 ) / 100;
+      let total : number = Math.round(+this.CreditosForm.value.capital * ( 1 + +this.CreditosForm.value.cuotas * this.CreditosForm.value.interes / 100 ) *100 ) / 100
+      // this.CreditosForm.get('total').setValue( total );
 
-    this.Cronograma=[];
+      // Se calculan las fechas de las cuotas
+      let ano_pago = moment(this.CreditosForm.value.fecha_pago).year();
+      let mes_pago = moment(this.CreditosForm.value.fecha_pago).month();
+      let dia_pago = moment(this.CreditosForm.value.fecha_pago).date();
+      let fecha_corregida : Date = new Date(ano_pago, mes_pago, dia_pago);
+      let fecha : Date;
 
-    let year = moment(this.CreditosForm.value.fecha_pago).year();
-    let month = moment(this.CreditosForm.value.fecha_pago).month();
-    let day = moment(this.CreditosForm.value.fecha_pago).date();
+      // Se evalúa si el crédito se da antes o después de quincena
+      let dia_credito :number = moment(this.CreditosForm.value.fecha_credito).date();
+      let mes_credito :number = moment(this.CreditosForm.value.fecha_credito).month();
+      let ano_credito :number = moment(this.CreditosForm.value.fecha_credito).year();
+      let dias_mes : number = moment(this.CreditosForm.value.fecha_credito).daysInMonth();
+      let interes_truncado = Math.round( ((dias_mes - dia_credito) / dias_mes) * interes * 100 ) / 100;
 
-    let fecha_corregida:Date = new Date(year, month, day);
+      // Si el crédito es antes de quincena, se paga a fin de mes los intereses truncados
+      if( dia_credito <= 15 ){
+        this.Cronograma.push({
+          numero: 0,
+          fecha_vencimiento: moment(this.CreditosForm.value.fecha_credito).endOf('month'),
+          monto_cuota: interes_truncado
+        })
+      }
 
-    let fecha:Date;
+      // Se pagan los intereses mientras no se cancele el crédito
+      if( mes_pago - mes_credito > 1){
+        for( i; i<mes_pago - mes_credito; i++){
+          fecha=moment(new Date(ano_credito, mes_credito, dia_pago)).add(i, 'months').toDate();
+          this.Cronograma.push({
+            numero: i,
+            fecha_vencimiento: fecha,
+            monto_cuota: interes
+          })
+        }
+      };
 
-    let monto=Math.round((this.CreditosForm.value.total)*100/this.FiltroCuota.nativeElement.value)/100
+      // Se calcula el monto de las cuotas normales
+      let monto=Math.round((total)*100/this.FiltroCuota.nativeElement.value)/100
+  
+      for (let j = 1; j<=this.FiltroCuota.nativeElement.value; j++) {
+        fecha=moment(fecha_corregida).add(j-1, 'months').toDate();
+        this.Cronograma.push({
+          numero: i+j-1,
+          fecha_vencimiento: fecha,
+          monto_cuota: monto
+        })
+      }
+  
+      this.CreditosForm.get('total').setValue(
+        this.Cronograma.reduce( (acumulador, item)=>{
+          return Math.round( ( acumulador + item.monto_cuota ) * 100 ) / 100
+        },0 )
+      );
 
-    for (var i = 1; i<=this.FiltroCuota.nativeElement.value; i++) {
-
-      fecha=moment(fecha_corregida).add(i-1, 'months').toDate();
-
-      this.Cronograma.push({
-        numero: i,
-        fecha_vencimiento: fecha,
-        monto_cuota: monto
-      })
-
+      this.CalcularTotalCronograma();
+      this.ListadoCronograma.AsignarInformacion(this.Cronograma);
     }
-
-    this.CalcularTotalCronograma();
-    this.ListadoCronograma.AsignarInformacion(this.Cronograma);
 
   }
 
@@ -731,7 +899,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       this.total_cronograma_editado=this.total_cronograma_editado+item.monto_cuota*1;
     })
 
-    console.log(this.diferencia);
+    // console.log(this.diferencia);
     this.diferencia= Math.abs(Math.round((this.CreditosForm.value.total-this.total_cronograma_editado)*100)/100);
 
   }
@@ -753,15 +921,135 @@ export class CreditosComponent implements OnInit, AfterViewInit {
 
   Guardar(){
     if(this.id_credito_editar){
-      this.ActualizarCredito();
+      if(this.id_tipo==1){
+        this.ActualizarAfiliacion()
+      } else {
+        this.ActualizarCredito();
+      }
     }else{
+
+      // Se verifican que los datos del nuevo cliente estén actualizados
+      this.VerificarAfiliacion(this.CreditosForm.value.id_cliente);
+      this.VerificarCondicionesAfiliacion();
+      this.ObtenerNumero(this.CreditosForm.value.id_cliente);
+
       this.CrearCredito();
     }
   }
 
-  CrearCredito(){
+  CrearAfiliacion( tarjeta: string){
 
-    this.ObtenerNumero();
+    this.Servicio.Crear(
+      1,
+      this.CreditosForm.value.sucursal,
+      this.CreditosForm.value.fecha_credito,
+      this.numero_afiliacion,
+      0,
+      0,
+      0,
+      this.CreditosForm.value.id_cliente,
+      this.CreditosForm.value.direccion,
+      this.CreditosForm.value.telefono,
+      this.CreditosForm.value.cargo,
+      this.CreditosForm.value.trabajo,
+      this.CreditosForm.value.tipo_pago,
+      this.CreditosForm.value.fecha_credito,
+      0,
+      this.CreditosForm.value.afiliacion_monto,
+      this.numero_cuotas,
+      +this.CreditosForm.value.afiliacion_monto * +this.CreditosForm.value.afiliacion_monto,
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      tarjeta,
+      "",
+      "",
+      "",
+      ""
+    ).subscribe(res=>{
+
+      this.Servicio.CrearCronogramaAfiliacion(
+        res['data'],
+        this.CreditosForm.value.afiliacion_monto,
+        this.numero_cuotas,
+        this.CreditosForm.value.fecha_credito
+      ).subscribe()
+
+    })
+  }
+
+  ActualizarAfiliacion(){
+
+    let random=(new Date()).getTime()
+
+    return forkJoin(
+      this.ServiciosGenerales.RenameFile(this.tarjeta_nuevo,'TARJETA',random.toString(),"credito")
+    ).subscribe(resultado=>{
+
+      // console.log(resultado)
+
+      this.Servicio.Actualizar(
+        this.id_credito_editar,
+        this.CreditosForm.value.sucursal,
+        this.CreditosForm.value.fecha_credito,
+        0,
+        0,
+        this.CreditosForm.value.id_cliente,
+        this.CreditosForm.value.direccion,
+        this.CreditosForm.value.telefono,
+        this.CreditosForm.value.cargo,
+        this.CreditosForm.value.trabajo,
+        this.CreditosForm.value.tipo_pago,
+        this.CreditosForm.value.fecha_pago,
+        this.CreditosForm.value.interes,
+        this.CreditosForm.value.capital,
+        this.CreditosForm.value.cuotas,
+        this.CreditosForm.value.total,
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        this.tarjeta_editar ? resultado[9].mensaje : this.tarjeta_antiguo,
+        "",
+        "",
+        "",
+        this.CreditosForm.value.observaciones
+      ).subscribe(res=>{
+        // console.log(res)
+  
+        this.Cronograma.forEach((item)=>{
+          this.Servicio.CrearCronograma(
+            res['data'],
+            item.monto_cuota,
+            item.fecha_vencimiento
+          ).subscribe()
+        })
+  
+        setTimeout(()=>{
+          this.router.navigate(['/creditos']);
+          if(res['codigo']==0){
+            this.Notificacion.Snack("Se actualizó la afiliación con éxito!","");
+          }else{
+            this.Notificacion.Snack("Ocurrió un error al actualizar la afiliación","");
+          }
+        }, 300)
+
+      })
+    })
+  }
+
+  CrearCredito(){
 
     let random=(new Date()).getTime()
 
@@ -781,11 +1069,18 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       this.ServiciosGenerales.RenameFile(this.ddjj,'DDJJ',random.toString(),"credito"),
     ).subscribe(resultado=>{
 
+      if( this.cliente_afiliado === false ){
+        this.CrearAfiliacion(
+          resultado[9].mensaje
+        )
+      }
+
       this.Servicio.Crear(
         2,
         this.CreditosForm.value.sucursal,
         this.CreditosForm.value.fecha_credito,
-        +this.CreditosForm.value.codigo,
+        this.numero_afiliacion,
+        this.CreditosForm.value.numero,
         this.CreditosForm.value.id_autorizador,
         this.CreditosForm.value.id_vendedor,
         this.CreditosForm.value.id_cliente,
@@ -814,8 +1109,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         resultado[12].mensaje,
         this.CreditosForm.value.observaciones
       ).subscribe(res=>{
-        console.log(res)
-  
+        // Se agrega el cronograma
         this.Cronograma.forEach((item)=>{
           this.Servicio.CrearCronograma(
             res['data'],
@@ -823,7 +1117,27 @@ export class CreditosComponent implements OnInit, AfterViewInit {
             item.fecha_vencimiento
           ).subscribe()
         })
-  
+
+        // Si el crédito tiene garante, se los agrega
+        if( this.CreditosForm.value.garante ){
+          this.CreditosForm['controls'].garantes['controls'].forEach((item, index)=>{
+            return forkJoin(
+              this.ServiciosGenerales.RenameFile(item.value.dni_pdf,`DNI_GARANTE_+${index+1}`,random.toString(),"credito"),
+              this.ServiciosGenerales.RenameFile(item.value.cip_pdf,`CIP_GARANTE_+${index+1}`,random.toString(),"credito"),
+              this.ServiciosGenerales.RenameFile(item.value.planilla_pdf,`PLANILLA_GARANTE_+${index+1}`,random.toString(),"credito"),
+            ).subscribe(response=>{
+              this.Servicio.CrearGarante(
+                res['data'],
+                item.value.id_cliente,
+                item.value.direccion,
+                item.value.telefono,
+                response[0].mensaje,
+                response[1].mensaje,
+                response[2].mensaje,
+              ).subscribe(res=>console.log(res))
+            })
+          })
+        }
 
         setTimeout(()=>{
           this.router.navigate(['/creditos']);
@@ -835,13 +1149,14 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         }, 300)
 
       })
+
     })
 
   }
 
   ActualizarCredito(){
 
-    this.ObtenerNumero();
+    // this.ObtenerNumero();
 
     let random=(new Date()).getTime()
 
@@ -895,7 +1210,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         this.ddjj_editar ? resultado[12].mensaje : this.ddjj_antiguo,
         this.CreditosForm.value.observaciones
       ).subscribe(res=>{
-        console.log(res)
+        // console.log(res)
   
         this.Cronograma.forEach((item)=>{
           this.Servicio.CrearCronograma(
@@ -914,9 +1229,34 @@ export class CreditosComponent implements OnInit, AfterViewInit {
           }
         }, 300)
 
+        // Si el crédito tiene garante, se los agrega
+        if( this.CreditosForm.value.garante ){
+          this.CreditosForm['controls'].garantes['controls'].forEach((item, index)=>{
+            return forkJoin(
+              this.ServiciosGenerales.RenameFile(item.value.dni_pdf_nuevo,`DNI_GARANTE_+${index+1}`,random.toString(),"credito"),
+              this.ServiciosGenerales.RenameFile(item.value.cip_pdf_nuevo,`CIP_GARANTE_+${index+1}`,random.toString(),"credito"),
+              this.ServiciosGenerales.RenameFile(item.value.planilla_pdf_nuevo,`PLANILLA_GARANTE_+${index+1}`,random.toString(),"credito"),
+            ).subscribe(response=>{
+              this.Servicio.CrearGarante(
+                res['data'],
+                item.value.id_cliente,
+                item.value.direccion,
+                item.value.telefono,
+                item.value.dni_editar ? response[0].mensaje : item.value.dni_pdf_antiguo,
+                item.value.cip_editar ? response[1].mensaje : item.value.cip_pdf_antiguo,
+                item.value.planilla_editar ? response[2].mensaje : item.value.planilla_pdf_antiguo,
+              ).subscribe(res=>console.log(res))
+            })
+          })
+        }
+
       })
     })
 
+  }
+
+  Imprimir(){
+    console.log(this.CreditosForm)
   }
 
 }

@@ -65,7 +65,7 @@
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let cliente">
-        	<button mat-icon-button color="primary" matTooltip="Seleccionar cliente" [mat-dialog-close]="cliente"> <mat-icon>	check </mat-icon> </button>
+        	<button mat-icon-button color="primary" matTooltip="Seleccionar cliente" [disabled]="cliente.id == id_cliente" [mat-dialog-close]="cliente"> <mat-icon>	check </mat-icon> </button>
         </mat-cell>
       </ng-container>
 

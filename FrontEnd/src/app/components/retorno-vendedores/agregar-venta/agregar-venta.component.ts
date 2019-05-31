@@ -146,7 +146,7 @@ export class AgregarVentaComponent implements OnInit {
   }
 
   ListarTipoPago() {
-    this.ServicioTipoPago.ListarTipoPago().subscribe( res => {
+    this.ServicioTipoPago.ListarTipoPago(2).subscribe( res => {
       this.LstTipoPago = [];
       for (let i in res) {
         this.LstTipoPago.push ( res[i] );

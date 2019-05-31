@@ -1,9 +1,9 @@
-import {Component, OnInit, ViewChild, AfterViewInit, ElementRef} from '@angular/core';
+import {Component, OnInit, ViewChild, AfterViewInit, ElementRef, Inject} from '@angular/core';
 import {ClienteService} from '../../clientes/clientes.service';
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {BehaviorSubject, Observable, of, merge, fromEvent} from 'rxjs';
 import {catchError, finalize,debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
-import { MatPaginator } from '@angular/material';
+import { MatPaginator, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 @Component({
   selector: 'app-seleccionar-cliente',
@@ -12,25 +12,31 @@ import { MatPaginator } from '@angular/material';
   providers: [ClienteService]
 })
 
-export class SeleccionarClienteComponent implements OnInit {
+export class SeleccionarClienteComponent implements OnInit, AfterViewInit {
+
+  public id_cliente : number = 0;
 
   @ViewChild('InputCodigo') FiltroCodigo: ElementRef;
   @ViewChild('InputDNI') FiltroDni: ElementRef;
   @ViewChild('InputNombre') FiltroNombre: ElementRef;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  ListadoCliente: ClienteDataSource;
-  Columnas: string[] = ['numero', 'codigo' , 'dni', 'nombrecliente', 'subsede', 'opciones'];
+  public ListadoCliente: ClienteDataSource;
+  public Columnas: string[] = ['numero', 'codigo' , 'dni', 'nombrecliente', 'subsede', 'opciones'];
 
   constructor(
+    @Inject(MAT_DIALOG_DATA) public data,
+    public ventana: MatDialogRef<SeleccionarClienteComponent>,
   	private Servicio: ClienteService,
   ) { }
 
   ngOnInit() {
+    this.ListadoCliente = new ClienteDataSource(this.Servicio);
+    this.ListadoCliente.CargarClientes('', '','',1);
 
-   this.ListadoCliente = new ClienteDataSource(this.Servicio);
-   this.ListadoCliente.CargarClientes('', '','',1);
-
+    if(this.data) {
+      this.id_cliente = this.data.cliente
+    }
   }
 
   ngAfterViewInit() {

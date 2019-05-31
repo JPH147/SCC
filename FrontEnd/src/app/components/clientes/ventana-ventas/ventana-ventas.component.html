@@ -10,22 +10,24 @@
 
       <mat-grid-tile>
         <mat-form-field>
-          <input matInput placeholder="Serie" #InputSerie>
+          <input matInput placeholder="Documento" #InputDocumento>
         </mat-form-field>
       </mat-grid-tile>
 
       <mat-grid-tile>
         <mat-form-field>
-          <input matInput placeholder="Número" #InputNumero>
+          <input matInput [matDatepicker]="inicio" placeholder="Hasta la fecha" [(ngModel)]="fecha" (dateChange)="CargarData()">
+          <mat-datepicker-toggle matSuffix [for]="inicio"></mat-datepicker-toggle>
+          <mat-datepicker #inicio disabled="false"></mat-datepicker>
         </mat-form-field>
       </mat-grid-tile>
 
       <mat-grid-tile>
         <mat-form-field>
           <mat-select placeholder="Estado" [(ngModel)]="estado" (selectionChange)="CargarData()">
-          	<mat-option [value]="0">Todas</mat-option>
-          	<mat-option [value]="1">Pendientes</mat-option>
-          	<mat-option [value]="2">Pagadas</mat-option>
+          	<mat-option [value]="'0'">Todas</mat-option>
+          	<mat-option [value]="'PENDIENTE'">Pendientes</mat-option>
+          	<mat-option [value]="'PAGADO'">Pagadas</mat-option>
           </mat-select>
         </mat-form-field>
       </mat-grid-tile>
@@ -43,8 +45,8 @@
     <mat-table [dataSource]="ListadoVentas" class="mat-elevation-z8">
 
       <ng-container matColumnDef="serie">
-        <mat-header-cell *matHeaderCellDef> Talonario </mat-header-cell>
-        <mat-cell *matCellDef="let venta"> {{venta.serie}}-{{venta.numero}}  </mat-cell>
+        <mat-header-cell *matHeaderCellDef> Documento </mat-header-cell>
+        <mat-cell *matCellDef="let venta"> {{venta.documento}}  </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="fecha">
