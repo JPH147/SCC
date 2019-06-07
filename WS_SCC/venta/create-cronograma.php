@@ -27,11 +27,11 @@
 
             if($venta->create_cronograma())
             {
-                print_json("0000", "Se creó la venta satisfactoriamente.", "");
+                print_json("0000", "Se creó el cronograma satisfactoriamente.", "");
             }
             else
             {
-                print_json("9999", "Ocurrió un error al crear la venta.", "");
+                print_json("9999", "Ocurrió un error al crear el cronograma.", "");
             }
         }
         else
@@ -41,7 +41,7 @@
     }
     catch(Exception $exception)
     {
-        print_json("9999", "Ocurrió un error al eliminar la venta.", $exception->getMessage());
+        print_json("9999", "Ocurrió un error al eliminar el cronograma.", $exception->getMessage());
     }
 
 ?>

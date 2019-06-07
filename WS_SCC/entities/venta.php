@@ -21,6 +21,7 @@ Class Venta{
     public $foto;
     public $vnt_contrato_pdf;
     public $tipo_documento;
+    public $documento;
     public $vnt_dni_pdf;
     public $vnt_cip_pdf;
     public $vnt_planilla_pdf;
@@ -831,8 +832,8 @@ Class Venta{
         $result = $this->conn->prepare($query);
 
         $result->bindParam(1, $this->id_cliente);
-        $result->bindParam(2, $this->talonario_serie);
-        $result->bindParam(3, $this->talonario_numero);
+        $result->bindParam(2, $this->documento);
+        $result->bindParam(3, $this->fecha);
         $result->bindParam(4, $this->estado);
         $result->bindParam(5, $this->numero_pagina);
         $result->bindParam(6, $this->total_pagina);
@@ -849,10 +850,7 @@ Class Venta{
                 "id"=>$id,
                 "tipo"=>$tipo,
                 "fecha"=>$fecha,
-                "id_talonario"=>$id_talonario,
-                "serie"=>$talonario_serie,
-                "numero"=>$talonario_numero,
-                "tipo_pago"=>$tipo_pago,
+                "documento"=>$documento,
                 "total_cuotas"=>$total_cuotas,
                 "cuotas_pagadas"=>$cuotas_pagadas,
                 "total"=>$total,
@@ -870,8 +868,8 @@ Class Venta{
         $result = $this->conn->prepare($query);
 
         $result->bindParam(1, $this->id_cliente);
-        $result->bindParam(2, $this->talonario_serie);
-        $result->bindParam(3, $this->talonario_numero);
+        $result->bindParam(2, $this->documento);
+        $result->bindParam(3, $this->fecha);
         $result->bindParam(4, $this->estado);
 
         $result->execute();

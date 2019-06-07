@@ -4,16 +4,21 @@ Class TipoPago{
 	private $conn;
 
 	public $idtipo_pago;
-    public $tpag_nombre;
-    
-    public function __construct($db){
-        $this->conn = $db;
-    }
+  public $tpag_nombre;
+  public $importancia;
+  
+  public function __construct($db){
+      $this->conn = $db;
+  }
 
   function read(){
 
-  	$query = "CALL sp_listartipopago";
+  	$query = "CALL sp_listartipopago(?)";
+    
     $result = $this->conn->prepare($query);
+
+    $result->bindParam(1, $this->importancia);
+
     $result->execute();
     
     $tipopagos_list=array();

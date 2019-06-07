@@ -4,8 +4,6 @@ Class File
     //public $img_nombre;
     //public $img_ruta;
 
-    public function __construct(){
-    }
     function upload()
     {
         if(is_uploaded_file($_FILES["file"]["tmp_name"]) && !empty(trim($_POST["file_ruta"])) 

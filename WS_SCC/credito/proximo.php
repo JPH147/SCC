@@ -16,7 +16,10 @@
 
 	try
 	{
-	    $credito->proximo_credito();
+
+		$credito->cliente = isset($_GET['prcliente']) ? trim($_GET['prcliente']) : die();
+
+		$credito->proximo_credito();
 
 	    if($credito->numero != ''){
 	        print_json("0000", "OK", $credito->numero);

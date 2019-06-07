@@ -21,6 +21,7 @@
 	    $credito->verificar_afiliacion();
 
 	    $credito_list = array(
+            "codigo_afiliacion"=>$credito->codigo,
             "total_pagado"=>$credito->total_pagado,
             "total_cuotas"=>$credito->total_cuotas
         );

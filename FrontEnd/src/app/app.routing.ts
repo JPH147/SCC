@@ -28,6 +28,9 @@ import { CreditosComponent } from './components/creditos/creditos.component';
 import { CobranzasComponent } from './components/cobranzas/cobranzas.component';
 import { CobranzasListarComponent } from './components/cobranzas-listar/cobranzas-listar.component';
 import { CobranzaArchivosComponent } from './components/cobranza-archivos/cobranza-archivos.component';
+import { TrabajadoresComponent } from './components/trabajadores/trabajadores.component';
+import { RegistroHorasComponent } from './components/registro-horas/registro-horas.component';
+import { ReporteAsistenciaComponent } from './components/reporte-asistencia/reporte-asistencia.component';
 
 const appRoutes: Routes = [
   // {path: '', component: EvaluacionComponent}, //prueba
@@ -69,6 +72,9 @@ const appRoutes: Routes = [
   {path: 'cobranzas', component: CobranzasListarComponent},
   {path: 'generar-archivos', component: CobranzasComponent},
   {path: 'archivos-cobranza', component: CobranzaArchivosComponent},
+  {path: 'trabajadores', component: TrabajadoresComponent}
+  {path: 'registro-horas', component: RegistroHorasComponent}
+  {path: 'reporte-asistencia', component: ReporteAsistenciaComponent}
   {path: 'prueba', component: CobranzaArchivosComponent}
 ];
 

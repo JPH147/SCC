@@ -15,8 +15,8 @@
         $venta = new Venta($db);
 
         $venta->id_cliente = !empty($_GET['prcliente']) ? trim($_GET['prcliente']) : null;
-        $venta->talonario_serie = !empty($_GET['prtalonarioserie']) ? trim($_GET['prtalonarioseerie']) : '';
-        $venta->talonario_numero = !empty($_GET['prtalonarionumero']) ? trim($_GET['prtalonarionumero']) : '';
+        $venta->documento = !empty($_GET['prdocumento']) ? trim($_GET['prdocumento']) : '';
+        $venta->fecha = !empty($_GET['prfecha']) ? trim($_GET['prfecha']) : null;
         $venta->estado = !empty($_GET['prestado']) ? trim($_GET['prestado']) : 0;
         $venta->numero_pagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : 1;
         $venta->total_pagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : 5;

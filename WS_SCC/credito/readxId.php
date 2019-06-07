@@ -27,6 +27,7 @@
             "id_sucursal" => $credito->id_sucursal,
             "sucursal" => $credito->sucursal,
             "fecha" => $credito->fecha,
+            "codigo" => $credito->codigo,
             "numero" => $credito->numero,
             "id_autorizador" => $credito->id_autorizador,
             "autorizador" => $credito->autorizador,
@@ -61,7 +62,8 @@
             "observaciones" => $credito->observaciones,
             "id_estado" => $credito->id_estado,
             "estado" => $credito->estado,
-            "cronograma" => $credito->cronograma
+            "cronograma" => $credito->cronograma,
+            "garantes" => $credito->garante
 	    );
 
         if ((trim($credito->id_credito)!= ''))

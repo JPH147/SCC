@@ -108,6 +108,25 @@ export class MenuComponent implements OnInit{
         ]
       },
       {
+        nombre: "Asistencia",
+        icono: "access_alarms",
+        disabled:false,
+        submenu:[
+          {
+            nombre: "Trabajadores",
+            path: "trabajadores"
+          },
+          {
+            nombre: "Registro",
+            path: "registro-horas"
+          },
+          {
+            nombre: "Reporte",
+            path: "reporte-asistencia"
+          },
+        ]
+      },
+      {
         nombre: "Tablas maestras",
         icono: "table_chart",
         disabled:false,

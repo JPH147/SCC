@@ -124,6 +124,9 @@ import { CobranzasComponent } from './components/cobranzas/cobranzas.component';
 import { CobranzasListarComponent } from './components/cobranzas-listar/cobranzas-listar.component';
 import { CobranzaPnpComponent } from './components/cobranzas/cobranza-pnp/cobranza-pnp.component';
 import { CobranzaArchivosComponent } from './components/cobranza-archivos/cobranza-archivos.component';
+import { TrabajadoresComponent } from './components/trabajadores/trabajadores.component';
+import { RegistroHorasComponent } from './components/registro-horas/registro-horas.component';
+import { ReporteAsistenciaComponent } from './components/reporte-asistencia/reporte-asistencia.component';
 
 @NgModule({
   imports: [
@@ -251,7 +254,10 @@ import { CobranzaArchivosComponent } from './components/cobranza-archivos/cobran
     CobranzasComponent,
     CobranzasListarComponent,
     CobranzaPnpComponent,
-    CobranzaArchivosComponent
+    CobranzaArchivosComponent,
+    TrabajadoresComponent,
+    RegistroHorasComponent,
+    ReporteAsistenciaComponent
    ],
   entryComponents: [
     AppComponent,

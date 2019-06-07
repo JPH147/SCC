@@ -15,8 +15,6 @@
     try
     {
         $credito = new Creditos($db);
-        $data = json_decode(file_get_contents('php://input'), true);
-
         
         if (($_POST["prtipo"])!=null)
         {
@@ -24,6 +22,7 @@
             $credito->tipo_credito=trim($_POST["prtipo"]);
             $credito->sucursal=trim($_POST["prsucursal"]);
             $credito->fecha_credito=trim($_POST["prfecha"]);
+            $credito->codigo=trim($_POST["prcodigo"]);
             $credito->numero=trim($_POST["prnumero"]);
             $credito->autorizador=trim($_POST["prautorizador"]);
             $credito->vendedor=trim($_POST["prvendedor"]);

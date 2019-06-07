@@ -15,6 +15,8 @@
     try{
     	$tipopago = new TipoPago($db);
 
+        $tipopago->importancia = !empty($_GET['primportancia']) ? trim($_GET['primportancia']) : 4;
+
         $tipopago_list = $tipopago->read();
 
         if (count(array_filter($tipopago_list))>0)

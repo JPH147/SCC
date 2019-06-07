@@ -3,8 +3,8 @@
 Class Creditos{
 
     private $conn;
-    private $table_name = "venta";
 
+    public $id;
     public $id_credito;
     public $cliente;
     public $tipo_credito;
@@ -14,8 +14,10 @@ Class Creditos{
 
     public $monto;
     public $fecha;
+    public $tiempo;
     public $total_pagado;
     public $total_cuotas;
+    public $codigo;
     public $numero;
 
     public $sucursal;
@@ -46,6 +48,7 @@ Class Creditos{
     public $pdf_ddjj;
     public $observacion;
     
+    public $garante;
     public $cronograma;
     public $orden;
     public $numero_pagina;
@@ -85,6 +88,7 @@ Class Creditos{
                 "numero"=>$contador,
                 "id"=>$id,
                 "codigo"=>$codigo,
+                "numero_credito"=>$numero,
                 "institucion"=>$institucion,
                 "sede"=>$sede,
                 "subsede"=>$subsede,
@@ -94,6 +98,7 @@ Class Creditos{
                 "tipo_pago"=>$tipo_pago,
                 "numero_cuotas"=>$numero_cuotas,
                 "monto_total"=>$monto_total,
+                "id_tipo_credito"=>$id_tipo_credito,
                 "tipo_credito"=>$tipo_credito,
                 "observaciones"=>$observaciones,
                 "estado"=>$estado,
@@ -133,7 +138,7 @@ Class Creditos{
         
         $result->bindParam(1, $this->id_credito);
 
-        // $Garantes=$this->read_garantes($this->id_venta);
+        $Garantes=$this->read_garantes($this->id_credito);
         $Cronograma=$this->read_cronograma($this->id_credito);
 
         $result->execute();
@@ -145,6 +150,7 @@ Class Creditos{
         $this->id_sucursal = $row['id_sucursal'];
         $this->sucursal = $row['sucursal'];
         $this->fecha = $row['fecha'];
+        $this->codigo = $row['codigo'];
         $this->numero = $row['numero'];
         $this->id_autorizador = $row['id_autorizador'];
         $this->autorizador = $row['autorizador'];
@@ -180,6 +186,40 @@ Class Creditos{
         $this->id_estado = $row['id_estado'];
         $this->estado = $row['estado'];
         $this->cronograma = $Cronograma;
+        $this->garante = $Garantes;
+    }
+
+    function read_garantes(){
+
+        $query = "CALL sp_listarcreditogarante(?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_credito);
+
+        $result->execute();
+        
+        $transaccion_list=array();
+        $transaccion_list["garantes"]=array();
+        
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $transaccion_item = array (
+                "id"=>$id,
+                "id_cliente"=>$id_cliente,
+                "cliente_dni"=>$cliente_dni,
+                "cliente_nombre"=>$cliente_nombre,
+                "cliente_telefono"=>$cliente_telefono,
+                "cliente_direccion"=>$cliente_direccion,
+                "dni_pdf"=>$dni_pdf,
+                "cip_pdf"=>$cip_pdf,
+                "planilla_pdf"=>$planilla_pdf,
+            );
+            array_push($transaccion_list["garantes"],$transaccion_item);
+        }
+
+        return $transaccion_list;
     }
 
     function read_cronogramaxId(){
@@ -253,6 +293,7 @@ Class Creditos{
             :prtipo,
             :prsucursal,
             :prfecha,
+            :prcodigo,
             :prnumero,
             :prautorizador,
             :prvendedor,
@@ -288,6 +329,7 @@ Class Creditos{
         $result->bindParam(":prtipo", $this->tipo_credito);
         $result->bindParam(":prsucursal", $this->sucursal);
         $result->bindParam(":prfecha", $this->fecha_credito);
+        $result->bindParam(":prcodigo", $this->codigo);
         $result->bindParam(":prnumero", $this->numero);
         $result->bindParam(":prautorizador", $this->autorizador);
         $result->bindParam(":prvendedor", $this->vendedor);
@@ -320,6 +362,7 @@ Class Creditos{
         $this->tipo_credito=htmlspecialchars(strip_tags($this->tipo_credito));
         $this->sucursal=htmlspecialchars(strip_tags($this->sucursal));
         $this->fecha_credito=htmlspecialchars(strip_tags($this->fecha_credito));
+        $this->codigo=htmlspecialchars(strip_tags($this->codigo));
         $this->numero=htmlspecialchars(strip_tags($this->numero));
         $this->autorizador=htmlspecialchars(strip_tags($this->autorizador));
         $this->vendedor=htmlspecialchars(strip_tags($this->vendedor));
@@ -473,6 +516,43 @@ Class Creditos{
         return false;
     }
 
+    function crear_garante(){
+        $query = "CALL sp_crearcreditogarante(
+            :prcredito,
+            :prcliente,
+            :prclientetelefono,
+            :prclientedireccion,
+            :prpdfdni,
+            :prpdfcip,
+            :prpdfplanilla
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prcredito", $this->id_credito);
+        $result->bindParam(":prcliente", $this->cliente);
+        $result->bindParam(":prclientetelefono", $this->cliente_direccion);
+        $result->bindParam(":prclientedireccion", $this->cliente_telefono);
+        $result->bindParam(":prpdfdni", $this->pdf_dni);
+        $result->bindParam(":prpdfcip", $this->pdf_cip);
+        $result->bindParam(":prpdfplanilla", $this->pdf_planilla);
+
+        $this->id_credito=htmlspecialchars(strip_tags($this->id_credito));
+        $this->cliente=htmlspecialchars(strip_tags($this->cliente));
+        $this->cliente_direccion=htmlspecialchars(strip_tags($this->cliente_direccion));
+        $this->cliente_telefono=htmlspecialchars(strip_tags($this->cliente_telefono));
+        $this->pdf_dni=htmlspecialchars(strip_tags($this->pdf_dni));
+        $this->pdf_cip=htmlspecialchars(strip_tags($this->pdf_cip));
+        $this->pdf_planilla=htmlspecialchars(strip_tags($this->pdf_planilla));
+
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
+    }
+
     function crear_cronograma(){
         $query = "CALL sp_crearcreditocronograma(
             :prcredito,
@@ -498,10 +578,40 @@ Class Creditos{
         return false;
     }
 
-    function proximo_credito(){
-        $query = "CALL sp_seleccionarproximocredito()";
+    function crear_cronograma_afiliacion(){
+        $query = "CALL sp_crearcreditocronogramaafiliacion(
+            :prcredito,
+            :prmonto,
+            :prcuotas,
+            :prprimeracuota
+        )";
 
         $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prcredito", $this->id_credito);
+        $result->bindParam(":prmonto", $this->monto);
+        $result->bindParam(":prcuotas", $this->total_cuotas);
+        $result->bindParam(":prprimeracuota", $this->fecha);
+
+        $this->id_credito=htmlspecialchars(strip_tags($this->id_credito));
+        $this->monto=htmlspecialchars(strip_tags($this->monto));
+        $this->total_cuotas=htmlspecialchars(strip_tags($this->total_cuotas));
+        $this->fecha=htmlspecialchars(strip_tags($this->fecha));
+
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    function proximo_credito(){
+        $query = "CALL sp_seleccionarproximocredito(?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->cliente);
 
         $result->execute();
 
@@ -521,6 +631,7 @@ Class Creditos{
 
         $row = $result->fetch(PDO::FETCH_ASSOC);
 
+        $this->codigo=$row['codigo_afiliacion'];
         $this->total_pagado=$row['pagado'];
         $this->total_cuotas=$row['total'];
     }
@@ -539,4 +650,32 @@ Class Creditos{
         $this->interes=$row['interes'];
     }
 
+    function seleccionar_parametros_afiliacion(){
+      $query = "CALL sp_seleccionarparametroafiliacion()";
+
+      $result = $this->conn->prepare($query);
+
+      $result->execute();
+
+      $row = $result->fetch(PDO::FETCH_ASSOC);
+
+      $this->id=$row['id'];
+      $this->monto=$row['monto'];
+      $this->tiempo=$row['tiempo'];
+      $this->fecha=$row['fecha'];
+    }        
+
+    function seleccionar_numero_afiliacion(){
+        $query = "CALL sp_seleccionarproximaafiliacion()";
+
+        $result = $this->conn->prepare($query);
+  
+        $result->execute();
+  
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+  
+        $this->numero=$row['numero'];
+    }
 }
+
+?>
