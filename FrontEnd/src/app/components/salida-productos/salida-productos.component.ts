@@ -248,7 +248,7 @@ export class SalidaProductosComponent implements OnInit {
           ip++
         }
       }
-      if (ip) {
+      if (ip >= 0) {
         this.SalidaProductosForm.get('productos')['controls'][index].get('cantidad').setValue(ip);
         this.SalidaProductosForm.get('productos')['controls'][index].get('cantidad-validacion').setValue(ip);
       }

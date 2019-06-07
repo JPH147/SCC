@@ -331,12 +331,13 @@ EditarModelo(
   }
 
   ListarInstitucion(
-  ):  Observable<Institucion> {
+  ):  Observable<any> {
       return this.http.get(this.url + 'institucion/read.php')
       .pipe(map(res => {
       if (res['codigo'] === 0 ) {
         return res['data'].institucion;
       } else {
+        return []
         // console.log('No hay datos que mostrar');
       }
     }));
@@ -351,6 +352,7 @@ EditarModelo(
       if (res['codigo'] === 0 ) {
         return res['data'].sede;
     } else {
+      return []
        // console.log('No hay datos que mostrar');
     }
   }));
@@ -365,6 +367,7 @@ EditarModelo(
       if (res['codigo'] === 0 ) {
           return res['data'].subsede;
       } else {
+        return []
           // console.log('No hay datos que mostrar');
         }
     }));
@@ -377,6 +380,7 @@ EditarModelo(
       if (res['codigo'] === 0) {
         return res['data'].almacenes;
       } else {
+        return []
         // console.log('No hay datos que mostrar');
         }
     }));
@@ -394,6 +398,7 @@ EditarModelo(
         if (res['codigo'] === 0) {
             return res['data'].tipos;
         } else {
+          return []
             // console.log('No hay datos que mostrar');
           }
       }));
@@ -411,6 +416,7 @@ EditarModelo(
 
             return res['data'].proveedor;
           } else {
+            return []
               // console.log ('No hay datos que mostrar');
           }
       }));
@@ -427,6 +433,7 @@ EditarModelo(
           if (res['codigo'] === 0) {
             return res['data'].clientes;
           } else {
+            return []
               // console.log ('No hay datos que mostrar');
           }
       }));
@@ -455,6 +462,7 @@ EditarModelo(
         if (res['codigo'] === 0) {
             return res['data'].sucursal;
         } else {
+          return []
           // console.log('No hay datos que mostrar');
         }
       }));
@@ -475,6 +483,7 @@ EditarModelo(
         if (res['codigo'] === 0) {
             return res['data'].productos;
         } else {
+          return []
           // console.log('No hay datos que mostrar');
         }
       }));
@@ -499,6 +508,7 @@ EditarModelo(
             if (res['codigo'] === 0) {
               return res['data'].vendedores;
             } else {
+              return []
               // console.log ('No hay datos que mostrar');
             }
         }));
@@ -516,6 +526,7 @@ EditarModelo(
             if (res['codigo'] === 0) {
               return res['data'].productos;
             } else {
+              return []
                 // console.log ('No hay datos que mostrar');
             }
         }));
@@ -530,6 +541,7 @@ EditarModelo(
           if (res['codigo'] === 0) {
             return res['data'].numeros;
           } else {
+            return []
               // console.log ('No hay datos que mostrar');
           }
       }));
@@ -543,6 +555,7 @@ EditarModelo(
           if (res['codigo'] === 0) {
             return res['data'].series;
           } else {
+            return []
               // console.log ('No hay datos que mostrar');
           }
       }));
@@ -573,6 +586,7 @@ EditarModelo(
           if (res['codigo'] === 0) {
             return res['data'];
           } else {
+            return []
               // console.log ('No hay datos que mostrar');
           }
       }));
@@ -601,6 +615,7 @@ EditarModelo(
           return res;
         } else {
           console.log ('No hay datos que mostrar');
+          return [];
         }
       }));
     }

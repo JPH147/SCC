@@ -1311,11 +1311,11 @@ export class VentasComponent implements OnInit {
 
         // Se genera el cronograma
         this.Cronograma.forEach((item)=>{
-          if(item.numero==0){
+          // if(item.numero==0){
+          //   this.Servicio.CrearVentaCronograma(res['data'],item.monto_cuota,item.fecha_vencimiento,1).subscribe(res=>console.log(res))
+          // }else{
             this.Servicio.CrearVentaCronograma(res['data'],item.monto_cuota,item.fecha_vencimiento,1).subscribe()
-          }else{
-            this.Servicio.CrearVentaCronograma(res['data'],item.monto_cuota,item.fecha_vencimiento,1).subscribe()
-          }
+          // }
         });
         
         // this.Servicio.CrearComisionVendedor(res['data'], formulario.value.vendedor.id, formulario.value.montototal).subscribe();

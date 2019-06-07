@@ -28,10 +28,10 @@ export class MenuComponent implements OnInit{
             nombre: "Evaluación",
             path: "evaluacion"
           },
-          {
-            nombre: "Generador de archivos",
-            path: ""
-          },
+          // {
+          //   nombre: "Generador de archivos",
+          //   path: ""
+          // },
         ]
       },
       {
@@ -96,6 +96,14 @@ export class MenuComponent implements OnInit{
           {
             nombre: "Cronograma",
             path: "cobranzas"
+          },
+          {
+            nombre: "Archivos generados",
+            path: "archivos-cobranza"
+          },
+          {
+            nombre: "Generar archivos",
+            path: "generar-archivos"
           },
         ]
       },

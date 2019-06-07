@@ -121,8 +121,9 @@ import { VentasSalidaComponent } from './components/ventas-salida/ventas-salida.
 import { CreditosComponent } from './components/creditos/creditos.component';
 import { CreditosListarComponent } from './components/creditos-listar/creditos-listar.component';
 import { CobranzasComponent } from './components/cobranzas/cobranzas.component';
-import { CobranzaPNPComponent } from './components/cobranza-pnp/cobranza-pnp.component';
 import { CobranzasListarComponent } from './components/cobranzas-listar/cobranzas-listar.component';
+import { CobranzaPnpComponent } from './components/cobranzas/cobranza-pnp/cobranza-pnp.component';
+import { CobranzaArchivosComponent } from './components/cobranza-archivos/cobranza-archivos.component';
 
 @NgModule({
   imports: [
@@ -248,8 +249,9 @@ import { CobranzasListarComponent } from './components/cobranzas-listar/cobranza
     CreditosComponent,
     CreditosListarComponent,
     CobranzasComponent,
-    CobranzaPNPComponent,
-    CobranzasListarComponent
+    CobranzasListarComponent,
+    CobranzaPnpComponent,
+    CobranzaArchivosComponent
    ],
   entryComponents: [
     AppComponent,

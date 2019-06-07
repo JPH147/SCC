@@ -34,7 +34,7 @@ export class CobranzasListarComponent implements OnInit {
   ngOnInit() {
 
     this.fecha_inicio= new Date()
-    this.fecha_fin = new Date((new Date()).valueOf() + 1000*60*60*24*60)
+    this.fecha_fin = new Date((new Date()).valueOf() + 1000*60*60*24*30)
 
     this.ListadoCobranza = new CobranzaDataSource(this.Servicio);
     this.ListadoCobranza.CargarCronograma( "" , "", "", "", 0, this.fecha_inicio, this.fecha_fin, 1, 1, 10 );
@@ -120,7 +120,7 @@ export class CobranzaDataSource implements DataSource<any> {
   ) {
     this.CargandoInformacion.next(true);
 
-    this.Servicio.Listar( cliente, sede, subsede, institucion, tipo, fecha_inicio, fecha_fin, estado, numero_pagina, total_pagina )
+    this.Servicio.ListarCronograma( cliente, sede, subsede, institucion, tipo, fecha_inicio, fecha_fin, estado, numero_pagina, total_pagina )
     .pipe(
       catchError(() => of([])),
       finalize(() => this.CargandoInformacion.next(false))

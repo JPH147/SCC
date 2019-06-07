@@ -160,13 +160,13 @@ export class CreditosComponent implements OnInit, AfterViewInit {
 
         if(params['idcredito']){
           this.id_credito=params['idcredito'];
-          this.id_credito=13;
+          // this.id_credito=13;
           this.SeleccionarCredito(this.id_credito);
         }
 
         if(params['idcreditoeditar']){
           this.id_credito_editar=params['idcreditoeditar'];
-          this.id_credito_editar=14;
+          // this.id_credito_editar=14;
           this.SeleccionarCredito(this.id_credito_editar);
         }
 
