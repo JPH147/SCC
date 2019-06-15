@@ -133,7 +133,6 @@ export class CobranzasService {
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     return this.http.post(this.url + 'cobranza/create-detalle.php', params, {headers: headers});
-
   }
 
   ListarCobranzas(

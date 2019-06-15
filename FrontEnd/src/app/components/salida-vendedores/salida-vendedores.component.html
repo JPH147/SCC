@@ -23,7 +23,7 @@
 
         <mat-grid-tile>
           <mat-form-field class="formulario-principal">
-            <input matInput placeholder="Pecosa" formControlName="pecosa" [readonly]="id_salida">
+            <input matInput placeholder="Pecosa" formControlName="pecosa" readonly>
             <mat-error>Solo se permiten números</mat-error>
           </mat-form-field>
         </mat-grid-tile>
@@ -207,7 +207,7 @@
         <ng-container matColumnDef="comision_efectiva">
           <mat-header-cell *matHeaderCellDef> Comisión efectiva </mat-header-cell>
           <mat-cell *matCellDef="let vendedor">
-             {{vendedor.comision_efectiva}} %
+             {{vendedor.comision_efectiva}} <span *ngIf="SalidaVendedoresForm.value.estado != 'Cerrada'"> % </span>  
              <span *ngIf="SalidaVendedoresForm.value.estado == 'Cerrada'">
               &nbsp; ({{ vendedor.comision_efectiva_porcentaje }} %)
              </span>
@@ -217,7 +217,7 @@
         <ng-container matColumnDef="comision_retenida">
           <mat-header-cell *matHeaderCellDef> Comisión retenida </mat-header-cell>
           <mat-cell *matCellDef="let vendedor">
-              {{vendedor.comision_retenida}} %
+              {{vendedor.comision_retenida}} <span *ngIf="SalidaVendedoresForm.value.estado != 'Cerrada'"> % </span>  
               <span *ngIf="SalidaVendedoresForm.value.estado == 'Cerrada'">
                &nbsp; ({{ vendedor.comision_retenida_porcentaje }} %)
               </span>
@@ -423,7 +423,8 @@
             [disabled]="
               SalidaVendedoresForm.value.serie==0 ||
               SalidaVendedoresForm.get('numero_inicio').invalid ||
-              SalidaVendedoresForm.get('numero_fin').invalid
+              SalidaVendedoresForm.get('numero_fin').invalid ||
+              SalidaVendedoresForm.value.numero_inicio.numero > SalidaVendedoresForm.value.numero_fin.numero
             ">Agregar</button>
           </mat-grid-tile>
   
@@ -577,7 +578,7 @@
               
                 <mat-grid-tile>
                   <button mat-mini-fab type="button" color="primary" matTooltip="Seleccionar series" (click)="AgregarSerieSalidaV(producto,i)" [disabled]="!producto.value.producto"><mat-icon>reorder</mat-icon></button>
-                  <button mat-mini-fab type="button" color="primary" matTooltip="Eliminar producto" (click)="EliminarProducto(producto.value.producto,i)"matTooltip="Eliminar Producto" ><mat-icon>delete</mat-icon></button>
+                  <button mat-mini-fab type="button" color="primary" matTooltip="Eliminar producto" (click)="EliminarProducto(producto.value.id,i)"  [disabled]="SalidaVendedoresForm['controls'].productos['controls'].length==1" ><mat-icon>delete</mat-icon></button>
                 </mat-grid-tile>
               
               </mat-grid-list>
@@ -585,6 +586,16 @@
           </div>
         </ng-container>
               
+      </ng-container>
+
+      <ng-container *ngIf="id_salida || id_salida_editar">
+        <mat-grid-list cols="3" rowHeight="70px">
+          <mat-grid-tile>
+            <mat-form-field class="formulario-principal">
+              <input matInput type="text" placeholder="Almacén" formControlName="almacen" readonly>
+            </mat-form-field>
+          </mat-grid-tile>
+        </mat-grid-list>
       </ng-container>
 
       <ng-container *ngIf="id_salida">
@@ -606,8 +617,13 @@
             <mat-cell *matCellDef="let producto"> {{producto.serie}} </mat-cell>
           </ng-container>
   
-          <ng-container matColumnDef="precio">
-            <mat-header-cell *matHeaderCellDef> Precio mínmo </mat-header-cell>
+          <ng-container matColumnDef="precio_venta">
+            <mat-header-cell *matHeaderCellDef> Precio de venta </mat-header-cell>
+            <mat-cell *matCellDef="let producto"> {{producto.precio_venta | currency:'S/.'}} </mat-cell>
+          </ng-container>
+  
+          <ng-container matColumnDef="precio_minimo">
+            <mat-header-cell *matHeaderCellDef> Precio mínimo </mat-header-cell>
             <mat-cell *matCellDef="let producto"> {{producto.precio_minimo | currency:'S/.'}} </mat-cell>
           </ng-container>
 
@@ -648,6 +664,7 @@
           <mat-grid-tile *ngIf="SalidaVendedoresForm.value.id_producto_editar">
             <mat-form-field class="formulario-principal">
               <input matInput placeholder="Producto" formControlName="descripcion_editar" readonly>
+              <mat-icon color="primary" matSuffix (click)="RemoverProductoEditar()"> remove_circle </mat-icon>
             </mat-form-field>
           </mat-grid-tile>
 
@@ -714,7 +731,7 @@
       <mat-grid-list cols="1" rowHeight="65px">
         <mat-grid-tile> 
           <button mat-raised-button type="button" color="primary" (click)="Guardar(SalidaVendedoresForm)" [disabled]="SalidaVendedoresForm.invalid"> Guardar </button>
-          <!-- <button mat-raised-button type="button" (click)="ImprimirFormulario()"> Guardar </button> -->
+          <!-- <button mat-raised-button type="button" (click)="ImprimirFormulario()"> Imprimir </button> -->
         </mat-grid-tile>
       </mat-grid-list>
     </mat-card-actions>

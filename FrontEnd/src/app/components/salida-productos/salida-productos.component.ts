@@ -70,7 +70,7 @@ export class SalidaProductosComponent implements OnInit {
       'fechaingreso': [null, [
         Validators.required
       ]],
-      'documento': [null, [
+      'documento': ["", [
         Validators.required
       ]],
       productos: this.FormBuilder.array([this.CrearProducto()])
@@ -170,14 +170,18 @@ export class SalidaProductosComponent implements OnInit {
   };
 
   ValidarDocumento(){
-    if (this.SalidaProductosForm.value.almacen && this.SalidaProductosForm.value.documento) {
-      this.SDocumentos.ValidarDocumento(5,this.SalidaProductosForm.value.almacen.id,this.SalidaProductosForm.value.documento).subscribe(res=>{
-        if (res.total==0) {
-          this.nuevo_documento = true
-        }else{
-          this.nuevo_documento = false
-        }
-      })
+    if(this.SalidaProductosForm.value.documento == ""){
+      this.nuevo_documento = true
+    } else {
+      if (this.SalidaProductosForm.value.almacen && this.SalidaProductosForm.value.documento) {
+        this.SDocumentos.ValidarDocumento(5,this.SalidaProductosForm.value.almacen.id,this.SalidaProductosForm.value.documento).subscribe(res=>{
+          if (res.total==0) {
+            this.nuevo_documento = true
+          }else{
+            this.nuevo_documento = false
+          }
+        })
+      }
     }
   }
 

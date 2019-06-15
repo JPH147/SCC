@@ -319,6 +319,24 @@ export class ClienteService {
     }));
   }
 
+  BuscarClienteDNI(
+    dni : string
+  ){
+
+    let params = new HttpParams()
+    .set('prdni', dni)
+
+    return this.http.get(this.url + 'cliente/buscar.php',{params})
+    .pipe(map(res => {
+     if (res['codigo'] === 0) {
+       return res;
+     }else {
+       console.log('No hay datos que mostrar');
+       return res;
+     }
+   }));
+  }
+
 }
 
 export interface Cliente {

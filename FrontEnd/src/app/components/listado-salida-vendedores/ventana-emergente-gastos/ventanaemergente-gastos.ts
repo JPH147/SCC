@@ -54,7 +54,7 @@ export class VentanaEmergenteGastos {
   ListarVendedores(){
     this.Servicio.ListarVendedores(this.data.id).subscribe(res=>{
       this.Vendedores=res['data'].vendedores
-      console.log(this.Vendedores)
+      // console.log(this.Vendedores)
     })
   }
 

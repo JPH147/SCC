@@ -14,6 +14,7 @@ Class Cliente{
     public $inst_nombre;
     public $clt_codigo;
     public $clt_dni;
+    public $dni;
     public $clt_numero;
     public $clt_nombre;
     public $clt_foto;
@@ -110,7 +111,6 @@ Class Cliente{
         }
         return $cliente_list;
     }
-
 
     function contar(){
 
@@ -309,8 +309,8 @@ Class Cliente{
         $this->clt_fecharegistro=$row['clt_fecharegistro'];
     }
 
-    function update()
-    {
+    function update(){
+
         $query = "CALL sp_actualizarcliente (
             :idcliente,
             :id_subsede,
@@ -372,8 +372,9 @@ Class Cliente{
         return false;
         // return $query;
     }
-    function delete()
-    {
+
+    function delete(){
+
         $query = "call sp_eliminarcliente(?)";
         $result = $this->conn->prepare($query);
 
@@ -389,8 +390,7 @@ Class Cliente{
             }
     }
     
-    function updatefoto()
-    {
+    function updatefoto() {
         $query= "CALL sp_actualizarfoto(:idcliente, :clt_foto)";
 
         $result = $this->conn->prepare($query);
@@ -407,6 +407,23 @@ Class Cliente{
         }
         
         return false;
+    }
+
+    function search(){
+        
+        $query ="CALL sp_buscarcliente(?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->dni);
+
+        $result->execute();
+    
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        $this->clt_codigo=$row['codigo'];
+        $this->clt_nombre=$row['nombre'];
+
     }
 }
 ?>

@@ -67,7 +67,7 @@ export class SalidaVendedoresComponent implements OnInit {
 
   // Tabla de productos cuando para ver la salida
   public ListadoProductos: ProductosDataSource;
-  public ColumnasProductos: string[] = [ 'numero','producto', 'serie', 'precio', 'estado', 'opciones'];
+  public ColumnasProductos: string[] = [ 'numero','producto', 'serie', 'precio_venta', 'precio_minimo', 'estado', 'opciones'];
 
   // Tabla de productos cuando se va a editar
   public ListadoProducto : ProductoDataSource;
@@ -142,7 +142,7 @@ export class SalidaVendedoresComponent implements OnInit {
 
         if(params['idsalidaeditar']){
           this.id_salida_editar=params['idsalidaeditar'];
-          this.id_salida_editar=65;
+          // this.id_salida_editar=67;
           this.SeleccionarSalida(this.id_salida_editar);
         }
 
@@ -228,13 +228,13 @@ export class SalidaVendedoresComponent implements OnInit {
       gasto_vendedor:[{value: 0, disabled: false},[
       ]],
       gasto_monto:[{value: null, disabled: false},[
-        Validators.required
+        // Validators.required
       ]],
       gasto_fecha:[{value: new Date(), disabled: false},[
-        Validators.required
+        // Validators.required
       ]],
       gasto_tipo:[{value: null, disabled: false},[
-        Validators.required
+        // Validators.required
       ]],
       gasto_observacion:[{value: "", disabled: false},[
       ]],
@@ -291,11 +291,11 @@ export class SalidaVendedoresComponent implements OnInit {
       this.SalidaVendedoresForm.get('numero_pecosa').setValue(res['data'].pecosa);
       this.SalidaVendedoresForm.get('pecosa').setValue(res['data'].pecosa);
       this.SalidaVendedoresForm.get('sucursal').setValue(res['data'].sucursal);
-
       this.SalidaVendedoresForm.get('guia_remision').setValue(res['data'].guia);
-
       this.SalidaVendedoresForm.get('destino').setValue(res['data'].destino);
-      
+      this.SalidaVendedoresForm.get('almacen').setValue(res['data'].almacen);
+      this.SalidaVendedoresForm.get('estado').setValue(res['data'].estado);
+
       if(res['data'].vehiculo_placa){
         this.SalidaVendedoresForm.get('movilidad_propia').setValue(true);
         this.SalidaVendedoresForm.get('placa').setValue(res['data'].vehiculo_placa);
@@ -303,7 +303,9 @@ export class SalidaVendedoresComponent implements OnInit {
         this.SalidaVendedoresForm.get('chofer').setValue(res['data'].chofer_nombre);
       }
 
-      this.SalidaVendedoresForm.get('estado').setValue(res['data'].estado);
+      // Se quita la opción de obligatorio en el FormArray que se crea
+      this.SalidaVendedoresForm['controls'].productos['controls'][0].get('id').setValue("JP")
+      this.SalidaVendedoresForm['controls'].productos['controls'][0].get('cantidad').setValue(null)
 
       this.Vendedores=res['data'].vendedores.vendedores;
       this.VendedoresViaticos=res['data'].vendedores.vendedores;
@@ -347,7 +349,7 @@ export class SalidaVendedoresComponent implements OnInit {
         this.SalidaVendedoresForm.get('sucursal').clearValidators();
         this.SalidaVendedoresForm.get('pecosa').disable();
         this.SalidaVendedoresForm.get('sucursal').disable();
-        this.SalidaVendedoresForm.get('almacen').setValue(res['data'].almacen);
+        // this.SalidaVendedoresForm.get('almacen').setValue(res['data'].almacen);
         this.SalidaVendedoresForm.get('almacen').clearValidators();
 
         // Inicialmente, ningún campo es obligatorio
@@ -368,9 +370,10 @@ export class SalidaVendedoresComponent implements OnInit {
         this.editar_productos=false;
         this.ProductoEditar=res['data'].productos.productos;
         this.ListadoProducto.AgregarInformacion(this.ProductoEditar);
-        this.PServicio.ListarAlmacenSucursal(res['data'].id_almacen).subscribe(res=>{
-          this.Almacenes=res;
-        })
+        this.ListarProductos("");
+        // this.PServicio.ListarAlmacenSucursal(res['data'].id_almacen).subscribe(res=>{
+        //   this.Almacenes=res;
+        // })
 
         // Para los viáticos
         this.Viaticos = res['data'].viaticos.gastos;
@@ -378,9 +381,9 @@ export class SalidaVendedoresComponent implements OnInit {
 
         // Para los talonarios
         this.Talonarios=res['data'].talonarios.talonarios;
+        this.ListarTalonarios()
         this.SalidaVendedoresForm.get('talonarios').setValue(this.TalonarioSeries.length);
         this.ListadoTalonario.AgregarInformacion(this.Talonarios);
-        this.ListarTalonarios()
       }
 
     })
@@ -478,6 +481,7 @@ export class SalidaVendedoresComponent implements OnInit {
   }
 
   SucursalSeleccionada(evento){
+    this.SalidaVendedoresForm.get('almacen').setValue(null);
     this.PServicio.ListarAlmacenSucursal(evento.value).subscribe(res=>{
       this.Almacenes=res;
     })
@@ -499,7 +503,6 @@ export class SalidaVendedoresComponent implements OnInit {
   }
 
   AgregarVendedor(){
-    console.log(this.SalidaVendedoresForm)
     if(this.Vendedores.length>0){
       if(!this.Vendedores.some(e=>e.id==this.SalidaVendedoresForm.value.vendedor_nombre.id)){
         this.AgregarVendedorEnVerdad()
@@ -596,12 +599,14 @@ export class SalidaVendedoresComponent implements OnInit {
   CrearProducto():FormGroup{
     return this.FormBuilder.group({
       'id':[{value:null, disabled:false},[
+        Validators.required
       ]],
       'producto':[{value:null, disabled:false},[
       ]],
       'descripcion':[{value:null, disabled:false},[
       ]],
-      'cantidad':[{value:null, disabled:false},[
+      'cantidad':[{value:0, disabled:false},[
+        Validators.min(1)
       ]],
     })
   }
@@ -611,8 +616,9 @@ export class SalidaVendedoresComponent implements OnInit {
     this.productos.push(this.CrearProducto())
   };
 
-  EliminarProducto(producto,i){
+  EliminarProducto(id,i){
     this.productos.removeAt(i);
+    this.EliminarElemento(id,1);
   };
 
   EliminarProductoEditar(id_producto){
@@ -628,7 +634,7 @@ export class SalidaVendedoresComponent implements OnInit {
         this.ProductoEditar.forEach((item)=>{
           if(item.nuevo){
             // console.log("Nuevo")
-            console.log(item);
+            // console.log(item);
             this.EliminarElemento(item.id_producto, 2)
           }
         })
@@ -657,6 +663,13 @@ export class SalidaVendedoresComponent implements OnInit {
     this.ListarProductos("");
   }
 
+  RemoverProductoEditar(){
+    this.SalidaVendedoresForm.get('id_producto_editar').setValue(null);
+    this.SalidaVendedoresForm.get('descripcion_editar').setValue(null);
+    this.SalidaVendedoresForm.get('producto_editar').setValue("");
+    this.ListarProductos("");
+  }
+
   EditarSeries(id_producto, descripcion, fecha){
 
     const serieventana = this.DialogoSerie.open(ventanaseriessv, {
@@ -673,13 +686,13 @@ export class SalidaVendedoresComponent implements OnInit {
 
       if (res) {
         
-        console.log(this.Series);
+        // console.log(this.Series);
 
         this.ProductoEditar=this.ProductoEditar.filter(e=>(e.id_producto != id_producto && e.nuevo) || !e.nuevo);
 
         this.EliminarElemento(id_producto,1);
 
-        console.log(this.Series);
+        // console.log(this.Series);
 
         res.forEach((item,index)=>{
 
@@ -706,7 +719,7 @@ export class SalidaVendedoresComponent implements OnInit {
           }
         }) 
 
-        console.log(this.Series)        
+        // console.log(this.Series)        
 
       }
 
@@ -854,7 +867,7 @@ export class SalidaVendedoresComponent implements OnInit {
 
   ListarTalonarios(){
     this.Ventas.ListarTalonarioSerie().subscribe(res=>{
-
+      console.log(res)
       this.TalonarioSeries=res;
 
       if (this.Talonarios.length>0) {
@@ -942,10 +955,20 @@ export class SalidaVendedoresComponent implements OnInit {
   }
 
   ResetearFormArray = (formArray: FormArray) => {
+    let longitud: number;
+    let ip : number = 0;
     if (formArray) {
+      longitud=formArray.length
       formArray.reset()
-      while (formArray.length !== 1) {
+      while (formArray.length > 0) {
+        ip++;
         formArray.removeAt(0)
+      }
+      // console.log(ip, longitud)
+      if(ip==longitud){
+        if(!this.id_salida_editar){
+          this.AgregarProducto()
+        }
       }
     }
   }
@@ -1041,7 +1064,7 @@ export class SalidaVendedoresComponent implements OnInit {
     this.Servicio.Agregar(
       formulario.value.pecosa,
       formulario.value.sucursal,
-      formulario.value.almacen,
+      formulario.value.almacen.id,
       formulario.value.fecha_salida,
       destinos.replace(/,(\s+)?$/, ''),
       formulario.value.guia_remision,
@@ -1067,7 +1090,6 @@ export class SalidaVendedoresComponent implements OnInit {
       })
 
       // Grabar datos de vendedor
-      console.log(this.Vendedores);
       this.Vendedores.forEach((item)=>{
         this.Servicio.AgregarVendedor(
           res.data,
@@ -1078,7 +1100,9 @@ export class SalidaVendedoresComponent implements OnInit {
       })
 
       // Grabar datos de los talonarios
-      this.talonarios.forEach((item)=>{
+      // console.log(this.Talonarios)
+      this.Talonarios.forEach((item)=>{
+        // console.log(item)
         for(let i=item.id_numero_inicio; i<=item.id_numero_fin; i++){
           this.Servicio.AgregarTalonarios(
             res.data,
@@ -1109,7 +1133,7 @@ export class SalidaVendedoresComponent implements OnInit {
 
     let destinos:string="";
 
-    console.log(this.departamentos, this.SalidaVendedoresForm.value.destino)
+    // console.log(this.departamentos, this.SalidaVendedoresForm.value.destino)
 
     if(this.departamentos.length>0){
       for (let i of this.departamentos) {
@@ -1176,7 +1200,7 @@ export class SalidaVendedoresComponent implements OnInit {
               this.id_salida_editar,
               i,
               formulario.value.fecha_salida,
-            ).subscribe(res=>console.log(res))
+            ).subscribe()
           }
         }
       })
@@ -1199,8 +1223,8 @@ export class SalidaVendedoresComponent implements OnInit {
   }
 
   ImprimirFormulario(){
-    console.log(this.SalidaVendedoresForm);
-    // this.ActualizarSalida(this.SalidaVendedoresForm);
+    // console.log(this.SalidaVendedoresForm);
+    // this.CrearSalida(this.SalidaVendedoresForm);
   }
 
 }
@@ -1216,7 +1240,7 @@ export class VendedoresDataSource implements DataSource<any> {
   }
 
   disconnect(){
-    this.Informacion.complete();
+    // this.Informacion.complete();
   }
 
   AgregarInformacion(array){
@@ -1236,7 +1260,7 @@ export class TalonarioDataSource implements DataSource<any> {
   }
 
   disconnect(){
-    this.InformacionTalonarios.complete();
+    // this.InformacionTalonarios.complete();
   }
 
   AgregarInformacion(array){
@@ -1256,7 +1280,7 @@ export class ProductoDataSource implements DataSource<any> {
   }
 
   disconnect(){
-    this.InformacionProductos.complete();
+    // this.InformacionProductos.complete();
   }
 
   AgregarInformacion(array){
@@ -1277,7 +1301,7 @@ export class GastosDataSource implements DataSource<any>{
   }
 
   disconnect(){
-    this.InformacionGastos.complete();
+    // this.InformacionGastos.complete();
   }
 
   AgregarInformacion(array){

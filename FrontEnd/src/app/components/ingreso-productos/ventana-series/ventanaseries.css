@@ -1,7 +1,9 @@
-.boton {
-float: right;
+.card{
+	padding: 0px;
+	overflow-x: hidden;
+	max-height: 90vh
 }
 
-.input-serie{
-	margin-left: 10px;
+mat-card-actions{
+  margin-bottom: 20px !important;
 }

@@ -13,18 +13,18 @@ import {ComisionesDetalleComponent} from './comisiones-detalle/comisiones-detall
 })
 export class ComisionesComponent implements OnInit {
 
-	public fecha_inicio: Date = new Date((new Date).valueOf() - 1000*60*60*24*60)
+	public fecha_inicio: Date = new Date((new Date).valueOf() - 1000*60*60*24*120)
 	public fecha_fin: Date = new Date()
 
-	@ViewChild('InputEfectivas') FiltroEfectivas: MatSelect;
-	@ViewChild('InputRetenidas') FiltroRetenidas: MatSelect;
+	// @ViewChild('InputEfectivas') FiltroEfectivas: MatSelect;
+	// @ViewChild('InputRetenidas') FiltroRetenidas: MatSelect;
 	@ViewChild('InputVendedor') FiltroVendedor: ElementRef;
 	@ViewChild('InputPecosa') FiltroPecosa: ElementRef;
 
 	@ViewChild(MatPaginator) paginator: MatPaginator;
 
   ListadoComisiones: ComisionesDataSource;
-  Columnas: string[] = ['numero', 'nombre_vendedor', 'comision_efectiva' , 'comision_retenida', 'opciones'];
+  Columnas: string[] = ['numero', 'pecosa','nombre_vendedor', 'comision_efectiva' , 'comision_retenida', 'opciones'];
   
   constructor(
   	private Servicio: ComisionesService,
@@ -63,8 +63,7 @@ export class ComisionesComponent implements OnInit {
 
   CargarInformacion(){
   	this.ListadoComisiones.CargarComisiones(
-			this.FiltroEfectivas.value,
-			this.FiltroRetenidas.value,
+      1,1,
 			this.FiltroVendedor.nativeElement.value,
 			this.fecha_inicio,
 			this.fecha_fin,
@@ -104,14 +103,15 @@ export class ComisionesDataSource implements DataSource<any> {
     pagina: number,
     totalpagina: number
   ){
-  this.CargandoInformacion.next(true);
+    this.CargandoInformacion.next(true);
 
-  this.Servicio.ComisionesListado(estado_comision_efectiva, estado_comision_retenida , vendedor, fecha_inicio, fecha_fin, pecosa, pagina, totalpagina)
-  .pipe(catchError(() => of([])),
-  finalize(() => this.CargandoInformacion.next(false))
-  )
-  .subscribe(res => {
-  		console.log(res)
+    this.Servicio.ComisionesListado(estado_comision_efectiva, estado_comision_retenida , vendedor, fecha_inicio, fecha_fin, pecosa, pagina, totalpagina)
+    .pipe(
+      catchError(() => of([])),
+      finalize(() => this.CargandoInformacion.next(false))
+    )
+    .subscribe(res => {
+  		// console.log(res)
       this.TotalResultados.next(res['mensaje']);
       this.InformacionClientes.next(res['data'].vendedores);
     });

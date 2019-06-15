@@ -7,7 +7,7 @@ import { ventanaseries } from './ventana-series/ventanaseries';
 import { VentanaFecha } from './ventana-fecha/ventanafecha';
 import { VentanaDetalle } from './ventana-detalle/ventanadetalle';
 import { FormControl, FormBuilder, FormGroup, Validators, PatternValidator,FormArray, FormControlName } from '@angular/forms';
-import {Observable, fromEvent} from 'rxjs';
+import {Observable, fromEvent, of} from 'rxjs';
 import { MatDialog,MatSnackBar } from '@angular/material';
 import {debounceTime, distinctUntilChanged, tap, delay, map} from 'rxjs/operators';
 import {ProductoService} from '../productos/productos.service';
@@ -63,6 +63,7 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
     public nuevo_documento: boolean;
     public fecha_inicio:Date;
 	  public fecha_fin:Date;
+    public hay_duplicados : boolean;
 
     @ViewChildren('InputProducto') FiltroProducto: QueryList<any>;
     public productos: FormArray;
@@ -96,6 +97,8 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
       this.documento_numero=null;
       this.enviado=false;
 
+      // this.nuevo_documento = true;
+
       this.ListarAlmacen();
       this.ListarTransaccionTipo();
       this.ListarProveedor('');
@@ -106,7 +109,7 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
           'almacen': [null, [Validators.required] ],
           'almacen1': [{value:null,disabled:true} ],
           'tipoIngreso': [null, [Validators.required]],
-          'docReferencia': [null, [Validators.required]],
+          'docReferencia': [ "", [ ]],
           'proveedor': [{value:null,disabled:false}, [Validators.required] ],
           // 'cliente': [null, [Validators.required]],
           // 'vendedor': [null, [Validators.required]],
@@ -164,27 +167,29 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
 
 
     ValidarDocumento(){
-      // console.log("a")
-      if (this.IngresoProductoForm.value.tipoIngreso == 1 && this.IngresoProductoForm.value.docReferencia && this.IngresoProductoForm.value.proveedor) {
-        this.SDocumentos.ValidarDocumento(1,this.IngresoProductoForm.value.proveedor.id,this.IngresoProductoForm.value.docReferencia).subscribe(res=>{
-          // console.log("b",res)
-          if (res.total==0) {
-            this.nuevo_documento = true
-            
-          }else{
-            this.nuevo_documento = false
-          }
-        })
-      }
-      if (this.IngresoProductoForm.value.tipoIngreso == 7 && this.IngresoProductoForm.value.docReferencia && this.id_almacen_referencia) {
-        this.SDocumentos.ValidarDocumento(7,this.id_almacen_referencia,this.IngresoProductoForm.value.docReferencia).subscribe(res=>{
-          // console.log("c",res)
-          if (res.total==0) {
-            this.nuevo_documento = true
-          }else{
-            this.nuevo_documento = false
-          }
-        })
+
+      if(this.IngresoProductoForm.value.docReferencia == ""){
+        this.nuevo_documento = true
+      } else {
+        if (this.IngresoProductoForm.value.tipoIngreso == 1 && this.IngresoProductoForm.value.docReferencia && this.IngresoProductoForm.value.proveedor) {
+          this.SDocumentos.ValidarDocumento(1,this.IngresoProductoForm.value.proveedor.id,this.IngresoProductoForm.value.docReferencia).subscribe(res=>{
+            if (res.total==0) {
+              this.nuevo_documento = true
+              
+            }else{
+              this.nuevo_documento = false
+            }
+          })
+        }
+        if (this.IngresoProductoForm.value.tipoIngreso == 7 && this.IngresoProductoForm.value.docReferencia && this.id_almacen_referencia) {
+          this.SDocumentos.ValidarDocumento(7,this.id_almacen_referencia,this.IngresoProductoForm.value.docReferencia).subscribe(res=>{
+            if (res.total==0) {
+              this.nuevo_documento = true
+            }else{
+              this.nuevo_documento = false
+            }
+          })
+        }
       }
     }
 
@@ -288,7 +293,7 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
         this.EliminarElemento2(this.Series,producto.id);
       }
       
-      console.log(producto)
+      // console.log(producto)
     };
 
     EliminarElemento(array:Array<any>,value) {
@@ -380,9 +385,8 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
         this.clientes = [];
         // tslint:disable-next-line:forin
         for (let i in res) {
-
-            this.clientes.push(res[i]);
-            // console.log(res[i]);
+          this.clientes.push(res[i]);
+          // console.log(res[i]);
         }
       });
     }
@@ -390,11 +394,9 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
     ListarVendedor(nombre: string) {
       this.Servicios.ListarVendedor("",nombre,"",1,5).subscribe( res => {
         this.Vendedores = [];
-
         // tslint:disable-next-line:forin
         for (let i in res) {
-            this.Vendedores.push(res[i]);
-
+          this.Vendedores.push(res[i]);
         }
       });
     }
@@ -431,8 +433,8 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
     }
   }
 
-  VerDetalle(detalle){
-    this.IngresoProductoservicios.ObtenerDetalle(detalle.id).subscribe(res=>{
+  VerDetalle(transaccion){
+    this.IngresoProductoservicios.ObtenerDetalle(transaccion.id).subscribe(res=>{
       let detalle_ventana = this.DialogoSerie.open(VentanaDetalle, {
         width: '800px',
         data: res
@@ -443,14 +445,22 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
 
   AgregarIngreso(transaccion){
 
-    let contador=0
-
     let ingreso_ventana = this.DialogoSerie.open(VentanaFecha,{
       width: '800px'
     })
 
     ingreso_ventana.afterClosed().subscribe(res=>{
       if(res){
+
+        // Se consulta el detalle de la transacción porque el procedimiento
+        // no muestra el detalle de la primera transacción. Motivo: desconocido
+        let detalle : any;
+        let contador=0
+
+        this.IngresoProductoservicios.ObtenerDetalle(transaccion.id).subscribe(res1=>{
+
+          detalle=res1;
+
         this.IngresoProductoservicios.AgregarTransferenciaSucursal(
           this.IngresoProductoForm.value.almacen.id,
           7,
@@ -460,22 +470,26 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
           transaccion.documento,
           this.documento_numero
         ).subscribe (res => {
-            let id_cabecera = res['data'];
-            for(let i of transaccion.detalle) {
-              this.IngresoProductoservicios.CrearTransaccionDetalle(id_cabecera,i.id_serie,i.cantidad*(-1),i.precio,"").subscribe()
-              contador++
-            }
-            if(contador==transaccion.detalle.length){
-              this.IngresoProductoForm.reset();
-              this.enviado=false;
-              this.Series = [];
-              this.detalle_transacciones=[];
-              this.ResetearFormArray(this.productos);
-              this.snackBar.open('El ingreso se guardó satisfactoriamente', '', {
-                duration: 2000,
-              });
-            }
+          // console.log(res)
+          let id_cabecera = res['data'];
+          for(let i of detalle) {
+            this.IngresoProductoservicios.CrearTransaccionDetalle(id_cabecera,i.id_serie,1,i.precio,"").subscribe()
+            contador++
+          }
+          if(contador==detalle.length){
+            this.IngresoProductoForm.reset();
+            this.enviado=false;
+            this.Series = [];
+            this.detalle_transacciones=[];
+            this.ResetearFormArray(this.productos);
+            this.snackBar.open('El ingreso se guardó satisfactoriamente', '', {
+              duration: 2000,
+            });
+          }
         })
+
+        })
+        // console.log(transaccion)
       }
     })
   }
@@ -506,6 +520,14 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
 
       if (res) {
 
+        this.Duplicados(res).subscribe(resultado=>{
+          if(resultado > 0) {
+            this.hay_duplicados = true;
+          } else {
+            this.hay_duplicados = false;
+          }
+        })
+
         let contador=0;
 
         for (let i of res) {
@@ -520,10 +542,29 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
         }
         this.IngresoProductoForm.get('productos')['controls'][index].get('cantidad').setValue(contador)
       }
+
     })
   }
 
+  Duplicados(array) {
+    let object = {};
+    let result = [];
 
+    array.forEach(item => {
+      if(!object[item.serie])
+        object[item.serie] = 0;
+      object[item.serie] += 1;
+    })
+
+    for (let prop in object) {
+      if(object[prop] >= 2) {
+        result.push(prop);
+      }
+    }
+
+    return of(result.length);
+
+  }
 
   Guardar(formulario) {
 
@@ -536,7 +577,8 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
 
       this.SDocumentos.ValidarDocumento(1,this.IngresoProductoForm.value.proveedor.id,this.IngresoProductoForm.value.docReferencia).subscribe(resultado=>{
         // Se valida que el documento no se haya registrado antes
-        if (resultado['total']==0) {
+        // Se agrega la condición de this.IngresoProductoForm.value.docReferencia=="" porque el documento no es obligatorio
+        if (resultado['total']==0 || this.IngresoProductoForm.value.docReferencia=="") {
 
           let contador, duplicados:number;
           contador=0;
@@ -544,7 +586,7 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
           // Se valida que las series no se hayan registrado antes
           this.Series.forEach((item, index)=>{
             this.SSeries.ValidarSerie(item.serie).subscribe(res=>{
-              console.log(res)
+              // console.log(res)
               if (res==0) {
                 contador++;
               }else{
@@ -565,7 +607,7 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
                     1,
                     formulario.value.proveedor.id,
                     formulario.value.fecingreso,
-                    formulario.value.docReferencia,
+                    formulario.value.docReferencia == "" ? "Sin documento" : formulario.value.docReferencia,
                     this.documento_numero
                   ).subscribe (res => {
                     let id_cabecera = res['data'];

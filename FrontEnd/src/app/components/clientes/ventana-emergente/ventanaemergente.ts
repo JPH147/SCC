@@ -85,15 +85,6 @@ export class VentanaEmergenteClientes {
       'departamento': [null, [
         Validators.required
       ]],
-      'direccion': [null, [
-        Validators.required
-      ]],
-      'telefono': [null, [
-        Validators.required
-      ]],
-      'cuenta': [null, [
-        Validators.required
-      ]],
       'provincia': [null, [
         Validators.required
       ]],
@@ -351,5 +342,8 @@ export class VentanaEmergenteClientes {
     })
   }
 
+  Imprimir(){
+    console.log(this.ClientesForm)
+  }
 
 }

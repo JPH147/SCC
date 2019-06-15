@@ -1,8 +1,8 @@
 <mat-card-content>
 
-  <div class="spinner-container" *ngIf="ListadoCobranzaPNP.Cargando| async">
+  <!-- <div class="spinner-container" *ngIf="ListadoCobranzaPNP.Cargando| async">
     <mat-spinner></mat-spinner>
-  </div>
+  </div> -->
 
   <mat-table [dataSource]="ListadoCobranzaPNP" matSort>
 
@@ -41,10 +41,10 @@
 
 </mat-card-content>
 
-<mat-card-actions *ngIf="!id_credito">
+<mat-card-actions>
   <mat-grid-list cols="1" rowHeight="40px">
     <mat-grid-tile>
-      <button mat-raised-button color="primary" (click)="Guardar()"> Guardar </button>
+      <button mat-raised-button color="primary" (click)="Guardar()"> Generar </button>
     </mat-grid-tile>
   </mat-grid-list>
 </mat-card-actions>

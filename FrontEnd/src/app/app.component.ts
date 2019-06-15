@@ -6,7 +6,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  public estado: boolean;
+
+  public estado: boolean; // El estado del menú true=abierto, false=cerrado
   public usuario: any;
 
   constructor() {
@@ -15,7 +16,9 @@ export class AppComponent {
 
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnInit() {
-    this.estado=true; //Valor original=true
+
+    // this.estado=false; // Cuando es para móviles
+    this.estado=true; // Cuando es para PC
     this.usuario = {
       nombre: 'Jean Pierre Rodriguez Farfan',
       rol: 'Administrador',

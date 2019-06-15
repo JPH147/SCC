@@ -1,6 +1,9 @@
-.boton {
-	float: right;
+.card{
+	padding: 0px;
+	overflow-x: hidden;
+	max-height: 90vh
 }
+
 
 .card{
 	padding: 0px;

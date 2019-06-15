@@ -72,7 +72,7 @@ export class VentaService {
       .set('prpdfautorizacion',pdfautorizacion)
       .set('probservaciones',observaciones)
 
-    console.log(params);
+    // console.log(params);
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 

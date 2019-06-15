@@ -8,6 +8,7 @@
     <mat-spinner></mat-spinner>
   </div>
 
+  <!-- Generales -->
   <div class="seccion">
 
     <mat-card-subtitle class="titulo-seccion">
@@ -64,6 +65,7 @@
 
   </div>
 
+  <!-- Ventas -->
   <div class="seccion">
 
     <mat-card-subtitle class="titulo-seccion">
@@ -103,40 +105,55 @@
 
   </div>
 
+  <!-- Viáticos -->
   <div class="seccion">
 
     <mat-card-subtitle class="titulo-seccion">
       ViÁTICOS TOTALES
     </mat-card-subtitle>
 
-    <mat-table [dataSource]="ListadoViaticos" class="mat-elevation-z8">
+    <ng-container *ngIf="!ListadoViaticos.hay_viaticos">
+      <mat-grid-list cols=3 rowHeight="70px">
+        <mat-grid-tile>
+          No hay viáticos asignados
+        </mat-grid-tile>
+      </mat-grid-list>
+    </ng-container>
 
-      <ng-container matColumnDef="numero">
-        <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
-        <mat-cell *matCellDef="let viatico"> {{viatico.numero}} </mat-cell>
-      </ng-container>
+    <ng-container *ngIf="ListadoViaticos.hay_viaticos">
 
-      <ng-container matColumnDef="vendedor">
-        <mat-header-cell *matHeaderCellDef> Contrato </mat-header-cell>
-        <mat-cell *matCellDef="let viatico"> {{viatico.vendedor}} </mat-cell>
-      </ng-container>
+      <mat-table [dataSource]="ListadoViaticos" class="mat-elevation-z8">
 
-      <ng-container matColumnDef="monto_grupal">
-        <mat-header-cell *matHeaderCellDef> Viáticos grupales </mat-header-cell>
-        <mat-cell *matCellDef="let viatico"> {{viatico.monto_grupal  | currency:'S/.'}}</mat-cell>
-      </ng-container>
+        <ng-container matColumnDef="numero">
+          <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+          <mat-cell *matCellDef="let viatico"> {{viatico.numero}} </mat-cell>
+        </ng-container>
+  
+        <ng-container matColumnDef="vendedor">
+          <mat-header-cell *matHeaderCellDef> Contrato </mat-header-cell>
+          <mat-cell *matCellDef="let viatico"> {{viatico.vendedor}} </mat-cell>
+        </ng-container>
+  
+        <ng-container matColumnDef="monto_grupal">
+          <mat-header-cell *matHeaderCellDef> Viáticos grupales </mat-header-cell>
+          <mat-cell *matCellDef="let viatico"> {{viatico.monto_grupal  | currency:'S/.'}}</mat-cell>
+        </ng-container>
+  
+        <ng-container matColumnDef="monto_individual">
+          <mat-header-cell *matHeaderCellDef> Viáticos individuales </mat-header-cell>
+          <mat-cell *matCellDef="let viatico"> {{viatico.monto_individual | currency:'S/.'}} </mat-cell>
+        </ng-container>
+  
+        <mat-header-row *matHeaderRowDef="ColumnasViaticos"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: ColumnasViaticos;"></mat-row>
 
-      <ng-container matColumnDef="monto_individual">
-        <mat-header-cell *matHeaderCellDef> Viáticos individuales </mat-header-cell>
-        <mat-cell *matCellDef="let viatico"> {{viatico.monto_individual | currency:'S/.'}} </mat-cell>
-      </ng-container>
+      </mat-table>
 
-      <mat-header-row *matHeaderRowDef="ColumnasViaticos"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: ColumnasViaticos;"></mat-row>
-    </mat-table>
+    </ng-container>
 
   </div>
 
+  <!-- Comisiones -->
   <div class="seccion">
 
     <mat-card-subtitle class="titulo-seccion">
@@ -171,12 +188,12 @@
       </ng-container>
 
       <ng-container matColumnDef="comision_efectiva">
-        <mat-header-cell *matHeaderCellDef> Ahorro del vendedor </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef> Ganancia del vendedor </mat-header-cell>
         <mat-cell *matCellDef="let vendedor"> {{vendedor.comision_total_efectiva  | currency:'S/.' }} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="comision_retenida">
-        <mat-header-cell *matHeaderCellDef> Ganancia del vendedor </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef> Ahorro del vendedor </mat-header-cell>
         <mat-cell *matCellDef="let vendedor"> {{vendedor.comision_total_retenida  | currency:'S/.' }} </mat-cell>
       </ng-container>
 
@@ -187,76 +204,102 @@
 
   </div>
 
+  <!-- Productos -->
   <div class="seccion">
 
     <mat-card-subtitle class="titulo-seccion">
       PRODUCTOS POR DEVOLVER
     </mat-card-subtitle>
 
+    <ng-container *ngIf="!hay_productos">
+      <mat-grid-list cols=3 rowHeight="70px">
+        <mat-grid-tile>
+          No hay productos por devolver
+        </mat-grid-tile>
+      </mat-grid-list>
+    </ng-container>
+    
+    <ng-container *ngIf="hay_productos">
 
-    <mat-grid-list cols=3 rowHeight="70px">
-      <mat-grid-tile colspan=1>
-        <mat-form-field class="columnas-1">
-          <mat-select placeholder="Almacén de retorno" [(ngModel)]="almacen_retorno">
-            <mat-option *ngFor="let almacen of Almacenes" [value]="almacen.id"> {{almacen.nombre}} </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </mat-grid-tile>
-    </mat-grid-list>
+      <mat-grid-list cols=3 rowHeight="70px">
+        <mat-grid-tile colspan=1>
+          <mat-form-field class="columnas-1">
+            <mat-select placeholder="Almacén de retorno" [(ngModel)]="almacen_retorno">
+              <mat-option *ngFor="let almacen of Almacenes" [value]="almacen.id"> {{almacen.nombre}} </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+      </mat-grid-list>
+  
+      <mat-table [dataSource]="ListadoProductos" class="mat-elevation-z8">
+  
+        <ng-container matColumnDef="numero">
+          <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+          <mat-cell *matCellDef="let producto"> {{producto.numero}} </mat-cell>
+        </ng-container>
+  
+        <ng-container matColumnDef="producto">
+          <mat-header-cell *matHeaderCellDef> Producto </mat-header-cell>
+          <mat-cell *matCellDef="let producto"> {{producto.producto}} </mat-cell>
+        </ng-container>
+  
+        <ng-container matColumnDef="serie">
+          <mat-header-cell *matHeaderCellDef> Serie </mat-header-cell>
+          <mat-cell *matCellDef="let producto"> {{producto.serie}} </mat-cell>
+        </ng-container>
+  
+        <mat-header-row *matHeaderRowDef="ColumnasProductos"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: ColumnasProductos;"></mat-row>
+  
+      </mat-table>
 
-    <mat-table [dataSource]="ListadoProductos" class="mat-elevation-z8">
-
-      <ng-container matColumnDef="numero">
-        <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
-        <mat-cell *matCellDef="let producto"> {{producto.numero}} </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="producto">
-        <mat-header-cell *matHeaderCellDef> Producto </mat-header-cell>
-        <mat-cell *matCellDef="let producto"> {{producto.producto}} </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="serie">
-        <mat-header-cell *matHeaderCellDef> Serie </mat-header-cell>
-        <mat-cell *matCellDef="let producto"> {{producto.serie}} </mat-cell>
-      </ng-container>
-
-      <mat-header-row *matHeaderRowDef="ColumnasProductos"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: ColumnasProductos;"></mat-row>
-
-    </mat-table>
+    </ng-container>
 
   </div>
 
-  <div class="seccion">
+  <!-- Talonarios -->
+  <div class="seccion" *ngIf="Talonarios.length>0">
 
     <mat-card-subtitle class="titulo-seccion">
       TALONARIOS POR DEVOLVER
     </mat-card-subtitle>
 
-    <mat-table [dataSource]="ListadoTalonarios" class="mat-elevation-z8">
 
-      <ng-container matColumnDef="numero">
-        <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
-        <mat-cell *matCellDef="let talonario"> {{talonario.numero}} </mat-cell>
-      </ng-container>
+    <ng-container *ngIf="!hay_talonarios">
+      <mat-grid-list cols=3 rowHeight="70px">
+        <mat-grid-tile>
+          No hay talonarios por devolver
+        </mat-grid-tile>
+      </mat-grid-list>
+    </ng-container>
 
-      <ng-container matColumnDef="contrato">
-        <mat-header-cell *matHeaderCellDef> Contrato </mat-header-cell>
-        <mat-cell *matCellDef="let talonario"> {{talonario.contrato}} </mat-cell>
-      </ng-container>
+    <ng-container *ngIf="hay_talonarios">
 
-      <mat-header-row *matHeaderRowDef="ColumnasTalonarios"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: ColumnasTalonarios;"></mat-row>
-      
-    </mat-table>
+      <mat-table [dataSource]="ListadoTalonarios" class="mat-elevation-z8">
+
+        <ng-container matColumnDef="numero">
+          <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+          <mat-cell *matCellDef="let talonario"> {{talonario.numero}} </mat-cell>
+        </ng-container>
+  
+        <ng-container matColumnDef="contrato">
+          <mat-header-cell *matHeaderCellDef> Contrato </mat-header-cell>
+          <mat-cell *matCellDef="let talonario"> {{talonario.contrato}} </mat-cell>
+        </ng-container>
+  
+        <mat-header-row *matHeaderRowDef="ColumnasTalonarios"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: ColumnasTalonarios;"></mat-row>
+        
+      </mat-table>
+
+    </ng-container>
 
   </div>
 
   <mat-card-actions>
     <mat-grid-list cols=1 rowHeight="40px">
       <mat-grid-tile>
-        <button mat-raised-button color="primary" (click)="CerrarSalida()" [disabled]="!almacen_retorno"> Guardar </button>
+        <button mat-raised-button color="primary" (click)="CerrarSalida()" [disabled]="!almacen_retorno && hay_productos"> Guardar </button>
       </mat-grid-tile>
     </mat-grid-list>
   </mat-card-actions>

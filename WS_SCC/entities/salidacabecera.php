@@ -106,6 +106,9 @@ Class SalidaCabecera{
                 "chofer_dni"=>$chofer_dni,
                 "chofer_nombre"=>$chofer_nombre,
                 "id_estado"=>$id_estado,
+                "ventas"=>$ventas,
+                "viaticos"=>$viaticos,
+                "vv"=>$ventas+$viaticos,
                 "estado"=>$estado
             );
             array_push($SCabecera_list["salidas"],$salida_item);
@@ -825,7 +828,7 @@ Class SalidaCabecera{
 
     function update_talonarios_venta(){
 
-        $query = "call sp_actualizarsalidadetalleproducto_venta(
+        $query = "call sp_actualizarsalidadetalletalonario_venta(
             :id_detalle_talonario,
             :id_venta
         )";

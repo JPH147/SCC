@@ -56,13 +56,13 @@ export class RetornoVendedoresComponent implements OnInit {
     this.ListadoTalonarios= new TalonariosDataSource(this.Servicio);
     this.ListadoProductos= new ProductosDataSource(this.Servicio);
 
-    // this.route.params.subscribe(params => {
-    //   if(params['idsalida']){
-        // this.id_salida=params['idsalida'];
-        this.id_salida=65;
+    this.route.params.subscribe(params => {
+      if(params['idsalida']){
+        this.id_salida=params['idsalida'];
+        // this.id_salida=70;
         this.SeleccionarSalida();
-      // }
-    // })
+      }
+    })
   }
 
   SeleccionarSalida(){
@@ -93,6 +93,7 @@ export class RetornoVendedoresComponent implements OnInit {
       if(res){
         this.ListadoTalonarios.CargarInformacion(this.id_salida,0);
         this.ListadoProductos.CargarInformacion(this.id_salida,0);
+        this.VerificarEstadoVentas()
       }
     })
   }
@@ -110,15 +111,18 @@ export class RetornoVendedoresComponent implements OnInit {
     })
 
     ventana.afterClosed().subscribe(res=>{
-      this.ListadoProductos.CargarInformacion(this.id_salida,0);
       if(res){
-        this.Servicio.AnularSalidaProducto(producto.id,3).subscribe()
+        this.Servicio.AnularSalidaProducto(producto.id,3).subscribe(res=>{
+          // console.log(res)
+          this.ListadoProductos.CargarInformacion(this.id_salida,0);
+        })
       }
     })
   }
 
   NoAnularProducto(producto){
     this.Servicio.AnularSalidaProducto(producto.id,1).subscribe(res=>{
+      // console.log(res)
       this.ListadoProductos.CargarInformacion(this.id_salida,0);
     })
   }

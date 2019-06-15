@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {CollectionViewer, DataSource} from "@angular/cdk/collections";
-import {MatDialog } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 import {Location} from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {SalidaVendedoresService} from '../salida-vendedores/salida-vendedores.service';
 import { BehaviorSubject } from 'rxjs';
 import {ProductosDataSource, TalonariosDataSource, VentasDataSource} from '../retorno-vendedores/retorno-vendedores.component';
@@ -40,14 +40,17 @@ export class RetornoVendedoresCierreComponent implements OnInit {
   public observacion_llegada:string;
   public Vendedores: any = {};
   public Almacenes : Array<any>;
-  public Productos: Array<any>;
-  public Talonarios: Array<any>;
+  public Productos: Array<any> = [];
+  public Talonarios: Array<any> = [];
   public almacen_retorno:number;
+  public hay_productos: boolean;
+  public hay_talonarios: boolean;
 
   constructor(
+    private snackBar: MatSnackBar,
     private location: Location,
-    private Dialogo: MatDialog,
     private route: ActivatedRoute,
+    private router : Router,
     private Servicio: SalidaVendedoresService,
     private VServicios: ServiciosVentas,
     private PServicio: ServiciosProductoSerie
@@ -55,7 +58,7 @@ export class RetornoVendedoresCierreComponent implements OnInit {
 
   ngOnInit() {
     this.observacion_llegada = "";
-    
+
     this.ListadoTalonarios = new TalonariosDataSource(this.Servicio);
     this.ListadoProductos = new ProductosDataSource(this.Servicio);
     this.ListadoVentas = new VentasDataSource(this.Servicio);
@@ -65,9 +68,6 @@ export class RetornoVendedoresCierreComponent implements OnInit {
     this.route.params.subscribe(params => {
       if(params['idsalida']){
         this.id_salida=params['idsalida'];
-        this.SeleccionarSalida();
-      }else{
-        this.id_salida=62;
         this.SeleccionarSalida();
       }
     })
@@ -108,12 +108,24 @@ export class RetornoVendedoresCierreComponent implements OnInit {
   ListarProductos(id_salida:number){
     this.Servicio.ListarSalidaProductos(id_salida,0).subscribe(res=>{
       this.Productos=res['data'].productos;
+      console.log(this.Productos.some(e=>e.id_estado==1))
+      if ( this.Productos.some(e=>e.id_estado==1) ){
+        this.hay_productos = true;
+      } else {
+        this.hay_productos = false;
+      }
     })
   }
   
   ListarTalonarios(id_salida:number){
-    this.Servicio.ListarSalidaTalonarios(id_salida, 0).subscribe(res=>{
+    this.Servicio.ListarSalidaTalonarios(id_salida, 1).subscribe(res=>{
+      // console.log(res['data'].talonarios)
       this.Talonarios=res['data'].talonarios
+      if(res['data'].talonarios.length>0){
+        this.hay_talonarios=true;
+      } else{
+        this.hay_talonarios=false;
+      }
     })
   }
 
@@ -145,17 +157,15 @@ export class RetornoVendedoresCierreComponent implements OnInit {
 
   CerrarSalida(){
 
-    console.log(this.Vendedores)
-
     this.Servicio.CrearLlegada(
       this.id_salida,
       this.fecha_retorno,
       this.observacion_llegada
     ).subscribe(res=>{
-      console.log(res)
       
       // Se crean las comisiones para el vendedor
       this.Vendedores.forEach((item)=>{
+        console.log(item)
         if(item.total_pagar>0){
           this.VServicios.CrearComisionVendedor(
             this.id_salida,
@@ -191,6 +201,20 @@ export class RetornoVendedoresCierreComponent implements OnInit {
         ).subscribe(res1=>console.log(res1))
       })
 
+      if(res['codigo']==0){
+        this.snackBar.open("La salida se creó satisfactoriamente", '', {
+          duration: 2000,
+        });
+      }else{
+        this.snackBar.open("Ocurrió un error al crear la salida", '', {
+          duration: 2000,
+        });
+      }
+
+      setTimeout(()=>{
+        this.router.navigate(['/salidavendedores']);
+      },1000)
+
     })
   }
 
@@ -220,6 +244,7 @@ export class VendedorDataSource implements DataSource<any>{
 export class ViaticosDataSource implements DataSource<any>{
 
   private Informacion = new BehaviorSubject<any>([])
+  public hay_viaticos : boolean;
 
   constructor(
     private Servicio: SalidaVendedoresService
@@ -237,6 +262,12 @@ export class ViaticosDataSource implements DataSource<any>{
     id_salida: number
   ){
     this.Servicio.ListarSalidaViaticos(id_salida).subscribe(res=>{
+      if (res['data'].viaticos.length==0) {
+        this.hay_viaticos=false;
+      } else{
+        this.hay_viaticos=true;
+      }
+      console.log(this.hay_viaticos)
       this.Informacion.next(res['data'].viaticos)
     })
   }

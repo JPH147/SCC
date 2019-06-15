@@ -31,9 +31,10 @@ import { CobranzaArchivosComponent } from './components/cobranza-archivos/cobran
 import { TrabajadoresComponent } from './components/trabajadores/trabajadores.component';
 import { RegistroHorasComponent } from './components/registro-horas/registro-horas.component';
 import { ReporteAsistenciaComponent } from './components/reporte-asistencia/reporte-asistencia.component';
+import { ConsultarClienteComponent } from './components/clientes/consultar-cliente/consultar-cliente.component';
 
 const appRoutes: Routes = [
-  // {path: '', component: EvaluacionComponent}, //prueba
+  // {path: '', component: ConsultarClienteComponent}, //prueba
   {path: 'usuarios', component: UsuariosComponent},
   {path: 'usuarios', component: UsuariosComponent},
   {path: 'productos', component: ProductosComponent},
@@ -72,10 +73,10 @@ const appRoutes: Routes = [
   {path: 'cobranzas', component: CobranzasListarComponent},
   {path: 'generar-archivos', component: CobranzasComponent},
   {path: 'archivos-cobranza', component: CobranzaArchivosComponent},
-  {path: 'trabajadores', component: TrabajadoresComponent}
-  {path: 'registro-horas', component: RegistroHorasComponent}
-  {path: 'reporte-asistencia', component: ReporteAsistenciaComponent}
-  {path: 'prueba', component: CobranzaArchivosComponent}
+  {path: 'trabajadores', component: TrabajadoresComponent},
+  {path: 'registro-horas', component: RegistroHorasComponent},
+  {path: 'reporte-asistencia', component: ReporteAsistenciaComponent},
+  {path: 'prueba', component: RetornoVendedoresComponent}
 ];
 
 export const appRoutingProvider: any[] = [];

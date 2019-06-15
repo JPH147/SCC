@@ -94,18 +94,16 @@ Class Vendedor{
 
     function read_comisiones(){
 
-        $query = "CALL sp_listarcomisiones(?,?,?,?,?,?,?,?)";
+        $query = "CALL sp_listarcomisiones(?,?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
-        $result->bindParam(1, $this->comisiones_efectivas_estado);
-        $result->bindParam(2, $this->comisiones_retenidas_estado);
-        $result->bindParam(3, $this->vendedor);
-        $result->bindParam(4, $this->fecha_inicio);
-        $result->bindParam(5, $this->fecha_fin);
-        $result->bindParam(6, $this->pecosa);
-        $result->bindParam(7, $this->numero_pagina);
-        $result->bindParam(8, $this->total_pagina);
+        $result->bindParam(1, $this->vendedor);
+        $result->bindParam(2, $this->fecha_inicio);
+        $result->bindParam(3, $this->fecha_fin);
+        $result->bindParam(4, $this->pecosa);
+        $result->bindParam(5, $this->numero_pagina);
+        $result->bindParam(6, $this->total_pagina);
 
         $result->execute();
         
@@ -138,16 +136,14 @@ Class Vendedor{
 
     function read_comisiones_contar(){
 
-        $query = "CALL sp_listarcomisionescontar(?,?,?,?,?,?)";
+        $query = "CALL sp_listarcomisionescontar(?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
-        $result->bindParam(1, $this->comisiones_efectivas_estado);
-        $result->bindParam(2, $this->comisiones_retenidas_estado);
-        $result->bindParam(3, $this->vendedor);
-        $result->bindParam(4, $this->fecha_inicio);
-        $result->bindParam(5, $this->fecha_fin);
-        $result->bindParam(6, $this->pecosa);
+        $result->bindParam(1, $this->vendedor);
+        $result->bindParam(2, $this->fecha_inicio);
+        $result->bindParam(3, $this->fecha_fin);
+        $result->bindParam(4, $this->pecosa);
 
         $result->execute();
 

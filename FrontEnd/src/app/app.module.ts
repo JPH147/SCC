@@ -124,9 +124,11 @@ import { CobranzasComponent } from './components/cobranzas/cobranzas.component';
 import { CobranzasListarComponent } from './components/cobranzas-listar/cobranzas-listar.component';
 import { CobranzaPnpComponent } from './components/cobranzas/cobranza-pnp/cobranza-pnp.component';
 import { CobranzaArchivosComponent } from './components/cobranza-archivos/cobranza-archivos.component';
+import { VentanaTrabajadoresComponent } from './components/trabajadores/ventana-trabajador/ventana-trabajador.component';
 import { TrabajadoresComponent } from './components/trabajadores/trabajadores.component';
 import { RegistroHorasComponent } from './components/registro-horas/registro-horas.component';
 import { ReporteAsistenciaComponent } from './components/reporte-asistencia/reporte-asistencia.component';
+import { ConsultarClienteComponent } from './components/clientes/consultar-cliente/consultar-cliente.component';
 
 @NgModule({
   imports: [
@@ -257,7 +259,9 @@ import { ReporteAsistenciaComponent } from './components/reporte-asistencia/repo
     CobranzaArchivosComponent,
     TrabajadoresComponent,
     RegistroHorasComponent,
-    ReporteAsistenciaComponent
+    ReporteAsistenciaComponent,
+    VentanaTrabajadoresComponent,
+    ConsultarClienteComponent
    ],
   entryComponents: [
     AppComponent,
@@ -297,7 +301,8 @@ import { ReporteAsistenciaComponent } from './components/reporte-asistencia/repo
     ComisionesDetalleComponent,
     VentanaCronogramaComponent,
     AgregarVentaComponent,
-    SeleccionarClienteComponent
+    SeleccionarClienteComponent,
+    VentanaTrabajadoresComponent
   ],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider, Notificaciones,{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}]

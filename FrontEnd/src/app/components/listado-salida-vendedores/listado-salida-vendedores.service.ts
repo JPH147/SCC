@@ -130,6 +130,8 @@ export class ListadoSalidaVendedoresService {
     return this.http.post(this.url + 'salidacabecera/delete-gasto.php', params, {headers: headers});
   }
 
+  // Cuando se elimina la salida, se coloca como inactivo las transacciones cabecera referentes
+  // para que los producto retornen al almacén
   EliminarSalida(
     id_salida: number
   ){

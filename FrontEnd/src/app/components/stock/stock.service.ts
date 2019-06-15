@@ -36,7 +36,7 @@ export class StockService {
       if (res['codigo'] === 0) {
         return res;
       } else {
-        console.log('No hay datos que mostrar');
+        // console.log('No hay datos que mostrar');
         return res;
     }
     }));

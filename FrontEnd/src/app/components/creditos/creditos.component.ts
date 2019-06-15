@@ -273,6 +273,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       ]],
       numero: [{value: null, disabled: false},[ // Es el número del crédito
       ]],
+      interes_diario: [{value: false, disabled: false},[
+      ]],
       fecha_pago: [{value: moment(new Date()).add(1, 'months').toDate(), disabled: false},[
         Validators.required,
       ]],

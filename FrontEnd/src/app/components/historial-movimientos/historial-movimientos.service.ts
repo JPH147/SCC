@@ -25,27 +25,21 @@ export class  HistorialMovimientosService {
     orden:string,
   ): Observable<any> {
 
-    // let parametro_corregido;
+    let params = new HttpParams()
+      .set('pralmacen', almacen)
+      .set('prtipo', tipo.toString())
+      .set('prparametro',estado_transaccion.toString())
+      .set('prreferente', referente)
+      .set('prfechainicio', moment(fecha_inicio).format("YYYY/MM/DD"))
+      .set('prfechafin', moment(fecha_fin).format("YYYY/MM/DD"))
+      .set('prdocumento', documento)
+      .set('prpagina', pagina_inicio.toString())
+      .set('prtotalpagina', total_pagina.toString())
+      .set('orden', orden)
 
-    // if (estado_transaccion == 0) {
-    //   parametro_corregido=null
-    // }else{
-    //   parametro_corregido=estado_transaccion.toString()
-    // }
+    // console.log(params)
 
-    return this.http.get(this.url + 'transaccioncabecera/read.php', {
-      params: new HttpParams()
-        .set('pralmacen', almacen)
-        .set('prtipo', tipo.toString())
-        .set('prparametro',estado_transaccion.toString())
-        .set('prreferente', referente)
-        .set('prfechainicio', moment(fecha_inicio).format("YYYY/MM/DD"))
-        .set('prfechafin', moment(fecha_fin).format("YYYY/MM/DD"))
-        .set('prdocumento', documento)
-        .set('prpagina', pagina_inicio.toString())
-        .set('prtotalpagina', total_pagina.toString())
-        .set('orden', orden)
-      }).pipe(map(res => {
+    return this.http.get(this.url + 'transaccioncabecera/read.php', {params}).pipe(map(res => {
       if (res['codigo'] === 0) {
         return res;
       } else {

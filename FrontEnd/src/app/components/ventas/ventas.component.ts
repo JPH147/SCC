@@ -773,7 +773,7 @@ export class VentasComponent implements OnInit {
   }
 
   TipoPagoSeleccionado(){
-    console.log(this.VentasForm.value.tipopago);
+    // console.log(this.VentasForm.value.tipopago);
     if (this.VentasForm.value.tipopago==3 && !this.idventa) {
       this.VentasForm.get('cuotas').setValue(1);
       this.VentasForm.get('cuotas').disable();
@@ -1271,7 +1271,7 @@ export class VentasComponent implements OnInit {
       this.ServiciosGenerales.RenameFile(this.letra,'LETRA',random.toString(),"venta"),
       this.ServiciosGenerales.RenameFile(this.autorizacion,'AUTORIZACION',random.toString(),"venta")
     ).subscribe(resultado=>{
-      console.log(resultado)    
+      // console.log(resultado)    
       this.Servicio.CrearVenta(
         formulario.value.fechaventa,
         formulario.value.sucursal,
@@ -1302,7 +1302,7 @@ export class VentasComponent implements OnInit {
         formulario.value.observaciones,
       ).subscribe(res=>{
 
-        console.log(res);
+        // console.log(res);
 
         // Se crean los productos y se generan los documentos en almacén para cuadrar
         formulario.value.productos.forEach((item)=>{
@@ -1446,11 +1446,11 @@ export class VentasComponent implements OnInit {
 
         // Se genera el cronograma
         this.Cronograma.forEach((item)=>{
-          if(item.numero==0){
+          // if(item.numero==0){
+          //   this.Servicio.CrearVentaCronograma(res['data'],item.monto_cuota,item.fecha_vencimiento,1).subscribe()
+          // }else{
             this.Servicio.CrearVentaCronograma(res['data'],item.monto_cuota,item.fecha_vencimiento,1).subscribe()
-          }else{
-            this.Servicio.CrearVentaCronograma(res['data'],item.monto_cuota,item.fecha_vencimiento,1).subscribe()
-          }
+          // }
         });
         
         // Si la venta tiene garante, se los agrega

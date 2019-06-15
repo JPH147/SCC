@@ -5,6 +5,7 @@ import { Observable, BehaviorSubject, of, fromEvent, merge } from 'rxjs';
 import { catchError, finalize, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import * as moment from 'moment';
 import { Router } from '@angular/router';
+import {Notificaciones} from '../../global/notificacion';
 
 @Component({
   selector: 'app-cobranza-pnp',
@@ -21,7 +22,8 @@ export class CobranzaPnpComponent implements OnInit {
 
   constructor(
     private Servicio: CobranzasService,
-    private router:Router
+    private router:Router,
+    private notificacion: Notificaciones
   ) { }
 
   ngOnInit() {
@@ -72,11 +74,11 @@ export class CobranzaPnpComponent implements OnInit {
                     item.codofin,
                     item.monto_pendiente
                   ).subscribe(res=>{
-                    // console.log(res)
+                    this.notificacion.Snack("Se creó el archivo con éxito","")
                   })
                 })
               } else {
-        
+                this.notificacion.Snack("Ocurrió un error al generar el archivo","")
               }
         
               setTimeout(()=>(

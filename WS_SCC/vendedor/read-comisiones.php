@@ -16,8 +16,6 @@
     try{
         $vendedor = new Vendedor($db);
 
-        $vendedor->comisiones_efectivas_estado = !empty($_GET['prestadoefectivas']) ? trim($_GET['prestadoefectivas']) : 1;
-        $vendedor->comisiones_retenidas_estado = !empty($_GET['prestadoretenidas']) ? trim($_GET['prestadoretenidas']) : 1;
         $vendedor->vendedor = !empty($_GET['prvendedor']) ? trim($_GET['prvendedor']) : "";
         $vendedor->fecha_inicio = !empty($_GET['prfechainicio']) ? trim($_GET['prfechainicio']) : null;
         $vendedor->fecha_fin = !empty($_GET['prfechafin']) ? trim($_GET['prfechafin']) : null;

@@ -2,7 +2,7 @@ import { Component, OnInit, Inject, ViewChildren, QueryList, } from '@angular/co
 import {FormControl} from '@angular/forms';
 import { MatCard, MatInputModule, MatButton, MatDatepicker, MatTableModule,MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import {ServiciosProductoSerie} from '../../global/productoserie';
-import {fromEvent} from 'rxjs';
+import {fromEvent, forkJoin, of} from 'rxjs';
 import {tap, distinctUntilChanged, debounceTime} from 'rxjs/operators';
 
 @Component({
@@ -100,11 +100,6 @@ export class ventanaseries  implements OnInit {
             if (this.seriearticulo.length>1) {
               if(this.FiltroSerie['_results'][i].nativeElement.value.trim()){
                 this.DuplicadosVista(this.FiltroSerie['_results'][i].nativeElement.value.trim(),i)
-                // if(this.Duplicados()==0){
-                //   this.seriearticulo[i].repetidoV=false
-                // }else{
-                //   this.seriearticulo[i].repetidoV=true
-                // }
               }
             }
             this.Comprobar();
@@ -123,7 +118,6 @@ export class ventanaseries  implements OnInit {
           distinctUntilChanged(),
           debounceTime(200),
           tap(()=>{
-            this.cargando=true;
             if(this.FiltroSerie['_results'][i].nativeElement.value.trim()){
               // this.DuplicadosVista(this.FiltroSerie['_results'][i].nativeElement.value,i.trim());
               this.Servicios.ValidarSerie(this.FiltroSerie['_results'][i].nativeElement.value.trim()).subscribe(res=>{
@@ -132,12 +126,10 @@ export class ventanaseries  implements OnInit {
                 }else{
                   this.seriearticulo[i].repetidoBD=true;
                 }
-                // console.log(this.seriearticulo);
                 this.Comprobar();
-                this.cargando=false;
               })
             }
-            this.Comprobar();
+            // this.Comprobar();
           })
         ).subscribe()
       }
@@ -211,10 +203,6 @@ export class ventanaseries  implements OnInit {
 
   }
 
-  // BuscarSerie(value){
-  //   return this.seriearticulo.some(e=>e.serie.trim()==)
-  // }
-
   // Para saber si se agregó la misma serie a otro producto
   DuplicadosVista(value,i){
     let contador=0;
@@ -259,36 +247,50 @@ export class ventanaseries  implements OnInit {
   }
 
   ComprobarVista(){
+    this.invalidV=false;
     if (this.seriearticulo.some(e=>e.repetidoV==true)) {
       this.invalidV=true
+      return of(true);
     }else{
       this.invalidV=false
+      return of(false);
     }
   }
 
   ComprobarPagina(){
+    this.invalidP=false;
     if (this.seriearticulo.some(e=>e.repetidoP==true)) {
-      this.invalidP=true
+      this.invalidP=true;
+      return of(true);
     }else{
-      this.invalidP=false
+      this.invalidP=false;
+      return of(false);
     }
     // this.invalidP=this.seriearticulo.some(e=>e.repetidoP==true)
   }  
 
   ComprobarBD(){
+    this.invalidBD=false;
     if (this.seriearticulo.some(e=>e.repetidoBD==true)) {
-      this.invalidBD=true
+      this.invalidBD=true;
+      return of(true);
     }else{
-      this.invalidBD=false
+      this.invalidBD=false;
+      return of(false);
     }
   }
 
   Comprobar(){
     this.EliminarEspacios();
-    this.ComprobarVista();
-    this.ComprobarPagina();
-    this.ComprobarBD();
-    // this.cargando=false;
+    return forkJoin(
+      this.ComprobarVista(),
+      this.ComprobarPagina(),
+      this.ComprobarBD()
+    ).subscribe(res=>{
+      // console.log(res);
+      this.cargando=false;
+    })
+    
   }
 
 }

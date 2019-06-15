@@ -35,7 +35,7 @@ export class ComisionesService {
 			.set('prpagina',pagina.toString())
 			.set('prtotalpagina',totalpagina.toString())
 
-		console.log(params);
+		// console.log(params);
 
 	  return this.http.get(this.url + 'vendedor/read-comisiones.php',{params})
 	  .pipe(map(res => {
@@ -58,7 +58,7 @@ export class ComisionesService {
 			.set('prpagina',pagina.toString())
 			.set('prtotalpagina',totalpagina.toString())
 
-		console.log(params)
+		// console.log(params)
 
 	  return this.http.get(this.url + 'vendedor/read-comisionesxvendedor.php',{params})
 	  .pipe(map(res => {

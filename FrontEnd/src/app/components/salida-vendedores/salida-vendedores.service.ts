@@ -329,13 +329,15 @@ export class SalidaVendedoresService {
   }
 
   ActualizarSalidaTalonarios(
-    id_detalle: number,
+    id_detalle_talonario: number, // Es el id del talonario en la tabla de salida
     id_venta: number
   ): Observable<any> {
 
     let params = new HttpParams()
-      .set('prid', id_detalle.toString())
+      .set('prid', id_detalle_talonario.toString())
       .set('prventa', id_venta.toString())
+
+    // console.log(params)
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 

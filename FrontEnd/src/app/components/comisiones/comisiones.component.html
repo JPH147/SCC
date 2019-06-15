@@ -6,7 +6,7 @@
 
 	<mat-grid-list cols="4" rowHeight="70px">
 		
-		<mat-grid-tile>
+		<!-- <mat-grid-tile>
 			<mat-form-field>
 				<mat-select placeholder="Comisiones efectivas" [value]="1" #InputEfectivas (selectionChange)="CargarInformacion()">
 					<mat-option [value]="3">Pendientes</mat-option>
@@ -23,6 +23,20 @@
 					<mat-option [value]="2">Pagadas</mat-option>
 					<mat-option [value]="1">Todos</mat-option>
 				</mat-select>
+			</mat-form-field>
+		</mat-grid-tile> -->
+
+		<mat-grid-tile>
+			<mat-icon>search</mat-icon>
+			<mat-form-field>
+				<input matInput type="text" placeholder="Vendedor" #InputVendedor>
+			</mat-form-field>
+		</mat-grid-tile>
+
+		<mat-grid-tile>
+			<mat-icon>search</mat-icon>
+			<mat-form-field>
+				<input matInput type="text" placeholder="Pecosa" #InputPecosa>
 			</mat-form-field>
 		</mat-grid-tile>
 
@@ -42,20 +56,6 @@
       </mat-form-field>
     </mat-grid-tile>
 
-		<mat-grid-tile>
-			<mat-icon>search</mat-icon>
-			<mat-form-field>
-				<input matInput type="text" placeholder="Vendedor" #InputVendedor>
-			</mat-form-field>
-		</mat-grid-tile>
-
-		<mat-grid-tile>
-			<mat-icon>search</mat-icon>
-			<mat-form-field>
-				<input matInput type="text" placeholder="Pecosa" #InputPecosa>
-			</mat-form-field>
-		</mat-grid-tile>
-
 	</mat-grid-list>
 
 	<mat-card-content>
@@ -71,10 +71,15 @@
         <mat-cell *matCellDef="let comision"> {{comision.numero}} </mat-cell>
       </ng-container>
 
+      <ng-container matColumnDef="pecosa">
+        <mat-header-cell *matHeaderCellDef> Pecosa </mat-header-cell>
+        <mat-cell *matCellDef="let comision"> {{comision.pecosa}} </mat-cell>
+      </ng-container>
+
       <ng-container matColumnDef="nombre_vendedor">
         <mat-header-cell *matHeaderCellDef> Vendedor </mat-header-cell>
         <mat-cell *matCellDef="let comision"> {{comision.nombre_vendedor}} </mat-cell>
-    </ng-container>
+      </ng-container>
 
       <ng-container matColumnDef="comision_efectiva">
         <mat-header-cell *matHeaderCellDef> Comisiones efectivas </mat-header-cell>
@@ -89,7 +94,8 @@
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let comision">
-          <button mat-icon-button matTooltip="Ver detalle" color="primary" (click)="VerDetalle(comision.id_vendedor, comision.nombre_vendedor)"><mat-icon> visibility </mat-icon></button>
+          <button mat-icon-button matTooltip="Ver pecosa" color="primary" [routerLink]="['/salidavendedores','ver',comision.id_salida]"><mat-icon> visibility </mat-icon></button>
+          <!-- <button mat-icon-button matTooltip="Ver pecosa" color="primary" (click)="VerDetalle(comision.id_vendedor, comision.nombre_vendedor)"><mat-icon> visibility </mat-icon></button> -->
           <!-- <button mat-icon-button matTooltip="Registrar pago" color="primary" (click)="Registrar(comision)"><mat-icon> attach_money </mat-icon></button> -->
         </mat-cell>
       </ng-container>

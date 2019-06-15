@@ -113,7 +113,6 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
 
-    this.id_venta_editar=50;
     this.editar_cronograma=3;
 
     this.ruta=URLIMAGENES.urlimages;
@@ -1027,7 +1026,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
         }
 
         setTimeout(()=>{
-          this.router.navigate(['/ventas']);
+          this.Atras();
   
           if(res['codigo']==0){
             this.Notificacion.Snack("Se editó la venta con éxito!","");

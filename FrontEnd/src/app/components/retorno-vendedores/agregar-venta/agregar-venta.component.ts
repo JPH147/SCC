@@ -32,6 +32,7 @@ export class AgregarVentaComponent implements OnInit {
   public LstTipoPago: Array<any>;
   public LstContrato: Array<any>;
   public LstProducto: Array<any>;
+  public LstProductoTotal: Array<any>;
   public cliente:any;
   public Productos: Array<any>; // Este será el array que contenga los productos seleccionados
   public Cronograma: Array<any>;
@@ -140,8 +141,8 @@ export class AgregarVentaComponent implements OnInit {
 
   ListarProductos(){
     this.Servicio.ListarSalidaProductos(this.data.salida, 1).subscribe(res=>{
-      // console.log(res);
-      this.LstProducto=res['data'].productos
+      this.LstProductoTotal=res['data'].productos;
+      this.LstProducto=this.LstProductoTotal;
     })
   }
 
@@ -160,13 +161,15 @@ export class AgregarVentaComponent implements OnInit {
     })
 
     Ventana.afterClosed().subscribe(res=>{
-      this.cliente=res;
-      this.ClienteForm.get('id').setValue(res.id);
-      this.ClienteForm.get('nombre').setValue(res.nombre);
-      this.ClienteForm.get('cargo').setValue(res.cargo);
-      this.ClienteForm.get('trabajo').setValue(res.trabajo);
-      this.ObtenerDireccion(res.id);
-      this.ObtenerTelefono(res.id);
+      if(res){
+        this.cliente=res;
+        this.ClienteForm.get('id').setValue(res.id);
+        this.ClienteForm.get('nombre').setValue(res.nombre);
+        this.ClienteForm.get('cargo').setValue(res.cargo);
+        this.ClienteForm.get('trabajo').setValue(res.trabajo);
+        this.ObtenerDireccion(res.id);
+        this.ObtenerTelefono(res.id);
+      }
     })
   }
 
@@ -200,18 +203,6 @@ export class AgregarVentaComponent implements OnInit {
     })
   }
 
-  AgregarProducto(){
-    if(this.Productos.length>0){
-      if(!this.Productos.some(e=>e.id==this.ProductoForm.value.producto.id)){
-        this.AgregarProductoEnVerdad()
-      }else{
-        this.ProductoForm.reset();
-      }
-    }else{
-      this.AgregarProductoEnVerdad()
-    }
-  }
-
   TipoPagoSeleccionado(){
     if (this.DocumentoForm.value.tipopago==3) {
       this.DocumentoForm.get('cuotas').setValue(1);
@@ -221,6 +212,18 @@ export class AgregarVentaComponent implements OnInit {
     }else{
       this.DocumentoForm.get('cuotas').enable();
       this.DocumentoForm.get('inicial').enable();
+    }
+  }
+
+  AgregarProducto(){
+    if(this.Productos.length>0){
+      if(!this.Productos.some(e=>e.id==this.ProductoForm.value.producto.id)){
+        this.AgregarProductoEnVerdad()
+      }else{
+        this.ProductoForm.reset();
+      }
+    }else{
+      this.AgregarProductoEnVerdad()
     }
   }
 
@@ -234,19 +237,37 @@ export class AgregarVentaComponent implements OnInit {
       precio_minimo: this.ProductoForm.value.producto.precio_minimo,
       precio_venta: this.ProductoForm.value.precio*1,
     })
+
     this.ProductoForm.reset();
-    console.log(this.Productos);
     this.ListadoProductos.AgregarInformacion(this.Productos);
     this.CalcularTotal();
+    this.VerificarProductos();
+  }
+
+  // Comprueba que los productos que se listan no estén ya agregados
+  VerificarProductos(){
+    if(this.Productos.length==0){
+      this.LstProducto = this.LstProductoTotal;
+    } else {
+      this.Productos.forEach((item)=>{
+        this.LstProducto = this.LstProductoTotal.filter(e => e.id != item.id)
+      })
+    }
   }
 
   EliminarProducto(id_producto){
+    let ip=0;
+    let longitud = this.Productos.length;
     this.Productos.forEach((item,index)=>{
+      ip++;
       if(item.id==id_producto){
         this.Productos.splice(index,1);
       }
+      if(ip==longitud){
+        this.ListadoProductos.AgregarInformacion(this.Productos);
+        this.VerificarProductos();
+      }
     })
-    this.ListadoProductos.AgregarInformacion(this.Productos);
   }
 
   CalcularTotal(){
@@ -289,7 +310,6 @@ export class AgregarVentaComponent implements OnInit {
   GuardarVenta(){
 
     this.CrearCronograma();
-    // console.log(this.Productos,this.data.talonario.id)
 
     this.VentaServicio.CrearVenta(
       this.VentaForm.value.fecha,
@@ -325,6 +345,7 @@ export class AgregarVentaComponent implements OnInit {
       // En las tablas de SALIDA ---------------------------------------->
       // Se registra la venta realizada en el talonario
       this.Servicio.ActualizarSalidaTalonarios(this.data.talonario.id, res['data']).subscribe();
+
       // Se registra que los productos se vendieron
       this.Productos.forEach((item)=>{
         this.Servicio.ActualizarSalidaProductos(item.id,res['data'],item.precio_venta).subscribe();
@@ -333,18 +354,13 @@ export class AgregarVentaComponent implements OnInit {
 
       // En las tablas de ventas ---------------------------------------->
       // Se crea el cronograma
-      if (this.DocumentoForm.value.tipopago==3) { 
-        this.VentaServicio.CrearVentaCronograma(res['data'],this.DocumentoForm.value.montototal,this.DocumentoForm.value.fechapago,2).subscribe(res=>console.log(res))
-      }else{
+      // if (this.DocumentoForm.value.tipopago==3) { 
+      //   this.VentaServicio.CrearVentaCronograma(res['data'],this.DocumentoForm.value.montototal,this.DocumentoForm.value.fechapago,2).subscribe()
+      // }else{
         this.Cronograma.forEach((item)=>{
-          this.VentaServicio.CrearVentaCronograma(res['data'],item.monto_cuota,item.fecha,1).subscribe(res=>console.log(res))
+          this.VentaServicio.CrearVentaCronograma(res['data'],item.monto_cuota,item.fecha_vencimiento,1).subscribe()
         });
-      }
-      // Se crean los productos y los descargos
-      // this.Productos.forEach((item)=>{
-      //   this.VentaServicio.CrearVentaProductos(res['data'],item.id_serie,item.precio).subscribe(res=>console.log(res))
-      // });
-      // ---------------------------------------------------------------->
+      // }
 
       this.ventana.close(true);
       if(res['codigo']=0){

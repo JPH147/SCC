@@ -29,10 +29,10 @@ export class ClientesComponent implements OnInit {
   Columnas: string[] = ['numero', 'foto', 'codigo' , 'dni', 'nombrecliente', 'subsede' ,  'opciones'];
   public maestro;
 
-  @ViewChild('InputInstitucion') FiltroInstitucion: ElementRef;
-  @ViewChild('InputSede') FiltroSede: ElementRef;
-  @ViewChild('InputSubsede') FiltroSubsede: ElementRef;
-  @ViewChild('InputCargo') FiltroCargo: ElementRef;
+  // @ViewChild('InputInstitucion') FiltroInstitucion: ElementRef;
+  // @ViewChild('InputSede') FiltroSede: ElementRef;
+  // @ViewChild('InputSubsede') FiltroSubsede: ElementRef;
+  // @ViewChild('InputCargo') FiltroCargo: ElementRef;
   @ViewChild('InputCodigo') FiltroCodigo: ElementRef;
   @ViewChild('InputDNI') FiltroDni: ElementRef;
   @ViewChild('InputNombre') FiltroNombre: ElementRef;
@@ -59,10 +59,10 @@ export class ClientesComponent implements OnInit {
     merge(
       fromEvent(this.FiltroDni.nativeElement, 'keyup'),
       fromEvent(this.FiltroNombre.nativeElement, 'keyup'),
-      fromEvent(this.FiltroInstitucion.nativeElement, 'keyup'),
-      fromEvent(this.FiltroSede.nativeElement, 'keyup'),
-      fromEvent(this.FiltroSubsede.nativeElement, 'keyup'),
-      fromEvent(this.FiltroCargo.nativeElement, 'keyup'),
+      // fromEvent(this.FiltroInstitucion.nativeElement, 'keyup'),
+      // fromEvent(this.FiltroSede.nativeElement, 'keyup'),
+      // fromEvent(this.FiltroSubsede.nativeElement, 'keyup'),
+      // fromEvent(this.FiltroCargo.nativeElement, 'keyup'),
       fromEvent(this.FiltroCodigo.nativeElement, 'keyup'),
     ).pipe(
       debounceTime(200),
@@ -85,10 +85,11 @@ export class ClientesComponent implements OnInit {
 
   CargarData() {
     this.ListadoCliente.CargarClientes(
-    this.FiltroInstitucion.nativeElement.value,
-    this.FiltroSede.nativeElement.value,
-    this.FiltroSubsede.nativeElement.value,
-    this.FiltroCargo.nativeElement.value,
+    // this.FiltroInstitucion.nativeElement.value,
+    // this.FiltroSede.nativeElement.value,
+    // this.FiltroSubsede.nativeElement.value,
+    // this.FiltroCargo.nativeElement.value,
+    "","","","",
     this.FiltroCodigo.nativeElement.value,
     this.FiltroDni.nativeElement.value,
     this.FiltroNombre.nativeElement.value,

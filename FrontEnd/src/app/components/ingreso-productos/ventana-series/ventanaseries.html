@@ -1,8 +1,14 @@
-<mat-card>
-    <button mat-mini-fab color="primary" class = 'boton' (click)="AgregarSerieVS()"><mat-icon>add</mat-icon></button>
-    <mat-card-header>
-      <mat-card-title>Ingresar series</mat-card-title>
-    </mat-card-header>
+<mat-card class="card">
+  
+    <mat-toolbar color="primary">
+      <mat-toolbar-row> Ingresar series </mat-toolbar-row>
+    </mat-toolbar>
+    
+    <mat-grid-list cols="1" rowHeight="45px">
+      <mat-grid-tile>
+        <button mat-mini-fab color="primary" (click)="AgregarSerieVS()"><mat-icon>add</mat-icon></button>
+      </mat-grid-tile>
+    </mat-grid-list>
 
     <mat-card-content>
       <mat-grid-list cols=4 rowHeight="70px" *ngFor="let serie of seriearticulo">
