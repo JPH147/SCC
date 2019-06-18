@@ -56,7 +56,7 @@ export class AgregarVentaComponent implements OnInit {
 
     this.ListarTipoPago();
 
-    console.log(this.data);
+    // console.log(this.data);
     this.ListadoProductos = new ProductosDataSource();
     
     this.ListarProductos();
@@ -289,7 +289,7 @@ export class AgregarVentaComponent implements OnInit {
 
     let fecha:Date;
 
-    console.log(year, month, fecha_corregida)
+    // console.log(year, month, fecha_corregida)
 
     let monto=Math.round((this.DocumentoForm.value.montototal-this.DocumentoForm.value.inicial)*100/this.DocumentoForm.value.cuotas)/100
 
@@ -340,7 +340,7 @@ export class AgregarVentaComponent implements OnInit {
       "",
       this.VentaForm.value.observaciones
     ).subscribe(res=>{
-      console.log(res)
+      // console.log(res)
 
       // En las tablas de SALIDA ---------------------------------------->
       // Se registra la venta realizada en el talonario

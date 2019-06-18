@@ -32,8 +32,8 @@ export class SalidaVendedoresService {
     almacen: number,
     fecha: Date,
     destino:string,
-    movilidad_propia: boolean,
     guia: string,
+    movilidad_propia: boolean,
     placa: string,
     dni: string,
     nombre:string,
@@ -46,10 +46,10 @@ export class SalidaVendedoresService {
    		.set('pralmacen', almacen.toString())
    		.set('prfecha', moment(fecha).format("YYYY/MM/DD").toString())
    		.set('prdestino', destino)
-   		.set('prguia', movilidad_propia ? guia : "")
+   		.set('prguia', guia)
       .set('prvehiculo', movilidad_propia ? placa : "")
       .set('prchoferdni', movilidad_propia ? dni : "")
-      .set('prchofernombre', nombre)
+      .set('prchofernombre', movilidad_propia ? nombre : "")
       .set('probservacion', observacion)
 
     console.log(params);

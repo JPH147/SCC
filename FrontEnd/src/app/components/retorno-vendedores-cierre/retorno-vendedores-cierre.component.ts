@@ -108,7 +108,7 @@ export class RetornoVendedoresCierreComponent implements OnInit {
   ListarProductos(id_salida:number){
     this.Servicio.ListarSalidaProductos(id_salida,0).subscribe(res=>{
       this.Productos=res['data'].productos;
-      console.log(this.Productos.some(e=>e.id_estado==1))
+      // console.log(this.Productos.some(e=>e.id_estado==1))
       if ( this.Productos.some(e=>e.id_estado==1) ){
         this.hay_productos = true;
       } else {
@@ -174,7 +174,7 @@ export class RetornoVendedoresCierreComponent implements OnInit {
             item.comision_total_efectiva,
             item.comision_retenida,
             item.comision_total_retenida
-          ).subscribe(res1=>console.log(res1))
+          ).subscribe()
         }
       })
 
@@ -189,7 +189,7 @@ export class RetornoVendedoresCierreComponent implements OnInit {
             item.precio_minimo,
             this.fecha_retorno,
             this.pecosa
-          ).subscribe(res1=>console.log(res1))
+          ).subscribe()
         }
       })
 
@@ -198,7 +198,7 @@ export class RetornoVendedoresCierreComponent implements OnInit {
         this.Servicio.CrearLlegadaTalonarios(
           item.id_talonario,
           item.id_estado==3 ? 0 : item.id_estado
-        ).subscribe(res1=>console.log(res1))
+        ).subscribe()
       })
 
       if(res['codigo']==0){
@@ -267,7 +267,7 @@ export class ViaticosDataSource implements DataSource<any>{
       } else{
         this.hay_viaticos=true;
       }
-      console.log(this.hay_viaticos)
+      // console.log(this.hay_viaticos)
       this.Informacion.next(res['data'].viaticos)
     })
   }

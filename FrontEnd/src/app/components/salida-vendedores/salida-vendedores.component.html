@@ -151,9 +151,10 @@
   
         <mat-grid-list cols="5" rowHeight="70px"> 
   
-          <mat-grid-tile colspan="2" *ngIf="!SalidaVendedoresForm.value.vendedor_nombre && !id_salida_editar">
+          <mat-grid-tile colspan="2" *ngIf="!id_salida_editar">
             <mat-form-field class="formulario-principal">
-              <input matInput placeholder="Vendedor" [matAutocomplete]="autovendedor" #InputVendedor formControlName="vendedor">
+              <input matInput placeholder="Vendedor" [matAutocomplete]="autovendedor" #InputVendedor formControlName="vendedor" [readonly]="SalidaVendedoresForm.value.vendedor_id">
+              <mat-icon color="primary" matSuffix (click)="RemoverVendedor()" *ngIf="SalidaVendedoresForm.value.vendedor_id"> remove_circle </mat-icon>
               <mat-autocomplete #autovendedor="matAutocomplete" [displayWith]="displayFn" (optionSelected)="VendedorSeleccionado($event)">
                 <mat-option *ngFor="let vendedor of Vendedor" [value]="vendedor">
                   {{vendedor.nombre}}
@@ -162,7 +163,7 @@
             </mat-form-field>
           </mat-grid-tile>
   
-          <mat-grid-tile colspan="2" *ngIf="SalidaVendedoresForm.value.vendedor_nombre || id_salida_editar">
+          <mat-grid-tile colspan="2" *ngIf="id_salida_editar">
             <mat-form-field class="formulario-principal">
               <input matInput placeholder="Vendedor" formControlName="vendedor_nombre" readonly>
               <mat-icon color="primary" matSuffix (click)="RemoverVendedor()" *ngIf="!id_salida_editar"> remove_circle </mat-icon>
@@ -184,8 +185,16 @@
           </mat-grid-tile>
   
           <mat-grid-tile>
-            <button mat-raised-button type="button" color="primary" matTooltip="Agrega vendedor" (click)="AgregarVendedor()" [disabled]="!SalidaVendedoresForm.value.vendedor_nombre" *ngIf="!id_salida_editar">Agregar</button>
-            <button mat-raised-button type="button" color="primary" matTooltip="Actualizar vendedor" (click)="ActualizarVendedor()" [disabled]="!SalidaVendedoresForm.value.vendedor_id" *ngIf="id_salida_editar">Actualizar</button>
+            <button mat-raised-button type="button" color="primary" matTooltip="Agrega vendedor" (click)="AgregarVendedor()"
+              [disabled]="!SalidaVendedoresForm.value.vendedor_nombre ||
+              SalidaVendedoresForm.get('vendedor_comision_efectiva').invalid ||
+              SalidaVendedoresForm.get('vendedor_comision_retenida').invalid "
+              *ngIf="!id_salida_editar">Agregar</button>
+            <button mat-raised-button type="button" color="primary" matTooltip="Actualizar vendedor" (click)="ActualizarVendedor()"
+              [disabled]="!SalidaVendedoresForm.value.vendedor_id ||
+              SalidaVendedoresForm.get('vendedor_comision_efectiva').invalid ||
+              SalidaVendedoresForm.get('vendedor_comision_retenida').invalid "
+              *ngIf="id_salida_editar">Actualizar</button>
           </mat-grid-tile>
   
         </mat-grid-list>

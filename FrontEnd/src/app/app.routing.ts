@@ -76,7 +76,7 @@ const appRoutes: Routes = [
   {path: 'trabajadores', component: TrabajadoresComponent},
   {path: 'registro-horas', component: RegistroHorasComponent},
   {path: 'reporte-asistencia', component: ReporteAsistenciaComponent},
-  {path: 'prueba', component: RetornoVendedoresComponent}
+  {path: 'prueba', component: SalidaVendedoresComponent}
 ];
 
 export const appRoutingProvider: any[] = [];

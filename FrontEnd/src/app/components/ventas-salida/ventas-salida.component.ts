@@ -822,7 +822,6 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   }
 
   TipoPagoSeleccionado(){
-    console.log(this.VentasSalidaForm.value.tipopago);
     if (this.VentasSalidaForm.value.tipopago==3 && !this.id_venta) {
       this.VentasSalidaForm.get('cuotas').setValue(1);
       this.VentasSalidaForm.get('cuotas').disable();
@@ -832,6 +831,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       this.VentasSalidaForm.get('cuotas').enable();
       this.VentasSalidaForm.get('inicial').enable();
     }
+    this.CrearCronograma()
   }
 
   ListarProductos(){
@@ -974,7 +974,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
 
         // Productos antiguos
         this.Productos.forEach((item)=>{
-          console.log(item)
+          // console.log(item)
           if(!item.eliminar){
             this.Servicio.ActualizarProductoSalida(this.id_venta_editar, item.id_serie, item.precio).subscribe()
           }

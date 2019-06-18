@@ -783,6 +783,7 @@ export class VentasComponent implements OnInit {
       this.VentasForm.get('cuotas').enable();
       this.VentasForm.get('inicial').enable();
     }
+    this.CrearCronograma();
   }
 
   ListarTipoPago() {

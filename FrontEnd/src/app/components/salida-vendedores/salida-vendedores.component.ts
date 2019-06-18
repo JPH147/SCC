@@ -196,8 +196,12 @@ export class SalidaVendedoresComponent implements OnInit {
       vendedor_nombre: [{value:null, disabled:false}, [
       ]],
       vendedor_comision_efectiva: [{value:null, disabled:false}, [
+        Validators.max(99),
+        Validators.pattern ('[0-9- ]+')
       ]],
       vendedor_comision_retenida:[{value:this.comision_retenida,disabled:false},[
+        Validators.max(99),
+        Validators.pattern ('[0-9- ]+')
       ]],
       vendedores: [{value:0, disabled:false}, [
         Validators.required,
@@ -526,7 +530,7 @@ export class SalidaVendedoresComponent implements OnInit {
 
     this.ResetearVendedor()
 
-    this.SalidaVendedoresForm.get("vendedores").setValue(this.Vendedores);
+    this.SalidaVendedoresForm.get("vendedores").setValue(this.Vendedores.length);
     this.ListadoVendedores.AgregarInformacion(this.Vendedores);
   }
 
@@ -538,12 +542,20 @@ export class SalidaVendedoresComponent implements OnInit {
     )
     .subscribe( res => {
       this.Vendedor=res;
+
+      if (this.Vendedores.length>0) {
+        this.Vendedores.forEach((item)=>{
+          this.Vendedor=this.Vendedor.filter(e=>e.id!=item.id)
+        })
+      }
+
     });
   }
 
   VendedorSeleccionado(event){
     this.SalidaVendedoresForm.get('vendedor_comision_efectiva').setValue(event.option.value.comision);
     this.SalidaVendedoresForm.get('vendedor_nombre').setValue(event.option.value.nombre);
+    this.SalidaVendedoresForm.get('vendedor_id').setValue(event.option.value.id);
     this.ListarVendedor("");
   }
 
@@ -867,12 +879,9 @@ export class SalidaVendedoresComponent implements OnInit {
 
   ListarTalonarios(){
     this.Ventas.ListarTalonarioSerie().subscribe(res=>{
-      console.log(res)
       this.TalonarioSeries=res;
-
       if (this.Talonarios.length>0) {
         this.Talonarios.forEach((item)=>{
-          // console.log(item)
           this.TalonarioSeries=this.TalonarioSeries.filter(e=>e.serie!=item.serie)
         })
       }
@@ -1223,8 +1232,7 @@ export class SalidaVendedoresComponent implements OnInit {
   }
 
   ImprimirFormulario(){
-    // console.log(this.SalidaVendedoresForm);
-    // this.CrearSalida(this.SalidaVendedoresForm);
+    console.log(this.SalidaVendedoresForm);
   }
 
 }

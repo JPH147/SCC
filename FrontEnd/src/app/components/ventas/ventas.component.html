@@ -368,7 +368,7 @@
 
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
-             <input matInput [matDatepicker]="picker" placeholder="Fecha de venta" formControlName="fechaventa" [readonly]="idventa">
+             <input matInput [matDatepicker]="picker" placeholder="Fecha de venta" formControlName="fechaventa" (dateChange)="CrearCronograma()" [readonly]="idventa">
              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
              <mat-datepicker #picker [disabled]="idventa"></mat-datepicker>
           </mat-form-field>
