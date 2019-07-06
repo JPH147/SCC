@@ -14,8 +14,7 @@
 	$db = $database->getConnection();
 	$venta = new Venta($db);
 
-	try
-	{
+	try{
 	    $venta->id_venta = isset($_GET['prid']) ? trim($_GET['prid']) : die();
 	    
 	    $venta->readxId_salida();
@@ -48,6 +47,7 @@
 			"letra_pdf"=>$venta->letra_pdf,
 			"voucher_pdf"=>$venta->voucher_pdf,
 			"autorizacion_pdf"=>$venta->autorizacion_pdf,
+			"otros_pdf"=>$venta->otros_pdf,
 			"observacion"=>$venta->observacion,
 			"lugar_venta"=>$venta->lugar_venta,
 			"estado"=>$venta->estado,

@@ -115,6 +115,7 @@ export class CreditosService {
     pdf_compromiso:string,
     pdf_letra:string,
     pdf_ddjj:string,
+    pdf_otros:string,
     observacion:string
   ) :Observable<any> {
 
@@ -124,7 +125,7 @@ export class CreditosService {
       .set('prfecha',moment(fecha_credito).format("YYYY-MM-DD"))
       .set('prcodigo',numero_afiliacion.toString())
       .set('prnumero',numero_credito.toString())
-      .set('prautorizador',autorizador ? autorizador.toString() : "0")
+      .set('prautorizador',autorizador.toString())
       .set('prvendedor',vendedor.toString())
       .set('prcliente',cliente.toString())
       .set('prclientedireccion',cliente_direccion)
@@ -150,6 +151,7 @@ export class CreditosService {
       .set('prpdfcompromiso',pdf_compromiso)
       .set('prpdfletra',pdf_letra)
       .set('prpdfddjj',pdf_ddjj)
+      .set('prpdfotros',pdf_otros)
       .set('probservacion',observacion)
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
@@ -213,6 +215,27 @@ export class CreditosService {
     return this.http.post(this.url + 'credito/create-garante.php', params, {headers: headers});
   }
 
+  CrearCourier(
+    id_credito : number,
+    id_courier : number,
+    fecha : Date,
+    numero_seguimiento : string,
+    pdf_foto : string,
+    observacion : string,
+  ){
+    let params = new HttpParams()
+      .set('prcredito',id_credito.toString())
+      .set('prcourier',id_courier.toString())
+      .set('prfecha',moment(fecha).format("YYYY-MM-DD"))
+      .set('prseguimiento',numero_seguimiento)
+      .set('prpdffoto',pdf_foto)
+      .set('probservacion',observacion)
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'credito/create-courier.php', params, {headers: headers});
+  }
+
   Actualizar(
     id_credito:number,
     sucursal:number,
@@ -243,6 +266,7 @@ export class CreditosService {
     pdf_compromiso:string,
     pdf_letra:string,
     pdf_ddjj:string,
+    pdf_otros:string,
     observacion:string
   ) :Observable<any> {
 
@@ -276,6 +300,7 @@ export class CreditosService {
       .set('prpdfcompromiso',pdf_compromiso)
       .set('prpdfletra',pdf_letra)
       .set('prpdfddjj',pdf_ddjj)
+      .set('prpdfotros',pdf_otros)
       .set('probservacion',observacion)
 
     console.log(params);
@@ -371,6 +396,20 @@ export class CreditosService {
         return [];
       }
     }))
+  }
+
+  ListarTipos() : Observable<any> {
+    return this.http.get(this.url + "credito/read-tipo.php")
+    .pipe(
+      map((res)=>{
+        if(res['codigo']==0){
+          return res['data']
+        } else {
+          console.log("No hay datos que mostrar")
+          return [];
+        }
+      })
+    )
   }
 
 }

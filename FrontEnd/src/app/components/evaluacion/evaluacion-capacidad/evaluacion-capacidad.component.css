@@ -8,7 +8,7 @@ mat-card.principal{
 }
 
 mat-form-field{
-    width: 80%
+    width: 100%
 }
 
 mat-list{
@@ -40,4 +40,12 @@ mat-list{
   top: 50px;
   left: 0px;
   width: 100%
+}
+
+.columna{
+    border-radius: 5px !important;
+}
+
+mat-list-item{
+    margin: 15px 0 !important;
 }

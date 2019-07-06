@@ -85,6 +85,7 @@ export class VentasComponent implements OnInit {
   public planilla: string;
   public letra: string;
   public autorizacion: string;
+  public otros: string;
 
   public foto_nuevo: string;
   public dni_nuevo: string;
@@ -94,6 +95,7 @@ export class VentasComponent implements OnInit {
   public planilla_nuevo: string;
   public letra_nuevo: string;
   public autorizacion_nuevo: string;
+  public otros_nuevo: string;
 
   public foto_antiguo: string;
   public dni_antiguo: string;
@@ -103,6 +105,7 @@ export class VentasComponent implements OnInit {
   public planilla_antiguo: string;
   public letra_antiguo: string;
   public autorizacion_antiguo: string;
+  public otros_antiguo: string;
 
   public foto_editar: boolean= false;
   public dni_editar: boolean= false;
@@ -112,6 +115,7 @@ export class VentasComponent implements OnInit {
   public planilla_editar: boolean= false;
   public letra_editar: boolean= false;
   public autorizacion_editar: boolean= false;
+  public otros_editar: boolean= false;
 
   @ViewChild('InputFechaPago') FiltroFecha: ElementRef;
   @ViewChild('InputInicial') FiltroInicial: ElementRef;
@@ -310,8 +314,8 @@ export class VentasComponent implements OnInit {
       this.VentasForm.get('direccion').setValue(res.cliente_direccion);
       this.VentasForm.get('telefono').setValue(res.cliente_telefono);
       this.VentasForm.get('lugar').setValue(res.lugar_venta);
-      this.VentasForm.get('fechaventa').setValue(res.fecha);
-      this.VentasForm.get('fechapago').setValue(res.fecha_inicio_pago);
+      this.VentasForm.get('fechaventa').setValue(moment(res.fecha).toDate());
+      this.VentasForm.get('fechapago').setValue(moment(res.fecha_inicio_pago).toDate());
       this.VentasForm.get('inicial').setValue(res.monto_inicial);
       this.VentasForm.get('cuotas').setValue(res.numero_cuotas);
       this.VentasForm.get('montototal').setValue(res.monto_total);
@@ -396,6 +400,10 @@ export class VentasComponent implements OnInit {
         res.autorizacion_pdf!="" ? this.autorizacion=URLIMAGENES.carpeta+'venta/'+res.autorizacion_pdf : null;
         res.autorizacion_pdf!="" ? this.autorizacion_editar=false : this.autorizacion_editar=true;
 
+        this.otros_antiguo=res.otros_pdf;
+        res.otros_pdf!="" ? this.otros=URLIMAGENES.carpeta+'venta/'+res.otros_pdf : null;
+        res.otros_pdf!="" ? this.otros_editar=false : this.otros_editar=true;
+
         if(res['garantes'].garantes.length>0){
 
           res['garantes'].garantes.forEach((item,index)=>{
@@ -453,6 +461,7 @@ export class VentasComponent implements OnInit {
         res.planilla_pdf!="" ? this.planilla=URLIMAGENES.carpeta+'venta/'+res.planilla_pdf : null;
         res.letra_pdf!="" ? this.letra=URLIMAGENES.carpeta+'venta/'+res.letra_pdf : null;
         res.autorizacion_pdf!="" ? this.autorizacion=URLIMAGENES.carpeta+'venta/'+res.autorizacion_pdf : null;
+        res.otros_pdf!="" ? this.otros=URLIMAGENES.carpeta+'venta/'+res.otros_pdf : null;
 
         if(res['garantes'].garantes.length>0){
 
@@ -710,7 +719,8 @@ export class VentasComponent implements OnInit {
 
     this.ClienteServicio.Seleccionar(id_cliente).subscribe(res => {
       if (res) {
-        // console.log(res)
+        console.log(res)
+        this.VentasForm.get('id_cliente').setValue(res.id);
         this.VentasForm.get('cliente').setValue(res.nombre);
         this.VentasForm.get('cargo').setValue(res.cargo);
         this.VentasForm.get('trabajo').setValue(res.trabajo);
@@ -1030,6 +1040,14 @@ export class VentasComponent implements OnInit {
     }
   }
 
+  SubirOtros(evento){
+    if (!this.idventa_editar) {
+      this.otros=evento.serverResponse.response.body.data;
+    }else{
+      this.otros_nuevo=evento.serverResponse.response.body.data;
+    }
+  }
+
   Atras(){
     this.location.back()
   }
@@ -1096,6 +1114,14 @@ export class VentasComponent implements OnInit {
 
   NoEditarAutorizacion(){
     this.autorizacion_editar=false;
+  }
+
+  EditarOtros(){
+    this.otros_editar=true;
+  }
+
+  NoEditarOtros(){
+    this.otros_editar=false;
   }
 
   SubirDNIAval(evento, index){
@@ -1270,14 +1296,15 @@ export class VentasComponent implements OnInit {
       this.ServiciosGenerales.RenameFile(this.transaccion,'TRANSACCION',random.toString(),"venta"),
       this.ServiciosGenerales.RenameFile(this.planilla,'PLANILLA',random.toString(),"venta"),
       this.ServiciosGenerales.RenameFile(this.letra,'LETRA',random.toString(),"venta"),
-      this.ServiciosGenerales.RenameFile(this.autorizacion,'AUTORIZACION',random.toString(),"venta")
+      this.ServiciosGenerales.RenameFile(this.autorizacion,'AUTORIZACION',random.toString(),"venta"),
+      this.ServiciosGenerales.RenameFile(this.otros,'OTROS',random.toString(),"venta")
     ).subscribe(resultado=>{
-      // console.log(resultado)    
+      console.log(resultado)
       this.Servicio.CrearVenta(
         formulario.value.fechaventa,
         formulario.value.sucursal,
         formulario.value.contrato,
-        formulario.value.id_autorizador,
+        formulario.value.id_autorizador ? formulario.value.id_autorizador : 0,
         formulario.value.id_cliente,
         formulario.value.direccion,
         formulario.value.telefono,
@@ -1300,6 +1327,7 @@ export class VentasComponent implements OnInit {
         resultado[5].mensaje,
         resultado[6].mensaje,
         resultado[7].mensaje,
+        resultado[8].mensaje,
         formulario.value.observaciones,
       ).subscribe(res=>{
 
@@ -1382,7 +1410,8 @@ export class VentasComponent implements OnInit {
       this.ServiciosGenerales.RenameFile(this.transaccion_nuevo,'TRANSACCION',random.toString(),"venta"),
       this.ServiciosGenerales.RenameFile(this.planilla_nuevo,'PLANILLA',random.toString(),"venta"),
       this.ServiciosGenerales.RenameFile(this.letra_nuevo,'LETRA',random.toString(),"venta"),
-      this.ServiciosGenerales.RenameFile(this.autorizacion_nuevo,'AUTORIZACION',random.toString(),"venta")
+      this.ServiciosGenerales.RenameFile(this.autorizacion_nuevo,'AUTORIZACION',random.toString(),"venta"),
+      this.ServiciosGenerales.RenameFile(this.otros_nuevo,'OTROS',random.toString(),"venta")
     ).subscribe(resultado=>{
       // console.log(resultado)
 
@@ -1394,7 +1423,7 @@ export class VentasComponent implements OnInit {
         formulario.value.fechaventa,
         formulario.value.sucursal,
         formulario.value.contrato,
-        formulario.value.id_autorizador,
+        formulario.value.id_autorizador ? formulario.value.id_autorizador : 0,
         formulario.value.id_cliente,
         formulario.value.direccion,
         formulario.value.telefono,
@@ -1417,6 +1446,7 @@ export class VentasComponent implements OnInit {
         this.planilla_editar ? resultado[5].mensaje : this.planilla_antiguo,
         this.letra_editar ? resultado[6].mensaje : this.letra_antiguo,
         this.autorizacion_editar ? resultado[7].mensaje : this.autorizacion_antiguo,
+        this.otros_editar ? resultado[8].mensaje : this.otros_antiguo,
         formulario.value.observaciones,
       ).subscribe(res=>{
 

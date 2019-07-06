@@ -28,6 +28,7 @@ Class Venta{
     public $vnt_letra_pdf;
     public $vnt_voucher_pdf;
     public $vnt_autorizacion_pdf;
+    public $vnt_otros_pdf;
     public $vnt_fecha_inicio;
     public $vnt_inicial;
     public $vnt_numero_cuota;
@@ -175,6 +176,7 @@ Class Venta{
             :prpdfletra,
             :prpdfvoucher,
             :prpdfautorizacion,
+            :prpdfotros,
             :probservaciones
         )";
 
@@ -206,6 +208,7 @@ Class Venta{
         $result->bindParam(":prpdfletra", $this->pdfletra);
         $result->bindParam(":prpdfvoucher", $this->pdfvoucher);
         $result->bindParam(":prpdfautorizacion", $this->pdfautorizacion);
+        $result->bindParam(":prpdfotros", $this->vnt_otros_pdf);
         $result->bindParam(":probservaciones", $this->observaciones);
 
         $this->fecha=htmlspecialchars(strip_tags($this->fecha));
@@ -234,6 +237,7 @@ Class Venta{
         $this->pdfletra=htmlspecialchars(strip_tags($this->pdfletra));
         $this->pdfvoucher=htmlspecialchars(strip_tags($this->pdfvoucher));
         $this->pdfautorizacion=htmlspecialchars(strip_tags($this->pdfautorizacion));
+        $this->vnt_otros_pdf=htmlspecialchars(strip_tags($this->vnt_otros_pdf));
         $this->observaciones=htmlspecialchars(strip_tags($this->observaciones));
 
         if($result->execute())
@@ -278,6 +282,7 @@ Class Venta{
             :prpdfletra,
             :prpdfvoucher,
             :prpdfautorizacion,
+            :prpdfotros,
             :probservaciones
         )";
 
@@ -310,6 +315,7 @@ Class Venta{
         $result->bindParam(":prpdfletra", $this->pdfletra);
         $result->bindParam(":prpdfvoucher", $this->pdfvoucher);
         $result->bindParam(":prpdfautorizacion", $this->pdfautorizacion);
+        $result->bindParam(":prpdfotros", $this->vnt_otros_pdf);
         $result->bindParam(":probservaciones", $this->observaciones);
 
         $this->id_venta=htmlspecialchars(strip_tags($this->id_venta));
@@ -339,6 +345,7 @@ Class Venta{
         $this->pdfletra=htmlspecialchars(strip_tags($this->pdfletra));
         $this->pdfvoucher=htmlspecialchars(strip_tags($this->pdfvoucher));
         $this->pdfautorizacion=htmlspecialchars(strip_tags($this->pdfautorizacion));
+        $this->vnt_otros_pdf=htmlspecialchars(strip_tags($this->vnt_otros_pdf));
         $this->observaciones=htmlspecialchars(strip_tags($this->observaciones));
 
         if($result->execute())
@@ -401,6 +408,7 @@ Class Venta{
         $this->letra_pdf=$row['letra_pdf'];
         $this->voucher_pdf=$row['voucher_pdf'];
         $this->autorizacion_pdf=$row['autorizacion_pdf'];
+        $this->otros_pdf=$row['otros_pdf'];
         $this->observacion=$row['observacion'];
         $this->lugar_venta=$row['lugar_venta'];
         $this->estado=$row['estado'];
@@ -456,6 +464,7 @@ Class Venta{
         $this->letra_pdf=$row['letra_pdf'];
         $this->voucher_pdf=$row['voucher_pdf'];
         $this->autorizacion_pdf=$row['autorizacion_pdf'];
+        $this->otros_pdf=$row['otros_pdf'];
         $this->observacion=$row['observacion'];
         $this->lugar_venta=$row['lugar_venta'];
         $this->estado=$row['estado'];

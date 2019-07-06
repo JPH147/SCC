@@ -38,6 +38,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   public id_salida: number;
   public productos: FormArray;
   public garantes: FormArray;
+  public Vendedores:Array<any> = [];
   public Productos:Array<any>;
   public Cronograma: Array<any>;
   public VentasSalidaForm:FormGroup;
@@ -66,6 +67,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   public planilla: string;
   public letra: string;
   public autorizacion: string;
+  public otros: string;
 
   public foto_nuevo: string;
   public dni_nuevo: string;
@@ -75,6 +77,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   public planilla_nuevo: string;
   public letra_nuevo: string;
   public autorizacion_nuevo: string;
+  public otros_nuevo: string;
 
   public foto_antiguo: string;
   public dni_antiguo: string;
@@ -84,6 +87,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   public planilla_antiguo: string;
   public letra_antiguo: string;
   public autorizacion_antiguo: string;
+  public otros_antiguo: string;
 
   public foto_editar: boolean= false;
   public dni_editar: boolean= false;
@@ -93,6 +97,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   public planilla_editar: boolean= false;
   public letra_editar: boolean= false;
   public autorizacion_editar: boolean= false;
+  public otros_editar: boolean= false;
 
   constructor(
     private Servicio: VentaService,
@@ -254,6 +259,8 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
 
     this.Servicio.SeleccionarVentaSalida(id_venta).subscribe(res=>{
       
+      // console.log(res)
+
       this.id_salida = res.id_salida;
 
       this.numero_contrato=res.contrato;
@@ -268,8 +275,8 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       this.VentasSalidaForm.get('telefono').setValue(res.cliente_telefono_numero);
       this.VentasSalidaForm.get('pecosa').setValue(res.pecosa);
       this.VentasSalidaForm.get('lugar').setValue(res.lugar_venta);
-      this.VentasSalidaForm.get('fechaventa').setValue(res.fecha);
-      this.VentasSalidaForm.get('fechapago').setValue(res.fecha_inicio_pago);
+      this.VentasSalidaForm.get('fechaventa').setValue(moment(res.fecha).toDate());
+      this.VentasSalidaForm.get('fechapago').setValue(moment(res.fecha_inicio_pago).toDate());
       this.VentasSalidaForm.get('inicial').setValue(res.monto_inicial);
       this.VentasSalidaForm.get('cuotas').setValue(res.numero_cuotas);
       this.VentasSalidaForm.get('montototal').setValue(res.monto_total);
@@ -281,6 +288,11 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       
       this.ListadoVentas.Informacion.next(this.Cronograma);
       
+      this.SServicio.ListarComisiones(res.id_salida).subscribe(res=>{
+        // console.log(res);
+        this.Vendedores=res;
+      })
+
       if(res['garantes'].garantes.length>0){
         
         this.VentasSalidaForm.get('garante').setValue(true);
@@ -312,6 +324,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
         this.planilla = res.planilla_pdf!="" ? URLIMAGENES.carpeta+'venta/'+res.planilla_pdf : null;
         this.letra = res.letra_pdf!="" ? URLIMAGENES.carpeta+'venta/'+res.letra_pdf : null;
         this.autorizacion = res.autorizacion_pdf!="" ? URLIMAGENES.carpeta+'venta/'+res.autorizacion_pdf : null;
+        this.otros = res.otros_pdf!="" ? URLIMAGENES.carpeta+'venta/'+res.otros_pdf : null;
 
         if(res['garantes'].garantes.length>0){
 
@@ -378,6 +391,10 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
         this.autorizacion_antiguo=res.autorizacion_pdf;
         res.autorizacion_pdf!="" ? this.autorizacion=URLIMAGENES.carpeta+'venta/'+res.autorizacion_pdf : null;
         res.autorizacion_pdf!="" ? this.autorizacion_editar=false : this.autorizacion_editar=true;
+
+        this.otros_antiguo=res.otros_pdf;
+        res.otros_pdf!="" ? this.otros=URLIMAGENES.carpeta+'venta/'+res.otros_pdf : null;
+        res.otros_pdf!="" ? this.otros_editar=false : this.otros_editar=true;
 
         if(res['garantes'].garantes.length>0){
 
@@ -775,6 +792,14 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
     }
   }
 
+  SubirOtros(evento){
+    if (!this.id_venta_editar) {
+      this.otros=evento.serverResponse.response.body.data;
+    }else{
+      this.otros_nuevo=evento.serverResponse.response.body.data;
+    }
+  }
+
   SubirDNIAval(evento, index){
     if (!this.id_venta_editar) {
       this.VentasSalidaForm['controls'].garantes['controls'][index].get('dni_pdf').setValue(evento.serverResponse.response.body.data);
@@ -935,7 +960,8 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       this.ServiciosGenerales.RenameFile(this.transaccion_nuevo,'TRANSACCION',random.toString(),"venta"),
       this.ServiciosGenerales.RenameFile(this.planilla_nuevo,'PLANILLA',random.toString(),"venta"),
       this.ServiciosGenerales.RenameFile(this.letra_nuevo,'LETRA',random.toString(),"venta"),
-      this.ServiciosGenerales.RenameFile(this.autorizacion_nuevo,'AUTORIZACION',random.toString(),"venta")
+      this.ServiciosGenerales.RenameFile(this.autorizacion_nuevo,'AUTORIZACION',random.toString(),"venta"),
+      this.ServiciosGenerales.RenameFile(this.otros_nuevo,'AUTORIZACION',random.toString(),"venta")
     ).subscribe(resultado=>{
 
       // Cuando se actualiza la venta, en el procedimiento
@@ -969,6 +995,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
         this.planilla_editar ? resultado[5].mensaje : this.planilla_antiguo,
         this.letra_editar ? resultado[6].mensaje : this.letra_antiguo,
         this.autorizacion_editar ? resultado[7].mensaje : this.autorizacion_antiguo,
+        this.otros_editar ? resultado[8].mensaje : this.otros_antiguo,
         formulario.value.observaciones
       ).subscribe(res=>{
 

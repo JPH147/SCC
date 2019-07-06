@@ -22,34 +22,4 @@
         return readfile($file);
     }
 
-    // try
-    // {
-
-
-    //     if (($_POST["prcobranza"])!=null)
-    //     {
-    //         $cobranza->id_cobranza=trim($_POST["prcobranza"]);
-    //         $cobranza->cliente=trim($_POST["prcliente"]);
-    //         $cobranza->codigo=trim($_POST["prcodofin"]);
-    //         $cobranza->monto=trim($_POST["prmonto"]);
-
-    //         if($cobranza->create_detalle())
-    //         {
-    //             print_json("0000", "Se creó la cobranza satisfactoriamente.", $cobranza->id_cobranza);
-    //         }
-    //         else
-    //         {
-    //             print_json("9999", "Ocurrió un error al crear la cobranza.", "");
-    //         }
-    //     }
-    //     else
-    //     {
-    //         print_json("9999", "Los campos no pueden estar vacíos.", "");
-    //     }
-    // }
-    // catch(Exception $exception)
-    // {
-    //     print_json("9999", "Ocurrió un error al eliminar la cobranza.", $exception->getMessage());
-    // }
-
 ?>

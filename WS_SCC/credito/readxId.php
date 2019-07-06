@@ -59,11 +59,13 @@
             "pdf_compromiso" => $credito->pdf_compromiso,
             "pdf_letra" => $credito->pdf_letra,
             "pdf_ddjj" => $credito->pdf_ddjj,
+            "pdf_otros" => $credito->pdf_otros,
             "observaciones" => $credito->observaciones,
             "id_estado" => $credito->id_estado,
             "estado" => $credito->estado,
+            "courier" => $credito->courier,
+            "garantes" => $credito->garante,
             "cronograma" => $credito->cronograma,
-            "garantes" => $credito->garante
 	    );
 
         if ((trim($credito->id_credito)!= ''))

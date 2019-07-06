@@ -1,0 +1,45 @@
+<mat-card class="card">
+
+    <mat-toolbar color="primary">
+      <mat-toolbar-row *ngIf="!data"><h4>Agregar producto</h4></mat-toolbar-row>
+      <mat-toolbar-row *ngIf="data">Editar producto</mat-toolbar-row>
+    </mat-toolbar>
+  
+    <form [formGroup]="TalonariosForm">
+      <mat-card-content>
+        <mat-grid-list cols="2" rowHeight="70px">
+  
+          <mat-grid-tile>
+            <mat-form-field class="columnas-1">
+              <input matInput formControlName="serie" placeholder="Serie">
+            </mat-form-field>
+          </mat-grid-tile>
+  
+          <mat-grid-tile>
+          </mat-grid-tile>
+  
+          <mat-grid-tile>
+            <mat-form-field class="columnas-1">
+              <input matInput type="number" formControlName="numero_inicio" placeholder="Número de inicio">
+            </mat-form-field>
+          </mat-grid-tile>
+  
+          <mat-grid-tile>
+            <mat-form-field class="columnas-1">
+              <input matInput type="number" formControlName="numero_fin" placeholder="Número final">
+            </mat-form-field>
+          </mat-grid-tile>
+  
+        </mat-grid-list>
+      </mat-card-content>
+  
+      <mat-card-actions>
+        <mat-grid-list cols=1 rowHeight="40px">
+          <mat-grid-tile>
+            <button type="button" mat-raised-button color="primary" [disabled]="TalonariosForm.invalid || (TalonariosForm.value.numero_inicio>=TalonariosForm.value.numero_fin)" (click)="Guardar()"> Guardar </button>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </mat-card-actions>
+  
+    </form>
+  </mat-card>

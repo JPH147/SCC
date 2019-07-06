@@ -16,9 +16,9 @@
     try{
         $vendedor = new Vendedor($db);
 
-        $vendedor->vnd_dni = !empty($_GET['vnd_dni']) ? trim($_GET['vnd_dni']) : '';
-        $vendedor->vnd_nombre = !empty($_GET['vnd_nombre']) ? trim($_GET['vnd_nombre']) : '';
-        $vendedor->scs_nombre = !empty($_GET['scs_nombre']) ? trim($_GET['scs_nombre']) : '';
+        $vendedor->vnd_dni = !empty($_GET['prdocumento']) ? trim($_GET['prdocumento']) : '';
+        $vendedor->vnd_nombre = !empty($_GET['prnombre']) ? trim($_GET['prnombre']) : '';
+        $vendedor->scs_nombre = !empty($_GET['prsucursal']) ? trim($_GET['prsucursal']) : '';
         $vendedor->numero_pagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : 1;
         $vendedor->total_pagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : 10;
 

@@ -643,10 +643,8 @@ Class SalidaCabecera{
                 "vendedor"=>$vendedor,
                 "comision_efectiva_porcentaje"=>$comision_efectiva_porcentaje,
                 "comision_efectiva"=>$comision_efectiva,
-                "comision_efectiva_pago"=>$comision_efectiva_pago,
                 "comision_retenida_porcentaje"=>$comision_retenida_porcentaje,
                 "comision_retenida"=>$comision_retenida,
-                "comision_retenida_pago"=>$comision_retenida_pago,
             );
             array_push($venta_list["comisiones"],$venta_item);
         }

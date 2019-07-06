@@ -45,6 +45,26 @@ mat-row:nth-child(even){
 }
 /******************/
 
+/*Estilos para los formularios*/
+
+.columnas4-1{
+  width: 80%;
+}
+
+.columnas4-2{
+  width: 90%
+}
+
+.columnas4-3{
+  width: 93.33%
+}
+
+.columnas4-4{
+  width: 95%
+}
+
+
+/******************/
 
 .mat-sort-header-stem,
 .mat-sort-header-indicator{
@@ -102,3 +122,4 @@ mat-row:nth-child(even){
 .img-ul-drag-box-msg{
   display: none !important;
 }
+

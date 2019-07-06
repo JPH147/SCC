@@ -24,6 +24,7 @@ export class AgregarVentaComponent implements OnInit {
   public ListadoProductos: ProductosDataSource;
   public Columnas: string[] = ["numero", "nombre", "serie", "precio_venta", "opciones"]
 
+  public cargando : boolean = false;
   public ClienteForm: FormGroup;
   public VentaForm: FormGroup;
   public DocumentoForm: FormGroup;
@@ -282,10 +283,13 @@ export class AgregarVentaComponent implements OnInit {
 
     this.Cronograma=[];
 
-    let year = moment(this.DocumentoForm.value.fechapago).year();
-    let month = moment(this.DocumentoForm.value.fechapago).month();
+    // let year = moment(this.DocumentoForm.value.fechapago).year();
+    // let month = moment(this.DocumentoForm.value.fechapago).month();
+    // let day = moment(this.DocumentoForm.value.fechapago).date();
 
-    let fecha_corregida:Date = new Date(year, month-1,27);
+    // let fecha_corregida:Date = new Date(year, month, day);
+
+    let fecha_corregida = this.DocumentoForm.value.fechapago;
 
     let fecha:Date;
 
@@ -307,7 +311,13 @@ export class AgregarVentaComponent implements OnInit {
 
   }
 
+  Imprimir(){
+    console.log(this.DocumentoForm.value.fechapago)
+  }
+
   GuardarVenta(){
+
+    this.cargando = true;
 
     this.CrearCronograma();
 
@@ -330,6 +340,7 @@ export class AgregarVentaComponent implements OnInit {
       this.DocumentoForm.value.tipopago==3 ? 1 :this.DocumentoForm.value.cuotas,
       this.DocumentoForm.value.montototal,
       this.DocumentoForm.value.fechapago,
+      "",
       "",
       "",
       "",
@@ -362,10 +373,8 @@ export class AgregarVentaComponent implements OnInit {
         });
       // }
 
-      this.ventana.close(true);
-      if(res['codigo']=0){
+        this.ventana.close(true);
         this.Notificacion.Snack("Se agregó la venta con éxito!","");
-      }
     })
   }
 

@@ -52,7 +52,7 @@ export class ClientesComponent implements OnInit {
 
   ngOnInit() {
    this.ListadoCliente = new ClienteDataSource(this.Servicio);
-   this.ListadoCliente.CargarClientes('', '', '', '', '', '','',1, 10);
+   this.ListadoCliente.CargarClientes('', '','',1, 10);
   }
 
   ngAfterViewInit() {
@@ -85,11 +85,6 @@ export class ClientesComponent implements OnInit {
 
   CargarData() {
     this.ListadoCliente.CargarClientes(
-    // this.FiltroInstitucion.nativeElement.value,
-    // this.FiltroSede.nativeElement.value,
-    // this.FiltroSubsede.nativeElement.value,
-    // this.FiltroCargo.nativeElement.value,
-    "","","","",
     this.FiltroCodigo.nativeElement.value,
     this.FiltroDni.nativeElement.value,
     this.FiltroNombre.nativeElement.value,

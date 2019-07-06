@@ -19,33 +19,26 @@
       </mat-grid-tile>
 
       <mat-grid-tile>
-        <mat-form-field>
-          <input type="text" matInput placeholder="Total a pagar" [(ngModel)]="prestamo" disabled>
+        <mat-form-field appearance="fill">
+          <mat-label>Total a pagar</mat-label>
+          <input type="text" matInput placeholder="Total a pagar" [(ngModel)]="prestamo" readonly>
         </mat-form-field>
       </mat-grid-tile>
 
       <mat-grid-tile>
         <mat-form-field>
-          <input matInput [matDatepicker]="picker" placeholder="Fecha de crédito" [(ngModel)]="fecha_prestamo" disabled (dateChange)="CambioFecha()"> 
+          <input matInput [matDatepicker]="picker" placeholder="Fecha de crédito" [(ngModel)]="fecha_prestamo" readonly (dateChange)="CambioFecha()"> 
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker [disabled]="false"></mat-datepicker>
-<!--           <input matInput [matDatepicker]="dp" placeholder="Inicio de pagos" [formControl]="date">
-          <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
-          <mat-datepicker #dp
-                          startView="multi-year"
-                          (yearSelected)="chosenYearHandler($event)"
-                          (monthSelected)="chosenMonthHandler($event, dp)"
-                          panelClass="example-month-picker">
-          </mat-datepicker> -->
         </mat-form-field>
       </mat-grid-tile>
 
       <mat-grid-tile>
-        <mat-checkbox color="primary" [(ngModel)]="interes_por_dia" (change)="CalcularPagos()">Interés por día</mat-checkbox>
+        <mat-checkbox color="primary" [(ngModel)]="interes_por_dia" (change)="CambioInteresDiario($event)">Interés por día</mat-checkbox>
       </mat-grid-tile>
 
       <mat-grid-tile>
-        <mat-checkbox color="primary" [(ngModel)]="pago_proximo_mes" (change)="CalcularPagos()">Iniciar el próximo mes</mat-checkbox>
+        <mat-checkbox color="primary" [(ngModel)]="pago_proximo_mes" (change)="CambioModoPago($event)">Iniciar el próximo mes</mat-checkbox>
       </mat-grid-tile>
 
       <mat-grid-tile>
@@ -106,4 +99,16 @@
     </mat-table>
 
   </mat-card-content>
+
+  <mat-card-actions>
+      
+    <mat-grid-list cols="1" rowHeight="40px">
+      <mat-grid-tile>
+        <button mat-raised-button color="primary" matStepperNext> Hacer presupuesto </button>
+        <!-- <button mat-raised-button color="primary" (click)="Guardar()" [disabled]="!this.cliente">Guardar</button> -->
+      </mat-grid-tile>
+    </mat-grid-list>
+
+  </mat-card-actions>
+
 </mat-card>

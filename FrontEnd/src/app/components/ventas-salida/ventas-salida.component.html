@@ -299,7 +299,7 @@
 
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
-             <input matInput [matDatepicker]="picker" placeholder="Fecha de venta" formControlName="fechaventa" (dateChange)="CrearCronograma()" [readonly]="id_venta">
+             <input matInput [matDatepicker]="picker" placeholder="Fecha de venta" formControlName="fechaventa" (dateChange)="CrearCronograma()" readonly>
              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
              <mat-datepicker #picker [disabled]="id_venta"></mat-datepicker>
           </mat-form-field>
@@ -331,6 +331,23 @@
 
       </mat-grid-list>
     </div>
+
+    <!-- Vendedores -->
+    <div class="seccion" *ngIf="Vendedores.length>0">
+      <mat-card-subtitle class="titulo-seccion">
+        VENDEDORES
+      </mat-card-subtitle>
+
+      <mat-grid-list cols="4" rowHeight="70px">
+        <ng-container *ngFor="let vendedor of Vendedores">
+          <mat-grid-tile colspan=2>
+            <mat-form-field class="columnas-2">
+              <input matInput type="text" [value]="vendedor.vendedor" readonly>
+            </mat-form-field>
+          </mat-grid-tile>
+        </ng-container>
+      </mat-grid-list>
+    </div>    
 
     <!-- Productos -->
     <div class="seccion">
@@ -497,8 +514,8 @@
       <mat-card-subtitle class="titulo-seccion">
         DOCUMENTOS ADJUNTOS
       </mat-card-subtitle>
-<!-- 
-      <mat-grid-list cols=8 rowHeight="60px" *ngIf="id_venta_editar">
+
+      <mat-grid-list cols=9 rowHeight="60px" *ngIf="id_venta_editar">
 
         <mat-grid-tile>
           <button mat-icon-button color="primary" (click)="foto_editar = true" [disabled]="!foto" *ngIf="!foto_editar">
@@ -571,184 +588,18 @@
             <mat-icon class="icono-documentos"> close </mat-icon>
           </button>
         </mat-grid-tile>
-      </mat-grid-list>
-
-      <mat-grid-list cols="8" rowHeight="100px" *ngIf="id_venta_editar">
 
         <mat-grid-tile>
-          <image-upload
-            class="cargar-imagen"
-            [max]="1"
-            url="{{ruta}}"
-            [buttonCaption]="'Foto'"
-            [extensions]="['png, jpg, jpeg']"
-            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
-            (uploadFinished)="SubirFoto($event)">
-          </image-upload>  
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          <image-upload
-            class="cargar-imagen"
-            [max]="1"
-            url="{{ruta}}"
-            [buttonCaption]="'DNI'"
-            [extensions]="['pdf']"
-            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
-            (uploadFinished)="SubirDNI($event)">
-          </image-upload>  
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          <image-upload
-            class="cargar-imagen"
-            [max]="1"
-            url="{{ruta}}"
-            [buttonCaption]="'CIP'"
-            [dropBoxMessage]="'o arrastrelo'"
-            [extensions]="['pdf']"
-            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
-            (uploadFinished)="SubirCIP($event)">
-          </image-upload>  
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          <image-upload
-            class="cargar-imagen"
-            [max]="1"
-            url="{{ruta}}"
-            [buttonCaption]="'Contrato'"
-            [extensions]="['pdf']"
-            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
-            (uploadFinished)="SubirContrato($event)">
-          </image-upload>  
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          <image-upload
-            class="cargar-imagen"
-            [max]="1"
-            url="{{ruta}}"
-            [buttonCaption]="'Transacción'"
-            [extensions]="['pdf']"
-            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
-            (uploadFinished)="SubirTransaccion($event)">
-          </image-upload>  
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          <image-upload
-            class="cargar-imagen"
-            [max]="1"
-            url="{{ruta}}"
-            [buttonCaption]="'Planilla'"
-            [extensions]="['pdf']"
-            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
-            (uploadFinished)="SubirPlanilla($event)">
-          </image-upload>  
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          <image-upload
-            class="cargar-imagen"
-            [max]="1"
-            url="{{ruta}}"
-            [buttonCaption]="'Letra'"
-            [extensions]="['pdf']"
-            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
-            (uploadFinished)="SubirLetra($event)">
-          </image-upload>  
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          <image-upload
-            class="cargar-imagen"
-            [max]="1"
-            url="{{ruta}}"
-            [buttonCaption]="'Autorización'"
-            [extensions]="['pdf']"
-            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
-            (uploadFinished)="SubirAutorizacion($event)">
-          </image-upload>  
-        </mat-grid-tile>
-      </mat-grid-list> -->
-
-      <mat-grid-list cols=8 rowHeight="60px" *ngIf="id_venta_editar">
-
-        <mat-grid-tile>
-          <button mat-icon-button color="primary" (click)="foto_editar = true" [disabled]="!foto" *ngIf="!foto_editar">
+          <button mat-icon-button color="primary"  (click)="otros_editar = true" [disabled]="!otros" *ngIf="!otros_editar">
             <mat-icon class="icono-documentos"> edit </mat-icon>
           </button>
-          <button mat-icon-button color="primary" (click)="foto_editar = false" [disabled]="!foto" *ngIf="foto_editar">
-            <mat-icon class="icono-documentos"> close </mat-icon>
-          </button>
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          <button mat-icon-button color="primary" (click)="dni_editar = true" [disabled]="!dni" *ngIf="!dni_editar">
-            <mat-icon class="icono-documentos"> edit </mat-icon>
-          </button>
-          <button mat-icon-button color="primary" (click)="dni_editar = false" [disabled]="!dni" *ngIf="dni_editar">
-            <mat-icon class="icono-documentos"> close </mat-icon>
-          </button>
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          <button mat-icon-button color="primary" (click)="cip_editar = true" [disabled]="!cip" *ngIf="!cip_editar">
-            <mat-icon class="icono-documentos"> edit </mat-icon>
-          </button>
-          <button mat-icon-button color="primary" (click)="cip_editar = false" [disabled]="!cip" *ngIf="cip_editar">
-            <mat-icon class="icono-documentos"> close </mat-icon>
-          </button>
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          <button mat-icon-button color="primary" (click)="contrato_editar = true" [disabled]="!contrato" *ngIf="!contrato_editar">
-            <mat-icon class="icono-documentos"> edit </mat-icon>
-          </button>
-          <button mat-icon-button color="primary" (click)="contrato_editar = false" [disabled]="!contrato" *ngIf="contrato_editar">
-            <mat-icon class="icono-documentos"> close </mat-icon>
-          </button>
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          <button mat-icon-button color="primary" (click)="transaccion_editar = true" [disabled]="!transaccion" *ngIf="!transaccion_editar">
-            <mat-icon class="icono-documentos"> edit </mat-icon>
-          </button>
-          <button mat-icon-button color="primary" (click)="transaccion_editar = false" [disabled]="!transaccion" *ngIf="transaccion_editar">
-            <mat-icon class="icono-documentos"> close </mat-icon>
-          </button>
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          <button mat-icon-button color="primary" (click)="planilla_editar = true" [disabled]="!planilla" *ngIf="!planilla_editar">
-            <mat-icon class="icono-documentos"> edit </mat-icon>
-          </button>
-          <button mat-icon-button color="primary" (click)="planilla_editar = false" [disabled]="!planilla" *ngIf="planilla_editar">
-            <mat-icon class="icono-documentos"> close </mat-icon>
-          </button>
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          <button mat-icon-button color="primary" (click)="letra_editar = true" [disabled]="!letra" *ngIf="!letra_editar">
-            <mat-icon class="icono-documentos"> edit </mat-icon>
-          </button>
-          <button mat-icon-button color="primary" (click)="letra_editar = false" [disabled]="!letra" *ngIf="letra_editar">
-            <mat-icon class="icono-documentos"> close </mat-icon>
-          </button>
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          <button mat-icon-button color="primary"  (click)="autorizacion_editar = true" [disabled]="!autorizacion" *ngIf="!autorizacion_editar">
-            <mat-icon class="icono-documentos"> edit </mat-icon>
-          </button>
-          <button mat-icon-button color="primary"  (click)="autorizacion_editar = false" [disabled]="!autorizacion" *ngIf="autorizacion_editar">
+          <button mat-icon-button color="primary"  (click)="otros_editar = false" [disabled]="!otros" *ngIf="otros_editar">
             <mat-icon class="icono-documentos"> close </mat-icon>
           </button>
         </mat-grid-tile>
       </mat-grid-list>
 
-      <mat-grid-list cols=8 rowHeight="20px" *ngIf="id_venta || id_venta_editar">
+      <mat-grid-list cols=9 rowHeight="20px" *ngIf="id_venta || id_venta_editar">
 
         <mat-grid-tile>
           Foto
@@ -782,9 +633,13 @@
           Autorización
         </mat-grid-tile>
 
+        <mat-grid-tile>
+          Otros
+        </mat-grid-tile>
+
       </mat-grid-list>
 
-      <mat-grid-list cols=8 rowHeight="60px" *ngIf="id_venta || id_venta_editar">
+      <mat-grid-list cols=9 rowHeight="60px" *ngIf="id_venta || id_venta_editar">
 
         <mat-grid-tile>
 
@@ -927,6 +782,24 @@
             [extensions]="['pdf']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
             (uploadFinished)="SubirAutorizacion($event)">
+          </image-upload>
+
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+
+          <button mat-icon-button color="primary" [disabled]="!otros" *ngIf="!otros_editar">
+            <mat-icon class="icono-documentos" (click)="AbrirDocumento(otros)"> visibility </mat-icon>
+          </button>
+
+          <image-upload
+            class="cargar-imagen" *ngIf="otros_editar"
+            [max]="1"
+            url="{{ruta}}"
+            [buttonCaption]="'Adjuntar'"
+            [extensions]="['pdf']"
+            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
+            (uploadFinished)="SubirOtros($event)">
           </image-upload>
 
         </mat-grid-tile>

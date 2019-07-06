@@ -11,7 +11,7 @@
 
         <mat-grid-tile>
           <mat-form-field>
-            <mat-select placeholder='Tipo' formControlName="tipo" (selectionChange)="TipoSeleccionado($event)">
+            <mat-select placeholder='Tipo' formControlName="tipo" (selectionChange)="TipoSeleccionado($event); AyudarCrearNombre()">
               <mat-option *ngFor="let tipo of Tipos" [value] = "tipo.id"> {{tipo.nombre}} </mat-option>
             </mat-select>
           </mat-form-field>
@@ -28,7 +28,7 @@
 
         <mat-grid-tile>
           <mat-form-field>
-            <mat-select placeholder='Marca' formControlName="marca" (selectionChange)="MarcaSeleccionada($event)">
+            <mat-select placeholder='Marca' formControlName="marca" (selectionChange)="MarcaSeleccionada($event); AyudarCrearNombre()">
               <mat-option *ngFor="let marca of Marcas" [value] = "marca.id"> {{marca.nombre}} </mat-option>
             </mat-select>
           </mat-form-field>
@@ -39,7 +39,7 @@
 
         <mat-grid-tile>
           <mat-form-field>
-            <mat-select placeholder='Modelo'  formControlName="modelo">
+            <mat-select placeholder='Modelo'  formControlName="modelo" (selectionChange)="ModeloSeleccionado($event); AyudarCrearNombre()">
               <mat-option *ngFor="let modelo of Modelos" [value] = "modelo.id"> {{modelo.nombre}} </mat-option>
             </mat-select>
           </mat-form-field>

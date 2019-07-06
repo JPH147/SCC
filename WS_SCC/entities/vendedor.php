@@ -30,6 +30,10 @@ Class Vendedor{
     public $numero_pagina;
     public $total_pagina;
 
+    public $documento;
+    public $nombre;
+    public $email;
+    public $comision;
     public $venta;
     public $salida;
     public $vendedor;
@@ -56,10 +60,14 @@ Class Vendedor{
         $vendedor_list=array();
         $vendedor_list["vendedores"]=array();
 
+        $contador = $this->total_pagina*($this->numero_pagina-1);
+
         while($row = $result->fetch(PDO::FETCH_ASSOC))
         {
             extract($row);
+            $contador=$contador+1;
             $vendedor_item = array (
+                "numero"=>$contador,
                 "id"=>$row['idvendedor'],
                 "sucnombre"=>$row['scs_nombre'],
                 "dni"=>$row['vnd_dni'],
@@ -90,6 +98,84 @@ Class Vendedor{
         $this->total_resultado=$row['total'];
 
         return $this->total_resultado;
+    }
+
+    function create(){
+        $query = "CALL sp_crearvendedor(
+            :prdocumento,
+            :prnombre,
+            :premail,
+            :prcomision
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prdocumento", $this->documento);
+        $result->bindParam(":prnombre", $this->nombre);
+        $result->bindParam(":premail", $this->email);
+        $result->bindParam(":prcomision", $this->comision);
+
+        $this->documento=htmlspecialchars(strip_tags($this->documento));
+        $this->nombre=htmlspecialchars(strip_tags($this->nombre));
+        $this->email=htmlspecialchars(strip_tags($this->email));
+        $this->comision=htmlspecialchars(strip_tags($this->comision));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        
+        return false;
+    }
+
+    function update(){
+        $query = "CALL sp_actualizarvendedor(
+            :prid,
+            :prdocumento,
+            :prnombre,
+            :premail,
+            :prcomision
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prid", $this->idvendedor);
+        $result->bindParam(":prdocumento", $this->documento);
+        $result->bindParam(":prnombre", $this->nombre);
+        $result->bindParam(":premail", $this->email);
+        $result->bindParam(":prcomision", $this->comision);
+
+        $this->idvendedor=htmlspecialchars(strip_tags($this->idvendedor));
+        $this->documento=htmlspecialchars(strip_tags($this->documento));
+        $this->nombre=htmlspecialchars(strip_tags($this->nombre));
+        $this->email=htmlspecialchars(strip_tags($this->email));
+        $this->comision=htmlspecialchars(strip_tags($this->comision));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        
+        return false;
+    }
+
+    function delete(){
+        $query = "CALL sp_eliminarvendedor(
+            :prid
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prid", $this->idvendedor);
+
+        $this->idvendedor=htmlspecialchars(strip_tags($this->idvendedor));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        
+        return false;
     }
 
     function read_comisiones(){
@@ -212,8 +298,8 @@ Class Vendedor{
         return $this->total_resultado;
     }
 
-    function  create_comision()
-    {
+    function  create_comision(){
+
         $query = "CALL sp_crearvendedorcomision(
             :prsalida,
             :prvendedor,

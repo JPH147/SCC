@@ -34,7 +34,7 @@ export class EvaluacionCapacidadComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.alto=350;
+    this.alto=450;
     this.descuento_oficial.push({descuento:null}, {descuento:null}, {descuento:null})
     this.descuento_personal.push({descuento:null}, {descuento:null}, {descuento:null})
   }
@@ -110,7 +110,7 @@ export class EvaluacionCapacidadComponent implements OnInit {
   }
   
   CalcularAlto(){
-    this.alto=Math.max(this.alto,this.descuento_oficial.length*60,this.descuento_personal.length*45.5);
+    this.alto=Math.max(this.alto,this.descuento_oficial.length*68,this.descuento_personal.length*68);
   }
 
   CalcularDescuentoTotal(){

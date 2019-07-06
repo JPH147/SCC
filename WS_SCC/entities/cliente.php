@@ -2,7 +2,7 @@
 Class Cliente{
 
     private $conn;
-    private $table_name = "cliente";
+    private $Direccion;
 
     public $idcliente;
     public $id_sede;
@@ -49,19 +49,19 @@ Class Cliente{
     }
 
     function read(){
-        $query = "CALL sp_listarcliente (?,?,?,?,?,?,?,?,?)";
+        $query = "CALL sp_listarcliente (?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
-        $result->bindParam(1, $this->inst_nombre);
-        $result->bindParam(2, $this->sd_nombre);
-        $result->bindParam(3, $this->ssd_nombre);
-        $result->bindParam(4, $this->clt_cargo);
-        $result->bindParam(5, $this->clt_codigo);
-        $result->bindParam(6, $this->clt_dni);
-        $result->bindParam(7, $this->clt_nombre);
-        $result->bindParam(8, $this->prpagina);
-        $result->bindParam(9, $this->prtotalpagina);
+        // $result->bindParam(1, $this->inst_nombre);
+        // $result->bindParam(2, $this->sd_nombre);
+        // $result->bindParam(3, $this->ssd_nombre);
+        // $result->bindParam(4, $this->clt_cargo);
+        $result->bindParam(1, $this->clt_codigo);
+        $result->bindParam(2, $this->clt_dni);
+        $result->bindParam(3, $this->clt_nombre);
+        $result->bindParam(4, $this->prpagina);
+        $result->bindParam(5, $this->prtotalpagina);
 
         $result->execute();
     
@@ -76,13 +76,13 @@ Class Cliente{
             $cliente_item = array (
                 "numero"=>$contador,
                 "id"=>$row['id'],
-                "institucion"=>$row['institucion'],
-                "sede"=>$row['sede'],
-                "subsede"=>$row['subsede'],
-                "id_cargo"=>$row['id_cargo'],
-                "cargo"=>$row['cargo'],
-                "id_cargo_estado"=>$row['id_cargo_estado'],
-                "cargo_estado"=>$row['cargo_estado'],
+                // "institucion"=>$row['institucion'],
+                // "sede"=>$row['sede'],
+                // "subsede"=>$row['subsede'],
+                // "id_cargo"=>$row['id_cargo'],
+                // "cargo"=>$row['cargo'],
+                // "id_cargo_estado"=>$row['id_cargo_estado'],
+                // "cargo_estado"=>$row['cargo_estado'],
                 "codigo"=>$row['codigo'],
                 "dni"=>$row['dni'],
                 "nombre"=>$row['nombre'],
@@ -90,15 +90,15 @@ Class Cliente{
                 "email"=>$row['email'],
                 "casilla"=>$row['casilla'],
                 "trabajo"=>$row['trabajo'],
-                "subsede"=>$row['subsede'],
-                "cargo"=>$row['cargo'],
+                // "subsede"=>$row['subsede'],
+                // "cargo"=>$row['cargo'],
                 "capacidad_pago"=>$row['capacidad_pago'],
-                "id_distrito_trabajo"=>$row['id_distrito_trabajo'],
-                "distrito"=>$row['distrito'],
-                "id_provincia"=>$row['id_provincia'],
-                "provincia"=>$row['provincia'],
-                "id_departamento"=>$row['id_departamento'],
-                "departamento"=>$row['departamento'],
+                // "id_distrito_trabajo"=>$row['id_distrito_trabajo'],
+                // "distrito"=>$row['distrito'],
+                // "id_provincia"=>$row['id_provincia'],
+                // "provincia"=>$row['provincia'],
+                // "id_departamento"=>$row['id_departamento'],
+                // "departamento"=>$row['departamento'],
                 "capacidad_pago"=>$row['capacidad_pago'],
                 "maximo_descuento"=>$row['maximo_descuento'],
                 "calificacion_personal"=>$row['calificacion_personal'],
@@ -114,19 +114,15 @@ Class Cliente{
 
     function contar(){
 
-        $query = "CALL sp_listarclientecontar(?,?,?,?,?,?,?,?,?)";
+        $query = "CALL sp_listarclientecontar(?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
-        $result->bindParam(1, $this->inst_nombre);
-        $result->bindParam(2, $this->sd_nombre);
-        $result->bindParam(3, $this->ssd_nombre);
-        $result->bindParam(4, $this->clt_cargo);
-        $result->bindParam(5, $this->clt_codigo);
-        $result->bindParam(6, $this->clt_dni);
-        $result->bindParam(7, $this->clt_nombre);
-        $result->bindParam(8, $this->prpagina);
-        $result->bindParam(9, $this->prtotalpagina);
+        $result->bindParam(1, $this->clt_codigo);
+        $result->bindParam(2, $this->clt_dni);
+        $result->bindParam(3, $this->clt_nombre);
+        $result->bindParam(4, $this->prpagina);
+        $result->bindParam(5, $this->prtotalpagina);
         $result->execute();
 
         $row = $result->fetch(PDO::FETCH_ASSOC);
@@ -421,8 +417,35 @@ Class Cliente{
     
         $row = $result->fetch(PDO::FETCH_ASSOC);
 
-        $this->clt_codigo=$row['codigo'];
-        $this->clt_nombre=$row['nombre'];
+        $cliente = array(
+            "id" => $row['id'] ,
+            "dni" => $row['dni'] ,
+            "nombre" => $row['nombre'] ,
+            "codigo" => $row['codigo'] ,
+            "id_institucion" => $row['id_institucion'] ,
+            "id_sede" => $row['id_sede'] ,
+            "sede" => $row['sede'] ,
+            "plantilla_ddjj" => $row['plantilla_ddjj'] ,
+            "id_subsede" => $row['id_subsede'] ,
+            "subsede" => $row['subsede'] ,
+            "id_cargo" => $row['id_cargo'] ,
+            "cargo_nombre" => $row['cargo_nombre'] ,
+            "id_cargo" => $row['id_cargo'] ,
+            "cargo_estado" => $row['cargo_estado'] ,
+            "cip" => $row['cip'] ,
+            "email" => $row['email'] ,
+            "casilla" => $row['casilla'] ,
+            "trabajo" => $row['trabajo'] ,
+            "id_trabajo_distrito" => $row['id_trabajo_distrito'] ,
+            "trabajo_distrito" => $row['trabajo_distrito'] ,
+            "id_trabajo_provincia" => $row['id_trabajo_provincia'] ,
+            "trabajo_provincia" => $row['trabajo_provincia'] ,
+            "id_trabajo_departamento" => $row['id_trabajo_departamento'] ,
+            "trabajo_departamento" => $row['trabajo_departamento'] ,
+            "foto" => $row['foto']
+        );
+
+        return $cliente;
 
     }
 }

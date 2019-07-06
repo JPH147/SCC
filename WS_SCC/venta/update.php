@@ -48,6 +48,7 @@
             $venta->pdfletra=trim($_POST["prpdfletra"]);
             $venta->pdfvoucher=trim($_POST["prpdfvoucher"]);
             $venta->pdfautorizacion=trim($_POST["prpdfautorizacion"]);
+            $venta->vnt_otros_pdf=trim($_POST["prpdfotros"]);
             $venta->observaciones=trim($_POST["probservaciones"]);
 
             if($venta->update())

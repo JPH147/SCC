@@ -62,7 +62,7 @@ export class ventanaseriesalida  implements OnInit {
         this.EliminarSerie(i)
       }  
       else{
-        this.Series.Listado(this.data.almacen,this.data.id_producto,1,5).subscribe(res=>{
+        this.Series.Listado(this.data.almacen,this.data.id_producto,1,100).subscribe(res=>{
           this.ListadoSeries(res['data'].producto_series);
         })
       }

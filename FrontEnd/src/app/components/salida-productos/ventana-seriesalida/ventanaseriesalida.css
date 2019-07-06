@@ -5,3 +5,9 @@
 .formulario-grande{
   width: 90%
 }
+
+.card{
+	padding: 0px;
+	overflow-x: hidden;
+	max-height: 90vh
+}

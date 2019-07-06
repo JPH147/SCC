@@ -85,7 +85,11 @@
       <ng-container matColumnDef="movimiento">
         <mat-header-cell *matHeaderCellDef> Movimiento </mat-header-cell>
 
-        <mat-cell *matCellDef="let movimiento"> {{ movimiento.referencia!='Cliente' ? movimiento.movimiento_serie+'-'+movimiento.movimiento_numero : movimiento.documento }} </mat-cell>
+        <mat-cell *matCellDef="let movimiento">
+          <ng-container *ngIf="movimiento.referencia=='Cliente'">{{movimiento.documento}}</ng-container>
+          <ng-container *ngIf="movimiento.referencia=='Salida de ventas'">Pecosa {{movimiento.documento}}</ng-container>
+          <ng-container *ngIf="movimiento.referencia!='Cliente' && movimiento.referencia!='Salida de ventas'">{{movimiento.movimiento_serie+'-'+movimiento.movimiento_numero}}</ng-container>
+        </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="almacen">

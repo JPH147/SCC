@@ -14,3 +14,7 @@
 tr{
 	text-align: left
 }
+
+.mat-column-numero{
+	max-width: 6%;
+}

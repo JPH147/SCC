@@ -144,6 +144,14 @@ export class MenuComponent implements OnInit{
             path: "detalleproductos"
           },
           {
+            nombre: "Vendedores",
+            path: "vendedores"
+          },
+          {
+            nombre: "Talonarios",
+            path: "talonarios"
+          },
+          {
             nombre: "Instituciones",
             path: ""
           },

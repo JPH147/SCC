@@ -81,7 +81,7 @@
         <mat-header-cell *matHeaderCellDef mat-sort-header> Código </mat-header-cell>
         <mat-cell *matCellDef="let credito">
           <ng-container *ngIf="credito.id_tipo_credito == 1"> {{credito.codigo}} </ng-container>
-          <ng-container *ngIf="credito.id_tipo_credito == 2"> {{credito.codigo}} - {{credito.numero_credito}} </ng-container>
+          <ng-container *ngIf="credito.id_tipo_credito > 1"> {{credito.codigo}} - {{credito.numero_credito}} </ng-container>
         </mat-cell>
       </ng-container>
 

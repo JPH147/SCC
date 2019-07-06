@@ -32,6 +32,10 @@ export class VentanaEmergenteProductos {
   public Productos: Array<any>=[];
   public ProductosExistentes: boolean=false;
 
+  public tipo : string = "";
+  public modelo : string = "";
+  public marca : string = "";
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
     public ventana: MatDialogRef<VentanaEmergenteProductos>,
@@ -44,11 +48,6 @@ export class VentanaEmergenteProductos {
     public DialogoProductos: MatDialog
     ) {}
 
-  // onNoClick(): void {
-  //   this.ventana.close();
-  // }
-
-  // tslint:disable-next-line:use-life-cycle-interface
   ngOnInit() {
     /* Crear formulario */
     this.ProductosForm = this.FormBuilder.group({
@@ -69,7 +68,7 @@ export class VentanaEmergenteProductos {
         Validators.required,
         Validators.pattern ('[0-9- ]+')
       ]],
-      'descripcion': [null, [
+      'descripcion': ["", [
         Validators.required,
       ]],
       'unidad_medida':[{value:null,disabled:true},[
@@ -112,7 +111,6 @@ export class VentanaEmergenteProductos {
       })
      ).subscribe()
   }
-
 
   AgregarTipo() {
 
@@ -157,22 +155,52 @@ export class VentanaEmergenteProductos {
   }
 
   /* Se muestran marcas cuando se selecciona un tipo de producto */
-  TipoSeleccionado(event) {
-      this.ListarMarcas(this.ProductosForm.value.tipo);
-      this.Servicios.ListarUnidadMedida(this.ProductosForm.value.tipo).subscribe(res=>this.ProductosForm.get('unidad_medida').setValue(res.data.unidades[0].nombre));
-      this.ProductosForm.get('marca').setValue('');
-      this.ProductosForm.get('modelo').setValue('');
-      this.ProductosForm.controls['marca'].enable();
-      this.ProductosForm.controls['modelo'].disable();
-    }
+  TipoSeleccionado( evento) {
+
+    this.Tipos.forEach((item)=>{
+      if(item.id==evento.value){
+        this.tipo=item.nombre
+      }
+    })
+
+    this.ListarMarcas(this.ProductosForm.value.tipo);
+    this.Servicios.ListarUnidadMedida(this.ProductosForm.value.tipo).subscribe(res=>this.ProductosForm.get('unidad_medida').setValue(res.data.unidades[0].nombre));
+    this.ProductosForm.get('marca').setValue('');
+    this.ProductosForm.get('modelo').setValue('');
+    this.ProductosForm.controls['marca'].enable();
+    this.ProductosForm.controls['modelo'].disable();
+  }
 
   /* Se muestran los modelos cuando se selecciona una marca */
-  MarcaSeleccionada(event) {
+  MarcaSeleccionada(evento) {
+
+    this.Marcas.forEach((item)=>{
+      if(item.id==evento.value){
+        this.marca=item.nombre
+      }
+    })
+
     this.ListarModelos(this.ProductosForm.value.marca);
     this.ProductosForm.get('modelo').setValue('');
     this.ProductosForm.controls['modelo'].enable();
-   }
+  }
 
+  ModeloSeleccionado(evento){
+    this.Modelos.forEach((item)=>{
+      if(item.id==evento.value){
+        this.modelo=item.nombre
+      }
+    })
+  }
+
+  AyudarCrearNombre(){
+    let descripcion = this.tipo + " " + this.marca + " " + this.modelo;
+
+    if( !this.data ){
+      this.ProductosForm.get('descripcion').setValue(descripcion)
+    }
+
+  }
 
   /* Enviar al formulario */
   Guardar(formulario) {

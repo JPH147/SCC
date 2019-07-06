@@ -1,5 +1,5 @@
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import {CollectionViewer, DataSource} from "@angular/cdk/collections";
-import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, AfterViewInit, Optional } from '@angular/core';
 import { CreditosService } from './creditos.service';
 import {FormArray, FormGroup, FormBuilder, Validators} from '@angular/forms';
 import { MatDialog, MatSort } from '@angular/material';
@@ -27,6 +27,7 @@ import { ReglasEvaluacionService } from '../tablas-maestras/reglas-evaluacion/re
 })
 export class CreditosComponent implements OnInit, AfterViewInit {
 
+  public Hoy : Date = new Date();
   public Cargando = new BehaviorSubject<boolean>(false);
   public CreditosForm: FormGroup
   public id_credito: number;
@@ -36,11 +37,13 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   public garantes: FormArray;
   public editar_cronograma:number;
   public Reglas : Array<any>;
+  public Couriers : Array<any>;
   public ruta: string;
   public numero_afiliacion : number;
   public cliente_afiliado : boolean;
   public numero_cuotas: number;
   public monto_cuota: number;
+  public Tipos : Array<any> ;
   public total_cronograma : number; // No necesariamente es el mismo que el total del formulario por los intereses diarios
 
   public ListadoCronograma: CronogramaDataSource;
@@ -62,6 +65,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   public compromiso : string = "";
   public letra : string = "";
   public ddjj : string = "";
+  public otros : string = "";
+  public papeles : string = "";
 
   public foto_antiguo : string = "";
   public dni_antiguo : string = "";
@@ -76,6 +81,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   public compromiso_antiguo : string = "";
   public letra_antiguo : string = "";
   public ddjj_antiguo : string = "";
+  public otros_antiguo : string = "";
+  public papeles_antiguo : string = "";
 
   public foto_nuevo : string = "";
   public dni_nuevo : string = "";
@@ -90,6 +97,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   public compromiso_nuevo : string = "";
   public letra_nuevo : string = "";
   public ddjj_nuevo : string = "";
+  public otros_nuevo : string = "";
+  public papeles_nuevo : string = "";
 
   public foto_editar : boolean = false;
   public dni_editar : boolean = false;
@@ -104,10 +113,12 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   public compromiso_editar : boolean = false;
   public letra_editar : boolean = false;
   public ddjj_editar : boolean = false;
+  public otros_editar : boolean = false;
+  public papeles_editar : boolean = false;
 
   @ViewChild('InputCapital') FiltroCapital: ElementRef;
   @ViewChild('InputCuota') FiltroCuota: ElementRef;
-  @ViewChild('Vendedor') VendedorAutoComplete: ElementRef;
+  @ViewChild('Vendedor') VendedorAutoComplete : ElementRef;
   @ViewChild('Autorizador') AutorizadorAutoComplete: ElementRef;
   @ViewChild(MatSort) sort: MatSort;
 
@@ -129,7 +140,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     private Dialogo: MatDialog,
     private route : ActivatedRoute,
     private Notificacion: Notificaciones,
-    private router: Router
+    private router: Router,
+    private changeDetector : ChangeDetectorRef
   ) { }
 
   ngOnInit() {
@@ -141,7 +153,11 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     this.ListarAutorizador("");
     this.ListarTipoPago();
     this.ListarSucursales();
-    this.ListarReglas();    
+    this.ListarReglas();
+    this.ListarCouriers();
+    this.ListarTiposCredito();
+
+    this.id_tipo=2;
 
     this.ruta=URLIMAGENES.urlimages;
 
@@ -166,7 +182,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
 
         if(params['idcreditoeditar']){
           this.id_credito_editar=params['idcreditoeditar'];
-          // this.id_credito_editar=14;
+          // this.id_credito_editar=26;
           this.SeleccionarCredito(this.id_credito_editar);
         }
 
@@ -190,13 +206,13 @@ export class CreditosComponent implements OnInit, AfterViewInit {
 
     if(!this.id_credito){
 
-      if(this.id_tipo==2){
+      if(this.id_tipo>1){
         fromEvent(this.VendedorAutoComplete.nativeElement, 'keyup')
         .pipe(
           debounceTime(10),
           distinctUntilChanged(),
           tap(() => {
-            this.ListarVendedor(this.CreditosForm.value.vendedor);
+            this.ListarVendedor(this.VendedorAutoComplete.nativeElement.value);
           })
          ).subscribe();
     
@@ -205,7 +221,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
           debounceTime(10),
           distinctUntilChanged(),
           tap(() => {
-            this.ListarAutorizador(this.CreditosForm.value.autorizador);
+            this.ListarAutorizador(this.AutorizadorAutoComplete.nativeElement.value);
           })
          ).subscribe();
       }
@@ -273,12 +289,15 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       ]],
       numero: [{value: null, disabled: false},[ // Es el número del crédito
       ]],
-      interes_diario: [{value: false, disabled: false},[
+      interes_diario: [{value: (moment(new Date()).date()>15 ? false : true), disabled: false},[
       ]],
       fecha_pago: [{value: moment(new Date()).add(1, 'months').toDate(), disabled: false},[
         Validators.required,
       ]],
       ////////
+      tipo_credito: [{value: null, disabled: false},[
+        Validators.required
+      ]],
       tipo_pago: [{value: null, disabled: false},[
         Validators.required
       ]],
@@ -298,41 +317,35 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         Validators.required
       ]],
       id_vendedor: [{value: null, disabled: false},[
-        Validators.required
       ]],
       vendedor: [{value: null, disabled: false},[
       ]],
       id_autorizador: [{value: null, disabled: false},[
-        // Validators.required
+        Validators.required
       ]],
       autorizador: [{value: null, disabled: false},[
       ]],
       observaciones: [{value: "", disabled: false},[
+      ]],
+      // Refente al envío de papeles
+      papeles: [{value: false, disabled: false},[
+      ]],
+      papeles_fecha_envio: [{value: new Date(), disabled: false},[
+      ]],
+      papeles_courier: [{value: "", disabled: false},[
+      ]],
+      papeles_seguimiento: [{value: "", disabled: false},[
+      ]],
+      papeles_observaciones: [{value: "", disabled: false},[
       ]],
       garantes: this.Builder.array([])
     })
   }
 
   NuevoCredito(){
-    this.id_tipo=2;
+    this.changeDetector.detectChanges();
     this.ColumnasCronograma= ['numero', 'fecha_vencimiento_ver', 'monto_cuota_ver'];
-    this.VerificarCondicionesAfiliacion();
-  }
-
-  ObtenerNumero(cliente:number){
-    this.Servicio.Proximo(cliente).subscribe(res=>{
-
-      this.CreditosForm.get('numero').setValue(res)
-
-      let codigo_string: string = res.toString();
-      let codigo_string_length: number = res.toString().length;
-
-      for( let i = codigo_string_length ; i < 3 ; i++ ){
-        codigo_string = "0" + codigo_string;
-      }
-
-      this.CreditosForm.get('codigo').setValue(this.numero_afiliacion + "-" + codigo_string);
-    })
+    // this.VerificarCondicionesAfiliacion();
   }
 
   SeleccionarCredito(id_credito){
@@ -354,7 +367,6 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       }
       
       this.id_tipo=res.id_tipo;
-      console.log(res.id_tipo)
 
       if(this.id_tipo==1){
         this.CreditosForm.get('codigo').setValue(res.codigo)
@@ -364,22 +376,22 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       ////////////////////////////
 
       this.CreditosForm.get('id_cliente').setValue(res.id_cliente);
-      this.CreditosForm.get('fecha_credito').setValue(res.fecha);
+      this.CreditosForm.get('fecha_credito').setValue(moment(res.fecha).toDate());
       this.CreditosForm.get('cliente').setValue(res.cliente);
       this.CreditosForm.get('cargo').setValue(res.cliente_cargo);
       this.CreditosForm.get('trabajo').setValue(res.cliente_trabajo);
       this.CreditosForm.get('direccion').setValue(res.cliente_direccion);
       this.CreditosForm.get('telefono').setValue(res.cliente_telefono);
-      this.CreditosForm.get('fecha_pago').setValue(res.fecha_pago);
+      this.CreditosForm.get('fecha_pago').setValue(moment(res.fecha_pago).toDate());
       this.CreditosForm.get('interes').setValue(res.interes);
       this.CreditosForm.get('capital').setValue(res.capital);
       this.CreditosForm.get('cuotas').setValue(res.numero_cuotas);
       this.CreditosForm.get('total').setValue(res.total);
       
-      this.CreditosForm.get('vendedor').setValue(res.vendedor);
-      this.CreditosForm.get('id_vendedor').setValue(res.id_vendedor);
-      this.CreditosForm.get('autorizador').setValue(res.autorizador);
-      this.CreditosForm.get('id_autorizador').setValue(res.id_autorizador);
+      this.CreditosForm.get('vendedor').setValue(res.id_vendedor >0 ? res.vendedor : null);
+      this.CreditosForm.get('id_vendedor').setValue(res.id_vendedor > 0 ? res.id_vendedor : null);
+      this.CreditosForm.get('autorizador').setValue(res.id_autorizador> 0 ? res.autorizador : null);
+      this.CreditosForm.get('id_autorizador').setValue(res.id_autorizador > 0 ? res.id_autorizador : null);
 
       observacion_corregida = res.observaciones == "" ? "No hay observaciones" : res.observaciones;
 
@@ -396,6 +408,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       res.pdf_compromiso!="" ? this.compromiso=URLIMAGENES.carpeta+'credito/'+res.pdf_compromiso : null;
       res.pdf_letra!="" ? this.letra=URLIMAGENES.carpeta+'credito/'+res.pdf_letra : null;
       res.pdf_ddjj!="" ? this.ddjj=URLIMAGENES.carpeta+'credito/'+res.pdf_ddjj : null;
+      res.pdf_otros!="" ? this.otros=URLIMAGENES.carpeta+'credito/'+res.pdf_otros : null;
 
 
       if(res['garantes'].garantes.length>0){
@@ -409,8 +422,18 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         })
       }
 
+      if( res['courier'].length>0 ){
+        this.CreditosForm.get('papeles').setValue(true);
+        this.CreditosForm.get('papeles_fecha_envio').setValue(res['courier'][0].fecha);
+        this.CreditosForm.get('papeles_courier').setValue(res['courier'][0].courier);
+        this.CreditosForm.get('papeles_seguimiento').setValue(res['courier'][0].numero_seguimiento);
+        this.CreditosForm.get('papeles_observaciones').setValue(res['courier'][0].observacion);
+        res['courier'][0].foto !="" ? this.papeles=URLIMAGENES.carpeta+'credito/'+res['courier'][0].foto : null;
+      }
+
       if( this.id_credito ) {
 
+        this.CreditosForm.get('tipo_credito').setValue(res.tipo);
         this.CreditosForm.get('sucursal').setValue(res.sucursal);
         this.CreditosForm.get('tipo_pago').setValue(res.tipo_pago);
         this.CreditosForm.get('observaciones').setValue(observacion_corregida);
@@ -435,6 +458,13 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       if ( this.id_credito_editar ) {
 
         this.CreditosForm.get('codigo').disable();
+        if( res['courier'].length>0 ){
+          this.CreditosForm.get('papeles_courier').setValue(res['courier'][0].id_courier);
+          
+          this.papeles_antiguo=res['courier'][0].foto;
+          res['courier'][0].foto !="" ? this.papeles_editar=false : this.papeles_editar=true;
+        }
+
 
         if(this.id_tipo==1){
           this.CreditosForm.get('vendedor').clearValidators();
@@ -443,6 +473,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
           this.CreditosForm.get('id_autorizador').clearValidators();
         }
 
+        this.CreditosForm.get('tipo_credito').setValue(this.id_tipo>1 ? res.id_tipo : res.tipo);
         this.CreditosForm.get('sucursal').setValue(res.id_sucursal);
         this.CreditosForm.get('tipo_pago').setValue(res.id_tipo_pago);
         this.CreditosForm.get('observaciones').setValue(res.observaciones);
@@ -464,6 +495,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         this.compromiso_antiguo=res.pdf_compromiso;
         this.letra_antiguo=res.pdf_letra;
         this.ddjj_antiguo=res.pdf_ddjj;
+        this.otros_antiguo=res.pdf_otros;
 
         res.pdf_foto!="" ? this.foto_editar=false : this.foto_editar=true;
         res.pdf_dni!="" ? this.dni_editar=false : this.dni_editar=true;
@@ -478,6 +510,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         res.pdf_compromiso!="" ? this.compromiso_editar=false : this.compromiso_editar=true;
         res.pdf_letra!="" ? this.letra_editar=false : this.letra_editar=true;
         res.pdf_ddjj!="" ? this.ddjj_editar=false : this.ddjj_editar=true;
+        res.pdf_otros!="" ? this.otros_editar=false : this.otros_editar=true;
 
         if(res['garantes'].garantes.length>0){
           res['garantes'].garantes.forEach((item,index)=>{
@@ -502,6 +535,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
             this.CreditosForm['controls'].garantes['controls'][index].get('planilla_pdf').setValue(planilla);
           })
         }
+
       }
 
     })
@@ -512,6 +546,28 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     this.Servicio.ObtenerCrongrama(id_credito, orden).subscribe(res=>{
       this.Cronograma = res.creditos;
       this.ListadoCronograma.AsignarInformacion(this.Cronograma);
+    })
+  }
+
+  ListarTiposCredito(){
+    this.Servicio.ListarTipos().subscribe(res=>{
+      this.Tipos=res
+    })
+  }
+
+  TipoCreditoSeleccionado(evento){
+    if(evento.value==3){
+      this.CreditosForm.get('id_vendedor').setValidators([Validators.required]);
+      this.CreditosForm.get('id_vendedor').updateValueAndValidity();
+    } else {
+      this.CreditosForm.get('id_vendedor').clearValidators();
+      this.CreditosForm.get('id_vendedor').updateValueAndValidity();
+    }
+  }
+
+  ListarCouriers(){
+    this.ServiciosGenerales.ListarCourier("",1,50).subscribe(res=>{
+      this.Couriers = res['data'].courier
     })
   }
 
@@ -540,14 +596,18 @@ export class CreditosComponent implements OnInit, AfterViewInit {
 
   VerificarAfiliacion(id_cliente){
     this.Servicio.Verificar_Afiliacion(id_cliente).subscribe(res=>{
+      // console.log(res)
       if(res['codigo_afiliacion']){
         this.numero_afiliacion=res['codigo_afiliacion'];
         this.VerificarInteres(res['total_pagado']);
         this.cliente_afiliado=true;
       }else{
         this.VerificarInteres(0);
+        // this.numero_afiliacion=res['codigo_afiliacion'];
         this.cliente_afiliado=false;
       }
+
+      this.VerificarCondicionesAfiliacion(id_cliente);
     })
   }
 
@@ -555,23 +615,38 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     this.Servicio.Verificar_Interes(monto).subscribe(res=>{
       // console.log(res);
       this.CreditosForm.get('interes').setValue(res);
+      this.CrearCronograma();
     })
   }
 
-  VerificarCondicionesAfiliacion(){
+  VerificarCondicionesAfiliacion(id_cliente){
     this.Servicio.SeleccionarParametros().subscribe(res=>{
-      this.numero_afiliacion = res.numero;
+      // console.log(res)
+      if(!this.cliente_afiliado) this.numero_afiliacion = res.numero;
+      this.ObtenerNumero(id_cliente);
       this.CreditosForm.get('afiliacion_tiempo').setValue(res.tiempo)
       this.numero_cuotas = +res.tiempo*12;
       this.CreditosForm.get('afiliacion_monto').setValue(res.monto)
     })
   }
 
+  ObtenerNumero(cliente:number){
+    this.Servicio.Proximo(cliente).subscribe(res=>{
+
+      this.CreditosForm.get('numero').setValue(res)
+
+      let codigo_string: string = res.toString();
+      let codigo_string_length: number = res.toString().length;
+
+      for( let i = codigo_string_length ; i < 3 ; i++ ){
+        codigo_string = "0" + codigo_string;
+      }
+
+      this.CreditosForm.get('codigo').setValue(this.numero_afiliacion + "-" + codigo_string);
+    })
+  }
+
   ObtenerClientexId(id_cliente) {
-
-    // El número del crédito
-    this.ObtenerNumero(id_cliente);
-
     this.ClienteServicio.Seleccionar(id_cliente).subscribe(res => {
       if (res) {
         // console.log(res)
@@ -608,7 +683,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
 
     this.CreditosForm.get('numero').setValue(null)
     this.CreditosForm.get('codigo').setValue(null);
-    this.cliente_afiliado=true;
+    // this.cliente_afiliado=true;
   }
   
   EditarContactoCliente(){
@@ -757,6 +832,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   RemoverVendedor(){
     this.CreditosForm.get('id_vendedor').setValue(null);
     this.CreditosForm.get('vendedor').setValue("");
+    this.ListarVendedor("");
   }
 
   ListarAutorizador(nombre: string) {
@@ -774,6 +850,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   RemoverAutorizador(){
     this.CreditosForm.get('id_autorizador').setValue(null);
     this.CreditosForm.get('autorizador').setValue("");
+    this.ListarVendedor("");
   }
 
   SubirArchivo(evento, orden){
@@ -792,6 +869,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       if ( orden == 11 ) this.compromiso_nuevo = evento.serverResponse.response.body.data;
       if ( orden == 12 ) this.letra_nuevo = evento.serverResponse.response.body.data;
       if ( orden == 13 ) this.ddjj_nuevo = evento.serverResponse.response.body.data;
+      if ( orden == 14 ) this.otros_nuevo = evento.serverResponse.response.body.data;
+      if ( orden == 15 ) this.papeles_nuevo = evento.serverResponse.response.body.data;
     }else{
       if ( orden == 1 ) this.foto = evento.serverResponse.response.body.data;
       if ( orden == 2 ) this.dni = evento.serverResponse.response.body.data;
@@ -806,6 +885,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       if ( orden == 11 ) this.compromiso = evento.serverResponse.response.body.data;
       if ( orden == 12 ) this.letra = evento.serverResponse.response.body.data;
       if ( orden == 13 ) this.ddjj = evento.serverResponse.response.body.data;
+      if ( orden == 14 ) this.otros = evento.serverResponse.response.body.data;
+      if ( orden == 15 ) this.papeles = evento.serverResponse.response.body.data;
     }
   }
 
@@ -818,6 +899,17 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       if(orden==1) this.CreditosForm['controls'].garantes['controls'][index].get('dni_pdf_nuevo').setValue(evento.serverResponse.response.body.data);
       if(orden==2) this.CreditosForm['controls'].garantes['controls'][index].get('cip_pdf_nuevo').setValue(evento.serverResponse.response.body.data);
       if(orden==3) this.CreditosForm['controls'].garantes['controls'][index].get('planilla_pdf_nuevo').setValue(evento.serverResponse.response.body.data);
+    }
+  }
+
+  CambioFechaCredito(){
+    if(this.id_tipo>1){
+      if( moment(this.CreditosForm.value.fecha_credito).date() < 15) {
+        this.CreditosForm.get('interes_diario').setValue(true);
+      } else {
+        this.CreditosForm.get('interes_diario').setValue(false);
+      }
+      this.CrearCronograma()
     }
   }
 
@@ -849,7 +941,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       let interes_truncado = Math.round( ((dias_mes - dia_credito) / dias_mes) * interes * 100 ) / 100;
 
       // Si el crédito es antes de quincena, se paga a fin de mes los intereses truncados
-      if( dia_credito <= 15 ){
+      if( this.CreditosForm.value.interes_diario ){
         this.Cronograma.push({
           numero: 0,
           fecha_vencimiento: moment(this.CreditosForm.value.fecha_credito).endOf('month'),
@@ -911,6 +1003,10 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     this.CalcularTotalCronograma();
   }
 
+  HayPapeles(evento){
+    this.CreditosForm.get('papeles').setValue(evento.checked)
+  }
+
   AbrirDocumento(url){
     if(url){
       window.open(url, "_blank");
@@ -932,8 +1028,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
 
       // Se verifican que los datos del nuevo cliente estén actualizados
       this.VerificarAfiliacion(this.CreditosForm.value.id_cliente);
-      this.VerificarCondicionesAfiliacion();
-      this.ObtenerNumero(this.CreditosForm.value.id_cliente);
+      // this.VerificarCondicionesAfiliacion(this.CreditosForm.value.id_cliente);
+      // this.ObtenerNumero(this.CreditosForm.value.id_cliente);
 
       this.CrearCredito();
     }
@@ -959,7 +1055,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       0,
       this.CreditosForm.value.afiliacion_monto,
       this.numero_cuotas,
-      +this.CreditosForm.value.afiliacion_monto * +this.CreditosForm.value.afiliacion_monto,
+      +this.CreditosForm.value.afiliacion_monto * this.numero_cuotas,
       "",
       "",
       "",
@@ -970,6 +1066,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       "",
       "",
       tarjeta,
+      "",
       "",
       "",
       "",
@@ -1022,7 +1119,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         "",
         "",
         "",
-        this.tarjeta_editar ? resultado[9].mensaje : this.tarjeta_antiguo,
+        this.tarjeta_editar ? resultado[0].mensaje : this.tarjeta_antiguo,
+        "",
         "",
         "",
         "",
@@ -1069,6 +1167,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       this.ServiciosGenerales.RenameFile(this.compromiso,'COMPROMISO',random.toString(),"credito"),
       this.ServiciosGenerales.RenameFile(this.letra,'LETRA',random.toString(),"credito"),
       this.ServiciosGenerales.RenameFile(this.ddjj,'DDJJ',random.toString(),"credito"),
+      this.ServiciosGenerales.RenameFile(this.otros,'OTROS',random.toString(),"credito"),
+      this.ServiciosGenerales.RenameFile(this.papeles,'PAPELES',random.toString(),"credito"),
     ).subscribe(resultado=>{
 
       if( this.cliente_afiliado === false ){
@@ -1083,8 +1183,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         this.CreditosForm.value.fecha_credito,
         this.numero_afiliacion,
         this.CreditosForm.value.numero,
-        this.CreditosForm.value.id_autorizador,
-        this.CreditosForm.value.id_vendedor,
+        this.CreditosForm.value.id_autorizador ? this.CreditosForm.value.id_autorizador : 0,
+        this.CreditosForm.value.id_vendedor ? this.CreditosForm.value.id_vendedor : 0,
         this.CreditosForm.value.id_cliente,
         this.CreditosForm.value.direccion,
         this.CreditosForm.value.telefono,
@@ -1109,6 +1209,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         resultado[10].mensaje,
         resultado[11].mensaje,
         resultado[12].mensaje,
+        resultado[13].mensaje,
         this.CreditosForm.value.observaciones
       ).subscribe(res=>{
         // Se agrega el cronograma
@@ -1139,6 +1240,18 @@ export class CreditosComponent implements OnInit, AfterViewInit {
               ).subscribe(res=>console.log(res))
             })
           })
+        }
+
+        // Se agregan los datos del courier
+        if( this.CreditosForm.value.papeles ){
+          this.Servicio.CrearCourier(
+            res['data'],
+            this.CreditosForm.value.papeles_courier,
+            this.CreditosForm.value.papeles_fecha_envio,
+            this.CreditosForm.value.papeles_seguimiento,
+            resultado[14].mensaje,
+            this.CreditosForm.value.papeles_observaciones
+          ).subscribe();
         }
 
         setTimeout(()=>{
@@ -1176,6 +1289,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       this.ServiciosGenerales.RenameFile(this.compromiso_nuevo,'COMPROMISO',random.toString(),"credito"),
       this.ServiciosGenerales.RenameFile(this.letra_nuevo,'LETRA',random.toString(),"credito"),
       this.ServiciosGenerales.RenameFile(this.ddjj_nuevo,'DDJJ',random.toString(),"credito"),
+      this.ServiciosGenerales.RenameFile(this.otros_nuevo,'OTROS',random.toString(),"credito"),
+      this.ServiciosGenerales.RenameFile(this.papeles_nuevo,'PAPELES',random.toString(),"credito"),
     ).subscribe(resultado=>{
 
       // console.log(resultado)
@@ -1184,8 +1299,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         this.id_credito_editar,
         this.CreditosForm.value.sucursal,
         this.CreditosForm.value.fecha_credito,
-        this.CreditosForm.value.id_autorizador,
-        this.CreditosForm.value.id_vendedor,
+        this.CreditosForm.value.id_autorizador ? this.CreditosForm.value.id_autorizador : 0,
+        this.CreditosForm.value.id_vendedor ? this.CreditosForm.value.id_vendedor : 0,
         this.CreditosForm.value.id_cliente,
         this.CreditosForm.value.direccion,
         this.CreditosForm.value.telefono,
@@ -1210,6 +1325,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         this.compromiso_editar ? resultado[10].mensaje : this.compromiso_antiguo,
         this.letra_editar ? resultado[11].mensaje : this.letra_antiguo,
         this.ddjj_editar ? resultado[12].mensaje : this.ddjj_antiguo,
+        this.otros_editar ? resultado[13].mensaje : this.otros_antiguo,
         this.CreditosForm.value.observaciones
       ).subscribe(res=>{
         // console.log(res)
@@ -1221,15 +1337,6 @@ export class CreditosComponent implements OnInit, AfterViewInit {
             item.fecha_vencimiento
           ).subscribe()
         })
-  
-        setTimeout(()=>{
-          this.router.navigate(['/creditos']);
-          if(res['codigo']==0){
-            this.Notificacion.Snack("Se actualizó el crédito con éxito!","");
-          }else{
-            this.Notificacion.Snack("Ocurrió un error al actualizar el crédito","");
-          }
-        }, 300)
 
         // Si el crédito tiene garante, se los agrega
         if( this.CreditosForm.value.garante ){
@@ -1251,6 +1358,27 @@ export class CreditosComponent implements OnInit, AfterViewInit {
             })
           })
         }
+
+        // Se agregan los datos del courier
+        if( this.CreditosForm.value.papeles ){
+          this.Servicio.CrearCourier(
+            res['data'],
+            this.CreditosForm.value.papeles_courier,
+            this.CreditosForm.value.papeles_fecha_envio,
+            this.CreditosForm.value.papeles_seguimiento,
+            resultado[14].mensaje,
+            this.CreditosForm.value.papeles_observaciones
+          ).subscribe();
+        }
+
+        setTimeout(()=>{
+          this.router.navigate(['/creditos']);
+          if(res['codigo']==0){
+            this.Notificacion.Snack("Se actualizó el crédito con éxito!","");
+          }else{
+            this.Notificacion.Snack("Ocurrió un error al actualizar el crédito","");
+          }
+        }, 300)
 
       })
     })

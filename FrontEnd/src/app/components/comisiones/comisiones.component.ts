@@ -16,9 +16,7 @@ export class ComisionesComponent implements OnInit {
 	public fecha_inicio: Date = new Date((new Date).valueOf() - 1000*60*60*24*120)
 	public fecha_fin: Date = new Date()
 
-	// @ViewChild('InputEfectivas') FiltroEfectivas: MatSelect;
-	// @ViewChild('InputRetenidas') FiltroRetenidas: MatSelect;
-	@ViewChild('InputVendedor') FiltroVendedor: ElementRef;
+  @ViewChild('InputVendedor') FiltroVendedor: ElementRef;
 	@ViewChild('InputPecosa') FiltroPecosa: ElementRef;
 
 	@ViewChild(MatPaginator) paginator: MatPaginator;
@@ -37,21 +35,21 @@ export class ComisionesComponent implements OnInit {
   }
 
   ngAfterViewInit(){
-  	
-  	this.paginator.page.subscribe(res=>{
-  		this.CargarInformacion()
-  	})
-
+    
   	merge(
-  		fromEvent(this.FiltroVendedor.nativeElement, 'keyup'),
-			fromEvent(this.FiltroPecosa.nativeElement, 'keyup'),
+      fromEvent(this.FiltroVendedor.nativeElement,'keyup'),
+			fromEvent(this.FiltroPecosa.nativeElement,'keyup')
   	).pipe(
   		debounceTime(200),
   		distinctUntilChanged(),
   		tap(()=>{
   			this.CargarInformacion()
   		})
-  	)
+  	).subscribe()
+
+  	this.paginator.page.subscribe(res=>{
+  		this.CargarInformacion()
+  	})
   }
 
   VerDetalle(id_vendedor, nombre_vendedor){

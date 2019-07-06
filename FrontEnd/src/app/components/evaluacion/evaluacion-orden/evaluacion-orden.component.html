@@ -127,7 +127,9 @@
 	<mat-card-actions>
 		<mat-grid-list cols="1" rowHeight="40px">
 			<mat-grid-tile>
-				<button mat-raised-button color="primary" (click)="Guardar()" [disabled]="!cliente || !capital">Guardar</button>
+				<!-- <button mat-raised-button color="primary" (click)="Guardar()" [disabled]="!cliente || !capital">Guardar</button> -->
+				<button mat-raised-button [disabled]="!cliente || !capital">Imprimir</button>
+				<button mat-raised-button color="primary" matStepperNext [disabled]="!cliente || !capital">Generar archivos</button>
 			</mat-grid-tile>
 		</mat-grid-list>
 	</mat-card-actions>

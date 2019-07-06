@@ -15,6 +15,7 @@ export class CreditosListarComponent implements OnInit {
 
   public fecha_inicio: Date;
   public fecha_fin: Date;
+  public Tipos : Array<any>;
 
   public ListadoCreditos: CreditosDataSource;
   public Columnas: string[] = ['numero', 'codigo', 'cliente_nombre', 'tipo_credito', 'monto_total', 'fecha', 'opciones'];
@@ -60,6 +61,12 @@ export class CreditosListarComponent implements OnInit {
          this.CargarData();
        })
     ).subscribe();
+  }
+
+  ListarTiposCredito(){
+    this.Servicio.ListarTipos().subscribe(res=>{
+      this.Tipos=res;
+    })
   }
 
   CargarData() {

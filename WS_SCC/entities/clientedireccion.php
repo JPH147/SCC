@@ -19,8 +19,7 @@ Class ClienteDireccion{
         $this->conn = $db;
     }
 
-    function create()
-    {
+    function create(){
         $query = "CALL sp_crearclientedireccion(
             :id_cliente,
             :drc_nombre,
@@ -60,8 +59,7 @@ Class ClienteDireccion{
       return false;
     }
 
-    function read()
-    {
+    function read(){
         $query = "CALL sp_listarclientedireccion(:pid_cliente, :pdrc_relevancia, :pagina, :total_pagina)";
 
         $result = $this->conn->prepare($query);
@@ -118,8 +116,7 @@ Class ClienteDireccion{
         return $this->total_resultado;
     }
 
-    function actualizar_primario()
-    {
+    function actualizar_primario(){
       $query = "CALL sp_actualizarrelevanciadireccion(
         :id_direccion
       )";

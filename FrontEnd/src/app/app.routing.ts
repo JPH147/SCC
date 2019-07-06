@@ -32,6 +32,8 @@ import { TrabajadoresComponent } from './components/trabajadores/trabajadores.co
 import { RegistroHorasComponent } from './components/registro-horas/registro-horas.component';
 import { ReporteAsistenciaComponent } from './components/reporte-asistencia/reporte-asistencia.component';
 import { ConsultarClienteComponent } from './components/clientes/consultar-cliente/consultar-cliente.component';
+import { VendedoresComponent } from './components/vendedores/vendedores.component';
+import { TalonariosComponent } from './components/talonarios/talonarios.component';
 
 const appRoutes: Routes = [
   // {path: '', component: ConsultarClienteComponent}, //prueba
@@ -53,6 +55,8 @@ const appRoutes: Routes = [
   {path: 'salidavendedores/retorno/:idsalida', component: RetornoVendedoresCierreComponent},
   {path: 'comisiones', component: ComisionesComponent},
   {path: 'clientes', component: ClientesComponent},
+  {path: 'vendedores', component: VendedoresComponent},
+  {path: 'talonarios', component: TalonariosComponent},
   {path: 'ventas', component: VentasListarComponent},
   {path: 'ventas/nueva', component: VentasComponent},
   {path: 'ventas/nueva/:idcliente', component: VentasComponent},
@@ -76,7 +80,7 @@ const appRoutes: Routes = [
   {path: 'trabajadores', component: TrabajadoresComponent},
   {path: 'registro-horas', component: RegistroHorasComponent},
   {path: 'reporte-asistencia', component: ReporteAsistenciaComponent},
-  {path: 'prueba', component: SalidaVendedoresComponent}
+  {path: 'prueba', component: CreditosComponent},
 ];
 
 export const appRoutingProvider: any[] = [];

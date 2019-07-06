@@ -44,7 +44,6 @@ export class EvaluacionOrdenComponent implements OnInit {
   	})
 
   	this.informacion_venta.subscribe(res=>{
-  		// console.log(res)
   		if (res) {
 	  		if (res.cliente) {
 	  			this.cliente=res.cliente;

@@ -5,6 +5,7 @@ import {BehaviorSubject, merge, fromEvent} from 'rxjs';
 import {tap, debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {EvaluacionService} from './evaluacion.service';
 import * as moment from 'moment';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-evaluacion',
@@ -16,6 +17,9 @@ import * as moment from 'moment';
 export class EvaluacionComponent implements OnInit {
 
   @ViewChild(MatStepper) stepper: MatStepper;
+  public Cargando = new BehaviorSubject<boolean>(false);
+  public EvaluacionForm : FormGroup;
+  public cliente_encontrado : number;
 
   public datos_prestamo = new BehaviorSubject<any>({
     interes: 0.15,
@@ -27,8 +31,7 @@ export class EvaluacionComponent implements OnInit {
   public aporte:number;
 
   public dni:string;
-  public nombre:string;
-  public Clientes: Array<any>;
+  public cliente_nombre:string;
   public cliente:any;
   public fecha: string;
   public montos_anteriores = new BehaviorSubject<any>([]);
@@ -44,69 +47,78 @@ export class EvaluacionComponent implements OnInit {
   public informacion = new BehaviorSubject<any>([]);
 
   @ViewChild('InputDNI') FiltroDNI : ElementRef;
-  @ViewChild('InputNombre') FiltroNombre : ElementRef;
 
   constructor(
     private Servicio: EvaluacionService,
     private CServicios: ClienteService,
+    private Buidler : FormBuilder,
   ) { }
 
   ngOnInit() {
     this.interes=0.15;
     this.aporte=20;
     this.dni="";
-    this.nombre="";
     this.seleccion=false;
-    this.BuscarCliente();
-
+    this.cliente_encontrado=3;
+    this.CrearFormulario();
   }
 
-  ngAfterViewInit(){
-    merge(
-      fromEvent(this.FiltroDNI.nativeElement,'keyup'),
-      fromEvent(this.FiltroNombre.nativeElement,'keyup'),
-    ).pipe(
-      debounceTime(200),
-      distinctUntilChanged(),
-      tap(()=>{
-        this.BuscarCliente();
-      })
-    ).subscribe()
-  }
+  CrearFormulario(){
+    this.EvaluacionForm = this.Buidler.group({
+      id: [ { value : null , disabled : false },[
+      ]],
+      dni: [ { value : null , disabled : false },[
+        Validators.maxLength(8),
+        Validators.minLength(8)
+      ]],
+      nombre: [ { value : null , disabled : true },[
+      ]],
+      codigo: [ { value : null , disabled : true },[
+      ]],
+      cargo: [ { value : null , disabled : true },[
+      ]],
+      sede: [ { value : null , disabled : true },[
+      ]],
 
-  DisplayDNI(cliente): string | undefined {
-    return cliente ? cliente.dni : ''
-  }
-
-  DisplayNombre(cliente): string | undefined {
-    return cliente ? cliente.nombre : ''
-  }
-
-  ClienteSeleccionado(numero,evento){
-
-    this.cliente=evento.option.value;
-    this.ActualizarInformacion();
-    this.seleccion=true;
-    // console.log(this.cliente);
-    this.Servicio.ConsultarCapacidad(this.cliente.id).subscribe(res=>{
-      if (res) {
-        this.fecha=moment(res.montos[0].fecha,"YYYY-MM-DD").format("DD/MM/YYYY");
-        this.montos_anteriores.next(res.montos);
-      }
     })
-
-    if (numero==1) {
-      this.nombre=evento.option.value
-    }
-    if (numero==2) {
-      this.dni=evento.option.value
-    }
   }
 
   BuscarCliente(){
-    this.CServicios.BuscarCliente(this.dni,this.nombre).subscribe(res=>{
-      this.Clientes=res;
+    this.Cargando.next(true);
+    this.CServicios.BuscarClienteDNI(this.FiltroDNI.nativeElement.value).subscribe(res=>{
+      this.Cargando.next(false);
+      if(res['codigo']==0){
+        this.cliente_encontrado=1;
+        this.EvaluacionForm.get('id').setValue(res['data'].id);
+        this.EvaluacionForm.get('nombre').enable();
+        this.EvaluacionForm.get('codigo').enable();
+        this.EvaluacionForm.get('cargo').enable();
+        this.EvaluacionForm.get('sede').enable();
+        this.EvaluacionForm.get('nombre').setValue(res['data'].nombre);
+        this.EvaluacionForm.get('codigo').setValue(res['data'].codigo);
+        this.EvaluacionForm.get('cargo').setValue(res['data'].cargo_nombre);
+        this.EvaluacionForm.get('sede').setValue(res['data'].sede);
+        this.cliente=res['data'];
+      } else {
+        this.cliente_encontrado=2;
+        this.cliente=[];
+      }
+      this.ActualizarInformacion();
     })
+  }
+
+  RemoverCliente(){
+    this.cliente_encontrado=3;
+    this.EvaluacionForm.get('id').setValue(null);
+    this.EvaluacionForm.get('nombre').disable();
+    this.EvaluacionForm.get('codigo').enable();
+    this.EvaluacionForm.get('cargo').disable();
+    this.EvaluacionForm.get('sede').disable();
+    this.EvaluacionForm.get('dni').setValue("");
+    this.EvaluacionForm.get('nombre').setValue(null);
+    this.EvaluacionForm.get('codigo').setValue(null);
+    this.EvaluacionForm.get('cargo').setValue(null);
+    this.EvaluacionForm.get('sede').setValue(null);
   }
 
   DefinirCapacidad(evento){
@@ -122,6 +134,7 @@ export class EvaluacionComponent implements OnInit {
     this.tipo_venta=evento.tipo;
     this.capital=evento.capital;
     this.total_pagar=evento.total;
+    this.fecha= evento.fecha,
     this.fecha_inicio=evento.fecha_inicio;
     this.productos=evento.productos;
     this.cuotas=evento.cuotas;
@@ -136,6 +149,7 @@ export class EvaluacionComponent implements OnInit {
       interes: this.interes,
       aporte: this.aporte,
       venta: this.tipo_venta,
+      fecha: this.fecha,
       fecha_inicio: this.fecha_inicio,
       capital: this.capital,
       cuotas: this.cuotas,
@@ -151,7 +165,7 @@ export class EvaluacionComponent implements OnInit {
     this.interes=0.15;
     this.aporte=20;
     this.dni="";
-    this.nombre="";
+    this.cliente_nombre="";
     this.seleccion=false;
     this.datos_prestamo.next({
       interes:this.interes,

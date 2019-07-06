@@ -18,14 +18,9 @@
 	{
 	    $cliente->dni = isset($_GET['prdni']) ? trim($_GET['prdni']) : die();
 	    
-		$cliente->search();
+	    $cliente_list = $cliente->search();
 
-	    $cliente_list = array(
-            "codigo"=>$cliente->clt_codigo,
-            "nombre"=>$cliente->clt_nombre
-	    );
-
-	    if(trim($cliente->clt_codigo) != ''){
+	    if( count(array_filter($cliente_list))>0 ){
 	        print_json("0000", "OK", $cliente_list);
 	    }
 	    else{

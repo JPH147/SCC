@@ -98,9 +98,14 @@ export class VentanaVentasComponent implements OnInit {
     this.ventana.close();
   }
 
-  VerVenta(id){
+  VerVenta(venta){
     this.ventana.close();
-    this.router.navigate(['/ventas', id]);
+    if(venta.tipo=="Venta directa"){
+      this.router.navigate(['/ventas', venta.id]);
+    }
+    if(venta.tipo=="Venta por salida"){
+      this.router.navigate(['/ventas', 'salida', venta.id]);
+    }
   }
 
 }

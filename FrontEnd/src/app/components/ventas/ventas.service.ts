@@ -40,6 +40,7 @@ export class VentaService {
     pdfplanilla:string,
     pdfletra:string,
     pdfautorizacion:string,
+    pdfotros:string,
     observaciones:string,
   ): Observable<any> {
 
@@ -47,7 +48,7 @@ export class VentaService {
       .set('prfecha',moment(fecha).format("YYYY-MM-DD"))
       .set('prsucursal',sucursal.toString())
       .set('prtalonario',talonario.toString())
-      .set('prautorizador',autorizador ? autorizador.toString() : "0")
+      .set('prautorizador',autorizador.toString())
       .set('prcliente',cliente.toString())
       .set('prclientedireccion',cliente_direccion)
       .set('prclientetelefono',cliente_telefono)
@@ -70,9 +71,10 @@ export class VentaService {
       .set('prpdfplanilla',pdfplanilla)
       .set('prpdfletra',pdfletra)
       .set('prpdfautorizacion',pdfautorizacion)
+      .set('prpdfotros',pdfotros)
       .set('probservaciones',observaciones)
 
-    // console.log(params);
+    console.log(params);
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -109,6 +111,7 @@ export class VentaService {
     pdfplanilla:string,
     pdfletra:string,
     pdfautorizacion:string,
+    pdfotros:string,
     observaciones:string,
   ): Observable<any> {
     let params = new HttpParams()
@@ -139,6 +142,7 @@ export class VentaService {
     .set('prpdfplanilla',pdfplanilla)
     .set('prpdfletra',pdfletra)
     .set('prpdfautorizacion',pdfautorizacion)
+    .set('prpdfotros',pdfotros)
     .set('probservaciones',observaciones)
 
     // console.log(params)
@@ -305,10 +309,9 @@ export class VentaService {
       .set('prpagina',pagina.toString())
       .set('prtotalpagina',total_pagina.toString())
 
-    console.log(params, moment(fecha).format("YYYY-MM-DD"), fecha);
-
     return this.http.get(this.url + 'venta/readxcliente.php', { params })
     .pipe(map(res => {
+      console.log(res)
       if (res['codigo'] === 0) {
         return res;
       }  else {

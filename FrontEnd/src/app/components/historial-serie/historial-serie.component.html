@@ -33,7 +33,10 @@
 
         <ng-container matColumnDef="movimiento">
           <mat-header-cell *matHeaderCellDef>Movimiento</mat-header-cell>
-          <mat-cell *matCellDef="let serie">{{serie.movimiento_serie}}-{{serie.movimiento_numero}}</mat-cell>
+          <mat-cell *matCellDef="let serie">
+            <ng-container *ngIf="serie.movimiento_numero">{{serie.movimiento_serie}}-{{serie.movimiento_numero}}</ng-container>
+            <ng-container *ngIf="!serie.movimiento_numero">{{serie.documento}}</ng-container>
+          </mat-cell>
         </ng-container>        
 
         <ng-container matColumnDef="fecha">

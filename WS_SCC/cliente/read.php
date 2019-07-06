@@ -16,10 +16,10 @@
     try{
         $cliente = new Cliente($db);
 
-        $cliente->inst_nombre = !empty($_GET['prinstitucion']) ? trim($_GET['prinstitucion']) : '';
-        $cliente->sd_nombre = !empty($_GET['prsede']) ? trim($_GET['prsede']) : '';
-        $cliente->ssd_nombre = !empty($_GET['prsubsede']) ? trim($_GET['prsubsede']) : '';
-        $cliente->clt_cargo = !empty($_GET['prcargo']) ? trim($_GET['prcargo']) : '';
+        // $cliente->inst_nombre = !empty($_GET['prinstitucion']) ? trim($_GET['prinstitucion']) : '';
+        // $cliente->sd_nombre = !empty($_GET['prsede']) ? trim($_GET['prsede']) : '';
+        // $cliente->ssd_nombre = !empty($_GET['prsubsede']) ? trim($_GET['prsubsede']) : '';
+        // $cliente->clt_cargo = !empty($_GET['prcargo']) ? trim($_GET['prcargo']) : '';
         $cliente->clt_codigo = !empty($_GET['prcodigo']) ? trim($_GET['prcodigo']) : '';
         $cliente->clt_dni = !empty($_GET['prdni']) ? trim($_GET['prdni']) : '';
         $cliente->clt_nombre = !empty($_GET['prnombre']) ? trim($_GET['prnombre']) : '';

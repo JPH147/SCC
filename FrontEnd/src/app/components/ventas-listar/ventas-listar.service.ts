@@ -24,8 +24,8 @@ export class VentasServicio {
     orden:string
   ): Observable<any> {
 
-    return this.http.get(this.url + 'venta/read.php', {
-      params: new HttpParams()
+    
+    let params = new HttpParams()
       .set('prcliente',cliente)
       .set('prtipo_venta',tipo_venta.toString())
       .set('prfecha_inicio',moment(fecha_inicio).format('YYYY-MM-DD'))
@@ -34,7 +34,8 @@ export class VentasServicio {
       .set('prpagina',pagina_inicio.toString())
       .set('prtotalpagina',pagina_final.toString())
       .set('prorden',orden)
-  })
+
+    return this.http.get(this.url + 'venta/read.php', { params })
     .pipe(map(res => {
       if (res['codigo'] === 0) {
           return res;

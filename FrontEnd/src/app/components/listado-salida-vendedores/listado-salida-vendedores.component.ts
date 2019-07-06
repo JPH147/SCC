@@ -53,12 +53,11 @@ export class ListadoSalidaVendedoresComponent implements OnInit {
 
   ngAfterViewInit(){
 
-    this.sort.sortChange.subscribe(res => {
-      this.paginator.pageIndex = 0;
+    this.paginator.page.subscribe(res => {
+      this.CargarData();
     });
 
     merge(
-      this.paginator.page,
       this.sort.sortChange,
       fromEvent(this.FiltroPecosa.nativeElement,'keyup'),
       fromEvent(this.FiltroDestino.nativeElement,'keyup'),

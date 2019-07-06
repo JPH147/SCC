@@ -88,8 +88,7 @@ export class EvaluacionService {
     return this.http.post(this.url + 'capacidad-pago/delete.php', params, {headers: headers});
   }
 
-  SeleccionarNumero(
-    ):Observable<any>{
+  SeleccionarNumero():Observable<any>{
     return this.http.get(this.url+'presupuesto/next.php',{
     })
     .pipe(
@@ -113,13 +112,13 @@ export class EvaluacionService {
     total: number,
   ): Observable<any> {
     let params = new HttpParams()
-                .set('prcliente',cliente.toString())
-                .set('prcuotas',cuotas.toString())
-                .set('prcapital',capital.toString())
-                .set('prtasa',tasa.toString())
-                .set('prtotal',total.toString())
-                .set('prtipo',tipo.toString())
-                .set('prfecha',moment(fecha).format("YYYY-MM-DD"))
+      .set('prcliente',cliente.toString())
+      .set('prcuotas',cuotas.toString())
+      .set('prcapital',capital.toString())
+      .set('prtasa',tasa.toString())
+      .set('prtotal',total.toString())
+      .set('prtipo',tipo.toString())
+      .set('prfecha',moment(fecha).format("YYYY-MM-DD"))
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -159,4 +158,78 @@ export class EvaluacionService {
 
     return this.http.post(this.url + 'presupuesto/create-producto.php', params, {headers: headers});
   }
+
+  GenerarDDJJ(
+    nombre_plantilla : string ,
+    nombre_archivo : string ,
+    nombre : string ,
+    dni : string ,
+    direccion : string ,
+    lugar : string ,
+    fecha_letras : Date ,
+  ) :Observable <any> {
+
+    let params = new HttpParams()
+      .set('prnombreplantilla', nombre_plantilla)
+      .set('prnombrearchivo', nombre_archivo)
+      .set('prnombre', nombre)
+      .set('prdni', dni)
+      .set('prdireccion', direccion)
+      .set('prlugar', lugar)
+      .set('prfecha', moment(fecha_letras).format("DD/MM/YYYY"))
+      .set('prfechaletras', moment(fecha_letras).format('LL'))
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post( this.url + 'plantillas/generar-ddjj.php', params, {headers : headers} )
+
+  }
+
+  GenerarAutorizacion(
+    nombre_plantilla : string ,
+    nombre_archivo : string ,
+    tipo : string ,
+    nombre : string ,
+    cargo_estado : string ,
+    dni : string ,
+    cip : string ,
+    codigo : string ,
+    direccion : string ,
+    tipo_telefono : string , /**/
+    telefono : string , /**/
+    email : string ,
+    ugel_nombre : string ,
+    monto_asociado : number ,
+    monto_cuota : number ,
+    numero_cuotas : number ,
+    lugar : string ,
+    fecha : Date 
+  ) :Observable <any> {
+
+    let params = new HttpParams()
+      .set('prnombreplantilla', nombre_plantilla)
+      .set('prnombrearchivo', nombre_archivo)
+      .set('prtipo', tipo)
+      .set('prnombre', nombre)
+      .set('prcargoestado', cargo_estado)
+      .set('prdni', dni)
+      .set('prcip', cip)
+      .set('prcodigo', codigo)
+      .set('prdireccion', direccion)
+      .set('prtipotelefono', tipo_telefono)
+      .set('prtelefono', telefono)
+      .set('premail', email)
+      .set('prugel', ugel_nombre)
+      .set('prmontoasociado', monto_asociado.toString())
+      .set('prmontocuota', monto_cuota.toString())
+      .set('prnumerocuotas', numero_cuotas.toString())
+      .set('prlugar', lugar)
+      .set('prfechaletras', moment(fecha).format('LL'))
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post( this.url + 'plantillas/generar-autorizacion.php', params, {headers : headers} )
+  }
+
+
 }

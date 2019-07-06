@@ -129,6 +129,11 @@ import { TrabajadoresComponent } from './components/trabajadores/trabajadores.co
 import { RegistroHorasComponent } from './components/registro-horas/registro-horas.component';
 import { ReporteAsistenciaComponent } from './components/reporte-asistencia/reporte-asistencia.component';
 import { ConsultarClienteComponent } from './components/clientes/consultar-cliente/consultar-cliente.component';
+import { VendedoresComponent } from './components/vendedores/vendedores.component';
+import { VentanaVendedorComponent } from './components/vendedores/ventana-vendedor/ventana-vendedor';
+import { TalonariosComponent } from './components/talonarios/talonarios.component';
+import { VentanaTalonarioComponent } from './components/talonarios/ventana-talonario/ventana-talonario.component';
+import { EvaluacionArchivosComponent } from './components/evaluacion/evaluacion-archivos/evaluacion-archivos.component';
 
 @NgModule({
   imports: [
@@ -261,7 +266,12 @@ import { ConsultarClienteComponent } from './components/clientes/consultar-clien
     RegistroHorasComponent,
     ReporteAsistenciaComponent,
     VentanaTrabajadoresComponent,
-    ConsultarClienteComponent
+    ConsultarClienteComponent,
+    VendedoresComponent,
+    TalonariosComponent,
+    VentanaVendedorComponent,
+    VentanaTalonarioComponent,
+    EvaluacionArchivosComponent
    ],
   entryComponents: [
     AppComponent,
@@ -302,7 +312,9 @@ import { ConsultarClienteComponent } from './components/clientes/consultar-clien
     VentanaCronogramaComponent,
     AgregarVentaComponent,
     SeleccionarClienteComponent,
-    VentanaTrabajadoresComponent
+    VentanaTrabajadoresComponent,
+    VentanaVendedorComponent,
+    VentanaTalonarioComponent
   ],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider, Notificaciones,{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}]

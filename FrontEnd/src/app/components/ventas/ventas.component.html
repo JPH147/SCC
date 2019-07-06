@@ -368,7 +368,7 @@
 
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
-             <input matInput [matDatepicker]="picker" placeholder="Fecha de venta" formControlName="fechaventa" (dateChange)="CrearCronograma()" [readonly]="idventa">
+             <input matInput [matDatepicker]="picker" placeholder="Fecha de venta" formControlName="fechaventa" (dateChange)="CrearCronograma()" readonly>
              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
              <mat-datepicker #picker [disabled]="idventa"></mat-datepicker>
           </mat-form-field>
@@ -561,7 +561,7 @@
 
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
-             <input matInput [matDatepicker]="InputFechaPago" placeholder="Inicio de pagos" [min]="VentasForm.value.fechaventa" formControlName="fechapago" (dateChange)="CrearCronograma()"  [readonly]="idventa">
+             <input matInput [matDatepicker]="InputFechaPago" placeholder="Inicio de pagos" [min]="VentasForm.value.fechaventa" formControlName="fechapago" (dateChange)="CrearCronograma()" readonly>
              <mat-datepicker-toggle matSuffix [for]="InputFechaPago"></mat-datepicker-toggle>
              <mat-datepicker #InputFechaPago [disabled]="idventa"></mat-datepicker>
           </mat-form-field>
@@ -614,7 +614,7 @@
         DOCUMENTOS ADJUNTOS
       </mat-card-subtitle>
 
-      <mat-grid-list cols="8" rowHeight="100px" *ngIf="!idventa && !idventa_editar">
+      <mat-grid-list cols=9 rowHeight="100px" *ngIf="!idventa && !idventa_editar">
 
         <mat-grid-tile>
           <image-upload
@@ -711,9 +711,21 @@
             (uploadFinished)="SubirAutorizacion($event)">
           </image-upload>  
         </mat-grid-tile>
+
+        <mat-grid-tile>
+          <image-upload
+            class="cargar-imagen"
+            [max]="1"
+            url="{{ruta}}"
+            [buttonCaption]="'Otros'"
+            [extensions]="['pdf']"
+            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
+            (uploadFinished)="SubirOtros($event)">
+          </image-upload>  
+        </mat-grid-tile>
       </mat-grid-list>
 
-      <mat-grid-list cols=8 rowHeight="60px" *ngIf="idventa_editar">
+      <mat-grid-list cols=9 rowHeight="60px" *ngIf="idventa_editar">
 
         <mat-grid-tile>
           <button mat-icon-button color="primary" (click)="EditarFoto()" [disabled]="!foto" *ngIf="!foto_editar">
@@ -786,9 +798,18 @@
             <mat-icon class="icono-documentos"> close </mat-icon>
           </button>
         </mat-grid-tile>
+
+        <mat-grid-tile>
+          <button mat-icon-button color="primary"  (click)="EditarOtros()" [disabled]="!otros" *ngIf="!otros_editar">
+            <mat-icon class="icono-documentos"> edit </mat-icon>
+          </button>
+          <button mat-icon-button color="primary"  (click)="NoEditarOtros()" [disabled]="!otros" *ngIf="otros_editar">
+            <mat-icon class="icono-documentos"> close </mat-icon>
+          </button>
+        </mat-grid-tile>
       </mat-grid-list>
 
-      <mat-grid-list cols=8 rowHeight="20px" *ngIf="idventa || idventa_editar">
+      <mat-grid-list cols=9 rowHeight="20px" *ngIf="idventa || idventa_editar">
 
         <mat-grid-tile>
           Foto
@@ -822,9 +843,13 @@
           Autorización
         </mat-grid-tile>
 
+        <mat-grid-tile>
+          Otros
+        </mat-grid-tile>
+
       </mat-grid-list>
 
-      <mat-grid-list cols=8 rowHeight="60px" *ngIf="idventa || idventa_editar">
+      <mat-grid-list cols=9 rowHeight="60px" *ngIf="idventa || idventa_editar">
 
         <mat-grid-tile>
 
@@ -967,6 +992,24 @@
             [extensions]="['pdf']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
             (uploadFinished)="SubirAutorizacion($event)">
+          </image-upload>
+
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+
+          <button mat-icon-button color="primary" [disabled]="!otros" *ngIf="!otros_editar">
+            <mat-icon class="icono-documentos" (click)="AbrirDocumento(otros)"> visibility </mat-icon>
+          </button>
+
+          <image-upload
+            class="cargar-imagen" *ngIf="otros_editar"
+            [max]="1"
+            url="{{ruta}}"
+            [buttonCaption]="'Adjuntar'"
+            [extensions]="['pdf']"
+            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
+            (uploadFinished)="SubirOtros($event)">
           </image-upload>
 
         </mat-grid-tile>

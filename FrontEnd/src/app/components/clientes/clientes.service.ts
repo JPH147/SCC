@@ -14,10 +14,10 @@ export class ClienteService {
   constructor(private http: HttpClient) {}
 
   Listado(
-  institucion: string,
-  sede: string,
-  subsede: string,
-  cargo:string,
+  // institucion: string,
+  // sede: string,
+  // subsede: string,
+  // cargo:string,
   codigo:string,
   dni: string,
   nombre: string,
@@ -26,10 +26,10 @@ export class ClienteService {
   ): Observable<any>  {
      return this.http.get(this.url + 'cliente/read.php',{
        params: new HttpParams()
-       .set('prinstitucion', institucion)
-       .set('prsede',sede)
-       .set('prsubsede',subsede)
-       .set('prcargo',cargo)
+      //  .set('prinstitucion', institucion)
+      //  .set('prsede',sede)
+      //  .set('prsubsede',subsede)
+      //  .set('prcargo',cargo)
        .set('prcodigo',codigo)
        .set('prdni',dni)
        .set('prnombre',nombre)
@@ -321,11 +321,9 @@ export class ClienteService {
 
   BuscarClienteDNI(
     dni : string
-  ){
-
+  ) : Observable <any> {
     let params = new HttpParams()
-    .set('prdni', dni)
-
+      .set('prdni', dni)
     return this.http.get(this.url + 'cliente/buscar.php',{params})
     .pipe(map(res => {
      if (res['codigo'] === 0) {

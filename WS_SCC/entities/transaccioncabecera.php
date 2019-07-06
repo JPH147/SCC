@@ -1,7 +1,5 @@
 <?php
 
-
-
 Class TransaccionCabecera{
 
     private $conn;
@@ -48,7 +46,7 @@ Class TransaccionCabecera{
     public function __construct($db){
         $this->conn = $db;
         include_once '../entities/transacciondetalle.php';
-        $this->detalle = new TransaccionDetalle($db);
+        $this->ClienteDireccion = new ClienteDireccion($db);
     }
 
     /* Listar productos */

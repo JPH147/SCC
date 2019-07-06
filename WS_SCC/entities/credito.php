@@ -19,6 +19,9 @@ Class Creditos{
     public $total_cuotas;
     public $codigo;
     public $numero;
+    public $id_courier;
+    public $courier;
+    public $numero_seguimiento;
 
     public $sucursal;
     public $fecha_credito;
@@ -46,6 +49,7 @@ Class Creditos{
     public $pdf_compromiso;
     public $pdf_letra;
     public $pdf_ddjj;
+    public $pdf_otros;
     public $observacion;
     
     public $garante;
@@ -138,6 +142,7 @@ Class Creditos{
         
         $result->bindParam(1, $this->id_credito);
 
+        $Courier=$this->read_courier($this->id_credito);
         $Garantes=$this->read_garantes($this->id_credito);
         $Cronograma=$this->read_cronograma($this->id_credito);
 
@@ -182,11 +187,44 @@ Class Creditos{
         $this->pdf_compromiso = $row['pdf_compromiso'];
         $this->pdf_letra = $row['pdf_letra'];
         $this->pdf_ddjj = $row['pdf_ddjj'];
+        $this->pdf_otros = $row['pdf_otros'];
         $this->observaciones = $row['observaciones'];
         $this->id_estado = $row['id_estado'];
         $this->estado = $row['estado'];
-        $this->cronograma = $Cronograma;
+        $this->courier = $Courier;
         $this->garante = $Garantes;
+        $this->cronograma = $Cronograma;
+    }
+
+    function read_courier(){
+
+        $query = "CALL sp_listarcreditocourierxcredito(?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_credito);
+
+        $result->execute();
+        
+        $courrier_list=array();
+
+        while( $row = $result->fetch(PDO::FETCH_ASSOC) )
+        {
+            extract($row) ;
+            $courier_item = array (
+                "id"=>$row['id'],
+                "id_courier"=>$row['id_courier'],
+                "courier"=>$row['courier'],
+                "fecha"=>$row['fecha'],
+                "numero_seguimiento"=>$row['numero_seguimiento'],
+                "foto"=>$row['foto'],
+                "fecha_recepcion"=>$row['fecha_recepcion'],
+                "usuario_recepcion"=>$row['usuario_recepcion'],
+                "observacion"=>$row['observacion']
+            );
+            array_push($courrier_list, $courier_item);
+        }
+        return $courrier_list;
     }
 
     function read_garantes(){
@@ -288,6 +326,28 @@ Class Creditos{
       return $cronograma_list;
     }
 
+    function read_tipo(){
+        $query = "CALL sp_listarcreditotipo()";
+
+        $result = $this->conn->prepare($query);
+  
+        $result->execute();
+        
+        $tipo_credito=array();
+  
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $tipo_item = array (
+                "id"=>$id,
+                "nombre"=>$nombre,
+            );
+            array_push($tipo_credito,$tipo_item);
+        }
+  
+        return $tipo_credito;
+    }
+
     function crear(){
         $query = "CALL sp_crearcredito(
             :prtipo,
@@ -321,6 +381,7 @@ Class Creditos{
             :prpdfcompromiso,
             :prpdfletra,
             :prpdfddjj,
+            :pdfotros,
             :probservacion
         )";
 
@@ -357,6 +418,7 @@ Class Creditos{
         $result->bindParam(":prpdfcompromiso", $this->pdf_compromiso);
         $result->bindParam(":prpdfletra", $this->pdf_letra);
         $result->bindParam(":prpdfddjj", $this->pdf_ddjj);
+        $result->bindParam(":pdfotros", $this->pdf_otros);
         $result->bindParam(":probservacion", $this->observacion);
 
         $this->tipo_credito=htmlspecialchars(strip_tags($this->tipo_credito));
@@ -390,8 +452,8 @@ Class Creditos{
         $this->pdf_compromiso=htmlspecialchars(strip_tags($this->pdf_compromiso));
         $this->pdf_letra=htmlspecialchars(strip_tags($this->pdf_letra));
         $this->pdf_ddjj=htmlspecialchars(strip_tags($this->pdf_ddjj));
+        $this->pdf_otros=htmlspecialchars(strip_tags($this->pdf_otros));
         $this->observacion=htmlspecialchars(strip_tags($this->observacion));
-
 
         if($result->execute())
         {
@@ -436,6 +498,7 @@ Class Creditos{
             :prpdfcompromiso,
             :prpdfletra,
             :prpdfddjj,
+            :prpdfotros,
             :probservacion
         )";
 
@@ -470,6 +533,7 @@ Class Creditos{
         $result->bindParam(":prpdfcompromiso", $this->pdf_compromiso);
         $result->bindParam(":prpdfletra", $this->pdf_letra);
         $result->bindParam(":prpdfddjj", $this->pdf_ddjj);
+        $result->bindParam(":prpdfotros", $this->pdf_otros);
         $result->bindParam(":probservacion", $this->observacion);
 
         $this->id_credito=htmlspecialchars(strip_tags($this->id_credito));
@@ -501,6 +565,7 @@ Class Creditos{
         $this->pdf_compromiso=htmlspecialchars(strip_tags($this->pdf_compromiso));
         $this->pdf_letra=htmlspecialchars(strip_tags($this->pdf_letra));
         $this->pdf_ddjj=htmlspecialchars(strip_tags($this->pdf_ddjj));
+        $this->pdf_otros=htmlspecialchars(strip_tags($this->pdf_otros));
         $this->observacion=htmlspecialchars(strip_tags($this->observacion));
 
 
@@ -551,6 +616,39 @@ Class Creditos{
             return true;
         }
         return false;
+    }
+
+    function crear_credito_courier(){
+        $query = "CALL sp_crearcreditocourier(
+            :prcredito,
+            :prcourier,
+            :prfecha,
+            :prseguimiento,
+            :prfoto,
+            :probservacion
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prcredito", $this->id_credito);
+        $result->bindParam(":prcourier", $this->id_courier);
+        $result->bindParam(":prfecha", $this->fecha);
+        $result->bindParam(":prseguimiento", $this->numero_seguimiento);
+        $result->bindParam(":prfoto", $this->pdf_foto);
+        $result->bindParam(":probservacion", $this->observacion);
+
+        $this->id_credito=htmlspecialchars(strip_tags($this->id_credito));
+        $this->id_courier=htmlspecialchars(strip_tags($this->id_courier));
+        $this->fecha=htmlspecialchars(strip_tags($this->fecha));
+        $this->numero_seguimiento=htmlspecialchars(strip_tags($this->numero_seguimiento));
+        $this->pdf_foto=htmlspecialchars(strip_tags($this->pdf_foto));
+        $this->observacion=htmlspecialchars(strip_tags($this->observacion));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false; 
     }
 
     function crear_cronograma(){

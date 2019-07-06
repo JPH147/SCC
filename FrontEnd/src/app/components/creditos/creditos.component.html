@@ -2,7 +2,7 @@
 
   <button mat-mini-fab type="button" color="primary" (click)="Atras()"><mat-icon>keyboard_arrow_left</mat-icon></button>
 
-  <ng-container *ngIf="id_tipo==2">
+  <ng-container *ngIf="id_tipo>1">
     <mat-card-title class="tituloProd" *ngIf="!id_credito && !id_credito_editar">Nuevo préstamo</mat-card-title>
     <mat-card-title class="tituloProd" *ngIf="id_credito || id_credito_editar">Préstamo N° {{CreditosForm.getRawValue().codigo}}</mat-card-title>
   </ng-container>
@@ -31,7 +31,7 @@
         <mat-grid-tile colspan="2" *ngIf="(CreditosForm.value.id_cliente || id_credito || id_cliente)">
           <mat-form-field class="columnas-2">
             <input #Cliente placeholder="Cliente" matInput formControlName="cliente" readonly>
-            <mat-icon color="primary" matSuffix (click)="RemoverCliente()" *ngIf="!id_cliente && !id_credito"> remove_circle </mat-icon>
+            <mat-icon color="primary" matSuffix (click)="RemoverCliente()" *ngIf="!id_cliente && !id_credito && id_tipo>1"> remove_circle </mat-icon>
             <mat-hint align="start" *ngIf="cliente_afiliado===true"> El cliente está afiliado. </mat-hint>
             <mat-hint align="start" *ngIf="cliente_afiliado===false"> El cliente no está afiliado. </mat-hint>
           </mat-form-field>
@@ -61,7 +61,7 @@
           </mat-form-field>
         </mat-grid-tile>
 
-        <ng-container *ngIf="id_tipo==2">
+        <ng-container *ngIf="id_tipo>1">
           <mat-grid-tile *ngIf="!id_credito">
             <button type="button" mat-icon-button color="primary" (click)="EditarContactoCliente()"> <mat-icon> edit </mat-icon>  </button>
             <mat-checkbox color="primary" formControlName="garante" (change)="HayGarante($event)">Garante</mat-checkbox>
@@ -105,7 +105,7 @@
 
         <mat-grid-tile>
           <mat-form-field>
-            <input matInput [matDatepicker]="afiliacion" placeholder="Fecha de pago"  formControlName="afiliacion_fecha_vencimiento">
+            <input matInput [matDatepicker]="afiliacion" placeholder="Fecha de pago"  formControlName="afiliacion_fecha_vencimiento" [readonly]="id_credito || id_tipo==1">
             <mat-datepicker-toggle matSuffix [for]="afiliacion"></mat-datepicker-toggle>
             <mat-datepicker #afiliacion [disabled]="id_credito"></mat-datepicker>
           </mat-form-field>
@@ -325,7 +325,7 @@
         <ng-container *ngIf="id_tipo==1">
           DATOS DE LA AFILIACIÓN
         </ng-container>
-        <ng-container *ngIf="id_tipo==2">
+        <ng-container *ngIf="id_tipo>1">
           DATOS DEL CRÉDITO
         </ng-container>
       </mat-card-subtitle>
@@ -334,9 +334,23 @@
 
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
-             <input matInput [matDatepicker]="picker" [placeholder]="id_tipo==1 ? 'Fecha de la afiliación' : 'Fecha del crédito'" formControlName="fecha_credito" (dateChange)="CrearCronograma()" [readonly]="id_credito">
+             <input matInput [matDatepicker]="picker" [max]="Hoy" [placeholder]="id_tipo==1 ? 'Fecha de la afiliación' : 'Fecha del crédito'" formControlName="fecha_credito" (dateChange)="CambioFechaCredito()" [readonly]="id_credito || id_tipo==1">
              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-             <mat-datepicker #picker [disabled]="id_credito"></mat-datepicker>
+             <mat-datepicker #picker [disabled]="id_credito || id_tipo==1"></mat-datepicker>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile *ngIf="!id_credito && id_tipo>1">
+          <mat-form-field class="columnas-1">
+            <mat-select placeholder="Tipo de crédito" formControlName="tipo_credito" (selectionChange)="TipoCreditoSeleccionado($event)">
+              <mat-option *ngFor="let tipo of Tipos" [value]="tipo.id">{{tipo.nombre}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile *ngIf="id_credito || id_tipo==1">
+          <mat-form-field class="columnas-1">
+            <input matInput placeholder="Tipo de crédito" formControlName="tipo_credito" readonly>
           </mat-form-field>
         </mat-grid-tile>
 
@@ -350,7 +364,7 @@
 
         <mat-grid-tile *ngIf="id_credito">
           <mat-form-field class="columnas-1">
-            <input matInput placeholder="Sucursal" formControlName="sucursal" [readonly]="id_credito">
+            <input matInput placeholder="Sucursal" formControlName="sucursal" readonly>
           </mat-form-field>
         </mat-grid-tile>
 
@@ -360,20 +374,17 @@
           </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile>
-          <mat-checkbox color="primary" *ngIf="id_tipo==2" formControlName="interes_diario"> Interés por día </mat-checkbox>
-        </mat-grid-tile>
-
         <ng-container *ngIf="id_tipo==1">
           <div #Vendedor></div>
           <div #Autorizador></div>
         </ng-container>
 
-        <ng-container *ngIf="id_tipo==2">
+        <ng-container *ngIf="id_tipo>1">
 
-          <mat-grid-tile colspan=2 *ngIf="!id_credito && !CreditosForm.value.id_vendedor">
+          <mat-grid-tile colspan=2 *ngIf="!id_credito">
             <mat-form-field class="columnas-2">
-              <input placeholder="Vendedor" matInput [matAutocomplete]="auto" formControlName="vendedor" #Vendedor>
+              <input placeholder="Vendedor" matInput [matAutocomplete]="auto" formControlName="vendedor" #Vendedor [readonly]="CreditosForm.value.id_vendedor">
+              <mat-icon color="primary" matSuffix (click)="RemoverVendedor()" *ngIf="CreditosForm.value.id_vendedor"> remove_circle </mat-icon>
               <mat-autocomplete #auto="matAutocomplete" [displayWith] = "displayVendedor" (optionSelected)="VendedorSeleccionado()">
                 <mat-option *ngFor="let vendedor of ListadoVendedores" [value]="vendedor">
                   {{vendedor.nombre}}
@@ -382,16 +393,17 @@
             </mat-form-field>
           </mat-grid-tile>
 
-          <mat-grid-tile colspan=2 *ngIf="id_credito || CreditosForm.value.id_vendedor">
+          <mat-grid-tile colspan=2 *ngIf="id_credito">
             <mat-form-field class="columnas-2">
               <input matInput type="text" placeholder="Vendedor" formControlName="vendedor" readonly>
               <mat-icon color="primary" matSuffix (click)="RemoverVendedor()" *ngIf="!id_credito"> remove_circle </mat-icon>
             </mat-form-field>
           </mat-grid-tile>
 
-          <mat-grid-tile colspan=2 *ngIf="!id_credito && !CreditosForm.value.id_autorizador">
+          <mat-grid-tile colspan=2 *ngIf="!id_credito">
             <mat-form-field class="columnas-2">
-              <input placeholder="Autorizador" matInput [matAutocomplete]="auto3" formControlName=autorizador #Autorizador>
+              <input placeholder="Autorizador" matInput [matAutocomplete]="auto3" formControlName=autorizador #Autorizador [readonly]="CreditosForm.value.id_autorizador">
+              <mat-icon color="primary" matSuffix (click)="RemoverAutorizador()" *ngIf="CreditosForm.value.id_autorizador"> remove_circle </mat-icon>
               <mat-autocomplete #auto3="matAutocomplete" [displayWith] = "displayVendedor" (optionSelected)="AutorizadorSeleccionado()">
                 <mat-option *ngFor="let autorizador of ListadoAudorizadores" [value]="autorizador">
                   {{autorizador.nombre}}
@@ -400,7 +412,7 @@
             </mat-form-field>
           </mat-grid-tile>
 
-          <mat-grid-tile colspan=2 *ngIf="id_credito || CreditosForm.value.id_autorizador">
+          <mat-grid-tile colspan=2 *ngIf="id_credito">
             <mat-form-field class="columnas-2">
               <input matInput type="text" placeholder="Autorizador" formControlName="autorizador" readonly>
               <mat-icon color="primary" matSuffix (click)="RemoverAutorizador()" *ngIf="!id_credito"> remove_circle </mat-icon>
@@ -409,13 +421,103 @@
 
         </ng-container>
 
-        <mat-grid-tile colspan="4">
-          <mat-form-field class="columnas-4">
+        <mat-grid-tile colspan="3">
+          <mat-form-field class="columnas-3">
              <input matInput placeholder="Observaciones" formControlName="observaciones" [readonly]="id_credito">
           </mat-form-field>
         </mat-grid-tile>
 
+        <ng-container *ngIf="id_tipo>1">
+          <mat-grid-tile *ngIf="!id_credito">
+            <mat-checkbox color="primary" formControlName="papeles" (change)="HayPapeles($event)"> No tiene sus documentos </mat-checkbox>
+          </mat-grid-tile>
+        </ng-container>
+
       </mat-grid-list>
+    </div>
+
+    <!-- Seguimiento de documentos -->
+    <div class="seccion" *ngIf="CreditosForm.value.papeles">
+      
+      <mat-card-subtitle class="titulo-seccion">
+        DATOS DE SEGUIMIENTO
+      </mat-card-subtitle>
+
+      <mat-grid-list cols="4" rowHeight="70px">
+
+        <mat-grid-tile colspan="1">
+          <mat-form-field>
+            <input matInput [matDatepicker]="fechaenvio" placeholder="Fecha de envío" formControlName="papeles_fecha_envio" [readonly]="id_credito">
+            <mat-datepicker-toggle matSuffix [for]="fechaenvio"></mat-datepicker-toggle>
+            <mat-datepicker #fechaenvio [disabled]="id_credito"></mat-datepicker>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan=1 *ngIf="!id_credito">
+          <mat-form-field>
+            <mat-select placeholder="Courier" formControlName="papeles_courier">
+              <mat-option *ngFor="let courier of Couriers" [value]="courier.id"> {{courier.nombre}} </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan=1 *ngIf="id_credito">
+          <mat-form-field>
+            <input matInput type="text" placeholder="Courier" formControlName="papeles_courier">
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan=1>
+          <mat-form-field>
+            <input matInput type="text" placeholder="Número de seguimiento" formControlName="papeles_seguimiento" [readonly]="id_credito">
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <ng-container *ngIf="!id_credito">
+
+          <mat-grid-tile colspan=1>
+
+            <button mat-icon-button color="primary" (click)="papeles_editar = true" [disabled]="!papeles" *ngIf="!papeles_editar">
+              <mat-icon class="icono-documentos"> edit </mat-icon>
+            </button>
+            <button mat-icon-button color="primary" (click)="papeles_editar = false" [disabled]="!papeles" *ngIf="papeles_editar">
+              <mat-icon class="icono-documentos"> close </mat-icon>
+            </button>
+
+            <button mat-icon-button color="primary" [disabled]="!papeles" *ngIf="!papeles_editar">
+              <mat-icon class="icono-documentos" (click)="AbrirDocumento(papeles)"> visibility </mat-icon>
+            </button>
+
+            <image-upload
+              *ngIf="papeles_editar"
+              class="cargar-imagen"
+              [max]="1"
+              url="{{ruta}}"
+              [buttonCaption]="'Foto'"
+              [extensions]="['png, jpg, jpeg']"
+              [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
+              (uploadFinished)="SubirArchivo($event, 15)">
+            </image-upload>  
+          </mat-grid-tile>
+
+        </ng-container>
+
+        <ng-container *ngIf="id_credito">
+          <mat-grid-tile>
+            <button mat-icon-button color="primary" [disabled]="!papeles">
+              <mat-icon class="icono-documentos" (click)="AbrirDocumento(papeles)"> visibility </mat-icon>
+            </button>
+          </mat-grid-tile>
+        </ng-container>
+
+        <mat-grid-tile colspan=4>
+          <mat-form-field class="columnas-4">
+            <input matInput type="text" placeholder="Observaciones" formControlName="papeles_observaciones" [readonly]="id_credito">
+          </mat-form-field>
+        </mat-grid-tile>
+        
+      </mat-grid-list>
+
     </div>
 
     <!-- Adjuntos -->
@@ -583,9 +685,21 @@
           </image-upload>  
         </mat-grid-tile>
 
+        <mat-grid-tile>
+          <image-upload
+            class="cargar-imagen"
+            [max]="1"
+            url="{{ruta}}"
+            [buttonCaption]="'Otros'"
+            [extensions]="['png, jpg, jpeg']"
+            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
+            (uploadFinished)="SubirArchivo($event, 14)">
+          </image-upload>  
+        </mat-grid-tile>
+
       </mat-grid-list>
 
-      <mat-grid-list cols=7 rowHeight="60px" *ngIf="id_credito_editar && id_tipo==2">
+      <mat-grid-list cols=7 rowHeight="60px" *ngIf="id_credito_editar && id_tipo>1">
 
         <mat-grid-tile>
           <button mat-icon-button color="primary" (click)="foto_editar = true" [disabled]="!foto" *ngIf="!foto_editar">
@@ -652,7 +766,7 @@
         
       </mat-grid-list>
 
-      <mat-grid-list cols=7 rowHeight="20px" *ngIf="(id_credito || id_credito_editar) && id_tipo==2">
+      <mat-grid-list cols=7 rowHeight="20px" *ngIf="(id_credito || id_credito_editar) && id_tipo>1">
 
         <mat-grid-tile>
           Foto
@@ -684,7 +798,7 @@
 
       </mat-grid-list>
 
-      <mat-grid-list cols=7 rowHeight="60px" *ngIf="(id_credito || id_credito_editar) && id_tipo==2">
+      <mat-grid-list cols=7 rowHeight="60px" *ngIf="(id_credito || id_credito_editar) && id_tipo>1">
 
         <mat-grid-tile>
 
@@ -816,13 +930,13 @@
       </mat-grid-list>
 
       <!-- Solo para dar la sensación de espacio -->
-      <mat-list *ngIf="(id_credito || id_credito_editar) && id_tipo==2">
+      <mat-list *ngIf="(id_credito || id_credito_editar) && id_tipo>1">
         <mat-divider></mat-divider>
       </mat-list>
 
       <mat-grid-list cols=7 rowHeight="60px" *ngIf="id_credito_editar">
 
-        <mat-grid-tile *ngIf="id_tipo==2">
+        <mat-grid-tile *ngIf="id_tipo>1">
           <button mat-icon-button color="primary"  (click)="transaccion_editar = true" [disabled]="!transaccion" *ngIf="!transaccion_editar">
             <mat-icon class="icono-documentos"> edit </mat-icon>
           </button>
@@ -831,7 +945,7 @@
           </button>
         </mat-grid-tile>
 
-        <mat-grid-tile *ngIf="id_tipo==2">
+        <mat-grid-tile *ngIf="id_tipo>1">
           <button mat-icon-button color="primary"  (click)="autorizacion_editar = true" [disabled]="!autorizacion" *ngIf="!autorizacion_editar">
             <mat-icon class="icono-documentos"> edit </mat-icon>
           </button>
@@ -849,7 +963,7 @@
           </button>
         </mat-grid-tile>
 
-        <mat-grid-tile *ngIf="id_tipo==2">
+        <mat-grid-tile *ngIf="id_tipo>1">
           <button mat-icon-button color="primary"  (click)="compromiso_editar = true" [disabled]="!compromiso" *ngIf="!compromiso_editar">
             <mat-icon class="icono-documentos"> edit </mat-icon>
           </button>
@@ -858,7 +972,7 @@
           </button>
         </mat-grid-tile>
 
-        <mat-grid-tile *ngIf="id_tipo==2">
+        <mat-grid-tile *ngIf="id_tipo>1">
           <button mat-icon-button color="primary"  (click)="letra_editar = true" [disabled]="!letra" *ngIf="!letra_editar">
             <mat-icon class="icono-documentos"> edit </mat-icon>
           </button>
@@ -867,7 +981,7 @@
           </button>
         </mat-grid-tile>
 
-        <mat-grid-tile *ngIf="id_tipo==2">
+        <mat-grid-tile *ngIf="id_tipo>1">
           <button mat-icon-button color="primary"  (click)="ddjj_editar = true" [disabled]="!ddjj" *ngIf="!ddjj_editar">
             <mat-icon class="icono-documentos"> edit </mat-icon>
           </button>
@@ -876,15 +990,24 @@
           </button>
         </mat-grid-tile>
 
+        <mat-grid-tile *ngIf="id_tipo>1">
+          <button mat-icon-button color="primary"  (click)="otros_editar = true" [disabled]="!otros" *ngIf="!otros_editar">
+            <mat-icon class="icono-documentos"> edit </mat-icon>
+          </button>
+          <button mat-icon-button color="primary"  (click)="otros_editar = false" [disabled]="!otros" *ngIf="otros_editar">
+            <mat-icon class="icono-documentos"> close </mat-icon>
+          </button>
+        </mat-grid-tile>
+
       </mat-grid-list>
 
       <mat-grid-list cols=7 rowHeight="20px" *ngIf="id_credito || id_credito_editar">
 
-        <mat-grid-tile *ngIf="id_tipo==2">
+        <mat-grid-tile *ngIf="id_tipo>1">
           Transaccion
         </mat-grid-tile>
 
-        <mat-grid-tile *ngIf="id_tipo==2">
+        <mat-grid-tile *ngIf="id_tipo>1">
           Autorizacion
         </mat-grid-tile>
 
@@ -892,23 +1015,27 @@
           Tarjeta de socio
         </mat-grid-tile>
 
-        <mat-grid-tile *ngIf="id_tipo==2">
+        <mat-grid-tile *ngIf="id_tipo>1">
           Compromiso
         </mat-grid-tile>
 
-        <mat-grid-tile *ngIf="id_tipo==2">
+        <mat-grid-tile *ngIf="id_tipo>1">
           Letra
         </mat-grid-tile>
 
-        <mat-grid-tile *ngIf="id_tipo==2">
+        <mat-grid-tile *ngIf="id_tipo>1">
           Declaración
+        </mat-grid-tile>
+
+        <mat-grid-tile *ngIf="id_tipo>1">
+          Otros
         </mat-grid-tile>
 
       </mat-grid-list>
 
       <mat-grid-list cols=7 rowHeight="60px" *ngIf="id_credito || id_credito_editar">
 
-        <mat-grid-tile *ngIf="id_tipo==2">
+        <mat-grid-tile *ngIf="id_tipo>1">
 
           <button mat-icon-button color="primary" [disabled]="!transaccion" *ngIf="!transaccion_editar">
             <mat-icon class="icono-documentos" (click)="AbrirDocumento(transaccion)"> visibility </mat-icon>
@@ -926,7 +1053,7 @@
 
         </mat-grid-tile>
 
-        <mat-grid-tile *ngIf="id_tipo==2">
+        <mat-grid-tile *ngIf="id_tipo>1">
 
           <button mat-icon-button color="primary" [disabled]="!autorizacion" *ngIf="!autorizacion_editar">
             <mat-icon class="icono-documentos" (click)="AbrirDocumento(autorizacion)"> visibility </mat-icon>
@@ -962,7 +1089,7 @@
 
         </mat-grid-tile>
 
-        <mat-grid-tile *ngIf="id_tipo==2">
+        <mat-grid-tile *ngIf="id_tipo>1">
 
           <button mat-icon-button color="primary" [disabled]="!compromiso" *ngIf="!compromiso_editar">
             <mat-icon class="icono-documentos" (click)="AbrirDocumento(compromiso)"> visibility </mat-icon>
@@ -980,7 +1107,7 @@
 
         </mat-grid-tile>
 
-        <mat-grid-tile *ngIf="id_tipo==2">
+        <mat-grid-tile *ngIf="id_tipo>1">
 
           <button mat-icon-button color="primary" [disabled]="!letra" *ngIf="!letra_editar">
             <mat-icon class="icono-documentos" (click)="AbrirDocumento(letra)"> visibility </mat-icon>
@@ -998,7 +1125,7 @@
 
         </mat-grid-tile>
 
-        <mat-grid-tile *ngIf="id_tipo==2">
+        <mat-grid-tile *ngIf="id_tipo>1">
 
           <button mat-icon-button color="primary" [disabled]="!ddjj" *ngIf="!ddjj_editar">
             <mat-icon class="icono-documentos" (click)="AbrirDocumento(ddjj)"> visibility </mat-icon>
@@ -1016,6 +1143,24 @@
 
         </mat-grid-tile>
 
+        <mat-grid-tile *ngIf="id_tipo>1">
+
+          <button mat-icon-button color="primary" [disabled]="!otros" *ngIf="!otros_editar">
+            <mat-icon class="icono-documentos" (click)="AbrirDocumento(otros)"> visibility </mat-icon>
+          </button>
+
+          <image-upload
+            class="cargar-imagen" *ngIf="otros_editar"
+            [max]="1"
+            url="{{ruta}}"
+            [buttonCaption]="'Adjuntar'"
+            [extensions]="['pdf']"
+            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
+            (uploadFinished)="SubirArchivo($event, 14)">
+          </image-upload>
+
+        </mat-grid-tile>
+
       </mat-grid-list>
 
     </div>
@@ -1027,11 +1172,11 @@
         DATOS DEL DOCUMENTO
       </mat-card-subtitle>
   
-      <mat-grid-list cols="3" rowHeight="70px">
+      <mat-grid-list cols="4" rowHeight="70px">
 
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
-            <input matInput [matDatepicker]="InputFechaPago" placeholder="Inicio de pagos" [min]="CreditosForm.value.fecha_credito" formControlName="fecha_pago" (dateChange)="CrearCronograma()"  [readonly]="id_credito">
+            <input matInput [matDatepicker]="InputFechaPago" placeholder="Inicio de pagos" [min]="CreditosForm.value.fecha_credito" formControlName="fecha_pago" (dateChange)="CrearCronograma()" readonly>
             <mat-datepicker-toggle matSuffix [for]="InputFechaPago"></mat-datepicker-toggle>
             <mat-datepicker #InputFechaPago [disabled]="id_credito"></mat-datepicker>
           </mat-form-field>
@@ -1058,19 +1203,20 @@
           </mat-form-field>
         </mat-grid-tile>
         
-        <!-- <mat-grid-tile>
-        </mat-grid-tile> -->
+        <mat-grid-tile *ngIf="id_tipo>1">
+          <mat-checkbox color="primary" formControlName="interes_diario" (change)="CrearCronograma()"> Interés por día </mat-checkbox>
+        </mat-grid-tile>
 
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
-            <input matInput placeholder="Capital" formControlName="capital" #InputCapital [readonly]="id_credito">
+            <input matInput placeholder="Capital" formControlName="capital" #InputCapital [readonly]="id_credito || id_tipo==1">
             <span matPrefix>S/ &nbsp;</span>
           </mat-form-field>
         </mat-grid-tile>
 
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
-            <input matInput type="number" placeholder="N° de cuotas" max=100 min=0 formControlName="cuotas" #InputCuota [readonly]="id_credito">
+            <input matInput type="number" placeholder="N° de cuotas" max=100 min=0 formControlName="cuotas" #InputCuota [readonly]="id_credito || id_tipo==1">
             <mat-error>El número de cuotas debe ser menor a 100.</mat-error>
           </mat-form-field>
         </mat-grid-tile>
@@ -1169,48 +1315,6 @@
             </mat-cell>
           </ng-container>
 
-          <!-- <ng-container matColumnDef="monto_cuota">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Monto </mat-header-cell>
-            <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_cuota | currency:'S/.' }} </mat-cell>
-          </ng-container>
-
-          <ng-container matColumnDef="fecha_vencimiento">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Vencimiento </mat-header-cell>
-            <mat-cell *matCellDef="let cronograma"> {{cronograma.fecha_vencimiento | date: 'dd/MM/yyyy'}} </mat-cell>
-          </ng-container>
-
-          <ng-container matColumnDef="monto_interes">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Interés </mat-header-cell>
-            <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_interes | currency:'S/.'}}</mat-cell>
-          </ng-container>
-
-          <ng-container matColumnDef="monto_pagado">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Total pagado </mat-header-cell>
-            <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_pagado | currency:'S/.'}}</mat-cell>
-          </ng-container>
-
-          <ng-container matColumnDef="fecha_cancelacion">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de cancelación </mat-header-cell>
-            <mat-cell *matCellDef="let cronograma"> {{cronograma.fecha_cancelacion | date: 'dd/MM/yyyy'}} </mat-cell>
-          </ng-container>
-
-          <ng-container matColumnDef="monto_pendiente">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Pendiente de pago </mat-header-cell>
-            <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_pendiente | currency:'S/.'}}</mat-cell>
-          </ng-container>
-
-          <ng-container matColumnDef="estado">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
-            <mat-cell *matCellDef="let cronograma"> {{cronograma.estado==1 ? "Por pagar" : "Pagado" }} </mat-cell>
-          </ng-container>
-
-          <ng-container matColumnDef="opciones">
-            <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
-            <mat-cell *matCellDef="let cronograma">
-              <button mat-icon-button color="primary" [disabled]="cronograma.monto_pagado==0" (click)="VerDetallePagos(cronograma)"> <mat-icon> visibility </mat-icon> </button>
-            </mat-cell>
-          </ng-container> -->
-
           <mat-header-row *matHeaderRowDef="ColumnasCronograma"></mat-header-row>
           <mat-row *matRowDef="let row; columns: ColumnasCronograma"></mat-row>
 
@@ -1232,7 +1336,7 @@
                       editar_cronograma==1 ||
                       diferencia>0.2"
           > Guardar </button>
-          <!-- <button  mat-raised-button (click)="Imprimir()"> Print </button> -->
+          <button  mat-raised-button (click)="Imprimir()"> Print </button>
         </mat-grid-tile>
       </mat-grid-list>
     </mat-card-actions>

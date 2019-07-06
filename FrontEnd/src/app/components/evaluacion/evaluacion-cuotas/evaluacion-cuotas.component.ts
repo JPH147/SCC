@@ -8,34 +8,11 @@ import {AgregarProductoComponent} from '../agregar-producto/agregar-producto.com
 import { ReglasEvaluacionService } from '../../tablas-maestras/reglas-evaluacion/reglas-evaluacion.service';
 import * as moment from 'moment';
 
-// import * as _moment from 'moment';
-
-// import {MomentDateAdapter} from '@angular/material-moment-adapter';
-// import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
-// import {MatDatepicker} from '@angular/material/datepicker';
-// import {default as _rollupMoment, Moment} from 'moment';
-
-// const moment = _rollupMoment || _moment;
-
-// export const MY_FORMATS = {
-//   parse: {
-//     dateInput: 'MM/YYYY',
-//   },
-//   display: {
-//     dateInput: 'MM/YYYY',
-//     monthYearLabel: 'MMM YYYY',
-//     dateA11yLabel: 'LL',
-//     monthYearA11yLabel: 'MMMM YYYY',
-//   },
-// };
-
 @Component({
   selector: 'app-evaluacion-cuotas',
   templateUrl: './evaluacion-cuotas.component.html',
   styleUrls: ['./evaluacion-cuotas.component.css'],
   providers: [ReglasEvaluacionService
-    // {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
-    // {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
   ],
 })
 export class EvaluacionCuotasComponent implements OnInit {
@@ -60,12 +37,13 @@ export class EvaluacionCuotasComponent implements OnInit {
   public interes_diario: number;
   public Reglas: Array<any>;
   public correcto:boolean;
+  public Hoy : Date = new Date();
 
   @ViewChild('InputCapital') FiltroCapital:ElementRef;
   @ViewChild('InputCuotas') FiltroCuotas:ElementRef;
 
   EvaluacionCuotas: EvaluacionCoutasDataSource;
-  Columnas: string[] = ['fecha','monto','aporte','total']
+  Columnas: string[] = ['numero','fecha','monto','aporte','total']
 
   constructor(
     private Dialogo: MatDialog,
@@ -96,7 +74,7 @@ export class EvaluacionCuotasComponent implements OnInit {
         this.interes=res.interes;
         this.capacidad=res.capacidad;
         this.CalcularPrimerPago();
-        this.informacion.emit({tipo: this.tipo, capital: this.capital,total: this.prestamo, cuotas:this.cuotas,cronograma:this.cronograma,productos: this.Productos})
+        this.EmitirInformacion();
       })
 
     })
@@ -118,9 +96,20 @@ export class EvaluacionCuotasComponent implements OnInit {
         }else{
           this.correcto=false;
         }
-        
       })
     ).subscribe()
+  }
+
+  EmitirInformacion(){
+    this.informacion.emit({
+      tipo: this.tipo,
+      fecha:this.fecha_prestamo,
+      capital: this.capital,
+      total: this.prestamo,
+      cuotas:this.cuotas,
+      cronograma:this.cronograma,productos:
+      this.Productos,
+    })
   }
 
   CambioFecha(){
@@ -150,7 +139,7 @@ export class EvaluacionCuotasComponent implements OnInit {
   }
 
   CambioModoPago(evento){
-    this.pago_proximo_mes=evento.checked
+    this.pago_proximo_mes=evento.checked;
     if (this.pago_proximo_mes) {
       this.fecha_inicio=moment(this.fecha_prestamo).add((1), 'months').toDate();
     }else{
@@ -159,15 +148,15 @@ export class EvaluacionCuotasComponent implements OnInit {
     this.CalcularPagos();
   }
 
-  // CambioInteresDiario(){
-    // console.log(evento.checked)
-    // if (this.interes_por_dia) {
-    //   this.CalcularInteresDiario();
-    // }else{
-    //   this.interes_diario=0;
-    // }
-    // this.CalcularPagos()
-  // }
+  CambioInteresDiario(evento){
+    this.interes_por_dia=evento.checked;
+    if (this.interes_por_dia) {
+      this.CalcularInteresDiario();
+    }else{
+      this.interes_diario=0;
+    }
+    this.CalcularPagos()
+  }
 
   CambioTipoVenta(evento){
     if (evento.value==1) {
@@ -179,9 +168,9 @@ export class EvaluacionCuotasComponent implements OnInit {
   }
 
   CalcularInteresDiario(){
-    // console.log(this.capital)
     if (this.interes_por_dia) {
-      this.interes_diario=Math.round((this.capital*this.interes)*(1-(moment(this.fecha_prestamo).date()/moment(this.fecha_prestamo).daysInMonth()))*10)/10;
+      let interes = this.capital*this.interes;
+      this.interes_diario=Math.round( interes * (1-(moment(this.fecha_prestamo).date()/moment(this.fecha_prestamo).daysInMonth()) )*10)/10;
     } else {
       this.interes_diario=0;
     }
@@ -189,55 +178,52 @@ export class EvaluacionCuotasComponent implements OnInit {
 
   CalcularPagos(){
 
-    this.EvaluarRegla();
+    // this.EvaluarRegla();
 
-    // this.CalcularInteresDiario()
+    this.CalcularInteresDiario();
     // this.CambioModoPago()
 
     this.cronograma=[];
 
     let fecha:Date;
     let adicional:boolean=false;
-    let j:number;
+    let j:number = 0;
 
     let interes_mensual=Math.round((this.capital*this.interes)*10)/10;
     let cuota=Math.round(((this.capital/this.cuotas)+interes_mensual)*10)/10;
 
+    if ( this.pago_proximo_mes && this.interes_por_dia) {
+      this.cronograma.push({
+        numero:1,
+        monto: this.interes_diario,
+        aporte: 0,
+        fecha: this.fecha_prestamo,
+        total: this.interes_diario,
+      });
+      j=1;
+    }
+
     for(let i=1; i<=this.cuotas ;i++){
 
-      if (this.fecha_inicio == this.fecha_prestamo && this.interes_diario>0 && i==1) {
-        this.cronograma.push({
-          numero:1,
-          monto: this.interes_diario,
-          aporte: this.aporte_considerado,
-          fecha: this.fecha_inicio,
-          total: this.interes_diario,
-        });
-        adicional=true;
-      }
+      j=j+1;
 
-      if (adicional) {
-        j=i+1
-      }else{
-        j=i
-      }
-      
       fecha = moment(this.fecha_inicio).add((j-1), 'months').toDate();
 
       this.cronograma.push({
         numero: j,
-        monto: cuota + ((!adicional && j==1) ? this.interes_diario : 0),
+        monto: cuota + ( (!adicional && j==1) ? this.interes_diario : 0) ,
         aporte: this.aporte_considerado,
         fecha: fecha,
         total: cuota+this.aporte_considerado + ((!adicional && j==1) ? this.interes_diario : 0),
       })
+
     }
 
     this.prestamo=Math.round(this.capital+interes_mensual*this.cuotas)+this.interes_diario;
 
     this.EvaluacionCuotas.CargarInformacion(this.cronograma);
 
-    this.EvaluarMonto()
+    this.EmitirInformacion()
   }
 
   EvaluarMonto(){
@@ -334,23 +320,6 @@ export class EvaluacionCuotasComponent implements OnInit {
 
     // this.capital=Math.round(this.prestamo/(1+this.cuotas*this.interes)*100)/100;
   }
-
-
-  // date = new FormControl(moment());
-
-  // chosenYearHandler(normalizedYear: Moment) {
-  //   const ctrlValue = this.date.value;
-  //   ctrlValue.year(normalizedYear.year());
-  //   this.date.setValue(ctrlValue);
-  // }
-
-  // chosenMonthHandler(normlizedMonth: Moment, datepicker: MatDatepicker<Moment>) {
-  //   const ctrlValue = this.date.value;
-  //   ctrlValue.month(normlizedMonth.month());
-  //   this.date.setValue(ctrlValue);
-  //   datepicker.close();
-  // }
-
 }
 
 export class EvaluacionCoutasDataSource {

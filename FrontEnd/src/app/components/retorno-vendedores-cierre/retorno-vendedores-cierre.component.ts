@@ -26,7 +26,7 @@ export class RetornoVendedoresCierreComponent implements OnInit {
   public ColumnasTalonarios:string[]=['numero', 'contrato'];
   public ColumnasProductos:string[]=['numero', 'producto', 'serie'];;
   public ColumnasVentas:string[]=['numero', 'contrato', 'total', 'comision'];
-  public ColumnasVendedores:string[]=['numero', 'nombre', 'comision_total', 'viaticos_totales', 'total_pagar','comision_efectiva', 'comision_retenida'];
+  public ColumnasVendedores:string[]=['numero', 'nombre', 'comision_total', 'viaticos_totales', 'total_pagar', 'comision_retenida','comision_efectiva'];
   public ColumnasViaticos:string[]=['numero', 'vendedor', 'monto_grupal', 'monto_individual'];
 
   public id_salida: number;
@@ -85,7 +85,7 @@ export class RetornoVendedoresCierreComponent implements OnInit {
       this.Vendedores=res['data'].vendedores.vendedores;
 
       this.ListarAlmacenesxSucursal(res['data'].id_sucursal);
-      this.CalcularComisiones()
+      this.CalcularComisiones();
 
       this.ListarProductos(this.id_salida);
       this.ListarTalonarios(this.id_salida);
@@ -97,6 +97,11 @@ export class RetornoVendedoresCierreComponent implements OnInit {
     this.ListadoVentas.CargarInformacion(this.id_salida);
     this.ListadoVendedores.CargarInformacion([]);
     this.ListadoViaticos.CargarInformacion(this.id_salida);
+
+    this.ListadoVentas.Comision.subscribe(res=>{
+      this.CalcularComisiones()
+    })
+
   }
 
   ListarAlmacenesxSucursal(id_sucursal:number){
@@ -108,7 +113,6 @@ export class RetornoVendedoresCierreComponent implements OnInit {
   ListarProductos(id_salida:number){
     this.Servicio.ListarSalidaProductos(id_salida,0).subscribe(res=>{
       this.Productos=res['data'].productos;
-      // console.log(this.Productos.some(e=>e.id_estado==1))
       if ( this.Productos.some(e=>e.id_estado==1) ){
         this.hay_productos = true;
       } else {
@@ -119,7 +123,6 @@ export class RetornoVendedoresCierreComponent implements OnInit {
   
   ListarTalonarios(id_salida:number){
     this.Servicio.ListarSalidaTalonarios(id_salida, 1).subscribe(res=>{
-      // console.log(res['data'].talonarios)
       this.Talonarios=res['data'].talonarios
       if(res['data'].talonarios.length>0){
         this.hay_talonarios=true;
@@ -138,7 +141,7 @@ export class RetornoVendedoresCierreComponent implements OnInit {
 
     this.Vendedores.forEach((item)=>{
       item.comision_total=monto_base*(item.comision_efectiva/100);
-      item.viaticos_totales=item.viatico_personal+item.viatico_grupal;
+      item.viaticos_totales=item.viatico_personal+(item.viatico_grupal/total_vendedores);
       item.total_pagar=item.comision_total-item.viaticos_totales;
 
       item.total_pagar>0 ? item.comision_total_retenida=item.total_pagar*(item.comision_retenida/100) : item.comision_total_retenida=0;

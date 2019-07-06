@@ -330,6 +330,7 @@ export class SalidaVendedoresComponent implements OnInit {
 
         if(res['data'].id_estado == 2){
           this.Servicio.ListarComisiones(this.id_salida).subscribe(res=>{
+            console.log(res)
             this.ListadoVendedores.AgregarInformacion(res);
           })
         }else{
@@ -1155,7 +1156,7 @@ export class SalidaVendedoresComponent implements OnInit {
     this.Servicio.Actualizar(
       this.id_salida_editar,
       formulario.value.fecha_salida,
-      destinos.slice(0, -1),
+      destinos,
       formulario.value.guia_remision,
       formulario.value.movilidad_propia,
       formulario.value.placa,

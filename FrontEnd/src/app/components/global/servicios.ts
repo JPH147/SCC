@@ -310,18 +310,17 @@ EditarModelo(
     }));
   }
 
-  ListarTipoDocumento(
-    ):  Observable<TipoDocumento> {
-        return this.http.get(this.url + 'tipodocumento/read.php')
-        .pipe(map(res => {
-        if (res['codigo'] === 0 ) {
-          return res['data'].tipodocumento;
-        } else {
-          // console.log('No hay datos que mostrar');
-        }
-      }));
-    }
-
+  ListarTipoDocumento( ):  Observable<TipoDocumento>
+  {
+    return this.http.get(this.url + 'tipodocumento/read.php')
+      .pipe(map(res => {
+      if (res['codigo'] === 0 ) {
+        return res['data'].tipodocumento;
+      } else {
+        // console.log('No hay datos que mostrar');
+      }
+    }));
+  }
 
   EliminarModelo(id:number):Observable<any>{
     let params = new HttpParams().set('idmodelo',id.toString());
@@ -373,8 +372,7 @@ EditarModelo(
     }));
   }
 
-  ListarAlmacen(
-  ): Observable<Almacen[]> {
+  ListarAlmacen(): Observable<Almacen[]> {
     return this.http.get(this.url + 'almacen/read.php')
     .pipe(map(res => {
       if (res['codigo'] === 0) {
@@ -389,20 +387,20 @@ EditarModelo(
   ListarTransaccionTipo (
     tipo:string //1. Ingreso, 2 Salida
   ): Observable <any> {
-      return this.http.get(this.url + 'transacciontipo/read.php', {
-        params: new HttpParams()
-        .set('prid', tipo)
-      })
+    return this.http.get(this.url + 'transacciontipo/read.php', {
+      params: new HttpParams()
+      .set('prid', tipo)
+    })
 
-      .pipe(map(res => {
-        if (res['codigo'] === 0) {
-            return res['data'].tipos;
-        } else {
-          return []
-            // console.log('No hay datos que mostrar');
-          }
-      }));
-    }
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+          return res['data'].tipos;
+      } else {
+        return []
+          // console.log('No hay datos que mostrar');
+        }
+    }));
+  }
 
   ListarProveedor(
      nombre: string
@@ -422,7 +420,7 @@ EditarModelo(
       }));
       }
 
-  ListarCliente(
+    ListarCliente(
     nombre: string
     ): Observable <any> {
       return this.http.get(this.url + 'cliente/read.php', {
@@ -439,7 +437,7 @@ EditarModelo(
       }));
     }
 
-  ListarSucursal(
+    ListarSucursal(
       id: number,
       nombre: string
     ): Observable<any> {
@@ -495,15 +493,16 @@ EditarModelo(
       sucursal: string,
       pagina: number,
       total_pagina:number
-      ): Observable <any> {
-        return this.http.get(this.url + 'vendedor/read.php', {
-          params: new  HttpParams()
-          .set('vnd_dni',dni)
-          .set('vnd_nombre',nombre)
-          .set('scs_nombre',sucursal)
-          .set('prpagina',pagina.toString())
-          .set('prtotalpagina',total_pagina.toString())
-        })
+    ): Observable <any> {
+
+      let params = new HttpParams()
+        .set('prdocumento',dni)
+        .set('prnombre',nombre)
+        .set('prsucursal',sucursal)
+        .set('prpagina',pagina.toString())
+        .set('prtotalpagina',total_pagina.toString())
+
+      return this.http.get(this.url + 'vendedor/read.php', {params})
         .pipe(map(res => {
             if (res['codigo'] === 0) {
               return res['data'].vendedores;
@@ -511,7 +510,8 @@ EditarModelo(
               return []
               // console.log ('No hay datos que mostrar');
             }
-        }));
+        })
+      );
     }
 
     ListarProductos(
@@ -590,6 +590,30 @@ EditarModelo(
               // console.log ('No hay datos que mostrar');
           }
       }));
+    }
+
+    ListarCourier(
+      nombre : string,
+      pagina: number,
+      total_pagina : number
+    ){
+      let params = new HttpParams()
+        .set('prnombre', nombre)
+        .set('prpagina', pagina.toString())
+        .set('prtotalpagina', total_pagina.toString())
+
+      return this.http.get(this.url + 'courier/read.php', { params })
+      .pipe(
+        map((res)=>{
+          if (res['codigo'] === 0) {
+            return res;
+          } else {
+            return []
+              // console.log ('No hay datos que mostrar');
+          }
+        }
+      ))
+
     }
 
     RenameFile(
@@ -677,6 +701,7 @@ export interface ModeloModelo {
   tipo: string;
   marca: string;
   modelo: string;
+  nombre: string;
 }
 
 export interface Subsede {

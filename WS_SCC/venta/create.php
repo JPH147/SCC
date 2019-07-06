@@ -23,6 +23,7 @@
 
             $venta->fecha=trim($_POST["prfecha"]);
             $venta->sucursal=trim($_POST["prsucursal"]);
+            $venta->salida_venta=trim($_POST["prsalida"]);
             $venta->talonario=trim($_POST["prtalonario"]);
             $venta->id_autorizador=trim($_POST["prautorizador"]);
             $venta->id_cliente=trim($_POST["prcliente"]);
@@ -33,7 +34,6 @@
             $venta->lugar=trim($_POST["prlugar"]);
             $venta->vendedor=trim($_POST["prvendedor"]);
             $venta->tipoventa=trim($_POST["prtipoventa"]);
-            $venta->salida_venta=trim($_POST["prsalida"]);
             $venta->tipopago=trim($_POST["prtipopago"]);
             $venta->inicial=trim($_POST["prinicial"]);
             $venta->cuotas=trim($_POST["prcuotas"]);
@@ -47,6 +47,7 @@
             $venta->pdfletra=trim($_POST["prpdfletra"]);
             $venta->pdfvoucher=trim($_POST["prpdfvoucher"]);
             $venta->pdfautorizacion=trim($_POST["prpdfautorizacion"]);
+            $venta->vnt_otros_pdf=trim($_POST["prpdfotros"]);
             $venta->observaciones=trim($_POST["probservaciones"]);
 
             if($venta->create())
@@ -65,7 +66,7 @@
     }
     catch(Exception $exception)
     {
-        print_json("9999", "Ocurrió un error al eliminar la venta.", $exception->getMessage());
+        print_json("9999", "Ocurrió un error al crear la venta.", $exception->getMessage());
     }
 
 ?>

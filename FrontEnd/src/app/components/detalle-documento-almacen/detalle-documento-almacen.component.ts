@@ -2,10 +2,10 @@ import { Component, OnInit, Inject, Optional } from '@angular/core';
 import {DetalleDocumentoAlmacenService} from './detalle-documento-almacen.service';
 import {ActivatedRoute, Params} from '@angular/router';
 import {FormGroup, FormBuilder} from '@angular/forms';
-import {finalize} from 'rxjs/operators';
 import {MatDialog, MatSnackBar, MAT_DIALOG_DATA} from '@angular/material';
 import {VentanaEditarSerieComponent} from './ventana-editar-serie/ventana-editar-serie.component'
 import {ServiciosProductoSerie} from '../global/productoserie';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-detalle-documento-almacen',

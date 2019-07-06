@@ -218,7 +218,7 @@
           </mat-grid-list>
 
           <button mat-button matStepperPrevious>Anterior</button>
-          <button mat-button [disabled]="DocumentoForm.invalid" (click)="GuardarVenta()" >Guardar</button>
+          <button mat-button [disabled]="DocumentoForm.invalid || cargando" (click)="GuardarVenta()" >Guardar</button>
 
         </form>
       </mat-step>
