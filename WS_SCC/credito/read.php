@@ -18,6 +18,7 @@
 
         $credito->cliente = !empty($_GET['prcliente']) ? trim($_GET['prcliente']) :'';
         $credito->tipo_credito = !empty($_GET['prtipo_credito']) ? trim($_GET['prtipo_credito']) : 0;
+        $credito->documentos = !empty($_GET['prdocumentos']) ? trim($_GET['prdocumentos']) : 0;
         $credito->fecha_inicio = !empty($_GET['prfecha_inicio']) ? trim($_GET['prfecha_inicio']) : null;
         $credito->fecha_fin = !empty($_GET['prfecha_fin']) ? trim($_GET['prfecha_fin']) : null;
         $credito->estado = !empty($_GET['prestado']) ? trim($_GET['prestado']) : 0;

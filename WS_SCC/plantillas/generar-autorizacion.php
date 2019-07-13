@@ -8,16 +8,21 @@
 
     include_once '../entities/plantillas.php';
     include_once '../shared/utilities.php';
-
+    include_once '../config/database.php';
+    
+	$database = new Database();
+	$db = $database->getConnection();
+	
     try
     {
-        $archivo = new Plantillas();
+        $archivo = new Plantillas($db);
         $data = json_decode(file_get_contents('php://input'), true);
 
         if ( trim($_POST["prnombre"])!=null )
         {
             $archivo->nombre_plantilla = trim($_POST["prnombreplantilla"]);
             $archivo->nombre_archivo = trim($_POST["prnombrearchivo"]);
+            $archivo->cooperativa = trim($_POST["prcooperativa"]);
             $archivo->tipo = trim($_POST["prtipo"]);
             $archivo->nombre = trim($_POST["prnombre"]);
             $archivo->cargo_estado = trim($_POST["prcargoestado"]);

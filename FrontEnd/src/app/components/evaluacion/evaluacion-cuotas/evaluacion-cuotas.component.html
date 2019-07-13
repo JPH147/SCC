@@ -72,25 +72,21 @@
 
       <ng-container matColumnDef="monto">
         <mat-header-cell *matHeaderCellDef>Monto</mat-header-cell>
-        <!-- <mat-cell *matCellDef="let cuota">{{cuota.monto  | currency:'S/.'}}</mat-cell> -->
         <mat-cell *matCellDef="let cuota">{{cuota.monto  | number:'1.1-1' }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="aporte">
         <mat-header-cell *matHeaderCellDef>Aporte</mat-header-cell>
-        <!-- <mat-cell *matCellDef="let cuota">{{cuota.aporte  | currency:'S/.'}}</mat-cell> -->
         <mat-cell *matCellDef="let cuota">{{cuota.aporte  | number:'1.1-1' }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="fecha">
         <mat-header-cell *matHeaderCellDef>Periodo</mat-header-cell>
-        <!-- <mat-cell *matCellDef="let cuota">{{cuota.fecha | date:'MM/yy'}}</mat-cell> -->
         <mat-cell *matCellDef="let cuota">{{cuota.fecha | date:'MM/yy' }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="total">
         <mat-header-cell *matHeaderCellDef>Total</mat-header-cell>
-        <!-- <mat-cell *matCellDef="let cuota">{{cuota.total  | currency:'S/.'}}</mat-cell> -->
         <mat-cell *matCellDef="let cuota">{{cuota.total  | number:'1.1-1' }}</mat-cell>
       </ng-container>
 
@@ -105,7 +101,6 @@
     <mat-grid-list cols="1" rowHeight="40px">
       <mat-grid-tile>
         <button mat-raised-button color="primary" matStepperNext> Hacer presupuesto </button>
-        <!-- <button mat-raised-button color="primary" (click)="Guardar()" [disabled]="!this.cliente">Guardar</button> -->
       </mat-grid-tile>
     </mat-grid-list>
 

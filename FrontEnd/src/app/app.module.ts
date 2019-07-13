@@ -5,7 +5,6 @@ import {HttpClientModule} from '@angular/common/http';
 import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MAT_DATE_LOCALE} from '@angular/material/core';
-import * as moment from 'moment';
 import {
   MatAutocompleteModule,
   MatBadgeModule,
@@ -134,6 +133,7 @@ import { VentanaVendedorComponent } from './components/vendedores/ventana-vended
 import { TalonariosComponent } from './components/talonarios/talonarios.component';
 import { VentanaTalonarioComponent } from './components/talonarios/ventana-talonario/ventana-talonario.component';
 import { EvaluacionArchivosComponent } from './components/evaluacion/evaluacion-archivos/evaluacion-archivos.component';
+import { PresupuestoComponent } from './components/presupuesto/presupuesto.component';
 
 @NgModule({
   imports: [
@@ -271,7 +271,8 @@ import { EvaluacionArchivosComponent } from './components/evaluacion/evaluacion-
     TalonariosComponent,
     VentanaVendedorComponent,
     VentanaTalonarioComponent,
-    EvaluacionArchivosComponent
+    EvaluacionArchivosComponent,
+    PresupuestoComponent
    ],
   entryComponents: [
     AppComponent,

@@ -6,12 +6,13 @@ import {tap, debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {EvaluacionService} from './evaluacion.service';
 import * as moment from 'moment';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { CreditosService } from '../creditos/creditos.service';
 
 @Component({
   selector: 'app-evaluacion',
   templateUrl: './evaluacion.component.html',
   styleUrls: ['./evaluacion.component.css'], 
-  providers: [ClienteService]
+  providers: [ ClienteService , CreditosService ]
 })
 
 export class EvaluacionComponent implements OnInit {
@@ -29,6 +30,7 @@ export class EvaluacionComponent implements OnInit {
 
   public interes:number;
   public aporte:number;
+  public cliente_afiliado : boolean ;
 
   public dni:string;
   public cliente_nombre:string;
@@ -49,8 +51,9 @@ export class EvaluacionComponent implements OnInit {
   @ViewChild('InputDNI') FiltroDNI : ElementRef;
 
   constructor(
-    private Servicio: EvaluacionService,
-    private CServicios: ClienteService,
+    private Servicio: EvaluacionService ,
+    private CrServicios : CreditosService ,
+    private CServicios: ClienteService ,
     private Buidler : FormBuilder,
   ) { }
 
@@ -60,6 +63,7 @@ export class EvaluacionComponent implements OnInit {
     this.dni="";
     this.seleccion=false;
     this.cliente_encontrado=3;
+    this.cliente_afiliado=false;
     this.CrearFormulario();
   }
 
@@ -89,6 +93,7 @@ export class EvaluacionComponent implements OnInit {
       this.Cargando.next(false);
       if(res['codigo']==0){
         this.cliente_encontrado=1;
+        this.VerificarCondiciones(res['data'].id)
         this.EvaluacionForm.get('id').setValue(res['data'].id);
         this.EvaluacionForm.get('nombre').enable();
         this.EvaluacionForm.get('codigo').enable();
@@ -104,6 +109,31 @@ export class EvaluacionComponent implements OnInit {
         this.cliente=[];
       }
       this.ActualizarInformacion();
+    })
+  }
+
+  VerificarCondiciones(id){
+    this.CrServicios.Verificar_Afiliacion(id).subscribe(res=>{
+      // Si está afiliado, se verifica el interés que debería pagar y el aporte se considera 0
+      if(res['codigo_afiliacion']) {
+        this.cliente_afiliado=true;
+        this.CrServicios.Verificar_Interes(res['total_pagado']).subscribe(res=>{
+          this.aporte=0;
+          this.interes= res / 100;
+          this.ActualizarInformacion();
+        })
+      } else {
+      // Si no está afiliado, se verifica el interés inicial y el aporte también es el estándar
+        this.cliente_afiliado=false;
+        this.CrServicios.SeleccionarParametros().subscribe(res=>{
+          this.aporte=res.monto;
+          this.ActualizarInformacion();
+        });
+        this.CrServicios.Verificar_Interes(0).subscribe(res=>{
+          this.interes= res / 100;
+          this.ActualizarInformacion();
+        })
+      }
     })
   }
 
@@ -145,6 +175,7 @@ export class EvaluacionComponent implements OnInit {
 
   ActualizarInformacion(){
     this.informacion.next({
+      afiliado: this.cliente_afiliado,
       cliente: this.cliente,
       interes: this.interes,
       aporte: this.aporte,

@@ -59,17 +59,15 @@ export class ClientesComponent implements OnInit {
     merge(
       fromEvent(this.FiltroDni.nativeElement, 'keyup'),
       fromEvent(this.FiltroNombre.nativeElement, 'keyup'),
-      // fromEvent(this.FiltroInstitucion.nativeElement, 'keyup'),
-      // fromEvent(this.FiltroSede.nativeElement, 'keyup'),
-      // fromEvent(this.FiltroSubsede.nativeElement, 'keyup'),
-      // fromEvent(this.FiltroCargo.nativeElement, 'keyup'),
       fromEvent(this.FiltroCodigo.nativeElement, 'keyup'),
     ).pipe(
       debounceTime(200),
       distinctUntilChanged(),
-      tap(() => {
-        this.paginator.pageIndex=0;
-        this.CargarData();
+      tap((e : KeyboardEvent) => {
+        // if(e.keyCode==13){
+          this.paginator.pageIndex=0;
+          this.CargarData();
+        // }
       })
      ).subscribe();
 

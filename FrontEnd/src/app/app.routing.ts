@@ -34,6 +34,7 @@ import { ReporteAsistenciaComponent } from './components/reporte-asistencia/repo
 import { ConsultarClienteComponent } from './components/clientes/consultar-cliente/consultar-cliente.component';
 import { VendedoresComponent } from './components/vendedores/vendedores.component';
 import { TalonariosComponent } from './components/talonarios/talonarios.component';
+import { PresupuestoComponent } from './components/presupuesto/presupuesto.component';
 
 const appRoutes: Routes = [
   // {path: '', component: ConsultarClienteComponent}, //prueba
@@ -69,6 +70,7 @@ const appRoutes: Routes = [
   {path: 'creditos/ver/:idcredito', component: CreditosComponent},
   {path: 'creditos/editar/:idcreditoeditar', component: CreditosComponent},
   {path: 'creditos/nuevo', component: CreditosComponent},
+  {path: 'presupuesto', component: PresupuestoComponent},
   {path: 'usuarios', component: UsuariosComponent},
   {path: 'proveedores', component: ProveedoresComponent},
   {path: 'direcciones', component: DireccionesComponent},
@@ -80,7 +82,7 @@ const appRoutes: Routes = [
   {path: 'trabajadores', component: TrabajadoresComponent},
   {path: 'registro-horas', component: RegistroHorasComponent},
   {path: 'reporte-asistencia', component: ReporteAsistenciaComponent},
-  {path: 'prueba', component: CreditosComponent},
+  {path: 'prueba', component: PresupuestoComponent},
 ];
 
 export const appRoutingProvider: any[] = [];

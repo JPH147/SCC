@@ -84,6 +84,7 @@ Class ClienteTelefono{
                 "cliente"=>$row['cliente'],
                 "tlf_numero"=>$row['tlf_numero'],
                 "id_tipo"=>$row['id_tipo'],
+                "tipo"=>$row['tipo'],
                 "tlf_relevancia"=>$row['tlf_relevancia'],
                 "estado"=>$row['tlf_estado'],
             );
@@ -129,5 +130,21 @@ Class ClienteTelefono{
       }
       return false;
     }
+
+    function buscar_celular(){
+
+      $query ="CALL sp_listarplantillaclientetelefono(?)";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(1, $this->id_cliente);
+
+      $result->execute();
+  
+      $row = $result->fetch(PDO::FETCH_ASSOC);
+
+      return $row['telefono'];
+    }
+
 }
 ?>

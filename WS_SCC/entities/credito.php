@@ -11,6 +11,7 @@ Class Creditos{
     public $fecha_inicio;
     public $fecha_fin;
     public $estado;
+    public $documentos;
 
     public $monto;
     public $fecha;
@@ -64,18 +65,19 @@ Class Creditos{
 
     function read(){
 
-        $query = "CALL sp_listarcredito(?,?,?,?,?,?,?,?)";
+        $query = "CALL sp_listarcredito(?,?,?,?,?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
         $result->bindParam(1, $this->cliente);
         $result->bindParam(2, $this->tipo_credito);
-        $result->bindParam(3, $this->fecha_inicio);
-        $result->bindParam(4, $this->fecha_fin);
-        $result->bindParam(5, $this->estado);
-        $result->bindParam(6, $this->numero_pagina);
-        $result->bindParam(7, $this->total_pagina);
-        $result->bindParam(8, $this->orden);
+        $result->bindParam(3, $this->documentos);
+        $result->bindParam(4, $this->fecha_inicio);
+        $result->bindParam(5, $this->fecha_fin);
+        $result->bindParam(6, $this->estado);
+        $result->bindParam(7, $this->numero_pagina);
+        $result->bindParam(8, $this->total_pagina);
+        $result->bindParam(9, $this->orden);
 
         $result->execute();
         
@@ -105,6 +107,8 @@ Class Creditos{
                 "id_tipo_credito"=>$id_tipo_credito,
                 "tipo_credito"=>$tipo_credito,
                 "observaciones"=>$observaciones,
+                "documentos_adjuntos"=>$documentos_adjuntos,
+                "documentos_totales"=>$documentos_totales,
                 "estado"=>$estado,
             );
             array_push($credito_list["creditos"],$items);
@@ -115,15 +119,16 @@ Class Creditos{
 
     function contar(){
 
-        $query = "CALL sp_listarcreditocontar(?,?,?,?,?)";
+        $query = "CALL sp_listarcreditocontar(?,?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
         $result->bindParam(1, $this->cliente);
         $result->bindParam(2, $this->tipo_credito);
-        $result->bindParam(3, $this->fecha_inicio);
-        $result->bindParam(4, $this->fecha_fin);
-        $result->bindParam(5, $this->estado);
+        $result->bindParam(3, $this->documentos);
+        $result->bindParam(4, $this->fecha_inicio);
+        $result->bindParam(5, $this->fecha_fin);
+        $result->bindParam(6, $this->estado);
 
         $result->execute();
 
@@ -774,6 +779,70 @@ Class Creditos{
   
         $this->numero=$row['numero'];
     }
+
+    function read_presupuesto(){
+        $query = "CALL sp_listarpresupuestocabecera(?,?,?,?,?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->cliente);
+        $result->bindParam(2, $this->fecha_inicio);
+        $result->bindParam(3, $this->fecha_fin);
+        $result->bindParam(4, $this->estado);
+        $result->bindParam(5, $this->numero_pagina);
+        $result->bindParam(6, $this->total_pagina);
+
+        $result->execute();
+        
+        $presupuesto_list=array();
+        $presupuesto_list["presupuestos"]=array();
+
+        $contador = $this->total_pagina*($this->numero_pagina-1);
+        
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $contador=$contador+1;
+            $items = array (
+                "numero"=>$contador,
+                "id"=>$id,
+                "id_cliente"=>$id_cliente,
+                "cliente"=>$cliente,
+                "id_tipo"=>$id_tipo,
+                "tipo"=>$tipo,
+                "fecha"=>$fecha,
+                "cuotas"=>$cuotas,
+                "capital"=>$capital,
+                "tasa"=>$tasa,
+                "total"=>$total,
+                "id_estado"=>$id_estado,
+                "estado"=>$estado,
+            );
+            array_push($presupuesto_list["presupuestos"],$items);
+        }
+
+        return $presupuesto_list;
+    }
+
+    function contar_presupuesto(){
+        $query = "CALL sp_listarpresupuestocabeceracontar(?,?,?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->cliente);
+        $result->bindParam(2, $this->fecha_inicio);
+        $result->bindParam(3, $this->fecha_fin);
+        $result->bindParam(4, $this->estado);
+
+        $result->execute();
+
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        $this->total_resultado=$row['total'];
+
+        return $this->total_resultado;
+    }
+
 }
 
 ?>

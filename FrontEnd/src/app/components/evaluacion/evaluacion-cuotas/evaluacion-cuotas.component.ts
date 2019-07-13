@@ -107,8 +107,8 @@ export class EvaluacionCuotasComponent implements OnInit {
       capital: this.capital,
       total: this.prestamo,
       cuotas:this.cuotas,
-      cronograma:this.cronograma,productos:
-      this.Productos,
+      cronograma:this.cronograma,
+      productos: this.Productos,
     })
   }
 
@@ -178,7 +178,7 @@ export class EvaluacionCuotasComponent implements OnInit {
 
   CalcularPagos(){
 
-    // this.EvaluarRegla();
+    this.EvaluarRegla();
 
     this.CalcularInteresDiario();
     // this.CambioModoPago()
@@ -197,6 +197,7 @@ export class EvaluacionCuotasComponent implements OnInit {
         numero:1,
         monto: this.interes_diario,
         aporte: 0,
+        fecha_formato : moment(this.fecha_prestamo).format('LL') ,
         fecha: this.fecha_prestamo,
         total: this.interes_diario,
       });
@@ -213,6 +214,7 @@ export class EvaluacionCuotasComponent implements OnInit {
         numero: j,
         monto: cuota + ( (!adicional && j==1) ? this.interes_diario : 0) ,
         aporte: this.aporte_considerado,
+        fecha_formato : moment(this.fecha_prestamo).format('LL') ,
         fecha: fecha,
         total: cuota+this.aporte_considerado + ((!adicional && j==1) ? this.interes_diario : 0),
       })
@@ -283,6 +285,7 @@ export class EvaluacionCuotasComponent implements OnInit {
           numero:1,
           monto: this.interes_diario,
           aporte: 0,
+          fecha_formato : moment(this.fecha_prestamo).format('LL') ,
           fecha: this.fecha_inicio,
           total: this.interes_diario,
         });
@@ -301,6 +304,7 @@ export class EvaluacionCuotasComponent implements OnInit {
         numero: j,
         monto: cuota + ((!adicional && j==1) ? this.interes_diario : 0),
         aporte: this.aporte_considerado,
+        fecha_formato : moment(this.fecha_prestamo).format('LL') ,
         fecha: fecha,
         total: cuota+this.aporte_considerado + ((!adicional && j==1) ? this.interes_diario : 0),
       })
@@ -346,6 +350,7 @@ export interface Cronograma{
   numero:number,
   monto:number,
   aporte:number,
+  fecha_formato:string,
   fecha: Date,
   total:number
 }

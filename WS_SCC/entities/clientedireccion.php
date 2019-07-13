@@ -90,6 +90,7 @@ Class ClienteDireccion{
                 "id_distrito"=>$row['id_distrito'],
                 "distrito"=> $row['dst_nombre'],
                 "direccioncompleta"=> $row['direccioncompleta'],
+                "direccion_formateada"=> $row['direccion_formateada'],
                 "relevancia"=>$row['drc_relevancia'],
             );
 

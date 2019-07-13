@@ -335,6 +335,22 @@ export class ClienteService {
    }));
   }
 
+  BuscarCelular(
+    id: number
+  ): Observable <any> {
+    let params = new HttpParams()
+      .set('prcliente', id.toString());
+
+    return this.http.get(this.url + 'clientetelefono/buscar-celular.php',{params})
+    .pipe(map(res => {
+     if (res['codigo'] === 0) {
+       return res['data'];
+     }else {
+       console.log('No hay datos que mostrar');
+       return res;
+     }
+   }));
+  }
 }
 
 export interface Cliente {

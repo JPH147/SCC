@@ -18,11 +18,12 @@ export class CreditosListarComponent implements OnInit {
   public Tipos : Array<any>;
 
   public ListadoCreditos: CreditosDataSource;
-  public Columnas: string[] = ['numero', 'codigo', 'cliente_nombre', 'tipo_credito', 'monto_total', 'fecha', 'opciones'];
+  public Columnas: string[] = ['numero', 'fecha', 'codigo', 'cliente_nombre', 'tipo_credito', 'monto_total', 'documentos_adjuntos', 'opciones'];
 
   @ViewChild('InputCliente') FiltroCliente: ElementRef;
   @ViewChild('InputTipo') FiltroTipo: MatSelect;
   @ViewChild('InputEstado') FiltroEstado: MatSelect;
+  @ViewChild('InputDocumentos') FiltroDocumentos: MatSelect;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
@@ -36,7 +37,7 @@ export class CreditosListarComponent implements OnInit {
     this.fecha_fin=new Date()
 
     this.ListadoCreditos = new CreditosDataSource(this.Servicio);
-    this.ListadoCreditos.CargarCreditos("",0,this.fecha_inicio,this.fecha_fin,1,1,10,"codigo desc");
+    this.ListadoCreditos.CargarCreditos("",0,0,this.fecha_inicio,this.fecha_fin,1,1,10,"fecha desc");
   }
 
   ngAfterViewInit () {
@@ -73,6 +74,7 @@ export class CreditosListarComponent implements OnInit {
     this.ListadoCreditos.CargarCreditos(
       this.FiltroCliente.nativeElement.value,
       this.FiltroTipo.value,
+      this.FiltroDocumentos.value,
       this.fecha_inicio,
       this.fecha_fin,
       this.FiltroEstado.value,
@@ -86,42 +88,6 @@ export class CreditosListarComponent implements OnInit {
     this.paginator.pageIndex = 0;
     this.CargarData()
   }
-
-  // AnularVenta(venta){
-    
-  //   let Transacciones: Array<any>;
-    
-  //   // Se listan las transacciones que pertenecen a esa venta
-  //   this.VServicio.ListarVentaTransacciones(venta.id).subscribe(res=>{
-  //     Transacciones=res.transaccion
-  //   });
-
-  //   let Dialogo = this.Dialogo.open(VentanaConfirmarComponent,{
-  //     data: {objeto: "la venta", valor: venta.contrato, venta:true}
-  //   })
-
-  //   Dialogo.afterClosed().subscribe(res=>{
-  //     if (res) {
-  //       if (res.respuesta) {
-  //         this.VServicio.EliminarVenta(venta.id, res.comentarios, res.monto).subscribe(respuesta=>{
-            
-  //           console.log(respuesta);
-  //           Transacciones.forEach((item)=>{
-  //             this.VServicio.CrearCanjeTransaccion(item.id,new Date(),"AJUSTE POR ANULACION").subscribe()
-  //           })
-
-  //           if (res.monto>0) {
-  //             this.VServicio.CrearVentaCronograma(venta.id,res.monto,new Date(), 1).subscribe()
-  //           }
-
-  //           this.CargarData()
-
-  //         });
-  //       }
-  //     }
-  //   })
-
-  // }
 
 }
 
@@ -137,17 +103,18 @@ export class CreditosDataSource implements DataSource<any> {
   ) { }
 
   connect(collectionViewer: CollectionViewer): Observable<any[]> {
-  return this.InformacionCreditos.asObservable();
+    return this.InformacionCreditos.asObservable();
   }
 
   disconnect() {
-  this.InformacionCreditos.complete();
-  this.CargandoInformacion.complete();
+    this.InformacionCreditos.complete();
+    this.CargandoInformacion.complete();
   }
 
   CargarCreditos(
     cliente:string,
     tipo_credito:number,
+    estado_documentos:number,
     fecha_inicio:Date,
     fecha_fin:Date,
     estado:number,
@@ -155,17 +122,17 @@ export class CreditosDataSource implements DataSource<any> {
     pagina_final:number,
     orden:string
   ) {
-  this.CargandoInformacion.next(true);
+    this.CargandoInformacion.next(true);
 
-  this.Servicio.Listar( cliente, tipo_credito, fecha_inicio, fecha_fin, estado, pagina_inicio, pagina_final, orden )
-  .pipe(
-    catchError(() => of([])),
-    finalize(() => this.CargandoInformacion.next(false))
-  )
-  .subscribe(res => {
-    this.TotalResultados.next(res['mensaje']);
-    this.InformacionCreditos.next(res['data'].creditos);
-  });
+    this.Servicio.Listar( cliente, tipo_credito, estado_documentos, fecha_inicio, fecha_fin, estado, pagina_inicio, pagina_final, orden )
+    .pipe(
+      catchError(() => of([])),
+      finalize(() => this.CargandoInformacion.next(false))
+    )
+    .subscribe(res => {
+      this.TotalResultados.next(res['mensaje']);
+      this.InformacionCreditos.next(res['data'].creditos);
+    });
   }
 
 }

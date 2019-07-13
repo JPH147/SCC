@@ -37,6 +37,7 @@ mat-card{
 .mat-column-monto_total,
 .mat-column-tipo_venta,
 .mat-column-fecha,
+.mat-column-documentos_adjuntos,
 .mat-column-opciones{
-  max-width: 13%;
+  max-width: 11%;
 }

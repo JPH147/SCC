@@ -90,7 +90,7 @@ Class Cliente{
                 "email"=>$row['email'],
                 "casilla"=>$row['casilla'],
                 "trabajo"=>$row['trabajo'],
-                // "subsede"=>$row['subsede'],
+                "subsede"=>$row['subsede'],
                 // "cargo"=>$row['cargo'],
                 "capacidad_pago"=>$row['capacidad_pago'],
                 // "id_distrito_trabajo"=>$row['id_distrito_trabajo'],
@@ -136,6 +136,7 @@ Class Cliente{
         }
 
         return $contador;
+        // return $this->total_resultado;
     }
 
     function readpreciso(){
@@ -425,7 +426,11 @@ Class Cliente{
             "id_institucion" => $row['id_institucion'] ,
             "id_sede" => $row['id_sede'] ,
             "sede" => $row['sede'] ,
+            "plantilla_tarjeta" => $row['plantilla_tarjeta'] ,
             "plantilla_ddjj" => $row['plantilla_ddjj'] ,
+            "plantilla_autorizacion" => $row['plantilla_autorizacion'] ,
+            "plantilla_transaccion" => $row['plantilla_transaccion'] ,
+            "plantilla_compromiso" => $row['plantilla_compromiso'] ,
             "id_subsede" => $row['id_subsede'] ,
             "subsede" => $row['subsede'] ,
             "id_cargo" => $row['id_cargo'] ,

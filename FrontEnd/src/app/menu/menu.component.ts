@@ -83,6 +83,10 @@ export class MenuComponent implements OnInit{
         disabled:false,
         submenu:[
           {
+            nombre: "Presupuestos",
+            path: "presupuesto"
+          },
+          {
             nombre: "Créditos",
             path: "creditos"
           },

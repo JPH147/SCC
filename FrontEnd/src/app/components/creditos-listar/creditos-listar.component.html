@@ -44,15 +44,22 @@
 
     <mat-grid-tile>
       <mat-form-field>
-        <mat-select #InputEstado placeholder="Estado" [value]=1 (selectionChange)="CambioFiltro()">
+        <mat-select #InputDocumentos placeholder="Documentos adjuntos" [value]=0 (selectionChange)="CambioFiltro()">
           <mat-option [value]=0>Todos</mat-option>
-          <mat-option [value]=1>Activos</mat-option>
-          <mat-option [value]=2>Anulados</mat-option>
+          <mat-option [value]=1>Pendientes</mat-option>
+          <mat-option [value]=2>Completados</mat-option>
         </mat-select>
       </mat-form-field>
     </mat-grid-tile>
 
     <mat-grid-tile>
+      <mat-form-field>
+        <mat-select #InputEstado placeholder="Estado del crédito" [value]=1 (selectionChange)="CambioFiltro()">
+          <mat-option [value]=0>Todos</mat-option>
+          <mat-option [value]=1>Activos</mat-option>
+          <mat-option [value]=2>Anulados</mat-option>
+        </mat-select>
+      </mat-form-field>
     </mat-grid-tile>
 
     <mat-grid-tile>
@@ -70,7 +77,7 @@
       <mat-spinner></mat-spinner>
     </div>
 
-    <mat-table [dataSource]="ListadoCreditos" class="mat-elevation-z8" matSort matSortActive="codigo" matSortDirection="desc" matSortDisableClear>
+    <mat-table [dataSource]="ListadoCreditos" class="mat-elevation-z8" matSort matSortActive="fecha" matSortDirection="desc" matSortDisableClear>
 
       <ng-container matColumnDef="numero">
         <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
@@ -103,6 +110,11 @@
       <ng-container matColumnDef="fecha">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha</mat-header-cell>
         <mat-cell *matCellDef="let credito"> {{credito.fecha | date:'dd/MM/yyyy'}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="documentos_adjuntos">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Adjuntos </mat-header-cell>
+        <mat-cell *matCellDef="let credito"> {{credito.documentos_adjuntos}} / {{credito.documentos_totales}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="opciones">

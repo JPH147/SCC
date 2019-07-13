@@ -111,6 +111,7 @@ export class EvaluacionOrdenComponent implements OnInit {
 			this.total,
   	).subscribe(res=>{
 
+      console.log(res)
   		if (res['data']>0) {
   			this.presupuesto_guardado.emit(true);
   			this.Notificacion.Snack("Se creó el presupuesto número "+this.numero,"")

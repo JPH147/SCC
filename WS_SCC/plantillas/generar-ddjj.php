@@ -8,10 +8,14 @@
 
     include_once '../entities/plantillas.php';
     include_once '../shared/utilities.php';
-
+    include_once '../config/database.php';
+    
+	$database = new Database();
+	$db = $database->getConnection();
+	
     try
     {
-        $archivo = new Plantillas();
+        $archivo = new Plantillas($db);
         $data = json_decode(file_get_contents('php://input'), true);
 
         if ( trim($_POST["prnombre"])!=null )
@@ -20,6 +24,7 @@
             $archivo->nombre_archivo = trim($_POST["prnombrearchivo"]);
             $archivo->nombre = trim($_POST["prnombre"]);
             $archivo->dni = trim($_POST["prdni"]);
+            $archivo->distrito = trim($_POST["prdistrito"]);
             $archivo->direccion = trim($_POST["prdireccion"]);
             $archivo->lugar = trim($_POST["prlugar"]);
             $archivo->fecha = trim($_POST["prfecha"]);
