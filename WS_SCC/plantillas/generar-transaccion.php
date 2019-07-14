@@ -58,8 +58,11 @@
             $archivo->email = trim($_POST["premail"]);
             $archivo->whatsapp = trim($_POST["prwhatsapp"]);
             $archivo->lugar = trim($_POST["prlugar"]);
+            $archivo->trabajador = !empty($_GET['prtrabajador']) ? trim($_GET['prtrabajador']) : null;
+            $archivo->trabajador_dni = trim($_POST["prtrabajadordni"]);
+            $archivo->trabajador_cargo = trim($_POST["prtrabajadorcargo"]);
             $archivo->vendedor = trim($_POST["prvendedor"]);
-            $archivo->vendedor_dni = trim($_POST["prvendedor_dni"]);
+            $archivo->vendedor_dni = trim($_POST["prvendedordni"]);
             $archivo->detalle = trim($_POST["prdetalle"]);
 
             if($archivo->generar_transaccion())

@@ -206,4 +206,9 @@ export class EvaluacionComponent implements OnInit {
     this.montos_anteriores.next(null)
   }
 
+  ActualizarCliente(){
+    console.log(2);
+    this.BuscarCliente();
+  }
+
 }

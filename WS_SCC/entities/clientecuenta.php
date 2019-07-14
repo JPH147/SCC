@@ -18,8 +18,7 @@ Class ClienteCuenta{
         $this->conn = $db;
     }
 
-    function create()
-    {
+    function create(){
         $query = "CALL sp_crearclientecuenta(
             :prcliente,
             :prbanco,
@@ -61,9 +60,8 @@ Class ClienteCuenta{
       }
       return false;
     }
+    function read(){
 
-    function read()
-    {
         $query = "CALL sp_listarclientecuenta(:id_cliente, :relevancia, :pagina, :total_pagina)";
 
         $result = $this->conn->prepare($query);
@@ -80,6 +78,7 @@ Class ClienteCuenta{
 
         while($row = $result->fetch(PDO::FETCH_ASSOC))
         {
+
             extract($row);
             $contador=$contador+1;
             $cuentas_item = array (
@@ -89,14 +88,17 @@ Class ClienteCuenta{
                 "id_banco"=>$row['id_banco'],
                 "nombre_banco"=>$row['nombre_banco'],
                 "cuenta_numero"=>$row['cuenta_numero'],
-                "cuenta_cci"=>$row["cuenta_cci"],
+                "cuenta_cci"=> $row['cuenta_cci'],
                 "relevancia"=>$row['relevancia'],
             );
 
+            
             array_push($cuentas_list["cuentas"],$cuentas_item);
         }
         return $cuentas_list;
     }
+
+    
 
     function contar(){
 
@@ -115,8 +117,7 @@ Class ClienteCuenta{
         return $this->total_resultado;
     }
 
-    function actualizar_primario()
-    {
+    function actualizar_primario(){
       $query = "CALL sp_actualizarrelevanciacuenta(
         :id_cuenta
       )";

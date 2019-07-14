@@ -18,6 +18,7 @@
 
         $trabajador->documento = !empty($_GET['prdocumento']) ? trim($_GET['prdocumento']) : '';
         $trabajador->nombre = !empty($_GET['prnombre']) ? trim($_GET['prnombre']) : '';
+        $trabajador->parametro = !empty($_GET['prparametro']) ? trim($_GET['prparametro']) : 0;
         $trabajador->numero_pagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : 1;
         $trabajador->total_pagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : 20;
 

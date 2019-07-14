@@ -36,11 +36,11 @@
       </mat-grid-tile>
 
       <mat-grid-tile>
-        <button mat-icon-button color="primary" matTooltip="Descargar" disabled> <mat-icon> arrow_downward </mat-icon> </button>
+        <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(tarjeta)" [disabled]="!tarjeta"> <mat-icon> arrow_downward </mat-icon> </button>
       </mat-grid-tile>
 
       <mat-grid-tile>
-        <button mat-icon-button color="primary" matTooltip="Descargar" disabled> <mat-icon> arrow_downward </mat-icon> </button>
+        <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(compromiso)" [disabled]="!compromiso"> <mat-icon> arrow_downward </mat-icon> </button>
       </mat-grid-tile>
     </mat-grid-list>
 
@@ -48,10 +48,11 @@
 
   <form [formGroup]="EvaluacionArchivosForm">
 
-    <mat-card-content>
+    <div class="seccion">
 
-      <mat-card-subtitle>
-        Datos del cliente
+      <mat-card-subtitle class="titulo-seccion">
+        DATOS DEL CLIENTE
+        <button mat-icon-button type="button" class="icono" (click)="EditarCliente()"><mat-icon>edit</mat-icon></button>
       </mat-card-subtitle>
 
       <mat-grid-list cols=3 rowHeight="70px">
@@ -68,9 +69,46 @@
           </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile colspan=3>
-          <mat-form-field class="columnas-3">
-            <input matInput type="text" placeholder="Dirección" formControlName="direccion" readonly>
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput type="text" placeholder="CIP" formControlName="cip" readonly>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput type="text" placeholder="Casilla" formControlName="casilla" readonly>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput type="text" placeholder="Email" formControlName="email" readonly>
+          </mat-form-field>
+        </mat-grid-tile>
+
+      </mat-grid-list>
+
+    </div>
+
+    <div class="seccion">
+
+      <mat-card-subtitle class="titulo-seccion">
+        DATOS DE CONTACTO
+        <button mat-icon-button type="button" class="icono" (click)="EditarClienteContacto()"><mat-icon>edit</mat-icon></button>
+      </mat-card-subtitle>
+
+      <mat-grid-list cols=3 rowHeight="70px">
+
+        <mat-grid-tile colspan=1>
+          <mat-form-field class="columnas-1">
+            <input matInput type="text" [placeholder]="EvaluacionArchivosForm.value.telefono_tipo ? EvaluacionArchivosForm.value.telefono_tipo : 'Teléfono'" formControlName="telefono_numero" readonly>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan=1>
+          <mat-form-field class="columnas-1">
+            <input matInput type="text" [placeholder]="EvaluacionArchivosForm.value.cuenta_banco ? ('Cuenta del ' + EvaluacionArchivosForm.value.cuenta_banco) : 'Cuenta'" formControlName="cuenta_numero" readonly>
           </mat-form-field>
         </mat-grid-tile>
 
@@ -78,14 +116,20 @@
           <mat-checkbox color="primary" formControlName="considerar_direccion_cliente" (change)="CambiarDireccion($event)">Considerar dirección del cliente</mat-checkbox>
         </mat-grid-tile>
 
+        <mat-grid-tile colspan=3>
+          <mat-form-field class="columnas-3">
+            <input matInput type="text" placeholder="Dirección" formControlName="direccion" readonly>
+          </mat-form-field>
+        </mat-grid-tile>
+
       </mat-grid-list>
 
-    </mat-card-content>
+    </div>
 
-    <mat-card-content>
+    <div class="seccion">
 
-      <mat-card-subtitle>
-        Adicionales
+      <mat-card-subtitle class="titulo-seccion">
+        INFORMACION ADICIONAL
       </mat-card-subtitle>
 
       <mat-grid-list cols=3 rowHeight="70px">
@@ -97,6 +141,18 @@
           </mat-form-field>
         </mat-grid-tile>
 
+        <mat-grid-tile colspan=2>
+          <mat-form-field class="columnas-2">
+            <input placeholder="Vendedor" matInput [matAutocomplete]="Vauto" formControlName="vendedor" #InputVendedor [readonly]="EvaluacionArchivosForm.value.id_vendedor">
+            <mat-icon color="primary" matSuffix (click)="RemoverVendedor()" *ngIf="EvaluacionArchivosForm.value.id_vendedor"> remove_circle </mat-icon>
+            <mat-autocomplete #Vauto="matAutocomplete" [displayWith] = "displayVendedor" (optionSelected)="VendedorSeleccionado()">
+              <mat-option *ngFor="let vendedor of ListadoVendedores" [value]="vendedor">
+                {{vendedor.nombre}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </mat-grid-tile>
+
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
             <input matInput [matDatepicker]="picker" placeholder="Fecha" formControlName="fecha_letras" readonly>
@@ -105,9 +161,21 @@
           </mat-form-field>
         </mat-grid-tile>
 
+        <mat-grid-tile colspan=2>
+          <mat-form-field class="columnas-2">
+            <input placeholder="Trabajador" matInput [matAutocomplete]="Tauto" formControlName="trabajador" #InputTrabajador [readonly]="EvaluacionArchivosForm.value.id_trabajador">
+            <mat-icon color="primary" matSuffix (click)="RemoverTrabajador()" *ngIf="EvaluacionArchivosForm.value.id_trabajador"> remove_circle </mat-icon>
+            <mat-autocomplete #Tauto="matAutocomplete" [displayWith] = "displayTrabajador" (optionSelected)="TrabajadorSeleccionado()">
+              <mat-option *ngFor="let trabajador of ListadoTrabajadores" [value]="trabajador">
+                {{trabajador.nombre}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </mat-grid-tile>
+
       </mat-grid-list>
 
-    </mat-card-content>
+    </div>
 
     <mat-card-actions>
       <mat-grid-list cols=1 rowHeight=40px>

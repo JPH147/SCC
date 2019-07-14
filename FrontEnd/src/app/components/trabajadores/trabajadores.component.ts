@@ -132,7 +132,7 @@ export class Trabajadores implements DataSource<any> {
   ) {
     this.CargandoInformacion.next(true);
 
-    this.Servicio.Listar( documento, nombre, numero_pagina, total_pagina )
+    this.Servicio.Listar( documento, nombre, 0 , numero_pagina, total_pagina )
     .pipe(
       catchError(() => of([])),
       finalize(() => this.CargandoInformacion.next(false))

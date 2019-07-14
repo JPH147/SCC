@@ -50,6 +50,21 @@ export class VentanaEmergenteClientes {
     this.ListarDepartamento();
 
     /* Crear formulario */
+    this.CrearFormulario();
+
+    this.Servicios.ListarInstitucion().subscribe( res => {
+      // tslint:disable-next-line:forin
+      for (let i in res) {
+        this.Institucion.push(res[i]);
+      }
+    });
+
+    if (this.data) {
+      this.AsignarInformacion();
+    }
+  }
+
+  CrearFormulario(){
     this.ClientesForm = this.FormBuilder.group({
       'institucion': [null, [
         Validators.required
@@ -91,6 +106,12 @@ export class VentanaEmergenteClientes {
       'distrito': [null, [
         Validators.required
       ]],
+      'direccion': [null, [
+      ]],
+      'telefono': [null, [
+      ]],
+      'cuenta': [null, [
+      ]],
       'trabajo': [null, [
         Validators.required
       ]],
@@ -114,56 +135,50 @@ export class VentanaEmergenteClientes {
         Validators.pattern('[0-9- ]+')
       ]]
     });
+  }
 
-    this.Servicios.ListarInstitucion().subscribe( res => {
-      // tslint:disable-next-line:forin
-      for (let i in res) {
-        this.Institucion.push(res[i]);
-      }
-    });
-
-    if (this.data) {
+  AsignarInformacion(){
       // console.log(this.data);
-      this.ClientesForm.get('institucion').setValue(this.data.objeto.institucion);
-      this.ListarSede(this.data.objeto.institucion);
-      this.ClientesForm.get('sede').setValue(this.data.objeto.sede);
-      this.ListarSubsede(this.data.objeto.sede);
-      this.ClientesForm.get('subsede').setValue(this.data.objeto.subsede);
-      this.ListarCargos(this.data.objeto.sede);
-      this.ClientesForm.get('cargo').setValue(this.data.objeto.id_cargo);
-      this.ListarEstadosCargo(this.data.objeto.id_cargo);
-      this.ClientesForm.get('cargo_estado').setValue(this.data.objeto.id_cargo_estado);
+    this.ClientesForm.get('institucion').setValue(this.data.objeto.institucion);
+    this.ListarSede(this.data.objeto.institucion);
+    this.ClientesForm.get('sede').setValue(this.data.objeto.sede);
+    this.ListarSubsede(this.data.objeto.sede);
+    this.ClientesForm.get('subsede').setValue(this.data.objeto.subsede);
+    this.ListarCargos(this.data.objeto.sede);
+    this.ClientesForm.get('cargo').setValue(this.data.objeto.id_cargo);
+    this.ListarEstadosCargo(this.data.objeto.id_cargo);
+    this.ClientesForm.get('cargo_estado').setValue(this.data.objeto.id_cargo_estado);
 
-      this.ClientesForm.get('codigo').setValue(this.data.objeto.codigo);
-      this.ClientesForm.get('dni').setValue(this.data.objeto.dni);
-      this.ClientesForm.get('nombre').setValue(this.data.objeto.nombre);
-      this.ClientesForm.get('cip').setValue(this.data.objeto.cip);
-      this.ClientesForm.get('email').setValue(this.data.objeto.email);
-      this.ClientesForm.get('casilla').setValue(this.data.objeto.casilla);
-      
-      this.ClientesForm.get('trabajo').setValue(this.data.objeto.trabajo);
-      this.ListarProvincia(this.data.objeto.departamento);
-      this.ListarDistrito(this.data.objeto.provincia);
-      this.ClientesForm.get('departamento').setValue(this.data.objeto.departamento);
-      this.ClientesForm.get('provincia').setValue(this.data.objeto.provincia);
-      this.ClientesForm.get('distrito').setValue(this.data.objeto.id_distrito_trabajo);
+    this.ClientesForm.get('codigo').setValue(this.data.objeto.codigo);
+    this.ClientesForm.get('dni').setValue(this.data.objeto.dni);
+    this.ClientesForm.get('nombre').setValue(this.data.objeto.nombre);
+    this.ClientesForm.get('cip').setValue(this.data.objeto.cip);
+    this.ClientesForm.get('email').setValue(this.data.objeto.email);
+    this.ClientesForm.get('casilla').setValue(this.data.objeto.casilla);
+    
+    this.ClientesForm.get('trabajo').setValue(this.data.objeto.trabajo);
+    this.ListarProvincia(this.data.objeto.departamento);
+    this.ListarDistrito(this.data.objeto.provincia);
+    this.ClientesForm.get('departamento').setValue(this.data.objeto.departamento);
+    this.ClientesForm.get('provincia').setValue(this.data.objeto.provincia);
+    this.ClientesForm.get('distrito').setValue(this.data.objeto.id_distrito_trabajo);
 
-      this.ClientesForm.get('capacidad_pago').setValue(this.data.objeto.capacidad_pago);
-      this.ClientesForm.get('descuento_maximo').setValue(this.data.objeto.maximo_descuento);
-      this.ClientesForm.get('calificacion_personal').setValue(this.data.objeto.calificacion_personal);
-      this.ClientesForm.get('aporte').setValue(this.data.objeto.aporte);
-      // this.ClientesForm.get('fecharegistro').setValue(this.data.fecharegistro);
-      this.ClientesForm.controls['sede'].enable();
-      this.ClientesForm.controls['subsede'].enable();
+    this.ClientesForm.get('capacidad_pago').setValue(this.data.objeto.capacidad_pago);
+    this.ClientesForm.get('descuento_maximo').setValue(this.data.objeto.maximo_descuento);
+    this.ClientesForm.get('calificacion_personal').setValue(this.data.objeto.calificacion_personal);
+    this.ClientesForm.get('aporte').setValue(this.data.objeto.aporte);
+    // this.ClientesForm.get('fecharegistro').setValue(this.data.fecharegistro);
+    this.ClientesForm.controls['sede'].enable();
+    this.ClientesForm.controls['subsede'].enable();
 
-      this.ObtenerDireccion(this.data.id);
-      this.ObtenerTelefono(this.data.id);
-      this.ObtenerCuenta(this.data.id);
-    }
+    this.ObtenerDireccion(this.data.id);
+    this.ObtenerTelefono(this.data.id);
+    this.ObtenerCuenta(this.data.id);
   }
 
   ObtenerDireccion(id) {
     this.ServicioDireccion.ListarDireccion( id, '1',1,1).subscribe(res => {
+      // console.log(id,res);
       if (res['data']) {
         this.ClientesForm.get('direccion').setValue(res['data'].direcciones[0].direccioncompleta);
       }else{
@@ -271,10 +286,10 @@ export class VentanaEmergenteClientes {
         formulario.value.descuento_maximo,
         formulario.value.calificacion_personal,
         formulario.value.aporte
-      ).subscribe(res => console.log(res));
-
-      this.ClientesForm.reset();
-      this.ventana.close();
+      ).subscribe(res =>{
+        // this.ClientesForm.reset();
+        this.ventana.close(true);
+      });
     }
 
     if (!this.data) {
@@ -293,10 +308,11 @@ export class VentanaEmergenteClientes {
         formulario.value.descuento_maximo,
         formulario.value.calificacion_personal,
         formulario.value.aporte
-      ).subscribe(res => console.log(res));
+      ).subscribe(res =>{
+        // this.ClientesForm.reset();
+        this.ventana.close(true);
+      });
     }
-      this.ClientesForm.reset();
-      this.ventana.close();
   }
 
   ListarInstitucion() {

@@ -7,6 +7,7 @@
         public $id_trabajador;
         public $documento;
         public $nombre;
+        public $parametro;
         public $cargo;
         public $fecha;
         public $fecha_inicio;
@@ -24,13 +25,14 @@
         }
 
         function read(){
-            $query = "CALL sp_listartrabajadores(?,?,?,?)";
+            $query = "CALL sp_listartrabajadores(?,?,?,?,?)";
             $result = $this->conn->prepare($query);
 
             $result->bindParam(1, $this->documento);
             $result->bindParam(2, $this->nombre);
-            $result->bindParam(3, $this->numero_pagina);
-            $result->bindParam(4, $this->total_pagina);
+            $result->bindParam(3, $this->parametro);
+            $result->bindParam(4, $this->numero_pagina);
+            $result->bindParam(5, $this->total_pagina);
             
             $result->execute();
 
@@ -60,13 +62,14 @@
 
         function contar(){
 
-            $query = "CALL sp_listartrabajadorescontar(?,?)";
+            $query = "CALL sp_listartrabajadorescontar(?,?,?)";
     
             $result = $this->conn->prepare($query);
     
             $result->bindParam(1, $this->documento);
             $result->bindParam(2, $this->nombre);
-    
+            $result->bindParam(3, $this->parametro);
+
             $result->execute();
     
             $row = $result->fetch(PDO::FETCH_ASSOC);

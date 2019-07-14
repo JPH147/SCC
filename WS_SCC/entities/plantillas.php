@@ -55,6 +55,9 @@ Class Plantillas{
     public $monto_cuota_penalidad_letras;
     public $vendedor;
     public $vendedor_dni;
+    public $trabajador;
+    public $trabajador_dni;
+    public $trabajador_cargo;
     public $detalle;
 
     public $path = '../uploads/autogenerados/';
@@ -185,6 +188,17 @@ Class Plantillas{
         $templateProcessor->setValue('email', $this->email);
         $templateProcessor->setValue('whatsapp', $this->whatsapp);
         $templateProcessor->setValue('lugar', $this->lugar);
+        if( is_null($this->trabajador) ) {
+            $templateProcessor->setValue('trabajador', "");
+            $templateProcessor->setValue('trabajador_dni', "");
+            $templateProcessor->setValue('trabajador_cargo', "");
+            $templateProcessor->setValue('trabajador_linea', "");
+        } else {
+            $templateProcessor->setValue('trabajador', $this->trabajador);
+            $templateProcessor->setValue('trabajador_dni', "DNI: " . $this->trabajador_dni);
+            $templateProcessor->setValue('trabajador_cargo', $this->trabajador_cargo);
+            $templateProcessor->setValue('trabajador_linea', "___________________________________");
+        }
         $templateProcessor->setValue('vendedor', $this->vendedor);
         $templateProcessor->setValue('vendedor_dni', $this->vendedor_dni);
 

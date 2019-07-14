@@ -20,13 +20,15 @@ export class TrabajadoresService {
   Listar(
     documento:string,
     nombre:string,
+    parametro : number,
     numero_pagina:number,
     total_pagina:number
   ): Observable<any> {
 
     let params = new HttpParams()
     .set('prdocumento',documento)
-    .set('prnombre',nombre.toString())
+    .set('prnombre',nombre)
+    .set('prparametro',parametro.toString())
     .set('prpagina',numero_pagina.toString())
     .set('prtotalpagina',total_pagina.toString())
 

@@ -1,23 +1,34 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Observable , fromEvent } from 'rxjs';
+import { debounceTime , distinctUntilChanged , tap } from 'rxjs/operators';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material';
 import { EvaluacionService } from '../evaluacion.service';
 import { ServiciosDirecciones } from '../../global/direcciones';
 import { ServiciosTelefonos } from '../../global/telefonos';
 import { ClienteService } from '../../clientes/clientes.service';
+import { ServiciosGenerales } from '../../global/servicios';
+import { TrabajadoresService } from '../../trabajadores/trabajadores.service';
+import { VentanaEmergenteContacto} from '../../clientes/ventana-emergentecontacto/ventanaemergentecontacto';
+import { VentanaEmergenteClientes } from '../../clientes/ventana-emergente/ventanaemergente';
 import * as moment from 'moment';
 import {saveAs} from 'file-saver';
 
 @Component({
   selector: 'app-evaluacion-archivos',
   templateUrl: './evaluacion-archivos.component.html',
-  styleUrls: ['./evaluacion-archivos.component.css'],
-  providers : [ EvaluacionService , ServiciosDirecciones , ServiciosTelefonos , ClienteService ]
+  styleUrls: ['./evaluacion-archivos.component.scss'],
+  providers : [ EvaluacionService , ServiciosDirecciones , ServiciosTelefonos , ClienteService , ServiciosGenerales , TrabajadoresService ]
 })
 
-export class EvaluacionArchivosComponent implements OnInit {
+export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
 
-	@Input() informacion_venta: Observable<any>;
+  @Input() informacion_venta: Observable<any>;
+  @Output() ActualizarCliente = new EventEmitter();
+
+  @ViewChild('InputVendedor') VendedorAutoComplete : ElementRef;
+  @ViewChild('InputTrabajador') TrabajadorAutoComplete : ElementRef;
+
   public EvaluacionArchivosForm : FormGroup;
   public cliente_afiliado : boolean = false;
   public generados : boolean = false;
@@ -25,8 +36,11 @@ export class EvaluacionArchivosComponent implements OnInit {
   public autorizacion : string ;
   public compromiso : string ;
   public transaccion : string ;
+  public tarjeta : string ;
+  public ListadoVendedores : Array<any>;
+  public ListadoTrabajadores : Array<any>;
   public cronograma : Array<any>;
-  
+
   public informacion_cooperativa : any;
   public cooperativa_nombre : string ;
   public penalidad_porcentaje : number ;
@@ -51,6 +65,9 @@ export class EvaluacionArchivosComponent implements OnInit {
     private DServicios : ServiciosDirecciones,
     private TServicios: ServiciosTelefonos,
     private CServicios : ClienteService,
+    private ServiciosGenerales : ServiciosGenerales,
+    private TraabajadoresServicios : TrabajadoresService,
+    private Dialogo : MatDialog
   ) { }
 
   ngOnInit() {
@@ -58,6 +75,29 @@ export class EvaluacionArchivosComponent implements OnInit {
     this.CrearFormulario();
     this.ActualizarInformacion();
     this.ObtenerDatosCooperativa();
+
+    this.ListarVendedor("");
+    this.ListarTrabajador("");
+  }
+
+  ngAfterViewInit(){
+    fromEvent(this.VendedorAutoComplete.nativeElement, 'keyup')
+    .pipe(
+      debounceTime(10),
+      distinctUntilChanged(),
+      tap(() => {
+        this.ListarVendedor(this.VendedorAutoComplete.nativeElement.value);
+      })
+     ).subscribe();
+
+     fromEvent(this.TrabajadorAutoComplete.nativeElement, 'keyup')
+    .pipe(
+      debounceTime(10),
+      distinctUntilChanged(),
+      tap(() => {
+        this.ListarTrabajador(this.TrabajadorAutoComplete.nativeElement.value);
+      })
+     ).subscribe();
   }
 
   ObtenerDatosCooperativa(){
@@ -106,6 +146,9 @@ export class EvaluacionArchivosComponent implements OnInit {
       ]],
       tipo : [ { value : null , disabled : false } , [
       ]],
+      id_cliente : [ { value : null , disabled : false } , [
+        Validators.required
+      ]],
       nombre : [ { value : null , disabled : false } , [
       ]],
       dni : [ { value : null , disabled : false } , [
@@ -132,7 +175,7 @@ export class EvaluacionArchivosComponent implements OnInit {
       ]],
       numero_cuotas : [ { value : null , disabled : false } , [
       ]],
-      telefono_tipo : [ { value : null , disabled : false } , [
+      telefono_tipo : [ { value : "" , disabled : false } , [
       ]],
       telefono_numero : [ { value : null , disabled : false } , [
       ]],
@@ -150,11 +193,26 @@ export class EvaluacionArchivosComponent implements OnInit {
       ]],
       email : [ { value : null , disabled : false } , [
       ]],
-      cuenta_banco : [ { value : null , disabled : false } , [
+      cuenta_banco : [ { value : "" , disabled : false } , [
       ]],
       cuenta_numero : [ { value : null , disabled : false } , [
       ]],
       fecha_letras : [ { value : null , disabled : false } , [
+      ]],
+      id_vendedor : [ { value : null , disabled : false } , [
+      ]],
+      vendedor : [ { value : null , disabled : false } , [
+        Validators.required
+      ]],
+      vendedor_dni : [ { value : "" , disabled : false } , [
+      ]],
+      id_trabajador : [ { value : null , disabled : false } , [
+      ]],
+      trabajador : [ { value : "" , disabled : false } , [
+      ]],
+      trabajador_dni : [ { value : "" , disabled : false } , [
+      ]],
+      trabajador_cargo : [ { value : "" , disabled : false } , [
       ]],
       lugar : [ { value : null , disabled : false } , [
         Validators.required
@@ -165,9 +223,11 @@ export class EvaluacionArchivosComponent implements OnInit {
   ActualizarInformacion(){
     this.informacion_venta.subscribe(res=>{
       // console.log(res);
+      this.EvaluacionArchivosForm.get('fecha_letras').setValue(res.fecha);
       if(res.cliente){
         this.cliente_afiliado=res['afiliado'];
         if(res.cliente.id) {
+          this.EvaluacionArchivosForm.get('id_cliente').setValue(res.cliente.id);
           this.ObtenerDireccion(res.cliente.id);
           this.ObtenerTelefono(res.cliente.id);
           this.ObtenerNumeroCelular(res.cliente.id);
@@ -189,7 +249,6 @@ export class EvaluacionArchivosComponent implements OnInit {
         this.EvaluacionArchivosForm.get('subsede').setValue(res.cliente.subsede)
         // this.EvaluacionArchivosForm.get('cuenta_banco').setValue(res.cliente.nombre_banco)
         // this.EvaluacionArchivosForm.get('cuenta_numero').setValue(res.cliente.cuenta_numero)
-        this.EvaluacionArchivosForm.get('fecha_letras').setValue(res.fecha)
         this.EvaluacionArchivosForm.get('cargo').setValue(res.cargo_nombre + " " +res.cargo_estado);
         this.EvaluacionArchivosForm.get('total').setValue(res.total);
         this.EvaluacionArchivosForm.get('monto_asociado').setValue(res.aporte);
@@ -199,6 +258,89 @@ export class EvaluacionArchivosComponent implements OnInit {
         this.cronograma=res.cronograma;
       }
     })
+  }
+
+  EditarCliente(){
+
+    let VentanaClientes;
+
+    this.CServicios.Seleccionar(this.EvaluacionArchivosForm.value.id_cliente).subscribe(res => {
+      VentanaClientes= this.Dialogo.open(VentanaEmergenteClientes, {
+        width: '1000px',
+        data: {objeto: res, id: this.EvaluacionArchivosForm.value.id_cliente},
+      });
+
+      VentanaClientes.afterClosed().subscribe (res => {
+        console.log(res);
+        if(res){
+          // console.log(1);
+          this.ActualizarCliente.emit();
+        }
+      });
+
+    });
+  }
+
+  EditarClienteContacto(){
+
+    let VentanaContacto= this.Dialogo.open(VentanaEmergenteContacto, {
+      width: '1000px',
+      data: this.EvaluacionArchivosForm.value.id_cliente
+    });
+
+    VentanaContacto.afterClosed().subscribe (res => {
+      console.log(res);
+      if(res){
+        console.log(1);
+        this.ActualizarCliente.emit();
+      }
+    });
+  }
+
+  ListarVendedor(nombre: string) {
+    this.ServiciosGenerales.ListarVendedor("",nombre,"",1,5).subscribe( res => {
+      this.ListadoVendedores=res;
+    });
+  }
+
+  VendedorSeleccionado(){
+    let nombre_vendedor= this.EvaluacionArchivosForm.value.vendedor.nombre;
+    this.EvaluacionArchivosForm.get('id_vendedor').setValue(this.EvaluacionArchivosForm.value.vendedor.id);
+    this.EvaluacionArchivosForm.get('vendedor_dni').setValue(this.EvaluacionArchivosForm.value.vendedor.dni);
+    this.EvaluacionArchivosForm.get('vendedor').setValue(nombre_vendedor);
+  }
+  
+  RemoverVendedor(){
+    this.EvaluacionArchivosForm.get('id_vendedor').setValue(null);
+    this.EvaluacionArchivosForm.get('vendedor').setValue("");
+    this.EvaluacionArchivosForm.get('vendedor_dni').setValue("");
+    this.ListarVendedor("");
+  }
+
+  ListarTrabajador(nombre: string) {
+    this.TraabajadoresServicios.Listar("",nombre,1,1,5).subscribe( res => {
+      if(res['codigo']==0){
+        this.ListadoTrabajadores=res['data'].trabajadores;
+      } else {
+        this.ListadoTrabajadores=[];
+      }
+    });
+  }
+
+  TrabajadorSeleccionado(){
+    let nombre_trabajador= this.EvaluacionArchivosForm.value.trabajador.nombre;
+    this.EvaluacionArchivosForm.get('id_trabajador').setValue(this.EvaluacionArchivosForm.value.trabajador.id);
+    this.EvaluacionArchivosForm.get('trabajador_cargo').setValue(this.EvaluacionArchivosForm.value.trabajador.cargo);
+    this.EvaluacionArchivosForm.get('trabajador_documento').setValue(this.EvaluacionArchivosForm.value.trabajador.documento);
+    this.EvaluacionArchivosForm.get('trabajador').setValue(nombre_trabajador);
+  }
+  
+  RemoverTrabajador(){
+    this.EvaluacionArchivosForm.get('id_trabajador').setValue(null);
+    this.EvaluacionArchivosForm.get('trabajador').setValue("");
+    this.EvaluacionArchivosForm.get('trabajador_cargo').setValue("");
+    this.EvaluacionArchivosForm.get('trabajador_documento').setValue("");
+    this.ListarTrabajador("");
   }
 
   ObtenerDireccion(id) {
@@ -244,7 +386,7 @@ export class EvaluacionArchivosComponent implements OnInit {
           if(res['data'].telefonos[0].id_tipo==1){
             this.EvaluacionArchivosForm.get('telefono_tipo').setValue(res['data'].telefonos[0].tipo);
           } else {
-            this.EvaluacionArchivosForm.get('telefono_tipo').setValue("Teléfono de" + res['data'].telefonos[0].tipo);
+            this.EvaluacionArchivosForm.get('telefono_tipo').setValue("Teléfono de " + res['data'].telefonos[0].tipo);
           }
         }else{
           this.EvaluacionArchivosForm.get('telefono_numero').setValue("No registra")
@@ -273,7 +415,7 @@ export class EvaluacionArchivosComponent implements OnInit {
       if(res['codigo']==0){
         if (res['data']) {
           this.EvaluacionArchivosForm.get('cuenta_banco').setValue(res['data'].cuentas[0].nombre_banco);
-          this.EvaluacionArchivosForm.get('cuenta_numero').setValue("Teléfono de" + res['data'].cuentas[0].cuenta_numero);
+          this.EvaluacionArchivosForm.get('cuenta_numero').setValue(res['data'].cuentas[0].cuenta_numero);
         }else{
           this.EvaluacionArchivosForm.get('cuenta_banco').setValue("No registra")
           this.EvaluacionArchivosForm.get('cuenta_numero').setValue("No registra")
@@ -287,10 +429,10 @@ export class EvaluacionArchivosComponent implements OnInit {
 
   GenerarArchivos(){
     let ahora = (new Date()).getTime();
-    // this.GenerarDDJJ("DDJJ_"+ahora);
-    // this.GenerarAutorizacion("Autorizacion_"+ahora);
-    // this.GenerarCompromiso("Compromiso_"+ahora);
-    // this.GenerarTarjeta("Tarjeta_"+ahora);
+    this.GenerarDDJJ("DDJJ_"+ahora);
+    this.GenerarAutorizacion("Autorizacion_"+ahora);
+    this.GenerarCompromiso("Compromiso_"+ahora);
+    this.GenerarTarjeta("Tarjeta_"+ahora);
     this.GenerarTransaccion("Transaccion_"+ahora);
   }
 
@@ -374,11 +516,16 @@ export class EvaluacionArchivosComponent implements OnInit {
       this.EvaluacionArchivosForm.value.email,
       this.EvaluacionArchivosForm.value.telefono_whatsapp,
       this.EvaluacionArchivosForm.value.lugar,
-      "VENDEDOR",
-      "DNI VENDEDOR",
+      // Se pone eso para asegurarnos que hay un trabajador
+      this.EvaluacionArchivosForm.value.id_trabajador ? this.EvaluacionArchivosForm.value.trabajador : "",
+      this.EvaluacionArchivosForm.value.id_trabajador ? this.EvaluacionArchivosForm.value.trabajador_dni : "",
+      this.EvaluacionArchivosForm.value.id_trabajador ? this.EvaluacionArchivosForm.value.trabajador_cargo : "",
+      this.EvaluacionArchivosForm.value.vendedor,
+      this.EvaluacionArchivosForm.value.vendedor_dni,
       this.cronograma
     ).subscribe(res=>{
-      console.log(res);
+      // console.log(res);
+      this.generados=true;
       this.transaccion=res['data'];
     })
   }
@@ -424,7 +571,7 @@ export class EvaluacionArchivosComponent implements OnInit {
       console.log(res)
       if(res['codigo']==0){
         this.generados=true;
-        this.compromiso=res['data'];
+        this.tarjeta=res['data'];
       }
     })
   }

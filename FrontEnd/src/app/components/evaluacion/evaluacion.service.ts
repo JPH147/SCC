@@ -270,6 +270,9 @@ export class EvaluacionService {
     email : string ,
     whatsapp : string ,
     lugar : string ,
+    trabajador : string ,
+    trabajador_dni : string ,
+    trabajador_cargo : string ,
     vendedor : string ,
     vendedor_dni : string ,
     detalle : Array<any>
@@ -277,10 +280,10 @@ export class EvaluacionService {
 
     let monto_penalidad : number = monto_total * (100 + penalidad_porcentaje)/100 ;
     let numero_cuotas_penalidad : number = Math.trunc( monto_penalidad / penalidad_maxima_cuota ) ;
-    let monto_cuotas_penalidad : number = Math.round( monto_penalidad /numero_cuotas_penalidad ) ;
+    let monto_cuotas_penalidad : number = Math.round( monto_penalidad / numero_cuotas_penalidad ) ;
 
-    monto_penalidad = Math.round(monto_penalidad*100)/100;
-    monto_cuotas_penalidad = Math.round(monto_penalidad*100)/100;
+    monto_penalidad = Math.round( monto_penalidad*100 ) / 100 ;
+    monto_cuotas_penalidad = Math.round( monto_cuotas_penalidad *100 ) / 100 ;
 
     let params = new HttpParams()
       .set('prnombreplantilla',nombre_plantilla )
@@ -321,11 +324,14 @@ export class EvaluacionService {
       .set('premail',email)
       .set('prwhatsapp',whatsapp)
       .set('prlugar',lugar)
+      .set('prtrabajador',trabajador)
+      .set('prtrabajadordni',trabajador_dni)
+      .set('prtrabajadorcargo',trabajador_cargo)
       .set('prvendedor',vendedor)
-      .set('prvendedor_dni',vendedor_dni)
+      .set('prvendedordni',vendedor_dni)
       .set('prdetalle',JSON.stringify(detalle));
 
-      // console.log(params);
+      console.log(params);
 
       let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 

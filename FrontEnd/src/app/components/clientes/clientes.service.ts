@@ -148,7 +148,7 @@ export class ClienteService {
     .set('clt_calificacion_personal',clt_calificacion_personal)
     .set('clt_aporte',clt_aporte.toString())
     
-    console.log(params);
+    // console.log(params);
     
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     return this.http.post(this.url + 'cliente/update.php', params, {headers: headers});

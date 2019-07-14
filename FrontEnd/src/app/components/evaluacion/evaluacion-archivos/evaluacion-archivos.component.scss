@@ -1,0 +1,37 @@
+@import '../../../../tema.scss';
+
+
+.columnas-1{
+  width: 80%
+}
+
+.columnas-2{
+  width: 90%
+}
+
+.columnas-3{
+  width: 93.33%
+}
+
+.seccion{
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border-color: mat-color($primary);
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 5px;
+}
+
+.titulo-seccion{
+  height: 30px;
+  font-size: 16px;
+  background-color: mat-color($primary);
+  color: white !important;
+  padding-top: 15px;
+  padding-left: 2.5%;
+}
+
+.icono{
+  float: right;
+  transform: translate(-20px, -12.5px);
+}

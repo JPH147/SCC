@@ -80,7 +80,7 @@
       </mat-step>
       <mat-step>
         <ng-template matStepLabel>Generar archivos</ng-template>
-        <app-evaluacion-archivos [informacion_venta]="informacion"></app-evaluacion-archivos>
+        <app-evaluacion-archivos [informacion_venta]="informacion" (ActualizarCliente)="ActualizarCliente()"></app-evaluacion-archivos>
       </mat-step>
     </mat-horizontal-stepper>
   </mat-card-content>
