@@ -4,7 +4,7 @@
   </mat-card-title>
 
   <mat-card-content>
-    <mat-grid-list cols=5 rowHeight="30px">
+    <mat-grid-list cols=5 rowHeight="60px">
       <mat-grid-tile>
         Autorizacion
       </mat-grid-tile>
@@ -126,6 +126,30 @@
 
     </div>
 
+    <div class="seccion" *ngIf="productos.length>0">
+
+      <mat-card-subtitle class="titulo-seccion">
+        DATOS DE LOS PRODUCTOS
+      </mat-card-subtitle>
+
+      <mat-grid-list cols=3 rowHeight="70px" *ngFor="let producto of productos_generar">
+
+        <mat-grid-tile colspan=2>
+          <mat-form-field class="columnas-2">
+            <input matInput type="text" placeholder="Producto" [(ngModel)]="producto.descripcion" [ngModelOptions]="{standalone: true}" readonly>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan=1>
+          <mat-form-field class="columnas-1">
+            <input matInput type="text" placeholder="Serie"  [(ngModel)]="producto.serie" [ngModelOptions]="{standalone: true}">
+          </mat-form-field>
+        </mat-grid-tile>
+
+      </mat-grid-list>
+
+    </div>
+
     <div class="seccion">
 
       <mat-card-subtitle class="titulo-seccion">
@@ -145,7 +169,7 @@
           <mat-form-field class="columnas-2">
             <input placeholder="Vendedor" matInput [matAutocomplete]="Vauto" formControlName="vendedor" #InputVendedor [readonly]="EvaluacionArchivosForm.value.id_vendedor">
             <mat-icon color="primary" matSuffix (click)="RemoverVendedor()" *ngIf="EvaluacionArchivosForm.value.id_vendedor"> remove_circle </mat-icon>
-            <mat-autocomplete #Vauto="matAutocomplete" [displayWith] = "displayVendedor" (optionSelected)="VendedorSeleccionado()">
+            <mat-autocomplete #Vauto="matAutocomplete" (optionSelected)="VendedorSeleccionado()">
               <mat-option *ngFor="let vendedor of ListadoVendedores" [value]="vendedor">
                 {{vendedor.nombre}}
               </mat-option>
@@ -165,7 +189,7 @@
           <mat-form-field class="columnas-2">
             <input placeholder="Trabajador" matInput [matAutocomplete]="Tauto" formControlName="trabajador" #InputTrabajador [readonly]="EvaluacionArchivosForm.value.id_trabajador">
             <mat-icon color="primary" matSuffix (click)="RemoverTrabajador()" *ngIf="EvaluacionArchivosForm.value.id_trabajador"> remove_circle </mat-icon>
-            <mat-autocomplete #Tauto="matAutocomplete" [displayWith] = "displayTrabajador" (optionSelected)="TrabajadorSeleccionado()">
+            <mat-autocomplete #Tauto="matAutocomplete" (optionSelected)="TrabajadorSeleccionado()">
               <mat-option *ngFor="let trabajador of ListadoTrabajadores" [value]="trabajador">
                 {{trabajador.nombre}}
               </mat-option>
@@ -180,7 +204,8 @@
     <mat-card-actions>
       <mat-grid-list cols=1 rowHeight=40px>
         <mat-grid-tile>
-          <button mat-raised-button color="primary" (click)="GenerarArchivos()" [disabled]="EvaluacionArchivosForm.invalid"> Generar </button>
+          <button mat-raised-button type="button" [color]="!generados ? 'primary' : 'null'" (click)="GenerarArchivos()" [disabled]="EvaluacionArchivosForm.invalid"> Generar </button>
+          <button mat-raised-button type="button" color="primary" (click)="Guardar()" [disabled]="!generados"> Hacer crédito </button>
         </mat-grid-tile>
       </mat-grid-list>
     </mat-card-actions>

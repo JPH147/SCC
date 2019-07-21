@@ -109,19 +109,33 @@ export class EvaluacionService {
     cliente: number,
     tipo: number,
     fecha: Date,
+    vendedor : number,
     cuotas: number,
     capital: number,
     tasa: number,
     total: number,
+    pdf_autorizacion : string ,
+    pdf_ddjj : string ,
+    pdf_transaccion : string ,
+    pdf_tarjeta : string ,
+    pdf_compromiso : string ,
   ): Observable<any> {
     let params = new HttpParams()
       .set('prcliente',cliente.toString())
+      .set('prtipo',tipo.toString())
+      .set('prfecha',moment(fecha).format("YYYY-MM-DD"))
+      .set('prvendedor',vendedor.toString())
       .set('prcuotas',cuotas.toString())
       .set('prcapital',capital.toString())
       .set('prtasa',tasa.toString())
       .set('prtotal',total.toString())
-      .set('prtipo',tipo.toString())
-      .set('prfecha',moment(fecha).format("YYYY-MM-DD"))
+      .set('prpdfautorizacion', pdf_autorizacion)
+      .set('prpdfddjj', pdf_ddjj)
+      .set('prpdftransaccion', pdf_transaccion)
+      .set('prpdftarjeta', pdf_tarjeta)
+      .set('prpdfcompromiso', pdf_compromiso)
+
+    console.log(params);
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -135,10 +149,12 @@ export class EvaluacionService {
     fecha: Date
   ): Observable<any> {
     let params = new HttpParams()
-                .set('prpresupuesto',presupuesto.toString())
-                .set('prmonto',monto.toString())
-                .set('praporte',aporte.toString())
-                .set('prfecha',moment(fecha).format("YYYY-MM-DD"))
+      .set('prpresupuesto',presupuesto.toString())
+      .set('prmonto',monto.toString())
+      .set('praporte',aporte.toString())
+      .set('prfecha',moment(fecha).format("YYYY-MM-DD"))
+
+    // console.log(params)
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -184,7 +200,7 @@ export class EvaluacionService {
       .set('prfecha', moment(fecha_letras).format("DD/MM/YYYY"))
       .set('prfechaletras', moment(fecha_letras).format('LL'))
 
-    console.log(params);
+    // console.log(params);
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -275,7 +291,9 @@ export class EvaluacionService {
     trabajador_cargo : string ,
     vendedor : string ,
     vendedor_dni : string ,
-    detalle : Array<any>
+    detalle : Array<any>,
+    tipo : number ,
+    productos : Array<any>
   ){
 
     let monto_penalidad : number = monto_total * (100 + penalidad_porcentaje)/100 ;
@@ -292,8 +310,8 @@ export class EvaluacionService {
       .set('prcooperativadireccion', cooperativa_direccion )
       .set('prcooperativadireccion1', cooperativa_direccion_1 )
       .set('prcooperativadireccion2', cooperativa_direccion_2 )
-      .set('prcooperativacuenta_banco', cooperativa_cuenta_banco )
-      .set('prcooperativacuenta_numero', cooperativa_cuenta_numero )
+      .set('prcooperativacuentabanco', cooperativa_cuenta_banco )
+      .set('prcooperativacuentanumero', cooperativa_cuenta_numero )
       .set('prpresidente', presidente )
       .set('prpresidentedni', presidente_dni )
       .set('prpresidentedireccion', presidente_direccion )
@@ -329,9 +347,11 @@ export class EvaluacionService {
       .set('prtrabajadorcargo',trabajador_cargo)
       .set('prvendedor',vendedor)
       .set('prvendedordni',vendedor_dni)
-      .set('prdetalle',JSON.stringify(detalle));
+      .set('prdetalle',JSON.stringify(detalle))
+      .set('prtipo',tipo.toString())
+      .set('prproductos',JSON.stringify(productos));
 
-      console.log(params);
+      // console.log(params);
 
       let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -403,7 +423,7 @@ export class EvaluacionService {
       .set('prcelular' , celular)
       .set('prmontoafiliacion' , monto_afiliacion.toString());
 
-    console.log(params);
+    // console.log(params);
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 

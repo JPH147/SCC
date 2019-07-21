@@ -203,7 +203,8 @@ export class EvaluacionComponent implements OnInit {
       aporte:this.aporte,
       capacidad:270
     });
-    this.montos_anteriores.next(null)
+    this.montos_anteriores.next(null);
+    this.RemoverCliente();
   }
 
   ActualizarCliente(){

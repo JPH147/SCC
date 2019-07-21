@@ -25,7 +25,7 @@ export class ventanaseries  implements OnInit {
   public invalidBD:boolean;
   public invalidV:boolean;
   public invalidP:boolean;
-  public series_vista:Array<any>;
+  public series_vista:Array<any> = [];
   public cargando:boolean;
 
   constructor(
@@ -162,10 +162,6 @@ export class ventanaseries  implements OnInit {
     this.seriearticulo.push({numero: this.contador, producto: this.data.producto, serie: '', color:'', almacenamiento:'', observacion:"", repetidoBD:false, repetidoV:false, repetidoP:false});
   }
 
-  Aceptar() {
-    return this.seriearticulo
-  }
-
   EliminarElemento(array,value){
     array.forEach( (item, index) => {
       if(item.id_producto == value) array.splice(index,1);
@@ -259,14 +255,32 @@ export class ventanaseries  implements OnInit {
 
   ComprobarPagina(){
     this.invalidP=false;
-    if (this.seriearticulo.some(e=>e.repetidoP==true)) {
-      this.invalidP=true;
-      return of(true);
-    }else{
-      this.invalidP=false;
-      return of(false);
+    // if (this.seriearticulo.some(e=>e.repetidoP==true)) {
+    //   this.invalidP=true;
+    //   return of(true);
+    // }else{
+    //   this.invalidP=false;
+    //   return of(false);
+    // }
+    
+    let i : number = 0;
+
+    if( this.series_vista.length > 0 ){
+      this.seriearticulo.forEach((item=>{
+        this.series_vista.forEach((item2)=>{
+          if(item.serie == item2.serie){
+            this.invalidP=true;
+            return of(true);
+          } 
+        })
+        i++;
+        if(i==this.seriearticulo.length && !this.invalidP){
+          this.invalidP=false;
+          return of(false);
+        }
+      }))
     }
-    // this.invalidP=this.seriearticulo.some(e=>e.repetidoP==true)
+
   }  
 
   ComprobarBD(){
@@ -282,15 +296,22 @@ export class ventanaseries  implements OnInit {
 
   Comprobar(){
     this.EliminarEspacios();
+
+    this.ComprobarPagina();
+    
     return forkJoin(
       this.ComprobarVista(),
-      this.ComprobarPagina(),
+      // this.ComprobarPagina(),
       this.ComprobarBD()
     ).subscribe(res=>{
       // console.log(res);
       this.cargando=false;
     })
     
+  }
+
+  Aceptar() {
+    return this.seriearticulo
   }
 
 }

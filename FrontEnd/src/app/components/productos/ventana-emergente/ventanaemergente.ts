@@ -78,9 +78,7 @@ export class VentanaEmergenteProductos {
     /*Relación de productos*/
 
     this.Servicios.ListarTipoProductos(null,'', '').subscribe(res => {
-      for (let i in res) {
-        this.Tipos.push(res[i]);
-      }
+      this.Tipos=res;
     });
 
     if (this.data) {
@@ -120,11 +118,15 @@ export class VentanaEmergenteProductos {
     });
  
     VentanaTipo.afterClosed().subscribe(res=>{
-      this.Servicios.ListarTipoProductos(null,'', '').subscribe(res => {
-        for (let i in res) {
-          this.Tipos.push(res[i]);
-        }
+      this.Servicios.ListarTipoProductos(null,'', '').subscribe(resultado => {
+        this.Tipos=resultado
       });
+      this.ProductosForm.get('tipo').setValue(res);
+      this.ListarMarcas(this.ProductosForm.value.tipo);
+      this.ProductosForm.get('marca').setValue('');
+      this.ProductosForm.get('modelo').setValue('');
+      this.ProductosForm.controls['marca'].enable();
+      this.ProductosForm.controls['modelo'].disable();
     })
   }
 
@@ -138,6 +140,10 @@ export class VentanaEmergenteProductos {
  
     VentanaMarca.afterClosed().subscribe(res=>{
       this.ListarMarcas(this.ProductosForm.value.tipo);
+      this.ProductosForm.get('marca').setValue(res);
+      this.ListarModelos(this.ProductosForm.value.marca);
+      this.ProductosForm.get('modelo').setValue('');
+      this.ProductosForm.controls['modelo'].enable();
     })
   }
 
@@ -151,6 +157,7 @@ export class VentanaEmergenteProductos {
  
     VentanaModelo.afterClosed().subscribe(res=>{
       this.ListarModelos(this.ProductosForm.value.marca);
+      this.ProductosForm.get('modelo').setValue(res);
     })
   }
 

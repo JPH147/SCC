@@ -384,8 +384,9 @@
           <mat-grid-tile colspan=2 *ngIf="!id_credito">
             <mat-form-field class="columnas-2">
               <input placeholder="Vendedor" matInput [matAutocomplete]="auto" formControlName="vendedor" #Vendedor [readonly]="CreditosForm.value.id_vendedor">
-              <mat-icon color="primary" matSuffix (click)="RemoverVendedor()" *ngIf="CreditosForm.value.id_vendedor"> remove_circle </mat-icon>
-              <mat-autocomplete #auto="matAutocomplete" [displayWith] = "displayVendedor" (optionSelected)="VendedorSeleccionado()">
+              <mat-icon color="primary" matSuffix (click)="RemoverVendedor()" *ngIf="CreditosForm.value.id_vendedor && !hay_presupuesto_vendedor"> remove_circle </mat-icon>
+              <!-- <mat-autocomplete #auto="matAutocomplete" [displayWith] = "displayVendedor" (optionSelected)="VendedorSeleccionado()"> -->
+              <mat-autocomplete #auto="matAutocomplete" (optionSelected)="VendedorSeleccionado()">
                 <mat-option *ngFor="let vendedor of ListadoVendedores" [value]="vendedor">
                   {{vendedor.nombre}}
                 </mat-option>
@@ -404,7 +405,7 @@
             <mat-form-field class="columnas-2">
               <input placeholder="Autorizador" matInput [matAutocomplete]="auto3" formControlName=autorizador #Autorizador [readonly]="CreditosForm.value.id_autorizador">
               <mat-icon color="primary" matSuffix (click)="RemoverAutorizador()" *ngIf="CreditosForm.value.id_autorizador"> remove_circle </mat-icon>
-              <mat-autocomplete #auto3="matAutocomplete" [displayWith] = "displayVendedor" (optionSelected)="AutorizadorSeleccionado()">
+              <mat-autocomplete #auto3="matAutocomplete" (optionSelected)="AutorizadorSeleccionado()">
                 <mat-option *ngFor="let autorizador of ListadoAudorizadores" [value]="autorizador">
                   {{autorizador.nombre}}
                 </mat-option>
@@ -480,7 +481,8 @@
             <button mat-icon-button color="primary" (click)="papeles_editar = true" [disabled]="!papeles" *ngIf="!papeles_editar">
               <mat-icon class="icono-documentos"> edit </mat-icon>
             </button>
-            <button mat-icon-button color="primary" (click)="papeles_editar = false" [disabled]="!papeles" *ngIf="papeles_editar">
+
+            <button mat-icon-button color="primary" (click)="papeles_editar = false" [disabled]="!papeles" *ngIf="papeles_editar && id_credito_editar">
               <mat-icon class="icono-documentos"> close </mat-icon>
             </button>
 
@@ -1178,7 +1180,7 @@
           <mat-form-field class="columnas-1">
             <input matInput [matDatepicker]="InputFechaPago" placeholder="Inicio de pagos" [min]="CreditosForm.value.fecha_credito" formControlName="fecha_pago" (dateChange)="CrearCronograma()" readonly>
             <mat-datepicker-toggle matSuffix [for]="InputFechaPago"></mat-datepicker-toggle>
-            <mat-datepicker #InputFechaPago [disabled]="id_credito"></mat-datepicker>
+            <mat-datepicker #InputFechaPago [disabled]="id_credito || id_presupuesto"></mat-datepicker>
           </mat-form-field>
         </mat-grid-tile>
 
@@ -1209,14 +1211,14 @@
 
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
-            <input matInput placeholder="Capital" formControlName="capital" #InputCapital [readonly]="id_credito || id_tipo==1">
+            <input matInput placeholder="Capital" formControlName="capital" #InputCapital [readonly]="id_credito || id_tipo==1 || id_presupuesto">
             <span matPrefix>S/ &nbsp;</span>
           </mat-form-field>
         </mat-grid-tile>
 
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
-            <input matInput type="number" placeholder="N° de cuotas" max=100 min=0 formControlName="cuotas" #InputCuota [readonly]="id_credito || id_tipo==1">
+            <input matInput type="number" placeholder="N° de cuotas" max=100 min=0 formControlName="cuotas" #InputCuota [readonly]="id_credito || id_tipo==1 || id_presupuesto">
             <mat-error>El número de cuotas debe ser menor a 100.</mat-error>
           </mat-form-field>
         </mat-grid-tile>
@@ -1236,8 +1238,10 @@
 
       <mat-card-subtitle class="titulo-seccion">
         CRONOGRAMA
-        <button mat-icon-button class="icono" *ngIf="!id_credito && editar_cronograma>1" (click)="EditarCronograma(1)"><mat-icon>edit</mat-icon></button>
-        <button mat-icon-button class="icono" *ngIf="!id_credito && editar_cronograma==1" (click)="EditarCronograma(2)"><mat-icon>check</mat-icon></button>
+        <ng-container *ngIf="!id_credito && !id_presupuesto">
+          <button mat-icon-button class="icono" *ngIf="editar_cronograma>1" (click)="EditarCronograma(1)"><mat-icon>edit</mat-icon></button>
+          <button mat-icon-button class="icono" *ngIf="editar_cronograma==1" (click)="EditarCronograma(2)"><mat-icon>check</mat-icon></button>
+        </ng-container>
       </mat-card-subtitle>
 
       <ng-container>
@@ -1336,7 +1340,7 @@
                       editar_cronograma==1 ||
                       diferencia>0.2"
           > Guardar </button>
-          <button  mat-raised-button (click)="Imprimir()"> Print </button>
+          <!-- <button  mat-raised-button (click)="Imprimir()"> Print </button> -->
         </mat-grid-tile>
       </mat-grid-list>
     </mat-card-actions>

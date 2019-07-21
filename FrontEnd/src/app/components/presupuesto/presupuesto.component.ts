@@ -2,8 +2,9 @@ import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angula
 import {CollectionViewer, DataSource} from "@angular/cdk/collections";
 import { Observable, forkJoin,fromEvent, merge, BehaviorSubject, of} from 'rxjs';
 import { catchError, finalize, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { MatSelect, MatPaginator, MatSort } from '@angular/material'
+import { MatSelect, MatPaginator, MatDialog } from '@angular/material'
 import { CreditosService } from '../creditos/creditos.service';
+import {VentanaArchivosComponent } from './ventana-archivos/ventana-archivos.component';
 
 @Component({
   selector: 'app-presupuesto',
@@ -25,6 +26,7 @@ export class PresupuestoComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
+    private Dialogo : MatDialog ,
     private Servicio: CreditosService
   ) { }
 
@@ -56,6 +58,13 @@ export class PresupuestoComponent implements OnInit {
          this.CargarData();
        })
     ).subscribe();
+  }
+
+  VerArchivos(presupuesto){
+    let Ventana = this.Dialogo.open(VentanaArchivosComponent, {
+      data: presupuesto,
+      width: '900px'
+    })
   }
 
   CargarData() {

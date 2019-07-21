@@ -11,7 +11,7 @@
         
         <mat-grid-tile>
           <mat-form-field class="columnas4-1">
-            <input matInput type="text" placeholder="DNI" maxlength="8" #InputDNI [readonly]="cliente_encontrado==1">
+            <input matInput type="text" placeholder="DNI" formControlName="dni" maxlength="8" #InputDNI [readonly]="cliente_encontrado==1">
             <mat-icon color="primary" matSuffix (click)="RemoverCliente()" *ngIf="cliente_encontrado==1"> remove_circle </mat-icon>
             <mat-hint align="end">{{InputDNI.value?.length || 0}}/8</mat-hint>
           </mat-form-field>

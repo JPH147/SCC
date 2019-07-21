@@ -1,0 +1,51 @@
+<mat-card class="card">
+
+  <mat-toolbar color="primary">
+    <mat-toolbar-row>Ver archivos</mat-toolbar-row>
+  </mat-toolbar>
+
+	<mat-card-content>
+
+    <mat-grid-list cols=5 rowHeight="60px">
+      <mat-grid-tile>
+        Autorizacion
+      </mat-grid-tile>
+      <mat-grid-tile>
+        Declaracion jurada
+      </mat-grid-tile>
+      <mat-grid-tile>
+        Transacción
+      </mat-grid-tile>
+      <mat-grid-tile>
+        Tarjeta de socio
+      </mat-grid-tile>
+      <mat-grid-tile>
+        Compromiso de pago
+      </mat-grid-tile>
+    </mat-grid-list>
+
+    <mat-grid-list cols=5 rowHeight="70px">
+      <mat-grid-tile>
+        <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(autorizacion)" [disabled]="!autorizacion"> <mat-icon> arrow_downward </mat-icon> </button>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(ddjj)" [disabled]="!ddjj"> <mat-icon> arrow_downward </mat-icon> </button>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(transaccion)" [disabled]="!transaccion"> <mat-icon> arrow_downward </mat-icon> </button>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(tarjeta)" [disabled]="!tarjeta"> <mat-icon> arrow_downward </mat-icon> </button>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(compromiso)" [disabled]="!compromiso"> <mat-icon> arrow_downward </mat-icon> </button>
+      </mat-grid-tile>
+    </mat-grid-list>
+
+	</mat-card-content>
+
+</mat-card>

@@ -143,19 +143,23 @@ export class VentanaEmergenteModelo {
     if (this.data) {
       if (this.data.productos) {
         this.mensaje = 'Modelo creado satisfactoriamente';
-        this.Servicios.CrearModelo(formulario.value.idmarca, formulario.value.nombre).subscribe();
+        this.Servicios.CrearModelo(formulario.value.idmarca, formulario.value.nombre).subscribe(res=>{
+          this.ventana.close(res['data']);
+        });
       } else {
         this.mensaje = 'Datos actualizados satisfactoriamente';
-        this.Servicios.EditarModelo(this.data.id, formulario.value.idmarca, formulario.value.nombre).subscribe();
+        this.Servicios.EditarModelo(this.data.id, formulario.value.idmarca, formulario.value.nombre).subscribe(res=>{
+          this.ventana.close()
+        });
       }
     }
 
     if (!this.data) {
       this.mensaje = 'Modelo creado satisfactoriamente';
-      this.Servicios.CrearModelo(formulario.value.idmarca, formulario.value.nombre).subscribe();
+      this.Servicios.CrearModelo(formulario.value.idmarca, formulario.value.nombre).subscribe(res=>{
+        this.ventana.close()
+      });
     }
-      this.ModeloForm.reset();
-      this.ventana.close();
   }
 
   Notificacion(message: string, action: string) {

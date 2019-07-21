@@ -28,10 +28,10 @@ export class MenuComponent implements OnInit{
             nombre: "Evaluación",
             path: "evaluacion"
           },
-          // {
-          //   nombre: "Generador de archivos",
-          //   path: ""
-          // },
+          {
+            nombre: "Seguimiento de documentos",
+            path: "seguimiento"
+          },
         ]
       },
       {

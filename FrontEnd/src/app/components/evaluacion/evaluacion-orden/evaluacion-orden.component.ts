@@ -105,40 +105,46 @@ export class EvaluacionOrdenComponent implements OnInit {
   		this.cliente.id,
 			this.tipo,
 			this.fecha,
+			0,
 			this.cuota,
 			this.capital,
 			this.tasa,
 			this.total,
+			"",
+			"",
+			"",
+			"",
+			""
   	).subscribe(res=>{
 
-      console.log(res)
-  		if (res['data']>0) {
-  			this.presupuesto_guardado.emit(true);
-  			this.Notificacion.Snack("Se creó el presupuesto número "+this.numero,"")
-  		}
+      if( res['codigo']==0 ) {
+ 		    if (this.Cronograma.length>0) {
+          this.Cronograma.forEach((item)=>{
+            this.Servicio.CrearPresupuestoCronograma(
+              res['data'],
+              item.monto,
+              item.aporte,
+              item.fecha,
+            ).subscribe()
+          })
+        }
 
-  		if (this.Cronograma.length>0) {
-	  		this.Cronograma.forEach((item)=>{
-	  			this.Servicio.CrearPresupuestoCronograma(
-	  				res['data'],
-	  				item.monto,
-						item.aporte,
-						item.fecha,
-	  			).subscribe()
-	  		})
-  		}
-
-  		if (this.Productos.length>0) {
-	  		this.Productos.forEach((item)=>{
-	  			this.Servicio.CrearPresupuestoCronograma(
-	  				res['data'],
-	  				item.id,
-						item.numero,
-						item.precio,
-	  			).subscribe()
-	  		})
-  		}
-
+  		  // if (this.Productos.length>0) {
+	  	  // 	this.Productos.forEach((item)=>{
+	  	  // 		this.Servicio.CrearPresupuestoCronograma(
+	  	  // 			res['data'],
+	  	  // 			item.id,
+			  // 			item.numero,
+			  // 			item.precio,
+	  	  // 		).subscribe()
+	  	  // 	})
+  		  // }
+        
+  		  if (res['data']>0) {
+  			  this.presupuesto_guardado.emit(true);
+  			  this.Notificacion.Snack("Se creó el presupuesto número "+this.numero,"")
+  		  }
+      }
   	})
 
   }

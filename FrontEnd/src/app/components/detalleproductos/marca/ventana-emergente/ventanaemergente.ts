@@ -56,14 +56,14 @@ export class VentanaEmergenteMarca {
       if (this.data) {
         if (this.data.productos) {
           this.Servicios.ListarTipoProductos(this.data.productos.id_tipo,"","").subscribe(rest=>{
+            this.MarcaForm.get('idtipo').setValue(this.data.productos.id_tipo);
             this.ObtenerArreglo();
-            this.MarcaForm.get('idtipo').setValue(rest[0].id);
           })
         } else {
           this.MarcaForm.get('nombre').setValue(this.data.marca);
           this.Servicios.ListarTipoProductos(this.data.idtipo,"","").subscribe(rest=>{
+            this.MarcaForm.get('idtipo').setValue(this.data.idtipo);
             this.ObtenerArreglo();
-            this.MarcaForm.get('idtipo').setValue(rest[0].id);
           })
         }
       }
@@ -101,19 +101,23 @@ export class VentanaEmergenteMarca {
     if (this.data) {
       if (this.data.productos) {
         this.mensaje = 'Marca creada satisfactoriamente';
-        this.Servicios.CrearMarca(formulario.value.idtipo, formulario.value.nombre).subscribe();
+        this.Servicios.CrearMarca(formulario.value.idtipo, formulario.value.nombre).subscribe(res=>{
+          this.ventana.close(res['data']);
+        });
       } else {
         this.mensaje = 'Datos actualizados satisfactoriamente';
-        this.Servicios.EditarMarca(this.data.id, formulario.value.idtipo, formulario.value.nombre).subscribe();
+        this.Servicios.EditarMarca(this.data.id, formulario.value.idtipo, formulario.value.nombre).subscribe(res=>{
+          this.ventana.close()
+        });
       }
     }
 
     if (!this.data) {
       this.mensaje = 'Marca creada satisfactoriamente';
-      this.Servicios.CrearMarca(formulario.value.idtipo, formulario.value.nombre).subscribe();
+      this.Servicios.CrearMarca(formulario.value.idtipo, formulario.value.nombre).subscribe(res=>{
+        this.ventana.close()
+      });
     }
-      this.MarcaForm.reset();
-      this.ventana.close();
   }
 
   Notificacion(message: string, action: string) {

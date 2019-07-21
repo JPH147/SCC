@@ -21,6 +21,8 @@ import {URLIMAGENES} from '../global/url'
 import {VentanaCronogramaComponent} from './ventana-cronograma/ventana-cronograma.component';
 import {SeleccionarClienteComponent} from '../retorno-vendedores/seleccionar-cliente/seleccionar-cliente.component';
 import { VentanaEmergenteContacto} from '../clientes/ventana-emergentecontacto/ventanaemergentecontacto';
+import { CreditosService } from "../creditos/creditos.service";
+import { SeguimientosService } from "../seguimientos/seguimientos.service";
 
 @Component({
   selector: 'app-ventas',
@@ -37,6 +39,7 @@ export class VentasComponent implements OnInit {
   public ruta:string;
   public ListadoCliente: ClienteDataSource;
   public LstTipoDocumento: TipoDocumento[] = [];
+  public Couriers: Array<any> = [];
   public LstCliente: Array<any> = [];
   public LstCargo: Array<any> = [];
   public VentasForm: FormGroup;
@@ -86,6 +89,7 @@ export class VentasComponent implements OnInit {
   public letra: string;
   public autorizacion: string;
   public otros: string;
+  public papeles : string = "";
 
   public foto_nuevo: string;
   public dni_nuevo: string;
@@ -96,6 +100,7 @@ export class VentasComponent implements OnInit {
   public letra_nuevo: string;
   public autorizacion_nuevo: string;
   public otros_nuevo: string;
+  public papeles_antiguo : string = "";
 
   public foto_antiguo: string;
   public dni_antiguo: string;
@@ -106,6 +111,7 @@ export class VentasComponent implements OnInit {
   public letra_antiguo: string;
   public autorizacion_antiguo: string;
   public otros_antiguo: string;
+  public papeles_nuevo : string = "";
 
   public foto_editar: boolean= false;
   public dni_editar: boolean= false;
@@ -116,6 +122,7 @@ export class VentasComponent implements OnInit {
   public letra_editar: boolean= false;
   public autorizacion_editar: boolean= false;
   public otros_editar: boolean= false;
+  public papeles_editar : boolean = false;
 
   @ViewChild('InputFechaPago') FiltroFecha: ElementRef;
   @ViewChild('InputInicial') FiltroInicial: ElementRef;
@@ -143,7 +150,9 @@ export class VentasComponent implements OnInit {
     private route: ActivatedRoute,
     private location: Location,
     private Notificacion: Notificaciones,
-    private router: Router
+    private router: Router,
+    private CServicio : CreditosService,
+    private SServicio : SeguimientosService,
   ) { }
 
   ngOnInit() {
@@ -162,6 +171,7 @@ export class VentasComponent implements OnInit {
     this.ListarTipoPago();
     this.ListarTalonarioSerie();
     this.ListarSucursales();
+    this.ListarCouriers();
 
     this.Columnas= ['numero', 'fecha_vencimiento_ver', 'monto_cuota_ver'];
     this.ListarVendedor("");
@@ -175,6 +185,7 @@ export class VentasComponent implements OnInit {
   
         // Si es una venta nueva
         if(params['idcliente']){
+          this.papeles_editar = true;
           this.idcliente = +params['idcliente'];
           this.ObtenerClientexId(this.idcliente);
           this.ObtenerDireccion(this.idcliente);
@@ -206,6 +217,8 @@ export class VentasComponent implements OnInit {
           this.idventa_editar=params['ideditar'];
           this.SeleccionarVentaxId(this.idventa_editar)
         }
+      } else {
+        this.papeles_editar = true;
       }
    });
 
@@ -343,7 +356,23 @@ export class VentasComponent implements OnInit {
         })
       }
 
+      if( res['courier'].id ){
+        this.VentasForm.get('papeles').setValue(true);
+        this.VentasForm.get('papeles_id').setValue(res['courier'].id);
+        this.VentasForm.get('papeles_fecha_envio').setValue(res['courier'].fecha);
+        this.VentasForm.get('papeles_courier').setValue(res['courier'].id_courier);
+        this.VentasForm.get('papeles_seguimiento').setValue(res['courier'].numero_seguimiento);
+        this.VentasForm.get('papeles_observaciones').setValue(res['courier'].observacion);
+        res['courier'].foto !="" ? this.papeles=URLIMAGENES.carpeta+'venta/'+res['courier'].foto : null;
+      }
+
       if (this.idventa_editar) {
+
+        if( res['courier'].id ){
+          this.VentasForm.get('papeles_courier').setValue(res['courier'].id_courier);
+          this.papeles_antiguo=res['courier'].foto;
+          res['courier'].foto !="" ? this.papeles_editar=false : this.papeles_editar=true;
+        }
 
         this.VentasForm.get('sucursal').setValue(res.id_sucursal);
         this.edicion_sucursal=res.id_sucursal;
@@ -553,6 +582,19 @@ export class VentasComponent implements OnInit {
         Validators.pattern('[0-9- ]+')
       ]],
       'observaciones': ["", [
+      ]],
+      // Refente al envío de papeles
+      papeles: [{value: false, disabled: false},[
+      ]],
+      papeles_id: [{value: false, disabled: false},[
+      ]],
+      papeles_fecha_envio: [{value: new Date(), disabled: false},[
+      ]],
+      papeles_courier: [{value: "", disabled: false},[
+      ]],
+      papeles_seguimiento: [{value: "", disabled: false},[
+      ]],
+      papeles_observaciones: [{value: "", disabled: false},[
       ]],
       productos: this.FormBuilder.array([this.CrearProducto()]),
       garantes: this.FormBuilder.array([]),
@@ -1164,6 +1206,14 @@ export class VentasComponent implements OnInit {
     }
   }
 
+  SubirPapeles(evento){
+    if(this.idventa_editar){
+      this.papeles_nuevo = evento.serverResponse.response.body.data;
+    }else{
+      this.papeles = evento.serverResponse.response.body.data;
+    }
+  }
+  
   ResetearFormArray(formArray){
     if (formArray) {
       formArray.reset();
@@ -1273,6 +1323,16 @@ export class VentasComponent implements OnInit {
     })
   }
 
+  ListarCouriers(){
+    this.ServiciosGenerales.ListarCourier("",1,50).subscribe(res=>{
+      this.Couriers = res['data'].courier
+    })
+  }
+
+  HayPapeles(evento){
+    this.VentasForm.get('papeles').setValue(evento.checked)
+  }
+
   Guardar(formulario){
     
     this.Cargando.next(true);
@@ -1297,7 +1357,8 @@ export class VentasComponent implements OnInit {
       this.ServiciosGenerales.RenameFile(this.planilla,'PLANILLA',random.toString(),"venta"),
       this.ServiciosGenerales.RenameFile(this.letra,'LETRA',random.toString(),"venta"),
       this.ServiciosGenerales.RenameFile(this.autorizacion,'AUTORIZACION',random.toString(),"venta"),
-      this.ServiciosGenerales.RenameFile(this.otros,'OTROS',random.toString(),"venta")
+      this.ServiciosGenerales.RenameFile(this.otros,'OTROS',random.toString(),"venta"),
+      this.ServiciosGenerales.RenameFile(this.papeles,'PAPELES',random.toString(),"venta")
     ).subscribe(resultado=>{
       console.log(resultado)
       this.Servicio.CrearVenta(
@@ -1347,7 +1408,18 @@ export class VentasComponent implements OnInit {
           // }
         });
         
-        // this.Servicio.CrearComisionVendedor(res['data'], formulario.value.vendedor.id, formulario.value.montototal).subscribe();
+        // Se agregan los datos del courier
+        if( this.VentasForm.value.papeles ){
+          this.CServicio.CrearCourier(
+            res['data'],
+            0,
+            this.VentasForm.value.papeles_courier,
+            this.VentasForm.value.papeles_fecha_envio,
+            this.VentasForm.value.papeles_seguimiento,
+            this.papeles_editar ? resultado[9].mensaje : this.papeles_antiguo,
+            this.VentasForm.value.papeles_observaciones
+          ).subscribe();
+        }
          
         // Si la transacción es producto de un canje, se devuelven los productos al almacén
         if (this.venta_canje) {
@@ -1411,7 +1483,8 @@ export class VentasComponent implements OnInit {
       this.ServiciosGenerales.RenameFile(this.planilla_nuevo,'PLANILLA',random.toString(),"venta"),
       this.ServiciosGenerales.RenameFile(this.letra_nuevo,'LETRA',random.toString(),"venta"),
       this.ServiciosGenerales.RenameFile(this.autorizacion_nuevo,'AUTORIZACION',random.toString(),"venta"),
-      this.ServiciosGenerales.RenameFile(this.otros_nuevo,'OTROS',random.toString(),"venta")
+      this.ServiciosGenerales.RenameFile(this.otros_nuevo,'OTROS',random.toString(),"venta"),
+      this.ServiciosGenerales.RenameFile(this.papeles_nuevo,'PAPELES',random.toString(),"venta"),
     ).subscribe(resultado=>{
       // console.log(resultado)
 
@@ -1453,12 +1526,6 @@ export class VentasComponent implements OnInit {
         if (formulario.value.contrato!=this.id_talonario_editar) {
           this.ServiciosGenerales.ActualizarEstadoTalonario(this.id_talonario_editar,1).subscribe();
         }
-
-        // Se elimina el cronograma anterior
-        // this.Servicio.EliminarCronogramaVenta(this.idventa_editar).subscribe()
-
-        // Se eliminan las comisiones
-        // this.Servicio.EliminarComisionVenta(this.idventa_editar).subscribe()
 
         // Se crean los productos en el almacén
         formulario.value.productos.forEach((item)=>{
@@ -1509,6 +1576,17 @@ export class VentasComponent implements OnInit {
             })
           })
 
+        }
+
+        if( this.VentasForm.value.papeles ){
+          this.SServicio.Actualizar(
+            this.VentasForm.value.papeles_id,
+            this.VentasForm.value.papeles_courier,
+            this.VentasForm.value.papeles_fecha_envio,
+            this.VentasForm.value.papeles_seguimiento,
+            this.papeles_editar ? resultado[9].mensaje : this.papeles_antiguo,
+            this.VentasForm.value.papeles_observaciones
+          ).subscribe();
         }
 
         setTimeout(()=>{

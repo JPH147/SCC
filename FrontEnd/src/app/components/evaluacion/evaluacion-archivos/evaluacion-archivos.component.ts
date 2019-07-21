@@ -3,6 +3,7 @@ import { Observable , fromEvent } from 'rxjs';
 import { debounceTime , distinctUntilChanged , tap } from 'rxjs/operators';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
+import { Router } from '@angular/router';
 import { EvaluacionService } from '../evaluacion.service';
 import { ServiciosDirecciones } from '../../global/direcciones';
 import { ServiciosTelefonos } from '../../global/telefonos';
@@ -11,6 +12,7 @@ import { ServiciosGenerales } from '../../global/servicios';
 import { TrabajadoresService } from '../../trabajadores/trabajadores.service';
 import { VentanaEmergenteContacto} from '../../clientes/ventana-emergentecontacto/ventanaemergentecontacto';
 import { VentanaEmergenteClientes } from '../../clientes/ventana-emergente/ventanaemergente';
+import {Notificaciones} from '../../global/notificacion';
 import * as moment from 'moment';
 import {saveAs} from 'file-saver';
 
@@ -40,6 +42,8 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
   public ListadoVendedores : Array<any>;
   public ListadoTrabajadores : Array<any>;
   public cronograma : Array<any>;
+  public productos : Array<any> = [];
+  public productos_generar : Array<any> = [];
 
   public informacion_cooperativa : any;
   public cooperativa_nombre : string ;
@@ -61,13 +65,15 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
 
   constructor(
     private Builder : FormBuilder,
+    private Dialogo : MatDialog,
+    private router : Router,
     private Servicios : EvaluacionService,
     private DServicios : ServiciosDirecciones,
     private TServicios: ServiciosTelefonos,
     private CServicios : ClienteService,
     private ServiciosGenerales : ServiciosGenerales,
     private TraabajadoresServicios : TrabajadoresService,
-    private Dialogo : MatDialog
+    private Notificacion: Notificaciones
   ) { }
 
   ngOnInit() {
@@ -167,6 +173,10 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
       ]],
       subsede : [ { value : null , disabled : false } , [
       ]],
+      capital : [ { value : null , disabled : false } , [
+      ]],
+      interes : [ { value : null , disabled : false } , [
+      ]],
       total : [ { value : null , disabled : false } , [
       ]],
       monto_asociado : [ { value : null , disabled : false } , [
@@ -200,9 +210,9 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
       fecha_letras : [ { value : null , disabled : false } , [
       ]],
       id_vendedor : [ { value : null , disabled : false } , [
+        Validators.required
       ]],
       vendedor : [ { value : null , disabled : false } , [
-        Validators.required
       ]],
       vendedor_dni : [ { value : "" , disabled : false } , [
       ]],
@@ -222,7 +232,7 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
 
   ActualizarInformacion(){
     this.informacion_venta.subscribe(res=>{
-      // console.log(res);
+      console.log(res);
       this.EvaluacionArchivosForm.get('fecha_letras').setValue(res.fecha);
       if(res.cliente){
         this.cliente_afiliado=res['afiliado'];
@@ -247,15 +257,17 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
         this.EvaluacionArchivosForm.get('casilla').setValue(res.cliente.casilla)
         this.EvaluacionArchivosForm.get('email').setValue(res.cliente.email)
         this.EvaluacionArchivosForm.get('subsede').setValue(res.cliente.subsede)
-        // this.EvaluacionArchivosForm.get('cuenta_banco').setValue(res.cliente.nombre_banco)
-        // this.EvaluacionArchivosForm.get('cuenta_numero').setValue(res.cliente.cuenta_numero)
         this.EvaluacionArchivosForm.get('cargo').setValue(res.cargo_nombre + " " +res.cargo_estado);
+        this.EvaluacionArchivosForm.get('interes').setValue(res.interes);
+        this.EvaluacionArchivosForm.get('capital').setValue(res.capital);
         this.EvaluacionArchivosForm.get('total').setValue(res.total);
         this.EvaluacionArchivosForm.get('monto_asociado').setValue(res.aporte);
         this.EvaluacionArchivosForm.get('monto_cuota').setValue(res.cronograma[0].total);
         this.EvaluacionArchivosForm.get('numero_cuotas').setValue(res.cuotas);
         this.EvaluacionArchivosForm.get('tipo').setValue(res.venta+1);
         this.cronograma=res.cronograma;
+        this.productos=res.productos;
+        this.GenerarInputProductos();
       }
     })
   }
@@ -427,6 +439,13 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
     });
   }
 
+  GenerarInputProductos(){
+    this.productos.forEach((item=>{
+      this.productos_generar.push({descripcion : item.descripcion, serie : ""});
+    }))
+    console.log(this.productos.length, this.productos_generar)
+  }
+
   GenerarArchivos(){
     let ahora = (new Date()).getTime();
     this.GenerarDDJJ("DDJJ_"+ahora);
@@ -447,7 +466,7 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
       this.EvaluacionArchivosForm.value.lugar,
       this.EvaluacionArchivosForm.value.fecha_letras
     ).subscribe(res=>{
-      console.log(res)
+      // console.log(res)
       if(res['codigo']==0){
         this.generados=true;
         this.ddjj=res['data'];
@@ -477,7 +496,7 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
       this.EvaluacionArchivosForm.value.lugar,
       this.EvaluacionArchivosForm.value.fecha_letras
     ).subscribe(res=>{
-      console.log(res)
+      // console.log(res)
       if(res['codigo']==0){
         this.generados=true;
         this.autorizacion=res['data'];
@@ -522,9 +541,11 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
       this.EvaluacionArchivosForm.value.id_trabajador ? this.EvaluacionArchivosForm.value.trabajador_cargo : "",
       this.EvaluacionArchivosForm.value.vendedor,
       this.EvaluacionArchivosForm.value.vendedor_dni,
-      this.cronograma
+      this.cronograma,
+      this.EvaluacionArchivosForm.value.tipo,
+      this.productos_generar
     ).subscribe(res=>{
-      // console.log(res);
+      console.log(res);
       this.generados=true;
       this.transaccion=res['data'];
     })
@@ -543,7 +564,7 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
       this.cooperativa_contacto,
       this.EvaluacionArchivosForm.value.fecha_letras
     ).subscribe(res=>{
-      console.log(res)
+      // console.log(res)
       if(res['codigo']==0){
         this.generados=true;
         this.compromiso=res['data'];
@@ -568,7 +589,7 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
       this.EvaluacionArchivosForm.value.telefono_numero,
       this.EvaluacionArchivosForm.value.monto_asociado,
     ).subscribe(res=>{
-      console.log(res)
+      // console.log(res)
       if(res['codigo']==0){
         this.generados=true;
         this.tarjeta=res['data'];
@@ -581,6 +602,62 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
       console.log(res);
       saveAs(res, nombre_archivo+'.docx');
     })
+  }
+
+  Guardar(){
+
+    this.Servicios.CrearPresupuesto(
+      this.EvaluacionArchivosForm.value.id_cliente,
+      this.EvaluacionArchivosForm.value.tipo-1,
+      this.EvaluacionArchivosForm.value.fecha,
+      this.EvaluacionArchivosForm.value.id_vendedor,
+      this.EvaluacionArchivosForm.value.numero_cuotas,
+      this.EvaluacionArchivosForm.value.capital,
+      this.EvaluacionArchivosForm.value.interes,
+      this.EvaluacionArchivosForm.value.total,
+      this.autorizacion,
+      this.ddjj,
+      this.transaccion,
+      this.tarjeta,
+      this.compromiso,
+    ).subscribe(res=>{
+      console.log(res);
+      if( res['codigo']==0 ) {
+          if (this.cronograma.length>0) {
+          this.cronograma.forEach((item)=>{
+            this.Servicios.CrearPresupuestoCronograma(
+              res['data'],
+              item.monto,
+              item.aporte,
+              item.fecha,
+            ).subscribe()
+          })
+        }
+
+        setTimeout(()=>{
+          this.router.navigate(['/creditos','nuevo',res['data']])
+        },500)
+
+        // if (this.Productos.length>0) {
+        // 	this.Productos.forEach((item)=>{
+        // 		this.Servicio.CrearPresupuestoCronograma(
+        // 			res['data'],
+        // 			item.id,
+        // 			item.numero,
+        // 			item.precio,
+        // 		).subscribe()
+        // 	})
+        // }
+        
+        // if (res['data']>0) {
+        //   this.presupuesto_guardado.emit(true);
+          this.Notificacion.Snack("Se creó el presupuesto","")
+        // }
+      } else {
+        this.Notificacion.Snack("Ocurrió un error al crear el presupuesto","")
+      }
+    })
+  
   }
 
 }

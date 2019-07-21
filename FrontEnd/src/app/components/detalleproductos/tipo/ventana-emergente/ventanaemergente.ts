@@ -89,19 +89,23 @@ export class VentanaEmergenteTipo {
     if(this.data){
       if (this.data.productos) {
         this.mensaje='Tipo de Producto creado satisfactoriamente';
-        this.Servicios.CrearTipoProducto(formulario.value.nombre, formulario.value.idunidadmedida).subscribe();
+        this.Servicios.CrearTipoProducto(formulario.value.nombre, formulario.value.idunidadmedida).subscribe(res=>{
+          this.ventana.close()
+        });
       } else {
         this.mensaje='Datos actualizados satisfactoriamente';
-        this.Servicios.EditarTipoProducto(this.data.id,formulario.value.nombre, formulario.value.idunidadmedida).subscribe();
+        this.Servicios.EditarTipoProducto(this.data.id,formulario.value.nombre, formulario.value.idunidadmedida).subscribe(res=>{
+          this.ventana.close()
+        });
       }
     }
 
     if(!this.data){
       this.mensaje='Tipo de Producto creado satisfactoriamente';
-      this.Servicios.CrearTipoProducto(formulario.value.nombre, formulario.value.idunidadmedida).subscribe();
+      this.Servicios.CrearTipoProducto(formulario.value.nombre, formulario.value.idunidadmedida).subscribe(res=>{
+        this.ventana.close(res['data']);
+      });
     }
-      this.TipoForm.reset();
-      this.ventana.close()
   }
 
   Notificacion(message: string, action: string) {

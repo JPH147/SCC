@@ -40,13 +40,17 @@ export class ImagenProductoComponent {
     SubirFoto() {
       if ( this.data) {
         // console.log(file);
-        this.Servicios.RenameFile(this.file.serverResponse.response.body.data, 'PRODUCTO', this.data.id+"-"+Math.floor(Math.random() * 100000),"producto").subscribe( res => {
-          if (res) {
-            this.ProductoServicios.ActualizarFoto(this.data.id, res.mensaje).subscribe(res=>{
-              this.ventana.close()
-            });
-          }
-        });
+        if(this.file) {
+          this.Servicios.RenameFile(this.file.serverResponse.response.body.data, 'PRODUCTO', this.data.id+"-"+Math.floor(Math.random() * 100000),"producto").subscribe( res => {
+            if (res) {
+              this.ProductoServicios.ActualizarFoto(this.data.id, res.mensaje).subscribe(res=>{
+                this.ventana.close()
+              });
+            }
+          });
+        } else {
+          this.ventana.close()
+        }
       }
       // console.log(file.serverResponse.response._body);
       // console.log(this.data);

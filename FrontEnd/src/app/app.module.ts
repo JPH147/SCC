@@ -134,6 +134,10 @@ import { TalonariosComponent } from './components/talonarios/talonarios.componen
 import { VentanaTalonarioComponent } from './components/talonarios/ventana-talonario/ventana-talonario.component';
 import { EvaluacionArchivosComponent } from './components/evaluacion/evaluacion-archivos/evaluacion-archivos.component';
 import { PresupuestoComponent } from './components/presupuesto/presupuesto.component';
+import { VentanaArchivosComponent } from './components/presupuesto/ventana-archivos/ventana-archivos.component';
+import { SeguimientosComponent } from './components/seguimientos/seguimientos.component';
+import { VentanaSeguimientosComponent } from './components/seguimientos/ventana-seguimientos/ventana-seguimientos.component';
+import { VentanaEntregaSeguimientosComponent } from './components/seguimientos/ventana-entrega-seguimientos/ventana-entrega-seguimientos.component';
 
 @NgModule({
   imports: [
@@ -272,7 +276,11 @@ import { PresupuestoComponent } from './components/presupuesto/presupuesto.compo
     VentanaVendedorComponent,
     VentanaTalonarioComponent,
     EvaluacionArchivosComponent,
-    PresupuestoComponent
+    PresupuestoComponent,
+    VentanaArchivosComponent,
+    SeguimientosComponent,
+    VentanaSeguimientosComponent,
+    VentanaEntregaSeguimientosComponent
    ],
   entryComponents: [
     AppComponent,
@@ -315,7 +323,10 @@ import { PresupuestoComponent } from './components/presupuesto/presupuesto.compo
     SeleccionarClienteComponent,
     VentanaTrabajadoresComponent,
     VentanaVendedorComponent,
-    VentanaTalonarioComponent
+    VentanaTalonarioComponent,
+    VentanaArchivosComponent,
+    VentanaSeguimientosComponent,
+    VentanaEntregaSeguimientosComponent
   ],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider, Notificaciones,{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}]

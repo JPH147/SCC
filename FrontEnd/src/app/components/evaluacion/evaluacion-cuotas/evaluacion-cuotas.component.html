@@ -7,7 +7,7 @@
 
       <mat-grid-tile>
         <mat-form-field>
-          <input type="number" matInput placeholder="Capital" [(ngModel)]="capital" #InputCapital>
+          <input type="number" matInput placeholder="Capital" [(ngModel)]="capital" #InputCapital [readonly]="tipo==2">
         </mat-form-field>
         <button mat-icon-button color="primary" *ngIf="tipo==2" (click)="AgregarProducto()"><mat-icon>add</mat-icon></button>
       </mat-grid-tile>
@@ -34,11 +34,11 @@
       </mat-grid-tile>
 
       <mat-grid-tile>
-        <mat-checkbox color="primary" [(ngModel)]="interes_por_dia" (change)="CambioInteresDiario($event)">Interés por día</mat-checkbox>
+        <mat-checkbox color="primary" [(ngModel)]="interes_por_dia" (change)="CambioInteresDiario($event)" disabled>Interés por día</mat-checkbox>
       </mat-grid-tile>
 
       <mat-grid-tile>
-        <mat-checkbox color="primary" [(ngModel)]="pago_proximo_mes" (change)="CambioModoPago($event)">Iniciar el próximo mes</mat-checkbox>
+        <mat-checkbox color="primary" [(ngModel)]="pago_proximo_mes" (change)="CambioModoPago($event)" disabled>Iniciar el próximo mes</mat-checkbox>
       </mat-grid-tile>
 
       <mat-grid-tile>

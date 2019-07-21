@@ -83,7 +83,7 @@ export class CreditosService {
       .set('prpagina',pagina_inicio.toString())
       .set('prtotalpagina',pagina_final.toString())
 
-    return this.http.get(this.url + 'credito/read-presupuesto.php', {params})
+    return this.http.get(this.url + 'presupuesto/read.php', {params})
     .pipe(map(res => {
       if (res['codigo'] === 0) {
         return res;
@@ -111,6 +111,23 @@ export class CreditosService {
       }
     }))
 
+  }
+
+  SeleccionarPresupuesto(
+    id: number ,
+  ){
+    let params = new HttpParams()
+      .set("prid", id.toString())
+
+    return this.http.get(this.url + 'presupuesto/readxid.php', { params })
+    .pipe(map(res=>{
+      if (res['codigo'] === 0) {
+        return res['data'];
+      } else {
+        console.log('No hay datos que mostrar');
+        return [];
+      }
+    }))
   }
 
   Crear(
@@ -246,6 +263,7 @@ export class CreditosService {
   }
 
   CrearCourier(
+    id_venta : number ,
     id_credito : number,
     id_courier : number,
     fecha : Date,
@@ -254,6 +272,7 @@ export class CreditosService {
     observacion : string,
   ){
     let params = new HttpParams()
+      .set('prventa',id_venta.toString())
       .set('prcredito',id_credito.toString())
       .set('prcourier',id_courier.toString())
       .set('prfecha',moment(fecha).format("YYYY-MM-DD"))
@@ -263,7 +282,7 @@ export class CreditosService {
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-    return this.http.post(this.url + 'credito/create-courier.php', params, {headers: headers});
+    return this.http.post(this.url + 'seguimiento/crear.php', params, {headers: headers});
   }
 
   Actualizar(

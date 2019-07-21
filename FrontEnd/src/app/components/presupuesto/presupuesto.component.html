@@ -53,34 +53,34 @@
 
       <ng-container matColumnDef="numero">
         <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
-        <mat-cell *matCellDef="let credito"> {{credito.numero}} </mat-cell>
+        <mat-cell *matCellDef="let presupuesto"> {{presupuesto.numero}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="cliente">
         <mat-header-cell *matHeaderCellDef> Cliente </mat-header-cell>
-        <mat-cell *matCellDef="let credito"> {{credito.cliente}}</mat-cell>
+        <mat-cell *matCellDef="let presupuesto"> {{presupuesto.cliente}}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="tipo">
         <mat-header-cell *matHeaderCellDef> Tipo </mat-header-cell>
-        <mat-cell *matCellDef="let credito"> {{credito.tipo}} </mat-cell>
+        <mat-cell *matCellDef="let presupuesto"> {{presupuesto.tipo}} </mat-cell>
       </ng-container>
       
       <ng-container matColumnDef="fecha">
         <mat-header-cell *matHeaderCellDef> Fecha </mat-header-cell>
-        <mat-cell *matCellDef="let credito"> {{credito.fecha | date:'dd/MM/yyyy'}} </mat-cell>
+        <mat-cell *matCellDef="let presupuesto"> {{presupuesto.fecha | date:'dd/MM/yyyy'}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="capital">
         <mat-header-cell *matHeaderCellDef> Capital </mat-header-cell>
-        <mat-cell *matCellDef="let credito"> {{credito.capital | currency:'S/.' }} </mat-cell>
+        <mat-cell *matCellDef="let presupuesto"> {{presupuesto.capital | currency:'S/.' }} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
-        <mat-cell *matCellDef="let credito">
-          <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="['ver', credito.id]"><mat-icon> visibility </mat-icon></button>
-          <button mat-icon-button color="primary" matTooltip="Editar" [disabled]="credito.estado==2 || credito.tipo_credito == 'Aporte de socio'" [routerLink]="['editar', credito.id]"><mat-icon> edit </mat-icon></button>
+        <mat-cell *matCellDef="let presupuesto">
+          <button mat-icon-button color="primary" matTooltip="Ver documentos" (click)="VerArchivos(presupuesto)"><mat-icon> visibility </mat-icon></button>
+          <button mat-icon-button color="primary" matTooltip="Hacer crédito" [routerLink]="['/creditos', 'nuevo', presupuesto.id]"><mat-icon> forward </mat-icon></button>
         </mat-cell>
       </ng-container>
 

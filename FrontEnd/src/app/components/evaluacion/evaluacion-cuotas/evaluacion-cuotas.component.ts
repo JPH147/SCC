@@ -140,12 +140,13 @@ export class EvaluacionCuotasComponent implements OnInit {
 
   CambioModoPago(evento){
     this.pago_proximo_mes=evento.checked;
-    if (this.pago_proximo_mes) {
+    if ( evento.checked ) {
       this.fecha_inicio=moment(this.fecha_prestamo).add((1), 'months').toDate();
-    }else{
+      // this.CalcularPagos();
+    } else {
       this.fecha_inicio=this.fecha_prestamo;
+      // this.CalcularPagos();
     }
-    this.CalcularPagos();
   }
 
   CambioInteresDiario(evento){
@@ -161,6 +162,7 @@ export class EvaluacionCuotasComponent implements OnInit {
   CambioTipoVenta(evento){
     if (evento.value==1) {
       this.aporte_considerado=this.aporte;
+      this.Productos=[];
     }else{
       this.aporte_considerado=0;
     }
@@ -250,7 +252,7 @@ export class EvaluacionCuotasComponent implements OnInit {
     
     let Ventana = this.Dialogo.open(AgregarProductoComponent,{
       width: '1200px',
-      data: {capital: this.capital, productos: this.Productos}
+      data: {capital: this.capital, productos: this.Productos, ocultar_almacen: true}
     })
 
     Ventana.afterClosed().subscribe(res=>{

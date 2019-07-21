@@ -1,12 +1,13 @@
-import {Component, Inject, OnInit, AfterViewInit} from '@angular/core';
+import {Component, Inject, OnInit, AfterViewInit, ElementRef, ViewChild} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {FormControl, FormGroup, FormBuilder,FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {ServiciosGenerales, Institucion, Sede, Subsede} from '../../global/servicios';
-import { NgControl } from '@angular/forms';
+import { fromEvent } from 'rxjs';
 import {ClienteService} from '../clientes.service';
 import {ServiciosDirecciones} from '../../global/direcciones';
 import {ServiciosTelefonos} from '../../global/telefonos';
+import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-ventanaemergente',
@@ -18,6 +19,7 @@ import {ServiciosTelefonos} from '../../global/telefonos';
 // tslint:disable-next-line:component-class-suffix
 export class VentanaEmergenteClientes {
   
+  @ViewChild('InputCliente') FiltroCliente : ElementRef;
   public selectedValue: string;
   public ClientesForm: FormGroup;
   public Sede: Sede[] = [];
@@ -28,22 +30,21 @@ export class VentanaEmergenteClientes {
   public Distritos: Array<any>;
   public Cargos: Array<any>;
   public Estados: Array<any>;
+  public cliente_nuevo : number = 3;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
     public ventana: MatDialogRef<VentanaEmergenteClientes>,
-    // tslint:disable-next-line:no-shadowed-variable
     private FormBuilder: FormBuilder,
     private Servicios: ServiciosGenerales,
     private ClienteServicios: ClienteService,
     private ServicioDireccion: ServiciosDirecciones,
-    private ServicioTelefono: ServiciosTelefonos
-    ) {}
+    private ServicioTelefono: ServiciosTelefonos,
+  ) {}
 
   onNoClick(): void {
     this.ventana.close();
   }
-
 
   ngOnInit() {
 
@@ -62,6 +63,20 @@ export class VentanaEmergenteClientes {
     if (this.data) {
       this.AsignarInformacion();
     }
+  }
+
+  ngAfterViewInit(){
+    fromEvent(this.FiltroCliente.nativeElement, 'keyup')
+    .pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      tap(()=>{
+        console.log(this.FiltroCliente.nativeElement.value.length);
+        if( this.FiltroCliente.nativeElement.value.length == 8 ) {
+          this.VerificarDNI(this.FiltroCliente.nativeElement.value)
+        }
+      })
+    ).subscribe()
   }
 
   CrearFormulario(){
@@ -135,6 +150,17 @@ export class VentanaEmergenteClientes {
         Validators.pattern('[0-9- ]+')
       ]]
     });
+  }
+
+  VerificarDNI(dni){
+    this.ClienteServicios.BuscarClienteDNI(dni).subscribe(res=>{
+      console.log(res);
+      if(res['codigo']==1){
+        this.cliente_nuevo = 1;
+      } else {
+        this.cliente_nuevo = 2;
+      }
+    })
   }
 
   AsignarInformacion(){

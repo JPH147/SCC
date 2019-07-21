@@ -23,7 +23,7 @@
 
             <mat-grid-tile>
               <mat-form-field class="input-ventana">
-                <input matInput placeholder="DNI"  formControlName="dni" maxlength="8" >
+                <input matInput placeholder="DNI"  formControlName="dni" maxlength="8" #InputCliente>
                 <mat-error *ngIf="ClientesForm.get('dni').invalid">Debes escribir 8 dígitos</mat-error>
               </mat-form-field>
             </mat-grid-tile>
@@ -210,8 +210,13 @@
 
       <mat-card-actions>
         <mat-grid-list cols=1 rowHeight="65px">
+
+          <mat-grid-tile *ngIf="cliente_nuevo==2">
+            <mat-error> El DNI ya se ha registrado anteriormente. </mat-error>
+          </mat-grid-tile>
+
           <mat-grid-tile>
-            <button type="submit" mat-raised-button color="primary" [disabled]="ClientesForm.invalid" matTooltip="Grabar"> Guardar </button>
+            <button type="submit" mat-raised-button color="primary" [disabled]="ClientesForm.invalid || cliente_nuevo==2" matTooltip="Grabar"> Guardar </button>
             <!-- <button type="button" mat-raised-button (click)="Imprimir()">Imprimir</button> -->
           </mat-grid-tile>
         </mat-grid-list>

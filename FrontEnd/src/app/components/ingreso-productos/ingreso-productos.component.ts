@@ -607,7 +607,7 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
                     1,
                     formulario.value.proveedor.id,
                     formulario.value.fecingreso,
-                    formulario.value.docReferencia == "" ? "Sin documento" : formulario.value.docReferencia,
+                    formulario.value.docReferencia == "" ? ( this.documento_serie+"-"+this.documento_numero ) : formulario.value.docReferencia,
                     this.documento_numero
                   ).subscribe (res => {
                     let id_cabecera = res['data'];

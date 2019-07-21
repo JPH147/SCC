@@ -33,9 +33,9 @@ export class AgregarProductoComponent implements OnInit {
   ngOnInit() {
 
   	this.Productos=this.data.productos;
-  	this.GServicios.ListarAlmacen().subscribe(res=>{
-  		this.Almacenes=res;
-  	})
+  	// this.GServicios.ListarAlmacen().subscribe(res=>{
+  	// 	this.Almacenes=res;
+  	// })
 
   	this.ListadoProductos = new AgregarProductosDataSource(this.Servicio);
   	this.ListadoProductos.CargarInformacion("",1,this.Productos);
