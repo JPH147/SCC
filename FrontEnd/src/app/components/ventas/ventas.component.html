@@ -430,7 +430,7 @@
         <mat-grid-tile colspan=2 *ngIf="idventa || VentasForm.value.id_vendedor">
           <mat-form-field class="columnas-2">
             <input matInput type="text" placeholder="Vendedor" formControlName="vendedor" readonly #Vendedor>
-            <mat-icon color="primary" matSuffix (click)="RemoverVendedor()" *ngIf="!idventa"> remove_circle </mat-icon>
+            <mat-icon color="primary" matSuffix (click)="RemoverVendedor()" *ngIf="!idventa && !hay_presupuesto_vendedor"> remove_circle </mat-icon>
           </mat-form-field>
         </mat-grid-tile>
 
@@ -652,7 +652,7 @@
           <mat-form-field class="columnas-1">
              <input matInput [matDatepicker]="InputFechaPago" placeholder="Inicio de pagos" [min]="VentasForm.value.fechaventa" formControlName="fechapago" (dateChange)="CrearCronograma()" readonly>
              <mat-datepicker-toggle matSuffix [for]="InputFechaPago"></mat-datepicker-toggle>
-             <mat-datepicker #InputFechaPago [disabled]="idventa"></mat-datepicker>
+             <mat-datepicker #InputFechaPago [disabled]="idventa || id_presupuesto"></mat-datepicker>
           </mat-form-field>
         </mat-grid-tile>
 
@@ -672,7 +672,7 @@
 
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
-            <input matInput placeholder="Cuota inicial" formControlName="inicial" #InputInicial [readonly]="idventa">
+            <input matInput placeholder="Cuota inicial" formControlName="inicial" #InputInicial [readonly]="idventa || id_presupuesto">
             <mat-error>Solo debe ingresar valores númericos</mat-error>
             <span matPrefix>S/ &nbsp;</span>
             <mat-hint *ngIf="monto_inicial_canje">Se dejó a cuenta S/. {{monto_inicial_canje}}</mat-hint>
@@ -681,14 +681,14 @@
 
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
-            <input matInput placeholder="N° de cuotas" maxlength=3 formControlName="cuotas" #InputCuota [readonly]="idventa">
+            <input matInput placeholder="N° de cuotas" maxlength=3 formControlName="cuotas" #InputCuota [readonly]="idventa || id_presupuesto">
             <mat-error>Solo debe ingresar valores númericos</mat-error>
           </mat-form-field>
         </mat-grid-tile>
 
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
-            <input matInput placeholder="Monto total" formControlName="montototal" readonly>
+            <input matInput placeholder="Monto total" formControlName="montototal" [readonly]="id_presupuesto">
             <span matPrefix>S/ &nbsp;</span>
           </mat-form-field>
         </mat-grid-tile>
@@ -1111,8 +1111,11 @@
 
       <mat-card-subtitle class="titulo-seccion">
         CRONOGRAMA
-        <button mat-icon-button class="icono" *ngIf="!idventa && editar_cronograma>1" (click)="EditarCronograma(1)"><mat-icon>edit</mat-icon></button>
-        <button mat-icon-button class="icono" *ngIf="!idventa && editar_cronograma==1" (click)="EditarCronograma(2)"><mat-icon>check</mat-icon></button>
+        <ng-container *ngIf="!idventa && !id_presupuesto">
+          <button mat-icon-button class="icono" *ngIf="editar_cronograma>1" (click)="EditarCronograma(1)"><mat-icon>edit</mat-icon></button>
+          <button mat-icon-button class="icono" *ngIf="editar_cronograma==1" (click)="EditarCronograma(2)"><mat-icon>check</mat-icon></button>
+        </ng-container>
+        
       </mat-card-subtitle>
 
       <ng-container>

@@ -23,7 +23,7 @@
             $modelo->mdl_nombre  = trim($_POST["modelo"]);
             if($modelo->create())
             {
-                print_json("0000", "Se creó el modelo satisfactoriamente.", "");
+                print_json("0000", "Se creó el modelo satisfactoriamente.", $modelo->id_modelo);
             }
             else
             {

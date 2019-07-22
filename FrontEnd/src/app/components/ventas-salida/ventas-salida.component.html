@@ -317,8 +317,8 @@
           </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile colspan="2">
-          <mat-form-field class="columnas-2">
+        <mat-grid-tile colspan="1">
+          <mat-form-field class="columnas-1">
              <input matInput placeholder="Lugar de venta" formControlName="lugar" [readonly]="id_venta">
           </mat-form-field>
         </mat-grid-tile>
@@ -329,7 +329,96 @@
           </mat-form-field>
         </mat-grid-tile>
 
+        <mat-grid-tile *ngIf="!idventa">
+          <mat-checkbox color="primary" formControlName="papeles" (change)="HayPapeles($event)"> No tiene sus documentos </mat-checkbox>
+        </mat-grid-tile>
+
       </mat-grid-list>
+    </div>
+
+    <!-- Seguimiento de documentos -->
+    <div class="seccion" *ngIf="VentasSalidaForm.value.papeles">
+      
+      <mat-card-subtitle class="titulo-seccion">
+        DATOS DE SEGUIMIENTO
+      </mat-card-subtitle>
+
+      <mat-grid-list cols="4" rowHeight="70px">
+
+        <mat-grid-tile colspan="1">
+          <mat-form-field>
+            <input matInput [matDatepicker]="fechaenvio" placeholder="Fecha de envío" formControlName="papeles_fecha_envio" [readonly]="id_venta">
+            <mat-datepicker-toggle matSuffix [for]="fechaenvio"></mat-datepicker-toggle>
+            <mat-datepicker #fechaenvio [disabled]="id_venta"></mat-datepicker>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan=1 *ngIf="!id_venta">
+          <mat-form-field>
+            <mat-select placeholder="Courier" formControlName="papeles_courier">
+              <mat-option *ngFor="let courier of Couriers" [value]="courier.id"> {{courier.nombre}} </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan=1 *ngIf="id_venta">
+          <mat-form-field>
+            <input matInput type="text" placeholder="Courier" formControlName="papeles_courier">
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan=1>
+          <mat-form-field>
+            <input matInput type="text" placeholder="Número de seguimiento" formControlName="papeles_seguimiento" [readonly]="id_venta">
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <ng-container *ngIf="!id_venta">
+
+          <mat-grid-tile colspan=1>
+
+            <button mat-icon-button color="primary" (click)="papeles_editar = true" [disabled]="!papeles" *ngIf="!papeles_editar">
+              <mat-icon class="icono-documentos"> edit </mat-icon>
+            </button>
+
+            <button mat-icon-button color="primary" (click)="papeles_editar = false" [disabled]="!papeles" *ngIf="papeles_editar && id_venta_editar">
+              <mat-icon class="icono-documentos"> close </mat-icon>
+            </button>
+
+            <button mat-icon-button color="primary" [disabled]="!papeles" *ngIf="!papeles_editar">
+              <mat-icon class="icono-documentos" (click)="AbrirDocumento(papeles)"> visibility </mat-icon>
+            </button>
+
+            <image-upload
+              *ngIf="papeles_editar"
+              class="cargar-imagen"
+              [max]="1"
+              url="{{ruta}}"
+              [buttonCaption]="'Foto'"
+              [extensions]="['png, jpg, jpeg']"
+              [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
+              (uploadFinished)="SubirPapeles($event)">
+            </image-upload>  
+          </mat-grid-tile>
+
+        </ng-container>
+
+        <ng-container *ngIf="id_venta">
+          <mat-grid-tile>
+            <button mat-icon-button color="primary" [disabled]="!papeles">
+              <mat-icon class="icono-documentos" (click)="AbrirDocumento(papeles)"> visibility </mat-icon>
+            </button>
+          </mat-grid-tile>
+        </ng-container>
+
+        <mat-grid-tile colspan=4>
+          <mat-form-field class="columnas-4">
+            <input matInput type="text" placeholder="Observaciones" formControlName="papeles_observaciones" [readonly]="id_venta">
+          </mat-form-field>
+        </mat-grid-tile>
+        
+      </mat-grid-list>
+
     </div>
 
     <!-- Vendedores -->

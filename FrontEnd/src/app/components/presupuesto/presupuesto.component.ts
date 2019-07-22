@@ -5,6 +5,7 @@ import { catchError, finalize, tap, debounceTime, distinctUntilChanged } from 'r
 import { MatSelect, MatPaginator, MatDialog } from '@angular/material'
 import { CreditosService } from '../creditos/creditos.service';
 import {VentanaArchivosComponent } from './ventana-archivos/ventana-archivos.component';
+import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
 
 @Component({
   selector: 'app-presupuesto',
@@ -36,7 +37,7 @@ export class PresupuestoComponent implements OnInit {
     this.fecha_fin=new Date()
 
     this.ListadoPresupuesto = new PresupuestoDataSource(this.Servicio);
-    this.ListadoPresupuesto.CargarPresupuestos("",this.fecha_inicio,this.fecha_fin,3,1,10);
+    this.ListadoPresupuesto.CargarPresupuestos("",this.fecha_inicio,this.fecha_fin,1,1,10);
   }
 
   ngAfterViewInit () {
@@ -82,6 +83,22 @@ export class PresupuestoComponent implements OnInit {
     this.paginator.pageIndex = 0;
     this.CargarData()
   }
+
+  Eliminar(presupuesto){
+    let Dialogo = this.Dialogo.open(VentanaConfirmarComponent,{
+      data: {objeto: "el presupuesto", valor: presupuesto.numero}
+    })
+
+    Dialogo.afterClosed().subscribe(res=>{
+      if (res) {
+        this.Servicio.ActualizarPresupuesto(presupuesto.id, 0).subscribe(respuesta=>{
+          console.log(respuesta);
+          this.CargarData();
+        });
+      }
+    })
+  }
+
 }
 
 export class PresupuestoDataSource implements DataSource<any>{

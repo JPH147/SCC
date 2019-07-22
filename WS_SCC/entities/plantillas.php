@@ -59,6 +59,8 @@ Class Plantillas{
     public $trabajador_dni;
     public $trabajador_cargo;
     public $detalle;
+    public $productos;
+    public $prueba;
 
     public $path = '../uploads/autogenerados/';
 
@@ -135,7 +137,6 @@ Class Plantillas{
         $templateProcessor->setValue('tipo_telefono', $this->tipo_telefono);
         $templateProcessor->setValue('telefono', $this->telefono);
         $templateProcessor->setValue('email', $this->email);
-        // $templateProcessor->setValue('monto_asociado', $this->monto_asociado);
         $templateProcessor->setValue('monto_cuota', $this->monto_cuota);
         $templateProcessor->setValue('numero_cuotas', $this->numero_cuotas);
         $templateProcessor->setValue('lugar', $this->lugar);
@@ -188,6 +189,23 @@ Class Plantillas{
         $templateProcessor->setValue('email', $this->email);
         $templateProcessor->setValue('whatsapp', $this->whatsapp);
         $templateProcessor->setValue('lugar', $this->lugar);
+
+        switch ($this->tipo) {
+            case 2:
+                $tipo_transaccion = " un préstamo en dinero o venta de equipo celular y/o otros ";
+                break;
+            case 3:
+                $this->prueba=[];
+                $tipo_transaccion =" una venta de " ;
+                $this->productos = json_decode($this->productos) ;
+                foreach ( $this->productos as $producto ) {
+                    $tipo_transaccion = $tipo_transaccion . ", " . $producto->descripcion . " con IMEI " . $producto->serie ;
+                }
+                break;
+        }
+
+        $templateProcessor->setValue('tipo_transaccion', $tipo_transaccion);
+
         if( is_null($this->trabajador) ) {
             $templateProcessor->setValue('trabajador', "");
             $templateProcessor->setValue('trabajador_dni', "");

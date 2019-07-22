@@ -23,7 +23,7 @@
             $marca->mrc_nombre  = trim($_POST["marca"]);
             if($marca->create())
             {
-                print_json("0000", "Se creó la marca satisfactoriamente.", "");
+                print_json("0000", "Se creó la marca satisfactoriamente.", $marca->id_marca);
             }
             else
             {
@@ -39,5 +39,3 @@
     {
         print_json("9999", "Ocurrió un error al crear la marca.", $exception->getMessage());
     }
-
-?>

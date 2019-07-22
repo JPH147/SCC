@@ -1,8 +1,11 @@
 <?php
 
+include_once '../entities/seguimiento.php';
+
 Class Creditos{
 
     private $conn;
+    private $Seguimiento;
 
     public $id;
     public $id_credito;
@@ -61,6 +64,7 @@ Class Creditos{
 
     public function __construct($db){
         $this->conn = $db;
+        $this->Seguimiento = new Seguimiento($db);
     }
 
     function read(){
@@ -147,7 +151,7 @@ Class Creditos{
         
         $result->bindParam(1, $this->id_credito);
 
-        $Courier=$this->read_courier($this->id_credito);
+        $Courier=$this->Seguimiento->readxdocumento_export(2,$this->id_credito);
         $Garantes=$this->read_garantes($this->id_credito);
         $Cronograma=$this->read_cronograma($this->id_credito);
 
@@ -199,37 +203,6 @@ Class Creditos{
         $this->courier = $Courier;
         $this->garante = $Garantes;
         $this->cronograma = $Cronograma;
-    }
-
-    function read_courier(){
-
-        $query = "CALL sp_listarcreditocourierxcredito(?)";
-
-        $result = $this->conn->prepare($query);
-
-        $result->bindParam(1, $this->id_credito);
-
-        $result->execute();
-        
-        $courrier_list=array();
-
-        while( $row = $result->fetch(PDO::FETCH_ASSOC) )
-        {
-            extract($row) ;
-            $courier_item = array (
-                "id"=>$row['id'],
-                "id_courier"=>$row['id_courier'],
-                "courier"=>$row['courier'],
-                "fecha"=>$row['fecha'],
-                "numero_seguimiento"=>$row['numero_seguimiento'],
-                "foto"=>$row['foto'],
-                "fecha_recepcion"=>$row['fecha_recepcion'],
-                "usuario_recepcion"=>$row['usuario_recepcion'],
-                "observacion"=>$row['observacion']
-            );
-            array_push($courrier_list, $courier_item);
-        }
-        return $courrier_list;
     }
 
     function read_garantes(){
@@ -623,39 +596,6 @@ Class Creditos{
         return false;
     }
 
-    function crear_credito_courier(){
-        $query = "CALL sp_crearcreditocourier(
-            :prcredito,
-            :prcourier,
-            :prfecha,
-            :prseguimiento,
-            :prfoto,
-            :probservacion
-        )";
-
-        $result = $this->conn->prepare($query);
-
-        $result->bindParam(":prcredito", $this->id_credito);
-        $result->bindParam(":prcourier", $this->id_courier);
-        $result->bindParam(":prfecha", $this->fecha);
-        $result->bindParam(":prseguimiento", $this->numero_seguimiento);
-        $result->bindParam(":prfoto", $this->pdf_foto);
-        $result->bindParam(":probservacion", $this->observacion);
-
-        $this->id_credito=htmlspecialchars(strip_tags($this->id_credito));
-        $this->id_courier=htmlspecialchars(strip_tags($this->id_courier));
-        $this->fecha=htmlspecialchars(strip_tags($this->fecha));
-        $this->numero_seguimiento=htmlspecialchars(strip_tags($this->numero_seguimiento));
-        $this->pdf_foto=htmlspecialchars(strip_tags($this->pdf_foto));
-        $this->observacion=htmlspecialchars(strip_tags($this->observacion));
-
-        if($result->execute())
-        {
-            return true;
-        }
-        return false; 
-    }
-
     function crear_cronograma(){
         $query = "CALL sp_crearcreditocronograma(
             :prcredito,
@@ -778,69 +718,6 @@ Class Creditos{
         $row = $result->fetch(PDO::FETCH_ASSOC);
   
         $this->numero=$row['numero'];
-    }
-
-    function read_presupuesto(){
-        $query = "CALL sp_listarpresupuestocabecera(?,?,?,?,?,?)";
-
-        $result = $this->conn->prepare($query);
-
-        $result->bindParam(1, $this->cliente);
-        $result->bindParam(2, $this->fecha_inicio);
-        $result->bindParam(3, $this->fecha_fin);
-        $result->bindParam(4, $this->estado);
-        $result->bindParam(5, $this->numero_pagina);
-        $result->bindParam(6, $this->total_pagina);
-
-        $result->execute();
-        
-        $presupuesto_list=array();
-        $presupuesto_list["presupuestos"]=array();
-
-        $contador = $this->total_pagina*($this->numero_pagina-1);
-        
-        while($row = $result->fetch(PDO::FETCH_ASSOC))
-        {
-            extract($row);
-            $contador=$contador+1;
-            $items = array (
-                "numero"=>$contador,
-                "id"=>$id,
-                "id_cliente"=>$id_cliente,
-                "cliente"=>$cliente,
-                "id_tipo"=>$id_tipo,
-                "tipo"=>$tipo,
-                "fecha"=>$fecha,
-                "cuotas"=>$cuotas,
-                "capital"=>$capital,
-                "tasa"=>$tasa,
-                "total"=>$total,
-                "id_estado"=>$id_estado,
-                "estado"=>$estado,
-            );
-            array_push($presupuesto_list["presupuestos"],$items);
-        }
-
-        return $presupuesto_list;
-    }
-
-    function contar_presupuesto(){
-        $query = "CALL sp_listarpresupuestocabeceracontar(?,?,?,?)";
-
-        $result = $this->conn->prepare($query);
-
-        $result->bindParam(1, $this->cliente);
-        $result->bindParam(2, $this->fecha_inicio);
-        $result->bindParam(3, $this->fecha_fin);
-        $result->bindParam(4, $this->estado);
-
-        $result->execute();
-
-        $row = $result->fetch(PDO::FETCH_ASSOC);
-
-        $this->total_resultado=$row['total'];
-
-        return $this->total_resultado;
     }
 
 }

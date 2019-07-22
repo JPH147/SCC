@@ -22,6 +22,7 @@ import {VentanaCronogramaComponent} from '../ventas/ventana-cronograma/ventana-c
 import { SalidaVendedoresService } from "../salida-vendedores/salida-vendedores.service";
 import { VentanaEmergenteContacto} from '../clientes/ventana-emergentecontacto/ventanaemergentecontacto';
 import {SeleccionarClienteComponent} from '../retorno-vendedores/seleccionar-cliente/seleccionar-cliente.component';
+import { SeguimientosService } from "../seguimientos/seguimientos.service";
 
 @Component({
   selector: 'app-ventas-salida',
@@ -68,6 +69,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   public letra: string;
   public autorizacion: string;
   public otros: string;
+  public papeles : string = "";
 
   public foto_nuevo: string;
   public dni_nuevo: string;
@@ -78,6 +80,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   public letra_nuevo: string;
   public autorizacion_nuevo: string;
   public otros_nuevo: string;
+  public papeles_antiguo : string = "";
 
   public foto_antiguo: string;
   public dni_antiguo: string;
@@ -88,6 +91,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   public letra_antiguo: string;
   public autorizacion_antiguo: string;
   public otros_antiguo: string;
+  public papeles_nuevo : string = "";
 
   public foto_editar: boolean= false;
   public dni_editar: boolean= false;
@@ -98,6 +102,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   public letra_editar: boolean= false;
   public autorizacion_editar: boolean= false;
   public otros_editar: boolean= false;
+  public papeles_editar : boolean = false;
 
   constructor(
     private Servicio: VentaService,
@@ -113,7 +118,8 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     private location: Location,
     private Notificacion: Notificaciones,
-    private router: Router
+    private router: Router,
+    private SgServicio : SeguimientosService,
   ) { }
 
   ngOnInit() {
@@ -252,6 +258,12 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       ]],
       productos: this.FormBuilder.array([]),
       garantes: this.FormBuilder.array([]),
+      papeles : [ { value : null , disabled : false } ,[] ],
+      papeles_id : [ { value : null , disabled : false } ,[] ],
+      papeles_fecha_envio : [ { value : null , disabled : false } ,[] ],
+      papeles_courier : [ { value : null , disabled : false } ,[] ],
+      papeles_seguimiento : [ { value : null , disabled : false } ,[] ],
+      papeles_observaciones : [ { value : null , disabled : false } ,[] ],
     });
   }
 
@@ -306,6 +318,16 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
         })
       }
       
+      if( res['courier'].id ){
+        this.VentasSalidaForm.get('papeles').setValue(true);
+        this.VentasSalidaForm.get('papeles_id').setValue(res['courier'].id);
+        this.VentasSalidaForm.get('papeles_fecha_envio').setValue(res['courier'].fecha);
+        this.VentasSalidaForm.get('papeles_courier').setValue(res['courier'].id_courier);
+        this.VentasSalidaForm.get('papeles_seguimiento').setValue(res['courier'].numero_seguimiento);
+        this.VentasSalidaForm.get('papeles_observaciones').setValue(res['courier'].observacion);
+        res['courier'].foto !="" ? this.papeles=URLIMAGENES.carpeta+'venta/'+res['courier'].foto : null;
+      }
+
       if (this.id_venta) {
 
         // Ajustes visuales
@@ -347,6 +369,12 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       }
 
       if(this.id_venta_editar){
+
+        if( res['courier'].id ){
+          this.VentasSalidaForm.get('papeles_courier').setValue(res['courier'].id_courier);
+          this.papeles_antiguo=res['courier'].foto;
+          res['courier'].foto !="" ? this.papeles_editar=false : this.papeles_editar=true;
+        }
 
         // Funciones importantes
         this.ListarTipoPago();
@@ -942,6 +970,18 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
     this.location.back()
   }
 
+  HayPapeles(evento){
+    this.VentasSalidaForm.get('papeles').setValue(evento.checked)
+  }
+
+  SubirPapeles(evento){
+    if(this.id_venta_editar){
+      this.papeles_nuevo = evento.serverResponse.response.body.data;
+    }else{
+      this.papeles = evento.serverResponse.response.body.data;
+    }
+  }
+
   GuardarVenta(formulario){
     if(this.id_venta_editar){
       this.ActualizarVenta(formulario)
@@ -961,7 +1001,8 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       this.ServiciosGenerales.RenameFile(this.planilla_nuevo,'PLANILLA',random.toString(),"venta"),
       this.ServiciosGenerales.RenameFile(this.letra_nuevo,'LETRA',random.toString(),"venta"),
       this.ServiciosGenerales.RenameFile(this.autorizacion_nuevo,'AUTORIZACION',random.toString(),"venta"),
-      this.ServiciosGenerales.RenameFile(this.otros_nuevo,'AUTORIZACION',random.toString(),"venta")
+      this.ServiciosGenerales.RenameFile(this.otros_nuevo,'AUTORIZACION',random.toString(),"venta"),
+      this.ServiciosGenerales.RenameFile(this.papeles_nuevo,'PAPELES',random.toString(),"venta"),
     ).subscribe(resultado=>{
 
       // Cuando se actualiza la venta, en el procedimiento
@@ -1010,6 +1051,18 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
             this.Servicio.EliminarProductosSalidaVenta(formulario.value.id_salida, item.id, item.id_serie).subscribe()
           }
         })
+
+        // Se actualizan los datos del courier
+        if( this.VentasSalidaForm.value.papeles ){
+          this.SgServicio.Actualizar(
+            this.VentasSalidaForm.value.papeles_id,
+            this.VentasSalidaForm.value.papeles_courier,
+            this.VentasSalidaForm.value.papeles_fecha_envio,
+            this.VentasSalidaForm.value.papeles_seguimiento,
+            this.papeles_editar ? resultado[9].mensaje : this.papeles_antiguo,
+            this.VentasSalidaForm.value.papeles_observaciones
+          ).subscribe();
+        }
 
         // Productos nuevos que se van a agregar
         formulario.value.productos.forEach((item)=>{

@@ -16,9 +16,9 @@
 
     <mat-grid-tile>
       <mat-form-field>
-        <mat-select #InputEstado placeholder="Estado" [value]=3 (selectionChange)="CambioFiltro()">
+        <mat-select #InputEstado placeholder="Estado" [value]=1 (selectionChange)="CambioFiltro()">
           <mat-option [value]=3>Todos</mat-option>
-          <mat-option [value]=0>Anulados</mat-option>
+          <!-- <mat-option [value]=0>Anulados</mat-option> -->
           <mat-option [value]=1>Pendientes</mat-option>
           <mat-option [value]=2>Realizados</mat-option>
         </mat-select>
@@ -79,8 +79,10 @@
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let presupuesto">
-          <button mat-icon-button color="primary" matTooltip="Ver documentos" (click)="VerArchivos(presupuesto)"><mat-icon> visibility </mat-icon></button>
-          <button mat-icon-button color="primary" matTooltip="Hacer crédito" [routerLink]="['/creditos', 'nuevo', presupuesto.id]"><mat-icon> forward </mat-icon></button>
+          <button mat-icon-button color="primary" matTooltip="Ver documentos" (click)="VerArchivos(presupuesto)" [disabled]="presupuesto.id_estado!=1"><mat-icon> visibility </mat-icon></button>
+          <button mat-icon-button color="primary" *ngIf="presupuesto.id_tipo==2" matTooltip="Hacer venta" [routerLink]="['/venta', 'nueva', 'presupuesto', presupuesto.id]" [disabled]="presupuesto.id_estado!=1"><mat-icon> forward </mat-icon></button>
+          <button mat-icon-button color="primary" *ngIf="presupuesto.id_tipo==1" matTooltip="Hacer crédito" [routerLink]="['/creditos', 'nuevo', presupuesto.id]" [disabled]="presupuesto.id_estado!=1"><mat-icon> forward </mat-icon></button>
+          <button mat-icon-button color="primary" matTooltip="Eliminar" (click)="Eliminar(presupuesto)" [disabled]="presupuesto.id_estado!=1"><mat-icon> delete </mat-icon></button>
         </mat-cell>
       </ng-container>
 

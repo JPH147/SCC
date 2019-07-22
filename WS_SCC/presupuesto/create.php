@@ -22,10 +22,16 @@
             $presupuesto->cliente = trim($_POST["prcliente"]);
             $presupuesto->tipo = trim($_POST["prtipo"]);
             $presupuesto->fecha = trim($_POST["prfecha"]);
+            $presupuesto->vendedor = trim($_POST["prvendedor"]) ;
             $presupuesto->cuotas = trim($_POST["prcuotas"]);
             $presupuesto->capital = trim($_POST["prcapital"]);
             $presupuesto->tasa = trim($_POST["prtasa"]);
             $presupuesto->total = trim($_POST["prtotal"]);
+            $presupuesto->pdf_autorizacion = trim($_POST["prpdfautorizacion"]);
+            $presupuesto->pdf_ddjj = trim($_POST["prpdfddjj"]);
+            $presupuesto->pdf_transaccion = trim($_POST["prpdftransaccion"]);
+            $presupuesto->pdf_tarjeta = trim($_POST["prpdftarjeta"]);
+            $presupuesto->pdf_compromiso = trim($_POST["prpdfcompromiso"]);
 
             if($presupuesto->create())
             {
@@ -33,7 +39,7 @@
             }
             else
             {
-                print_json("9999", "Ocurrió un error al crear el presupuesto.", "");
+                print_json("9999", "Ocurrió un error al crear el presupuesto.", $_POST);
             }
         }
         else

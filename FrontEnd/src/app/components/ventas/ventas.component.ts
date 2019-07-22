@@ -137,6 +137,9 @@ export class VentasComponent implements OnInit {
   public ListadoVentas: VentaDataSource;
   public Columnas: string[];
 
+  public id_presupuesto : number ;
+  public hay_presupuesto_vendedor : boolean ;
+
   constructor(
     private Servicio: VentaService,
     private ClienteServicio: ClienteService,
@@ -177,6 +180,8 @@ export class VentasComponent implements OnInit {
     this.ListarVendedor("");
     this.ListarAutorizador("");
 
+    this.CrearFormulario();
+
     this.route.params.subscribe(params => {
       if(Object.keys(params).length>0){
         
@@ -204,6 +209,14 @@ export class VentasComponent implements OnInit {
           }
         }
   
+        // Si viene de un presupuesto
+        if(params['idpresupuesto']){
+          this.id_presupuesto=params['idpresupuesto'];
+          this.papeles_editar=true;
+          // this.id_presupuesto = 17 ;
+          this.NuevoCreditoPresupuesto(this.id_presupuesto);
+        }
+
         // Cuando se ve una venta
         if(params['idventa']){
           this.Columnas= ['numero', 'monto_cuota','fecha_vencimiento', 'monto_interes','monto_pagado', 'fecha_cancelacion', 'monto_pendiente','estado', 'opciones'];
@@ -221,8 +234,6 @@ export class VentasComponent implements OnInit {
         this.papeles_editar = true;
       }
    });
-
-    this.CrearFormulario();
   }
   
   ngAfterViewInit() {
@@ -1333,6 +1344,31 @@ export class VentasComponent implements OnInit {
     this.VentasForm.get('papeles').setValue(evento.checked)
   }
 
+  NuevoCreditoPresupuesto(id){
+    // this.NuevoCredito();
+    this.CServicio.SeleccionarPresupuesto(id).subscribe(res=>{
+      // console.log(res);
+      this.idcliente=res.id_cliente;
+      this.VentasForm.get('id_cliente').setValue(res.id);
+      this.ObtenerClientexId(res.id_cliente);
+      this.ObtenerDireccion(res.id_cliente);
+      this.ObtenerTelefono(res.id_cliente);
+      this.VentasForm.get('cuotas').setValue(res.cuotas);
+      this.VentasForm.get('montototal').setValue(res.total);
+
+      this.Cronograma=res.cronograma;
+      this.ListadoVentas.Informacion.next(this.Cronograma)
+      this.CalcularTotalCronograma();
+
+      if(res.id_vendedor){
+        this.hay_presupuesto_vendedor=true;
+        this.VentasForm.get('id_vendedor').setValue(res.id_vendedor);
+        this.VentasForm.get('vendedor').setValue(res.vendedor);
+      }
+      this.VentasForm.get('fechapago').setValue( moment(res.cronograma[0].fecha_vencimiento).toDate() );
+    })
+  }
+
   Guardar(formulario){
     
     this.Cargando.next(true);
@@ -1428,6 +1464,11 @@ export class VentasComponent implements OnInit {
             this.Servicio.CrearCanjeTransaccion(item.id,formulario.value.fechaventa,"AJUSTE POR CANJE").subscribe()
           })
         }  
+
+        // Si la venta viene de un presupuesto, el presupuesto cambia de estado
+        if(this.id_presupuesto){
+          this.CServicio.ActualizarPresupuesto(this.id_presupuesto, 2).subscribe(res=>console.log(res));
+        }
 
         // Si la venta tiene garante, se los agrega
         if( this.VentasForm.value.garante ){
@@ -1578,6 +1619,7 @@ export class VentasComponent implements OnInit {
 
         }
 
+        // Se actualizan los datos del courier
         if( this.VentasForm.value.papeles ){
           this.SServicio.Actualizar(
             this.VentasForm.value.papeles_id,

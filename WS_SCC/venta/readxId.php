@@ -62,6 +62,7 @@
 			"canje_talonario_contrato"=>$venta->canje_talonario_contrato,
 			"anulacion_observacion"=>$venta->anulacion_observacion,
 			"anulacion_monto"=>$venta->anulacion_monto,
+			"courier"=>$venta->courier,
 			"cronograma"=>$venta->cronograma,
 			"productos"=>$venta->productos,
 			"garantes"=>$venta->garantes,

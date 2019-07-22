@@ -165,7 +165,7 @@ Class ProductoSerie{
             :prcolor,
             :pralmacenamiento,
             :prprecio
-            )";
+        )";
 
         $result = $this->conn->prepare($query);
 
@@ -221,48 +221,7 @@ Class ProductoSerie{
       }
 
     }
-
-    /* Actualizar producto */
-    // function enter(){
-
-    //     $query = "call sp_actualizarproductoserieingresar(:prid)";
-
-    //     $result = $this->conn->prepare($query);
-
-    //     $result->bindParam(":prid", $this->id_producto_serie);
-
-    //     $this->id_producto_serie=htmlspecialchars(strip_tags($this->id_producto_serie));
-
-    //     if($result->execute())
-    //         {
-    //             return true;
-    //         }
-    //         else
-    //         {
-    //             return false;
-    //         }
-    // }
-
-    // function leave(){
-
-    //     $query = "call sp_actualizarproductoseriequitar(:prid)";
-
-    //     $result = $this->conn->prepare($query);
-
-    //     $result->bindParam(":prid", $this->id_producto_serie);
-
-    //     $this->id_producto_serie=htmlspecialchars(strip_tags($this->id_producto_serie));
-
-    //     if($result->execute())
-    //         {
-    //             return true;
-    //         }
-    //         else
-    //         {
-    //             return false;
-    //         }
-    // }
-
+    
     function validar(){
         $query = "CALL sp_validarproductoserie(?)";
 

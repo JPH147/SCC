@@ -62,6 +62,7 @@ const appRoutes: Routes = [
   {path: 'ventas', component: VentasListarComponent},
   {path: 'ventas/nueva', component: VentasComponent},
   {path: 'ventas/nueva/:idcliente', component: VentasComponent},
+  {path: 'ventas/nueva/presupuesto/:idpresupuesto', component: VentasComponent},
   {path: 'ventas/nueva/:idventacanje/:idcliente', component: VentasComponent},
   {path: 'ventas/editar/:ideditar', component: VentasComponent},
   {path: 'ventas/:idventa', component: VentasComponent},
@@ -85,7 +86,7 @@ const appRoutes: Routes = [
   {path: 'trabajadores', component: TrabajadoresComponent},
   {path: 'registro-horas', component: RegistroHorasComponent},
   {path: 'reporte-asistencia', component: ReporteAsistenciaComponent},
-  {path: 'prueba', component: IngresoProductosComponent},
+  {path: 'prueba', component: VentasComponent},
 ];
 
 export const appRoutingProvider: any[] = [];

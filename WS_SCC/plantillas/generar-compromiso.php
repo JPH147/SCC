@@ -47,7 +47,7 @@
     }
     catch(Exception $exception)
     {
-        print_json("9999", "Ocurrió un error al eliminar el archivo.", $exception->getMessage());
+        print_json("9999", "Ocurrió un error al crear el archivo.", $exception->getMessage());
     }
 
 ?>

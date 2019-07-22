@@ -59,17 +59,17 @@
             }
             else
             {
-                print_json("9999", "Ocurrió un error al actualizar el credito.", "");
+                print_json("9000", "Ocurrió un error al actualizar el credito.", "");
             }
         }
         else
         {
-            print_json("9999", "Los campos no pueden estar vacíos.", "");
+            print_json("9900", "Los campos no pueden estar vacíos.", "");
         }
     }
     catch(Exception $exception)
     {
-        print_json("9999", "Ocurrió un error al eliminar el credito.", $exception->getMessage());
+        print_json("9999", "Ocurrió un error al actualizar el credito.", $exception->getMessage());
     }
 
 ?>

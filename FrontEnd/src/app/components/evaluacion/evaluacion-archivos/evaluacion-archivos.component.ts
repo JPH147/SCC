@@ -441,7 +441,9 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
 
   GenerarInputProductos(){
     this.productos.forEach((item=>{
-      this.productos_generar.push({descripcion : item.descripcion, serie : ""});
+      for(let i=0 ; i < item.numero ; i++ ){
+        this.productos_generar.push({descripcion : item.descripcion, serie : ""});
+      }
     }))
     console.log(this.productos.length, this.productos_generar)
   }

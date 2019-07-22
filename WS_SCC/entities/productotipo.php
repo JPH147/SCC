@@ -100,9 +100,9 @@ class Tipo_Producto{
         return $this->total_resultado;
     }
 
-
 	function read_unidadmedida(){
-	$query = "CALL sp_listarunidadmedida(?)";
+
+		$query = "CALL sp_listarunidadmedida(?)";
 
 		$result = $this->conn->prepare($query);
 
@@ -130,8 +130,8 @@ class Tipo_Producto{
 		return $unidad_medida_list;
 	}
 
-	function create()
-    {
+	function create() {
+
         $query = "CALL sp_creartipoproducto (:prnombre, :idunidadmedida)";
         $result = $this->conn->prepare($query);
 		$this->tprd_nombre = htmlspecialchars(strip_tags($this->tprd_nombre));
@@ -142,14 +142,15 @@ class Tipo_Producto{
 
         if($result->execute())
         {
+            $row = $result->fetch(PDO::FETCH_ASSOC);
+            $this->id_tipo_producto=$row['id'];
             return true;
         }
         
         return false;
 	}
 	
-	function update()
-    {
+	function update() {
         $query = "call sp_actualizartipoproducto(:id, :nombre, :idunidad)";
         
         $result = $this->conn->prepare($query);
@@ -189,21 +190,20 @@ class Tipo_Producto{
         $this->idunidadmedida=$row['idunidad'];
 	}
 	
-	function delete()
-    {
+	function delete() {
         $query = "call sp_eliminartipoproducto(?)";
         $result = $this->conn->prepare($query);
 
         $result->bindParam(1, $this->id_tipo_producto);
 
         if($result->execute())
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
     }
 
 	

@@ -26,8 +26,8 @@
             $archivo->cooperativa_direccion = trim($_POST["prcooperativadireccion"]);
             $archivo->cooperativa_direccion_1 = trim($_POST["prcooperativadireccion1"]);
             $archivo->cooperativa_direccion_2 = trim($_POST["prcooperativadireccion2"]);
-            $archivo->cooperativa_cuenta_banco = trim($_POST["prcooperativacuenta_banco"]);
-            $archivo->cooperativa_cuenta_numero = trim($_POST["prcooperativacuenta_numero"]);
+            $archivo->cooperativa_cuenta_banco = trim($_POST["prcooperativacuentabanco"]);
+            $archivo->cooperativa_cuenta_numero = trim($_POST["prcooperativacuentanumero"]);
             $archivo->presidente = trim($_POST["prpresidente"]);
             $archivo->presidente_dni = trim($_POST["prpresidentedni"]);
             $archivo->presidente_direccion = trim($_POST["prpresidentedireccion"]);
@@ -64,6 +64,8 @@
             $archivo->vendedor = trim($_POST["prvendedor"]);
             $archivo->vendedor_dni = trim($_POST["prvendedordni"]);
             $archivo->detalle = trim($_POST["prdetalle"]);
+            $archivo->tipo = trim($_POST["prtipo"]);
+            $archivo->productos = trim($_POST["prproductos"]);
 
             if($archivo->generar_transaccion())
             {
@@ -81,7 +83,7 @@
     }
     catch(Exception $exception)
     {
-        print_json("9999", "Ocurrió un error al eliminar el archivo.", $exception->getMessage());
+        print_json("9999", "Ocurrió un error al crear el archivo.", $exception->getMessage());
     }
 
 ?>

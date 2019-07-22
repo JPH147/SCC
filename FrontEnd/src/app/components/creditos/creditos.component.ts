@@ -384,10 +384,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         this.CreditosForm.get('id_vendedor').setValue(res.id_vendedor);
         this.CreditosForm.get('vendedor').setValue(res.vendedor);
       }
-      
       this.CreditosForm.get('fecha_pago').setValue( moment(res.cronograma[0].fecha_vencimiento).toDate() );
       this.CreditosForm.get('interes_diario').disable();
-
     })
   }
 
@@ -1266,6 +1264,11 @@ export class CreditosComponent implements OnInit, AfterViewInit {
             item.fecha_vencimiento
           ).subscribe()
         })
+
+        // Si viene de un presupuesto, el presupuesto cambia de estado
+        if(this.id_presupuesto){
+          this.Servicio.ActualizarPresupuesto(this.id_presupuesto, 2).subscribe();
+        }
 
         // Si el crédito tiene garante, se los agrega
         if( this.CreditosForm.value.garante ){

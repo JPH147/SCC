@@ -1,8 +1,11 @@
 <?php
+
+include_once '../entities/seguimiento.php';
+
 Class Venta{
 
     private $conn;
-    private $table_name = "venta";
+    private $Seguimiento;
 
     public $id_venta;
     public $id_talonario;
@@ -67,6 +70,7 @@ Class Venta{
     public $anulacion_observacion;
     public $anulacion_monto;
     public $id_salida;
+    public $courier;
     public $pecosa;
     public $observacion;
     public $numero_pagina;
@@ -74,6 +78,7 @@ Class Venta{
 
     public function __construct($db){
         $this->conn = $db;
+        $this->Seguimiento = new Seguimiento($db);
     }
 
     function read(){
@@ -368,6 +373,7 @@ Class Venta{
         
         $result->bindParam(1, $this->id_venta);
 
+        $Courier=$this->Seguimiento->readxdocumento_export(1,$this->id_venta);
         $Productos=$this->read_productos($this->id_venta);
         $Cronograma=$this->read_cronograma($this->id_venta);
         $Garantes=$this->read_garantes($this->id_venta);
@@ -417,6 +423,7 @@ Class Venta{
         $this->canje_talonario_contrato=$row['canje_talonario_contrato'];
         $this->anulacion_observacion=$row['anulacion_observacion'];
         $this->anulacion_monto=$row['anulacion_monto'];
+        $this->courier = $Courier;
         $this->cronograma=$Cronograma;
         $this->productos=$Productos;
         $this->garantes=$Garantes;
@@ -429,6 +436,7 @@ Class Venta{
         
         $result->bindParam(1, $this->id_venta);
 
+        $Courier=$this->Seguimiento->readxdocumento_export(1,$this->id_venta);
         $Productos=$this->read_productos($this->id_venta);
         $Cronograma=$this->read_cronograma($this->id_venta);
         $Garantes=$this->read_garantes($this->id_venta);
@@ -473,6 +481,7 @@ Class Venta{
         $this->canje_talonario_contrato=$row['canje_talonario_contrato'];
         $this->anulacion_observacion=$row['anulacion_observacion'];
         $this->anulacion_monto=$row['anulacion_monto'];
+        $this->courier = $Courier;
         $this->cronograma=$Cronograma;
         $this->productos=$Productos;
         $this->garantes=$Garantes;

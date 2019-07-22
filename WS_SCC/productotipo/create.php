@@ -23,7 +23,7 @@
             $productotipo->idunidadmedida  = trim($_POST["idunidadmedida"]);
             if($productotipo->create())
             {
-                print_json("0000", "Se creó el tipo de producto satisfactoriamente.", "");
+                print_json("0000", "Se creó el tipo de producto satisfactoriamente.", $productotipo->id_tipo_producto);
             }
             else
             {

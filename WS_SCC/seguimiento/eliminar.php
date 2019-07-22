@@ -6,7 +6,7 @@
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
  
     include_once '../config/database.php';
-    include_once '../entities/credito.php';
+    include_once '../entities/seguimiento.php';
     include_once '../shared/utilities.php';
 
     $database = new Database();
@@ -14,27 +14,22 @@
 
     try
     {
-        $credito = new Creditos($db);
+        $seguimiento = new Seguimiento($db);
         $data = json_decode(file_get_contents('php://input'), true);
 
         
-        if (($_POST["prcredito"])!=null)
+        if (($_POST["prid"])!=null)
         {
 
-            $credito->id_credito=trim($_POST["prcredito"]);
-            $credito->id_courier=trim($_POST["prcourier"]);
-            $credito->fecha=trim($_POST["prfecha"]);
-            $credito->numero_seguimiento=trim($_POST["prseguimiento"]);
-            $credito->pdf_foto=trim($_POST["prpdffoto"]);
-            $credito->observacion=trim($_POST["probservacion"]);
+            $seguimiento->id_seguimiento=trim($_POST["prid"]);
 
-            if($credito->crear_credito_courier())
+            if($seguimiento->eliminar())
             {
-                print_json("0000", "Se creó el courier satisfactoriamente.", $credito->id_credito);
+                print_json("0000", "Se eliminó el seguimiento satisfactoriamente.", $seguimiento->id_seguimiento);
             }
             else
             {
-                print_json("9999", "Ocurrió un error al crear el courier.", "");
+                print_json("9999", "Ocurrió un error al eliminar el seguimiento.", "");
             }
         }
         else
@@ -44,7 +39,7 @@
     }
     catch(Exception $exception)
     {
-        print_json("9999", "Ocurrió un error al eliminar el courier.", $exception->getMessage());
+        print_json("9999", "Ocurrió un error al eliminar el seguimiento.", $exception->getMessage());
     }
 
 ?>

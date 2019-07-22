@@ -461,4 +461,17 @@ export class CreditosService {
     )
   }
 
+  ActualizarPresupuesto(
+    id : number ,
+    estado : number
+  ){
+    let params = new HttpParams()
+      .set('prid',id.toString())
+      .set('prestado',estado.toString())
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'presupuesto/update.php', params, {headers: headers});
+  }
+
 }

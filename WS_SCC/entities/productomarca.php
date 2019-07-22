@@ -84,8 +84,7 @@ class Marca{
 		return $marca_list;
 	}
 
-    function readxId()
-    {
+    function readxId(){
         $query ="call sp_listarmarcaxId(?)";
         
         $result = $this->conn->prepare($query);
@@ -120,8 +119,8 @@ class Marca{
         return $this->total_resultado;
 	}
 	
-	function create()
-    {
+	function create(){
+
         $query = "CALL sp_crearmarca (:idtipoproducto, :marca)";
         $result = $this->conn->prepare($query);
 		$this->id_tipo_producto = htmlspecialchars(strip_tags($this->id_tipo_producto));
@@ -132,14 +131,15 @@ class Marca{
 
         if($result->execute())
         {
+            $row = $result->fetch(PDO::FETCH_ASSOC);
+            $this->id_marca=$row['id'];
             return true;
         }
         
         return false;
 	}
 	
-	function update()
-    {
+	function update(){
         $query = "call sp_actualizarmarca(:id, :idtipoproducto, :marca)";
         
         $result = $this->conn->prepare($query);
@@ -162,8 +162,7 @@ class Marca{
             }
 	}
 	
-	function delete()
-    {
+	function delete(){
         $query = "call sp_eliminarmarca(?)";
         $result = $this->conn->prepare($query);
 

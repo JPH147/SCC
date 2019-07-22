@@ -105,8 +105,8 @@ class Modelo{
         return $this->total_resultado;
 	}
 	
-	function create()
-    {
+	function create(){
+
         $query = "CALL sp_crearmodelo (:idmarca, :modelo)";
         $result = $this->conn->prepare($query);
 		$this->id_marca = htmlspecialchars(strip_tags($this->id_marca));
@@ -117,14 +117,15 @@ class Modelo{
 
         if($result->execute())
         {
+            $row = $result->fetch(PDO::FETCH_ASSOC);
+            $this->id_modelo=$row['id'];
             return true;
         }
         
         return false;
 	}
 	
-	function update()
-    {
+	function update() {
         $query = "call sp_actualizarmodelo(:id, :idmarca, :modelo)";
         
         $result = $this->conn->prepare($query);
@@ -164,8 +165,7 @@ class Modelo{
         $this->mdl_nombre=$row['modelo'];
 	}
 	
-	function delete()
-    {
+	function delete() {
         $query = "call sp_eliminarmodelo(?)";
         $result = $this->conn->prepare($query);
 
