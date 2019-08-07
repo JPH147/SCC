@@ -1,7 +1,10 @@
 <mat-card>
+  <div>
+      <button mat-fab matTooltip="Agregar Cliente" class="agregar"  (click)="Agregar()" color="primary" ><mat-icon> person_add </mat-icon></button>
+  </div>
   
   <mat-card-title>
-    <div id = "tituloProd"> Listado de clientes</div>
+    <div id = "tituloProd"> Listado de Clientes</div>
   </mat-card-title>
 
   <mat-grid-list cols=4 rowHeight="70px">
@@ -30,7 +33,7 @@
     <mat-grid-tile>
       <button mat-raised-button (click)="VerPendientes()" *ngIf="estado==1">Ver pendientes</button>
       <button mat-raised-button (click)="VerTodos()" *ngIf="estado==5">Ver todos</button>
-      <button mat-raised-button color="primary" (click)="Agregar()" *ngIf="estado==1">Agregar</button>
+      <!-- <button mat-raised-button color="primary" (click)="Agregar()" *ngIf="estado==1">Agregar</button> -->
     </mat-grid-tile>
 
   </mat-grid-list>

@@ -1,7 +1,7 @@
 <mat-card class="card">
 
   <mat-toolbar color="primary">
-    <mat-toolbar-row *ngIf="!data"><h4>Agregar cliente</h4></mat-toolbar-row>
+    <mat-toolbar-row *ngIf="!data"><h4>Agregar Cliente</h4></mat-toolbar-row>
     <mat-toolbar-row *ngIf="data">Editar cliente</mat-toolbar-row>
   </mat-toolbar>
 
@@ -38,20 +38,14 @@
               <mat-form-field class="input-ventanaa">
                 <input matInput placeholder="Casilla" formControlName="casilla">
               </mat-form-field>
-            </mat-grid-tile>
-
-           
-
-           
-
+            </mat-grid-tile>       
+         
             <mat-grid-tile colspan="9">
               <mat-form-field class="input-ventanac">
                 <input matInput placeholder="Email" formControlName="email" email="true">
                 <mat-error>Debe ser un email válido</mat-error>
               </mat-form-field>
             </mat-grid-tile>
-
-        
 
             <mat-grid-tile *ngIf="this.data">
               <mat-form-field class="input-ventana">
