@@ -28,11 +28,12 @@ export class ClienteDataSource implements DataSource<Cliente> {
     dni: string,
     nombre: string,
     prpagina: number,
-    prtotalpagina: number
+    prtotalpagina: number,
+    estado : number
   ){
   this.CargandoInformacion.next(true);
 
-  this.Servicio.Listado( codigo, dni, nombre, prpagina, prtotalpagina)
+  this.Servicio.Listado( codigo, dni, nombre, prpagina, prtotalpagina, estado)
   .pipe(catchError(() => of([])),
   finalize(() => this.CargandoInformacion.next(false))
   )

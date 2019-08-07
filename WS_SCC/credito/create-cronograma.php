@@ -22,7 +22,8 @@
         {
 
             $credito->id_credito=trim($_POST["prcredito"]);
-            $credito->monto=trim($_POST["prmonto"]);
+            $credito->capital=trim($_POST["prcapital"]);
+            $credito->interes=trim($_POST["printeres"]);
             $credito->fecha=trim($_POST["prfecha"]);
 
             if($credito->crear_cronograma())

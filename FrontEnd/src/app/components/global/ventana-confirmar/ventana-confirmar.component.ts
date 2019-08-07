@@ -11,6 +11,8 @@ export class VentanaConfirmarComponent implements OnInit {
   public monto:number;
   public mensaje:string;
   public comentarios:string="";
+  public titulo : string ;
+  public accion : string ;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
@@ -20,7 +22,17 @@ export class VentanaConfirmarComponent implements OnInit {
 
   ngOnInit() {
     this.monto=50;
-    this.mensaje = this.data.objeto + ' ' + 'se eliminó satisfactoriamente';
+    
+    if(this.data.accion){
+      this.titulo=this.data.titulo;
+      this.accion=this.data.accion;
+      this.mensaje = this.data.objeto + " " + this.data.mensaje;
+      this.comentarios="JP";
+    } else {
+      this.titulo="Eliminar";
+      this.accion="eliminar";
+      this.mensaje = this.data.objeto + ' ' + 'se eliminó satisfactoriamente';
+    }
   }
 
   onNoClick(): void {

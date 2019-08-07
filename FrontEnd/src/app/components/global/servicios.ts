@@ -608,12 +608,71 @@ EditarModelo(
           if (res['codigo'] === 0) {
             return res;
           } else {
-            return []
+            return res
               // console.log ('No hay datos que mostrar');
           }
         }
       ))
 
+    }
+
+    SeleccionarCourier(
+      id : number 
+    ){
+      let params = new HttpParams()
+        .set('prid', id.toString());
+
+      return this.http.get(this.url + 'courier/readxId.php', { params })
+      .pipe(map(res => {
+        if (res['codigo'] === 0) {
+          return res['data'];
+        } else {
+          return []
+            // console.log ('No hay datos que mostrar');
+        }
+      }));
+    }
+
+    CrearCourier(
+      nombre : string,
+      url: string
+    ){
+
+      let params = new HttpParams()
+        .set('prnombre',nombre)
+        .set('prurl',url);
+      
+      let headers = new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded');
+  
+      return this.http.post(this.url + 'courier/create.php', params, {headers: headers});
+    }
+
+    ActualizarCourier(
+      id : number,
+      nombre : string,
+      url: string
+    ){
+
+      let params = new HttpParams()
+        .set('prid',id.toString())
+        .set('prnombre',nombre)
+        .set('prurl',url);
+      
+      let headers = new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded');
+  
+      return this.http.post(this.url + 'courier/update.php', params, {headers: headers});
+    }
+
+    EliminarCourier(
+      id : number
+    ){
+
+      let params = new HttpParams()
+        .set('prid',id.toString())
+      
+      let headers = new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded');
+  
+      return this.http.post(this.url + 'courier/delete.php', params, {headers: headers});
     }
 
     RenameFile(
@@ -669,12 +728,13 @@ vndNombre: string;
 scsNombre: string;
 }
 
-  export interface TipoTransaccion {
+export interface TipoTransaccion {
   numero: number;
   id: number;
   nombre: string;
 
 }
+
 export interface Almacen {
   numero: number;
   id_almacen: number;
@@ -727,11 +787,13 @@ export interface Institucion {
   id: number;
   nombre: string;
 }
+
 export interface Talonario {
   id: number;
   serie: number;
   numero: number;
 }
+
 export interface Serie {
   serie: number;
 }

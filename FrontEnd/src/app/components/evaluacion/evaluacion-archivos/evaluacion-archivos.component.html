@@ -1,6 +1,9 @@
 <mat-card>
+
+  <button class="derecha" mat-icon-button color="primary" matTooltip="Descargar originales" (click)="VerPlantillas()"> <mat-icon> cloud_download </mat-icon> </button>
+
   <mat-card-title>
-		Archivos generados
+		Generador de archivos
   </mat-card-title>
 
   <mat-card-content>
@@ -48,11 +51,12 @@
 
   <form [formGroup]="EvaluacionArchivosForm">
 
+    <!-- Datos del cliente -->
     <div class="seccion">
 
       <mat-card-subtitle class="titulo-seccion">
         DATOS DEL CLIENTE
-        <button mat-icon-button type="button" class="icono" (click)="EditarCliente()"><mat-icon>edit</mat-icon></button>
+        <button mat-icon-button type="button" class="icono" (click)="cliente_provisional ? EditarClienteProvisional() : EditarCliente()" *ngIf="EvaluacionArchivosForm.value.id_cliente"><mat-icon>edit</mat-icon></button>
       </mat-card-subtitle>
 
       <mat-grid-list cols=3 rowHeight="70px">
@@ -82,20 +86,19 @@
         </mat-grid-tile>
 
         <mat-grid-tile>
-          <mat-form-field class="columnas-1">
-            <input matInput type="text" placeholder="Email" formControlName="email" readonly>
-          </mat-form-field>
+          <mat-checkbox color="primary" formControlName="hay_garante"> Hay garante </mat-checkbox>
         </mat-grid-tile>
 
       </mat-grid-list>
 
     </div>
 
+    <!-- Datos de contacto -->
     <div class="seccion">
 
       <mat-card-subtitle class="titulo-seccion">
         DATOS DE CONTACTO
-        <button mat-icon-button type="button" class="icono" (click)="EditarClienteContacto()"><mat-icon>edit</mat-icon></button>
+        <button mat-icon-button type="button" class="icono" (click)="EditarClienteContacto()" *ngIf="EvaluacionArchivosForm.value.id_cliente"><mat-icon>edit</mat-icon></button>
       </mat-card-subtitle>
 
       <mat-grid-list cols=3 rowHeight="70px">
@@ -118,7 +121,7 @@
 
         <mat-grid-tile colspan=3>
           <mat-form-field class="columnas-3">
-            <input matInput type="text" placeholder="Dirección" formControlName="direccion" readonly>
+            <input matInput type="text" placeholder="Dirección" formControlName="direccion_mostrar" readonly>
           </mat-form-field>
         </mat-grid-tile>
 
@@ -126,6 +129,91 @@
 
     </div>
 
+    <!-- Datos del garante -->
+    <div class="seccion" *ngIf="EvaluacionArchivosForm.value.hay_garante">
+
+      <mat-card-subtitle class="titulo-seccion">
+        DATOS DEL GARANTE
+      </mat-card-subtitle>
+
+      <div formArrayName="garantes" *ngFor="let garante of EvaluacionArchivosForm['controls'].garantes['controls']; let i = index">
+                  
+        <mat-list *ngIf="i>0">
+          <mat-divider></mat-divider>
+        </mat-list>
+
+        <div [formGroupName]="i">
+
+          <mat-grid-list cols="3" rowHeight="70px">
+
+            <mat-grid-tile colspan="3" *ngIf="!garante.value.id_cliente">
+              <button type="button" mat-icon-button color="primary" (click)="SeleccionarGarante(i)"> <mat-icon> person_add </mat-icon>  </button>
+            </mat-grid-tile>
+
+            <mat-grid-tile colspan="2" *ngIf="garante.value.id_cliente">
+              <mat-form-field class="columnas-2">
+                <input matInput placeholder="Garante" formControlName="nombre" readonly>
+                <mat-icon color="primary" matSuffix (click)="EliminarGarante(i)"> remove_circle </mat-icon>
+              </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile colspan="1" *ngIf="garante.value.id_cliente">
+              <mat-form-field class="columnas-1">
+                <input matInput placeholder="DNI" formControlName="dni" readonly>
+              </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile colspan="2" *ngIf="garante.value.id_cliente">
+              <mat-form-field class="columnas-2">
+                <input matInput placeholder="Dirección" formControlName="direccion" readonly>
+              </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile colspan="1" *ngIf="garante.value.id_cliente">
+              <button *ngIf="!idventa" type="button" mat-icon-button color="primary" (click)="EditarContactoGarante(garante.value.id_cliente, i)"> <mat-icon> edit </mat-icon>  </button>
+            </mat-grid-tile>
+
+          </mat-grid-list>
+
+          <mat-grid-list cols=4 rowHeight="60px">
+            <mat-grid-tile>
+              Autorizacion
+            </mat-grid-tile>
+            <mat-grid-tile>
+              Declaracion jurada
+            </mat-grid-tile>
+            <mat-grid-tile>
+              Carta del aval
+            </mat-grid-tile>
+            <mat-grid-tile>
+              Compromiso de pago
+            </mat-grid-tile>
+          </mat-grid-list>
+      
+          <mat-grid-list cols=4 rowHeight="40px">
+            <mat-grid-tile>
+              <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(autorizacion_aval)" [disabled]="!autorizacion_aval"> <mat-icon> arrow_downward </mat-icon> </button>
+            </mat-grid-tile>
+      
+            <mat-grid-tile>
+              <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(ddjj_aval)" [disabled]="!ddjj_aval"> <mat-icon> arrow_downward </mat-icon> </button>
+            </mat-grid-tile>
+      
+            <mat-grid-tile>
+              <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(carta_aval)" [disabled]="!carta_aval"> <mat-icon> arrow_downward </mat-icon> </button>
+            </mat-grid-tile>
+      
+            <mat-grid-tile>
+              <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(compromiso_aval)" [disabled]="!compromiso_aval"> <mat-icon> arrow_downward </mat-icon> </button>
+            </mat-grid-tile>
+          </mat-grid-list>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Datos de productos -->
     <div class="seccion" *ngIf="productos.length>0">
 
       <mat-card-subtitle class="titulo-seccion">
@@ -140,9 +228,13 @@
           </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile colspan=1>
+        <mat-grid-tile colspan=1 *ngIf="!producto.serie">
+          <button mat-icon-button color="primary" type="button" matTooltip="Seleccionar serie" (click)="SeleccionarSerie(producto)"><mat-icon>search</mat-icon></button>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan=1 *ngIf="producto.serie">
           <mat-form-field class="columnas-1">
-            <input matInput type="text" placeholder="Serie"  [(ngModel)]="producto.serie" [ngModelOptions]="{standalone: true}">
+            <input matInput type="text" placeholder="Serie"  [(ngModel)]="producto.serie" [ngModelOptions]="{standalone: true}" readonly>
           </mat-form-field>
         </mat-grid-tile>
 
@@ -150,6 +242,7 @@
 
     </div>
 
+    <!-- Información adicional -->
     <div class="seccion">
 
       <mat-card-subtitle class="titulo-seccion">
@@ -185,7 +278,13 @@
           </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile colspan=2>
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput type="number" placeholder="Días de premura para el contrato" formControlName="dias_premura">
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <!-- <mat-grid-tile colspan=2>
           <mat-form-field class="columnas-2">
             <input placeholder="Trabajador" matInput [matAutocomplete]="Tauto" formControlName="trabajador" #InputTrabajador [readonly]="EvaluacionArchivosForm.value.id_trabajador">
             <mat-icon color="primary" matSuffix (click)="RemoverTrabajador()" *ngIf="EvaluacionArchivosForm.value.id_trabajador"> remove_circle </mat-icon>
@@ -195,19 +294,48 @@
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
-        </mat-grid-tile>
+        </mat-grid-tile> -->
 
       </mat-grid-list>
 
     </div>
 
     <mat-card-actions>
-      <mat-grid-list cols=1 rowHeight=40px>
-        <mat-grid-tile>
-          <button mat-raised-button type="button" [color]="!generados ? 'primary' : 'null'" (click)="GenerarArchivos()" [disabled]="EvaluacionArchivosForm.invalid"> Generar </button>
-          <button mat-raised-button type="button" color="primary" (click)="Guardar()" [disabled]="!generados"> Hacer crédito </button>
+
+      <mat-grid-list cols=1 rowHeight=40px *ngIf="this.EvaluacionArchivosForm.value.id_cliente">
+        <mat-grid-tile *ngIf="!this.EvaluacionArchivosForm.value.email">
+          <mat-error> 
+            <strong>Falta el email: </strong> No se pueden generar la autorización ni la transacción.
+          </mat-error>
+        </mat-grid-tile>
+        <mat-grid-tile *ngIf="!this.EvaluacionArchivosForm.value.casilla">
+          <mat-error>
+            <strong>Falta la casilla: </strong>No se puede generar la transacción.
+          </mat-error>
+        </mat-grid-tile>
+        <mat-grid-tile *ngIf="!this.EvaluacionArchivosForm.value.codigo">
+          <mat-error>
+            <strong>Falta el código: </strong>No se puede generar la autorización.
+          </mat-error>
+        </mat-grid-tile>
+        <mat-grid-tile *ngIf="!this.EvaluacionArchivosForm.value.cuenta_numero">
+          <mat-error>
+            <strong>Falta la tarjeta: </strong>No se puede generar la tarjeta de socio.
+          </mat-error>
         </mat-grid-tile>
       </mat-grid-list>
+
+      <mat-grid-list cols=1 rowHeight=40px>
+        <mat-grid-tile>
+          <button mat-raised-button type="button" [color]="!generados ? 'primary' : 'null'" (click)="GenerarArchivos()"
+            [disabled]=" EvaluacionArchivosForm.invalid || ( EvaluacionArchivosForm.value.hay_garante && !EvaluacionArchivosForm['controls'].garantes['controls'][0].value.id_cliente ) ">
+            Generar
+          </button>
+          <button mat-raised-button type="button" color="primary" (click)="Guardar()" *ngIf="this.EvaluacionArchivosForm.value.tipo==2" [disabled]="!generados || cliente_provisional"> Hacer crédito </button>
+          <button mat-raised-button type="button" color="primary" (click)="Guardar()" *ngIf="this.EvaluacionArchivosForm.value.tipo==3" [disabled]="!generados || cliente_provisional"> Hacer venta </button>
+        </mat-grid-tile>
+      </mat-grid-list>
+      
     </mat-card-actions>
 
   </form>

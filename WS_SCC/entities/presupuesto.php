@@ -13,6 +13,7 @@ Class Presupuesto{
     public $fecha;
     public $cuotas;
     public $capital;
+    public $interes;
     public $tasa;
     public $total;
     public $numero;
@@ -105,6 +106,7 @@ Class Presupuesto{
         $query ="call sp_listarpresupuestocabeceraxId(?)";
         
         $cronograma = $this->read_cronograma($this->id_presupuesto);
+        $productos = $this->read_productos($this->id_presupuesto);
 
         $result = $this->conn->prepare($query);
         
@@ -131,6 +133,7 @@ Class Presupuesto{
             "pdf_compromiso" => $row['pdf_compromiso'],
             "estado" => $row['estado'],
             "cronograma" => $cronograma,
+            "productos" => $productos,
         );
 
         return $presupuesto;
@@ -156,6 +159,8 @@ Class Presupuesto{
             $item = array (
                 "numero" => $contador,
                 "id" => $id,
+                "capital" => $capital,
+                "interes" => $interes,
                 "monto_cuota" => $monto,
                 "fecha_vencimiento" => date($fecha),
             );
@@ -163,6 +168,38 @@ Class Presupuesto{
         }
 
         return $cronograma; 
+    }
+
+    function read_productos( $id_presupuesto ) {
+
+        $query = "CALL sp_listarpresupuestoproductos(?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam( 1, $id_presupuesto );
+
+        $result->execute();
+        
+        $productos=array();
+        $contador=0;
+
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $contador = $contador+1;
+            $item = array (
+                "numero" => $contador,
+                "id" => $id,
+                "id_producto" => $id_producto,
+                "nombre" => $producto,
+                "id_serie" => $id_serie,
+                "serie" => $serie,
+                "precio" => $precio,
+            );
+            array_push($productos,$item);
+        }
+
+        return $productos; 
     }
 
     function get_next(){
@@ -242,7 +279,8 @@ Class Presupuesto{
 
         $query = "call sp_crearpresupuestocronograma(
             :prpresupuesto,
-            :prmonto,
+            :prcapital,
+            :printeres,
             :praporte,
             :prfecha
         )";
@@ -250,12 +288,14 @@ Class Presupuesto{
         $result = $this->conn->prepare($query);
 
         $result->bindParam(":prpresupuesto", $this->presupuesto);
-        $result->bindParam(":prmonto", $this->monto);
+        $result->bindParam(":prcapital", $this->capital);
+        $result->bindParam(":printeres", $this->interes);
         $result->bindParam(":praporte", $this->aporte);
         $result->bindParam(":prfecha", $this->fecha);
 
         $this->presupuesto=htmlspecialchars(strip_tags($this->presupuesto));
-        $this->monto=htmlspecialchars(strip_tags($this->monto));
+        $this->capital=htmlspecialchars(strip_tags($this->capital));
+        $this->interes=htmlspecialchars(strip_tags($this->interes));
         $this->aporte=htmlspecialchars(strip_tags($this->aporte));
         $this->fecha=htmlspecialchars(strip_tags($this->fecha));
 
@@ -269,10 +309,10 @@ Class Presupuesto{
 
     function create_producto(){
 
-        $query = "call sp_crearpresupuestocronograma(
+        $query = "call sp_crearpresupuestoproducto(
             :prpresupuesto,
             :prproducto,
-            :prcantidad,
+            :prserie,
             :prprecio
         )";
 
@@ -280,12 +320,12 @@ Class Presupuesto{
 
         $result->bindParam(":prpresupuesto", $this->presupuesto);
         $result->bindParam(":prproducto", $this->producto);
-        $result->bindParam(":prcantidad", $this->cantidad);
+        $result->bindParam(":prserie", $this->id_serie);
         $result->bindParam(":prprecio", $this->precio);
 
         $this->presupuesto=htmlspecialchars(strip_tags($this->presupuesto));
         $this->producto=htmlspecialchars(strip_tags($this->producto));
-        $this->cantidad=htmlspecialchars(strip_tags($this->cantidad));
+        $this->id_serie=htmlspecialchars(strip_tags($this->id_serie));
         $this->precio=htmlspecialchars(strip_tags($this->precio));
 
         if($result->execute())

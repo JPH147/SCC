@@ -24,6 +24,7 @@ import { ReglasEvaluacionComponent } from './components/tablas-maestras/reglas-e
 import { RetornoVendedoresCierreComponent } from './components/retorno-vendedores-cierre/retorno-vendedores-cierre.component';
 import { VentasSalidaComponent } from './components/ventas-salida/ventas-salida.component';
 import { CreditosListarComponent } from './components/creditos-listar/creditos-listar.component';
+import { CreditosListarAfiliacionesComponent } from './components/creditos-listar-afiliaciones/creditos-listar-afiliaciones.component';
 import { CreditosComponent } from './components/creditos/creditos.component';
 import { CobranzasComponent } from './components/cobranzas/cobranzas.component';
 import { CobranzasListarComponent } from './components/cobranzas-listar/cobranzas-listar.component';
@@ -36,6 +37,9 @@ import { VendedoresComponent } from './components/vendedores/vendedores.componen
 import { TalonariosComponent } from './components/talonarios/talonarios.component';
 import { PresupuestoComponent } from './components/presupuesto/presupuesto.component';
 import { SeguimientosComponent } from './components/seguimientos/seguimientos.component';
+import { CourierComponent } from './components/courier/courier.component';
+import { PlantillasComponent } from './components/plantillas/plantillas.component';
+import { RefinanciamientoComponent } from './components/refinanciamiento/refinanciamiento.component';
 
 const appRoutes: Routes = [
   // {path: '', component: ConsultarClienteComponent}, //prueba
@@ -68,12 +72,15 @@ const appRoutes: Routes = [
   {path: 'ventas/:idventa', component: VentasComponent},
   {path: 'ventas/salida/:idventa', component: VentasSalidaComponent},
   {path: 'ventas/salida/editar/:idventaeditar', component: VentasSalidaComponent},
+  {path: 'afiliaciones', component: CreditosListarAfiliacionesComponent},
   {path: 'creditos', component: CreditosListarComponent},
   {path: 'creditos/ver/:idcredito', component: CreditosComponent},
   {path: 'creditos/editar/:idcreditoeditar', component: CreditosComponent},
   {path: 'creditos/nuevo', component: CreditosComponent},
+  {path: 'creditos/nuevo/refinanciamiento/:idclienterefinanciado/:total/:transacciones', component: CreditosComponent},
   {path: 'creditos/nuevo/:idpresupuesto', component: CreditosComponent},
   {path: 'presupuesto', component: PresupuestoComponent},
+  {path: 'refinanciamiento', component: RefinanciamientoComponent},
   {path: 'seguimiento', component: SeguimientosComponent},
   {path: 'usuarios', component: UsuariosComponent},
   {path: 'proveedores', component: ProveedoresComponent},
@@ -86,7 +93,8 @@ const appRoutes: Routes = [
   {path: 'trabajadores', component: TrabajadoresComponent},
   {path: 'registro-horas', component: RegistroHorasComponent},
   {path: 'reporte-asistencia', component: ReporteAsistenciaComponent},
-  {path: 'prueba', component: VentasComponent},
+  {path: 'plantillas', component: PlantillasComponent},
+  {path: 'prueba', component: CreditosComponent},
 ];
 
 export const appRoutingProvider: any[] = [];

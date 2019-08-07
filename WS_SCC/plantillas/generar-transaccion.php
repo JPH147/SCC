@@ -34,6 +34,8 @@
             $archivo->nombre = trim($_POST["prnombre"]);
             $archivo->cargo = trim($_POST["prcargo"]);
             $archivo->dni = trim($_POST["prdni"]);
+            $archivo->cip = trim($_POST["prcip"]);
+            $archivo->direccion_cliente = trim($_POST["prdireccioncliente"]);
             $archivo->direccion = trim($_POST["prdireccion"]);
             $archivo->casilla = trim($_POST["prcasilla"]);
             $archivo->fecha_anterior = trim($_POST["prfechaanterior"]);
@@ -58,14 +60,14 @@
             $archivo->email = trim($_POST["premail"]);
             $archivo->whatsapp = trim($_POST["prwhatsapp"]);
             $archivo->lugar = trim($_POST["prlugar"]);
-            $archivo->trabajador = !empty($_GET['prtrabajador']) ? trim($_GET['prtrabajador']) : null;
-            $archivo->trabajador_dni = trim($_POST["prtrabajadordni"]);
-            $archivo->trabajador_cargo = trim($_POST["prtrabajadorcargo"]);
             $archivo->vendedor = trim($_POST["prvendedor"]);
             $archivo->vendedor_dni = trim($_POST["prvendedordni"]);
             $archivo->detalle = trim($_POST["prdetalle"]);
             $archivo->tipo = trim($_POST["prtipo"]);
             $archivo->productos = trim($_POST["prproductos"]);
+
+            $archivo->nombre_aval = trim($_POST["prnombreaval"]);
+            $archivo->dni_aval = trim($_POST["prdniaval"]);
 
             if($archivo->generar_transaccion())
             {

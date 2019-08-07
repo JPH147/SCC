@@ -39,7 +39,7 @@ export class ImagenProductoComponent {
 
     SubirFoto() {
       if ( this.data) {
-        // console.log(file);
+        // console.log(this.file);
         if(this.file) {
           this.Servicios.RenameFile(this.file.serverResponse.response.body.data, 'PRODUCTO', this.data.id+"-"+Math.floor(Math.random() * 100000),"producto").subscribe( res => {
             if (res) {

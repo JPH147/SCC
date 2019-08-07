@@ -17,6 +17,8 @@ Class Creditos{
     public $documentos;
 
     public $monto;
+    public $capital;
+    public $interes;
     public $fecha;
     public $tiempo;
     public $total_pagado;
@@ -36,8 +38,6 @@ Class Creditos{
     public $cliente_cargo;
     public $cliente_trabajo;
     public $tipo_pago;
-    public $interes;
-    public $capital;
     public $cuotas;
     public $total;
     public $pdf_foto;
@@ -55,7 +55,7 @@ Class Creditos{
     public $pdf_ddjj;
     public $pdf_otros;
     public $observacion;
-    
+
     public $garante;
     public $cronograma;
     public $orden;
@@ -260,6 +260,8 @@ Class Creditos{
             $credito_item = array (
                 "numero"=>$contador,
                 "id_cronograma"=>$id_cronograma,
+                "capital"=>$capital,
+                "interes"=>$interes,
                 "monto_cuota"=>$monto_cuota,
                 "fecha_vencimiento"=>$fecha_vencimiento,
                 "monto_interes"=>$monto_interes,
@@ -294,6 +296,8 @@ Class Creditos{
           $cronograma_item = array (
               "numero"=>$contador,
               "id_cronograma"=>$id,
+              "capital"=>$capital,
+              "interes"=>$interes,
               "monto_cuota"=>$monto,
               "fecha_vencimiento"=>$fecha,
               "estado"=>$estado
@@ -599,18 +603,21 @@ Class Creditos{
     function crear_cronograma(){
         $query = "CALL sp_crearcreditocronograma(
             :prcredito,
-            :prmonto,
+            :prcapital,
+            :printeres,
             :prfechavencimiento
         )";
 
         $result = $this->conn->prepare($query);
 
         $result->bindParam(":prcredito", $this->id_credito);
-        $result->bindParam(":prmonto", $this->monto);
+        $result->bindParam(":prcapital", $this->capital);
+        $result->bindParam(":printeres", $this->interes);
         $result->bindParam(":prfechavencimiento", $this->fecha);
 
         $this->id_credito=htmlspecialchars(strip_tags($this->id_credito));
-        $this->monto=htmlspecialchars(strip_tags($this->monto));
+        $this->capital=htmlspecialchars(strip_tags($this->capital));
+        $this->interes=htmlspecialchars(strip_tags($this->interes));
         $this->fecha=htmlspecialchars(strip_tags($this->fecha));
 
 
@@ -718,6 +725,144 @@ Class Creditos{
         $row = $result->fetch(PDO::FETCH_ASSOC);
   
         $this->numero=$row['numero'];
+    }
+
+    // Este SP muestra las ventas y créditos que puede refinanciar
+    function read_transacciones(){
+
+        $query = "CALL sp_listartransaccionesxcliente(?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->cliente);
+
+        $result->execute();
+        
+        $credito_list=array();
+        $credito_list["transacciones"]=array();
+
+        $contador = 0;
+        
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $contador=$contador+1;
+
+            $items = array (
+                "numero"=>$contador,
+                "id"=>$id,
+                "id_tipo"=>$id_tipo,
+                "tipo"=>$tipo,
+                "fecha"=>$fecha,
+                "documento"=>$documento,
+                "total"=>$total,
+                "monto_pendiente"=>$monto_pendiente,
+                "considerar"=>false,
+            );
+            array_push($credito_list["transacciones"],$items);
+        }
+
+        return $credito_list;
+    }
+
+    function read_transacciones_cronograma(){
+        $query = "CALL sp_listartransaccionescronogramaxclientecronograma(?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->tipo);
+        $result->bindParam(2, $this->id_transaccion);
+
+        $result->execute();
+        
+        $credito_list=array();
+
+        $contador = 0;
+        
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $contador=$contador+1;
+            $items = array (
+                "numero"=>$contador,
+                "monto_cuota"=>$monto_cuota,
+                "fecha"=>$fecha,
+            );
+            array_push($credito_list,$items);
+        }
+
+        return $credito_list;
+    }
+
+    // Este SP muestra todas las cuotas que tiene el cliente
+    function read_cronogramasxcliente(){
+
+        $query = "CALL sp_listartransaccionescronogramaxcliente(?)";
+  
+        $result = $this->conn->prepare($query);
+  
+        $result->bindParam(1, $this->cliente);
+  
+        $result->execute();
+        
+        $cronograma_list=array();
+        $contador = 0;
+  
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $contador=$contador+1;
+            $item = array (
+                "numero"=>$contador,
+                "fecha_vencimiento"=>$fecha_vencimiento,
+                "cuota_mensual"=>$cuota_mensual
+            );
+            array_push($cronograma_list,$item);
+        }
+  
+        return $cronograma_list;
+    }
+
+    function actualizar_transacciones_refinanciadas(){
+        $query = "CALL sp_actualizartransaccionrefinanciada(
+            :prnuevocredito,
+            :ptipo,
+            :prtransaccion
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prnuevocredito", $this->id_credito);
+        $result->bindParam(":ptipo", $this->tipo);
+        $result->bindParam(":prtransaccion", $this->id_transaccion);
+
+        $this->id_credito=htmlspecialchars(strip_tags($this->id_credito));
+        $this->tipo=htmlspecialchars(strip_tags($this->tipo));
+        $this->id_transaccion=htmlspecialchars(strip_tags($this->id_transaccion));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    function eliminar_credito(){
+        $query = "CALL sp_eliminarcredito(
+            :prcredito
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prcredito", $this->id_credito);
+
+        $this->id_credito=htmlspecialchars(strip_tags($this->id_credito));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
     }
 
 }

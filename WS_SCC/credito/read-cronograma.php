@@ -19,7 +19,7 @@
         $credito->id_credito = !empty($_GET['prcredito']) ? trim($_GET['prcredito']) : null;
         $credito->orden = !empty($_GET['prorden']) ? trim($_GET['prorden']) : 'fecha_vencimiento asc';
 
-        $credito_list = $credito->read_cronogramaxId();
+        $credito_list = $credito->read_cronograma();
 
         if (count(array_filter($credito_list))>0)
         { 

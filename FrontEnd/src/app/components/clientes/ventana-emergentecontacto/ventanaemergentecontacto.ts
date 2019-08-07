@@ -111,8 +111,8 @@ export class VentanaEmergenteContacto {
       cuenta:[null,[
         Validators.required,
       ]],
-      cci:[null,[
-        Validators.required,
+      cci:["",[
+        // Validators.required,
         Validators.minLength(20),
         Validators.maxLength(20)
       ]]
@@ -258,6 +258,7 @@ export class VentanaEmergenteContacto {
       {id: 4, viewValue: 'Otro'}
     ];
   }
+  
   ListarRelevancia() {
     this.Relevancias = [
       {id: 1, viewValue: 'Principal'},

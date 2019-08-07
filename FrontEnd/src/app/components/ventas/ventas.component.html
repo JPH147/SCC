@@ -557,13 +557,13 @@
         PRODUCTOS
       </mat-card-subtitle>
 
-      <mat-grid-list cols="4" rowHeight="50px" *ngIf="!idventa">
+      <mat-grid-list cols="4" rowHeight="50px" *ngIf="!idventa && !id_presupuesto">
         <mat-grid-tile colspan="4">
           <button mat-mini-fab color="primary" (click)="AgregarProducto()" matTooltip="Agregar productos" type="button" [disabled]="!this.sucursal"><mat-icon>add</mat-icon></button>
         </mat-grid-tile>
       </mat-grid-list>
 
-      <ng-container *ngIf="this.sucursal && !idventa">
+      <ng-container *ngIf="this.sucursal && !idventa && !id_presupuesto">
         <div formArrayName="productos" *ngFor="let producto of VentasForm['controls'].productos['controls']; let i = index">
           <div [formGroupName]="i">
 
@@ -613,7 +613,7 @@
         </div>
       </ng-container>
 
-      <ng-container *ngIf="idventa">
+      <ng-container *ngIf="idventa || id_presupuesto">
         <mat-grid-list cols="5" rowHeight="70px" *ngFor="let producto of ProductosComprados">
 
           <mat-grid-tile colspan="2">
@@ -1213,7 +1213,7 @@
                       editar_cronograma==1 ||
                       diferencia>0.2 "
           > Guardar </button>
-          <!-- <button mat-raised-button (click)="ImprimirFormulario()"> print </button> -->
+          <!-- <button mat-raised-button type="button" (click)="ImprimirFormulario()"> print </button> -->
         </mat-grid-tile>
       </mat-grid-list>
     </mat-card-actions>

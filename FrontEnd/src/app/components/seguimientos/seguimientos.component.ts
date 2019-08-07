@@ -85,6 +85,20 @@ export class SeguimientosComponent implements OnInit {
     this.CargarData()
   }
 
+  AbrirVentana(url){
+    window.open(url, "_blank")
+  }
+
+  VerSeguimiento(id_seguimiento){
+    let Ventana = this.Dialogo.open( VentanaSeguimientosComponent ,{
+      data : { ver: true , id : id_seguimiento },
+      width : '900px'
+    } )
+
+    Ventana.afterClosed().subscribe(res=>{
+    })
+  }
+
   EditarSeguimiento(id_seguimiento){
     let Ventana = this.Dialogo.open( VentanaSeguimientosComponent ,{
       data : { editar: true , id : id_seguimiento },

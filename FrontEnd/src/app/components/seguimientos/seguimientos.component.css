@@ -41,3 +41,6 @@ mat-card{
   max-width: 15%;
 }
  
+.pequeno{
+  font-size: 18px !important;
+}

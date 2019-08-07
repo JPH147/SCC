@@ -46,6 +46,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { LayoutModule } from '@angular/cdk/layout';
+// import { FileSelectDirective } from 'ng2-file-upload';
 
 import {routing, appRoutingProvider} from './app.routing';
 import {Notificaciones} from './components/global/notificacion';
@@ -71,6 +72,7 @@ import {VentanaDetalle} from './components/ingreso-productos/ventana-detalle/ven
 import {VentanaFecha} from './components/ingreso-productos/ventana-fecha/ventanafecha';
 import { ventanaseriesalida } from './components/salida-productos/ventana-seriesalida/ventanaseriesalida';
 import {VentanaEmergenteClientes} from './components/clientes/ventana-emergente/ventanaemergente';
+import { VentanaEmergenteProvisionalClientes } from './components/clientes/ventana-emergente-provisional/ventanaemergenteprovisional';
 import { ProveedoresComponent } from './components/proveedores/proveedores.component';
 import { ventanaseriessv } from './components/salida-vendedores/ventana-seriessv/ventanaseriessv';
 import { DireccionesComponent } from './components/direcciones/direcciones.component';
@@ -138,6 +140,13 @@ import { VentanaArchivosComponent } from './components/presupuesto/ventana-archi
 import { SeguimientosComponent } from './components/seguimientos/seguimientos.component';
 import { VentanaSeguimientosComponent } from './components/seguimientos/ventana-seguimientos/ventana-seguimientos.component';
 import { VentanaEntregaSeguimientosComponent } from './components/seguimientos/ventana-entrega-seguimientos/ventana-entrega-seguimientos.component';
+import { CourierComponent } from './components/courier/courier.component';
+import { VentanaCourierComponent } from './components/courier/ventana-courier/ventana-courier.component';
+import { CreditosListarAfiliacionesComponent } from './components/creditos-listar-afiliaciones/creditos-listar-afiliaciones.component';
+import { PlantillasComponent } from './components/plantillas/plantillas.component';
+import { VentanaPlantillasComponent } from './components/plantillas/ventana-plantillas/ventana-plantillas.component';
+import { RefinanciamientoComponent } from './components/refinanciamiento/refinanciamiento.component';
+import { VerPlantillasComponent } from './components/evaluacion/ver-plantillas/ver-plantillas.component';
 
 @NgModule({
   imports: [
@@ -209,6 +218,7 @@ import { VentanaEntregaSeguimientosComponent } from './components/seguimientos/v
     VentanaDetalle,
     ventanaseriesalida,
     VentanaEmergenteClientes,
+    VentanaEmergenteProvisionalClientes,
     ProveedoresComponent,
     ventanaseriessv,
     VentanaConfirmarComponent,
@@ -221,6 +231,7 @@ import { VentanaEntregaSeguimientosComponent } from './components/seguimientos/v
     VentanaEmergenteDistrito,
     VentanaEmergenteGastos,
     FileUpload,
+    // FileSelectDirective,
     VentanaEmergenteContacto,
     VentanaEmergenteStock,
     VentasListarComponent,
@@ -280,7 +291,14 @@ import { VentanaEntregaSeguimientosComponent } from './components/seguimientos/v
     VentanaArchivosComponent,
     SeguimientosComponent,
     VentanaSeguimientosComponent,
-    VentanaEntregaSeguimientosComponent
+    VentanaEntregaSeguimientosComponent,
+    CourierComponent,
+    VentanaCourierComponent,
+    CreditosListarAfiliacionesComponent,
+    PlantillasComponent,
+    VentanaPlantillasComponent,
+    RefinanciamientoComponent,
+    VerPlantillasComponent
    ],
   entryComponents: [
     AppComponent,
@@ -291,6 +309,7 @@ import { VentanaEntregaSeguimientosComponent } from './components/seguimientos/v
     VentanaFecha,
     ventanaseriesalida,
     VentanaEmergenteClientes,
+    VentanaEmergenteProvisionalClientes,
     ventanaseriessv,
     VentanaConfirmarComponent,
     VentanaEmergenteDepartamento,
@@ -326,7 +345,10 @@ import { VentanaEntregaSeguimientosComponent } from './components/seguimientos/v
     VentanaTalonarioComponent,
     VentanaArchivosComponent,
     VentanaSeguimientosComponent,
-    VentanaEntregaSeguimientosComponent
+    VentanaEntregaSeguimientosComponent,
+    VentanaCourierComponent,
+    VentanaPlantillasComponent,
+    VerPlantillasComponent
   ],
   bootstrap: [AppComponent],
   providers: [appRoutingProvider, Notificaciones,{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}]

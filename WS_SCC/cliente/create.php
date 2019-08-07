@@ -38,10 +38,11 @@
             $cliente->clt_calificacion_personal = trim($_POST["clt_calificacion_personal"]);
             $cliente->clt_aporte = trim($_POST["clt_aporte"]);
             $cliente->clt_fecharegistro = trim($_POST["clt_fecharegistro"]);
+            $cliente->clt_estado = trim($_POST["prestado"]);
 
             if($cliente->create())
             {
-                print_json("0000", "Se creó el cliente satisfactoriamente.", "");
+                print_json("0000", "Se creó el cliente satisfactoriamente.", $cliente->id);
             }
             else
             {

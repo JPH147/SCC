@@ -836,17 +836,18 @@ export class VentasComponent implements OnInit {
   }
 
   TipoPagoSeleccionado(){
-    // console.log(this.VentasForm.value.tipopago);
-    if (this.VentasForm.value.tipopago==3 && !this.idventa) {
-      this.VentasForm.get('cuotas').setValue(1);
-      this.VentasForm.get('cuotas').disable();
-      this.VentasForm.get('inicial').setValue(0);
-      this.VentasForm.get('inicial').disable();
-    }else{
-      this.VentasForm.get('cuotas').enable();
-      this.VentasForm.get('inicial').enable();
+    if(!this.id_presupuesto) {
+      if (this.VentasForm.value.tipopago==3 && !this.idventa) {
+        this.VentasForm.get('cuotas').setValue(1);
+        this.VentasForm.get('cuotas').disable();
+        this.VentasForm.get('inicial').setValue(0);
+        this.VentasForm.get('inicial').disable();
+      }else{
+        this.VentasForm.get('cuotas').enable();
+        this.VentasForm.get('inicial').enable();
+      }
+      this.CrearCronograma();
     }
-    this.CrearCronograma();
   }
 
   ListarTipoPago() {
@@ -877,13 +878,15 @@ export class VentasComponent implements OnInit {
 
   SucursalSeleccionada(evento){
     this.sucursal=evento.value;
-    this.ResetearProductosFormArray();
-    this.BuscarProducto(this.sucursal,"");
-    if (this.idventa_editar){
-      if (evento.value==this.edicion_sucursal) {
-        this.Restaurar_productos(2);
-      }else{
-        this.Restaurar_productos(3);
+    if(!this.id_presupuesto) {
+      this.ResetearProductosFormArray();
+      this.BuscarProducto(this.sucursal,"");
+      if (this.idventa_editar){
+        if (evento.value==this.edicion_sucursal) {
+          this.Restaurar_productos(2);
+        }else{
+          this.Restaurar_productos(3);
+        }
       }
     }
   }
@@ -1360,13 +1363,25 @@ export class VentasComponent implements OnInit {
       this.ListadoVentas.Informacion.next(this.Cronograma)
       this.CalcularTotalCronograma();
 
+      this.ProductosComprados=res.productos;
+
       if(res.id_vendedor){
         this.hay_presupuesto_vendedor=true;
         this.VentasForm.get('id_vendedor').setValue(res.id_vendedor);
         this.VentasForm.get('vendedor').setValue(res.vendedor);
       }
+
+      this.QuitarValidacionProductos();
+      this.diferencia=0;
+
       this.VentasForm.get('fechapago').setValue( moment(res.cronograma[0].fecha_vencimiento).toDate() );
     })
+  }
+
+  QuitarValidacionProductos(){
+    this.VentasForm['controls'].productos['controls'][0].get('id_producto').setValue(1000);
+    this.VentasForm['controls'].productos['controls'][0].get('id_serie').setValue(1000);
+    this.VentasForm['controls'].productos['controls'][0].get('precio').setValue(1000);
   }
 
   Guardar(formulario){
@@ -1428,12 +1443,20 @@ export class VentasComponent implements OnInit {
         formulario.value.observaciones,
       ).subscribe(res=>{
 
-        // console.log(res);
+        console.log(res);
 
         // Se crean los productos y se generan los documentos en almacén para cuadrar
-        formulario.value.productos.forEach((item)=>{
-          this.Servicio.CrearVentaProductos(res['data'],item.id_serie,item.precio).subscribe()
-        });
+        if(!this.id_presupuesto){
+          formulario.value.productos.forEach((item)=>{
+            this.Servicio.CrearVentaProductos(res['data'],item.id_serie,item.precio).subscribe()
+          });
+        } else {
+          this.ProductosComprados.forEach((item)=>{
+            this.Servicio.CrearVentaProductos(res['data'],item.id_serie,item.precio).subscribe(res=>{
+              // console.log(res)
+            })
+          })
+        }
 
         // Se genera el cronograma
         this.Cronograma.forEach((item)=>{

@@ -4,6 +4,7 @@ Class Cliente{
     private $conn;
     private $Direccion;
 
+    public $id;
     public $idcliente;
     public $id_sede;
     public $id_institucion;
@@ -35,6 +36,12 @@ Class Cliente{
     public $clt_estado;
     public $clt_fecharegistro;
 
+    public $plantilla_tarjeta;
+    public $plantilla_ddjj;
+    public $plantilla_autorizacion;
+    public $plantilla_transaccion;
+    public $plantilla_compromiso;
+
     public $cargo;
     public $cargo_estado;
 
@@ -49,19 +56,16 @@ Class Cliente{
     }
 
     function read(){
-        $query = "CALL sp_listarcliente (?,?,?,?,?)";
+        $query = "CALL sp_listarcliente (?,?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
-        // $result->bindParam(1, $this->inst_nombre);
-        // $result->bindParam(2, $this->sd_nombre);
-        // $result->bindParam(3, $this->ssd_nombre);
-        // $result->bindParam(4, $this->clt_cargo);
         $result->bindParam(1, $this->clt_codigo);
         $result->bindParam(2, $this->clt_dni);
         $result->bindParam(3, $this->clt_nombre);
         $result->bindParam(4, $this->prpagina);
         $result->bindParam(5, $this->prtotalpagina);
+        $result->bindParam(6, $this->clt_estado);
 
         $result->execute();
     
@@ -76,13 +80,6 @@ Class Cliente{
             $cliente_item = array (
                 "numero"=>$contador,
                 "id"=>$row['id'],
-                // "institucion"=>$row['institucion'],
-                // "sede"=>$row['sede'],
-                // "subsede"=>$row['subsede'],
-                // "id_cargo"=>$row['id_cargo'],
-                // "cargo"=>$row['cargo'],
-                // "id_cargo_estado"=>$row['id_cargo_estado'],
-                // "cargo_estado"=>$row['cargo_estado'],
                 "codigo"=>$row['codigo'],
                 "dni"=>$row['dni'],
                 "nombre"=>$row['nombre'],
@@ -91,14 +88,7 @@ Class Cliente{
                 "casilla"=>$row['casilla'],
                 "trabajo"=>$row['trabajo'],
                 "subsede"=>$row['subsede'],
-                // "cargo"=>$row['cargo'],
                 "capacidad_pago"=>$row['capacidad_pago'],
-                // "id_distrito_trabajo"=>$row['id_distrito_trabajo'],
-                // "distrito"=>$row['distrito'],
-                // "id_provincia"=>$row['id_provincia'],
-                // "provincia"=>$row['provincia'],
-                // "id_departamento"=>$row['id_departamento'],
-                // "departamento"=>$row['departamento'],
                 "capacidad_pago"=>$row['capacidad_pago'],
                 "maximo_descuento"=>$row['maximo_descuento'],
                 "calificacion_personal"=>$row['calificacion_personal'],
@@ -114,7 +104,7 @@ Class Cliente{
 
     function contar(){
 
-        $query = "CALL sp_listarclientecontar(?,?,?,?,?)";
+        $query = "CALL sp_listarclientecontar(?,?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
@@ -123,6 +113,8 @@ Class Cliente{
         $result->bindParam(3, $this->clt_nombre);
         $result->bindParam(4, $this->prpagina);
         $result->bindParam(5, $this->prtotalpagina);
+        $result->bindParam(6, $this->clt_estado);
+
         $result->execute();
 
         $row = $result->fetch(PDO::FETCH_ASSOC);
@@ -219,7 +211,8 @@ Class Cliente{
             :clt_maximo_descuento,
             :clt_calificacion_personal,
             :clt_aporte,
-            :clt_fecharegistro
+            :clt_fecharegistro,
+            :clt_estado
         )"; 
 
         $result = $this->conn->prepare($query);
@@ -240,6 +233,7 @@ Class Cliente{
         $this->clt_calificacion_personal=htmlspecialchars(strip_tags($this->clt_calificacion_personal));
         $this->clt_aporte=htmlspecialchars(strip_tags($this->clt_aporte));
         $this->clt_fecharegistro=htmlspecialchars(strip_tags($this->clt_fecharegistro));
+        $this->clt_estado=htmlspecialchars(strip_tags($this->clt_estado));
 
         $result->bindParam(":id_sub_sede", $this->id_sub_sede);
         $result->bindParam(":id_cargo_estado", $this->id_cargo_estado);
@@ -257,10 +251,13 @@ Class Cliente{
         $result->bindParam(":clt_calificacion_personal", $this->clt_calificacion_personal);
         $result->bindParam(":clt_aporte", $this->clt_aporte);
         $result->bindParam(":clt_fecharegistro", $this->clt_fecharegistro);
+        $result->bindParam(":clt_estado", $this->clt_estado);
         
 
         if($result->execute())
         {
+            $row = $result->fetch(PDO::FETCH_ASSOC);
+            $this->id=$row['id'];
             return true;
         }
         
@@ -281,11 +278,12 @@ Class Cliente{
         $this->idcliente = $row['idcliente'];
         $this->id_institucion=$row['id_institucion'];
         $this->id_sede=$row['id_sede'];
+        $this->sede=$row['sede'];
         $this->id_subsede=$row['id_subsede'];
         $this->id_cargo=$row['id_cargo'];
         $this->cargo=$row['crg_nombre'];
         $this->id_cargo_estado=$row['id_cargo_estado'];
-        $this->cargo_estado=$row['id_cargo_estado'];
+        $this->cargo_estado=$row['cargo_estado'];
         $this->clt_codigo=$row['clt_codigo'];
         $this->clt_dni=$row['clt_dni'];
         $this->clt_nombre=$row['clt_nombre'];
@@ -304,6 +302,12 @@ Class Cliente{
         $this->clt_calificacion_personal= $row['clt_calificacion_personal'];
         $this->clt_aporte=$row['clt_aporte'];
         $this->clt_fecharegistro=$row['clt_fecharegistro'];
+        $this->clt_estado=$row['estado'];
+        $this->plantilla_tarjeta=$row['plantilla_tarjeta'];
+        $this->plantilla_ddjj=$row['plantilla_ddjj'];
+        $this->plantilla_autorizacion=$row['plantilla_autorizacion'];
+        $this->plantilla_transaccion=$row['plantilla_transaccion'];
+        $this->plantilla_compromiso=$row['plantilla_compromiso'];
     }
 
     function update(){
@@ -323,7 +327,8 @@ Class Cliente{
             :clt_capacidad_pago,
             :clt_maximo_descuento,
             :clt_calificacion_personal,
-            :clt_aporte
+            :clt_aporte,
+            :prestado
         )"; 
 
         $result = $this->conn->prepare($query);
@@ -343,6 +348,7 @@ Class Cliente{
         $this->maximo_descuento=htmlspecialchars(strip_tags($this->maximo_descuento));
         $this->clt_calificacion_personal=htmlspecialchars(strip_tags($this->clt_calificacion_personal));
         $this->clt_aporte=htmlspecialchars(strip_tags($this->clt_aporte));
+        $this->clt_estado=htmlspecialchars(strip_tags($this->clt_estado));
 
         $result->bindParam(":idcliente", $this->idcliente);
         $result->bindParam(":id_subsede", $this->id_subsede);
@@ -359,6 +365,7 @@ Class Cliente{
         $result->bindParam(":clt_maximo_descuento", $this->maximo_descuento);
         $result->bindParam(":clt_calificacion_personal", $this->clt_calificacion_personal);
         $result->bindParam(":clt_aporte", $this->clt_aporte);
+        $result->bindParam(":prestado", $this->clt_estado);
         
 
         if($result->execute())

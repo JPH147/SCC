@@ -21,6 +21,7 @@
         $cliente->clt_nombre = !empty($_GET['prnombre']) ? trim($_GET['prnombre']) : '';
         $cliente->prpagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : 1;
         $cliente->prtotalpagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : 10;
+        $cliente->clt_estado = !empty($_GET['prestado']) ? trim($_GET['prestado']) : 1;
 
         $cliente_list = $cliente->read();
         $cliente_contar = $cliente->contar();

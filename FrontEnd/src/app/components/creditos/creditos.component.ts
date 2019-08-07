@@ -19,6 +19,7 @@ import {SeleccionarClienteComponent} from '../retorno-vendedores/seleccionar-cli
 import { VentanaEmergenteContacto} from '../clientes/ventana-emergentecontacto/ventanaemergentecontacto';
 import { ReglasEvaluacionService } from '../tablas-maestras/reglas-evaluacion/reglas-evaluacion.service';
 import { SeguimientosService } from '../seguimientos/seguimientos.service';
+import { RefinanciamientoService } from '../refinanciamiento/refinanciamiento.service';
 
 @Component({
   selector: 'app-creditos',
@@ -47,6 +48,9 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   public monto_cuota: number;
   public Tipos : Array<any> ;
   public total_cronograma : number; // No necesariamente es el mismo que el total del formulario por los intereses diarios
+  public cliente_refinanciado : number ;
+  public refinancimiento_total : number ;
+  public refinanciamiento_transacciones : Array<any> ;
 
   public ListadoCronograma: CronogramaDataSource;
   public ColumnasCronograma: Array<string>;
@@ -138,6 +142,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     private ServiciosGenerales: ServiciosGenerales,
     private ServicioTipoPago: ServiciosTipoPago,
     private RServicio: ReglasEvaluacionService,
+    private RfServicio : RefinanciamientoService,
     private SServicio : SeguimientosService,
     private location: Location,
     private Builder: FormBuilder,
@@ -194,6 +199,14 @@ export class CreditosComponent implements OnInit, AfterViewInit {
           this.id_credito_editar=params['idcreditoeditar'];
           // this.id_credito_editar=30;
           this.SeleccionarCredito(this.id_credito_editar);
+        }
+
+        if(params['transacciones']){
+          // console.log(params['transacciones']);
+          this.cliente_refinanciado = params['idclienterefinanciado'];
+          this.refinancimiento_total = params['total'];
+          this.refinanciamiento_transacciones = JSON.parse(params['transacciones']);
+          this.NuevoCreditoRefinanciamiento(this.cliente_refinanciado);
         }
 
       }else{
@@ -387,6 +400,17 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       this.CreditosForm.get('fecha_pago').setValue( moment(res.cronograma[0].fecha_vencimiento).toDate() );
       this.CreditosForm.get('interes_diario').disable();
     })
+  }
+
+  NuevoCreditoRefinanciamiento(id){
+    this.NuevoCredito();
+    this.id_cliente=id;
+    this.CreditosForm.get('id_cliente').setValue(id);
+    this.ObtenerClientexId(this.id_cliente);
+    this.ObtenerDireccion(this.id_cliente);
+    this.ObtenerTelefono(this.id_cliente);
+    this.VerificarAfiliacion(this.id_cliente);
+    this.CreditosForm.get('capital').setValue(this.refinancimiento_total);
   }
 
   SeleccionarCredito(id_credito){
@@ -585,7 +609,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
 
   ObtenerCronograma(id_credito, orden){
     this.Servicio.ObtenerCrongrama(id_credito, orden).subscribe(res=>{
-      this.Cronograma = res.creditos;
+      this.Cronograma = res;
       this.ListadoCronograma.AsignarInformacion(this.Cronograma);
     })
   }
@@ -636,6 +660,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   }
 
   VerificarAfiliacion(id_cliente){
+    // console.log(id_cliente);
     this.Servicio.Verificar_Afiliacion(id_cliente).subscribe(res=>{
       // console.log(res)
       if(res['codigo_afiliacion']){
@@ -988,7 +1013,9 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         this.Cronograma.push({
           numero: 0,
           fecha_vencimiento: moment(this.CreditosForm.value.fecha_credito).endOf('month'),
-          monto_cuota: interes_truncado
+          monto_cuota: interes_truncado,
+          interes : interes_truncado,
+          capital : 0
         })
       }
 
@@ -999,20 +1026,24 @@ export class CreditosComponent implements OnInit, AfterViewInit {
           this.Cronograma.push({
             numero: i,
             fecha_vencimiento: fecha,
-            monto_cuota: interes
+            monto_cuota: interes,
+            interes : interes,
+            capital : 0
           })
         }
       };
 
       // Se calcula el monto de las cuotas normales
-      let monto=Math.round((total)*100/this.FiltroCuota.nativeElement.value)/100
+      let monto : number = Math.round((total)*100/this.FiltroCuota.nativeElement.value)/100
   
       for (let j = 1; j<=this.FiltroCuota.nativeElement.value; j++) {
         fecha=moment(fecha_corregida).add(j-1, 'months').toDate();
         this.Cronograma.push({
           numero: i+j-1,
           fecha_vencimiento: fecha,
-          monto_cuota: monto
+          monto_cuota: monto ,
+          interes : interes,
+          capital : monto-interes
         })
       }
   
@@ -1035,7 +1066,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     this.Cronograma.forEach((item)=>{
       this.total_cronograma_editado=this.total_cronograma_editado+item.monto_cuota*1;
     })
-
+    // console.log(this.Cronograma);
     // console.log(this.diferencia);
     this.diferencia= Math.abs(Math.round((this.CreditosForm.value.total-this.total_cronograma_editado)*100)/100);
 
@@ -1175,6 +1206,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
           this.Servicio.CrearCronograma(
             res['data'],
             item.monto_cuota,
+            0,
             item.fecha_vencimiento
           ).subscribe()
         })
@@ -1260,7 +1292,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         this.Cronograma.forEach((item)=>{
           this.Servicio.CrearCronograma(
             res['data'],
-            item.monto_cuota,
+            item.capital,
+            item.interes,
             item.fecha_vencimiento
           ).subscribe()
         })
@@ -1382,10 +1415,12 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   
         if(res['codigo']==0){
 
+          // console.log(this.Cronograma);
           this.Cronograma.forEach((item)=>{
             this.Servicio.CrearCronograma(
               res['data'],
               item.monto_cuota,
+              0,
               item.fecha_vencimiento
             ).subscribe()
           })
@@ -1421,6 +1456,17 @@ export class CreditosComponent implements OnInit, AfterViewInit {
               this.papeles_editar ? resultado[14].mensaje : this.papeles_antiguo,
               this.CreditosForm.value.papeles_observaciones
             ).subscribe();
+          }
+
+          // Si el crédito es refinanciado, se actualizan los documentos que se refinanciaron
+          if(this.cliente_refinanciado){
+            this.refinanciamiento_transacciones.forEach((item)=>{
+              this.RfServicio.ActualizarTransacciones(
+                res['data'],
+                item.tipo,
+                item.id
+              ).subscribe()
+            })
           }
         }
 

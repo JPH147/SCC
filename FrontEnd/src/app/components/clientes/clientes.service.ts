@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, Optional} from '@angular/core';
 import {HttpClient, HttpParams, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
@@ -22,7 +22,8 @@ export class ClienteService {
   dni: string,
   nombre: string,
   prpagina: number,
-  prtotalpagina: number
+  prtotalpagina: number,
+  estado : number
   ): Observable<any>  {
      return this.http.get(this.url + 'cliente/read.php',{
        params: new HttpParams()
@@ -35,6 +36,7 @@ export class ClienteService {
        .set('prnombre',nombre)
        .set('prpagina',prpagina.toString())
        .set('prtotalpagina',prtotalpagina.toString())
+       .set('prestado', estado.toString())
      }).pipe(map(res => {
       if (res['codigo'] === 0) {
         res['data'].clientes.forEach((item)=>{
@@ -89,25 +91,29 @@ export class ClienteService {
     capacidad_pago: number,
     maximo_descuento: number,
     clt_calificacion_personal: string,
-    clt_aporte: number
+    clt_aporte: number,
+    estado: number,
   ): Observable<any> {
 
     let params = new HttpParams()
-    .set('prsubsede', id_subsede.toString())
-    .set('prcargoestado', cargo_estado.toString())
-    .set('clt_codigo', clt_codigo)
-    .set('clt_dni', clt_dni)
-    .set('clt_nombre', clt_nombre)
-    .set('clt_cip', clt_cip)
-    .set('clt_email', clt_email)
-    .set('clt_casilla', clt_casilla)
-    .set('clt_trabajo', clt_trabajo)
-    .set('prdistrito', id_distrito.toString())
-    .set('prapacidadpago',capacidad_pago.toString())
-    .set('prmaximodescuento',maximo_descuento.toString())
-    .set('clt_calificacion_personal',clt_calificacion_personal)
-    .set('clt_aporte',clt_aporte.toString())
-    .set('clt_fecharegistro', moment(new Date()).format("YYYY-MM-DD"))
+      .set('prsubsede', id_subsede.toString())
+      .set('prcargoestado', cargo_estado.toString())
+      .set('clt_codigo', clt_codigo)
+      .set('clt_dni', clt_dni)
+      .set('clt_nombre', clt_nombre)
+      .set('clt_cip', clt_cip)
+      .set('clt_email', clt_email)
+      .set('clt_casilla', clt_casilla)
+      .set('prdistrito', id_distrito.toString() )
+      .set('clt_trabajo', clt_trabajo)
+      .set('prapacidadpago', capacidad_pago.toString() )
+      .set('prmaximodescuento', maximo_descuento.toString() )
+      .set('clt_calificacion_personal',clt_calificacion_personal)
+      .set('clt_aporte',clt_aporte.toString())
+      .set('clt_fecharegistro', moment(new Date()).format("YYYY-MM-DD"))
+      .set('prestado',estado.toString())
+
+    console.log(params);
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     return this.http.post(this.url + 'cliente/create.php', params, {headers: headers});
@@ -128,7 +134,8 @@ export class ClienteService {
     capacidad_pago: number,
     maximo_descuento: number,
     clt_calificacion_personal: string,
-    clt_aporte: number
+    clt_aporte: number,
+    estado : number
   ): Observable<any> {
 
     let params = new HttpParams()
@@ -147,8 +154,9 @@ export class ClienteService {
     .set('prmaximodescuento', maximo_descuento.toString())
     .set('clt_calificacion_personal',clt_calificacion_personal)
     .set('clt_aporte',clt_aporte.toString())
+    .set('prestado',estado.toString())
     
-    // console.log(params);
+    console.log(params);
     
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     return this.http.post(this.url + 'cliente/update.php', params, {headers: headers});
@@ -169,7 +177,7 @@ export class ClienteService {
   Seleccionar(
     id: number
   // tslint:disable-next-line:whitespace
-  ):Observable<Cliente> {
+  ):Observable<any> {
     return this.http.get(this.url + 'cliente/readxId.php?idcliente=' + id)
     .pipe(map(res => {
       if (res['codigo'] === 0) {

@@ -10,7 +10,13 @@
 
       <mat-grid-list cols="3" rowHeight="70px">
 
-        <mat-grid-tile>
+        <mat-grid-tile *ngIf="data.ver">
+          <mat-form-field class="columnas-1">
+            <input type="text" matInput placeholder="Courier" formControlName="courier" readonly>
+          </mat-form-field>
+        </mat-grid-tile>
+          
+        <mat-grid-tile *ngIf="data.editar">
           <mat-form-field class="columnas-1">
             <mat-select placeholder="Courier" formControlName="courier">
               <mat-option *ngFor="let courier of Couriers" [value]="courier.id"> {{courier.nombre}} </mat-option>
@@ -20,25 +26,13 @@
 
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
-            <input matInput [matDatepicker]="inicio" placeholder="Fecha" formControlName="fecha">
+            <input matInput [matDatepicker]="inicio" placeholder="Fecha de envío" formControlName="fecha" readonly>
             <mat-datepicker-toggle matSuffix [for]="inicio"></mat-datepicker-toggle>
-            <mat-datepicker #inicio disabled="false"></mat-datepicker>
+            <mat-datepicker #inicio disabled="data.ver"></mat-datepicker>
           </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile>
-          <mat-form-field class="columnas-1">
-            <input type="text" matInput placeholder="Número de seguimiento" formControlName="numero_seguimiento">
-          </mat-form-field>
-        </mat-grid-tile>
-
-        <mat-grid-tile colspan=2>
-          <mat-form-field class="columnas-2">
-            <input type="text" matInput placeholder="Observación" formControlName="observacion">
-          </mat-form-field>
-        </mat-grid-tile>
-
-        <mat-grid-tile>
+        <mat-grid-tile *ngIf="data.editar">
 
           <button mat-icon-button color="primary" (click)="editar_foto = true" [disabled]="!foto" *ngIf="!editar_foto">
             <mat-icon class="icono-documentos"> edit </mat-icon>
@@ -48,8 +42,8 @@
             <mat-icon class="icono-documentos"> close </mat-icon>
           </button>
 
-          <button mat-icon-button color="primary" [disabled]="!foto" *ngIf="!editar_foto">
-            <mat-icon class="icono-documentos" (click)="AbrirDocumento(foto)"> visibility </mat-icon>
+          <button mat-icon-button color="primary" (click)="AbrirDocumento(foto)" [disabled]="!foto" *ngIf="!editar_foto">
+            <mat-icon class="icono-documentos"> visibility </mat-icon>
           </button>
 
           <image-upload
@@ -64,11 +58,45 @@
           </image-upload>
         </mat-grid-tile>
 
+        <mat-grid-tile *ngIf="data.ver">
+          <button mat-icon-button color="primary" [disabled]="!foto" (click)="AbrirDocumento(foto)">
+            <mat-icon class="icono-documentos"> visibility </mat-icon>
+          </button>
+        </mat-grid-tile>
+
+        <ng-container *ngIf="entregado">
+          <mat-grid-tile>
+            <mat-form-field class="columnas-1">
+              <input matInput [matDatepicker]="fin" placeholder="Fecha de recepción" formControlName="fecha_recepcion" readonly>
+              <mat-datepicker-toggle matSuffix [for]="fin"></mat-datepicker-toggle>
+              <mat-datepicker #fin disabled="true"></mat-datepicker>
+            </mat-form-field>
+          </mat-grid-tile>
+  
+          <mat-grid-tile colspan=2>
+            <mat-form-field class="columnas-2">
+              <input type="text" matInput placeholder="Usuario que recibió" formControlName="usuario_recepcion">
+            </mat-form-field>
+          </mat-grid-tile>
+        </ng-container>
+
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input type="text" matInput placeholder="Número de seguimiento" formControlName="numero_seguimiento" [readonly]="data.ver">
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan=2>
+          <mat-form-field class="columnas-2">
+            <input type="text" matInput placeholder="Observación" formControlName="observacion" [readonly]="data.ver">
+          </mat-form-field>
+        </mat-grid-tile>
+
       </mat-grid-list>
   
     </mat-card-content>
 
-    <mat-card-actions>
+    <mat-card-actions *ngIf="this.data.editar">
       <mat-grid-list cols=1 rowHeight="40px">
         <mat-grid-tile>
           <button type="button" mat-raised-button color="primary" (click)="Guardar()">Guardar</button>

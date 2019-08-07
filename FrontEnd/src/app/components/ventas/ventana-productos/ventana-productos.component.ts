@@ -81,7 +81,7 @@ export class AgregarProductosDataSource {
 
       // Si la serie ya ha sido agregada, no se permite ingresarla dos veces.
       // En este caso, se está utilizado "número" como "utilizado"
-      console.log(res['data'].producto_series,series_registradas)
+      // console.log(res['data'].producto_series,series_registradas)
       res['data'].producto_series.forEach((item)=>{
         item.numero=false;
         series_registradas.forEach((element)=>{

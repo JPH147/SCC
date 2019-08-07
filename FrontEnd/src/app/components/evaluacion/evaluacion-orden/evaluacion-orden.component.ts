@@ -58,7 +58,7 @@ export class EvaluacionOrdenComponent implements OnInit {
 	  		}
 
 	  		if (res.interes) {
-	  			this.tasa=res.interes;
+	  			this.tasa=res.interes/100;
 	  		}
 
 	  		if (res.total) {
@@ -122,7 +122,8 @@ export class EvaluacionOrdenComponent implements OnInit {
           this.Cronograma.forEach((item)=>{
             this.Servicio.CrearPresupuestoCronograma(
               res['data'],
-              item.monto,
+              item.capital,
+              item.interes,
               item.aporte,
               item.fecha,
             ).subscribe()

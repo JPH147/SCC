@@ -20,7 +20,8 @@
         if (($_POST["prpresupuesto"])!=null)
         {
             $presupuesto->presupuesto = trim($_POST["prpresupuesto"]);
-            $presupuesto->monto = trim($_POST["prmonto"]);
+            $presupuesto->capital = trim($_POST["prcapital"]);
+            $presupuesto->interes = trim($_POST["printeres"]);
             $presupuesto->aporte = trim($_POST["praporte"]);
             $presupuesto->fecha = trim($_POST["prfecha"]);
 

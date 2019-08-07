@@ -209,12 +209,14 @@ export class CreditosService {
 
   CrearCronograma(
     id_credito:number,
-    monto: number,
+    capital: number,
+    interes: number,
     fecha_vencimiento: Date
   ){
     let params = new HttpParams()
       .set('prcredito',id_credito.toString())
-      .set('prmonto',monto.toString())
+      .set('prcapital',capital.toString())
+      .set('printeres',interes.toString())
       .set('prfecha',moment(fecha_vencimiento).format("YYYY-MM-DD"))
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
@@ -423,6 +425,8 @@ export class CreditosService {
     .set('prcredito', id_credito.toString())
     .set('prorden', orden)
 
+    // console.log(params)
+
     return this.http.get(this.url + 'credito/read-cronograma.php', {params})
     .pipe(map(res=>{
       if(res['codigo'] === 0){
@@ -472,6 +476,35 @@ export class CreditosService {
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'presupuesto/update.php', params, {headers: headers});
+  }
+
+  EliminarCredito(
+    id_credito : number
+  ){
+    let params = new HttpParams()
+      .set('prcredito',id_credito.toString())
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'credito/eliminar.php', params, {headers: headers});
+  }
+
+  ListarCronogramaxCliente(
+    cliente:number
+  ): Observable<any> {
+
+    let params = new HttpParams()
+      .set('prcliente',cliente.toString());
+
+    return this.http.get(this.url + 'credito/read-cronogramaxcliente.php', {params})
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res;
+      } else {
+        console.log('No hay datos que mostrar');
+        return res;
+      }
+    }));
   }
 
 }
