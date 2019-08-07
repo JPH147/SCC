@@ -1,5 +1,9 @@
 <?php
+  
   header("Access-Control-Allow-Origin: *");
+  header("Access-Control-Allow-Methods: POST");
+  header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+
   include_once '../shared/utilities.php';
 
   if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -34,11 +38,10 @@
     }
   }
   else {
-    // echo json_encode(
-    //   array('status' => false, 'msg' => 'No file uploaded.')
-    // );
-    print_json("9999", "No se ha subido nincuna imagen.", "1");
-    // exit;
+
+    // print_json("9999", "No se ha subido nincuna imagen.", "1");
+    print_json("9999", "No se ha subido nincuna imagen.", $_FILES);
   }
  
+
 ?>

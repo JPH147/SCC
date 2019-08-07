@@ -54,26 +54,28 @@ export class ServiciosProductoSerie {
 
     let Producto:string="";
 
-   if(producto>0){
-     Producto=producto.toString()
-   }
+    if(producto>0){
+      Producto=producto.toString()
+    }
 
-    return this.http.get(this.url + 'productoserie/read-sucursal.php', {
-      params: new HttpParams()
-        .set('prsucursal', sucursal.toString())
-        .set('prproducto',Producto)
-        .set('prpagina', pagina.toString())
-        .set('prtotalpagina',total_pagina.toString())
-    })
-    .pipe (map(res => {
-      // console.log(res,sucursal, Producto)
-      if (res['codigo'] === 0) {
-        return res;
-      } else {
-        console.log('No hay datos que mostrar');
-        return res;
-      }
-    }));
+    let params = new HttpParams()
+     .set('prsucursal', sucursal.toString())
+     .set('prproducto',Producto)
+     .set('prpagina', pagina.toString())
+     .set('prtotalpagina',total_pagina.toString())
+
+    // console.log(params)
+
+    return this.http.get(this.url + 'productoserie/read-sucursal.php', { params })
+      .pipe (map(res => {
+        // console.log(res,sucursal, Producto)
+        if (res['codigo'] === 0) {
+          return res;
+        } else {
+          console.log('No hay datos que mostrar');
+          return res;
+        }
+      }));
   }
 
   CrearProductoSerie(

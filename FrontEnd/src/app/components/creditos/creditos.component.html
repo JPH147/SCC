@@ -1211,7 +1211,7 @@
 
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
-            <input matInput placeholder="Capital" formControlName="capital" #InputCapital [readonly]="id_credito || id_tipo==1 || id_presupuesto">
+            <input matInput placeholder="Capital" formControlName="capital" #InputCapital [readonly]="id_credito || id_tipo==1 || id_presupuesto || cliente_refinanciado">
             <span matPrefix>S/ &nbsp;</span>
           </mat-form-field>
         </mat-grid-tile>

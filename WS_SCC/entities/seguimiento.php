@@ -63,6 +63,7 @@ class Seguimiento{
                 "documento" => $documento,
                 "id_courier" => $id_courier,
                 "courier" => $courier,
+                "courier_url" => $courier_url,
                 "fecha" => $fecha,
                 "numero_seguimiento" => $numero_seguimiento,
                 "foto" => $foto,
@@ -124,7 +125,8 @@ class Seguimiento{
             "foto"=>$row['foto'],
             "fecha_recepcion"=>$row['fecha_recepcion'],
             "usuario_recepcion"=>$row['usuario_recepcion'],
-            "observacion"=>$row['observacion']
+            "observacion"=>$row['observacion'],
+            "id_estado"=>$row['id_estado'],
         );
 
         return $courrier_list;

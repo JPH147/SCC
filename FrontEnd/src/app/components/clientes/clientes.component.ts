@@ -28,11 +28,8 @@ export class ClientesComponent implements OnInit {
   ListadoCliente: ClienteDataSource;
   Columnas: string[] = ['numero', 'foto', 'codigo' , 'dni', 'nombrecliente', 'subsede' ,  'opciones'];
   public maestro;
-
-  // @ViewChild('InputInstitucion') FiltroInstitucion: ElementRef;
-  // @ViewChild('InputSede') FiltroSede: ElementRef;
-  // @ViewChild('InputSubsede') FiltroSubsede: ElementRef;
-  // @ViewChild('InputCargo') FiltroCargo: ElementRef;
+  public estado: number ;
+  
   @ViewChild('InputCodigo') FiltroCodigo: ElementRef;
   @ViewChild('InputDNI') FiltroDni: ElementRef;
   @ViewChild('InputNombre') FiltroNombre: ElementRef;
@@ -52,7 +49,8 @@ export class ClientesComponent implements OnInit {
 
   ngOnInit() {
    this.ListadoCliente = new ClienteDataSource(this.Servicio);
-   this.ListadoCliente.CargarClientes('', '','',1, 10);
+   this.ListadoCliente.CargarClientes('', '','',1, 10,1);
+   this.estado=1;
   }
 
   ngAfterViewInit() {
@@ -83,11 +81,12 @@ export class ClientesComponent implements OnInit {
 
   CargarData() {
     this.ListadoCliente.CargarClientes(
-    this.FiltroCodigo.nativeElement.value,
-    this.FiltroDni.nativeElement.value,
-    this.FiltroNombre.nativeElement.value,
-    this.paginator.pageIndex+1,
-    this.paginator.pageSize
+      this.FiltroCodigo.nativeElement.value,
+      this.FiltroDni.nativeElement.value,
+      this.FiltroNombre.nativeElement.value,
+      this.paginator.pageIndex+1,
+      this.paginator.pageSize,
+      this.estado
     );
   }
   
@@ -121,12 +120,12 @@ export class ClientesComponent implements OnInit {
     });
   }
 
-  Editar(id) {
+  Editar(id, confirmar) {
     this.Servicio.Seleccionar(id).subscribe(res => {
       // tslint:disable-next-line:prefer-const
       let VentanaClientes = this.DialogoClientes.open(VentanaEmergenteClientes, {
         width: '1000px',
-        data: {objeto: res, id: id},
+        data: {objeto: res, id: id, confirmar: confirmar},
       });
       // tslint:disable-next-line:no-shadowed-variable
       VentanaClientes.afterClosed().subscribe (res => {
@@ -192,6 +191,26 @@ export class ClientesComponent implements OnInit {
         this.router.navigate(['/ventas/nueva', id])
       }
     })
+  }
+
+  VerPendientes(){
+    this.estado=5;
+    this.paginator.pageIndex=0;
+    this.FiltroCodigo.nativeElement.value = "" ;
+    this.FiltroDni.nativeElement.value = "" ;
+    this.FiltroNombre.nativeElement.value = "" ;
+
+    this.CargarData();
+  }
+
+  VerTodos(){
+    this.estado=1;
+    this.paginator.pageIndex=0;
+    this.FiltroCodigo.nativeElement.value = "" ;
+    this.FiltroDni.nativeElement.value = "" ;
+    this.FiltroNombre.nativeElement.value = "" ;
+    
+    this.CargarData();
   }
 
 }

@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { MatSelect, MatPaginator, MatSort } from '@angular/material'
+import { MatSelect, MatPaginator, MatSort, MatDialog } from '@angular/material'
 import { Observable, BehaviorSubject, of, fromEvent, merge } from 'rxjs';
 import { catchError, finalize, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CreditosService } from '../creditos/creditos.service';
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
+import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
 
 @Component({
   selector: 'app-creditos-listar',
@@ -28,16 +29,19 @@ export class CreditosListarComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(
-    private Servicio: CreditosService
+    private Servicio: CreditosService,
+    private Dialogo : MatDialog
   ) { }
 
   ngOnInit() {
+
+    this.ListarTiposCredito();
 
     this.fecha_inicio= new Date((new Date()).valueOf() - 1000*60*60*24*120)
     this.fecha_fin=new Date()
 
     this.ListadoCreditos = new CreditosDataSource(this.Servicio);
-    this.ListadoCreditos.CargarCreditos("",0,0,this.fecha_inicio,this.fecha_fin,1,1,10,"fecha desc");
+    this.ListadoCreditos.CargarCreditos("",99 ,0,this.fecha_inicio,this.fecha_fin,1,1,10,"fecha desc");
   }
 
   ngAfterViewInit () {
@@ -67,6 +71,7 @@ export class CreditosListarComponent implements OnInit {
   ListarTiposCredito(){
     this.Servicio.ListarTipos().subscribe(res=>{
       this.Tipos=res;
+      // console.log(res)
     })
   }
 
@@ -89,6 +94,22 @@ export class CreditosListarComponent implements OnInit {
     this.CargarData()
   }
 
+  AnularVenta(credito){
+   
+    let Ventana = this.Dialogo.open(VentanaConfirmarComponent,{
+      data: { objeto: "el crédito", valor: credito.codigo+"-"+credito.numero_credito }
+    })
+
+    Ventana.afterClosed().subscribe(res=>{
+      if (res) {
+        this.Servicio.EliminarCredito(credito.id).subscribe(res=>{
+          this.CargarData()
+        });
+      }
+    })
+
+  }
+ 
 }
 
 export class CreditosDataSource implements DataSource<any> {

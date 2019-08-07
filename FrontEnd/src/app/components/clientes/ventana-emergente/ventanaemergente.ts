@@ -145,10 +145,12 @@ export class VentanaEmergenteClientes {
       'calificacion_personal': [null, [
         Validators.required
       ]],
-      'aporte': [null, [
+      'aporte': [ 20, [
         Validators.required,
         Validators.pattern('[0-9- ]+')
-      ]]
+      ]],
+      'estado': [ 1, [
+      ]],
     });
   }
 
@@ -181,13 +183,16 @@ export class VentanaEmergenteClientes {
     this.ClientesForm.get('cip').setValue(this.data.objeto.cip);
     this.ClientesForm.get('email').setValue(this.data.objeto.email);
     this.ClientesForm.get('casilla').setValue(this.data.objeto.casilla);
+    this.ClientesForm.get('estado').setValue(this.data.objeto.estado);
     
-    this.ClientesForm.get('trabajo').setValue(this.data.objeto.trabajo);
-    this.ListarProvincia(this.data.objeto.departamento);
-    this.ListarDistrito(this.data.objeto.provincia);
-    this.ClientesForm.get('departamento').setValue(this.data.objeto.departamento);
-    this.ClientesForm.get('provincia').setValue(this.data.objeto.provincia);
-    this.ClientesForm.get('distrito').setValue(this.data.objeto.id_distrito_trabajo);
+    if(!this.data.confirmar){
+      this.ClientesForm.get('trabajo').setValue(this.data.objeto.trabajo);
+      this.ListarProvincia(this.data.objeto.departamento);
+      this.ListarDistrito(this.data.objeto.provincia);
+      this.ClientesForm.get('departamento').setValue(this.data.objeto.departamento);
+      this.ClientesForm.get('provincia').setValue(this.data.objeto.provincia);
+      this.ClientesForm.get('distrito').setValue(this.data.objeto.id_distrito_trabajo);
+    }
 
     this.ClientesForm.get('capacidad_pago').setValue(this.data.objeto.capacidad_pago);
     this.ClientesForm.get('descuento_maximo').setValue(this.data.objeto.maximo_descuento);
@@ -311,7 +316,8 @@ export class VentanaEmergenteClientes {
         formulario.value.capacidad_pago,
         formulario.value.descuento_maximo,
         formulario.value.calificacion_personal,
-        formulario.value.aporte
+        formulario.value.aporte,
+        this.data.confirmar ? 1 : formulario.value.estado
       ).subscribe(res =>{
         // this.ClientesForm.reset();
         this.ventana.close(true);
@@ -333,7 +339,8 @@ export class VentanaEmergenteClientes {
         formulario.value.capacidad_pago,
         formulario.value.descuento_maximo,
         formulario.value.calificacion_personal,
-        formulario.value.aporte
+        formulario.value.aporte,
+        1
       ).subscribe(res =>{
         // this.ClientesForm.reset();
         this.ventana.close(true);

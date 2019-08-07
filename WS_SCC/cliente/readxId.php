@@ -24,9 +24,11 @@
 				"id" => $cliente->idcliente,
 				"institucion"=>$cliente->id_institucion,
 				"sede"=>$cliente->id_sede,
+				"sede_nombre"=>$cliente->sede,
                 "subsede"=>$cliente->id_subsede,
                 "id_cargo"=>$cliente->id_cargo,
                 "cargo"=>$cliente->cargo,
+                "cargo_nombre"=>$cliente->cargo,
                 "id_cargo_estado"=>$cliente->id_cargo_estado,
                 "cargo_estado"=>$cliente->cargo_estado,
                 "codigo"=>$cliente->clt_codigo,
@@ -46,7 +48,13 @@
                 "maximo_descuento"=>$cliente->clt_maximo_descuento,
                 "calificacion_personal"=>$cliente->clt_calificacion_personal,
                 "aporte"=>$cliente->clt_aporte,
-                "fecharegistro"=>$cliente->clt_fecharegistro
+				"fecharegistro"=>$cliente->clt_fecharegistro,
+				"plantilla_tarjeta" => $cliente->plantilla_tarjeta,
+				"plantilla_ddjj" => $cliente->plantilla_ddjj,
+				"plantilla_autorizacion" => $cliente->plantilla_autorizacion,
+				"plantilla_transaccion" => $cliente->plantilla_transaccion,
+				"plantilla_compromiso" => $cliente->plantilla_compromiso,
+                "estado"=>$cliente->clt_estado,
 	    );
 
 	    if(trim($cliente->clt_dni)!= ''){

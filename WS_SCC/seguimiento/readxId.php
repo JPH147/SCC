@@ -16,7 +16,7 @@
     try{
         $seguimiento = new Seguimiento($db);
 
-        $seguimiento->id = !empty($_GET['prid']) ? trim($_GET['prid']) : '';
+        $seguimiento->id = !empty($_GET['prid']) ? trim($_GET['prid']) : die();
 
         $seguimiento_list = $seguimiento->readxId();
 

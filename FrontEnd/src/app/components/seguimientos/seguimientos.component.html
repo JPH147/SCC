@@ -89,7 +89,10 @@
 
       <ng-container matColumnDef="courier">
         <mat-header-cell *matHeaderCellDef> Courier </mat-header-cell>
-        <mat-cell *matCellDef="let seguimiento"> {{seguimiento.courier}} </mat-cell>
+        <mat-cell *matCellDef="let seguimiento">
+          {{seguimiento.courier}}
+          <button mat-icon-button color="primary" [disabled]="!seguimiento.courier_url" (click)="AbrirVentana(seguimiento.courier_url)"> <mat-icon class="pequeno">open_in_new</mat-icon> </button>   
+        </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="numero_seguimiento">
@@ -105,11 +108,12 @@
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let seguimiento">
-          <button mat-icon-button color="primary" *ngIf="seguimiento.salida" matTooltip="Ver venta" [routerLink]="['/ventas', 'salida', seguimiento.id_transaccion]"><mat-icon> visibility </mat-icon></button>
-          <button mat-icon-button color="primary" *ngIf="!seguimiento.salida && seguimiento.id_tipo==1" matTooltip="Ver venta" [routerLink]="['/ventas', seguimiento.id_transaccion]"><mat-icon> visibility </mat-icon></button>
-          <button mat-icon-button color="primary" *ngIf="seguimiento.id_tipo==2" matTooltip="Ver crédito" [routerLink]="['/creditos', 'ver', seguimiento.id_transaccion]"><mat-icon> visibility </mat-icon></button>
+          <button mat-icon-button color="primary" matTooltip="Ver detalle" (click)="VerSeguimiento(seguimiento.id)"><mat-icon> visibility </mat-icon></button>
           <button mat-icon-button color="primary" matTooltip="Editar" [disabled]="seguimiento.id_estado==2" (click)="EditarSeguimiento(seguimiento.id)"><mat-icon> edit </mat-icon></button>
           <button mat-icon-button color="primary" matTooltip="Registrar entrega" [disabled]="seguimiento.id_estado==2" (click)="RegistrarEntrega(seguimiento.id)"><mat-icon> assignment_return </mat-icon></button>
+          <button mat-icon-button color="primary" *ngIf="seguimiento.salida" matTooltip="Ver venta" [routerLink]="['/ventas', 'salida', seguimiento.id_transaccion]"><mat-icon> description </mat-icon></button>
+          <button mat-icon-button color="primary" *ngIf="!seguimiento.salida && seguimiento.id_tipo==1" matTooltip="Ver venta" [routerLink]="['/ventas', seguimiento.id_transaccion]"><mat-icon> description </mat-icon></button>
+          <button mat-icon-button color="primary" *ngIf="seguimiento.id_tipo==2" matTooltip="Ver crédito" [routerLink]="['/creditos', 'ver', seguimiento.id_transaccion]"><mat-icon> description </mat-icon></button>
           <button mat-icon-button color="primary" matTooltip="Eliminar" [disabled]="seguimiento.id_estado==2" (click)="EliminarSeguimiento(seguimiento)"> <mat-icon>delete</mat-icon> </button>
         </mat-cell>
       </ng-container>

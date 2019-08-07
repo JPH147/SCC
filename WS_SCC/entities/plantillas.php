@@ -7,10 +7,15 @@ Class Plantillas{
     public $nombre_plantilla;
 
     public $nombre_archivo;
+    public $aporte;
     public $nombre;
     public $cargo;
     public $cargo_estado;
     public $dni;
+    public $nombre_aval ;
+    public $dni_aval ;
+    public $direccion_cliente;
+    public $direccion_aval ;
     public $cip;
     public $codigo;
     public $cooperativa;
@@ -62,6 +67,8 @@ Class Plantillas{
     public $productos;
     public $prueba;
 
+    public $path_originales = '../plantillas/archivos/';
+    public $path_estandar = '../plantillas/estaticos/';
     public $path = '../uploads/autogenerados/';
 
     public function __construct($db){
@@ -72,7 +79,7 @@ Class Plantillas{
 
         $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('../plantillas/archivos/'.$this->nombre_plantilla);
 
-        $templateProcessor->setValue('nombre', $this->nombre);
+        $templateProcessor->setValue('nombre', $this->convertir_formato($this->nombre) );
         $templateProcessor->setValue('dni', str_pad($this->dni, 15) );
         $templateProcessor->setValue('cip', str_pad($this->cip, 15) );
         $templateProcessor->setValue('codigo', $this->codigo);
@@ -95,7 +102,7 @@ Class Plantillas{
 
         $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('../plantillas/archivos/'.$this->nombre_plantilla);
 
-        $templateProcessor->setValue('nombre', $this->nombre);
+        $templateProcessor->setValue('nombre', $this->convertir_formato($this->nombre) );
         $templateProcessor->setValue('dni', $this->dni);
         $templateProcessor->setValue('distrito', $this->distrito);
         $templateProcessor->setValue('direccion', $this->direccion);
@@ -127,8 +134,8 @@ Class Plantillas{
 
         $templateProcessor->setValue('cooperativa', $this->cooperativa);
         $templateProcessor->setValue('tipo_motivo', $tipo_autorizacion);
-        $templateProcessor->setValue('nombre', $this->nombre);
-        $templateProcessor->setValue('cargo_estado', $this->cargo_estado);
+        $templateProcessor->setValue('nombre', $this->convertir_formato($this->nombre) );
+        $templateProcessor->setValue('cargo_estado', ucwords(strtolower($this->cargo_estado)));
         $templateProcessor->setValue('dni', $this->dni);
         $templateProcessor->setValue('cip', $this->cip);
         $templateProcessor->setValue('codigo', $this->codigo);
@@ -137,7 +144,7 @@ Class Plantillas{
         $templateProcessor->setValue('tipo_telefono', $this->tipo_telefono);
         $templateProcessor->setValue('telefono', $this->telefono);
         $templateProcessor->setValue('email', $this->email);
-        $templateProcessor->setValue('monto_cuota', $this->monto_cuota);
+        $templateProcessor->setValue('monto_cuota', number_format($this->monto_cuota,2));
         $templateProcessor->setValue('numero_cuotas', $this->numero_cuotas);
         $templateProcessor->setValue('lugar', $this->lugar);
         $templateProcessor->setValue('fecha', $this->fecha_letras);
@@ -162,16 +169,17 @@ Class Plantillas{
         $templateProcessor->setValue('presidente_dni', $this->presidente_dni);
         $templateProcessor->setValue('presidente_direccion', $this->presidente_direccion);
 
-        $templateProcessor->setValue('nombre', $this->nombre);
+        $templateProcessor->setValue('nombre', $this->convertir_formato($this->nombre) );
         $templateProcessor->setValue('cargo', $this->cargo);
         $templateProcessor->setValue('dni', $this->dni);
+        $templateProcessor->setValue('cip', $this->cip);
         $templateProcessor->setValue('direccion', $this->direccion);
         $templateProcessor->setValue('casilla', $this->casilla);
         $templateProcessor->setValue('fecha_anterior', $this->fecha_anterior);
         $templateProcessor->setValue('fecha_letras', $this->fecha_letras);
-        $templateProcessor->setValue('monto_total', $this->monto_total);
+        $templateProcessor->setValue('monto_total', number_format($this->monto_total,2));
         $templateProcessor->setValue('monto_total_letras', $this->monto_total_letras);
-        $templateProcessor->setValue('monto_cuotas', $this->monto_cuota);
+        $templateProcessor->setValue('monto_cuotas', number_format($this->monto_cuota,2));
         $templateProcessor->setValue('monto_cuotas_letras', $this->monto_cuota_letras);
         $templateProcessor->setValue('ugel_nombre', $this->ugel_nombre);
         $templateProcessor->setValue('numero_cuotas', $this->numero_cuotas);
@@ -180,19 +188,23 @@ Class Plantillas{
         $templateProcessor->setValue('fecha_dia_letras', $this->fecha_dia_letras);
         $templateProcessor->setValue('banco_nombre', $this->banco_nombre);
         $templateProcessor->setValue('cuenta_numero', $this->cuenta_numero);
-        $templateProcessor->setValue('monto_penalidad', $this->monto_penalidad);
+        $templateProcessor->setValue('monto_penalidad', number_format($this->monto_penalidad,2));
         $templateProcessor->setValue('monto_penalidad_letras', $this->monto_penalidad_letras);
         $templateProcessor->setValue('numero_cuotas_penalidad', $this->numero_cuotas_penalidad);
         $templateProcessor->setValue('numero_cuotas_penalidad_letras', $this->numero_cuotas_penalidad_letras);
-        $templateProcessor->setValue('monto_cuota_penalidad', $this->monto_cuota_penalidad);
+        $templateProcessor->setValue('monto_cuota_penalidad', number_format($this->monto_cuota_penalidad,2));
         $templateProcessor->setValue('monto_cuota_penalidad_letras', $this->monto_cuota_penalidad_letras);
         $templateProcessor->setValue('email', $this->email);
         $templateProcessor->setValue('whatsapp', $this->whatsapp);
         $templateProcessor->setValue('lugar', $this->lugar);
-
+        $templateProcessor->setValue('vendedor', $this->vendedor);
+        $templateProcessor->setValue('vendedor_dni', $this->vendedor_dni);
+        
+        // Para registrar el tipo de transacción
         switch ($this->tipo) {
             case 2:
                 $tipo_transaccion = " un préstamo en dinero o venta de equipo celular y/o otros ";
+                $templateProcessor->setValue('tipo_transaccion', $tipo_transaccion);
                 break;
             case 3:
                 $this->prueba=[];
@@ -201,28 +213,45 @@ Class Plantillas{
                 foreach ( $this->productos as $producto ) {
                     $tipo_transaccion = $tipo_transaccion . ", " . $producto->descripcion . " con IMEI " . $producto->serie ;
                 }
+                $templateProcessor->setValue('tipo_transaccion', $tipo_transaccion);
                 break;
         }
 
-        $templateProcessor->setValue('tipo_transaccion', $tipo_transaccion);
-
-        if( is_null($this->trabajador) ) {
-            $templateProcessor->setValue('trabajador', "");
-            $templateProcessor->setValue('trabajador_dni', "");
-            $templateProcessor->setValue('trabajador_cargo', "");
-            $templateProcessor->setValue('trabajador_linea', "");
+        // En caso haya algún garante
+        if( $this->nombre_aval == "0" ) {
+            $informacion_aval = "";
+            $templateProcessor->setValue('aval_linea', "");
+            $templateProcessor->setValue('aval', "");
+            $templateProcessor->setValue('aval_dni', "");
+            $templateProcessor->setValue('aval_cargo', "");
         } else {
-            $templateProcessor->setValue('trabajador', $this->trabajador);
-            $templateProcessor->setValue('trabajador_dni', "DNI: " . $this->trabajador_dni);
-            $templateProcessor->setValue('trabajador_cargo', $this->trabajador_cargo);
-            $templateProcessor->setValue('trabajador_linea', "___________________________________");
+            $informacion_aval = "Asimismo, en caso de no efectuarse los descuentos en su oportunidad AUTORIZA el descuento de sus haberes al garante "
+            . $this->convertir_formato($this->nombre_aval) . " con DNI " .  $this->dni_aval . " la deuda de S/. " . number_format($this->monto_total,2) .
+            " (" . $this->monto_total_letras ."). ";
+            $templateProcessor->setValue('aval_linea', "___________________________________");
+            $templateProcessor->setValue('aval', $this->convertir_formato($this->nombre_aval));
+            $templateProcessor->setValue('aval_dni', "DNI: " . $this->dni_aval);
+            $templateProcessor->setValue('aval_cargo', "GARANTE-AVAL");
         }
-        $templateProcessor->setValue('vendedor', $this->vendedor);
-        $templateProcessor->setValue('vendedor_dni', $this->vendedor_dni);
+        $templateProcessor->setValue('información_aval', $informacion_aval);
 
-        $templateProcessor->cloneBlock('block_name', 0, true, false, json_decode($this->detalle));
-        $templateProcessor->cloneBlock('block_name_1', 0, true, false, json_decode($this->detalle));
-        $templateProcessor->cloneBlock('block_name_2', 0, true, false, json_decode($this->detalle));
+        // Se le da el formato a los números del cronograma
+        $cronograma=json_decode($this->detalle);
+        forEach ($cronograma as $valor){
+            $valor->monto = number_format($valor->monto, 2);
+        }
+        $templateProcessor->cloneBlock('block_name', 0, true, false, $cronograma);
+        $templateProcessor->cloneBlock('block_name_1', 0, true, false, $cronograma);
+        $templateProcessor->cloneBlock('block_name_2', 0, true, false, $cronograma);
+
+        // Para las hojas 2 y 3, se evalúa que no se repitan las direcciones
+        $this->direccion_cliente = filter_var($this->direccion_cliente, FILTER_VALIDATE_BOOLEAN);
+        if ( $this->direccion_cliente ) {
+            $direccion_cliente = " y/o en " . $this->direccion;
+        } else {
+            $direccion_cliente = "" ;
+        }
+        $templateProcessor->setValue('dirección_cliente', $direccion_cliente);
 
         $templateProcessor->saveAs('../uploads/autogenerados/' . $this->nombre_archivo . '.docx');
 
@@ -235,7 +264,7 @@ Class Plantillas{
         $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('../plantillas/archivos/'.$this->nombre_plantilla);
 
         $templateProcessor->setValue('cooperativa', $this->cooperativa);
-        $templateProcessor->setValue('nombre', $this->nombre);
+        $templateProcessor->setValue('nombre', $this->convertir_formato($this->nombre) );
         $templateProcessor->setValue('dni', $this->dni);
         $templateProcessor->setValue('cip', $this->cip);
         $templateProcessor->setValue('fecha', $this->fecha);
@@ -260,10 +289,29 @@ Class Plantillas{
         $templateProcessor->setValue('banco', $this->banco);
         $templateProcessor->setValue('cuenta', $this->cuenta);
         $templateProcessor->setValue('contacto', $this->contacto);
+        $templateProcessor->setValue('monto_afiliacion', number_format($this->monto_afiliacion,2));
 
         $templateProcessor->saveAs('../uploads/autogenerados/' . $this->nombre_archivo . '.docx');
 
         return file_exists ( '../uploads/autogenerados/' . $this->nombre_archivo . '.docx' );
+    }
+
+    function generar_carta(){
+
+        $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('../plantillas/archivos/carta_aval.docx');
+
+        $templateProcessor->setValue('nombre_aval', $this->convertir_formato($this->nombre_aval) );
+        $templateProcessor->setValue('dni_aval', $this->dni_aval );
+        $templateProcessor->setValue('dirección_aval', $this->direccion_aval );
+        $templateProcessor->setValue('nombre_cliente', $this->convertir_formato($this->nombre) );
+        $templateProcessor->setValue('dni_cliente', $this->dni );
+        $templateProcessor->setValue('lugar', $this->lugar);
+        $templateProcessor->setValue('fecha', $this->fecha_letras);
+
+        $templateProcessor->saveAs('../uploads/autogenerados/' . $this->nombre_archivo . '.docx');
+
+        return file_exists ( '../uploads/autogenerados/' . $this->nombre_archivo . '.docx' );
+        
     }
 
     function consultar_direccion_ddjj(){
@@ -418,6 +466,19 @@ Class Plantillas{
         );
 
         return $listado;
+    }
+
+    function convertir_formato($nombre){
+
+        $posicion_coma = strpos($nombre, ',');
+        if( $posicion_coma === false ){
+            return $nombre;
+        } else {
+            $apellido = TRIM(substr($nombre, 0, $posicion_coma ));
+            $nombre = TRIM(substr($nombre, $posicion_coma + 1 ));
+            $nombre_corregido = strtoupper( $apellido ) .", " . ucwords(strtolower($nombre));
+            return $nombre_corregido;
+        }
     }
 
 }

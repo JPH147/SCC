@@ -18,7 +18,7 @@ export class AgregarProductoComponent implements OnInit {
   Columnas: string[] = ['descripcion', 'tipo', 'marca', 'modelo', 'precio', 'opciones'];
   @ViewChild('InputProducto') FiltroProducto: ElementRef;
   @ViewChild(MatPaginator) Paginator: MatPaginator;
-  public Productos: Array<any> =[];
+  public ProductosSeleccionados: Array<any> =[];
   public total: number;
   public Almacenes: Array<Almacen>;
   public almacen:number;
@@ -32,13 +32,15 @@ export class AgregarProductoComponent implements OnInit {
 
   ngOnInit() {
 
-  	this.Productos=this.data.productos;
+    if( this.data.productos.length > 0 ) {
+      this.ProductosSeleccionados=this.data.productos;
+    }
   	// this.GServicios.ListarAlmacen().subscribe(res=>{
   	// 	this.Almacenes=res;
   	// })
 
   	this.ListadoProductos = new AgregarProductosDataSource(this.Servicio);
-  	this.ListadoProductos.CargarInformacion("",1,this.Productos);
+  	this.ListadoProductos.CargarInformacion("",1,this.ProductosSeleccionados);
   	this.total=0;
   }
 
@@ -65,40 +67,44 @@ export class AgregarProductoComponent implements OnInit {
 
   Agregar(producto){
   	producto.numero++;
-  	if (this.Productos.some(e=>e.id==producto.id)) {
-  		this.Productos.find(e=>e.id==producto.id).numero=producto.numero;
+  	if (this.ProductosSeleccionados.some(e=>e.id==producto.id)) {
+  		this.ProductosSeleccionados.find(e=>e.id==producto.id).numero=producto.numero;
   	}else{
-  		this.Productos.push(producto);	
+  		this.ProductosSeleccionados.push(producto);	
   	}
   	this.CalcularTotal();
   }
 
   Quitar(producto){
   	producto.numero--;
-  	if (this.Productos.find(e=>e.id==producto.id).numero>1) {
-  		this.Productos.find(e=>e.id==producto.id).numero=producto.numero;
+  	if (this.ProductosSeleccionados.find(e=>e.id==producto.id).numero>1) {
+  		this.ProductosSeleccionados.find(e=>e.id==producto.id).numero=producto.numero;
   	}else{
-  		this.Productos=this.Productos.filter(e=>e.id!=producto.id)
+  		this.ProductosSeleccionados=this.ProductosSeleccionados.filter(e=>e.id!=producto.id)
   	}
   	this.CalcularTotal();
   }
 
   CalcularTotal(){
   	this.total=0;
-  	this.Productos.forEach((item)=>{
+  	this.ProductosSeleccionados.forEach((item)=>{
   		this.total+=item.precio*item.numero
   	})
   }
 
   CargarInformacion(){
-  	this.ListadoProductos.CargarInformacion(this.FiltroProducto.nativeElement.value,this.Paginator.pageIndex+1,this.Productos)
+  	this.ListadoProductos.CargarInformacion(this.FiltroProducto.nativeElement.value,this.Paginator.pageIndex+1,this.ProductosSeleccionados)
+  }
+
+  Guardar(){
+	  this.Ventana.close({productos:this.ProductosSeleccionados, total:this.total});
   }
 
 }
 
 export class AgregarProductosDataSource {
 
-  public Productos= new BehaviorSubject<any>([]);
+  public InformacionProductos= new BehaviorSubject<any>([]);
   public Total = new BehaviorSubject<number>(0);
 
   constructor(
@@ -106,11 +112,11 @@ export class AgregarProductosDataSource {
   ){ }
 
   connect(collectionViewer: CollectionViewer): Observable<any> {
-    return this.Productos.asObservable();
+    return this.InformacionProductos.asObservable();
   }
   
   disconnect() {
-    this.Productos.complete();
+    this.InformacionProductos.complete();
   }
   
   CargarInformacion(
@@ -119,17 +125,17 @@ export class AgregarProductosDataSource {
 		ProductosAgregados: Array<any>
   ){
     this.Servicio.Listado(
-			'',
-			'',
-			'',
-			descripcion,
-			null,
-			null,
-			pagina,
-			5,
-			"precio",
-			"asc",
-			1
+      '',
+      '',
+      '',
+      descripcion,
+      null,
+      null,
+      pagina,
+      5,
+      "precio",
+      "asc",
+      1
     ).subscribe(res=>{
     	res['data'].productos.forEach((item)=>{
     		item.numero=0;
@@ -137,7 +143,7 @@ export class AgregarProductosDataSource {
     			item.numero=ProductosAgregados.find(e=>e.id==item.id).numero
     		}
     	});
-    	this.Productos.next(res['data'].productos);
+    	this.InformacionProductos.next(res['data'].productos);
     	this.Total.next(res['mensaje']);
     })
   }

@@ -18,10 +18,9 @@
     <mat-grid-tile>
       <mat-icon>search</mat-icon>
       <mat-form-field>
-        <mat-select #InputTipo placeholder="Tipo de crédito" (selectionChange)="CambioFiltro()" [value]=0>
-          <mat-option [value]=0> Todos </mat-option>
-          <mat-option [value]=1> Afiliaciones </mat-option>
-          <mat-option [value]=2> Préstamos </mat-option>
+        <mat-select #InputTipo placeholder="Tipo de crédito" (selectionChange)="CambioFiltro()" [value]=99>
+          <mat-option [value]=99> Todos </mat-option>
+          <mat-option *ngFor="let tipo of Tipos" [value]="tipo.id"> {{tipo.nombre}} </mat-option>
         </mat-select>
       </mat-form-field>
     </mat-grid-tile>

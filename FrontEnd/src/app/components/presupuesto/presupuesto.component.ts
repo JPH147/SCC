@@ -20,7 +20,7 @@ export class PresupuestoComponent implements OnInit {
   public fecha_fin: Date;
 
   public ListadoPresupuesto: PresupuestoDataSource;
-  public Columnas: string[] = ['numero', 'cliente', 'tipo', 'fecha', 'capital', 'opciones'];
+  public Columnas: string[] = ['numero', 'cliente', 'tipo', 'fecha', 'capital', 'cuotas', 'total', 'opciones'];
 
   @ViewChild('InputCliente') FiltroCliente: ElementRef;
   @ViewChild('InputEstado') FiltroEstado: MatSelect;
@@ -86,6 +86,7 @@ export class PresupuestoComponent implements OnInit {
 
   Eliminar(presupuesto){
     let Dialogo = this.Dialogo.open(VentanaConfirmarComponent,{
+      width: '900px',
       data: {objeto: "el presupuesto", valor: presupuesto.numero}
     })
 

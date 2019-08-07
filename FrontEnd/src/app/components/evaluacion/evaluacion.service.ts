@@ -135,7 +135,7 @@ export class EvaluacionService {
       .set('prpdftarjeta', pdf_tarjeta)
       .set('prpdfcompromiso', pdf_compromiso)
 
-    console.log(params);
+    // console.log(params);
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -144,13 +144,15 @@ export class EvaluacionService {
 
   CrearPresupuestoCronograma(
     presupuesto: number,
-    monto: number,
+    capital: number,
+    interes: number,
     aporte: number,
     fecha: Date
   ): Observable<any> {
     let params = new HttpParams()
       .set('prpresupuesto',presupuesto.toString())
-      .set('prmonto',monto.toString())
+      .set('prcapital',capital.toString())
+      .set('printeres',interes.toString())
       .set('praporte',aporte.toString())
       .set('prfecha',moment(fecha).format("YYYY-MM-DD"))
 
@@ -162,16 +164,19 @@ export class EvaluacionService {
   }
 
   CrearPresupuestoProducto(
-    presupuesto: number,
-    producto: number,
-    cantidad: number,
+    id_presupuesto: number,
+    id_producto: number,
+    id_serie: number,
     precio: number
   ): Observable<any> {
+
     let params = new HttpParams()
-      .set('prpresupuesto',presupuesto.toString())
-      .set('prproducto',producto.toString())
-      .set('prcantidad',cantidad.toString())
+      .set('prpresupuesto',id_presupuesto.toString())
+      .set('prproducto',id_producto.toString())
+      .set('prserie',id_serie.toString())
       .set('prprecio',precio.toString())
+
+    console.log(params);
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -206,6 +211,32 @@ export class EvaluacionService {
 
     return this.http.post( this.url + 'plantillas/generar-ddjj.php', params, {headers : headers} )
 
+  }
+
+  GenerarCarta(
+    nombre_archivo : string ,
+    nombre_aval : string ,
+    dni_aval : string ,
+    direccion_aval : string ,
+    nombre : string ,
+    dni : string ,
+    lugar : string ,
+    fecha : Date 
+  ) :Observable <any> {
+
+    let params = new HttpParams()
+      .set('prnombrearchivo', nombre_archivo)
+      .set('prnombreaval', nombre_aval)
+      .set('prdniaval', dni_aval)
+      .set('prdireccionaval', direccion_aval)
+      .set('prnombre', nombre)
+      .set('prdni', dni)
+      .set('prlugar', lugar)
+      .set('prfechaletras', moment(fecha).format('LL'))
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post( this.url + 'plantillas/generar-carta.php', params, {headers : headers} )
   }
 
   GenerarAutorizacion(
@@ -271,6 +302,8 @@ export class EvaluacionService {
     nombre : string ,
     cargo : string ,
     dni : string ,
+    cip : string ,
+    direccion_cliente : boolean ,
     direccion : string ,
     casilla : string ,
     ugel : string ,
@@ -286,21 +319,21 @@ export class EvaluacionService {
     email : string ,
     whatsapp : string ,
     lugar : string ,
-    trabajador : string ,
-    trabajador_dni : string ,
-    trabajador_cargo : string ,
     vendedor : string ,
     vendedor_dni : string ,
     detalle : Array<any>,
     tipo : number ,
-    productos : Array<any>
+    productos : Array<any>,
+    nombre_aval : string,
+    dni_aval : string,
   ){
 
     let monto_penalidad : number = monto_total * (100 + penalidad_porcentaje)/100 ;
-    let numero_cuotas_penalidad : number = Math.trunc( monto_penalidad / penalidad_maxima_cuota ) ;
-    let monto_cuotas_penalidad : number = Math.round( monto_penalidad / numero_cuotas_penalidad ) ;
+    monto_penalidad = Math.round( monto_penalidad * 100 ) / 100 ;
 
-    monto_penalidad = Math.round( monto_penalidad*100 ) / 100 ;
+    let numero_cuotas_penalidad : number = Math.ceil( monto_penalidad / penalidad_maxima_cuota ) ;
+    
+    let monto_cuotas_penalidad : number = ( monto_penalidad / numero_cuotas_penalidad ) ;
     monto_cuotas_penalidad = Math.round( monto_cuotas_penalidad *100 ) / 100 ;
 
     let params = new HttpParams()
@@ -318,6 +351,8 @@ export class EvaluacionService {
       .set('prnombre',nombre )
       .set('prcargo',cargo )
       .set('prdni',dni )
+      .set('prcip',cip )
+      .set('prdireccioncliente', direccion_cliente.toString() )
       .set('prdireccion',direccion )
       .set('prcasilla',casilla )
       .set('prugel', ugel)
@@ -329,7 +364,7 @@ export class EvaluacionService {
       .set('prmontocuotaletras', this.EsribirNumero(monto_cuotas,1) )
       .set('prnumerocuotas',numero_cuotas.toString() )
       .set('prnumerocuotasletras',this.EsribirNumero(numero_cuotas,2) )
-      .set('prfechadia',moment(fecha).date().toString() )
+      .set('prfechadia', moment(fecha).date().toString() )
       .set('prfechadialetras', writtenNumber(moment(fecha).date()) )
       .set('prbanconombre',banco_nombre )
       .set('prcuentanumero',cuenta_numero )
@@ -342,14 +377,13 @@ export class EvaluacionService {
       .set('premail',email)
       .set('prwhatsapp',whatsapp)
       .set('prlugar',lugar)
-      .set('prtrabajador',trabajador)
-      .set('prtrabajadordni',trabajador_dni)
-      .set('prtrabajadorcargo',trabajador_cargo)
       .set('prvendedor',vendedor)
       .set('prvendedordni',vendedor_dni)
       .set('prdetalle',JSON.stringify(detalle))
       .set('prtipo',tipo.toString())
-      .set('prproductos',JSON.stringify(productos));
+      .set('prproductos',JSON.stringify(productos))
+      .set('prnombreaval',nombre_aval)
+      .set('prdniaval',dni_aval);
 
       // console.log(params);
 
@@ -383,6 +417,8 @@ export class EvaluacionService {
       .set('prcuenta', cuenta)
       .set('prcontacto', contacto)
       .set('prfecha', moment(fecha).format("DD/MM/YYYY"))
+
+    // console.log(params);
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -445,6 +481,20 @@ export class EvaluacionService {
     });
   }
 
+  ObtenerArchivosEstandar(
+    nombre:string
+  ): Observable<Blob>{
+
+    let params = new HttpParams()
+      .set('prarchivo', nombre)
+
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+
+    return this.http.post(this.url + 'plantillas/enviar-archivos-estandar.php', params, {
+      responseType: "blob"
+    });
+  }
+
   // Se obtiene la información de la cooperativa
   ObtenerInformacion(){
     return this.http.get(this.url+'plantillas/consultar-informacion.php',{
@@ -466,6 +516,7 @@ export class EvaluacionService {
     let decimal : number ;
     let decimal_corregido : string ;
 
+    numero = Math.trunc(numero*100)/100;
     entero = Math.trunc(numero);
 
     decimal = Math.trunc( ( numero-entero ) * 100 );

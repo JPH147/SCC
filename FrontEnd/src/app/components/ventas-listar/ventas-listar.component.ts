@@ -23,7 +23,7 @@ export class VentasListarComponent implements OnInit {
   public fecha_fin: Date;
 
   ListadoVentas: VentaDataSource;
-  Columnas: string[] = ['numero', 'contrato', 'cliente_nombre', 'tipo_venta', 'monto_total', 'fecha', 'opciones'];
+  Columnas: string[] = ['numero', 'fecha', 'contrato', 'cliente_nombre', 'tipo_venta', 'monto_total', 'opciones'];
 
   @ViewChild('InputCliente') FiltroCliente: ElementRef;
   @ViewChild('InputTipo') FiltroTipo: MatSelect;
@@ -44,7 +44,7 @@ export class VentasListarComponent implements OnInit {
     this.fecha_fin=new Date()
 
     this.ListadoVentas = new VentaDataSource(this.Servicio);
-    this.ListadoVentas.CargarVentas("",0,this.fecha_inicio,this.fecha_fin,1,1,10,"contrato desc");
+    this.ListadoVentas.CargarVentas("",0,this.fecha_inicio,this.fecha_fin,1,1,10,"fecha desc");
  }
 
 // tslint:disable-next-line:use-life-cycle-interface

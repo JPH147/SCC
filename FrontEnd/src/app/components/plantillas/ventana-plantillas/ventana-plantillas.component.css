@@ -1,0 +1,23 @@
+.card{
+  padding: 0px;
+  overflow: hidden;
+  height: 250px;
+}
+
+.spinner-container{
+  position: absolute;
+  top: 150px;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.columnas-1{
+  width: 80%
+}
+
+.columnas-2{
+  width: 90%
+}

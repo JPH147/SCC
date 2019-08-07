@@ -6,34 +6,6 @@
 
   <mat-grid-list cols=4 rowHeight="70px">
 
-    <!-- <mat-grid-tile>
-      <mat-icon>search</mat-icon>
-      <mat-form-field>
-        <input matInput placeholder="Institución" #InputInstitucion>
-      </mat-form-field>
-    </mat-grid-tile>
-
-    <mat-grid-tile>
-      <mat-icon>search</mat-icon>
-      <mat-form-field>
-        <input matInput placeholder="Sede" #InputSede>
-      </mat-form-field>
-    </mat-grid-tile>
-      
-    <mat-grid-tile>
-      <mat-icon>search</mat-icon>
-      <mat-form-field>
-        <input matInput placeholder="Subsede" #InputSubsede>
-      </mat-form-field>
-    </mat-grid-tile>
-
-    <mat-grid-tile>
-      <mat-icon>search</mat-icon>
-      <mat-form-field>
-        <input matInput placeholder="Cargo" #InputCargo>
-      </mat-form-field>
-    </mat-grid-tile> -->
-
     <mat-grid-tile>
       <mat-icon>search</mat-icon>
       <mat-form-field>
@@ -56,7 +28,9 @@
     </mat-grid-tile>
 
     <mat-grid-tile>
-      <button mat-raised-button color="primary" (click)="Agregar()">Agregar</button>
+      <button mat-raised-button (click)="VerPendientes()" *ngIf="estado==1">Ver pendientes</button>
+      <button mat-raised-button (click)="VerTodos()" *ngIf="estado==5">Ver todos</button>
+      <button mat-raised-button color="primary" (click)="Agregar()" *ngIf="estado==1">Agregar</button>
     </mat-grid-tile>
 
   </mat-grid-list>
@@ -103,13 +77,19 @@
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let cliente">
-          <button mat-icon-button matTooltip="Agregar datos de contacto" (click)="AgregarDatoContacto(cliente.id)" color="primary"><mat-icon> local_phone </mat-icon></button>
-          <button mat-icon-button matTooltip="Subir foto" color="primary" (click)="SubirImagen(cliente)"><mat-icon> add_a_photo </mat-icon></button>
-          <!-- <button mat-icon-button matTooltip="Realizar venta" color="primary" (click)="HacerVenta(cliente.id)"><mat-icon> add_shopping_cart </mat-icon></button> -->
-          <button mat-icon-button matTooltip="Ver ventas" color="primary" (click)="VerVentas(cliente)"><mat-icon> monetization_on </mat-icon></button>
-          <button mat-icon-button matTooltip="Agregar observaciones" color="primary" (click)="AgregarObservaciones(cliente.id)"><mat-icon> assignment</mat-icon></button>
-          <button mat-icon-button matTooltip="Editar" color="primary" (click)="Editar(cliente.id)"><mat-icon> edit </mat-icon></button>
-          <button mat-icon-button matTooltip="Eliminar" color="primary" (click)="Eliminar(cliente)"><mat-icon> delete </mat-icon></button>
+          <ng-container *ngIf="estado==1">
+            <button mat-icon-button matTooltip="Agregar datos de contacto" (click)="AgregarDatoContacto(cliente.id)" color="primary"><mat-icon> local_phone </mat-icon></button>
+            <button mat-icon-button matTooltip="Subir foto" color="primary" (click)="SubirImagen(cliente)"><mat-icon> add_a_photo </mat-icon></button>
+            <!-- <button mat-icon-button matTooltip="Realizar venta" color="primary" (click)="HacerVenta(cliente.id)"><mat-icon> add_shopping_cart </mat-icon></button> -->
+            <button mat-icon-button matTooltip="Ver ventas" color="primary" (click)="VerVentas(cliente)"><mat-icon> monetization_on </mat-icon></button>
+            <button mat-icon-button matTooltip="Agregar observaciones" color="primary" (click)="AgregarObservaciones(cliente.id)"><mat-icon> assignment</mat-icon></button>
+            <button mat-icon-button matTooltip="Editar" color="primary" (click)="Editar(cliente.id, false)"><mat-icon> edit </mat-icon></button>
+            <button mat-icon-button matTooltip="Eliminar" color="primary" (click)="Eliminar(cliente)"><mat-icon> delete </mat-icon></button>
+          </ng-container>
+          <ng-container *ngIf="estado==5">
+            <button mat-icon-button matTooltip="Confirmar" color="primary" (click)="Editar(cliente.id, true)"><mat-icon> check </mat-icon></button>
+            <button mat-icon-button matTooltip="Eliminar" color="primary" (click)="Eliminar(cliente)"><mat-icon> delete </mat-icon></button>
+          </ng-container>
         </mat-cell>
       </ng-container>
 

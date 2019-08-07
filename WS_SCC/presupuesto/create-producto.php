@@ -21,7 +21,7 @@
         {
             $presupuesto->presupuesto = trim($_POST["prpresupuesto"]);
             $presupuesto->producto = trim($_POST["prproducto"]);
-            $presupuesto->cantidad = trim($_POST["prcantidad"]);
+            $presupuesto->id_serie = trim($_POST["prserie"]);
             $presupuesto->precio = trim($_POST["prprecio"]);
 
             if($presupuesto->create_producto())

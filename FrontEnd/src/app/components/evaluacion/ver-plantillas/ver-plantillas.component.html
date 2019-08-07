@@ -1,0 +1,52 @@
+<mat-card class="card">
+
+    <mat-toolbar color="primary">
+      <mat-toolbar-row> Plantillas originales </mat-toolbar-row>
+    </mat-toolbar>
+  
+    <mat-card-content>
+  
+      <mat-grid-list cols=5 rowHeight="60px">
+        <mat-grid-tile>
+          Autorizacion de aporte
+        </mat-grid-tile>
+        <mat-grid-tile>
+          Autorización de celular
+        </mat-grid-tile>
+        <mat-grid-tile>
+          Autorización de préstamo
+        </mat-grid-tile>
+        <mat-grid-tile>
+          Declaración jurada
+        </mat-grid-tile>
+        <mat-grid-tile>
+          Tarjeta de socio
+        </mat-grid-tile>
+      </mat-grid-list>
+  
+      <mat-grid-list cols=5 rowHeight="70px">
+        <mat-grid-tile>
+          <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(aporte)"> <mat-icon> arrow_downward </mat-icon> </button>
+        </mat-grid-tile>
+  
+        <mat-grid-tile>
+          <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(celular)"> <mat-icon> arrow_downward </mat-icon> </button>
+        </mat-grid-tile>
+  
+        <mat-grid-tile>
+          <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(prestamo)"> <mat-icon> arrow_downward </mat-icon> </button>
+        </mat-grid-tile>
+  
+        <mat-grid-tile>
+          <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(tarjeta)"> <mat-icon> arrow_downward </mat-icon> </button>
+        </mat-grid-tile>
+  
+        <mat-grid-tile>
+          <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(ddjj)"> <mat-icon> arrow_downward </mat-icon> </button>
+        </mat-grid-tile>
+      </mat-grid-list>
+  
+    </mat-card-content>
+  
+  </mat-card>
+  

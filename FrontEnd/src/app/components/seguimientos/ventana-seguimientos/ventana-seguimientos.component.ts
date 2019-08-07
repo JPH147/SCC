@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MatPaginator, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FormGroup , FormBuilder , Validators } from '@angular/forms';
 import * as moment from 'moment' ;
 import { URLIMAGENES } from '../../global/url'
@@ -22,6 +22,7 @@ export class VentanaSeguimientosComponent implements OnInit {
   public foto_nuevo : string ;
   public foto_antiguo : string ;
   public foto : string ;
+  public entregado : boolean ;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data ,
@@ -48,6 +49,10 @@ export class VentanaSeguimientosComponent implements OnInit {
       ] ],
       observacion : [ { value : null , disabled : false }, [
       ] ],
+      fecha_recepcion : [ { value : null , disabled : false }, [
+      ] ],
+      usuario_recepcion : [ { value : null , disabled : false }, [
+      ] ],
     })
   }
 
@@ -58,18 +63,34 @@ export class VentanaSeguimientosComponent implements OnInit {
   }
 
   AsignarInformacion( informacion ){
-    this.VentanaSeguimientoForm.get('courier').setValue( informacion.id_courier ) ;
     this.VentanaSeguimientoForm.get('fecha').setValue( moment(informacion.fecha).toDate() ) ;
     this.VentanaSeguimientoForm.get('numero_seguimiento').setValue( informacion.numero_seguimiento ) ;
     this.VentanaSeguimientoForm.get('observacion').setValue( informacion.observacion ) ;
-    console.log(informacion.foto);
-    if(informacion.foto==""){
-      this.editar_foto = true;
-    } else {
-      this.editar_foto = false ;
-      this.foto = URLIMAGENES.carpeta+informacion.tipo+'/'+ informacion.foto;
-      this.foto_antiguo = informacion.foto ;
+   
+    if ( this.data.editar ) {
+      this.VentanaSeguimientoForm.get('courier').setValue( informacion.id_courier ) ;
+      if(informacion.foto==""){
+        this.editar_foto = true;
+      } else {
+        this.editar_foto = false ;
+        this.foto = URLIMAGENES.carpeta+informacion.tipo+'/'+ informacion.foto;
+        this.foto_antiguo = informacion.foto ;
+      }
     }
+
+    if( this.data.ver ) {
+      this.VentanaSeguimientoForm.get('courier').setValue( informacion.courier ) ;
+      if( informacion.id_estado==2 ) {
+        this.entregado = true ;
+        this.VentanaSeguimientoForm.get('fecha_recepcion').setValue( moment(informacion.fecha_recepcion).toDate() ) ;
+        this.VentanaSeguimientoForm.get('usuario_recepcion').setValue( informacion.usuario_recepcion ) ;
+      }
+      if(informacion.foto==""){
+      } else {
+        this.foto = URLIMAGENES.carpeta+informacion.tipo+'/'+ informacion.foto;
+      }
+    }
+
   }
 
   ListarCouriers(){

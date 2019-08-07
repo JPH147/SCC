@@ -87,8 +87,16 @@ export class MenuComponent implements OnInit{
             path: "presupuesto"
           },
           {
-            nombre: "Créditos",
+            nombre: "Préstamos",
             path: "creditos"
+          },
+          {
+            nombre: "Afiliaciones",
+            path: "afiliaciones"
+          },
+          {
+            nombre: "Refinanciamientos",
+            path: "refinanciamiento"
           },
         ]
       },
@@ -140,29 +148,33 @@ export class MenuComponent implements OnInit{
             path: ""
           },
           {
-            nombre: "Proveedores",
-            path: "proveedores"
+            nombre: "Plantillas",
+            path: "plantillas"
           },
           {
             nombre: "Productos",
             path: "detalleproductos"
           },
           {
-            nombre: "Vendedores",
-            path: "vendedores"
+            nombre: "Proveedores",
+            path: "proveedores"
           },
           {
             nombre: "Talonarios",
             path: "talonarios"
           },
           {
-            nombre: "Instituciones",
-            path: ""
+            nombre: "Vendedores",
+            path: "vendedores"
           },
-          {
-            nombre: "Reglas de evaluación",
-            path: "evaluacion-reglas"
-          }
+          // {
+          //   nombre: "Instituciones",
+          //   path: ""
+          // },
+          // {
+          //   nombre: "Reglas de evaluación",
+          //   path: "evaluacion-reglas"
+          // }
         ]
       },
     ]
