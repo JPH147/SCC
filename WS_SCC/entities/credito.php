@@ -766,35 +766,33 @@ Class Creditos{
     }
 
     function read_transacciones_cronograma(){
-        $query = "CALL sp_listartransaccionescronogramaxclientecronograma(?,?)";
+        $query = "CALL sp_listartransaccionesxclientecronograma(?)";
 
         $result = $this->conn->prepare($query);
 
-        $result->bindParam(1, $this->tipo);
-        $result->bindParam(2, $this->id_transaccion);
+        $result->bindParam(1, $this->cliente);
 
         $result->execute();
         
         $credito_list=array();
+        $credito_list['cronograma']=array();
 
-        $contador = 0;
-        
         while($row = $result->fetch(PDO::FETCH_ASSOC))
         {
             extract($row);
-            $contador=$contador+1;
             $items = array (
-                "numero"=>$contador,
-                "monto_cuota"=>$monto_cuota,
-                "fecha"=>$fecha,
+                "tipo" => $tipo,
+                "id_transaccion" => $id_transaccion,
+                "fecha_vencimiento" => $fecha_vencimiento,
+                "cuota_mensual" => $cuota_mensual,
             );
-            array_push($credito_list,$items);
+            array_push($credito_list['cronograma'],$items);
         }
 
-        return $credito_list;
+        return $credito_list['cronograma'];
     }
 
-    // Este SP muestra todas las cuotas que tiene el cliente
+    // Este SP muestra el monto mensual que tiene por pagar el cliente
     function read_cronogramasxcliente(){
 
         $query = "CALL sp_listartransaccionescronogramaxcliente(?)";

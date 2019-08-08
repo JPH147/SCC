@@ -4,11 +4,9 @@
 
   <mat-card-title class="tituloProd"> Refinanciamiento de deuda </mat-card-title>
 
+    <mat-horizontal-stepper linear="false">
 
-
-    <mat-horizontal-stepper>
       <mat-step [stepControl]="RefinanciamientoSeleccionForm">
-
         <!-- Seleccionar cliente -->
         <form [formGroup]="RefinanciamientoSeleccionForm">
           <ng-template matStepLabel>Seleccionar cliente</ng-template>
@@ -88,23 +86,411 @@
           <mat-card-actions>
             <mat-grid-list cols="1" rowHeight="40px">
               <mat-grid-tile>
-                <button mat-raised-button type="button" color="primary" (click)="TransaccionesSelecionadas()" matStepperNext [disabled]="RefinanciamientoSeleccionForm.invalid"> Guardar </button>
+                <button mat-raised-button type="button" color="primary" (click)="Paso1Completado()" matStepperNext [disabled]="RefinanciamientoSeleccionForm.invalid"> Guardar </button>
               </mat-grid-tile>
             </mat-grid-list>
           </mat-card-actions>
-
         </form>
-
       </mat-step>
 
-      <mat-step>
-        <ng-template matStepLabel>Definir cronograma</ng-template>
-        Content 2
+      <mat-step [stepControl]="RefinanciamientoCronogramaForm">
+        <form [formGroup]="RefinanciamientoCronogramaForm">
+          <ng-template matStepLabel>Definir cronograma</ng-template>
+
+          <mat-grid-list class="contenido-tab" cols="4" rowHeight="70px">
+        
+            <mat-grid-tile>
+              <mat-form-field>
+                <input type="number" matInput placeholder="Capital adicional" formControlName="capital_adicional" #InputCapital>
+              </mat-form-field>
+            </mat-grid-tile>
+      
+            <mat-grid-tile>
+              <mat-form-field>
+                <input type="number" matInput placeholder="Número de cuotas" formControlName="numero_cuotas" #InputCuotas>
+              </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+              <span matPreffix>S/. &nbsp;</span>
+              <mat-form-field>
+                <input matInput placeholder="Capital total" formControlName="capital" readonly>
+              </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+              <span matPreffix>S/. &nbsp;</span>
+              <mat-form-field>
+                <input matInput placeholder="Total" formControlName="total" readonly>
+              </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+              <mat-form-field>
+                <input matInput [matDatepicker]="picker" placeholder="Fecha de crédito" formControlName="fecha_prestamo" readonly (dateChange)="CrearCronograma()"> 
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker [disabled]="false"></mat-datepicker>
+              </mat-form-field>
+            </mat-grid-tile>
+      
+            <mat-grid-tile>
+              <mat-checkbox color="primary" formControlName="interes_por_dia" (change)="CalcularInteresDiario()">Interés por día</mat-checkbox>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+              <!-- <mat-checkbox color="primary" formControlName="cuotas_homogeneas" (change)="CambioTipoCuotas()"> Cuotas homogéneas </mat-checkbox> -->
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+              <mat-form-field>
+                <input matInput [matDatepicker]="FInicio" placeholder="Fecha de inicio de pagos" formControlName="fecha_inicio" readonly (dateChange)="CrearCronograma()"> 
+                <mat-datepicker-toggle matSuffix [for]="FInicio"></mat-datepicker-toggle>
+                <mat-datepicker #FInicio [disabled]="false"></mat-datepicker>
+              </mat-form-field>
+            </mat-grid-tile>
+
+          </mat-grid-list>
+
+          <mat-table [dataSource]="ListadoCronograma">
+
+            <ng-container matColumnDef="numero">
+              <mat-header-cell *matHeaderCellDef>N°</mat-header-cell>
+              <mat-cell *matCellDef="let cuota">{{cuota.numero}}</mat-cell>
+            </ng-container>
+      
+            <ng-container matColumnDef="monto">
+              <mat-header-cell *matHeaderCellDef>Monto</mat-header-cell>
+              <mat-cell *matCellDef="let cuota"> {{ cuota.monto | number:'1.2-2' }} </mat-cell>
+            </ng-container>
+      
+            <ng-container matColumnDef="aporte">
+              <mat-header-cell *matHeaderCellDef>Aporte</mat-header-cell>
+              <mat-cell *matCellDef="let cuota">{{cuota.aporte  | number:'1.2-2' }}</mat-cell>
+            </ng-container>
+      
+            <ng-container matColumnDef="fecha">
+              <mat-header-cell *matHeaderCellDef>Fecha de pago</mat-header-cell>
+              <mat-cell *matCellDef="let cuota">{{cuota.fecha | date:'dd/MM/yyyy' }}</mat-cell>
+            </ng-container>
+      
+            <ng-container matColumnDef="total">
+              <mat-header-cell *matHeaderCellDef>Total</mat-header-cell>
+              <mat-cell *matCellDef="let cuota">{{cuota.total  | number:'2.2-2' }}</mat-cell>
+            </ng-container>
+      
+            <ng-container matColumnDef="antiguos">
+              <mat-header-cell *matHeaderCellDef>Antiguos</mat-header-cell>
+              <mat-cell *matCellDef="let cuota">{{cuota.antiguo  | number:'2.2-2' }}</mat-cell>
+            </ng-container>
+      
+            <mat-header-row *matHeaderRowDef="ColumnasCronograma"></mat-header-row>
+            <mat-row *matRowDef="let row;columns:ColumnasCronograma"></mat-row>
+          </mat-table>
+
+          <mat-card-actions>
+            <mat-grid-list cols="1" rowHeight="40px">
+              <mat-grid-tile>
+                <button mat-raised-button type="button" color="primary" (click)="Paso2Completado()" matStepperNext [disabled]="RefinanciamientoCronogramaForm.invalid"> Generar refinanciamiento </button>
+              </mat-grid-tile>
+            </mat-grid-list>
+          </mat-card-actions>
+        </form>
       </mat-step>
-      <mat-step>
-        <ng-template matStepLabel>Generar nuevo crédito</ng-template>
-        Content 3
+
+      <mat-step [stepControl]="RefinanciamientoArchivosForm">
+        <form [formGroup]="RefinanciamientoArchivosForm">
+          <ng-template matStepLabel>Generar nuevo crédito</ng-template>
+
+          <mat-card-content>
+            <mat-grid-list cols=4 rowHeight="60px">
+              <mat-grid-tile>
+                Autorizacion
+              </mat-grid-tile>
+              <mat-grid-tile>
+                Declaracion jurada
+              </mat-grid-tile>
+              <mat-grid-tile>
+                Transacción
+              </mat-grid-tile>
+              <mat-grid-tile>
+                Compromiso de pago
+              </mat-grid-tile>
+            </mat-grid-list>
+        
+            <mat-grid-list cols=4 rowHeight="30px">
+              <mat-grid-tile>
+                <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(autorizacion)" [disabled]="!autorizacion"> <mat-icon> arrow_downward </mat-icon> </button>
+              </mat-grid-tile>
+        
+              <mat-grid-tile>
+                <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(ddjj)" [disabled]="!ddjj"> <mat-icon> arrow_downward </mat-icon> </button>
+              </mat-grid-tile>
+        
+              <mat-grid-tile>
+                <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(transaccion)" [disabled]="!transaccion"> <mat-icon> arrow_downward </mat-icon> </button>
+              </mat-grid-tile>
+        
+              <mat-grid-tile>
+                <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(compromiso)" [disabled]="!compromiso"> <mat-icon> arrow_downward </mat-icon> </button>
+              </mat-grid-tile>
+            </mat-grid-list>
+        
+          </mat-card-content>
+
+          <!-- Datos del cliente -->
+          <div class="seccion">
+
+            <mat-card-subtitle class="titulo-seccion">
+              DATOS DEL CLIENTE
+              <button mat-icon-button type="button" class="icono" (click)="cliente_provisional ? EditarClienteProvisional() : EditarCliente()" *ngIf="RefinanciamientoArchivosForm.value.id_cliente"><mat-icon>edit</mat-icon></button>
+            </mat-card-subtitle>
+
+            <mat-grid-list cols=3 rowHeight="70px">
+
+              <mat-grid-tile colspan=2>
+                <mat-form-field class="columnas-2">
+                  <input matInput type="text" placeholder="Nombre" formControlName="nombre" readonly>
+                </mat-form-field>
+              </mat-grid-tile>
+
+              <mat-grid-tile>
+                <mat-form-field class="columnas-1">
+                  <input matInput type="text" placeholder="DNI" formControlName="dni" readonly>
+                </mat-form-field>
+              </mat-grid-tile>
+
+              <mat-grid-tile>
+                <mat-form-field class="columnas-1">
+                  <input matInput type="text" placeholder="CIP" formControlName="cip" readonly>
+                </mat-form-field>
+              </mat-grid-tile>
+
+              <mat-grid-tile>
+                <mat-form-field class="columnas-1">
+                  <input matInput type="text" placeholder="Casilla" formControlName="casilla" readonly>
+                </mat-form-field>
+              </mat-grid-tile>
+
+              <mat-grid-tile>
+                <mat-checkbox color="primary" formControlName="hay_garante"> Hay garante </mat-checkbox>
+              </mat-grid-tile>
+
+            </mat-grid-list>
+
+          </div>
+
+          <!-- Datos de contacto -->
+          <div class="seccion">
+
+            <mat-card-subtitle class="titulo-seccion">
+              DATOS DE CONTACTO
+              <button mat-icon-button type="button" class="icono" (click)="EditarClienteContacto()" *ngIf="RefinanciamientoArchivosForm.value.id_cliente"><mat-icon>edit</mat-icon></button>
+            </mat-card-subtitle>
+
+            <mat-grid-list cols=3 rowHeight="70px">
+
+              <mat-grid-tile colspan=1>
+                <mat-form-field class="columnas-1">
+                  <input matInput type="text" [placeholder]="RefinanciamientoArchivosForm.value.telefono_tipo ? RefinanciamientoArchivosForm.value.telefono_tipo : 'Teléfono'" formControlName="telefono_numero" readonly>
+                </mat-form-field>
+              </mat-grid-tile>
+
+              <mat-grid-tile colspan=1>
+                <mat-form-field class="columnas-1">
+                  <input matInput type="text" [placeholder]="RefinanciamientoArchivosForm.value.cuenta_banco ? ('Cuenta del ' + RefinanciamientoArchivosForm.value.cuenta_banco) : 'Cuenta'" formControlName="cuenta_numero" readonly>
+                </mat-form-field>
+              </mat-grid-tile>
+
+              <mat-grid-tile>
+                <mat-checkbox color="primary" formControlName="considerar_direccion_cliente" (change)="CambiarDireccion($event)">Considerar dirección del cliente</mat-checkbox>
+              </mat-grid-tile>
+
+              <mat-grid-tile colspan=3>
+                <mat-form-field class="columnas-3">
+                  <input matInput type="text" placeholder="Dirección" formControlName="direccion_mostrar" readonly>
+                </mat-form-field>
+              </mat-grid-tile>
+
+            </mat-grid-list>
+
+          </div>
+
+          <!-- Datos del garante -->
+          <div class="seccion" *ngIf="RefinanciamientoArchivosForm.value.hay_garante">
+
+            <mat-card-subtitle class="titulo-seccion">
+              DATOS DEL GARANTE
+            </mat-card-subtitle>
+
+            <div formArrayName="garantes" *ngFor="let garante of RefinanciamientoArchivosForm['controls'].garantes['controls']; let i = index">
+                        
+              <mat-list *ngIf="i>0">
+                <mat-divider></mat-divider>
+              </mat-list>
+
+              <div [formGroupName]="i">
+
+                <mat-grid-list cols="3" rowHeight="70px">
+
+                  <mat-grid-tile colspan="3" *ngIf="!garante.value.id_cliente">
+                    <button type="button" mat-icon-button color="primary" (click)="SeleccionarGarante(i)"> <mat-icon> person_add </mat-icon>  </button>
+                  </mat-grid-tile>
+
+                  <mat-grid-tile colspan="2" *ngIf="garante.value.id_cliente">
+                    <mat-form-field class="columnas-2">
+                      <input matInput placeholder="Garante" formControlName="nombre" readonly>
+                      <mat-icon color="primary" matSuffix (click)="EliminarGarante(i)"> remove_circle </mat-icon>
+                    </mat-form-field>
+                  </mat-grid-tile>
+
+                  <mat-grid-tile colspan="1" *ngIf="garante.value.id_cliente">
+                    <mat-form-field class="columnas-1">
+                      <input matInput placeholder="DNI" formControlName="dni" readonly>
+                    </mat-form-field>
+                  </mat-grid-tile>
+
+                  <mat-grid-tile colspan="2" *ngIf="garante.value.id_cliente">
+                    <mat-form-field class="columnas-2">
+                      <input matInput placeholder="Dirección" formControlName="direccion" readonly>
+                    </mat-form-field>
+                  </mat-grid-tile>
+
+                  <mat-grid-tile colspan="1" *ngIf="garante.value.id_cliente">
+                    <button *ngIf="!idventa" type="button" mat-icon-button color="primary" (click)="EditarContactoGarante(garante.value.id_cliente, i)"> <mat-icon> edit </mat-icon>  </button>
+                  </mat-grid-tile>
+
+                </mat-grid-list>
+
+                <mat-grid-list cols=4 rowHeight="60px">
+                  <mat-grid-tile>
+                    Autorizacion
+                  </mat-grid-tile>
+                  <mat-grid-tile>
+                    Declaracion jurada
+                  </mat-grid-tile>
+                  <mat-grid-tile>
+                    Carta del aval
+                  </mat-grid-tile>
+                  <mat-grid-tile>
+                    Compromiso de pago
+                  </mat-grid-tile>
+                </mat-grid-list>
+            
+                <mat-grid-list cols=4 rowHeight="40px">
+                  <mat-grid-tile>
+                    <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(autorizacion_aval)" [disabled]="!autorizacion_aval"> <mat-icon> arrow_downward </mat-icon> </button>
+                  </mat-grid-tile>
+            
+                  <mat-grid-tile>
+                    <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(ddjj_aval)" [disabled]="!ddjj_aval"> <mat-icon> arrow_downward </mat-icon> </button>
+                  </mat-grid-tile>
+            
+                  <mat-grid-tile>
+                    <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(carta_aval)" [disabled]="!carta_aval"> <mat-icon> arrow_downward </mat-icon> </button>
+                  </mat-grid-tile>
+            
+                  <mat-grid-tile>
+                    <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(compromiso_aval)" [disabled]="!compromiso_aval"> <mat-icon> arrow_downward </mat-icon> </button>
+                  </mat-grid-tile>
+                </mat-grid-list>
+
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Información adicional -->
+          <div class="seccion">
+
+            <mat-card-subtitle class="titulo-seccion">
+              INFORMACION ADICIONAL
+            </mat-card-subtitle>
+
+            <mat-grid-list cols=3 rowHeight="70px">
+
+              <mat-grid-tile>
+                <mat-form-field class="columnas-1">
+                  <input matInput type="text" placeholder="Lugar" formControlName="lugar">
+                  <mat-error *ngIf="RefinanciamientoArchivosForm.get('lugar').invalid"> Debe ingresar el lugar de firma </mat-error>
+                </mat-form-field>
+              </mat-grid-tile>
+
+              <mat-grid-tile colspan=2>
+                <mat-form-field class="columnas-2">
+                  <input placeholder="Vendedor" matInput [matAutocomplete]="Vauto" formControlName="vendedor" #InputVendedor [readonly]="RefinanciamientoArchivosForm.value.id_vendedor">
+                  <mat-icon color="primary" matSuffix (click)="RemoverVendedor()" *ngIf="RefinanciamientoArchivosForm.value.id_vendedor"> remove_circle </mat-icon>
+                  <mat-autocomplete #Vauto="matAutocomplete" (optionSelected)="VendedorSeleccionado()">
+                    <mat-option *ngFor="let vendedor of ListadoVendedores" [value]="vendedor">
+                      {{vendedor.nombre}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </mat-grid-tile>
+
+              <mat-grid-tile>
+                <mat-form-field class="columnas-1">
+                  <input matInput [matDatepicker]="picker1" placeholder="Fecha" formControlName="fecha_letras" readonly>
+                  <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                  <mat-datepicker #picker1 [disabled]="false"></mat-datepicker>
+                </mat-form-field>
+              </mat-grid-tile>
+
+              <mat-grid-tile>
+                <mat-form-field class="columnas-1">
+                  <input matInput type="number" placeholder="Días de premura para el contrato" formControlName="dias_premura">
+                </mat-form-field>
+              </mat-grid-tile>
+
+              <!-- <mat-grid-tile colspan=2>
+                <mat-form-field class="columnas-2">
+                  <input placeholder="Trabajador" matInput [matAutocomplete]="Tauto" formControlName="trabajador" #InputTrabajador [readonly]="RefinanciamientoArchivosForm.value.id_trabajador">
+                  <mat-icon color="primary" matSuffix (click)="RemoverTrabajador()" *ngIf="RefinanciamientoArchivosForm.value.id_trabajador"> remove_circle </mat-icon>
+                  <mat-autocomplete #Tauto="matAutocomplete" (optionSelected)="TrabajadorSeleccionado()">
+                    <mat-option *ngFor="let trabajador of ListadoTrabajadores" [value]="trabajador">
+                      {{trabajador.nombre}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </mat-grid-tile> -->
+
+            </mat-grid-list>
+
+          </div>
+
+          <mat-card-actions>
+
+            <mat-grid-list cols=1 rowHeight=40px *ngIf="this.RefinanciamientoArchivosForm.value.id_cliente">
+              <mat-grid-tile *ngIf="!this.RefinanciamientoArchivosForm.value.email">
+                <mat-error> 
+                  <strong>Falta el email: </strong> No se pueden generar la autorización ni la transacción.
+                </mat-error>
+              </mat-grid-tile>
+              <mat-grid-tile *ngIf="!this.RefinanciamientoArchivosForm.value.casilla">
+                <mat-error>
+                  <strong>Falta la casilla: </strong>No se puede generar la transacción.
+                </mat-error>
+              </mat-grid-tile>
+              <mat-grid-tile *ngIf="!this.RefinanciamientoArchivosForm.value.codigo">
+                <mat-error>
+                  <strong>Falta el código: </strong>No se puede generar la autorización.
+                </mat-error>
+              </mat-grid-tile>
+            </mat-grid-list>
+      
+            <mat-grid-list cols=1 rowHeight=40px>
+              <mat-grid-tile>
+                <button mat-raised-button type="button" [color]="!generados ? 'primary' : 'null'" (click)="GenerarArchivos()"
+                  [disabled]=" RefinanciamientoArchivosForm.invalid || ( RefinanciamientoArchivosForm.value.hay_garante && !RefinanciamientoArchivosForm['controls'].garantes['controls'][0].value.id_cliente ) ">
+                  Generar
+                </button>
+                <button mat-raised-button type="button" color="primary" (click)="Guardar()" [disabled]="!generados"> Hacer crédito </button>
+              </mat-grid-tile>
+            </mat-grid-list>
+            
+          </mat-card-actions>
+        </form>
       </mat-step>
+
     </mat-horizontal-stepper>
 
     <div class = "spinner-container" *ngIf = "Listadotransacciones.Cargando| async">

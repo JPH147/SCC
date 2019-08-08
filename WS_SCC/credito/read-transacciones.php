@@ -19,10 +19,11 @@
         $credito->cliente = !empty($_GET['prcliente']) ? trim($_GET['prcliente']) :'';
 
         $credito_list = $credito->read_transacciones();
+        $credito_cronograma = $credito->read_transacciones_cronograma();
 
         if (count(array_filter($credito_list))>0)
         { 
-            print_json("0000", 1, $credito_list);
+            print_json("0000", $credito_cronograma, $credito_list);
         }
         else
         { print_json("0001", 0, $credito_list); }

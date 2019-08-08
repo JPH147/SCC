@@ -334,9 +334,9 @@
 
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
-             <input matInput [matDatepicker]="picker" [max]="Hoy" [placeholder]="id_tipo==1 ? 'Fecha de la afiliación' : 'Fecha del crédito'" formControlName="fecha_credito" (dateChange)="CambioFechaCredito()" [readonly]="id_credito || id_tipo==1">
+             <input matInput [matDatepicker]="picker" [max]="Hoy" [placeholder]="id_tipo==1 ? 'Fecha de la afiliación' : 'Fecha del crédito'" formControlName="fecha_credito" (dateChange)="CambioFechaCredito()" readonly>
              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-             <mat-datepicker #picker [disabled]="id_credito || id_tipo==1"></mat-datepicker>
+             <mat-datepicker #picker [disabled]="id_credito || id_tipo==1 || cliente_refinanciado"></mat-datepicker>
           </mat-form-field>
         </mat-grid-tile>
 
@@ -384,7 +384,7 @@
           <mat-grid-tile colspan=2 *ngIf="!id_credito">
             <mat-form-field class="columnas-2">
               <input placeholder="Vendedor" matInput [matAutocomplete]="auto" formControlName="vendedor" #Vendedor [readonly]="CreditosForm.value.id_vendedor">
-              <mat-icon color="primary" matSuffix (click)="RemoverVendedor()" *ngIf="CreditosForm.value.id_vendedor && !hay_presupuesto_vendedor"> remove_circle </mat-icon>
+              <mat-icon color="primary" matSuffix (click)="RemoverVendedor()" *ngIf="CreditosForm.value.id_vendedor && !hay_presupuesto_vendedor && !this.cliente_refinanciado"> remove_circle </mat-icon>
               <!-- <mat-autocomplete #auto="matAutocomplete" [displayWith] = "displayVendedor" (optionSelected)="VendedorSeleccionado()"> -->
               <mat-autocomplete #auto="matAutocomplete" (optionSelected)="VendedorSeleccionado()">
                 <mat-option *ngFor="let vendedor of ListadoVendedores" [value]="vendedor">
@@ -1180,7 +1180,7 @@
           <mat-form-field class="columnas-1">
             <input matInput [matDatepicker]="InputFechaPago" placeholder="Inicio de pagos" [min]="CreditosForm.value.fecha_credito" formControlName="fecha_pago" (dateChange)="CrearCronograma()" readonly>
             <mat-datepicker-toggle matSuffix [for]="InputFechaPago"></mat-datepicker-toggle>
-            <mat-datepicker #InputFechaPago [disabled]="id_credito || id_presupuesto"></mat-datepicker>
+            <mat-datepicker #InputFechaPago [disabled]="id_credito || id_presupuesto || cliente_refinanciado"></mat-datepicker>
           </mat-form-field>
         </mat-grid-tile>
 
@@ -1200,7 +1200,7 @@
 
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
-            <input matInput type="number" placeholder="Interés" formControlName="interes" readonly>
+            <input matInput type="number" placeholder="Interés" formControlName="interes" [readonly] = " cliente_refinanciado ">
             <span matSuffix> % </span>
           </mat-form-field>
         </mat-grid-tile>
@@ -1218,7 +1218,7 @@
 
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
-            <input matInput type="number" placeholder="N° de cuotas" max=100 min=0 formControlName="cuotas" #InputCuota [readonly]="id_credito || id_tipo==1 || id_presupuesto">
+            <input matInput type="number" placeholder="N° de cuotas" max=100 min=0 formControlName="cuotas" #InputCuota [readonly]="id_credito || id_tipo==1 || id_presupuesto || cliente_refinanciado">
             <mat-error>El número de cuotas debe ser menor a 100.</mat-error>
           </mat-form-field>
         </mat-grid-tile>
@@ -1238,7 +1238,7 @@
 
       <mat-card-subtitle class="titulo-seccion">
         CRONOGRAMA
-        <ng-container *ngIf="!id_credito && !id_presupuesto">
+        <ng-container *ngIf="!id_credito && !id_presupuesto && !cliente_refinanciado">
           <button mat-icon-button class="icono" *ngIf="editar_cronograma>1" (click)="EditarCronograma(1)"><mat-icon>edit</mat-icon></button>
           <button mat-icon-button class="icono" *ngIf="editar_cronograma==1" (click)="EditarCronograma(2)"><mat-icon>check</mat-icon></button>
         </ng-container>

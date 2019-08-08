@@ -6,8 +6,8 @@ import { MatDialog, MatSort } from '@angular/material';
 import {ServiciosTipoPago} from '../global/tipopago';
 import {ClienteService } from '../clientes/clientes.service';
 import { forkJoin,fromEvent, merge, BehaviorSubject} from 'rxjs';
-import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
-import { ActivatedRoute, Router } from '@angular/router';
+import {debounceTime, distinctUntilChanged, tap, filter, map} from 'rxjs/operators';
+import { ActivatedRoute, Router, NavigationStart } from '@angular/router';
 import {ServiciosTelefonos} from '../global/telefonos';
 import {ServiciosDirecciones,} from '../global/direcciones';
 import {ServiciosGenerales} from '../global/servicios';
@@ -51,6 +51,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   public cliente_refinanciado : number ;
   public refinancimiento_total : number ;
   public refinanciamiento_transacciones : Array<any> ;
+  public InformacionRefinanciamiento : any = {} ;
 
   public ListadoCronograma: CronogramaDataSource;
   public ColumnasCronograma: Array<string>;
@@ -201,11 +202,44 @@ export class CreditosComponent implements OnInit, AfterViewInit {
           this.SeleccionarCredito(this.id_credito_editar);
         }
 
-        if(params['transacciones']){
-          // console.log(params['transacciones']);
-          this.cliente_refinanciado = params['idclienterefinanciado'];
-          this.refinancimiento_total = params['total'];
-          this.refinanciamiento_transacciones = JSON.parse(params['transacciones']);
+        if(params['idclienterefinanciado']){
+          this.route.paramMap
+          .pipe(map(() => {
+            console.log(window.history.state)
+            let data = window.history.state ;
+            // this.InformacionRefinanciamiento.id_vendedor = 1 ;
+            // this.InformacionRefinanciamiento.vendedor = "JEAN PIERRE RODRIGUEZ" ;
+            // this.InformacionRefinanciamiento.capital = 6500 ;
+            // this.InformacionRefinanciamiento.cronograma = [] ;
+            // this.InformacionRefinanciamiento.cuotas = 10 ;
+            // this.InformacionRefinanciamiento.interes = 15 ;
+            // this.InformacionRefinanciamiento.total = 16250 ;
+            // this.InformacionRefinanciamiento.fecha_credito = new Date(2019,7,7);
+            // this.InformacionRefinanciamiento.fecha_inicio = new Date(2019,8,7);
+            // this.InformacionRefinanciamiento.aval = 1 ;
+            // this.InformacionRefinanciamiento.aval_nombre = "JEAN PIERRE RODRIGUEZ" ;
+            // this.refinanciamiento_transacciones = [
+            //   {tipo: 2, id: 119, documento: "200-1457"} ,
+            //   {tipo: 1, id: 30, documento: "8-002"}
+            // ] ;
+            // this.cliente_refinanciado = 1029569;
+
+            this.InformacionRefinanciamiento.id_vendedor = data.id_vendedor ;
+            this.InformacionRefinanciamiento.vendedor = data.vendedor ;
+            this.InformacionRefinanciamiento.capital = data.capital ;
+            this.InformacionRefinanciamiento.cronograma = data.cronograma ;
+            this.InformacionRefinanciamiento.cuotas = data.cuotas ;
+            this.InformacionRefinanciamiento.interes = data.interes ;
+            this.InformacionRefinanciamiento.total = data.total ;
+            this.InformacionRefinanciamiento.fecha_credito = data.fecha_prestamo ;
+            this.InformacionRefinanciamiento.fecha_inicio = data.fecha_inicio ;
+            this.InformacionRefinanciamiento.aval = data.aval ;
+            this.InformacionRefinanciamiento.aval_nombre = data.aval_nombre ;
+            this.refinanciamiento_transacciones = data.transacciones ;
+            this.cliente_refinanciado = params['idclienterefinanciado'];
+            this.NuevoCreditoRefinanciamiento(this.cliente_refinanciado);
+          })).subscribe()
+
           this.NuevoCreditoRefinanciamiento(this.cliente_refinanciado);
         }
 
@@ -406,11 +440,45 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     this.NuevoCredito();
     this.id_cliente=id;
     this.CreditosForm.get('id_cliente').setValue(id);
+    this.Servicio.Verificar_Afiliacion(this.id_cliente).subscribe(res=>{
+      if(res['codigo_afiliacion']){
+        this.numero_afiliacion=res['codigo_afiliacion'];
+        this.ObtenerNumero(this.id_cliente);
+        this.cliente_afiliado=true;
+      }
+    }) ;
+
     this.ObtenerClientexId(this.id_cliente);
     this.ObtenerDireccion(this.id_cliente);
     this.ObtenerTelefono(this.id_cliente);
-    this.VerificarAfiliacion(this.id_cliente);
-    this.CreditosForm.get('capital').setValue(this.refinancimiento_total);
+
+    this.CreditosForm.get('capital').setValue(this.InformacionRefinanciamiento.capital);
+    this.CreditosForm.get('interes').setValue(this.InformacionRefinanciamiento.interes);
+    this.CreditosForm.get('cuotas').setValue(this.InformacionRefinanciamiento.cuotas);
+    this.CreditosForm.get('total').setValue(this.InformacionRefinanciamiento.total);
+    this.CreditosForm.get('interes_diario').disable();
+
+    this.CreditosForm.get('fecha_credito').setValue(this.InformacionRefinanciamiento.fecha_credito) ;
+    this.CreditosForm.get('fecha_pago').setValue(this.InformacionRefinanciamiento.fecha_inicio) ;
+
+    this.CreditosForm.get('id_vendedor').setValue(this.InformacionRefinanciamiento.id_vendedor);
+    this.CreditosForm.get('vendedor').setValue(this.InformacionRefinanciamiento.vendedor);
+
+    if( this.InformacionRefinanciamiento.aval ) {
+      this.AgregarGarante( false ) ;
+      this.CreditosForm.get('garante').setValue( true ) ;
+      this.CreditosForm['controls'].garantes['controls'][0].get('id_cliente').setValue( this.InformacionRefinanciamiento.aval )
+      this.CreditosForm['controls'].garantes['controls'][0].get('nombre').setValue( this.InformacionRefinanciamiento.aval_nombre )
+      this.ObtenerDireccionGarante( this.InformacionRefinanciamiento.aval , 0 );
+      this.ObtenerTelefonoGarante( this.InformacionRefinanciamiento.aval , 0 );
+    } else {
+      this.CreditosForm.get('garante').disable() ;
+    }
+
+    this.Cronograma = this.InformacionRefinanciamiento.cronograma ;
+    this.ListadoCronograma.AsignarInformacion(this.Cronograma);
+
+    // this.VerificarAfiliacion(this.id_cliente);
   }
 
   SeleccionarCredito(id_credito){
@@ -864,6 +932,18 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     });
   }
 
+  EditarContactoGarante(id_cliente, index){
+    let VentanaContacto = this.Dialogo.open(VentanaEmergenteContacto, {
+      width: '1200px',
+      data: id_cliente
+    });
+
+    VentanaContacto.afterClosed().subscribe(res=>{
+      this.ObtenerDireccionGarante(id_cliente,index);
+      this.ObtenerTelefonoGarante(id_cliente,index);
+    })
+  }
+
   AgregarGarante(bool):void{
     this.garantes = this.CreditosForm.get('garantes') as FormArray;
     this.garantes.push(this.CrearGarante(bool));
@@ -984,7 +1064,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   /*Cronograma */
   CrearCronograma(){
 
-    if(this.CreditosForm.get('cuotas').valid && this.CreditosForm.value.interes>0){
+    if(this.CreditosForm.get('cuotas').valid && this.CreditosForm.value.interes>0 && !this.cliente_refinanciado){
       
       this.Cronograma=[];
       let i = 1;
@@ -1303,6 +1383,16 @@ export class CreditosComponent implements OnInit, AfterViewInit {
           this.Servicio.ActualizarPresupuesto(this.id_presupuesto, 2).subscribe();
         }
 
+        // Si se realiza por un refinanciamiento, se actualizan las transacciones en referencia
+        if(this.cliente_refinanciado){
+          this.refinanciamiento_transacciones.forEach((item)=>{
+            this.RfServicio.ActualizarTransacciones(
+              res['data'],
+              item.tipo,
+              item.id
+            ).subscribe()
+          })
+        }
         // Si el crédito tiene garante, se los agrega
         if( this.CreditosForm.value.garante ){
           this.CreditosForm['controls'].garantes['controls'].forEach((item, index)=>{

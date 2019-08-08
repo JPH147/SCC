@@ -51,24 +51,4 @@ export class RefinanciamientoService {
     return this.http.post(this.url + 'credito/update-refinanciamiento.php', params, {headers: headers});
   }
 
-  ListarCronogramaTransacciones(
-    id_tipo:number,
-    id_transaccion:number,
-  ): Observable<any> {
-
-    let params = new HttpParams()
-      .set('prtipo',id_tipo.toString())
-      .set('prtransaccion',id_transaccion.toString());
-
-    return this.http.get(this.url + 'credito/read-transacciones-cronograma.php', {params})
-    .pipe(map(res => {
-      if (res['codigo'] === 0) {
-        return res['data'];
-      } else {
-        console.log('No hay datos que mostrar');
-        return [];
-      }
-    }));
-  }
-
 }

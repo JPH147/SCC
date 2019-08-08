@@ -77,7 +77,7 @@ const appRoutes: Routes = [
   {path: 'creditos/ver/:idcredito', component: CreditosComponent},
   {path: 'creditos/editar/:idcreditoeditar', component: CreditosComponent},
   {path: 'creditos/nuevo', component: CreditosComponent},
-  {path: 'creditos/nuevo/refinanciamiento/:idclienterefinanciado/:total/:transacciones', component: CreditosComponent},
+  {path: 'creditos/nuevo/refinanciamiento/:idclienterefinanciado', component: CreditosComponent},
   {path: 'creditos/nuevo/:idpresupuesto', component: CreditosComponent},
   {path: 'presupuesto', component: PresupuestoComponent},
   {path: 'refinanciamiento', component: RefinanciamientoComponent},
