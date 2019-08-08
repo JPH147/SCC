@@ -1,7 +1,11 @@
 <mat-card class="principal">
+    <div>
+        <button mat-fab matTooltip="Agrega Cliente" class="agregar"  (click)="AgregarCliente()" color="primary" ><mat-icon> person_add </mat-icon></button>
+    </div>
+    
   
   <mat-card-title>
-    <div id="tituloProd">Evaluación de créditos</div>
+    <div id="tituloProd">Evaluación de Créditos</div>
   </mat-card-title>
 
   <mat-card-content>
@@ -10,9 +14,9 @@
       <mat-grid-list cols="4" rowHeight="70px">
         
         <mat-grid-tile colspan=3 *ngIf="cliente_encontrado!=1">
-          <button mat-icon-button color="primary" matTooltip="Seleccionar cliente" (click)="SeleccionarCliente()">
-            <mat-icon>person_add</mat-icon>
-          </button>
+          <!-- <button mat-icon-button color="primary" matTooltip="Seleccionar cliente" (click)="SeleccionarCliente()"> -->
+              <button mat-fab matTooltip="Selecciona Cliente" class="selec"  (click)="SeleccionarCliente()" color="primary" > <mat-icon >how_to_reg</mat-icon> </button>
+         
         </mat-grid-tile>
 
         <ng-container *ngIf="cliente_encontrado==1">
@@ -32,7 +36,7 @@
         </ng-container>
                
         <mat-grid-tile>
-          <button mat-raised-button type="button" (click)="AgregarCliente()"> Agregar </button>
+          <!-- <button mat-raised-button type="button" (click)="AgregarCliente()"> Agregar </button> -->
           <!-- &nbsp; -->
           <!-- <button mat-raised-button type="button" color="primary" (click)="BuscarCliente()"> Buscar </button> -->
         </mat-grid-tile> 

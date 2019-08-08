@@ -18,10 +18,19 @@
   .example-button-row a {
     margin-right: 8px;
   }
+
+  .input-ventanaa{ 
+    width:85%
+  }
   
   .input-ventana{ 
-    width:80%
+    width:88%
   }
+
+  .input-ventanac{ 
+    width:92%
+  }
+
   .mat-card-header{
     background-color: #673ab7;
     color: #fff;
@@ -44,4 +53,7 @@
     margin-left: 20px;
     margin-bottom: 0px !important;
     margin-top: 20px;
+    font-weight: bold;
+    color: #006064;
+
   }

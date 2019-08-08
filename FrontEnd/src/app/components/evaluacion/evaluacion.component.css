@@ -40,3 +40,27 @@ mat-list{
 .divider-2{
   width: 25%;
 }
+
+.example-button-row button,
+.example-button-row a {
+  margin-right: 8px;
+}
+
+/* .agregar{
+  float:right;
+  margin-left: 5px;
+  z-index: 1
+} */
+
+.agregar{
+  float:right;
+  margin-bottom: 5px;
+  height: 70px;
+  width: 70px;
+}
+
+.selec{
+  margin-bottom: 12px;
+  height: 40px;
+  width: 40px;
+}

@@ -19,8 +19,15 @@
   margin-right: 8px;
 }
 
+.input-ventanac{ 
+  width:92%
+}
+
+.input-ventanaa{ 
+  width:85%
+}
 .input-ventana{ 
-  width:80%
+  width:88%
 }
 .mat-card-header{
   background-color: #673ab7;
@@ -44,6 +51,8 @@
   margin-left: 20px;
   margin-bottom: 0px !important;
   margin-top: 20px;
+  font-weight: bold;
+  color: #006064;
 }
 
 .grande{
