@@ -67,6 +67,8 @@ Class Venta{
     public $id_venta_producto;
     public $canje_talonario_serie;
     public $canje_talonario_contrato;
+    public $id_credito_refinanciado;
+    public $credito_refinanciado;
     public $anulacion_observacion;
     public $anulacion_monto;
     public $id_salida;
@@ -421,6 +423,8 @@ Class Venta{
         $this->id_venta_canje=$row['id_venta_canje'];
         $this->canje_talonario_serie=$row['canje_talonario_serie'];
         $this->canje_talonario_contrato=$row['canje_talonario_contrato'];
+        $this->id_credito_refinanciado=$row['id_credito_refinanciado'];
+        $this->credito_refinanciado=$row['credito_refinanciado'];
         $this->anulacion_observacion=$row['anulacion_observacion'];
         $this->anulacion_monto=$row['anulacion_monto'];
         $this->courier = $Courier;

@@ -1,6 +1,6 @@
 <mat-card>
-  <!-- Encabezado -->
 
+  <!-- Encabezado -->
   <mat-card-title>
     <div id = "tituloProd"> Listado de créditos</div>
   </mat-card-title>
@@ -43,20 +43,21 @@
 
     <mat-grid-tile>
       <mat-form-field>
-        <mat-select #InputDocumentos placeholder="Documentos adjuntos" [value]=0 (selectionChange)="CambioFiltro()">
+        <mat-select #InputEstado placeholder="Estado del crédito" [value]=1 (selectionChange)="CambioFiltro()">
           <mat-option [value]=0>Todos</mat-option>
-          <mat-option [value]=1>Pendientes</mat-option>
-          <mat-option [value]=2>Completados</mat-option>
+          <mat-option [value]=1>Activos</mat-option>
+          <mat-option [value]=4>Refinanciados</mat-option>
+          <mat-option [value]=2>Anulados</mat-option>
         </mat-select>
       </mat-form-field>
     </mat-grid-tile>
 
     <mat-grid-tile>
       <mat-form-field>
-        <mat-select #InputEstado placeholder="Estado del crédito" [value]=1 (selectionChange)="CambioFiltro()">
+        <mat-select #InputDocumentos placeholder="Documentos adjuntos" [value]=0 (selectionChange)="CambioFiltro()">
           <mat-option [value]=0>Todos</mat-option>
-          <mat-option [value]=1>Activos</mat-option>
-          <mat-option [value]=2>Anulados</mat-option>
+          <mat-option [value]=1>Pendientes</mat-option>
+          <mat-option [value]=2>Completados</mat-option>
         </mat-select>
       </mat-form-field>
     </mat-grid-tile>
@@ -120,9 +121,8 @@
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let credito">
           <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="['ver', credito.id]"><mat-icon> visibility </mat-icon></button>
-          <button mat-icon-button color="primary" matTooltip="Editar" [disabled]="credito.estado==2 || credito.tipo_credito == 'Aporte de socio'" [routerLink]="['editar', credito.id]"><mat-icon> edit </mat-icon></button>
-          <!--<button mat-icon-button color="primary" matTooltip="Canjear" [disabled]="venta.estado!=1" [routerLink]="['nueva', venta.id, venta.id_cliente]" *ngIf="venta.tipo_venta!='Salida'"><mat-icon> import_export </mat-icon></button>
-          <button mat-icon-button color="primary" matTooltip="Anular" [disabled]="venta.estado!=1" (click)="AnularVenta(venta)" *ngIf="venta.tipo_venta!='Salida'"><mat-icon> delete </mat-icon></button> -->
+          <button mat-icon-button color="primary" matTooltip="Editar" [disabled]="credito.estado>1 || credito.tipo_credito == 'Aporte de socio'" [routerLink]="['editar', credito.id]"><mat-icon> edit </mat-icon></button>
+          <button mat-icon-button color="primary" matTooltip="Anular" [disabled]="credito.estado!=1" (click)="AnularCredito(credito)"><mat-icon> delete </mat-icon></button>
         </mat-cell>
       </ng-container>
 
@@ -133,4 +133,5 @@
     <mat-paginator [length]="ListadoCreditos.TotalResultados | async" [pageSize]="10" [pageSizeOptions]="[10,15,20]"></mat-paginator>
 
   </mat-card-content>
+
 </mat-card>

@@ -79,6 +79,9 @@ export class VentasComponent implements OnInit {
   public anulacion_observacion: string;
   public anulacion_monto: string;
   public existe_garante:boolean = false;
+  public venta_canjeada : boolean ;
+  public venta_refinanciada : boolean ;
+  public codigo_credito : string ;
 
   public foto: string;
   public dni: string;
@@ -324,8 +327,6 @@ export class VentasComponent implements OnInit {
 
   SeleccionarVentaxId(id_venta){
 
-    let cuota_0;
-
     this.Servicio.SeleccionarVenta(id_venta).subscribe(res=>{
 
       this.talonario=res.talonario_serie+" - "+res.talonario_contrato;
@@ -353,6 +354,16 @@ export class VentasComponent implements OnInit {
       this.anulacion_observacion=res.anulacion_observacion;
       this.anulacion_monto=res.anulacion_monto;
       this.total_cronograma_editado=res.monto_total;
+
+      if( res.id_venta_canje && res.estado==3 ) {
+        this.venta_canjeada = true ;
+        this.talonario = res.canje_talonario_serie + "-" + res.canje_talonario_contrato ;
+      }
+
+      if( res.id_credito_refinanciado ) {
+        this.venta_refinanciada = true ;
+        this.codigo_credito = res.credito_refinanciado ;
+      }
 
       if(res['garantes'].garantes.length>0){
 

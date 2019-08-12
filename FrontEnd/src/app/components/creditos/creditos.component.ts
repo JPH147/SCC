@@ -52,6 +52,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   public refinancimiento_total : number ;
   public refinanciamiento_transacciones : Array<any> ;
   public InformacionRefinanciamiento : any = {} ;
+  public credito_refinanciado : boolean ;
+  public codigo_credito : string ;
 
   public ListadoCronograma: CronogramaDataSource;
   public ColumnasCronograma: Array<string>;
@@ -186,7 +188,6 @@ export class CreditosComponent implements OnInit, AfterViewInit {
 
         if(params['idpresupuesto']){
           this.id_presupuesto=params['idpresupuesto'];
-          // this.id_presupuesto = 15 ;
           this.NuevoCreditoPresupuesto(this.id_presupuesto);
         }
 
@@ -207,23 +208,6 @@ export class CreditosComponent implements OnInit, AfterViewInit {
           .pipe(map(() => {
             console.log(window.history.state)
             let data = window.history.state ;
-            // this.InformacionRefinanciamiento.id_vendedor = 1 ;
-            // this.InformacionRefinanciamiento.vendedor = "JEAN PIERRE RODRIGUEZ" ;
-            // this.InformacionRefinanciamiento.capital = 6500 ;
-            // this.InformacionRefinanciamiento.cronograma = [] ;
-            // this.InformacionRefinanciamiento.cuotas = 10 ;
-            // this.InformacionRefinanciamiento.interes = 15 ;
-            // this.InformacionRefinanciamiento.total = 16250 ;
-            // this.InformacionRefinanciamiento.fecha_credito = new Date(2019,7,7);
-            // this.InformacionRefinanciamiento.fecha_inicio = new Date(2019,8,7);
-            // this.InformacionRefinanciamiento.aval = 1 ;
-            // this.InformacionRefinanciamiento.aval_nombre = "JEAN PIERRE RODRIGUEZ" ;
-            // this.refinanciamiento_transacciones = [
-            //   {tipo: 2, id: 119, documento: "200-1457"} ,
-            //   {tipo: 1, id: 30, documento: "8-002"}
-            // ] ;
-            // this.cliente_refinanciado = 1029569;
-
             this.InformacionRefinanciamiento.id_vendedor = data.id_vendedor ;
             this.InformacionRefinanciamiento.vendedor = data.vendedor ;
             this.InformacionRefinanciamiento.capital = data.capital ;
@@ -239,7 +223,6 @@ export class CreditosComponent implements OnInit, AfterViewInit {
             this.cliente_refinanciado = params['idclienterefinanciado'];
             this.NuevoCreditoRefinanciamiento(this.cliente_refinanciado);
           })).subscribe()
-
           this.NuevoCreditoRefinanciamiento(this.cliente_refinanciado);
         }
 
@@ -431,6 +414,19 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         this.CreditosForm.get('id_vendedor').setValue(res.id_vendedor);
         this.CreditosForm.get('vendedor').setValue(res.vendedor);
       }
+
+      if(res.garantes.length>0){
+        this.CreditosForm.get('garante').setValue(true);
+        res.garantes.forEach((item)=>{
+          this.AgregarGarante(false);
+          this.CreditosForm['controls'].garantes['controls'][0].get('id_cliente').setValue(item.id_cliente)
+          this.CreditosForm['controls'].garantes['controls'][0].get('nombre').setValue(item.cliente)
+          this.ObtenerDireccionGarante(item.id_cliente,0);
+          this.ObtenerTelefonoGarante(item.id_cliente,0);
+        })
+
+      }
+
       this.CreditosForm.get('fecha_pago').setValue( moment(res.cronograma[0].fecha_vencimiento).toDate() );
       this.CreditosForm.get('interes_diario').disable();
     })
@@ -465,12 +461,13 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     this.CreditosForm.get('vendedor').setValue(this.InformacionRefinanciamiento.vendedor);
 
     if( this.InformacionRefinanciamiento.aval ) {
-      this.AgregarGarante( false ) ;
       this.CreditosForm.get('garante').setValue( true ) ;
+      this.AgregarGarante(false);
       this.CreditosForm['controls'].garantes['controls'][0].get('id_cliente').setValue( this.InformacionRefinanciamiento.aval )
       this.CreditosForm['controls'].garantes['controls'][0].get('nombre').setValue( this.InformacionRefinanciamiento.aval_nombre )
       this.ObtenerDireccionGarante( this.InformacionRefinanciamiento.aval , 0 );
       this.ObtenerTelefonoGarante( this.InformacionRefinanciamiento.aval , 0 );
+      this.EliminarGarante(1);
     } else {
       this.CreditosForm.get('garante').disable() ;
     }
@@ -543,6 +540,10 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       res.pdf_ddjj!="" ? this.ddjj=URLIMAGENES.carpeta+'credito/'+res.pdf_ddjj : null;
       res.pdf_otros!="" ? this.otros=URLIMAGENES.carpeta+'credito/'+res.pdf_otros : null;
 
+      if( res.id_credito_refinanciado ) {
+        this.credito_refinanciado = true ;
+        this.codigo_credito = res.credito_refinanciado ;
+      }
 
       if(res['garantes'].garantes.length>0){
         this.CreditosForm.get('garante').setValue(true);
@@ -1393,6 +1394,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
             ).subscribe()
           })
         }
+
         // Si el crédito tiene garante, se los agrega
         if( this.CreditosForm.value.garante ){
           this.CreditosForm['controls'].garantes['controls'].forEach((item, index)=>{
@@ -1404,8 +1406,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
               this.Servicio.CrearGarante(
                 res['data'],
                 item.value.id_cliente,
-                item.value.direccion,
                 item.value.telefono,
+                item.value.direccion,
                 response[0].mensaje,
                 response[1].mensaje,
                 response[2].mensaje,

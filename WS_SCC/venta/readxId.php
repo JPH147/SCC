@@ -60,6 +60,8 @@
 			"id_venta_canje"=>$venta->id_venta_canje,
 			"canje_talonario_serie"=>$venta->canje_talonario_serie,
 			"canje_talonario_contrato"=>$venta->canje_talonario_contrato,
+			"id_credito_refinanciado"=>$venta->id_credito_refinanciado,
+			"credito_refinanciado"=>$venta->credito_refinanciado,
 			"anulacion_observacion"=>$venta->anulacion_observacion,
 			"anulacion_monto"=>$venta->anulacion_monto,
 			"courier"=>$venta->courier,

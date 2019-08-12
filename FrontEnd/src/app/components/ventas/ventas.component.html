@@ -5,7 +5,9 @@
   <mat-card-title class="tituloProd" *ngIf="!idventa && !idventa_editar">Nueva venta</mat-card-title>
   <mat-card-title class="tituloProd" *ngIf="idventa || idventa_editar">Venta {{talonario}}</mat-card-title>
   
-  <mat-card-subtitle *ngIf="venta_canje"> Venta canjeada por la {{talonario}} </mat-card-subtitle>
+  <mat-card-subtitle *ngIf="venta_canje"> Venta a canjear por la {{talonario}} </mat-card-subtitle>
+  <mat-card-subtitle *ngIf="venta_canjeada"> Esta venta ha sido canjeada por la {{talonario}} </mat-card-subtitle>
+  <mat-card-subtitle *ngIf="venta_refinanciada"> Esta venta ha sido refinanciada por el crédito {{codigo_credito}} </mat-card-subtitle>
   <mat-card-subtitle *ngIf="anulacion_observacion"> La venta se anuló porque {{anulacion_observacion}} </mat-card-subtitle>
   <mat-card-subtitle *ngIf="anulacion_monto"> La penalidad fue de {{anulacion_monto}} </mat-card-subtitle>
 

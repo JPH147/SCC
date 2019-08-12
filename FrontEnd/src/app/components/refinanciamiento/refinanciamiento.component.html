@@ -4,7 +4,7 @@
 
   <mat-card-title class="tituloProd"> Refinanciamiento de deuda </mat-card-title>
 
-    <mat-horizontal-stepper linear="false">
+    <mat-horizontal-stepper linear="true">
 
       <mat-step [stepControl]="RefinanciamientoSeleccionForm">
         <!-- Seleccionar cliente -->
@@ -35,9 +35,9 @@
               </mat-grid-tile>
             </ng-container>
             
-            <mat-grid-tile>
+            <!-- <mat-grid-tile>
               <button mat-raised-button type="button" color="primary" (click)="BuscarTransacciones()" [disabled]="!RefinanciamientoSeleccionForm.value.id_cliente"> Buscar transacciones </button>
-            </mat-grid-tile>
+            </mat-grid-tile> -->
         
           </mat-grid-list>
       
@@ -138,7 +138,7 @@
             </mat-grid-tile>
 
             <mat-grid-tile>
-              <!-- <mat-checkbox color="primary" formControlName="cuotas_homogeneas" (change)="CambioTipoCuotas()"> Cuotas homogéneas </mat-checkbox> -->
+              <mat-checkbox color="primary" formControlName="cuotas_homogeneas" (change)="CambioTipoCuotas()"> Cuotas homogéneas </mat-checkbox>
             </mat-grid-tile>
 
             <mat-grid-tile>
@@ -173,14 +173,29 @@
               <mat-cell *matCellDef="let cuota">{{cuota.fecha | date:'dd/MM/yyyy' }}</mat-cell>
             </ng-container>
       
+            <ng-container matColumnDef="capital">
+              <mat-header-cell *matHeaderCellDef>Capital</mat-header-cell>
+              <mat-cell *matCellDef="let cuota">{{cuota.capital  | number:'2.2-2' }}</mat-cell>
+            </ng-container>
+      
+            <ng-container matColumnDef="nuevo">
+              <mat-header-cell *matHeaderCellDef>Capital nuevo</mat-header-cell>
+              <mat-cell *matCellDef="let cuota">{{cuota.nuevo  | number:'2.2-2' }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="antiguo">
+              <mat-header-cell *matHeaderCellDef>Capital antiguo</mat-header-cell>
+              <mat-cell *matCellDef="let cuota">{{cuota.antiguo  | number:'2.2-2' }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="interes">
+              <mat-header-cell *matHeaderCellDef>Interés</mat-header-cell>
+              <mat-cell *matCellDef="let cuota">{{cuota.interes  | number:'2.2-2' }}</mat-cell>
+            </ng-container>
+      
             <ng-container matColumnDef="total">
               <mat-header-cell *matHeaderCellDef>Total</mat-header-cell>
               <mat-cell *matCellDef="let cuota">{{cuota.total  | number:'2.2-2' }}</mat-cell>
-            </ng-container>
-      
-            <ng-container matColumnDef="antiguos">
-              <mat-header-cell *matHeaderCellDef>Antiguos</mat-header-cell>
-              <mat-cell *matCellDef="let cuota">{{cuota.antiguo  | number:'2.2-2' }}</mat-cell>
             </ng-container>
       
             <mat-header-row *matHeaderRowDef="ColumnasCronograma"></mat-header-row>

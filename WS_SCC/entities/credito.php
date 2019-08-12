@@ -28,7 +28,8 @@ Class Creditos{
     public $id_courier;
     public $courier;
     public $numero_seguimiento;
-
+    public $id_credito_refinanciado;
+    public $credito_refinanciado;
     public $sucursal;
     public $fecha_credito;
     public $autorizador;
@@ -198,6 +199,8 @@ Class Creditos{
         $this->pdf_ddjj = $row['pdf_ddjj'];
         $this->pdf_otros = $row['pdf_otros'];
         $this->observaciones = $row['observaciones'];
+        $this->id_credito_refinanciado = $row['id_credito_refinanciado'];
+        $this->credito_refinanciado = $row['credito_refinanciado'];
         $this->id_estado = $row['id_estado'];
         $this->estado = $row['estado'];
         $this->courier = $Courier;

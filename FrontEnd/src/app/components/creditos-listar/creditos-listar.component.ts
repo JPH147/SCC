@@ -94,7 +94,7 @@ export class CreditosListarComponent implements OnInit {
     this.CargarData()
   }
 
-  AnularVenta(credito){
+  AnularCredito(credito){
    
     let Ventana = this.Dialogo.open(VentanaConfirmarComponent,{
       data: { objeto: "el crédito", valor: credito.codigo+"-"+credito.numero_credito }

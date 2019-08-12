@@ -29,6 +29,8 @@ Class Presupuesto{
     public $pdf_transaccion;
     public $pdf_tarjeta;
     public $pdf_compromiso;
+    public $id_cliente;
+    public $pdf_carta;
 
     public function __construct($db){
         $this->conn = $db;
@@ -107,6 +109,7 @@ Class Presupuesto{
         
         $cronograma = $this->read_cronograma($this->id_presupuesto);
         $productos = $this->read_productos($this->id_presupuesto);
+        $garantes = $this->read_garantes($this->id_presupuesto);
 
         $result = $this->conn->prepare($query);
         
@@ -134,6 +137,7 @@ Class Presupuesto{
             "estado" => $row['estado'],
             "cronograma" => $cronograma,
             "productos" => $productos,
+            "garantes" => $garantes,
         );
 
         return $presupuesto;
@@ -357,6 +361,73 @@ Class Presupuesto{
         }
         
         return false;
+    }
+
+    function create_garante(){
+
+        $query = "call sp_crearpresupuestogarante(
+            :prpresupuesto,
+            :prcliente,
+            :prpdfautorizacion,
+            :prpdfddjj,
+            :prpdfcarta,
+            :prpdfcompromiso
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prpresupuesto", $this->id_presupuesto);
+        $result->bindParam(":prcliente", $this->id_cliente);
+        $result->bindParam(":prpdfautorizacion", $this->pdf_autorizacion);
+        $result->bindParam(":prpdfddjj", $this->pdf_ddjj);
+        $result->bindParam(":prpdfcarta", $this->pdf_carta);
+        $result->bindParam(":prpdfcompromiso", $this->pdf_compromiso);
+
+        $this->id_presupuesto=htmlspecialchars(strip_tags($this->id_presupuesto));
+        $this->id_cliente=htmlspecialchars(strip_tags($this->id_cliente));
+        $this->pdf_autorizacion=htmlspecialchars(strip_tags($this->pdf_autorizacion));
+        $this->pdf_ddjj=htmlspecialchars(strip_tags($this->pdf_ddjj));
+        $this->pdf_carta=htmlspecialchars(strip_tags($this->pdf_carta));
+        $this->pdf_compromiso=htmlspecialchars(strip_tags($this->pdf_compromiso));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        
+        return false;
+    }
+
+    function read_garantes( $id_presupuesto ) {
+
+        $query = "CALL sp_listarpresupuestogarante(?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam( 1, $id_presupuesto );
+
+        $result->execute();
+        
+        $garantes=array();
+        $contador=0;
+
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $contador = $contador+1;
+            $item = array (
+                "numero" => $contador,
+                "id_cliente" => $id_cliente,
+                "cliente" => $cliente,
+                "pdf_autorizacion" => $pdf_autorizacion,
+                "pdf_ddjj" => $pdf_ddjj,
+                "pdf_carta" => $pdf_carta,
+                "pdf_compromiso" => $pdf_compromiso,
+            );
+            array_push($garantes,$item);
+        }
+
+        return $garantes; 
     }
 
 }

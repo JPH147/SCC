@@ -772,6 +772,17 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
         	})
         }
 
+        if( this.EvaluacionArchivosForm.value.hay_garante ) {
+          this.Servicios.CrearPresupuestoGarante(
+            res['data'],
+            this.EvaluacionArchivosForm['controls'].garantes['controls'][0].value.id_cliente,
+            this.autorizacion_aval,
+            this.ddjj_aval,
+            this.carta_aval,
+            this.compromiso_aval,
+          ).subscribe(res=>console.log(res))
+        }
+
         setTimeout(()=>{
           if(this.EvaluacionArchivosForm.value.tipo==2){
             this.router.navigate(['/creditos','nuevo',res['data']])
@@ -857,7 +868,7 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
 
     Ventana.afterClosed().subscribe(res=>{
       if(res){
-        console.log(res);
+        // console.log(res);
         this.EvaluacionArchivosForm['controls'].garantes['controls'][index].get('id_cliente').setValue(res.id);
         this.EvaluacionArchivosForm['controls'].garantes['controls'][index].get('nombre').setValue(res.nombre);
         this.EvaluacionArchivosForm['controls'].garantes['controls'][index].get('dni').setValue(res.dni);
@@ -865,7 +876,7 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
         this.ObtenerDireccionGarante(res.id,index);
         this.ObtenerTelefonoGarante(res.id,index);
         this.CServicios.Seleccionar(res.id).subscribe(res=>{
-          console.log(res)
+          // console.log(res)
           this.EvaluacionArchivosForm['controls'].garantes['controls'][index].get('plantilla_ddjj').setValue(res.plantilla_ddjj) ;
           this.EvaluacionArchivosForm['controls'].garantes['controls'][index].get('plantilla_autorizacion').setValue(res.plantilla_autorizacion) ;
           this.EvaluacionArchivosForm['controls'].garantes['controls'][index].get('plantilla_compromiso').setValue(res.plantilla_compromiso) ;

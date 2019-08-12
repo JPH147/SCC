@@ -7,6 +7,7 @@
     <mat-card-title class="tituloProd" *ngIf="id_credito || id_credito_editar">Préstamo N° {{CreditosForm.getRawValue().codigo}}</mat-card-title>
   </ng-container>
   
+  <mat-card-subtitle *ngIf="credito_refinanciado"> Esta préstamo ha sido refinanciado por el {{codigo_credito}} </mat-card-subtitle>
   <mat-card-title class="tituloProd" *ngIf="id_tipo==1"> Afiliación N° {{CreditosForm.getRawValue().codigo}} </mat-card-title>
 
   <form [formGroup]="CreditosForm">
@@ -64,7 +65,7 @@
         <ng-container *ngIf="id_tipo>1">
           <mat-grid-tile *ngIf="!id_credito">
             <button type="button" mat-icon-button color="primary" (click)="EditarContactoCliente()"> <mat-icon> edit </mat-icon>  </button>
-            <mat-checkbox color="primary" formControlName="garante" (change)="HayGarante($event)">Garante</mat-checkbox>
+            <mat-checkbox color="primary" formControlName="garante" (change)="HayGarante($event)" *ngIf="!id_presupuesto">Garante</mat-checkbox>
           </mat-grid-tile>
         </ng-container>
 
@@ -121,7 +122,7 @@
         DATOS DEL GARANTE
       </mat-card-subtitle>
 
-      <mat-grid-list cols="1" rowHeight="50px" *ngIf="!id_credito">
+      <mat-grid-list cols="1" rowHeight="50px" *ngIf="!id_credito && !cliente_refinanciado && !id_presupuesto">
         <mat-grid-tile colspan="1">
           <button mat-mini-fab color="primary" (click)="AgregarGarante(id_credito_editar ? true : false)" matTooltip="Agregar aval" type="button" [disabled]="CreditosForm['controls'].garantes['controls'].length>1"><mat-icon>add</mat-icon></button>
         </mat-grid-tile>
@@ -148,7 +149,7 @@
             </mat-grid-tile>
 
             <mat-grid-tile colspan="2">
-              <button *ngIf="!id_credito" type="button" mat-icon-button color="primary" (click)="EliminarGarante(i)" [disabled]="CreditosForm['controls'].garantes['controls'].length<2"> <mat-icon> delete </mat-icon>  </button>
+              <button *ngIf="!id_credito" type="button" mat-icon-button color="primary" (click)="EliminarGarante(i)" [disabled]="CreditosForm['controls'].garantes['controls'].length<2 || cliente_refinanciado || id_presupuesto"> <mat-icon> delete </mat-icon>  </button>
             </mat-grid-tile>
 
             <mat-grid-tile colspan="2" *ngIf="garante.value.id_cliente">
@@ -1200,7 +1201,7 @@
 
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
-            <input matInput type="number" placeholder="Interés" formControlName="interes" [readonly] = " cliente_refinanciado ">
+            <input matInput type="number" placeholder="Interés" formControlName="interes" [readonly] = " id_presupuesto || cliente_refinanciado ">
             <span matSuffix> % </span>
           </mat-form-field>
         </mat-grid-tile>

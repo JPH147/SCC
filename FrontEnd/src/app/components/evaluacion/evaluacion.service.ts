@@ -183,6 +183,30 @@ export class EvaluacionService {
     return this.http.post(this.url + 'presupuesto/create-producto.php', params, {headers: headers});
   }
 
+  CrearPresupuestoGarante(
+    presupuesto: number,
+    cliente: number,
+    pdf_autorizacion: string,
+    pdf_ddjj: string,
+    pdf_carta: string,
+    pdf_compromiso: string
+  ): Observable<any> {
+
+    let params = new HttpParams()
+      .set('prpresupuesto',presupuesto.toString())
+      .set('prcliente',cliente.toString())
+      .set('prpdfautorizacion',pdf_autorizacion)
+      .set('prpdfddjj',pdf_ddjj)
+      .set('prpdfcarta',pdf_carta)
+      .set('prpdfcompromiso',pdf_compromiso);
+
+    console.log(params);
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'presupuesto/create-garante.php', params, {headers: headers});
+  }
+
   GenerarDDJJ(
     nombre_plantilla : string ,
     nombre_archivo : string ,

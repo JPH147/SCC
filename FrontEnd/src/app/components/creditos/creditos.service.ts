@@ -259,6 +259,8 @@ export class CreditosService {
       .set('prpdfcip',pdfcip)
       .set('prpdfplanilla',pdfplanilla)
 
+    console.log(params);
+
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'credito/create-garante.php', params, {headers: headers});

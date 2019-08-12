@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material';
 import { SeleccionarClienteComponent } from '../retorno-vendedores/seleccionar-cliente/seleccionar-cliente.component';
 import { VentanaEmergenteContacto} from '../clientes/ventana-emergentecontacto/ventanaemergentecontacto';
 import { VentanaConfirmarComponent } from '../global/ventana-confirmar/ventana-confirmar.component';
+import { VentanaEmergenteClientes } from '../clientes/ventana-emergente/ventanaemergente';
 import { RefinanciamientoService } from './refinanciamiento.service';
 import { CreditosService } from '../creditos/creditos.service';
 import { ClienteService } from '../clientes/clientes.service' ;
@@ -59,6 +60,7 @@ export class RefinanciamientoComponent implements OnInit, AfterViewInit {
   public carta_aval : string ;
   public compromiso_aval : string ;
 
+  public dni_cliente : string ;
   public generados : boolean ;
   public ddjj : string ;
   public autorizacion : string ;
@@ -106,7 +108,7 @@ export class RefinanciamientoComponent implements OnInit, AfterViewInit {
     this.Columnas = [ "numero" , "considerar" , "fecha" , "tipo" , "documento" , "monto_pendiente" ] ;
     this.Listadotransacciones = new RefinanciamientoDataSource(this.Servicio);
 
-    this.ColumnasCronograma =  ['numero','fecha','monto', 'total'] ;
+    this.ColumnasCronograma =  ['numero','fecha','capital','interes', 'total'] ;
     this.ListadoCronograma = new CronogramaDataSource();
   }
 
@@ -284,13 +286,6 @@ export class RefinanciamientoComponent implements OnInit, AfterViewInit {
     })
   }
 
-  // Esta función recibe una fecha y transforma el día en 27 XD!
-  CorregirFecha(fecha : Date){
-    let ano = moment( fecha ).year() ;
-    let mes = moment( fecha ).month() ;
-    this.RefinanciamientoCronogramaForm.get('fecha_inicio').setValue( new Date(ano, mes, 27) ) ;
-  }
-
   SeleccionarCliente(){
     let Ventana = this.Dialogo.open(SeleccionarClienteComponent,{
       width: "1200px"
@@ -298,18 +293,20 @@ export class RefinanciamientoComponent implements OnInit, AfterViewInit {
 
     Ventana.afterClosed().subscribe(res=>{
       if(res){
+        console.log(res);
         this.RefinanciamientoSeleccionForm.get('id_cliente').setValue(res.id);
         this.RefinanciamientoSeleccionForm.get('cliente_nombre').setValue(res.nombre);
         this.VerificarCondiciones(res.id);
 
-        let dni : string = res.dni;
+        this.dni_cliente = res.dni;
         let dni_longitud : number = (res.dni).toString().length;
         // console.log(dni_longitud, dni)
         for(let i = dni_longitud; i<8 ; i++){
           // console.log(dni_longitud, dni)
-          dni = "0" + dni ;
+          this.dni_cliente = "0" + this.dni_cliente ;
         }
-        this.BuscarCliente(dni);
+        this.BuscarCliente(this.dni_cliente);
+        this.BuscarTransacciones();
       }
     })
   }
@@ -320,26 +317,6 @@ export class RefinanciamientoComponent implements OnInit, AfterViewInit {
 
     this.RefinanciamientoSeleccionForm.get('total').setValue(0) ;
     this.Listadotransacciones.InformacionTransacciones.next([]);
-  }
-
-  VerificarCondiciones(id){
-    this.CrServicios.Verificar_Afiliacion(id).subscribe(res=>{
-      // Si está afiliado, se verifica el interés que debería pagar y el aporte se considera 0
-      if(res['codigo_afiliacion']) {
-        this.CrServicios.Verificar_Interes(res['total_pagado']).subscribe(res=>{
-          this.RefinanciamientoCronogramaForm.get('aporte').setValue(0);
-          this.RefinanciamientoCronogramaForm.get('interes').setValue(res) ;
-        })
-      } else {
-      // Si no está afiliado, se verifica el interés inicial y el aporte también es el estándar
-        this.CrServicios.SeleccionarParametros().subscribe(res=>{
-          this.RefinanciamientoCronogramaForm.get('aporte').setValue(res.monto);
-        })
-        this.CrServicios.Verificar_Interes(0).subscribe(res=>{
-          this.RefinanciamientoCronogramaForm.get('interes').setValue(res) 
-        })
-      }
-    })
   }
 
   TransaccionSeleccionada(evento, id) {
@@ -396,9 +373,28 @@ export class RefinanciamientoComponent implements OnInit, AfterViewInit {
     this.CrearCronograma();
   }
 
+ // Esta función recibe una fecha y transforma el día en 27 XD!
+  CorregirFecha(fecha : Date){
+    let ano = moment( fecha ).year() ;
+    let mes = moment( fecha ).month() ;
+    this.RefinanciamientoCronogramaForm.get('fecha_inicio').setValue( new Date(ano, mes, 27) ) ;
+  }
+
   CalcularNuevoCapital(){
     let capital = this.RefinanciamientoCronogramaForm.value.capital_adicional + this.RefinanciamientoCronogramaForm.value.capital_anterior ;
     this.RefinanciamientoCronogramaForm.get('capital').setValue( capital ) ;
+  }
+
+  VerificarCondiciones(id){
+    this.CrServicios.Verificar_Afiliacion(id).subscribe(res=>{
+      // Si está afiliado, se verifica el interés que debería pagar y el aporte se considera 0
+      if(res['codigo_afiliacion']) {
+        this.CrServicios.Verificar_Interes(res['total_pagado']).subscribe(res=>{
+          this.RefinanciamientoCronogramaForm.get('aporte').setValue(0);
+          this.RefinanciamientoCronogramaForm.get('interes').setValue(res) ;
+        })
+      }
+    })
   }
 
   CrearCuotasArray(){
@@ -451,33 +447,78 @@ export class RefinanciamientoComponent implements OnInit, AfterViewInit {
 
   CambioTipoCuotas(){
     if( this.RefinanciamientoCronogramaForm.value.cuotas_homogeneas ) {
-      this.ColumnasCronograma =  ['numero','fecha','monto', 'total'] ;
+      this.ColumnasCronograma =  ['numero','fecha','capital','interes', 'total'] ;
     } else {
-      this.ColumnasCronograma =  ['numero','fecha','monto', 'antiguos', 'total'] ;
+      this.ColumnasCronograma =  ['numero','fecha','nuevo', 'antiguo', 'interes', 'total'] ;
     }
     this.CrearCronograma();
   }
 
-  VerificarCoincidenciaCronograma(fecha) {
+  VerificarCoincidenciaCronograma(fecha, tipo) {
+    // tipo 2. Exacta (Se considera si el mes es el mes de la cuota)
+    // Tipo 1. Límite (Se considera los montos hasta esa fecha)
+    // Tipo 3. Límite (Se considera los montos desde esa fecha)
     this.comodin = 0 ;
     let i : number = 0 ;
     let j : boolean = false ;
 
-    if(this.Informacion.length>0){
-      this.Informacion.forEach((item)=>{
-        i=i+1;
-        let comparar_mes = moment(item.fecha).month() == moment(fecha).month();
-        let comparar_ano = moment(item.fecha).year() == moment(fecha).year();
-        if( comparar_mes && comparar_ano ) {
-          j=true;
-          this.comodin=this.comodin+item.monto;
-        }
-        if( i==this.Informacion.length && !j ) {
+    if( this.RefinanciamientoCronogramaForm.value.cuotas_homogeneas ) {
+
+      this.comodin = 0;
+
+    } else {
+
+      if( tipo == 1 ) {
+        if(this.Informacion.length>0){
+          this.Informacion.forEach((item)=>{
+            i=i+1;
+            if( moment(item.fecha).isSameOrBefore(fecha, 'month') ) {
+              j=true;
+              this.comodin=this.comodin+item.monto;
+            }
+            if( i==this.Informacion.length && !j ) {
+              this.comodin=0 ;
+            }
+          })
+        } else {
           this.comodin=0 ;
         }
-      })
-    } else {
-      this.comodin=0 ;
+      }
+  
+      if( tipo == 2 ) {
+        if(this.Informacion.length>0){
+          this.Informacion.forEach((item)=>{
+            i=i+1;
+            if( moment(item.fecha).isSame(fecha, 'month') ) {
+              j=true;
+              this.comodin=this.comodin+item.monto;
+            }
+            if( i==this.Informacion.length && !j ) {
+              this.comodin=0 ;
+            }
+          })
+        } else {
+          this.comodin=0 ;
+        }
+      }
+  
+      if( tipo == 3 ) {
+        if(this.Informacion.length>0){
+          this.Informacion.forEach((item)=>{
+            i=i+1;
+            if( moment(item.fecha).isSameOrAfter(fecha, 'month') ) {
+              j=true;
+              console.log(item.monto);
+              this.comodin=this.comodin+item.monto;
+            }
+            if( i==this.Informacion.length && !j ) {
+              this.comodin=0 ;
+            }
+          })
+        } else {
+          this.comodin=0 ;
+        }
+      }
     }
   }
 
@@ -487,7 +528,7 @@ export class RefinanciamientoComponent implements OnInit, AfterViewInit {
 
     let fecha_inicio = this.RefinanciamientoCronogramaForm.value.fecha_inicio ;
     let fecha_prestamo = this.RefinanciamientoCronogramaForm.value.fecha_prestamo ;
-    let interes2 = this.RefinanciamientoCronogramaForm.value.interes ;
+    let tasa_interes = this.RefinanciamientoCronogramaForm.value.interes ;
     let cuotas = this.RefinanciamientoCronogramaForm.value.numero_cuotas ;
     
     let capital : number ;
@@ -502,9 +543,16 @@ export class RefinanciamientoComponent implements OnInit, AfterViewInit {
     let i = 1;
 
     //Se calcula el monto total y el interés
-    let interes : number =  Math.round(capital * (interes2 /100 ) *100 ) / 100;
-    let total : number = Math.round(capital * ( 1 + cuotas * interes2 / 100 ) *100 ) / 100
+    let interes : number =  Math.round(capital * (tasa_interes /100 ) *100 ) / 100 ;
+    let total : number = Math.round(capital * ( 1 + cuotas * tasa_interes / 100 ) *100 ) / 100 ;
+    let monto : number = ( total / cuotas ) ;
 
+    //Se calculan las cuotas estándar.
+    let capital_estandar : number = this.RefinanciamientoCronogramaForm.value.capital ;
+    let interes_estandar : number =  Math.round(capital_estandar * (tasa_interes /100 ) *100 ) / 100 ;
+    let total_estandar : number = Math.round(capital_estandar * ( 1 + cuotas * tasa_interes / 100 ) *100 ) / 100 ;
+    let monto_estandar : number = ( total_estandar / cuotas ) ;
+    
     // Se calculan las fechas de las cuotas
     let ano_pago = moment(fecha_inicio).year();
     let mes_pago = moment(fecha_inicio).month();
@@ -517,7 +565,7 @@ export class RefinanciamientoComponent implements OnInit, AfterViewInit {
     let mes_credito :number = moment(fecha_prestamo).month();
     let ano_credito :number = moment(fecha_prestamo).year();
     let dias_mes : number = moment(fecha_prestamo).daysInMonth();
-    let interes_truncado = Math.round( ((dias_mes - dia_credito) / dias_mes) * interes * 100 ) / 100;
+    let interes_truncado = Math.round( ((dias_mes - dia_credito) / dias_mes) * interes_estandar * 100 ) / 100;
 
     // Si el crédito es antes de quincena, se paga a fin de mes los intereses truncados
     if( this.RefinanciamientoCronogramaForm.value.interes_por_dia ){
@@ -532,6 +580,8 @@ export class RefinanciamientoComponent implements OnInit, AfterViewInit {
         interes : interes_truncado,
         total: interes_truncado ,
         monto_cuota: interes_truncado ,
+        antiguo : 0 ,
+        nuevo : 0,
       })
     }
 
@@ -539,58 +589,70 @@ export class RefinanciamientoComponent implements OnInit, AfterViewInit {
     if( mes_pago - mes_credito > 1){
       for( i; i<mes_pago - mes_credito; i++){
         fecha=moment(new Date(ano_credito, mes_credito, dia_pago)).add(i, 'months').toDate();
-        this.VerificarCoincidenciaCronograma(fecha);
+        (i==1 ) ? this.VerificarCoincidenciaCronograma(fecha,1) : this.VerificarCoincidenciaCronograma(fecha,2)
+
+        let capital_total = this.comodin ;
+        let interes_cuota = ( interes_estandar * capital_total ) / ( monto_estandar - interes_estandar )
+
         this.Cronograma.push({
           numero: i,
           fecha: fecha,
           fecha_vencimiento: fecha,
           fecha_formato: moment(fecha).format('LL'),
           monto: interes,
-          capital : 0,
-          interes : interes,
-          total: interes,
-          monto_cuota: interes,
+          capital : capital_total,
+          interes : interes_estandar + interes_cuota,
+          total: capital_total + interes_estandar + interes_cuota,
+          monto_cuota: capital_total + interes_estandar + interes_cuota,
           antiguo : this.comodin,
+          nuevo : 0,
         })
       }
     };
 
-    let monto_acumulado : number = 0;
+    let capital_cuota : number = 0 ;
     // Se calcula el monto de las cuotas normales
-    let monto : number = ( (total)/cuotas ) ;
-
     for (let j = 1; j<=cuotas; j++) {
       fecha=moment(fecha_corregida).add(j-1, 'months').toDate();
-      this.VerificarCoincidenciaCronograma(fecha);
+      ( i == 1 && j == 1 ) ? this.VerificarCoincidenciaCronograma(fecha,1) : this.VerificarCoincidenciaCronograma(fecha,2);
+      ( j == cuotas ) ? this.VerificarCoincidenciaCronograma(fecha,3) : "Nada XD!" ;
+
+      let capital_cuota = monto - interes ;
+      let capital_total = monto - interes + this.comodin ;
+      let interes_cuota = ( interes_estandar * capital_total ) / ( monto_estandar - interes_estandar )
+
       this.Cronograma.push({
         numero: i+j-1,
         fecha: fecha,
         fecha_vencimiento: fecha,
         fecha_formato: moment(fecha).format('LL'),
         monto: monto,
-        capital : monto-interes,
-        interes : interes,
-        total: monto,
-        monto_cuota: monto,
+        capital : capital_total,
+        interes : interes_cuota,
+        total: capital_total + interes_cuota,
+        monto_cuota: capital_total + interes_cuota,
         antiguo : this.comodin,
+        nuevo : capital_cuota,
       })
     }
 
     let prestamo = Math.round(
         +this.Cronograma.reduce( (acumulador, item)=>{
-          return ( acumulador + item.monto ) ;
+          return ( acumulador + item.total ) ;
         },0 )
       * 100 ) / 100;
 
     this.RefinanciamientoCronogramaForm.get('total').setValue(prestamo) ;
-    console.log(this.Cronograma);
+    // console.log(this.Cronograma);
 
     this.ListadoCronograma.CargarInformacion(this.Cronograma) ;
   }
 
   /***************************************************************************************** */ 
   Paso2Completado(){
-    this.RefinanciamientoArchivosForm.get('fecha_letras').setValue(this.RefinanciamientoCronogramaForm.value.fecha_prestamo) ;
+    let fecha : Date = this.RefinanciamientoCronogramaForm.value.fecha_prestamo ;
+    console.log(fecha);
+    this.RefinanciamientoArchivosForm.get('fecha_letras').setValue( fecha ) ;
   }
 
   ListarVendedor(nombre: string) {
@@ -616,7 +678,7 @@ export class RefinanciamientoComponent implements OnInit, AfterViewInit {
   BuscarCliente(dni){
     this.CServicios.BuscarClienteDNI(dni).subscribe(res=>{
       if(res['codigo']==0){
-        console.log(res);
+        // console.log(res);
         this.RefinanciamientoArchivosForm.get('id_cliente').setValue(res['data'].id) ;
         this.RefinanciamientoArchivosForm.get('plantilla_ddjj').setValue(res['data'].plantilla_ddjj) ;
         this.RefinanciamientoArchivosForm.get('plantilla_autorizacion').setValue(res['data'].plantilla_autorizacion) ;
@@ -639,6 +701,40 @@ export class RefinanciamientoComponent implements OnInit, AfterViewInit {
         this.ObtenerCuenta(res['data'].id);
       }
     })
+  }
+
+  EditarCliente(){
+
+    let VentanaClientes;
+
+    this.CServicios.Seleccionar(this.RefinanciamientoArchivosForm.value.id_cliente).subscribe(res => {
+      VentanaClientes= this.Dialogo.open(VentanaEmergenteClientes, {
+        width: '1000px',
+        data: {objeto: res, id: this.RefinanciamientoArchivosForm.value.id_cliente},
+      });
+
+      VentanaClientes.afterClosed().subscribe (res => {
+        if(res){
+          this.BuscarCliente( this.dni_cliente ) ;
+        }
+      });
+
+    });
+  }
+
+  EditarClienteContacto(){
+
+    let VentanaContacto= this.Dialogo.open(VentanaEmergenteContacto, {
+      width: '1000px',
+      data: this.RefinanciamientoArchivosForm.value.id_cliente
+    });
+
+    VentanaContacto.afterClosed().subscribe (res => {
+      console.log(res);
+      if(res){
+        this.BuscarCliente( this.dni_cliente ) ;
+      }
+    });
   }
 
   CambiarDireccion(evento){

@@ -61,6 +61,8 @@
             "pdf_ddjj" => $credito->pdf_ddjj,
             "pdf_otros" => $credito->pdf_otros,
             "observaciones" => $credito->observaciones,
+            "id_credito_refinanciado" => $credito->id_credito_refinanciado,
+            "credito_refinanciado" => $credito->credito_refinanciado,
             "id_estado" => $credito->id_estado,
             "estado" => $credito->estado,
             "courier" => $credito->courier,
