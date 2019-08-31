@@ -137,17 +137,17 @@ export class VentanaEmergenteClientes {
         Validators.required
       ]],
       'capacidad_pago': [null, [
-        Validators.required
+        // Validators.required
       ]],
       'descuento_maximo': [null, [
-        Validators.required
+        // Validators.required
       ]],
       'calificacion_personal': [null, [
-        Validators.required
+        // Validators.required
       ]],
       'aporte': [ 20, [
-        Validators.required,
-        Validators.pattern('[0-9- ]+')
+        // Validators.required,
+        // Validators.pattern('[0-9- ]+')
       ]],
       'estado': [ 1, [
       ]],

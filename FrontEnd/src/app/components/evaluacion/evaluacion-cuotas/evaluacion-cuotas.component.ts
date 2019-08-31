@@ -88,9 +88,19 @@ export class EvaluacionCuotasComponent implements OnInit {
         this.aporte_considerado=res.aporte;
         this.interes=res.interes;
         this.capacidad=res.capacidad;
-        this.OtrosPagos=res.otros_pagos?res.otros_pagos:[];
-        this.CalcularPrimerPago();
-        this.EmitirInformacion();
+        if(res.presupuesto_antiguo) {
+          this.capital = res.capital ;
+          this.cuotas = res.cuotas ;
+          this.prestamo = res.prestamo ;
+          this.tipo = res.tipo ;
+          this.cronograma = res.cronograma ;
+          this.EvaluacionCuotas.CargarInformacion(this.cronograma) ;
+        } else {
+          console.log(1)
+          this.OtrosPagos=res.otros_pagos?res.otros_pagos:[];
+          this.CalcularPrimerPago();
+          this.EmitirInformacion();
+        }
       });
     });
   }
@@ -368,7 +378,6 @@ export class EvaluacionCuotasComponent implements OnInit {
     // console.log(this.cronograma);
 
     this.CalcularTotalCronograma();
-    console.log(this.cronograma);
     this.EvaluacionCuotas.CargarInformacion(this.cronograma);
 
     this.EmitirInformacion();
@@ -576,6 +585,7 @@ export class EvaluacionCoutasDataSource {
   
   CargarInformacion(cuotas){
     this.Cuotas.next(cuotas)
+    console.log(cuotas)
   }
 
 }

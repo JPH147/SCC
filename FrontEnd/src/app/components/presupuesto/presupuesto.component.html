@@ -89,7 +89,8 @@
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let presupuesto">
-          <button mat-icon-button color="primary" matTooltip="Ver documentos" (click)="VerArchivos(presupuesto)" [disabled]="presupuesto.id_estado!=1"><mat-icon> visibility </mat-icon></button>
+          <button mat-icon-button color="primary" matTooltip="Ver documentos" (click)="VerArchivos(presupuesto)" [disabled]="presupuesto.id_estado!=1"><mat-icon> description </mat-icon></button>
+          <button mat-icon-button color="primary" matTooltip="Editar presupuesto" [routerLink]="['/evaluacion', presupuesto.id]"><mat-icon> edit </mat-icon></button>
           <button mat-icon-button color="primary" *ngIf="presupuesto.id_tipo==2" matTooltip="Hacer venta" [routerLink]="['/ventas', 'nueva', 'presupuesto', presupuesto.id]" [disabled]="!presupuesto.pdf_transaccion || presupuesto.id_estado!=1"><mat-icon> forward </mat-icon></button>
           <button mat-icon-button color="primary" *ngIf="presupuesto.id_tipo==1" matTooltip="Hacer crédito" [routerLink]="['/creditos', 'nuevo', presupuesto.id]" [disabled]="!presupuesto.pdf_transaccion || presupuesto.id_estado!=1"><mat-icon> forward </mat-icon></button>
           <button mat-icon-button color="primary" matTooltip="Eliminar" (click)="Eliminar(presupuesto)" [disabled]="presupuesto.id_estado!=1"><mat-icon> delete </mat-icon></button>

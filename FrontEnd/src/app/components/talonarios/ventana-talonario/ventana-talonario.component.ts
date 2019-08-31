@@ -1,7 +1,9 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, AfterViewInit, ViewChild, ElementRef} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { FormGroup, FormBuilder, Validators, AbstractControl} from '@angular/forms';
 import { ServiciosVentas } from '../../global/ventas';
+import { fromEvent } from 'rxjs';
+import { debounceTime, distinctUntilChanged , tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-ventana-talonario',
@@ -9,9 +11,11 @@ import { ServiciosVentas } from '../../global/ventas';
   styleUrls: ['./ventana-talonario.component.css'],
   providers: [ServiciosVentas]
 })
-export class VentanaTalonarioComponent implements OnInit {
+export class VentanaTalonarioComponent implements OnInit, AfterViewInit {
 
+  @ViewChild('InputSerie') FiltroSerie : ElementRef ;
   public TalonariosForm : FormGroup;
+  public repetido : boolean ;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
@@ -25,6 +29,14 @@ export class VentanaTalonarioComponent implements OnInit {
   }
 
   ngAfterViewInit(){
+    fromEvent(this.FiltroSerie.nativeElement, 'keyup')
+    .pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      tap(()=>{
+        this.VerificarRegistroSerie();
+      })
+    ).subscribe()    
   }
 
   CrearFormulario(){
@@ -45,6 +57,17 @@ export class VentanaTalonarioComponent implements OnInit {
 
   Guardar(){
     this.CrearTalonario()
+  }
+
+  VerificarRegistroSerie(){
+    this.Servicios.VerificarTalonario(this.FiltroSerie.nativeElement.value).subscribe(res=>{
+      console.log(res)
+      if(res){
+        this.repetido=true ;
+      } else {
+        this.repetido = false ;
+      }
+    })
   }
 
   CrearTalonario(){

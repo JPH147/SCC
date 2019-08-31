@@ -25,6 +25,10 @@
     public $estado;
     public $numero_pagina;
     public $total_pagina;
+    public $fecha;
+    public $cuenta;
+    public $operacion;
+    public $observaciones;
 
     public function __construct($db){
       $this->conn = $db;
@@ -188,8 +192,8 @@
 
     }
 
-    function create_cabecera(){
-      $query = "CALL sp_crearcobranzacabecera(
+    function create_archivos_cabecera(){
+      $query = "CALL sp_crearcobranzaarchivoscabecera(
         :prinstitucion,
         :prtipopago,
         :prfechainicio,
@@ -230,8 +234,8 @@
       return false;
     }
 
-    function create_detalle(){
-      $query = "CALL sp_crearcobranzadetalle(
+    function create_archivos_detalle(){
+      $query = "CALL sp_crearcobranzaarchivosdetalle(
         :prcobranza,
         :prcliente,
         :prcodofin,
@@ -309,6 +313,75 @@
       $this->total_resultado=$row['total'];
 
       return $this->total_resultado;
+    }
+
+    function create_directa(){
+      $query = "CALL sp_crearcobranzadirecta(
+        :prfecha,
+        :prcliente,
+        :prcuenta,
+        :properacion,
+        :prmonto,
+        :probservaciones
+      )";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(":prfecha", $this->fecha);
+      $result->bindParam(":prcliente", $this->cliente);
+      $result->bindParam(":prcuenta", $this->cuenta);
+      $result->bindParam(":properacion", $this->operacion);
+      $result->bindParam(":prmonto", $this->monto);
+      $result->bindParam(":probservaciones", $this->observaciones);
+
+      $this->fecha=htmlspecialchars(strip_tags($this->fecha));
+      $this->cliente=htmlspecialchars(strip_tags($this->cliente));
+      $this->cuenta=htmlspecialchars(strip_tags($this->cuenta));
+      $this->operacion=htmlspecialchars(strip_tags($this->operacion));
+      $this->monto=htmlspecialchars(strip_tags($this->monto));
+      $this->observaciones=htmlspecialchars(strip_tags($this->observaciones));
+
+      if($result->execute())
+      {
+          while($row = $result->fetch(PDO::FETCH_ASSOC))
+          {
+              extract($row);
+              $this->id_cobranza=$id;
+          }
+          return true;
+      }
+      return false;
+    }
+
+    function read_cooperativa_cuenta(){
+      
+      $query = "CALL sp_listarcooperativacuenta()";
+
+      $result = $this->conn->prepare($query);
+
+      $result->execute();
+
+      $cuentas=array();
+      $cuentas["cuentas"]=array();
+
+      $contador = $this->total_pagina*($this->numero_pagina-1);
+
+      while($row = $result->fetch(PDO::FETCH_ASSOC))
+      {
+          extract($row);
+          $contador=$contador+1;
+          $items = array (
+            "numero" => $contador,
+            "id" => $id,
+            "id_banco" => $id_banco,
+            "banco" => $banco,
+            "numero_cuenta" => $numero_cuenta,
+            "cci" => $cci,
+          );
+          array_push($cuentas["cuentas"],$items);
+      }
+
+      return $cuentas;
     }
 
   }

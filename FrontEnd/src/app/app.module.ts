@@ -121,10 +121,10 @@ import { RetornoVendedoresCierreComponent } from './components/retorno-vendedore
 import { VentasSalidaComponent } from './components/ventas-salida/ventas-salida.component';
 import { CreditosComponent } from './components/creditos/creditos.component';
 import { CreditosListarComponent } from './components/creditos-listar/creditos-listar.component';
-import { CobranzasComponent } from './components/cobranzas/cobranzas.component';
-import { CobranzasListarComponent } from './components/cobranzas-listar/cobranzas-listar.component';
-import { CobranzaPnpComponent } from './components/cobranzas/cobranza-pnp/cobranza-pnp.component';
 import { CobranzaArchivosComponent } from './components/cobranza-archivos/cobranza-archivos.component';
+import { CobranzasListarComponent } from './components/cobranzas-listar/cobranzas-listar.component';
+import { CobranzaPnpComponent } from './components/cobranza-archivos/cobranza-pnp/cobranza-pnp.component';
+import { CobranzaArchivosListarComponent } from './components/cobranza-archivos-listar/cobranza-archivos-listar.component';
 import { VentanaTrabajadoresComponent } from './components/trabajadores/ventana-trabajador/ventana-trabajador.component';
 import { TrabajadoresComponent } from './components/trabajadores/trabajadores.component';
 import { RegistroHorasComponent } from './components/registro-horas/registro-horas.component';
@@ -147,6 +147,8 @@ import { PlantillasComponent } from './components/plantillas/plantillas.componen
 import { VentanaPlantillasComponent } from './components/plantillas/ventana-plantillas/ventana-plantillas.component';
 import { RefinanciamientoComponent } from './components/refinanciamiento/refinanciamiento.component';
 import { VerPlantillasComponent } from './components/evaluacion/ver-plantillas/ver-plantillas.component';
+import { CobranzaDirectaComponent } from './components/cobranza-directa/cobranza-directa.component';
+import { CobranzaDirectaListarComponent } from './components/cobranza-directa-listar/cobranza-directa-listar.component';
 
 @NgModule({
   imports: [
@@ -273,10 +275,10 @@ import { VerPlantillasComponent } from './components/evaluacion/ver-plantillas/v
     VentasSalidaComponent,
     CreditosComponent,
     CreditosListarComponent,
-    CobranzasComponent,
+    CobranzaArchivosComponent,
     CobranzasListarComponent,
     CobranzaPnpComponent,
-    CobranzaArchivosComponent,
+    CobranzaArchivosListarComponent,
     TrabajadoresComponent,
     RegistroHorasComponent,
     ReporteAsistenciaComponent,
@@ -298,7 +300,9 @@ import { VerPlantillasComponent } from './components/evaluacion/ver-plantillas/v
     PlantillasComponent,
     VentanaPlantillasComponent,
     RefinanciamientoComponent,
-    VerPlantillasComponent
+    VerPlantillasComponent,
+    CobranzaDirectaComponent,
+    CobranzaDirectaListarComponent
    ],
   entryComponents: [
     AppComponent,

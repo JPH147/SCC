@@ -1,0 +1,72 @@
+<mat-card>
+  
+  <button mat-mini-fab type="button" color="primary" (click)="Atras()"><mat-icon>keyboard_arrow_left</mat-icon></button>
+  
+  <!-- Encabezado -->
+  <mat-card-title>
+    <div id="tituloProd"> Registro de depósitos </div>
+  </mat-card-title>
+
+  <form [formGroup]="CobranzaDirectaForm">
+
+    <!-- Voucher -->
+    <div class="seccion">
+
+      <mat-card-subtitle class="titulo-seccion">
+        DATOS DEL VOUCHER
+      </mat-card-subtitle>
+
+      <mat-grid-list cols="4" rowHeight="70px">
+
+        <mat-grid-tile colspan="2" *ngIf="!(CobranzaDirectaForm.value.id_cliente)">
+          <button type="button" mat-icon-button color="primary" (click)="SeleccionarCliente()"> <mat-icon> person_add </mat-icon>  </button>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan="2" *ngIf="(CobranzaDirectaForm.value.id_cliente)">
+          <mat-form-field class="columnas-2">
+            <input #Cliente placeholder="Cliente" matInput formControlName="cliente" readonly>
+            <mat-icon color="primary" matSuffix (click)="RemoverCliente()"> remove_circle </mat-icon>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+              <input matInput [matDatepicker]="afiliacion" placeholder="Fecha"  formControlName="fecha">
+              <mat-datepicker-toggle matSuffix [for]="afiliacion"></mat-datepicker-toggle>
+              <mat-datepicker #afiliacion [disabled]="id_credito"></mat-datepicker>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <mat-select placeholder="Cuenta de depósito" formControlName="cuenta_bancaria">
+              <mat-option *ngFor="let cuenta of cuentas" [value]="cuenta.id"> {{cuenta.banco}} </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan="1">
+          <mat-form-field class="columnas-1">
+            <input matInput placeholder="Número de operación" formControlName="numero_operacion">
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan="1">
+          <span matPreffix>S/. &nbsp;</span>
+          <mat-form-field class="columnas-1">
+            <input matInput placeholder="Monto de depósito" formControlName="monto">
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan="2">
+          <mat-form-field class="columnas-2">
+            <input matInput placeholder="Observaciones" formControlName="observaciones">
+          </mat-form-field>
+        </mat-grid-tile>
+
+      </mat-grid-list>
+    </div>
+
+  </form>
+
+</mat-card>

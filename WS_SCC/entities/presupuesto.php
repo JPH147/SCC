@@ -10,6 +10,7 @@ Class Presupuesto{
     public $fecha_fin;
     public $estado;
     public $tipo;
+    public $id_tipo;
     public $fecha;
     public $cuotas;
     public $capital;
@@ -120,7 +121,9 @@ Class Presupuesto{
         $row = $result->fetch(PDO::FETCH_ASSOC);
 
         $presupuesto = array(
+            "id_tipo" => $row['id_tipo'],
             "id_cliente" => $row['id_cliente'],
+            "cliente_dni" => $row['cliente_dni'],
             "cliente" => $row['cliente'],
             "id_vendedor" => $row['id_vendedor'],
             "vendedor" => $row['vendedor'],

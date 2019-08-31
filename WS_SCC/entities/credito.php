@@ -788,6 +788,7 @@ Class Creditos{
                 "id_transaccion" => $id_transaccion,
                 "fecha_vencimiento" => $fecha_vencimiento,
                 "cuota_mensual" => $cuota_mensual,
+                "capital" => $capital
             );
             array_push($credito_list['cronograma'],$items);
         }

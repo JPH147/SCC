@@ -26,9 +26,9 @@ import { VentasSalidaComponent } from './components/ventas-salida/ventas-salida.
 import { CreditosListarComponent } from './components/creditos-listar/creditos-listar.component';
 import { CreditosListarAfiliacionesComponent } from './components/creditos-listar-afiliaciones/creditos-listar-afiliaciones.component';
 import { CreditosComponent } from './components/creditos/creditos.component';
-import { CobranzasComponent } from './components/cobranzas/cobranzas.component';
-import { CobranzasListarComponent } from './components/cobranzas-listar/cobranzas-listar.component';
 import { CobranzaArchivosComponent } from './components/cobranza-archivos/cobranza-archivos.component';
+import { CobranzasListarComponent } from './components/cobranzas-listar/cobranzas-listar.component';
+import { CobranzaArchivosListarComponent } from './components/cobranza-archivos-listar/cobranza-archivos-listar.component';
 import { TrabajadoresComponent } from './components/trabajadores/trabajadores.component';
 import { RegistroHorasComponent } from './components/registro-horas/registro-horas.component';
 import { ReporteAsistenciaComponent } from './components/reporte-asistencia/reporte-asistencia.component';
@@ -40,6 +40,8 @@ import { SeguimientosComponent } from './components/seguimientos/seguimientos.co
 import { CourierComponent } from './components/courier/courier.component';
 import { PlantillasComponent } from './components/plantillas/plantillas.component';
 import { RefinanciamientoComponent } from './components/refinanciamiento/refinanciamiento.component';
+import { CobranzaDirectaComponent } from './components/cobranza-directa/cobranza-directa.component';
+import { CobranzaDirectaListarComponent } from './components/cobranza-directa-listar/cobranza-directa-listar.component';
 
 const appRoutes: Routes = [
   // {path: '', component: ConsultarClienteComponent}, //prueba
@@ -48,6 +50,7 @@ const appRoutes: Routes = [
   {path: 'productos', component: ProductosComponent},
   {path: 'series', component: HistorialSerieComponent},
   {path: 'evaluacion', component: EvaluacionComponent},
+  // {path: 'evaluacion/:idpresupuesto', component: EvaluacionComponent},
   {path: 'movimientos', component: HistorialMovimientosComponent},
   {path: 'movimientos/:id', component: DetalleDocumentoAlmacenComponent},
   {path: 'stock', component: StockComponent},
@@ -77,8 +80,8 @@ const appRoutes: Routes = [
   {path: 'creditos/ver/:idcredito', component: CreditosComponent},
   {path: 'creditos/editar/:idcreditoeditar', component: CreditosComponent},
   {path: 'creditos/nuevo', component: CreditosComponent},
-  {path: 'creditos/nuevo/refinanciamiento/:idclienterefinanciado', component: CreditosComponent},
   {path: 'creditos/nuevo/:idpresupuesto', component: CreditosComponent},
+  {path: 'creditos/nuevo/refinanciamiento/:idclienterefinanciado', component: CreditosComponent},
   {path: 'presupuesto', component: PresupuestoComponent},
   {path: 'refinanciamiento', component: RefinanciamientoComponent},
   {path: 'seguimiento', component: SeguimientosComponent},
@@ -88,13 +91,15 @@ const appRoutes: Routes = [
   {path: 'detalleproductos', component: DetalleProductosComponent},
   {path: 'evaluacion-reglas', component: ReglasEvaluacionComponent},
   {path: 'cobranzas', component: CobranzasListarComponent},
-  {path: 'generar-archivos', component: CobranzasComponent},
-  {path: 'archivos-cobranza', component: CobranzaArchivosComponent},
+  {path: 'cobranza-directa', component: CobranzaDirectaListarComponent},
+  {path: 'cobranza-directa/generar', component: CobranzaDirectaComponent},
+  {path: 'cobranza-archivos', component: CobranzaArchivosListarComponent},
+  {path: 'cobranza-archivos/generar', component: CobranzaArchivosComponent},
   {path: 'trabajadores', component: TrabajadoresComponent},
   {path: 'registro-horas', component: RegistroHorasComponent},
   {path: 'reporte-asistencia', component: ReporteAsistenciaComponent},
   {path: 'plantillas', component: PlantillasComponent},
-  {path: 'prueba', component: CreditosComponent},
+  {path: 'prueba', component: CobranzaDirectaComponent},
 ];
 
 export const appRoutingProvider: any[] = [];

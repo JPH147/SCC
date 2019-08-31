@@ -119,7 +119,8 @@ export class VentanaEmergenteProductos {
  
     VentanaTipo.afterClosed().subscribe(res=>{
       this.Servicios.ListarTipoProductos(null,'', '').subscribe(resultado => {
-        this.Tipos=resultado
+        this.Tipos=resultado;
+        this.ObtenerNombreTipo(res);
       });
       this.ProductosForm.get('tipo').setValue(res);
       this.ListarMarcas(this.ProductosForm.value.tipo);
@@ -139,7 +140,10 @@ export class VentanaEmergenteProductos {
     });
  
     VentanaMarca.afterClosed().subscribe(res=>{
-      this.ListarMarcas(this.ProductosForm.value.tipo);
+      this.Servicios.ListarMarca(this.ProductosForm.value.tipo, '').subscribe(resultado => {
+        this.Marcas=resultado;
+        this.ObtenerNombreMarca(res);
+      })
       this.ProductosForm.get('marca').setValue(res);
       this.ListarModelos(this.ProductosForm.value.marca);
       this.ProductosForm.get('modelo').setValue('');
@@ -156,7 +160,10 @@ export class VentanaEmergenteProductos {
     });
  
     VentanaModelo.afterClosed().subscribe(res=>{
-      this.ListarModelos(this.ProductosForm.value.marca);
+      this.Servicios.ListarModelo(this.ProductosForm.value.marca, '').subscribe(resultado => {
+        this.Modelos=resultado;
+        this.ObtenerNombreModelo(res);
+     });
       this.ProductosForm.get('modelo').setValue(res);
     })
   }
@@ -164,11 +171,7 @@ export class VentanaEmergenteProductos {
   /* Se muestran marcas cuando se selecciona un tipo de producto */
   TipoSeleccionado( evento) {
 
-    this.Tipos.forEach((item)=>{
-      if(item.id==evento.value){
-        this.tipo=item.nombre
-      }
-    })
+    this.ObtenerNombreTipo(evento.value) ;
 
     this.ListarMarcas(this.ProductosForm.value.tipo);
     this.Servicios.ListarUnidadMedida(this.ProductosForm.value.tipo).subscribe(res=>this.ProductosForm.get('unidad_medida').setValue(res.data.unidades[0].nombre));
@@ -181,11 +184,7 @@ export class VentanaEmergenteProductos {
   /* Se muestran los modelos cuando se selecciona una marca */
   MarcaSeleccionada(evento) {
 
-    this.Marcas.forEach((item)=>{
-      if(item.id==evento.value){
-        this.marca=item.nombre
-      }
-    })
+    this.ObtenerNombreMarca(evento.value);
 
     this.ListarModelos(this.ProductosForm.value.marca);
     this.ProductosForm.get('modelo').setValue('');
@@ -193,8 +192,33 @@ export class VentanaEmergenteProductos {
   }
 
   ModeloSeleccionado(evento){
+    this.ObtenerNombreModelo(evento.value);
+  }
+
+  ObtenerNombreTipo(id_tipo){
+    this.marca = "" ;
+    this.modelo = "" ;
+    this.Tipos.forEach((item)=>{
+      if(item.id==id_tipo){
+        this.tipo=item.nombre;
+        this.AyudarCrearNombre();
+      }
+    })
+  }
+
+  ObtenerNombreMarca(id_marca){
+    this.modelo = "" ;
+    this.Marcas.forEach((item)=>{
+      if(item.id==id_marca){
+        this.marca=item.nombre;
+        this.AyudarCrearNombre();
+      }
+    })
+  }
+
+  ObtenerNombreModelo(id_modelo){
     this.Modelos.forEach((item)=>{
-      if(item.id==evento.value){
+      if(item.id==id_modelo){
         this.modelo=item.nombre
       }
     })
@@ -225,32 +249,20 @@ export class VentanaEmergenteProductos {
 
   ListarTipos(){
     this.Servicios.ListarTipoProductos(null,'', '').subscribe(res => {
-      this.Marcas = [];
-      // tslint:disable-next-line:forin
-      for (let i in res) {
-        this.Tipos.push(res[i]);
-      }
-    })}
+      this.Tipos = res ;
+    })
+  }
 
   ListarMarcas(i) {
     this.Servicios.ListarMarca(i, '').subscribe(res => {
-      this.Marcas = [];
-      // tslint:disable-next-line:forin
-      for (let i in res) {
-        this.Marcas.push(res[i]);
-      }
-  })}
+      this.Marcas=res;
+    })
+  }
 
   ListarModelos(i) {
     this.Servicios.ListarModelo(i, '').subscribe(res => {
-      this.Modelos = [];
-      // tslint:disable-next-line:forin
-      for (let i in res) {
-       
-        this.Modelos.push( res[i] );
-      }
+      this.Modelos=res;
    });
-
   }
 
   VerificarProducto(nombre){

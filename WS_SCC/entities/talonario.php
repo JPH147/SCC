@@ -9,6 +9,7 @@ class Talonario{
 	public $estado;
 	public $numero_pagina;
 	public $total_pagina;
+	public $total_resultado;
 
 	public function __construct($db){
 		$this->conn = $db;
@@ -199,6 +200,22 @@ class Talonario{
         return false;
 
     }
+
+	function verificar_serie(){
+        $query = "CALL sp_verificartalonarioserie(?)";
+
+		$result = $this->conn->prepare($query);
+		
+		$result->bindParam(1, $this->serie);
+
+        $result->execute();
+
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        $this->total_resultado=$row['total'];
+
+        return $this->total_resultado;
+	}
 
 }
 

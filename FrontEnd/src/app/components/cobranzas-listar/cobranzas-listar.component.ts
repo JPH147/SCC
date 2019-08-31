@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatSelect, MatPaginator, MatSort } from '@angular/material'
 import { Observable, BehaviorSubject, of, fromEvent, merge } from 'rxjs';
 import { catchError, finalize, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { CobranzasService } from '../cobranzas/cobranzas.service';
+import { CobranzasService } from './cobranzas.service';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 
 @Component({

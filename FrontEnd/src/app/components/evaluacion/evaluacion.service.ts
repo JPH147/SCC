@@ -176,7 +176,7 @@ export class EvaluacionService {
       .set('prserie',id_serie.toString())
       .set('prprecio',precio.toString())
 
-    console.log(params);
+    // console.log(params);
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 

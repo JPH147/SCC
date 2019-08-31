@@ -1239,10 +1239,10 @@
 
       <mat-card-subtitle class="titulo-seccion">
         CRONOGRAMA
-        <ng-container *ngIf="!id_credito && !id_presupuesto && !cliente_refinanciado">
+        <!-- <ng-container *ngIf="!id_credito && !id_presupuesto && !cliente_refinanciado">
           <button mat-icon-button class="icono" *ngIf="editar_cronograma>1" (click)="EditarCronograma(1)"><mat-icon>edit</mat-icon></button>
           <button mat-icon-button class="icono" *ngIf="editar_cronograma==1" (click)="EditarCronograma(2)"><mat-icon>check</mat-icon></button>
-        </ng-container>
+        </ng-container> -->
       </mat-card-subtitle>
 
       <ng-container>
@@ -1310,7 +1310,7 @@
 
           <ng-container matColumnDef="estado">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
-            <mat-cell *matCellDef="let cronograma"> {{cronograma.estado==1 ? "Por pagar" : "Pagado" }} </mat-cell>
+            <mat-cell *matCellDef="let cronograma"> {{ cronograma.estado }} </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="opciones">

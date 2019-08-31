@@ -293,7 +293,7 @@ export class RefinanciamientoComponent implements OnInit, AfterViewInit {
 
     Ventana.afterClosed().subscribe(res=>{
       if(res){
-        console.log(res);
+        // console.log(res);
         this.RefinanciamientoSeleccionForm.get('id_cliente').setValue(res.id);
         this.RefinanciamientoSeleccionForm.get('cliente_nombre').setValue(res.nombre);
         this.VerificarCondiciones(res.id);
@@ -388,6 +388,7 @@ export class RefinanciamientoComponent implements OnInit, AfterViewInit {
   VerificarCondiciones(id){
     this.CrServicios.Verificar_Afiliacion(id).subscribe(res=>{
       // Si está afiliado, se verifica el interés que debería pagar y el aporte se considera 0
+      // console.log(id,res);
       if(res['codigo_afiliacion']) {
         this.CrServicios.Verificar_Interes(res['total_pagado']).subscribe(res=>{
           this.RefinanciamientoCronogramaForm.get('aporte').setValue(0);
@@ -400,7 +401,6 @@ export class RefinanciamientoComponent implements OnInit, AfterViewInit {
   CrearCuotasArray(){
     this.InformacionCompleta = this.Listadotransacciones.Cronograma ;
     this.Informacion = [] ;
-    this.Informacion2 = [] ;
     let documento : any = {} ;
 
     // Se filtran todas las cuotas del las transacciones
@@ -409,30 +409,10 @@ export class RefinanciamientoComponent implements OnInit, AfterViewInit {
       this.InformacionCompleta.forEach((item2)=>{
         if( item.tipo == item2.tipo && item.id == item2.id_transaccion ) {
           documento[item.documento] = item2.cuota_mensual ;
-          this.Informacion.push({ fecha: item2.fecha_vencimiento , monto: item2.cuota_mensual , documento})
+          this.Informacion.push({ fecha: item2.fecha_vencimiento , monto: item2.cuota_mensual , capital : item2.capital , documento})
         }
       })
     })
-
-    // this.Informacion.forEach((item)=>{
-    //   if( this.Informacion2.length > 0 ) {
-    //     this.Informacion2.forEach((item2)=>{
-    //       if( moment(item.fecha).month() == moment(item2.fecha).month() ) {
-    //         console.log(1);
-    //         let documento = item.documento;
-    //         item2.push({documento})
-    //       } else {
-    //         console.log(2);
-    //         this.Informacion2.push({fecha: item.fecha, documento: item.documento})
-    //       }
-    //     })
-    //   } else {
-    //     this.Informacion2.push( item ) ;
-    //   }
-    // })
-
-    // console.log(this.Informacion2);
-
   }
 
   CalcularInteresDiario(){
@@ -474,7 +454,7 @@ export class RefinanciamientoComponent implements OnInit, AfterViewInit {
             i=i+1;
             if( moment(item.fecha).isSameOrBefore(fecha, 'month') ) {
               j=true;
-              this.comodin=this.comodin+item.monto;
+              this.comodin=this.comodin+item.capital;
             }
             if( i==this.Informacion.length && !j ) {
               this.comodin=0 ;
@@ -491,7 +471,7 @@ export class RefinanciamientoComponent implements OnInit, AfterViewInit {
             i=i+1;
             if( moment(item.fecha).isSame(fecha, 'month') ) {
               j=true;
-              this.comodin=this.comodin+item.monto;
+              this.comodin=this.comodin+item.capital;
             }
             if( i==this.Informacion.length && !j ) {
               this.comodin=0 ;
@@ -508,8 +488,8 @@ export class RefinanciamientoComponent implements OnInit, AfterViewInit {
             i=i+1;
             if( moment(item.fecha).isSameOrAfter(fecha, 'month') ) {
               j=true;
-              console.log(item.monto);
-              this.comodin=this.comodin+item.monto;
+              this.comodin=this.comodin+item.capital;
+
             }
             if( i==this.Informacion.length && !j ) {
               this.comodin=0 ;
@@ -619,7 +599,8 @@ export class RefinanciamientoComponent implements OnInit, AfterViewInit {
 
       let capital_cuota = monto - interes ;
       let capital_total = monto - interes + this.comodin ;
-      let interes_cuota = ( interes_estandar * capital_total ) / ( monto_estandar - interes_estandar )
+      let interes_cuota = ( interes_estandar * capital_total ) / ( monto_estandar - interes_estandar ) ;
+      // console.log(interes_cuota, interes_estandar, capital_total, monto, interes, this.comodin);
 
       this.Cronograma.push({
         numero: i+j-1,

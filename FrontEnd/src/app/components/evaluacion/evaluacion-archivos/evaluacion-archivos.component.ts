@@ -669,7 +669,7 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
       this.EvaluacionArchivosForm.value.hay_garante ? this.EvaluacionArchivosForm['controls'].garantes['controls'][0].value.nombre : "0",
       this.EvaluacionArchivosForm.value.hay_garante ? this.EvaluacionArchivosForm['controls'].garantes['controls'][0].value.dni : "0",
     ).subscribe(res=>{
-      console.log(res);
+      // console.log(res);
       this.generados=true;
       this.transaccion=res['data'];
     })
@@ -745,7 +745,7 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
       this.tarjeta,
       this.compromiso,
     ).subscribe(res=>{
-      console.log(res);
+      // console.log(res);
 
       if( res['codigo']===0 ) {
 
@@ -768,7 +768,7 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
         			item.id_producto,
         			item.id_serie,
         			item.precio,
-        		).subscribe(res=>console.log(res))
+        		).subscribe()
         	})
         }
 
@@ -780,7 +780,7 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
             this.ddjj_aval,
             this.carta_aval,
             this.compromiso_aval,
-          ).subscribe(res=>console.log(res))
+          ).subscribe()
         }
 
         setTimeout(()=>{

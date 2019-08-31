@@ -9,6 +9,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CreditosService } from '../creditos/creditos.service';
 import { VentanaEmergenteProvisionalClientes } from '../clientes/ventana-emergente-provisional/ventanaemergenteprovisional' ;
 import { SeleccionarClienteComponent } from '../retorno-vendedores/seleccionar-cliente/seleccionar-cliente.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-evaluacion',
@@ -57,12 +58,16 @@ export class EvaluacionComponent implements OnInit, AfterViewInit {
   public informacion = new BehaviorSubject<any>([]);
   public OtrosPagos : Array<any> = [];
 
+  public id_presupuesto : number ;
+  public presupuesto_antiguo : boolean = false ;
+
   constructor(
     private Servicio: EvaluacionService ,
     private CrServicios : CreditosService ,
     private CServicios: ClienteService ,
     private Buidler : FormBuilder,
-    private Dialogo : MatDialog
+    private Dialogo : MatDialog,
+    private route : ActivatedRoute
   ) { }
 
   ngOnInit() {
@@ -74,6 +79,18 @@ export class EvaluacionComponent implements OnInit, AfterViewInit {
     this.cliente_encontrado=3;
     this.cliente_afiliado=false;
     this.CrearFormulario();
+
+    // this.route.params.subscribe(params => {
+    //   // Verifica si 'params' tiene datos
+    //   if(Object.keys(params).length>0){
+    //     if(params['idpresupuesto']){
+    //       this.id_presupuesto=params['idpresupuesto'];
+          this.id_presupuesto=94;
+          this.SeleccionarPresupuesto();
+    //     }
+    //   }
+    // })
+
   }
 
   ngAfterViewInit(){
@@ -105,6 +122,65 @@ export class EvaluacionComponent implements OnInit, AfterViewInit {
       ]],
       sede: [ { value : null , disabled : true },[
       ]],
+    })
+  }
+
+  SeleccionarPresupuesto(){
+    this.presupuesto_antiguo = true ;
+    this.CrServicios.SeleccionarPresupuesto(this.id_presupuesto).subscribe(resultado=>{
+
+      if(resultado){
+
+        let dni : string = resultado.cliente_dni;
+        let dni_longitud : number = (resultado.cliente_dni).toString().length;
+
+        for(let i = dni_longitud; i<8 ; i++){
+          dni = "0" + dni ;
+        }
+
+        this.EvaluacionForm.get('dni').setValue(dni);
+        this.CServicios.BuscarClienteDNI(dni).subscribe(res=>{
+          this.Cargando.next(false);
+          if(res['codigo']==0){
+            this.cliente_encontrado=1;
+            this.VerificarCondiciones(res['data'].id);
+            this.ConsultarOtrosPagos(res['data'].id);
+            this.EvaluacionForm.get('id').setValue(res['data'].id);
+            this.EvaluacionForm.get('nombre').enable();
+            this.EvaluacionForm.get('codigo').enable();
+            this.EvaluacionForm.get('cargo').enable();
+            this.EvaluacionForm.get('sede').enable();
+            this.EvaluacionForm.get('nombre').setValue(res['data'].nombre);
+            this.EvaluacionForm.get('codigo').setValue(res['data'].codigo);
+            this.EvaluacionForm.get('cargo').setValue(res['data'].cargo_nombre);
+            this.EvaluacionForm.get('sede').setValue(res['data'].sede);
+            this.cliente=res['data'];
+
+            this.interes=resultado.tasa;
+            this.cliente_afiliado = true ;
+            this.fecha = resultado.fecha ;
+            this.capital = resultado.capital ;
+            this.cuotas = resultado.cuotas ;
+            this.total_prestamo = resultado.total ;
+            this.cronograma = resultado.cronograma ;
+            this.productos = resultado.productos ;
+            this.tipo_venta = resultado.id_tipo ;
+            this.ActualizarInformacion() ;
+            this.datos_prestamo.next({
+              presupuesto_antiguo : this.presupuesto_antiguo ,
+              interes:this.interes,
+              aporte:this.aporte,
+              capacidad: this.capacidad,
+              otros_pagos : this.OtrosPagos,
+              capital : this.capital ,
+              cuotas : this.cuotas ,
+              prestamo : this.total_prestamo ,
+              tipo : this.tipo_venta ,
+              cronograma : this.cronograma 
+            });
+          }
+        })
+      }
     })
   }
 
@@ -201,18 +277,18 @@ export class EvaluacionComponent implements OnInit, AfterViewInit {
   ActualizarInformacion(){
     // console.log(this.interes);
     this.informacion.next({
-      afiliado: this.cliente_afiliado,
-      cliente: this.cliente,
-      interes: this.interes,
-      aporte: this.aporte,
-      venta: this.tipo_venta,
-      fecha: this.fecha,
+      afiliado: this.cliente_afiliado,//
+      cliente: this.cliente,//
+      interes: this.interes,//
+      aporte: this.aporte,//
+      venta: this.tipo_venta,//
+      fecha: this.fecha,//
       fecha_inicio: this.fecha_inicio,
-      capital: this.capital,
-      cuotas: this.cuotas,
-      total: this.total_prestamo,
-      cronograma: this.cronograma,
-      productos: this.productos,
+      capital: this.capital,//
+      cuotas: this.cuotas,//
+      total: this.total_prestamo,//
+      cronograma: this.cronograma,//
+      productos: this.productos,//
       otros_pagos : this.OtrosPagos
     })
   }
@@ -344,10 +420,16 @@ export class EvaluacionComponent implements OnInit, AfterViewInit {
 
   ActualizarInformacionCuotas(){
     this.datos_prestamo.next({
+      presupuesto_antiguo : this.presupuesto_antiguo ,
       interes:this.interes,
       aporte:this.aporte,
       capacidad: this.capacidad,
       otros_pagos : this.OtrosPagos,
+      capital : this.capital ,
+      cuotas : this.cuotas ,
+      prestamo : this.total_prestamo ,
+      tipo : this.tipo_venta ,
+      cronograma : this.cronograma 
     });
   }
 

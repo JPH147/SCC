@@ -29,6 +29,10 @@ export class MenuComponent implements OnInit{
             path: "evaluacion"
           },
           {
+            nombre: "Presupuestos",
+            path: "presupuesto"
+          },
+          {
             nombre: "Seguimiento de documentos",
             path: "seguimiento"
           },
@@ -83,10 +87,6 @@ export class MenuComponent implements OnInit{
         disabled:false,
         submenu:[
           {
-            nombre: "Presupuestos",
-            path: "presupuesto"
-          },
-          {
             nombre: "Préstamos",
             path: "creditos"
           },
@@ -106,16 +106,16 @@ export class MenuComponent implements OnInit{
         disabled:false,
         submenu:[
           {
-            nombre: "Cronograma",
+            nombre: "Pendientes",
             path: "cobranzas"
           },
           {
-            nombre: "Archivos generados",
-            path: "archivos-cobranza"
+            nombre: "Cobranzas directas",
+            path: "cobranza-directa"
           },
           {
-            nombre: "Generar archivos",
-            path: "generar-archivos"
+            nombre: "Cobranzas por planilla",
+            path: "cobranza-archivos"
           },
         ]
       },

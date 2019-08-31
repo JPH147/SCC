@@ -179,16 +179,32 @@ export class ServiciosVentas{
 		  .set("prnumeropagina", pagina.toString())
 		  .set("prtotalpagina", total_pagina.toString())
 	
-			return this.http.get(this.url+'talonario/read.php', {params})
-			.pipe(map(res=>{
-				if(res['codigo']===0){
-					return res;
-				}else{
-					console.log('No hay datos que mostrar')
-				}
-			}))
-		}
+    return this.http.get(this.url+'talonario/read.php', {params})
+    .pipe(map(res=>{
+      if(res['codigo']===0){
+        return res;
+      }else{
+        console.log('No hay datos que mostrar')
+      }
+    }))
+  }
+  
+  VerificarTalonario(
+		serie : string 
+	  ){
+		let params = new HttpParams()
+		  .set("prserie", serie);
 	
+    return this.http.get(this.url+'talonario/verificar.php', {params})
+    .pipe(map(res=>{
+      if(res['codigo']===0){
+        return true;
+      }else{
+        return false;
+      }
+    }))
+  }
+
 	CrearTalonarios(
 		serie:string,
 		numero_inicio:number,
@@ -204,7 +220,7 @@ export class ServiciosVentas{
 		return this.http.post(this.url + 'talonario/create.php', params, {headers: headers});
 	}
   
-  // Esta función se usa para anular o revertir talonarios
+  // Esta función se usa para anular talonarios. Si se va a utilizar para otra cosa, revisar SP.
 	ActualizarTalonarios(
     serie : string,
     estado : number

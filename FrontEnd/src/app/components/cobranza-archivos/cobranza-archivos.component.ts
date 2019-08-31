@@ -1,91 +1,40 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { Observable, BehaviorSubject, of, fromEvent, merge } from 'rxjs';
-import { catchError, finalize, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { CobranzasService } from '../cobranzas/cobranzas.service';
-import { CollectionViewer, DataSource } from '@angular/cdk/collections';
-import { MatPaginator } from '@angular/material';
-import {saveAs} from 'file-saver';
+import { Component, OnInit } from '@angular/core';
+import { CobranzasService } from '../cobranzas-listar/cobranzas.service';
+import { ServiciosGenerales } from '../global/servicios';
+import { Location } from '@angular/common';
+import * as moment from 'moment';
 
 @Component({
-  selector: 'app-cobranza-archivos',
+  selector: 'app-cobranzas',
   templateUrl: './cobranza-archivos.component.html',
-  styleUrls: ['./cobranza-archivos.component.scss']
+  styleUrls: ['./cobranza-archivos.component.css'],
+  providers: [ServiciosGenerales]
 })
 export class CobranzaArchivosComponent implements OnInit {
-  
-  public ListadoCobranzas: CobranzasDataSource;
-  public Columnas: string[] = ['numero', 'fecha_creacion','institucion', 'tipo_pago', 'fecha_inicio', 'cantidad', 'monto', 'opciones'];
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  // public fecha_inicio= new Date(moment().format("YYYY-MM-01"));
+  // public fecha_fin= new Date(moment().format("YYYY-MM-") + moment().daysInMonth());
+
+  public fecha_inicio = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+  public fecha_fin = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
+
+  public institucion: number;
+  public Institucion : Array<any>;
 
   constructor(
-    private Servicio : CobranzasService
+    private location: Location,
+    private Servicio: CobranzasService,
+    private GServicios: ServiciosGenerales,
   ) { }
 
   ngOnInit() {
-
-    this.ListadoCobranzas = new CobranzasDataSource(this.Servicio);
-    this.ListadoCobranzas.CargarCronograma(1,10);
-
-  }
-
-  ngAfterViewInit () {
-
-    merge(
-      this.paginator.page
-    ).pipe(
-      tap(() => this.CargarData())
-    ).subscribe();
-
-  }
-
-  CargarData(){
-    this.ListadoCobranzas.CargarCronograma(this.paginator.pageIndex+1, this.paginator.pageSize);
-  }
-
-  AbrirArchivo(nombre_archivo){
-    this.Servicio.ObtenerArchivo(nombre_archivo).subscribe(res=>{
-      saveAs(res, nombre_archivo);
+    this.GServicios.ListarInstitucion().subscribe(res=>{
+      this.Institucion=res;
     })
   }
-  
-}
 
-export class CobranzasDataSource implements DataSource<any> {
-
-  private InformacionCobranzas = new BehaviorSubject<any[]>([]);
-  private CargandoInformacion = new BehaviorSubject<boolean>(false);
-  public Cargando = this.CargandoInformacion.asObservable();
-  public TotalResultados = new BehaviorSubject<number>(0);
-
-  constructor(
-    private Servicio: CobranzasService
-  ) { }
-
-  connect(collectionViewer: CollectionViewer): Observable<any[]> {
-  return this.InformacionCobranzas.asObservable();
-  }
-
-  disconnect() {
-  this.InformacionCobranzas.complete();
-  this.CargandoInformacion.complete();
-  }
-
-  CargarCronograma(
-    numero_pagina : number,
-    total_pagina : number,
-  ) {
-    this.CargandoInformacion.next(true);
-
-    this.Servicio.ListarCobranzas( numero_pagina, total_pagina )
-    .pipe(
-      catchError(() => of([])),
-      finalize(() => this.CargandoInformacion.next(false))
-    )
-    .subscribe(res => {
-      this.TotalResultados.next(res['mensaje']);
-      this.InformacionCobranzas.next(res['data'].cobranzas);
-    });
+  Atras(){
+    this.location.back()
   }
 
 }

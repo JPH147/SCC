@@ -33,7 +33,10 @@ mat-card{
 .mat-column-cuotas,
 .mat-column-total,
 .mat-column-tipo,
-.mat-column-fecha,
-.mat-column-opciones{
+.mat-column-fecha{
   max-width: 10%;
+}
+
+.mat-column-opciones{
+  max-width: 12%;
 }

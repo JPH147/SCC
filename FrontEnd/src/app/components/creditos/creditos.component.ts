@@ -1173,6 +1173,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   }
 
   Guardar(){
+    console.log(this.Cronograma);
     if(this.id_credito_editar){
       if(this.id_tipo==1){
         this.ActualizarAfiliacion()
@@ -1180,12 +1181,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         this.ActualizarCredito();
       }
     }else{
-
-      // Se verifican que los datos del nuevo cliente estén actualizados
       this.VerificarAfiliacion(this.CreditosForm.value.id_cliente);
-      // this.VerificarCondicionesAfiliacion(this.CreditosForm.value.id_cliente);
-      // this.ObtenerNumero(this.CreditosForm.value.id_cliente);
-
       this.CrearCredito();
     }
   }
