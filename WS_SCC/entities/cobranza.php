@@ -179,17 +179,6 @@
         }
 
       }
-
-
-      // $txt = "John Doe\n";
-      // fwrite($myfile, $txt);
-      // $txt = "Jane Doe\n";
-      // fwrite($myfile, $txt);
-      // fclose($myfile);
-
-
-      
-
     }
 
     function create_archivos_cabecera(){
@@ -382,6 +371,48 @@
       }
 
       return $cuentas;
+    }
+
+    function seleccionar_cuotas_pagar(){
+      $query = "CALL sp_listarcobranzasposiblescuotas(?,?)";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(1, $this->cliente);
+      $result->bindParam(2, $this->monto);
+
+      $result->execute();
+
+      $cronograma=array();
+      $cronograma["cuotas"]=array();
+
+      $contador = 0;
+
+      while($row = $result->fetch(PDO::FETCH_ASSOC))
+      {
+          extract($row);
+          $contador=$contador+1;
+          $items = array (
+            "id" => $id ,
+            "id_cronograma" => $id_cronograma ,
+            "id_tipo" => $id_tipo ,
+            "tipo" => $tipo ,
+            "codigo" => $codigo ,
+            "cliente" => $cliente ,
+            "capital" => $capital ,
+            "interes" => $interes ,
+            "monto_total" => $monto_total ,
+            "monto_pendiente" => $monto_pendiente ,
+            "fecha_vencimiento" => $fecha_vencimiento ,
+            "fecha_cancelacion" => $fecha_cancelacion ,
+            "estado" => $estado ,
+            "id_estado" => $id_estado ,
+          );
+          array_push($cronograma["cuotas"],$items);
+      }
+
+      return $cronograma;
+
     }
 
   }
