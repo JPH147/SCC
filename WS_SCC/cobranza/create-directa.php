@@ -16,13 +16,15 @@
     {
         $cobranza = new Cobranzas($db);
 
-        if (($_POST["prinstitucion"])!=null)
+        if (($_POST["prcliente"])!=null)
         {
             $cobranza->fecha=trim($_POST["prfecha"]);
             $cobranza->cliente=trim($_POST["prcliente"]);
             $cobranza->cuenta=trim($_POST["prcuenta"]);
             $cobranza->operacion=trim($_POST["properacion"]);
             $cobranza->monto=trim($_POST["prmonto"]);
+            $cobranza->solo_directas=trim($_POST["prsolodirectas"]);
+            $cobranza->archivo=trim($_POST["prarchivo"]);
             $cobranza->observaciones=trim($_POST["probservaciones"]);
 
             if($cobranza->create_directa())
@@ -41,7 +43,7 @@
     }
     catch(Exception $exception)
     {
-        print_json("9999", "Ocurrió un error al eliminar la cobranza.", $exception->getMessage());
+        print_json("9999", "Ocurrió un error al crear la cobranza.", $exception->getMessage());
     }
 
 ?>

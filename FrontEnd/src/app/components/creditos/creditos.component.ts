@@ -1,25 +1,26 @@
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, AfterViewInit } from '@angular/core';
-import {CollectionViewer, DataSource} from "@angular/cdk/collections";
+import { CollectionViewer, DataSource } from "@angular/cdk/collections";
 import { CreditosService } from './creditos.service';
-import {FormArray, FormGroup, FormBuilder, Validators} from '@angular/forms';
+import { FormArray, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog, MatSort } from '@angular/material';
-import {ServiciosTipoPago} from '../global/tipopago';
-import {ClienteService } from '../clientes/clientes.service';
+import { ServiciosTipoPago } from '../global/tipopago';
+import { ClienteService  } from '../clientes/clientes.service';
 import { forkJoin,fromEvent, merge, BehaviorSubject} from 'rxjs';
-import {debounceTime, distinctUntilChanged, tap, filter, map} from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, tap, map } from 'rxjs/operators';
 import { ActivatedRoute, Router, NavigationStart } from '@angular/router';
-import {ServiciosTelefonos} from '../global/telefonos';
-import {ServiciosDirecciones,} from '../global/direcciones';
-import {ServiciosGenerales} from '../global/servicios';
+import { ServiciosTelefonos } from '../global/telefonos';
+import { ServiciosDirecciones } from '../global/direcciones';
+import { ServiciosGenerales } from '../global/servicios';
 import * as moment from 'moment';
-import {Location} from '@angular/common';
-import {Notificaciones} from '../global/notificacion';
-import {URLIMAGENES} from '../global/url'
-import {SeleccionarClienteComponent} from '../retorno-vendedores/seleccionar-cliente/seleccionar-cliente.component';
+import { Location } from '@angular/common';
+import { Notificaciones } from '../global/notificacion';
+import { URLIMAGENES } from '../global/url';
+import { SeleccionarClienteComponent } from '../retorno-vendedores/seleccionar-cliente/seleccionar-cliente.component';
 import { VentanaEmergenteContacto} from '../clientes/ventana-emergentecontacto/ventanaemergentecontacto';
 import { ReglasEvaluacionService } from '../tablas-maestras/reglas-evaluacion/reglas-evaluacion.service';
 import { SeguimientosService } from '../seguimientos/seguimientos.service';
 import { RefinanciamientoService } from '../refinanciamiento/refinanciamiento.service';
+import { VentanaPagosComponent } from '../cobranzas-listar/ventana-pagos/ventana-pagos.component';
 
 @Component({
   selector: 'app-creditos',
@@ -193,13 +194,13 @@ export class CreditosComponent implements OnInit, AfterViewInit {
 
         if(params['idcredito']){
           this.id_credito=params['idcredito'];
-          // this.id_credito=30;
+          // this.id_credito=12;
           this.SeleccionarCredito(this.id_credito);
         }
 
         if(params['idcreditoeditar']){
           this.id_credito_editar=params['idcreditoeditar'];
-          // this.id_credito_editar=30;
+          // this.id_credito_editar=12;
           this.SeleccionarCredito(this.id_credito_editar);
         }
 
@@ -239,7 +240,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       this.sort.sortChange
       .pipe(
         tap(() =>{
-          this.ObtenerCronograma(this.id_credito, this.sort.active + " " + this.sort.direction)
+          this.ObtenerCronograma(this.id_credito, this.sort.active + " " + this.sort.direction);
         })
       ).subscribe();
     }
@@ -574,7 +575,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         this.CreditosForm.get('tipo_pago').setValue(res.tipo_pago);
         this.CreditosForm.get('observaciones').setValue(observacion_corregida);
 
-        this.ColumnasCronograma= ['numero', 'monto_cuota','fecha_vencimiento', 'monto_interes','monto_pagado', 'fecha_cancelacion', 'monto_pendiente','estado', 'opciones'];
+        this.ColumnasCronograma= ['numero', 'fecha_vencimiento', 'monto', 'interes_generado','monto_pagado', 'fecha_cancelacion','estado', 'opciones'];
         this.ObtenerCronograma(this.id_credito, "fecha_vencimiento asc");
 
         if(res['garantes'].garantes.length>0){
@@ -1168,6 +1169,13 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     }
   }
 
+  VerDetallePagos( cronograma ){
+    let ventana = this.Dialogo.open(VentanaPagosComponent,{
+      width : '900px',
+      data: { tipo : 1 , cuota : cronograma.id_cronograma }
+    })
+  }
+
   Atras(){
     this.location.back()
   }
@@ -1590,11 +1598,10 @@ export class CronogramaDataSource implements DataSource<any>{
   }
 
   disconnect(){
-    this.Informacion.complete()
+    // this.Informacion.complete()
   }
 
   AsignarInformacion(array){
-    // console.log(array);
     this.Informacion.next(array);
   }
 

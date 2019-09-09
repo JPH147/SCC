@@ -90,8 +90,8 @@ export class VentanaEmergenteClientes {
       'subsede': [null, [
         Validators.required
       ]],
-      'codigo': [null, [
-        Validators.required
+      'codigo': ["", [
+        
       ]],
       'dni': [null, [
         Validators.required,
@@ -102,7 +102,7 @@ export class VentanaEmergenteClientes {
       'nombre': [null, [
         Validators.required
       ]],
-      'cip': [null, [
+      'cip': ["", [
         Validators.required
       ]],
       'email': [null, [
@@ -113,13 +113,13 @@ export class VentanaEmergenteClientes {
         Validators.required
       ]],
       'departamento': [null, [
-        Validators.required
+        // Validators.required
       ]],
       'provincia': [null, [
-        Validators.required
+        // Validators.required
       ]],
       'distrito': [null, [
-        Validators.required
+        // Validators.required
       ]],
       'direccion': [null, [
       ]],
@@ -127,8 +127,7 @@ export class VentanaEmergenteClientes {
       ]],
       'cuenta': [null, [
       ]],
-      'trabajo': [null, [
-        Validators.required
+      'trabajo': ["", [
       ]],
       'cargo': [null, [
         Validators.required
@@ -136,13 +135,13 @@ export class VentanaEmergenteClientes {
       'cargo_estado': [null, [
         Validators.required
       ]],
-      'capacidad_pago': [null, [
+      'capacidad_pago': [0, [
         // Validators.required
       ]],
-      'descuento_maximo': [null, [
+      'descuento_maximo': [0, [
         // Validators.required
       ]],
-      'calificacion_personal': [null, [
+      'calificacion_personal': ["Buena", [
         // Validators.required
       ]],
       'aporte': [ 20, [
@@ -186,12 +185,16 @@ export class VentanaEmergenteClientes {
     this.ClientesForm.get('estado').setValue(this.data.objeto.estado);
     
     if(!this.data.confirmar){
-      this.ClientesForm.get('trabajo').setValue(this.data.objeto.trabajo);
-      this.ListarProvincia(this.data.objeto.departamento);
-      this.ListarDistrito(this.data.objeto.provincia);
-      this.ClientesForm.get('departamento').setValue(this.data.objeto.departamento);
-      this.ClientesForm.get('provincia').setValue(this.data.objeto.provincia);
-      this.ClientesForm.get('distrito').setValue(this.data.objeto.id_distrito_trabajo);
+      if( this.data.objeto.id_distrito_trabajo ) {
+        this.ListarProvincia(this.data.objeto.departamento);
+        this.ListarDistrito(this.data.objeto.provincia);
+        this.ClientesForm.get('departamento').setValue(this.data.objeto.departamento);
+        this.ClientesForm.get('provincia').setValue(this.data.objeto.provincia);
+        this.ClientesForm.get('distrito').setValue(this.data.objeto.id_distrito_trabajo);
+      }
+      if( this.data.objeto.trabajo ) {
+        this.ClientesForm.get('trabajo').setValue(this.data.objeto.trabajo);
+      }
     }
 
     this.ClientesForm.get('capacidad_pago').setValue(this.data.objeto.capacidad_pago);

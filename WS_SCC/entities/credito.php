@@ -20,6 +20,10 @@ Class Creditos{
     public $capital;
     public $interes;
     public $fecha;
+    public $interes_generado;
+    public $monto_pagado;
+    public $fecha_cancelacion;
+    public $monto_pendiente;
     public $tiempo;
     public $total_pagado;
     public $total_cuotas;
@@ -109,6 +113,7 @@ Class Creditos{
                 "tipo_pago"=>$tipo_pago,
                 "numero_cuotas"=>$numero_cuotas,
                 "monto_total"=>$monto_total,
+                "monto_pagado"=>$monto_pagado,
                 "id_tipo_credito"=>$id_tipo_credito,
                 "tipo_credito"=>$tipo_credito,
                 "observaciones"=>$observaciones,
@@ -154,7 +159,7 @@ Class Creditos{
 
         $Courier=$this->Seguimiento->readxdocumento_export(2,$this->id_credito);
         $Garantes=$this->read_garantes($this->id_credito);
-        $Cronograma=$this->read_cronograma($this->id_credito);
+        $Cronograma=$this->read_cronograma_simple($this->id_credito);
 
         $result->execute();
     
@@ -281,11 +286,12 @@ Class Creditos{
 
     function read_cronograma(){
 
-      $query = "CALL sp_listarcreditocronograma(?)";
+      $query = "CALL sp_listarcreditocronograma(?,?)";
 
       $result = $this->conn->prepare($query);
 
       $result->bindParam(1, $this->id_credito);
+      $result->bindParam(2, $this->orden);
 
       $result->execute();
       
@@ -297,13 +303,57 @@ Class Creditos{
           extract($row);
           $contador=$contador+1;
           $cronograma_item = array (
-              "numero"=>$contador,
-              "id_cronograma"=>$id,
-              "capital"=>$capital,
-              "interes"=>$interes,
-              "monto_cuota"=>$monto,
-              "fecha_vencimiento"=>$fecha,
-              "estado"=>$estado
+                "numero" => $contador,
+                "id_cronograma" => $id ,
+                "fecha_vencimiento" => $fecha ,
+                "capital" => $capital ,
+                "interes" => $interes ,
+                "monto" => $monto ,
+                "interes_generado" => $interes_generado ,
+                "monto_pagado" => $monto_pagado ,
+                "fecha_cancelacion" => $fecha_cancelacion ,
+                "monto_pendiente" => $monto_pendiente ,
+                "estado" => $estado
+          );
+          array_push($cronograma_list,$cronograma_item);
+      }
+
+      return $cronograma_list;
+    }
+
+    function read_cronograma_simple($id_credito){
+
+      $query = "CALL sp_listarcreditocronograma(?,?)";
+
+      $result = $this->conn->prepare($query);
+
+      $orden = "fecha asc" ;
+
+      $result->bindParam(1, $id_credito);
+      $result->bindParam(2, $orden);
+
+      $result->execute();
+      
+      $cronograma_list=array();
+      $contador = 0;
+
+      while($row = $result->fetch(PDO::FETCH_ASSOC))
+      {
+          extract($row);
+          $contador=$contador+1;
+          $cronograma_item = array (
+                "numero" => $contador,
+                "id_cronograma" => $id ,
+                "fecha_vencimiento" => $fecha ,
+                "capital" => $capital ,
+                "interes" => $interes ,
+                "monto" => $monto ,
+                "monto_cuota" => $monto ,
+                "interes_generado" => $interes_generado ,
+                "monto_pagado" => $monto_pagado ,
+                "fecha_cancelacion" => $fecha_cancelacion ,
+                "monto_pendiente" => $monto_pendiente ,
+                "estado" => $estado
           );
           array_push($cronograma_list,$cronograma_item);
       }

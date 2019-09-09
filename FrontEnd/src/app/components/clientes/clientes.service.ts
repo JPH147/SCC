@@ -14,11 +14,8 @@ export class ClienteService {
   constructor(private http: HttpClient) {}
 
   Listado(
-  // institucion: string,
-  // sede: string,
-  // subsede: string,
-  // cargo:string,
   codigo:string,
+  cip:string,
   dni: string,
   nombre: string,
   prpagina: number,
@@ -32,6 +29,7 @@ export class ClienteService {
       //  .set('prsubsede',subsede)
       //  .set('prcargo',cargo)
        .set('prcodigo',codigo)
+       .set('prcip',cip)
        .set('prdni',dni)
        .set('prnombre',nombre)
        .set('prpagina',prpagina.toString())
@@ -104,7 +102,7 @@ export class ClienteService {
       .set('clt_cip', clt_cip)
       .set('clt_email', clt_email)
       .set('clt_casilla', clt_casilla)
-      .set('prdistrito', id_distrito.toString() )
+      .set('prdistrito', id_distrito ? id_distrito.toString() : "0" )
       .set('clt_trabajo', clt_trabajo)
       .set('prapacidadpago', capacidad_pago.toString() )
       .set('prmaximodescuento', maximo_descuento.toString() )

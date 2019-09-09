@@ -16,8 +16,9 @@
     try{
         $cobranza = new Cobranzas($db);
 
-        $cobranza->cliente = !empty($_GET['prcliente']) ? trim($_GET['prcliente']) : 1;
-        $cobranza->monto = !empty($_GET['prmonto']) ? trim($_GET['prmonto']) : 20;
+        $cobranza->cliente = !empty($_GET['prcliente']) ? trim($_GET['prcliente']) : die() ;
+        $cobranza->monto = !empty($_GET['prmonto']) ? trim($_GET['prmonto']) : 1000 ;
+        $cobranza->solo_directas = !empty($_GET['prsolodirectas']) ? trim($_GET['prsolodirectas']) : 0;
 
         $cobranza_list = $cobranza->seleccionar_cuotas_pagar();
 

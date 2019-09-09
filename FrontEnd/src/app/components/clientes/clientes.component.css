@@ -91,3 +91,11 @@ mat-card{
   display: none !important;
   color: red;
 }
+
+.columnas-1{
+  width: 80%;
+}
+
+.columnas-2{
+  width: 90%;
+}
