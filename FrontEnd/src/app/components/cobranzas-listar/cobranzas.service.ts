@@ -59,11 +59,11 @@ export class CobranzasService {
       .set('prfechainicio', moment(fecha_inicio).format("YYYY-MM-DD"))
       .set('prfechafin', moment(fecha_fin).format("YYYY-MM-DD"))
 
-    // console.log(params)
+     console.log(params)
 
     return this.http.get(this.url + 'cobranza/read-pnp.php', {params})
     .pipe(map(res => {
-      // console.log(res)
+     console.log(res)
       if (res['codigo'] === 0) {
         return res;
       } else {
@@ -91,7 +91,7 @@ export class CobranzasService {
   }
 
   CrearCabecera(
-    institucion : number,
+    sede : number,
     tipo_pago : number,
     fecha_inicio : Date,
     fecha_fin : Date,
@@ -101,7 +101,8 @@ export class CobranzasService {
   ){
 
     let params = new HttpParams()
-      .set('prinstitucion', institucion.toString())
+      // .set('prinstitucion', institucion.toString())
+      .set('prsede', sede.toString())
       .set('prtipopago', tipo_pago.toString())
       .set('prfechainicio', moment(fecha_inicio).format("YYYY-MM-DD"))
       .set('prfechafin', moment(fecha_fin).format("YYYY-MM-DD"))
@@ -142,6 +143,7 @@ export class CobranzasService {
     let params = new HttpParams()
       .set('prpagina', numero_pagina.toString())
       .set('prtotalpagina', total_pagina.toString())
+      console.log(params);
 
     return this.http.get(this.url + 'cobranza/read.php', {params})
     .pipe(map(res => {

@@ -2,7 +2,7 @@
   <!-- Encabezado -->
 
   <mat-card-title>
-    <div id="tituloProd"> Cobranzas por planilla </div>
+    <div id="tituloProd"> Cobranzas por Planilla </div>
   </mat-card-title>
 
   <mat-grid-list cols= "4" rowHeight="70px">
@@ -17,7 +17,7 @@
     </mat-grid-tile>
 
     <mat-grid-tile>
-      <button mat-raised-button color="primary" [routerLink]="['generar']"> Generar </button>
+      <button mat-raised-button color="primary" [routerLink]="['generar']"> Generar</button>
     </mat-grid-tile>
     
   </mat-grid-list>
@@ -40,9 +40,9 @@
         <mat-cell *matCellDef="let cobranza"> {{ cobranza.fecha_creacion | date:'dd/MM/yyyy' }} </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="institucion">
-        <mat-header-cell *matHeaderCellDef> Institución </mat-header-cell>
-        <mat-cell *matCellDef="let cobranza"> {{ cobranza.institucion }} </mat-cell>
+      <ng-container matColumnDef="sede">
+        <mat-header-cell *matHeaderCellDef> Sede </mat-header-cell>
+        <mat-cell *matCellDef="let cobranza"> {{ cobranza.sede }} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="tipo_pago">

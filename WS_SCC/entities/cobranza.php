@@ -183,7 +183,7 @@
 
     function create_archivos_cabecera(){
       $query = "CALL sp_crearcobranzaarchivoscabecera(
-        :prinstitucion,
+        :prsede,
         :prtipopago,
         :prfechainicio,
         :prfechafin,
@@ -194,7 +194,7 @@
 
       $result = $this->conn->prepare($query);
 
-      $result->bindParam(":prinstitucion", $this->institucion);
+      $result->bindParam(":prsede", $this->sede);
       $result->bindParam(":prtipopago", $this->tipo_pago);
       $result->bindParam(":prfechainicio", $this->fecha_inicio);
       $result->bindParam(":prfechafin", $this->fecha_fin);
@@ -202,7 +202,7 @@
       $result->bindParam(":prmonto", $this->monto);
       $result->bindParam(":prarchivo", $this->archivo);
 
-      $this->institucion=htmlspecialchars(strip_tags($this->institucion));
+      $this->sede=htmlspecialchars(strip_tags($this->sede));
       $this->tipo_pago=htmlspecialchars(strip_tags($this->tipo_pago));
       $this->fecha_inicio=htmlspecialchars(strip_tags($this->fecha_inicio));
       $this->fecha_fin=htmlspecialchars(strip_tags($this->fecha_fin));
@@ -274,7 +274,7 @@
           $items = array (
             "numero"=>$contador,
             "fecha_creacion"=>$fecha_creacion,
-            "institucion"=>$institucion,
+            "sede"=>$sede,
             "tipo_pago"=>$tipo_pago,
             "fecha_inicio"=>$fecha_inicio,
             "fecha_fin"=>$fecha_fin,

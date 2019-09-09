@@ -14,7 +14,7 @@ import {saveAs} from 'file-saver';
 export class CobranzaArchivosListarComponent implements OnInit {
   
   public ListadoCobranzas: CobranzasDataSource;
-  public Columnas: string[] = ['numero', 'fecha_creacion','institucion', 'tipo_pago', 'fecha_inicio', 'cantidad', 'monto', 'opciones'];
+  public Columnas: string[] = ['numero', 'fecha_creacion','sede', 'tipo_pago', 'fecha_inicio', 'cantidad', 'monto', 'opciones'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { CobranzasService } from '../../cobranzas-listar/cobranzas.service';
 import { Observable, BehaviorSubject, of, fromEvent, merge } from 'rxjs';
@@ -20,6 +20,8 @@ export class CobranzaPnpComponent implements OnInit {
   public fecha_inicio = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
   public fecha_fin = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
 
+  @Input() sede_elegida:number;
+
   constructor(
     private Servicio: CobranzasService,
     private router:Router,
@@ -27,6 +29,7 @@ export class CobranzaPnpComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    console.log(this.sede_elegida);
     this.ListadoCobranzaPNP = new CobranzaPNPDataSource(this.Servicio);
     this.ListadoCobranzaPNP.CargarPagos( this.fecha_inicio, this.fecha_fin );
   }
@@ -56,7 +59,7 @@ export class CobranzaPnpComponent implements OnInit {
           if(res['codigo']==0){
 
             this.Servicio.CrearCabecera(
-              2,
+              this.sede_elegida,
               1,
               this.fecha_inicio,
               this.fecha_fin,
@@ -82,7 +85,7 @@ export class CobranzaPnpComponent implements OnInit {
               }
         
               setTimeout(()=>(
-                this.router.navigate(['/archivos-cobranza'])
+                this.router.navigate(['/cobranza-archivos'])
               ),200)
 
             })
@@ -133,6 +136,8 @@ export class CobranzaPNPDataSource implements DataSource<any> {
       this.InformacionCobranzas.next(res['data'].cronograma);
       this.informacion = res['data'].cronograma;
       this.totales = {cantidad : res['mensaje'].cantidad, total : res['mensaje'].total}
+      console.log(res)
     });
+
   }
 }

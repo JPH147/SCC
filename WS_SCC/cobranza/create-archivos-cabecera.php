@@ -16,9 +16,10 @@
     {
         $cobranza = new Cobranzas($db);
 
-        if (($_POST["prinstitucion"])!=null)
+        if (($_POST["prsede"])!=null)
         {
-            $cobranza->institucion=trim($_POST["prinstitucion"]);
+            // $cobranza->institucion=trim($_POST["prinstitucion"]);
+            $cobranza->sede=trim($_POST["prsede"]);
             $cobranza->tipo_pago=trim($_POST["prtipopago"]);
             $cobranza->fecha_inicio=trim($_POST["prfechainicio"]);
             $cobranza->fecha_fin=trim($_POST["prfechafin"]);

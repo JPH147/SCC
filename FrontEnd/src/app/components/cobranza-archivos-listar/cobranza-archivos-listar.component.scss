@@ -24,7 +24,26 @@
     align-items: center;
     justify-content: center;
   }
+
   
+  .mat-column-cantidad,
   .mat-column-numero{
     max-width: 5%;
+  }
+
+  .mat-column-tipo_pago,
+  .mat-column-opciones
+  {
+    max-width: 10%;
+  }
+
+  .mat-column-fecha_inicio,
+  .mat-column-fecha_creacion,
+  .mat-column-monto
+  {
+    max-width: 15%;
+  }
+
+  .mat-column-sede{
+    max-width: 25%;
   }

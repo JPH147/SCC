@@ -4,25 +4,44 @@
   
   <!-- Encabezado -->
   <mat-card-title>
-    <div id="tituloProd"> Generador de archivos </div>
+    <div id="tituloProd"> Generador de Archivos </div>
   </mat-card-title>
 
-  <mat-grid-list cols= "2" rowHeight="70px">
+ <form [formGroup]="CobranzaForm"  (ngSubmit)="Guardar(CobranzaForm)">     
+   
+  <mat-grid-list cols= "12" rowHeight="70px">
 
-    <mat-grid-tile>
-      <mat-form-field class="columnas-2">
-        <mat-select placeholder="Seleccionar institución" [(ngModel)]="institucion">
+    <mat-grid-tile colspan="4" >
+      <mat-form-field class="input-ventana">
+        <mat-select placeholder='Selecciona Institución'  formControlName="institucion" (selectionChange)="InstitucionSeleccionada($event)">
           <mat-option *ngFor="let institucion of Institucion" [value]="institucion.id"> {{institucion.nombre}} </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </mat-grid-tile>
+
+    <mat-grid-tile colspan="5">
+      <mat-form-field class="input-ventana">
+        <mat-select placeholder='Selecciona Sede' formControlName="sede" (selectionChange)="SedeSeleccionada($event)">
+          <mat-option *ngFor="let sede of Sede" [value] = "sede.id"> {{sede.nombre}} </mat-option>
         </mat-select>
       </mat-form-field>
     </mat-grid-tile>
 
   </mat-grid-list>
 
-  <ng-container *ngIf="institucion==2">
+  </form>
 
-    <app-cobranza-pnp></app-cobranza-pnp>
+ <!-- PAra Ministerio de interior Policia ejercito  -->
+  <ng-container *ngIf="sede==3 "> 
 
+    <app-cobranza-pnp [sede_elegida]="sede"></app-cobranza-pnp>
+
+  </ng-container>
+
+  <ng-container *ngIf="sede==4"> 
+
+      <app-cobranza-pnp  [sede_elegida]="sede"></app-cobranza-pnp>
+  
   </ng-container>
 
 </mat-card>
