@@ -31,6 +31,7 @@ export class ClientesComponent implements OnInit {
   public estado: number ;
   
   @ViewChild('InputCodigo') FiltroCodigo: ElementRef;
+  @ViewChild('InputCIP') FiltroCIP: ElementRef;
   @ViewChild('InputDNI') FiltroDni: ElementRef;
   @ViewChild('InputNombre') FiltroNombre: ElementRef;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -49,7 +50,7 @@ export class ClientesComponent implements OnInit {
 
   ngOnInit() {
    this.ListadoCliente = new ClienteDataSource(this.Servicio);
-   this.ListadoCliente.CargarClientes('', '','',1, 10,1);
+   this.ListadoCliente.CargarClientes('','', '','',1, 10,1);
    this.estado=1;
   }
 
@@ -58,6 +59,7 @@ export class ClientesComponent implements OnInit {
       fromEvent(this.FiltroDni.nativeElement, 'keyup'),
       fromEvent(this.FiltroNombre.nativeElement, 'keyup'),
       fromEvent(this.FiltroCodigo.nativeElement, 'keyup'),
+      fromEvent(this.FiltroCIP.nativeElement, 'keyup'),
     ).pipe(
       debounceTime(200),
       distinctUntilChanged(),
@@ -82,6 +84,7 @@ export class ClientesComponent implements OnInit {
   CargarData() {
     this.ListadoCliente.CargarClientes(
       this.FiltroCodigo.nativeElement.value,
+      this.FiltroCIP.nativeElement.value,
       this.FiltroDni.nativeElement.value,
       this.FiltroNombre.nativeElement.value,
       this.paginator.pageIndex+1,

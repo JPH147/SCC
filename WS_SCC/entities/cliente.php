@@ -56,16 +56,17 @@ Class Cliente{
     }
 
     function read(){
-        $query = "CALL sp_listarcliente (?,?,?,?,?,?)";
+        $query = "CALL sp_listarcliente (?,?,?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
         $result->bindParam(1, $this->clt_codigo);
-        $result->bindParam(2, $this->clt_dni);
-        $result->bindParam(3, $this->clt_nombre);
-        $result->bindParam(4, $this->prpagina);
-        $result->bindParam(5, $this->prtotalpagina);
-        $result->bindParam(6, $this->clt_estado);
+        $result->bindParam(2, $this->clt_cip);
+        $result->bindParam(3, $this->clt_dni);
+        $result->bindParam(4, $this->clt_nombre);
+        $result->bindParam(5, $this->prpagina);
+        $result->bindParam(6, $this->prtotalpagina);
+        $result->bindParam(7, $this->clt_estado);
 
         $result->execute();
     
@@ -104,16 +105,17 @@ Class Cliente{
 
     function contar(){
 
-        $query = "CALL sp_listarclientecontar(?,?,?,?,?,?)";
+        $query = "CALL sp_listarclientecontar(?,?,?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
         $result->bindParam(1, $this->clt_codigo);
-        $result->bindParam(2, $this->clt_dni);
-        $result->bindParam(3, $this->clt_nombre);
-        $result->bindParam(4, $this->prpagina);
-        $result->bindParam(5, $this->prtotalpagina);
-        $result->bindParam(6, $this->clt_estado);
+        $result->bindParam(2, $this->clt_cip);
+        $result->bindParam(3, $this->clt_dni);
+        $result->bindParam(4, $this->clt_nombre);
+        $result->bindParam(5, $this->prpagina);
+        $result->bindParam(6, $this->prtotalpagina);
+        $result->bindParam(7, $this->clt_estado);
 
         $result->execute();
 

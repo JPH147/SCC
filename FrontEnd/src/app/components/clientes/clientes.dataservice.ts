@@ -25,6 +25,7 @@ export class ClienteDataSource implements DataSource<Cliente> {
 
   CargarClientes(
     codigo:string,
+    cip:string,
     dni: string,
     nombre: string,
     prpagina: number,
@@ -33,7 +34,7 @@ export class ClienteDataSource implements DataSource<Cliente> {
   ){
   this.CargandoInformacion.next(true);
 
-  this.Servicio.Listado( codigo, dni, nombre, prpagina, prtotalpagina, estado)
+  this.Servicio.Listado( codigo, cip, dni, nombre, prpagina, prtotalpagina, estado)
   .pipe(catchError(() => of([])),
   finalize(() => this.CargandoInformacion.next(false))
   )

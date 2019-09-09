@@ -1,0 +1,18 @@
+.card{
+    padding: 0px;
+    overflow: hidden;
+ }
+
+.spinner-container{
+  position: absolute;
+  top: 90px;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mat-column-numero{
+    max-width: 10%
+}

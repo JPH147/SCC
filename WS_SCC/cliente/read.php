@@ -17,6 +17,7 @@
         $cliente = new Cliente($db);
 
         $cliente->clt_codigo = !empty($_GET['prcodigo']) ? trim($_GET['prcodigo']) : '';
+        $cliente->clt_cip = !empty($_GET['prcip']) ? trim($_GET['prcip']) : '';
         $cliente->clt_dni = !empty($_GET['prdni']) ? trim($_GET['prdni']) : '';
         $cliente->clt_nombre = !empty($_GET['prnombre']) ? trim($_GET['prnombre']) : '';
         $cliente->prpagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : 1;

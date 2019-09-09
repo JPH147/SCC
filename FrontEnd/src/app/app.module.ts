@@ -48,8 +48,10 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { LayoutModule } from '@angular/cdk/layout';
 // import { FileSelectDirective } from 'ng2-file-upload';
 
-import {routing, appRoutingProvider} from './app.routing';
+import { RouterModule } from '@angular/router';
+import {appRoutes} from './app.routing';
 import {Notificaciones} from './components/global/notificacion';
+import { ServiciosGenerales } from './components/global/servicios';
 
 /* Imports del software */
 import {AppComponent} from './app.component';
@@ -149,8 +151,16 @@ import { RefinanciamientoComponent } from './components/refinanciamiento/refinan
 import { VerPlantillasComponent } from './components/evaluacion/ver-plantillas/ver-plantillas.component';
 import { CobranzaDirectaComponent } from './components/cobranza-directa/cobranza-directa.component';
 import { CobranzaDirectaListarComponent } from './components/cobranza-directa-listar/cobranza-directa-listar.component';
+import { VentanaPagosComponent } from './components/cobranzas-listar/ventana-pagos/ventana-pagos.component';
+import { InstitucionesComponent } from './components/instituciones/instituciones.component';
+import { InstitucionComponent } from './components/instituciones/institucion/institucion.component';
+import { SedeComponent } from './components/instituciones/sede/sede.component';
+import { SubsedeComponent } from './components/instituciones/subsede/subsede.component';
 
 @NgModule({
+  exports:[
+    RouterModule
+  ],
   imports: [
     MatNativeDateModule,
     CdkTableModule,
@@ -196,7 +206,7 @@ import { CobranzaDirectaListarComponent } from './components/cobranza-directa-li
     MatNativeDateModule,
     ReactiveFormsModule,
     LayoutModule,
-    routing,
+    RouterModule.forRoot(appRoutes),
     ImageUploadModule.forRoot()
   ],
   declarations: [
@@ -302,7 +312,12 @@ import { CobranzaDirectaListarComponent } from './components/cobranza-directa-li
     RefinanciamientoComponent,
     VerPlantillasComponent,
     CobranzaDirectaComponent,
-    CobranzaDirectaListarComponent
+    CobranzaDirectaListarComponent,
+    VentanaPagosComponent,
+    InstitucionesComponent,
+    InstitucionComponent,
+    SedeComponent,
+    SubsedeComponent
    ],
   entryComponents: [
     AppComponent,
@@ -352,10 +367,15 @@ import { CobranzaDirectaListarComponent } from './components/cobranza-directa-li
     VentanaEntregaSeguimientosComponent,
     VentanaCourierComponent,
     VentanaPlantillasComponent,
-    VerPlantillasComponent
+    VerPlantillasComponent,
+    VentanaPagosComponent
   ],
   bootstrap: [AppComponent],
-  providers: [appRoutingProvider, Notificaciones,{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}]
+  providers: [
+    Notificaciones,
+    ServiciosGenerales,
+    {provide: MAT_DATE_LOCALE, useValue: 'en-GB'}
+  ]
 })
 
 export class AppModule {}

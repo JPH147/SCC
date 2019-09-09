@@ -1,5 +1,5 @@
 import {ModuleWithProviders} from '@angular/core';
-import {Routes, RouterModule} from '@angular/router';
+import {Routes, RouterModule, RoutesRecognized} from '@angular/router';
 
 import { UsuariosComponent } from './components/usuarios/usuarios.component';
 import { ProductosComponent } from './components/productos/productos.component';
@@ -42,8 +42,11 @@ import { PlantillasComponent } from './components/plantillas/plantillas.componen
 import { RefinanciamientoComponent } from './components/refinanciamiento/refinanciamiento.component';
 import { CobranzaDirectaComponent } from './components/cobranza-directa/cobranza-directa.component';
 import { CobranzaDirectaListarComponent } from './components/cobranza-directa-listar/cobranza-directa-listar.component';
+import { InstitucionComponent } from './components/instituciones/institucion/institucion.component';
+import { SedeComponent } from './components/instituciones/sede/sede.component';
+import { SubsedeComponent } from './components/instituciones/subsede/subsede.component';
 
-const appRoutes: Routes = [
+export const appRoutes: Routes = [
   // {path: '', component: ConsultarClienteComponent}, //prueba
   {path: 'usuarios', component: UsuariosComponent},
   {path: 'usuarios', component: UsuariosComponent},
@@ -92,16 +95,19 @@ const appRoutes: Routes = [
   {path: 'evaluacion-reglas', component: ReglasEvaluacionComponent},
   {path: 'cobranzas', component: CobranzasListarComponent},
   {path: 'cobranza-directa', component: CobranzaDirectaListarComponent},
-  {path: 'cobranza-directa/generar', component: CobranzaDirectaComponent},
+  {path: 'cobranza-directa/nueva', component: CobranzaDirectaComponent},
+  {path: 'cobranza-directa/ver/:idcobranza', component: CobranzaDirectaComponent},
+  {path: 'cobranza-directa/editar/:idcobranzaeditar', component: CobranzaDirectaComponent},
   {path: 'cobranza-archivos', component: CobranzaArchivosListarComponent},
   {path: 'cobranza-archivos/generar', component: CobranzaArchivosComponent},
   {path: 'trabajadores', component: TrabajadoresComponent},
   {path: 'registro-horas', component: RegistroHorasComponent},
   {path: 'reporte-asistencia', component: ReporteAsistenciaComponent},
   {path: 'plantillas', component: PlantillasComponent},
-  {path: 'prueba', component: CobranzaDirectaComponent},
+  {path: 'prueba', component: SubsedeComponent},
 ];
 
-export const appRoutingProvider: any[] = [];
-export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);
+// export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);
+// export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes,{ enableTracing: true });
+// export const routing: ModuleWithProviders = RouterModule.forChild(appRoutes);
 

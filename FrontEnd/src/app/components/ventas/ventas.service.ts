@@ -401,12 +401,12 @@ export class VentaService {
 
   ListarCronograma(
     id_venta:number,
-    proden:string,
+    orden:string,
   ){
     return this.http.get(this.url + 'venta/read-cronograma.php', {
       params: new HttpParams()
       .set('prventa',id_venta.toString())
-      .set('prorden',proden)
+      .set('prorden',orden)
     })
     .pipe(map(res => {
       if (res['codigo'] === 0) {

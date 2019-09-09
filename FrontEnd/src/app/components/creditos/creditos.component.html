@@ -541,7 +541,7 @@
             [extensions]="['png, jpg, jpeg']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
             (uploadFinished)="SubirArchivo($event, 1)">
-          </image-upload>  
+          </image-upload>
         </mat-grid-tile>
 
         <mat-grid-tile>
@@ -1181,7 +1181,7 @@
           <mat-form-field class="columnas-1">
             <input matInput [matDatepicker]="InputFechaPago" placeholder="Inicio de pagos" [min]="CreditosForm.value.fecha_credito" formControlName="fecha_pago" (dateChange)="CrearCronograma()" readonly>
             <mat-datepicker-toggle matSuffix [for]="InputFechaPago"></mat-datepicker-toggle>
-            <mat-datepicker #InputFechaPago [disabled]="id_credito || id_presupuesto || cliente_refinanciado"></mat-datepicker>
+            <mat-datepicker #InputFechaPago [disabled]="id_credito || id_tipo==1 || id_presupuesto || cliente_refinanciado"></mat-datepicker>
           </mat-form-field>
         </mat-grid-tile>
 
@@ -1201,7 +1201,7 @@
 
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
-            <input matInput type="number" placeholder="Interés" formControlName="interes" [readonly] = " id_presupuesto || cliente_refinanciado ">
+            <input matInput type="number" placeholder="Interés" formControlName="interes" [readonly] = "id_credito || id_tipo==1 || id_presupuesto || cliente_refinanciado ">
             <span matSuffix> % </span>
           </mat-form-field>
         </mat-grid-tile>
@@ -1268,7 +1268,7 @@
 
             </mat-cell>
           </ng-container>
-
+          
           <ng-container matColumnDef="fecha_vencimiento_ver">
             <mat-header-cell *matHeaderCellDef> Vencimiento </mat-header-cell>
             <mat-cell *matCellDef="let cronograma">
@@ -1277,20 +1277,20 @@
           </ng-container>
 
           <!-- Con el sort -->
-
-          <ng-container matColumnDef="monto_cuota">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Monto </mat-header-cell>
-            <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_cuota | currency:'S/.' }} </mat-cell>
-          </ng-container>
-
+          
           <ng-container matColumnDef="fecha_vencimiento">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Vencimiento </mat-header-cell>
             <mat-cell *matCellDef="let cronograma"> {{cronograma.fecha_vencimiento | date: 'dd/MM/yyyy'}} </mat-cell>
           </ng-container>
 
-          <ng-container matColumnDef="monto_interes">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Interés </mat-header-cell>
-            <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_interes | currency:'S/.'}}</mat-cell>
+          <ng-container matColumnDef="monto">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Monto </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma"> {{cronograma.monto | currency:'S/.' }} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="interes_generado">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Interés generado </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma"> {{cronograma.interes_generado | currency:'S/.'}}</mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="monto_pagado">
@@ -1299,13 +1299,11 @@
           </ng-container>
 
           <ng-container matColumnDef="fecha_cancelacion">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de cancelación </mat-header-cell>
-            <mat-cell *matCellDef="let cronograma"> {{cronograma.fecha_cancelacion | date: 'dd/MM/yyyy'}} </mat-cell>
-          </ng-container>
-
-          <ng-container matColumnDef="monto_pendiente">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Pendiente de pago </mat-header-cell>
-            <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_pendiente | currency:'S/.'}}</mat-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de pago </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma">
+              <ng-container *ngIf="cronograma.fecha_cancelacion"> {{ cronograma.fecha_cancelacion | date: 'dd/MM/yyyy' }} </ng-container>
+              <ng-container *ngIf="!cronograma.fecha_cancelacion"> - </ng-container>
+            </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="estado">

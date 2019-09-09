@@ -1,0 +1,56 @@
+<mat-card class="card">
+
+  <mat-toolbar color="primary">
+    <mat-toolbar-row>Detalle de pagos</mat-toolbar-row>
+  </mat-toolbar>
+
+  <mat-card-content>
+
+    <div class = "spinner-container" *ngIf = "ListadoPagos.Cargando| async">
+      <mat-spinner></mat-spinner>
+    </div>
+
+    <mat-table [dataSource]="ListadoPagos" class="mat-elevation-z8">
+
+      <ng-container matColumnDef="numero">
+        <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+        <mat-cell *matCellDef="let cuota"> {{cuota.numero}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="fecha_pago">
+        <mat-header-cell *matHeaderCellDef> Fecha de pago</mat-header-cell>
+        <mat-cell *matCellDef="let cuota"> {{cuota.fecha_pago | date:"dd/MM/yyyy"}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="tipo">
+        <mat-header-cell *matHeaderCellDef> Tipo de pago </mat-header-cell>
+        <mat-cell *matCellDef="let cuota"> {{cuota.tipo}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="documento">
+        <mat-header-cell *matHeaderCellDef> Comprobante </mat-header-cell>
+        <mat-cell *matCellDef="let cuota"> {{cuota.documento}} </mat-cell>
+      </ng-container>
+      
+      <ng-container matColumnDef="monto">
+        <mat-header-cell *matHeaderCellDef> Monto </mat-header-cell>
+        <mat-cell *matCellDef="let cuota"> {{cuota.monto | currency : 'S/.'}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="opciones">
+        <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
+        <mat-cell *matCellDef="let cuota">
+          <button mat-icon-button matTooltip="Ver" color="primary" (click)="Ver(cuota)"><mat-icon> visibility </mat-icon></button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: Columnas;"></mat-row>
+    </mat-table>
+
+    <mat-paginator [length]="ListadoPagos.TotalResultados | async" [pageSize]="5"></mat-paginator>
+
+  </mat-card-content>
+
+</mat-card>
+  

@@ -1151,19 +1151,19 @@
           </ng-container>
 
           <!-- Con el sort -->
+          
+          <ng-container matColumnDef="fecha_vencimiento">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Vencimiento </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma"> {{cronograma.fecha_vencimiento | date: 'dd/MM/yyyy'}} </mat-cell>
+          </ng-container>
 
           <ng-container matColumnDef="monto_cuota">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Monto </mat-header-cell>
             <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_cuota | currency:'S/.' }} </mat-cell>
           </ng-container>
 
-          <ng-container matColumnDef="fecha_vencimiento">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Vencimiento </mat-header-cell>
-            <mat-cell *matCellDef="let cronograma"> {{cronograma.fecha_vencimiento | date: 'dd/MM/yyyy'}} </mat-cell>
-          </ng-container>
-
           <ng-container matColumnDef="monto_interes">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Interés </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Interés generado </mat-header-cell>
             <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_interes | currency:'S/.'}}</mat-cell>
           </ng-container>
 
@@ -1173,13 +1173,11 @@
           </ng-container>
 
           <ng-container matColumnDef="fecha_cancelacion">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de cancelación </mat-header-cell>
-            <mat-cell *matCellDef="let cronograma"> {{cronograma.fecha_cancelacion | date: 'dd/MM/yyyy'}} </mat-cell>
-          </ng-container>
-
-          <ng-container matColumnDef="monto_pendiente">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Pendiente de pago </mat-header-cell>
-            <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_pendiente | currency:'S/.'}}</mat-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de pago </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma">
+              <ng-container *ngIf="cronograma.fecha_cancelacion"> {{ cronograma.fecha_cancelacion | date: 'dd/MM/yyyy' }} </ng-container>
+              <ng-container *ngIf="!cronograma.fecha_cancelacion"> - </ng-container>
+            </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="estado">

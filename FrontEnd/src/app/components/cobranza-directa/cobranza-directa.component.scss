@@ -22,6 +22,10 @@ mat-card{
   justify-content: center;
 }
 
+.principal{
+  top: 300px;
+}
+
 #tituloProd {
   padding: 25px;
   font-size: 30px;
@@ -61,4 +65,28 @@ mat-card{
   color: white !important;
   padding-top: 15px;
   padding-left: 2.5%;
+}
+
+.error-monto{
+  margin-left: 2.5%;
+  margin-bottom: 20px;
+}
+
+.icono{
+  float: right;
+  transform: translate(-20px, -12.5px);
+}
+
+.icono-documentos{
+  font-size: 35px;
+  height: 40px;
+  width: 40px;
+}
+
+.columnas5-3{
+  width: 80%
+}
+
+image-upload{
+  width: 70% !important;
 }

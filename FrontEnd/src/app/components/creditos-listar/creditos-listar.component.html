@@ -47,7 +47,7 @@
           <mat-option [value]=0>Todos</mat-option>
           <mat-option [value]=1>Activos</mat-option>
           <mat-option [value]=4>Refinanciados</mat-option>
-          <mat-option [value]=2>Anulados</mat-option>
+          <mat-option [value]=3>Anulados</mat-option>
         </mat-select>
       </mat-form-field>
     </mat-grid-tile>
@@ -121,8 +121,8 @@
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let credito">
           <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="['ver', credito.id]"><mat-icon> visibility </mat-icon></button>
-          <button mat-icon-button color="primary" matTooltip="Editar" [disabled]="credito.estado>1 || credito.tipo_credito == 'Aporte de socio'" [routerLink]="['editar', credito.id]"><mat-icon> edit </mat-icon></button>
-          <button mat-icon-button color="primary" matTooltip="Anular" [disabled]="credito.estado!=1" (click)="AnularCredito(credito)"><mat-icon> delete </mat-icon></button>
+          <button mat-icon-button color="primary" matTooltip="Editar" [disabled]="credito.monto_pagado>0 || credito.estado!=1 || credito.tipo_credito == 'Aporte de socio'" [routerLink]="['editar', credito.id]"><mat-icon> edit </mat-icon></button>
+          <button mat-icon-button color="primary" matTooltip="Anular" [disabled]="credito.monto_pagado>0 || credito.estado!=1" (click)="AnularCredito(credito)"><mat-icon> delete </mat-icon></button>
         </mat-cell>
       </ng-container>
 

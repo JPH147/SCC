@@ -18,11 +18,11 @@ import * as moment from 'moment';
 import {Location} from '@angular/common';
 import {Notificaciones} from '../global/notificacion';
 import {URLIMAGENES} from '../global/url'
-import {VentanaCronogramaComponent} from './ventana-cronograma/ventana-cronograma.component';
 import {SeleccionarClienteComponent} from '../retorno-vendedores/seleccionar-cliente/seleccionar-cliente.component';
 import { VentanaEmergenteContacto} from '../clientes/ventana-emergentecontacto/ventanaemergentecontacto';
 import { CreditosService } from "../creditos/creditos.service";
 import { SeguimientosService } from "../seguimientos/seguimientos.service";
+import { VentanaPagosComponent } from '../cobranzas-listar/ventana-pagos/ventana-pagos.component';
 
 @Component({
   selector: 'app-ventas',
@@ -222,8 +222,9 @@ export class VentasComponent implements OnInit {
 
         // Cuando se ve una venta
         if(params['idventa']){
-          this.Columnas= ['numero', 'monto_cuota','fecha_vencimiento', 'monto_interes','monto_pagado', 'fecha_cancelacion', 'monto_pendiente','estado', 'opciones'];
+          this.Columnas= ['numero','fecha_vencimiento', 'monto_cuota', 'monto_interes','monto_pagado', 'fecha_cancelacion','estado', 'opciones'];
           this.idventa = +params['idventa'];
+          // this.idventa=77;
           this.SeleccionarVentaxId(this.idventa);
         }
   
@@ -1255,9 +1256,9 @@ export class VentasComponent implements OnInit {
   }
 
   VerDetallePagos(cronograma){
-    let Ventana = this.Dialogo.open(VentanaCronogramaComponent,{
+    let Ventana = this.Dialogo.open(VentanaPagosComponent,{
       width: '900px',
-      data: {numero: cronograma.numero, id:cronograma.id_cronograma}
+      data: { tipo: 2 , cuota : cronograma.id_cronograma }
     })
   }
 
