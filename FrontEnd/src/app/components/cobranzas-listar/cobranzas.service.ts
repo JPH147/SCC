@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http'
-import {map} from 'rxjs/operators';
-import {URL} from '../global/url';
+import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { URL, URLIMAGENES } from '../global/url';
 import * as moment from 'moment';
 
 @Injectable({
@@ -11,6 +11,7 @@ import * as moment from 'moment';
 export class CobranzasService {
 
   public url: string = URL.url;
+  public url_imagenes: string = URLIMAGENES.urlimages;
 
   constructor(
     private http: HttpClient
@@ -52,18 +53,18 @@ export class CobranzasService {
   }
 
   ListarPNP(
-    fecha_inicio : Date,
+    sede : number ,
+    fecha_inicio : Date ,
     fecha_fin : Date
   ){
+    // Se envía null para que se muestren las deudas hasta la fecha
     let params = new HttpParams()
-      .set('prfechainicio', moment(fecha_inicio).format("YYYY-MM-DD"))
-      .set('prfechafin', moment(fecha_fin).format("YYYY-MM-DD"))
-
-     console.log(params)
+      .set('prsede', sede.toString() )
+      // .set('prfechainicio', moment(fecha_inicio).format("YYYY-MM-DD"))
+      .set('prfechafin', moment(fecha_fin).format("YYYY-MM-DD") );
 
     return this.http.get(this.url + 'cobranza/read-pnp.php', {params})
     .pipe(map(res => {
-     console.log(res)
       if (res['codigo'] === 0) {
         return res;
       } else {
@@ -83,11 +84,27 @@ export class CobranzasService {
       .set('prarchivo', nombre_archivo)
       .set('contenido', informacion.toString())
 
-    console.log(params);
-
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'cobranza/generar-pnp.php', params, {headers: headers});
+  }
+
+  MoverArchivoPNP(
+    nameimg: string,
+    nombre: string,
+  ): Observable <any> {
+
+    if (!nameimg) {
+      return of({codigo:1, data:"",mensaje:""});
+    }
+
+    let params = new  HttpParams()
+      .set('nameimg', nameimg.trim())
+      .set('tipodoc', nombre.trim());
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post( this.url + 'cobranza/upload-planilla.php', params , { headers : headers } )
   }
 
   CrearCabecera(
@@ -97,22 +114,23 @@ export class CobranzasService {
     fecha_fin : Date,
     cantidad : number,
     monto : number,
-    archivo : string
+    archivo : string,
+    detalle : Array<any>
   ){
 
     let params = new HttpParams()
-      // .set('prinstitucion', institucion.toString())
       .set('prsede', sede.toString())
       .set('prtipopago', tipo_pago.toString())
-      .set('prfechainicio', moment(fecha_inicio).format("YYYY-MM-DD"))
+      // .set('prfechainicio', moment(fecha_inicio).format("YYYY-MM-DD"))
       .set('prfechafin', moment(fecha_fin).format("YYYY-MM-DD"))
       .set('prcantidad', cantidad.toString())
       .set('prmonto', monto.toString())
       .set('prarchivo', archivo)
+      .set('prdetalle', JSON.stringify(detalle) );
 
-    console.log(params);
+      console.log(params);
 
-    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+      let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'cobranza/create-archivos-cabecera.php', params, {headers: headers});
 
@@ -130,8 +148,6 @@ export class CobranzasService {
       .set('prcodofin', codigo.toString())
       .set('prmonto', monto.toString())
 
-    console.log(params);
-
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     return this.http.post(this.url + 'cobranza/create-archivos-detalle.php', params, {headers: headers});
   }
@@ -143,9 +159,8 @@ export class CobranzasService {
     let params = new HttpParams()
       .set('prpagina', numero_pagina.toString())
       .set('prtotalpagina', total_pagina.toString())
-      console.log(params);
 
-    return this.http.get(this.url + 'cobranza/read.php', {params})
+    return this.http.get(this.url + 'cobranza/read-planilla.php', {params})
     .pipe(map(res => {
       if (res['codigo'] === 0) {
         return res;
@@ -279,6 +294,28 @@ export class CobranzasService {
     }));
   }
 
+  ListarCobranzasRealizadasxPlanilla(
+    id_cliente : number ,
+    monto : number
+  ):Observable<any>{
+
+    let params = new HttpParams()
+      .set('prcliente', id_cliente.toString())
+      .set('prmonto', monto.toString());
+
+    console.log(params);
+
+    return this.http.get( this.url + 'cobranza/read-cobranzas-realizadas-planilla.php', { params } )
+    .pipe(map(res=>{
+      if(res['codigo']===0){
+        return res['data'];
+      } else {
+        console.log('No hay datos que mostrar');
+        return [];
+      }
+    }));
+  }
+
   CrearCobranzaDirecta(
     fecha : Date,
     cliente : number,
@@ -405,6 +442,21 @@ export class CobranzasService {
         return false;
       }
     }));
+  }
+
+  CrearArchivoPNP(
+    codigo_cooperativa : string ,
+    nombre_archivo : string ,
+    detalle : Array<any>
+  ){
+    let params = new HttpParams()
+      .set('prcodigo', codigo_cooperativa )
+      .set('prarchivo', nombre_archivo )
+      .set('prdetalle', JSON.stringify(detalle) ) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'cobranza/create-archivo-pnp.php', params, {headers: headers});
   }
 
 }

@@ -26,8 +26,9 @@ import { VentasSalidaComponent } from './components/ventas-salida/ventas-salida.
 import { CreditosListarComponent } from './components/creditos-listar/creditos-listar.component';
 import { CreditosListarAfiliacionesComponent } from './components/creditos-listar-afiliaciones/creditos-listar-afiliaciones.component';
 import { CreditosComponent } from './components/creditos/creditos.component';
-import { CobranzaArchivosComponent } from './components/cobranza-archivos/cobranza-archivos.component';
 import { CobranzasListarComponent } from './components/cobranzas-listar/cobranzas-listar.component';
+import { CobranzaArchivosComponent } from './components/cobranza-archivos/cobranza-archivos.component';
+import { CobranzaArchivosPagoComponent } from './components/cobranza-archivos-pago/cobranza-archivos-pago.component';
 import { CobranzaArchivosListarComponent } from './components/cobranza-archivos-listar/cobranza-archivos-listar.component';
 import { TrabajadoresComponent } from './components/trabajadores/trabajadores.component';
 import { RegistroHorasComponent } from './components/registro-horas/registro-horas.component';
@@ -104,7 +105,7 @@ export const appRoutes: Routes = [
   {path: 'registro-horas', component: RegistroHorasComponent},
   {path: 'reporte-asistencia', component: ReporteAsistenciaComponent},
   {path: 'plantillas', component: PlantillasComponent},
-  {path: 'prueba', component: SubsedeComponent},
+  {path: 'prueba', component: CobranzaArchivosComponent},
 ];
 
 // export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);

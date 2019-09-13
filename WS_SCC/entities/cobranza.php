@@ -4,7 +4,8 @@
 
     private $conn;
           
-    public $path = '../descuentos/';
+    public $path = '../uploads/planilla-descuentos/';
+    public $path_cobros = '../uploads/planilla-cobros/';
 
     public $id_cobranza;
     public $total_resultado;
@@ -38,6 +39,7 @@
     public $operacion;
     public $solo_directas;
     public $observaciones;
+    public $detalle_cabecera;
 
     public function __construct($db){
       $this->conn = $db;
@@ -178,12 +180,13 @@
 
     function read_pnp(){
 
-      $query = "CALL sp_listarcronogramaxcobrarpnp(?,?)";
+      $query = "CALL sp_listarcronogramaxcobrarpnp(?,?,?)";
 
       $result = $this->conn->prepare($query);
 
-      $result->bindParam(1, $this->fecha_inicio);
-      $result->bindParam(2, $this->fecha_fin);
+      $result->bindParam(1, $this->sede);
+      $result->bindParam(2, $this->fecha_inicio);
+      $result->bindParam(3, $this->fecha_fin);
 
       $result->execute();
 
@@ -198,13 +201,18 @@
           $contador=$contador+1;
           $items = array (
             "numero"=>$contador,
+            "id"=>$id,
+            "id_tipo"=>$id_tipo,
+            "tipo"=>$tipo,
+            "codigo"=>$codigo,
             "codofin"=>$codofin,
             "cip"=>$cip,
             "id_cliente"=>$id_cliente,
             "cliente"=>$cliente,
             "fecha"=>$fecha,
             "monto_pendiente"=>$monto_pendiente,
-            "archivo"=>$archivo
+            // "archivo"=>$archivo,
+            "considerar"=>true,
           );
           array_push($cronograma["cronograma"],$items);
       }
@@ -214,12 +222,13 @@
 
     function read_pnp_total(){
 
-      $query = "CALL sp_listarcronogramaxcobrarpnptotal(?,?)";
+      $query = "CALL sp_listarcronogramaxcobrarpnptotal(?,?,?)";
 
       $result = $this->conn->prepare($query);
 
-      $result->bindParam(1, $this->fecha_inicio);
-      $result->bindParam(2, $this->fecha_fin);
+      $result->bindParam(1, $this->sede);
+      $result->bindParam(2, $this->fecha_inicio);
+      $result->bindParam(3, $this->fecha_fin);
 
       $result->execute();
 
@@ -234,9 +243,9 @@
 
       $file = fopen($this->path.$this->archivo.".txt", "w") or die();
 
-      $array =  explode(",",$this->contenido);
+      $array = $this->contenido;
 
-      foreach($array as $item){
+      foreach($this->contenido as $item){
         fwrite($file, $item."\n");
 
         if( !next( $array ) ) {
@@ -270,56 +279,72 @@
 
       $this->sede=htmlspecialchars(strip_tags($this->sede));
       $this->tipo_pago=htmlspecialchars(strip_tags($this->tipo_pago));
-      $this->fecha_inicio=htmlspecialchars(strip_tags($this->fecha_inicio));
+      // $this->fecha_inicio=htmlspecialchars(strip_tags($this->fecha_inicio));
       $this->fecha_fin=htmlspecialchars(strip_tags($this->fecha_fin));
       $this->cantidad=htmlspecialchars(strip_tags($this->cantidad));
       $this->monto=htmlspecialchars(strip_tags($this->monto));
       $this->archivo=htmlspecialchars(strip_tags($this->archivo));
 
-
       if($result->execute())
       {
-          while($row = $result->fetch(PDO::FETCH_ASSOC))
-          {
-              extract($row);
-              $this->id_cobranza=$id;
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        $this->id_cobranza = $row['id'];
+
+        foreach ($this->detalle_cabecera as $item) {
+          // echo "Tipo:" . $item->id_tipo . "/n" ;
+          if( $item->considerar ){
+            if( $item->id_tipo == 3 ) {
+              // echo "TipoV:" . $item->id_tipo . "/n" ;
+              $this->create_archivos_detalle($item->id_cliente, 0, $item->id, $item->monto_pendiente) ;
+            } else {
+              // echo "TipoC:" . $item->id_tipo . "/n" ;
+              $this->create_archivos_detalle($item->id_cliente, $item->id, 0, $item->monto_pendiente) ;
+            }
           }
-          return true;
+        }
+        
+        return true;
       }
       return false;
     }
 
-    function create_archivos_detalle(){
+    function create_archivos_detalle($cliente, $credito_cronongrama, $venta_cronograma, $monto){
       $query = "CALL sp_crearcobranzaarchivosdetalle(
         :prcobranza,
         :prcliente,
-        :prcodofin,
+        :prcreditocronograma,
+        :prventacronograma,
         :prmonto
       )";
 
       $result = $this->conn->prepare($query);
 
       $result->bindParam(":prcobranza", $this->id_cobranza);
-      $result->bindParam(":prcliente", $this->cliente);
-      $result->bindParam(":prcodofin", $this->codigo);
-      $result->bindParam(":prmonto", $this->monto);
+      $result->bindParam(":prcliente", $cliente);
+      $result->bindParam(":prcreditocronograma", $credito_cronongrama);
+      $result->bindParam(":prventacronograma", $venta_cronograma);
+      $result->bindParam(":prmonto", $monto);
 
       $this->id_cobranza=htmlspecialchars(strip_tags($this->id_cobranza));
-      $this->cliente=htmlspecialchars(strip_tags($this->cliente));
-      $this->codigo=htmlspecialchars(strip_tags($this->codigo));
-      $this->monto=htmlspecialchars(strip_tags($this->monto));
+      $cliente=htmlspecialchars(strip_tags($cliente));
+      $credito_cronongrama=htmlspecialchars(strip_tags($credito_cronongrama));
+      $venta_cronograma=htmlspecialchars(strip_tags($venta_cronograma));
+      $monto=htmlspecialchars(strip_tags($monto));
 
-
-      if($result->execute())
+      if( $result->execute() )
       {
-          return true;
+        echo "1-ParamsOK:" . " id: ".$this->id_cobranza . " cliente: " . $cliente . " cc: " . $credito_cronongrama . " vc: " . $venta_cronograma . " monto: " . $monto . "\n";
+        return true;
+      } else {
+        echo "ParamsErr:" . " id: ".$this->id_cobranza . " cliente: " . $cliente . " cc: " . $credito_cronongrama . " vc: " . $venta_cronograma . " monto: " . $monto . "\n";
+        return false;
       }
-      return false;
     
     }
 
-    function read_cabecera(){
-      $query = "CALL sp_listarcobranzacabecera(?,?)";
+    function read_planilla_cabecera(){
+      $query = "CALL sp_listarcobranzaplanillacabecera(?,?)";
 
       $result = $this->conn->prepare($query);
 
@@ -339,6 +364,7 @@
           $contador=$contador+1;
           $items = array (
             "numero"=>$contador,
+            "id"=>$id,
             "fecha_creacion"=>$fecha_creacion,
             "sede"=>$sede,
             "tipo_pago"=>$tipo_pago,
@@ -355,9 +381,9 @@
     
     }
 
-    function read_cabecera_contar(){
+    function read_planilla_cabecera_contar(){
 
-      $query = "CALL sp_listarcobranzacabeceracontar()";
+      $query = "CALL sp_listarcobranzaplanillacabeceracontar()";
 
       $result = $this->conn->prepare($query);
 
@@ -709,6 +735,55 @@
             "monto_pendiente" => $monto_pendiente ,
             "fecha_vencimiento" => $fecha_vencimiento ,
             "pagar" => 0 ,
+            "fecha_cancelacion" => $fecha_cancelacion ,
+            "estado" => $estado ,
+            "id_estado" => $id_estado ,
+          );
+          array_push($cronograma["cuotas"],$items);
+      }
+
+      return $cronograma;
+
+    }
+
+    function seleccionar_cuotas_pagadas_planilla(){
+      $query = "CALL sp_listarcobranzasrealizadasplanilla(?,?)";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(1, $this->cliente);
+      $result->bindParam(2, $this->monto);
+
+      $result->execute();
+
+      $cronograma=array();
+      $cronograma["cuotas"]=array();
+
+      $contador = 0;
+      $comodin = $this->monto ;
+
+      while($row = $result->fetch(PDO::FETCH_ASSOC))
+      {
+          extract($row);
+          $contador=$contador+1;
+          if( $comodin > $monto_pendiente) {
+            $pagar = $monto_pendiente ;
+            $comodin = ROUND($comodin - $monto_pendiente ,2) ;
+          } else {
+            $pagar = $comodin ;
+          }
+          $items = array (
+            "id" => $id ,
+            "id_cronograma" => $id_cronograma ,
+            "id_tipo" => $id_tipo ,
+            "tipo" => $tipo ,
+            "codigo" => $codigo ,
+            "capital" => $capital ,
+            "interes" => $interes ,
+            "monto_total" => $monto_total ,
+            "monto_pendiente" => $monto_pendiente ,
+            "fecha_vencimiento" => $fecha_vencimiento ,
+            "pagar" => $pagar ,
             "fecha_cancelacion" => $fecha_cancelacion ,
             "estado" => $estado ,
             "id_estado" => $id_estado ,

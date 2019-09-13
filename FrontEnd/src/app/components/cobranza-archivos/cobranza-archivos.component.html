@@ -7,23 +7,36 @@
     <div id="tituloProd"> Generador de Archivos </div>
   </mat-card-title>
 
- <form [formGroup]="CobranzaForm"  (ngSubmit)="Guardar(CobranzaForm)">     
+ <form [formGroup]="CobranzaForm">     
    
-  <mat-grid-list cols= "12" rowHeight="70px">
+  <mat-grid-list cols= "4" rowHeight="70px">
 
-    <mat-grid-tile colspan="4" >
-      <mat-form-field class="input-ventana">
+    <mat-grid-tile colspan="1">
+      <mat-form-field class="columnas-1">
         <mat-select placeholder='Selecciona Institución'  formControlName="institucion" (selectionChange)="InstitucionSeleccionada($event)">
           <mat-option *ngFor="let institucion of Institucion" [value]="institucion.id"> {{institucion.nombre}} </mat-option>
         </mat-select>
       </mat-form-field>
     </mat-grid-tile>
 
-    <mat-grid-tile colspan="5">
-      <mat-form-field class="input-ventana">
+    <mat-grid-tile colspan="1">
+      <mat-form-field class="columnas-1">
         <mat-select placeholder='Selecciona Sede' formControlName="sede" (selectionChange)="SedeSeleccionada($event)">
           <mat-option *ngFor="let sede of Sede" [value] = "sede.id"> {{sede.nombre}} </mat-option>
         </mat-select>
+      </mat-form-field>
+    </mat-grid-tile>
+
+    <mat-grid-tile>
+    </mat-grid-tile>
+
+    <mat-grid-tile>
+      <mat-form-field class="columnas-1">
+        <input matInput [matDatepicker]="FFin" placeholder="Periodo de cobranza" formControlName="fecha_fin" (dateChange)="EmitirInformacion()" readonly>
+        <mat-datepicker-toggle matSuffix [for]="FFin"></mat-datepicker-toggle>
+        <mat-datepicker #FFin startView="year"
+                        (yearSelected)="AnoElegido($event)"
+                        (monthSelected)="MesElegico($event, FFin)"></mat-datepicker>
       </mat-form-field>
     </mat-grid-tile>
 
@@ -31,17 +44,9 @@
 
   </form>
 
- <!-- PAra Ministerio de interior Policia ejercito  -->
-  <ng-container *ngIf="sede==3 "> 
-
-    <app-cobranza-pnp [sede_elegida]="sede"></app-cobranza-pnp>
-
-  </ng-container>
-
-  <ng-container *ngIf="sede==4"> 
-
-      <app-cobranza-pnp  [sede_elegida]="sede"></app-cobranza-pnp>
-  
+  <!-- Para Ministerio del Interior  -->
+  <ng-container *ngIf="CobranzaForm.value.institucion==4 "> 
+    <app-cobranza-pnp [sede_seleccionada]="sede"></app-cobranza-pnp>
   </ng-container>
 
 </mat-card>

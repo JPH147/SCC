@@ -36,7 +36,7 @@ export class PlantillasService {
   ){
     let testData:FormData = new FormData();
     testData.append('image', file, file.name);
-    console.log(testData);
+    // console.log(testData);
     return this.http.post(this.url_imagenes, testData);
   }
 

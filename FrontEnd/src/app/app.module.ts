@@ -123,10 +123,11 @@ import { RetornoVendedoresCierreComponent } from './components/retorno-vendedore
 import { VentasSalidaComponent } from './components/ventas-salida/ventas-salida.component';
 import { CreditosComponent } from './components/creditos/creditos.component';
 import { CreditosListarComponent } from './components/creditos-listar/creditos-listar.component';
-import { CobranzaArchivosComponent } from './components/cobranza-archivos/cobranza-archivos.component';
 import { CobranzasListarComponent } from './components/cobranzas-listar/cobranzas-listar.component';
 import { CobranzaPnpComponent } from './components/cobranza-archivos/cobranza-pnp/cobranza-pnp.component';
 import { CobranzaArchivosListarComponent } from './components/cobranza-archivos-listar/cobranza-archivos-listar.component';
+import { CobranzaArchivosComponent } from './components/cobranza-archivos/cobranza-archivos.component';
+import { CobranzaArchivosPagoComponent } from './components/cobranza-archivos-pago/cobranza-archivos-pago.component';
 import { VentanaTrabajadoresComponent } from './components/trabajadores/ventana-trabajador/ventana-trabajador.component';
 import { TrabajadoresComponent } from './components/trabajadores/trabajadores.component';
 import { RegistroHorasComponent } from './components/registro-horas/registro-horas.component';
@@ -317,7 +318,8 @@ import { SubsedeComponent } from './components/instituciones/subsede/subsede.com
     InstitucionesComponent,
     InstitucionComponent,
     SedeComponent,
-    SubsedeComponent
+    SubsedeComponent,
+    CobranzaArchivosPagoComponent
    ],
   entryComponents: [
     AppComponent,

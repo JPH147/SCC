@@ -19,8 +19,8 @@
         $cobranza->numero_pagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : 1;
         $cobranza->total_pagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : 20;
 
-        $cobranza_list = $cobranza->read_cabecera();
-        $cobranza_contar = $cobranza->read_cabecera_contar();
+        $cobranza_list = $cobranza->read_planilla_cabecera();
+        $cobranza_contar = $cobranza->read_planilla_cabecera_contar();
 
         if (count(array_filter($cobranza_list))>0)
         { 

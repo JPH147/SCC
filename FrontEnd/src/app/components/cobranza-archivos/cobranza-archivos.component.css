@@ -25,19 +25,10 @@ mat-card{
   font-family: sans-serif;
 }
 
+.columnas-1{
+  width: 80%
+}
+
 .columnas-2{
   width: 90%
-}
-
-
-.input-ventanaa{ 
-  width:85%
-}
-
-.input-ventana{ 
-  width:88%
-}
-
-.input-ventanac{ 
-  width:92%
 }

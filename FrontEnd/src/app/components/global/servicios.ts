@@ -345,7 +345,7 @@ EditarModelo(
   ListarSede(
     id_institucion: number,
     sd_nombre: string
-  ): Observable<Sede>	{
+  ): Observable<any>	{
       return this.http.get(this.url + 'sede/read.php?id_institucion=' + id_institucion + '&sd_nombre' + sd_nombre)
       .pipe(map(res => {
       if (res['codigo'] === 0 ) {
@@ -358,9 +358,9 @@ EditarModelo(
   }
 
   ListarSubsede(
-  id_sede: number,
-  ssd_nombre: string
-    ): Observable<Sede> {
+    id_sede: number,
+    ssd_nombre: string
+  ): Observable<Sede> {
       return this.http.get(this.url + 'subsede/read.php?id_sede=' + id_sede + '&ssd_nombre' + ssd_nombre)
       .pipe(map(res => {
       if (res['codigo'] === 0 ) {

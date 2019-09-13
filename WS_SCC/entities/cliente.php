@@ -462,5 +462,30 @@ Class Cliente{
         return $cliente;
 
     }
+
+    function search_codigo( $codigo , $institucion ){
+        
+        $query ="CALL sp_buscarclientexcodigoinstitucion(?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam( 1 , $codigo );
+        $result->bindParam( 2 , $institucion );
+
+        $result->execute();
+    
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        $cliente = array(
+            "id" => $row['id'] ,
+            "dni" => $row['dni'] ,
+            "nombre" => $row['nombre'] ,
+            "codigo" => $row['codigo'] ,
+            "cip" => $row['cip']
+        );
+
+        return $cliente;
+
+    }
 }
 ?>

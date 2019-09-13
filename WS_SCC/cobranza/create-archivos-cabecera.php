@@ -16,16 +16,17 @@
     {
         $cobranza = new Cobranzas($db);
 
-        if (($_POST["prsede"])!=null)
+        if ( ($_POST["prsede"])!=null && ($_POST["prdetalle"])!=null )
         {
             // $cobranza->institucion=trim($_POST["prinstitucion"]);
             $cobranza->sede=trim($_POST["prsede"]);
             $cobranza->tipo_pago=trim($_POST["prtipopago"]);
-            $cobranza->fecha_inicio=trim($_POST["prfechainicio"]);
+            $cobranza->fecha_inicio=null;
             $cobranza->fecha_fin=trim($_POST["prfechafin"]);
             $cobranza->cantidad=trim($_POST["prcantidad"]);
             $cobranza->monto=trim($_POST["prmonto"]);
             $cobranza->archivo=trim($_POST["prarchivo"]);
+            $cobranza->detalle_cabecera=json_decode( trim($_POST["prdetalle"]) );
 
             if($cobranza->create_archivos_cabecera())
             {

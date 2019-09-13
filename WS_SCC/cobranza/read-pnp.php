@@ -16,21 +16,22 @@
     try{
         $cobranza = new Cobranzas($db);
 
+        $cobranza->sede = !empty($_GET['prsede']) ? trim($_GET['prsede']) : die();
         $cobranza->fecha_inicio = !empty($_GET['prfechainicio']) ? trim($_GET['prfechainicio']) : null;
         $cobranza->fecha_fin = !empty($_GET['prfechafin']) ? trim($_GET['prfechafin']) : null;
 
         $cobranza->read_pnp_total();
 
-        $cobranza_totales = array(
+        /*$cobranza_totales = array(
             "cantidad" => $cobranza->cantidad,
             "total" => $cobranza->total
-	    );
+	    );*/
 
         $cobranza_list = $cobranza->read_pnp();
 
         if (count(array_filter($cobranza_list))>0)
         { 
-            print_json("0000", $cobranza_totales, $cobranza_list);
+            print_json("0000", 0, $cobranza_list);
         }
         else
         { print_json("0001", 1, $cobranza_list); }

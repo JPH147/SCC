@@ -13,7 +13,6 @@
     $ext = pathinfo($nameimg, PATHINFO_EXTENSION);
 
     $return_name =$tipodoc;
-    $return_name2 ="JeanPierre.txt";
 
     $return_path =$path.$return_name; //destino
     $path_destino = $path_final.$return_name;
