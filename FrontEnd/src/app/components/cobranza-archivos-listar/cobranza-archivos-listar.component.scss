@@ -37,13 +37,10 @@
     max-width: 10%;
   }
 
-  .mat-column-fecha_inicio,
   .mat-column-fecha_creacion,
-  .mat-column-monto
+  .mat-column-fecha_fin,
+  .mat-column-monto,
+  .mat-column-estado
   {
-    max-width: 15%;
-  }
-
-  .mat-column-sede{
-    max-width: 25%;
+    max-width: 10%;
   }

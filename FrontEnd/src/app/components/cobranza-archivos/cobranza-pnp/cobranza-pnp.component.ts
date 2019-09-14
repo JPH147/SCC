@@ -17,7 +17,7 @@ export class CobranzaPnpComponent implements OnInit {
   @Input() sede_seleccionada: BehaviorSubject<any>;
 
   public ListadoCobranzaPNP: CobranzaPNPDataSource;
-  public Columnas: string[] = ['numero', 'tipo', 'codigo', 'cliente', 'monto', 'opciones'];
+  public Columnas: string[] = ['numero', 'tipo', 'codigo', 'fecha', 'cliente', 'monto', 'opciones'];
 
   public sede : number ;
   public fecha_inicio : Date ;
@@ -122,6 +122,7 @@ export class CobranzaPnpComponent implements OnInit {
   Guardar(){
 
     let nombre_archivo : string = "H" + this.codigo_cooperativa + moment(this.fecha_fin).format("YYYYMM") ;
+    this.ListadoCobranzaPNP.CargandoInformacion.next(true);
 
     this.Servicio.CrearArchivoPNP(this.codigo_cooperativa, nombre_archivo,this.ListadoCobranzaPNP.InformacionCobranzas.value).subscribe(res=>{
       // console.log(res);
@@ -135,16 +136,20 @@ export class CobranzaPnpComponent implements OnInit {
           this.ListadoCobranzaPNP.totales.total,
           nombre_archivo,
           this.ListadoCobranzaPNP.InformacionCobranzas.value
-        ).subscribe(res=>{
+        )
+        .pipe(finalize(()=>this.ListadoCobranzaPNP.CargandoInformacion.next(true)))
+        .subscribe(res=>{
           if(res['codigo']===0){
             this.notificacion.Snack("Se registró la cobranza satisfactoriamente.","") ;
           } else {
             this.notificacion.Snack("Ocurrió un error al registrar la cobranza.","") ;
           }
-          // this.router.navigate(['/cobranza-archivos']) ;
+          this.router.navigate(['/cobranza-archivos']) ;
         })
       } else {
+        this.ListadoCobranzaPNP.CargandoInformacion.next(true) ;
         this.notificacion.Snack("Ocurrió un error al crear el archivo, inténtelo nuevamente en un momento.","")
+        this.router.navigate(['/cobranza-archivos']) ;
       }
     })
   }
@@ -155,7 +160,7 @@ export class CobranzaPnpComponent implements OnInit {
 export class CobranzaPNPDataSource implements DataSource<any> {
 
   public InformacionCobranzas = new BehaviorSubject<any[]>([]);
-  private CargandoInformacion = new BehaviorSubject<boolean>(false);
+  public CargandoInformacion = new BehaviorSubject<boolean>(false);
   public totales: any = {cantidad : 0, total: 0};
   public informacion : Array <any>;
 

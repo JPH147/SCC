@@ -6,6 +6,8 @@ import { CobranzasService } from '../cobranzas-listar/cobranzas.service';
 import { PlantillasService } from '../plantillas/plantillas.service';
 import { finalize } from 'rxjs/operators';
 import { isNgTemplate } from '@angular/compiler';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Notificaciones } from '../global/notificacion';
 
 @Component({
   selector: 'app-cobranza-archivos-pago',
@@ -17,6 +19,7 @@ export class CobranzaArchivosPagoComponent implements OnInit {
   public Cargando = new BehaviorSubject<boolean>(false);
   public PagosPlanillaForm : FormGroup ;
 
+  public id_cabecera : number ;
   public archivo : File ;
   public archivo_nombre : string ;
   public es_txt : boolean ;
@@ -24,14 +27,27 @@ export class CobranzaArchivosPagoComponent implements OnInit {
   public Descuentos : Array<any> = [] ;
 
   constructor(
+    private route : ActivatedRoute ,
+    private router : Router ,
     private location : Location ,
     private Builder : FormBuilder ,
     private Servicio : CobranzasService ,
     private PServicio : PlantillasService ,
+    private notificacion : Notificaciones ,
   ) { }
 
   ngOnInit() {
     this.CrearFormulario();
+
+    this.route.params.subscribe(params => {
+      if(Object.keys(params).length>0){
+        if(params['id']){
+          // this.id_cabecera=1;
+          this.id_cabecera=params['id'];
+        }
+      }
+    })
+
   }
 
   Atras(){
@@ -99,15 +115,65 @@ export class CobranzaArchivosPagoComponent implements OnInit {
 
   VerificarPagos(){
     this.Descuentos.forEach((item)=>{
+      // console.log(item)
       item.completado = false ;
       if( item.cliente ) {
-        this.Servicio.ListarCobranzasRealizadasxPlanilla(item.cliente.id,item.descuento)
-        .pipe( finalize(()=>{item.completado = true }) )
-        .subscribe(res=>{
-          item.realizados = res.cuotas
-        });
+        if( item.descuento > 0 ) {
+          this.Servicio.ListarCobranzasRealizadasxPlanilla(this.id_cabecera,item.cliente.id,item.descuento)
+          .pipe( finalize(()=>{
+            item.completado = true
+          }) )
+          .subscribe(res=>{
+            item.realizados = res ;
+          });
+        } else {
+          item.completado = true ;
+          item.realizados = [] ;
+        }
       }
     })
+  }
+
+  Guardar(){
+
+    this.Cargando.next(true);
+
+    let i : number = 0, i2 : number = 0 ;
+    let array_descontados :Array<any> = [];
+    let total = this.Descuentos.length, total2 = 0 ;
+
+    this.Descuentos.forEach((item)=>{
+      i++;
+      if(item.realizados.length>0){
+        total2 = item.realizados.length ;
+        i2 = 0 ;
+        console.log(item.realizados, i, total);
+        item.realizados.forEach((item2)=>{
+          array_descontados.push(item2);
+          i2++;
+          if( i==total && i2==total2 ) {
+            this.Servicio.CrearCabeceraPago(
+              this.id_cabecera,
+              new Date(),
+              this.PagosPlanillaForm.value.total_descuentos,
+              array_descontados
+            )
+            .pipe(finalize( ()=>{
+              this.Cargando.next(false)
+            }) )
+            .subscribe(res=>{
+              if(res['codigo']==0){
+                this.notificacion.Snack("Se registró el pago satisfactoriamente.","")
+              } else {
+                this.notificacion.Snack("Ocurrió un error al registrar el pago.","")
+              }
+              this.router.navigate(['/cobranza-archivos']);
+            })
+          }
+        });
+      }
+    });
+
   }
 
 }

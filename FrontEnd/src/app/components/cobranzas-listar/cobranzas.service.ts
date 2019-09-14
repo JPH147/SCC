@@ -128,7 +128,7 @@ export class CobranzasService {
       .set('prarchivo', archivo)
       .set('prdetalle', JSON.stringify(detalle) );
 
-      console.log(params);
+      // console.log(params);
 
       let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -150,6 +150,25 @@ export class CobranzasService {
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     return this.http.post(this.url + 'cobranza/create-archivos-detalle.php', params, {headers: headers});
+  }
+
+  CrearCabeceraPago(
+    id_cabecera : number ,
+    fecha_pago : Date ,
+    monto : number ,
+    detalle : Array<any>
+  ) :Observable<any> {
+
+    let params = new HttpParams()
+      .set('prcobranza', id_cabecera.toString())
+      .set('prfechapago', moment(fecha_pago).format("YYYY-MM-DD"))
+      .set('prmontopagado', monto.toString())
+      .set('prdetalle', JSON.stringify(detalle) );
+
+      console.log(params);
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    return this.http.post(this.url + 'cobranza/create-archivos-cabecera-pago.php', params, {headers: headers});
   }
 
   ListarCobranzas(
@@ -295,20 +314,22 @@ export class CobranzasService {
   }
 
   ListarCobranzasRealizadasxPlanilla(
+    cabecera : number ,
     id_cliente : number ,
-    monto : number
+    monto : number ,
   ):Observable<any>{
 
     let params = new HttpParams()
+      .set('prcabecera', cabecera.toString())
       .set('prcliente', id_cliente.toString())
       .set('prmonto', monto.toString());
 
-    console.log(params);
+    // console.log(params);
 
     return this.http.get( this.url + 'cobranza/read-cobranzas-realizadas-planilla.php', { params } )
     .pipe(map(res=>{
       if(res['codigo']===0){
-        return res['data'];
+        return res['data'].cuotas;
       } else {
         console.log('No hay datos que mostrar');
         return [];

@@ -154,18 +154,18 @@
                     <mat-grid-tile>
                       <span matPrefix>S/. &nbsp;</span>
                       <mat-form-field>
-                        <input matInput type="text" placeholder="Pago" [(ngModel)]="cuota.pagar" [ngModelOptions]="{standalone: true}" [readonly]="editar_cuotas>1">
+                        <input matInput type="text" placeholder="Pago" [(ngModel)]="cuota.pagar" [ngModelOptions]="{standalone: true}" readonly>
                       </mat-form-field>
                     </mat-grid-tile>
                   </mat-grid-list>
                 </ng-container>
-                <ng-container *ngIf="descuento.realizados.length > 0">
-                  NO hay pagos por registrar.
+                <ng-container *ngIf="descuento.realizados.length == 0">
+                  <mat-error> No hay pagos por registrar. </mat-error>
                 </ng-container>
               </ng-container>
               
               <ng-container *ngIf="!descuento.completado">
-                  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                <mat-progress-bar mode="indeterminate"></mat-progress-bar>
               </ng-container>
 
             </mat-expansion-panel>
@@ -173,7 +173,16 @@
           </div>
   
         </mat-card-content>
+
       </form>
     </ng-container>
+
+    <mat-card-actions *ngIf="Descuentos.length > 0">
+      <mat-grid-list cols=1 rowHeight="40px">
+        <mat-grid-tile>
+          <button type="button" mat-raised-button color="primary" [disabled]="Descuentos.length==0 || (Cargando | async)" (click)="Guardar()"> Guardar </button>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-card-actions>
 
 </mat-card>

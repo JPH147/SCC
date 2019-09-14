@@ -101,11 +101,12 @@ export const appRoutes: Routes = [
   {path: 'cobranza-directa/editar/:idcobranzaeditar', component: CobranzaDirectaComponent},
   {path: 'cobranza-archivos', component: CobranzaArchivosListarComponent},
   {path: 'cobranza-archivos/generar', component: CobranzaArchivosComponent},
+  {path: 'cobranza-archivos/cobrar/:id', component: CobranzaArchivosPagoComponent},
   {path: 'trabajadores', component: TrabajadoresComponent},
   {path: 'registro-horas', component: RegistroHorasComponent},
   {path: 'reporte-asistencia', component: ReporteAsistenciaComponent},
   {path: 'plantillas', component: PlantillasComponent},
-  {path: 'prueba', component: CobranzaArchivosComponent},
+  {path: 'prueba', component: CobranzaArchivosPagoComponent},
 ];
 
 // export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);

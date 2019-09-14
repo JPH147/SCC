@@ -32,6 +32,11 @@
       <mat-cell *matCellDef="let cuota"> {{cuota.codigo}} </mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef="fecha">
+      <mat-header-cell *matHeaderCellDef> Vencimiento </mat-header-cell>
+      <mat-cell *matCellDef="let cuota"> {{cuota.fecha}} </mat-cell>
+    </ng-container>
+
     <ng-container matColumnDef="cliente">
       <mat-header-cell *matHeaderCellDef> Cliente </mat-header-cell>
       <mat-cell *matCellDef="let cuota"> {{cuota.cliente}} </mat-cell>
@@ -55,10 +60,14 @@
 
 </mat-card-content>
 
+<div class = "spinner-container" *ngIf = "ListadoCobranzaPNP.CargandoInformacion | async">
+  <mat-spinner></mat-spinner>
+</div>
+
 <mat-card-actions>
   <mat-grid-list cols="1" rowHeight="40px">
     <mat-grid-tile>
-      <button mat-raised-button color="primary" (click)="Guardar()" [disabled]="ListadoCobranzaPNP.totales.cantidad==0"> Generar </button>
+      <button mat-raised-button color="primary" (click)="Guardar()" [disabled]="ListadoCobranzaPNP.totales.cantidad==0 || (ListadoCobranzaPNP.CargandoInformacion | async)"> Generar </button>
     </mat-grid-tile>
   </mat-grid-list>
 </mat-card-actions>
