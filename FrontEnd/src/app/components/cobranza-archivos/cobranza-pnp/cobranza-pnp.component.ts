@@ -25,6 +25,7 @@ export class CobranzaPnpComponent implements OnInit {
   public total_cantidad : number = 0 ;
   public total_monto : number = 0 ;
   public codigo_cooperativa : string ;
+  public cobranza_repetida : boolean = false ;
 
   constructor(
     private Servicio: CobranzasService,
@@ -41,14 +42,22 @@ export class CobranzaPnpComponent implements OnInit {
       if(res.institucion==4){
         this.sede = res.sede ;
         this.fecha_inicio = res.fecha_inicio ;
-        this.fecha_fin = moment(res.fecha_fin).toDate() ;
+        this.fecha_fin = moment(res.fecha_fin.endOf('month')).toDate() ;
         this.CargarData() ;
       }
     })
   }
 
   CargarData() {
-    this.ListadoCobranzaPNP.CargarPagos( this.sede, this.fecha_inicio, this.fecha_fin );
+    this.Servicio.VerificarPagoSede(this.sede, this.fecha_fin).subscribe(res=>{
+      console.log(res)
+      if(res>0){
+        this.cobranza_repetida = true ;
+      } else {
+        this.cobranza_repetida = false ;
+        this.ListadoCobranzaPNP.CargarPagos( this.sede, this.fecha_inicio, this.fecha_fin );
+      }
+    })
   }
 
   CalcularTotales(){
@@ -60,64 +69,6 @@ export class CobranzaPnpComponent implements OnInit {
       }
     })
   }
-
-  // Guardar(){
-
-  //   let nombre_archivo : string = "PNP" + moment(this.fecha_inicio).format("YYYYMMDD") + moment(this.fecha_fin).format("YYYYMMDD");
-  //   let array_archivo : Array<any> = [];
-
-  //   let longitud = this.ListadoCobranzaPNP.informacion.length;
-  //   let i : number = 0;
-
-  //   this.ListadoCobranzaPNP.informacion.forEach((item=>{
-  //     array_archivo.push(item.archivo);
-  //     i++;
-  //     if(i==longitud){
-  //       this.Servicio.Generar_PNP(
-  //         nombre_archivo,
-  //         array_archivo
-  //       ).subscribe(res=>{
-
-  //         if(res['codigo']==0){
-
-            // this.Servicio.CrearCabecera(
-  //             this.sede_seleccionada.value.sede,
-  //             1,
-  //             this.fecha_inicio,
-  //             this.fecha_fin,
-  //             this.ListadoCobranzaPNP.totales.cantidad,
-  //             this.ListadoCobranzaPNP.totales.total,
-  //             nombre_archivo
-  //           ).subscribe(res=>{
-
-  //             if(res['codigo']==0){
-
-  //               this.ListadoCobranzaPNP.informacion.forEach((item)=>{
-  //                 this.Servicio.CrearDetalle(
-  //                   res['data'],
-  //                   item.id_cliente,
-  //                   item.codofin,
-  //                   item.monto_pendiente
-  //                 ).subscribe(res=>{
-  //                   this.notificacion.Snack("Se creó el archivo con éxito","")
-  //                 })
-  //               })
-  //             } else {
-  //               this.notificacion.Snack("Ocurrió un error al generar el archivo","")
-  //             }
-        
-  //             setTimeout(()=>(
-  //               this.router.navigate(['/cobranza-archivos'])
-  //             ),200)
-
-  //           })
-  //         }
-
-  //       })
-  //     }
-  //   }))
-
-  // }
 
   Guardar(){
 

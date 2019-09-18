@@ -4,6 +4,7 @@ import { MatPaginator, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError , finalize , debounceTime , distinctUntilChanged , tap } from 'rxjs/operators'
 import { CobranzasService } from '../cobranzas.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-ventana-pagos',
@@ -20,6 +21,7 @@ export class VentanaPagosComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
     public ventana: MatDialogRef<VentanaPagosComponent>,
+    private router : Router ,
     private Servicio: CobranzasService
   ) { }
 
@@ -45,6 +47,14 @@ export class VentanaPagosComponent implements OnInit {
 
   onNoClick(): void {
     this.ventana.close();
+  }
+
+  Ver(cuota){
+    console.log(cuota);
+    if( cuota.id_cobranza_directa > 0 ) {
+      this.router.navigate(['cobranza-directa','ver',cuota.id_cobranza_directa]);
+      this.ventana.close();
+    }
   }
 
 }

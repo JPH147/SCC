@@ -46,7 +46,7 @@
       </ng-container>
 
       <ng-container matColumnDef="fecha_fin">
-        <mat-header-cell *matHeaderCellDef> Periodo</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef> Periodo </mat-header-cell>
         <mat-cell *matCellDef="let cobranza"> {{ cobranza.fecha_fin | date:'MM/yyyy' }} </mat-cell>
       </ng-container>
 
@@ -70,6 +70,7 @@
         <mat-cell *matCellDef="let cobranza">
           <button mat-icon-button color="primary" matTooltip="Descargar archivo" (click)="AbrirArchivo(cobranza.archivo)"> <mat-icon> cloud_download </mat-icon> </button>
           <button mat-icon-button color="primary" matTooltip="Registrar pago" [disabled]="cobranza.id_estado==2" [routerLink]="['cobrar',cobranza.id]"> <mat-icon> cloud_upload </mat-icon> </button>
+          <button mat-icon-button color="primary" matTooltip="Eliminar" [disabled]="cobranza.id_estado==2" (click)="Eliminar(cobranza)"> <mat-icon> delete </mat-icon> </button>
         </mat-cell>
       </ng-container>
 

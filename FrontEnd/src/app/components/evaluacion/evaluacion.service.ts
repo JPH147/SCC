@@ -357,6 +357,12 @@ export class EvaluacionService {
 
     let numero_cuotas_penalidad : number = Math.ceil( monto_penalidad / penalidad_maxima_cuota ) ;
     
+    // Se especifica que si el número de cuotas de la penalidad es mayor que el número original
+    // se reduce en uno el número original. Este número debe ser como mínimo 1.
+    if( numero_cuotas_penalidad >= numero_cuotas ) {
+      numero_cuotas_penalidad = Math.max( numero_cuotas - 1 , 1 );
+    }
+    
     let monto_cuotas_penalidad : number = ( monto_penalidad / numero_cuotas_penalidad ) ;
     monto_cuotas_penalidad = Math.round( monto_cuotas_penalidad *100 ) / 100 ;
 

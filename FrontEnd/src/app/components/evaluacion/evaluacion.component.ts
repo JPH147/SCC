@@ -34,7 +34,8 @@ export class EvaluacionComponent implements OnInit, AfterViewInit {
     interes: 15,
     aporte: 20,
     capacidad:270
-  })
+  });
+
   public capacidad : number;
   public interes:number;
   public aporte:number;
@@ -80,16 +81,16 @@ export class EvaluacionComponent implements OnInit, AfterViewInit {
     this.cliente_afiliado=false;
     this.CrearFormulario();
 
-    // this.route.params.subscribe(params => {
-    //   // Verifica si 'params' tiene datos
-    //   if(Object.keys(params).length>0){
-    //     if(params['idpresupuesto']){
-    //       this.id_presupuesto=params['idpresupuesto'];
-          this.id_presupuesto=94;
+    this.route.params.subscribe(params => {
+      // Verifica si 'params' tiene datos
+      if(Object.keys(params).length>0){
+        if(params['idpresupuesto']){
+          this.id_presupuesto=params['idpresupuesto'];
+          // this.id_presupuesto=94;
           this.SeleccionarPresupuesto();
-    //     }
-    //   }
-    // })
+        }
+      }
+    })
 
   }
 

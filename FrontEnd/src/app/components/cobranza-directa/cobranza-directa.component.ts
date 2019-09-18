@@ -34,6 +34,7 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
   public id_cobranza : number ;
   public id_cobranza_editar : number ;
   public no_hay_cuotas : boolean ;
+  public pago_excedente : boolean = false ;
 
   public ruta : string = URLIMAGENES.urlimages;
   public voucher_repetido : boolean = false ;
@@ -217,6 +218,7 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
                   item.pagar = monto ;
                 }
               });
+              this.CalcularTotalPorPagar();
               this.no_hay_cuotas = false ;
             } else {
               this.no_hay_cuotas = true ;
@@ -238,14 +240,14 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
                   item.pagar = monto ;
                 }
               })
+              this.CalcularTotalPorPagar();
               this.no_hay_cuotas = false ;
             } else {
               this.no_hay_cuotas = true ;
             }
           })
         }
-  
-      }
+        }
     }
   }
 
@@ -255,13 +257,13 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
   }
 
   CalcularTotalPorPagar(){
-    
     this.total_cuotas_editado=0;
-    
+
+    this.pago_excedente = this.Cuotas.some(item=>item.pagar>item.monto_pendiente) ;
+
     this.Cuotas.forEach((item)=>{
       this.total_cuotas_editado=this.total_cuotas_editado+1*item.pagar ;
     })
-
     this.diferencia = Math.abs(Math.round((this.CobranzaDirectaForm.value.monto-this.total_cuotas_editado)*100)/100);
   }
 
@@ -318,28 +320,27 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
           this.CobranzaDirectaForm.value.monto ,
           this.CobranzaDirectaForm.value.solo_directas ,
           respuesta[1].mensaje,
-          this.CobranzaDirectaForm.value.observaciones
+          this.CobranzaDirectaForm.value.observaciones,
+          this.Cuotas
         ).subscribe(res=>{
           if(res['codigo']==0){
-            this.Cuotas.forEach((item)=>{
-              if( item.pagar > 0 ) {
-                this.Servicio.CrearDetalleCobranza(
-                  res['data'],
-                  0,
-                  0,
-                  item.id_tipo < 3 ? item.id_cronograma : 0 ,
-                  item.id_tipo == 3 ? item.id_cronograma : 0 ,
-                  item.pagar ,
-                  this.CobranzaDirectaForm.value.fecha
-                ).subscribe()
-              }
-            })
-
-            setTimeout(()=>{
-              this.router.navigate(['/cobranza-directa']);
+            // this.Cuotas.forEach((item)=>{
+            //   if( item.pagar > 0 ) {
+            //     this.Servicio.CrearDetalleCobranza(
+            //       res['data'],
+            //       0,
+            //       0,
+            //       item.id_tipo < 3 ? item.id_cronograma : 0 ,
+            //       item.id_tipo == 3 ? item.id_cronograma : 0 ,
+            //       item.pagar ,
+            //       this.CobranzaDirectaForm.value.fecha
+            //     ).subscribe()
+            //   }
+            // })
+            // setTimeout(()=>{
+              // this.router.navigate(['/cobranza-directa']);
               this.Notificacion.Snack("Se creó la cobranza con éxito!","");
-            }, 300)
-
+            // }, 300)
           } else {
             this.router.navigate(['/cobranza-directa']);
             this.Notificacion.Snack("Ocurrió un error al crear la cobranza.", "")
@@ -367,22 +368,23 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
           this.CobranzaDirectaForm.value.monto ,
           this.CobranzaDirectaForm.value.solo_directas ,
           this.archivo_editar ? resultado.mensaje : this.archivo_antiguo,
-          this.CobranzaDirectaForm.value.observaciones
+          this.CobranzaDirectaForm.value.observaciones,
+          this.Cuotas
         ).subscribe(res=>{
           if(res['codigo']==0){
-            this.Cuotas.forEach((item)=>{
-              if( item.pagar > 0 ) {
-                this.Servicio.CrearDetalleCobranza(
-                  res['data'],
-                  0,
-                  0,
-                  item.id_tipo < 3 ? item.id_cronograma : 0 ,
-                  item.id_tipo == 3 ? item.id_cronograma : 0 ,
-                  item.pagar ,
-                  this.CobranzaDirectaForm.value.fecha
-                ).subscribe()
-              }
-            })
+            // this.Cuotas.forEach((item)=>{
+            //   if( item.pagar > 0 ) {
+            //     this.Servicio.CrearDetalleCobranza(
+            //       res['data'],
+            //       0,
+            //       0,
+            //       item.id_tipo < 3 ? item.id_cronograma : 0 ,
+            //       item.id_tipo == 3 ? item.id_cronograma : 0 ,
+            //       item.pagar ,
+            //       this.CobranzaDirectaForm.value.fecha
+            //     ).subscribe()
+            //   }
+            // })
 
             setTimeout(()=>{
               this.router.navigate(['/cobranza-directa']);

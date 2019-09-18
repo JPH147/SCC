@@ -1,73 +1,83 @@
-<mat-card-content>
-
-  <mat-grid-list cols=4 rowHeight="70px">
+<ng-container *ngIf="cobranza_repetida">
+  <mat-grid-list cols=1 rowHeight="40px">
     <mat-grid-tile>
-      <mat-form-field class="columnas-1">
-        <input type="text" matInput placeholder="Total de cobros" [(ngModel)]="ListadoCobranzaPNP.totales.cantidad">
-      </mat-form-field>
-    </mat-grid-tile>
-
-    <mat-grid-tile>
-      <span matPrefix>S/. &nbsp;</span>
-      <mat-form-field class="columnas-1">
-        <input type="text" matInput placeholder="Total de recaudación" [(ngModel)]="ListadoCobranzaPNP.totales.total">
-      </mat-form-field>
+      <mat-error> Ya se ha generado un archivo para este periodo. </mat-error>
     </mat-grid-tile>
   </mat-grid-list>
+</ng-container>
 
-  <mat-table [dataSource]="ListadoCobranzaPNP" matSort>
+<ng-container *ngIf="!cobranza_repetida">
+  <mat-card-content>
 
-    <ng-container matColumnDef="numero">
-      <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
-      <mat-cell *matCellDef="let cuota"> {{cuota.numero}} </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="tipo">
-      <mat-header-cell *matHeaderCellDef> Tipo </mat-header-cell>
-      <mat-cell *matCellDef="let cuota"> {{cuota.tipo}} </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="codigo">
-      <mat-header-cell *matHeaderCellDef> Documento </mat-header-cell>
-      <mat-cell *matCellDef="let cuota"> {{cuota.codigo}} </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="fecha">
-      <mat-header-cell *matHeaderCellDef> Vencimiento </mat-header-cell>
-      <mat-cell *matCellDef="let cuota"> {{cuota.fecha}} </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="cliente">
-      <mat-header-cell *matHeaderCellDef> Cliente </mat-header-cell>
-      <mat-cell *matCellDef="let cuota"> {{cuota.cliente}} </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="monto">
-      <mat-header-cell *matHeaderCellDef> Monto </mat-header-cell>
-      <mat-cell *matCellDef="let cuota"> {{cuota.monto_pendiente | currency : 'S/. '}} </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="opciones">
-      <mat-header-cell *matHeaderCellDef> Considerar </mat-header-cell>
-      <mat-cell *matCellDef="let cuota">
-        <mat-checkbox color="primary" [(ngModel)]="cuota.considerar" (change)="CalcularTotales()"></mat-checkbox>
-      </mat-cell>
-    </ng-container>
-
-    <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: Columnas;"></mat-row>
-  </mat-table>
-
-</mat-card-content>
-
-<div class = "spinner-container" *ngIf = "ListadoCobranzaPNP.CargandoInformacion | async">
-  <mat-spinner></mat-spinner>
-</div>
-
-<mat-card-actions>
-  <mat-grid-list cols="1" rowHeight="40px">
-    <mat-grid-tile>
-      <button mat-raised-button color="primary" (click)="Guardar()" [disabled]="ListadoCobranzaPNP.totales.cantidad==0 || (ListadoCobranzaPNP.CargandoInformacion | async)"> Generar </button>
-    </mat-grid-tile>
-  </mat-grid-list>
-</mat-card-actions>
+    <mat-grid-list cols=4 rowHeight="70px">
+      <mat-grid-tile>
+        <mat-form-field class="columnas-1">
+          <input type="text" matInput placeholder="Total de cobros" [(ngModel)]="ListadoCobranzaPNP.totales.cantidad">
+        </mat-form-field>
+      </mat-grid-tile>
+  
+      <mat-grid-tile>
+        <span matPrefix>S/. &nbsp;</span>
+        <mat-form-field class="columnas-1">
+          <input type="text" matInput placeholder="Total de recaudación" [(ngModel)]="ListadoCobranzaPNP.totales.total">
+        </mat-form-field>
+      </mat-grid-tile>
+    </mat-grid-list>
+  
+    <div class = "spinner-container" *ngIf = "ListadoCobranzaPNP.CargandoInformacion | async">
+      <mat-spinner></mat-spinner>
+    </div>
+  
+    <mat-table [dataSource]="ListadoCobranzaPNP" matSort>
+  
+      <ng-container matColumnDef="numero">
+        <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+        <mat-cell *matCellDef="let cuota"> {{cuota.numero}} </mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="tipo">
+        <mat-header-cell *matHeaderCellDef> Tipo </mat-header-cell>
+        <mat-cell *matCellDef="let cuota"> {{cuota.tipo}} </mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="codigo">
+        <mat-header-cell *matHeaderCellDef> Documento </mat-header-cell>
+        <mat-cell *matCellDef="let cuota"> {{cuota.codigo}} </mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="fecha">
+        <mat-header-cell *matHeaderCellDef> Vencimiento </mat-header-cell>
+        <mat-cell *matCellDef="let cuota"> {{cuota.fecha}} </mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="cliente">
+        <mat-header-cell *matHeaderCellDef> Cliente </mat-header-cell>
+        <mat-cell *matCellDef="let cuota"> {{cuota.cliente}} </mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="monto">
+        <mat-header-cell *matHeaderCellDef> Monto </mat-header-cell>
+        <mat-cell *matCellDef="let cuota"> {{cuota.monto_pendiente | currency : 'S/. '}} </mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="opciones">
+        <mat-header-cell *matHeaderCellDef> Considerar </mat-header-cell>
+        <mat-cell *matCellDef="let cuota">
+          <mat-checkbox color="primary" [(ngModel)]="cuota.considerar" (change)="CalcularTotales()"></mat-checkbox>
+        </mat-cell>
+      </ng-container>
+  
+      <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: Columnas;"></mat-row>
+    </mat-table>
+  
+  </mat-card-content>
+  
+  <mat-card-actions>
+    <mat-grid-list cols="1" rowHeight="40px">
+      <mat-grid-tile>
+        <button mat-raised-button color="primary" (click)="Guardar()" [disabled]="ListadoCobranzaPNP.totales.cantidad==0 || (ListadoCobranzaPNP.CargandoInformacion | async)"> Generar </button>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-card-actions>
+</ng-container>

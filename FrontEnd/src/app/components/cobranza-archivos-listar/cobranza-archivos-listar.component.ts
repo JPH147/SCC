@@ -3,8 +3,10 @@ import { Observable, BehaviorSubject, of, fromEvent, merge } from 'rxjs';
 import { catchError, finalize, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CobranzasService } from '../cobranzas-listar/cobranzas.service';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
-import { MatPaginator } from '@angular/material';
+import { MatPaginator, MatDialog } from '@angular/material';
 import {saveAs} from 'file-saver';
+import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
+import * as moment from 'moment' ;
 
 @Component({
   selector: 'app-cobranza-archivos-listar',
@@ -19,6 +21,7 @@ export class CobranzaArchivosListarComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
+    private Dialogo : MatDialog ,
     private Servicio : CobranzasService
   ) { }
 
@@ -49,6 +52,21 @@ export class CobranzaArchivosListarComponent implements OnInit {
     })
   }
   
+  Eliminar(cobranza) {
+    let VentanaConfirmar = this.Dialogo.open(VentanaConfirmarComponent, {
+      width: '400px',
+      data: {objeto: 'la cobranza', valor: cobranza.sede + " " + moment(cobranza.fecha_fin).format("MM-YYYY")}
+    });
+    
+    VentanaConfirmar.afterClosed().subscribe(res => {
+      if (res === true) {
+        this.Servicio.EliminarCobranzaPlanilla(cobranza.id).subscribe(res => {
+          this.CargarData();
+        });
+      }
+    });
+  }
+
 }
 
 export class CobranzasDataSource implements DataSource<any> {

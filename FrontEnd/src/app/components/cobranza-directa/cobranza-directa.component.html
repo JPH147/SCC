@@ -208,6 +208,10 @@
       <mat-error class="error-monto" *ngIf="diferencia>0.05 && editar_cuotas<3">
         Las cuotas deben sumar {{CobranzaDirectaForm.value.monto}}. {{ CobranzaDirectaForm.value.monto>this.total_cuotas_editado ? 'Falta:' : 'Excede en:' }} {{ diferencia }}.
       </mat-error>
+      
+      <mat-error class="error-monto" *ngIf="pago_excedente && editar_cuotas<3">
+        No se puede pagar más de lo que se debe.
+      </mat-error>
 
     </div>
 
@@ -228,6 +232,7 @@
           [disabled]="enviado ||
                       voucher_repetido ||
                       no_hay_cuotas ||
+                      pago_excedente ||
                       CobranzaDirectaForm.invalid || 
                       editar_cuotas==1 ||
                       diferencia>0.05"> Guardar </button>

@@ -39,14 +39,14 @@ export class CobranzaArchivosPagoComponent implements OnInit {
   ngOnInit() {
     this.CrearFormulario();
 
-    this.route.params.subscribe(params => {
-      if(Object.keys(params).length>0){
-        if(params['id']){
-          // this.id_cabecera=1;
-          this.id_cabecera=params['id'];
-        }
-      }
-    })
+    // this.route.params.subscribe(params => {
+    //   if(Object.keys(params).length>0){
+    //     if(params['id']){
+          this.id_cabecera=2;
+          // this.id_cabecera=params['id'];
+    //     }
+    //   }
+    // })
 
   }
 
@@ -94,20 +94,28 @@ export class CobranzaArchivosPagoComponent implements OnInit {
     let nombre = "pago_" + new Date().getTime();
 
     this.PServicio.SubirArchivo(this.archivo).subscribe(res=>{
-      this.Servicio.MoverArchivoPNP(res['data'], nombre)
+      this.Servicio.MoverArchivoPNP(this.id_cabecera, res['data'], nombre)
       .pipe( finalize( () => {
         this.enviado = false ;
         this.Cargando.next(false) ;
       }) )
       .subscribe( resultado => {
+        this.RemoverArchivo();
+        if (resultado['codigo']==1) {
+          this.notificacion.Snack("Ocurrió un error con el servicio.","");
+        }
+        if (resultado['codigo']==2) {
+          this.notificacion.Snack("Ocurrió un error al leer el archivo.","");
+        }
+        if (resultado['codigo']==3) {
+          this.notificacion.Snack("El archivo no hace referencia a lo cobrado.","");
+        }
         if (resultado['codigo']==0) {
           this.PagosPlanillaForm.get('numero_descuentos').setValue( resultado['mensaje'].total_procesado ) ;
           this.PagosPlanillaForm.get('total_descuentos').setValue( resultado['mensaje'].total_descontado ) ;
           this.PagosPlanillaForm.get('total_no_descuentos').setValue( resultado['mensaje'].total_Ndescontado ) ;
           this.Descuentos = resultado['data'] ;
           this.VerificarPagos();
-        } else {
-          // this.ventana.close(false);
         }
       });
     })

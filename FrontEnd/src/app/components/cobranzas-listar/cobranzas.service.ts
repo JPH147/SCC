@@ -74,6 +74,25 @@ export class CobranzasService {
     }));
   }
 
+  VerificarPagoSede(
+    sede : number,
+    fecha_fin : Date
+  ) : Observable <any> {
+    let params = new HttpParams()
+      .set('prsede', sede.toString())
+      .set('prfecha', moment(fecha_fin).format("YYYY-MM-DD"))
+
+    return this.http.get(this.url + 'cobranza/verificar-pago-sede.php', {params})
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res['data'];
+      } else {
+        console.log('No hay datos que mostrar');
+        return 0;
+      }
+    }));
+  }
+
   // Prueba de enviar array a PHP
   Generar_PNP(
     nombre_archivo: string,
@@ -90,6 +109,7 @@ export class CobranzasService {
   }
 
   MoverArchivoPNP(
+    id_cobranza: number,
     nameimg: string,
     nombre: string,
   ): Observable <any> {
@@ -99,8 +119,11 @@ export class CobranzasService {
     }
 
     let params = new  HttpParams()
+      .set('prcobranza', id_cobranza.toString())
       .set('nameimg', nameimg.trim())
       .set('tipodoc', nombre.trim());
+
+    // console.log(params);
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -130,7 +153,7 @@ export class CobranzasService {
 
       // console.log(params);
 
-      let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'cobranza/create-archivos-cabecera.php', params, {headers: headers});
 
@@ -169,6 +192,18 @@ export class CobranzasService {
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     return this.http.post(this.url + 'cobranza/create-archivos-cabecera-pago.php', params, {headers: headers});
+  }
+
+  EliminarCobranzaPlanilla(
+    id_cobranza : number 
+  ) : Observable <any> {
+
+    let params = new HttpParams()
+      .set('prid', id_cobranza.toString());
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'cobranza/delete-cobranza-planilla.php', params, {headers: headers});
   }
 
   ListarCobranzas(
@@ -346,6 +381,7 @@ export class CobranzasService {
     considerar_solo_directas : boolean ,
     archivo : string,
     observaciones : string,
+    detalle : Array<any>
   ){
     let params = new HttpParams()
       .set('prfecha', moment(fecha).format("YYYY-MM-DD"))
@@ -355,7 +391,10 @@ export class CobranzasService {
       .set('prmonto', monto.toString())
       .set('prsolodirectas', considerar_solo_directas ? "1" : "0" )
       .set('prarchivo', archivo)
-      .set('probservaciones', observaciones);
+      .set('probservaciones', observaciones)
+      .set('prdetalle', JSON.stringify(detalle) );
+
+    console.log(params);
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -372,6 +411,7 @@ export class CobranzasService {
     considerar_solo_directas : boolean ,
     archivo : string,
     observaciones : string,
+    detalle : Array<any>
   ){
     let params = new HttpParams()
       .set('prid', id_cobranza.toString())
@@ -382,7 +422,8 @@ export class CobranzasService {
       .set('prmonto', monto.toString())
       .set('prsolodirectas', considerar_solo_directas ? "1" : "0" )
       .set('prarchivo', archivo)
-      .set('probservaciones', observaciones);
+      .set('probservaciones', observaciones)
+      .set('prdetalle', JSON.stringify(detalle) );
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
