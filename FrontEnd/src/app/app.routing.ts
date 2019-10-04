@@ -29,6 +29,7 @@ import { CreditosComponent } from './components/creditos/creditos.component';
 import { CobranzasListarComponent } from './components/cobranzas-listar/cobranzas-listar.component';
 import { CobranzaArchivosComponent } from './components/cobranza-archivos/cobranza-archivos.component';
 import { CobranzaArchivosPagoComponent } from './components/cobranza-archivos-pago/cobranza-archivos-pago.component';
+import { CobranzaArchivosDetalleComponent } from './components/cobranza-archivos-detalle/cobranza-archivos-detalle.component';
 import { CobranzaArchivosListarComponent } from './components/cobranza-archivos-listar/cobranza-archivos-listar.component';
 import { TrabajadoresComponent } from './components/trabajadores/trabajadores.component';
 import { RegistroHorasComponent } from './components/registro-horas/registro-horas.component';
@@ -46,6 +47,7 @@ import { CobranzaDirectaListarComponent } from './components/cobranza-directa-li
 import { InstitucionComponent } from './components/instituciones/institucion/institucion.component';
 import { SedeComponent } from './components/instituciones/sede/sede.component';
 import { SubsedeComponent } from './components/instituciones/subsede/subsede.component';
+import { CobranzaClienteListarComponent } from './components/cobranza-cliente-listar/cobranza-cliente-listar.component';
 
 export const appRoutes: Routes = [
   // {path: '', component: ConsultarClienteComponent}, //prueba
@@ -95,18 +97,20 @@ export const appRoutes: Routes = [
   {path: 'detalleproductos', component: DetalleProductosComponent},
   {path: 'evaluacion-reglas', component: ReglasEvaluacionComponent},
   {path: 'cobranzas', component: CobranzasListarComponent},
+  {path: 'cobranzas-cliente', component: CobranzaClienteListarComponent},
   {path: 'cobranza-directa', component: CobranzaDirectaListarComponent},
   {path: 'cobranza-directa/nueva', component: CobranzaDirectaComponent},
   {path: 'cobranza-directa/ver/:idcobranza', component: CobranzaDirectaComponent},
   {path: 'cobranza-directa/editar/:idcobranzaeditar', component: CobranzaDirectaComponent},
   {path: 'cobranza-archivos', component: CobranzaArchivosListarComponent},
+  {path: 'cobranza-archivos/ver/:idcobranza', component: CobranzaArchivosDetalleComponent},
   {path: 'cobranza-archivos/generar', component: CobranzaArchivosComponent},
   {path: 'cobranza-archivos/cobrar/:id', component: CobranzaArchivosPagoComponent},
   {path: 'trabajadores', component: TrabajadoresComponent},
   {path: 'registro-horas', component: RegistroHorasComponent},
   {path: 'reporte-asistencia', component: ReporteAsistenciaComponent},
   {path: 'plantillas', component: PlantillasComponent},
-  {path: 'prueba', component: CobranzaArchivosPagoComponent},
+  {path: 'prueba', component: CobranzaArchivosDetalleComponent},
 ];
 
 // export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);

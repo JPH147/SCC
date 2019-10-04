@@ -27,6 +27,7 @@
             $cobranza->solo_directas=trim($_POST["prsolodirectas"]);
             $cobranza->archivo=trim($_POST["prarchivo"]);
             $cobranza->observaciones=trim($_POST["probservaciones"]);
+            $cobranza->detalle_cabecera = json_decode( trim($_POST["prdetalle"]) );
 
             if($cobranza->update_directa())
             {

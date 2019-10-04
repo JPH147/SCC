@@ -496,6 +496,7 @@ Class Venta{
         
         $query = "CALL sp_crearventacronograma(
             :prventa,
+            :prtipopago,
             :prmonto,
             :prvencimiento,
             :prestado
@@ -504,11 +505,13 @@ Class Venta{
         $result = $this->conn->prepare($query);
 
         $result->bindParam(":prventa", $this->venta);
+        $result->bindParam(":prtipopago", $this->tipo_pago);
         $result->bindParam(":prmonto", $this->monto);
         $result->bindParam(":prvencimiento", $this->vencimiento);
         $result->bindParam(":prestado", $this->estado);
 
         $this->venta=htmlspecialchars(strip_tags($this->venta));
+        $this->tipo_pago=htmlspecialchars(strip_tags($this->tipo_pago));
         $this->monto=htmlspecialchars(strip_tags($this->monto));
         $this->vencimiento=htmlspecialchars(strip_tags($this->vencimiento));
         $this->estado=htmlspecialchars(strip_tags($this->estado));
@@ -541,6 +544,8 @@ Class Venta{
             $venta_item = array (
                 "numero"=>$contador,
                 "id_cronograma"=>$id_cronograma,
+                "id_tipo_pago"=>$id_tipo_pago,
+                "tipo_pago"=>$tipo_pago,
                 "monto_cuota"=>$monto_cuota,
                 "fecha_vencimiento"=>$fecha_vencimiento,
                 "monto_interes"=>$monto_interes,
@@ -577,6 +582,7 @@ Class Venta{
             $venta_item = array (
                 "numero"=>$contador,
                 "id_cronograma"=>$id_cronograma,
+                "tipo_pago"=>$tipo_pago,
                 "monto_cuota"=>$monto_cuota,
                 "fecha_vencimiento"=>$fecha_vencimiento,
                 "monto_interes"=>$monto_interes,

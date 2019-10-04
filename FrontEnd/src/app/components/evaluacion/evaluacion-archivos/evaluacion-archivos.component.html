@@ -116,7 +116,10 @@
         </mat-grid-tile>
 
         <mat-grid-tile>
-          <mat-checkbox color="primary" formControlName="considerar_direccion_cliente" (change)="CambiarDireccion($event)">Considerar dirección del cliente</mat-checkbox>
+          <!-- <mat-form-field> -->
+            <mat-checkbox color="primary" formControlName="considerar_direccion_cliente" (change)="CambiarDireccion($event)">Considerar dirección del cliente</mat-checkbox>
+            <!-- <mat-hint> En la transacción </mat-hint> -->
+          <!-- </mat-form-field> -->
         </mat-grid-tile>
 
         <mat-grid-tile colspan=3>
@@ -320,7 +323,7 @@
         </mat-grid-tile>
         <mat-grid-tile *ngIf="!this.EvaluacionArchivosForm.value.cuenta_numero">
           <mat-error>
-            <strong>Falta la tarjeta: </strong>No se puede generar la tarjeta de socio.
+            <strong>Falta la cuenta: </strong>No se puede generar la tarjeta de socio.
           </mat-error>
         </mat-grid-tile>
       </mat-grid-list>

@@ -119,7 +119,7 @@ export class CreditosService {
     let params = new HttpParams()
       .set("prid", id.toString())
 
-    return this.http.get(this.url + 'presupuesto/readxid.php', { params })
+    return this.http.get(this.url + 'presupuesto/readxId.php', { params })
     .pipe(map(res=>{
       if (res['codigo'] === 0) {
         return res['data'];
@@ -209,12 +209,14 @@ export class CreditosService {
 
   CrearCronograma(
     id_credito:number,
+    id_tipo_pago:number,
     capital: number,
     interes: number,
     fecha_vencimiento: Date
   ){
     let params = new HttpParams()
       .set('prcredito',id_credito.toString())
+      .set('prtipopago',id_tipo_pago.toString())
       .set('prcapital',capital.toString())
       .set('printeres',interes.toString())
       .set('prfecha',moment(fecha_vencimiento).format("YYYY-MM-DD"))
@@ -226,12 +228,14 @@ export class CreditosService {
 
   CrearCronogramaAfiliacion(
     id_credito:number,
+    id_tipo_pago:number,
     monto_cuota: number,
     numero_cuotas: number,
     fecha_vencimiento: Date
   ){
     let params = new HttpParams()
       .set('prcredito',id_credito.toString())
+      .set('prtipopago',id_tipo_pago.toString())
       .set('prmonto',monto_cuota.toString())
       .set('prcuotas',numero_cuotas.toString())
       .set('prprimeracuota',moment(fecha_vencimiento).format("YYYY-MM-DD"))

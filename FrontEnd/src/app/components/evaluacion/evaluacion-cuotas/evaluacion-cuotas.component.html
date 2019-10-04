@@ -7,21 +7,21 @@
 
       <mat-grid-tile>
         <mat-form-field>
-          <input type="number" matInput [placeholder]="tipo==1 ? 'Capital' : 'Precio de productos' " [(ngModel)]="capital" #InputCapital [readonly]="tipo==2">
+          <input type="number" class="resaltado" matInput [placeholder]="tipo==1 ? 'Capital' : 'Precio de productos' " [(ngModel)]="capital" #InputCapital [readonly]="tipo==2">
         </mat-form-field>
         <button mat-icon-button color="primary" *ngIf="tipo==2" (click)="AgregarProducto()"><mat-icon>add</mat-icon></button>
       </mat-grid-tile>
 
       <mat-grid-tile>
         <mat-form-field>
-          <input type="number" matInput placeholder="Número de cuotas" [(ngModel)]="cuotas" #InputCuotas>
+          <input type="number" class="resaltado" matInput placeholder="Número de cuotas" [(ngModel)]="cuotas" #InputCuotas>
         </mat-form-field>
       </mat-grid-tile>
 
       <mat-grid-tile>
         <mat-form-field appearance="fill">
           <mat-label>Total a pagar</mat-label>
-          <input type="text" matInput placeholder="Total a pagar" [(ngModel)]="prestamo" readonly>
+          <input type="text" class="resaltado" matInput placeholder="Total a pagar" [(ngModel)]="prestamo" readonly>
         </mat-form-field>
       </mat-grid-tile>
 

@@ -387,7 +387,7 @@ export class EvaluacionService {
       .set('prcasilla',casilla )
       .set('prugel', ugel)
       .set('prfechaanterior',moment(fecha).subtract(dias_premura, 'd').format('LL') )
-      .set('prfechaletras',moment(fecha).format('LL') )
+      .set('prfechaletras', this.EscribirFecha(fecha) )
       .set('prmontototal',monto_total.toString() )
       .set('prmontototalletras', this.EsribirNumero(monto_total,1) )
       .set('prmontocuota', monto_cuotas.toString())
@@ -415,7 +415,7 @@ export class EvaluacionService {
       .set('prnombreaval',nombre_aval)
       .set('prdniaval',dni_aval);
 
-      // console.log(params);
+      console.log("PrintTransaccion",params);
 
       let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -563,6 +563,31 @@ export class EvaluacionService {
 
     return writtenNumber(entero).toUpperCase() + decimal_corregido;
 
+  }
+
+  EscribirFecha( fecha : Date ) :string {
+
+    let fecha_escrita : string ;
+    
+    let dia : string ;
+    let mes : string ;
+    let ano : string ;
+
+    if ( moment(fecha).date() == 1 ){
+      dia = " al primer día" ;
+    } else {
+      dia = " a los " + moment(fecha).date() + " días"
+    }
+
+    mes = moment(fecha).format("MMMM") ;
+    mes = mes.charAt(0).toUpperCase() + mes.slice(1) ;
+    mes = " del mes de " + mes ;
+
+    ano = " del año " + moment(fecha).format("YYYY") ;
+
+    fecha_escrita = dia + mes + ano ;
+
+    return fecha_escrita ;
   }
 
 }

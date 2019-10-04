@@ -1072,9 +1072,9 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
         // Se genera el cronograma
         this.Cronograma.forEach((item)=>{
           if(item.numero==0){
-            this.Servicio.CrearVentaCronograma(res['data'],item.monto_cuota,item.fecha_vencimiento,1).subscribe()
+            this.Servicio.CrearVentaCronograma(res['data'],formulario.value.tipopago,item.monto_cuota,item.fecha_vencimiento,1).subscribe()
           }else{
-            this.Servicio.CrearVentaCronograma(res['data'],item.monto_cuota,item.fecha_vencimiento,1).subscribe()
+            this.Servicio.CrearVentaCronograma(res['data'],formulario.value.tipopago,item.monto_cuota,item.fecha_vencimiento,1).subscribe()
           }
         });
         

@@ -1,9 +1,14 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { MatSelect, MatPaginator, MatSort } from '@angular/material'
+import { MatSelect, MatPaginator, MatSort, MatDialog } from '@angular/material'
 import { Observable, BehaviorSubject, of, fromEvent, merge } from 'rxjs';
 import { catchError, finalize, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CobranzasService } from './cobranzas.service';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
+import { VentanaTipoReporteComponent } from './ventana-tipo-reporte/ventana-tipo-reporte.component';
+import { VentanaPagosComponent } from './ventana-pagos/ventana-pagos.component';
+
+import { Notificaciones } from '../global/notificacion';
+import { VentanaEditarPagoComponent } from './ventana-editar-pago/ventana-editar-pago.component';
 
 @Component({
   selector: 'app-cobranzas-listar',
@@ -17,7 +22,7 @@ export class CobranzasListarComponent implements OnInit {
   public fecha_fin: Date;
 
   public ListadoCobranza: CobranzaDataSource;
-  public Columnas: string[] = ['numero', 'tipo', 'codigo', 'cliente', 'monto_total', 'fecha', 'estado', 'opciones'];
+  public Columnas: string[] = ['numero', 'tipo', 'codigo', "tipo_pago",'cliente', 'monto_total', 'fecha', 'estado', 'opciones'];
 
   @ViewChild('InputCliente') FiltroCliente: ElementRef;
   @ViewChild('InputSubsede') FiltroSubSede: ElementRef;
@@ -28,6 +33,8 @@ export class CobranzasListarComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
+    private Dialogo: MatDialog,
+    private Notificacion : Notificaciones ,
     private Servicio: CobranzasService
   ) { }
 
@@ -82,6 +89,34 @@ export class CobranzasListarComponent implements OnInit {
   CambioFiltro(){
     this.paginator.pageIndex = 0;
     this.CargarData()
+  }
+
+  VerDetallePagos( cronograma ){
+    let tipo : number = cronograma.id_tipo==3 ? 2 : 1 ;
+    let ventana = this.Dialogo.open(VentanaPagosComponent,{
+      width : '900px',
+      data: { tipo : tipo , cuota : cronograma.id_cronograma }
+    })
+  }
+
+  EditarCuota(cobranza){
+    let Ventana = this.Dialogo.open(VentanaEditarPagoComponent,{
+      width : '900px' ,
+      data: { tipo : cobranza.id_tipo, id: cobranza.id_cronograma, fecha_vencimiento: cobranza.fecha_vencimiento, tipo_pago: cobranza.id_tipo_pago }
+    })
+
+    Ventana.afterClosed().subscribe(res=>{
+      if(res===true){
+        this.Notificacion.Snack("Se actualizó al cuota satisfactoriamente","");
+        this.CargarData();
+      }
+      if(res===false){
+        this.Notificacion.Snack("Ocurrió un error al actualizar la cuota","")
+      }
+    })
+  }
+
+  ExportToExcel(){
   }
 
 }

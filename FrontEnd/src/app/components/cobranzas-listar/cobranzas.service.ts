@@ -260,7 +260,7 @@ export class CobranzasService {
 
   SeleccionarCobranzaDirecta(
     id_cobranza : number
-  ){
+  ) : Observable<any> {
     let params = new HttpParams()
       .set('prid', id_cobranza.toString());
 
@@ -274,6 +274,26 @@ export class CobranzasService {
         }
       })
     );
+  }
+
+  SeleccionarCobranzaPlanilla(
+    id_cobranza : number
+  ) : Observable<any> {
+
+    let params = new HttpParams()
+      .set('prcabecera', id_cobranza.toString());
+
+    return this.http.get(this.url + 'cobranza/read-cobranzas-archivosxId.php', {params})
+      .pipe(map(res => {
+        if (res['codigo'] === 0) {
+          return { cabecera: res['data'], detalle: res['mensaje'] };
+        } else {
+          console.log('No hay datos que mostrar', res);
+          return false;
+        }
+      })
+    );
+
   }
 
   ObtenerArchivo(
@@ -521,4 +541,85 @@ export class CobranzasService {
     return this.http.post(this.url + 'cobranza/create-archivo-pnp.php', params, {headers: headers});
   }
 
+  ActualizarCuota(
+    tipo : number,
+    id_cobranza : Date,
+    fecha : number,
+    tipo_pago : string,
+  ){
+    let params = new HttpParams()
+      .set('prtipo', tipo.toString())
+      .set('prid', id_cobranza.toString())
+      .set('prfecha', moment(fecha).format("YYYY-MM-DD"))
+      .set('prtipopago', tipo_pago);
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'cobranza/update-cuota.php', params, {headers: headers});
+  }
+
+  ListarCobranzasxcliente(
+    cliente : string,
+    sede : string,
+    subsede : string,
+    institucion : string,
+    tipo_pago : number,
+    fecha_inicio : Date,
+    fecha_fin : Date,
+    numero_pagina : number,
+    total_pagina : number,
+  ) : Observable <any> {
+    let params = new HttpParams()
+      .set('prcliente', cliente)
+      .set('prsede', sede)
+      .set('prsubsede', subsede)
+      .set('prinstitucion', institucion)
+      .set('prtipopago', tipo_pago.toString())
+      .set('prfechainicio', moment(fecha_inicio).format("YYYY-MM-DD"))
+      .set('prfechafin', moment(fecha_fin).format("YYYY-MM-DD"))
+      .set('prpagina', numero_pagina.toString())
+      .set('prtotalpagina', total_pagina.toString())
+
+    return this.http.get(this.url + 'cobranza/read-cobranzasxcliente.php', {params})
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res;
+      } else {
+        console.log('No hay datos que mostrar');
+        return res;
+      }
+    }));
+  }
+
+  ListarCobranzasxclienteUnlimited(
+    nombre_archivo : string,
+    cliente : string,
+    sede : string,
+    subsede : string,
+    institucion : string,
+    tipo_pago : number,
+    fecha_inicio : Date,
+    fecha_fin : Date,
+  ) : Observable <any> {
+    let params = new HttpParams()
+      .set('prarchivo', nombre_archivo)  
+      .set('prcliente', cliente)
+      .set('prsede', sede)
+      .set('prsubsede', subsede)
+      .set('prinstitucion', institucion)
+      .set('prtipopago', tipo_pago.toString())
+      .set('prfechainicio', moment(fecha_inicio).format("YYYY-MM-DD"))
+      .set('prfechafin', moment(fecha_fin).format("YYYY-MM-DD"));
+
+    return this.http.get(this.url + 'cobranza/read-cobranzasxcliente-unlimited.php', {params})
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res['data'];
+      } else {
+        console.log('No hay datos que mostrar');
+        console.log(res);
+        return false;
+      }
+    }));
+  }
 }

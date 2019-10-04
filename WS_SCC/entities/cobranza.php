@@ -1,11 +1,16 @@
 <?php
 
-  Class Cobranzas{
+  require '../vendor/autoload.php';
+  use PhpOffice\PhpSpreadsheet\Spreadsheet;
+  use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
+  Class Cobranzas{
+    
     private $conn;
-          
+
     public $path = '../uploads/planilla-descuentos/';
     public $path_cobros = '../uploads/planilla-cobros/';
+    public $path_reporte = '../uploads/reporte-cobranzas/';
 
     public $id_cobranza;
     public $total_resultado;
@@ -18,6 +23,7 @@
     public $credito_cronograma;
     public $venta_cronograma;
 
+    public $cabecera;
     public $cliente;
     public $codigo;
     public $sede;
@@ -74,9 +80,12 @@
           $contador=$contador+1;
           $items = array (
               "numero"=>$contador,
-              "id"=>$id,
+              "id_cronograma"=>$id_cronograma,
+              "id_tipo"=>$id_tipo,
               "tipo"=>$tipo,
               "codigo"=>$codigo,
+              "id_tipo_pago"=>$id_tipo_pago,
+              "tipo_pago"=>$tipo_pago,
               "cliente"=>$cliente,
               "id_subsede"=>$id_subsede,
               "subsede"=>$subsede,
@@ -121,6 +130,33 @@
       return $this->total_resultado;
     }
 
+    function actualizar_cuota(){
+      $query = "CALL sp_actualizarcronograma(
+        :prtipo,
+        :prid,
+        :prfecha,
+        :prtipopago
+      )";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(":prtipo", $this->tipo);
+      $result->bindParam(":prid", $this->id_cobranza);
+      $result->bindParam(":prfecha", $this->fecha);
+      $result->bindParam(":prtipopago", $this->tipo_pago);
+
+      $this->tipo=htmlspecialchars(strip_tags($this->tipo));
+      $this->id_cobranza=htmlspecialchars(strip_tags($this->id_cobranza));
+      $this->fecha=htmlspecialchars(strip_tags($this->fecha));
+      $this->tipo_pago=htmlspecialchars(strip_tags($this->tipo_pago));
+
+      if($result->execute())
+      {
+        return true;
+      }
+      return false;
+    }
+
     function read_pagos_cuotas(){
       
       $query = "CALL sp_listarcobranzasxcuota(?,?,?,?)";
@@ -152,6 +188,7 @@
             "monto" => $monto ,
             "fecha_pago" => $fecha_pago ,
             "documento" => $documento ,
+            "$id_tipo" => $id_tipo ,
             "tipo" => $tipo
           );
           array_push($cronograma["pagos"],$items);
@@ -291,25 +328,14 @@
 
         $this->id_cobranza = $row['id'];
 
-        foreach ($this->detalle_cabecera as $item) {
-          // echo "Tipo:" . $item->id_tipo . "/n" ;
-          if( $item->considerar ){
-            if( $item->id_tipo == 3 ) {
-              // echo "TipoV:" . $item->id_tipo . "/n" ;
-              $this->create_archivos_detalle($item->id_cliente, 0, $item->id, $item->monto_pendiente) ;
-            } else {
-              // echo "TipoC:" . $item->id_tipo . "/n" ;
-              $this->create_archivos_detalle($item->id_cliente, $item->id, 0, $item->monto_pendiente) ;
-            }
-          }
-        }
+        $this->create_archivos_detalle() ;
         
         return true;
       }
       return false;
     }
 
-    function create_archivos_detalle($cliente, $credito_cronongrama, $venta_cronograma, $monto){
+    function create_archivos_detalle(){
       $query = "CALL sp_crearcobranzaarchivosdetalle(
         :prcobranza,
         :prcliente,
@@ -318,31 +344,118 @@
         :prmonto
       )";
 
+      // Se crea un primer elemento sin información
+      // Se hace esto porque la primera iteración falla
+      $array = (object) array(
+        "considerar" => true ,
+        "id_tipo" => 0 ,
+        "id" => 0 ,
+        "id_cliente" => 0 ,
+        "monto_pendiente" => 0
+      );
+      array_unshift($this->detalle_cabecera, $array);
+      // ---------------------------------------------->
+
+      foreach ($this->detalle_cabecera as $item) {
+        if( $item->considerar ){
+
+          $cliente = $item->id_cliente ;
+          $monto = $item->monto_pendiente ;
+
+          if( $item->id_tipo == 3 ) {
+            $venta_cronograma = $item->id ;
+            $credito_cronongrama = 0;
+          } else {
+            $venta_cronograma = 0 ;
+            $credito_cronongrama = $item->id ;
+          }
+          $result = $this->conn->prepare($query);
+
+          $result->bindParam(":prcobranza", $this->id_cobranza);
+          $result->bindParam(":prcliente", $cliente);
+          $result->bindParam(":prcreditocronograma", $credito_cronongrama);
+          $result->bindParam(":prventacronograma", $venta_cronograma);
+          $result->bindParam(":prmonto", $monto);
+    
+          $this->id_cobranza=htmlspecialchars(strip_tags($this->id_cobranza));
+          $cliente=htmlspecialchars(strip_tags($cliente));
+          $credito_cronongrama=htmlspecialchars(strip_tags($credito_cronongrama));
+          $venta_cronograma=htmlspecialchars(strip_tags($venta_cronograma));
+          $monto=htmlspecialchars(strip_tags($monto));
+    
+          if( $result->execute() )
+          {
+            // echo "ParamsOK:" . " id: ".$this->id_cobranza . " cliente: " . $cliente . " cc: " . $credito_cronongrama . " vc: " . $venta_cronograma . " monto: " . $monto . "\n";
+            // return true;
+          } else {
+            // echo "ParamsErr:" . " id: ".$this->id_cobranza . " cliente: " . $cliente . " cc: " . $credito_cronongrama . " vc: " . $venta_cronograma . " monto: " . $monto . "\n";
+            // return false;
+          }
+        }
+      }
+    }
+
+    function create_archivos_cabecera_pago(){
+      $query = "CALL sp_crearcobranzaarchivoscabecerapago(
+        :prcobranza,
+        :prfechapago,
+        :prmontopagado
+      )";
+
       $result = $this->conn->prepare($query);
 
       $result->bindParam(":prcobranza", $this->id_cobranza);
-      $result->bindParam(":prcliente", $cliente);
-      $result->bindParam(":prcreditocronograma", $credito_cronongrama);
-      $result->bindParam(":prventacronograma", $venta_cronograma);
-      $result->bindParam(":prmonto", $monto);
+      $result->bindParam(":prfechapago", $this->fecha);
+      $result->bindParam(":prmontopagado", $this->monto);
 
       $this->id_cobranza=htmlspecialchars(strip_tags($this->id_cobranza));
-      $cliente=htmlspecialchars(strip_tags($cliente));
-      $credito_cronongrama=htmlspecialchars(strip_tags($credito_cronongrama));
-      $venta_cronograma=htmlspecialchars(strip_tags($venta_cronograma));
-      $monto=htmlspecialchars(strip_tags($monto));
+      $this->fecha=htmlspecialchars(strip_tags($this->fecha));
+      $this->monto=htmlspecialchars(strip_tags($this->monto));
 
-      if( $result->execute() )
+      if($result->execute())
       {
-        echo "1-ParamsOK:" . " id: ".$this->id_cobranza . " cliente: " . $cliente . " cc: " . $credito_cronongrama . " vc: " . $venta_cronograma . " monto: " . $monto . "\n";
+        $this->create_detalle_array(2);
         return true;
-      } else {
-        echo "ParamsErr:" . " id: ".$this->id_cobranza . " cliente: " . $cliente . " cc: " . $credito_cronongrama . " vc: " . $venta_cronograma . " monto: " . $monto . "\n";
-        return false;
       }
-    
+      return false;
     }
 
+    function delete_archivos_cabecera(){
+      $query = "CALL sp_eliminarcobranzaarchivos(
+        :prcobranza
+      )";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(":prcobranza", $this->id_cobranza);
+
+      $this->id_cobranza=htmlspecialchars(strip_tags($this->id_cobranza));
+
+      if($result->execute())
+      {
+        return true;
+      }
+      return false;
+    }
+
+    function verificar_pago_sede(){
+
+      $query = "CALL sp_verificarpagosede(?,?)";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(1, $this->sede);
+      $result->bindParam(2, $this->fecha);
+
+      $result->execute();
+
+      $row = $result->fetch(PDO::FETCH_ASSOC);
+
+      $this->total_resultado=$row['total'];
+
+      return $this->total_resultado;
+    }
+    
     function read_planilla_cabecera(){
       $query = "CALL sp_listarcobranzaplanillacabecera(?,?)";
 
@@ -372,7 +485,9 @@
             "fecha_fin"=>$fecha_fin,
             "cantidad"=>$cantidad,
             "monto"=>$monto,
-            "archivo"=>$archivo
+            "archivo"=>$archivo,
+            "estado"=>$estado,
+            "id_estado"=>$id_estado
           );
           array_push($cronograma["cobranzas"],$items);
       }
@@ -394,6 +509,95 @@
       $this->total_resultado=$row['total'];
 
       return $this->total_resultado;
+    }
+
+    function read_planilla_detalle_consolidadoxcliente(){
+      $query = "CALL sp_listarcobranzadetalleplanillaconsolidadoxcliente(?)";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(1, $this->id_cobranza);
+
+      $result->execute();
+
+      $cronograma=array();
+
+      $contador = $this->total_pagina*($this->numero_pagina-1);
+
+      while($row = $result->fetch(PDO::FETCH_ASSOC))
+      {
+          extract($row);
+          $contador=$contador+1;
+          $items = $codigo ."-" . ROUND($monto,2) ;
+          array_push($cronograma,$items);
+      }
+
+      return $cronograma;
+    
+    }
+
+    function read_cobranza_archivosxId(){
+      $query ="CALL sp_listarcobranzaarchivosxId(?)";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(1, $this->id_cobranza);
+
+      $result->execute();
+
+      $row = $result->fetch(PDO::FETCH_ASSOC);
+      $transacciones = array (
+        "id" => $row['id'] ,
+        "institucion" => $row['institucion'] ,
+        "sede" => $row['sede'] ,
+        "tipo_pago" => $row['tipo_pago'] ,
+        "fecha_inicio" => $row['fecha_inicio'] ,
+        "fecha_fin" => $row['fecha_fin'] ,
+        "fecha_pago" => $row['fecha_pago'] ,
+        "cantidad" => $row['cantidad'] ,
+        "monto" => $row['monto'] ,
+        "monto_pagado" => $row['monto_pagado'] ,
+        "archivo" => $row['archivo'] ,
+        "id_estado" => $row['id_estado'] ,
+        "estado" => $row['estado'] ,
+      );
+
+      return $transacciones;
+    }
+
+    function read_cobranza_detallexcabecera(){
+      $query = "CALL sp_listarcobranzaarchivosdetalle(?)";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(1, $this->id_cobranza);
+
+      $result->execute();
+
+      $cronograma=array();
+      $cronograma["cobranzas"]=array();
+
+      $contador = 0;
+
+      while($row = $result->fetch(PDO::FETCH_ASSOC))
+      {
+          extract($row);
+          $contador=$contador+1;
+          $items = array (
+            "numero"=>$contador,
+            "id_cliente" => $id_cliente ,
+            "cliente_dni" => $cliente_dni ,
+            "cliente" => $cliente ,
+            "id_tipo" => $id_tipo ,
+            "tipo" => $tipo ,
+            "documento" => $documento ,
+            "monto_enviado" => $monto_enviado ,
+            "monto_pagado" => $monto_pagado ,
+          );
+          array_push($cronograma["cobranzas"],$items);
+      }
+
+      return $cronograma;
     }
 
     function read_cobranza_directa(){
@@ -560,11 +764,9 @@
 
       if($result->execute())
       {
-          while($row = $result->fetch(PDO::FETCH_ASSOC))
-          {
-              extract($row);
-              $this->id_cobranza=$id;
-          }
+          $row = $result->fetch(PDO::FETCH_ASSOC);
+          $this->id_cobranza=$row['id'];
+          $this->create_detalle_array(1);
           return true;
       }
       return false;
@@ -607,6 +809,7 @@
 
       if($result->execute())
       {
+        $this->create_detalle_array(1);
         return true;
       }
       return false;
@@ -751,8 +954,8 @@
 
       $result = $this->conn->prepare($query);
 
-      $result->bindParam(1, $this->cliente);
-      $result->bindParam(2, $this->monto);
+      $result->bindParam(1, $this->cabecera);
+      $result->bindParam(2, $this->cliente);
 
       $result->execute();
 
@@ -771,6 +974,7 @@
             $comodin = ROUND($comodin - $monto_pendiente ,2) ;
           } else {
             $pagar = $comodin ;
+            $comodin = 0 ;
           }
           $items = array (
             "id" => $id ,
@@ -831,6 +1035,79 @@
       return false;
     }
 
+    function create_detalle_array($tipo){
+      $query = "CALL sp_crearcobranzadetalle(
+        :prcobranzadirecta,
+        :prcobranzaarchivos,
+        :prcobranzajudicial,
+        :prcreditocronograma,
+        :prventacronograma,
+        :prmonto,
+        :prfecha
+      )";
+
+      $array = (object) array(
+        "id" => 0 ,
+        "id_tipo" => 0 ,
+        "id_cronograma" => 0 ,
+        "pagar" => 0
+      );
+      array_unshift($this->detalle_cabecera, $array);
+
+      foreach ($this->detalle_cabecera as $item) {
+        if ( $item->pagar >= 0 ) {
+          $cobranza_directa = 0 ;
+          $cobranza_archivos = 0 ;
+          $cobranza_judicial = 0 ;
+          
+          if( $tipo == 1 && $item->pagar > 0 ) {
+            $cobranza_directa = $this->id_cobranza ;
+          }
+          if( $tipo == 2 && $item->pagar > 0 ) {
+            $cobranza_archivos = $item->id ;
+          }
+  
+          if( $item->id_tipo == 3 ) {
+            $venta_cronograma = $item->id_cronograma ;
+            $credito_cronograma = 0;
+          } else {
+            $venta_cronograma = 0 ;
+            $credito_cronograma = $item->id_cronograma ;
+          }
+  
+          $monto = $item->pagar ;
+          $fecha = $this->fecha ;
+  
+          $result = $this->conn->prepare($query);
+  
+          $result->bindParam(":prcobranzadirecta", $cobranza_directa);
+          $result->bindParam(":prcobranzaarchivos", $cobranza_archivos);
+          $result->bindParam(":prcobranzajudicial", $cobranza_judicial);
+          $result->bindParam(":prcreditocronograma", $credito_cronograma);
+          $result->bindParam(":prventacronograma", $venta_cronograma);
+          $result->bindParam(":prmonto", $monto);
+          $result->bindParam(":prfecha", $fecha);
+  
+          $cobranza_directa=htmlspecialchars(strip_tags($cobranza_directa));
+          $cobranza_archivos=htmlspecialchars(strip_tags($cobranza_archivos));
+          $cobranza_judicial=htmlspecialchars(strip_tags($cobranza_judicial));
+          $credito_cronograma=htmlspecialchars(strip_tags($credito_cronograma));
+          $venta_cronograma=htmlspecialchars(strip_tags($venta_cronograma));
+          $monto=htmlspecialchars(strip_tags($monto));
+          $fecha=htmlspecialchars(strip_tags($fecha));
+
+          $result->execute();
+
+          // if($result->execute()) {
+          //   echo "Ok." . " - " . $cobranza_directa . " - " .$cobranza_archivos . " - " .$cobranza_judicial . " - " .$credito_cronograma . " - " .$venta_cronograma . " - " .$monto . " - " .$fecha . "\n" ;
+          // } else {
+          //   echo "Err." . " - " . $cobranza_directa . " - " .$cobranza_archivos . " - " .$cobranza_judicial . " - " .$credito_cronograma . " - " .$venta_cronograma . " - " .$monto . " - " .$fecha . "\n" ;
+          // };
+        }
+      }
+
+    }
+
     function delete_cobranza_directa(){
       $query = "CALL sp_eliminarcobranzadirecta(
         :prcobranzadirecta
@@ -848,6 +1125,136 @@
       }
       return false;
     }
+
+    function read_cobranzasxcliente() {
+      $query = "CALL sp_listarcobranzasxcliente(?,?,?,?,?,?,?,?,?)";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(1, $this->cliente);
+      $result->bindParam(2, $this->sede);
+      $result->bindParam(3, $this->subsede);
+      $result->bindParam(4, $this->institucion);
+      $result->bindParam(5, $this->tipo_pago);
+      $result->bindParam(6, $this->fecha_inicio);
+      $result->bindParam(7, $this->fecha_fin);
+      $result->bindParam(8, $this->numero_pagina);
+      $result->bindParam(9, $this->total_pagina);
+
+      $result->execute();
+      
+      $cobranza=array();
+      $cobranza["cobranza"]=array();
+
+      $contador = $this->total_pagina*($this->numero_pagina-1);
+      
+      while($row = $result->fetch(PDO::FETCH_ASSOC))
+      {
+          extract($row);
+          $contador=$contador+1;
+          $items = array (
+              "numero"=>$contador,
+              "id_cliente"=>$id_cliente,
+              "cliente"=>$cliente,
+              "cliente_dni"=>$cliente_dni,
+              "tipo_pago"=>$tipo_pago,
+              "subsede"=>$subsede,
+              "sede"=>$sede,
+              "institucion"=>$institucion,
+              "monto_pendiente"=>$monto_pendiente,
+          );
+          array_push($cobranza["cobranza"],$items);
+      }
+
+      return $cobranza;
+    }
+
+    function contar_cobranzasxcliente(){
+
+      $query = "CALL sp_listarcobranzasxclientecontar(?,?,?,?,?,?,?)";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(1, $this->cliente);
+      $result->bindParam(2, $this->sede);
+      $result->bindParam(3, $this->subsede);
+      $result->bindParam(4, $this->institucion);
+      $result->bindParam(5, $this->tipo_pago);
+      $result->bindParam(6, $this->fecha_inicio);
+      $result->bindParam(7, $this->fecha_fin);
+
+      $result->execute();
+
+      $row = $result->fetch(PDO::FETCH_ASSOC);
+
+      $this->total_resultado=$row['total'];
+
+      return $this->total_resultado;
+    }
+
+    function read_cobranzasxclienteunlimited() {
+
+      $spreadsheet = new Spreadsheet();
+      $sheet = $spreadsheet->getActiveSheet();
+
+      $query = "CALL sp_listarcobranzasxclienteunlimited(?,?,?,?,?,?,?)";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(1, $this->cliente);
+      $result->bindParam(2, $this->sede);
+      $result->bindParam(3, $this->subsede);
+      $result->bindParam(4, $this->institucion);
+      $result->bindParam(5, $this->tipo_pago);
+      $result->bindParam(6, $this->fecha_inicio);
+      $result->bindParam(7, $this->fecha_fin);
+
+      $result->execute();
+      
+      $archivo = "" ;
+      $cobranza=array();
+      $cobranza["cobranza"]=array();
+
+      $contador = 1;
+
+      $sheet->setCellValue('A1', 'N°');
+      $sheet->setCellValue('B1', 'DNI');
+      $sheet->setCellValue('C1', 'Cliente');
+      $sheet->setCellValue('D1', 'Tipo de pago');
+      $sheet->setCellValue('E1', 'Subsede');
+      $sheet->setCellValue('F1', 'Sede');
+      $sheet->setCellValue('G1', 'Institución');
+      $sheet->setCellValue('H1', 'Monto pendiente');
+
+      while($row = $result->fetch(PDO::FETCH_ASSOC))
+      {
+          extract($row);
+          $contador=$contador+1;
+
+          $sheet->setCellValue('A' . $contador, $contador-1 );
+          $sheet->setCellValue('B' . $contador, $cliente_dni );
+          $sheet->setCellValue('C' . $contador, $cliente );
+          $sheet->setCellValue('D' . $contador, $tipo_pago );
+          $sheet->setCellValue('E' . $contador, $subsede );
+          $sheet->setCellValue('F' . $contador, $sede );
+          $sheet->setCellValue('G' . $contador, $institucion );
+          $sheet->setCellValue('H' . $contador, $monto_pendiente );
+      }
+
+      $writer = new Xlsx($spreadsheet);
+
+      $archivo = $this->path_reporte.$this->archivo.'.xlsx';
+
+      $writer->save($archivo);
+      
+      if( file_exists ( $archivo ) ){
+        return $archivo;
+      } else {
+        return false;
+      };
+
+    }
+
 
   }
 

@@ -21,6 +21,7 @@
         {
 
             $venta->venta=trim($_POST["prventa"]);
+            $venta->tipo_pago=trim($_POST["prtipopago"]);
             $venta->monto=trim($_POST["prmonto"]);
             $venta->vencimiento=trim($_POST["prvencimiento"]);
             $venta->estado=trim($_POST["prestado"]);

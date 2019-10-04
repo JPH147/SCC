@@ -22,6 +22,7 @@
         {
 
             $credito->id_credito=trim($_POST["prcredito"]);
+            $credito->tipo_pago=trim($_POST["prtipopago"]);
             $credito->monto=trim($_POST["prmonto"]);
             $credito->total_cuotas=trim($_POST["prcuotas"]);
             $credito->fecha=trim($_POST["prprimeracuota"]);

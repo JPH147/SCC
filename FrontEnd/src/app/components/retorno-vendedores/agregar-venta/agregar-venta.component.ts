@@ -369,7 +369,7 @@ export class AgregarVentaComponent implements OnInit {
       //   this.VentaServicio.CrearVentaCronograma(res['data'],this.DocumentoForm.value.montototal,this.DocumentoForm.value.fechapago,2).subscribe()
       // }else{
         this.Cronograma.forEach((item)=>{
-          this.VentaServicio.CrearVentaCronograma(res['data'],item.monto_cuota,item.fecha_vencimiento,1).subscribe()
+          this.VentaServicio.CrearVentaCronograma(res['data'],this.DocumentoForm.value.tipopago,item.monto_cuota,item.fecha_vencimiento,1).subscribe()
         });
       // }
 

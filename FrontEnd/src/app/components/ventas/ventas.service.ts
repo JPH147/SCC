@@ -155,6 +155,7 @@ export class VentaService {
   // estado: 1. Por pagar, 2. Pagado
   CrearVentaCronograma(
     venta:number,
+    id_tipo_pago : number ,
     monto:number,
     vencimiento:Date,
     estado:number
@@ -162,6 +163,7 @@ export class VentaService {
 
     let params = new HttpParams()
     .set('prventa',venta.toString())
+    .set('prtipopago',id_tipo_pago.toString())
     .set('prmonto',monto.toString())
     .set('prvencimiento',moment(vencimiento).format("YYYY-MM-DD"))
     .set('prestado',estado.toString())

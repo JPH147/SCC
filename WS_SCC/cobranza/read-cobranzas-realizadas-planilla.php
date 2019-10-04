@@ -16,8 +16,9 @@
     try{
         $cobranza = new Cobranzas($db);
 
+        $cobranza->cabecera = !empty($_GET['prcabecera']) ? trim($_GET['prcabecera']) :  die() ;
         $cobranza->cliente = !empty($_GET['prcliente']) ? trim($_GET['prcliente']) : die() ;
-        $cobranza->monto = !empty($_GET['prmonto']) ? trim($_GET['prmonto']) : 1000 ;
+        $cobranza->monto = !empty($_GET['prmonto']) ? trim($_GET['prmonto']) : 0 ;
 
         $cobranza_list = $cobranza->seleccionar_cuotas_pagadas_planilla();
 

@@ -31,7 +31,7 @@ body{
 /* Estilos para la tabla */
 mat-header-cell,
 mat-grid-tile-header {
-  font-size: 14px !important;
+  font-size: 16px !important;
   background-color: mat-color($primary) !important;
   color: #fff !important;
 }
@@ -142,4 +142,37 @@ mat-row:nth-child(even){
 	box-shadow: inset 0 0 6px rgba(0,0,0,.3);
 	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
 	background-color: #555;
+}
+
+/* El espacio que hay en el centro de las mat-toolbar */
+.espacio {
+  flex: 1 1 auto;
+}
+
+/* Fondo de color blanco */
+.white{
+  background-color: white !important
+}
+
+/**************/
+.mat-form-field-appearance-legacy .mat-form-field-label {
+  color: rgba(0,0,0,0.8) !important
+}
+
+.mat-expansion-panel-header {
+  font-size: 18px !important;
+}
+
+.mat-expansion-panel-content,
+.mat-step-label,
+.mat-cheackbox-label,
+.mat-input-element,
+.mat-grid-tile-header,
+.mat-figure,
+button{
+  font-size: 16px !important;
+}
+
+.mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label{
+  transform: scale(0.9);
 }

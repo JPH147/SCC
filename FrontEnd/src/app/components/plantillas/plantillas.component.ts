@@ -83,16 +83,16 @@ export class PlantillasComponent implements OnInit {
       {numero: 1, nombre: "transaccion_1.docx", referente: "Policía Nacional del Perú"},
       {numero: 2, nombre: "transaccion_2.docx", referente: "Caja Pensión"},
       {numero: 3, nombre: "transaccion_3.docx", referente: "Ejército"},
-      {numero: 4, nombre: "transaccion_4.docx", referente: "Ministerio de Salud"},
-      {numero: 5, nombre: "transaccion_5.docx", referente: "Ministerio de educación"},
+      {numero: 4, nombre: "transaccion_4.docx", referente: "Ministerio de educación"},
+      {numero: 5, nombre: "transaccion_5.docx", referente: "Ministerio de salud"},
       {numero: 6, nombre: "transaccion_6.docx", referente: "Otros"}
     ];
     this.ListadoAutorizacion = [
       {numero: 1, nombre: "autorizacion_1.docx", referente: "Policía Nacional del Perú"},
       {numero: 2, nombre: "autorizacion_2.docx", referente: "Caja Pensión"},
       {numero: 3, nombre: "autorizacion_3.docx", referente: "Ejército"},
-      {numero: 4, nombre: "autorizacion_4.docx", referente: "Ministerio de Salud"},
-      {numero: 5, nombre: "autorizacion_5.docx", referente: "Ministerio de educación"},
+      {numero: 4, nombre: "autorizacion_4.docx", referente: "Ministerio de educación"},
+      {numero: 5, nombre: "autorizacion_5.docx", referente: "Ministerio de salud"},
       {numero: 6, nombre: "autorizacion_6.docx", referente: "Otros"}
     ];
     this.ListadoDDJJ = [

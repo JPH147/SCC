@@ -1152,6 +1152,11 @@
 
           <!-- Con el sort -->
           
+          <ng-container matColumnDef="tipo_pago">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo de pago </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma"> {{cronograma.tipo_pago}} </mat-cell>
+          </ng-container>
+
           <ng-container matColumnDef="fecha_vencimiento">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Vencimiento </mat-header-cell>
             <mat-cell *matCellDef="let cronograma"> {{cronograma.fecha_vencimiento | date: 'dd/MM/yyyy'}} </mat-cell>

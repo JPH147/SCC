@@ -547,6 +547,9 @@ export class RefinanciamientoComponent implements OnInit, AfterViewInit {
     let dias_mes : number = moment(fecha_prestamo).daysInMonth();
     let interes_truncado = Math.round( ((dias_mes - dia_credito) / dias_mes) * interes_estandar * 100 ) / 100;
 
+    let numero_cuotas = moment(fecha_inicio).diff(moment(fecha_prestamo), 'months') ;
+    // Se reemplazó numero_cuotas por (mes_pago - mes_credito)
+
     // Si el crédito es antes de quincena, se paga a fin de mes los intereses truncados
     if( this.RefinanciamientoCronogramaForm.value.interes_por_dia ){
       let fecha_1 = moment(fecha_prestamo).endOf('month');
@@ -566,8 +569,8 @@ export class RefinanciamientoComponent implements OnInit, AfterViewInit {
     }
 
     // Se pagan los intereses mientras no se cancele el crédito
-    if( mes_pago - mes_credito > 1){
-      for( i; i<mes_pago - mes_credito; i++){
+    if( numero_cuotas > 1){
+      for( i; i< numero_cuotas; i++){
         fecha=moment(new Date(ano_credito, mes_credito, dia_pago)).add(i, 'months').toDate();
         (i==1 ) ? this.VerificarCoincidenciaCronograma(fecha,1) : this.VerificarCoincidenciaCronograma(fecha,2)
 

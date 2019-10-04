@@ -80,7 +80,7 @@ Class Plantillas{
         $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('../plantillas/archivos/'.$this->nombre_plantilla);
 
         $templateProcessor->setValue('nombre', $this->convertir_formato($this->nombre) );
-        $templateProcessor->setValue('dni', str_pad($this->dni, 15) );
+        $templateProcessor->setValue('dni', str_pad( str_pad($this->dni, 8 ,"0" ,STR_PAD_LEFT) , 15) );
         $templateProcessor->setValue('cip', str_pad($this->cip, 15) );
         $templateProcessor->setValue('codigo', $this->codigo);
         $templateProcessor->setValue('cargo_estado', $this->cargo_estado);
@@ -103,7 +103,7 @@ Class Plantillas{
         $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('../plantillas/archivos/'.$this->nombre_plantilla);
 
         $templateProcessor->setValue('nombre', $this->convertir_formato($this->nombre) );
-        $templateProcessor->setValue('dni', $this->dni);
+        $templateProcessor->setValue('dni', str_pad($this->dni, 8 ,"0" ,STR_PAD_LEFT) );
         $templateProcessor->setValue('distrito', $this->distrito);
         $templateProcessor->setValue('direccion', $this->direccion);
         $templateProcessor->setValue('lugar', $this->lugar);
@@ -136,7 +136,7 @@ Class Plantillas{
         $templateProcessor->setValue('tipo_motivo', $tipo_autorizacion);
         $templateProcessor->setValue('nombre', $this->convertir_formato($this->nombre) );
         $templateProcessor->setValue('cargo_estado', ucwords(strtolower($this->cargo_estado)));
-        $templateProcessor->setValue('dni', $this->dni);
+        $templateProcessor->setValue('dni', str_pad($this->dni, 8 ,"0" ,STR_PAD_LEFT) );
         $templateProcessor->setValue('cip', $this->cip);
         $templateProcessor->setValue('codigo', $this->codigo);
         $templateProcessor->setValue('ugel_nombre', $this->ugel_nombre);
@@ -166,12 +166,12 @@ Class Plantillas{
         $templateProcessor->setValue('cooperativa_cuenta_banco', $this->cooperativa_cuenta_banco);
         $templateProcessor->setValue('cooperativa_cuenta_numero', $this->cooperativa_cuenta_numero);
         $templateProcessor->setValue('presidente', $this->presidente);
-        $templateProcessor->setValue('presidente_dni', $this->presidente_dni);
+        $templateProcessor->setValue('presidente_dni', str_pad($this->presidente_dni, 8 ,"0" ,STR_PAD_LEFT));
         $templateProcessor->setValue('presidente_direccion', $this->presidente_direccion);
 
         $templateProcessor->setValue('nombre', $this->convertir_formato($this->nombre) );
         $templateProcessor->setValue('cargo', $this->cargo);
-        $templateProcessor->setValue('dni', $this->dni);
+        $templateProcessor->setValue('dni', str_pad($this->dni, 8 ,"0" ,STR_PAD_LEFT));
         $templateProcessor->setValue('cip', $this->cip);
         $templateProcessor->setValue('direccion', $this->direccion);
         $templateProcessor->setValue('casilla', $this->casilla);
@@ -265,7 +265,7 @@ Class Plantillas{
 
         $templateProcessor->setValue('cooperativa', $this->cooperativa);
         $templateProcessor->setValue('nombre', $this->convertir_formato($this->nombre) );
-        $templateProcessor->setValue('dni', $this->dni);
+        $templateProcessor->setValue('dni', str_pad($this->dni, 8 ,"0" ,STR_PAD_LEFT) );
         $templateProcessor->setValue('cip', $this->cip);
         $templateProcessor->setValue('fecha', $this->fecha);
         $templateProcessor->setValue('banco', $this->banco);
@@ -283,7 +283,7 @@ Class Plantillas{
 
         $templateProcessor->setValue('cooperativa', $this->cooperativa);
         $templateProcessor->setValue('nombre', $this->nombre);
-        $templateProcessor->setValue('dni', $this->dni);
+        $templateProcessor->setValue('dni', str_pad($this->dni, 8 ,"0" ,STR_PAD_LEFT) );
         $templateProcessor->setValue('cip', $this->cip);
         $templateProcessor->setValue('fecha', $this->fecha);
         $templateProcessor->setValue('banco', $this->banco);
@@ -301,10 +301,10 @@ Class Plantillas{
         $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('../plantillas/archivos/carta_aval.docx');
 
         $templateProcessor->setValue('nombre_aval', $this->convertir_formato($this->nombre_aval) );
-        $templateProcessor->setValue('dni_aval', $this->dni_aval );
+        $templateProcessor->setValue('dni_aval', str_pad($this->dni_aval, 8 ,"0" ,STR_PAD_LEFT) );
         $templateProcessor->setValue('dirección_aval', $this->direccion_aval );
         $templateProcessor->setValue('nombre_cliente', $this->convertir_formato($this->nombre) );
-        $templateProcessor->setValue('dni_cliente', $this->dni );
+        $templateProcessor->setValue('dni_cliente', str_pad($this->dni, 8 ,"0" ,STR_PAD_LEFT) );
         $templateProcessor->setValue('lugar', $this->lugar);
         $templateProcessor->setValue('fecha', $this->fecha_letras);
 

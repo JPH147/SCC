@@ -1,0 +1,38 @@
+<mat-card class="card">
+
+  <mat-toolbar color="primary">
+    <mat-toolbar-row>Editar detalles del pago</mat-toolbar-row>
+  </mat-toolbar>
+
+  <form [formGroup]="VentanaPagoForm">
+    <mat-card-content>
+      <mat-grid-list cols="3" rowHeight="70px">
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput [matDatepicker]="InputFechaPago" placeholder="Fecha de pago" [min]="Hoy" formControlName="fecha_vencimiento" readonly>
+            <mat-datepicker-toggle matSuffix [for]="InputFechaPago"></mat-datepicker-toggle>
+            <mat-datepicker #InputFechaPago></mat-datepicker>
+          </mat-form-field>
+        </mat-grid-tile>
+  
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <mat-select placeholder='Tipo de pago' formControlName="tipo_pago">
+              <mat-option *ngFor="let tipopago of ListadoTipoPago" [value] = "tipopago.id"> {{tipopago.nombre}} </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-card-content>
+  
+    <mat-card-actions>
+      <mat-grid-list cols=1 rowHeight="40px">
+        <mat-grid-tile>
+          <button mat-raised-button color="primary" (click)="Guardar()"> Guardar </button>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-card-actions>
+  </form>
+
+</mat-card>
+  

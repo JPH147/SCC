@@ -1,0 +1,101 @@
+<mat-card>
+
+  <button mat-mini-fab type="button" color="primary" (click)="Atras()"><mat-icon>keyboard_arrow_left</mat-icon></button>
+
+  <mat-card-title class="tituloProd"> Cobranza por planillas </mat-card-title>
+
+  <div class = "spinner-container" *ngIf = "Cargando | async">
+    <mat-spinner></mat-spinner>
+  </div>
+  
+  <form [formGroup]="PlanillasForm">
+
+    <!-- General -->
+    <div class="seccion">
+
+      <mat-card-subtitle class="titulo-seccion">
+        DATOS GENERALES
+      </mat-card-subtitle>
+
+      <mat-grid-list cols="4" rowHeight="70px">
+
+        <mat-grid-tile colspan=2>
+          <mat-form-field class="columnas-2">
+            <input matInput placeholder="Institución" formControlName="institucion" readonly>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan=2>
+          <mat-form-field class="columnas-2">
+            <input matInput placeholder="Sede" formControlName="sede" readonly>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan="1">
+          <mat-form-field class="columnas-1">
+              <input matInput placeholder="Periodo" formControlName="periodo" readonly>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput placeholder="Estado" formControlName="estado" readonly>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile *ngIf="PlanillasForm.value.id_estado>1">
+          <mat-form-field class="columnas-1">
+            <input matInput placeholder="Fecha de pago" formControlName="fecha_pago" readonly>
+          </mat-form-field>
+        </mat-grid-tile>
+
+      </mat-grid-list>
+    </div>
+
+    <!-- Detalle -->
+    <div class="seccion">
+      <mat-card-subtitle class="titulo-seccion">
+        Detalle de cobranzas
+      </mat-card-subtitle>
+
+      <div *ngFor="let detalle of Detalle">
+        <mat-grid-list [cols]="PlanillasForm.value.id_estado==1 ? 5 : 6 " rowHeight="70px">
+  
+          <mat-grid-tile colspan=2>
+            <mat-form-field class="columnas-2">
+              <input matInput placeholder="Cliente" [value]="detalle.cliente" readonly>
+            </mat-form-field>
+          </mat-grid-tile>
+  
+          <mat-grid-tile colspan=1>
+            <mat-form-field class="columnas-1">
+              <input matInput placeholder="Tipo" [value]="detalle.tipo" readonly>
+            </mat-form-field>
+          </mat-grid-tile>
+  
+          <mat-grid-tile colspan="1">
+            <mat-form-field class="columnas-1">
+                <input matInput placeholder="Documento" [value]="detalle.documento" readonly>
+            </mat-form-field>
+          </mat-grid-tile>
+  
+          <mat-grid-tile>
+            <mat-form-field class="columnas-1">
+              <span matPrefix>S/.&nbsp;</span>
+              <input matInput placeholder="Monto enviado" [value]="detalle.monto_enviado" readonly>
+            </mat-form-field>
+          </mat-grid-tile>
+  
+          <mat-grid-tile *ngIf="PlanillasForm.value.id_estado>1">
+            <mat-form-field class="columnas-1">
+              <span matPrefix>S/.&nbsp;</span>
+              <input matInput placeholder="Monto pagado" [value]="detalle.monto_pagado" readonly>
+            </mat-form-field>
+          </mat-grid-tile>
+  
+        </mat-grid-list>
+      </div>
+    </div>
+
+  </form>
+</mat-card>

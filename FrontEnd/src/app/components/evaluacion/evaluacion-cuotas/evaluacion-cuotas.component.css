@@ -14,3 +14,8 @@ mat-card.principal{
 .mat-form-field{
 	width: 80%
 }
+
+.resaltado{
+  font-weight: bold;
+  font-size: 20px !important;
+}

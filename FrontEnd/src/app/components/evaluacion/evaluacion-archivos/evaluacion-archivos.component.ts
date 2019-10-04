@@ -100,6 +100,7 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
 
     this.ListarVendedor("");
     this.ListarTrabajador("");
+
   }
 
   ngAfterViewInit(){
@@ -111,15 +112,6 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
         this.ListarVendedor(this.VendedorAutoComplete.nativeElement.value);
       })
      ).subscribe();
-
-    //  fromEvent(this.TrabajadorAutoComplete.nativeElement, 'keyup')
-    // .pipe(
-    //   debounceTime(10),
-    //   distinctUntilChanged(),
-    //   tap(() => {
-    //     this.ListarTrabajador(this.TrabajadorAutoComplete.nativeElement.value);
-    //   })
-    //  ).subscribe();
   }
 
   ObtenerDatosCooperativa(){
@@ -243,7 +235,7 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
       ]],
       trabajador_cargo : [ { value : "" , disabled : false } , [
       ]],
-      lugar : [ { value : null , disabled : false } , [
+      lugar : [ { value : "Ate Vitarte" , disabled : false } , [
         Validators.required
       ]],
       dias_premura : [ { value : null , disabled : false } , [
@@ -400,21 +392,6 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
     });
   }
 
-  // TrabajadorSeleccionado(){
-  //   let nombre_trabajador= this.EvaluacionArchivosForm.value.trabajador.nombre;
-  //   this.EvaluacionArchivosForm.get('id_trabajador').setValue(this.EvaluacionArchivosForm.value.trabajador.id);
-  //   this.EvaluacionArchivosForm.get('trabajador_cargo').setValue(this.EvaluacionArchivosForm.value.trabajador.cargo);
-  //   this.EvaluacionArchivosForm.get('trabajador_dni').setValue(this.EvaluacionArchivosForm.value.trabajador.documento);
-  //   this.EvaluacionArchivosForm.get('trabajador').setValue(nombre_trabajador);
-  // }
-  
-  // RemoverTrabajador(){
-  //   this.EvaluacionArchivosForm.get('id_trabajador').setValue(null);
-  //   this.EvaluacionArchivosForm.get('trabajador').setValue("");
-  //   this.EvaluacionArchivosForm.get('trabajador_cargo').setValue("");
-  //   this.EvaluacionArchivosForm.get('trabajador_documento').setValue("");
-  //   this.ListarTrabajador("");
-  // }
 
   ObtenerDireccion(id) {
     this.DServicios.ListarDireccion( id, '1',1,1).subscribe(res => {
@@ -585,8 +562,10 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
       nombre_archivo,
       this.EvaluacionArchivosForm.value.nombre,
       this.EvaluacionArchivosForm.value.dni,
-      this.EvaluacionArchivosForm.value.considerar_direccion_cliente ? this.distrito_cliente : this.informacion_cooperativa['direccion_ddjj'].distrito,
-      this.EvaluacionArchivosForm.value.considerar_direccion_cliente ? this.direccion_cliente : this.informacion_cooperativa['direccion_ddjj'].direccion,
+      // this.EvaluacionArchivosForm.value.considerar_direccion_cliente ? this.distrito_cliente : this.informacion_cooperativa['direccion_ddjj'].distrito,
+      // this.EvaluacionArchivosForm.value.considerar_direccion_cliente ? this.direccion_cliente : this.informacion_cooperativa['direccion_ddjj'].direccion,
+      this.distrito_cliente,
+      this.direccion_cliente,
       this.EvaluacionArchivosForm.value.lugar,
       this.EvaluacionArchivosForm.value.fecha_letras
     ).subscribe(res=>{
@@ -609,7 +588,8 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
       this.EvaluacionArchivosForm.value.dni,
       this.EvaluacionArchivosForm.value.cip,
       this.EvaluacionArchivosForm.value.codigo,
-      this.EvaluacionArchivosForm.value.considerar_direccion_cliente ? this.direccion_cliente : this.informacion_cooperativa['direccion_ddjj'].direccion,
+      // this.EvaluacionArchivosForm.value.considerar_direccion_cliente ? this.direccion_cliente : this.informacion_cooperativa['direccion_ddjj'].direccion,
+      this.direccion_cliente,
       this.EvaluacionArchivosForm.value.telefono_tipo,
       this.EvaluacionArchivosForm.value.telefono_numero,
       this.EvaluacionArchivosForm.value.email,
@@ -649,7 +629,7 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
       this.EvaluacionArchivosForm.value.considerar_direccion_cliente ? this.direccion_cliente : this.informacion_cooperativa['direccion_ddjj'].direccion,
       this.EvaluacionArchivosForm.value.casilla,
       this.EvaluacionArchivosForm.value.subsede,
-      this.EvaluacionArchivosForm.value.fecha,
+      this.EvaluacionArchivosForm.value.fecha_letras,
       this.EvaluacionArchivosForm.value.dias_premura,
       Math.round(this.EvaluacionArchivosForm.value.total*100)/100,
       Math.round(this.EvaluacionArchivosForm.value.monto_cuota*100)/100,
@@ -970,7 +950,8 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
       this.EvaluacionArchivosForm['controls'].garantes['controls'][0].value.dni,
       this.EvaluacionArchivosForm['controls'].garantes['controls'][0].value.cip,
       this.EvaluacionArchivosForm['controls'].garantes['controls'][0].value.codigo,
-      this.EvaluacionArchivosForm.value.considerar_direccion_cliente ? this.direccion_aval : this.informacion_cooperativa['direccion_ddjj'].direccion,
+      // this.EvaluacionArchivosForm.value.considerar_direccion_cliente ? this.direccion_aval : this.informacion_cooperativa['direccion_ddjj'].direccion,
+      this.direccion_aval,
       this.EvaluacionArchivosForm['controls'].garantes['controls'][0].value.telefono_tipo,
       this.EvaluacionArchivosForm['controls'].garantes['controls'][0].value.telefono_numero,
       this.EvaluacionArchivosForm['controls'].garantes['controls'][0].value.email,
@@ -993,8 +974,10 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
       nombre_archivo,
       this.EvaluacionArchivosForm['controls'].garantes['controls'][0].value.nombre,
       this.EvaluacionArchivosForm['controls'].garantes['controls'][0].value.dni,
-      this.EvaluacionArchivosForm.value.considerar_direccion_cliente ? this.distrito_aval : this.informacion_cooperativa['direccion_ddjj'].distrito,
-      this.EvaluacionArchivosForm.value.considerar_direccion_cliente ? this.direccion_aval : this.informacion_cooperativa['direccion_ddjj'].direccion,
+      // this.EvaluacionArchivosForm.value.considerar_direccion_cliente ? this.distrito_aval : this.informacion_cooperativa['direccion_ddjj'].distrito,
+      // this.EvaluacionArchivosForm.value.considerar_direccion_cliente ? this.direccion_aval : this.informacion_cooperativa['direccion_ddjj'].direccion,
+      this.distrito_aval,
+      this.direccion_aval,
       this.EvaluacionArchivosForm.value.lugar,
       this.EvaluacionArchivosForm.value.fecha_letras
     ).subscribe(res=>{
@@ -1032,7 +1015,8 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
       nombre_archivo,
       this.EvaluacionArchivosForm['controls'].garantes['controls'][0].value.nombre,
       this.EvaluacionArchivosForm['controls'].garantes['controls'][0].value.dni,
-      this.EvaluacionArchivosForm.value.considerar_direccion_cliente ? this.direccion_aval : this.informacion_cooperativa['direccion_ddjj'].direccion,
+      // this.EvaluacionArchivosForm.value.considerar_direccion_cliente ? this.direccion_aval : this.informacion_cooperativa['direccion_ddjj'].direccion,
+      this.direccion_aval,
       this.EvaluacionArchivosForm.value.nombre,
       this.EvaluacionArchivosForm.value.dni,
       this.EvaluacionArchivosForm.value.lugar,

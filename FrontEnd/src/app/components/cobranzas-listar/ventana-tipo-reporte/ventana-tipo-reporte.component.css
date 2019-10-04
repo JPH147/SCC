@@ -1,0 +1,8 @@
+.click:hover{
+  cursor: pointer;
+}
+
+.card{
+  padding: 0px;
+  overflow: hidden;
+}

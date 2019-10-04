@@ -268,6 +268,8 @@ Class Creditos{
             $credito_item = array (
                 "numero"=>$contador,
                 "id_cronograma"=>$id_cronograma,
+                "id_tipo_pago" => $id_tipo_pago ,
+                "tipo_pago" => $tipo_pago ,
                 "capital"=>$capital,
                 "interes"=>$interes,
                 "monto_cuota"=>$monto_cuota,
@@ -305,6 +307,7 @@ Class Creditos{
           $cronograma_item = array (
                 "numero" => $contador,
                 "id_cronograma" => $id ,
+                "tipo_pago" => $tipo_pago ,
                 "fecha_vencimiento" => $fecha ,
                 "capital" => $capital ,
                 "interes" => $interes ,
@@ -656,6 +659,7 @@ Class Creditos{
     function crear_cronograma(){
         $query = "CALL sp_crearcreditocronograma(
             :prcredito,
+            :prtipopago,
             :prcapital,
             :printeres,
             :prfechavencimiento
@@ -664,11 +668,13 @@ Class Creditos{
         $result = $this->conn->prepare($query);
 
         $result->bindParam(":prcredito", $this->id_credito);
+        $result->bindParam(":prtipopago", $this->tipo_pago);
         $result->bindParam(":prcapital", $this->capital);
         $result->bindParam(":printeres", $this->interes);
         $result->bindParam(":prfechavencimiento", $this->fecha);
 
         $this->id_credito=htmlspecialchars(strip_tags($this->id_credito));
+        $this->tipo_pago=htmlspecialchars(strip_tags($this->tipo_pago));
         $this->capital=htmlspecialchars(strip_tags($this->capital));
         $this->interes=htmlspecialchars(strip_tags($this->interes));
         $this->fecha=htmlspecialchars(strip_tags($this->fecha));
@@ -684,6 +690,7 @@ Class Creditos{
     function crear_cronograma_afiliacion(){
         $query = "CALL sp_crearcreditocronogramaafiliacion(
             :prcredito,
+            :prcredito,
             :prmonto,
             :prcuotas,
             :prprimeracuota
@@ -692,11 +699,13 @@ Class Creditos{
         $result = $this->conn->prepare($query);
 
         $result->bindParam(":prcredito", $this->id_credito);
+        $result->bindParam(":prtipopago", $this->tipo_pago);
         $result->bindParam(":prmonto", $this->monto);
         $result->bindParam(":prcuotas", $this->total_cuotas);
         $result->bindParam(":prprimeracuota", $this->fecha);
 
         $this->id_credito=htmlspecialchars(strip_tags($this->id_credito));
+        $this->tipo_pago=htmlspecialchars(strip_tags($this->tipo_pago));
         $this->monto=htmlspecialchars(strip_tags($this->monto));
         $this->total_cuotas=htmlspecialchars(strip_tags($this->total_cuotas));
         $this->fecha=htmlspecialchars(strip_tags($this->fecha));

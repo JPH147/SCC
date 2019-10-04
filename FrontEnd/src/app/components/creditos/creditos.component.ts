@@ -575,7 +575,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         this.CreditosForm.get('tipo_pago').setValue(res.tipo_pago);
         this.CreditosForm.get('observaciones').setValue(observacion_corregida);
 
-        this.ColumnasCronograma= ['numero', 'fecha_vencimiento', 'monto', 'interes_generado','monto_pagado', 'fecha_cancelacion','estado', 'opciones'];
+        this.ColumnasCronograma = ['numero', 'tipo_pago','fecha_vencimiento', 'monto', 'interes_generado','monto_pagado', 'fecha_cancelacion','estado', 'opciones'];
         this.ObtenerCronograma(this.id_credito, "fecha_vencimiento asc");
 
         if(res['garantes'].garantes.length>0){
@@ -1234,6 +1234,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
 
       this.Servicio.CrearCronogramaAfiliacion(
         res['data'],
+        this.CreditosForm.value.tipo_pago,
         this.CreditosForm.value.afiliacion_monto,
         this.numero_cuotas,
         this.CreditosForm.value.fecha_credito
@@ -1290,6 +1291,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         this.Cronograma.forEach((item)=>{
           this.Servicio.CrearCronograma(
             res['data'],
+            this.CreditosForm.value.tipo_pago,
             item.monto_cuota,
             0,
             item.fecha_vencimiento
@@ -1377,6 +1379,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         this.Cronograma.forEach((item)=>{
           this.Servicio.CrearCronograma(
             res['data'],
+            this.CreditosForm.value.tipo_pago,
             item.capital,
             item.interes,
             item.fecha_vencimiento
@@ -1515,6 +1518,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
           this.Cronograma.forEach((item)=>{
             this.Servicio.CrearCronograma(
               res['data'],
+              this.CreditosForm.value.tipo_pago,
               item.monto_cuota,
               0,
               item.fecha_vencimiento

@@ -192,6 +192,7 @@ export class EvaluacionComponent implements OnInit, AfterViewInit {
       this.Cargando.next(false);
       if(res['codigo']==0){
         this.cliente_encontrado=1;
+        this.capacidad=0;
         this.VerificarCondiciones(res['data'].id);
         this.ConsultarOtrosPagos(res['data'].id);
         this.EvaluacionForm.get('id').setValue(res['data'].id);
@@ -262,6 +263,7 @@ export class EvaluacionComponent implements OnInit, AfterViewInit {
   }
 
   InformacionPrestamo(evento){
+    // console.log("Entrada",evento.cronograma);
     this.tipo_venta=evento.tipo;
     this.interes=evento.interes;
     this.capital=evento.capital;
@@ -276,7 +278,6 @@ export class EvaluacionComponent implements OnInit, AfterViewInit {
   }
 
   ActualizarInformacion(){
-    // console.log(this.interes);
     this.informacion.next({
       afiliado: this.cliente_afiliado,//
       cliente: this.cliente,//
@@ -292,6 +293,7 @@ export class EvaluacionComponent implements OnInit, AfterViewInit {
       productos: this.productos,//
       otros_pagos : this.OtrosPagos
     })
+    // console.log("Salida",this.cronograma);
   }
 
   NuevaEvaluacion(){

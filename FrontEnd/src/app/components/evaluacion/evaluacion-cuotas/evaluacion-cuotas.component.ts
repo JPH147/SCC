@@ -82,7 +82,7 @@ export class EvaluacionCuotasComponent implements OnInit {
     this.RServicio.ListarReglas().subscribe(res=>{
       this.Reglas=res;
       this.datos.subscribe(res=>{
-        // console.log(res);
+        console.log("Entrada",res.cronograma);
         this.monto_mayor=false;
         this.aporte=res.aporte;
         this.aporte_considerado=res.aporte;
@@ -96,7 +96,7 @@ export class EvaluacionCuotasComponent implements OnInit {
           this.cronograma = res.cronograma ;
           this.EvaluacionCuotas.CargarInformacion(this.cronograma) ;
         } else {
-          console.log(1)
+          // console.log(1)
           this.OtrosPagos=res.otros_pagos?res.otros_pagos:[];
           this.CalcularPrimerPago();
           this.EmitirInformacion();
@@ -167,7 +167,7 @@ export class EvaluacionCuotasComponent implements OnInit {
   }
 
   EmitirInformacion(){
-    // console.log(this.interes);
+    console.log("Salida",this.cronograma);
     this.informacion.emit({
       tipo: this.tipo,
       interes : this.interes,
@@ -248,7 +248,7 @@ export class EvaluacionCuotasComponent implements OnInit {
 
   CalcularInteresDiario(){
     if (this.interes_por_dia) {
-      let interes = this.capital*this.interes;
+      let interes = this.capital*this.interes/100;
       this.interes_diario=Math.round( interes * (1-(moment(this.fecha_prestamo).date()/moment(this.fecha_prestamo).daysInMonth()) )*10)/10;
     } else {
       this.interes_diario=0;
@@ -309,6 +309,9 @@ export class EvaluacionCuotasComponent implements OnInit {
     let dias_mes : number = moment(this.fecha_prestamo).daysInMonth();
     let interes_truncado = Math.round( ((dias_mes - dia_credito) / dias_mes) * interes * 100 ) / 100;
 
+    let numero_cuotas = moment(this.fecha_inicio).diff(moment(this.fecha_prestamo), 'months') ;
+    // Se reemplazó numero_cuotas por (mes_pago - mes_credito)
+
     // Si el crédito es antes de quincena, se paga a fin de mes los intereses truncados
     if( this.interes_por_dia ){
       let fecha_1 = moment(this.fecha_prestamo).endOf('month');
@@ -327,8 +330,8 @@ export class EvaluacionCuotasComponent implements OnInit {
     }
 
     // Se pagan los intereses mientras no se cancele el crédito
-    if( mes_pago - mes_credito > 1){
-      for( i; i<mes_pago - mes_credito; i++){
+    if( numero_cuotas > 1){
+      for( i; i<numero_cuotas; i++){
         fecha=moment(new Date(ano_credito, mes_credito, dia_pago)).add(i, 'months').toDate();
         this.VerificarCoincidenciaCronograma(fecha);
         this.cronograma.push({
@@ -442,79 +445,83 @@ export class EvaluacionCuotasComponent implements OnInit {
   }
 
   CalcularPrimerPago(){
+    if(this.cronograma.length==0){
 
-    // Si se hace una evaluación, cambia el capital
-    if( this.capacidad!=270 ) {
-      this.capital=((this.capacidad-this.aporte)*this.cuotas)/(1+this.cuotas*this.interes/100) ;
-      this.capital= Math.round(this.capital*100)/100 ;
-    }
-
-    let aporte : number ;
-    if(this.interes==0){
-      aporte=0;
-    } else {
-      aporte=this.aporte_considerado;
-    }
-
-    this.EvaluarRegla();
-
-    let interes : number =  Math.round(+this.capital * (this.interes /100 ) *100 ) / 100;
-    this.prestamo=this.capital*(1+this.cuotas*this.interes/100)+this.interes_diario; // +this.interes_diario solo para pruebas
-
-    let fecha:Date;
-    let adicional: boolean = false;
-
-    let cuota=this.capacidad-aporte;
-    let j: number;
-
-    this.cronograma=[];
-
-    for(let i=1; i<=this.cuotas; i++){
-
-      if (!this.pago_proximo_mes && this.interes_por_dia && i==1) {
-        this.VerificarCoincidenciaCronograma(this.fecha_inicio);
-        this.cronograma.push({
-          numero:1,
-          capital : 0,
-          interes : this.interes_diario,
-          monto: this.interes_diario,
-          aporte: 0,
-          fecha: this.fecha_inicio,
-          fecha_formato : moment(fecha).format('LL') ,
-          total: this.interes_diario,
-          otros_pagos : this.comodin,
-          total_acumulado : this.interes_diario+ this.comodin
-        });
-        adicional=true;
+      // Si se hace una evaluación, cambia el capital
+      if( this.capacidad!=270 && this.capacidad>0) {
+        this.capital=((this.capacidad-this.aporte)*this.cuotas)/(1+this.cuotas*this.interes/100) ;
+        this.capital= Math.round(this.capital*100)/100 ;
       }
-
-      if (adicional) {
-        j=i+1
-      }else{
-        j=i
+  
+      console.log(this.capital);
+  
+      let aporte : number ;
+      if(this.interes==0){
+        aporte=0;
+      } else {
+        aporte=this.aporte_considerado;
+      }
+  
+      this.EvaluarRegla();
+  
+      let interes : number =  Math.round(+this.capital * (this.interes /100 ) *100 ) / 100;
+      this.prestamo = this.capital*(1+this.cuotas*this.interes/100)+this.interes_diario ; // +this.interes_diario solo para pruebas
+  
+      let fecha:Date;
+      let adicional: boolean = false;
+  
+      let cuota=this.capacidad-aporte;
+      let j: number;
+  
+      this.cronograma=[];
+  
+      for(let i=1; i<=this.cuotas; i++){
+  
+        if (this.interes_por_dia && i==1) {
+          this.VerificarCoincidenciaCronograma(this.fecha_inicio);
+          this.cronograma.push({
+            numero:0,
+            capital : 0,
+            interes : this.interes_diario,
+            monto: this.interes_diario,
+            aporte: 0,
+            fecha: this.fecha_inicio,
+            fecha_formato : moment(fecha).format('LL') ,
+            total: this.interes_diario,
+            otros_pagos : this.comodin,
+            total_acumulado : this.interes_diario + this.comodin
+          });
+          adicional=true;
+        }
+  
+        if (adicional) {
+          j=i+0
+        }else{
+          j=i
+        }
+        
+        fecha = moment(this.fecha_inicio).add((j-1), 'months').toDate();
+        this.VerificarCoincidenciaCronograma(fecha);
+  
+        let total = cuota+aporte + ((!adicional && j==1) ? this.interes_diario : 0);
+  
+        this.cronograma.push({
+          numero: j,
+          monto: cuota + ((!adicional && j==1) ? this.interes_diario : 0),
+          capital : cuota + ((!adicional && j==1) ? this.interes_diario : 0) - interes,
+          interes : interes,
+          aporte: aporte,
+          fecha: fecha,
+          fecha_formato : moment(fecha).format('LL') ,
+          total: total,
+          otros_pagos : this.comodin,
+          total_acumulado : total + this.comodin
+        })
       }
       
-      fecha = moment(this.fecha_inicio).add((j-1), 'months').toDate();
-      this.VerificarCoincidenciaCronograma(fecha);
-
-      let total = cuota+aporte + ((!adicional && j==1) ? this.interes_diario : 0);
-
-      this.cronograma.push({
-        numero: j,
-        monto: cuota + ((!adicional && j==1) ? this.interes_diario : 0),
-        capital : cuota + ((!adicional && j==1) ? this.interes_diario : 0) - interes,
-        interes : interes,
-        aporte: aporte,
-        fecha: fecha,
-        fecha_formato : moment(fecha).format('LL') ,
-        total: total,
-        otros_pagos : this.comodin,
-        total_acumulado : total + this.comodin
-      })
+      this.CalcularPrimerosTotales();
+      this.EvaluacionCuotas.CargarInformacion(this.cronograma);
     }
-    
-    this.CalcularPrimerosTotales();
-    this.EvaluacionCuotas.CargarInformacion(this.cronograma);
   }
 
   CalcularPrimerosTotales(){
@@ -585,7 +592,7 @@ export class EvaluacionCoutasDataSource {
   
   CargarInformacion(cuotas){
     this.Cuotas.next(cuotas)
-    console.log(cuotas)
+    // console.log(cuotas)
   }
 
 }

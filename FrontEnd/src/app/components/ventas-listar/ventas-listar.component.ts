@@ -109,7 +109,7 @@ export class VentasListarComponent implements OnInit {
             })
 
             if (res.monto>0) {
-              this.VServicio.CrearVentaCronograma(venta.id,res.monto,new Date(), 1).subscribe()
+              this.VServicio.CrearVentaCronograma(venta.id,2,res.monto,new Date(), 1).subscribe()
             }
 
             this.CargarData()

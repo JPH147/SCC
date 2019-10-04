@@ -110,6 +110,10 @@ export class MenuComponent implements OnInit{
             path: "cobranzas"
           },
           {
+            nombre: "Deudas por cliente",
+            path: "cobranzas-cliente"
+          },
+          {
             nombre: "Cobranzas directas",
             path: "cobranza-directa"
           },

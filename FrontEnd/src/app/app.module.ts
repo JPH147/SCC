@@ -41,11 +41,13 @@ import {
   MatToolbarModule,
   MatTooltipModule,
   MatTreeModule,
+  MatPaginatorIntl
 } from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { LayoutModule } from '@angular/cdk/layout';
+import { Configuracion } from '../paginador_espanol';
 // import { FileSelectDirective } from 'ng2-file-upload';
 
 import { RouterModule } from '@angular/router';
@@ -157,6 +159,12 @@ import { InstitucionesComponent } from './components/instituciones/instituciones
 import { InstitucionComponent } from './components/instituciones/institucion/institucion.component';
 import { SedeComponent } from './components/instituciones/sede/sede.component';
 import { SubsedeComponent } from './components/instituciones/subsede/subsede.component';
+import { VentanaTipoReporteComponent } from './components/cobranzas-listar/ventana-tipo-reporte/ventana-tipo-reporte.component';
+import { VentanaEditarPagoComponent } from './components/cobranzas-listar/ventana-editar-pago/ventana-editar-pago.component';
+import { CobranzaArchivosDetalleComponent } from './components/cobranza-archivos-detalle/cobranza-archivos-detalle.component';
+import { CobranzaJudicialListarComponent } from './components/cobranza-judicial-listar/cobranza-judicial-listar.component';
+import { CobranzaJudicialComponent } from './components/cobranza-judicial/cobranza-judicial.component';
+import { CobranzaClienteListarComponent } from './components/cobranza-cliente-listar/cobranza-cliente-listar.component';
 
 @NgModule({
   exports:[
@@ -319,7 +327,13 @@ import { SubsedeComponent } from './components/instituciones/subsede/subsede.com
     InstitucionComponent,
     SedeComponent,
     SubsedeComponent,
-    CobranzaArchivosPagoComponent
+    CobranzaArchivosPagoComponent,
+    VentanaTipoReporteComponent,
+    VentanaEditarPagoComponent,
+    CobranzaArchivosDetalleComponent,
+    CobranzaJudicialListarComponent,
+    CobranzaJudicialComponent,
+    CobranzaClienteListarComponent
    ],
   entryComponents: [
     AppComponent,
@@ -370,13 +384,16 @@ import { SubsedeComponent } from './components/instituciones/subsede/subsede.com
     VentanaCourierComponent,
     VentanaPlantillasComponent,
     VerPlantillasComponent,
-    VentanaPagosComponent
+    VentanaPagosComponent,
+    VentanaTipoReporteComponent,
+    VentanaEditarPagoComponent
   ],
   bootstrap: [AppComponent],
   providers: [
     Notificaciones,
     ServiciosGenerales,
-    {provide: MAT_DATE_LOCALE, useValue: 'en-GB'}
+    {provide: MAT_DATE_LOCALE, useValue: 'en-GB'},
+    { provide: MatPaginatorIntl, useValue: Configuracion() }
   ]
 })
 

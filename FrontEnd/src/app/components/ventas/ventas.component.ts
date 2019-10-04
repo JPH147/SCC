@@ -222,7 +222,7 @@ export class VentasComponent implements OnInit {
 
         // Cuando se ve una venta
         if(params['idventa']){
-          this.Columnas= ['numero','fecha_vencimiento', 'monto_cuota', 'monto_interes','monto_pagado', 'fecha_cancelacion','estado', 'opciones'];
+          this.Columnas= ['numero','tipo_pago','fecha_vencimiento', 'monto_cuota', 'monto_interes','monto_pagado', 'fecha_cancelacion','estado', 'opciones'];
           this.idventa = +params['idventa'];
           // this.idventa=77;
           this.SeleccionarVentaxId(this.idventa);
@@ -1475,7 +1475,7 @@ export class VentasComponent implements OnInit {
           // if(item.numero==0){
           //   this.Servicio.CrearVentaCronograma(res['data'],item.monto_cuota,item.fecha_vencimiento,1).subscribe(res=>console.log(res))
           // }else{
-            this.Servicio.CrearVentaCronograma(res['data'],item.monto_cuota,item.fecha_vencimiento,1).subscribe()
+            this.Servicio.CrearVentaCronograma(res['data'],formulario.value.tipopago,item.monto_cuota,item.fecha_vencimiento,1).subscribe()
           // }
         });
         
@@ -1623,7 +1623,7 @@ export class VentasComponent implements OnInit {
           // if(item.numero==0){
           //   this.Servicio.CrearVentaCronograma(res['data'],item.monto_cuota,item.fecha_vencimiento,1).subscribe()
           // }else{
-            this.Servicio.CrearVentaCronograma(res['data'],item.monto_cuota,item.fecha_vencimiento,1).subscribe()
+            this.Servicio.CrearVentaCronograma(res['data'],formulario.value.tipopago,item.monto_cuota,item.fecha_vencimiento,1).subscribe()
           // }
         });
         
