@@ -82,6 +82,7 @@ export class RefinanciamientoComponent implements OnInit, AfterViewInit {
   public cooperativa_direccion : string ;
   public cooperativa_direccion_1 : string ;
   public cooperativa_direccion_2 : string ;
+  public cooperativa_direccion_3 : string ;
   public presidente_nombre : string ;
   public presidente_dni : string ;
   public presidente_direccion : string ;
@@ -851,6 +852,9 @@ export class RefinanciamientoComponent implements OnInit, AfterViewInit {
           if(i==2){
             this.cooperativa_direccion_2=item.direccion;
           }
+          if(i==2){
+            this.cooperativa_direccion_3=item.direccion;
+          }
         }
       });
       this.presidente_nombre = this.informacion_cooperativa['presidente'].nombre;
@@ -964,6 +968,7 @@ export class RefinanciamientoComponent implements OnInit, AfterViewInit {
       this.cooperativa_direccion,
       this.cooperativa_direccion_1,
       this.cooperativa_direccion_2,
+      this.cooperativa_direccion_3,
       this.cooperativa_cuenta_banco,
       this.cooperativa_cuenta_numero,
       this.presidente_nombre,

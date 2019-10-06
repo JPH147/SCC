@@ -188,6 +188,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         this.Cargando.next(true);
 
         if(params['idpresupuesto']){
+          console.log(params)
           this.id_presupuesto=params['idpresupuesto'];
           this.NuevoCreditoPresupuesto(this.id_presupuesto);
         }
@@ -207,7 +208,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         if(params['idclienterefinanciado']){
           this.route.paramMap
           .pipe(map(() => {
-            console.log(window.history.state)
+            // console.log(window.history.state)
             let data = window.history.state ;
             this.InformacionRefinanciamiento.id_vendedor = data.id_vendedor ;
             this.InformacionRefinanciamiento.vendedor = data.vendedor ;
@@ -224,7 +225,6 @@ export class CreditosComponent implements OnInit, AfterViewInit {
             this.cliente_refinanciado = params['idclienterefinanciado'];
             this.NuevoCreditoRefinanciamiento(this.cliente_refinanciado);
           })).subscribe()
-          this.NuevoCreditoRefinanciamiento(this.cliente_refinanciado);
         }
 
       }else{
@@ -394,14 +394,13 @@ export class CreditosComponent implements OnInit, AfterViewInit {
 
   NuevoCreditoPresupuesto(id){
     this.NuevoCredito();
+    this.id_cliente=id;
+    this.CreditosForm.get('id_cliente').setValue(id);
+    this.ObtenerClientexId(id);
+    this.ObtenerDireccion(id);
+    this.ObtenerTelefono(id);
+    this.VerificarAfiliacion(id);
     this.Servicio.SeleccionarPresupuesto(id).subscribe(res=>{
-      // console.log(res);
-      this.id_cliente=res.id_cliente;
-      this.CreditosForm.get('id_cliente').setValue(res.id);
-      this.ObtenerClientexId(res.id_cliente);
-      this.ObtenerDireccion(res.id_cliente);
-      this.ObtenerTelefono(res.id_cliente);
-      this.VerificarAfiliacion(res.id_cliente);
       this.CreditosForm.get('capital').setValue(res.capital);
       this.CreditosForm.get('cuotas').setValue(res.cuotas);
       this.CreditosForm.get('total').setValue(res.total);

@@ -65,6 +65,7 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
   public cooperativa_direccion : string ;
   public cooperativa_direccion_1 : string ;
   public cooperativa_direccion_2 : string ;
+  public cooperativa_direccion_3 : string ;
 
   public presidente_nombre : string ;
   public presidente_dni : string ;
@@ -118,7 +119,6 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
     let i = 0;
     this.Servicios.ObtenerInformacion().subscribe(res=>{
       this.informacion_cooperativa=res;
-      // console.log(this.informacion_cooperativa)
       this.cooperativa_nombre=this.informacion_cooperativa['cooperativa'].find(e => e.parametro=="nombre").valor;
       this.penalidad_porcentaje=this.informacion_cooperativa['cooperativa_configuracion'].find(e => e.parametro=="penalidad_credito_porcentaje").valor;
       this.penalidad_maxima_cuota=this.informacion_cooperativa['cooperativa_configuracion'].find(e => e.parametro=="penalidad_credito_cuota_maxima").valor;
@@ -127,18 +127,14 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
       this.cooperativa_cuenta_banco=this.informacion_cooperativa['cuenta'].banco;
       this.cooperativa_cuenta_numero=this.informacion_cooperativa['cuenta'].cuenta;
       this.cooperativa_contacto=this.informacion_cooperativa['contacto'];
-      this.informacion_cooperativa['direccion_transaccion'].forEach((item)=>{
+      let array_comodin = this.informacion_cooperativa['direccion_transaccion'].filter(e=>e.id_tipo==2);
+      this.cooperativa_direccion_1=array_comodin[0].direccion;
+      this.cooperativa_direccion_2=array_comodin[1].direccion;
+      this.cooperativa_direccion_3=array_comodin[2].direccion;
+
+      this.informacion_cooperativa['direccion_transaccion'].forEach((item,index)=>{
         if(item.id_tipo=1) {
           this.cooperativa_direccion=item.direccion;
-        }
-        if(item.id_tipo=2){
-          i++;
-          if(i==1){
-            this.cooperativa_direccion_1=item.direccion;            
-          }
-          if(i==2){
-            this.cooperativa_direccion_2=item.direccion;
-          }
         }
       });
       this.presidente_nombre = this.informacion_cooperativa['presidente'].nombre;
@@ -392,7 +388,6 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
     });
   }
 
-
   ObtenerDireccion(id) {
     this.DServicios.ListarDireccion( id, '1',1,1).subscribe(res => {
       // console.log(res);
@@ -616,6 +611,7 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
       this.cooperativa_direccion,
       this.cooperativa_direccion_1,
       this.cooperativa_direccion_2,
+      this.cooperativa_direccion_3,
       this.cooperativa_cuenta_banco,
       this.cooperativa_cuenta_numero,
       this.presidente_nombre,
