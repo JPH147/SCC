@@ -22,6 +22,8 @@ Class Plantillas{
     public $cooperativa_direccion;
     public $cooperativa_direccion_1;
     public $cooperativa_direccion_2;
+    public $cooperativa_direccion_3;
+    public $cooperativa_direccion_4;
     public $cooperativa_cuenta_banco;
     public $cooperativa_cuenta_numero;
     public $presidente;
@@ -164,6 +166,7 @@ Class Plantillas{
         $templateProcessor->setValue('cooperativa_direccion_1', $this->cooperativa_direccion_1);
         $templateProcessor->setValue('cooperativa_direccion_2', $this->cooperativa_direccion_2);
         $templateProcessor->setValue('cooperativa_direccion_3', $this->cooperativa_direccion_3);
+        $templateProcessor->setValue('cooperativa_direccion_4', $this->cooperativa_direccion_4);
         $templateProcessor->setValue('cooperativa_cuenta_banco', $this->cooperativa_cuenta_banco);
         $templateProcessor->setValue('cooperativa_cuenta_numero', $this->cooperativa_cuenta_numero);
         $templateProcessor->setValue('presidente', $this->presidente);
@@ -244,6 +247,8 @@ Class Plantillas{
         $templateProcessor->cloneBlock('block_name', 0, true, false, $cronograma);
         $templateProcessor->cloneBlock('block_name_1', 0, true, false, $cronograma);
         $templateProcessor->cloneBlock('block_name_2', 0, true, false, $cronograma);
+        $templateProcessor->cloneBlock('block_name_3', 0, true, false, $cronograma);
+        $templateProcessor->cloneBlock('block_name_4', 0, true, false, $cronograma);
 
         // Para las hojas 2 y 3, se evalúa que no se repitan las direcciones
         $this->direccion_cliente = filter_var($this->direccion_cliente, FILTER_VALIDATE_BOOLEAN);

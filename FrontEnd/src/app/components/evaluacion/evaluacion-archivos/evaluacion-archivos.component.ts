@@ -66,6 +66,7 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
   public cooperativa_direccion_1 : string ;
   public cooperativa_direccion_2 : string ;
   public cooperativa_direccion_3 : string ;
+  public cooperativa_direccion_4 : string ;
 
   public presidente_nombre : string ;
   public presidente_dni : string ;
@@ -131,6 +132,7 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
       this.cooperativa_direccion_1=array_comodin[0].direccion;
       this.cooperativa_direccion_2=array_comodin[1].direccion;
       this.cooperativa_direccion_3=array_comodin[2].direccion;
+      this.cooperativa_direccion_4=array_comodin[3].direccion;
 
       this.informacion_cooperativa['direccion_transaccion'].forEach((item,index)=>{
         if(item.id_tipo=1) {
@@ -612,6 +614,7 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
       this.cooperativa_direccion_1,
       this.cooperativa_direccion_2,
       this.cooperativa_direccion_3,
+      this.cooperativa_direccion_4,
       this.cooperativa_cuenta_banco,
       this.cooperativa_cuenta_numero,
       this.presidente_nombre,

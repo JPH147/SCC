@@ -83,6 +83,7 @@ export class RefinanciamientoComponent implements OnInit, AfterViewInit {
   public cooperativa_direccion_1 : string ;
   public cooperativa_direccion_2 : string ;
   public cooperativa_direccion_3 : string ;
+  public cooperativa_direccion_4 : string ;
   public presidente_nombre : string ;
   public presidente_dni : string ;
   public presidente_direccion : string ;
@@ -840,21 +841,16 @@ export class RefinanciamientoComponent implements OnInit, AfterViewInit {
       this.cooperativa_cuenta_banco=this.informacion_cooperativa['cuenta'].banco;
       this.cooperativa_cuenta_numero=this.informacion_cooperativa['cuenta'].cuenta;
       this.cooperativa_contacto=this.informacion_cooperativa['contacto'];
+
+      let array_comodin = this.informacion_cooperativa['direccion_transaccion'].filter(e=>e.id_tipo==2);
+      this.cooperativa_direccion_1=array_comodin[0].direccion;
+      this.cooperativa_direccion_2=array_comodin[1].direccion;
+      this.cooperativa_direccion_3=array_comodin[2].direccion;
+      this.cooperativa_direccion_4=array_comodin[3].direccion;
+
       this.informacion_cooperativa['direccion_transaccion'].forEach((item)=>{
         if(item.id_tipo=1) {
           this.cooperativa_direccion=item.direccion;
-        }
-        if(item.id_tipo=2){
-          i++;
-          if(i==1){
-            this.cooperativa_direccion_1=item.direccion;            
-          }
-          if(i==2){
-            this.cooperativa_direccion_2=item.direccion;
-          }
-          if(i==2){
-            this.cooperativa_direccion_3=item.direccion;
-          }
         }
       });
       this.presidente_nombre = this.informacion_cooperativa['presidente'].nombre;
@@ -969,6 +965,7 @@ export class RefinanciamientoComponent implements OnInit, AfterViewInit {
       this.cooperativa_direccion_1,
       this.cooperativa_direccion_2,
       this.cooperativa_direccion_3,
+      this.cooperativa_direccion_4,
       this.cooperativa_cuenta_banco,
       this.cooperativa_cuenta_numero,
       this.presidente_nombre,

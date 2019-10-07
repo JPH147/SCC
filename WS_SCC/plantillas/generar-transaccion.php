@@ -27,6 +27,7 @@
             $archivo->cooperativa_direccion_1 = trim($_POST["prcooperativadireccion1"]);
             $archivo->cooperativa_direccion_2 = trim($_POST["prcooperativadireccion2"]);
             $archivo->cooperativa_direccion_3 = trim($_POST["prcooperativadireccion3"]);
+            $archivo->cooperativa_direccion_4 = trim($_POST["prcooperativadireccion4"]);
             $archivo->cooperativa_cuenta_banco = trim($_POST["prcooperativacuentabanco"]);
             $archivo->cooperativa_cuenta_numero = trim($_POST["prcooperativacuentanumero"]);
             $archivo->presidente = trim($_POST["prpresidente"]);

@@ -319,6 +319,7 @@ export class EvaluacionService {
     cooperativa_direccion_1 : string ,
     cooperativa_direccion_2 : string ,
     cooperativa_direccion_3 : string ,
+    cooperativa_direccion_4 : string ,
     cooperativa_cuenta_banco : string ,
     cooperativa_cuenta_numero : string ,
     presidente : string ,
@@ -375,6 +376,7 @@ export class EvaluacionService {
       .set('prcooperativadireccion1', cooperativa_direccion_1 )
       .set('prcooperativadireccion2', cooperativa_direccion_2 )
       .set('prcooperativadireccion3', cooperativa_direccion_3 )
+      .set('prcooperativadireccion4', cooperativa_direccion_4 )
       .set('prcooperativacuentabanco', cooperativa_cuenta_banco )
       .set('prcooperativacuentanumero', cooperativa_cuenta_numero )
       .set('prpresidente', presidente )
