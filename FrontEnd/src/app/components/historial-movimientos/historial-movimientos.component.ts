@@ -5,6 +5,7 @@ import {MatPaginator, MatSort, MatSelect} from '@angular/material'
 import {merge, Observable, of as observableOf, from, fromEvent} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap, delay, catchError, map, startWith, switchMap} from 'rxjs/operators';
 import {ServiciosGenerales} from '../global/servicios';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-historial-movimientos',
@@ -36,7 +37,7 @@ export class HistorialMovimientosComponent implements OnInit {
 
   ngOnInit() {
 
-  	this.fecha_inicio= new Date((new Date()).valueOf() - 1000*60*60*24*120);
+  	this.fecha_inicio= moment(new Date()).subtract(5,'year').toDate();
   	this.fecha_fin= new Date();
 
   	this.ListadoMovimientos = new HistorialMovimientosDataService(this.Servicio);

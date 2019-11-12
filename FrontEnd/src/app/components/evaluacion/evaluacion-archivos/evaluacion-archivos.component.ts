@@ -198,7 +198,7 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
       ]],
       telefono_whatsapp : [ { value : null , disabled : false } , [
       ]],
-      considerar_direccion_cliente : [ { value : false , disabled : false } , [
+      considerar_direccion_cliente : [ { value : true , disabled : false } , [
       ]],
       direccion_resumen : [ { value : null , disabled : false } , [
       ]],
@@ -401,7 +401,7 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
           this.EvaluacionArchivosForm.get('direccion_resumen').setValue(res['data'].direcciones[0].direccion);
           this.EvaluacionArchivosForm.get('provincia').setValue(res['data'].direcciones[0].provincia);
 
-          this.EvaluacionArchivosForm.get('considerar_direccion_cliente').setValue(false);
+          this.EvaluacionArchivosForm.get('considerar_direccion_cliente').setValue(true);
           this.EvaluacionArchivosForm.get('distrito').setValue(this.distrito_cliente);
           this.EvaluacionArchivosForm.get('direccion').setValue(this.direccion_cliente);
           this.EvaluacionArchivosForm.get('direccion_mostrar').setValue(this.direccion_cliente);

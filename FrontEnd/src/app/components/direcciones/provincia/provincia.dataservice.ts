@@ -34,8 +34,13 @@ constructor(private Servicio: ServiciosDirecciones) { }
   	finalize(() => this.CargandoInformacion.next(false))
   )
   .subscribe(res => {
-    this.TotalResultados.next(res['mensaje']);
-    this.InformacionProvincias.next(res['data'].provincias);
+    if(res){
+      this.TotalResultados.next(res['mensaje']);
+      this.InformacionProvincias.next(res['data'].provincias);
+    } else {
+      this.TotalResultados.next(0);
+      this.InformacionProvincias.next([]);
+    }
   });
   }
 

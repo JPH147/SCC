@@ -66,13 +66,23 @@ export class VentanaEmergenteDistrito {
 
   Guardar(formulario){
     if(this.data){
-      this.mensaje='Distrito actualizado satisfactoriamente';
-      this.Servicio.ActualizarDistrito(this.data.id,formulario.value.provincia,formulario.value.nombre).subscribe()
+      this.Servicio.ActualizarDistrito(this.data.id,formulario.value.provincia,formulario.value.nombre).subscribe(res=>{
+        if(res['codigo']==0){
+          this.Notificacion("Se actualizó el distrito satisfactoriamente","")
+        } else {
+          this.Notificacion("Ocurrió un error al actualizar el distrito","")
+        }
+      })
     }
 
     if(!this.data){
-      this.mensaje='Distrito creado satisfactoriamente';
-      this.Servicio.CrearDistrito(formulario.value.provincia,formulario.value.nombre).subscribe();
+      this.Servicio.CrearDistrito(formulario.value.provincia,formulario.value.nombre).subscribe(res=>{
+        if(res['codigo']==0){
+          this.Notificacion("Se creó el distrito satisfactoriamente","")
+        } else {
+          this.Notificacion("Ocurrió un error al crear el distrito","")
+        }
+      });
     }
       this.DistritosForm.reset();
       this.ventana.close()

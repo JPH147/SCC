@@ -1,3 +1,197 @@
-<p>
-  cobranza-judicial works!
-</p>
+<mat-card class="principal">
+  <button mat-mini-fab type="button" color="primary" (click)="Atras()"><mat-icon>keyboard_arrow_left</mat-icon></button>
+
+  <ng-container>
+    <ng-container *ngIf="id_venta || id_credito">
+      <mat-card-title class="tituloProd"> Nuevo documento judicial </mat-card-title>
+    </ng-container>
+    <ng-container *ngIf="id_proceso_agregar">
+      <mat-card-title class="tituloProd"> Agregar documentos de seguimiento </mat-card-title>
+    </ng-container>
+    <ng-container *ngIf="id_proceso_editar">
+      <mat-card-title class="tituloProd"> Editar documento judicial </mat-card-title>
+    </ng-container>
+    <ng-container *ngIf="id_proceso_ver">
+      <mat-card-title class="tituloProd"> Ver documento judicial </mat-card-title>
+    </ng-container>
+  </ng-container>
+
+  <form [formGroup]="JudicialForm">
+    <mat-card-content>
+      <div class = "spinner-container" *ngIf = "Cargando| async">
+        <mat-spinner></mat-spinner>
+      </div>
+
+      <!-- Datos del cliente -->
+      <div class="seccion-secundaria">
+        <mat-card-subtitle class="titulo-seccion-secundaria">
+          INFORMACION DE LA DEMANDA
+        </mat-card-subtitle>
+        <mat-grid-list cols=3 rowHeight="70px">
+          <mat-grid-tile colspan="1">
+            <mat-form-field class="columnas-1">
+              <input matInput type="text" placeholder="DNI" formControlName="cliente_documento" readonly>
+            </mat-form-field>
+          </mat-grid-tile>
+  
+          <mat-grid-tile colspan="2">
+            <mat-form-field class="columnas-2">
+              <input matInput type="text" placeholder="Cliente" formControlName="cliente_nombre" readonly>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile colspan="1">
+            <mat-form-field class="columnas-1">
+              <input matInput type="text" placeholder="Tipo de transacción" formControlName="tipo_transaccion" readonly>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile colspan="1">
+            <mat-form-field class="columnas-1">
+              <input matInput type="text" placeholder="Documento" formControlName="codigo_documento" readonly>
+            </mat-form-field>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </div>
+
+      <!-- Cabecera -->
+      <div class="seccion-secundaria">
+        <mat-card-subtitle class="titulo-seccion-secundaria">
+          REPORTE DE EXPEDIENTE
+          <ng-container *ngIf="this.id_proceso_editar">
+            <button mat-icon-button type="button" class="icono" *ngIf="editar_cabecera>1" (click)="EditarCabecera(1)"><mat-icon>edit</mat-icon></button>
+            <button mat-icon-button type="button" class="icono" *ngIf="editar_cabecera==1" (click)="EditarCabecera(2)"><mat-icon>check</mat-icon></button>
+          </ng-container>
+        </mat-card-subtitle>
+        <mat-grid-list cols=3 rowHeight="70px">
+
+          <mat-grid-tile colspan=1>
+            <mat-form-field class="columnas-1">
+              <input matInput type="text" placeholder="Expediente" formControlName="expediente" [readonly]="id_proceso_ver || (id_proceso_editar && editar_cabecera>1)">
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile colspan=2>
+            <mat-form-field class="columnas-2">
+              <input matInput type="text" placeholder="Juzgado" formControlName="juzgado" [readonly]="id_proceso_ver || (id_proceso_editar && editar_cabecera>1)">
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile colspan=1>
+            <mat-form-field class="columnas-1">
+              <input matInput [matDatepicker]="FechaInicio" placeholder="Fecha de inicio" formControlName="fecha_inicio" readonly>
+              <mat-datepicker-toggle matSuffix [for]="FechaInicio"></mat-datepicker-toggle>
+              <mat-datepicker #FechaInicio [disabled]="id_proceso_ver || (id_proceso_editar && editar_cabecera>1)"></mat-datepicker>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile colspan=2>
+            <mat-form-field class="columnas-2">
+              <input matInput type="text" placeholder="Sumilla" formControlName="sumilla" [readonly]="id_proceso_ver || (id_proceso_editar && editar_cabecera>1)">
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile colspan="1">
+            <mat-form-field class="columnas-1">
+              <input matInput type="text" placeholder="Número de cuotas" formControlName="numero_cuotas" [readonly]="id_proceso_ver || (id_proceso_editar && editar_cabecera>1)">
+              <mat-error *ngIf="JudicialForm.get('numero_cuotas').invalid"> Se debe ingresar un número mayor a cero. </mat-error>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile colspan="1">
+            <mat-form-field class="columnas-1">
+              <span matPrefix> S/. &nbsp; </span>
+              <input matInput type="text" placeholder="Total" formControlName="total" [readonly]="id_proceso_ver || (id_proceso_editar && editar_cabecera>1)">
+              <mat-error *ngIf="JudicialForm.get('total').invalid"> Se debe ingresar un número mayor a cero. </mat-error>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile colspan="1">
+            <mat-form-field class="columnas-1">
+              <span matPrefix> S/. &nbsp; </span>
+              <input matInput type="text" placeholder="Cuota" formControlName="monto_cuota" readonly>
+            </mat-form-field>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </div>
+
+      <!-- Detalle -->
+      <ng-container *ngIf="id_venta==0 && id_credito==0">
+        <div class="seccion-secundaria">
+          <mat-card-subtitle class="titulo-seccion-secundaria">
+            SEGUIMIENTO DE EXPEDIENTES
+          </mat-card-subtitle>
+  
+          <mat-grid-list cols=1 rowHeight="55px" *ngIf="id_proceso_agregar">
+            <mat-grid-tile>
+              <button class="derecha" type="button" mat-mini-fab colos="primary" (click)="AgregarDocumento()"> <mat-icon> add </mat-icon> </button>
+            </mat-grid-tile>
+          </mat-grid-list>
+  
+          <div *ngFor="let documento of Documentos">
+            <div [ngClass]="{'contenedor': true,
+                            'tipo-1': documento.tipo_documento=='Escrito',
+                            'tipo-2': documento.tipo_documento=='Resolución',
+                            'tipo-3': documento.tipo_documento=='Oficio'
+                          }">
+              <mat-grid-list cols=3 rowHeight="70px">
+                <mat-grid-tile colspan=1>
+                  <mat-form-field class="columnas-1">
+                    <input matInput type="text" placeholder="Tipo de documento" [(ngModel)]="documento.tipo_documento" [ngModelOptions]="{standalone:true}" readonly>
+                  </mat-form-field>
+                </mat-grid-tile>
+  
+                <mat-grid-tile colspan=1>
+                  <mat-form-field class="columnas-1">
+                    <input matInput [matDatepicker]="FechaInicio" placeholder="Fecha" [(ngModel)]="documento.fecha" [ngModelOptions]="{standalone:true}" readonly>
+                    <mat-datepicker-toggle matSuffix [for]="FechaInicio"></mat-datepicker-toggle>
+                    <mat-datepicker #FechaInicio disabled></mat-datepicker>
+                  </mat-form-field>
+                </mat-grid-tile>
+  
+                <mat-grid-tile colspan=1>
+                  <mat-form-field class="columnas-1">
+                    <input matInput type="text" placeholder="Número" [(ngModel)]="documento.numero" [ngModelOptions]="{standalone:true}" readonly>
+                  </mat-form-field>
+                </mat-grid-tile>
+  
+                <mat-grid-tile colspan=2>
+                  <mat-form-field class="columnas-2">
+                    <input matInput type="text" placeholder="Sumilla" [(ngModel)]="documento.sumilla" [ngModelOptions]="{standalone:true}" readonly>
+                  </mat-form-field>
+                </mat-grid-tile>
+  
+                <mat-grid-tile colspan=1>
+                  <ng-container *ngIf="!id_proceso_editar">
+                    <button mat-icon-button color="primary" [disabled]="!documento.archivo" (click)="AbrirDocumento(documento.archivo)">
+                      <mat-icon class="icono-documentos"> visibility </mat-icon>
+                    </button>
+                  </ng-container>
+                  <ng-container *ngIf="id_proceso_editar">
+                    <button mat-icon-button type="button" color="primary" (click)="EditarDetalle(documento)"> <mat-icon> edit </mat-icon> </button>
+                    <button mat-icon-button type="button" color="primary" (click)="EliminarDetalle(documento.id)"> <mat-icon> delete </mat-icon> </button>
+                  </ng-container>
+                </mat-grid-tile>
+  
+                <mat-grid-tile colspan=3>
+                  <mat-form-field class="columnas-3">
+                    <input matInput type="text" placeholder="Comentarios" [(ngModel)]="documento.comentarios" [ngModelOptions]="{standalone:true}" readonly>
+                  </mat-form-field>
+                </mat-grid-tile>
+              </mat-grid-list>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </mat-card-content>
+
+    <mat-card-actions *ngIf="id_venta>0 || id_credito>0">
+      <mat-grid-list cols="1" rowHeight="40px">
+        <mat-grid-tile>
+          <button mat-raised-button color="primary" [disabled]="JudicialForm.invalid || (Cargando | async)" (click)="Guardar()"> Guardar </button>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-card-actions>
+  </form>
+
+</mat-card>

@@ -107,15 +107,29 @@
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let venta">
-          <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="[venta.id]" *ngIf="venta.tipo_venta!='Salida'"><mat-icon> visibility </mat-icon></button>
-          <button mat-icon-button color="primary" matTooltip="Editar" [disabled]="venta.monto_pagado>0 || venta.estado!=1" [routerLink]="['editar', venta.id]" *ngIf="venta.tipo_venta!='Salida'"><mat-icon> edit </mat-icon></button>
-          <button mat-icon-button color="primary" matTooltip="Canjear" [disabled]="venta.estado!=1" [routerLink]="['nueva', venta.id, venta.id_cliente]" *ngIf="venta.tipo_venta!='Salida'"><mat-icon> import_export </mat-icon></button>
-          <button mat-icon-button color="primary" matTooltip="Anular" [disabled]="venta.monto_pagado>0 || venta.estado!=1" (click)="AnularVenta(venta)" *ngIf="venta.tipo_venta!='Salida'"><mat-icon> delete </mat-icon></button>
-
-          <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="['salida', venta.id]" *ngIf="venta.tipo_venta=='Salida'"><mat-icon> visibility </mat-icon></button>
-          <button mat-icon-button color="primary" matTooltip="Editar" [disabled]="venta.monto_pagado>0 || venta.estado!=1" [routerLink]="['salida', 'editar', venta.id]" *ngIf="venta.tipo_venta=='Salida'"><mat-icon> edit </mat-icon></button>
-          <button mat-icon-button color="primary" matTooltip="Canjear" [disabled]="true" *ngIf="venta.tipo_venta=='Salida'"><mat-icon> import_export </mat-icon></button>
-          <button mat-icon-button color="primary" matTooltip="Anular" [disabled]="venta.monto_pagado>0 || true" (click)="AnularVenta(venta)" *ngIf="venta.tipo_venta=='Salida'"><mat-icon> delete </mat-icon></button>
+          <ng-container *ngIf="venta.tipo_venta!='Salida'">
+            <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="[venta.id]"><mat-icon> visibility </mat-icon></button>
+            <button mat-icon-button color="primary" matTooltip="Editar" [routerLink]="['editar', venta.id]"
+              [disabled]="venta.monto_pagado>0 || venta.estado!=1 || venta.id_proceso_judicial"><mat-icon> edit </mat-icon></button>
+            <button mat-icon-button color="primary" matTooltip="Canjear" [disabled]="venta.estado!=1" [routerLink]="['nueva', venta.id, venta.id_cliente]"><mat-icon> import_export </mat-icon></button>
+            <button mat-icon-button color="primary" matTooltip="Abrir proceso judicial"
+              [routerLink]="['../cobranza-judicial','nueva-venta','venta',venta.id]" *ngIf="!venta.id_proceso_judicial"><mat-icon> gavel </mat-icon></button>
+            <button mat-icon-button color="primary" matTooltip="Ver proceso judicial"
+              [routerLink]="['../cobranza-judicial','ver',venta.id_proceso_judicial]" *ngIf="venta.id_proceso_judicial"><mat-icon> face </mat-icon></button>
+            <button mat-icon-button color="primary" matTooltip="Anular" [disabled]="venta.monto_pagado>0 || venta.estado!=1 || venta.id_proceso_judicial" (click)="AnularVenta(venta)"><mat-icon> delete </mat-icon></button>
+          </ng-container>
+          
+          <ng-container *ngIf="venta.tipo_venta=='Salida'">
+            <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="['salida', venta.id]"><mat-icon> visibility </mat-icon></button>
+            <button mat-icon-button color="primary" matTooltip="Editar" [routerLink]="['salida', 'editar', venta.id]"
+              [disabled]="venta.monto_pagado>0 || venta.estado!=1 || venta.id_proceso_judicial"><mat-icon> edit </mat-icon></button>
+            <button mat-icon-button color="primary" matTooltip="Canjear" [disabled]="true"><mat-icon> import_export </mat-icon></button>
+            <button mat-icon-button color="primary" matTooltip="Abrir proceso judicial"
+              [routerLink]="['../cobranza-judicial','nueva-venta','salida',venta.id]" *ngIf="!venta.id_proceso_judicial"><mat-icon> gavel </mat-icon></button>
+            <button mat-icon-button color="primary" matTooltip="Ver proceso judicial"
+              [routerLink]="['../cobranza-judicial','ver',venta.id_proceso_judicial]" *ngIf="venta.id_proceso_judicial"><mat-icon> face </mat-icon></button>
+            <button mat-icon-button color="primary" matTooltip="Anular" [disabled]="venta.monto_pagado>0 || true" (click)="AnularVenta(venta)"><mat-icon> delete </mat-icon></button>
+          </ng-container>
         </mat-cell>
       </ng-container>
 

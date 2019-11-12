@@ -1,0 +1,30 @@
+@import '../../../tema.scss';
+
+.contenedor{
+  width: 95%;
+  box-sizing: border-box;
+  position: relative;
+  margin-left: 2.5%;
+  margin-bottom: 10px;
+  border-left-style: solid;
+  border-left-width: 5px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.tipo-1{
+  border-left-color: mat-color($mat_ambar);
+}
+
+.tipo-2{
+  border-left-color: mat-color($mat_rojo);
+}
+
+.tipo-3{
+  border-left-color: mat-color($mat_verde);
+}
+
+.icono{
+  float: right;
+  transform: translate(-20px, -12.5px);
+}

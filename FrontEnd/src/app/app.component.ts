@@ -11,8 +11,7 @@ export class AppComponent {
   public usuario: any;
 
   constructor() {
-
-   }
+  }
 
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnInit() {

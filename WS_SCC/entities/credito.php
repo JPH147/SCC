@@ -38,6 +38,7 @@ Class Creditos{
     public $fecha_credito;
     public $autorizador;
     public $vendedor;
+    public $cliente_dni;
     public $cliente_direccion;
     public $cliente_telefono;
     public $cliente_cargo;
@@ -119,6 +120,8 @@ Class Creditos{
                 "observaciones"=>$observaciones,
                 "documentos_adjuntos"=>$documentos_adjuntos,
                 "documentos_totales"=>$documentos_totales,
+                "id_proceso_judicial" => $id_proceso_judicial,
+                "cobro_judicial" => $cobro_judicial,
                 "estado"=>$estado,
             );
             array_push($credito_list["creditos"],$items);
@@ -172,6 +175,7 @@ Class Creditos{
         $this->fecha = $row['fecha'];
         $this->codigo = $row['codigo'];
         $this->numero = $row['numero'];
+        $this->codigo_credito = $row['codigo_credito'];
         $this->id_autorizador = $row['id_autorizador'];
         $this->autorizador = $row['autorizador'];
         $this->id_vendedor = $row['id_vendedor'];
@@ -179,6 +183,7 @@ Class Creditos{
         $this->id_cliente = $row['id_cliente'];
         $this->cliente = $row['cliente'];
         $this->cliente_direccion = $row['cliente_direccion'];
+        $this->cliente_dni = $row['cliente_dni'];
         $this->cliente_telefono = $row['cliente_telefono'];
         $this->cliente_cargo = $row['cliente_cargo'];
         $this->cliente_trabajo = $row['cliente_trabajo'];

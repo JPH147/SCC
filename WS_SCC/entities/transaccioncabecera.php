@@ -42,6 +42,7 @@ Class TransaccionCabecera{
     public $almacen_referencia;
     public $documento_serie;
     public $documento_numero;
+    public $observaciones;
 
     public function __construct($db){
         $this->conn = $db;
@@ -149,6 +150,7 @@ Class TransaccionCabecera{
         $this->vendedor=$row['vendedor'];
         $this->fecha=$row['fecha'];
         $this->documento=$row['documento'];
+        $this->observaciones=$row['observaciones'];
         $this->transaccion_detalle=$this->detalle->readxcabecera($row['id']);
     }
 
@@ -209,7 +211,8 @@ Class TransaccionCabecera{
             :prvendedor,
             :prfecha,
             :prdocumento,
-            :prnumerodoc
+            :prnumerodoc,
+            :probservaciones
         )";
 
         $result = $this->conn->prepare($query);
@@ -225,6 +228,7 @@ Class TransaccionCabecera{
         $result->bindParam(":prfecha", $this->fecha);
         $result->bindParam(":prdocumento", $this->documento);
         $result->bindParam(":prnumerodoc", $this->numero_documento);
+        $result->bindParam(":probservaciones", $this->observaciones);
 
         $this->id_almacen=htmlspecialchars(strip_tags($this->id_almacen));
         $this->id_tipo=htmlspecialchars(strip_tags($this->id_tipo));

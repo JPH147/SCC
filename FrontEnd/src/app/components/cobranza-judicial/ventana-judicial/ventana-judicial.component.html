@@ -1,0 +1,71 @@
+<mat-card class="card">
+
+  <mat-toolbar color="primary">
+    <mat-toolbar-row> Agregar documento </mat-toolbar-row>
+  </mat-toolbar>
+
+  <div class = "spinner-container" *ngIf = "Cargando| async">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <form [formGroup]="VentanaJudicialForm">
+    <mat-card-content>
+      <mat-grid-list cols=3 rowHeight="70px">
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <mat-select placeholder="Tipo de documento" formControlName="tipo_documento">
+              <mat-option *ngFor="let tipo of TipoDocumentos" [value]="tipo"> {{tipo}} </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput [matDatepicker]="FechaInicio" placeholder="Fecha" formControlName="fecha" readonly>
+            <mat-datepicker-toggle matSuffix [for]="FechaInicio"></mat-datepicker-toggle>
+            <mat-datepicker #FechaInicio></mat-datepicker>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput type="number" placeholder="Número de resolución" formControlName="numero_resolucion">
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan=2>
+          <mat-form-field class="columnas-2">
+            <input matInput type="text" placeholder="Sumilla" formControlName="sumilla">
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan=1>
+          <ng-container *ngIf="!archivo">
+            <input hidden #uploader type="file" (change)="SubirArchivo($event.target.files)">
+            <button mat-raised-button type="button" (click)="uploader.click()"> Seleccionar archivo </button>
+          </ng-container>
+          <ng-container *ngIf="archivo">
+            <span> {{ archivo_nombre }} </span>
+            &nbsp;
+            <button type="button" mat-icon-button color="primary" (click)="RemoverArchivo()"> <mat-icon> remove_circle_outline </mat-icon> </button>
+          </ng-container>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan="3">
+          <mat-form-field class="columnas-3">
+            <input matInput type="text" placeholder="Comentarios" formControlName="comentarios">
+          </mat-form-field>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <mat-grid-list cols=1 rowHeight="40px">
+        <mat-grid-tile>
+          <button mat-raised-button color="primary" class="boton" (click)="Guardar()" type="button" [disabled]="(Cargando | async)">Agregar</button>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-card-actions>
+  </form>
+
+</mat-card>

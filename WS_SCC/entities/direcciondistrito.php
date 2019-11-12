@@ -32,7 +32,7 @@ class Distrito{
         //$distrito_list["total"]=array();
 		$distrito_list["distritos"]=array();
 
-		$contador = $this->total_pagina*($this->numero_pagina);
+        $contador = $this->total_pagina*($this->numero_pagina-1);
 
 		while($row = $result->fetch(PDO::FETCH_ASSOC))
 		{

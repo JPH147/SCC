@@ -35,8 +35,13 @@ constructor(private Servicio: ServiciosDirecciones) { }
   	finalize(() => this.CargandoInformacion.next(false))
   )
   .subscribe(res => {
-    this.TotalResultados.next(res['mensaje']);
-    this.InformacionDistritos.next(res['data'].distritos);
+    if(res){
+      this.TotalResultados.next(res['mensaje']);
+      this.InformacionDistritos.next(res['data'].distritos);
+    } else {
+      this.TotalResultados.next(0);
+      this.InformacionDistritos.next([]);
+    }
   });
   }
 

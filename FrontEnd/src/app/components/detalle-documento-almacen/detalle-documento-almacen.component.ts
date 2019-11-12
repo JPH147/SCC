@@ -22,6 +22,7 @@ export class DetalleDocumentoAlmacenComponent implements OnInit {
 	public referente:string;
 	public documento:string;
 	public fecha:string;
+	public observacion:string;
 	public detalle:Array<any>;
 	public cargando:boolean;
 
@@ -55,36 +56,38 @@ export class DetalleDocumentoAlmacenComponent implements OnInit {
   }
 
   AsignarValores(objeto){
-        this.almacen= objeto['data'].almacen;
-        this.tipo= objeto['data'].tipo;
-        this.referencia= objeto['data'].referencia;
-        this.id_tipo= objeto['data'].id_tipo;
-        this.documento= objeto['data'].documento;
-        this.fecha= objeto['data'].fecha;
-        this.detalle=objeto['data'].detalle;
-        switch (objeto['data'].referencia) {
-          case 1:{
-            this.referente= objeto['data'].proveedor
-            break;
-          }
-          case 2:{
-            this.referente= objeto['data'].cliente
-            break;
-          }
-          case 3:{
-            this.referente= objeto['data'].salida_venta
-            break;
-          }
-          case 4:{
-            this.referente= objeto['data'].sucursal
-            break;
-          }
-          case 5:{
-            this.referente= objeto['data'].vendedor
-            break;
-          }
-        }
-        this.cargando=false
+    console.log(objeto);
+    this.almacen= objeto['data'].almacen;
+    this.tipo= objeto['data'].tipo;
+    this.referencia= objeto['data'].referencia;
+    this.id_tipo= objeto['data'].id_tipo;
+    this.documento= objeto['data'].documento;
+    this.fecha= objeto['data'].fecha;
+    this.detalle=objeto['data'].detalle;
+    this.observacion=objeto['data'].observaciones;
+    switch (objeto['data'].referencia) {
+      case 1:{
+        this.referente= objeto['data'].proveedor
+        break;
+      }
+      case 2:{
+        this.referente= objeto['data'].cliente
+        break;
+      }
+      case 3:{
+        this.referente= objeto['data'].salida_venta
+        break;
+      }
+      case 4:{
+        this.referente= objeto['data'].sucursal
+        break;
+      }
+      case 5:{
+        this.referente= objeto['data'].vendedor
+        break;
+      }
+    }
+    this.cargando=false
   }
 
   Editar(detalle){

@@ -33,8 +33,13 @@ constructor(private Servicio: ServiciosDirecciones) { }
   finalize(() => this.CargandoInformacion.next(false))
   )
   .subscribe(res => {
-    this.TotalResultados.next(res['mensaje']);
-    this.InformacionDepartamentos.next(res['data'].departamentos);
+    if(res){
+      this.TotalResultados.next(res['mensaje']);
+      this.InformacionDepartamentos.next(res['data'].departamentos);
+    } else {
+      this.TotalResultados.next(0);
+      this.InformacionDepartamentos.next([]);
+    }
   });
   }
 

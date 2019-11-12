@@ -57,13 +57,23 @@ export class VentanaEmergenteProvincia {
 
   Guardar(formulario){
    if(this.data){
-      this.mensaje='Datos actualizados satisfactoriamente';
-      this.Servicio.ActualizarDepartamento(this.data.id,formulario.value.nombre).subscribe()
+      this.Servicio.ActualizarDepartamento(this.data.id,formulario.value.nombre).subscribe(res=>{
+        if(res['codigo']==0){
+          this.Notificacion("Se actualizó la provincia satisfactoriamente","")
+        } else {
+          this.Notificacion("Ocurrió un error al actualizar la provincia","")
+        }
+      })
    }
 
     if(!this.data){
-      this.mensaje='Provincia creada satisfactoriamente';
-      this.Servicio.CrearProvincia(formulario.value.departamento,formulario.value.nombre).subscribe();
+      this.Servicio.CrearProvincia(formulario.value.departamento,formulario.value.nombre).subscribe(res=>{
+        if(res['codigo']==0){
+          this.Notificacion("Se creó la provincia satisfactoriamente","")
+        } else {
+          this.Notificacion("Ocurrió un error al crear la provincia","")
+        }
+      });
     }
       this.ventana.close()
   }

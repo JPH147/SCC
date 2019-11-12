@@ -29,6 +29,10 @@ export class MenuComponent implements OnInit{
             path: "evaluacion"
           },
           {
+            nombre: "Evaluación Express",
+            path: "evaluacion-express"
+          },
+          {
             nombre: "Presupuestos",
             path: "presupuesto"
           },
@@ -121,6 +125,10 @@ export class MenuComponent implements OnInit{
             nombre: "Cobranzas por planilla",
             path: "cobranza-archivos"
           },
+          {
+            nombre: "Cobranzas judiciales",
+            path: "cobranza-judicial"
+          },
         ]
       },
       {
@@ -152,6 +160,10 @@ export class MenuComponent implements OnInit{
             path: ""
           },
           {
+            nombre: "Direcciones",
+            path: "direcciones"
+          },
+          {
             nombre: "Plantillas",
             path: "plantillas"
           },
@@ -171,14 +183,6 @@ export class MenuComponent implements OnInit{
             nombre: "Vendedores",
             path: "vendedores"
           },
-          // {
-          //   nombre: "Instituciones",
-          //   path: ""
-          // },
-          // {
-          //   nombre: "Reglas de evaluación",
-          //   path: "evaluacion-reglas"
-          // }
         ]
       },
     ]
@@ -197,26 +201,3 @@ export interface Submenu{
   nombre:string,
   path:string,
 }
-
-/*
-
-const TREE_DATA = JSON.stringify({
-  'Administración del sistema': {
-    Usuarios: 'usuarios',
-    Proveedores: 'proveedores',
-    Cooperativa: {
-      'Aportes de socio': '',
-      'Cuentas bancarias': ''
-    },
-    'Tipo de cambio': '',
-    'Tablas maestras': {
-      'Bancos': '',
-      'Condición laboral': '',
-      'Detalle de productos': 'detalleproductos',
-      'Direcciones': 'direcciones',
-      'Instituciones': '',
-      'Sucursales': '',
-    }
-  }
-});
-*/

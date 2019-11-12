@@ -39,7 +39,15 @@ export class ClienteDataSource implements DataSource<Cliente> {
   finalize(() => this.CargandoInformacion.next(false))
   )
   .subscribe(res => {
-      // console.log(res);
+      res['data'].clientes.forEach((item)=>{
+        let dni : string = item.dni;
+        let dni_longitud : number = (item.dni).toString().length;
+
+        for(let i = dni_longitud; i<8 ; i++){
+          dni = "0" + dni ;
+        }
+        item.dni = dni ;
+      })
       this.TotalResultados.next(res['mensaje']);
       this.InformacionClientes.next(res['data'].clientes);
     });

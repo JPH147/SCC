@@ -1,16 +1,13 @@
 <mat-card>
-    <div>
-        <button mat-fab matTooltip="Agregar Distrito" class="agregar"   color="primary" (click)="Agregar()"><mat-icon> add_location </mat-icon></button>
-    </div>
 
   <!-- Encabezado -->
   <mat-card-title>
-    <div id = "tituloProd"> Listado de Distritos</div>
+    <div id = "tituloProd"> Listado de distritos</div>
   </mat-card-title>
 
  <!-- <button mat-raised-button color="primary" class="agregar" (click)="Agregar()">Agregar</button>  -->
 
-  <mat-grid-list cols=3 rowHeight="70px">
+  <mat-grid-list cols=4 rowHeight="70px">
     <mat-grid-tile>
       <mat-icon>search</mat-icon>
       <mat-form-field>
@@ -28,6 +25,9 @@
       <mat-form-field>
         <input matInput placeholder="Distrito" #InputDistrito>
       </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <button mat-raised-button color="primary" (click)="Agregar()"> Agregar </button>
     </mat-grid-tile>
   </mat-grid-list>
 
@@ -62,7 +62,7 @@
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let distrito">
-          <button mat-icon-button color="primary" (click)="Editar(distrito.id)" matTooltip="Editar"><mat-icon>edit_location</mat-icon></button>
+          <button mat-icon-button color="primary" (click)="Editar(distrito.id)" matTooltip="Editar"><mat-icon>edit</mat-icon></button>
           <button mat-icon-button color="primary" (click)="Eliminar(distrito)" matTooltip="Eliminar" ><mat-icon> delete </mat-icon></button>
         </mat-cell>
       </ng-container>

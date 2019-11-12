@@ -4,9 +4,13 @@
 // ...
 
 $primary: mat-palette($mat-cyan, 900);
-$accent:  mat-palette($mat-purple, 700);
+$accent:  mat-palette($mat-blue, 600);
 $warn:    mat-palette($mat-deep-orange);
 
 $theme: mat-light-theme($primary, $accent, $warn);
+
+$mat_verde : mat-palette($mat-green, 800);
+$mat_ambar : mat-palette($mat-amber, 500);
+$mat_rojo : mat-palette($mat-red, 500);
 
 @include angular-material-theme($theme);

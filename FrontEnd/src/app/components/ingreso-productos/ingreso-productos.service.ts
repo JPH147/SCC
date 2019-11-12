@@ -24,6 +24,7 @@ constructor(private http: HttpClient) {}
       prfecha: Date,
       prdocumento: string,
       prnumerodoc: number,
+      observaciones: string,
     ): Observable <any> {
 
       // tslint:disable-next-line:prefer-const
@@ -34,7 +35,8 @@ constructor(private http: HttpClient) {}
       .set('prproveedor', prproveedor.toString())
       .set('prfecha', moment (prfecha).format('YYYY/MM/DD'))
       .set('prdocumento', prdocumento)
-      .set('prnumerodoc', prnumerodoc.toString());
+      .set('prnumerodoc', prnumerodoc.toString())
+      .set('probservaciones', observaciones.toString());
 
       // console.log(params);
 
@@ -102,7 +104,7 @@ constructor(private http: HttpClient) {}
       perfecha: Date,
       prdocumento: string,
       prnumerodoc: number,
-
+      observaciones:string
       ): Observable <any> {
 
         // tslint:disable-next-line:prefer-const
@@ -113,7 +115,8 @@ constructor(private http: HttpClient) {}
         .set('prsucursal', pralmacenEntra.toString())
         .set('prfecha', moment(perfecha).format('YYYY/MM/DD').toString())
         .set('prdocumento', prdocumento.toString())
-        .set('prnumerodoc', prnumerodoc.toString());
+        .set('prnumerodoc', prnumerodoc.toString())
+        .set('probservaciones', observaciones);
 
       // tslint:disable-next-line:prefer-const
       let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');

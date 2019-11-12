@@ -4,8 +4,8 @@ class Database {
     private $server = "107.180.40.35";
     private $port = "3306";
     private $db_name = "GENUS_SCC";
-    private $username = "genus_jpr";
-    private $password = "genus_jpr";
+    private $username = "genus_jph";
+    private $password = "JP2953116*";
 
     // private $server = "localhost";
     // private $port = "3306";

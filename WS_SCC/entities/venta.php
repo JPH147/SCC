@@ -13,6 +13,7 @@ Class Venta{
     public $id_cliente;
     public $id_clientedireccion;
     public $id_clientetelefono;
+    public $cliente_dni;
     public $direccion;
     public $telefono;
     public $clientecargo;
@@ -126,6 +127,8 @@ Class Venta{
                 "monto_pagado"=>$monto_pagado,
                 "tipo_venta"=>$tipo_venta,
                 "observaciones"=>$observaciones,
+                "id_proceso_judicial"=>$id_proceso_judicial,
+                "cobro_judicial"=>$cobro_judicial,
                 "estado"=>$estado,
             );
             array_push($venta_list["ventas"],$venta_item);
@@ -393,7 +396,9 @@ Class Venta{
         $this->id_talonario=$row['id_talonario'];
         $this->talonario_serie=$row['talonario_serie'];
         $this->talonario_contrato=$row['talonario_contrato'];
+        $this->contrato=$row['contrato'];
         $this->id_cliente=$row['id_cliente'];
+        $this->cliente_dni=$row['cliente_dni'];
         $this->cliente_nombre=$row['cliente_nombre'];
         $this->cliente_trabajo=$row['cliente_trabajo'];
         $this->cliente_cargo_nombre=$row['cliente_cargo_nombre'];
@@ -458,6 +463,7 @@ Class Venta{
         $this->id_talonario=$row['id_talonario'];
         $this->contrato=$row['contrato'];
         $this->id_cliente=$row['id_cliente'];
+        $this->cliente_dni=$row['cliente_dni'];
         $this->cliente_nombre=$row['cliente_nombre'];
         $this->cliente_trabajo=$row['cliente_trabajo'];
         $this->cliente_cargo_nombre=$row['cliente_cargo_nombre'];

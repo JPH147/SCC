@@ -1,10 +1,11 @@
 <mat-card class="card">
-  <mat-card-header>
+
+  <mat-toolbar color="primary">
     <mat-card-title *ngIf="!data">Agregar Provincia</mat-card-title>
     <mat-card-title *ngIf="data">Editar Provincia</mat-card-title>
-  </mat-card-header>
+  </mat-toolbar>
 
-  <form [formGroup]="ProvinciasForm" (ngSubmit)="Guardar(ProvinciasForm); Notificacion(mensaje,'')">
+  <form [formGroup]="ProvinciasForm" (ngSubmit)="Guardar(ProvinciasForm)">
     
     <mat-card-content>
       <mat-grid-list cols="1" rowHeight="80px">

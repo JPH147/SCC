@@ -1,21 +1,40 @@
 <mat-card class="card">
   
-    <mat-toolbar color="primary">
-      <mat-toolbar-row> Ingresar series </mat-toolbar-row>
-    </mat-toolbar>
-    
+  <mat-toolbar color="primary">
+    <mat-toolbar-row>
+      Ingresar series
+      <span class="espacio"></span>
+      <span> Total: {{seriearticulo.length}} </span>
+    </mat-toolbar-row>
+  </mat-toolbar>
+  
+  <!-- Se pregunta cuántas series se van a agregar -->
+  <ng-container *ngIf="consultar_numero_items">
+    <mat-grid-list cols=1 rowHeight="70px">
+      <mat-grid-tile>
+        <mat-form-field>
+          <input matInput type="number" [(ngModel)]="numero_items" min=1 placeholder="Series a agregar">
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <button mat-raised-button color="primary" (click)="SeleccionarNumeroSeries()" [disabled]="numero_items<1"> Agregar series </button>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </ng-container>
+  
+  <ng-container *ngIf="!consultar_numero_items">
     <mat-grid-list cols="1" rowHeight="45px">
       <mat-grid-tile>
         <button mat-mini-fab color="primary" (click)="AgregarSerieVS()"><mat-icon>add</mat-icon></button>
       </mat-grid-tile>
     </mat-grid-list>
-
+  
     <mat-card-content>
       <mat-grid-list cols=4 rowHeight="70px" *ngFor="let serie of seriearticulo">
         <mat-grid-tile>
           <mat-form-field class="input-serie">
             <input matInput placeholder="Serie" [(ngModel)]="serie.serie" #InputSerie>
-            <mat-hint class="error" *ngIf="serie.repetidoBD">La serie ya se encuentra registrada</mat-hint>
+            <mat-hint class="error" *ngIf="serie.repetidoBD">La serie ya existe</mat-hint>
           </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -40,7 +59,7 @@
         </mat-grid-tile>
       </mat-grid-list>
     </mat-card-content>
-
+  
     <mat-card-actions>
       <mat-grid-list cols=1 rowHeight="40px">
         <mat-grid-tile *ngIf="invalidV">
@@ -54,6 +73,5 @@
         </mat-grid-tile>
       </mat-grid-list>
     </mat-card-actions>
-
-
-  </mat-card>
+  </ng-container>
+</mat-card>

@@ -1,10 +1,11 @@
 <mat-card class="card">
-  <mat-card-header >
+
+  <mat-toolbar color="primary">
     <mat-card-title *ngIf="!data">Agregar Departamento</mat-card-title>
     <mat-card-title *ngIf="data">Editar Departamento</mat-card-title>
-  </mat-card-header>
+  </mat-toolbar>
 
-  <form [formGroup]="DepartamentosForm" (ngSubmit)="Guardar(DepartamentosForm); Notificacion(mensaje,'')">
+  <form [formGroup]="DepartamentosForm" (ngSubmit)="Guardar(DepartamentosForm)">
     
     <mat-card-content>
       <mat-grid-list cols="1" rowHeight="80px">

@@ -72,7 +72,7 @@
 
       <ng-container matColumnDef="foto">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Foto </mat-header-cell>
-        <mat-cell *matCellDef="let producto">
+        <mat-cell *matCellDef="let producto" (click)="VerFoto(producto.descripcion, producto.foto)">
           <img [attr.src]="producto.foto" class="imagen-producto" />
         </mat-cell>
       </ng-container>

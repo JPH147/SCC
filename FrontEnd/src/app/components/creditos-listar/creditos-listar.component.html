@@ -121,8 +121,14 @@
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let credito">
           <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="['ver', credito.id]"><mat-icon> visibility </mat-icon></button>
-          <button mat-icon-button color="primary" matTooltip="Editar" [disabled]="credito.monto_pagado>0 || credito.estado!=1 || credito.tipo_credito == 'Aporte de socio'" [routerLink]="['editar', credito.id]"><mat-icon> edit </mat-icon></button>
-          <button mat-icon-button color="primary" matTooltip="Anular" [disabled]="credito.monto_pagado>0 || credito.estado!=1" (click)="AnularCredito(credito)"><mat-icon> delete </mat-icon></button>
+          <button mat-icon-button color="primary" matTooltip="Editar" [routerLink]="['editar', credito.id]"
+            [disabled]="credito.monto_pagado>0 || credito.estado!=1 || credito.tipo_credito == 'Aporte de socio' || credito.id_proceso_judicial"><mat-icon> edit </mat-icon></button>
+          <button mat-icon-button color="primary" matTooltip="Abrir proceso judicial"
+            [routerLink]="['../cobranza-judicial','nueva-credito',credito.id]" *ngIf="!credito.id_proceso_judicial"><mat-icon> gavel </mat-icon></button>
+          <button mat-icon-button color="primary" matTooltip="Ver proceso judicial"
+            [routerLink]="['../cobranza-judicial','ver',credito.id_proceso_judicial]" *ngIf="credito.id_proceso_judicial"><mat-icon> face </mat-icon></button>
+          <button mat-icon-button color="primary" matTooltip="Anular"
+            [disabled]="credito.monto_pagado>0 || credito.estado!=1 || credito.id_proceso_judicial" (click)="AnularCredito(credito)"><mat-icon> delete </mat-icon></button>
         </mat-cell>
       </ng-container>
 

@@ -819,6 +819,7 @@ class TemplateProcessor
     {
         // Note: we can't use the same function for both cases here, because of performance considerations.
         if (self::MAXIMUM_REPLACEMENTS_DEFAULT === $limit) {
+            $replace = preg_replace('/\\\s/', '<w:t xml:space="preserve"> 0 </w:t>', $replace);
             return str_replace($search, $replace, $documentPartXML);
         }
         $regExpEscaper = new RegExp();

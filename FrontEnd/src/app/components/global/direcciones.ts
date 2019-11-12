@@ -90,14 +90,15 @@ export class ServiciosDirecciones{
 		total_pagina:number,
 	):Observable<any>
 	{
+    let params = new HttpParams()
+    .set('prdepartamento', departamento)
+    .set('prprovincia', provincia)
+    .set('prpagina',pagina.toString())
+    .set('prtotalpagina',total_pagina.toString())
+    
+    // console.log(params);
 
-		return this.http.get(this.url+'direccionprovincia/read.php',{
-			params: new HttpParams()
-			.set('prdepartamento', departamento)
-			.set('prprovincia', provincia)
-			.set('prpagina',pagina.toString())
-			.set('prtotalpagina',total_pagina.toString())
-		})
+		return this.http.get(this.url+'direccionprovincia/read.php',{params})
 		.pipe(map(res=>{
 			if(res['codigo']===0){
 				return res=res

@@ -19,6 +19,7 @@ import { HistorialSerieComponent } from './components/historial-serie/historial-
 import { HistorialMovimientosComponent } from './components/historial-movimientos/historial-movimientos.component';
 import { DetalleProductosComponent } from './components/detalleproductos/detalleproductos.component';
 import { DetalleDocumentoAlmacenComponent } from './components/detalle-documento-almacen/detalle-documento-almacen.component';
+import { EvaluacionExpressComponent } from './components/evaluacion/evaluacion-express/evaluacion-express.component';
 import { EvaluacionComponent } from './components/evaluacion/evaluacion.component';
 import { ReglasEvaluacionComponent } from './components/tablas-maestras/reglas-evaluacion/reglas-evaluacion.component';
 import { RetornoVendedoresCierreComponent } from './components/retorno-vendedores-cierre/retorno-vendedores-cierre.component';
@@ -48,14 +49,17 @@ import { InstitucionComponent } from './components/instituciones/institucion/ins
 import { SedeComponent } from './components/instituciones/sede/sede.component';
 import { SubsedeComponent } from './components/instituciones/subsede/subsede.component';
 import { CobranzaClienteListarComponent } from './components/cobranza-cliente-listar/cobranza-cliente-listar.component';
+import { CobranzaJudicialListarComponent } from './components/cobranza-judicial-listar/cobranza-judicial-listar.component';
+import { CobranzaJudicialComponent } from './components/cobranza-judicial/cobranza-judicial.component';
+import { CobranzaJudicialGenerarComponent } from './components/cobranza-judicial-generar/cobranza-judicial-generar.component';
 
 export const appRoutes: Routes = [
   // {path: '', component: ConsultarClienteComponent}, //prueba
   {path: 'usuarios', component: UsuariosComponent},
-  {path: 'usuarios', component: UsuariosComponent},
   {path: 'productos', component: ProductosComponent},
   {path: 'series', component: HistorialSerieComponent},
   {path: 'evaluacion', component: EvaluacionComponent},
+  {path: 'evaluacion-express', component: EvaluacionExpressComponent},
   // {path: 'evaluacion/:idpresupuesto', component: EvaluacionComponent},
   {path: 'movimientos', component: HistorialMovimientosComponent},
   {path: 'movimientos/:id', component: DetalleDocumentoAlmacenComponent},
@@ -106,14 +110,21 @@ export const appRoutes: Routes = [
   {path: 'cobranza-archivos/ver/:idcobranza', component: CobranzaArchivosDetalleComponent},
   {path: 'cobranza-archivos/generar', component: CobranzaArchivosComponent},
   {path: 'cobranza-archivos/cobrar/:id', component: CobranzaArchivosPagoComponent},
+  {path: 'cobranza-judicial', component: CobranzaJudicialListarComponent},
+  {path: 'cobranza-judicial/ver/:idprocesover', component: CobranzaJudicialComponent},
+  {path: 'cobranza-judicial/editar/:idprocesoeditar', component: CobranzaJudicialComponent},
+  {path: 'cobranza-judicial/agregar/:idprocesoagregar', component: CobranzaJudicialComponent},
+  {path: 'cobranza-judicial/nueva', component: CobranzaJudicialComponent},
+  {path: 'cobranza-judicial/nueva-credito/:idcredito', component: CobranzaJudicialComponent},
+  {path: 'cobranza-judicial/nueva-venta/venta/:idventa', component: CobranzaJudicialComponent},
+  {path: 'cobranza-judicial/nueva-venta/salida/:idventasalida', component: CobranzaJudicialComponent},
+  {path: 'cobranza-judicial/generar/nuevo/:idprocesonuevo', component: CobranzaJudicialGenerarComponent},
+  {path: 'cobranza-judicial/generar/ver/:idprocesover', component: CobranzaJudicialGenerarComponent},
   {path: 'trabajadores', component: TrabajadoresComponent},
   {path: 'registro-horas', component: RegistroHorasComponent},
   {path: 'reporte-asistencia', component: ReporteAsistenciaComponent},
   {path: 'plantillas', component: PlantillasComponent},
-  {path: 'prueba', component: CobranzaArchivosDetalleComponent},
+  {path: 'prueba', component: IngresoProductosComponent},
 ];
 
-// export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);
-// export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes,{ enableTracing: true });
-// export const routing: ModuleWithProviders = RouterModule.forChild(appRoutes);
 

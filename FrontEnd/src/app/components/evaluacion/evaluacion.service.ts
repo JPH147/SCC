@@ -200,7 +200,7 @@ export class EvaluacionService {
       .set('prpdfcarta',pdf_carta)
       .set('prpdfcompromiso',pdf_compromiso);
 
-    console.log(params);
+    // console.log(params);
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -390,7 +390,7 @@ export class EvaluacionService {
       .set('prdireccion',direccion )
       .set('prcasilla',casilla )
       .set('prugel', ugel)
-      .set('prfechaanterior',moment(fecha).subtract(dias_premura, 'd').format('LL') )
+      .set('prfechaanterior',moment(fecha).subtract(dias_premura, 'd').locale('es').format('LL') )
       .set('prfechaletras', this.EscribirFecha(fecha) )
       .set('prmontototal',monto_total.toString() )
       .set('prmontototalletras', this.EsribirNumero(monto_total,1) )
@@ -419,7 +419,7 @@ export class EvaluacionService {
       .set('prnombreaval',nombre_aval)
       .set('prdniaval',dni_aval);
 
-      console.log("PrintTransaccion",params);
+      // console.log("PrintTransaccion",params);
 
       let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -557,9 +557,9 @@ export class EvaluacionService {
 
     if( tipo == 1 ) {
       if(decimal>0){
-        decimal_corregido =  " con " + decimal + "/100 SOLES";
+        decimal_corregido =  " CON " + decimal + "/100 SOLES";
       } else {
-        decimal_corregido = " con 00/100 SOLES";
+        decimal_corregido = " CON 00/100 SOLES";
       }
     } else {
       decimal_corregido = "" ;
@@ -583,7 +583,7 @@ export class EvaluacionService {
       dia = " a los " + moment(fecha).date() + " días"
     }
 
-    mes = moment(fecha).format("MMMM") ;
+    mes = moment(fecha).locale('es').format("MMMM") ;
     mes = mes.charAt(0).toUpperCase() + mes.slice(1) ;
     mes = " del mes de " + mes ;
 

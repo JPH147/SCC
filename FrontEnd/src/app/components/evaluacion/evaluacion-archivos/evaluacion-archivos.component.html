@@ -46,7 +46,6 @@
         <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(compromiso)" [disabled]="!compromiso"> <mat-icon> arrow_downward </mat-icon> </button>
       </mat-grid-tile>
     </mat-grid-list>
-
   </mat-card-content>
 
   <form [formGroup]="EvaluacionArchivosForm">
@@ -286,18 +285,6 @@
             <input matInput type="number" placeholder="Días de premura para el contrato" formControlName="dias_premura">
           </mat-form-field>
         </mat-grid-tile>
-
-        <!-- <mat-grid-tile colspan=2>
-          <mat-form-field class="columnas-2">
-            <input placeholder="Trabajador" matInput [matAutocomplete]="Tauto" formControlName="trabajador" #InputTrabajador [readonly]="EvaluacionArchivosForm.value.id_trabajador">
-            <mat-icon color="primary" matSuffix (click)="RemoverTrabajador()" *ngIf="EvaluacionArchivosForm.value.id_trabajador"> remove_circle </mat-icon>
-            <mat-autocomplete #Tauto="matAutocomplete" (optionSelected)="TrabajadorSeleccionado()">
-              <mat-option *ngFor="let trabajador of ListadoTrabajadores" [value]="trabajador">
-                {{trabajador.nombre}}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
-        </mat-grid-tile> -->
 
       </mat-grid-list>
 

@@ -28,6 +28,7 @@
 			"id_talonario"=>$venta->id_talonario,
 			"contrato"=>$venta->contrato,
 			"id_cliente"=>$venta->id_cliente,
+			"cliente_dni"=>$venta->cliente_dni,
 			"cliente_nombre"=>$venta->cliente_nombre,
 			"cliente_trabajo"=>$venta->cliente_trabajo,
 			"cliente_cargo_nombre"=>$venta->cliente_cargo_nombre,

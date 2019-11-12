@@ -1,8 +1,9 @@
 <mat-card class="card">
-  <mat-card-header>
+
+  <mat-toolbar color="primary">
     <mat-card-title *ngIf="!data">Agregar Distrito</mat-card-title>
     <mat-card-title *ngIf="data">Editar Distrito</mat-card-title>
-  </mat-card-header>
+  </mat-toolbar>
 
   <form [formGroup]="DistritosForm" (ngSubmit)="Guardar(DistritosForm); Notificacion(mensaje,'')">
     

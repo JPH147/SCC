@@ -188,7 +188,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         this.Cargando.next(true);
 
         if(params['idpresupuesto']){
-          console.log(params)
+          // console.log(params)
           this.id_presupuesto=params['idpresupuesto'];
           this.NuevoCreditoPresupuesto(this.id_presupuesto);
         }

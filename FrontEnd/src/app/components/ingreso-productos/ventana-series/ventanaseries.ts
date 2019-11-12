@@ -27,6 +27,8 @@ export class ventanaseries  implements OnInit {
   public invalidP:boolean;
   public series_vista:Array<any> = [];
   public cargando:boolean;
+  public consultar_numero_items : boolean = false ;
+  public numero_items : number = 1 ;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
@@ -64,7 +66,8 @@ export class ventanaseries  implements OnInit {
         
       }
 
-    }else{
+    } else {
+      this.consultar_numero_items = true ;
     }
 
   }
@@ -74,6 +77,13 @@ export class ventanaseries  implements OnInit {
     this.FiltrarColores();
     this.FiltrarSerie();
     this.FiltrarSerieVista();
+  }
+
+  SeleccionarNumeroSeries(){
+    this.consultar_numero_items = false ;
+    for(let i = this.seriearticulo.length ; i < this.numero_items ; i++) {
+      this.AgregarSerieVS();
+    }
   }
 
   ValidarBD(){
@@ -262,13 +272,12 @@ export class ventanaseries  implements OnInit {
     //   this.invalidP=false;
     //   return of(false);
     // }
-    
     let i : number = 0;
 
     if( this.series_vista.length > 0 ){
       this.seriearticulo.forEach((item=>{
         this.series_vista.forEach((item2)=>{
-          if(item.serie == item2.serie){
+          if(item.serie == item2.serie && item.producto != item2.id_producto){
             this.invalidP=true;
             return of(true);
           } 

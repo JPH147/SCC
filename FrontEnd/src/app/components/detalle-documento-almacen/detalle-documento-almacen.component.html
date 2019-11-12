@@ -43,6 +43,10 @@
 					<strong>FECHA: &nbsp;</strong> {{fecha | date:"dd/MM/yyyy"}}
 				</mat-grid-tile>
 
+				<mat-grid-tile colspan=3 *ngIf="observacion">
+          <strong>OBSERVACIONES: &nbsp;</strong> {{observacion}}
+        </mat-grid-tile>
+
 			</mat-grid-list>
 
 		<mat-card-subtitle>

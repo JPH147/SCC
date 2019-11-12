@@ -46,13 +46,23 @@ export class VentanaEmergenteDepartamento {
 
   Guardar(formulario){
     if(this.data){
-      this.mensaje='Datos actualizados satisfactoriamente';
-      this.Servicios.ActualizarDepartamento(this.data.id,formulario.value.nombre).subscribe()
+      this.Servicios.ActualizarDepartamento(this.data.id,formulario.value.nombre).subscribe(res=>{
+        if(res['codigo']==0){
+          this.Notificacion("Se actualizó el departamento satisfactoriamente","")
+        } else {
+          this.Notificacion("Ocurrió un error al actualizar el departamento","")
+        }
+      })
     }
 
     if(!this.data){
-      this.mensaje='Departamento creado satisfactoriamente';
-      this.Servicios.CrearDepartamento(formulario.value.nombre).subscribe();
+      this.Servicios.CrearDepartamento(formulario.value.nombre).subscribe(res=>{
+        if(res['codigo']==0){
+          this.Notificacion("Se creó el departamento satisfactoriamente","")
+        } else {
+          this.Notificacion("Ocurrió un error al crear el departamento","")
+        }
+      });
     }
       this.DepartamentosForm.reset();
       this.ventana.close()

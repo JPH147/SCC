@@ -70,7 +70,6 @@ import { ClientesComponent } from './components/clientes/clientes.component';
 import { VentasComponent } from './components/ventas/ventas.component';
 import { ListadoSalidaVendedoresComponent } from './components/listado-salida-vendedores/listado-salida-vendedores.component';
 import {VentanaEmergenteProductos} from './components/productos/ventana-emergente/ventanaemergente';
-import {VentanaEmergenteArchivos} from './components/ventas/ventana-emergente/ventanaemergente';
 import {ventanaseries} from './components/ingreso-productos/ventana-series/ventanaseries';
 import {VentanaDetalle} from './components/ingreso-productos/ventana-detalle/ventanadetalle';
 import {VentanaFecha} from './components/ingreso-productos/ventana-fecha/ventanafecha';
@@ -81,11 +80,11 @@ import { ProveedoresComponent } from './components/proveedores/proveedores.compo
 import { ventanaseriessv } from './components/salida-vendedores/ventana-seriessv/ventanaseriessv';
 import { DireccionesComponent } from './components/direcciones/direcciones.component';
 import { DepartamentoComponent } from './components/direcciones/departamento/departamento.component';
+import { ProvinciaComponent } from './components/direcciones/provincia/provincia.component';
+import { DistritoComponent } from './components/direcciones/distrito/distrito.component';
 import { VentanaEmergenteDepartamento} from './components/direcciones/departamento/ventana-emergente/ventanaemergente';
 import {VentanaEmergenteProvincia} from './components/direcciones/provincia/ventana-emergente/ventanaemergente';
 import {VentanaEmergenteDistrito } from './components/direcciones/distrito/ventana-emergente/ventanaemergente';
-import { ProvinciaComponent } from './components/direcciones/provincia/provincia.component';
-import { DistritoComponent } from './components/direcciones/distrito/distrito.component';
 import { VentanaConfirmarComponent } from './components/global/ventana-confirmar/ventana-confirmar.component';
 import { VentanaEmergenteGastos } from './components/listado-salida-vendedores/ventana-emergente-gastos/ventanaemergente-gastos';
 import { ImageUploadModule } from 'angular2-image-upload';
@@ -164,7 +163,10 @@ import { VentanaEditarPagoComponent } from './components/cobranzas-listar/ventan
 import { CobranzaArchivosDetalleComponent } from './components/cobranza-archivos-detalle/cobranza-archivos-detalle.component';
 import { CobranzaJudicialListarComponent } from './components/cobranza-judicial-listar/cobranza-judicial-listar.component';
 import { CobranzaJudicialComponent } from './components/cobranza-judicial/cobranza-judicial.component';
+import { CobranzaJudicialGenerarComponent } from './components/cobranza-judicial-generar/cobranza-judicial-generar.component';
 import { CobranzaClienteListarComponent } from './components/cobranza-cliente-listar/cobranza-cliente-listar.component';
+import { EvaluacionExpressComponent } from './components/evaluacion/evaluacion-express/evaluacion-express.component';
+import { VentanaJudicialComponent } from './components/cobranza-judicial/ventana-judicial/ventana-judicial.component';
 
 @NgModule({
   exports:[
@@ -233,7 +235,6 @@ import { CobranzaClienteListarComponent } from './components/cobranza-cliente-li
     VentasComponent,
     ListadoSalidaVendedoresComponent,
     VentanaEmergenteProductos,
-    VentanaEmergenteArchivos,
     ventanaseries,
     VentanaFecha,
     VentanaDetalle,
@@ -333,12 +334,14 @@ import { CobranzaClienteListarComponent } from './components/cobranza-cliente-li
     CobranzaArchivosDetalleComponent,
     CobranzaJudicialListarComponent,
     CobranzaJudicialComponent,
-    CobranzaClienteListarComponent
+    CobranzaClienteListarComponent,
+    EvaluacionExpressComponent,
+    VentanaJudicialComponent,
+    CobranzaJudicialGenerarComponent
    ],
   entryComponents: [
     AppComponent,
     VentanaEmergenteProductos,
-    VentanaEmergenteArchivos,
     ventanaseries,
     VentanaDetalle,
     VentanaFecha,
@@ -386,7 +389,8 @@ import { CobranzaClienteListarComponent } from './components/cobranza-cliente-li
     VerPlantillasComponent,
     VentanaPagosComponent,
     VentanaTipoReporteComponent,
-    VentanaEditarPagoComponent
+    VentanaEditarPagoComponent,
+    VentanaJudicialComponent
   ],
   bootstrap: [AppComponent],
   providers: [

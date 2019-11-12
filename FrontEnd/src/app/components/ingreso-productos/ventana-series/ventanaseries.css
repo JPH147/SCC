@@ -1,7 +1,6 @@
 .card{
 	padding: 0px;
-	overflow-x: hidden;
-	max-height: 90vh
+	/* overflow-x: hidden; */
 }
 
 mat-card-actions{

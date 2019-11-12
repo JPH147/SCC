@@ -27,7 +27,7 @@ class Institucion{
 	}
 
 	function read(){
-		$query = "CALL sp_listarinstitucion";
+		$query = "CALL sp_listarinstitucion()";
 
 		$result = $this->conn->prepare($query);
 		$result->execute();

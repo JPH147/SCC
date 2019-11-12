@@ -1,8 +1,4 @@
 <mat-card class="principal">
-    <!-- <div>
-        <button mat-fab matTooltip="Agrega Cliente" class="agregar"  (click)="AgregarCliente()" color="primary" ><mat-icon> person_add </mat-icon></button>
-    </div> -->
-    
   
   <mat-card-title>
     <div id="tituloProd">Evaluación de Créditos</div>
@@ -21,7 +17,7 @@
 
         <ng-container *ngIf="cliente_encontrado==1">
           <mat-grid-tile>
-            <mat-form-field class="columnas4-1">
+            <mat-form-field class="columnas-1">
               <input matInput type="text" placeholder="DNI" formControlName="dni" maxlength="8" #InputDNI [readonly]="cliente_encontrado==1">
               <mat-icon color="primary" matSuffix (click)="RemoverCliente()" *ngIf="cliente_encontrado==1"> remove_circle </mat-icon>
               <mat-hint align="end">{{InputDNI.value?.length || 0}}/8</mat-hint>
@@ -29,7 +25,7 @@
           </mat-grid-tile>
   
           <mat-grid-tile colspan=2>
-            <mat-form-field class="columnas4-2">
+            <mat-form-field class="columnas-2">
               <input matInput type="text" placeholder="Nombre" formControlName="nombre" readonly>
             </mat-form-field>
           </mat-grid-tile>
@@ -42,7 +38,7 @@
         </mat-grid-tile> 
         
         <mat-grid-tile>
-          <mat-form-field class="columnas4-1">
+          <mat-form-field class="columnas-1">
             <input matInput placeholder="Interés" [(ngModel)]="interes" [ngModelOptions]="{standalone: true}" #InputInteres>
             <span matSuffix>&nbsp; % </span>
           </mat-form-field>
@@ -51,19 +47,19 @@
         <ng-container *ngIf="cliente_encontrado==1">
 
           <!-- <mat-grid-tile colspan=1>
-            <mat-form-field class="columnas4-1">
+            <mat-form-field class="columnas-1">
               <input matInput type="text" placeholder="Código" formControlName="codigo" readonly>
             </mat-form-field>
           </mat-grid-tile> -->
 
           <mat-grid-tile colspan=1>
-            <mat-form-field class="columnas4-1">
+            <mat-form-field class="columnas-1">
               <input matInput type="text" placeholder="Cargo" formControlName="cargo" readonly>
             </mat-form-field>
           </mat-grid-tile>
 
           <mat-grid-tile colspan=2>
-            <mat-form-field class="columnas4-2">
+            <mat-form-field class="columnas-2">
               <input matInput type="text" placeholder="Sede" formControlName="sede" readonly>
             </mat-form-field>
           </mat-grid-tile>

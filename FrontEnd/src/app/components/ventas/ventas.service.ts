@@ -5,7 +5,9 @@ import {map} from 'rxjs/operators';
 import {URL} from '../global/url';
 import * as moment from 'moment';
 
-@Injectable()
+@Injectable({
+  providedIn:'root'
+})
 
 export class VentaService {
 

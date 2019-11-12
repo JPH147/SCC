@@ -22,7 +22,7 @@
 
         <!--Campo ingresar Tipo de Ingreso a almacen -->
         <mat-grid-tile >
-            <mat-form-field  class="example-full-width">
+            <mat-form-field  class="columnas-1">
               <mat-select placeholder="Tipo de ingreso" formControlName= "tipoIngreso" (selectionChange)="ActualizarTipoIngreso($event)">
                 <mat-option *ngFor="let tipoIngreso of TipoIngresos" [value]="tipoIngreso.id">
                   {{tipoIngreso.nombre}}
@@ -33,49 +33,54 @@
 
          <!-- Seleccionar Almacen -->
         <mat-grid-tile>
-          <mat-form-field class="example-full-width">
-              <mat-select placeholder="Almacen" formControlName="almacen"  (selectionChange)="ResetearForm($event); ValidarDocumento();ListarTransferenciasPendientes()">
-                <mat-option *ngFor="let almacen of almacen_origen" [value]="almacen">
-                  {{almacen.nombre}}
-                </mat-option>
-              </mat-select>
-              <mat-error> Debe ingresar el almacén de salida </mat-error>
-            </mat-form-field>
-          </mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <mat-select placeholder="Almacen" formControlName="almacen"  (selectionChange)="ResetearForm($event); ValidarDocumento();ListarTransferenciasPendientes()">
+              <mat-option *ngFor="let almacen of almacen_origen" [value]="almacen">
+                {{almacen.nombre}}
+              </mat-option>
+            </mat-select>
+            <mat-error> Debe ingresar el almacén de salida </mat-error>
+          </mat-form-field>
+        </mat-grid-tile>
 
-          <mat-grid-tile>
-            
-          </mat-grid-tile>
+        <mat-grid-tile>
+          
+        </mat-grid-tile>
 
-          <mat-grid-tile *ngIf="IngresoProductoForm.get('tipoIngreso').value!=7">
-              <mat-form-field class="input-ventana" class="example-full-width">
-              <input #docRefencia matInput placeholder="Documento Referencia" formControlName="docReferencia">
-              <mat-error> Debe ingresar el documento de referencia </mat-error>
-            </mat-form-field>
-          </mat-grid-tile>
+        <mat-grid-tile *ngIf="IngresoProductoForm.get('tipoIngreso').value!=7">
+          <mat-form-field class="columnas-1">
+            <input #docRefencia matInput placeholder="Documento Referencia" formControlName="docReferencia">
+            <mat-error> Debe ingresar el documento de referencia </mat-error>
+          </mat-form-field>
+        </mat-grid-tile>
 
-          <mat-grid-tile *ngIf="IngresoProductoForm.get('tipoIngreso').value!=7">
-            <!--Campo ingresar Proveedor -->
-            <mat-form-field class="example-full-width">
-              <input #Proveedor placeholder="Proveedor" matInput [matAutocomplete]="auto" formControlName=proveedor >
-              <mat-error> Debe ingresar Proveedor </mat-error>
-              <mat-autocomplete #auto="matAutocomplete" [displayWith] = "displayProveedor" (optionSelected)="ProveedorSeleccionado()">
-                <mat-option *ngFor="let proveedor of proveedores" [value]="proveedor">
-                  {{proveedor.nombre}}
-                </mat-option>
-              </mat-autocomplete>
-            </mat-form-field>
-          </mat-grid-tile>
+        <mat-grid-tile *ngIf="IngresoProductoForm.get('tipoIngreso').value!=7">
+          <!--Campo ingresar Proveedor -->
+          <mat-form-field class="columnas-1">
+            <input #Proveedor placeholder="Proveedor" matInput [matAutocomplete]="auto" formControlName=proveedor >
+            <mat-error> Debe ingresar Proveedor </mat-error>
+            <mat-autocomplete #auto="matAutocomplete" [displayWith] = "displayProveedor" (optionSelected)="ProveedorSeleccionado()">
+              <mat-option *ngFor="let proveedor of proveedores" [value]="proveedor">
+                {{proveedor.nombre}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </mat-grid-tile>
 
-          <mat-grid-tile *ngIf="IngresoProductoForm.get('tipoIngreso').value!=7">
-            <mat-form-field class ="IngFecha" class="Alma1"  class="example-full-width" >
-                <input matInput [matDatepicker]="picker" placeholder="Fecha Ingreso" formControlName="fecingreso" [max]="Hoy"> 
-                <mat-error> Debe ingresar la fecha </mat-error>
-                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
-          </mat-grid-tile>
-      
+        <mat-grid-tile *ngIf="IngresoProductoForm.get('tipoIngreso').value!=7">
+          <mat-form-field class ="IngFecha" class="Alma1"  class="columnas-1" >
+            <input matInput [matDatepicker]="picker" placeholder="Fecha Ingreso" formControlName="fecingreso" [max]="Hoy"> 
+            <mat-error> Debe ingresar la fecha </mat-error>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </mat-grid-tile>
+    
+        <mat-grid-tile colspan=3>
+          <mat-form-field class="columnas-3">
+            <input #docRefencia matInput placeholder="Observaciones" formControlName="observacion">
+          </mat-form-field>
+        </mat-grid-tile>
       </mat-grid-list>
     </mat-card>
 

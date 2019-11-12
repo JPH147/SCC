@@ -29,7 +29,8 @@
             $transaccion->id_vendedor = !empty($_POST["prvendedor"]) ? trim($_POST["prvendedor"]) : null;
             $transaccion->fecha = !empty($_POST["prfecha"]) ? trim($_POST["prfecha"]) : null;
             $transaccion->documento = !empty($_POST["prdocumento"]) ? trim($_POST["prdocumento"]) : '';
-            $transaccion->numero_documento = !empty($_POST["prnumerodoc"]) ? trim($_POST["prnumerodoc"]) : null;
+            $transaccion->numero_documento = !empty($_POST["prnumerodoc"]) ? trim($_POST["prnumerodoc"]) : "";
+            $transaccion->observaciones = !empty($_POST["probservaciones"]) ? trim($_POST["probservaciones"]) : "";
             
             if($transaccion->create())
             {

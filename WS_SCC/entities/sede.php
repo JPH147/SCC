@@ -61,7 +61,12 @@ class Sede{
 				"distrito"=>$dst_nombre,
 				"direccion"=>$sd_direccion,
 				"telefono"=>$sd_telefono,
-				"codigo"=>$sd_codigo_cooperativa
+				"codigo"=>$sd_codigo_cooperativa,
+				"plantilla_tarjeta_socio"=>$plantilla_tarjeta_socio,
+				"plantilla_autorizacion"=>$plantilla_autorizacion,
+				"plantilla_ddjj"=>$plantilla_ddjj,
+				"plantilla_compromiso"=>$plantilla_compromiso,
+				"plantilla_transaccion"=>$plantilla_transaccion,
 			);
 			array_push($sede_list["sede"],$sede_fila);
 		}

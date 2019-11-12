@@ -2,11 +2,12 @@ import { VentanaEmergenteProductos } from './ventana-emergente/ventanaemergente'
 import {Component, OnInit, ViewChild, AfterViewInit, ElementRef} from '@angular/core';
 import { MatPaginator, MatSort, MatDialog,MatSelect,MatSnackBar } from '@angular/material';
 import {merge, Observable, fromEvent} from 'rxjs';
-import {catchError, map, startWith, switchMap, debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
 import {ProductoService} from './productos.service';
 import {ProductoDataSource} from './productos.dataservice';
 import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
 import {ImagenProductoComponent} from './imagen-producto/imagen-producto.component'
+import { VentanaFotoComponent } from '../clientes/ventana-foto/ventana-foto.component';
 
 @Component({
   selector: 'app-productos',
@@ -96,7 +97,7 @@ export class ProductosComponent implements OnInit {
 
 
  /* Agregar productos */
- Agregar() {
+  Agregar() {
    // tslint:disable-next-line:prefer-const
    let VentanaProductos = this.DialogoProductos.open(VentanaEmergenteProductos, {
      width: '600px',
@@ -106,26 +107,26 @@ export class ProductosComponent implements OnInit {
    VentanaProductos.afterClosed().subscribe(res => {
      this.CargarData();
    });
- }
+  }
 
- /* Eliminar productos */
- Eliminar(producto) {
-  const VentanaConfirmar = this.DialogoProductos.open(VentanaConfirmarComponent, {
-    width: '400px',
-    data: {objeto: 'el producto', valor: producto.descripcion}
-  });
-  VentanaConfirmar.afterClosed().subscribe(res => {
-    if (res === true) {
-     // tslint:disable-next-line:no-shadowed-variable
-      this.Servicio.Eliminar(producto.id).subscribe(res => {
-      this.CargarData();
-     });
-    }
-  });
- }
+  /* Eliminar productos */
+  Eliminar(producto) {
+    const VentanaConfirmar = this.DialogoProductos.open(VentanaConfirmarComponent, {
+      width: '400px',
+      data: {objeto: 'el producto', valor: producto.descripcion}
+    });
+    VentanaConfirmar.afterClosed().subscribe(res => {
+      if (res === true) {
+      // tslint:disable-next-line:no-shadowed-variable
+        this.Servicio.Eliminar(producto.id).subscribe(res => {
+        this.CargarData();
+      });
+      }
+    });
+  }
 
- /* Editar productos */
- Editar(id) {
+  /* Editar productos */
+  Editar(id) {
    this.Servicio.Seleccionar(id).subscribe(res => {
      // tslint:disable-next-line:prefer-const
      let VentanaProductos = this.DialogoProductos.open(VentanaEmergenteProductos, {
@@ -137,18 +138,18 @@ export class ProductosComponent implements OnInit {
        this.CargarData();
      });
    });
- }
+  }
 
- Activar(id){
+  Activar(id){
    this.Servicio.Activar(id).subscribe(res=>{
      this.CargarData();
       this.snackBar.open("Se activó el producto satisfactoriamente", "", {
         duration: 2000,
       });
    })
- }
+  }
 
- CargarImagen(producto){
+  CargarImagen(producto){
     let VentanaFileUpload = this.DialogFileUpload.open(ImagenProductoComponent, {
       width: '800px',
       data : producto
@@ -157,7 +158,14 @@ export class ProductosComponent implements OnInit {
     VentanaFileUpload.afterClosed().subscribe(res=>{
        this.CargarData();
     })
+  }
 
- }
+
+  VerFoto(nombre,imagen){
+    let VentanaFoto = this.DialogFileUpload.open(VentanaFotoComponent, {
+      width: '600px',
+      data: {nombre: nombre, imagen: imagen}
+    });
+  }
 
 }

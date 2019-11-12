@@ -12,6 +12,55 @@ body{
 	// height: 100vh;
 }
 
+mat-card.principal{
+  width: 80%;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  min-height: 100px;
+}
+
+mat-card.card{
+  padding: 0px;
+  overflow: hidden;
+}
+
+.spinner-container{
+  position: absolute;
+  top: 200px;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.seccion-secundaria{
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border-color: mat-color($primary);
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 5px;
+}
+
+.titulo-seccion-secundaria{
+  height: 30px;
+  font-size: 16px;
+  background-color: mat-color($primary);
+  color: white !important;
+  padding-top: 15px;
+  padding-left: 2.5%;
+}
+
+.icono-documentos{
+  font-size: 35px;
+  height: 40px;
+  width: 40px;
+}
+
 .mat-dialog-container {
 	padding: 0px !important;
 	border-radius: 15px 15px;
@@ -27,6 +76,24 @@ body{
 	max-height: 100%
 }
 
+.tituloProd {
+  padding: 15px;
+  font-size: 30px;
+  text-align: center;
+  font-family: sans-serif;
+}
+
+.icono-ambar{
+  color: mat-color($mat_ambar);
+}
+
+.icono-rojo{
+  color: mat-color($mat_rojo);
+}
+
+.icono-verde{
+  color: mat-color($mat_verde);
+}
 
 /* Estilos para la tabla */
 mat-header-cell,
@@ -47,22 +114,21 @@ mat-row:nth-child(even){
 
 /*Estilos para los formularios*/
 
-.columnas4-1{
-  width: 80%;
+.columnas-1{
+  width: 80%
 }
 
-.columnas4-2{
+.columnas-2{
   width: 90%
 }
 
-.columnas4-3{
+.columnas-3{
   width: 93.33%
 }
 
-.columnas4-4{
+.columnas-4{
   width: 95%
 }
-
 
 /******************/
 

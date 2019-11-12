@@ -1,25 +1,27 @@
 <mat-card>
-    <div>
-      <button mat-fab matTooltip="Agregar Proveedor" class="agregar"  (click)="Agregar()" color="primary"><mat-icon> person_add </mat-icon></button>
-    </div>
    <!-- Encabezado -->
   <mat-card-title>
     <div id = "tituloProd"> Listado de proveedores</div>
   </mat-card-title>
 
   <mat-grid-list cols=4 rowHeight="70px">
-      <mat-grid-tile>
-        <mat-icon>search</mat-icon>
-        <mat-form-field>
-          <input matInput placeholder="RUC" #InputRUC>
-        </mat-form-field>
-      </mat-grid-tile>
-          <mat-grid-tile>
-        <mat-icon>search</mat-icon>
-        <mat-form-field>
-          <input matInput placeholder="Nombre" #InputNombreProvedor>
-        </mat-form-field>
-      </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-icon>search</mat-icon>
+      <mat-form-field>
+        <input matInput placeholder="RUC" #InputRUC>
+      </mat-form-field>
+    </mat-grid-tile>
+        <mat-grid-tile>
+      <mat-icon>search</mat-icon>
+      <mat-form-field>
+        <input matInput placeholder="Nombre" #InputNombreProvedor>
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <button mat-raised-button matTooltip="Agregar proveedor" (click)="Agregar()" color="primary"> Nuevo </button>
+    </mat-grid-tile>
   </mat-grid-list>
 
 

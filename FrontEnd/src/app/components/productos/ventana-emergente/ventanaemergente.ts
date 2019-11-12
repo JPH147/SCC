@@ -105,7 +105,7 @@ export class VentanaEmergenteProductos {
       debounceTime(200),
       distinctUntilChanged(),
       tap(()=>{
-        this.VerificarProducto(this.FiltroDescripcion.nativeElement.value);
+        this.VerificarProducto();
       })
      ).subscribe()
   }
@@ -228,7 +228,8 @@ export class VentanaEmergenteProductos {
     let descripcion = this.tipo + " " + this.marca + " " + this.modelo;
 
     if( !this.data ){
-      this.ProductosForm.get('descripcion').setValue(descripcion)
+      this.ProductosForm.get('descripcion').setValue(descripcion);
+      this.VerificarProducto();
     }
 
   }
@@ -265,22 +266,26 @@ export class VentanaEmergenteProductos {
    });
   }
 
-  VerificarProducto(nombre){
-    this.ProductoServicios.Verificar(nombre).subscribe(res=>{
-      this.Productos=res;
-      
-      if (this.data) {
-        if (this.Productos['id']=this.data.id){
-          this.Productos=[];
+  VerificarProducto(){
+    let nombre = this.FiltroDescripcion.nativeElement.value ;
+    if(this.ProductosForm.value.modelo){
+      this.ProductosExistentes=true;
+      this.ProductoServicios.Verificar(nombre).subscribe(res=>{
+        this.Productos=res;
+        
+        if (this.data) {
+          if (this.Productos['id']=this.data.id){
+            this.Productos=[];
+          }
         }
-      }
-
-      if (this.Productos['id']) {
-        this.ProductosExistentes=true
-      }else{
-        this.ProductosExistentes=false
-      }
-    })
+  
+        if (this.Productos['id']) {
+          this.ProductosExistentes=true;
+        }else{
+          this.ProductosExistentes=false;
+        }
+      })
+    }
   }
 
   EliminarElemento(array,value){

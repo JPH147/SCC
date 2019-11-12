@@ -353,7 +353,7 @@ export class ClienteService {
        return res['data'];
      }else {
        console.log('No hay datos que mostrar');
-       return res;
+       return false;
      }
    }));
   }

@@ -1,0 +1,16 @@
+.mat-column-numero,
+.mat-column-id_tipo_documento{
+  max-width: 5%;
+}
+
+.mat-column-fecha_inicio{
+  max-width: 10%;
+}
+
+.mat-column-cliente_dni{
+  max-width: 12%;
+}
+
+.mat-column-opciones{
+  max-width: 15%;
+}

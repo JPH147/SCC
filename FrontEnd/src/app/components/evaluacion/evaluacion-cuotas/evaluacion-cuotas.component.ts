@@ -82,7 +82,7 @@ export class EvaluacionCuotasComponent implements OnInit {
     this.RServicio.ListarReglas().subscribe(res=>{
       this.Reglas=res;
       this.datos.subscribe(res=>{
-        console.log("Entrada",res.cronograma);
+        // console.log("Entrada",res.cronograma);
         this.monto_mayor=false;
         this.aporte=res.aporte;
         this.aporte_considerado=res.aporte;
@@ -167,7 +167,7 @@ export class EvaluacionCuotasComponent implements OnInit {
   }
 
   EmitirInformacion(){
-    console.log("Salida",this.cronograma);
+    // console.log("Salida",this.cronograma);
     this.informacion.emit({
       tipo: this.tipo,
       interes : this.interes,
@@ -453,7 +453,7 @@ export class EvaluacionCuotasComponent implements OnInit {
         this.capital= Math.round(this.capital*100)/100 ;
       }
   
-      console.log(this.capital);
+      // console.log(this.capital);
   
       let aporte : number ;
       if(this.interes==0){
@@ -568,12 +568,6 @@ export class EvaluacionCuotasComponent implements OnInit {
       this.Columnas = ['numero','fecha','monto','aporte','total'];
     }
   }
-
-  // BuscarProducto(sucursal:number, producto:string){
-  //   this.ServiciosGenerales.ListarProductoEnSucursal(sucursal, producto).subscribe(res=>{
-  //     this.ProductosArray=res;
-  //   })
-  // }
 
 }
 

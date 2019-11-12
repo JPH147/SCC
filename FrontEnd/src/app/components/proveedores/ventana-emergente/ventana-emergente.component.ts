@@ -53,7 +53,7 @@ export class VentanaEmergenteProveedores {
         Validators.required
       ]],
       'observacion': [null, [
-        Validators.required
+        // Validators.required
       ]],
      
     });

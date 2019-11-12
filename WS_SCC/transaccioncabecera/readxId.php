@@ -33,6 +33,7 @@
             "vendedor"=>$transaccion->vendedor,
             "fecha"=>$transaccion->fecha,
             "documento"=>$transaccion->documento,
+            "observaciones"=>$transaccion->observaciones,
             "detalle"=>$transaccion->transaccion_detalle,
 	    );
 

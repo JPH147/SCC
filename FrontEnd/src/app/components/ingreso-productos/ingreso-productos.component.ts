@@ -119,8 +119,8 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
           // 'producto': [null, [Validators.required]],
           // 'cantidad': [null, [Validators.required]],
           // 'precioUnitario': [null, [Validators.required]],
+          observacion: [{value:"",disabled:false}],
           productos: this.FormBuilder.array([this.CrearProducto()]),
-          // observacion: this.FormBuilder.array([this.CrearObservacion()]),
       });
       
     }
@@ -158,7 +158,6 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
         distinctUntilChanged(),
         tap(() => {
           if (this.IngresoProductoForm.value.tipoIngreso==7 && this.IngresoProductoForm.value.almacen) {
-            // this.SeleccionarCabecera(this.IngresoProductoForm.value.almacen.id, this.FiltroReferencia.nativeElement.value.trim());
           }
           this.ValidarDocumento();
         })
@@ -214,9 +213,6 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
         this.IngresoProductoForm.get('productos')['controls'][0].get('producto').disable()
         this.IngresoProductoForm.get('productos')['controls'][0].get('precioUnitario').disable()
       }
-      // if (this.IngresoProductoForm.value.almacen) {
-        // this.SeleccionarCabecera(this.IngresoProductoForm.value.almacen.id,this.IngresoProductoForm.value.docReferencia);
-      // }
 
       this.IngresoProductoForm.get('productos')['controls'][0].get('cantidad').disable();
       this.ValidarDocumento()
@@ -246,7 +242,6 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
     };
 
     ResetearForm(event) {
-      // this.SeleccionarCabecera(this.IngresoProductoForm.value.almacen.id,this.IngresoProductoForm.value.docReferencia);
       this.ResetearFormArray(this.productos);
       this.Series = [];
       this.Articulos.Listado('', '', '', '', null,null,1, 10, 'descripcion', 'asc',1).subscribe(res => {
@@ -319,7 +314,6 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
     }
 
     ProductoSeleccionado(index){
-
       this.IngresoProductoForm.get('productos')['controls'][index].get('cantidad').setValue(0);
       this.IngresoProductoForm.get('productos')['controls'][index].get('producto').setValue(this.IngresoProductoForm.get('productos')['controls'][index].value.descripcion);
       this.IngresoProductoForm.get('productos')['controls'][index].get('descripcion').disable()
@@ -468,7 +462,8 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
           transaccion.id_almacen,
           res,
           transaccion.documento,
-          this.documento_numero
+          this.documento_numero,
+          this.IngresoProductoForm.value.observacion
         ).subscribe (res => {
           // console.log(res)
           let id_cabecera = res['data'];
@@ -513,6 +508,7 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
 
     const serieventana = this.DialogoSerie.open(ventanaseries, {
       width: '1200px',
+      maxHeight : '80vh',
       data: {producto: producto.get('producto').value.id, series:this.Series}
     });
 
@@ -607,8 +603,9 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
                     1,
                     formulario.value.proveedor.id,
                     formulario.value.fecingreso,
-                    formulario.value.docReferencia == "" ? ( this.documento_serie+"-"+this.documento_numero ) : formulario.value.docReferencia,
-                    this.documento_numero
+                    (formulario.value.docReferencia==null || formulario.value.docReferencia == "" )? ( this.documento_serie+"-"+this.documento_numero ) : formulario.value.docReferencia,
+                    this.documento_numero,
+                    formulario.value.observacion,
                   ).subscribe (res => {
                     let id_cabecera = res['data'];
                     for (let i of formulario.value.productos) {
@@ -640,39 +637,6 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
         }
       })
     }
-
-    // if (tipoingreso == 7) {
-
-    //   this.SDocumentos.ValidarDocumento(7,this.id_almacen_referencia,this.IngresoProductoForm.value.docReferencia).subscribe(resultado=>{
-    //     if (resultado['total']==0) {
-    //       this.IngresoProductoservicios.AgregarTransferenciaSucursal(
-    //         formulario.value.almacen.id,
-    //         7,
-    //         4,
-    //         this.id_almacen_referencia,
-    //         formulario.value.fecingreso,
-    //         formulario.value.docReferencia,
-    //         this.documento_numero
-    //       ).subscribe (res => {
-    //           let id_cabecera = res['data'];
-    //           for(let i of this.detalle) {
-    //             this.IngresoProductoservicios.CrearTransaccionDetalle(id_cabecera,i.id_serie,i.cantidad*(-1),i.precio,"").subscribe()
-    //           }
-    //       })
-    //       this.IngresoProductoForm.reset();
-    //       this.enviado=false;
-    //       this.Series = [];
-    //       this.ResetearFormArray(this.productos);
-    //       this.snackBar.open('El ingreso se guardó satisfactoriamente', '', {
-    //         duration: 2000,
-    //       });
-    //     }else{
-    //       this.snackBar.open('Ya se ha registrado este documento', '', {
-    //         duration: 2000,
-    //       });
-    //     }
-    //   })
-    // }
   }
 
 }
