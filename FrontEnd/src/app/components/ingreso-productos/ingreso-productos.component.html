@@ -126,7 +126,7 @@
 
           <mat-grid-list cols="8" rowHeight="70px">
 
-            <mat-grid-tile colspan=3>
+            <mat-grid-tile colspan=5>
               <mat-form-field class="example-full-width">
                 <input matInput placeholder="Producto" [matAutocomplete]="autoproducto" #InputProducto formControlName="descripcion">
                 <mat-autocomplete #autoproducto="matAutocomplete" [displayWith]="displayFn2" (optionSelected)="ProductoSeleccionado(i)">
@@ -139,18 +139,18 @@
 
 
             <mat-grid-tile colspan="2">
-              <mat-form-field>
-                <input matInput placeholder="Cantidad" formControlName="cantidad">
+              <mat-form-field appearance="fill">
+                <input matInput placeholder="Cantidad" formControlName="cantidad" readonly>
               </mat-form-field>
             </mat-grid-tile>
 
-            <mat-grid-tile colspan="2">
+            <!-- <mat-grid-tile colspan="2">
               <mat-form-field  class="example-full-width">
                 <input matInput placeholder="Precio unitario" formControlName="precioUnitario" class="example-right-align" >
                 <mat-error> Debe ingresar el precio</mat-error>
                 <span matPrefix>S/.&nbsp;</span>
               </mat-form-field>
-            </mat-grid-tile>
+            </mat-grid-tile> -->
 
             <mat-grid-tile colspan="1">
               <button mat-mini-fab color="primary" (click) = "AgregarSerie(producto,i)"  matTooltip="Ingresar series" type="button" [disabled]="!producto.value.producto"><mat-icon> reorder </mat-icon> </button>

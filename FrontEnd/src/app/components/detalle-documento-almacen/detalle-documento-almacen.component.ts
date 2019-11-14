@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject, Optional } from '@angular/core';
 import {DetalleDocumentoAlmacenService} from './detalle-documento-almacen.service';
+import { BehaviorSubject } from 'rxjs';
 import {ActivatedRoute, Params} from '@angular/router';
 import {FormGroup, FormBuilder} from '@angular/forms';
 import {MatDialog, MatSnackBar, MAT_DIALOG_DATA} from '@angular/material';
@@ -24,7 +25,7 @@ export class DetalleDocumentoAlmacenComponent implements OnInit {
 	public fecha:string;
 	public observacion:string;
 	public detalle:Array<any>;
-	public cargando:boolean;
+	public Cargando = new BehaviorSubject<boolean>(false);
 
   constructor(
     @Optional() @Inject (MAT_DIALOG_DATA) public data,
@@ -41,22 +42,16 @@ export class DetalleDocumentoAlmacenComponent implements OnInit {
   }
 
   CargarInformacion(){
-    
-    this.cargando=true;
-    if (this.data) {
-      this.Servicio.SeleccionarCabecera(this.data.id).subscribe(res=>{
-        this.AsignarValores(res)
-      })
-    }else{
-      this.Servicio.SeleccionarCabecera(+this.ruta.snapshot.paramMap.get("id"))
-      .subscribe(res=>{
-        this.AsignarValores(res)
-      })
-    }
+    this.Cargando.next(true);
+    let id = this.data ? this.data : +this.ruta.snapshot.paramMap.get("id") ;
+
+    this.Servicio.SeleccionarCabecera(id).subscribe(res=>{
+      this.Cargando.next(false);
+      this.AsignarValores(res)
+    })
   }
 
   AsignarValores(objeto){
-    console.log(objeto);
     this.almacen= objeto['data'].almacen;
     this.tipo= objeto['data'].tipo;
     this.referencia= objeto['data'].referencia;
@@ -87,7 +82,6 @@ export class DetalleDocumentoAlmacenComponent implements OnInit {
         break;
       }
     }
-    this.cargando=false
   }
 
   Editar(detalle){
@@ -98,10 +92,9 @@ export class DetalleDocumentoAlmacenComponent implements OnInit {
 
     VentanaEditar.afterClosed().subscribe(res=>{
       if (res) {
-        this.SServicio.ValidarSerie(res.serie).subscribe(rest=>{
+        this.SServicio.ValidarSerie(res.serie,res.id).subscribe(rest=>{
           if (rest==0) {
             this.SServicio.Actualizar(res.id, res.id_producto, res.serie, res.color, res.almacenamiento, res.precio).subscribe(res=>{
-              console.log(res)
               this.CargarInformacion();
               this.Notificacion("Se editó el producto con éxito","")
             })

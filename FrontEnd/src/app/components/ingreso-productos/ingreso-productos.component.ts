@@ -227,11 +227,11 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
         'producto': [{value: null, disabled: false}, [
           Validators.required
         ]],
-        'cantidad': [{value: null, disabled: true}, [ ]],
+        'cantidad': [{value: null, disabled: false}, [ ]],
         'precioUnitario': [{value:null, disabled: false}, [
-          Validators.required,
-          Validators.min(1),
-          Validators.pattern ('[0-9- ]+')
+          // Validators.required,
+          // Validators.min(1),
+          // Validators.pattern ('[0-9- ]+')
         ]],
       })
     }
@@ -440,7 +440,7 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
   AgregarIngreso(transaccion){
 
     let ingreso_ventana = this.DialogoSerie.open(VentanaFecha,{
-      width: '800px'
+      width: '1200px'
     })
 
     ingreso_ventana.afterClosed().subscribe(res=>{
@@ -532,7 +532,7 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
 
         for (let i of res) {
           if (i.serie != '') {
-            this.Series.push({id_producto: producto.get('producto').value.id, serie: i.serie, color:i.color, almacenamiento: i.almacenamiento, observacion:i.observacion});
+            this.Series.push({id_producto: producto.get('producto').value.id, serie: i.serie, color:i.color, almacenamiento: i.almacenamiento, observacion:i.observacion, precio:i.precio});
             contador++
           }
         }
@@ -581,7 +581,7 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
           duplicados=0;
           // Se valida que las series no se hayan registrado antes
           this.Series.forEach((item, index)=>{
-            this.SSeries.ValidarSerie(item.serie).subscribe(res=>{
+            this.SSeries.ValidarSerie(item.serie,0).subscribe(res=>{
               // console.log(res)
               if (res==0) {
                 contador++;
@@ -611,8 +611,8 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
                     for (let i of formulario.value.productos) {
                       for (let is of this.Series) {
                         if (i.producto.id === is.id_producto) {
-                          this.SSeries.CrearProductoSerie(i.producto.id,is.serie, is.color, is.almacenamiento, i.precioUnitario).subscribe(response => {
-                            this.IngresoProductoservicios.CrearTransaccionDetalle(id_cabecera, response['data'], 1, i.precioUnitario, is.observacion).subscribe();
+                          this.SSeries.CrearProductoSerie(i.producto.id,is.serie, is.color, is.almacenamiento, is.precio).subscribe(response => {
+                            this.IngresoProductoservicios.CrearTransaccionDetalle(id_cabecera, response['data'], 1, is.precio, is.observacion).subscribe();
                           });
                         }
                       }

@@ -24,7 +24,6 @@ export class  HistorialSerieService {
       .set('prtotalpagina', total_pagina.toString())
        }).pipe(map(res => {
       if (res['codigo'] === 0) {
-        console.log(res);
         return res;
       } else {
         console.log('No hay datos que mostrar');
@@ -32,6 +31,27 @@ export class  HistorialSerieService {
     }
     }));
   }
+
+  ListadoSerieUnlimited(
+    archivo: string,
+    serie: string,
+  ): Observable<any> {
+
+    let params = new HttpParams()
+      .set('prarchivo', archivo)
+      .set('prserie', serie) ;
+
+    return this.http.get(this.url + 'serieproducto/read-unlimited.php', { params })
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res['data'];
+      } else {
+        console.log('No hay datos que mostrar',res);
+        return false;
+    }
+    }));
+  }
+
 }
 
 export interface ProductoSerie {

@@ -3,6 +3,7 @@ import { MatCard, MatInputModule, MatButton, MatDatepicker, MatTableModule } fro
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {FormControl, FormGroup, FormBuilder, FormArray,Validators} from '@angular/forms';
 import {ServiciosProductoSerie} from '../../global/productoserie'
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-ventanaseriessv',
@@ -13,6 +14,7 @@ import {ServiciosProductoSerie} from '../../global/productoserie'
 
 export class ventanaseriessv  implements OnInit {
 
+  public Cargando = new BehaviorSubject<boolean>(false);
   public SeriesProductosForm:FormGroup;
   public series: FormArray;
   public Productos:Array<any>;
@@ -58,7 +60,9 @@ export class ventanaseriessv  implements OnInit {
       else{
         // console.log("Estamos aquí")
         /*Si no hay series para el producto, trae los datos*/
+        this.Cargando.next(true);
         this.Series.Listado(this.data.almacen,this.data.id_producto,1,20).subscribe(res=>{
+          this.Cargando.next(false);
           // console.log(res['data'].producto_series);
           this.ListadoSeries(res['data'].producto_series);
         })

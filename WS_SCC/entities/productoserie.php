@@ -10,6 +10,7 @@ Class ProductoSerie{
     public $sucursal;
     public $almacen;
     public $id_serie;
+    public $id_serie_evitar;
     public $serie;
     public $estado;
     public $color;
@@ -223,11 +224,13 @@ Class ProductoSerie{
     }
     
     function validar(){
-        $query = "CALL sp_validarproductoserie(?)";
+        $query = "CALL sp_validarproductoserie(?,?)";
 
         $result = $this->conn->prepare($query);
 
         $result->bindParam(1, $this->serie);
+        $result->bindParam(2, $this->id_serie_evitar);
+
         $result->execute();
 
         $row = $result->fetch(PDO::FETCH_ASSOC);

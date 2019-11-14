@@ -167,11 +167,13 @@ export class ServiciosProductoSerie {
   }
 
   ValidarSerie(
-    serie:string
+    serie : string ,
+    serie_evitar : number
   ):Observable<any>{
     return this.http.get(this.url+'productoserie/validar.php', {
       params: new HttpParams()
       .set('prserie', serie)
+      .set('prserieevitar', serie_evitar.toString() )
     })
     .pipe(map(res=>{
         if (res['codigo'] === 0) {
@@ -192,7 +194,7 @@ export class ServiciosProductoSerie {
 
     series.forEach((item, index)=>{
 
-      this.ValidarSerie(item.serie).subscribe(res=>{
+      this.ValidarSerie(item.serie,0).subscribe(res=>{
         console.log(res)
         if (res==0) {
           contador++;

@@ -76,31 +76,31 @@
       
       while($row = $result->fetch(PDO::FETCH_ASSOC))
       {
-          extract($row);
-          $contador=$contador+1;
-          $items = array (
-              "numero"=>$contador,
-              "id_cronograma"=>$id_cronograma,
-              "id_tipo"=>$id_tipo,
-              "tipo"=>$tipo,
-              "codigo"=>$codigo,
-              "id_tipo_pago"=>$id_tipo_pago,
-              "tipo_pago"=>$tipo_pago,
-              "cliente"=>$cliente,
-              "id_subsede"=>$id_subsede,
-              "subsede"=>$subsede,
-              "id_sede"=>$id_sede,
-              "sede"=>$sede,
-              "id_institucion"=>$id_institucion,
-              "institucion"=>$institucion,
-              "monto_total"=>$monto_total,
-              "monto_pendiente"=>$monto_pendiente,
-              "fecha_vencimiento"=>$fecha_vencimiento,
-              "fecha_cancelacion"=>$fecha_cancelacion,
-              "id_estado"=>$id_estado,
-              "estado"=>$estado,
-          );
-          array_push($cronograma["cronograma"],$items);
+        extract($row);
+        $contador=$contador+1;
+        $items = array (
+          "numero"=>$contador,
+          "id_cronograma"=>$id_cronograma,
+          "id_tipo"=>$id_tipo,
+          "tipo"=>$tipo,
+          "codigo"=>$codigo,
+          "id_tipo_pago"=>$id_tipo_pago,
+          "tipo_pago"=>$tipo_pago,
+          "cliente"=>$cliente,
+          "id_subsede"=>$id_subsede,
+          "subsede"=>$subsede,
+          "id_sede"=>$id_sede,
+          "sede"=>$sede,
+          "id_institucion"=>$id_institucion,
+          "institucion"=>$institucion,
+          "monto_total"=>$monto_total,
+          "monto_pendiente"=>$monto_pendiente,
+          "fecha_vencimiento"=>$fecha_vencimiento,
+          "fecha_cancelacion"=>$fecha_cancelacion,
+          "id_estado"=>$id_estado,
+          "estado"=>$estado,
+        );
+        array_push($cronograma["cronograma"],$items);
       }
 
       return $cronograma;
@@ -1254,8 +1254,6 @@
       };
 
     }
-
-
   }
 
 ?>

@@ -12,19 +12,6 @@
 	max-width: 10%;
 }
 
-.mat-card-header{
-  background-color: #673ab7;
-  color: #fff;
-  padding-top: 20px;
-  justify-content: center;
-  
-}
-.card{
-  /*padding: 0px;*/
-  /*border-radius: 10px 10px;*/
-  overflow: hidden;
-}
-
 .mat-card-title{
   font-weight: bold;
   align-content: center; 

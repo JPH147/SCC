@@ -4,6 +4,8 @@ import { HistorialSerieDataService } from './historial-serie.data.service';
 import { MatPaginator, MatSort, MatDialog, MatSelect, MatSnackBar } from '@angular/material';
 import { merge, fromEvent } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
+import {saveAs} from 'file-saver';
+import { ArchivosService } from '../global/archivos';
 
 @Component({
   selector: 'app-historial-serie',
@@ -22,6 +24,7 @@ export class HistorialSerieComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(
+    private AServicio : ArchivosService,
     private Servicio: HistorialSerieService,
     public DialogoProductos: MatDialog,
     public snackBar: MatSnackBar,
@@ -58,8 +61,30 @@ export class HistorialSerieComponent implements OnInit {
   }
 
   CargarData() {
-    this.ListadoProductos.CargarProductos(this.FiltroProductos.nativeElement.value,
-    this.paginator.pageIndex + 1,
-    this.paginator.pageSize);
+    this.ListadoProductos.CargarProductos(
+      this.FiltroProductos.nativeElement.value,
+      this.paginator.pageIndex + 1,
+      this.paginator.pageSize
+    );
   }
+
+  ExportToExcel(){
+    let nombre_archivo : string = "reporte_movimiento_series_" + new Date().getTime();
+
+    this.Servicio.ListadoSerieUnlimited(
+      nombre_archivo,
+      this.FiltroProductos.nativeElement.value,
+    ).subscribe(res=>{
+      if(res){
+        this.AbrirArchivo(nombre_archivo,res);
+      }
+    })
+  }
+
+  AbrirArchivo(nombre_archivo,path){
+    this.AServicio.ObtenerArchivo(path).subscribe(res=>{
+      saveAs(res, nombre_archivo+'.xlsx');
+    })
+  }
+
 }

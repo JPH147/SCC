@@ -73,76 +73,59 @@ export class ProveedorService {
 
   Eliminar(
     idproveedor: number
-   ): Observable<any>  {
-     // tslint:disable-next-line:prefer-const
-     let params = '&idproveedor=' + idproveedor;
-     // tslint:disable-next-line:prefer-const
-     let headers = new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded');
-     return this.http.post(this.url + 'proveedor/delete.php', params, {headers: headers});
-    // tslint:disable-next-line:indent
-     }
+  ): Observable<any>  {
+    // tslint:disable-next-line:prefer-const
+    let params = '&idproveedor=' + idproveedor;
+    // tslint:disable-next-line:prefer-const
+    let headers = new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded');
+    return this.http.post(this.url + 'proveedor/delete.php', params, {headers: headers});
+  // tslint:disable-next-line:indent
+  }
 
-     Seleccionar(
-      id: number
-    // tslint:disable-next-line:whitespace
-    ):Observable<Proveedor> {
-      return this.http.get(this.url + 'proveedor/readxId.php?id=' + id)
-      .pipe(map(res => {
-        if (res['codigo'] === 0) {
-            return res['data'];
-        }  else {
-            console.log('No hay datos que mostrar');
-        }
-      }));
-    }
+  Seleccionar(
+    id: number
+  // tslint:disable-next-line:whitespace
+  ):Observable<Proveedor> {
+    return this.http.get(this.url + 'proveedor/readxId.php?id=' + id)
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+          return res['data'];
+      }  else {
+          console.log('No hay datos que mostrar');
+      }
+    }));
+  }
 
+  Agregar(
+    pprv_idtipodocumento: number,
+    pprv_documento: string,
+    pprv_nombre: string,
+    pprv_representante_legal: string,
+    pprv_observacion: string
+    ): Observable<any> {
+      let params =  '&prv_idtipodocumento=' + pprv_idtipodocumento + '&prv_documento=' + pprv_documento
+      + '&prv_nombre=' + pprv_nombre + '&prv_representante_legal=' + pprv_representante_legal
+      + '&prv_observacion=' + pprv_observacion ; 
+      let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+      return this.http.post(this.url + 'proveedor/create.php', params, {headers: headers});
+  }
 
-    Agregar(
-      pprv_idtipodocumento: number,
-      pprv_documento: string,
-      pprv_nombre: string,
-      pprv_representante_legal: string,
-      pprv_observacion: string
-      
-      
-     ): Observable<any> {
-        let params =  '&prv_idtipodocumento=' + pprv_idtipodocumento + '&prv_documento=' + pprv_documento
-        + '&prv_nombre=' + pprv_nombre + '&prv_representante_legal=' + pprv_representante_legal
-        + '&prv_observacion=' + pprv_observacion ; 
-  
-        console.log(params);
-        // tslint:disable-next-line:prefer-const
-        let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-        return this.http.post(this.url + 'proveedor/create.php', params, {headers: headers});
-    }
+  Actualizar(idproveedor: number,
+    pprv_idtipodocumento: number,
+    pprv_documento: string,
+    pprv_nombre: string,
+    pprv_representante_legal: string,
+    pprv_observacion: string,
+    ): Observable<any> {
+      let params = 'idproveedor=' + idproveedor + '&prv_tipo_documento=' + pprv_idtipodocumento + '&prv_documento=' + pprv_documento
+      + '&prv_nombre=' + pprv_nombre + '&prv_representante_legal=' + pprv_representante_legal
+      + '&prv_observacion=' + pprv_observacion; 
 
-
-
-
-    Actualizar(idproveedor: number,
-      
-      pprv_idtipodocumento: number,
-      pprv_documento: string,
-      pprv_nombre: string,
-      pprv_representante_legal: string,
-      pprv_observacion: string,
-     
-      
-     ): Observable<any> {
-        let params = 'idproveedor=' + idproveedor + '&prv_tipo_documento=' + pprv_idtipodocumento + '&prv_documento=' + pprv_documento
-        + '&prv_nombre=' + pprv_nombre + '&prv_representante_legal=' + pprv_representante_legal
-        + '&prv_observacion=' + pprv_observacion; 
-  
-        console.log(params);
-        // tslint:disable-next-line:prefer-const
-        let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-        return this.http.post(this.url + 'proveedor/update.php', params, {headers: headers});
-    }
-
-
-    
-
-
+      // console.log(params);
+      // tslint:disable-next-line:prefer-const
+      let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+      return this.http.post(this.url + 'proveedor/update.php', params, {headers: headers});
+  }
 }
 
 export interface Proveedor {

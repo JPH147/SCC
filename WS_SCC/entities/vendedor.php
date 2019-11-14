@@ -70,7 +70,7 @@ Class Vendedor{
                 "numero"=>$contador,
                 "id"=>$row['idvendedor'],
                 "sucnombre"=>$row['scs_nombre'],
-                "dni"=>$row['vnd_dni'],
+                "dni"=>'"'.$row['vnd_dni'].'"',
                 "nombre"=>$row['vnd_nombre'],
                 "email"=>$row['vnd_email'],
                 "comision"=>$row['vnd_comision']

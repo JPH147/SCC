@@ -96,6 +96,7 @@ export class EvaluacionExpressComponent implements OnInit {
     this.interes_diario=0;
     this.fecha_prestamo=new Date();
     this.fecha_inicio=moment(new Date()).add(1,'month').toDate();
+    this.CorregirFecha(this.fecha_inicio);
 
     this.InformacionForm = this.Builder.group({});
   }
@@ -138,6 +139,12 @@ export class EvaluacionExpressComponent implements OnInit {
       })
     ).subscribe();
 
+  }
+  
+  CorregirFecha(fecha : Date){
+    let ano = moment( fecha ).year() ;
+    let mes = moment( fecha ).month() ;
+    this.fecha_inicio = new Date(ano, mes, 27) ;
   }
 
   CrearFormulario(){

@@ -29,6 +29,7 @@ export class ventanaseries  implements OnInit {
   public cargando:boolean;
   public consultar_numero_items : boolean = false ;
   public numero_items : number = 1 ;
+  public precio_minimo : number = 0 ;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
@@ -43,7 +44,7 @@ export class ventanaseries  implements OnInit {
     this.invalidBD=false;
     this.invalidP=false;
     this.contador = 1;
-    this.seriearticulo = [{numero: this.contador, producto:this.data.producto,serie: '', color:'', almacenamiento:'', observacion:"", repetidoBD:false, repetidoV:false, repetidoP:false} ];
+    this.seriearticulo = [{numero: this.contador, producto:this.data.producto,serie: '', color:'', almacenamiento:'', observacion:"", precio: this.precio_minimo, repetidoBD:false, repetidoV:false, repetidoP:false} ];
     this.ListarColores("");
 
     if (this.data.series.length>0) {
@@ -52,7 +53,7 @@ export class ventanaseries  implements OnInit {
       let is:number=0;
       for (let i of this.data.series) {
         if (this.data.producto==i.id_producto) {
-          this.seriearticulo.push({numero:this.contador, producto: this.data.producto,  serie:i.serie, color:i.color, almacenamiento:i.almacenamiento, observacion:i.observacion, repetidoBD:false, repetidoV:false, repetidoP:false})
+          this.seriearticulo.push({numero:this.contador, producto: this.data.producto,  serie:i.serie, color:i.color, almacenamiento:i.almacenamiento, observacion:i.observacion, precio:i.precio, repetidoBD:false, repetidoV:false, repetidoP:false})
           this.contador++;
           is++;
           this.invalidV=false;
@@ -81,6 +82,7 @@ export class ventanaseries  implements OnInit {
 
   SeleccionarNumeroSeries(){
     this.consultar_numero_items = false ;
+    this.seriearticulo[0].precio = this.precio_minimo ;
     for(let i = this.seriearticulo.length ; i < this.numero_items ; i++) {
       this.AgregarSerieVS();
     }
@@ -88,7 +90,7 @@ export class ventanaseries  implements OnInit {
 
   ValidarBD(){
     this.seriearticulo.forEach((item,index)=>{
-      this.Servicios.ValidarSerie(item.serie).subscribe(res=>{
+      this.Servicios.ValidarSerie(item.serie,0).subscribe(res=>{
         if (res==0) {
           this.seriearticulo[index].repetidoBD=false;
         }else{
@@ -130,7 +132,7 @@ export class ventanaseries  implements OnInit {
           tap(()=>{
             if(this.FiltroSerie['_results'][i].nativeElement.value.trim()){
               // this.DuplicadosVista(this.FiltroSerie['_results'][i].nativeElement.value,i.trim());
-              this.Servicios.ValidarSerie(this.FiltroSerie['_results'][i].nativeElement.value.trim()).subscribe(res=>{
+              this.Servicios.ValidarSerie(this.FiltroSerie['_results'][i].nativeElement.value.trim(),0).subscribe(res=>{
                 if (res==0) {
                   this.seriearticulo[i].repetidoBD=false;
                 }else{
@@ -169,7 +171,7 @@ export class ventanaseries  implements OnInit {
 
   AgregarSerieVS() {
     this.contador++;
-    this.seriearticulo.push({numero: this.contador, producto: this.data.producto, serie: '', color:'', almacenamiento:'', observacion:"", repetidoBD:false, repetidoV:false, repetidoP:false});
+    this.seriearticulo.push({numero: this.contador, producto: this.data.producto, serie: '', color:'', almacenamiento:'', observacion:"", precio: this.precio_minimo, repetidoBD:false, repetidoV:false, repetidoP:false});
   }
 
   EliminarElemento(array,value){

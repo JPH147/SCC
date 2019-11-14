@@ -2,7 +2,7 @@ import { Component, AfterViewInit, OnInit, Inject, ViewChild, ElementRef } from 
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import {FormGroup, FormBuilder} from '@angular/forms';
 import {ServiciosProductoSerie} from '../../global/productoserie';
-import {fromEvent} from 'rxjs';
+import {fromEvent, BehaviorSubject} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
 
 @Component({
@@ -18,6 +18,7 @@ export class VentanaEditarSerieComponent implements OnInit {
   public Informacion:any = {id:null, id_producto:null,serie:"", color:"", almacenamiento:"",precio:null};
   public repetido: boolean;
   public verificando:boolean;
+  public Cargando = new BehaviorSubject<boolean>(false);
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
@@ -35,8 +36,7 @@ export class VentanaEditarSerieComponent implements OnInit {
   ngAfterViewInit(){
     
     this.FiltrarSerie();
-
-    this.SServicio.ValidarSerie(this.Informacion.serie).subscribe(res=>{
+    this.SServicio.ValidarSerie(this.Informacion.serie,this.data.id_serie).subscribe(res=>{
       this.verificando=false;
       if (res==0) {
         this.repetido=false;                
@@ -54,9 +54,8 @@ export class VentanaEditarSerieComponent implements OnInit {
       debounceTime(200),
       tap(()=>{
         this.verificando=true;
-        this.SServicio.ValidarSerie(this.FiltroSerie.nativeElement.value.trim()).subscribe(res=>{
+        this.SServicio.ValidarSerie(this.FiltroSerie.nativeElement.value.trim(),this.data.id_serie).subscribe(res=>{
           this.verificando=false;
-          console.log(res)
           if (res==0) {
             this.repetido=false;                
           }else{
@@ -68,9 +67,10 @@ export class VentanaEditarSerieComponent implements OnInit {
   }
 
   ActualizarInformacion(){
-    this.SServicio.ValidarSerie(this.FiltroSerie.nativeElement.value.trim()).subscribe(res=> {
+    this.Cargando.next(true);
+    this.SServicio.ValidarSerie(this.FiltroSerie.nativeElement.value.trim(),this.data.id_serie).subscribe(res=> {
       this.SServicio.Seleccionar(this.data.id_serie).subscribe(res=>{
-        // console.log(res)
+        this.Cargando.next(false);
         this.Informacion.id=res.id_producto_serie;
         this.Informacion.id_producto=res.id_producto;
         this.Informacion.serie=res.serie;

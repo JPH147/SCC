@@ -10,13 +10,20 @@
   
   <!-- Se pregunta cuántas series se van a agregar -->
   <ng-container *ngIf="consultar_numero_items">
-    <mat-grid-list cols=1 rowHeight="70px">
+    <mat-grid-list cols=4 rowHeight="70px">
+      <mat-grid-tile>
+      </mat-grid-tile>
       <mat-grid-tile>
         <mat-form-field>
           <input matInput type="number" [(ngModel)]="numero_items" min=1 placeholder="Series a agregar">
         </mat-form-field>
       </mat-grid-tile>
       <mat-grid-tile>
+        <mat-form-field>
+          <input matInput type="number" [(ngModel)]="precio_minimo" min=0 placeholder="Precio mínimo">
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile colspan=4>
         <button mat-raised-button color="primary" (click)="SeleccionarNumeroSeries()" [disabled]="numero_items<1"> Agregar series </button>
       </mat-grid-tile>
     </mat-grid-list>
@@ -30,15 +37,15 @@
     </mat-grid-list>
   
     <mat-card-content>
-      <mat-grid-list cols=4 rowHeight="70px" *ngFor="let serie of seriearticulo">
+      <mat-grid-list cols=5 rowHeight="70px" *ngFor="let serie of seriearticulo">
         <mat-grid-tile>
-          <mat-form-field class="input-serie">
+          <mat-form-field class="columnas-1">
             <input matInput placeholder="Serie" [(ngModel)]="serie.serie" #InputSerie>
             <mat-hint class="error" *ngIf="serie.repetidoBD">La serie ya existe</mat-hint>
           </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
-          <mat-form-field class="input-serie">
+          <mat-form-field class="columnas-1">
             <input matInput placeholder="Color" [matAutocomplete]="auto" [(ngModel)]="serie.color" #InputColor>
             <mat-autocomplete #auto="matAutocomplete" (optionSelected)="ColorSeleccionado($event)">
               <mat-option *ngFor="let color of colores" [value]="color.nombre">
@@ -48,12 +55,17 @@
           </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
-          <mat-form-field class="input-serie">
+          <mat-form-field class="columnas-1">
             <input matInput placeholder="Almacenamiento" [(ngModel)]="serie.almacenamiento">
           </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
-          <mat-form-field class="input-serie">
+          <mat-form-field class="columnas-1">
+            <input matInput type="number" min=0 placeholder="Precio" [(ngModel)]="serie.precio">
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
             <input matInput placeholder="Observación" [(ngModel)]="serie.observacion">
           </mat-form-field>
         </mat-grid-tile>

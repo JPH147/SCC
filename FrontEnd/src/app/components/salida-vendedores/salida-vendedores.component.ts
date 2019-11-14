@@ -767,6 +767,7 @@ export class SalidaVendedoresComponent implements OnInit {
 
     const serieventana = this.DialogoSerie.open(ventanaseriessv, {
       width: '800px',
+      maxHeight : "80vh",
       data:{almacen:this.FiltroAlmacen.value.nombre, id_producto:producto.value.id, precio:producto.precio, series:this.Series}
     });
 

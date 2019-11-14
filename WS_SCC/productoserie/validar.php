@@ -16,6 +16,7 @@
         $productoserie = new ProductoSerie($db);
 
         $productoserie->serie = !empty($_GET['prserie']) ? trim($_GET['prserie']) :'';
+        $productoserie->id_serie_evitar = !empty($_GET['prserieevitar']) ? trim($_GET['prserieevitar']) : 0;
 
         $producto_serie_validar = $productoserie->validar();
 

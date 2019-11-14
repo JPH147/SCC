@@ -1,5 +1,3 @@
-.card{
-	padding: 0px;
-	overflow-x: hidden;
-	max-height: 90vh
+.spinner-container{
+  top: 100px;
 }
