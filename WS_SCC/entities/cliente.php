@@ -56,7 +56,7 @@ Class Cliente{
     }
 
     function read(){
-        $query = "CALL sp_listarcliente (?,?,?,?,?,?,?)";
+        $query = "CALL sp_listarcliente (?,?,?,?,?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
@@ -64,9 +64,11 @@ Class Cliente{
         $result->bindParam(2, $this->clt_cip);
         $result->bindParam(3, $this->clt_dni);
         $result->bindParam(4, $this->clt_nombre);
-        $result->bindParam(5, $this->prpagina);
-        $result->bindParam(6, $this->prtotalpagina);
-        $result->bindParam(7, $this->clt_estado);
+        $result->bindParam(5, $this->clt_cargo);
+        $result->bindParam(6, $this->ssd_nombre);
+        $result->bindParam(7, $this->prpagina);
+        $result->bindParam(8, $this->prtotalpagina);
+        $result->bindParam(9, $this->clt_estado);
 
         $result->execute();
     
@@ -81,14 +83,15 @@ Class Cliente{
             $cliente_item = array (
                 "numero"=>$contador,
                 "id"=>$row['id'],
-                "codigo"=>$row['codigo'],
-                "dni"=>$row['dni'],
+                "codigo"=> "'". $row['codigo'],
+                "dni"=> "'" . $row['dni'],
                 "nombre"=>$row['nombre'],
                 "cip"=>$row['cip'],
                 "email"=>$row['email'],
                 "casilla"=>$row['casilla'],
                 "trabajo"=>$row['trabajo'],
                 "subsede"=>$row['subsede'],
+                "cargo"=>$row['cargo'],
                 "capacidad_pago"=>$row['capacidad_pago'],
                 "capacidad_pago"=>$row['capacidad_pago'],
                 "maximo_descuento"=>$row['maximo_descuento'],
@@ -98,14 +101,14 @@ Class Cliente{
                 "foto"=>$row['foto']
             );
 
-                array_push($cliente_list["clientes"],$cliente_item);
+            array_push($cliente_list["clientes"],$cliente_item);
         }
         return $cliente_list;
     }
 
     function contar(){
 
-        $query = "CALL sp_listarclientecontar(?,?,?,?,?,?,?)";
+        $query = "CALL sp_listarclientecontar(?,?,?,?,?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
@@ -113,9 +116,11 @@ Class Cliente{
         $result->bindParam(2, $this->clt_cip);
         $result->bindParam(3, $this->clt_dni);
         $result->bindParam(4, $this->clt_nombre);
-        $result->bindParam(5, $this->prpagina);
-        $result->bindParam(6, $this->prtotalpagina);
-        $result->bindParam(7, $this->clt_estado);
+        $result->bindParam(5, $this->clt_cargo);
+        $result->bindParam(6, $this->ssd_nombre);
+        $result->bindParam(7, $this->prpagina);
+        $result->bindParam(8, $this->prtotalpagina);
+        $result->bindParam(9, $this->clt_estado);
 
         $result->execute();
 
@@ -130,7 +135,88 @@ Class Cliente{
         }
 
         return $contador;
-        // return $this->total_resultado;
+    }
+
+    function read_comercial(){
+        $query = "CALL sp_listarclienteestricto(?,?,?,?,?,?,?,?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->clt_codigo);
+        $result->bindParam(2, $this->clt_cip);
+        $result->bindParam(3, $this->clt_dni);
+        $result->bindParam(4, $this->clt_nombre);
+        $result->bindParam(5, $this->clt_cargo);
+        $result->bindParam(6, $this->ssd_nombre);
+        $result->bindParam(7, $this->prpagina);
+        $result->bindParam(8, $this->prtotalpagina);
+        $result->bindParam(9, $this->clt_estado);
+
+        $result->execute();
+    
+        $cliente_list=array();
+        $cliente_list["clientes"]=array();
+        $contador = $this->prtotalpagina*($this->prpagina-1);
+
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $contador=$contador+1;
+            $cliente_item = array (
+                "numero"=>$contador,
+                "id"=>$row['id'],
+                "codigo"=> "'". $row['codigo'],
+                "dni"=> "'" . $row['dni'],
+                "nombre"=>$row['nombre'],
+                "cip"=>$row['cip'],
+                "email"=>$row['email'],
+                "casilla"=>$row['casilla'],
+                "trabajo"=>$row['trabajo'],
+                "subsede"=>$row['subsede'],
+                "cargo"=>$row['cargo'],
+                "capacidad_pago"=>$row['capacidad_pago'],
+                "capacidad_pago"=>$row['capacidad_pago'],
+                "maximo_descuento"=>$row['maximo_descuento'],
+                "calificacion_personal"=>$row['calificacion_personal'],
+                "aporte"=>$row['aporte'],
+                "fecharegistro"=>$row['fecha_registro'],
+                "foto"=>$row['foto']
+            );
+
+            array_push($cliente_list["clientes"],$cliente_item);
+        }
+        return $cliente_list;
+    }
+
+    function contar_comercial(){
+
+        $query = "CALL sp_listarclienteestrictocontar(?,?,?,?,?,?,?,?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->clt_codigo);
+        $result->bindParam(2, $this->clt_cip);
+        $result->bindParam(3, $this->clt_dni);
+        $result->bindParam(4, $this->clt_nombre);
+        $result->bindParam(5, $this->clt_cargo);
+        $result->bindParam(6, $this->ssd_nombre);
+        $result->bindParam(7, $this->prpagina);
+        $result->bindParam(8, $this->prtotalpagina);
+        $result->bindParam(9, $this->clt_estado);
+
+        $result->execute();
+
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        $this->total_resultado=$row['total'];
+
+        if ($this->total_resultado>1) {
+            $contador = $this->prtotalpagina*($this->prpagina);
+        }else{
+            $contador = $this->prtotalpagina*($this->prpagina)+1;
+        }
+
+        return $contador;
     }
 
     function readpreciso(){
@@ -199,6 +285,7 @@ Class Cliente{
     function create(){
         $query = "CALL sp_crearcliente(
             :id_sub_sede,
+            :id_cargo,
             :id_cargo_estado,
             :clt_codigo,
             :clt_dni,
@@ -220,6 +307,7 @@ Class Cliente{
         $result = $this->conn->prepare($query);
 
         $this->id_sub_sede=htmlspecialchars(strip_tags($this->id_sub_sede));
+        $this->id_cargo=htmlspecialchars(strip_tags($this->id_cargo));
         $this->id_cargo_estado=htmlspecialchars(strip_tags($this->id_cargo_estado));
         $this->clt_codigo=htmlspecialchars(strip_tags($this->clt_codigo));
         $this->clt_dni=htmlspecialchars(strip_tags($this->clt_dni));
@@ -238,6 +326,7 @@ Class Cliente{
         $this->clt_estado=htmlspecialchars(strip_tags($this->clt_estado));
 
         $result->bindParam(":id_sub_sede", $this->id_sub_sede);
+        $result->bindParam(":id_cargo", $this->id_cargo);
         $result->bindParam(":id_cargo_estado", $this->id_cargo_estado);
         $result->bindParam(":clt_codigo", $this->clt_codigo);
         $result->bindParam(":clt_dni", $this->clt_dni);
@@ -317,6 +406,7 @@ Class Cliente{
         $query = "CALL sp_actualizarcliente (
             :idcliente,
             :id_subsede,
+            :id_cargo,
             :id_cargo_estado,
             :clt_codigo,
             :clt_dni,
@@ -337,6 +427,7 @@ Class Cliente{
 
         $this->idcliente=htmlspecialchars(strip_tags($this->idcliente));
         $this->id_subsede=htmlspecialchars(strip_tags($this->id_subsede));
+        $this->id_cargo=htmlspecialchars(strip_tags($this->id_cargo));
         $this->id_cargo_estado=htmlspecialchars(strip_tags($this->id_cargo_estado));
         $this->clt_codigo=htmlspecialchars(strip_tags($this->clt_codigo));
         $this->clt_dni=htmlspecialchars(strip_tags($this->clt_dni));
@@ -354,6 +445,7 @@ Class Cliente{
 
         $result->bindParam(":idcliente", $this->idcliente);
         $result->bindParam(":id_subsede", $this->id_subsede);
+        $result->bindParam(":id_cargo", $this->id_cargo);
         $result->bindParam(":id_cargo_estado", $this->id_cargo_estado);
         $result->bindParam(":clt_codigo", $this->clt_codigo);
         $result->bindParam(":clt_dni", $this->clt_dni);
@@ -396,6 +488,21 @@ Class Cliente{
             }
     }
     
+    function delete_pendientes(){
+
+        $query = "call sp_eliminarclientespendientes()";
+        $result = $this->conn->prepare($query);
+
+        if($result->execute())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     function updatefoto() {
         $query= "CALL sp_actualizarfoto(:idcliente, :clt_foto)";
 
@@ -440,6 +547,10 @@ Class Cliente{
             "plantilla_autorizacion" => $row['plantilla_autorizacion'] ,
             "plantilla_transaccion" => $row['plantilla_transaccion'] ,
             "plantilla_compromiso" => $row['plantilla_compromiso'] ,
+            "parametro_condicion" => $row['parametro_condicion'] ,
+            "parametro_domicilio" => $row['parametro_domicilio'] ,
+            "parametro_autorizacion_1" => $row['parametro_autorizacion_1'] ,
+            "parametro_autorizacion_2" => $row['parametro_autorizacion_2'] ,
             "id_subsede" => $row['id_subsede'] ,
             "subsede" => $row['subsede'] ,
             "id_cargo" => $row['id_cargo'] ,

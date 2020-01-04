@@ -19,10 +19,11 @@ export class CobranzaJudicialListarComponent implements OnInit {
   public Cuentas : Array<any>;
 
   public ListadoProcesos: CobranzaDataSource;
-  public Columnas: string[] = ['id_tipo_documento', 'fecha_inicio', 'cliente_nombre', 'expediente', 'juzgado', 'total', 'opciones'];
+  public Columnas: string[] = ['id_tipo_documento', 'fecha_inicio', 'cliente_nombre', 'expediente', 'juzgado', 'vendedor','total', 'opciones'];
 
   @ViewChild('InputCliente') FiltroCliente: ElementRef;
   @ViewChild('InputExpediente') FiltroExpediente: ElementRef;
+  @ViewChild('InputDistrito') FiltroDistrito: ElementRef;
   @ViewChild('InputJuzgado') FiltroJuzgado: ElementRef;
   @ViewChild('InputDNI') FiltroDNI: ElementRef;
   @ViewChild('InputEstado') FiltroEstado: MatSelect;
@@ -41,7 +42,7 @@ export class CobranzaJudicialListarComponent implements OnInit {
     this.fecha_fin=new Date()
 
     this.ListadoProcesos = new CobranzaDataSource(this._judicial);
-    this.ListadoProcesos.CargarCobranzas("","","","",this.fecha_inicio,this.fecha_fin,0,1,10,"fecha_inicio desc");
+    this.ListadoProcesos.CargarCobranzas("","","","","",this.fecha_inicio,this.fecha_fin,0,1,10,"fecha_inicio desc");
   }
 
   ngAfterViewInit () {
@@ -55,6 +56,7 @@ export class CobranzaJudicialListarComponent implements OnInit {
     merge(
       fromEvent(this.FiltroCliente.nativeElement, 'keyup'),
       fromEvent(this.FiltroExpediente.nativeElement, 'keyup'),
+      fromEvent(this.FiltroDistrito.nativeElement, 'keyup'),
       fromEvent(this.FiltroJuzgado.nativeElement, 'keyup'),
       fromEvent(this.FiltroDNI.nativeElement, 'keyup'),
       this.sort.sortChange
@@ -72,6 +74,7 @@ export class CobranzaJudicialListarComponent implements OnInit {
   CargarData() {
     this.ListadoProcesos.CargarCobranzas(
       this.FiltroExpediente.nativeElement.value,
+      this.FiltroDistrito.nativeElement.value,
       this.FiltroJuzgado.nativeElement.value,
       this.FiltroDNI.nativeElement.value,
       this.FiltroCliente.nativeElement.value,
@@ -135,6 +138,7 @@ export class CobranzaDataSource implements DataSource<any> {
 
   CargarCobranzas(
     expediente:string,
+    distrito:string,
     juzgado:string,
     dni:string,
     nombre:string,
@@ -147,7 +151,7 @@ export class CobranzaDataSource implements DataSource<any> {
   ) {
     this.CargandoInformacion.next(true);
 
-    this._judicial.Listar( expediente , juzgado , dni , nombre , fecha_inicio , fecha_fin , estado , numero_pagina , total_pagina, orden )
+    this._judicial.Listar( expediente , distrito , juzgado , dni , nombre , fecha_inicio , fecha_fin , estado , numero_pagina , total_pagina, orden )
     .pipe(
       catchError(() => of([])),
       finalize(() => this.CargandoInformacion.next(false))

@@ -32,8 +32,8 @@ export class SeguimientosService {
       .set('prnumeroseguimiento',numero_seguimiento)
       .set('prcourier',courier)
       .set('prestado',estado.toString())
-      .set('prfechainicio',moment(fecha_inicio).format('YYYY-MM-DD'))
-      .set('prfechafin',moment(fecha_fin).format('YYYY-MM-DD'))
+      .set('prfechainicio', fecha_inicio ? moment(fecha_inicio).format('YYYY-MM-DD') : "" )
+      .set('prfechafin', fecha_fin ? moment(fecha_fin).format('YYYY-MM-DD') : "" )
       .set('prnumeropagina',pagina_inicio.toString())
       .set('prtotalpagina',pagina_final.toString())
 

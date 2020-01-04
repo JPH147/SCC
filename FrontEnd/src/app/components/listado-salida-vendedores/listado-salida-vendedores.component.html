@@ -40,10 +40,6 @@
       </mat-form-field>
     </mat-grid-tile>
 
-   <!-- <mat-grid-tile>
-      <button mat-raised-button color="primary" class="agregar" [routerLink]="['ingreso']">Nueva Salida</button>
-    </mat-grid-tile>-->
-
     <mat-grid-tile>
       <mat-icon>search</mat-icon>
       <mat-form-field>
@@ -51,16 +47,9 @@
       </mat-form-field>
     </mat-grid-tile>
 
-<!--     <mat-grid-tile>
-      <mat-icon>search</mat-icon>
-      <mat-form-field>
-        <input matInput placeholder="IMEI" #InputSerie>
-      </mat-form-field>
-    </mat-grid-tile> -->
-
     <mat-grid-tile>
       <mat-form-field>
-        <input matInput #fechainicio [matDatepicker]="fechainicio" placeholder="Fecha de inicio" (dateChange)="CargarData()" [(ngModel)]="fecha_inicio">
+        <input matInput #fechainicio [matDatepicker]="fechainicio" placeholder="Fecha de inicio" (dateChange)="CargarData()" [(ngModel)]="fecha_inicio" readonly>
         <mat-datepicker-toggle matSuffix [for]="fechainicio"></mat-datepicker-toggle>
         <mat-datepicker #fechainicio></mat-datepicker>
       </mat-form-field>
@@ -68,7 +57,7 @@
 
     <mat-grid-tile>
       <mat-form-field>
-        <input matInput #fechafin [matDatepicker]="fechafin" placeholder="Fecha de fin" (dateChange)="CargarData()" [(ngModel)]="fecha_fin">
+        <input matInput #fechafin [matDatepicker]="fechafin" placeholder="Fecha de fin" (dateChange)="CargarData()" [(ngModel)]="fecha_fin" readonly>
         <mat-datepicker-toggle matSuffix [for]="fechafin"></mat-datepicker-toggle>
         <mat-datepicker #fechafin></mat-datepicker>
       </mat-form-field>

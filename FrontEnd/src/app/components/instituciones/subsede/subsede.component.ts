@@ -5,6 +5,8 @@ import { catchError, finalize, tap, debounceTime, distinctUntilChanged } from 'r
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { InstitucionesService } from '../instituciones.service';
 import { VentanaConfirmarComponent } from '../../global/ventana-confirmar/ventana-confirmar.component';
+import { VentanaSubsedeComponent } from './ventana-subsede/ventana-subsede.component';
+import { Notificaciones } from '../../global/notificacion';
 
 @Component({
   selector: 'app-subsede',
@@ -27,11 +29,11 @@ export class SubsedeComponent implements OnInit {
 
   constructor(
     private Servicio: InstitucionesService,
-    private Dialogo : MatDialog
+    private Dialogo : MatDialog,
+    private _notificacion : Notificaciones,
   ) { }
 
   ngOnInit() {
-
     this.ListadoSubsedes = new SubsedeDataSource(this.Servicio);
     this.ListadoSubsedes.CargarInformacion("","","",1,10);
   }
@@ -46,7 +48,8 @@ export class SubsedeComponent implements OnInit {
 
     merge(
       fromEvent(this.FiltroInstitucion.nativeElement, 'keyup'),
-      fromEvent(this.FiltroSede.nativeElement, 'keyup')
+      fromEvent(this.FiltroSede.nativeElement, 'keyup'),
+      fromEvent(this.FiltroSubsede.nativeElement, 'keyup')
     )
     .pipe(
        debounceTime(200),
@@ -68,22 +71,42 @@ export class SubsedeComponent implements OnInit {
     );
   }
 
-  // EliminarCobranza(cobranza){
-   
-  //   let Ventana = this.Dialogo.open(VentanaConfirmarComponent,{
-  //     data: { objeto: "la cobranza", valor: cobranza.numero_operacion+" en el banco "+cobranza.banco }
-  //   })
+  Editar(subsede){
+    let Ventana = this.Dialogo.open( VentanaSubsedeComponent, {
+      width: '900px',
+      data: subsede
+    })
 
-  //   Ventana.afterClosed().subscribe(res=>{
-  //     if (res) {
-  //       this.Servicio.EliminarCobranzaDirecta(cobranza.id).subscribe(res=>{
-  //         // console.log(res);
-  //         this.CargarData();
-  //       });
-  //     }
-  //   })
+    Ventana.afterClosed().subscribe(res=>{
+      if(res){
+        if(res.resultado){
+          this._notificacion.Snack("Se actualizó la subsede satisfactoriamente","");
+          this.CargarData();
+        }
+        if(res.resultado===false){
+          this._notificacion.Snack("Ocurrió un error al actualizar la subsede","")
+        }
+      }
+    })
+  }
 
-  // }
+  Agregar(){
+    let Ventana = this.Dialogo.open( VentanaSubsedeComponent, {
+      width: '900px',
+    })
+
+    Ventana.afterClosed().subscribe(res=>{
+      if(res){
+        if(res.resultado){
+          this._notificacion.Snack("Se creó la subsede satisfactoriamente","");
+          this.CargarData();
+        }
+        if(res.resultado===false){
+          this._notificacion.Snack("Ocurrió un error al crear la subsede","")
+        }
+      }
+    })
+  }
  
 }
 

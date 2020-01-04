@@ -71,7 +71,7 @@ class Institucion{
 		$institucion_list=array();
 		$institucion_list["institucion"]=array();
 
-		$contador = 0;
+		$contador = $this->total_pagina*($this->numero_pagina-1);
 
 		while($row = $result->fetch(PDO::FETCH_ASSOC))
 		{
@@ -163,7 +163,7 @@ class Institucion{
 	}
 
     function update(){
-		$query = "CALL sp_actualizinstitucion(
+		$query = "CALL sp_actualizarinstitucion(
 			:prid,
 			:prnombre,
 			:prabreviatura,

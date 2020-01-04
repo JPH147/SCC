@@ -21,6 +21,7 @@
         {
             $vendedor->documento = trim($_POST["prdocumento"]);
             $vendedor->nombre = trim($_POST["prnombre"]);
+            $vendedor->cargo = trim($_POST["prcargo"]);
             $vendedor->email = trim($_POST["premail"]);
             $vendedor->comision = trim($_POST["prcomision"]);
 

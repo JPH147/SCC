@@ -45,13 +45,12 @@ import { PlantillasComponent } from './components/plantillas/plantillas.componen
 import { RefinanciamientoComponent } from './components/refinanciamiento/refinanciamiento.component';
 import { CobranzaDirectaComponent } from './components/cobranza-directa/cobranza-directa.component';
 import { CobranzaDirectaListarComponent } from './components/cobranza-directa-listar/cobranza-directa-listar.component';
-import { InstitucionComponent } from './components/instituciones/institucion/institucion.component';
-import { SedeComponent } from './components/instituciones/sede/sede.component';
-import { SubsedeComponent } from './components/instituciones/subsede/subsede.component';
+import { InstitucionesComponent } from './components/instituciones/instituciones.component';
 import { CobranzaClienteListarComponent } from './components/cobranza-cliente-listar/cobranza-cliente-listar.component';
 import { CobranzaJudicialListarComponent } from './components/cobranza-judicial-listar/cobranza-judicial-listar.component';
 import { CobranzaJudicialComponent } from './components/cobranza-judicial/cobranza-judicial.component';
 import { CobranzaJudicialGenerarComponent } from './components/cobranza-judicial-generar/cobranza-judicial-generar.component';
+import { ProcesoJudicialVinculadosComponent } from './components/proceso-judicial-vinculados/proceso-judicial-vinculados.component';
 
 export const appRoutes: Routes = [
   // {path: '', component: ConsultarClienteComponent}, //prueba
@@ -62,7 +61,8 @@ export const appRoutes: Routes = [
   {path: 'evaluacion-express', component: EvaluacionExpressComponent},
   // {path: 'evaluacion/:idpresupuesto', component: EvaluacionComponent},
   {path: 'movimientos', component: HistorialMovimientosComponent},
-  {path: 'movimientos/:id', component: DetalleDocumentoAlmacenComponent},
+  {path: 'movimientos/ver/:id', component: DetalleDocumentoAlmacenComponent},
+  {path: 'movimientos/editar/:ideditar', component: DetalleDocumentoAlmacenComponent},
   {path: 'stock', component: StockComponent},
   {path: 'stock/ingresoproductos', component: IngresoProductosComponent},
   {path: 'stock/salidaproductos', component: SalidaProductosComponent},
@@ -120,11 +120,13 @@ export const appRoutes: Routes = [
   {path: 'cobranza-judicial/nueva-venta/salida/:idventasalida', component: CobranzaJudicialComponent},
   {path: 'cobranza-judicial/generar/nuevo/:idprocesonuevo', component: CobranzaJudicialGenerarComponent},
   {path: 'cobranza-judicial/generar/ver/:idprocesover', component: CobranzaJudicialGenerarComponent},
+  {path: 'instituciones', component: InstitucionesComponent},
   {path: 'trabajadores', component: TrabajadoresComponent},
   {path: 'registro-horas', component: RegistroHorasComponent},
   {path: 'reporte-asistencia', component: ReporteAsistenciaComponent},
+  {path: 'proceso-judicial-vinculados', component: ProcesoJudicialVinculadosComponent},
   {path: 'plantillas', component: PlantillasComponent},
-  {path: 'prueba', component: IngresoProductosComponent},
+  {path: 'prueba', component: CobranzaJudicialComponent},
 ];
 
 

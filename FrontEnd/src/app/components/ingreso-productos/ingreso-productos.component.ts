@@ -73,11 +73,7 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
     selected = 'option2';
     myControl = new FormControl();
     filteredOptions: Observable<string[]>;
-
-    // ListadoMovimientos: HistorialMovimientosDataService;
-
     Columnas: string[] = ['numero', 'movimiento','tipo','almacen', 'referencia', 'referente', 'documento', 'fecha', 'opciones'];
-    
   
     constructor(
       public DialogoSerie: MatDialog,
@@ -106,21 +102,21 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
       this.ListarVendedor('');
 
       this.IngresoProductoForm = this.FormBuilder.group({
-          'almacen': [null, [Validators.required] ],
-          'almacen1': [{value:null,disabled:true} ],
-          'tipoIngreso': [null, [Validators.required]],
-          'docReferencia': [ "", [ ]],
-          'proveedor': [{value:null,disabled:false}, [Validators.required] ],
-          // 'cliente': [null, [Validators.required]],
-          // 'vendedor': [null, [Validators.required]],
-          // 'sucursal': [null, [Validators.required]],
-          // 'documento': [null, [Validators.required]],
-          'fecingreso': [{value:this.Hoy,disabled:false}, [Validators.required]],
-          // 'producto': [null, [Validators.required]],
-          // 'cantidad': [null, [Validators.required]],
-          // 'precioUnitario': [null, [Validators.required]],
-          observacion: [{value:"",disabled:false}],
-          productos: this.FormBuilder.array([this.CrearProducto()]),
+        'almacen': [null, [Validators.required] ],
+        'almacen1': [{value:null,disabled:true} ],
+        'tipoIngreso': [null, [Validators.required]],
+        'docReferencia': [ "", [ ]],
+        'proveedor': [{value:null,disabled:false}, [Validators.required] ],
+        // 'cliente': [null, [Validators.required]],
+        // 'vendedor': [null, [Validators.required]],
+        // 'sucursal': [null, [Validators.required]],
+        // 'documento': [null, [Validators.required]],
+        'fecingreso': [{value:this.Hoy,disabled:false}, [Validators.required]],
+        // 'producto': [null, [Validators.required]],
+        // 'cantidad': [null, [Validators.required]],
+        // 'precioUnitario': [null, [Validators.required]],
+        observacion: [{value:"",disabled:false}],
+        productos: this.FormBuilder.array([this.CrearProducto()]),
       });
       
     }

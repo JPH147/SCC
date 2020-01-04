@@ -26,6 +26,7 @@
             "id_tipo"=>$transaccion->id_tipo,
             "tipo"=>$transaccion->tipo,
             "referencia"=>$transaccion->referencia,
+            "id_proveedor"=>$transaccion->id_proveedor,
             "proveedor"=>$transaccion->proveedor,
             "cliente"=>$transaccion->cliente,
             "salida_venta"=>$transaccion->salida_venta,

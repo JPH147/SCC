@@ -39,7 +39,8 @@ class Provincia{
 				"numero"=>$contador,
 				"id"=>$id_provincia,
 				"departamento"=>$dpt_nombre,
-				"nombre"=>$prv_nombre
+				"nombre"=> $prv_nombre
+				// "nombre"=> ucwords( strtolower( $prv_nombre ) )
 			);
 			array_push($provincia_list["provincias"],$provincia_fila);
 		}

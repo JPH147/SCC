@@ -1,14 +1,15 @@
 import {Component, Inject, OnInit, AfterViewInit, ElementRef, ViewChild, Optional, Output, EventEmitter} from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material';
 import {FormControl, FormGroup, FormBuilder,FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {ServiciosGenerales, Institucion, Sede, Subsede} from '../../global/servicios';
-import { fromEvent } from 'rxjs';
+import { fromEvent, BehaviorSubject } from 'rxjs';
 import {ClienteService} from '../clientes.service';
 import {ServiciosDirecciones} from '../../global/direcciones';
 import {ServiciosTelefonos} from '../../global/telefonos';
 import {ServiciosVentas} from '../../global/ventas';
-import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, tap, finalize } from 'rxjs/operators';
+import { SeleccionarClienteComponent } from '../../retorno-vendedores/seleccionar-cliente/seleccionar-cliente.component';
 
 @Component({
   selector: 'app-ventanaemergenteprovisional',
@@ -20,6 +21,7 @@ import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 // tslint:disable-next-line:component-class-suffix
 export class VentanaEmergenteProvisionalClientes {
   
+  public Cargando = new BehaviorSubject<boolean>(false) ;
   @Output() cliente_output = new EventEmitter();
   @ViewChild('InputCliente') FiltroCliente : ElementRef;
   public selectedValue: string;
@@ -47,6 +49,7 @@ export class VentanaEmergenteProvisionalClientes {
     @Optional() @Inject(MAT_DIALOG_DATA) public data,
     @Optional() public ventana: MatDialogRef<VentanaEmergenteProvisionalClientes>,
     private FormBuilder: FormBuilder,
+    private Dialogo : MatDialog ,
     private Servicios: ServiciosGenerales,
     private SVentas: ServiciosVentas,
     private ClienteServicios: ClienteService,
@@ -67,9 +70,7 @@ export class VentanaEmergenteProvisionalClientes {
 
     this.Servicios.ListarInstitucion().subscribe( res => {
       // tslint:disable-next-line:forin
-      for (let i in res) {
-        this.Institucion.push(res[i]);
-      }
+      this.Institucion=res;
     });
 
     if (this.data) {
@@ -91,20 +92,29 @@ export class VentanaEmergenteProvisionalClientes {
     this.ListarRelevancia();
 
     //  Por los valores predeterminados
-    this.ListarSede(4);
+    this.ListarSede(4,true);
     this.ListarSubsede(3);
     this.ListarCargos(3);
-    this.ListarEstadosCargo(219);
+    this.ListarEstadosCargo(3);
   }
 
   ngAfterViewInit(){
+    // this.ClientesForm.get('nombre').valueChanges
+    // .pipe(
+    //   debounceTime(200),
+    //   distinctUntilChanged(),
+    //   tap(()=>{
+    //     this.GenerarEmail();
+    //   })
+    // ).subscribe()
+
     fromEvent(this.FiltroCliente.nativeElement, 'keyup')
     .pipe(
       debounceTime(200),
       distinctUntilChanged(),
       tap(()=>{
-        // console.log(this.FiltroCliente.nativeElement.value.length);
         if( this.FiltroCliente.nativeElement.value.length == 8 ) {
+          this.Cargando.next(true) ;
           this.VerificarDNI(this.FiltroCliente.nativeElement.value)
         }
       })
@@ -133,9 +143,9 @@ export class VentanaEmergenteProvisionalClientes {
         Validators.required
       ]],
       'codigo': ["", [
-        // Validators.required
+        Validators.maxLength(10)
       ]],
-      'dni': [null, [
+      'dni': ["", [
         Validators.required,
         Validators.pattern('[0-9- ]+'),
         Validators.minLength(8),
@@ -146,13 +156,13 @@ export class VentanaEmergenteProvisionalClientes {
       ]],
       'id_cliente': [null, [
       ]],
-      'cip': [null, [
-        Validators.required
+      'cip': ["", [
+        // Validators.required
       ]],
       'email': ["", [
         Validators.email
       ]],
-      'casilla': ["", [
+      'casilla': [ "" , [
       ]],
       'email_real': [1, [
       ]],
@@ -176,7 +186,8 @@ export class VentanaEmergenteProvisionalClientes {
       ]],
       telefono_numero: [null,[
         Validators.required,
-        Validators.minLength(7),
+        Validators.minLength(6),
+        Validators.maxLength(9),
         Validators.pattern('[0-9- ]+')
       ]],
       telefono_whatsapp: [{value:null,disabled:false},[
@@ -192,29 +203,43 @@ export class VentanaEmergenteProvisionalClientes {
       cuenta_banco_nombre: [1,[
         // Validators.required,
       ]],
-      cuenta_numero:["",[
+      cuenta_numero:["0",[
         // Validators.required,
       ]],
       'cargo': [219, [
         Validators.required
       ]],
-      'cargo_estado': [204, [
+      'cargo_estado': [377, [
         Validators.required
       ]],
-      'cargo_nombre': [219, [
+      'cargo_nombre': ["SUB OFICIAL", [
       ]],
-      'cargo_estado_nombre': [204, [
+      'cargo_estado_nombre': ["ACTIVIDAD", [
       ]],
       plantilla_ddjj : ["ddjj_1.docx", []],
       plantilla_autorizacion : ["autorizacion_1.docx", []],
       plantilla_transaccion : ["transaccion_1.docx", []],
       plantilla_compromiso : ["compromiso_1.docx", []],
       plantilla_tarjeta : ["tarjeta_1.docx", []],
+      parametro_condicion : ["", []],
+      parametro_domicilio_laboral : ["", []],
+      parametro_autorizacion_1 : ["", []],
+      parametro_autorizacion_2 : ["", []],
+      id_garante: [null,[
+      ]],
+      nombre_garante: ["",[
+      ]],
+      dni_garante: ["",[
+      ]],
     });
   }
 
   VerificarDNI(dni){
-    this.ClienteServicios.BuscarClienteDNI(dni).subscribe(res=>{
+    this.ClienteServicios.BuscarClienteDNI(dni)
+    .pipe(
+      finalize(()=>this.Cargando.next(false))
+    )
+    .subscribe(res=>{
       // console.log(res);
       if(res['codigo']==1){
         this.cliente_nuevo = 1;
@@ -224,20 +249,20 @@ export class VentanaEmergenteProvisionalClientes {
         this.ClientesForm.get("cliente_nuevo").setValue(false);
         // Si es para la evaluación express
         if(!this.ventana){
-          this.ListarSede(res['data'].id_institucion);
           this.ClientesForm.get('institucion').setValue(res['data'].id_institucion) ;
-
+          this.ListarSede(res['data'].id_institucion, true);
+          
           this.ListarSubsede(res['data'].id_sede);
           this.ListarCargos(res['data'].id_sede);
-          this.ClientesForm.get('sede').setValue(res['data'].id_sede) ;
           
+          this.ClientesForm.get('sede').setValue(res['data'].id_sede) ;
           this.ClientesForm.get('subsede_nombre').setValue(res['data'].subsede) ;
           this.ClientesForm.get('subsede').setValue(res['data'].id_subsede) ;
           
           this.ClientesForm.get('cargo').setValue(res['data'].id_cargo) ;
           this.ClientesForm.get('cargo_nombre').setValue(res['data'].cargo_nombre) ;
 
-          this.ListarEstadosCargo(res['data'].id_cargo);
+          this.ListarEstadosCargo(res['data'].id_sede);
           this.ClientesForm.get('cargo_estado').setValue(res['data'].id_cargo_estado) ;
           this.ClientesForm.get('cargo_estado_nombre').setValue(res['data'].cargo_estado) ;
 
@@ -268,13 +293,13 @@ export class VentanaEmergenteProvisionalClientes {
   AsignarInformacion(){
       // console.log(this.data);
     this.ClientesForm.get('institucion').setValue(this.data.objeto.institucion);
-    this.ListarSede(this.data.objeto.institucion);
+    this.ListarSede(this.data.objeto.institucion, false);
     this.ClientesForm.get('sede').setValue(this.data.objeto.sede);
     this.ListarSubsede(this.data.objeto.sede);
     this.ClientesForm.get('subsede').setValue(this.data.objeto.subsede);
     this.ListarCargos(this.data.objeto.sede);
     this.ClientesForm.get('cargo').setValue(this.data.objeto.id_cargo);
-    this.ListarEstadosCargo(this.data.objeto.id_cargo);
+    this.ListarEstadosCargo(this.data.objeto.sede);
     this.ClientesForm.get('cargo_estado').setValue(this.data.objeto.id_cargo_estado);
 
     this.ClientesForm.get('codigo').setValue(this.data.objeto.codigo);
@@ -367,7 +392,7 @@ export class VentanaEmergenteProvisionalClientes {
   }
 
   InstitucionSeleccionada(event) {
-    this.ListarSede(event.value);
+    this.ListarSede(event.value, true);
     this.ClientesForm.get('sede').setValue ('');
     this.ClientesForm.get('subsede').setValue ('');
     this.ClientesForm.controls['sede'].enable();
@@ -375,23 +400,35 @@ export class VentanaEmergenteProvisionalClientes {
   }
 
 /* Se muestran los modelos cuando se selecciona una marca */
-  SedeSeleccionada(event) {
+  SedeSeleccionada(event, traer_info) {
     this.SeleccionarPlanilla(event.value);
 
     let sedeX = this.Sede.filter(e=>e.id==event.value);
+
     this.ClientesForm.get('plantilla_ddjj').setValue(sedeX[0].plantilla_ddjj);
     this.ClientesForm.get('plantilla_autorizacion').setValue(sedeX[0].plantilla_autorizacion);
     this.ClientesForm.get('plantilla_transaccion').setValue(sedeX[0].plantilla_transaccion);
     this.ClientesForm.get('plantilla_compromiso').setValue(sedeX[0].plantilla_compromiso);
     this.ClientesForm.get('plantilla_tarjeta').setValue(sedeX[0].plantilla_tarjeta_socio);
 
-    this.ListarSubsede(event.value);
-    this.ClientesForm.get('subsede').setValue('');
-    this.ClientesForm.controls['subsede'].enable();
+    this.ClientesForm.get('parametro_condicion').setValue(sedeX[0].parametro_condicion);
+    this.ClientesForm.get('parametro_domicilio_laboral').setValue(sedeX[0].parametro_domicilio);
+    this.ClientesForm.get('parametro_autorizacion_1').setValue(sedeX[0].parametro_autorizacion_1);
+    this.ClientesForm.get('parametro_autorizacion_2').setValue(sedeX[0].parametro_autorizacion_2);
 
-    this.ListarCargos(event.value);
-    this.ClientesForm.get('cargo').setValue('');
-    this.ClientesForm.get('cargo').enable();
+    if( !traer_info ) {
+      this.ListarSubsede(event.value);
+      this.ClientesForm.get('subsede').setValue('');
+      this.ClientesForm.controls['subsede'].enable();
+      
+      this.ListarCargos(event.value);
+      this.ClientesForm.get('cargo').setValue('');
+      this.ClientesForm.get('cargo').enable();
+      
+      this.ListarEstadosCargo(event.value);
+      this.ClientesForm.get('cargo_estado').setValue('');
+      this.ClientesForm.get('cargo_estado').enable();
+    }
   }
 
   SubsedeSeleccionada(evento){
@@ -444,14 +481,7 @@ export class VentanaEmergenteProvisionalClientes {
       this.ClientesForm.get('plantilla_compromiso').setValue("compromiso_2.docx")
       this.ClientesForm.get('plantilla_tarjeta').setValue("tarjeta_2.docx")
     }
-
   }  
-
-  CargoSeleccionado(event){
-    this.ListarEstadosCargo(event.value);
-    this.ClientesForm.get('cargo_estado').setValue('');
-    this.ClientesForm.get('cargo_estado').enable;
-  }
 
   ListarDepartamento() {
     this.ServicioDireccion.ListarDepartamentos('', 0, 50).subscribe( res => {
@@ -496,12 +526,12 @@ export class VentanaEmergenteProvisionalClientes {
     this.Servicios.ListarInstitucion().subscribe( res => {
       this.Institucion = res;
    });
-
   }
 
-  ListarSede(i) {
+  ListarSede(i, traer_info) {
     this.Servicios.ListarSede(i, '').subscribe(res => {
       this.Sede = res ;
+      this.SedeSeleccionada({ value : this.ClientesForm.value.sede }, traer_info)
   })}
 
   ListarSubsede(i) {
@@ -520,6 +550,24 @@ export class VentanaEmergenteProvisionalClientes {
     this.ClienteServicios.ListarCargoEstado(i).subscribe(res=>{
       this.Estados=res['estados']
     })
+  }
+
+  GenerarEmail() : string {
+    // if( !this.ClientesForm.value.email ){
+      let apellido : string, nombres : string, primer_nombre : string ;
+      let nombre : string = this.ClientesForm.value.nombre ;
+      let email : string ;
+      if( nombre && nombre.includes(',') ) {
+        apellido = nombre.substring(0,nombre.search(" ") ) ;
+        apellido = apellido.trim() ;
+        nombres = nombre.substring(nombre.search(",")+1,nombre.length ) ;
+        nombres = nombres.trim() ;
+        primer_nombre = nombres.substring(0,nombres.length ) ;
+        email = primer_nombre + apellido + "@gmail.com" ;
+        this.ClientesForm.get("email").setValue(email) ;
+        return email;
+      }
+    // }
   }
 
   Imprimir(){
@@ -592,18 +640,71 @@ export class VentanaEmergenteProvisionalClientes {
   EmitirInformacion(){
     // console.log("Salida",this.ClientesForm);
     this.cliente_output.emit(
-      this.ClientesForm
+      { reset : false ,formulario: this.ClientesForm }
     )
+  }
+
+  Resetear(){
+    this.ClientesForm.reset();
+    //  Por los valores predeterminados
+    this.ClientesForm.get('institucion').setValue(4) ;
+    this.ClientesForm.get('sede').setValue(3) ;
+    this.ClientesForm.get('subsede').setValue(7) ;
+    this.ClientesForm.get('subsede_nombre').setValue("Policía Nacional del Perú") ;
+    this.ClientesForm.get('cargo').setValue(219) ;
+    this.ClientesForm.get('cargo_estado').setValue(377) ;
+    this.ClientesForm.get('cargo_nombre').setValue("SUB OFICIAL") ;
+    this.ClientesForm.get('cargo_estado_nombre').setValue("ACTIVIDAD") ;
+    this.ClientesForm.get('telefono_tipo').setValue(1) ;
+    this.ClientesForm.get('cuenta_banco').setValue(1) ;
+    this.ListarSede(4,true);
+    this.ListarSubsede(3);
+    this.ListarCargos(3);
+    this.ListarEstadosCargo(4);
+    this.cliente_output.emit(
+      { reset : true ,formulario: this.ClientesForm }
+    )
+  }
+
+  AbrirVentanaGarante(){
+    let Ventana = this.Dialogo.open(SeleccionarClienteComponent,{
+      width: "1200px",
+      data: {cliente : this.ClientesForm.value.id_cliente}
+    })
+
+    Ventana.afterClosed().subscribe(res=>{
+      if(res){
+        // console.log(res);
+        this.ClientesForm.get('id_garante').setValue(res.id);
+        this.ClientesForm.get('nombre_garante').setValue(res.nombre);
+        this.ClientesForm.get('dni_garante').setValue(res.dni);
+        // this.ObtenerDireccionGarante(res.id,index);
+        // this.ObtenerTelefonoGarante(res.id,index);
+        // this.CServicios.Seleccionar(res.id).subscribe(res=>{
+        //   // console.log(res)
+        //   this.ClientesForm['controls'].garantes['controls'][index].get('plantilla_ddjj').setValue(res.plantilla_ddjj) ;
+        //   this.ClientesForm['controls'].garantes['controls'][index].get('plantilla_autorizacion').setValue(res.plantilla_autorizacion) ;
+        //   this.ClientesForm['controls'].garantes['controls'][index].get('plantilla_compromiso').setValue(res.plantilla_compromiso) ;
+        // })
+      }
+    })
+  }
+
+  EliminarGarante(){
+    this.ClientesForm.get('id_garante').setValue(null);
+    this.ClientesForm.get('nombre_garante').setValue("");
+    this.ClientesForm.get('dni_garante').setValue("");
   }
 
   /* Enviar al formulario */
   Guardar(formulario) {
-    //console.log(formulario.value.subsede);
-    if (this.data) {
+    this.Cargando.next(true) ;
 
+    if (this.data) {
       this.ClienteServicios.Actualizar(
         this.data.id,
         formulario.value.subsede,
+        formulario.value.cargo,
         formulario.value.cargo_estado,
         formulario.value.codigo,
         formulario.value.dni,
@@ -618,7 +719,11 @@ export class VentanaEmergenteProvisionalClientes {
         "",
         20,
         5
-      ).subscribe(res =>{
+      )
+      .pipe(
+        finalize(()=>this.Cargando.next(false))
+      )
+      .subscribe(res =>{
         // this.ClientesForm.reset();
         this.ventana.close(true);
       });
@@ -627,6 +732,7 @@ export class VentanaEmergenteProvisionalClientes {
     if (!this.data) {
       this.ClienteServicios.Agregar(
         formulario.value.subsede,
+        formulario.value.cargo,
         formulario.value.cargo_estado,
         formulario.value.codigo,
         formulario.value.dni,
@@ -641,7 +747,11 @@ export class VentanaEmergenteProvisionalClientes {
         "",
         20,
         5
-      ).subscribe(res =>{
+      )
+      .pipe(
+      finalize(()=>this.Cargando.next(false))
+      )
+      .subscribe(res =>{
         // this.ClientesForm.reset();
         // console.log(res)
 

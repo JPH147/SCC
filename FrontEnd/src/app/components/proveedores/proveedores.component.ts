@@ -1,12 +1,14 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { fromEvent,merge } from 'rxjs';
-import {ProveedorService} from './proveedores.service';
-import {ProveedorDataSource} from './proveedores.dataservice';
+import { ProveedorService } from './proveedores.service';
+import { ProveedorDataSource } from './proveedores.dataservice';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
-import {MatPaginator, MatSort, MatDialog, MatSnackBar} from '@angular/material';
-import {ProveedoresMovimientosComponent} from './proveedores-movimientos/proveedores-movimientos.component'
+import { MatPaginator, MatSort, MatDialog, MatSnackBar } from '@angular/material';
+import { ProveedoresMovimientosComponent } from './proveedores-movimientos/proveedores-movimientos.component'
 import { VentanaEmergenteProveedores } from './ventana-emergente/ventana-emergente.component';
-import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
+import { VentanaConfirmarComponent } from '../global/ventana-confirmar/ventana-confirmar.component';
+import { FileUploadProveedores } from './file-upload/fileupload';
+import { VentanaFotoComponent } from '../clientes/ventana-foto/ventana-foto.component';
 
 @Component({
   selector: 'app-proveedores',
@@ -17,7 +19,7 @@ import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-con
 export class ProveedoresComponent implements OnInit {
 
   ListadoProveedor: ProveedorDataSource;
-  Columnas: string[] = ['numero', 'tipo_documento', 'ruc', 'nombre','opciones'];
+  Columnas: string[] = ['numero', 'foto','tipo_documento', 'ruc', 'nombre','opciones'];
   public maestro;
 
   @ViewChild('InputRUC') FiltroRuc: ElementRef;
@@ -85,6 +87,12 @@ export class ProveedoresComponent implements OnInit {
    });
   }
 
+  VerFoto(nombre,imagen){
+    let VentanaFoto = this.DialogoProveedores.open(VentanaFotoComponent, {
+      width: '600px',
+      data: {nombre: nombre, imagen: imagen}
+    });
+  }
 
   Eliminar(proveedor) {
     // tslint:disable-next-line:prefer-const
@@ -118,6 +126,18 @@ export class ProveedoresComponent implements OnInit {
         this.CargarData();
       });
     });
+  }
+
+  SubirImagen(proveedor) {
+    // tslint:disable-next-line:prefer-const
+    let VentanaFileUpload = this.DialogoProveedores.open(FileUploadProveedores, {
+      width: '800px',
+      data : proveedor
+    });
+
+    VentanaFileUpload.afterClosed().subscribe(res=>{
+      this.CargarData()
+    })
   }
 
 }

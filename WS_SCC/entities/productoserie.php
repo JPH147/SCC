@@ -83,14 +83,15 @@ Class ProductoSerie{
 
     function read_sucursal(){
 
-        $query = "CALL sp_listarproductoseriexsucursal(?,?,?,?)";
+        $query = "CALL sp_listarproductoseriexsucursal(?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
         $result->bindParam(1, $this->sucursal);
         $result->bindParam(2, $this->id_producto);
-        $result->bindParam(3, $this->numero_pagina);
-        $result->bindParam(4, $this->total_pagina);
+        $result->bindParam(3, $this->serie);
+        $result->bindParam(4, $this->numero_pagina);
+        $result->bindParam(5, $this->total_pagina);
 
         $result->execute();
         
@@ -121,12 +122,13 @@ Class ProductoSerie{
 
     function contar_sucursal(){
 
-        $query = "CALL sp_listarproductoseriecontarxsucursal(?,?)";
+        $query = "CALL sp_listarproductoseriecontarxsucursal(?,?,?)";
 
         $result = $this->conn->prepare($query);
 
         $result->bindParam(1, $this->sucursal);
         $result->bindParam(2, $this->id_producto);
+        $result->bindParam(3, $this->serie);
 
         $result->execute();
 

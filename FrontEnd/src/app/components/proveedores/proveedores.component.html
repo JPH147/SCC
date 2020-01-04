@@ -33,10 +33,14 @@
 
     <mat-table [dataSource]="ListadoProveedor">
 
-
       <ng-container matColumnDef="numero">
         <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
         <mat-cell *matCellDef="let proveedor"> {{proveedor.numero}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="foto">
+        <mat-header-cell *matHeaderCellDef>Foto </mat-header-cell>
+        <mat-cell *matCellDef="let proveedor"><img [attr.src]="proveedor.foto" class="imagen-tabla" (click)="VerFoto(proveedor.nombre, proveedor.foto)"></mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="ruc">
@@ -49,16 +53,16 @@
         <mat-cell *matCellDef="let proveedor"> {{proveedor.nombre}} </mat-cell>
       </ng-container>
 
-        <ng-container matColumnDef="tipo_documento">
-            <mat-header-cell *matHeaderCellDef> Tipo Documento </mat-header-cell>
-            <mat-cell *matCellDef="let proveedor"> {{proveedor.tipo_documento}} </mat-cell>
-          </ng-container>
-
+      <ng-container matColumnDef="tipo_documento">
+        <mat-header-cell *matHeaderCellDef> Tipo Documento </mat-header-cell>
+        <mat-cell *matCellDef="let proveedor"> {{proveedor.tipo_documento}} </mat-cell>
+      </ng-container>
 
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let proveedor">
           <button mat-icon-button matTooltip="Ver últimas compras" color="primary" (click)="VerDetalle(proveedor)"><mat-icon> visibility </mat-icon></button>
+          <button mat-icon-button matTooltip="Subir foto" color="primary" (click)="SubirImagen(proveedor)"><mat-icon> add_a_photo </mat-icon></button>
           <button mat-icon-button matTooltip="Editar información" color="primary" (click)="Editar(proveedor.id)"><mat-icon> edit </mat-icon></button>
           <button mat-icon-button matTooltip="Eliminar" color="primary" (click)="Eliminar(proveedor)"><mat-icon> delete </mat-icon></button>
         </mat-cell>

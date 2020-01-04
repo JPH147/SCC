@@ -95,7 +95,6 @@ export class CobranzaDirectaListarComponent implements OnInit {
   }
 
   EliminarCobranza(cobranza){
-   
     let Ventana = this.Dialogo.open(VentanaConfirmarComponent,{
       data: { objeto: "la cobranza", valor: cobranza.numero_operacion+" en el banco "+cobranza.banco }
     })
@@ -108,7 +107,6 @@ export class CobranzaDirectaListarComponent implements OnInit {
         });
       }
     })
-
   }
  
 }

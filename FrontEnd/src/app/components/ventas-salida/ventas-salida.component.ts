@@ -216,6 +216,8 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       ]],
       'cliente': [null, [
       ]],
+      'dni': [null, [
+      ]],
       'cargo': [null, [
       ]],
       'trabajo': [null, [
@@ -281,6 +283,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       this.VentasSalidaForm.get('id_cliente').setValue(res.id_cliente);
       this.VentasSalidaForm.get('id_contrato').setValue(res.id_talonario);
       this.VentasSalidaForm.get('cliente').setValue(res.cliente_nombre);
+      this.VentasSalidaForm.get('dni').setValue(res.cliente_dni);
       this.VentasSalidaForm.get('cargo').setValue(res.cliente_cargo_nombre);
       this.VentasSalidaForm.get('trabajo').setValue(res.cliente_trabajo);
       this.VentasSalidaForm.get('direccion').setValue(res.cliente_direccion_nombre);
@@ -581,6 +584,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       if (res) {
         // console.log(res)
         this.VentasSalidaForm.get('cliente').setValue(res.nombre);
+        this.VentasSalidaForm.get('dni').setValue(res.dni);
         this.VentasSalidaForm.get('cargo').setValue(res.cargo);
         this.VentasSalidaForm.get('trabajo').setValue(res.trabajo);
         this.Cargando.next(false);
@@ -607,6 +611,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   RemoverCliente(){
     this.VentasSalidaForm.get('id_cliente').setValue(null);
     this.VentasSalidaForm.get('cliente').setValue(null);
+    this.VentasSalidaForm.get('dni').setValue(null);
     this.VentasSalidaForm.get('cargo').setValue("");
     this.VentasSalidaForm.get('trabajo').setValue("");
     this.VentasSalidaForm.get('direccion').setValue("");

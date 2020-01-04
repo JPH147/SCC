@@ -23,7 +23,9 @@
 
       $proceso->id_proceso=trim($_POST["prproceso"]);
       $proceso->expediente=trim($_POST["prexpediente"]);
-      $proceso->juzgado=trim($_POST["prjuzgado"]);
+      $proceso->instancia=trim($_POST["prinstancia"]);
+      $proceso->juez=trim($_POST["prjuez"]);
+      $proceso->especialista=trim($_POST["prespecialista"]);
       $proceso->fecha_inicio=trim($_POST["prfecha"]);
       $proceso->sumilla=trim($_POST["prsumilla"]);
       $proceso->numero_cuotas=trim($_POST["prnumerocuotas"]);

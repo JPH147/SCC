@@ -12,14 +12,14 @@
         <mat-grid-tile>
           <mat-form-field>
             <mat-select placeholder="Departamento" formControlName="departamento" (selectionChange)="DepartamentoSeleccionado($event)">
-              <mat-option *ngFor="let departamento of departamentos" [value]="departamento.nombre">{{departamento.nombre}}</mat-option>
+              <mat-option *ngFor="let departamento of departamentos" [value]="departamento.nombre">{{departamento.nombre | uppercase }}</mat-option>
             </mat-select>
           </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
           <mat-form-field>
             <mat-select placeholder="Provincia" formControlName="provincia">
-              <mat-option *ngFor="let provincia of provincias" [value]="provincia.id">{{provincia.nombre}}</mat-option>
+              <mat-option *ngFor="let provincia of provincias" [value]="provincia.id">{{provincia.nombre | uppercase }}</mat-option>
             </mat-select>
           </mat-form-field>
         </mat-grid-tile>

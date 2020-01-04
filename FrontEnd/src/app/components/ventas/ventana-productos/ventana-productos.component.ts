@@ -2,7 +2,7 @@ import {Component, Inject, OnInit, AfterViewInit, ViewChild, ElementRef} from '@
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog,MatPaginator} from '@angular/material';
 import {ServiciosProductoSerie } from '../../global/productoserie';
 import { BehaviorSubject,Observable, fromEvent, merge } from 'rxjs';
-import {tap, debounceTime, distinctUntilChanged} from 'rxjs/operators';
+import {tap, debounceTime, distinctUntilChanged, debounce} from 'rxjs/operators';
 import {CollectionViewer} from '@angular/cdk/collections';
 
 @Component({
@@ -11,13 +11,13 @@ import {CollectionViewer} from '@angular/cdk/collections';
   styleUrls: ['./ventana-productos.component.css'],
   providers: [ServiciosProductoSerie]
 })
-export class VentanaProductosComponent implements OnInit {
+export class VentanaProductosComponent implements OnInit, AfterViewInit {
 
-  ListadoProductos: AgregarProductosDataSource;
-  Columnas: string[] = ['serie', 'color', 'almacenamiento', 'almacen', 'opciones'];
-
+  @ViewChild('InputSerie') FiltroSerie: ElementRef;
   @ViewChild(MatPaginator) Paginator: MatPaginator;
-
+  
+  Columnas: string[] = ['serie', 'color', 'almacenamiento', 'almacen', 'opciones'];
+  ListadoProductos: AgregarProductosDataSource;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
@@ -27,11 +27,20 @@ export class VentanaProductosComponent implements OnInit {
 
   ngOnInit() {
   	this.ListadoProductos = new AgregarProductosDataSource(this.Servicio);
-  	this.ListadoProductos.CargarInformacion(this.data.series,this.data.sucursal,this.data.producto,1);
+  	this.ListadoProductos.CargarInformacion(this.data.series,this.data.sucursal,this.data.producto,"",1);
     // console.log(this.data)
   }
 
   ngAfterViewInit(){
+    fromEvent( this.FiltroSerie.nativeElement, 'keyup' )
+    .pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      tap(()=>{
+        this.CargarInformacion();
+        this.Paginator.pageIndex=0;
+      })
+    ).subscribe()
 
   	this.Paginator.page
   	.pipe(
@@ -39,11 +48,16 @@ export class VentanaProductosComponent implements OnInit {
   			this.CargarInformacion()
   		})
   	).subscribe()
-
   }
 
   CargarInformacion(){
-  	this.ListadoProductos.CargarInformacion(this.data.series,this.data.sucursal,this.data.producto,this.Paginator.pageIndex+1)
+    this.ListadoProductos.CargarInformacion(
+      this.data.series,
+      this.data.sucursal,
+      this.data.producto,
+      this.FiltroSerie.nativeElement.value,
+      this.Paginator.pageIndex+1
+    )
   }
 
 }
@@ -52,6 +66,7 @@ export class AgregarProductosDataSource {
 
   public Productos= new BehaviorSubject<any>([]);
   public Total = new BehaviorSubject<number>(0);
+  public Cargando = new BehaviorSubject<boolean>(false);
 
   constructor(
   	private Servicio: ServiciosProductoSerie
@@ -68,15 +83,19 @@ export class AgregarProductosDataSource {
   CargarInformacion(
     series_registradas:Array<any>,
 		sucursal:number,
-		producto: number,
+    producto: number,
+    serie:string,
 		pagina_inicial: number,
   ){
+    this.Cargando.next(true);
     this.Servicio.ListadoSucursal(
 			sucursal,
-			producto,
+      producto,
+      serie,
 			pagina_inicial,
 			5
     ).subscribe(res=>{
+      this.Cargando.next(false);
       // console.log(res['data'].producto_series)
 
       // Si la serie ya ha sido agregada, no se permite ingresarla dos veces.

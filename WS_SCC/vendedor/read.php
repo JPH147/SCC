@@ -19,6 +19,8 @@
         $vendedor->vnd_dni = !empty($_GET['prdocumento']) ? trim($_GET['prdocumento']) : '';
         $vendedor->vnd_nombre = !empty($_GET['prnombre']) ? trim($_GET['prnombre']) : '';
         $vendedor->scs_nombre = !empty($_GET['prsucursal']) ? trim($_GET['prsucursal']) : '';
+        $vendedor->cargo = !empty($_GET['prcargo']) ? trim($_GET['prcargo']) : '';
+        $vendedor->id_cargo = !empty($_GET['pridcargo']) ? trim($_GET['pridcargo']) : 0;
         $vendedor->numero_pagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : 1;
         $vendedor->total_pagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : 10;
 

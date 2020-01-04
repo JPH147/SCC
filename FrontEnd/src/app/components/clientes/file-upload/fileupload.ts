@@ -37,12 +37,10 @@ export class FileUpload {
        this.carga_finalizada=false;
     }
 
-
-     // onUploadFinished(file: FileHolder) {
-      
     SubirFoto() {
       if (this.file) {
-        this.Servicios.RenameFile(this.file.serverResponse.response.body.data, 'CLIENTE', this.data.dni+ "-"+Math.floor(Math.random() * 100000),"cliente").subscribe( res => {
+        let fecha = new Date().getTime() ;
+        this.Servicios.RenameFile(this.file.serverResponse.response.body.data, 'CLIENTE', this.data.dni+ "-"+ fecha ,"cliente").subscribe( res => {
           if (res) {
               this.ClienteServicios.ActualizarFoto(this.data.id, res.mensaje).subscribe( res2 => {
                 this.ventana.close()

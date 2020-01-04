@@ -48,34 +48,28 @@ export class ServiciosProductoSerie {
   ListadoSucursal(
     sucursal: number,
     producto:number,
+    serie:string,
     pagina: number,
     total_pagina: number
   ): Observable <any> {
 
-    let Producto:string="";
-
-    if(producto>0){
-      Producto=producto.toString()
-    }
-
     let params = new HttpParams()
      .set('prsucursal', sucursal.toString())
-     .set('prproducto',Producto)
+     .set('prproducto',producto.toString())
+     .set('prserie',serie)
      .set('prpagina', pagina.toString())
      .set('prtotalpagina',total_pagina.toString())
 
-    // console.log(params)
-
     return this.http.get(this.url + 'productoserie/read-sucursal.php', { params })
-      .pipe (map(res => {
-        // console.log(res,sucursal, Producto)
-        if (res['codigo'] === 0) {
-          return res;
-        } else {
-          console.log('No hay datos que mostrar');
-          return res;
-        }
-      }));
+    .pipe (map(res => {
+      console.log(res)
+      if (res['codigo'] === 0) {
+        return res;
+      } else {
+        console.log('No hay datos que mostrar');
+        return res;
+      }
+    }));
   }
 
   CrearProductoSerie(

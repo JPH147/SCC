@@ -37,8 +37,8 @@ export class CreditosListarComponent implements OnInit {
 
     this.ListarTiposCredito();
 
-    this.fecha_inicio= new Date((new Date()).valueOf() - 1000*60*60*24*120)
-    this.fecha_fin=new Date()
+    this.fecha_inicio = null
+    this.fecha_fin = null
 
     this.ListadoCreditos = new CreditosDataSource(this.Servicio);
     this.ListadoCreditos.CargarCreditos("",99 ,0,this.fecha_inicio,this.fecha_fin,1,1,10,"fecha desc");

@@ -38,6 +38,9 @@ Class Vendedor{
     public $salida;
     public $vendedor;
     public $monto;
+    public $foto;
+    public $cargo;
+    public $id_cargo;
 
     public function __construct($db){
         $this->conn = $db;
@@ -45,15 +48,17 @@ Class Vendedor{
 
     function read(){
 
-        $query = "CALL sp_listarvendedor(?,?,?,?,?)";
+        $query = "CALL sp_listarvendedor(?,?,?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
         $result->bindParam(1, $this->vnd_dni);
         $result->bindParam(2, $this->vnd_nombre);
         $result->bindParam(3, $this->scs_nombre);
-        $result->bindParam(4, $this->numero_pagina);
-        $result->bindParam(5, $this->total_pagina);
+        $result->bindParam(4, $this->cargo);
+        $result->bindParam(5, $this->id_cargo);
+        $result->bindParam(6, $this->numero_pagina);
+        $result->bindParam(7, $this->total_pagina);
 
         $result->execute();
     
@@ -70,10 +75,13 @@ Class Vendedor{
                 "numero"=>$contador,
                 "id"=>$row['idvendedor'],
                 "sucnombre"=>$row['scs_nombre'],
-                "dni"=>'"'.$row['vnd_dni'].'"',
+                "dni"=> "'".$row['vnd_dni'] ,
                 "nombre"=>$row['vnd_nombre'],
                 "email"=>$row['vnd_email'],
-                "comision"=>$row['vnd_comision']
+                "comision"=>$row['vnd_comision'],
+                "foto"=>$row['foto'],
+                "id_cargo"=>$row['id_cargo'],
+                "cargo"=>$row['cargo'],
             );
 
             array_push($vendedor_list["vendedores"],$vendedor_item);
@@ -83,13 +91,15 @@ Class Vendedor{
 
     function contar(){
 
-        $query = "CALL sp_listarvendedorcontar(?,?,?)";
+        $query = "CALL sp_listarvendedorcontar(?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
         $result->bindParam(1, $this->vnd_dni);
         $result->bindParam(2, $this->vnd_nombre);
         $result->bindParam(3, $this->scs_nombre);
+        $result->bindParam(4, $this->cargo);
+        $result->bindParam(5, $this->id_cargo);
 
         $result->execute();
 
@@ -104,6 +114,7 @@ Class Vendedor{
         $query = "CALL sp_crearvendedor(
             :prdocumento,
             :prnombre,
+            :prcargo,
             :premail,
             :prcomision
         )";
@@ -112,11 +123,13 @@ Class Vendedor{
 
         $result->bindParam(":prdocumento", $this->documento);
         $result->bindParam(":prnombre", $this->nombre);
+        $result->bindParam(":prcargo", $this->cargo);
         $result->bindParam(":premail", $this->email);
         $result->bindParam(":prcomision", $this->comision);
 
         $this->documento=htmlspecialchars(strip_tags($this->documento));
         $this->nombre=htmlspecialchars(strip_tags($this->nombre));
+        $this->cargo=htmlspecialchars(strip_tags($this->cargo));
         $this->email=htmlspecialchars(strip_tags($this->email));
         $this->comision=htmlspecialchars(strip_tags($this->comision));
 
@@ -133,6 +146,7 @@ Class Vendedor{
             :prid,
             :prdocumento,
             :prnombre,
+            :prcargo,
             :premail,
             :prcomision
         )";
@@ -142,12 +156,14 @@ Class Vendedor{
         $result->bindParam(":prid", $this->idvendedor);
         $result->bindParam(":prdocumento", $this->documento);
         $result->bindParam(":prnombre", $this->nombre);
+        $result->bindParam(":prcargo", $this->cargo);
         $result->bindParam(":premail", $this->email);
         $result->bindParam(":prcomision", $this->comision);
 
         $this->idvendedor=htmlspecialchars(strip_tags($this->idvendedor));
         $this->documento=htmlspecialchars(strip_tags($this->documento));
         $this->nombre=htmlspecialchars(strip_tags($this->nombre));
+        $this->cargo=htmlspecialchars(strip_tags($this->cargo));
         $this->email=htmlspecialchars(strip_tags($this->email));
         $this->comision=htmlspecialchars(strip_tags($this->comision));
 
@@ -331,6 +347,121 @@ Class Vendedor{
         }
         
         return false;
+    }
+
+    function updatefoto() {
+        $query= "CALL sp_actualizarvendedorfoto(:idvendedor, :prfoto)";
+
+        $result = $this->conn->prepare($query);
+        
+        $result->bindParam(":idvendedor", $this->idvendedor);
+        $result->bindParam(":prfoto", $this->foto);
+
+        $this->idvendedor=htmlspecialchars(strip_tags($this->idvendedor));
+        $this->foto=htmlspecialchars(strip_tags($this->foto));
+
+        if($result->execute())
+        {
+        return true;
+        }
+        return false;
+    }
+
+    function read_cargo(){
+
+        $query = "CALL sp_listarvendedorcargo(?,?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->nombre);
+        $result->bindParam(2, $this->numero_pagina);
+        $result->bindParam(3, $this->total_pagina);
+
+        $result->execute();
+    
+        $vendedor_list=array();
+
+        $contador = $this->total_pagina*($this->numero_pagina-1);
+
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $contador=$contador+1;
+            $vendedor_item = array (
+                "numero"=>$contador,
+                "id"=>$row['id'],
+                "nombre"=>$row['nombre'],
+            );
+
+            array_push($vendedor_list,$vendedor_item);
+        }
+        return $vendedor_list;
+    }
+
+    function read_cargo_contar(){
+
+        $query = "CALL sp_listarvendedorcargocontar(?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->nombre);
+
+        $result->execute();
+
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        $this->total_resultado=$row['total'];
+
+        return $this->total_resultado;
+    }
+
+    function create_vendedor_cargo(){
+
+        $query = "CALL sp_crearvendedorcargo(?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->nombre);
+
+        if( $result->execute() ) {
+            return true ;
+        } else {
+            return false ;
+        }
+    
+    }
+
+    function update_vendedor_cargo(){
+
+        $query = "CALL sp_actualizarvendedorcargo(?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_cargo);
+        $result->bindParam(2, $this->nombre);
+
+        if( $result->execute() ) {
+            return true ;
+        } else {
+            return false ;
+        }
+    
+    }
+
+    function delete_vendedor_cargo(){
+
+        $query = "CALL sp_eliminarvendedorcargo(?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_cargo);
+
+        if( $result->execute() ) {
+            return true ;
+        } else {
+            return false ;
+        }
+    
     }
 
 }

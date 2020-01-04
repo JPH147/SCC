@@ -31,6 +31,11 @@ export class ProveedorService {
     })
     .pipe(map(res => {
       if( res['codigo'] === 0){
+        res['data'].proveedor = res['data'].proveedor.map(item=>{
+                                    item.foto = URLIMAGENES.carpeta + 'proveedor/' + item.foto;
+                                    item.documento = item.documento.substring(1,item.documento.length-1);
+                                    return item;
+                                  })
         return res;
       } else {
         console.log('No hay datos que mostrar');
@@ -125,6 +130,20 @@ export class ProveedorService {
       // tslint:disable-next-line:prefer-const
       let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
       return this.http.post(this.url + 'proveedor/update.php', params, {headers: headers});
+  }
+
+  ActualizarFoto(
+    id_proveedor : number,
+    clt_foto : string
+  ): Observable<any> {
+    let params = new HttpParams()
+    .set('prproveedor', id_proveedor.toString())
+    .set('prfoto', clt_foto);
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    return this.http.post(this.url + 'proveedor/updateimage.php', params, {headers: headers}).pipe(map(res => {
+      return res;
+    }));
   }
 }
 

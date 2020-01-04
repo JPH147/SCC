@@ -21,6 +21,7 @@ import { ReglasEvaluacionService } from '../tablas-maestras/reglas-evaluacion/re
 import { SeguimientosService } from '../seguimientos/seguimientos.service';
 import { RefinanciamientoService } from '../refinanciamiento/refinanciamiento.service';
 import { VentanaPagosComponent } from '../cobranzas-listar/ventana-pagos/ventana-pagos.component';
+import { VentanaEmergenteClientes } from '../clientes/ventana-emergente/ventanaemergente' ;
 
 @Component({
   selector: 'app-creditos',
@@ -129,6 +130,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
 
   @ViewChild('InputCapital') FiltroCapital: ElementRef;
   @ViewChild('InputCuota') FiltroCuota: ElementRef;
+  @ViewChild('InputInteres') FiltroInteres: ElementRef;
   @ViewChild('Vendedor') VendedorAutoComplete : ElementRef;
   @ViewChild('Autorizador') AutorizadorAutoComplete: ElementRef;
   @ViewChild(MatSort) sort: MatSort;
@@ -253,7 +255,9 @@ export class CreditosComponent implements OnInit, AfterViewInit {
           debounceTime(10),
           distinctUntilChanged(),
           tap(() => {
-            this.ListarVendedor(this.VendedorAutoComplete.nativeElement.value);
+            if( this.VendedorAutoComplete.nativeElement.value ){
+              this.ListarVendedor(this.VendedorAutoComplete.nativeElement.value);
+            }
           })
          ).subscribe();
     
@@ -262,14 +266,17 @@ export class CreditosComponent implements OnInit, AfterViewInit {
           debounceTime(10),
           distinctUntilChanged(),
           tap(() => {
-            this.ListarAutorizador(this.AutorizadorAutoComplete.nativeElement.value);
+            if( this.AutorizadorAutoComplete.nativeElement.value ){
+              this.ListarAutorizador(this.AutorizadorAutoComplete.nativeElement.value);
+            }
           })
          ).subscribe();
       }
   
        merge(
         fromEvent(this.FiltroCuota.nativeElement,'keyup'),
-        fromEvent(this.FiltroCapital.nativeElement,'keyup')
+        fromEvent(this.FiltroCapital.nativeElement,'keyup'),
+        fromEvent(this.FiltroInteres.nativeElement,'keyup')
       ).pipe(
         debounceTime(200),
         distinctUntilChanged(),
@@ -293,6 +300,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         Validators.required
       ]],
       cliente :[{value: null, disabled: false},[
+      ]],
+      dni :[{value: null, disabled: false},[
       ]],
       cargo :[{value: null, disabled: false},[
         Validators.required
@@ -508,6 +517,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       this.CreditosForm.get('id_cliente').setValue(res.id_cliente);
       this.CreditosForm.get('fecha_credito').setValue(moment(res.fecha).toDate());
       this.CreditosForm.get('cliente').setValue(res.cliente);
+      this.CreditosForm.get('dni').setValue(res.cliente_dni);
       this.CreditosForm.get('cargo').setValue(res.cliente_cargo);
       this.CreditosForm.get('trabajo').setValue(res.cliente_trabajo);
       this.CreditosForm.get('direccion').setValue(res.cliente_direccion);
@@ -592,8 +602,6 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       }
 
       if ( this.id_credito_editar ) {
-
-        this.CreditosForm.get('codigo').disable();
         if( res['courier'].id ){
           this.CreditosForm.get('papeles_courier').setValue(res['courier'].id_courier);
           this.papeles_antiguo=res['courier'].foto;
@@ -786,8 +794,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   ObtenerClientexId(id_cliente) {
     this.ClienteServicio.Seleccionar(id_cliente).subscribe(res => {
       if (res) {
-        // console.log(res)
         this.CreditosForm.get('cliente').setValue(res.nombre);
+        this.CreditosForm.get('dni').setValue(res.dni);
         this.CreditosForm.get('cargo').setValue(res.cargo);
         this.CreditosForm.get('trabajo').setValue(res.trabajo);
         this.Cargando.next(false);
@@ -813,6 +821,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
 
   RemoverCliente(){
     this.CreditosForm.get('id_cliente').setValue(null);
+    this.CreditosForm.get('dni').setValue("");
     this.CreditosForm.get('cargo').setValue("");
     this.CreditosForm.get('trabajo').setValue("");
     this.CreditosForm.get('direccion').setValue("");
@@ -823,6 +832,17 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     // this.cliente_afiliado=true;
   }
   
+  EditarCliente(){
+    let id_cliente : number = this.CreditosForm.value.id_cliente ;
+    let VentanaClientes = this.Dialogo.open(VentanaEmergenteClientes, {
+      width: '1200px',
+      data: {id: id_cliente, confirmar: false},
+    });
+    VentanaClientes.afterClosed().subscribe (res => {
+      this.ObtenerClientexId(id_cliente)
+    });
+  }
+
   EditarContactoCliente(){
 
     let id_cliente = this.CreditosForm.value.id_cliente ? this.CreditosForm.value.id_cliente : this.id_cliente;
@@ -967,7 +987,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   }
 
   ListarVendedor(nombre: string) {
-    this.ServiciosGenerales.ListarVendedor("",nombre,"",1,5).subscribe( res => {
+    this.ServiciosGenerales.ListarVendedor("",nombre,"",1,50).subscribe( res => {
       this.ListadoVendedores=res;
     });
   }
@@ -985,7 +1005,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   }
 
   ListarAutorizador(nombre: string) {
-    this.ServiciosGenerales.ListarVendedor("",nombre,"",1,5).subscribe( res => {
+    this.ServiciosGenerales.ListarVendedor("",nombre,"",1,50).subscribe( res => {
       this.ListadoAudorizadores=res;
     });
   }
@@ -1065,7 +1085,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   /*Cronograma */
   CrearCronograma(){
 
-    if(this.CreditosForm.get('cuotas').valid && this.CreditosForm.value.interes>0 && !this.cliente_refinanciado){
+    if(this.CreditosForm.get('cuotas').valid && this.CreditosForm.value.interes>=0 && !this.cliente_refinanciado){
       
       this.Cronograma=[];
       let i = 1;
@@ -1311,25 +1331,28 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   }
 
   CrearCredito(){
-
+    this.Cargando.next(true) ;
     let random=(new Date()).getTime()
+    let identificador = this.CreditosForm.value.codigo ;
+    let dni = this.CreditosForm.value.dni ;
+    let fecha = moment(this.CreditosForm.value.fechaventa).format("DD_MM_YYYY") ;
 
     return forkJoin(
-      this.ServiciosGenerales.RenameFile(this.foto,'FOTO',random.toString(),"credito"),
-      this.ServiciosGenerales.RenameFile(this.dni,'DNI',random.toString(),"credito"),
-      this.ServiciosGenerales.RenameFile(this.cip,'CIP',random.toString(),"credito"),
-      this.ServiciosGenerales.RenameFile(this.planilla,'PLANILLA',random.toString(),"credito"),
-      this.ServiciosGenerales.RenameFile(this.voucher,'VOUCHER',random.toString(),"credito"),
-      this.ServiciosGenerales.RenameFile(this.recibo,'RECIBO',random.toString(),"credito"),
-      this.ServiciosGenerales.RenameFile(this.casilla,'CASILLA',random.toString(),"credito"),
-      this.ServiciosGenerales.RenameFile(this.transaccion,'TRANSACCION',random.toString(),"credito"),
-      this.ServiciosGenerales.RenameFile(this.autorizacion,'AUTORIAZACION',random.toString(),"credito"),
-      this.ServiciosGenerales.RenameFile(this.tarjeta,'TARJETA',random.toString(),"credito"),
-      this.ServiciosGenerales.RenameFile(this.compromiso,'COMPROMISO',random.toString(),"credito"),
-      this.ServiciosGenerales.RenameFile(this.letra,'LETRA',random.toString(),"credito"),
-      this.ServiciosGenerales.RenameFile(this.ddjj,'DDJJ',random.toString(),"credito"),
-      this.ServiciosGenerales.RenameFile(this.otros,'OTROS',random.toString(),"credito"),
-      this.ServiciosGenerales.RenameFile(this.papeles,'PAPELES',random.toString(),"credito"),
+      this.ServiciosGenerales.RenameFile(this.foto, dni + '_FOTO_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.dni, dni + '_DNI_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.cip, dni + '_CIP_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.planilla, dni + '_PLANILLA_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.voucher, dni + '_VOUCHER_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.recibo, dni + '_RECIBO_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.casilla, dni + '_CASILLA_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.transaccion, dni + '_TRANSACCION_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.autorizacion, dni + '_AUTORIAZACION_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.tarjeta, dni + '_TARJETA_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.compromiso, dni + '_COMPROMISO_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.letra, dni + '_LETRA_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.ddjj, dni + '_DDJJ_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.otros, dni + '_OTROS_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.papeles, dni + '_PAPELES_' + fecha, identificador ,"credito"),
     ).subscribe(resultado=>{
 
       if( this.cliente_afiliado === false ){
@@ -1451,27 +1474,28 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   }
 
   ActualizarCredito(){
-
-    // this.ObtenerNumero();
-
-    let random=(new Date()).getTime()
+    this.Cargando.next(true) ;
+    let random=(new Date()).getTime() ;
+    let identificador = this.CreditosForm.value.codigo ;
+    let dni = this.CreditosForm.value.dni ;
+    let fecha = moment(this.CreditosForm.value.fechaventa).format("DD_MM_YYYY") ;
 
     return forkJoin(
-      this.ServiciosGenerales.RenameFile(this.foto_nuevo,'FOTO',random.toString(),"credito"),
-      this.ServiciosGenerales.RenameFile(this.dni_nuevo,'DNI',random.toString(),"credito"),
-      this.ServiciosGenerales.RenameFile(this.cip_nuevo,'CIP',random.toString(),"credito"),
-      this.ServiciosGenerales.RenameFile(this.planilla_nuevo,'PLANILLA',random.toString(),"credito"),
-      this.ServiciosGenerales.RenameFile(this.voucher_nuevo,'VOUCHER',random.toString(),"credito"),
-      this.ServiciosGenerales.RenameFile(this.recibo_nuevo,'RECIBO',random.toString(),"credito"),
-      this.ServiciosGenerales.RenameFile(this.casilla_nuevo,'CASILLA',random.toString(),"credito"),
-      this.ServiciosGenerales.RenameFile(this.transaccion_nuevo,'TRANSACCION',random.toString(),"credito"),
-      this.ServiciosGenerales.RenameFile(this.autorizacion_nuevo,'AUTORIAZACION',random.toString(),"credito"),
-      this.ServiciosGenerales.RenameFile(this.tarjeta_nuevo,'TARJETA',random.toString(),"credito"),
-      this.ServiciosGenerales.RenameFile(this.compromiso_nuevo,'COMPROMISO',random.toString(),"credito"),
-      this.ServiciosGenerales.RenameFile(this.letra_nuevo,'LETRA',random.toString(),"credito"),
-      this.ServiciosGenerales.RenameFile(this.ddjj_nuevo,'DDJJ',random.toString(),"credito"),
-      this.ServiciosGenerales.RenameFile(this.otros_nuevo,'OTROS',random.toString(),"credito"),
-      this.ServiciosGenerales.RenameFile(this.papeles_nuevo,'PAPELES',random.toString(),"credito"),
+      this.ServiciosGenerales.RenameFile(this.foto_nuevo, dni + '_FOTO_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.dni_nuevo, dni + '_DNI_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.cip_nuevo, dni + '_CIP_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.planilla_nuevo, dni + '_PLANILLA_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.voucher_nuevo, dni + '_VOUCHER_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.recibo_nuevo, dni + '_RECIBO_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.casilla_nuevo, dni + '_CASILLA_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.transaccion_nuevo, dni + '_TRANSACCION_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.autorizacion_nuevo, dni + '_AUTORIAZACION_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.tarjeta_nuevo, dni + '_TARJETA_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.compromiso_nuevo, dni + '_COMPROMISO_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.letra_nuevo, dni + '_LETRA_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.ddjj_nuevo, dni + '_DDJJ_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.otros_nuevo, dni + '_OTROS_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.papeles_nuevo, dni + '_PAPELES_' + fecha, identificador ,"credito"),
     ).subscribe(resultado=>{
 
       // console.log(resultado)

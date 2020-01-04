@@ -37,6 +37,16 @@ mat-card.card{
   justify-content: center;
 }
 
+.spinner-container-emergente{
+  position: absolute;
+  top: 100px;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .seccion-secundaria{
   margin-top: 20px;
   margin-bottom: 20px;
@@ -116,6 +126,10 @@ mat-row:nth-child(even){
 
 .columnas-1{
   width: 80%
+}
+
+.columnas-1-5{
+  width: 86.67%
 }
 
 .columnas-2{
@@ -241,4 +255,9 @@ button{
 
 .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label{
   transform: scale(0.9);
+}
+
+.imagen-tabla{
+  max-width: 100%;
+  height: 40px
 }

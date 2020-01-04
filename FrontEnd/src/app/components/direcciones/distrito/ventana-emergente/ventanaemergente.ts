@@ -54,6 +54,7 @@ export class VentanaEmergenteDistrito {
 
       if(this.data){
       // Se traen y asignan los datos
+      console.log(this.data);
       this.DistritosForm.get('departamento').setValue(this.data.departamento);
       this.ListarProvincias(this.data.departamento);
       this.DistritosForm.get('provincia').setValue(this.data.provincia);

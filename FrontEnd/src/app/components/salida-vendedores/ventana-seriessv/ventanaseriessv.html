@@ -1,35 +1,45 @@
 <mat-card class="card">
 
+  <mat-toolbar color="primary">
+    <mat-toolbar-row>Seleccionar series</mat-toolbar-row>
+  </mat-toolbar>
+  
   <div class = "spinner-container" *ngIf = "Cargando | async">
     <mat-spinner></mat-spinner>
   </div>
 
   <form [formGroup]="SeriesProductosForm">
-  
-    <mat-toolbar color="primary">
-      <mat-toolbar-row>Seleccionar series</mat-toolbar-row>
-    </mat-toolbar>
-    
     <mat-card-content>
+      <mat-grid-list cols=1 rowHeight="70px">
+        <mat-grid-tile>
+          <mat-icon matPreffix>search</mat-icon>
+          <mat-form-field class="columnas-2">
+            <input matInput type="text" #InputBuscador>
+          </mat-form-field>
+        </mat-grid-tile>
+      </mat-grid-list>
+
       <div formArrayName="series" *ngFor="let serie of SeriesProductosForm['controls'].series['controls'];let i = index">
         <div [formGroupName]="i">
-          <mat-grid-list cols=5 rowHeight="70px">
-            <mat-grid-tile colspan=2>
-              <mat-form-field>
-                <input matInput placeholder="Serie" formControlName="serie" readonly>
-              </mat-form-field>
-            </mat-grid-tile>
-          
-            <mat-grid-tile colspan=2>
-              <mat-form-field>
-                <input matInput placeholder="Precio mínimo" formControlName="precio">
-              </mat-form-field>
-            </mat-grid-tile>
-          
-            <mat-grid-tile colspan=1>
-              <mat-checkbox formControlName="considerar" color="primary" formControlName="considerar"></mat-checkbox>
-            </mat-grid-tile>
-          </mat-grid-list>
+          <ng-container *ngIf="serie.value.mostrar">
+            <mat-grid-list cols=5 rowHeight="70px">
+              <mat-grid-tile colspan=2>
+                <mat-form-field>
+                  <input matInput placeholder="Serie" formControlName="serie" readonly>
+                </mat-form-field>
+              </mat-grid-tile>
+            
+              <mat-grid-tile colspan=2>
+                <mat-form-field>
+                  <input matInput placeholder="Precio mínimo" formControlName="precio">
+                </mat-form-field>
+              </mat-grid-tile>
+            
+              <mat-grid-tile colspan=1>
+                <mat-checkbox formControlName="considerar" color="primary" formControlName="considerar"></mat-checkbox>
+              </mat-grid-tile>
+            </mat-grid-list>
+          </ng-container>
         </div>
       </div>
     </mat-card-content>

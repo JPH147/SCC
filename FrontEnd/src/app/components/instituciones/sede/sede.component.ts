@@ -5,6 +5,9 @@ import { catchError, finalize, tap, debounceTime, distinctUntilChanged } from 'r
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { InstitucionesService } from '../instituciones.service';
 import { VentanaConfirmarComponent } from '../../global/ventana-confirmar/ventana-confirmar.component';
+import { VentanaParametrosPlantillasComponent } from './ventana-parametros-plantillas/ventana-parametros-plantillas.component';
+import { VentanaSedeComponent } from './ventana-sede/ventana-sede.component';
+import { Notificaciones } from '../../global/notificacion';
 
 @Component({
   selector: 'app-sede',
@@ -27,11 +30,11 @@ export class SedeComponent implements OnInit {
 
   constructor(
     private Servicio: InstitucionesService,
-    private Dialogo : MatDialog
+    private Dialogo : MatDialog,
+    private _notificacion : Notificaciones
   ) { }
 
   ngOnInit() {
-
     this.ListadoSedes = new SedeDataSource(this.Servicio);
     this.ListadoSedes.CargarInformacion("","",1,10);
   }
@@ -67,22 +70,61 @@ export class SedeComponent implements OnInit {
     );
   }
 
-  // EliminarCobranza(cobranza){
-   
-  //   let Ventana = this.Dialogo.open(VentanaConfirmarComponent,{
-  //     data: { objeto: "la cobranza", valor: cobranza.numero_operacion+" en el banco "+cobranza.banco }
-  //   })
+  EditarParametros(id_sede){
+    let Ventana = this.Dialogo.open( VentanaParametrosPlantillasComponent, {
+      width: '900px',
+      data: id_sede
+    })
 
-  //   Ventana.afterClosed().subscribe(res=>{
-  //     if (res) {
-  //       this.Servicio.EliminarCobranzaDirecta(cobranza.id).subscribe(res=>{
-  //         // console.log(res);
-  //         this.CargarData();
-  //       });
-  //     }
-  //   })
+    Ventana.afterClosed().subscribe(res=>{
+      if(res){
+        if(res.resultado){
+          this._notificacion.Snack("Se actualizaron los parámetros satisfactoriamente","");
+          this.CargarData();
+        }
+        if(res.resultado===false){
+          this._notificacion.Snack("Ocurrió un error al actualizar los parámetros","")
+        }
+      }
+    })
+  }
 
-  // }
+  Editar(sede){
+    let Ventana = this.Dialogo.open( VentanaSedeComponent, {
+      width: '900px',
+      data: sede
+    })
+
+    Ventana.afterClosed().subscribe(res=>{
+      if(res){
+        if(res.resultado){
+          this._notificacion.Snack("Se actualizó la sede satisfactoriamente","");
+          this.CargarData();
+        }
+        if(res.resultado===false){
+          this._notificacion.Snack("Ocurrió un error al actualizar la sede","")
+        }
+      }
+    })
+  }
+
+  Agregar(){
+    let Ventana = this.Dialogo.open( VentanaSedeComponent, {
+      width: '900px',
+    })
+
+    Ventana.afterClosed().subscribe(res=>{
+      if(res){
+        if(res.resultado){
+          this._notificacion.Snack("Se creó la sede satisfactoriamente","");
+          this.CargarData();
+        }
+        if(res.resultado===false){
+          this._notificacion.Snack("Ocurrió un error al crear la sede","")
+        }
+      }
+    })
+  }
  
 }
 

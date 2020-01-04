@@ -12,7 +12,7 @@
         <mat-grid-tile>
           <mat-form-field>
             <mat-select placeholder="Departamento" formControlName="departamento">
-              <mat-option *ngFor="let departamento of departamentos" [value]="departamento.id">{{departamento.nombre}}</mat-option>
+              <mat-option *ngFor="let departamento of departamentos" [value]="departamento.id">{{departamento.nombre | uppercase }}</mat-option>
             </mat-select>
           </mat-form-field>
         </mat-grid-tile>

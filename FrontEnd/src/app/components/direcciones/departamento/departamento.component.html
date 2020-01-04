@@ -41,7 +41,7 @@
 
       <ng-container matColumnDef="nombre">
         <mat-header-cell *matHeaderCellDef> Departamento </mat-header-cell>
-        <mat-cell *matCellDef="let departamento"> {{departamento.nombre}} </mat-cell>
+        <mat-cell *matCellDef="let departamento"> {{departamento.nombre | uppercase}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="opciones">

@@ -282,7 +282,9 @@ export class EvaluacionService {
     monto_cuota : number ,
     numero_cuotas : number ,
     lugar : string ,
-    fecha : Date 
+    fecha : Date ,
+    parametro_autorizacion_1 : string ,
+    parametro_autorizacion_2 : string ,
   ) :Observable <any> {
 
     let params = new HttpParams()
@@ -305,6 +307,8 @@ export class EvaluacionService {
       .set('prnumerocuotas', numero_cuotas.toString())
       .set('prlugar', lugar)
       .set('prfechaletras', moment(fecha).format('LL'))
+      .set('prparametroautorizacion1', parametro_autorizacion_1)
+      .set('prparametroautorizacion2', parametro_autorizacion_2);
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -314,6 +318,10 @@ export class EvaluacionService {
   GenerarTransaccion(
     nombre_plantilla : string ,
     nombre_archivo : string ,
+    parametro_condicion : string ,
+    parametro_domicilio_laboral : string ,
+    parametro_autorizacion_1 : string ,
+    parametro_autorizacion_2 : string ,
     cooperativa : string ,
     cooperativa_direccion : string ,
     cooperativa_direccion_1 : string ,
@@ -371,6 +379,10 @@ export class EvaluacionService {
     let params = new HttpParams()
       .set('prnombreplantilla',nombre_plantilla )
       .set('prnombrearchivo',nombre_archivo )
+      .set('prparametrocondicion', parametro_condicion )
+      .set('prparametrodomiciliolaboral', parametro_domicilio_laboral )
+      .set('prparametroautorizacion1', parametro_autorizacion_1 )
+      .set('prparametroautorizacion2', parametro_autorizacion_2 )
       .set('prcooperativa', cooperativa )
       .set('prcooperativadireccion', cooperativa_direccion )
       .set('prcooperativadireccion1', cooperativa_direccion_1 )

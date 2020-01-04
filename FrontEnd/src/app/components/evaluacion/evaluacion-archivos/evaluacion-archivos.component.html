@@ -172,7 +172,7 @@
             </mat-grid-tile>
 
             <mat-grid-tile colspan="1" *ngIf="garante.value.id_cliente">
-              <button *ngIf="!idventa" type="button" mat-icon-button color="primary" (click)="EditarContactoGarante(garante.value.id_cliente, i)"> <mat-icon> edit </mat-icon>  </button>
+              <button type="button" mat-icon-button color="primary" (click)="EditarContactoGarante(garante.value.id_cliente, i)"> <mat-icon> edit </mat-icon>  </button>
             </mat-grid-tile>
 
           </mat-grid-list>

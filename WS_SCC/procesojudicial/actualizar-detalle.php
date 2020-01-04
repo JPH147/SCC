@@ -24,6 +24,7 @@
       $proceso->id_proceso=trim($_POST["prproceso"]);
       $proceso->tipo_documento=trim($_POST["prdocumento"]);
       $proceso->fecha=trim($_POST["prfecha"]);
+      $proceso->trabajador=trim($_POST["prtrabajador"]);
       $proceso->numero=trim($_POST["prnumero"]);
       $proceso->sumilla=trim($_POST["prsumilla"]);
       $proceso->archivo=trim($_POST["prarchivo"]);

@@ -39,22 +39,22 @@
 
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
-             <input matInput placeholder="Cargo" formControlName="cargo" readonly>
+             <input matInput placeholder="DNI" formControlName="dni" readonly>
           </mat-form-field>
         </mat-grid-tile>
 
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
+             <input matInput placeholder="Cargo" formControlName="cargo" readonly>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan=2>
+          <mat-form-field class="columnas-2">
              <input matInput placeholder="Centro de Trabajo" formControlName="trabajo" readonly>
           </mat-form-field>
         </mat-grid-tile>
-
-        <mat-grid-tile colspan="2">
-          <mat-form-field class="columnas-2">
-             <input matInput placeholder="Dirección" formControlName="direccion" readonly>
-          </mat-form-field>
-        </mat-grid-tile>
-
+        
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
             <input matInput placeholder="Teléfono" formControlName="telefono" readonly>
@@ -62,8 +62,15 @@
         </mat-grid-tile>
 
         <mat-grid-tile *ngIf="!idventa">
-          <button type="button" mat-icon-button color="primary" (click)="EditarContactoCliente()"> <mat-icon> edit </mat-icon>  </button>
+            <button type="button" mat-icon-button color="primary" (click)="EditarCliente()" matTooltip="Editar cliente" [disabled]="!VentasForm.value.id_cliente"> <mat-icon> edit </mat-icon> </button>
+            <button type="button" mat-icon-button color="primary" (click)="EditarContactoCliente()" matTooltip="Cambiar datos de contacto" [disabled]="!VentasForm.value.id_cliente"> <mat-icon> local_phone </mat-icon> </button>
           <mat-checkbox color="primary" formControlName="garante" (change)="HayGarante($event)">Garante</mat-checkbox>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan="3">
+          <mat-form-field class="columnas-3">
+             <input matInput placeholder="Dirección" formControlName="direccion" readonly>
+          </mat-form-field>
         </mat-grid-tile>
 
       </mat-grid-list>
@@ -406,7 +413,7 @@
 
         <mat-grid-tile *ngIf="!idventa">
           <mat-form-field class="columnas-1">
-            <mat-select placeholder='Contrato' formControlName="contrato">
+            <mat-select placeholder='Contrato' formControlName="contrato" (selectionChange)="CrearidentificadorDocumento($event)">
               <mat-option *ngFor="let contrato of LstContrato" [value] = "contrato.id"> {{contrato.numero}} </mat-option>
             </mat-select>
          </mat-form-field>
@@ -573,7 +580,7 @@
 
               <mat-grid-tile colspan="2" *ngIf="!producto.value.id_producto">
                 <mat-form-field class="columnas-2">
-                  <input matInput placeholder="Producto" [matAutocomplete]="autoproducto" #InputProducto>
+                  <input matInput placeholder="Producto" [matAutocomplete]="autoproducto" #InputProducto formControlName="nombre">
                   <mat-autocomplete #autoproducto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="ProductoSeleccionado(producto,$event)">
                     <mat-option *ngFor="let producto of Producto" [value]="producto">
                       {{producto.nombre}}

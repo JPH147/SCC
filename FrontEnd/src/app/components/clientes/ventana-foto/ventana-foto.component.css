@@ -1,7 +1,8 @@
 .foto-cliente{
-	max-width: 100%;
-	max-height: 100%;
+	max-width: 80%;
+	max-height: 80%;
 	position: relative;
+	margin: auto;
 }
 
 .card{

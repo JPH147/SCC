@@ -42,12 +42,12 @@
 
       <ng-container matColumnDef="departamento">
         <mat-header-cell *matHeaderCellDef> Departamento </mat-header-cell>
-        <mat-cell *matCellDef="let provincia"> {{provincia.departamento}} </mat-cell>
+        <mat-cell *matCellDef="let provincia"> {{provincia.departamento | uppercase }} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="nombre">
         <mat-header-cell *matHeaderCellDef> Provincia </mat-header-cell>
-        <mat-cell *matCellDef="let provincia"> {{provincia.nombre}} </mat-cell>
+        <mat-cell *matCellDef="let provincia"> {{provincia.nombre | uppercase}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="opciones">

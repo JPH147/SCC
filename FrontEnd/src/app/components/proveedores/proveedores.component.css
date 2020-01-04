@@ -40,3 +40,8 @@ mat-card{
 .mat-column-opciones{
   max-width: 15%;
 }
+
+.mat-column-foto{
+  max-width: 5%;
+  height: 55px ;
+}

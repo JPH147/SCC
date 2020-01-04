@@ -40,19 +40,19 @@
 
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
-             <input matInput placeholder="Cargo" formControlName="cargo" readonly>
+            <input matInput placeholder="DNI" formControlName="dni" readonly>
           </mat-form-field>
         </mat-grid-tile>
 
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
-             <input matInput placeholder="Centro de Trabajo" formControlName="trabajo" readonly>
+            <input matInput placeholder="Cargo" formControlName="cargo" readonly>
           </mat-form-field>
         </mat-grid-tile>
 
         <mat-grid-tile colspan="2">
           <mat-form-field class="columnas-2">
-             <input matInput placeholder="Dirección" formControlName="direccion" readonly>
+             <input matInput placeholder="Centro de Trabajo" formControlName="trabajo" readonly>
           </mat-form-field>
         </mat-grid-tile>
 
@@ -64,10 +64,17 @@
 
         <ng-container *ngIf="id_tipo>1">
           <mat-grid-tile *ngIf="!id_credito">
-            <button type="button" mat-icon-button color="primary" (click)="EditarContactoCliente()"> <mat-icon> edit </mat-icon>  </button>
+            <button type="button" mat-icon-button color="primary" (click)="EditarCliente()" matTooltip="Editar cliente" [disabled]="!CreditosForm.value.id_cliente"> <mat-icon> edit </mat-icon> </button>
+            <button type="button" mat-icon-button color="primary" (click)="EditarContactoCliente()" matTooltip="Cambiar datos de contacto" [disabled]="!CreditosForm.value.id_cliente"> <mat-icon> local_phone </mat-icon> </button>
             <mat-checkbox color="primary" formControlName="garante" (change)="HayGarante($event)" *ngIf="!id_presupuesto">Garante</mat-checkbox>
           </mat-grid-tile>
         </ng-container>
+
+        <mat-grid-tile colspan="3">
+          <mat-form-field class="columnas-3">
+             <input matInput placeholder="Dirección" formControlName="direccion" readonly>
+          </mat-form-field>
+        </mat-grid-tile>
 
       </mat-grid-list>
     </div>
@@ -335,7 +342,7 @@
 
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
-             <input matInput [matDatepicker]="picker" [max]="Hoy" [placeholder]="id_tipo==1 ? 'Fecha de la afiliación' : 'Fecha del crédito'" formControlName="fecha_credito" (dateChange)="CambioFechaCredito()" readonly>
+             <input matInput [matDatepicker]="picker" [placeholder]="id_tipo==1 ? 'Fecha de la afiliación' : 'Fecha del crédito'" formControlName="fecha_credito" (dateChange)="CambioFechaCredito()" readonly>
              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
              <mat-datepicker #picker [disabled]="id_credito || id_tipo==1 || cliente_refinanciado"></mat-datepicker>
           </mat-form-field>
@@ -1201,7 +1208,7 @@
 
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
-            <input matInput type="number" placeholder="Interés" formControlName="interes" [readonly] = "id_credito || id_tipo==1 || id_presupuesto || cliente_refinanciado ">
+            <input matInput type="number" placeholder="Interés" formControlName="interes" #InputInteres [readonly] = "id_credito || id_tipo==1 || id_presupuesto || cliente_refinanciado ">
             <span matSuffix> % </span>
           </mat-form-field>
         </mat-grid-tile>
@@ -1340,7 +1347,8 @@
         <mat-grid-tile>
           <button mat-raised-button color="primary"
           (click)="Guardar()"
-          [disabled]="CreditosForm.invalid || 
+          [disabled]="( Cargando | async ) ||
+                      CreditosForm.invalid || 
                       editar_cronograma==1 ||
                       diferencia>0.2"
           > Guardar </button>

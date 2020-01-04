@@ -77,6 +77,7 @@ import { ventanaseriesalida } from './components/salida-productos/ventana-series
 import {VentanaEmergenteClientes} from './components/clientes/ventana-emergente/ventanaemergente';
 import { VentanaEmergenteProvisionalClientes } from './components/clientes/ventana-emergente-provisional/ventanaemergenteprovisional';
 import { ProveedoresComponent } from './components/proveedores/proveedores.component';
+import { FileUploadProveedores } from './components/proveedores/file-upload/fileupload';
 import { ventanaseriessv } from './components/salida-vendedores/ventana-seriessv/ventanaseriessv';
 import { DireccionesComponent } from './components/direcciones/direcciones.component';
 import { DepartamentoComponent } from './components/direcciones/departamento/departamento.component';
@@ -135,7 +136,8 @@ import { RegistroHorasComponent } from './components/registro-horas/registro-hor
 import { ReporteAsistenciaComponent } from './components/reporte-asistencia/reporte-asistencia.component';
 import { ConsultarClienteComponent } from './components/clientes/consultar-cliente/consultar-cliente.component';
 import { VendedoresComponent } from './components/vendedores/vendedores.component';
-import { VentanaVendedorComponent } from './components/vendedores/ventana-vendedor/ventana-vendedor';
+import { FileUploadVendedores } from './components/vendedores-listado/file-upload/fileupload';
+import { VentanaVendedorComponent } from './components/vendedores-listado/ventana-vendedor/ventana-vendedor';
 import { TalonariosComponent } from './components/talonarios/talonarios.component';
 import { VentanaTalonarioComponent } from './components/talonarios/ventana-talonario/ventana-talonario.component';
 import { EvaluacionArchivosComponent } from './components/evaluacion/evaluacion-archivos/evaluacion-archivos.component';
@@ -167,6 +169,23 @@ import { CobranzaJudicialGenerarComponent } from './components/cobranza-judicial
 import { CobranzaClienteListarComponent } from './components/cobranza-cliente-listar/cobranza-cliente-listar.component';
 import { EvaluacionExpressComponent } from './components/evaluacion/evaluacion-express/evaluacion-express.component';
 import { VentanaJudicialComponent } from './components/cobranza-judicial/ventana-judicial/ventana-judicial.component';
+import { VentanaEditarDocumentoComponent } from './components/detalle-documento-almacen/ventana-editar-documento/ventana-editar-documento.component';
+import { VentanaInstitucionComponent } from './components/instituciones/institucion/ventana-institucion/ventana-institucion.component';
+import { VentanaSedeComponent } from './components/instituciones/sede/ventana-sede/ventana-sede.component';
+import { VentanaSubsedeComponent } from './components/instituciones/subsede/ventana-subsede/ventana-subsede.component';
+import { VentanaParametrosPlantillasComponent } from './components/instituciones/sede/ventana-parametros-plantillas/ventana-parametros-plantillas.component';
+import { CargoComponent } from './components/instituciones/cargo/cargo.component';
+import { CargoEstadoComponent } from './components/instituciones/cargo-estado/cargo-estado.component';
+import { VentanaCargoEstadoComponent } from './components/instituciones/cargo-estado/ventana-cargo-estado/ventana-cargo-estado.component';
+import { VentanaCargoComponent } from './components/instituciones/cargo/ventana-cargo/ventana-cargo.component';
+import { VendedoresCargoComponent } from './components/vendedores-cargo/vendedores-cargo.component';
+import { VentanaVendedoresCargoComponent } from './components/vendedores-cargo/ventana-vendedores-cargo/ventana-vendedores-cargo.component';
+import { VendedoresListadoComponent } from './components/vendedores-listado/vendedores-listado.component';
+import { DistritoJudicialComponent } from './components/proceso-judicial-vinculados/distrito-judicial/distrito-judicial.component';
+import { VentanaDistritoJudicialComponent } from './components/proceso-judicial-vinculados/distrito-judicial/ventana-distrito-judicial/ventana-distrito-judicial.component';
+import { InstanciaJudicialComponent } from './components/proceso-judicial-vinculados/instancia-judicial/instancia-judicial.component';
+import { VentanaInstanciaJudicialComponent } from './components/proceso-judicial-vinculados/instancia-judicial/ventana-instancia-judicial/ventana-instancia-judicial.component';
+import { ProcesoJudicialVinculadosComponent } from './components/proceso-judicial-vinculados/proceso-judicial-vinculados.component';
 
 @NgModule({
   exports:[
@@ -253,7 +272,8 @@ import { VentanaJudicialComponent } from './components/cobranza-judicial/ventana
     VentanaEmergenteDistrito,
     VentanaEmergenteGastos,
     FileUpload,
-    // FileSelectDirective,
+    FileUploadProveedores,
+    FileUploadVendedores,
     VentanaEmergenteContacto,
     VentanaEmergenteStock,
     VentasListarComponent,
@@ -337,7 +357,24 @@ import { VentanaJudicialComponent } from './components/cobranza-judicial/ventana
     CobranzaClienteListarComponent,
     EvaluacionExpressComponent,
     VentanaJudicialComponent,
-    CobranzaJudicialGenerarComponent
+    CobranzaJudicialGenerarComponent,
+    VentanaEditarDocumentoComponent,
+    VentanaInstitucionComponent,
+    VentanaSedeComponent,
+    VentanaSubsedeComponent,
+    VentanaParametrosPlantillasComponent,
+    CargoComponent,
+    CargoEstadoComponent,
+    VentanaCargoEstadoComponent,
+    VentanaCargoComponent,
+    VendedoresCargoComponent,
+    VentanaVendedoresCargoComponent,
+    VendedoresListadoComponent,
+    DistritoJudicialComponent,
+    VentanaDistritoJudicialComponent,
+    InstanciaJudicialComponent,
+    VentanaInstanciaJudicialComponent,
+    ProcesoJudicialVinculadosComponent
    ],
   entryComponents: [
     AppComponent,
@@ -355,6 +392,8 @@ import { VentanaJudicialComponent } from './components/cobranza-judicial/ventana
     VentanaEmergenteDistrito,
     VentanaEmergenteGastos,
     FileUpload,
+    FileUploadProveedores,
+    FileUploadVendedores,
     VentanaEmergenteContacto,
     VentanaEmergenteStock,
     VentasComponent,
@@ -390,13 +429,23 @@ import { VentanaJudicialComponent } from './components/cobranza-judicial/ventana
     VentanaPagosComponent,
     VentanaTipoReporteComponent,
     VentanaEditarPagoComponent,
-    VentanaJudicialComponent
+    VentanaJudicialComponent,
+    VentanaEditarDocumentoComponent,
+    VentanaInstitucionComponent,
+    VentanaSedeComponent,
+    VentanaSubsedeComponent,
+    VentanaParametrosPlantillasComponent,
+    VentanaCargoEstadoComponent,
+    VentanaCargoComponent,
+    VentanaVendedoresCargoComponent,
+    VentanaDistritoJudicialComponent,
+    VentanaInstanciaJudicialComponent
   ],
   bootstrap: [AppComponent],
   providers: [
     Notificaciones,
     ServiciosGenerales,
-    {provide: MAT_DATE_LOCALE, useValue: 'en-GB'},
+    {provide: MAT_DATE_LOCALE, useValue: 'es-ES'},
     { provide: MatPaginatorIntl, useValue: Configuracion() }
   ]
 })

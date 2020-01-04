@@ -14,6 +14,8 @@ import { VentaService } from '../ventas/ventas.service';
 import * as moment from 'moment'
 import { EvaluacionService } from '../evaluacion/evaluacion.service';
 import { VentanaConfirmarComponent } from '../global/ventana-confirmar/ventana-confirmar.component';
+import { URLIMAGENES } from '../../components/global/url' ;
+import { ProcesoJudicialVinculadosService } from '../proceso-judicial-vinculados/proceso-judicial-vinculados.service';
 
 @Component({
   selector: 'app-cobranza-judicial',
@@ -30,9 +32,12 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
   public id_proceso_ver : number ;
   public id_proceso_editar : number ;
   public id_proceso_agregar : number ;
+  public Distritos : Array<any>;
+  public Instancias : Array<any>;
   public Documentos : Array<any>;
   public penalidad_porcentaje : number ;
-  public editar_cabecera : number = 3 ;
+  public editar_expediente : number = 3 ;
+  public editar_juzgado : number = 3 ;
 
   constructor(
     private router : Router ,
@@ -41,6 +46,7 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
     private Builder : FormBuilder ,
     private Notificacion : Notificaciones ,
     private location : Location ,
+    private _vinculados : ProcesoJudicialVinculadosService ,
     private _evaluacion : EvaluacionService ,
     private _judicial : CobranzaJudicialService ,
     private _creditos : CreditosService ,
@@ -48,32 +54,29 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit() {
-    this.CrearFormulario();
+    this.CrearFormulario() ;
+    this.ListarDistritosJudiciales() ;
 
     this.route.params.subscribe(params => {
       // Verifica si 'params' tiene datos
       if(Object.keys(params).length>0){
         if(params['idprocesoagregar']){
           this.id_proceso_agregar = params['idprocesoagregar'];
-          // this.id_proceso_agregar = 3;
           this.SeleccionarProceso(this.id_proceso_agregar);
         }
 
         if(params['idprocesover']){
           this.id_proceso_ver = params['idprocesover'];
-          // this.id_proceso_ver = 3;
           this.SeleccionarProceso(this.id_proceso_ver);
         }
 
         if(params['idprocesoeditar']){
           this.id_proceso_editar = params['idprocesoeditar'];
-          // this.id_proceso_editar = 3;
           this.SeleccionarProceso(this.id_proceso_editar);
         }
 
         if(params['idcredito']){
           this.id_credito=params['idcredito'] ;
-          // this.id_credito=55;
           this.SeleccionarCredito();
           this.ObtenerDatosCooperativa();
         }
@@ -94,7 +97,6 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-
     if( this.id_credito || this.id_venta || this.id_proceso_editar ){
       merge(
         this.JudicialForm.get('numero_cuotas').valueChanges,
@@ -112,10 +114,23 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
 
   CrearFormulario(){
     this.JudicialForm = this.Builder.group({
-      expediente : [ { value : null, disabled : false },[
+      distrito_judicial : [ { value : null, disabled : false },[
         Validators.required
       ] ] ,
-      juzgado : [ { value : null, disabled : false },[
+      instancia_judicial : [ { value : null, disabled : false },[
+        Validators.required
+      ] ] ,
+      distrito_judicial_nombre : [ { value : null, disabled : false },[
+      ] ] ,
+      instancia_judicial_nombre : [ { value : null, disabled : false },[
+      ] ] ,
+      juez : [ { value : null, disabled : false },[
+        Validators.required
+      ] ] ,
+      especialista : [ { value : null, disabled : false },[
+        Validators.required
+      ] ] ,
+      expediente : [ { value : null, disabled : false },[
         Validators.required
       ] ] ,
       fecha_inicio : [ { value : new Date(), disabled : false },[
@@ -146,7 +161,7 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
         Validators.required ,
         Validators.min(1) ,
       ] ] ,
-      numero_cuotas : [ { value : 0, disabled : false },[
+      numero_cuotas : [ { value : 1, disabled : false },[
         Validators.required ,
         Validators.min(1) ,
       ] ] ,
@@ -167,8 +182,15 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
       finalize(()=>this.Cargando.next(false))
     )
     .subscribe(res=>{
+      this.JudicialForm.get('distrito_judicial').setValue(res[0].id_juzgado_distrito) ;
+      this.JudicialForm.get('distrito_judicial_nombre').setValue(res[0].juzgado_distrito) ;
+      this.ListarInstanciasJudiciales();
+      this.JudicialForm.get('instancia_judicial').setValue(res[0].id_juzgado_instancia) ;
+      this.JudicialForm.get('instancia_judicial_nombre').setValue(res[0].juzgado_instancia) ;
+
+      this.JudicialForm.get('juez').setValue(res[0].juez) ;
+      this.JudicialForm.get('especialista').setValue(res[0].especialista) ;
       this.JudicialForm.get('expediente').setValue(res[0].expediente) ;
-      this.JudicialForm.get('juzgado').setValue(res[0].juzgado) ;
       this.JudicialForm.get('fecha_inicio').setValue(moment(res[0].fecha_inicio).toDate()) ;
       this.JudicialForm.get('sumilla').setValue(res[0].sumilla) ;
       this.JudicialForm.get('id_cliente').setValue(res[0].id_cliente) ;
@@ -179,7 +201,14 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
       this.JudicialForm.get('total').setValue(res[0].total) ;
       this.JudicialForm.get('numero_cuotas').setValue(res[0].numero_cuotas) ;
       this.JudicialForm.get('monto_cuota').setValue(res[0].monto_cuota) ;
-      this.CargarDetalle(id_proceso);
+      // this.CargarDetalle(id_proceso);
+      this.Documentos=res[1] ;
+      this.Documentos = this.Documentos.map((item)=>{
+                          item.fecha = moment(item.fecha).toDate();
+                          item.archivo_antiguo = item.archivo;
+                          item.archivo = item.archivo ? URLIMAGENES.carpeta + 'proceso judicial/' + item.archivo : "";
+                          return item;
+                        })
     })
   }
 
@@ -255,11 +284,26 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
       finalize(()=>this.Cargando.next(false))
     )
     .subscribe(res=>{
+      // console.log(res)
       this.Documentos=res ;
       this.Documentos = this.Documentos.map((item)=>{
                           item.fecha = moment(item.fecha).toDate();
+                          item.archivo_antiguo = item.archivo;
+                          item.archivo = item.archivo ? URLIMAGENES.carpeta + 'proceso judicial/' + item.archivo : "";
                           return item;
                         })
+    })
+  }
+
+  ListarDistritosJudiciales(){
+    this._vinculados.ListarDistritosJudiciales("",1,50).subscribe(res=>{
+      this.Distritos = res['data'].distritos
+    })
+  }
+
+  ListarInstanciasJudiciales(){
+    this._vinculados.ListarInstanciasJudiciales(this.JudicialForm.value.distrito_judicial,"","",1,50).subscribe(res=>{
+      this.Instancias = res['data'].instancias
     })
   }
 
@@ -294,27 +338,51 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
 
   CalcularCuotas(){
     let cuota : number = 0 ;
-
     cuota = this.JudicialForm.value.total / this.JudicialForm.value.numero_cuotas ;
-
     cuota = Math.round(cuota*100) / 100 ;
-
     this.JudicialForm.get('monto_cuota').setValue(cuota);
   }
 
-  EditarCabecera(numero){
-    this.editar_cabecera = numero ;
+  EditarExpediente(numero){
+    this.editar_expediente = numero ;
     if( numero==2 ){
       this._judicial.ActualizarProcesoCabecera(
         this.id_proceso_editar,
         this.JudicialForm.value.expediente ,
-        this.JudicialForm.value.juzgado ,
+        this.JudicialForm.value.instancia_judicial ,
+        this.JudicialForm.value.juez ,
+        this.JudicialForm.value.especialista ,
         this.JudicialForm.value.fecha_inicio ,
         this.JudicialForm.value.sumilla ,
         this.JudicialForm.value.numero_cuotas ,
         this.JudicialForm.value.total
       ).subscribe(res=>{
         if(res){
+          this.SeleccionarProceso(this.id_proceso_editar) ;
+          this.Notificacion.Snack("Se actualizaron los datos satisfactoriamente","")
+        } else {
+          this.Notificacion.Snack("Ocurrió un error al actualizar los datos","")
+        }
+      })
+    }
+  }
+
+  EditarJuzgado(numero){
+    this.editar_juzgado = numero ;
+    if( numero==2 ){
+      this._judicial.ActualizarProcesoCabecera(
+        this.id_proceso_editar,
+        this.JudicialForm.value.expediente ,
+        this.JudicialForm.value.instancia_judicial ,
+        this.JudicialForm.value.juez ,
+        this.JudicialForm.value.especialista ,
+        this.JudicialForm.value.fecha_inicio ,
+        this.JudicialForm.value.sumilla ,
+        this.JudicialForm.value.numero_cuotas ,
+        this.JudicialForm.value.total
+      ).subscribe(res=>{
+        if(res){
+          this.SeleccionarProceso(this.id_proceso_editar) ;
           this.Notificacion.Snack("Se actualizaron los datos satisfactoriamente","")
         } else {
           this.Notificacion.Snack("Ocurrió un error al actualizar los datos","")
@@ -325,7 +393,7 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
 
   EditarDetalle(proceso){
     let Ventana = this.Dialogo.open(VentanaJudicialComponent,{
-      data: { proceso_detalle : proceso } ,
+      data: { proceso_detalle : proceso, proceso: this.id_proceso_agregar ? this.id_proceso_agregar : this.id_proceso_editar } ,
       width: '900px'
     });
 
@@ -349,10 +417,17 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
     Ventana.afterClosed().subscribe(res=>{
       if (res) {
         this._judicial.EliminarProcesoDetalle(proceso.id).subscribe((res)=>{
-          this.CargarDetalle(this.id_proceso_agregar);
+          this.CargarDetalle(this.id_proceso_editar);
         });
       }
     })
+  }
+
+  AbrirDocumento(archivo){
+    // console.log(archivo);
+    if(archivo){
+      window.open(archivo, "_blank");
+    }
   }
 
   Atras(){
@@ -365,7 +440,9 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
       this.id_venta ,
       this.id_credito ,
       this.JudicialForm.value.expediente ,
-      this.JudicialForm.value.juzgado ,
+      this.JudicialForm.value.instancia_judicial ,
+      this.JudicialForm.value.juez ,
+      this.JudicialForm.value.especialista ,
       this.JudicialForm.value.fecha_inicio ,
       this.JudicialForm.value.sumilla ,
       this.JudicialForm.value.numero_cuotas ,

@@ -1,9 +1,10 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
 import { MatCard, MatInputModule, MatButton, MatDatepicker, MatTableModule } from '@angular/material';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {FormControl, FormGroup, FormBuilder, FormArray,Validators} from '@angular/forms';
 import {ServiciosProductoSerie} from '../../global/productoserie'
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, fromEvent } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-ventanaseriessv',
@@ -14,6 +15,7 @@ import { BehaviorSubject } from 'rxjs';
 
 export class ventanaseriessv  implements OnInit {
 
+  @ViewChild('InputBuscador') FiltroBuscador : ElementRef ;
   public Cargando = new BehaviorSubject<boolean>(false);
   public SeriesProductosForm:FormGroup;
   public series: FormArray;
@@ -21,15 +23,16 @@ export class ventanaseriessv  implements OnInit {
   public contador:number=0
 
   constructor(
-     @Inject(MAT_DIALOG_DATA) public data,
-      public ventana: MatDialogRef<ventanaseriessv>,
-      private FormBuilder: FormBuilder,
-      private Series:ServiciosProductoSerie
+    @Inject(MAT_DIALOG_DATA) public data,
+    public ventana: MatDialogRef<ventanaseriessv>,
+    private FormBuilder: FormBuilder,
+    private Series:ServiciosProductoSerie
   ) { }
 
   ngOnInit() {
 
     this.SeriesProductosForm = this.FormBuilder.group({
+      buscador : ["",[]],
       series: this.FormBuilder.array([this.CrearSerie()])
     })
 
@@ -68,8 +71,15 @@ export class ventanaseriessv  implements OnInit {
         })
       }
     }
+  }
 
-
+  ngAfterViewInit(){
+    fromEvent( this.FiltroBuscador.nativeElement, 'keyup' )
+    .pipe(
+      tap(()=>{
+        this.FiltrarSeries();
+      })
+    ).subscribe()
   }
 
   CrearSerie():FormGroup{
@@ -87,6 +97,9 @@ export class ventanaseriessv  implements OnInit {
       'cantidad':[{value:null, disabled:false},[
       ]],
       'considerar':[{value:false,disabled:false},[
+      ]],
+      // Solo se usa para filtrar
+      'mostrar':[{value:true,disabled:false},[
       ]]
     })
   }
@@ -111,6 +124,18 @@ export class ventanaseriessv  implements OnInit {
   EliminarSerie(index){
     this.series.removeAt(index);
   };
+
+  FiltrarSeries(){
+    let filtro : string = this.FiltroBuscador.nativeElement.value ;
+    this.SeriesProductosForm['controls'].series['controls'].forEach(item => {
+      let serie : string = item.value.serie.toString() ;
+      if( serie.includes(filtro) ) {
+        item.get('mostrar').setValue(true)
+      } else {
+        item.get('mostrar').setValue(false)
+      }
+    });
+  }
 
   EliminarElemento(array,value){
     // console.log(array,value);

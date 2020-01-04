@@ -24,33 +24,38 @@ export class ClienteDataSource implements DataSource<Cliente> {
   }
 
   CargarClientes(
+    relacion : boolean ,
     codigo:string,
     cip:string,
     dni: string,
     nombre: string,
+    cargo: string,
+    subsede: string,
     prpagina: number,
     prtotalpagina: number,
     estado : number
   ){
   this.CargandoInformacion.next(true);
 
-  this.Servicio.Listado( codigo, cip, dni, nombre, prpagina, prtotalpagina, estado)
-  .pipe(catchError(() => of([])),
-  finalize(() => this.CargandoInformacion.next(false))
-  )
-  .subscribe(res => {
-      res['data'].clientes.forEach((item)=>{
-        let dni : string = item.dni;
-        let dni_longitud : number = (item.dni).toString().length;
-
-        for(let i = dni_longitud; i<8 ; i++){
-          dni = "0" + dni ;
-        }
-        item.dni = dni ;
-      })
+  if( relacion ) {
+    this.Servicio.ListadoComercial( codigo, cip, dni, nombre, cargo, subsede, prpagina, prtotalpagina, estado)
+    .pipe(catchError(() => of([])),
+    finalize(() => this.CargandoInformacion.next(false))
+    )
+    .subscribe(res => {
       this.TotalResultados.next(res['mensaje']);
       this.InformacionClientes.next(res['data'].clientes);
     });
+  } else {
+    this.Servicio.Listado( codigo, cip, dni, nombre, cargo, subsede, prpagina, prtotalpagina, estado)
+    .pipe(catchError(() => of([])),
+    finalize(() => this.CargandoInformacion.next(false))
+    )
+    .subscribe(res => {
+        this.TotalResultados.next(res['mensaje']);
+        this.InformacionClientes.next(res['data'].clientes);
+      });
+    }
   }
 
 }

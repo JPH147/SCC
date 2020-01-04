@@ -17,6 +17,7 @@
       $proceso = new Proceso($db);
 
       $proceso->expediente = !empty($_GET['prexpediente']) ? trim($_GET['prexpediente']) :'';
+      $proceso->distrito_judicial = !empty($_GET['prdistrito']) ? trim($_GET['prdistrito']) : '';
       $proceso->juzgado = !empty($_GET['prjuzgado']) ? trim($_GET['prjuzgado']) : '';
       $proceso->dni = !empty($_GET['prdni']) ? trim($_GET['prdni']) : '';
       $proceso->nombre = !empty($_GET['prnombre']) ? trim($_GET['prnombre']) : '';

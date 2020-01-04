@@ -33,6 +33,11 @@
             $archivo->presidente = trim($_POST["prpresidente"]);
             $archivo->presidente_dni = trim($_POST["prpresidentedni"]);
             $archivo->presidente_direccion = trim($_POST["prpresidentedireccion"]);
+            $archivo->parametro_condicion = trim($_POST["prparametrocondicion"]);
+            $archivo->parametro_domicilio_laboral = trim($_POST["prparametrodomiciliolaboral"]);
+            $archivo->parametro_autorizacion_1 = trim($_POST["prparametroautorizacion1"]);
+            $archivo->parametro_autorizacion_2 = trim($_POST["prparametroautorizacion2"]);
+
             $archivo->nombre = trim($_POST["prnombre"]);
             $archivo->cargo = trim($_POST["prcargo"]);
             $archivo->dni = trim($_POST["prdni"]);

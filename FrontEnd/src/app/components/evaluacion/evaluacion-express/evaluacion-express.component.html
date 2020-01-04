@@ -26,7 +26,7 @@
       </mat-grid-tile>
     </mat-grid-list>
 
-    <mat-grid-list cols=5 rowHeight="30px">
+    <mat-grid-list cols=5 rowHeight="45px">
       <mat-grid-tile>
         <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(autorizacion)" [disabled]="!autorizacion"> <mat-icon> arrow_downward </mat-icon> </button>
       </mat-grid-tile>
@@ -82,11 +82,11 @@
           </mat-grid-tile>
     
           <mat-grid-tile>
-            <mat-form-field>
-              <input matInput [matDatepicker]="picker" placeholder="Fecha de crédito" [(ngModel)]="fecha_prestamo" [ngModelOptions]="{standalone:true}" readonly (dateChange)="CalcularPagos()"> 
-              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker [disabled]="false"></mat-datepicker>
-            </mat-form-field>
+            <mat-radio-group (change)="CambioTipoVenta()" [(ngModel)]="tipo" [ngModelOptions]="{standalone:true}">
+              <mat-radio-button color="primary" [value]=1>Crédito</mat-radio-button>
+              &nbsp;&nbsp;
+              <mat-radio-button color="primary" [value]=2>Equipo</mat-radio-button>
+            </mat-radio-group>
           </mat-grid-tile>
     
           <mat-grid-tile>
@@ -102,12 +102,12 @@
           </mat-grid-tile>
 
           <mat-grid-tile>
-            <mat-checkbox color="primary" [(ngModel)]="interes_por_dia" [ngModelOptions]="{standalone:true}" (change)="CambioInteresDiario($event)">Interés por día</mat-checkbox>
+            <mat-checkbox color="primary" [(ngModel)]="interes_por_dia" [ngModelOptions]="{standalone:true}" (change)="CambioInteresDiario($event)" [disabled]="interes_diario_deshabilitado">Interés por día</mat-checkbox>
           </mat-grid-tile>
     
           <mat-grid-tile>
             <mat-form-field>
-              <input matInput [matDatepicker]="FInicio" placeholder="Fecha de inicio de pagos" [min]="fecha_prestamo" [(ngModel)]="fecha_inicio" [ngModelOptions]="{standalone:true}" readonly (dateChange)="CalcularPagos()"> 
+              <input matInput [matDatepicker]="FInicio" placeholder="Fecha de inicio de pagos" [(ngModel)]="fecha_inicio" [ngModelOptions]="{standalone:true}" readonly (dateChange)="CambioFechaInicio()"> 
               <mat-datepicker-toggle matSuffix [for]="FInicio"></mat-datepicker-toggle>
               <mat-datepicker #FInicio [disabled]="false"></mat-datepicker>
             </mat-form-field>
@@ -144,7 +144,7 @@
 
           <mat-grid-tile>
             <mat-form-field class="columnas-1">
-              <input matInput [matDatepicker]="picker3" placeholder="Fecha" formControlName="fecha_letras" readonly>
+              <input matInput [matDatepicker]="picker3" placeholder="Fecha" [max]="fecha_inicio" formControlName="fecha_letras" (dateChange)="CambioFechaLetras()" readonly>
               <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
               <mat-datepicker #picker3 [disabled]="false"></mat-datepicker>
             </mat-form-field>
@@ -198,26 +198,26 @@
   <mat-card-actions>
 
     <mat-grid-list cols=1 rowHeight=40px *ngIf="InformacionForm.value.nombre">
-      <mat-grid-tile *ngIf="!InformacionForm.value.email">
+      <!-- <mat-grid-tile *ngIf="!InformacionForm.value.email">
         <mat-error> 
           <strong>Falta el email: </strong> No se pueden generar la autorización ni la transacción.
         </mat-error>
-      </mat-grid-tile>
-      <mat-grid-tile *ngIf="!InformacionForm.value.casilla">
+      </mat-grid-tile> -->
+      <!-- <mat-grid-tile *ngIf="!InformacionForm.value.casilla">
         <mat-error>
           <strong>Falta la casilla: </strong>No se puede generar la transacción.
         </mat-error>
-      </mat-grid-tile>
-      <mat-grid-tile *ngIf="!InformacionForm.value.codigo">
+      </mat-grid-tile> -->
+      <!-- <mat-grid-tile *ngIf="!InformacionForm.value.codigo">
         <mat-error>
           <strong>Falta el código: </strong>No se puede generar la autorización.
         </mat-error>
-      </mat-grid-tile>
-      <mat-grid-tile *ngIf="!InformacionForm.value.cuenta_numero">
+      </mat-grid-tile> -->
+      <!-- <mat-grid-tile *ngIf="!InformacionForm.value.cuenta_numero">
         <mat-error>
           <strong>Falta la cuenta: </strong>No se puede generar la tarjeta de socio.
         </mat-error>
-      </mat-grid-tile>
+      </mat-grid-tile> -->
     </mat-grid-list>
 
     <mat-grid-list cols=1 rowHeight=40px>

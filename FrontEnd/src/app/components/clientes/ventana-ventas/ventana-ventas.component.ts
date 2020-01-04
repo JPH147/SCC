@@ -23,7 +23,7 @@ export class VentanaVentasComponent implements OnInit {
   @ViewChild('InputDocumento') FiltroDocumento: ElementRef;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   ListadoVentas: VentasClienteDataSource;
-  Columnas: string[] = [ 'serie', 'fecha', 'total', 'estado', 'opciones'];
+  Columnas: string[] = [ 'documento', 'tipo','fecha', 'total', 'estado', 'opciones'];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
@@ -66,8 +66,6 @@ export class VentanaVentasComponent implements OnInit {
   }
 
   CargarData(){
-  console.log(this.fecha)
-
   	this.ListadoVentas.CargarVentas(
       this.data.id,
       this.FiltroDocumento.nativeElement.value,
@@ -98,14 +96,17 @@ export class VentanaVentasComponent implements OnInit {
     this.ventana.close();
   }
 
-  VerVenta(venta){
+  VerVenta(transaccion){
+    if(transaccion.id_tipo<3){
+      this.router.navigate(['/creditos/ver', transaccion.id]);
+    }
+    if(transaccion.id_tipo==3){
+      this.router.navigate(['/ventas', transaccion.id]);
+    }
+    if(transaccion.id_tipo==4){
+      this.router.navigate(['/ventas', 'salida', transaccion.id]);
+    }
     this.ventana.close();
-    if(venta.tipo=="Venta directa"){
-      this.router.navigate(['/ventas', venta.id]);
-    }
-    if(venta.tipo=="Venta por salida"){
-      this.router.navigate(['/ventas', 'salida', venta.id]);
-    }
   }
 
 }
@@ -137,9 +138,6 @@ export class VentasClienteDataSource implements DataSource<any> {
     total_pagina: number
   ){
   	this.CargandoInformacion.next(true);
-  
-    console.log(fecha)
-
   	this.Servicio.ListarVentasxCliente(
   		id_cliente,
   		documento,

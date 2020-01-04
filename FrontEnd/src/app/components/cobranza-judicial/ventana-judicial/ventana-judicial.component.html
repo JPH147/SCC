@@ -13,7 +13,7 @@
       <mat-grid-list cols=3 rowHeight="70px">
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
-            <mat-select placeholder="Tipo de documento" formControlName="tipo_documento">
+            <mat-select placeholder="Tipo de documento" formControlName="tipo_documento" (selectionChange)="TipoDocumentoSeleccionado()">
               <mat-option *ngFor="let tipo of TipoDocumentos" [value]="tipo"> {{tipo}} </mat-option>
             </mat-select>
           </mat-form-field>
@@ -29,7 +29,16 @@
 
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
-            <input matInput type="number" placeholder="Número de resolución" formControlName="numero_resolucion">
+            <input matInput type="number" placeholder="Número de resolución" formControlName="numero_resolucion" readonly>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan=2>
+          <mat-form-field class="columnas-2">
+            <mat-select placeholder="Trabajador" formControlName="trabajador">
+              <mat-option [value]="0"> No aplica </mat-option>
+              <mat-option *ngFor="let trabajador of Trabajadores" [value]="trabajador.id"> {{trabajador.nombre}} </mat-option>
+            </mat-select>
           </mat-form-field>
         </mat-grid-tile>
 
@@ -39,12 +48,35 @@
           </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile colspan=1>
+        <mat-grid-tile colspan=1 *ngIf="!editar">
           <ng-container *ngIf="!archivo">
             <input hidden #uploader type="file" (change)="SubirArchivo($event.target.files)">
             <button mat-raised-button type="button" (click)="uploader.click()"> Seleccionar archivo </button>
           </ng-container>
           <ng-container *ngIf="archivo">
+            <span> {{ archivo_nombre }} </span>
+            &nbsp;
+            <button type="button" mat-icon-button color="primary" (click)="RemoverArchivo()"> <mat-icon> remove_circle_outline </mat-icon> </button>
+          </ng-container>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan=1 *ngIf="editar">
+          <button mat-icon-button color="primary" type="button" (click)="editar_archivo = !editar_archivo" [disabled]="!archivo_nombre_antiguo" *ngIf="!editar_archivo">
+            <mat-icon class="icono-documentos"> edit </mat-icon>
+          </button>
+          <button mat-icon-button color="primary" type="button" (click)="editar_archivo = !editar_archivo" [disabled]="!archivo_nombre_antiguo" *ngIf="editar_archivo">
+            <mat-icon class="icono-documentos"> close </mat-icon>
+          </button>
+
+          <button mat-icon-button color="primary" type="button" [disabled]="!archivo_nombre_antiguo_enlace" *ngIf="!editar_archivo && archivo_nombre_antiguo">
+            <mat-icon class="icono-documentos" (click)="AbrirDocumento(archivo_nombre_antiguo_enlace)"> visibility </mat-icon>
+          </button>
+          
+          <ng-container *ngIf="!archivo_nombre && editar_archivo">
+            <input hidden #uploader type="file" (change)="SubirArchivo($event.target.files)">
+            <button mat-raised-button type="button" (click)="uploader.click()"> Seleccionar archivo </button>
+          </ng-container>
+          <ng-container *ngIf="archivo_nombre">
             <span> {{ archivo_nombre }} </span>
             &nbsp;
             <button type="button" mat-icon-button color="primary" (click)="RemoverArchivo()"> <mat-icon> remove_circle_outline </mat-icon> </button>

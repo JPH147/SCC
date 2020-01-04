@@ -27,7 +27,7 @@
 
     <mat-grid-tile>
       <mat-form-field>
-        <input matInput [matDatepicker]="inicio" placeholder="Fecha de inicio" [(ngModel)]="fecha_inicio" (dateChange)="CambioFiltro()">
+        <input matInput [matDatepicker]="inicio" placeholder="Fecha de inicio" [(ngModel)]="fecha_inicio" (dateChange)="CambioFiltro()" readonly>
         <mat-datepicker-toggle matSuffix [for]="inicio"></mat-datepicker-toggle>
         <mat-datepicker #inicio disabled="false"></mat-datepicker>
       </mat-form-field>
@@ -35,7 +35,7 @@
 
     <mat-grid-tile>
       <mat-form-field>
-        <input matInput [matDatepicker]="fin" placeholder="Fecha de fin" [(ngModel)]="fecha_fin" (dateChange)="CambioFiltro()">
+        <input matInput [matDatepicker]="fin" placeholder="Fecha de fin" [(ngModel)]="fecha_fin" (dateChange)="CambioFiltro()" readonly>
         <mat-datepicker-toggle matSuffix [for]="fin"></mat-datepicker-toggle>
         <mat-datepicker #fin disabled="false"></mat-datepicker>
       </mat-form-field>

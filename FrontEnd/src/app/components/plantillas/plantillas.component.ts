@@ -80,31 +80,34 @@ export class PlantillasComponent implements OnInit {
 
   CrearDocumentosPlantillas(){
     this.ListadoTransaccion = [
-      {numero: 1, nombre: "transaccion_1.docx", referente: "Policía Nacional del Perú"},
-      {numero: 2, nombre: "transaccion_2.docx", referente: "Caja Pensión"},
-      {numero: 3, nombre: "transaccion_3.docx", referente: "Ejército"},
-      {numero: 4, nombre: "transaccion_4.docx", referente: "Ministerio de educación"},
-      {numero: 5, nombre: "transaccion_5.docx", referente: "Ministerio de salud"},
-      {numero: 6, nombre: "transaccion_6.docx", referente: "Otros"}
+      {numero: 1, nombre: "transaccion_X.docx", referente: "Todos"},
+      // {numero: 1, nombre: "transaccion_1.docx", referente: "Policía Nacional del Perú"},
+      // {numero: 2, nombre: "transaccion_2.docx", referente: "Caja Pensión"},
+      // {numero: 3, nombre: "transaccion_3.docx", referente: "Ejército"},
+      // {numero: 4, nombre: "transaccion_4.docx", referente: "Ministerio de educación"},
+      // {numero: 5, nombre: "transaccion_5.docx", referente: "Ministerio de salud"},
+      // {numero: 6, nombre: "transaccion_6.docx", referente: "Otros"}
     ];
     this.ListadoAutorizacion = [
-      {numero: 1, nombre: "autorizacion_1.docx", referente: "Policía Nacional del Perú"},
-      {numero: 2, nombre: "autorizacion_2.docx", referente: "Caja Pensión"},
-      {numero: 3, nombre: "autorizacion_3.docx", referente: "Ejército"},
-      {numero: 4, nombre: "autorizacion_4.docx", referente: "Ministerio de educación"},
-      {numero: 5, nombre: "autorizacion_5.docx", referente: "Ministerio de salud"},
-      {numero: 6, nombre: "autorizacion_6.docx", referente: "Otros"}
+      {numero: 1, nombre: "autorizacion_X.docx", referente: "Todos"},
+      // {numero: 2, nombre: "autorizacion_2.docx", referente: "Caja Pensión"},
+      // {numero: 3, nombre: "autorizacion_3.docx", referente: "Ejército"},
+      // {numero: 4, nombre: "autorizacion_4.docx", referente: "Ministerio de educación"},
+      // {numero: 5, nombre: "autorizacion_5.docx", referente: "Ministerio de salud"},
+      // {numero: 6, nombre: "autorizacion_6.docx", referente: "Otros"}
     ];
     this.ListadoDDJJ = [
-      {numero: 1, nombre: "ddjj_1.docx", referente: "Todos"}
+      {numero: 1, nombre: "ddjj_X.docx", referente: "Todos"}
     ];
     this.ListadoTarjeta = [
-      {numero: 1, nombre: "tarjeta_1.docx", referente: "PNP, Caja Pensión y Ejército"},
-      {numero: 2, nombre: "tarjeta_2.docx", referente: "MINEDU, MINSA y otros"},
+      {numero: 1, nombre: "tarjeta_X.docx", referente: "Todos"},
+      // {numero: 1, nombre: "tarjeta_1.docx", referente: "PNP, Caja Pensión y Ejército"},
+      // {numero: 2, nombre: "tarjeta_2.docx", referente: "MINEDU, MINSA y otros"},
     ];
     this.ListadoCompromiso = [
-      {numero: 1, nombre: "compromiso_1.docx", referente: "PNP, Caja Pensión y Ejército"},
-      {numero: 2, nombre: "compromiso_2.docx", referente: "MINEDU, MINSA y otros"},
+      {numero: 1, nombre: "compromiso_X.docx", referente: "Todos"},
+      // {numero: 1, nombre: "compromiso_1.docx", referente: "PNP, Caja Pensión y Ejército"},
+      // {numero: 2, nombre: "compromiso_2.docx", referente: "MINEDU, MINSA y otros"},
     ];
     this.ListadoCarta = [
       {numero: 1, nombre: "carta_aval.docx", referente: "Avales"}

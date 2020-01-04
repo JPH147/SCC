@@ -9,6 +9,9 @@ Class Proceso{
   public $id_credito ;
   public $expediente ;
   public $juzgado ;
+  public $instancia ;
+  public $juez ;
+  public $especialista ;
   public $tipo_documento ;
   public $numero ;
   public $sumilla ;
@@ -17,6 +20,7 @@ Class Proceso{
   public $dni ;
   public $nombre ;
   public $fecha ;
+  public $trabajador ;
   public $fecha_inicio ;
   public $fecha_fin ;
   public $monto_cuota ;
@@ -32,21 +36,21 @@ Class Proceso{
   }
 
   function read(){
-    // $query = "call sp_listarprocesojudicial(?,?,?,?,?,?,?,1,10,'id asc')";
-    $query = "CALL sp_listarprocesojudicial(?,?,?,?,?,?,?,?,?,?)";
+    $query = "CALL sp_listarprocesojudicial(?,?,?,?,?,?,?,?,?,?,?)";
 
     $result = $this->conn->prepare($query);
 
     $result->bindParam(1, $this->expediente);
-    $result->bindParam(2, $this->juzgado);
-    $result->bindParam(3, $this->dni);
-    $result->bindParam(4, $this->nombre);
-    $result->bindParam(5, $this->fecha_inicio);
-    $result->bindParam(6, $this->fecha_fin);
-    $result->bindParam(7, $this->estado);
-    $result->bindParam(8, $this->numero_pagina);
-    $result->bindParam(9, $this->total_pagina);
-    $result->bindParam(10, $this->orden);
+    $result->bindParam(2, $this->distrito_judicial);
+    $result->bindParam(3, $this->juzgado);
+    $result->bindParam(4, $this->dni);
+    $result->bindParam(5, $this->nombre);
+    $result->bindParam(6, $this->fecha_inicio);
+    $result->bindParam(7, $this->fecha_fin);
+    $result->bindParam(8, $this->estado);
+    $result->bindParam(9, $this->numero_pagina);
+    $result->bindParam(10, $this->total_pagina);
+    $result->bindParam(11, $this->orden);
 
     $result->execute();
     
@@ -65,7 +69,9 @@ Class Proceso{
         "ultimo_documento"=>$ultimo_documento,
         "id_tipo_documento"=>$id_tipo_documento,
         "expediente"=>$expediente,
+        "distrito"=>$distrito,
         "juzgado"=>$juzgado,
+        "vendedor"=>$vendedor,
         "fecha_inicio"=>$fecha_inicio,
         "sumilla"=>$sumilla,
         "id_tipo"=>$id_tipo,
@@ -82,18 +88,18 @@ Class Proceso{
   }
 
   function contar(){
-
-    $query = "CALL sp_listarprocesojudicialcontar(?,?,?,?,?,?,?)";
+    $query = "CALL sp_listarprocesojudicialcontar(?,?,?,?,?,?,?,?)";
 
     $result = $this->conn->prepare($query);
 
     $result->bindParam(1, $this->expediente);
-    $result->bindParam(2, $this->juzgado);
-    $result->bindParam(3, $this->dni);
-    $result->bindParam(4, $this->nombre);
-    $result->bindParam(5, $this->fecha_inicio);
-    $result->bindParam(6, $this->fecha_fin);
-    $result->bindParam(7, $this->estado);
+    $result->bindParam(2, $this->distrito_judicial);
+    $result->bindParam(3, $this->juzgado);
+    $result->bindParam(4, $this->dni);
+    $result->bindParam(5, $this->nombre);
+    $result->bindParam(6, $this->fecha_inicio);
+    $result->bindParam(7, $this->fecha_fin);
+    $result->bindParam(8, $this->estado);
 
     $result->execute();
 
@@ -112,8 +118,6 @@ Class Proceso{
     
     $result->bindParam(1, $this->id_proceso);
 
-    // $Detalle = $this->read_cobranza_detallexdirecta($this->id_proceso);
-
     $result->execute();
 
     $row = $result->fetch(PDO::FETCH_ASSOC);
@@ -121,7 +125,12 @@ Class Proceso{
     $resultado = array (
       "id" => $row['id'] ,
       "expediente" => $row['expediente'] ,
-      "juzgado" => $row['juzgado'] ,
+      "id_juzgado_distrito" => $row['id_juzgado_distrito'] ,
+      "juzgado_distrito" => $row['juzgado_distrito'] ,
+      "id_juzgado_instancia" => $row['id_juzgado_instancia'] ,
+      "juzgado_instancia" => $row['juzgado_instancia'] ,
+      "juez" => $row['juez'] ,
+      "especialista" => $row['especialista'] ,
       "fecha_inicio" => $row['fecha_inicio'] ,
       "sumilla" => $row['sumilla'] ,
       "tipo" => $row['tipo'] ,
@@ -133,7 +142,6 @@ Class Proceso{
       "total" => $row['total'] ,
       "monto_cuota" => $row['monto_cuota'] ,
       "estado" => $row['estado'] ,
-      // "detalle" => $Detalle
     );
 
     return $resultado;
@@ -158,6 +166,8 @@ Class Proceso{
           "id"=>$id,
           "tipo_documento"=>$tipo_documento,
           "fecha"=>$fecha,
+          "id_trabajador"=>$id_trabajador,
+          "trabajador"=>$trabajador,
           "numero"=>$numero,
           "sumilla"=>$sumilla,
           "archivo"=>$archivo,
@@ -174,7 +184,9 @@ Class Proceso{
       :prventa,
       :prcredito,
       :prexpediente,
-      :prjuzgado,
+      :prinstancia,
+      :prjuez,
+      :prespecialista,
       :prfecha,
       :prsumilla,
       :prnumerocuotas,
@@ -186,7 +198,9 @@ Class Proceso{
     $result->bindParam(":prventa", $this->id_venta);
     $result->bindParam(":prcredito", $this->id_credito);
     $result->bindParam(":prexpediente", $this->expediente);
-    $result->bindParam(":prjuzgado", $this->juzgado);
+    $result->bindParam(":prinstancia", $this->instancia);
+    $result->bindParam(":prjuez", $this->juez);
+    $result->bindParam(":prespecialista", $this->especialista);
     $result->bindParam(":prfecha", $this->fecha_inicio);
     $result->bindParam(":prsumilla", $this->sumilla);
     $result->bindParam(":prnumerocuotas", $this->numero_cuotas);
@@ -195,7 +209,9 @@ Class Proceso{
     $this->id_venta=htmlspecialchars(strip_tags($this->id_venta));
     $this->id_credito=htmlspecialchars(strip_tags($this->id_credito));
     $this->expediente=htmlspecialchars(strip_tags($this->expediente));
-    $this->juzgado=htmlspecialchars(strip_tags($this->juzgado));
+    $this->instancia=htmlspecialchars(strip_tags($this->instancia));
+    $this->juez=htmlspecialchars(strip_tags($this->juez));
+    $this->especialista=htmlspecialchars(strip_tags($this->especialista));
     $this->fecha_inicio=htmlspecialchars(strip_tags($this->fecha_inicio));
     $this->sumilla=htmlspecialchars(strip_tags($this->sumilla));
     $this->numero_cuotas=htmlspecialchars(strip_tags($this->numero_cuotas));
@@ -218,7 +234,9 @@ Class Proceso{
     $query = "call sp_actualizarprocesojudicial(
       :prproceso,
       :prexpediente,
-      :prjuzgado,
+      :prinstancia,
+      :prjuez,
+      :prespecialista,
       :prfecha,
       :prsumilla,
       :prnumerocuotas,
@@ -229,7 +247,9 @@ Class Proceso{
 
     $result->bindParam(":prproceso", $this->id_proceso);
     $result->bindParam(":prexpediente", $this->expediente);
-    $result->bindParam(":prjuzgado", $this->juzgado);
+    $result->bindParam(":prinstancia", $this->instancia);
+    $result->bindParam(":prjuez", $this->juez);
+    $result->bindParam(":prespecialista", $this->especialista);
     $result->bindParam(":prfecha", $this->fecha_inicio);
     $result->bindParam(":prsumilla", $this->sumilla);
     $result->bindParam(":prnumerocuotas", $this->numero_cuotas);
@@ -237,7 +257,9 @@ Class Proceso{
 
     $this->id_proceso=htmlspecialchars(strip_tags($this->id_proceso));
     $this->expediente=htmlspecialchars(strip_tags($this->expediente));
-    $this->juzgado=htmlspecialchars(strip_tags($this->juzgado));
+    $this->instancia=htmlspecialchars(strip_tags($this->instancia));
+    $this->juez=htmlspecialchars(strip_tags($this->juez));
+    $this->especialista=htmlspecialchars(strip_tags($this->especialista));
     $this->fecha_inicio=htmlspecialchars(strip_tags($this->fecha_inicio));
     $this->sumilla=htmlspecialchars(strip_tags($this->sumilla));
     $this->numero_cuotas=htmlspecialchars(strip_tags($this->numero_cuotas));
@@ -274,11 +296,36 @@ Class Proceso{
     return false;
   }
 
+  function obtener_proximo_numero_judicial_detalle(){
+    $query = "call sp_Seleccionarproximonumerodetallejudicial(
+      :prproceso,
+      :prdocumento,
+      :prprocesodetalle
+    )";
+
+    $result = $this->conn->prepare($query);
+
+    $result->bindParam(":prproceso", $this->id_proceso);
+    $result->bindParam(":prdocumento", $this->tipo_documento);
+    $result->bindParam(":prprocesodetalle", $this->id_proceso_detalle);
+
+    $this->id_proceso=htmlspecialchars(strip_tags($this->id_proceso));
+    $this->tipo_documento=htmlspecialchars(strip_tags($this->tipo_documento));
+    $this->id_proceso_detalle=htmlspecialchars(strip_tags($this->id_proceso_detalle));
+
+    $result->execute() ;
+
+    $row = $result->fetch(PDO::FETCH_ASSOC) ;
+    
+    return $row['proximo_numero'] ;
+  }
+
   function create_proceso_judicial_detalle(){
     $query = "call sp_crearprocesojudicialdetalle(
       :prproceso,
       :prdocumento,
       :prfecha,
+      :prtrabajador,
       :prnumero,
       :prsumilla,
       :prarchivo,
@@ -290,6 +337,7 @@ Class Proceso{
     $result->bindParam(":prproceso", $this->id_proceso);
     $result->bindParam(":prdocumento", $this->tipo_documento);
     $result->bindParam(":prfecha", $this->fecha);
+    $result->bindParam(":prtrabajador", $this->trabajador);
     $result->bindParam(":prnumero", $this->numero);
     $result->bindParam(":prsumilla", $this->sumilla);
     $result->bindParam(":prarchivo", $this->archivo);
@@ -298,6 +346,7 @@ Class Proceso{
     $this->id_proceso=htmlspecialchars(strip_tags($this->id_proceso));
     $this->tipo_documento=htmlspecialchars(strip_tags($this->tipo_documento));
     $this->fecha=htmlspecialchars(strip_tags($this->fecha));
+    $this->trabajador=htmlspecialchars(strip_tags($this->trabajador));
     $this->numero=htmlspecialchars(strip_tags($this->numero));
     $this->sumilla=htmlspecialchars(strip_tags($this->sumilla));
     $this->archivo=htmlspecialchars(strip_tags($this->archivo));
@@ -316,6 +365,7 @@ Class Proceso{
       :prproceso,
       :prdocumento,
       :prfecha,
+      :prtrabajador,
       :prnumero,
       :prsumilla,
       :prarchivo,
@@ -327,6 +377,7 @@ Class Proceso{
     $result->bindParam(":prproceso", $this->id_proceso);
     $result->bindParam(":prdocumento", $this->tipo_documento);
     $result->bindParam(":prfecha", $this->fecha);
+    $result->bindParam(":prtrabajador", $this->trabajador);
     $result->bindParam(":prnumero", $this->numero);
     $result->bindParam(":prsumilla", $this->sumilla);
     $result->bindParam(":prarchivo", $this->archivo);
@@ -335,6 +386,7 @@ Class Proceso{
     $this->id_proceso=htmlspecialchars(strip_tags($this->id_proceso));
     $this->tipo_documento=htmlspecialchars(strip_tags($this->tipo_documento));
     $this->fecha=htmlspecialchars(strip_tags($this->fecha));
+    $this->trabajador=htmlspecialchars(strip_tags($this->trabajador));
     $this->numero=htmlspecialchars(strip_tags($this->numero));
     $this->sumilla=htmlspecialchars(strip_tags($this->sumilla));
     $this->archivo=htmlspecialchars(strip_tags($this->archivo));
@@ -347,7 +399,7 @@ Class Proceso{
     
     return false;
   }
-
+  
   function delete_proceso_judicial(){
     $query = "call sp_eliminarprocesojudicialcabecera(
       :prproceso

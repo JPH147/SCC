@@ -37,8 +37,8 @@ export class SeguimientosComponent implements OnInit {
 
   ngOnInit() {
 
-    this.fecha_inicio= new Date((new Date()).valueOf() - 1000*60*60*24*120)
-    this.fecha_fin=new Date()
+    this.fecha_inicio = null ;
+    this.fecha_fin = null ;
 
     this.ListadoSeguimientos = new SeguimientosDataSource(this.Servicio);
     this.ListadoSeguimientos.CargarSeguimientos("","","",0,this.fecha_inicio,this.fecha_fin,1,10);

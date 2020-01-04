@@ -1,10 +1,9 @@
 import { Cliente } from './../clientes/clientes.service';
-import { TipoProductoModelo } from './servicios';
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import {Observable, of} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {URL} from './url';
+import {URL, URLIMAGENES} from './url';
 import * as moment from 'moment';
 import { equalParamsAndUrlSegments } from '../../../../node_modules/@angular/router/src/router_state';
 
@@ -12,7 +11,7 @@ import { equalParamsAndUrlSegments } from '../../../../node_modules/@angular/rou
 
 export class ServiciosGenerales {
   public url: string = URL.url;
-
+  public url_imagenes: string = URLIMAGENES.urlimages;
   constructor(
     private http: HttpClient) { }
 
@@ -505,6 +504,10 @@ EditarModelo(
       return this.http.get(this.url + 'vendedor/read.php', {params})
         .pipe(map(res => {
             if (res['codigo'] === 0) {
+              res['data'].vendedores = res['data'].vendedores.map(item=>{
+                item.dni = item.dni.substring(1);
+                return item;
+              })
               return res['data'].vendedores;
             } else {
               return []
@@ -673,6 +676,15 @@ EditarModelo(
       let headers = new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded');
   
       return this.http.post(this.url + 'courier/delete.php', params, {headers: headers});
+    }
+
+    SubirArchivo(
+      file : File
+    ){
+      let testData:FormData = new FormData();
+      testData.append('image', file, file.name);
+      // console.log(testData);
+      return this.http.post(this.url_imagenes, testData);
     }
 
     RenameFile(

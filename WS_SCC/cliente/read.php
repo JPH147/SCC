@@ -20,6 +20,8 @@
         $cliente->clt_cip = !empty($_GET['prcip']) ? trim($_GET['prcip']) : '';
         $cliente->clt_dni = !empty($_GET['prdni']) ? trim($_GET['prdni']) : '';
         $cliente->clt_nombre = !empty($_GET['prnombre']) ? trim($_GET['prnombre']) : '';
+        $cliente->clt_cargo = !empty($_GET['prcargo']) ? trim($_GET['prcargo']) : '';
+        $cliente->ssd_nombre = !empty($_GET['prsubsede']) ? trim($_GET['prsubsede']) : '';
         $cliente->prpagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : 1;
         $cliente->prtotalpagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : 10;
         $cliente->clt_estado = !empty($_GET['prestado']) ? trim($_GET['prestado']) : 1;

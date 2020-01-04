@@ -24,8 +24,8 @@ mat-card{
  max-width: 5%; 
 }
 
-.mat-column-email{
-  max-width: 20%; 
+.mat-column-cargo{
+  max-width: 15%; 
 }
 
 .mat-column-dni{
@@ -40,4 +40,9 @@ mat-card{
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.mat-column-foto{
+  max-width: 5%;
+  height: 55px ;
 }

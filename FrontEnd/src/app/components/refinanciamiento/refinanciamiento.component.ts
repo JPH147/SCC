@@ -199,6 +199,14 @@ export class RefinanciamientoComponent implements OnInit, AfterViewInit {
       ]],
       plantilla_tarjeta : [ { value : null , disabled : false } , [
       ]],
+      parametro_condicion : [ { value : "" , disabled : false } , [
+      ]],
+      parametro_domicilio : [ { value : "" , disabled : false } , [
+      ]],
+      parametro_autorizacion_1 : [ { value : "" , disabled : false } , [
+      ]],
+      parametro_autorizacion_2 : [ { value : "" , disabled : false } , [
+      ]],
       tipo : [ { value : null , disabled : false } , [
       ]],
       id_cliente : [ { value : null , disabled : false } , [
@@ -671,6 +679,10 @@ export class RefinanciamientoComponent implements OnInit, AfterViewInit {
         this.RefinanciamientoArchivosForm.get('plantilla_compromiso').setValue(res['data'].plantilla_compromiso) ;
         this.RefinanciamientoArchivosForm.get('plantilla_transaccion').setValue(res['data'].plantilla_transaccion) ;
         this.RefinanciamientoArchivosForm.get('plantilla_tarjeta').setValue(res['data'].plantilla_tarjeta) ;
+        this.RefinanciamientoArchivosForm.get('parametro_condicion').setValue(res['data'].parametro_condicion) ;
+        this.RefinanciamientoArchivosForm.get('parametro_domicilio').setValue(res['data'].parametro_domicilio) ;
+        this.RefinanciamientoArchivosForm.get('parametro_autorizacion_1').setValue(res['data'].parametro_autorizacion_1) ;
+        this.RefinanciamientoArchivosForm.get('parametro_autorizacion_2').setValue(res['data'].parametro_autorizacion_2) ;
         this.RefinanciamientoArchivosForm.get('nombre').setValue(res['data'].nombre) ;
         this.RefinanciamientoArchivosForm.get('dni').setValue(res['data'].dni) ;
         this.RefinanciamientoArchivosForm.get('trabajo').setValue(res['data'].trabajo) ;
@@ -938,7 +950,9 @@ export class RefinanciamientoComponent implements OnInit, AfterViewInit {
       monto_cuota,
       this.RefinanciamientoCronogramaForm.value.numero_cuotas,
       this.RefinanciamientoArchivosForm.value.lugar,
-      this.RefinanciamientoArchivosForm.value.fecha_letras
+      this.RefinanciamientoArchivosForm.value.fecha_letras,
+      this.RefinanciamientoArchivosForm.value.parametro_autorizacion_1 ,
+      this.RefinanciamientoArchivosForm.value.parametro_autorizacion_2 ,
     ).subscribe(res=>{
       // console.log(res)
       if(res['codigo']==0){
@@ -960,6 +974,10 @@ export class RefinanciamientoComponent implements OnInit, AfterViewInit {
     this.AServicios.GenerarTransaccion(
       this.RefinanciamientoArchivosForm.value.plantilla_transaccion,
       nombre_archivo,
+      this.RefinanciamientoArchivosForm.value.parametro_condicion ,
+      this.RefinanciamientoArchivosForm.value.parametro_domicilio ,
+      this.RefinanciamientoArchivosForm.value.parametro_autorizacion_1 ,
+      this.RefinanciamientoArchivosForm.value.parametro_autorizacion_2 ,
       this.cooperativa_nombre,
       this.cooperativa_direccion,
       this.cooperativa_direccion_1,
@@ -1212,7 +1230,9 @@ export class RefinanciamientoComponent implements OnInit, AfterViewInit {
       monto_cuota,
       this.RefinanciamientoCronogramaForm.value.numero_cuotas,
       this.RefinanciamientoArchivosForm.value.lugar,
-      this.RefinanciamientoArchivosForm.value.fecha_letras
+      this.RefinanciamientoArchivosForm.value.fecha_letras,
+      this.RefinanciamientoArchivosForm.value.parametro_autorizacion_1 ,
+      this.RefinanciamientoArchivosForm.value.parametro_autorizacion_2 ,
     ).subscribe(res=>{
       if(res['codigo']==0){
         this.autorizacion_aval=res['data'];

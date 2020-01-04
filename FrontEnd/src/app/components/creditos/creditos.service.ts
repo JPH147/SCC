@@ -33,14 +33,12 @@ export class CreditosService {
       .set('prcliente',cliente)
       .set('prtipo_credito',tipo_credito.toString())
       .set('prdocumentos',documentos.toString())
-      .set('prfecha_inicio',moment(fecha_inicio).format('YYYY-MM-DD'))
-      .set('prfecha_fin',moment(fecha_fin).format('YYYY-MM-DD'))
+      .set('prfecha_inicio', fecha_inicio ? moment(fecha_inicio).format('YYYY-MM-DD') : "" )
+      .set('prfecha_fin', fecha_fin ? moment(fecha_fin).format('YYYY-MM-DD') : "" )
       .set('prestado',estado.toString())
       .set('prpagina',pagina_inicio.toString())
       .set('prtotalpagina',pagina_final.toString())
       .set('prorden',orden)
-
-    // console.log(params);
 
     return this.http.get(this.url + 'credito/read.php', {params})
     .pipe(map(res => {
@@ -77,8 +75,8 @@ export class CreditosService {
 
     let params = new HttpParams()
       .set('prcliente',cliente)
-      .set('prfechainicio',moment(fecha_inicio).format('YYYY-MM-DD'))
-      .set('prfechafin',moment(fecha_fin).format('YYYY-MM-DD'))
+      .set('prfechainicio', fecha_inicio ? moment(fecha_inicio).format('YYYY-MM-DD') : "" )
+      .set('prfechafin', fecha_fin ? moment(fecha_fin).format('YYYY-MM-DD') : "" )
       .set('prestado',estado.toString())
       .set('prpagina',pagina_inicio.toString())
       .set('prtotalpagina',pagina_final.toString())

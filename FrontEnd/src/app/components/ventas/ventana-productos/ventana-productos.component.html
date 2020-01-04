@@ -1,17 +1,25 @@
-<mat-card>
+<mat-card class="card">
 
   <mat-toolbar color="primary">
     <mat-toolbar-row>Agregar productos</mat-toolbar-row>
   </mat-toolbar>
+  
+  <div class="spinner-container" *ngIf="ListadoProductos.Cargando | async">
+    <mat-spinner></mat-spinner>
+  </div>
 
+  
   <mat-card-content>
-
-<!--     <div class="spinner-container" *ngIf="ListadoProductos.Cargando| async">
-      <mat-spinner></mat-spinner>
-    </div> -->
+    <mat-grid-list cols=4 rowHeight="70px">
+      <mat-grid-tile colspan=2>
+        <mat-icon matPreffix> search </mat-icon>
+        <mat-form-field class="columnas-2">
+          <input matInput type="text" placeholder="Serie" #InputSerie>
+        </mat-form-field>
+      </mat-grid-tile>
+    </mat-grid-list>
 
     <mat-table [dataSource]="ListadoProductos" matSort matSortActive="descripcion" matSortDirection="asc" matSortDisableClear>
-
       <ng-container matColumnDef="serie">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Serie </mat-header-cell>
         <mat-cell *matCellDef="let producto"> {{producto.serie}} </mat-cell>
@@ -44,7 +52,6 @@
     </mat-table>
 
     <mat-paginator [length]="ListadoProductos.Total | async" [pageSize]="5"></mat-paginator>
-
   </mat-card-content>
 <!-- 
 	<mat-card-actions>

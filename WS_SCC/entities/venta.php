@@ -883,6 +883,7 @@ Class Venta{
             extract($row);
             $venta_item = array (
                 "id"=>$id,
+                "id_tipo"=>$id_tipo,
                 "tipo"=>$tipo,
                 "fecha"=>$fecha,
                 "documento"=>$documento,

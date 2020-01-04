@@ -39,6 +39,8 @@
             $archivo->numero_cuotas = trim($_POST["prnumerocuotas"]);
             $archivo->lugar = trim($_POST["prlugar"]);
             $archivo->fecha_letras = trim($_POST["prfechaletras"]);
+            $archivo->parametro_autorizacion_1 = trim($_POST["prparametroautorizacion1"]) ;
+            $archivo->parametro_autorizacion_2 = trim($_POST["prparametroautorizacion2"]) ;
 
             if($archivo->generar_autorizacion())
             {

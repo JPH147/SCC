@@ -49,7 +49,6 @@ export class VentanaEmergenteProvincia {
     });
 
     if(this.data){
-      console.log(this.data);
       this.ProvinciasForm.get('departamento').setValue(this.data.departamento);
       this.ProvinciasForm.get('nombre').setValue(this.data.nombre)
     }
@@ -57,7 +56,7 @@ export class VentanaEmergenteProvincia {
 
   Guardar(formulario){
    if(this.data){
-      this.Servicio.ActualizarDepartamento(this.data.id,formulario.value.nombre).subscribe(res=>{
+      this.Servicio.ActualizarProvincia(this.data.id, formulario.value.departamento, formulario.value.nombre).subscribe(res=>{
         if(res['codigo']==0){
           this.Notificacion("Se actualizó la provincia satisfactoriamente","")
         } else {

@@ -274,6 +274,7 @@ export class VentaService {
       .set('prid',id_venta.toString())
     }).pipe(map(res=>{
       if (res['codigo'] === 0) {
+        res['data']
         return res['data'];
       } else {
         console.log('No hay datos que mostrar');
@@ -315,7 +316,6 @@ export class VentaService {
 
     return this.http.get(this.url + 'venta/readxcliente.php', { params })
     .pipe(map(res => {
-      console.log(res)
       if (res['codigo'] === 0) {
         return res;
       }  else {

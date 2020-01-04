@@ -39,7 +39,7 @@ export class VentanaPlantillasComponent implements OnInit {
   onFileSelected(event) {
     if(event.target.files.length > 0) 
      {
-       console.log(event.target.files[0]);
+      //  console.log(event.target.files[0]);
        this.file = event.target.files[0];
      }
    }

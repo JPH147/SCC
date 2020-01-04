@@ -157,6 +157,14 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
       ]],
       plantilla_tarjeta : [ { value : null , disabled : false } , [
       ]],
+      parametro_condicion : [ { value : null , disabled : false } , [
+      ]],
+      parametro_domicilio : [ { value : null , disabled : false } , [
+      ]],
+      parametro_autorizacion_1 : [ { value : null , disabled : false } , [
+      ]],
+      parametro_autorizacion_2 : [ { value : null , disabled : false } , [
+      ]],
       tipo : [ { value : null , disabled : false } , [
       ]],
       id_cliente : [ { value : null , disabled : false } , [
@@ -280,6 +288,10 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
         this.EvaluacionArchivosForm.get('plantilla_compromiso').setValue(res.cliente.plantilla_compromiso)
         this.EvaluacionArchivosForm.get('plantilla_transaccion').setValue(res.cliente.plantilla_transaccion)
         this.EvaluacionArchivosForm.get('plantilla_tarjeta').setValue(res.cliente.plantilla_tarjeta)
+        this.EvaluacionArchivosForm.get('parametro_condicion').setValue(res.cliente.parametro_condicion)
+        this.EvaluacionArchivosForm.get('parametro_domicilio').setValue(res.cliente.parametro_domicilio)
+        this.EvaluacionArchivosForm.get('parametro_autorizacion_1').setValue(res.cliente.parametro_autorizacion_1)
+        this.EvaluacionArchivosForm.get('parametro_autorizacion_2').setValue(res.cliente.parametro_autorizacion_2)
         this.EvaluacionArchivosForm.get('nombre').setValue(res.cliente.nombre)
         this.EvaluacionArchivosForm.get('dni').setValue(res.cliente.dni)
         this.EvaluacionArchivosForm.get('trabajo').setValue(res.cliente.trabajo)
@@ -345,16 +357,13 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
   }
 
   EditarClienteContacto(){
-
     let VentanaContacto= this.Dialogo.open(VentanaEmergenteContacto, {
       width: '1000px',
       data: this.EvaluacionArchivosForm.value.id_cliente
     });
 
     VentanaContacto.afterClosed().subscribe (res => {
-      console.log(res);
       if(res){
-        console.log(1);
         this.ActualizarCliente.emit();
       }
     });
@@ -543,6 +552,7 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
       this.GenerarTarjeta("Tarjeta_"+ahora);
     }
 
+    console.log(this.EvaluacionArchivosForm.value.email, this.EvaluacionArchivosForm.value.casilla);
     if(this.EvaluacionArchivosForm.value.email && this.EvaluacionArchivosForm.value.casilla){
       this.GenerarTransaccion("Transaccion_"+ahora);
     }
@@ -595,7 +605,9 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
       this.EvaluacionArchivosForm.value.monto_cuota,
       this.EvaluacionArchivosForm.value.numero_cuotas,
       this.EvaluacionArchivosForm.value.lugar,
-      this.EvaluacionArchivosForm.value.fecha_letras
+      this.EvaluacionArchivosForm.value.fecha_letras,
+      this.EvaluacionArchivosForm.value.parametro_autorizacion_1,
+      this.EvaluacionArchivosForm.value.parametro_autorizacion_2,
     ).subscribe(res=>{
       // console.log(res)
       if(res['codigo']==0){
@@ -609,6 +621,10 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
     this.Servicios.GenerarTransaccion(
       this.EvaluacionArchivosForm.value.plantilla_transaccion,
       nombre_archivo,
+      this.EvaluacionArchivosForm.value.parametro_condicion,
+      this.EvaluacionArchivosForm.value.parametro_domicilio,
+      this.EvaluacionArchivosForm.value.parametro_autorizacion_1,
+      this.EvaluacionArchivosForm.value.parametro_autorizacion_2,
       this.cooperativa_nombre,
       this.cooperativa_direccion,
       this.cooperativa_direccion_1,
@@ -702,7 +718,6 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
 
   AbrirArchivo(nombre_archivo){
     this.Servicios.ObtenerArchivo(nombre_archivo).subscribe(res=>{
-      // console.log(res);
       saveAs(res, nombre_archivo+'.docx');
     })
   }
@@ -959,7 +974,9 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
       this.EvaluacionArchivosForm.value.monto_cuota,
       this.EvaluacionArchivosForm.value.numero_cuotas,
       this.EvaluacionArchivosForm.value.lugar,
-      this.EvaluacionArchivosForm.value.fecha_letras
+      this.EvaluacionArchivosForm.value.fecha_letras,
+      this.EvaluacionArchivosForm.value.parametro_autorizacion_1,
+      this.EvaluacionArchivosForm.value.parametro_autorizacion_2,
     ).subscribe(res=>{
       if(res['codigo']==0){
         this.autorizacion_aval=res['data'];

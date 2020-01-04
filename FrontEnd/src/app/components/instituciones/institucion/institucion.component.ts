@@ -5,6 +5,8 @@ import { catchError, finalize, tap, debounceTime, distinctUntilChanged } from 'r
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { InstitucionesService } from '../instituciones.service';
 import { VentanaConfirmarComponent } from '../../global/ventana-confirmar/ventana-confirmar.component';
+import { VentanaInstitucionComponent } from './ventana-institucion/ventana-institucion.component';
+import { Notificaciones } from '../../global/notificacion';
 
 @Component({
   selector: 'app-institucion',
@@ -18,14 +20,15 @@ export class InstitucionComponent implements OnInit, AfterViewInit {
   public Cuentas : Array<any>;
 
   public ListadoInstituciones: InstitucionDataSource;
-  public Columnas: string[] = ["numero" , "nombre" , "codigo_cooperativa" , "opciones"];
+  public Columnas: string[] = ["numero" , "nombre" , "opciones"];
 
   @ViewChild('InputNombre') FiltroNombre: ElementRef;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
     private Servicio: InstitucionesService,
-    private Dialogo : MatDialog
+    private Dialogo : MatDialog,
+    private _notificacion : Notificaciones,
   ) { }
 
   ngOnInit() {
@@ -61,23 +64,43 @@ export class InstitucionComponent implements OnInit, AfterViewInit {
     );
   }
 
-  // EliminarCobranza(cobranza){
-   
-  //   let Ventana = this.Dialogo.open(VentanaConfirmarComponent,{
-  //     data: { objeto: "la cobranza", valor: cobranza.numero_operacion+" en el banco "+cobranza.banco }
-  //   })
+  Editar(institucion){
+    let Ventana = this.Dialogo.open( VentanaInstitucionComponent, {
+      width: '900px',
+      data: institucion
+    })
 
-  //   Ventana.afterClosed().subscribe(res=>{
-  //     if (res) {
-  //       this.Servicio.EliminarCobranzaDirecta(cobranza.id).subscribe(res=>{
-  //         // console.log(res);
-  //         this.CargarData();
-  //       });
-  //     }
-  //   })
+    Ventana.afterClosed().subscribe(res=>{
+      if(res){
+        if(res.resultado){
+          this._notificacion.Snack("Se actualizó la institución satisfactoriamente","");
+          this.CargarData();
+        }
+        if(res.resultado===false){
+          this._notificacion.Snack("Ocurrió un error al actualizar la institución","")
+        }
+      }
+    })
+  }
 
-  // }
- 
+  Agregar(){
+    let Ventana = this.Dialogo.open( VentanaInstitucionComponent, {
+      width: '900px',
+    })
+
+    Ventana.afterClosed().subscribe(res=>{
+      if(res){
+        if(res.resultado){
+          this._notificacion.Snack("Se creó la institución satisfactoriamente","");
+          this.CargarData();
+        }
+        if(res.resultado===false){
+          this._notificacion.Snack("Ocurrió un error al crear la institución","")
+        }
+      }
+    })
+  }
+
 }
 
 export class InstitucionDataSource implements DataSource<any> {

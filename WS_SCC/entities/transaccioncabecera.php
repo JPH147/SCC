@@ -42,6 +42,7 @@ Class TransaccionCabecera{
     public $almacen_referencia;
     public $documento_serie;
     public $documento_numero;
+    public $archivo;
     public $observaciones;
 
     public function __construct($db){
@@ -144,6 +145,7 @@ Class TransaccionCabecera{
         $this->tipo=$row['tipo_transaccion'];
         $this->referencia=$row['referencia'];
         $this->proveedor=$row['proveedor'];
+        $this->id_proveedor=$row['id_proveedor'];
         $this->cliente=$row['cliente'];
         $this->salida_venta=$row['salida_venta'];
         $this->sucursal=$row['sucursal'];
@@ -212,6 +214,7 @@ Class TransaccionCabecera{
             :prfecha,
             :prdocumento,
             :prnumerodoc,
+            :prarchivo,
             :probservaciones
         )";
 
@@ -228,6 +231,7 @@ Class TransaccionCabecera{
         $result->bindParam(":prfecha", $this->fecha);
         $result->bindParam(":prdocumento", $this->documento);
         $result->bindParam(":prnumerodoc", $this->numero_documento);
+        $result->bindParam(":prarchivo", $this->archivo);
         $result->bindParam(":probservaciones", $this->observaciones);
 
         $this->id_almacen=htmlspecialchars(strip_tags($this->id_almacen));
@@ -256,6 +260,9 @@ Class TransaccionCabecera{
 
         $this->fecha=htmlspecialchars(strip_tags($this->fecha));
         $this->documento=htmlspecialchars(strip_tags($this->documento));
+        $this->numero_documento=htmlspecialchars(strip_tags($this->numero_documento));
+        $this->archivo=htmlspecialchars(strip_tags($this->archivo));
+        $this->observaciones=htmlspecialchars(strip_tags($this->observaciones));
 
         if($result->execute())
         {
@@ -354,6 +361,34 @@ Class TransaccionCabecera{
             }
     }
 
+    function update_compra(){
+        $query = "call sp_actualizartransaccioncabeceracompra(
+            :prid,
+            :prproveedor,
+            :prfecha,
+            :prdocumento
+        )";
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prid", $this->id_transaccion);
+        $result->bindParam(":prproveedor", $this->id_proveedor);
+        $result->bindParam(":prfecha", $this->fecha);
+        $result->bindParam(":prdocumento", $this->documento);
+
+        $this->id_transaccion=htmlspecialchars(strip_tags($this->id_transaccion));
+        $this->id_proveedor=htmlspecialchars(strip_tags($this->id_proveedor)); 
+        $this->fecha=htmlspecialchars(strip_tags($this->fecha));
+        $this->documento=htmlspecialchars(strip_tags($this->documento));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
     function readxproveedor(){
 

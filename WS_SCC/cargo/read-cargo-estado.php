@@ -16,7 +16,7 @@
     try{
         $cargo = new Cargo($db);
 
-        $cargo->id_cargo = !empty($_GET['prcargo']) ? trim($_GET['prcargo']) : '';
+        $cargo->sede = !empty($_GET['prsede']) ? trim($_GET['prsede']) : '';
 
         $cliente_list = $cargo->read_cargo_Estado();
         

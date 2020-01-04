@@ -31,16 +31,39 @@
     </mat-grid-tile>
 
     <mat-grid-tile>
-      <button mat-raised-button (click)="VerPendientes()" *ngIf="estado==1">Ver pendientes</button>
-      <button mat-raised-button (click)="VerTodos()" *ngIf="estado==5">Ver todos</button>
-      <button mat-raised-button color="primary" (click)="Agregar()" *ngIf="estado==1">Agregar</button>
+      <ng-container *ngIf="estado==1">
+        <button mat-raised-button (click)="VerPendientes()">Ver pendientes</button>
+        <button mat-raised-button color="primary" (click)="Agregar()">Agregar</button>
+      </ng-container>
+      <ng-container *ngIf="estado==5">
+        <button mat-raised-button (click)="VerTodos()">Ver todos</button>
+        <button mat-raised-button color="warn" (click)="DescartarTodos()">Descartar todos</button>
+      </ng-container>
     </mat-grid-tile>
 
-    <mat-grid-tile colspan=2>
+    <mat-grid-tile colspan=1>
       <mat-icon>search</mat-icon>
-      <mat-form-field class="columnas-2">
+      <mat-form-field class="columnas-1">
         <input matInput placeholder="Nombre" #InputNombre>
       </mat-form-field>
+    </mat-grid-tile>
+
+    <mat-grid-tile>
+      <mat-icon>search</mat-icon>
+      <mat-form-field class="columnas-1">
+        <input matInput placeholder="Cargo" #InputCargo>
+      </mat-form-field>
+    </mat-grid-tile>
+
+    <mat-grid-tile>
+      <mat-icon>search</mat-icon>
+      <mat-form-field class="columnas-1">
+        <input matInput placeholder="Subsede" #InputSubsede>
+      </mat-form-field>
+    </mat-grid-tile>
+
+    <mat-grid-tile *ngIf="estado==1">
+      <mat-checkbox color="primary" #InputRelacion> Relación comercial </mat-checkbox>
     </mat-grid-tile>
 
   </mat-grid-list>
@@ -64,9 +87,9 @@
         <mat-cell *matCellDef="let cliente"><img [attr.src]="cliente.foto" class="foto-cliente" (click)="VerFoto(cliente.nombre, cliente.foto)"></mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="subsede">
-        <mat-header-cell *matHeaderCellDef> Subsede </mat-header-cell>
-        <mat-cell *matCellDef="let cliente"> {{cliente.subsede}} </mat-cell>
+      <ng-container matColumnDef="cargo">
+        <mat-header-cell *matHeaderCellDef> Cargo </mat-header-cell>
+        <mat-cell *matCellDef="let cliente"> {{cliente.cargo}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="codigo">

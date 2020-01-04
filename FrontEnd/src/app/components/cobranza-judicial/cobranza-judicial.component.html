@@ -54,26 +54,78 @@
         </mat-grid-list>
       </div>
 
-      <!-- Cabecera -->
+      <!-- Datos del juzgado -->
+      <div class="seccion-secundaria">
+        <mat-card-subtitle class="titulo-seccion-secundaria">
+          DATOS DEL JUZGADO
+          <ng-container *ngIf="this.id_proceso_editar">
+            <button mat-icon-button type="button" class="icono" *ngIf="editar_juzgado>1" (click)="EditarJuzgado(1)"><mat-icon>edit</mat-icon></button>
+            <button mat-icon-button type="button" class="icono" *ngIf="editar_juzgado==1" (click)="EditarJuzgado(2)"><mat-icon>check</mat-icon></button>
+          </ng-container>
+        </mat-card-subtitle>
+        <mat-grid-list cols=6 rowHeight="70px">
+
+          <ng-container *ngIf="id_proceso_ver || (id_proceso_editar && editar_juzgado>1)">
+            <mat-grid-tile colspan=2>
+              <mat-form-field class="columnas-1">
+                <input matInput type="text" placeholder="Distrito judicial" formControlName="distrito_judicial_nombre" readonly>
+              </mat-form-field>
+            </mat-grid-tile>
+  
+            <mat-grid-tile colspan=4>
+              <mat-form-field class="columnas-2">
+                <input matInput type="text" placeholder="Instancia" formControlName="instancia_judicial_nombre" readonly>
+              </mat-form-field>
+            </mat-grid-tile>
+          </ng-container>
+
+          <ng-container *ngIf="!id_proceso_ver && id_proceso_editar && editar_juzgado==1">
+            <mat-grid-tile colspan=2>
+              <mat-form-field class="columnas-1">
+                <mat-select placeholder="Distrito judicial" formControlName="distrito_judicial" (selectionChange)="ListarInstanciasJudiciales()">
+                  <mat-option *ngFor="let distrito of Distritos" [value]="distrito.id"> {{distrito.nombre}} </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile colspan=4>
+              <mat-form-field class="columnas-2">
+                <mat-select placeholder="Instancia judicial" formControlName="instancia_judicial">
+                  <mat-option *ngFor="let instancia of Instancias" [value]="instancia.id_juzgado_instancia"> {{instancia.juzgado_instancia}} </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </mat-grid-tile>
+          </ng-container>
+
+          <mat-grid-tile colspan=3>
+            <mat-form-field class="columnas-1-5">
+              <input matInput type="text" placeholder="Juez" formControlName="juez" [readonly]="id_proceso_ver || (id_proceso_editar && editar_juzgado>1)">
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile colspan=3>
+            <mat-form-field class="columnas-1-5">
+              <input matInput type="text" placeholder="Especialista legal" formControlName="especialista" [readonly]="id_proceso_ver || (id_proceso_editar && editar_juzgado>1)">
+            </mat-form-field>
+          </mat-grid-tile>
+
+        </mat-grid-list>
+      </div>
+
+      <!-- Reporte del expediente -->
       <div class="seccion-secundaria">
         <mat-card-subtitle class="titulo-seccion-secundaria">
           REPORTE DE EXPEDIENTE
           <ng-container *ngIf="this.id_proceso_editar">
-            <button mat-icon-button type="button" class="icono" *ngIf="editar_cabecera>1" (click)="EditarCabecera(1)"><mat-icon>edit</mat-icon></button>
-            <button mat-icon-button type="button" class="icono" *ngIf="editar_cabecera==1" (click)="EditarCabecera(2)"><mat-icon>check</mat-icon></button>
+            <button mat-icon-button type="button" class="icono" *ngIf="editar_expediente>1" (click)="EditarExpediente(1)"><mat-icon>edit</mat-icon></button>
+            <button mat-icon-button type="button" class="icono" *ngIf="editar_expediente==1" (click)="EditarExpediente(2)"><mat-icon>check</mat-icon></button>
           </ng-container>
         </mat-card-subtitle>
         <mat-grid-list cols=3 rowHeight="70px">
 
-          <mat-grid-tile colspan=1>
-            <mat-form-field class="columnas-1">
-              <input matInput type="text" placeholder="Expediente" formControlName="expediente" [readonly]="id_proceso_ver || (id_proceso_editar && editar_cabecera>1)">
-            </mat-form-field>
-          </mat-grid-tile>
-
           <mat-grid-tile colspan=2>
             <mat-form-field class="columnas-2">
-              <input matInput type="text" placeholder="Juzgado" formControlName="juzgado" [readonly]="id_proceso_ver || (id_proceso_editar && editar_cabecera>1)">
+              <input matInput type="text" placeholder="Expediente" formControlName="expediente" [readonly]="id_proceso_ver || (id_proceso_editar && editar_expediente>1)">
             </mat-form-field>
           </mat-grid-tile>
 
@@ -81,19 +133,22 @@
             <mat-form-field class="columnas-1">
               <input matInput [matDatepicker]="FechaInicio" placeholder="Fecha de inicio" formControlName="fecha_inicio" readonly>
               <mat-datepicker-toggle matSuffix [for]="FechaInicio"></mat-datepicker-toggle>
-              <mat-datepicker #FechaInicio [disabled]="id_proceso_ver || (id_proceso_editar && editar_cabecera>1)"></mat-datepicker>
+              <mat-datepicker #FechaInicio [disabled]="id_proceso_ver || (id_proceso_editar && editar_expediente>1)"></mat-datepicker>
             </mat-form-field>
           </mat-grid-tile>
 
           <mat-grid-tile colspan=2>
             <mat-form-field class="columnas-2">
-              <input matInput type="text" placeholder="Sumilla" formControlName="sumilla" [readonly]="id_proceso_ver || (id_proceso_editar && editar_cabecera>1)">
+              <input matInput type="text" placeholder="Sumilla" formControlName="sumilla" [readonly]="id_proceso_ver || (id_proceso_editar && editar_expediente>1)">
             </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
           </mat-grid-tile>
 
           <mat-grid-tile colspan="1">
             <mat-form-field class="columnas-1">
-              <input matInput type="text" placeholder="Número de cuotas" formControlName="numero_cuotas" [readonly]="id_proceso_ver || (id_proceso_editar && editar_cabecera>1)">
+              <input matInput type="text" placeholder="Número de cuotas" formControlName="numero_cuotas" [readonly]="id_proceso_ver || (id_proceso_editar && editar_expediente>1)">
               <mat-error *ngIf="JudicialForm.get('numero_cuotas').invalid"> Se debe ingresar un número mayor a cero. </mat-error>
             </mat-form-field>
           </mat-grid-tile>
@@ -101,7 +156,7 @@
           <mat-grid-tile colspan="1">
             <mat-form-field class="columnas-1">
               <span matPrefix> S/. &nbsp; </span>
-              <input matInput type="text" placeholder="Total" formControlName="total" [readonly]="id_proceso_ver || (id_proceso_editar && editar_cabecera>1)">
+              <input matInput type="text" placeholder="Total" formControlName="total" [readonly]="id_proceso_ver || (id_proceso_editar && editar_expediente>1)">
               <mat-error *ngIf="JudicialForm.get('total').invalid"> Se debe ingresar un número mayor a cero. </mat-error>
             </mat-form-field>
           </mat-grid-tile>
@@ -155,6 +210,12 @@
                   </mat-form-field>
                 </mat-grid-tile>
   
+                <mat-grid-tile colspan=2 *ngIf="documento.id_trabajador>0">
+                  <mat-form-field class="columnas-2">
+                    <input matInput type="text" placeholder="Abogado" [(ngModel)]="documento.trabajador" [ngModelOptions]="{standalone:true}" readonly>
+                  </mat-form-field>
+                </mat-grid-tile>
+  
                 <mat-grid-tile colspan=2>
                   <mat-form-field class="columnas-2">
                     <input matInput type="text" placeholder="Sumilla" [(ngModel)]="documento.sumilla" [ngModelOptions]="{standalone:true}" readonly>
@@ -164,12 +225,15 @@
                 <mat-grid-tile colspan=1>
                   <ng-container *ngIf="!id_proceso_editar">
                     <button mat-icon-button color="primary" [disabled]="!documento.archivo" (click)="AbrirDocumento(documento.archivo)">
-                      <mat-icon class="icono-documentos"> visibility </mat-icon>
+                      <mat-icon> visibility </mat-icon>
                     </button>
                   </ng-container>
                   <ng-container *ngIf="id_proceso_editar">
+                    <button mat-icon-button color="primary" [disabled]="!documento.archivo" (click)="AbrirDocumento(documento.archivo)">
+                      <mat-icon> visibility </mat-icon>
+                    </button>
                     <button mat-icon-button type="button" color="primary" (click)="EditarDetalle(documento)"> <mat-icon> edit </mat-icon> </button>
-                    <button mat-icon-button type="button" color="primary" (click)="EliminarDetalle(documento.id)"> <mat-icon> delete </mat-icon> </button>
+                    <button mat-icon-button type="button" color="primary" (click)="EliminarDetalle(documento)"> <mat-icon> delete </mat-icon> </button>
                   </ng-container>
                 </mat-grid-tile>
   

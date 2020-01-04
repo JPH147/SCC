@@ -23,6 +23,7 @@
         {
 
             $cliente->id_sub_sede = trim($_POST["prsubsede"]);
+            $cliente->id_cargo = trim($_POST["prcargo"]);
             $cliente->id_cargo_estado = trim($_POST["prcargoestado"]);
             $cliente->clt_codigo = trim($_POST["clt_codigo"]);
             $cliente->clt_dni = trim($_POST["clt_dni"]);

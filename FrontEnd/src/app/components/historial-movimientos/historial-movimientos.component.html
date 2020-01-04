@@ -38,7 +38,7 @@
 
     <mat-grid-tile>
       <mat-form-field>
-        <input matInput [matDatepicker]="Inicio" placeholder="Fecha de inicio" [(ngModel)]="fecha_inicio" (dateChange)="CargarInformacion()">
+        <input matInput [matDatepicker]="Inicio" placeholder="Fecha de inicio" [(ngModel)]="fecha_inicio" (dateChange)="CargarInformacion()" readonly>
         <mat-datepicker-toggle matSuffix [for]="Inicio"></mat-datepicker-toggle>
         <mat-datepicker #Inicio ></mat-datepicker>
       </mat-form-field>
@@ -46,7 +46,7 @@
 
     <mat-grid-tile>
       <mat-form-field>
-        <input matInput [matDatepicker]="Salida" placeholder="Fecha de fin" [(ngModel)]="fecha_fin" (dateChange)="CargarInformacion()">
+        <input matInput [matDatepicker]="Salida" placeholder="Fecha de fin" [(ngModel)]="fecha_fin" (dateChange)="CargarInformacion()" readonly>
         <mat-datepicker-toggle matSuffix [for]="Salida"></mat-datepicker-toggle>
         <mat-datepicker #Salida ></mat-datepicker>
       </mat-form-field>
@@ -125,7 +125,8 @@
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let movimiento">
-          <button mat-icon-button color="primary" matTooltip="Ver detalle" [routerLink]="[movimiento.id]"><mat-icon> visibility </mat-icon></button>
+          <button mat-icon-button color="primary" matTooltip="Ver detalle" [routerLink]="['ver',movimiento.id]"><mat-icon> visibility </mat-icon></button>
+          <button mat-icon-button color="primary" matTooltip="Editar documento" [routerLink]="['editar',movimiento.id]"><mat-icon> edit </mat-icon></button>
        
         </mat-cell>
       </ng-container>

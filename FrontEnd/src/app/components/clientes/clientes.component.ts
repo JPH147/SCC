@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild, AfterViewInit, ElementRef} from '@angular/core';
-import { MatPaginator, MatSort, MatDialog, MatSnackBar } from '@angular/material';
+import { MatPaginator, MatSort, MatDialog, MatSnackBar, MatCheckbox } from '@angular/material';
 import {merge, Observable, of , fromEvent, forkJoin } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
 import {ClienteService} from './clientes.service';
@@ -26,7 +26,7 @@ import { VentanaVentasComponent } from './ventana-ventas/ventana-ventas.componen
 export class ClientesComponent implements OnInit {
 
   ListadoCliente: ClienteDataSource;
-  Columnas: string[] = ['numero', 'foto', 'codigo' , 'dni', 'nombrecliente', 'subsede' ,  'opciones'];
+  Columnas: string[] = ['numero', 'foto', 'codigo' , 'dni', 'nombrecliente', 'cargo' ,  'opciones'];
   public maestro;
   public estado: number ;
   
@@ -34,6 +34,9 @@ export class ClientesComponent implements OnInit {
   @ViewChild('InputCIP') FiltroCIP: ElementRef;
   @ViewChild('InputDNI') FiltroDni: ElementRef;
   @ViewChild('InputNombre') FiltroNombre: ElementRef;
+  @ViewChild('InputCargo') FiltroCargo: ElementRef;
+  @ViewChild('InputSubsede') FiltroSubsede: ElementRef;
+  @ViewChild('InputRelacion') FiltroRelacion : MatCheckbox ;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
@@ -49,9 +52,9 @@ export class ClientesComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-   this.ListadoCliente = new ClienteDataSource(this.Servicio);
-   this.ListadoCliente.CargarClientes('','', '','',1, 10,1);
-   this.estado=1;
+    this.ListadoCliente = new ClienteDataSource(this.Servicio);
+    this.ListadoCliente.CargarClientes(false,'','', '','','','',1, 10,1);
+    this.estado=1;
   }
 
   ngAfterViewInit() {
@@ -60,6 +63,9 @@ export class ClientesComponent implements OnInit {
       fromEvent(this.FiltroNombre.nativeElement, 'keyup'),
       fromEvent(this.FiltroCodigo.nativeElement, 'keyup'),
       fromEvent(this.FiltroCIP.nativeElement, 'keyup'),
+      fromEvent(this.FiltroCargo.nativeElement, 'keyup'),
+      fromEvent(this.FiltroSubsede.nativeElement, 'keyup'),
+      this.FiltroRelacion.change
     ).pipe(
       debounceTime(200),
       distinctUntilChanged(),
@@ -83,10 +89,13 @@ export class ClientesComponent implements OnInit {
 
   CargarData() {
     this.ListadoCliente.CargarClientes(
+      this.FiltroRelacion.checked,
       this.FiltroCodigo.nativeElement.value,
       this.FiltroCIP.nativeElement.value,
       this.FiltroDni.nativeElement.value,
       this.FiltroNombre.nativeElement.value,
+      this.FiltroCargo.nativeElement.value,
+      this.FiltroSubsede.nativeElement.value,
       this.paginator.pageIndex+1,
       this.paginator.pageSize,
       this.estado
@@ -96,7 +105,7 @@ export class ClientesComponent implements OnInit {
   Agregar() {
     // tslint:disable-next-line:prefer-const
     let VentanaClientes = this.DialogoClientes.open(VentanaEmergenteClientes, {
-      width: '1000px'
+      width: '1200px'
     });
 
     VentanaClientes.afterClosed().subscribe(res => {
@@ -115,7 +124,6 @@ export class ClientesComponent implements OnInit {
     
     VentanaConfirmar.afterClosed().subscribe(res => {
       if (res === true) {
-        // tslint:disable-next-line:no-shadowed-variable
         this.Servicio.Eliminar(cliente.id).subscribe(res => {
           this.CargarData();
         });
@@ -124,16 +132,12 @@ export class ClientesComponent implements OnInit {
   }
 
   Editar(id, confirmar) {
-    this.Servicio.Seleccionar(id).subscribe(res => {
-      // tslint:disable-next-line:prefer-const
-      let VentanaClientes = this.DialogoClientes.open(VentanaEmergenteClientes, {
-        width: '1000px',
-        data: {objeto: res, id: id, confirmar: confirmar},
-      });
-      // tslint:disable-next-line:no-shadowed-variable
-      VentanaClientes.afterClosed().subscribe (res => {
-        this.CargarData();
-      });
+    let VentanaClientes = this.DialogoClientes.open(VentanaEmergenteClientes, {
+      width: '1200px',
+      data: {id: id, confirmar: confirmar},
+    });
+    VentanaClientes.afterClosed().subscribe (res => {
+      this.CargarData();
     });
   }
 
@@ -154,11 +158,19 @@ export class ClientesComponent implements OnInit {
   }
 
   AgregarObservaciones(id){
-
     let VentanaContacto = this.DialogoContacto.open(VentanaObservacionesComponent, {
-      width: '900px',
+      width: '1200px',
       data: id
     });
+
+    VentanaContacto.afterClosed().subscribe(res=>{
+      if ( res ) {
+        this.Notificacion.Snack("Se creó la observación satisfactoriamente.","")
+      }
+      if ( res===false ) {
+        this.Notificacion.Snack("Ocurrió un error al crear la observación.","")
+      }
+    })
   }
 
   VerVentas(cliente){
@@ -214,6 +226,24 @@ export class ClientesComponent implements OnInit {
     this.FiltroNombre.nativeElement.value = "" ;
     
     this.CargarData();
+  }
+
+  DescartarTodos(){
+    let VentanaConfirmar = this.DialogoClientes.open(VentanaConfirmarComponent, {
+      width: '400px',
+      data: {objeto: 'el grupo de clientes', valor:""}
+    });
+    
+    VentanaConfirmar.afterClosed().subscribe(res => {
+      if (res === true) {
+        this.Servicio.EliminarPendientes()
+        .subscribe(res=>{
+          if(res){
+            this.CargarData();
+          }
+        })
+      }
+    });
   }
 
 }

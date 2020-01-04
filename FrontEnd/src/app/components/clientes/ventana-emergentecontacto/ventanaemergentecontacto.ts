@@ -66,12 +66,13 @@ export class VentanaEmergenteContacto {
     this.ListadoTelefonos.CargarTelefonos(this.data, 1, 5);
 
     this.TelefonosForm = this.FormBuilder.group({
-      telefono: [null,[
+      telefono: ["",[
         Validators.required,
-        Validators.minLength(7),
+        Validators.minLength(6),
+        Validators.maxLength(9),
         Validators.pattern('[0-9- ]+')
       ]],
-      tipo: [{value:2,disabled:false},[
+      tipo: [{value:1,disabled:false},[
         Validators.required,
       ]],
     });

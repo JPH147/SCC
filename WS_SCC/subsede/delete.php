@@ -39,5 +39,4 @@
     	print_json("9999", "Ocurrió un error", $exception->getMessage());
     }
 
-
 ?>

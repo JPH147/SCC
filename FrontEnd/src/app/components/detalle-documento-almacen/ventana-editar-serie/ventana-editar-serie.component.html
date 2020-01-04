@@ -12,26 +12,39 @@
 
 	<mat-card-content>
 		<mat-grid-list cols="4" rowHeight="70px">
+
+      <mat-grid-tile colspan=4 *ngIf="nuevo">
+        <mat-form-field class="columnas-4">
+          <input matInput placeholder="Producto" [matAutocomplete]="autoproducto" #InputProducto [(ngModel)]="producto" [readonly]="Informacion.id_producto">
+          <mat-icon color="primary" matSuffix (click)="RemoverProducto()" *ngIf="Informacion.id_producto"> remove_circle </mat-icon>
+          <mat-autocomplete #autoproducto="matAutocomplete" [displayWith]="displayFn2" (optionSelected)="ProductoSeleccionado($event)">
+            <mat-option *ngFor="let producto of Producto" [value]="producto">
+              {{producto.descripcion}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </mat-grid-tile>
+
       <mat-grid-tile>
-        <mat-form-field>
+        <mat-form-field class="columnas-1">
           <input matInput placeholder="Serie" [(ngModel)]="this.Informacion.serie" #InputSerie>
         </mat-form-field>
       </mat-grid-tile>
 
       <mat-grid-tile>
-        <mat-form-field>
+        <mat-form-field class="columnas-1">
           <input matInput placeholder="Color" [(ngModel)]="this.Informacion.color">
         </mat-form-field>
       </mat-grid-tile>
 
       <mat-grid-tile>
-        <mat-form-field>
+        <mat-form-field class="columnas-1">
           <input matInput placeholder="Almacenamiento" [(ngModel)]="this.Informacion.almacenamiento">
         </mat-form-field>
       </mat-grid-tile>
       
       <mat-grid-tile>
-        <mat-form-field>
+        <mat-form-field class="columnas-1">
           <span matPrefix>S/. &nbsp;</span>
           <input matInput placeholder="Precio" [(ngModel)]="this.Informacion.precio">
         </mat-form-field>
@@ -39,7 +52,7 @@
 		</mat-grid-list>
 	</mat-card-content>
 
-  <mat-card-actions>
+  <!-- <mat-card-actions> -->
     <mat-grid-list cols=1 rowHeight="40px">
       <mat-grid-tile *ngIf="repetido">
         <mat-error>La serie ya se encuentra registrada.</mat-error>
@@ -48,5 +61,6 @@
         <button mat-raised-button color="primary" [mat-dialog-close]="this.Informacion" [disabled]="repetido || verificando || (Cargando | async)">Grabar</button>
       </mat-grid-tile>
     </mat-grid-list>
-  </mat-card-actions>
+  <!-- </mat-card-actions> -->
+
 </mat-card>

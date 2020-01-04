@@ -30,6 +30,7 @@
             $transaccion->fecha = !empty($_POST["prfecha"]) ? trim($_POST["prfecha"]) : null;
             $transaccion->documento = !empty($_POST["prdocumento"]) ? trim($_POST["prdocumento"]) : '';
             $transaccion->numero_documento = !empty($_POST["prnumerodoc"]) ? trim($_POST["prnumerodoc"]) : "";
+            $transaccion->archivo = !empty($_POST["prarchivo"]) ? trim($_POST["prarchivo"]) : "";
             $transaccion->observaciones = !empty($_POST["probservaciones"]) ? trim($_POST["probservaciones"]) : "";
             
             if($transaccion->create())

@@ -23,6 +23,7 @@ import { VentanaEmergenteContacto} from '../clientes/ventana-emergentecontacto/v
 import { CreditosService } from "../creditos/creditos.service";
 import { SeguimientosService } from "../seguimientos/seguimientos.service";
 import { VentanaPagosComponent } from '../cobranzas-listar/ventana-pagos/ventana-pagos.component';
+import { VentanaEmergenteClientes } from '../clientes/ventana-emergente/ventanaemergente' ;
 
 @Component({
   selector: 'app-ventas',
@@ -82,6 +83,7 @@ export class VentasComponent implements OnInit {
   public venta_canjeada : boolean ;
   public venta_refinanciada : boolean ;
   public codigo_credito : string ;
+  public identificador_documento : string ;
 
   public foto: string;
   public dni: string;
@@ -258,7 +260,9 @@ export class VentasComponent implements OnInit {
       debounceTime(10),
       distinctUntilChanged(),
       tap(() => {
-        this.ListarVendedor(this.VentasForm.value.vendedor);
+        if( this.VentasForm.value.vendedor ){
+          this.ListarVendedor(this.VentasForm.value.vendedor);
+        }
       })
      ).subscribe();
 
@@ -267,10 +271,12 @@ export class VentasComponent implements OnInit {
       debounceTime(10),
       distinctUntilChanged(),
       tap(() => {
-        this.ListarAutorizador(this.VentasForm.value.autorizador);
+        if( this.VentasForm.value.autorizador ){
+          this.ListarAutorizador(this.VentasForm.value.autorizador);
+        }
       })
      ).subscribe();
-
+     
     this.FiltroProducto.changes.subscribe(res=>{
       for (let i in this.FiltroProducto['_results']) {
         fromEvent(this.FiltroProducto['_results'][i].nativeElement,'keyup')
@@ -332,9 +338,10 @@ export class VentasComponent implements OnInit {
 
       this.talonario=res.talonario_serie+" - "+res.talonario_contrato;
 
-      // this.ObtenerClientexId(res.id_cliente);
+      this.ObtenerClientexId(res);
       this.VentasForm.get('id_cliente').setValue(res.id_cliente);
       this.VentasForm.get('cliente').setValue(res.cliente_nombre);
+      this.VentasForm.get('dni').setValue(res.cliente_dni);
       this.VentasForm.get('cargo').setValue(res.cliente_cargo_nombre);
       this.VentasForm.get('trabajo').setValue(res.cliente_trabajo);
       this.VentasForm.get('direccion').setValue(res.cliente_direccion);
@@ -557,6 +564,9 @@ export class VentasComponent implements OnInit {
       'cliente': ["", [
         Validators.required
       ]],
+      'dni': ["", [
+        Validators.required
+      ]],
       'cargo': ["", [
       ]],
       'trabajo': ["", [
@@ -629,7 +639,9 @@ export class VentasComponent implements OnInit {
       'id_producto': [{value: null, disabled: false}, [
         Validators.required
       ]],
-      'descripcion': [{value: null, disabled: false}, [
+      'nombre': [{value: "", disabled: false}, [
+      ]],
+      'descripcion': [{value: "", disabled: false}, [
       ]],
       'id_serie': [{value: null, disabled: false}, [
         Validators.required
@@ -784,9 +796,9 @@ export class VentasComponent implements OnInit {
 
     this.ClienteServicio.Seleccionar(id_cliente).subscribe(res => {
       if (res) {
-        console.log(res)
         this.VentasForm.get('id_cliente').setValue(res.id);
         this.VentasForm.get('cliente').setValue(res.nombre);
+        this.VentasForm.get('dni').setValue(res.dni);
         this.VentasForm.get('cargo').setValue(res.cargo);
         this.VentasForm.get('trabajo').setValue(res.trabajo);
         this.Cargando.next(false);
@@ -1279,12 +1291,24 @@ export class VentasComponent implements OnInit {
 
   RemoverCliente(){
     this.VentasForm.get('id_cliente').setValue(null);
+    this.VentasForm.get('dni').setValue("");
     this.VentasForm.get('cargo').setValue("");
     this.VentasForm.get('trabajo').setValue("");
     this.VentasForm.get('direccion').setValue("");
     this.VentasForm.get('telefono').setValue("");
   }
   
+  EditarCliente(){
+    let id_cliente : number = this.VentasForm.value.id_cliente ;
+    let VentanaClientes = this.Dialogo.open(VentanaEmergenteClientes, {
+      width: '1200px',
+      data: {id: id_cliente, confirmar: false},
+    });
+    VentanaClientes.afterClosed().subscribe (res => {
+      this.ObtenerClientexId(id_cliente)
+    });
+  }
+
   EditarContactoCliente(){
 
     let id_cliente = this.VentasForm.value.id_cliente ? this.VentasForm.value.id_cliente : this.idcliente;
@@ -1396,6 +1420,11 @@ export class VentasComponent implements OnInit {
     this.VentasForm['controls'].productos['controls'][0].get('precio').setValue(1000);
   }
 
+  CrearidentificadorDocumento(evento){
+    let contrato = this.LstContrato.filter(e=>e.id == evento.value)[0].numero ;
+    this.identificador_documento = this.VentasForm.value.talonario + "-" + contrato ;
+  }
+
   Guardar(formulario){
     
     this.Cargando.next(true);
@@ -1410,18 +1439,21 @@ export class VentasComponent implements OnInit {
   GuardarVenta(formulario) {
 
     let random=(new Date()).getTime()
+    let identificador = this.identificador_documento ;
+    let dni = this.VentasForm.value.dni ;
+    let fecha = moment(this.VentasForm.value.fechaventa).format("DD_MM_YYYY") ;
 
     return forkJoin(
-      this.ServiciosGenerales.RenameFile(this.foto,'FOTO',random.toString(),"venta"),
-      this.ServiciosGenerales.RenameFile(this.dni,'DNI',random.toString(),"venta"),
-      this.ServiciosGenerales.RenameFile(this.cip,'CIP',random.toString(),"venta"),
-      this.ServiciosGenerales.RenameFile(this.contrato,'CONTRATO',random.toString(),"venta"),
-      this.ServiciosGenerales.RenameFile(this.transaccion,'TRANSACCION',random.toString(),"venta"),
-      this.ServiciosGenerales.RenameFile(this.planilla,'PLANILLA',random.toString(),"venta"),
-      this.ServiciosGenerales.RenameFile(this.letra,'LETRA',random.toString(),"venta"),
-      this.ServiciosGenerales.RenameFile(this.autorizacion,'AUTORIZACION',random.toString(),"venta"),
-      this.ServiciosGenerales.RenameFile(this.otros,'OTROS',random.toString(),"venta"),
-      this.ServiciosGenerales.RenameFile(this.papeles,'PAPELES',random.toString(),"venta")
+      this.ServiciosGenerales.RenameFile(this.foto, dni + '_FOTO_' + fecha, identificador, "venta"),
+      this.ServiciosGenerales.RenameFile(this.dni, dni + '_DNI_' + fecha, identificador, "venta"),
+      this.ServiciosGenerales.RenameFile(this.cip, dni + '_CIP_' + fecha, identificador, "venta"),
+      this.ServiciosGenerales.RenameFile(this.contrato, dni + '_CONTRATO_' + fecha, identificador, "venta"),
+      this.ServiciosGenerales.RenameFile(this.transaccion, dni + '_TRANSACCION_' + fecha, identificador, "venta"),
+      this.ServiciosGenerales.RenameFile(this.planilla, dni + '_PLANILLA_' + fecha, identificador, "venta"),
+      this.ServiciosGenerales.RenameFile(this.letra, dni + '_LETRA_' + fecha, identificador, "venta"),
+      this.ServiciosGenerales.RenameFile(this.autorizacion, dni + '_AUTORIZACION_' + fecha, identificador, "venta"),
+      this.ServiciosGenerales.RenameFile(this.otros, dni + '_OTROS_' + fecha, identificador, "venta"),
+      this.ServiciosGenerales.RenameFile(this.papeles, dni + '_PAPELES_' + fecha, identificador, "venta")
     ).subscribe(resultado=>{
       console.log(resultado)
       this.Servicio.CrearVenta(
@@ -1549,18 +1581,21 @@ export class VentasComponent implements OnInit {
   ActualizarVenta(formulario){
 
     let random=(new Date()).getTime();
-
+    let identificador = this.identificador_documento ;
+    let dni = this.VentasForm.value.dni ;
+    let fecha = moment(this.VentasForm.value.fechaventa).format("DD_MM_YYYY") ;
+    
     return forkJoin(
-      this.ServiciosGenerales.RenameFile(this.foto_nuevo,'DNI',random.toString(),"venta"),
-      this.ServiciosGenerales.RenameFile(this.dni_nuevo,'DNI',random.toString(),"venta"),
-      this.ServiciosGenerales.RenameFile(this.cip_nuevo,'CIP',random.toString(),"venta"),
-      this.ServiciosGenerales.RenameFile(this.contrato_nuevo,'CONTRATO',random.toString(),"venta"),
-      this.ServiciosGenerales.RenameFile(this.transaccion_nuevo,'TRANSACCION',random.toString(),"venta"),
-      this.ServiciosGenerales.RenameFile(this.planilla_nuevo,'PLANILLA',random.toString(),"venta"),
-      this.ServiciosGenerales.RenameFile(this.letra_nuevo,'LETRA',random.toString(),"venta"),
-      this.ServiciosGenerales.RenameFile(this.autorizacion_nuevo,'AUTORIZACION',random.toString(),"venta"),
-      this.ServiciosGenerales.RenameFile(this.otros_nuevo,'OTROS',random.toString(),"venta"),
-      this.ServiciosGenerales.RenameFile(this.papeles_nuevo,'PAPELES',random.toString(),"venta"),
+      this.ServiciosGenerales.RenameFile(this.foto_nuevo, dni + '_FOTO_' + fecha, identificador, "venta"),
+      this.ServiciosGenerales.RenameFile(this.dni_nuevo, dni + '_DNI_' + fecha, identificador, "venta"),
+      this.ServiciosGenerales.RenameFile(this.cip_nuevo, dni + '_CIP_' + fecha, identificador, "venta"),
+      this.ServiciosGenerales.RenameFile(this.contrato_nuevo, dni + '_CONTRATO_' + fecha, identificador, "venta"),
+      this.ServiciosGenerales.RenameFile(this.transaccion_nuevo, dni + '_TRANSACCION_' + fecha, identificador, "venta"),
+      this.ServiciosGenerales.RenameFile(this.planilla_nuevo, dni + '_PLANILLA_' + fecha, identificador, "venta"),
+      this.ServiciosGenerales.RenameFile(this.letra_nuevo, dni + '_LETRA_' + fecha, identificador, "venta"),
+      this.ServiciosGenerales.RenameFile(this.autorizacion_nuevo, dni + '_AUTORIZACION_' + fecha, identificador, "venta"),
+      this.ServiciosGenerales.RenameFile(this.otros_nuevo, dni + '_OTROS_' + fecha, identificador, "venta"),
+      this.ServiciosGenerales.RenameFile(this.papeles_nuevo, dni + '_PAPELES_' + fecha, identificador, "venta")
     ).subscribe(resultado=>{
       // console.log(resultado)
 

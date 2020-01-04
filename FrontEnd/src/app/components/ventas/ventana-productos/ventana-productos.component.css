@@ -6,3 +6,14 @@
 .mat-column-opciones{
 	max-width: 10%
 }
+
+mat-card-content{
+	width: 90%;
+	position: relative;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.spinner-container{
+	top: 100px !important;
+}

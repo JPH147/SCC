@@ -18,28 +18,69 @@ export class ClienteService {
   cip:string,
   dni: string,
   nombre: string,
+  cargo: string,
+  subsede: string,
   prpagina: number,
   prtotalpagina: number,
   estado : number
   ): Observable<any>  {
      return this.http.get(this.url + 'cliente/read.php',{
        params: new HttpParams()
-      //  .set('prinstitucion', institucion)
-      //  .set('prsede',sede)
-      //  .set('prsubsede',subsede)
-      //  .set('prcargo',cargo)
        .set('prcodigo',codigo)
        .set('prcip',cip)
        .set('prdni',dni)
        .set('prnombre',nombre)
+       .set('prcargo',cargo)
+       .set('prsubsede',subsede)
        .set('prpagina',prpagina.toString())
        .set('prtotalpagina',prtotalpagina.toString())
        .set('prestado', estado.toString())
      }).pipe(map(res => {
       if (res['codigo'] === 0) {
-        res['data'].clientes.forEach((item)=>{
-          item.foto= URLIMAGENES.carpeta + 'cliente/' + item.foto;
-        })
+        res['data'].clientes = res['data'].clientes.map(item=>{
+                                item.foto = URLIMAGENES.carpeta + 'cliente/' + item.foto;
+                                item.dni = item.dni.substring(1,item.dni.length);
+                                item.codigo = item.codigo.substring(1,item.codigo.length);
+                                return item;
+                              })
+        return res;
+      }else {
+        console.log('No hay datos que mostrar');
+        return res;
+      }
+    }));
+  }
+
+  ListadoComercial(
+  codigo:string,
+  cip:string,
+  dni: string,
+  nombre: string,
+  cargo: string,
+  subsede: string,
+  prpagina: number,
+  prtotalpagina: number,
+  estado : number
+  ): Observable<any>  {
+     return this.http.get(this.url + 'cliente/read-comercial.php',{
+       params: new HttpParams()
+       .set('prcodigo',codigo)
+       .set('prcip',cip)
+       .set('prdni',dni)
+       .set('prnombre',nombre)
+       .set('prcargo',cargo)
+       .set('prsubsede',subsede)
+       .set('prpagina',prpagina.toString())
+       .set('prtotalpagina',prtotalpagina.toString())
+       .set('prestado', estado.toString())
+     }).pipe(map(res => {
+      if (res['codigo'] === 0) {
+        res['data'].clientes = res['data'].clientes.map(item=>{
+                                item.foto = URLIMAGENES.carpeta + 'cliente/' + item.foto;
+                                item.dni = item.dni.substring(1,item.dni.length);
+                                item.codigo = item.codigo.substring(1,item.codigo.length);
+                                return item;
+                              })
         return res;
       }else {
         console.log('No hay datos que mostrar');
@@ -77,6 +118,7 @@ export class ClienteService {
 
   Agregar(
     id_subsede:number,
+    cargo: number,
     cargo_estado: number,
     clt_codigo: string,
     clt_dni: string,
@@ -95,6 +137,7 @@ export class ClienteService {
 
     let params = new HttpParams()
       .set('prsubsede', id_subsede.toString())
+      .set('prcargo', cargo.toString())
       .set('prcargoestado', cargo_estado.toString())
       .set('clt_codigo', clt_codigo)
       .set('clt_dni', clt_dni)
@@ -120,6 +163,7 @@ export class ClienteService {
   Actualizar(
     idcliente: number,
     id_subsede: number,
+    cargo: number,
     cargo_estado: number,
     clt_codigo: string,
     clt_dni: string,
@@ -139,6 +183,7 @@ export class ClienteService {
     let params = new HttpParams()
     .set('idcliente', idcliente.toString())
     .set('id_subsede', id_subsede.toString())
+    .set('prcargo', cargo.toString())
     .set('prcargoestado', cargo_estado.toString())
     .set('clt_codigo', clt_codigo)
     .set('clt_dni', clt_dni)
@@ -147,21 +192,21 @@ export class ClienteService {
     .set('clt_email', clt_email)
     .set('clt_casilla', clt_casilla)
     .set('clt_trabajo', clt_trabajo)
-    .set('prdistritotrabajo',id_distrito.toString())
+    .set('prdistritotrabajo',id_distrito ? id_distrito.toString() : "0")
     .set('prcapacidadpago', capacidad_pago.toString())
     .set('prmaximodescuento', maximo_descuento.toString())
     .set('clt_calificacion_personal',clt_calificacion_personal)
     .set('clt_aporte',clt_aporte.toString())
     .set('prestado',estado.toString())
-    
-    console.log(params);
-    
+
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     return this.http.post(this.url + 'cliente/update.php', params, {headers: headers});
   }
 
-  ActualizarFoto(idcliente: number,
-  clt_foto: string): Observable<any> {
+  ActualizarFoto(
+    idcliente: number,
+    clt_foto: string
+  ): Observable<any> {
     let params = new HttpParams()
     .set('idcliente', idcliente.toString())
     .set('clt_foto', clt_foto);
@@ -185,6 +230,20 @@ export class ClienteService {
         console.log('No hay datos que mostrar');
       }
     }));
+  }
+
+  EliminarPendientes(
+  ) : Observable<any> {
+    let params = new HttpParams() ;
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded') ;
+    return this.http.post(this.url + 'cliente/delete-pendientes.php', params, { headers : headers } )
+    .pipe(map(res=>{
+      if( res['codigo']===0 ) {
+        return true ;
+      } else {
+        return false ;
+      }
+    }))
   }
 
   /******************************************/
@@ -249,16 +308,25 @@ export class ClienteService {
 
   CrearObservacion(
     cliente:number,
+    fecha: Date,
     observacion:string,
-    fecha: Date
+    nombre_archivo : string ,
   ){
     let params = new HttpParams()
     .set('prcliente', cliente.toString())
-    .set('probservacion', observacion)
     .set('prfecha', moment(fecha).format("YYYY-MM-DD"))
+    .set('probservacion', observacion)
+    .set('prarchivo', nombre_archivo) ;
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-    return this.http.post(this.url + 'clienteobservacion/create.php', params, {headers: headers});
+    return this.http.post(this.url + 'clienteobservacion/create.php', params, {headers: headers})
+    .pipe(map(res=>{
+      if( res['codigo']===0 ) {
+        return true ;
+      } else {
+        return false ;
+      }
+    }))
   }
 
   ListarObservacion(
@@ -310,11 +378,11 @@ export class ClienteService {
   }
 
   ListarCargoEstado(
-    id_cargo:number
+    id_sede:number
   ){
     return this.http.get(this.url + 'cargo/read-cargo-estado.php',{
        params: new HttpParams()
-       .set('prcargo', id_cargo.toString())
+       .set('prsede', id_sede.toString())
      }).pipe(map(res => {
       if (res['codigo'] === 0) {
         return res['data'];

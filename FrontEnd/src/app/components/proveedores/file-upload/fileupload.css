@@ -1,0 +1,12 @@
+.imagen-cliente{
+	max-height: 400px;
+	max-width: 80%;
+	display:block;
+    margin:auto;
+}
+
+.card-imagen{
+	border-style:  groove;
+	border-width: 10px;
+	background-color: rgb(240, 240, 2240)  
+}

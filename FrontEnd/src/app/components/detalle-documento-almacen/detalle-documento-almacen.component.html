@@ -16,85 +16,103 @@
 	      <mat-spinner></mat-spinner>
 		</div>
 
-			<mat-grid-list cols=3 rowHeight="70px">
-			
-				<mat-grid-tile>
-					<strong>ALMACEN: &nbsp;</strong> {{almacen}}
-				</mat-grid-tile>
+    <mat-grid-list cols=3 rowHeight="70px">
+    
+      <mat-grid-tile>
+        <strong>ALMACEN: &nbsp;</strong> {{almacen}}
+      </mat-grid-tile>
 
-				<mat-grid-tile>
-					<strong>TIPO: &nbsp;</strong> {{tipo}}
-				</mat-grid-tile>
+      <mat-grid-tile>
+        <strong>TIPO: &nbsp;</strong> {{tipo}}
+      </mat-grid-tile>
 
-				<mat-grid-tile [ngSwitch]="referencia">
-					<strong *ngSwitchCase="1">PROVEEDOR: &nbsp;</strong>
-					<strong *ngSwitchCase="2">CLIENTE: &nbsp;</strong>
-					<strong *ngSwitchCase="3">SALIDA DE VENTA: &nbsp;</strong>
-					<strong *ngSwitchCase="4">SUCURSAL: &nbsp;</strong>
-					<strong *ngSwitchCase="5">VENDEDOR: &nbsp;</strong>
-					{{referente}}
-				</mat-grid-tile>
+      <mat-grid-tile [ngSwitch]="referencia">
+        <strong *ngSwitchCase="1">PROVEEDOR: &nbsp;</strong>
+        <strong *ngSwitchCase="2">CLIENTE: &nbsp;</strong>
+        <strong *ngSwitchCase="3">SALIDA DE VENTA: &nbsp;</strong>
+        <strong *ngSwitchCase="4">SUCURSAL: &nbsp;</strong>
+        <strong *ngSwitchCase="5">VENDEDOR: &nbsp;</strong>
+        {{referente}}
+      </mat-grid-tile>
 
-				<mat-grid-tile>
-					<strong>DOCUMENTO: &nbsp;</strong> {{documento}}
-				</mat-grid-tile>
+      <mat-grid-tile>
+        <strong>DOCUMENTO: &nbsp;</strong> {{documento}}
+      </mat-grid-tile>
 
-				<mat-grid-tile>
-					<strong>FECHA: &nbsp;</strong> {{fecha | date:"dd/MM/yyyy"}}
-				</mat-grid-tile>
+      <mat-grid-tile>
+        <strong>FECHA: &nbsp;</strong> {{fecha | date:"dd/MM/yyyy"}}
+      </mat-grid-tile>
 
-				<mat-grid-tile colspan=3 *ngIf="observacion">
-          <strong>OBSERVACIONES: &nbsp;</strong> {{observacion}}
-        </mat-grid-tile>
+      <mat-grid-tile>
+        <button mat-icon-button color="primary" matTooltip (click)="EditarDocumento()"> <mat-icon> edit </mat-icon> </button>
+      </mat-grid-tile>
 
-			</mat-grid-list>
+      <mat-grid-tile colspan=3 *ngIf="observacion">
+        <strong>OBSERVACIONES: &nbsp;</strong> {{observacion}}
+      </mat-grid-tile>
+
+    </mat-grid-list>
 
 		<mat-card-subtitle>
-			Detalle de docu
+			Detalle de documento
 		</mat-card-subtitle>
-	
-		<table  class="tabla-detalle">
-		  <tr>
-		  	<th>N°</th>
+  
+    <mat-grid-list cols=1 rowHeight="60px">
+      <mat-grid-tile>
+        <button mat-mini-fab color="primary" matTooltip="Agregar producto" (click)="AgregarSerie()" class="derecha">
+          <mat-icon> add </mat-icon>
+        </button>
+      </mat-grid-tile>
+    </mat-grid-list>
 
-		  	<th>PRODUCTO</th>
+    <mat-table [dataSource]="ListadoInformacion" class="mat-elevation-z8">
 
-		    <th>SERIE</th>
+      <ng-container matColumnDef="numero">
+        <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+        <mat-cell *matCellDef="let detalle"> {{ detalle.numero }} </mat-cell>
+      </ng-container>
 
-		    <th>COLOR</th> 
+      <ng-container matColumnDef="producto">
+        <mat-header-cell *matHeaderCellDef> Producto </mat-header-cell>
+        <mat-cell *matCellDef="let detalle"> {{ detalle.producto }} </mat-cell>
+      </ng-container>
 
-		    <th>ALMACENAMIENTO</th>
+      <ng-container matColumnDef="serie">
+        <mat-header-cell *matHeaderCellDef> Serie </mat-header-cell>
+        <mat-cell *matCellDef="let detalle"> {{ detalle.serie }}</mat-cell>
+      </ng-container>
 
-		    <!-- <th>CANTIDAD</th> -->
-		    <th *ngIf="referencia==1">PRECIO</th>
+      <ng-container matColumnDef="color">
+        <mat-header-cell *matHeaderCellDef> Color </mat-header-cell>
+        <mat-cell *matCellDef="let detalle"> {{ detalle.color }}</mat-cell>
+      </ng-container>
 
-		    <th>OBSERVACIONES</th>
+      <ng-container matColumnDef="almacenamiento">
+        <mat-header-cell *matHeaderCellDef> Almacenamiento </mat-header-cell>
+        <mat-cell *matCellDef="let detalle"> {{ detalle.almacenamiento }} </mat-cell>
+      </ng-container>
 
-		    <th *ngIf="id_tipo==1 && !this.data">OPCIONES</th>
+      <ng-container matColumnDef="precio">
+        <mat-header-cell *matHeaderCellDef> Precio </mat-header-cell>
+        <mat-cell *matCellDef="let detalle"> {{ detalle.precio | currency:'S/.' }} </mat-cell>
+      </ng-container>
 
-		  </tr>
-		  <tr *ngFor="let detalle of detalle">
+      <ng-container matColumnDef="observaciones">
+        <mat-header-cell *matHeaderCellDef> Observaciones </mat-header-cell>
+        <mat-cell *matCellDef="let detalle"> {{ detalle.observaciones }} </mat-cell>
+      </ng-container>
 
-		    <td class="detalle-columnas" id="detalle-numero">{{detalle.numero}}</td> 
+      <ng-container matColumnDef="opciones">
+        <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
+        <mat-cell *matCellDef="let detalle">
+          <button mat-icon-button color="primary" (click)="Editar(detalle)"> <mat-icon> edit </mat-icon> </button>
+          <button mat-icon-button color="primary" (click)="Eliminar(detalle)"> <mat-icon> delete </mat-icon> </button>
+        </mat-cell>
+      </ng-container>
 
-		    <td class="detalle-columnas" id="detalle-producto">{{detalle.producto}}</td>
-
-		    <td class="detalle-columnas" id="detalle-serie">{{detalle.serie}}</td> 
-
-		    <td class="detalle-columnas" id="detalle-color">{{detalle.color}}</td>
-
-		    <td class="detalle-columnas" id="detalle-almacenamiento">{{detalle.almacenamiento}}</td>
-
-			<td class="detalle-columnas" id="detalle-precio" *ngIf="referencia ==1">{{detalle.precio | currency:'S/.' }}</td>
-
-		    <td class="detalle-columnas" id="detalle-observacion">{{detalle.observacion}}</td>
-
-		    <td class="detalle-columnas" id="detalle-opciones" *ngIf="id_tipo==1 && !this.data">
-		    	<button mat-icon-button color="primary" (click)="Editar(detalle)"> <mat-icon>edit</mat-icon> </button>
-		    </td>
-		  </tr>
-		</table>		
-
+      <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: Columnas;"></mat-row>
+    </mat-table>
 	</mat-card-content>
 
 

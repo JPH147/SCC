@@ -5,6 +5,11 @@
     <mat-toolbar-row *ngIf="data">Editar cliente</mat-toolbar-row>
   </mat-toolbar>
 
+
+  <div class = "spinner-container" *ngIf = "Cargando| async">
+    <mat-spinner></mat-spinner>
+  </div>
+
     <form [formGroup]="ClientesForm" (ngSubmit)="Guardar(ClientesForm)">
       <mat-card-content>
 
@@ -17,7 +22,8 @@
 
             <mat-grid-tile colspan="1">
               <mat-form-field class="input-ventanaa">
-                <input matInput placeholder="Código" formControlName="codigo">
+                <input matInput placeholder="Código" formControlName="codigo" maxlength="10">
+                <mat-hint align="end">{{ClientesForm.value.codigo?.length || 0}}/10</mat-hint>
               </mat-form-field>
             </mat-grid-tile>
 
@@ -25,6 +31,7 @@
               <mat-form-field class="input-ventanaa">
                 <input matInput placeholder="DNI"  formControlName="dni" maxlength="8" #InputCliente>
                 <mat-error *ngIf="ClientesForm.get('dni').invalid">Debes escribir 8 dígitos</mat-error>
+                <mat-hint align="end">{{ClientesForm.value.dni?.length || 0}}/8</mat-hint>
               </mat-form-field>
             </mat-grid-tile>
 
@@ -101,7 +108,7 @@
 
             <mat-grid-tile colspan="1">
               <mat-form-field class="input-ventanaa">
-                <mat-select placeholder='Cargo' formControlName="cargo" (selectionChange)="CargoSeleccionado($event)">
+                <mat-select placeholder='Cargo' formControlName="cargo">
                   <mat-option *ngFor="let cargo of Cargos" [value] = "cargo.id"> {{cargo.nombre}} </mat-option>
                 </mat-select>
               </mat-form-field>
@@ -117,7 +124,8 @@
 
             <mat-grid-tile colspan="1">
               <mat-form-field class="input-ventanaa">
-                <input matInput placeholder="CIP" formControlName="cip">
+                <input matInput placeholder="CIP" formControlName="cip" maxlength="10">
+                <mat-hint align="end">{{ClientesForm.value.cip?.length || 0}}/10</mat-hint>
               </mat-form-field>
             </mat-grid-tile>
 
@@ -135,7 +143,7 @@
               <mat-form-field class="input-ventanaa">
                 <mat-select placeholder='Departamento' formControlName="departamento" (selectionChange)="DepartamentoSeleccionado($event)" >
                   <mat-option *ngFor="let departamento of Departamentos" [value]="departamento.nombre">
-                    {{departamento.nombre}}
+                    {{ departamento.nombre | uppercase }}
                   </mat-option>
                 </mat-select>
               </mat-form-field>
@@ -145,7 +153,7 @@
               <mat-form-field class="input-ventanaa">
                 <mat-select placeholder='Provincia' formControlName="provincia" (selectionChange)="ProvinciaSeleccionada($event)">
                   <mat-option *ngFor="let provincia of Provincias" [value]="provincia.nombre">
-                    {{provincia.nombre}}
+                    {{ provincia.nombre | uppercase }}
                   </mat-option>
                 </mat-select>
               </mat-form-field>
@@ -155,7 +163,7 @@
               <mat-form-field class="input-ventanaa">
                 <mat-select placeholder='Distrito' formControlName="distrito" >
                   <mat-option *ngFor="let distrito of Distritos" [value]="distrito.id">
-                    {{distrito.nombre}}
+                    {{ distrito.nombre | uppercase }}
                   </mat-option>
                 </mat-select>
               </mat-form-field>
@@ -217,7 +225,7 @@
           </mat-grid-tile>
 
           <mat-grid-tile>
-            <button type="submit" mat-raised-button color="primary" [disabled]="ClientesForm.invalid || cliente_nuevo==2" matTooltip="Grabar"> Guardar </button>
+            <button type="submit" mat-raised-button color="primary" [disabled]="( Cargando | async )||  ClientesForm.invalid || cliente_nuevo==2" matTooltip="Grabar"> Guardar </button>
             <!-- <button type="button" mat-raised-button (click)="Imprimir()">Imprimir</button> -->
           </mat-grid-tile>
         </mat-grid-list>

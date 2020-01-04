@@ -16,7 +16,7 @@ export class MenuComponent implements OnInit{
   ngOnInit(){
     this.menu=[
       {
-        nombre: "Clientes",
+        nombre: "Maestro general",
         icono: "person",
         disabled:false,
         submenu:[
@@ -155,13 +155,21 @@ export class MenuComponent implements OnInit{
         icono: "table_chart",
         disabled:false,
         submenu:[
-          {
-            nombre: "Cooperativa",
-            path: ""
-          },
+          // {
+          //   nombre: "Cooperativa",
+          //   path: ""
+          // },
           {
             nombre: "Direcciones",
             path: "direcciones"
+          },
+          {
+            nombre: "Instituciones",
+            path: "instituciones"
+          },
+          {
+            nombre: "Instancias judiciales",
+            path: "proceso-judicial-vinculados"
           },
           {
             nombre: "Plantillas",

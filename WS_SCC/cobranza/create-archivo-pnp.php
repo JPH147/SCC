@@ -26,7 +26,7 @@
     {
     
         $detalle = json_decode($_POST["prdetalle"],true) ;
-        $codigo = $_POST["prcodigo"] ;
+        $codigo = "14070000" ;
         
         foreach ( $detalle as $item ) {
             if( $item['considerar'] ) {

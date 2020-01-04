@@ -20,8 +20,9 @@
         if (($_POST["prcliente"])!=null)
         {
             $observacion->id_cliente = trim($_POST["prcliente"]);
-            $observacion->observacion = trim($_POST["probservacion"]);
             $observacion->fecha = trim($_POST["prfecha"]);
+            $observacion->observacion = trim($_POST["probservacion"]);
+            $observacion->archivo = trim($_POST["prarchivo"]);
 
             if($observacion->create())
             {

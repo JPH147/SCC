@@ -103,7 +103,7 @@ export class ClienteDataSource implements DataSource<any> {
   ){
     this.CargandoInformacion.next(true);
 
-    this.Servicio.Listado( codigo, cip, dni, nombre, prpagina, 5,1)
+    this.Servicio.Listado( codigo, cip, dni, nombre,'','', prpagina, 5,1)
     .pipe(catchError(() => of([])),
       finalize(() => this.CargandoInformacion.next(false))
     ).subscribe(res => {

@@ -37,8 +37,8 @@ export class HistorialMovimientosComponent implements OnInit {
 
   ngOnInit() {
 
-  	this.fecha_inicio= moment(new Date()).subtract(5,'year').toDate();
-  	this.fecha_fin= new Date();
+  	this.fecha_inicio = null ;
+  	this.fecha_fin = null ;
 
   	this.ListadoMovimientos = new HistorialMovimientosDataService(this.Servicio);
     this.ListadoMovimientos.CargarDatos("",0,0,"",this.fecha_inicio,this.fecha_fin,"",1,10,"fecha desc");

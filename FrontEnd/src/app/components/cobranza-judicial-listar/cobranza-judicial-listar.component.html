@@ -17,7 +17,14 @@
     <mat-grid-tile>
       <mat-icon>search</mat-icon>
       <mat-form-field>
-        <input matInput placeholder="Juzgado" #InputJuzgado>
+        <input matInput placeholder="Distrito judicial" #InputDistrito>
+      </mat-form-field>
+    </mat-grid-tile>
+
+    <mat-grid-tile>
+      <mat-icon>search</mat-icon>
+      <mat-form-field>
+        <input matInput placeholder="Instancia" #InputJuzgado>
       </mat-form-field>
     </mat-grid-tile>
 
@@ -106,9 +113,9 @@
         <mat-cell *matCellDef="let proceso"> {{proceso.juzgado}} </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="cliente_dni">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> DNI </mat-header-cell>
-        <mat-cell *matCellDef="let proceso"> {{proceso.cliente_dni}} </mat-cell>
+      <ng-container matColumnDef="vendedor">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Abogado </mat-header-cell>
+        <mat-cell *matCellDef="let proceso"> {{proceso.vendedor}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="cliente_nombre">

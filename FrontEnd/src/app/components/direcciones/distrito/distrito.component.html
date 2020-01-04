@@ -46,17 +46,17 @@
 
       <ng-container matColumnDef="departamento">
         <mat-header-cell *matHeaderCellDef> Departamento </mat-header-cell>
-        <mat-cell *matCellDef="let distrito"> {{distrito.departamento}} </mat-cell>
+        <mat-cell *matCellDef="let distrito"> {{ distrito.departamento  | uppercase }} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="provincia">
         <mat-header-cell *matHeaderCellDef> Provincia </mat-header-cell>
-        <mat-cell *matCellDef="let distrito"> {{distrito.provincia}} </mat-cell>
+        <mat-cell *matCellDef="let distrito"> {{ distrito.provincia  | uppercase }} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="nombre">
         <mat-header-cell *matHeaderCellDef> Distrito </mat-header-cell>
-        <mat-cell *matCellDef="let distrito"> {{distrito.nombre}} </mat-cell>
+        <mat-cell *matCellDef="let distrito"> {{ distrito.nombre | uppercase}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="opciones">

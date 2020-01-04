@@ -18,6 +18,7 @@ export class CobranzaJudicialService {
 
   Listar(
     expediente:string,
+    distrito:string,
     juzgado:string,
     dni:string,
     nombre:string,
@@ -30,6 +31,7 @@ export class CobranzaJudicialService {
   ): Observable<any> {
     let params = new HttpParams()
       .set('prexpediente',expediente)
+      .set('prdistrito',distrito)
       .set('prjuzgado',juzgado)
       .set('prdni',dni)
       .set('prnombre',nombre)
@@ -53,19 +55,19 @@ export class CobranzaJudicialService {
 
   ListarxId(
     id_proceso : number
-  ){
+  ) :Observable<any> {
     let params = new HttpParams()
-    .set('prid',id_proceso.toString() );
+      .set('prid',id_proceso.toString() );
 
-  return this.http.get(this.url + 'procesojudicial/readxId.php', {params})
-  .pipe(map(res => {
-    if (res['codigo'] === 0) {
-      return res['data'];
-    } else {
-      console.log('No hay datos que mostrar');
-      return res;
-    }
-  }));
+    return this.http.get(this.url + 'procesojudicial/readxId.php', {params})
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res['data'];
+      } else {
+        console.log('No hay datos que mostrar');
+        return res;
+      }
+    }));
   }
 
   ListarDetallexProceso(
@@ -89,7 +91,9 @@ export class CobranzaJudicialService {
     id_venta:number,
     id_credito:number,
     expediente: string,
-    juzgado: string,
+    instancia: number,
+    juez: string,
+    especialista: string,
     fecha_inicio: Date,
     sumilla: string ,
     numero_cuotas : number ,
@@ -99,11 +103,14 @@ export class CobranzaJudicialService {
       .set('prventa', id_venta.toString())
       .set('prcredito', id_credito.toString())
       .set('prexpediente', expediente)
-      .set('prjuzgado', juzgado)
+      .set('prinstancia', instancia.toString())
+      .set('prjuez', juez)
+      .set('prespecialista', especialista)
       .set('prfecha', moment(fecha_inicio).format("YYYY-MM-DD"))
       .set('prsumilla', sumilla )
       .set('prnumerocuotas', numero_cuotas.toString() )
       .set('prtotal', total.toString() );    
+    
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -123,6 +130,7 @@ export class CobranzaJudicialService {
     id_proceso:number,
     tipo_documento:string,
     fecha:Date,
+    trabajador:number,
     numero: number,
     sumilla: string,
     archivo: string,
@@ -132,6 +140,7 @@ export class CobranzaJudicialService {
       .set('prproceso', id_proceso.toString())
       .set('prdocumento', tipo_documento)
       .set('prfecha', moment(fecha).format("YYYY-MM-DD"))
+      .set('prtrabajador', trabajador.toString())
       .set('prnumero', numero.toString())
       .set('prsumilla', sumilla)
       .set('prarchivo', archivo)
@@ -203,7 +212,9 @@ export class CobranzaJudicialService {
   ActualizarProcesoCabecera(
     id_proceso:number,
     expediente: string,
-    juzgado: string,
+    instancia: number,
+    juez: string,
+    especialista: string,
     fecha_inicio: Date,
     sumilla: string ,
     numero_cuotas : number ,
@@ -212,7 +223,9 @@ export class CobranzaJudicialService {
     let params = new HttpParams()
       .set('prproceso', id_proceso.toString() )
       .set('prexpediente', expediente)
-      .set('prjuzgado', juzgado)
+      .set('prinstancia', instancia.toString() )
+      .set('prjuez', juez)
+      .set('prespecialista', especialista)
       .set('prfecha', moment(fecha_inicio).format("YYYY-MM-DD") )
       .set('prsumilla', sumilla )
       .set('prnumerocuotas', numero_cuotas.toString() )
@@ -236,6 +249,7 @@ export class CobranzaJudicialService {
     id_proceso_detalle:number,
     tipo_documento:string,
     fecha:Date,
+    trabajador: number,
     numero: number,
     sumilla: string,
     archivo: string,
@@ -245,12 +259,13 @@ export class CobranzaJudicialService {
       .set('prproceso', id_proceso_detalle.toString())
       .set('prdocumento', tipo_documento)
       .set('prfecha', moment(fecha).format("YYYY-MM-DD"))
+      .set('prtrabajador', trabajador.toString())
       .set('prnumero', numero.toString())
       .set('prsumilla', sumilla)
       .set('prarchivo', archivo)
       .set('prcomentarios', comentarios )
 
-    // console.log(params)
+    console.log(params)
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -306,6 +321,26 @@ export class CobranzaJudicialService {
     );
   }
 
+  ObtenerProximoNumero(
+    id_proceso:number,
+    tipo_documento:string,
+    id_proceso_detalle : number
+  ): Observable<any> {
+    let params = new HttpParams()
+      .set('prproceso',id_proceso.toString())
+      .set('prdocumento',tipo_documento)
+      .set('prprocesodetalle',id_proceso_detalle.toString()) ;
   
+    // console.log(params);
+    return this.http.get(this.url + 'procesojudicial/read-proximo.php', {params})
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res['data'];
+      } else {
+        console.log('No hay datos que mostrar');
+        return 0;
+      }
+    }));
+  }
 
 }

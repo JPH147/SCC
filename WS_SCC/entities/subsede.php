@@ -80,7 +80,7 @@ class Subsede{
 		$subsede_list=array();
 		$subsede_list["subsede"]=array();
 
-		$contador = 0;
+		$contador = $this->total_pagina*($this->numero_pagina-1);
 
 		while($row = $result->fetch(PDO::FETCH_ASSOC))
 		{
@@ -89,7 +89,9 @@ class Subsede{
 			$item = array(
 				"numero"=>$contador,
 				"id" => $id ,
+				"id_institucion" => $id_institucion ,
 				"institucion" => $institucion ,
+				"id_sede" => $id_sede ,
 				"sede" => $sede ,
 				"nombre" => $nombre ,
 				"abreviatura" => $abreviatura 

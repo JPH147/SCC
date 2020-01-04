@@ -44,9 +44,14 @@
 
     <mat-table [dataSource]="ListadoVentas" class="mat-elevation-z8">
 
-      <ng-container matColumnDef="serie">
+      <ng-container matColumnDef="documento">
         <mat-header-cell *matHeaderCellDef> Documento </mat-header-cell>
         <mat-cell *matCellDef="let venta"> {{venta.documento}}  </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="tipo">
+        <mat-header-cell *matHeaderCellDef> Tipo </mat-header-cell>
+        <mat-cell *matCellDef="let venta"> {{venta.tipo}}  </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="fecha">
@@ -56,7 +61,7 @@
 
       <ng-container matColumnDef="total">
         <mat-header-cell *matHeaderCellDef> Total </mat-header-cell>
-        <mat-cell *matCellDef="let venta"> {{venta.total}} </mat-cell>
+        <mat-cell *matCellDef="let venta"> {{venta.total | currency:'S/.'}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="estado">

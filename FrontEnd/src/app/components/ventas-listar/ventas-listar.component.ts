@@ -40,8 +40,8 @@ export class VentasListarComponent implements OnInit {
 
   ngOnInit() {
 
-    this.fecha_inicio= new Date((new Date()).valueOf() - 1000*60*60*24*120)
-    this.fecha_fin=new Date()
+    this.fecha_inicio = null ;
+    this.fecha_fin = null ;
 
     this.ListadoVentas = new VentaDataSource(this.Servicio);
     this.ListadoVentas.CargarVentas("",0,this.fecha_inicio,this.fecha_fin,1,1,10,"fecha desc");

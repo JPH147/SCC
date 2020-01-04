@@ -103,6 +103,7 @@ Class TransaccionDetalle{
             $contador=$contador+1;
             $detalle_items = array (
                 "numero"=>$contador,
+                "id"=>$id,
                 "producto"=>$producto,
                 "serie"=>$serie,
                 "id_serie"=>$id_serie,
@@ -208,26 +209,24 @@ Class TransaccionDetalle{
     }
 
     /* Eliminar producto */
-    function delete()
-    {
+    function delete(){
         $query = "call sp_eliminartransacciondetalle(?)";
         $result = $this->conn->prepare($query);
 
         $result->bindParam(1, $this->id_transaccion);
 
         if($result->execute())
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     /* Actualizar producto */
-    function update()
-    {
+    function update(){
         $query = "call sp_actualizartransacciondetalle(
             :prid,
             :prproductoserie,
@@ -256,6 +255,26 @@ Class TransaccionDetalle{
             {
                 return false;
             }
+    }
+
+    function eliminar_compra(){
+        $query = "call sp_eliminartransacciondetallecompra(?,?)";
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->id_transaccion);
+        $result->bindParam(2, $this->id_producto_serie);
+
+        $this->id_transaccion=htmlspecialchars(strip_tags($this->id_transaccion));
+        $this->id_producto_serie=htmlspecialchars(strip_tags($this->id_producto_serie));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
 ?>

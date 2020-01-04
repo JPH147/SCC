@@ -27,6 +27,8 @@ export class EvaluacionExpressComponent implements OnInit {
   @ViewChild('InputAporte') FiltroAporte : ElementRef ;
   @ViewChild('InputVendedor') VendedorAutoComplete : ElementRef;
 
+  public Hoy : Date = new Date() ;
+  public tipo : number = 1 ;
   public capital : number ;
   public cuotas : number ;
   public interes : number ;
@@ -70,6 +72,7 @@ export class EvaluacionExpressComponent implements OnInit {
   public presidente_nombre : string ;
   public presidente_dni : string ;
   public presidente_direccion : string ;
+  public interes_diario_deshabilitado : boolean = false ;
 
   constructor(
     private Builder : FormBuilder ,
@@ -197,9 +200,10 @@ export class EvaluacionExpressComponent implements OnInit {
   }
 
   CalcularInteresDiario(){
+    let fecha_prestamo = this.ExpressForm.value.fecha_letras ;
     if (this.interes_por_dia) {
       let interes = this.capital*this.interes/100;
-      this.interes_diario=Math.round( interes * (1-(moment(this.fecha_prestamo).date()/moment(this.fecha_prestamo).daysInMonth()) )*10)/10;
+      this.interes_diario=Math.round( interes * (1-(moment(fecha_prestamo).date()/moment(fecha_prestamo).daysInMonth()) )*10)/10;
     } else {
       this.interes_diario=0;
     }
@@ -207,7 +211,42 @@ export class EvaluacionExpressComponent implements OnInit {
 
   ObtenerCliente(evento){
     this.nueva_infomacion = true ;
-    this.InformacionForm = evento;
+    this.InformacionForm = evento.formulario;
+    if(evento.reset) {
+      this.ExpressForm.reset();
+      this.capital = 0 ;
+      this.cuotas = 0 ;
+      this.prestamo = 0 ;
+      this.tipo = 1 ;
+      this.interes = 15 ;
+      this.aporte = 20 ;
+      this.interes_por_dia = false ;
+      this.fecha_inicio=moment(new Date()).add(1,'month').toDate();
+      this.CorregirFecha(this.fecha_inicio);
+      this.ExpressForm.get('lugar').setValue("Ate Vitarte")
+      this.ExpressForm.get('fecha_letras').setValue(new Date())
+    }
+  }
+
+  CambioFechaInicio(){
+    let fecha_letras = this.ExpressForm.value.fecha_letras ;
+    if( this.fecha_inicio < fecha_letras ) {
+      this.ExpressForm.get('fecha_letras').setValue( this.fecha_inicio ) ;
+    }
+    this.CambioFechaLetras();
+  }
+
+  CambioFechaLetras(){
+    let mes_inicio_pagos = moment(this.fecha_inicio).month() ;
+    let mes_firma = moment(this.ExpressForm.value.fecha_letras).month() ;
+    if( mes_inicio_pagos == mes_firma ) {
+      this.interes_diario_deshabilitado = true ;
+      this.interes_por_dia = false ;
+      this.CalcularInteresDiario() ;
+    } else {
+      this.interes_diario_deshabilitado = false ;
+    }
+    this.CalcularPagos();
   }
 
   CalcularPagos(){
@@ -228,6 +267,9 @@ export class EvaluacionExpressComponent implements OnInit {
     //Se calcula el monto total y el interés
     let interes : number =  Math.round(+this.capital * (this.interes /100 ) *100 ) / 100;
     let total : number = Math.round(+this.capital * ( 1 + +this.cuotas * this.interes / 100 ) *100 ) / 100
+
+    // Se considera la fecha de inicio la fecha de firma del préstamo
+    this.fecha_prestamo = this.ExpressForm.value.fecha_letras ;
 
     // Se calculan las fechas de las cuotas
     let ano_pago = moment(this.fecha_inicio).year();
@@ -336,26 +378,90 @@ export class EvaluacionExpressComponent implements OnInit {
   // Esto no se debe ejecutar cuando la dirección viene de la BBDD.
   CrearDireccionCompleta() : string {
     let direccion :string = this.InformacionForm.value.direccion_nombre ;
-    direccion = direccion[0].toUpperCase() + direccion.slice(1);
+    // Transforma dirección a Capitalize
+    direccion = direccion.toLowerCase().replace(/\b[a-z]/g, function(letra) {
+      return letra.toUpperCase();
+    });
+    // // direccion = direccion.replace("ñ","n") ;
+    // // direccion = direccion[0].toUpperCase() + direccion.slice(1);
     
     let distrito : string = this.InformacionForm.value.direccion_distrito_nombre ;
-    distrito = distrito[0].toUpperCase() + distrito.slice(1);
-    
+    // distrito = distrito.toLowerCase().replace(/\b[a-z]/g, function(letra) {
+    //   return letra.toUpperCase();
+    // });
+    // // distrito = distrito.replace("ñ","n") ;
+    // distrito = distrito.replace(/^(.)|\s+(.)/g, function ($1) {
+    //   return $1.toUpperCase()
+    // })
+
     let provincia : string = this.InformacionForm.value.direccion_provincia ;
-    provincia = provincia[0].toUpperCase() + provincia.slice(1);
-    
+    // provincia = provincia.toLowerCase().replace(/\b[a-z]/g, function(letra) {
+    //   return letra.toUpperCase();
+    // });
+    // // provincia = provincia.replace("ñ","n") ;
+    // provincia = provincia.replace(/^(.)|\s+(.)/g, function ($1) {
+    //   return $1.toUpperCase()
+    // })
+
     let departamento : string = this.InformacionForm.value.direccion_departamento ;
-    departamento = departamento[0].toUpperCase() + departamento.slice(1);
-    
+    // departamento = departamento.toLowerCase().replace(/\b[a-z]/g, function(letra) {
+    //   return letra.toUpperCase();
+    // });
+    // departamento = departamento.replace(/^(.)|\s+(.)/g, function ($1) {
+    //   return $1.toUpperCase()
+    // })
+
+    departamento = departamento.replace("ñ","n") ;
+    // console.log(departamento, provincia, distrito)
+
     let direccion_completa : string = direccion + ", distrito de " + distrito + ", provincia de " + provincia + " del departamento de " + departamento ;
     return direccion_completa ;
   }
 
+  CambioTipoVenta(){
+    if(this.tipo==1){
+      this.aporte = 20 ;
+      this.interes = 15 ;
+    } else {
+      this.aporte = 0 ;
+      this.interes = 0 ;
+    }
+    this.CalcularInteresDiario();
+  }
+
   Print(){
-    console.log("Express",this.ExpressForm);
-    console.log("Informacion",this.InformacionForm);
+    this.CrearDireccionCompleta() ;
+    this.GenerarEmail() ;
+    // console.log("Express",this.ExpressForm);
+    // console.log("Informacion",this.InformacionForm);
   }
   
+  GenerarEmail() : string {
+    // if( !this.ClientesForm.value.email ){
+      let apellido : string, nombres : string, primer_nombre : string ;
+      let nombre : string = this.InformacionForm.value.nombre.toLowerCase() ;
+      let email : string ;
+      if( nombre && nombre.includes(',') ) {
+        apellido = nombre.substring(0,nombre.search(" ") ) ;
+        apellido = apellido.trim() ;
+        nombres = nombre.substring(nombre.search(",")+1,nombre.length ) ;
+        nombres = nombres.trim() ;
+        if( nombres.includes(" ") ){
+          primer_nombre = nombres.substring(0,nombres.search(" ") ) ;
+        } else {
+          primer_nombre = nombres.substring(0,nombres.length ) ;
+        }
+        primer_nombre = primer_nombre.trim() ;
+        email = primer_nombre + apellido + "@gmail.com" ;
+        // // this.InformacionForm.get("email").setValue(email) ;
+        // console.log(email)
+        email = email.replace("ñ","n") ;
+        console.log(email);
+        return email;
+      }
+    // }
+  }
+
   GenerarArchivos(){
     let ahora = (new Date()).getTime();
     // console.log(this.cronograma);
@@ -375,17 +481,17 @@ export class EvaluacionExpressComponent implements OnInit {
     this.GenerarDDJJ("DDJJ_"+ahora);
     this.GenerarCompromiso("Compromiso_"+ahora);
 
-    if(this.InformacionForm.value.email && this.InformacionForm.value.codigo){
+    // if(this.InformacionForm.value.email && this.InformacionForm.value.codigo){
       this.GenerarAutorizacion("Autorizacion_"+ahora);
-    }
+    // }
 
-    if(this.InformacionForm.value.cuenta_numero){
+    // if(this.InformacionForm.value.cuenta_numero){
       this.GenerarTarjeta("Tarjeta_"+ahora);
-    }
+    // }
 
-    if(this.InformacionForm.value.email && this.InformacionForm.value.casilla){
+    // if(this.InformacionForm.value.email && this.InformacionForm.value.casilla){
       this.GenerarTransaccion("Transaccion_"+ahora);
-    }
+    // }
 
   }
 
@@ -421,13 +527,15 @@ export class EvaluacionExpressComponent implements OnInit {
       this.InformacionForm.value.direccion_completa,
       this.InformacionForm.value.telefono_tipo_nombre,
       this.InformacionForm.value.telefono_numero,
-      this.InformacionForm.value.email,
+      this.InformacionForm.value.email ? this.InformacionForm.value.email : this.GenerarEmail(),
       this.InformacionForm.value.subsede_nombre,
       this.aporte,
       this.cuota_estandar,
       this.numero_cuotas_estandar,
       this.ExpressForm.value.lugar,
-      this.ExpressForm.value.fecha_letras
+      this.ExpressForm.value.fecha_letras,
+      this.InformacionForm.value.parametro_autorizacion_1 ,
+      this.InformacionForm.value.parametro_autorizacion_2 ,
     ).subscribe(res=>{
       if(res['codigo']==0){
         this.generados=true;
@@ -439,13 +547,17 @@ export class EvaluacionExpressComponent implements OnInit {
   GenerarTransaccion(nombre_archivo){
     let direccion_completa : string ;
 
-    if( !this.InformacionForm.value.direccion_completa ) {
+    // if( !this.InformacionForm.value.direccion_completa ) {
       direccion_completa = this.CrearDireccionCompleta();
-    }
+    // }
 
     this.Servicios.GenerarTransaccion(
       this.InformacionForm.value.plantilla_transaccion,
       nombre_archivo,
+      this.InformacionForm.value.parametro_condicion ,
+      this.InformacionForm.value.parametro_domicilio_laboral ,
+      this.InformacionForm.value.parametro_autorizacion_1 ,
+      this.InformacionForm.value.parametro_autorizacion_2 ,
       this.cooperativa_nombre,
       this.cooperativa_direccion,
       this.cooperativa_direccion_1,
@@ -463,7 +575,7 @@ export class EvaluacionExpressComponent implements OnInit {
       this.InformacionForm.value.cip,
       true,
       this.InformacionForm.value.direccion_completa ? this.InformacionForm.value.direccion_completa : direccion_completa,
-      this.InformacionForm.value.casilla,
+      this.InformacionForm.value.casilla ? this.InformacionForm.value.casilla : ( Math.floor(Math.random() * 89999) + 10000 ),
       this.InformacionForm.value.subsede_nombre,
       this.ExpressForm.value.fecha_letras,
       this.dias_contrato_premura,
@@ -474,7 +586,7 @@ export class EvaluacionExpressComponent implements OnInit {
       this.penalidad_maxima_cuota,
       this.InformacionForm.value.cuenta_banco_nombre,
       this.InformacionForm.value.cuenta_numero,
-      this.InformacionForm.value.email,
+      this.InformacionForm.value.email ? this.InformacionForm.value.email : this.GenerarEmail(),
       this.InformacionForm.value.telefono_numero,
       this.ExpressForm.value.lugar,
       this.ExpressForm.value.vendedor,
@@ -482,8 +594,8 @@ export class EvaluacionExpressComponent implements OnInit {
       this.cronograma,
       1,
       [],
-      "0",
-      "0",
+      this.InformacionForm.value.id_garante ? this.InformacionForm.value.nombre_garante : "0",
+      this.InformacionForm.value.id_garante ? this.InformacionForm.value.dni_garante : "0",
     ).subscribe(res=>{
       // console.log(res);
       this.generados=true;
@@ -547,6 +659,7 @@ export class EvaluacionExpressComponent implements OnInit {
     //console.log(formulario.value.subsede);
     this.ClienteServicios.Agregar(
       formulario.value.subsede,
+      formulario.value.cargo,
       formulario.value.cargo_estado,
       formulario.value.codigo,
       formulario.value.dni,
