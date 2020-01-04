@@ -29,9 +29,9 @@ import {saveAs} from 'file-saver';
 
 export class RefinanciamientoComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('InputCapital') FiltroCapital : ElementRef;
-  @ViewChild('InputCuotas') FiltroCuotas : ElementRef;
-  @ViewChild('InputVendedor') VendedorAutoComplete : ElementRef;
+  @ViewChild('InputCapital', { static: true }) FiltroCapital : ElementRef;
+  @ViewChild('InputCuotas', { static: true }) FiltroCuotas : ElementRef;
+  @ViewChild('InputVendedor', { static: true }) VendedorAutoComplete : ElementRef;
 
   public RefinanciamientoSeleccionForm : FormGroup ;
   public RefinanciamientoCronogramaForm : FormGroup ;

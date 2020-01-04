@@ -22,9 +22,9 @@ export class InstanciaJudicialComponent implements OnInit {
   public ListadoInstancias: InstanciaDataSource;
   public Columnas: string[] = ["numero" , "juzgado_distrito" , "juzgado_instancia" , "opciones"];
 
-  @ViewChild('InputDistrito') FiltroDistrito: ElementRef;
-  @ViewChild('InputInstancia') FiltroInstancia: ElementRef;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('InputDistrito', { static: true }) FiltroDistrito: ElementRef;
+  @ViewChild('InputInstancia', { static: true }) FiltroInstancia: ElementRef;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(
     private Servicio: ProcesoJudicialVinculadosService,

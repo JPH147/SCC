@@ -26,7 +26,7 @@ export class VentanaEmergenteContacto {
   public TelefonosForm: FormGroup;
   public Tipos: TipoTelefono[];
   public Relevancias: RelevanciaTelefono[];
-  @ViewChild('PaginadorTelefonos') paginatorTelefonos: MatPaginator;
+  @ViewChild('PaginadorTelefonos', { static: true }) paginatorTelefonos: MatPaginator;
 
   // Direcciones
   public ListadoDirecciones: ClienteDireccionDataSource;
@@ -36,14 +36,14 @@ export class VentanaEmergenteContacto {
   public LstDepartamento: any;
   public LstProvincia: any;
   public LstDistrito: any;
-  @ViewChild('PaginadorDirecciones') paginatorDirecciones: MatPaginator;
+  @ViewChild('PaginadorDirecciones', { static: true }) paginatorDirecciones: MatPaginator;
 
   // Cuentas
   public ListadoCuentas: ClienteCuentaDataSource;
   public ColumnasCuentas: string[] = [ 'cuenta-numero', 'cuenta-banco', 'cuenta-cuenta', 'cuenta-cci', 'cuenta-relevancia', 'cuenta-opciones'];  
   public CuentasForm: FormGroup;
   public Bancos: Array<any>;
-  @ViewChild('PaginadorCuentas') paginatorCuentas: MatPaginator;
+  @ViewChild('PaginadorCuentas', { static: true }) paginatorCuentas: MatPaginator;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,

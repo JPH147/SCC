@@ -18,9 +18,9 @@ export class VendedoresCargoComponent implements OnInit {
 
   public ListadoVendedores : VendedoresDataSource ;
   public Columnas : Array <string> = [ "numero" , "nombre" , "opciones" ];
-  @ViewChild (MatPaginator) paginator : MatPaginator ;
+  @ViewChild(MatPaginator, { static: true }) paginator : MatPaginator ;
 
-  @ViewChild('InputNombre') FiltroNombre : ElementRef ;
+  @ViewChild('InputNombre', { static: true }) FiltroNombre : ElementRef ;
 
   constructor(
     private Servicio : ServiciosVentas ,

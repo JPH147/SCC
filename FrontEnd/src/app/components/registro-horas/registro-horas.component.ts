@@ -20,7 +20,7 @@ export class RegistroHorasComponent implements OnInit {
   public hora_salida : Time;
   public salida : Time;
 
-  @ViewChild('InputDocumento') FiltroDocumento : ElementRef;
+  @ViewChild('InputDocumento', { static: true }) FiltroDocumento : ElementRef;
 
   constructor(
     private Servicio : TrabajadoresService

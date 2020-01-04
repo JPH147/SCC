@@ -17,14 +17,14 @@ import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
 
 export class ListadoSalidaVendedoresComponent implements OnInit {
 
-  @ViewChild('InputPecosa') FiltroPecosa: ElementRef;
-  @ViewChild('InputDestino') FiltroDestino: ElementRef;
-  @ViewChild('InputSucursal') FiltroSucursal: MatSelect;
-  @ViewChild('InputSerie') FiltroSerie: ElementRef;
-  @ViewChild('InputVendedor') FiltroVendedor: ElementRef;
-  @ViewChild('InputEstado') FiltroEstado: MatSelect;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('InputPecosa', { static: true }) FiltroPecosa: ElementRef;
+  @ViewChild('InputDestino', { static: true }) FiltroDestino: ElementRef;
+  @ViewChild('InputSucursal', { static: true }) FiltroSucursal: MatSelect;
+  @ViewChild('InputSerie', { static: false }) FiltroSerie: ElementRef;
+  @ViewChild('InputVendedor', { static: true }) FiltroVendedor: ElementRef;
+  @ViewChild('InputEstado', { static: true }) FiltroEstado: MatSelect;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
   public fecha_inicio:Date;
   public fecha_fin:Date;
 

@@ -21,11 +21,11 @@ export class CobranzaDirectaListarComponent implements OnInit {
   public ListadoCobranzas: CobranzaDataSource;
   public Columnas: string[] = ['numero', 'fecha', 'cliente', 'banco', 'numero_operacion', 'monto', 'opciones'];
 
-  @ViewChild('InputCliente') FiltroCliente: ElementRef;
-  @ViewChild('InputOperacion') FiltroOperacion: ElementRef;
-  @ViewChild('InputBanco') FiltroBanco: MatSelect;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('InputCliente', { static: true }) FiltroCliente: ElementRef;
+  @ViewChild('InputOperacion', { static: true }) FiltroOperacion: ElementRef;
+  @ViewChild('InputBanco', { static: true }) FiltroBanco: MatSelect;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(
     private Servicio: CobranzasService,

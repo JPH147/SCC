@@ -21,14 +21,14 @@ export class CobranzaJudicialListarComponent implements OnInit {
   public ListadoProcesos: CobranzaDataSource;
   public Columnas: string[] = ['id_tipo_documento', 'fecha_inicio', 'cliente_nombre', 'expediente', 'juzgado', 'vendedor','total', 'opciones'];
 
-  @ViewChild('InputCliente') FiltroCliente: ElementRef;
-  @ViewChild('InputExpediente') FiltroExpediente: ElementRef;
-  @ViewChild('InputDistrito') FiltroDistrito: ElementRef;
-  @ViewChild('InputJuzgado') FiltroJuzgado: ElementRef;
-  @ViewChild('InputDNI') FiltroDNI: ElementRef;
-  @ViewChild('InputEstado') FiltroEstado: MatSelect;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('InputCliente', { static: true }) FiltroCliente: ElementRef;
+  @ViewChild('InputExpediente', { static: true }) FiltroExpediente: ElementRef;
+  @ViewChild('InputDistrito', { static: true }) FiltroDistrito: ElementRef;
+  @ViewChild('InputJuzgado', { static: true }) FiltroJuzgado: ElementRef;
+  @ViewChild('InputDNI', { static: true }) FiltroDNI: ElementRef;
+  @ViewChild('InputEstado', { static: true }) FiltroEstado: MatSelect;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(
     private router : Router ,

@@ -25,11 +25,11 @@ export class VentasListarComponent implements OnInit {
   ListadoVentas: VentaDataSource;
   Columnas: string[] = ['numero', 'fecha', 'contrato', 'cliente_nombre', 'tipo_venta', 'monto_total', 'opciones'];
 
-  @ViewChild('InputCliente') FiltroCliente: ElementRef;
-  @ViewChild('InputTipo') FiltroTipo: MatSelect;
-  @ViewChild('InputEstado') FiltroEstado: MatSelect;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('InputCliente', { static: true }) FiltroCliente: ElementRef;
+  @ViewChild('InputTipo', { static: true }) FiltroTipo: MatSelect;
+  @ViewChild('InputEstado', { static: true }) FiltroEstado: MatSelect;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(
     //private Servicio: ProductoService,

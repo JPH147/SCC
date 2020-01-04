@@ -20,11 +20,11 @@ import { ActivatedRoute } from '@angular/router';
 
 export class EvaluacionComponent implements OnInit, AfterViewInit {
 
-  @ViewChild(MatStepper) stepper: MatStepper;
-  @ViewChild('InputInteres') FiltroInteres : ElementRef ;
-  @ViewChild('InputCliente') FiltroCliente : ElementRef;
+  @ViewChild(MatStepper, { static: true }) stepper: MatStepper;
+  @ViewChild('InputInteres', { static: true }) FiltroInteres : ElementRef ;
+  @ViewChild('InputCliente', { static: false }) FiltroCliente : ElementRef;
 
-  @ViewChild('InputDNI') FiltroDNI : ElementRef;
+  @ViewChild('InputDNI', { static: false }) FiltroDNI : ElementRef;
 
   public Cargando = new BehaviorSubject<boolean>(false);
   public EvaluacionForm : FormGroup;

@@ -18,9 +18,9 @@ export class ReporteAsistenciaComponent implements OnInit, AfterViewInit {
   public id_trabajador : number;
   public trabajador : string;
 
-  @ViewChild('InputDocumento') FiltroDocumento : ElementRef;
-  @ViewChild('InputTrabajador') FiltroTrabajador : ElementRef;
-  @ViewChild(MatPaginator) paginator : MatPaginator;
+  @ViewChild('InputDocumento', { static: true }) FiltroDocumento : ElementRef;
+  @ViewChild('InputTrabajador', { static: true }) FiltroTrabajador : ElementRef;
+  @ViewChild(MatPaginator, { static: true }) paginator : MatPaginator;
 
   public ListadoTareo : TareoDataSource;
   public Columnas : Array <string> = [ "numero", "documento", "trabajador", "fecha", "ingreso", "tardanza_ingreso", "salida", "tardanza_salida", "horas_trabajadas" ];

@@ -15,9 +15,9 @@ import {DetalleDocumentoAlmacenComponent} from '../../detalle-documento-almacen/
 })
 export class ProveedoresMovimientosComponent implements OnInit {
 
-	@ViewChild('InputProducto') FiltroProducto: ElementRef;
-	@ViewChild('InputIMEI') FiltroIMEI: ElementRef;
-	@ViewChild(MatPaginator) paginator: MatPaginator;
+	@ViewChild('InputProducto', { static: true }) FiltroProducto: ElementRef;
+	@ViewChild('InputIMEI', { static: true }) FiltroIMEI: ElementRef;
+	@ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
 	public FInicio: Date = new Date((new Date()).valueOf() - 1000*60*60*24*120);
 	public FFin:Date = new Date();

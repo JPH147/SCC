@@ -17,8 +17,8 @@ import {debounceTime, tap, distinctUntilChanged} from 'rxjs/operators'
 // tslint:disable-next-line:component-class-suffix
 export class VentanaEmergenteModelo {
 
-  @ViewChild ('InputModelo') FiltroModelo: ElementRef;
-  @ViewChild('InputMarca') FiltroMarca: MatSelect;
+  @ViewChild('InputModelo', { static: true }) FiltroModelo: ElementRef;
+  @ViewChild('InputMarca', { static: true }) FiltroMarca: MatSelect;
   public selectedValue: string;
   public ModeloForm: FormGroup;
   public Tipos: Array<any>;

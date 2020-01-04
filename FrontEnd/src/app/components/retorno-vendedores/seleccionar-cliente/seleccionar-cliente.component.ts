@@ -16,10 +16,10 @@ export class SeleccionarClienteComponent implements OnInit, AfterViewInit {
 
   public id_cliente : number = 0;
 
-  @ViewChild('InputCodigo') FiltroCodigo: ElementRef;
-  @ViewChild('InputDNI') FiltroDni: ElementRef;
-  @ViewChild('InputNombre') FiltroNombre: ElementRef;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('InputCodigo', { static: true }) FiltroCodigo: ElementRef;
+  @ViewChild('InputDNI', { static: true }) FiltroDni: ElementRef;
+  @ViewChild('InputNombre', { static: true }) FiltroNombre: ElementRef;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   public ListadoCliente: ClienteDataSource;
   public Columnas: string[] = ['numero', 'codigo' , 'dni', 'nombrecliente', 'subsede', 'opciones'];

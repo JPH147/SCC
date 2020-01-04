@@ -22,8 +22,8 @@ export class InstitucionComponent implements OnInit, AfterViewInit {
   public ListadoInstituciones: InstitucionDataSource;
   public Columnas: string[] = ["numero" , "nombre" , "opciones"];
 
-  @ViewChild('InputNombre') FiltroNombre: ElementRef;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('InputNombre', { static: true }) FiltroNombre: ElementRef;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(
     private Servicio: InstitucionesService,

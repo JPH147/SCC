@@ -13,7 +13,7 @@ import { debounceTime, distinctUntilChanged , tap } from 'rxjs/operators';
 })
 export class VentanaTalonarioComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('InputSerie') FiltroSerie : ElementRef ;
+  @ViewChild('InputSerie', { static: true }) FiltroSerie : ElementRef ;
   public TalonariosForm : FormGroup;
   public repetido : boolean ;
 

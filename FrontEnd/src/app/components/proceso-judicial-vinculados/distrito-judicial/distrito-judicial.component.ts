@@ -22,8 +22,8 @@ export class DistritoJudicialComponent implements OnInit {
   public ListadoDistritos: DistritoDataSource;
   public Columnas: string[] = ["numero" , "nombre" , "opciones"];
 
-  @ViewChild('InputDistrito') FiltroNombre: ElementRef;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('InputDistrito', { static: true }) FiltroNombre: ElementRef;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(
     private Servicio: ProcesoJudicialVinculadosService,

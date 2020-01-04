@@ -19,7 +19,7 @@ import { URLIMAGENES } from '../../global/url';
 export class VentanaObservacionesComponent implements OnInit {
 
 	public observacion: string;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   public ListadoObservaciones: ObservacionesDataSource;
   public Columnas: string[] = [ 'numero', 'observacion', 'fecha', 'opciones'];
   public ObservacionesForm : FormGroup ;

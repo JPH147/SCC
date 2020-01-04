@@ -19,9 +19,9 @@ export class MarcaComponent implements OnInit {
   ListadoMarca: MarcaDataSource;
   Columnas: string[] = ['numero', 'tipo', 'marca', 'opciones'];
   public TotalResultados:number=0;
-  @ViewChild('InputTipo') FiltroTipo: ElementRef;
-  @ViewChild('InputNombre') FiltroMarca: ElementRef;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('InputTipo', { static: true }) FiltroTipo: ElementRef;
+  @ViewChild('InputNombre', { static: true }) FiltroMarca: ElementRef;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(
     private Servicio: ServiciosGenerales,

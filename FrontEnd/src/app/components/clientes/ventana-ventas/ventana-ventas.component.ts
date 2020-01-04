@@ -20,8 +20,8 @@ export class VentanaVentasComponent implements OnInit {
   public estado : string;
   public fecha : Date;
 
-  @ViewChild('InputDocumento') FiltroDocumento: ElementRef;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('InputDocumento', { static: true }) FiltroDocumento: ElementRef;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   ListadoVentas: VentasClienteDataSource;
   Columnas: string[] = [ 'documento', 'tipo','fecha', 'total', 'estado', 'opciones'];
 

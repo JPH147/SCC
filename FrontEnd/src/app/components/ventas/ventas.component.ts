@@ -129,15 +129,15 @@ export class VentasComponent implements OnInit {
   public otros_editar: boolean= false;
   public papeles_editar : boolean = false;
 
-  @ViewChild('InputFechaPago') FiltroFecha: ElementRef;
-  @ViewChild('InputInicial') FiltroInicial: ElementRef;
-  @ViewChild('InputCuota') FiltroCuota: ElementRef;
-  @ViewChild('Cliente') ClienteAutoComplete: ElementRef;
-  @ViewChild('Vendedor') VendedorAutoComplete: ElementRef;
-  @ViewChild('Autorizador') AutorizadorAutoComplete: ElementRef;
+  @ViewChild('InputFechaPago', { static: true }) FiltroFecha: ElementRef;
+  @ViewChild('InputInicial', { static: true }) FiltroInicial: ElementRef;
+  @ViewChild('InputCuota', { static: true }) FiltroCuota: ElementRef;
+  @ViewChild('Cliente', { static: false }) ClienteAutoComplete: ElementRef;
+  @ViewChild('Vendedor', { static: false }) VendedorAutoComplete: ElementRef;
+  @ViewChild('Autorizador', { static: false }) AutorizadorAutoComplete: ElementRef;
   @ViewChildren('InputProducto') FiltroProducto:QueryList<any>;
   @ViewChildren('InputPrecio') FiltroPrecio:QueryList<any>;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   public ListadoVentas: VentaDataSource;
   public Columnas: string[];

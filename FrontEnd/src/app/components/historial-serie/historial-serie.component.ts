@@ -19,9 +19,9 @@ export class HistorialSerieComponent implements OnInit {
   ListadoProductos: HistorialSerieDataService;
   Columnas: string[] = ['numero','serie', 'movimiento', 'producto', 'transaccion','tenedor', 'documento','fecha'];
 
-  @ViewChild('InputserieProducto') FiltroProductos: ElementRef;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('InputserieProducto', { static: true }) FiltroProductos: ElementRef;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
 
   constructor(
     private AServicio : ArchivosService,

@@ -20,8 +20,8 @@ import * as moment from 'moment' ;
 
 export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('InputMonto') FiltroMonto : ElementRef ;
-  @ViewChild('InputOperacion') FiltroOperacion : ElementRef ;
+  @ViewChild('InputMonto', { static: true }) FiltroMonto : ElementRef ;
+  @ViewChild('InputOperacion', { static: true }) FiltroOperacion : ElementRef ;
 
   public Cargando = new BehaviorSubject<boolean>(false);
   public CobranzaDirectaForm : FormGroup ;

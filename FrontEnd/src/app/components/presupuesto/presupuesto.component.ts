@@ -22,9 +22,9 @@ export class PresupuestoComponent implements OnInit {
   public ListadoPresupuesto: PresupuestoDataSource;
   public Columnas: string[] = ['numero', 'cliente', 'tipo', 'fecha', 'capital', 'cuotas', 'total', 'opciones'];
 
-  @ViewChild('InputCliente') FiltroCliente: ElementRef;
-  @ViewChild('InputEstado') FiltroEstado: MatSelect;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('InputCliente', { static: true }) FiltroCliente: ElementRef;
+  @ViewChild('InputEstado', { static: true }) FiltroEstado: MatSelect;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(
     private Dialogo : MatDialog ,

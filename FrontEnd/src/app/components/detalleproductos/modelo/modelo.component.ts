@@ -19,10 +19,10 @@ export class ModeloComponent implements OnInit {
   ListadoModelo: ModeloDataSource;
     Columnas: string[] = ['numero', 'tipo', 'marca', 'modelo', 'opciones'];
 
-    @ViewChild('InputTipo') FiltroTipo: ElementRef;
-    @ViewChild('InputMarca') FiltroMarca: ElementRef;
-    @ViewChild('InputNombre') FiltroModelo: ElementRef;
-    @ViewChild(MatPaginator) paginator: MatPaginator;
+    @ViewChild('InputTipo', { static: true }) FiltroTipo: ElementRef;
+    @ViewChild('InputMarca', { static: true }) FiltroMarca: ElementRef;
+    @ViewChild('InputNombre', { static: true }) FiltroModelo: ElementRef;
+    @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
     constructor(
       private Servicio: ServiciosGenerales,

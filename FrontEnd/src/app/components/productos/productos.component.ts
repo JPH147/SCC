@@ -22,15 +22,15 @@ export class ProductosComponent implements OnInit {
   Columnas: string[] = ['numero','foto', 'descripcion', 'tipo', 'marca', 'modelo', 'unidad_medida','precio', 'opciones'];
   // tslint:disable-next-line:no-inferrable-types
 
-  @ViewChild('InputProducto') FiltroProductos: ElementRef;
-  @ViewChild('InputTipo') FiltroTipo: ElementRef;
-  @ViewChild('InputMarca') FiltroMarca: ElementRef;
-  @ViewChild('InputModelo') FiltroModelo: ElementRef;
-  @ViewChild('InputPMinimo') FiltroPMinimo: ElementRef;
-  @ViewChild('InputPMaximo') FiltroPMaximo: ElementRef; 
-  @ViewChild('InputEstado') FiltroEstado:MatSelect;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('InputProducto', { static: true }) FiltroProductos: ElementRef;
+  @ViewChild('InputTipo', { static: true }) FiltroTipo: ElementRef;
+  @ViewChild('InputMarca', { static: true }) FiltroMarca: ElementRef;
+  @ViewChild('InputModelo', { static: true }) FiltroModelo: ElementRef;
+  @ViewChild('InputPMinimo', { static: true }) FiltroPMinimo: ElementRef;
+  @ViewChild('InputPMaximo', { static: true }) FiltroPMaximo: ElementRef; 
+  @ViewChild('InputEstado', { static: true }) FiltroEstado:MatSelect;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(
     private Servicio: ProductoService,

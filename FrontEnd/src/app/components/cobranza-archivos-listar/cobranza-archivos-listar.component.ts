@@ -18,7 +18,7 @@ export class CobranzaArchivosListarComponent implements OnInit {
   public ListadoCobranzas: CobranzasDataSource;
   public Columnas: string[] = ['numero', 'fecha_creacion','sede', 'fecha_fin', 'cantidad', 'monto', 'estado', 'opciones'];
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(
     private Dialogo : MatDialog ,

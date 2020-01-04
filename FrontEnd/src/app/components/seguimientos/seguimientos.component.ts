@@ -23,11 +23,11 @@ export class SeguimientosComponent implements OnInit {
   public ListadoSeguimientos: SeguimientosDataSource;
   public Columnas: string[] = ['numero', 'fecha', 'documento', 'cliente', 'courier', 'numero_seguimiento', 'estado', 'opciones'];
 
-  @ViewChild('InputCliente') FiltroCliente: ElementRef;
-  @ViewChild('InputNumero') FiltroNumero: ElementRef;
-  @ViewChild('InputCourier') FiltroCourier: ElementRef;
-  @ViewChild('InputEstado') FiltroEstado: MatSelect;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('InputCliente', { static: true }) FiltroCliente: ElementRef;
+  @ViewChild('InputNumero', { static: true }) FiltroNumero: ElementRef;
+  @ViewChild('InputCourier', { static: true }) FiltroCourier: ElementRef;
+  @ViewChild('InputEstado', { static: true }) FiltroEstado: MatSelect;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(
     private Dialogo : MatDialog ,

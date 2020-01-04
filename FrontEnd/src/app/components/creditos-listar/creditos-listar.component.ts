@@ -21,12 +21,12 @@ export class CreditosListarComponent implements OnInit {
   public ListadoCreditos: CreditosDataSource;
   public Columnas: string[] = ['numero', 'fecha', 'codigo', 'cliente_nombre', 'tipo_credito', 'monto_total', 'documentos_adjuntos', 'opciones'];
 
-  @ViewChild('InputCliente') FiltroCliente: ElementRef;
-  @ViewChild('InputTipo') FiltroTipo: MatSelect;
-  @ViewChild('InputEstado') FiltroEstado: MatSelect;
-  @ViewChild('InputDocumentos') FiltroDocumentos: MatSelect;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('InputCliente', { static: true }) FiltroCliente: ElementRef;
+  @ViewChild('InputTipo', { static: true }) FiltroTipo: MatSelect;
+  @ViewChild('InputEstado', { static: true }) FiltroEstado: MatSelect;
+  @ViewChild('InputDocumentos', { static: true }) FiltroDocumentos: MatSelect;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(
     private Servicio: CreditosService,

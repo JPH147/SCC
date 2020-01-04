@@ -23,7 +23,7 @@ export class VentanaEmergenteProvisionalClientes {
   
   public Cargando = new BehaviorSubject<boolean>(false) ;
   @Output() cliente_output = new EventEmitter();
-  @ViewChild('InputCliente') FiltroCliente : ElementRef;
+  @ViewChild('InputCliente', { static: true }) FiltroCliente : ElementRef;
   public selectedValue: string;
   public ClientesForm: FormGroup;
   public Sede: any = [];

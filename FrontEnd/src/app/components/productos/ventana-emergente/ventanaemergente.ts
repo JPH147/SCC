@@ -21,7 +21,7 @@ import { VentanaEmergenteMarca } from '../../detalleproductos/marca/ventana-emer
 // tslint:disable-next-line:component-class-suffix
 export class VentanaEmergenteProductos {
 
-  @ViewChild('InputDescripcion') FiltroDescripcion: ElementRef;
+  @ViewChild('InputDescripcion', { static: true }) FiltroDescripcion: ElementRef;
 
   public selectedValue: string;
   public ProductosForm: FormGroup;

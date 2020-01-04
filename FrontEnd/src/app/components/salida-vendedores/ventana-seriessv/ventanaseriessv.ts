@@ -15,7 +15,7 @@ import { tap } from 'rxjs/operators';
 
 export class ventanaseriessv  implements OnInit {
 
-  @ViewChild('InputBuscador') FiltroBuscador : ElementRef ;
+  @ViewChild('InputBuscador', { static: true }) FiltroBuscador : ElementRef ;
   public Cargando = new BehaviorSubject<boolean>(false);
   public SeriesProductosForm:FormGroup;
   public series: FormArray;

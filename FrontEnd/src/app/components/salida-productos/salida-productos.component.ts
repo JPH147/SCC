@@ -39,7 +39,7 @@ export class SalidaProductosComponent implements OnInit {
   public Hoy: Date = new Date();
   public nuevo_documento:boolean;
 
-  @ViewChild('InputDocumento') FiltroDocumento: ElementRef;
+  @ViewChild('InputDocumento', { static: true }) FiltroDocumento: ElementRef;
   @ViewChildren('InputProducto') FiltroProducto: QueryList<any>;
 
   constructor (

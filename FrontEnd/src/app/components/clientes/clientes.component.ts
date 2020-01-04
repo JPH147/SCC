@@ -30,14 +30,14 @@ export class ClientesComponent implements OnInit {
   public maestro;
   public estado: number ;
   
-  @ViewChild('InputCodigo') FiltroCodigo: ElementRef;
-  @ViewChild('InputCIP') FiltroCIP: ElementRef;
-  @ViewChild('InputDNI') FiltroDni: ElementRef;
-  @ViewChild('InputNombre') FiltroNombre: ElementRef;
-  @ViewChild('InputCargo') FiltroCargo: ElementRef;
-  @ViewChild('InputSubsede') FiltroSubsede: ElementRef;
-  @ViewChild('InputRelacion') FiltroRelacion : MatCheckbox ;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('InputCodigo', { static: true }) FiltroCodigo: ElementRef;
+  @ViewChild('InputCIP', { static: true }) FiltroCIP: ElementRef;
+  @ViewChild('InputDNI', { static: true }) FiltroDni: ElementRef;
+  @ViewChild('InputNombre', { static: true }) FiltroNombre: ElementRef;
+  @ViewChild('InputCargo', { static: true }) FiltroCargo: ElementRef;
+  @ViewChild('InputSubsede', { static: true }) FiltroSubsede: ElementRef;
+  @ViewChild('InputRelacion', { static: false }) FiltroRelacion : MatCheckbox ;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(
     private Servicio: ClienteService,

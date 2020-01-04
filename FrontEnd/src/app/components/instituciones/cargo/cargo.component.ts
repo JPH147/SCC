@@ -14,10 +14,10 @@ import { Notificaciones } from '../../global/notificacion';
 })
 export class CargoComponent implements OnInit {
 
-  @ViewChild('InputInstitucion') FiltroInstitucion: ElementRef;
-  @ViewChild('InputSede') FiltroSede: ElementRef;
-  @ViewChild('InputCargo') FiltroCargo: ElementRef;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('InputInstitucion', { static: true }) FiltroInstitucion: ElementRef;
+  @ViewChild('InputSede', { static: true }) FiltroSede: ElementRef;
+  @ViewChild('InputCargo', { static: true }) FiltroCargo: ElementRef;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   public fecha_inicio: Date;
   public fecha_fin: Date;

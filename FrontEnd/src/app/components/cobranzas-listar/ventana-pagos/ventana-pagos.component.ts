@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 export class VentanaPagosComponent implements OnInit {
 
 	public observacion: string;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   public ListadoPagos: PagosDataSource;
   public Columnas: string[] = [ 'numero' , 'fecha_pago' , 'tipo' , 'documento' , 'monto' , 'opciones' ];
 

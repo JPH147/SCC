@@ -20,7 +20,7 @@ import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 export class VentanaEmergenteClientes {
   
   public Cargando = new BehaviorSubject<boolean>(false) ;
-  @ViewChild('InputCliente') FiltroCliente : ElementRef;
+  @ViewChild('InputCliente', { static: true }) FiltroCliente : ElementRef;
   public selectedValue: string;
   public ClientesForm: FormGroup;
   public Sede: Sede[] = [];

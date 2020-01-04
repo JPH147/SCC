@@ -13,8 +13,8 @@ import {CollectionViewer} from '@angular/cdk/collections';
 })
 export class VentanaProductosComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('InputSerie') FiltroSerie: ElementRef;
-  @ViewChild(MatPaginator) Paginator: MatPaginator;
+  @ViewChild('InputSerie', { static: true }) FiltroSerie: ElementRef;
+  @ViewChild(MatPaginator, { static: true }) Paginator: MatPaginator;
   
   Columnas: string[] = ['serie', 'color', 'almacenamiento', 'almacen', 'opciones'];
   ListadoProductos: AgregarProductosDataSource;

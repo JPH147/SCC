@@ -19,8 +19,8 @@ export class DepartamentoComponent implements OnInit {
   Columnas: string[] = ['numero', 'nombre', 'opciones'];
   public TotalResultados:number=0;
 
-  @ViewChild('InputDepartamento') FiltroDepartamento: ElementRef;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('InputDepartamento', { static: true }) FiltroDepartamento: ElementRef;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(
     private Servicio: ServiciosDirecciones,

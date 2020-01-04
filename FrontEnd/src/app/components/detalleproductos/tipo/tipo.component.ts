@@ -18,9 +18,9 @@ export class TipoComponent implements OnInit {
 
     ListadoTipo: TipoDataSource;
     Columnas: string[] = ['numero', 'nombre', 'unidadmedida', 'opciones'];
-    @ViewChild('InputTipo') FiltroTipo: ElementRef;
-    @ViewChild('InputUM') FiltroUM: ElementRef;
-    @ViewChild(MatPaginator) paginator: MatPaginator;
+    @ViewChild('InputTipo', { static: true }) FiltroTipo: ElementRef;
+    @ViewChild('InputUM', { static: true }) FiltroUM: ElementRef;
+    @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
     constructor(
         private Servicio: ServiciosGenerales,

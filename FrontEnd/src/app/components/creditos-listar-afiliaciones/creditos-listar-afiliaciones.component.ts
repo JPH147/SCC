@@ -22,12 +22,12 @@ export class CreditosListarAfiliacionesComponent implements OnInit {
   public ListadoCreditos: CreditosDataSource;
   public Columnas: string[] = ['numero', 'fecha', 'codigo', 'cliente_nombre', 'monto_total', 'documentos_adjuntos', 'opciones'];
 
-  @ViewChild('InputCliente') FiltroCliente: ElementRef;
+  @ViewChild('InputCliente', { static: true }) FiltroCliente: ElementRef;
   // @ViewChild('InputTipo') FiltroTipo: MatSelect;
   // @ViewChild('InputEstado') FiltroEstado: MatSelect;
-  @ViewChild('InputDocumentos') FiltroDocumentos: MatSelect;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('InputDocumentos', { static: true }) FiltroDocumentos: MatSelect;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(
     private Servicio: CreditosService

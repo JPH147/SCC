@@ -22,9 +22,9 @@ export class ProveedoresComponent implements OnInit {
   Columnas: string[] = ['numero', 'foto','tipo_documento', 'ruc', 'nombre','opciones'];
   public maestro;
 
-  @ViewChild('InputRUC') FiltroRuc: ElementRef;
-  @ViewChild('InputNombreProvedor') FiltroNombre: ElementRef;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('InputRUC', { static: true }) FiltroRuc: ElementRef;
+  @ViewChild('InputNombreProvedor', { static: true }) FiltroNombre: ElementRef;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(
     private Servicio: ProveedorService,

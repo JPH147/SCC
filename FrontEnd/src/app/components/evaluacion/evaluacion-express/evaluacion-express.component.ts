@@ -21,11 +21,11 @@ import { Notificaciones } from '../../global/notificacion';
 
 export class EvaluacionExpressComponent implements OnInit {
 
-  @ViewChild('InputCapital') FiltroCapital : ElementRef ;
-  @ViewChild('InputCuotas') FiltroCuotas : ElementRef ;
-  @ViewChild('InputInteres') FiltroInteres : ElementRef ;
-  @ViewChild('InputAporte') FiltroAporte : ElementRef ;
-  @ViewChild('InputVendedor') VendedorAutoComplete : ElementRef;
+  @ViewChild('InputCapital', { static: true }) FiltroCapital : ElementRef ;
+  @ViewChild('InputCuotas', { static: true }) FiltroCuotas : ElementRef ;
+  @ViewChild('InputInteres', { static: true }) FiltroInteres : ElementRef ;
+  @ViewChild('InputAporte', { static: true }) FiltroAporte : ElementRef ;
+  @ViewChild('InputVendedor', { static: true }) VendedorAutoComplete : ElementRef;
 
   public Hoy : Date = new Date() ;
   public tipo : number = 1 ;

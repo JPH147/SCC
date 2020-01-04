@@ -16,7 +16,7 @@ import {tap} from 'rxjs/operators';
 // tslint:disable-next-line:component-class-suffix
 export class VentanaEmergenteStock  implements OnInit {
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   public seriearticulo: Array<any> ;
   public numero: number;
   public series: Array <string>;

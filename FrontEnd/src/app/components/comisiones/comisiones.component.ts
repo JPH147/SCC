@@ -16,10 +16,10 @@ export class ComisionesComponent implements OnInit {
 	public fecha_inicio: Date = new Date((new Date).valueOf() - 1000*60*60*24*120)
 	public fecha_fin: Date = new Date()
 
-  @ViewChild('InputVendedor') FiltroVendedor: ElementRef;
-	@ViewChild('InputPecosa') FiltroPecosa: ElementRef;
+  @ViewChild('InputVendedor', { static: true }) FiltroVendedor: ElementRef;
+	@ViewChild('InputPecosa', { static: true }) FiltroPecosa: ElementRef;
 
-	@ViewChild(MatPaginator) paginator: MatPaginator;
+	@ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   ListadoComisiones: ComisionesDataSource;
   Columnas: string[] = ['numero', 'pecosa','nombre_vendedor', 'comision_efectiva' , 'comision_retenida', 'opciones'];

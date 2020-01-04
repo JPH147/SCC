@@ -24,9 +24,9 @@ export class SedeComponent implements OnInit {
   public ListadoSedes: SedeDataSource;
   public Columnas: string[] = ["numero" , "institucion" , "nombre" , "opciones"];
 
-  @ViewChild('InputInstitucion') FiltroInstitucion: ElementRef;
-  @ViewChild('InputSede') FiltroSede: ElementRef;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('InputInstitucion', { static: true }) FiltroInstitucion: ElementRef;
+  @ViewChild('InputSede', { static: true }) FiltroSede: ElementRef;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(
     private Servicio: InstitucionesService,

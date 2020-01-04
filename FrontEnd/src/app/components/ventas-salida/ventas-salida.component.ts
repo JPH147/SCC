@@ -55,10 +55,10 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
 
   public numero_contrato: string;
 
-  @ViewChild('InputInicial') FiltroInicial: ElementRef;
-  @ViewChild('InputCuota') FiltroCuota: ElementRef;
+  @ViewChild('InputInicial', { static: true }) FiltroInicial: ElementRef;
+  @ViewChild('InputCuota', { static: true }) FiltroCuota: ElementRef;
   @ViewChildren('InputPrecio') FiltroPrecio:QueryList<any>;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
 
   public foto: string;
   public dni: string;

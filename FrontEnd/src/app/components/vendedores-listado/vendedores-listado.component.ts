@@ -21,10 +21,10 @@ export class VendedoresListadoComponent implements OnInit {
   public ListadoVendedores : VendedoresDataSource ;
   public Columnas : Array <string> = [ "numero" , "foto" , "cargo" , "dni" , "nombre" , "comision" , "opciones" ];
 
-  @ViewChild('InputDocumento') FiltroDocumento : ElementRef ;
-  @ViewChild('InputNombre') FiltroNombre : ElementRef ;
-  @ViewChild('InputCargo') FiltroCargo : ElementRef ;
-  @ViewChild (MatPaginator) paginator : MatPaginator ;
+  @ViewChild('InputDocumento', { static: true }) FiltroDocumento : ElementRef ;
+  @ViewChild('InputNombre', { static: true }) FiltroNombre : ElementRef ;
+  @ViewChild('InputCargo', { static: true }) FiltroCargo : ElementRef ;
+  @ViewChild(MatPaginator, { static: true }) paginator : MatPaginator ;
 
   constructor(
     private Servicio : ServiciosVentas ,

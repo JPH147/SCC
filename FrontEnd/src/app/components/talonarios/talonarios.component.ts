@@ -19,8 +19,8 @@ export class TalonariosComponent implements OnInit {
   public ListadoTalonarios : TalonariosDataSource ;
   public Columnas : Array <string> = [ "numero" , "serie" , "numero_inicio" , "numero_fin" , "disponibles" , "utilizados" , "consignacion" , "anulados"  , "total" , "opciones" ];
 
-  @ViewChild('InputSerie') FiltroSerie : ElementRef ;
-  @ViewChild (MatPaginator) paginator : MatPaginator ;
+  @ViewChild('InputSerie', { static: true }) FiltroSerie : ElementRef ;
+  @ViewChild(MatPaginator, { static: true }) paginator : MatPaginator ;
 
   constructor(
     private Servicio : ServiciosVentas ,

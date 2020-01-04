@@ -22,10 +22,10 @@ export class SubsedeComponent implements OnInit {
   public ListadoSubsedes: SubsedeDataSource;
   public Columnas: string[] = ["numero" , "institucion" , "sede" , "nombre" , "opciones"];
 
-  @ViewChild('InputInstitucion') FiltroInstitucion: ElementRef;
-  @ViewChild('InputSede') FiltroSede: ElementRef;
-  @ViewChild('InputSubsede') FiltroSubsede: ElementRef;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('InputInstitucion', { static: true }) FiltroInstitucion: ElementRef;
+  @ViewChild('InputSede', { static: true }) FiltroSede: ElementRef;
+  @ViewChild('InputSubsede', { static: true }) FiltroSubsede: ElementRef;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(
     private Servicio: InstitucionesService,

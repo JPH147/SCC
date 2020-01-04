@@ -25,7 +25,7 @@ export class EvaluacionCapacidadComponent implements OnInit {
   @Input() cliente: any;
   @Input() montos: any;
   @Output() capacidad = new EventEmitter();
-  @ViewChild('InputSueldo') FiltroSueldo: ElementRef;
+  @ViewChild('InputSueldo', { static: true }) FiltroSueldo: ElementRef;
   @ViewChildren('InputDescuento') FiltroDescuento: QueryList<any>;
 
   constructor(

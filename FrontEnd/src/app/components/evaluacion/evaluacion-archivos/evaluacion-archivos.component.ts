@@ -34,7 +34,7 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
   @Input() informacion_venta: Observable<any>;
   @Output() ActualizarCliente = new EventEmitter();
 
-  @ViewChild('InputVendedor') VendedorAutoComplete : ElementRef;
+  @ViewChild('InputVendedor', { static: true }) VendedorAutoComplete : ElementRef;
   // @ViewChild('InputTrabajador') TrabajadorAutoComplete : ElementRef;
 
   public EvaluacionArchivosForm : FormGroup;

@@ -15,13 +15,13 @@ import * as moment from 'moment';
 })
 export class HistorialMovimientosComponent implements OnInit {
 
-	@ViewChild('InputAlmacen') FiltroAlmacen: ElementRef;
-	@ViewChild('InputTipo') FiltroTipo: MatSelect;
-  @ViewChild('InputEstadoTransferencia') FiltroEstadoTransferencia: MatSelect;
-	@ViewChild('InputReferente') FiltroReferente: ElementRef;
-	@ViewChild('InputDocumento') FiltroDocumento: ElementRef;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+	@ViewChild('InputAlmacen', { static: true }) FiltroAlmacen: ElementRef;
+	@ViewChild('InputTipo', { static: true }) FiltroTipo: MatSelect;
+  @ViewChild('InputEstadoTransferencia', { static: false }) FiltroEstadoTransferencia: MatSelect;
+	@ViewChild('InputReferente', { static: true }) FiltroReferente: ElementRef;
+	@ViewChild('InputDocumento', { static: true }) FiltroDocumento: ElementRef;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   public tipo_transaccion:Array<any>;
 	public fecha_inicio:Date;

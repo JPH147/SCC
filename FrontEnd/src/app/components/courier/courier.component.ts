@@ -21,8 +21,8 @@ export class CourierComponent implements OnInit {
   public ListadoCourier: CourierDataSource;
   public Columnas: string[] = ['numero', 'nombre', 'url', 'opciones'];
 
-  @ViewChild('InputCourier') FiltroCourier: ElementRef;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('InputCourier', { static: true }) FiltroCourier: ElementRef;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(
     private Dialogo : MatDialog ,

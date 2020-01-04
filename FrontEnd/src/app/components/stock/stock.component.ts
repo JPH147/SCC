@@ -20,13 +20,13 @@ export class StockComponent implements OnInit {
 
   public TotalResultados = 0;
 
-  @ViewChild('InputAlmacen') FiltroAlmacen: ElementRef;
-  @ViewChild('InputTipo') FiltroTipo: ElementRef;
-  @ViewChild('InputMarca') FiltroMarca: ElementRef;
-  @ViewChild('InputModelo') FiltroModelo: ElementRef;
-  @ViewChild('InputDescripcion') FiltroDescripcion: ElementRef;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('InputAlmacen', { static: true }) FiltroAlmacen: ElementRef;
+  @ViewChild('InputTipo', { static: true }) FiltroTipo: ElementRef;
+  @ViewChild('InputMarca', { static: true }) FiltroMarca: ElementRef;
+  @ViewChild('InputModelo', { static: true }) FiltroModelo: ElementRef;
+  @ViewChild('InputDescripcion', { static: true }) FiltroDescripcion: ElementRef;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(
     private http: HttpClient,

@@ -15,7 +15,7 @@ export class VentanaCronogramaComponent implements OnInit {
 
   ListadoPagos: CronogramaPagosDataSource;
   Columnas: string[] = [ 'numero', 'pago', 'fecha', 'tipo_pago', 'comprobante'];
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,

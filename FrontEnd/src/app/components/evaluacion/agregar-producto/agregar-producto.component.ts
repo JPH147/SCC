@@ -16,8 +16,8 @@ export class AgregarProductoComponent implements OnInit {
 
   ListadoProductos: AgregarProductosDataSource;
   Columnas: string[] = ['descripcion', 'tipo', 'marca', 'modelo', 'precio', 'opciones'];
-  @ViewChild('InputProducto') FiltroProducto: ElementRef;
-  @ViewChild(MatPaginator) Paginator: MatPaginator;
+  @ViewChild('InputProducto', { static: true }) FiltroProducto: ElementRef;
+  @ViewChild(MatPaginator, { static: true }) Paginator: MatPaginator;
   public ProductosSeleccionados: Array<any> =[];
   public total: number;
   public Almacenes: Array<Almacen>;

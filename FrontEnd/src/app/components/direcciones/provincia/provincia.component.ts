@@ -19,9 +19,9 @@ export class ProvinciaComponent implements OnInit {
   Columnas: string[] = ['numero', 'departamento', 'nombre', 'opciones'];
   public TotalResultados:number=0;
 
-  @ViewChild('InputDepartamento') FiltroDepartamento: ElementRef;
-  @ViewChild('InputProvincia') FiltroProvincia: ElementRef;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('InputDepartamento', { static: true }) FiltroDepartamento: ElementRef;
+  @ViewChild('InputProvincia', { static: true }) FiltroProvincia: ElementRef;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(
     private Servicio: ServiciosDirecciones,

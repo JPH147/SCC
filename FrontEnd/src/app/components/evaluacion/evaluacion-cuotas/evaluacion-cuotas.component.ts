@@ -48,8 +48,8 @@ export class EvaluacionCuotasComponent implements OnInit {
   public OtrosPagos : Array<any> = [];
   public comodin : number = 0 ;
 
-  @ViewChild('InputCapital') FiltroCapital:ElementRef;
-  @ViewChild('InputCuotas') FiltroCuotas:ElementRef;
+  @ViewChild('InputCapital', { static: true }) FiltroCapital:ElementRef;
+  @ViewChild('InputCuotas', { static: true }) FiltroCuotas:ElementRef;
 
   @ViewChildren('InputNumero') FiltroNumero: QueryList<any>;
   @ViewChildren('InputPrecio') FiltroPrecio: QueryList<any>;

@@ -24,13 +24,13 @@ export class CobranzasListarComponent implements OnInit {
   public ListadoCobranza: CobranzaDataSource;
   public Columnas: string[] = ['numero', 'tipo', 'codigo', "tipo_pago",'cliente', 'monto_total', 'fecha', 'estado', 'opciones'];
 
-  @ViewChild('InputCliente') FiltroCliente: ElementRef;
-  @ViewChild('InputSubsede') FiltroSubSede: ElementRef;
-  @ViewChild('InputSede') FiltroSede: ElementRef;
-  @ViewChild('InputInstitución') FiltroInstitucion: ElementRef;
-  @ViewChild('InputTipo') FiltroTipo: MatSelect;
-  @ViewChild('InputEstado') FiltroEstado: MatSelect;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('InputCliente', { static: true }) FiltroCliente: ElementRef;
+  @ViewChild('InputSubsede', { static: true }) FiltroSubSede: ElementRef;
+  @ViewChild('InputSede', { static: true }) FiltroSede: ElementRef;
+  @ViewChild('InputInstitución', { static: true }) FiltroInstitucion: ElementRef;
+  @ViewChild('InputTipo', { static: true }) FiltroTipo: MatSelect;
+  @ViewChild('InputEstado', { static: true }) FiltroEstado: MatSelect;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(
     private Dialogo: MatDialog,

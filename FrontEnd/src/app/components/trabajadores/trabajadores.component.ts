@@ -21,9 +21,9 @@ export class TrabajadoresComponent implements OnInit, AfterViewInit {
 
   public nuevo_trabajador : boolean;
 
-  @ViewChild('InputDocumento') FiltroDocumento : ElementRef;
-  @ViewChild('InputTrabajador') FiltroTrabajador : ElementRef;
-  @ViewChild(MatPaginator) paginator : MatPaginator;
+  @ViewChild('InputDocumento', { static: true }) FiltroDocumento : ElementRef;
+  @ViewChild('InputTrabajador', { static: true }) FiltroTrabajador : ElementRef;
+  @ViewChild(MatPaginator, { static: true }) paginator : MatPaginator;
 
   public ListadoTrabajadores : Trabajadores;
   public Columnas : Array <string> = [ "numero", "documento", "trabajador", "cargo", "hora_ingreso", "hora_salida", "opciones" ];
