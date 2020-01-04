@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {CollectionViewer, DataSource} from "@angular/cdk/collections";
-import {MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import {Location} from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import {SalidaVendedoresService} from '../salida-vendedores/salida-vendedores.service';

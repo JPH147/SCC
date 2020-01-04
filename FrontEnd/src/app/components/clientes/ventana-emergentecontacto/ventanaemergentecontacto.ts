@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatPaginator, MatDialog} from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
 import {FormGroup, FormBuilder, FormArray , Validators} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {ServiciosTelefonos} from '../../global/telefonos';

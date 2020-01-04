@@ -1,6 +1,8 @@
 import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
-import { MatPaginator, MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { BehaviorSubject, Observable, of, merge, fromEvent, forkJoin } from 'rxjs';
 import {catchError, finalize, debounceTime, distinctUntilChanged, tap} from 'rxjs/operators'
 import { VentaService } from '../../ventas/ventas.service';

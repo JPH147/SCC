@@ -1,7 +1,8 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {StockSerieDataSource} from '../stock.dataservice';
-import { MatPaginator,MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
 import {ServiciosProductoSerie} from '../../global/productoserie';
 import {tap} from 'rxjs/operators';
 

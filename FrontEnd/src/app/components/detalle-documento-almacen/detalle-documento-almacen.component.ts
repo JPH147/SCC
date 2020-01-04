@@ -4,7 +4,8 @@ import { DetalleDocumentoAlmacenService } from './detalle-documento-almacen.serv
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ActivatedRoute, Params } from '@angular/router';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { MatDialog, MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { VentanaEditarSerieComponent } from './ventana-editar-serie/ventana-editar-serie.component'
 import { ServiciosProductoSerie } from '../global/productoserie';
 import * as moment from 'moment';

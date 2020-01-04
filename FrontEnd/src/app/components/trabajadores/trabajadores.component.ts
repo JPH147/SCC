@@ -3,7 +3,8 @@ import { TrabajadoresService } from './trabajadores.service';
 import { Observable, BehaviorSubject, of, fromEvent, merge } from 'rxjs';
 import { catchError, finalize, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
-import { MatPaginator, MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
 import {VentanaTrabajadoresComponent} from './ventana-trabajador/ventana-trabajador.component';
 import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
 

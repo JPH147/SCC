@@ -3,7 +3,8 @@ import { ServiciosVentas } from '../global/ventas';
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {BehaviorSubject, fromEvent, merge} from 'rxjs';
 import {finalize, debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
-import { MatPaginator , MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
 import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
 import {Notificaciones} from '../global/notificacion';
 import {VentanaTalonarioComponent} from './ventana-talonario/ventana-talonario.component'

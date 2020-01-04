@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { MatSelect, MatPaginator, MatSort } from '@angular/material'
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSelect } from '@angular/material/select';
+import { MatSort } from '@angular/material/sort';
 import { Observable, BehaviorSubject, of, fromEvent, merge } from 'rxjs';
 import { catchError, finalize, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CreditosService } from '../creditos/creditos.service';

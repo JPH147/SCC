@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit, AfterViewInit, ViewChild, ElementRef} from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import {FormControl, FormGroup, FormBuilder, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {ServiciosGenerales, TipoProductoModelo, MarcaModelo, ModeloModelo} from '../../global/servicios';

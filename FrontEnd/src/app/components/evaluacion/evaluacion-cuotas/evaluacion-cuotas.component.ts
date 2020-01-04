@@ -3,7 +3,7 @@ import { BehaviorSubject,Observable, fromEvent, merge } from 'rxjs';
 import {FormControl} from '@angular/forms';
 import {tap, debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {CollectionViewer} from '@angular/cdk/collections';
-import {MatDialog} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import {AgregarProductoComponent} from '../agregar-producto/agregar-producto.component';
 import { ReglasEvaluacionService } from '../../tablas-maestras/reglas-evaluacion/reglas-evaluacion.service';
 import * as moment from 'moment';

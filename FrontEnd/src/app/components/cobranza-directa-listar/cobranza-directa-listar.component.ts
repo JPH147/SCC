@@ -1,5 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { MatSelect, MatPaginator, MatSort, MatDialog } from '@angular/material'
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSelect } from '@angular/material/select';
+import { MatSort } from '@angular/material/sort';
 import { Observable, BehaviorSubject, of, fromEvent, merge } from 'rxjs';
 import { catchError, finalize, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';

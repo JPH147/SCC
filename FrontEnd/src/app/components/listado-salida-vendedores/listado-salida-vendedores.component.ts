@@ -1,6 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { VentanaEmergenteGastos} from './ventana-emergente-gastos/ventanaemergente-gastos';
-import {MatSelect, MatPaginator, MatSort,MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSelect } from '@angular/material/select';
+import { MatSort } from '@angular/material/sort';
 import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
 import {ListadoSalidaVendedoresService} from './listado-salida-vendedores.service';
 import {ListadoSalidaVendedoresDataSource} from './listado-salida-vendedores.dataservice'

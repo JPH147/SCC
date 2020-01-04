@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {CollectionViewer, DataSource} from "@angular/cdk/collections";
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {Location} from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import {SalidaVendedoresService} from '../salida-vendedores/salida-vendedores.service';

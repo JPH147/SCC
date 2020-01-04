@@ -3,7 +3,9 @@ import {merge, Observable, fromEvent} from 'rxjs';
 import {DepartamentoDataSource} from './departamento.dataservice';
 import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
 import {ServiciosDirecciones, Departamento} from '../../global/direcciones';
-import { MatPaginator, MatSort, MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import {VentanaEmergenteDepartamento} from './ventana-emergente/ventanaemergente';
 import {VentanaConfirmarComponent} from '../../global/ventana-confirmar/ventana-confirmar.component'
 

@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit, AfterViewInit, ViewChild, ElementRef} from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormGroup, FormBuilder, Validators, AbstractControl} from '@angular/forms';
 import { ServiciosVentas } from '../../global/ventas';
 import { fromEvent } from 'rxjs';

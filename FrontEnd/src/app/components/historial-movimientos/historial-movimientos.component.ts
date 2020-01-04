@@ -1,7 +1,9 @@
 import { Component, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import {HistorialMovimientosService} from './historial-movimientos.service'
 import {HistorialMovimientosDataService} from './historial-movimientos.dataservice'
-import {MatPaginator, MatSort, MatSelect} from '@angular/material'
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSelect } from '@angular/material/select';
+import { MatSort } from '@angular/material/sort';
 import {merge, Observable, of as observableOf, from, fromEvent} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap, delay, catchError, map, startWith, switchMap} from 'rxjs/operators';
 import {ServiciosGenerales} from '../global/servicios';

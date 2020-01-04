@@ -1,5 +1,9 @@
 import {Component, OnInit, ViewChild, AfterViewInit, ElementRef} from '@angular/core';
-import { MatPaginator, MatSort, MatDialog, MatSnackBar, MatCheckbox } from '@angular/material';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSort } from '@angular/material/sort';
 import {merge, Observable, of , fromEvent, forkJoin } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
 import {ClienteService} from './clientes.service';

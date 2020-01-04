@@ -4,7 +4,7 @@ import { Observable, forkJoin,fromEvent, merge, BehaviorSubject, of} from 'rxjs'
 import { PlantillasService } from './plantillas.service';
 import { VentanaPlantillasComponent } from './ventana-plantillas/ventana-plantillas.component';
 import {saveAs} from 'file-saver';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { Notificaciones } from '../global/notificacion';
 
 @Component({

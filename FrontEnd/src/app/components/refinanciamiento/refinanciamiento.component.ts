@@ -5,7 +5,7 @@ import { Observable, of , BehaviorSubject , merge, fromEvent} from 'rxjs';
 import { catchError , finalize, debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import {Location} from '@angular/common';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { SeleccionarClienteComponent } from '../retorno-vendedores/seleccionar-cliente/seleccionar-cliente.component';
 import { VentanaEmergenteContacto} from '../clientes/ventana-emergentecontacto/ventanaemergentecontacto';
 import { VentanaConfirmarComponent } from '../global/ventana-confirmar/ventana-confirmar.component';

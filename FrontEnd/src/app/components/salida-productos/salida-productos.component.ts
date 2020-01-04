@@ -6,8 +6,9 @@ import {FormControl, FormBuilder, FormGroup, Validators, FormArray} from '@angul
 import {Observable, fromEvent} from 'rxjs';
 import {map, startWith, debounceTime, tap, distinctUntilChanged} from 'rxjs/operators';
 import {SelectionModel} from '@angular/cdk/collections';
-import {MatTableDataSource, MatSnackBar} from '@angular/material';
-import { MatDialog } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
 import {StockService} from '../stock/stock.service'
 import {ServiciosProductoSerie} from '../global/productoserie'
 import {IngresoProductoService} from '../ingreso-productos/ingreso-productos.service'

@@ -3,7 +3,10 @@ import { fromEvent,merge } from 'rxjs';
 import { ProveedorService } from './proveedores.service';
 import { ProveedorDataSource } from './proveedores.dataservice';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
-import { MatPaginator, MatSort, MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSort } from '@angular/material/sort';
 import { ProveedoresMovimientosComponent } from './proveedores-movimientos/proveedores-movimientos.component'
 import { VentanaEmergenteProveedores } from './ventana-emergente/ventana-emergente.component';
 import { VentanaConfirmarComponent } from '../global/ventana-confirmar/ventana-confirmar.component';

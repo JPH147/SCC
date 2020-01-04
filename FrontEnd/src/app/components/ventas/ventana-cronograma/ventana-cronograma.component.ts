@@ -1,6 +1,7 @@
 import {Component, Inject, OnInit, AfterViewInit, ViewChild} from '@angular/core';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
-import { MatDialogRef, MAT_DIALOG_DATA,MatPaginator} from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
 import {VentaService} from '../ventas.service';
 import {BehaviorSubject, Observable, of} from 'rxjs';
 import {catchError, finalize,debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';

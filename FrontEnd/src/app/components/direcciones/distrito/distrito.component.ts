@@ -3,7 +3,9 @@ import {ServiciosDirecciones, Provincia} from '../../global/direcciones';
 import {merge, Observable, fromEvent} from 'rxjs';
 import {DistritoDataSource} from './distrito.dataservice'
 import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
-import { MatPaginator, MatSort, MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import {VentanaConfirmarComponent} from '../../global/ventana-confirmar/ventana-confirmar.component'
 import {VentanaEmergenteDistrito} from './ventana-emergente/ventanaemergente'
 // import {ViewEncapsulation} from '@angular/core';

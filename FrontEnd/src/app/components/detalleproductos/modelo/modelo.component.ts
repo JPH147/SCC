@@ -2,7 +2,9 @@ import {Component, OnInit, ViewChild, AfterViewInit, ElementRef} from '@angular/
 import {merge, Observable, fromEvent} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
 import {ServiciosDirecciones, Departamento} from '../../global/direcciones';
-import { MatPaginator, MatSort, MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import {VentanaConfirmarComponent} from '../../global/ventana-confirmar/ventana-confirmar.component'
 import { ModeloDataSource } from './modelo.data.service';
 import { ServiciosGenerales } from '../../global/servicios';

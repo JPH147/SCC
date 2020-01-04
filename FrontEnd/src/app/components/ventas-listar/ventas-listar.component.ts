@@ -1,6 +1,9 @@
 import { VentanaEmergenteProductos } from '../productos/ventana-emergente/ventanaemergente';
 import {Component, OnInit, ViewChild, AfterViewInit, ElementRef} from '@angular/core';
-import { MatPaginator, MatSort, MatDialog, MatSelect } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSelect } from '@angular/material/select';
+import { MatSort } from '@angular/material/sort';
 import {merge, fromEvent} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
 import {ProductoService} from '../productos/productos.service';

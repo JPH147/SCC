@@ -2,7 +2,8 @@ import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, AfterViewI
 import { CollectionViewer, DataSource } from "@angular/cdk/collections";
 import { CreditosService } from './creditos.service';
 import { FormArray, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MatDialog, MatSort } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSort } from '@angular/material/sort';
 import { ServiciosTipoPago } from '../global/tipopago';
 import { ClienteService  } from '../clientes/clientes.service';
 import { forkJoin,fromEvent, merge, BehaviorSubject} from 'rxjs';

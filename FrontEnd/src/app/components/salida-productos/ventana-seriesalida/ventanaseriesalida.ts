@@ -1,6 +1,10 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MatCard, MatInputModule, MatButton, MatDatepicker, MatTableModule } from '@angular/material';
-import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import { MatButton } from '@angular/material/button';
+import { MatCard } from '@angular/material/card';
+import { MatDatepicker } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { MatTableModule } from '@angular/material/table';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {FormControl, FormGroup, FormBuilder, FormArray,Validators} from '@angular/forms';
 import {ServiciosProductoSerie} from '../../global/productoserie';
 

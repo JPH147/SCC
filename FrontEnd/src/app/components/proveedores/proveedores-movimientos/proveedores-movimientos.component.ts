@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import {MovimientosProveedorDataSource} from '../proveedores.dataservice';
-import { MatPaginator,MatDialogRef, MAT_DIALOG_DATA,MatDialog } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
 import {ProveedorService} from '../proveedores.service';
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {fromEvent, merge} from 'rxjs';

@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import {FormArray, FormGroup, FormBuilder, Validators, AbstractControl} from '@angular/forms';
 import {ServiciosTipoPago} from '../../global/tipopago';
-import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import {SeleccionarClienteComponent} from '../seleccionar-cliente/seleccionar-cliente.component';
 import {ServiciosTelefonos} from '../../global/telefonos';
 import {ServiciosDirecciones} from '../../global/direcciones';

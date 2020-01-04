@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, ViewChil
 import { Observable , fromEvent } from 'rxjs';
 import { debounceTime , distinctUntilChanged , tap } from 'rxjs/operators';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { EvaluacionService } from '../evaluacion.service';
 import { ServiciosDirecciones } from '../../global/direcciones';

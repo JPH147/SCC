@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { ServiciosGenerales } from '../../global/servicios';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-ventana-editar-documento',

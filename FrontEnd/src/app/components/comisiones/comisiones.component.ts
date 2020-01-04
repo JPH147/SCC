@@ -3,7 +3,9 @@ import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {BehaviorSubject, Observable, of, merge, fromEvent} from 'rxjs';
 import {catchError, finalize, debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
 import {ComisionesService} from './comisiones.service';
-import {MatPaginator, MatSelect,MatDialog} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSelect } from '@angular/material/select';
 import {ComisionesDetalleComponent} from './comisiones-detalle/comisiones-detalle.component';
 
 @Component({

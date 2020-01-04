@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { fromEvent, BehaviorSubject, forkJoin } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
-import { MatDialog } from '@angular/material' ;
+import { MatDialog } from '@angular/material/dialog';
 import { Notificaciones } from '../global/notificacion';
 import { URLIMAGENES } from '../global/url';
 import { ServiciosGenerales } from '../global/servicios';

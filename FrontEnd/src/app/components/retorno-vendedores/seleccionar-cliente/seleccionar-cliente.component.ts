@@ -3,7 +3,8 @@ import {ClienteService} from '../../clientes/clientes.service';
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {BehaviorSubject, Observable, of, merge, fromEvent} from 'rxjs';
 import {catchError, finalize,debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
-import { MatPaginator, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-seleccionar-cliente',

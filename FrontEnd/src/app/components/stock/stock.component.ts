@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import {MatPaginator, MatSort, MatDialog} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import {merge, Observable, of as observableOf, from, fromEvent} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap, delay, catchError, map, startWith, switchMap} from 'rxjs/operators';
 import { VentanaEmergenteStock } from './ventana-emergentestock/ventanaemergentestock';

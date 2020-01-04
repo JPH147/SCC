@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import {ClienteService} from '../clientes/clientes.service';
-import { MatStepper , MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatStepper } from '@angular/material/stepper';
 import {BehaviorSubject, merge, fromEvent} from 'rxjs';
 import {tap, debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {EvaluacionService} from './evaluacion.service';

@@ -3,7 +3,7 @@ import { TrabajadoresService } from '../trabajadores/trabajadores.service';
 import { Observable, BehaviorSubject, of, fromEvent, merge } from 'rxjs';
 import { catchError, finalize, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
-import { MatPaginator } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-reporte-asistencia',

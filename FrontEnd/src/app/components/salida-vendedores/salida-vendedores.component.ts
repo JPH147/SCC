@@ -1,5 +1,8 @@
 import { Component, OnInit,  ViewChild, ElementRef, ViewChildren, QueryList } from '@angular/core';
-import {MatDialog, MatChipInputEvent, MatSelect, MatSnackBar} from '@angular/material';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSelect } from '@angular/material/select';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormGroup, FormBuilder, FormArray, Validators, AbstractControl} from '@angular/forms';
 import {Observable, fromEvent, BehaviorSubject} from 'rxjs';
 import {COMMA} from '@angular/cdk/keycodes';
