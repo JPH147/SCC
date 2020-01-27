@@ -51,9 +51,10 @@ import { CobranzaJudicialListarComponent } from './components/cobranza-judicial-
 import { CobranzaJudicialComponent } from './components/cobranza-judicial/cobranza-judicial.component';
 import { CobranzaJudicialGenerarComponent } from './components/cobranza-judicial-generar/cobranza-judicial-generar.component';
 import { ProcesoJudicialVinculadosComponent } from './components/proceso-judicial-vinculados/proceso-judicial-vinculados.component';
+import { ConsultarCuotasComponent } from './components/consultar-cuotas/consultar-cuotas.component';
 
 export const appRoutes: Routes = [
-  // {path: '', component: ConsultarClienteComponent}, //prueba
+  // {path: '', component: ConsultarCuotasComponent}, //prueba
   {path: 'usuarios', component: UsuariosComponent},
   {path: 'productos', component: ProductosComponent},
   {path: 'series', component: HistorialSerieComponent},

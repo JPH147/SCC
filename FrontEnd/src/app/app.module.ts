@@ -4,7 +4,7 @@ import {CdkTreeModule} from '@angular/cdk/tree';
 import {HttpClientModule} from '@angular/common/http';
 import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MAT_DATE_LOCALE} from '@angular/material/core';
+import {MAT_DATE_LOCALE, MAT_DATE_FORMATS, DateAdapter} from '@angular/material/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
@@ -182,12 +182,33 @@ import { VentanaDistritoJudicialComponent } from './components/proceso-judicial-
 import { InstanciaJudicialComponent } from './components/proceso-judicial-vinculados/instancia-judicial/instancia-judicial.component';
 import { VentanaInstanciaJudicialComponent } from './components/proceso-judicial-vinculados/instancia-judicial/ventana-instancia-judicial/ventana-instancia-judicial.component';
 import { ProcesoJudicialVinculadosComponent } from './components/proceso-judicial-vinculados/proceso-judicial-vinculados.component';
+import { ConsultarCuotasComponent } from './components/consultar-cuotas/consultar-cuotas.component';
+import { VentanaCambioDistritoComponent } from './components/cobranza-judicial-listar/ventana-cambio-distrito/ventana-cambio-distrito.component';
+import { EstadoDocumentosComponent } from './components/proceso-judicial-vinculados/estado-documentos/estado-documentos.component';
+import { VentanaDocumentosComponent } from './components/proceso-judicial-vinculados/estado-documentos/ventana-documentos/ventana-documentos.component';
+
+import { MatMomentDateModule, MomentDateAdapter } from '@angular/material-moment-adapter';
+import { JuezJuzgadoComponent } from './components/proceso-judicial-vinculados/juez-juzgado/juez-juzgado.component';
+import { VentanaJuezJuzgadoComponent } from './components/proceso-judicial-vinculados/juez-juzgado/ventana-juez-juzgado/ventana-juez-juzgado.component';
+
+export const CUSTOM_DATE_FORMAT = {
+  parse: {
+    dateInput: 'DD/MM/YYYY',
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MMMM YYYY',
+    dateA11yLabel: 'DD/MM/YYYY',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 
 @NgModule({
   exports:[
     RouterModule
   ],
   imports: [
+    MatMomentDateModule,
     MatNativeDateModule,
     CdkTableModule,
     CdkTreeModule,
@@ -370,7 +391,13 @@ import { ProcesoJudicialVinculadosComponent } from './components/proceso-judicia
     VentanaDistritoJudicialComponent,
     InstanciaJudicialComponent,
     VentanaInstanciaJudicialComponent,
-    ProcesoJudicialVinculadosComponent
+    ProcesoJudicialVinculadosComponent,
+    ConsultarCuotasComponent,
+    VentanaCambioDistritoComponent,
+    EstadoDocumentosComponent,
+    VentanaDocumentosComponent,
+    JuezJuzgadoComponent,
+    VentanaJuezJuzgadoComponent
    ],
   entryComponents: [
     AppComponent,
@@ -435,15 +462,22 @@ import { ProcesoJudicialVinculadosComponent } from './components/proceso-judicia
     VentanaCargoComponent,
     VentanaVendedoresCargoComponent,
     VentanaDistritoJudicialComponent,
-    VentanaInstanciaJudicialComponent
+    VentanaInstanciaJudicialComponent,
+    VentanaCambioDistritoComponent,
+    VentanaDocumentosComponent,
+    VentanaJuezJuzgadoComponent
   ],
   bootstrap: [AppComponent],
   providers: [
     Notificaciones,
     ServiciosGenerales,
+    {provide: DateAdapter, useClass: MomentDateAdapter},
+    {provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMAT},
     {provide: MAT_DATE_LOCALE, useValue: 'es-ES'},
     { provide: MatPaginatorIntl, useValue: Configuracion() }
   ]
 })
+
+
 
 export class AppModule {}

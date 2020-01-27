@@ -22,7 +22,7 @@
 
       if($proceso->create_distrito_juzgado())
       {
-        print_json("0000", "Se creó el distrito judicial satisfactoriamente.", $proceso->id_distrito_juzgado);
+        print_json("0000", "Se creó el distrito judicial satisfactoriamente.", true);
       }
       else
       {

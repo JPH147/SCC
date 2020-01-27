@@ -1,0 +1,140 @@
+<mat-card class="principal">
+
+  <mat-card-content>
+
+    <mat-grid-list cols=4 rowHeight="70px">
+
+      <mat-grid-tile>
+        <mat-form-field>
+          <input type="number" class="resaltado" matInput placeholder="Capital" [(ngModel)]="capital" #InputCapital>
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <mat-form-field>
+          <input type="number" class="resaltado" matInput placeholder="Número de cuotas" [(ngModel)]="cuotas" #InputCuotas>
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <mat-form-field>
+          <input type="number" class="resaltado" matInput placeholder="Interés" [(ngModel)]="interes" #InputInteres>
+          <span matSuffix>%</span>
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <mat-form-field appearance="fill">
+          <mat-label>Total a pagar</mat-label>
+          <input type="text" class="resaltado" matInput placeholder="Total a pagar" [(ngModel)]="prestamo" readonly>
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <mat-form-field>
+          <input matInput [matDatepicker]="picker" placeholder="Fecha de crédito" [(ngModel)]="fecha_prestamo" [max]="fecha_inicio" readonly (dateChange)="CambioFecha()"> 
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker [disabled]="false"></mat-datepicker>
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <mat-checkbox color="primary" [(ngModel)]="interes_por_dia" (change)="CambioInteresDiario($event)" [disabled]="interes_diario_deshabilitado">Interés por día</mat-checkbox>
+      </mat-grid-tile>
+
+      <mat-grid-tile></mat-grid-tile>
+
+      <mat-grid-tile>
+        <mat-form-field>
+          <input matInput [matDatepicker]="FInicio" placeholder="Fecha de inicio de pagos" [min]="fecha_prestamo" [(ngModel)]="fecha_inicio" readonly (dateChange)="CambioFecha()"> 
+          <mat-datepicker-toggle matSuffix [for]="FInicio"></mat-datepicker-toggle>
+          <mat-datepicker #FInicio [disabled]="false"></mat-datepicker>
+        </mat-form-field>
+      </mat-grid-tile>
+    </mat-grid-list>
+
+    <!-- Notificación de errores -->
+    <ng-container>
+      <mat-grid-list cols=1 rowHeight="50px" *ngIf="monto_mayor">
+        <mat-grid-tile>
+          <mat-error>El monto a pagar es mayor a la capacidad de pago</mat-error>
+        </mat-grid-tile>
+      </mat-grid-list>
+  
+      <mat-grid-list cols=1 rowHeight="50px" *ngIf="!correcto">
+        <mat-grid-tile>
+          <mat-error> Los valores ingresados deben ser enteros </mat-error>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </ng-container>
+
+    <ng-container *ngIf="tipo==2">
+      <mat-grid-list cols="5" rowHeight="70px" *ngFor="let producto of Productos">
+
+        <mat-grid-tile colspan="2">
+          <mat-form-field class="columnas-2">
+            <input matInput placeholder="Producto" [(ngModel)]="producto.descripcion" readonly>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan="1">
+          <mat-form-field class="columnas-1">
+            <input matInput placeholder="Cantidad" [(ngModel)]="producto.numero" #InputNumero>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput placeholder="Precio" [(ngModel)]="producto.precio" #InputPrecio>
+            <mat-error>Solo pueden ingresar números</mat-error>
+            <span matPrefix>S/ &nbsp;</span>
+          </mat-form-field>
+        </mat-grid-tile>
+
+      </mat-grid-list>
+    </ng-container>
+
+    <mat-table [dataSource]="EvaluacionCuotas" *ngIf="correcto">
+
+      <ng-container matColumnDef="numero">
+        <mat-header-cell *matHeaderCellDef>N°</mat-header-cell>
+        <mat-cell *matCellDef="let cuota">{{cuota.numero}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="monto">
+        <mat-header-cell *matHeaderCellDef>Monto</mat-header-cell>
+        <mat-cell *matCellDef="let cuota"> {{ cuota.monto | currency:'S/.' }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="aporte">
+        <mat-header-cell *matHeaderCellDef>Aporte</mat-header-cell>
+        <mat-cell *matCellDef="let cuota">{{cuota.aporte | currency:'S/.' }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="fecha">
+        <mat-header-cell *matHeaderCellDef>Fecha de pago</mat-header-cell>
+        <mat-cell *matCellDef="let cuota">{{cuota.fecha | date:'dd/MM/yyyy' }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="total">
+        <mat-header-cell *matHeaderCellDef>Total</mat-header-cell>
+        <mat-cell *matCellDef="let cuota">{{cuota.total | currency:'S/.'}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="otros_pagos">
+        <mat-header-cell *matHeaderCellDef>Otros pagos</mat-header-cell>
+        <mat-cell *matCellDef="let cuota">{{cuota.otros_pagos | currency:'S/.' }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="total_acumulado">
+        <mat-header-cell *matHeaderCellDef>Total acumulado</mat-header-cell>
+        <mat-cell *matCellDef="let cuota">{{cuota.total_acumulado | currency:'S/.' }}</mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>
+      <mat-row *matRowDef="let row;columns:Columnas"></mat-row>
+    </mat-table>
+
+  </mat-card-content>
+
+</mat-card>

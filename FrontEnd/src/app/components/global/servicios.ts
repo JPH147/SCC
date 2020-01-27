@@ -4,8 +4,6 @@ import {HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import {Observable, of} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {URL, URLIMAGENES} from './url';
-import * as moment from 'moment';
-import { equalParamsAndUrlSegments } from '../../../../node_modules/@angular/router/src/router_state';
 
 @Injectable()
 
@@ -681,10 +679,13 @@ EditarModelo(
     SubirArchivo(
       file : File
     ){
-      let testData:FormData = new FormData();
-      testData.append('image', file, file.name);
-      // console.log(testData);
-      return this.http.post(this.url_imagenes, testData);
+      if(file) {
+        let testData:FormData = new FormData();
+        testData.append('image', file, file.name);
+        return this.http.post(this.url_imagenes, testData);
+      } else {
+        return of("") ;
+      }
     }
 
     RenameFile(

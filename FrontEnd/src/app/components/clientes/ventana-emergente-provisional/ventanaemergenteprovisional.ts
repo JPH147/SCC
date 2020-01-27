@@ -24,6 +24,7 @@ export class VentanaEmergenteProvisionalClientes {
   public Cargando = new BehaviorSubject<boolean>(false) ;
   @Output() cliente_output = new EventEmitter();
   @ViewChild('InputCliente', { static: true }) FiltroCliente : ElementRef;
+  
   public selectedValue: string;
   public ClientesForm: FormGroup;
   public Sede: any = [];
@@ -120,6 +121,17 @@ export class VentanaEmergenteProvisionalClientes {
       })
     ).subscribe();
     
+    this.ClientesForm.get('dni_garante').valueChanges
+    .pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      tap(()=>{
+        if( this.ClientesForm.value.dni_garante.length == 8 ) {
+          this.BuscarGarante()
+        }
+      })
+    ).subscribe();
+
     // Se emite información para la vista express cada vez que hay un cambio
     this.ClientesForm.valueChanges.subscribe(res=>{
       this.EmitirInformacion();
@@ -225,7 +237,7 @@ export class VentanaEmergenteProvisionalClientes {
       parametro_domicilio_laboral : ["", []],
       parametro_autorizacion_1 : ["", []],
       parametro_autorizacion_2 : ["", []],
-      id_garante: [null,[
+      hay_garante: [false,[
       ]],
       nombre_garante: ["",[
       ]],
@@ -598,21 +610,6 @@ export class VentanaEmergenteProvisionalClientes {
     });
   }
 
-  // DepartamentoDireccionSeleccionado(event) {
-  //   this.ServicioDireccion.ListarProvincias(event.value, '' , 1, 30).subscribe(res => {
-  //     this.LstProvincia = res['data'].provincias
-  //   });
-  //   this.ClientesForm.get('direccion_provincia').setValue('');
-  //   this.ClientesForm.get('direccion_distrito').setValue('');
-  // }
-
-  // ProvinciaDireccionSeleccionada(event) {
-  //   this.ServicioDireccion.ListarDistritos('', event.value, '' , 1, 50).subscribe(res => {
-  //     this.LstDistrito = res['data'].distritos
-  //   });
-  //   this.ClientesForm.get('direccion_distrito').setValue('');
-  // }
-
   ListarRelevanciaDireccion() {
     this.RelevanciaDireccion = [
       {id: 1, viewValue: 'Primaria'},
@@ -666,16 +663,38 @@ export class VentanaEmergenteProvisionalClientes {
     )
   }
 
+  HayGarante(hay:boolean){
+    if( hay ) {
+      this.ClientesForm.get('hay_garante').setValue(true)
+    } else {
+      this.ClientesForm.get('hay_garante').setValue(false) ;
+      this.ClientesForm.get('nombre_garante').setValue("");
+      this.ClientesForm.get('dni_garante').setValue("");
+    }
+  }
+
+  BuscarGarante() {
+    this.ClienteServicios.BuscarClienteDNI(this.ClientesForm.value.dni_garante)
+    .pipe(
+      finalize(()=>this.Cargando.next(false))
+    )
+    .subscribe(res=>{
+      if(res['codigo']==0){
+        this.ClientesForm.get('nombre_garante').setValue(res['data'].nombre); 
+      }
+    })
+  }
+
   AbrirVentanaGarante(){
     let Ventana = this.Dialogo.open(SeleccionarClienteComponent,{
       width: "1200px",
-      data: {cliente : this.ClientesForm.value.id_cliente}
+      data: { cliente : this.ClientesForm.value.id_cliente ? this.ClientesForm.value.id_cliente : 0 }
     })
 
     Ventana.afterClosed().subscribe(res=>{
       if(res){
         // console.log(res);
-        this.ClientesForm.get('id_garante').setValue(res.id);
+        // this.ClientesForm.get('id_garante').setValue(res.id);
         this.ClientesForm.get('nombre_garante').setValue(res.nombre);
         this.ClientesForm.get('dni_garante').setValue(res.dni);
         // this.ObtenerDireccionGarante(res.id,index);
@@ -688,12 +707,6 @@ export class VentanaEmergenteProvisionalClientes {
         // })
       }
     })
-  }
-
-  EliminarGarante(){
-    this.ClientesForm.get('id_garante').setValue(null);
-    this.ClientesForm.get('nombre_garante').setValue("");
-    this.ClientesForm.get('dni_garante').setValue("");
   }
 
   /* Enviar al formulario */

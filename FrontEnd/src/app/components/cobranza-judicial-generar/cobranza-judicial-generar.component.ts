@@ -23,6 +23,7 @@ export class CobranzaJudicialGenerarComponent implements OnInit {
   public cronograma : Array<any> ;
   public ListadoCronograma : CronogramaDataSource ;
   public Columnas : Array<string>;
+  public fecha_expediente : Date = new Date() ;
 
   constructor(
     private route : ActivatedRoute ,
@@ -43,7 +44,7 @@ export class CobranzaJudicialGenerarComponent implements OnInit {
       if(Object.keys(params).length>0){
         if(params['idprocesonuevo']){
           this.id_proceso_nuevo = params['idprocesonuevo'];
-          // this.id_proceso_nuevo = 4;
+          // this.id_proceso_nuevo = 25;
           this.SeleccionarProceso(this.id_proceso_nuevo);
         }
         if(params['idprocesover']){
@@ -117,6 +118,7 @@ export class CobranzaJudicialGenerarComponent implements OnInit {
       this.JudicialForm.get('total').setValue(res[0].total) ;
       this.JudicialForm.get('numero_cuotas').setValue(res[0].numero_cuotas) ;
       this.JudicialForm.get('monto_cuota').setValue(res[0].monto_cuota) ;
+      this.fecha_expediente = moment(res[0].fecha_inicio,"YYYY-MM-DD").toDate() ;
       this.CrearCronograma();
     })
   }

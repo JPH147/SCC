@@ -24,7 +24,7 @@
 
       if($proceso->create_instancia_juzgado())
       {
-        print_json("0000", "Se creó la instancia judicial satisfactoriamente.", $proceso->id_instancia_juzgado);
+        print_json("0000", "Se creó la instancia judicial satisfactoriamente.", true);
       }
       else
       {

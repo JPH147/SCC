@@ -9,26 +9,32 @@ import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { CobranzaJudicialService } from '../cobranza-judicial/cobranza-judicial.service';
 import { VentanaConfirmarComponent } from '../global/ventana-confirmar/ventana-confirmar.component';
 import { Router } from '@angular/router';
+import { ProcesoJudicialVinculadosService } from '../proceso-judicial-vinculados/proceso-judicial-vinculados.service';
+import { VentanaCambioDistritoComponent } from './ventana-cambio-distrito/ventana-cambio-distrito.component';
+import { Notificaciones } from '../global/notificacion';
 
 @Component({
   selector: 'app-cobranza-judicial-listar',
   templateUrl: './cobranza-judicial-listar.component.html',
-  styleUrls: ['./cobranza-judicial-listar.component.css']
+  styleUrls: ['./cobranza-judicial-listar.component.css'],
 })
+
 export class CobranzaJudicialListarComponent implements OnInit {
 
   public fecha_inicio: Date;
   public fecha_fin: Date;
-  public Cuentas : Array<any>;
+  public TipoDocumentos : Array<any> ;
+  public Cuentas : Array<any> = [];
+  public Distritos : Array<any> = [];
 
   public ListadoProcesos: CobranzaDataSource;
-  public Columnas: string[] = ['id_tipo_documento', 'fecha_inicio', 'cliente_nombre', 'expediente', 'juzgado', 'vendedor','total', 'opciones'];
+  public Columnas: string[] = ['id_tipo_documento', 'fecha_inicio', 'cliente_nombre', 'expediente', 'juzgado', 'vendedor','fecha_ultimo_documento','fecha_ultimo_documento_diferencia', 'opciones'];
 
-  @ViewChild('InputCliente', { static: true }) FiltroCliente: ElementRef;
   @ViewChild('InputExpediente', { static: true }) FiltroExpediente: ElementRef;
   @ViewChild('InputDistrito', { static: true }) FiltroDistrito: ElementRef;
   @ViewChild('InputJuzgado', { static: true }) FiltroJuzgado: ElementRef;
   @ViewChild('InputDNI', { static: true }) FiltroDNI: ElementRef;
+  @ViewChild('InputCliente', { static: true }) FiltroCliente: ElementRef;
   @ViewChild('InputEstado', { static: true }) FiltroEstado: MatSelect;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -36,16 +42,19 @@ export class CobranzaJudicialListarComponent implements OnInit {
   constructor(
     private router : Router ,
     private Dialogo : MatDialog ,
+    private Notificaciones : Notificaciones ,
     private _judicial: CobranzaJudicialService,
+    private _vinculados : ProcesoJudicialVinculadosService
   ) { }
 
   ngOnInit() {
-
-    this.fecha_inicio= new Date((new Date()).valueOf() - 1000*60*60*24*60)
-    this.fecha_fin=new Date()
+    this.ListarTipoDocumentos();
+    this.EncontrarFecha();
+    this.ListarDistritos();
+    this.fecha_inicio = new Date() ;
+    this.fecha_fin = new Date() ;
 
     this.ListadoProcesos = new CobranzaDataSource(this._judicial);
-    this.ListadoProcesos.CargarCobranzas("","","","","",this.fecha_inicio,this.fecha_fin,0,1,10,"fecha_inicio desc");
   }
 
   ngAfterViewInit () {
@@ -54,6 +63,15 @@ export class CobranzaJudicialListarComponent implements OnInit {
       this.paginator.page,
     ).pipe(
       tap(() => this.CargarData())
+    ).subscribe();
+
+    fromEvent(this.FiltroDistrito.nativeElement, 'keyup')
+    .pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      tap(() => {
+        this.ListarDistritos();
+      })
     ).subscribe();
 
     merge(
@@ -72,6 +90,13 @@ export class CobranzaJudicialListarComponent implements OnInit {
          this.CargarData();
        })
     ).subscribe();
+  }
+
+  EncontrarFecha(){
+    this._judicial.ObtenerFechaAntigua().subscribe(res=>{
+      this.fecha_inicio = res ;
+      this.ListadoProcesos.CargarCobranzas("","","","","",this.fecha_inicio,this.fecha_fin,-1,1,10,"fecha_inicio desc");
+    })
   }
 
   CargarData() {
@@ -93,6 +118,31 @@ export class CobranzaJudicialListarComponent implements OnInit {
   CambioFiltro(){
     this.paginator.pageIndex = 0;
     this.CargarData()
+  }
+
+  CambiarSede( proceso ){
+    let Dialogo = this.Dialogo.open(VentanaCambioDistritoComponent,{
+      data: proceso ,
+      width: '1200px'
+    }) ;
+
+    Dialogo.afterClosed().subscribe(res=>{
+      if(res){
+        this.Notificaciones.Snack("Se creó el traslado satisfactoriamente.","")
+        this.CargarData();
+      }
+      if(res===false) {
+        this.Notificaciones.Snack("Ocurrió un error al crear el traslado.","")
+      }
+    })
+  }
+
+  ListarDistritos(){
+    this._vinculados.ListarDistritosJudicialesActivos(
+      this.FiltroDistrito.nativeElement.value || ""
+    ).subscribe(res=>{
+      this.Distritos = res ;
+    })
   }
 
   EliminarProceso(proceso){
@@ -117,6 +167,12 @@ export class CobranzaJudicialListarComponent implements OnInit {
     this.router.navigate(['/cobranza-judicial', 'agregar', proceso.id] )
   }
 
+  ListarTipoDocumentos(){
+    this._vinculados.ListarDocumentosJudiciales("",1,20).subscribe(res=>{
+      this.TipoDocumentos = res['data'].documentos ;
+    })
+  }
+
 }
 
 export class CobranzaDataSource implements DataSource<any> {
@@ -137,6 +193,19 @@ export class CobranzaDataSource implements DataSource<any> {
   disconnect() {
     this.Informacion.complete();
     this.CargandoInformacion.complete();
+  }
+
+  CargarInstancias(
+    expediente:string,
+    distrito:string,
+    juzgado:string,
+    dni:string,
+    nombre:string,
+    fecha_inicio:Date,
+    fecha_fin:Date,
+    estado:number,
+  ) {
+
   }
 
   CargarCobranzas(

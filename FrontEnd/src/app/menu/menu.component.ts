@@ -168,7 +168,7 @@ export class MenuComponent implements OnInit{
             path: "instituciones"
           },
           {
-            nombre: "Instancias judiciales",
+            nombre: "Procesos judiciales",
             path: "proceso-judicial-vinculados"
           },
           {

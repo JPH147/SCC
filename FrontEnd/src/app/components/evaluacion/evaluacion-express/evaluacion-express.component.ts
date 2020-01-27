@@ -594,10 +594,9 @@ export class EvaluacionExpressComponent implements OnInit {
       this.cronograma,
       1,
       [],
-      this.InformacionForm.value.id_garante ? this.InformacionForm.value.nombre_garante : "0",
-      this.InformacionForm.value.id_garante ? this.InformacionForm.value.dni_garante : "0",
+      (this.InformacionForm.value.hay_garante && this.InformacionForm.value.dni_garante)? this.InformacionForm.value.nombre_garante : "0",
+      (this.InformacionForm.value.hay_garante && this.InformacionForm.value.dni_garante) ? this.InformacionForm.value.dni_garante : "0",
     ).subscribe(res=>{
-      // console.log(res);
       this.generados=true;
       this.transaccion=res['data'];
     })

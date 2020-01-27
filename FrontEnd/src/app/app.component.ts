@@ -16,8 +16,9 @@ export class AppComponent {
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnInit() {
 
-    // this.estado=false; // Cuando es para móviles
-    this.estado=true; // Cuando es para PC
+    // Estado debe ser TRUE cuando es para PC y FALSE cuando es para móviles
+    this.estado=true;
+
     this.usuario = {
       nombre: 'Jean Pierre Rodriguez Farfan',
       rol: 'Administrador',

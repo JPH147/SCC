@@ -342,7 +342,7 @@
 
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
-             <input matInput [matDatepicker]="picker" [placeholder]="id_tipo==1 ? 'Fecha de la afiliación' : 'Fecha del crédito'" formControlName="fecha_credito" (dateChange)="CambioFechaCredito()" readonly>
+             <input matInput [matDatepicker]="picker" [placeholder]="id_tipo==1 ? 'Fecha de la afiliación' : 'Fecha del crédito'" formControlName="fecha_credito" (dateChange)="CambioFechaCredito()"  [readonly]="id_credito || id_tipo==1 || cliente_refinanciado">
              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
              <mat-datepicker #picker [disabled]="id_credito || id_tipo==1 || cliente_refinanciado"></mat-datepicker>
           </mat-form-field>
@@ -1186,7 +1186,7 @@
 
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
-            <input matInput [matDatepicker]="InputFechaPago" placeholder="Inicio de pagos" [min]="CreditosForm.value.fecha_credito" formControlName="fecha_pago" (dateChange)="CrearCronograma()" readonly>
+            <input matInput [matDatepicker]="InputFechaPago" placeholder="Inicio de pagos" [min]="CreditosForm.value.fecha_credito" formControlName="fecha_pago" (dateChange)="CrearCronograma()" [readonly]="id_credito || id_tipo==1 || id_presupuesto || cliente_refinanciado">
             <mat-datepicker-toggle matSuffix [for]="InputFechaPago"></mat-datepicker-toggle>
             <mat-datepicker #InputFechaPago [disabled]="id_credito || id_tipo==1 || id_presupuesto || cliente_refinanciado"></mat-datepicker>
           </mat-form-field>

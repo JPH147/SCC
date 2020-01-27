@@ -17,7 +17,12 @@
     <mat-grid-tile>
       <mat-icon>search</mat-icon>
       <mat-form-field>
-        <input matInput placeholder="Distrito judicial" #InputDistrito>
+        <input matInput placeholder="Distrito judicial" [matAutocomplete]="autodistrito" #InputDistrito>
+        <mat-autocomplete #autodistrito="matAutocomplete" (optionSelected)="CargarData()">
+          <mat-option *ngFor="let distrito of Distritos" [value]="distrito.nombre">
+            {{distrito.nombre}}
+          </mat-option>
+        </mat-autocomplete>
       </mat-form-field>
     </mat-grid-tile>
 
@@ -45,8 +50,12 @@
     <mat-grid-tile>
       <mat-icon>search</mat-icon>
       <mat-form-field>
-        <mat-select #InputEstado placeholder="Estado" (selectionChange)="CambioFiltro()" [value]=0>
-          <mat-option [value]=0> Todos </mat-option>
+        <mat-select #InputEstado placeholder="Estado" (selectionChange)="CambioFiltro()" [value]=-1>
+          <mat-option [value]=-3> Todos </mat-option>
+          <mat-option [value]=0> En cobranza </mat-option>
+          <mat-option [value]=-1> En trámite </mat-option>
+          <mat-option [value]=1> Sin documentos </mat-option>
+          <mat-option *ngFor="let tipo of TipoDocumentos" [value]="tipo.id"> {{tipo.nombre}} </mat-option>
         </mat-select>
       </mat-form-field>
     </mat-grid-tile>
@@ -90,26 +99,27 @@
       <ng-container matColumnDef="id_tipo_documento">
         <mat-header-cell *matHeaderCellDef mat-sort-header> <mat-icon> stars </mat-icon> </mat-header-cell>
         <mat-cell *matCellDef="let proceso">
-          <ng-container *ngIf="proceso.id_tipo_documento==1"> <mat-icon> fiber_manual_record </mat-icon> </ng-container>
-          <ng-container *ngIf="proceso.id_tipo_documento==2"> <mat-icon class="icono-ambar"> info </mat-icon> </ng-container>
-          <ng-container *ngIf="proceso.id_tipo_documento==3"> <mat-icon class="icono-rojo"> error </mat-icon> </ng-container>
-          <ng-container *ngIf="proceso.id_tipo_documento==4"> <mat-icon class="icono-verde"> check_circle </mat-icon> </ng-container>
-          <ng-container *ngIf="proceso.id_tipo_documento==5"> <mat-icon color="primary"> star </mat-icon> </ng-container>
+          <ng-container *ngIf="proceso.id_tipo_documento==0"> <mat-icon color="primary" matTooltip="Ya tiene cronograma"> star </mat-icon> </ng-container>
+          <ng-container *ngIf="proceso.id_tipo_documento==1"> <mat-icon matTooltip="Aún no hay documentos"> fiber_manual_record </mat-icon> </ng-container>
+          <ng-container *ngIf="proceso.id_tipo_documento==2"> <mat-icon class="icono-ambar" matTooltip="Se presentó un escrito"> info </mat-icon> </ng-container>
+          <ng-container *ngIf="proceso.id_tipo_documento==3"> <mat-icon class="icono-rojo" matTooltip="Se emitió una resolución"> error </mat-icon> </ng-container>
+          <ng-container *ngIf="proceso.id_tipo_documento==4"> <mat-icon class="icono-verde" matTooltip="Se emitió el oficio"> check_circle </mat-icon> </ng-container>
+          <ng-container *ngIf="proceso.id_tipo_documento==5"> <mat-icon class="icono-rojo" matTooltip="Se solicitó devolución"> cancel </mat-icon> </ng-container>
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="fecha_inicio">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha DDA </mat-header-cell>
         <mat-cell *matCellDef="let proceso"> {{proceso.fecha_inicio | date:'dd/MM/yyyy'}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="expediente">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Expediente </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Expedientes </mat-header-cell>
         <mat-cell *matCellDef="let proceso"> {{proceso.expediente}}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="juzgado">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Juzgado </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Juzgados   </mat-header-cell>
         <mat-cell *matCellDef="let proceso"> {{proceso.juzgado}} </mat-cell>
       </ng-container>
 
@@ -128,6 +138,16 @@
         <mat-cell *matCellDef="let proceso"> {{proceso.total | currency:'S/.' }} </mat-cell>
       </ng-container>
 
+      <ng-container matColumnDef="fecha_ultimo_documento">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Último documento </mat-header-cell>
+        <mat-cell *matCellDef="let proceso"> {{proceso.fecha_ultimo_documento | date:'dd/MM/yyyy' }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="fecha_ultimo_documento_diferencia">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Días transcurridos </mat-header-cell>
+        <mat-cell *matCellDef="let proceso"> {{proceso.fecha_ultimo_documento_diferencia}} </mat-cell>
+      </ng-container>
+
       <ng-container matColumnDef="ultimo_documento">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Último documento </mat-header-cell>
         <mat-cell *matCellDef="let proceso"> {{proceso.ultimo_documento}} </mat-cell>
@@ -137,10 +157,14 @@
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let proceso">
           <button mat-icon-button color="primary" matTooltip="Ver seguimiento de documentos" [routerLink]="['ver',proceso.id]"><mat-icon> visibility </mat-icon></button>
-          <button mat-icon-button color="primary" matTooltip="Editar documentos" [routerLink]="['editar',proceso.id]" [disabled]="proceso.id_tipo_documento>=4"><mat-icon> edit </mat-icon></button>
-          <button mat-icon-button color="primary" matTooltip="Registrar hito" (click)="AgregarDocumentos(proceso)" *ngIf="proceso.id_tipo_documento<4"><mat-icon> note_add </mat-icon></button>
+          <button mat-icon-button [matMenuTriggerFor]="menu2" color="primary" matTooltip="Editar expediente" ><mat-icon> edit </mat-icon></button>
+          <mat-menu #menu2="matMenu">
+            <button mat-menu-item color="primary" [routerLink]="['editar',proceso.id]" [disabled]="proceso.id_tipo_documento==0"> Editar expediente </button>
+            <button mat-menu-item color="primary" (click)="AgregarDocumentos(proceso)" *ngIf="proceso.id_tipo_documento>0 && proceso.id_tipo_documento!=4" [disabled]="proceso.id_tipo_documento==5"> Agregar documentos </button>
+            <button mat-menu-item color="primary" (click)="CambiarSede(proceso)" [disabled]="proceso.id_tipo_documento!=3"> Registrar traslado </button>
+          </mat-menu>
+          <button mat-icon-button color="primary" matTooltip="Ver cronograma" [routerLink]="['/cobranza-judicial','generar','ver', proceso.id]" *ngIf="proceso.id_tipo_documento==0"><mat-icon> notes </mat-icon></button>
           <button mat-icon-button color="primary" matTooltip="Realizar cronograma" [routerLink]="['/cobranza-judicial','generar','nuevo', proceso.id]" *ngIf="proceso.id_tipo_documento==4"><mat-icon> next_week </mat-icon></button>
-          <button mat-icon-button color="primary" matTooltip="Ver cronograma" [routerLink]="['/cobranza-judicial','generar','ver', proceso.id]" *ngIf="proceso.id_tipo_documento==5"><mat-icon> notes </mat-icon></button>
           <button mat-icon-button color="primary" matTooltip="Eliminar" (click)="EliminarProceso(proceso)" [disabled]="proceso.id_tipo_documento>=4"><mat-icon> delete </mat-icon></button>
         </mat-cell>
       </ng-container>

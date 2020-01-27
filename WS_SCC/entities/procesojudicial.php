@@ -5,6 +5,9 @@ Class Proceso{
   private $conn;
   
   public $id_proceso ;
+  public $id_proceso_nuevo ;
+  public $id_proceso_antiguo ;
+  public $id_estado ;
   public $id_venta ;
   public $id_credito ;
   public $expediente ;
@@ -69,10 +72,13 @@ Class Proceso{
         "ultimo_documento"=>$ultimo_documento,
         "id_tipo_documento"=>$id_tipo_documento,
         "expediente"=>$expediente,
+        "id_distrito"=>$id_distrito,
         "distrito"=>$distrito,
         "juzgado"=>$juzgado,
         "vendedor"=>$vendedor,
         "fecha_inicio"=>$fecha_inicio,
+        "fecha_ultimo_documento"=>$fecha_ultimo_documento,
+        "fecha_ultimo_documento_diferencia"=>$fecha_ultimo_documento_diferencia,
         "sumilla"=>$sumilla,
         "id_tipo"=>$id_tipo,
         "tipo"=>$tipo,
@@ -129,6 +135,45 @@ Class Proceso{
       "juzgado_distrito" => $row['juzgado_distrito'] ,
       "id_juzgado_instancia" => $row['id_juzgado_instancia'] ,
       "juzgado_instancia" => $row['juzgado_instancia'] ,
+      "id_juez" => $row['id_juez'] ,
+      "juez" => $row['juez'] ,
+      "id_especialista" => $row['id_especialista'] ,
+      "especialista" => $row['especialista'] ,
+      "fecha_inicio" => $row['fecha_inicio'] ,
+      "sumilla" => $row['sumilla'] ,
+      "tipo" => $row['tipo'] ,
+      "codigo" => $row['codigo'] ,
+      "id_cliente" => $row['id_cliente'] ,
+      "cliente_dni" => $row['cliente_dni'] ,
+      "cliente_documento" => $row['cliente_documento'] ,
+      "numero_cuotas" => $row['numero_cuotas'] ,
+      "total" => $row['total'] ,
+      "monto_cuota" => $row['monto_cuota'] ,
+      "estado" => $row['estado'] ,
+    );
+
+    return $resultado;
+  }
+
+  function readanteriorxId(){
+
+    $query ="call sp_listarprocesojudicialanteriorxId(?)";
+      
+    $result = $this->conn->prepare($query);
+    
+    $result->bindParam(1, $this->id_proceso);
+
+    $result->execute();
+
+    $row = $result->fetch(PDO::FETCH_ASSOC);
+
+    $resultado = array (
+      "id" => $row['id'] ,
+      "expediente" => $row['expediente'] ,
+      "id_juzgado_distrito" => $row['id_juzgado_distrito'] ,
+      "juzgado_distrito" => $row['juzgado_distrito'] ,
+      "id_juzgado_instancia" => $row['id_juzgado_instancia'] ,
+      "juzgado_instancia" => $row['juzgado_instancia'] ,
       "juez" => $row['juez'] ,
       "especialista" => $row['especialista'] ,
       "fecha_inicio" => $row['fecha_inicio'] ,
@@ -164,6 +209,42 @@ Class Proceso{
         extract($row);
         $items = array (
           "id"=>$id,
+          "id_tipo_documento"=>$id_tipo_documento,
+          "tipo_documento"=>$tipo_documento,
+          "fecha"=>$fecha,
+          "id_trabajador"=>$id_trabajador,
+          "trabajador"=>$trabajador,
+          "id_estado"=>$id_estado,
+          "estado"=>$estado,
+          "numero"=>$numero,
+          "sumilla"=>$sumilla,
+          "archivo"=>$archivo,
+          "comentarios"=>$comentarios
+        );
+        array_push($procesos_list["procesos"],$items);
+    }
+
+    return $procesos_list;
+  }
+
+  function read_proceso_detalle_anteriores(){
+    $query = "CALL sp_listarprocesojudicialdetalleanteriores(?)";
+
+    $result = $this->conn->prepare($query);
+
+    $result->bindParam(1, $this->id_proceso);
+
+    $result->execute();
+    
+    $procesos_list=array();
+    $procesos_list["procesos"]=array();
+    
+    while($row = $result->fetch(PDO::FETCH_ASSOC))
+    {
+        extract($row);
+        $items = array (
+          "id"=>$id,
+          "id_tipo_documento"=>$id_tipo_documento,
           "tipo_documento"=>$tipo_documento,
           "fecha"=>$fecha,
           "id_trabajador"=>$id_trabajador,
@@ -273,6 +354,28 @@ Class Proceso{
     return false;
   }
 
+  function update_proceso_judicial_traslado(){
+    $query = "call sp_actualizarprocesojudicialtraslado(
+      :prprocesonuevo,
+      :prprocesoantiguo
+    )";
+
+    $result = $this->conn->prepare($query);
+
+    $result->bindParam(":prprocesonuevo", $this->id_proceso_nuevo);
+    $result->bindParam(":prprocesoantiguo", $this->id_proceso_antiguo);
+
+    $this->id_proceso_nuevo=htmlspecialchars(strip_tags($this->id_proceso_nuevo));
+    $this->id_proceso_antiguo=htmlspecialchars(strip_tags($this->id_proceso_antiguo));
+
+    if($result->execute())
+    {
+      return true;
+    }
+    
+    return false;
+  }
+
   // Cuando un proceso para para ser cobrado
   function update_proceso_judicial_cobranza(){
     $query = "call sp_actualizarprocesojudicialcobranza(
@@ -326,6 +429,7 @@ Class Proceso{
       :prdocumento,
       :prfecha,
       :prtrabajador,
+      :prestado,
       :prnumero,
       :prsumilla,
       :prarchivo,
@@ -338,6 +442,7 @@ Class Proceso{
     $result->bindParam(":prdocumento", $this->tipo_documento);
     $result->bindParam(":prfecha", $this->fecha);
     $result->bindParam(":prtrabajador", $this->trabajador);
+    $result->bindParam(":prestado", $this->id_estado);
     $result->bindParam(":prnumero", $this->numero);
     $result->bindParam(":prsumilla", $this->sumilla);
     $result->bindParam(":prarchivo", $this->archivo);
@@ -347,6 +452,7 @@ Class Proceso{
     $this->tipo_documento=htmlspecialchars(strip_tags($this->tipo_documento));
     $this->fecha=htmlspecialchars(strip_tags($this->fecha));
     $this->trabajador=htmlspecialchars(strip_tags($this->trabajador));
+    $this->id_estado=htmlspecialchars(strip_tags($this->id_estado));
     $this->numero=htmlspecialchars(strip_tags($this->numero));
     $this->sumilla=htmlspecialchars(strip_tags($this->sumilla));
     $this->archivo=htmlspecialchars(strip_tags($this->archivo));
@@ -366,6 +472,7 @@ Class Proceso{
       :prdocumento,
       :prfecha,
       :prtrabajador,
+      :prestado,
       :prnumero,
       :prsumilla,
       :prarchivo,
@@ -378,6 +485,7 @@ Class Proceso{
     $result->bindParam(":prdocumento", $this->tipo_documento);
     $result->bindParam(":prfecha", $this->fecha);
     $result->bindParam(":prtrabajador", $this->trabajador);
+    $result->bindParam(":prestado", $this->id_estado);
     $result->bindParam(":prnumero", $this->numero);
     $result->bindParam(":prsumilla", $this->sumilla);
     $result->bindParam(":prarchivo", $this->archivo);
@@ -387,6 +495,7 @@ Class Proceso{
     $this->tipo_documento=htmlspecialchars(strip_tags($this->tipo_documento));
     $this->fecha=htmlspecialchars(strip_tags($this->fecha));
     $this->trabajador=htmlspecialchars(strip_tags($this->trabajador));
+    $this->id_estado=htmlspecialchars(strip_tags($this->id_estado));
     $this->numero=htmlspecialchars(strip_tags($this->numero));
     $this->sumilla=htmlspecialchars(strip_tags($this->sumilla));
     $this->archivo=htmlspecialchars(strip_tags($this->archivo));
@@ -463,5 +572,146 @@ Class Proceso{
     return false;
   }
 
+  function create_proceso_judicial_traslado(){
+    $query = "call sp_crearprocesojudicialtraslado(
+      :prprocesoantiguo,
+      :prexpediente,
+      :prinstancia,
+      :prjuez,
+      :prespecialista,
+      :prsumilla
+    )";
+
+    $result = $this->conn->prepare($query);
+
+    $result->bindParam(":prprocesoantiguo", $this->id_proceso);
+    $result->bindParam(":prexpediente", $this->expediente);
+    $result->bindParam(":prinstancia", $this->instancia);
+    $result->bindParam(":prjuez", $this->juez);
+    $result->bindParam(":prespecialista", $this->especialista);
+    $result->bindParam(":prsumilla", $this->sumilla);
+
+    $this->id_proceso=htmlspecialchars(strip_tags($this->id_proceso));
+    $this->expediente=htmlspecialchars(strip_tags($this->expediente));
+    $this->instancia=htmlspecialchars(strip_tags($this->instancia));
+    $this->juez=htmlspecialchars(strip_tags($this->juez));
+    $this->especialista=htmlspecialchars(strip_tags($this->especialista));
+    $this->sumilla=htmlspecialchars(strip_tags($this->sumilla));
+
+    if($result->execute())
+    {
+      return true;
+    }
+    
+    return false;
+  }
+
+  // Esta función obtiene lafecha más antigua de los procesos que no han sido cerrados
+  function read_fecha(){
+    $query ="call sp_listarprocesojudicialfecha()";
+      
+    $result = $this->conn->prepare($query);
+    
+    $result->execute();
+
+    $row = $result->fetch(PDO::FETCH_ASSOC);
+
+    $resultado = array (
+      "fecha_inicio" => $row['fecha_inicio'] ,
+    );
+
+    return $resultado;
+  }
+
+  function readV2(){
+    $query = "CALL sp_listarprocesojudicialV2(?,?,?,?,?,?,?,?,?)";
+
+    $result = $this->conn->prepare($query);
+
+    $result->bindParam(1, $this->instancia);
+    $result->bindParam(2, $this->expediente);
+    $result->bindParam(3, $this->juzgado);
+    $result->bindParam(4, $this->dni);
+    $result->bindParam(5, $this->nombre);
+    $result->bindParam(6, $this->fecha_inicio);
+    $result->bindParam(7, $this->fecha_fin);
+    $result->bindParam(8, $this->estado);
+    $result->bindParam(9, $this->orden);
+
+    $result->execute();
+    
+    $procesos_list=array();
+    $procesos_list["procesos"]=array();
+
+    $contador = $this->total_pagina*($this->numero_pagina-1);
+    
+    while($row = $result->fetch(PDO::FETCH_ASSOC))
+    {
+      extract($row);
+      $contador=$contador+1;
+      $items = array (
+        "numero"=>$contador,
+        "id"=>$id,
+        "ultimo_documento"=>$ultimo_documento,
+        "id_tipo_documento"=>$id_tipo_documento,
+        "expediente"=>$expediente,
+        "id_distrito"=>$id_distrito,
+        "distrito"=>$distrito,
+        "juzgado"=>$juzgado,
+        "vendedor"=>$vendedor,
+        "fecha_inicio"=>$fecha_inicio,
+        "fecha_ultimo_documento"=>$fecha_ultimo_documento,
+        "fecha_ultimo_documento_diferencia"=>$fecha_ultimo_documento_diferencia,
+        "sumilla"=>$sumilla,
+        "id_tipo"=>$id_tipo,
+        "tipo"=>$tipo,
+        "id_cliente"=>$id_cliente,
+        "cliente_dni"=>$cliente_dni,
+        "cliente_nombre"=>$cliente_nombre,
+        "total"=>$total,
+        "estado"=>$estado
+      );
+      array_push($procesos_list["procesos"],$items);
+    }
+    return $procesos_list;
+  }
+
+  function read_procesos_instancias(){
+    $query = "CALL sp_listarprocesojudicialinstancias(?,?,?,?,?,?,?,?)";
+
+    $result = $this->conn->prepare($query);
+
+    $result->bindParam(1, $this->expediente);
+    $result->bindParam(2, $this->distrito_judicial);
+    $result->bindParam(3, $this->juzgado);
+    $result->bindParam(4, $this->dni);
+    $result->bindParam(5, $this->nombre);
+    $result->bindParam(6, $this->fecha_inicio);
+    $result->bindParam(7, $this->fecha_fin);
+    $result->bindParam(8, $this->estado);
+
+    $result->execute();
+    
+    $procesos_list=array();
+    $procesos_list["instancias"]=array();
+
+    $contador = $this->total_pagina*($this->numero_pagina-1);
+    
+    while($row = $result->fetch(PDO::FETCH_ASSOC))
+    {
+      extract($row);
+      $contador=$contador+1;
+      $items = array (
+        "numero"=>$contador,
+        "id"=>$id,
+        "id_instancia"=>$id_instancia,
+        "instancia"=>$instancia,
+        "id_distrito"=>$id_distrito,
+        "distrito"=>$distrito,
+      );
+      array_push($procesos_list["instancias"],$items);
+    }
+    return $procesos_list;
+  }
 }
 ?>

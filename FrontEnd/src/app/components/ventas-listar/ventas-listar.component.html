@@ -28,7 +28,7 @@
 
     <mat-grid-tile>
       <mat-form-field>
-        <input matInput [matDatepicker]="inicio" placeholder="Fecha de inicio" [(ngModel)]="fecha_inicio" (dateChange)="CambioFiltro()" readonly>
+        <input matInput [matDatepicker]="inicio" placeholder="Fecha de inicio" [(ngModel)]="fecha_inicio" (dateChange)="CambioFiltro()">
         <mat-datepicker-toggle matSuffix [for]="inicio"></mat-datepicker-toggle>
         <mat-datepicker #inicio disabled="false"></mat-datepicker>
       </mat-form-field>
@@ -36,7 +36,7 @@
 
     <mat-grid-tile>
       <mat-form-field>
-        <input matInput [matDatepicker]="fin" placeholder="Fecha de fin" [(ngModel)]="fecha_fin" (dateChange)="CambioFiltro()" readonly>
+        <input matInput [matDatepicker]="fin" placeholder="Fecha de fin" [(ngModel)]="fecha_fin" (dateChange)="CambioFiltro()">
         <mat-datepicker-toggle matSuffix [for]="fin"></mat-datepicker-toggle>
         <mat-datepicker #fin disabled="false"></mat-datepicker>
       </mat-form-field>
@@ -108,7 +108,11 @@
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let venta">
           <ng-container *ngIf="venta.tipo_venta!='Salida'">
-            <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="[venta.id]"><mat-icon> visibility </mat-icon></button>
+            <button mat-icon-button [matMenuTriggerFor]="menu1" color="primary" matTooltip="Ver documento" ><mat-icon> visibility </mat-icon></button>
+            <mat-menu #menu1="matMenu">
+              <button mat-menu-item [routerLink]="[venta.id]">Documento completo</button>
+              <button mat-menu-item>Cronograma de pagos</button>
+            </mat-menu>
             <button mat-icon-button color="primary" matTooltip="Editar" [routerLink]="['editar', venta.id]"
               [disabled]="venta.monto_pagado>0 || venta.estado!=1 || venta.id_proceso_judicial"><mat-icon> edit </mat-icon></button>
             <button mat-icon-button color="primary" matTooltip="Canjear" [disabled]="venta.estado!=1" [routerLink]="['nueva', venta.id, venta.id_cliente]"><mat-icon> import_export </mat-icon></button>
@@ -120,7 +124,11 @@
           </ng-container>
           
           <ng-container *ngIf="venta.tipo_venta=='Salida'">
-            <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="['salida', venta.id]"><mat-icon> visibility </mat-icon></button>
+            <button mat-icon-button [matMenuTriggerFor]="menu2" color="primary" matTooltip="Ver documento" ><mat-icon> visibility </mat-icon></button>
+            <mat-menu #menu2="matMenu">
+              <button mat-menu-item [routerLink]="['salida', venta.id]">Documento completo</button>
+              <button mat-menu-item>Cronograma de pagos</button>
+            </mat-menu>
             <button mat-icon-button color="primary" matTooltip="Editar" [routerLink]="['salida', 'editar', venta.id]"
               [disabled]="venta.monto_pagado>0 || venta.estado!=1 || venta.id_proceso_judicial"><mat-icon> edit </mat-icon></button>
             <button mat-icon-button color="primary" matTooltip="Canjear" [disabled]="true"><mat-icon> import_export </mat-icon></button>

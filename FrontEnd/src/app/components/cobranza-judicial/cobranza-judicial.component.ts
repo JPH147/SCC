@@ -34,7 +34,13 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
   public id_proceso_agregar : number ;
   public Distritos : Array<any>;
   public Instancias : Array<any>;
+  public Jueces : Array<any>;
+  public Especialistas : Array<any>;
   public Documentos : Array<any>;
+  public DocumentosAnteriores : Array<any> = [];
+  public juzgado_distrito_anterior : string ;
+  public juzgado_instancia_anterior : string ;
+  public expediente_anterior : string ;
   public penalidad_porcentaje : number ;
   public editar_expediente : number = 3 ;
   public editar_juzgado : number = 3 ;
@@ -64,12 +70,13 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
           this.id_proceso_agregar = params['idprocesoagregar'];
           this.SeleccionarProceso(this.id_proceso_agregar);
         }
-
+    
         if(params['idprocesover']){
           this.id_proceso_ver = params['idprocesover'];
+          // this.id_proceso_ver = 24 ;
           this.SeleccionarProceso(this.id_proceso_ver);
         }
-
+      
         if(params['idprocesoeditar']){
           this.id_proceso_editar = params['idprocesoeditar'];
           this.SeleccionarProceso(this.id_proceso_editar);
@@ -108,7 +115,25 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
         tap(()=>{
           this.CalcularCuotas();
         })
-      ).subscribe()
+      ).subscribe() ;
+
+      this.JudicialForm.get('juez').valueChanges
+      .pipe(
+        debounceTime(200),
+        distinctUntilChanged(),
+        tap(()=>{
+          this.ListarJueces();
+        })
+      ).subscribe() ;
+
+      this.JudicialForm.get('especialista').valueChanges
+      .pipe(
+        debounceTime(200),
+        distinctUntilChanged(),
+        tap(()=>{
+          this.ListarEspecialistas();
+        })
+      ).subscribe() ;
     }
   }
 
@@ -124,10 +149,14 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
       ] ] ,
       instancia_judicial_nombre : [ { value : null, disabled : false },[
       ] ] ,
-      juez : [ { value : null, disabled : false },[
+      id_juez : [ { value : null, disabled : false },[
         Validators.required
       ] ] ,
-      especialista : [ { value : null, disabled : false },[
+      juez : [ { value : "", disabled : false },[
+      ] ] ,
+      id_especialista : [ { value : null, disabled : false },[
+      ] ] ,
+      especialista : [ { value : "", disabled : false },[
         Validators.required
       ] ] ,
       expediente : [ { value : null, disabled : false },[
@@ -188,6 +217,10 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
       this.JudicialForm.get('instancia_judicial').setValue(res[0].id_juzgado_instancia) ;
       this.JudicialForm.get('instancia_judicial_nombre').setValue(res[0].juzgado_instancia) ;
 
+      if( this.id_proceso_editar ) {
+        this.JudicialForm.get('id_juez').setValue(res[0].id_juez) ;
+        this.JudicialForm.get('id_especialista').setValue(res[0].id_especialista) ;
+      }
       this.JudicialForm.get('juez').setValue(res[0].juez) ;
       this.JudicialForm.get('especialista').setValue(res[0].especialista) ;
       this.JudicialForm.get('expediente').setValue(res[0].expediente) ;
@@ -201,14 +234,16 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
       this.JudicialForm.get('total').setValue(res[0].total) ;
       this.JudicialForm.get('numero_cuotas').setValue(res[0].numero_cuotas) ;
       this.JudicialForm.get('monto_cuota').setValue(res[0].monto_cuota) ;
-      // this.CargarDetalle(id_proceso);
       this.Documentos=res[1] ;
       this.Documentos = this.Documentos.map((item)=>{
                           item.fecha = moment(item.fecha).toDate();
                           item.archivo_antiguo = item.archivo;
                           item.archivo = item.archivo ? URLIMAGENES.carpeta + 'proceso judicial/' + item.archivo : "";
                           return item;
-                        })
+                        }) ;
+      if( this.id_proceso_ver ){
+        this.CargarDetalleAnterior();
+      }
     })
   }
 
@@ -295,16 +330,80 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
     })
   }
 
+  CargarDetalleAnterior(){
+
+    forkJoin(
+      this._judicial.ListarAnteriorxId( this.id_proceso_ver ) ,
+      this._judicial.ListarDetalleAnteriorxProceso( this.id_proceso_ver )
+    )
+    .pipe(
+      finalize(()=>this.Cargando.next(false))
+    )
+    .subscribe(res=>{
+      if(res[1]) {
+        this.juzgado_distrito_anterior = res[0].juzgado_distrito ,
+        this.juzgado_instancia_anterior = res[0].juzgado_instancia ,
+        this.expediente_anterior = res[0].expediente
+        this.DocumentosAnteriores = res[1] ;
+        this.DocumentosAnteriores = this.DocumentosAnteriores.map((item)=>{
+                            item.fecha = moment(item.fecha).toDate();
+                            item.archivo_antiguo = item.archivo;
+                            item.archivo = item.archivo ? URLIMAGENES.carpeta + 'proceso judicial/' + item.archivo : "";
+                            item.anteriores = true ;
+                            return item;
+                          })
+      }
+    })
+  }
+
   ListarDistritosJudiciales(){
     this._vinculados.ListarDistritosJudiciales("",1,50).subscribe(res=>{
       this.Distritos = res['data'].distritos
     })
   }
 
+  DistritoSeleccionado(){
+    this.ListarInstanciasJudiciales() ;
+    this.ListarJueces() ;
+    this.ListarEspecialistas() ;
+  }
+
   ListarInstanciasJudiciales(){
     this._vinculados.ListarInstanciasJudiciales(this.JudicialForm.value.distrito_judicial,"","",1,50).subscribe(res=>{
       this.Instancias = res['data'].instancias
     })
+  }
+
+  ListarJueces(){
+    this._vinculados.ListarJuez(this.JudicialForm.value.distrito_judicial,"","juez",this.JudicialForm.value.juez,1,50).subscribe(res=>{
+      this.Jueces = res['data'].jueces
+    })
+  }
+
+  ListarEspecialistas(){
+    this._vinculados.ListarJuez(this.JudicialForm.value.distrito_judicial,"","especialista",this.JudicialForm.value.especialista,1,50).subscribe(res=>{
+      this.Especialistas = res['data'].jueces
+    })
+  }
+
+  JuezSeleccionado(event){
+    this.JudicialForm.get('id_juez').setValue(event.option.value.id_juzgado_juez);
+    this.JudicialForm.get('juez').setValue(event.option.value.juzgado_juez);
+  }
+
+  EspecialistaSeleccionado(event){
+    this.JudicialForm.get('id_especialista').setValue(event.option.value.id_juzgado_juez);
+    this.JudicialForm.get('especialista').setValue(event.option.value.juzgado_juez);
+  }
+
+  RemoverJuez(){
+    this.JudicialForm.get('id_juez').setValue(null);
+    this.JudicialForm.get('juez').setValue("");
+  }
+
+  RemoverEspecialista(){
+    this.JudicialForm.get('id_especialista').setValue(null);
+    this.JudicialForm.get('especialista').setValue("");
   }
 
   AgregarDocumento(){
@@ -341,54 +440,6 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
     cuota = this.JudicialForm.value.total / this.JudicialForm.value.numero_cuotas ;
     cuota = Math.round(cuota*100) / 100 ;
     this.JudicialForm.get('monto_cuota').setValue(cuota);
-  }
-
-  EditarExpediente(numero){
-    this.editar_expediente = numero ;
-    if( numero==2 ){
-      this._judicial.ActualizarProcesoCabecera(
-        this.id_proceso_editar,
-        this.JudicialForm.value.expediente ,
-        this.JudicialForm.value.instancia_judicial ,
-        this.JudicialForm.value.juez ,
-        this.JudicialForm.value.especialista ,
-        this.JudicialForm.value.fecha_inicio ,
-        this.JudicialForm.value.sumilla ,
-        this.JudicialForm.value.numero_cuotas ,
-        this.JudicialForm.value.total
-      ).subscribe(res=>{
-        if(res){
-          this.SeleccionarProceso(this.id_proceso_editar) ;
-          this.Notificacion.Snack("Se actualizaron los datos satisfactoriamente","")
-        } else {
-          this.Notificacion.Snack("Ocurrió un error al actualizar los datos","")
-        }
-      })
-    }
-  }
-
-  EditarJuzgado(numero){
-    this.editar_juzgado = numero ;
-    if( numero==2 ){
-      this._judicial.ActualizarProcesoCabecera(
-        this.id_proceso_editar,
-        this.JudicialForm.value.expediente ,
-        this.JudicialForm.value.instancia_judicial ,
-        this.JudicialForm.value.juez ,
-        this.JudicialForm.value.especialista ,
-        this.JudicialForm.value.fecha_inicio ,
-        this.JudicialForm.value.sumilla ,
-        this.JudicialForm.value.numero_cuotas ,
-        this.JudicialForm.value.total
-      ).subscribe(res=>{
-        if(res){
-          this.SeleccionarProceso(this.id_proceso_editar) ;
-          this.Notificacion.Snack("Se actualizaron los datos satisfactoriamente","")
-        } else {
-          this.Notificacion.Snack("Ocurrió un error al actualizar los datos","")
-        }
-      })
-    }
   }
 
   EditarDetalle(proceso){
@@ -441,8 +492,8 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
       this.id_credito ,
       this.JudicialForm.value.expediente ,
       this.JudicialForm.value.instancia_judicial ,
-      this.JudicialForm.value.juez ,
-      this.JudicialForm.value.especialista ,
+      this.JudicialForm.value.id_juez ,
+      this.JudicialForm.value.id_especialista ,
       this.JudicialForm.value.fecha_inicio ,
       this.JudicialForm.value.sumilla ,
       this.JudicialForm.value.numero_cuotas ,
@@ -459,6 +510,54 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
         this.Notificacion.Snack("Ocurrió un error al crear el proceso","")
       }
     })
+  }
+
+  EditarExpediente(numero){
+    this.editar_expediente = numero ;
+    if( numero==2 ){
+      this._judicial.ActualizarProcesoCabecera(
+        this.id_proceso_editar,
+        this.JudicialForm.value.expediente ,
+        this.JudicialForm.value.instancia_judicial ,
+        this.JudicialForm.value.id_juez ,
+        this.JudicialForm.value.id_especialista ,
+        this.JudicialForm.value.fecha_inicio ,
+        this.JudicialForm.value.sumilla ,
+        this.JudicialForm.value.numero_cuotas ,
+        this.JudicialForm.value.total
+      ).subscribe(res=>{
+        if(res){
+          this.SeleccionarProceso(this.id_proceso_editar) ;
+          this.Notificacion.Snack("Se actualizaron los datos satisfactoriamente","")
+        } else {
+          this.Notificacion.Snack("Ocurrió un error al actualizar los datos","")
+        }
+      })
+    }
+  }
+
+  EditarJuzgado(numero){
+    this.editar_juzgado = numero ;
+    if( numero==2 ){
+      this._judicial.ActualizarProcesoCabecera(
+        this.id_proceso_editar,
+        this.JudicialForm.value.expediente ,
+        this.JudicialForm.value.instancia_judicial ,
+        this.JudicialForm.value.id_juez ,
+        this.JudicialForm.value.id_especialista ,
+        this.JudicialForm.value.fecha_inicio ,
+        this.JudicialForm.value.sumilla ,
+        this.JudicialForm.value.numero_cuotas ,
+        this.JudicialForm.value.total
+      ).subscribe(res=>{
+        if(res){
+          this.SeleccionarProceso(this.id_proceso_editar) ;
+          this.Notificacion.Snack("Se actualizaron los datos satisfactoriamente","")
+        } else {
+          this.Notificacion.Snack("Ocurrió un error al actualizar los datos","")
+        }
+      })
+    }
   }
 
 }

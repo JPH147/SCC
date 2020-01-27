@@ -2,8 +2,8 @@ import {Component, Inject, OnInit, AfterViewInit, ViewChild, ElementRef} from '@
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { FormGroup, FormBuilder, Validators} from '@angular/forms';
 import { ServiciosVentas } from '../../global/ventas';
-import {merge,fromEvent} from 'rxjs';
-import {tap, debounceTime, distinctUntilChanged} from 'rxjs/operators';
+import {merge,fromEvent, BehaviorSubject} from 'rxjs';
+import {tap, debounceTime, distinctUntilChanged, finalize} from 'rxjs/operators';
 
 @Component({
   selector: 'app-ventana-vendedor',
@@ -14,8 +14,8 @@ import {tap, debounceTime, distinctUntilChanged} from 'rxjs/operators';
 
 // tslint:disable-next-line:component-class-suffix
 export class VentanaVendedorComponent {
-
-  public VendedoresForm : FormGroup;
+  public Cargando = new BehaviorSubject<boolean>(false) ;
+  public VendedoresForm : FormGroup ;
   public Cargos : Array<any> ;
 
   constructor(
@@ -23,17 +23,15 @@ export class VentanaVendedorComponent {
     public ventana: MatDialogRef<VentanaVendedorComponent>,
     private Builder: FormBuilder,
     private Servicios: ServiciosVentas,
-    ) {}
+  ) {}
 
   ngOnInit() {
     this.CrearFormulario();
+    this.ListarCargos()
 
     if(this.data){
       this.AsignarValores();
     }
-
-    this.ListarCargos()
-
   }
 
   ngAfterViewInit(){
@@ -94,13 +92,18 @@ export class VentanaVendedorComponent {
   }
 
   CrearVendedor(){
+    this.Cargando.next(true) ;
     this.Servicios.CrearVendedor(
       this.VendedoresForm.value.documento,
       this.VendedoresForm.value.nombre,
       this.VendedoresForm.value.cargo,
       this.VendedoresForm.value.email,
       this.VendedoresForm.value.comision
-    ).subscribe(res=>{
+    )
+    .pipe(
+      finalize(()=>this.Cargando.next(false))
+    )
+    .subscribe(res=>{
       if(res['codigo']==0){
         this.ventana.close(true)
       }else{
@@ -117,7 +120,11 @@ export class VentanaVendedorComponent {
       this.VendedoresForm.value.cargo,
       this.VendedoresForm.value.email,
       this.VendedoresForm.value.comision
-    ).subscribe(res=>{
+    )
+    .pipe(
+      finalize(()=>this.Cargando.next(false))
+    )
+    .subscribe(res=>{
       if(res['codigo']==0){
         this.ventana.close(true)
       }else{
@@ -125,5 +132,4 @@ export class VentanaVendedorComponent {
       }
     })
   }
-
 }

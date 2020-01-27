@@ -105,8 +105,7 @@ Class Producto{
     }
 
     /* Seleccionar producto */
-    function readxId()
-    {
+    function readxId(){
         $query ="call sp_listarproductoxId(?)";
         
         $result = $this->conn->prepare($query);
@@ -128,8 +127,7 @@ Class Producto{
     }
 
     /* Seleccionar producto por nombre */
-    function readxnombre()
-    {
+    function readxnombre(){
         $query ="call sp_listarproductoxnombre(?)";
         
         $result = $this->conn->prepare($query);

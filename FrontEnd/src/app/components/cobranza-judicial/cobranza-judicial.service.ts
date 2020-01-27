@@ -35,7 +35,7 @@ export class CobranzaJudicialService {
       .set('prjuzgado',juzgado)
       .set('prdni',dni)
       .set('prnombre',nombre)
-      .set('prfechainicio',moment(fecha_inicio).format('YYYY-MM-DD'))
+      .set('prfechainicio', moment(fecha_inicio).format('YYYY-MM-DD'))
       .set('prfechafin',moment(fecha_fin).format('YYYY-MM-DD'))
       .set('prestado',estado.toString())
       .set('prpagina',numero_pagina.toString())
@@ -70,6 +70,23 @@ export class CobranzaJudicialService {
     }));
   }
 
+  ListarAnteriorxId(
+    id_proceso : number
+  ) :Observable<any> {
+    let params = new HttpParams()
+      .set('prid',id_proceso.toString() );
+
+    return this.http.get(this.url + 'procesojudicial/readanteriorxId.php', {params})
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res['data'];
+      } else {
+        console.log('No hay datos que mostrar');
+        return false;
+      }
+    }));
+  }
+
   ListarDetallexProceso(
     id_proceso : number
   ){
@@ -83,6 +100,23 @@ export class CobranzaJudicialService {
       } else {
         console.log('No hay datos que mostrar',res);
         return [];
+      }
+    }));
+  }
+
+  ListarDetalleAnteriorxProceso(
+    id_proceso : number
+  ) :Observable<any> {
+    let params = new HttpParams()
+      .set('prid',id_proceso.toString());
+
+    return this.http.get(this.url + 'procesojudicial/readdetalleanteriorxproceso.php', {params})
+    .pipe(map(res => {
+      if (res['codigo'] === 0 && res['data'].procesos) {
+        return res['data'].procesos;
+      } else {
+        console.log('No hay datos que mostrar',res);
+        return false;
       }
     }));
   }
@@ -104,8 +138,8 @@ export class CobranzaJudicialService {
       .set('prcredito', id_credito.toString())
       .set('prexpediente', expediente)
       .set('prinstancia', instancia.toString())
-      .set('prjuez', juez)
-      .set('prespecialista', especialista)
+      .set('prjuez', juez.toString() )
+      .set('prespecialista', especialista.toString() )
       .set('prfecha', moment(fecha_inicio).format("YYYY-MM-DD"))
       .set('prsumilla', sumilla )
       .set('prnumerocuotas', numero_cuotas.toString() )
@@ -131,6 +165,7 @@ export class CobranzaJudicialService {
     tipo_documento:string,
     fecha:Date,
     trabajador:number,
+    estado:number,
     numero: number,
     sumilla: string,
     archivo: string,
@@ -141,12 +176,11 @@ export class CobranzaJudicialService {
       .set('prdocumento', tipo_documento)
       .set('prfecha', moment(fecha).format("YYYY-MM-DD"))
       .set('prtrabajador', trabajador.toString())
+      .set('prestado', estado.toString())
       .set('prnumero', numero.toString())
       .set('prsumilla', sumilla)
       .set('prarchivo', archivo)
       .set('prcomentarios', comentarios )
-
-    // console.log(params)
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -213,8 +247,8 @@ export class CobranzaJudicialService {
     id_proceso:number,
     expediente: string,
     instancia: number,
-    juez: string,
-    especialista: string,
+    juez: number,
+    especialista: number,
     fecha_inicio: Date,
     sumilla: string ,
     numero_cuotas : number ,
@@ -224,8 +258,8 @@ export class CobranzaJudicialService {
       .set('prproceso', id_proceso.toString() )
       .set('prexpediente', expediente)
       .set('prinstancia', instancia.toString() )
-      .set('prjuez', juez)
-      .set('prespecialista', especialista)
+      .set('prjuez', juez.toString() )
+      .set('prespecialista', especialista.toString() )
       .set('prfecha', moment(fecha_inicio).format("YYYY-MM-DD") )
       .set('prsumilla', sumilla )
       .set('prnumerocuotas', numero_cuotas.toString() )
@@ -245,11 +279,34 @@ export class CobranzaJudicialService {
     );
   }
 
+  ActualizarProcesoTraslado(
+    id_proceso_nuevo : number ,
+    id_proceso_antiguo : number ,
+  ){
+    let params = new HttpParams()
+      .set('prprocesonuevo', id_proceso_nuevo.toString() )
+      .set('prprocesoantiguo', id_proceso_antiguo.toString() );    
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'procesojudicial/actualizar-traslado.php', params, {headers: headers})
+    .pipe(
+      map((res)=>{
+        if(res['codigo']==0){
+          return true;
+        } else {
+          return false;
+        }
+      })
+    );
+  }
+
   ActualizarProcesoDetalle(
     id_proceso_detalle:number,
     tipo_documento:string,
     fecha:Date,
     trabajador: number,
+    estado: number,
     numero: number,
     sumilla: string,
     archivo: string,
@@ -260,12 +317,11 @@ export class CobranzaJudicialService {
       .set('prdocumento', tipo_documento)
       .set('prfecha', moment(fecha).format("YYYY-MM-DD"))
       .set('prtrabajador', trabajador.toString())
+      .set('prestado', estado.toString())
       .set('prnumero', numero.toString())
       .set('prsumilla', sumilla)
       .set('prarchivo', archivo)
       .set('prcomentarios', comentarios )
-
-    console.log(params)
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -339,6 +395,113 @@ export class CobranzaJudicialService {
       } else {
         console.log('No hay datos que mostrar');
         return 0;
+      }
+    }));
+  }
+
+  CrearProcesoJudicialTraslado(
+    id_proceso:number,
+    expediente: string,
+    instancia: number,
+    juez: string,
+    especialista: string,
+    sumilla: string
+  ) :Observable<any> {
+    let params = new HttpParams()
+      .set('prproceso', id_proceso.toString())
+      .set('prexpediente', expediente)
+      .set('prinstancia', instancia.toString())
+      .set('prjuez', juez)
+      .set('prespecialista', especialista)
+      .set('prsumilla', sumilla ) ;
+    console.log(params);
+      
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'procesojudicial/crear-traslado.php', params, {headers: headers})
+    .pipe(
+      map((res)=>{
+        if(res['codigo']==0){
+          return true;
+        } else {
+          return false;
+        }
+      })
+    );
+  }
+
+  ObtenerFechaAntigua(): Observable<any> {
+    return this.http.get(this.url + 'procesojudicial/readfecha.php')
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return moment(res['data'].fecha_inicio).toDate();
+      } else {
+        console.log('No hay datos que mostrar');
+        return new Date();
+      }
+    }));
+  }
+
+  ListarV2(
+    instancia:number,
+    expediente:string,
+    juzgado:string,
+    dni:string,
+    nombre:string,
+    fecha_inicio:Date,
+    fecha_fin:Date,
+    estado:number,
+    orden:string
+  ): Observable<any> {
+    let params = new HttpParams()
+      .set('prinstancia',instancia.toString())
+      .set('prexpediente',expediente)
+      .set('prjuzgado',juzgado)
+      .set('prdni',dni)
+      .set('prnombre',nombre)
+      .set('prfechainicio', moment(fecha_inicio).format('YYYY-MM-DD'))
+      .set('prfechafin',moment(fecha_fin).format('YYYY-MM-DD'))
+      .set('prestado',estado.toString())
+      .set('prorden',orden);
+
+    return this.http.get(this.url + 'procesojudicial/readV2.php', {params})
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res;
+      } else {
+        console.log('No hay datos que mostrar');
+        return res;
+      }
+    }));
+  }
+
+  ListarInstancias(
+    expediente:string,
+    distrito:string,
+    juzgado:string,
+    dni:string,
+    nombre:string,
+    fecha_inicio:Date,
+    fecha_fin:Date,
+    estado:number,
+  ): Observable<any> {
+    let params = new HttpParams()
+      .set('prexpediente',expediente)
+      .set('prdistrito',distrito)
+      .set('prjuzgado',juzgado)
+      .set('prdni',dni)
+      .set('prnombre',nombre)
+      .set('prfechainicio', moment(fecha_inicio).format('YYYY-MM-DD'))
+      .set('prfechafin',moment(fecha_fin).format('YYYY-MM-DD'))
+      .set('prestado',estado.toString()) ;
+
+    return this.http.get(this.url + 'procesojudicial/readprocesosinstancias.php', {params})
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res;
+      } else {
+        console.log('No hay datos que mostrar');
+        return res;
       }
     }));
   }

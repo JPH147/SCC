@@ -5,6 +5,10 @@
     <mat-toolbar-row *ngIf="data">Editar vendedor</mat-toolbar-row>
   </mat-toolbar>
 
+  <div class="spinner-container" *ngIf="Cargando | async">
+    <mat-spinner></mat-spinner>
+  </div>
+
   <form [formGroup]="VendedoresForm">
     <mat-card-content>
       <mat-grid-list cols="3" rowHeight="70px">
@@ -48,7 +52,7 @@
     <mat-card-actions>
       <mat-grid-list cols=1 rowHeight="40px">
         <mat-grid-tile>
-          <button type="button" mat-raised-button color="primary" [disabled]="VendedoresForm.invalid" (click)="Guardar()"> Guardar </button>
+          <button type="button" mat-raised-button color="primary" [disabled]="VendedoresForm.invalid || (Cargando | async)" (click)="Guardar()"> Guardar </button>
         </mat-grid-tile>
       </mat-grid-list>
     </mat-card-actions>

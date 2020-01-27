@@ -36,8 +36,8 @@
   <mat-sidenav-content>
     <mat-toolbar color="primary">
       <!-- Colocar cuando se exporte para móviles -->
-      <!-- *ngIf="estado" -->
       <button
+        *ngIf="estado"
         type="button"
         aria-label="Toggle sidenav"
         mat-icon-button
@@ -46,8 +46,10 @@
       </button>
      <span>Sistema de Créditos y Cobranzas</span>
      <span class="espacio"></span>
-     <mat-icon class="icono">chat</mat-icon>
-     <mat-icon class="icono">account_circle</mat-icon>
+     <ng-container *ngIf="estado">
+       <mat-icon class="icono">chat</mat-icon>
+       <mat-icon class="icono">account_circle</mat-icon>
+     </ng-container>
     </mat-toolbar>
     <router-outlet></router-outlet>
   </mat-sidenav-content>

@@ -79,7 +79,7 @@
 
           <mat-grid-tile colspan=1>
             <mat-form-field class="columnas-1">
-              <input matInput [matDatepicker]="FechaInicio" placeholder="Fecha de inicio" formControlName="fecha_inicio" (dateChange)="CrearCronograma()" readonly>
+              <input matInput [matDatepicker]="FechaInicio" [min]="fecha_expediente" placeholder="Fecha de inicio" formControlName="fecha_inicio" (dateChange)="CrearCronograma()" [readonly]="id_proceso_ver">
               <mat-datepicker-toggle matSuffix [for]="FechaInicio"></mat-datepicker-toggle>
               <mat-datepicker #FechaInicio [disabled]="id_proceso_ver"></mat-datepicker>
             </mat-form-field>

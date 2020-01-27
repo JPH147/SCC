@@ -28,3 +28,14 @@
   float: right;
   transform: translate(-20px, -12.5px);
 }
+
+.fake-list{
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  width: 93.33%;
+}
+
+textarea{
+  overflow:hidden
+}
