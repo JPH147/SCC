@@ -12,6 +12,8 @@ import * as moment from 'moment';
 import { VentanaConfirmarComponent } from '../global/ventana-confirmar/ventana-confirmar.component';
 import { IngresoProductoService } from '../ingreso-productos/ingreso-productos.service';
 import { VentanaEditarDocumentoComponent } from './ventana-editar-documento/ventana-editar-documento.component';
+import { URLIMAGENES } from '../global/url' ;
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-detalle-documento-almacen',
@@ -36,6 +38,8 @@ export class DetalleDocumentoAlmacenComponent implements OnInit {
   public detalle : Array<any>;
   public Columnas : Array<string>;
   public ListadoInformacion : DetalleMovimientoDataSource ;
+	public archivo_nombre : string = "";
+	public archivo_nombre_original : string = "";
 
   constructor(
     @Optional() @Inject (MAT_DIALOG_DATA) public data,
@@ -46,7 +50,8 @@ export class DetalleDocumentoAlmacenComponent implements OnInit {
     private Dialogo:MatDialog,
     public snackBar: MatSnackBar,
     private SSeries: ServiciosProductoSerie,
-    private IngresoProductoservicios: IngresoProductoService
+    private IngresoProductoservicios: IngresoProductoService,
+    private location : Location
   ) { }
 
   ngOnInit() {
@@ -55,13 +60,13 @@ export class DetalleDocumentoAlmacenComponent implements OnInit {
       if(Object.keys(params).length>0){
         if(params['id']){
           this.id_ver = params['id'];
-          // this.id_ver = 304;
+          // this.id_ver = 317;
           this.Columnas = [ "numero" , "producto" , "serie" , "color" , "almacenamiento" , "precio" ]
           this.CargarInformacion(this.id_ver);
         }
         if(params['ideditar']){
           this.id_editar = params['ideditar'];
-          // this.id_editar = 304 ;
+          // this.id_editar = 317 ;
           this.Columnas = [ "numero" , "producto" , "serie" , "color" , "almacenamiento" , "precio"  , "opciones" ]
           this.CargarInformacion(this.id_editar);
         }
@@ -78,6 +83,8 @@ export class DetalleDocumentoAlmacenComponent implements OnInit {
   }
 
   AsignarValores(objeto){
+    this.archivo_nombre_original= objeto['data'].archivo ;
+    this.archivo_nombre= objeto['data'].archivo ? URLIMAGENES.carpeta + 'movimientos almacen/' +objeto['data'].archivo : ""  ;
     this.almacen= objeto['data'].almacen;
     this.tipo= objeto['data'].tipo;
     this.referencia= objeto['data'].referencia;
@@ -111,19 +118,25 @@ export class DetalleDocumentoAlmacenComponent implements OnInit {
     this.ListadoInformacion.AsignarInformacion(objeto['data'].detalle) ;
   }
 
+  AbrirDocumento(url){
+    if(url){
+      window.open(url, "_blank");
+    }
+  }
+
   AgregarSerie(){
     let VentanaEditar = this.Dialogo.open(VentanaEditarSerieComponent,{
       width: '1200px',
+      data : {transaccion : this.id_editar}
     })
 
     VentanaEditar.afterClosed().subscribe(res=>{
       if (res) {
-        this.SSeries.CrearProductoSerie(res.id_producto,res.serie, res.color, res.almacenamiento, res.precio).subscribe(response => {
-          this.IngresoProductoservicios.CrearTransaccionDetalle(this.id_editar, response['data'], 1, res.precio, "").subscribe(resp=>{
-            this.Notificacion("Se creó la serie satisfactoriamente","");
-            this.CargarInformacion(this.id_editar);
-          });
-        });
+        this.Notificacion("Se creó la serie satisfactoriamente","");
+        this.CargarInformacion(this.id_editar);
+      }
+      if(res===false) {
+        this.Notificacion("Ocurrió un error al crear la serie","");
       }
     })
   }
@@ -131,32 +144,29 @@ export class DetalleDocumentoAlmacenComponent implements OnInit {
   Editar(detalle){
     let VentanaEditar = this.Dialogo.open(VentanaEditarSerieComponent,{
       width: '1200px',
-      data: detalle
+      data: {detalle: detalle}
     })
 
     VentanaEditar.afterClosed().subscribe(res=>{
       if (res) {
-        this.SServicio.ValidarSerie(res.serie,res.id).subscribe(rest=>{
-          if (rest==0) {
-            this.SServicio.Actualizar(res.id, res.id_producto, res.serie, res.color, res.almacenamiento, res.precio).subscribe(res=>{
-              this.CargarInformacion(this.id_ver || this.id_editar);
-              this.Notificacion("Se editó el producto con éxito","")
-            })
-          }else{
-            this.Notificacion("El producto tiene la serie duplicada","")
-          }
-        })
-
+        this.Notificacion("Se actualizó la serie satisfactoriamente","");
+        this.CargarInformacion(this.id_editar);
+      }
+      if(res===false) {
+        this.Notificacion("Ocurrió un error al actualizar la serie","");
       }
     })
   }
 
   EditarDocumento(){
     let datos = {
+      id : this.id_editar ,
       id_referente : this.id_referente ,
       referente : this.referente ,
       documento : this.documento ,
       fecha : this.fecha ,
+      archivo : this.archivo_nombre,
+      archivo_nombre : this.archivo_nombre_original 
     }
 
     let VentanaEditar = this.Dialogo.open(VentanaEditarDocumentoComponent,{
@@ -166,14 +176,7 @@ export class DetalleDocumentoAlmacenComponent implements OnInit {
 
     VentanaEditar.afterClosed().subscribe(res=>{
       if (res) {
-        this.Servicio.ActualizarCabecera(
-          this.id_editar,
-          res.id_proveedor,
-          res.fecha,
-          res.documento
-        ).subscribe(res=>{
-          this.CargarInformacion(this.id_editar);
-        })
+        this.CargarInformacion(this.id_editar);
       }
     })
   }
@@ -196,6 +199,10 @@ export class DetalleDocumentoAlmacenComponent implements OnInit {
     this.snackBar.open(message, action, {
       duration: 2000,
     });
+  }
+
+  Atras(){
+    this.location.back()
   }
 }
 

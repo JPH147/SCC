@@ -25,18 +25,20 @@ constructor(private http: HttpClient) {}
       prdocumento: string,
       prnumerodoc: number,
       observaciones: string,
+      archivo: string,
     ): Observable <any> {
 
       // tslint:disable-next-line:prefer-const
       let params = new HttpParams()
-      .set('pralmacen', pralmacen.toString())
-      .set('prtipo', prtipo.toString())
-      .set('prreferencia', pr_referencia.toString())
-      .set('prproveedor', prproveedor.toString())
-      .set('prfecha', moment (prfecha).format('YYYY/MM/DD'))
-      .set('prdocumento', prdocumento)
-      .set('prnumerodoc', prnumerodoc.toString())
-      .set('probservaciones', observaciones.toString());
+        .set('pralmacen', pralmacen.toString())
+        .set('prtipo', prtipo.toString())
+        .set('prreferencia', pr_referencia.toString())
+        .set('prproveedor', prproveedor.toString())
+        .set('prfecha', moment (prfecha).format('YYYY/MM/DD'))
+        .set('prdocumento', prdocumento)
+        .set('prnumerodoc', prnumerodoc.toString())
+        .set('probservaciones', observaciones)
+        .set('prarchivo', archivo);
 
       // console.log(params);
 

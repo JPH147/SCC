@@ -44,7 +44,7 @@ import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { LayoutModule } from '@angular/cdk/layout';
 import { Configuracion } from '../paginador_espanol';
-// import { FileSelectDirective } from 'ng2-file-upload';
+import { MatMomentDateModule, MomentDateAdapter } from '@angular/material-moment-adapter';
 
 import { RouterModule } from '@angular/router';
 import {appRoutes} from './app.routing';
@@ -54,7 +54,6 @@ import { ServiciosGenerales } from './components/global/servicios';
 /* Imports del software */
 import {AppComponent} from './app.component';
 import {MenuComponent} from './menu/menu.component';
-import { UsuariosComponent } from './components/usuarios/usuarios.component';
 import { ProductosComponent } from './components/productos/productos.component';
 import { StockComponent } from './components/stock/stock.component';
 import { IngresoProductosComponent } from './components/ingreso-productos/ingreso-productos.component';
@@ -186,10 +185,17 @@ import { ConsultarCuotasComponent } from './components/consultar-cuotas/consulta
 import { VentanaCambioDistritoComponent } from './components/cobranza-judicial-listar/ventana-cambio-distrito/ventana-cambio-distrito.component';
 import { EstadoDocumentosComponent } from './components/proceso-judicial-vinculados/estado-documentos/estado-documentos.component';
 import { VentanaDocumentosComponent } from './components/proceso-judicial-vinculados/estado-documentos/ventana-documentos/ventana-documentos.component';
-
-import { MatMomentDateModule, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { JuezJuzgadoComponent } from './components/proceso-judicial-vinculados/juez-juzgado/juez-juzgado.component';
 import { VentanaJuezJuzgadoComponent } from './components/proceso-judicial-vinculados/juez-juzgado/ventana-juez-juzgado/ventana-juez-juzgado.component';
+import { CobranzaJudicialMultipleComponent } from './components/cobranza-judicial-multiple/cobranza-judicial-multiple.component';
+import { UsuariosListarComponent } from './components/usuarios/usuarios-listar/usuarios-listar.component';
+import { PermisosListarComponent } from './components/usuarios/permisos-listar/permisos-listar.component';
+import { VentanaUsuariosComponent } from './components/usuarios/usuarios-listar/ventana-usuarios/ventana-usuarios.component';
+import { VentanaPermisosComponent } from './components/usuarios/permisos-listar/ventana-permisos/ventana-permisos.component';
+import { UsuariosComponent } from './components/usuarios/usuarios.component';
+import { LoginComponent } from './login/login.component';
+import { InicioComponent } from './inicio/inicio.component';
+import { VentanaCobranzaClienteComponent } from './components/cobranza-cliente-listar/ventana-cobranza-cliente/ventana-cobranza-cliente.component';
 
 export const CUSTOM_DATE_FORMAT = {
   parse: {
@@ -259,7 +265,6 @@ export const CUSTOM_DATE_FORMAT = {
   declarations: [
     AppComponent,
     MenuComponent,
-    UsuariosComponent,
     ProductosComponent,
     StockComponent,
     IngresoProductosComponent,
@@ -397,7 +402,16 @@ export const CUSTOM_DATE_FORMAT = {
     EstadoDocumentosComponent,
     VentanaDocumentosComponent,
     JuezJuzgadoComponent,
-    VentanaJuezJuzgadoComponent
+    VentanaJuezJuzgadoComponent,
+    CobranzaJudicialMultipleComponent,
+    UsuariosListarComponent,
+    PermisosListarComponent,
+    VentanaUsuariosComponent,
+    VentanaPermisosComponent,
+    UsuariosComponent,
+    LoginComponent,
+    InicioComponent,
+    VentanaCobranzaClienteComponent
    ],
   entryComponents: [
     AppComponent,
@@ -465,7 +479,10 @@ export const CUSTOM_DATE_FORMAT = {
     VentanaInstanciaJudicialComponent,
     VentanaCambioDistritoComponent,
     VentanaDocumentosComponent,
-    VentanaJuezJuzgadoComponent
+    VentanaJuezJuzgadoComponent,
+    VentanaUsuariosComponent,
+    VentanaPermisosComponent,
+    VentanaCobranzaClienteComponent
   ],
   bootstrap: [AppComponent],
   providers: [

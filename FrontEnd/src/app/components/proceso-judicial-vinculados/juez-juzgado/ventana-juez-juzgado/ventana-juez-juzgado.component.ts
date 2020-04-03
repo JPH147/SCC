@@ -13,6 +13,7 @@ export class VentanaJuezJuzgadoComponent implements OnInit {
 
   public Cargando = new BehaviorSubject<boolean>(false);
   public Distritos : Array<any> = [];
+  public Instancias : Array<any> = [];
   public JuecesForm : FormGroup ;
   
   constructor(
@@ -29,6 +30,8 @@ export class VentanaJuezJuzgadoComponent implements OnInit {
       console.log(this.data)
       this.JuecesForm.get('id_juez').setValue(this.data.id_juzgado_juez);
       this.JuecesForm.get('id_distrito').setValue(this.data.id_juzgado_distrito);
+      this.ListarInstanciasJudiciales();
+      this.JuecesForm.get('id_instancia').setValue(this.data.id_juzgado_instancia);
       this.JuecesForm.get('id_tipo').setValue(this.data.id_tipo);
       this.JuecesForm.get('juez').setValue(this.data.juzgado_juez);
     }
@@ -40,12 +43,21 @@ export class VentanaJuezJuzgadoComponent implements OnInit {
     })
   }
 
+  ListarInstanciasJudiciales(){
+    this._instancias.ListarInstanciasJudiciales(this.JuecesForm.value.id_distrito,"","",1,50).subscribe(res=>{
+      this.Instancias = res['data'].instancias
+    })
+  }
+
   CrearFormulario(){
     this.JuecesForm = this.Builder.group({
       id_juez : [null, [
         // Validators.required
       ]],
       id_distrito : [null, [
+        Validators.required
+      ]],
+      id_instancia : [null, [
         Validators.required
       ]],
       id_tipo : [null, [
@@ -61,7 +73,7 @@ export class VentanaJuezJuzgadoComponent implements OnInit {
     this.Cargando.next(true);
     if (!this.data) {
       this._instancias.CrearJuez(
-        this.JuecesForm.value.id_distrito ,
+        this.JuecesForm.value.id_instancia ,
         this.JuecesForm.value.id_tipo ,
         this.JuecesForm.value.juez
       ).subscribe(res=>{
@@ -71,7 +83,7 @@ export class VentanaJuezJuzgadoComponent implements OnInit {
     } else {
       this._instancias.ActualizarJuez(
         this.JuecesForm.value.id_juez ,
-        this.JuecesForm.value.id_distrito ,
+        this.JuecesForm.value.id_instancia ,
         this.JuecesForm.value.id_tipo ,
         this.JuecesForm.value.juez
       ).subscribe(res=>{

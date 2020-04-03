@@ -14,6 +14,13 @@
     <mat-grid-tile>
       <mat-icon>search</mat-icon>
       <mat-form-field>
+        <input matInput placeholder="Instancia" #InputInstancia>
+      </mat-form-field>
+    </mat-grid-tile>
+
+    <mat-grid-tile>
+      <mat-icon>search</mat-icon>
+      <mat-form-field>
         <input matInput placeholder="Cargo" #InputTipo>
       </mat-form-field>
     </mat-grid-tile>
@@ -25,6 +32,10 @@
       </mat-form-field>
     </mat-grid-tile>
   
+    <mat-grid-tile></mat-grid-tile>
+    <mat-grid-tile></mat-grid-tile>
+    <mat-grid-tile></mat-grid-tile>
+
     <mat-grid-tile>
       <button mat-raised-button color="primary" (click)="Agregar()"> Agregar </button>
     </mat-grid-tile>
@@ -47,12 +58,17 @@
         <mat-cell *matCellDef="let instancia"> {{instancia.juzgado_distrito}} </mat-cell>
       </ng-container>
 
+      <ng-container matColumnDef="juzgado_instancia">
+        <mat-header-cell *matHeaderCellDef> Instancia judicial </mat-header-cell>
+        <mat-cell *matCellDef="let instancia"> {{instancia.juzgado_instancia}} </mat-cell>
+      </ng-container>
+
       <ng-container matColumnDef="tipo">
         <mat-header-cell *matHeaderCellDef> Cargo </mat-header-cell>
         <mat-cell *matCellDef="let instancia"> {{instancia.tipo}} </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="juzgado_instancia">
+      <ng-container matColumnDef="juzgado_juez">
         <mat-header-cell *matHeaderCellDef> Juez </mat-header-cell>
         <mat-cell *matCellDef="let instancia"> {{instancia.juzgado_juez}} </mat-cell>
       </ng-container>

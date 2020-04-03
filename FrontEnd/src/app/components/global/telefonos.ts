@@ -31,6 +31,22 @@ export class ServiciosTelefonos {
     return this.http.post(this.url + 'clientetelefono/create.php', params, {headers: headers});
   }
 
+  ActualizarTelefono(
+    id_telefono: number,
+    tlf_numero: string,
+    id_tipo: number,
+  ): Observable<any> {
+
+    let params = new HttpParams()
+    .set('prid', id_telefono.toString())
+    .set('tlf_numero', tlf_numero)
+    .set('id_tipo', id_tipo.toString())
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'clientetelefono/update.php', params, {headers: headers});
+  }
+
   ListarTelefono(
 	id_cliente:number,
 	tlf_relevancia:string,

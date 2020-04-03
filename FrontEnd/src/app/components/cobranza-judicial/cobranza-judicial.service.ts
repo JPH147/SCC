@@ -99,7 +99,7 @@ export class CobranzaJudicialService {
         return res['data'].procesos;
       } else {
         console.log('No hay datos que mostrar',res);
-        return [];
+        return false;
       }
     }));
   }
@@ -403,18 +403,17 @@ export class CobranzaJudicialService {
     id_proceso:number,
     expediente: string,
     instancia: number,
-    juez: string,
-    especialista: string,
+    juez: number,
+    especialista: number,
     sumilla: string
   ) :Observable<any> {
     let params = new HttpParams()
       .set('prproceso', id_proceso.toString())
       .set('prexpediente', expediente)
       .set('prinstancia', instancia.toString())
-      .set('prjuez', juez)
-      .set('prespecialista', especialista)
+      .set('prjuez', juez.toString() )
+      .set('prespecialista', especialista.toString() )
       .set('prsumilla', sumilla ) ;
-    console.log(params);
       
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -445,7 +444,6 @@ export class CobranzaJudicialService {
   ListarV2(
     instancia:number,
     expediente:string,
-    juzgado:string,
     dni:string,
     nombre:string,
     fecha_inicio:Date,
@@ -456,7 +454,6 @@ export class CobranzaJudicialService {
     let params = new HttpParams()
       .set('prinstancia',instancia.toString())
       .set('prexpediente',expediente)
-      .set('prjuzgado',juzgado)
       .set('prdni',dni)
       .set('prnombre',nombre)
       .set('prfechainicio', moment(fecha_inicio).format('YYYY-MM-DD'))
@@ -476,9 +473,9 @@ export class CobranzaJudicialService {
   }
 
   ListarInstancias(
-    expediente:string,
-    distrito:string,
+    distrito:number,
     juzgado:string,
+    expediente:string,
     dni:string,
     nombre:string,
     fecha_inicio:Date,
@@ -486,9 +483,9 @@ export class CobranzaJudicialService {
     estado:number,
   ): Observable<any> {
     let params = new HttpParams()
-      .set('prexpediente',expediente)
-      .set('prdistrito',distrito)
+      .set('prdistrito',distrito.toString())
       .set('prjuzgado',juzgado)
+      .set('prexpediente',expediente)
       .set('prdni',dni)
       .set('prnombre',nombre)
       .set('prfechainicio', moment(fecha_inicio).format('YYYY-MM-DD'))
@@ -502,6 +499,112 @@ export class CobranzaJudicialService {
       } else {
         console.log('No hay datos que mostrar');
         return res;
+      }
+    }));
+  }
+
+  ListarDistritos(
+    distrito:string,
+    juzgado:string,
+    expediente:string,
+    dni:string,
+    nombre:string,
+    fecha_inicio:Date,
+    fecha_fin:Date,
+    estado:number,
+  ): Observable<any> {
+    let params = new HttpParams()
+      .set('prdistrito',distrito)
+      .set('prjuzgado',juzgado)
+      .set('prexpediente',expediente)
+      .set('prdni',dni)
+      .set('prnombre',nombre)
+      .set('prfechainicio', moment(fecha_inicio).format('YYYY-MM-DD'))
+      .set('prfechafin',moment(fecha_fin).format('YYYY-MM-DD'))
+      .set('prestado',estado.toString()) ;
+
+    return this.http.get(this.url + 'procesojudicial/readprocesosdistritos.php', {params})
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res;
+      } else {
+        console.log('No hay datos que mostrar');
+        return res;
+      }
+    }));
+  }
+
+  CrearProcesoTransaccionesMultiples(
+    id_cliente:number,
+    expediente: string,
+    instancia: number,
+    juez: string,
+    especialista: string,
+    fecha_inicio: Date,
+    sumilla: string ,
+    numero_cuotas : number ,
+    total : number ,
+    transacciones : Array<any> ,
+  ){
+    let params = new HttpParams()
+      .set('prcliente', id_cliente.toString())
+      .set('prexpediente', expediente)
+      .set('prinstancia', instancia.toString())
+      .set('prjuez', juez.toString() )
+      .set('prespecialista', especialista.toString() )
+      .set('prfecha', moment(fecha_inicio).format("YYYY-MM-DD"))
+      .set('prsumilla', sumilla )
+      .set('prnumerocuotas', numero_cuotas.toString() )
+      .set('prtotal', total.toString() )
+      .set('prtransacciones', JSON.stringify( transacciones ) );    
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'procesojudicial/crear-multiple-transacciones.php', params, {headers: headers})
+    .pipe(
+      map((res)=>{
+        if(res['codigo']==0){
+          transacciones.map(item=>{
+            this.CrearTransacciones(res['data'], item.id_tipo, item.id).subscribe() ;
+          })
+          return res['data'];
+        } else {
+          return false;
+        }
+      })
+    );
+  }
+
+  CrearTransacciones(
+    proceso : number ,
+    tipo : number ,
+    transaccion : number ,
+  ) :Observable<any> {
+    let params = new HttpParams()
+      .set('prproceso', proceso.toString())
+      .set('prtipo', tipo.toString())
+      .set('prtransaccion', transaccion.toString() ) ;    
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'procesojudicial/crear-transacciones.php', params, {headers: headers}) ;
+  } 
+
+  ListarProcesosxTransaccion(
+    tipo : number , // 1. Préstamo, 2. Venta
+    transaccion : number
+  ) :Observable<any> {
+    let params = new HttpParams()
+      .set('prtipotransaccion',tipo.toString())
+      .set('prtransaccion',transaccion.toString()) ;
+
+    return this.http.get(this.url + 'procesojudicial/readxtransaccion.php', {params})
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res['data'].transacciones;
+      } else {
+        console.log('No hay datos que mostrar');
+        return [];
       }
     }));
   }

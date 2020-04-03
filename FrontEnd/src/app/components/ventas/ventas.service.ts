@@ -331,11 +331,9 @@ export class VentaService {
     monto:number
   ): Observable<any>{
     let params = new HttpParams()
-    .set('prid',id_venta.toString())
-    .set('probservacion',observacion)
-    .set('prmonto',monto.toString())
-
-    console.log(params)
+      .set('prid',id_venta.toString())
+      .set('probservacion',observacion)
+      .set('prmonto',monto.toString())
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 

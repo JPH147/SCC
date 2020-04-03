@@ -1169,6 +1169,7 @@
       return $cobranza;
     }
 
+    // Estas funciones retornan la deuda acumulada de los clientes
     function contar_cobranzasxcliente(){
 
       $query = "CALL sp_listarcobranzasxclientecontar(?,?,?,?,?,?,?)";
@@ -1253,6 +1254,69 @@
         return false;
       };
 
+    }
+
+    // Estas funciones retornan las cuotas por cliente
+    function read_cronogramaxcliente() {
+      $query = "CALL sp_listarcronogramaxcliente(?,?,?,?,?)";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(1, $this->cliente);
+      $result->bindParam(2, $this->fecha_inicio);
+      $result->bindParam(3, $this->fecha_fin);
+      $result->bindParam(4, $this->numero_pagina);
+      $result->bindParam(5, $this->total_pagina);
+
+      $result->execute();
+      
+      $cronograma=array();
+      $cronograma["cronograma"]=array();
+
+      $contador = $this->total_pagina*($this->numero_pagina-1);
+      
+      while($row = $result->fetch(PDO::FETCH_ASSOC))
+      {
+        extract($row);
+        $contador=$contador+1;
+        $items = array (
+          "numero"=>$contador,
+          "id_cronograma"=>$id_cronograma,
+          "id_tipo"=>$id_tipo,
+          "tipo"=>$tipo,
+          "codigo"=>$codigo,
+          "id_tipo_pago"=>$id_tipo_pago,
+          "tipo_pago"=>$tipo_pago,
+          "monto_total"=>$monto_total,
+          "monto_pendiente"=>$monto_pendiente,
+          "fecha_vencimiento"=>$fecha_vencimiento,
+          "fecha_cancelacion"=>$fecha_cancelacion,
+          "id_estado"=>$id_estado,
+          "estado"=>$estado,
+        );
+        array_push($cronograma["cronograma"],$items);
+      }
+
+      return $cronograma;
+    }
+
+    function contar_cronogramaxcliente(){
+
+      $query = "CALL sp_listarcronogramaxclientecontar(?,?,?)";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(1, $this->cliente);
+      $result->bindParam(2, $this->fecha_inicio);
+      $result->bindParam(3, $this->fecha_fin);
+
+      $result->execute();
+
+      $row = $result->fetch(PDO::FETCH_ASSOC);
+
+      $this->total_resultado=$row['total'];
+
+      return $this->total_resultado;
     }
   }
 

@@ -52,12 +52,14 @@ export class  DetalleDocumentoAlmacenService {
     proveedor : number ,
     fecha : Date ,
     documento : string ,
+    archivo : string ,
   ){
     let params = new HttpParams()
       .set('prid', id_transaccion.toString())
       .set('prproveedor', proveedor.toString())
       .set('prfecha', moment(fecha).format("YYYY-MM-DD"))
-      .set('prdocumento', documento);
+      .set('prdocumento', documento)
+      .set('prarchivo', archivo);
     
     return this.http.post(this.url + 'transaccioncabecera/update-compra.php', params )
     .pipe(map(res => {

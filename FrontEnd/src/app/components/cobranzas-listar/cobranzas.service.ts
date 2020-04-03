@@ -558,6 +558,7 @@ export class CobranzasService {
     return this.http.post(this.url + 'cobranza/update-cuota.php', params, {headers: headers});
   }
 
+  // Esta función muestra las deudas por cliente
   ListarCobranzasxcliente(
     cliente : string,
     sede : string,
@@ -619,6 +620,32 @@ export class CobranzasService {
         console.log('No hay datos que mostrar');
         console.log(res);
         return false;
+      }
+    }));
+  }
+
+  // Esta función muestra las cuotas por cliente
+  ListarCronogramaxCliente(
+    cliente : number,
+    fecha_inicio : Date,
+    fecha_fin : Date,
+    numero_pagina : number,
+    total_pagina : number,
+  ) : Observable <any> {
+    let params = new HttpParams()
+      .set('prcliente', cliente.toString())
+      .set('prfechainicio', moment(fecha_inicio).format("YYYY-MM-DD"))
+      .set('prfechafin', moment(fecha_fin).format("YYYY-MM-DD"))
+      .set('prpagina', numero_pagina.toString())
+      .set('prtotalpagina', total_pagina.toString())
+
+    return this.http.get(this.url + 'cobranza/read-cronogramaxcliente.php', {params})
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res;
+      } else {
+        console.log('No hay datos que mostrar');
+        return res;
       }
     }));
   }

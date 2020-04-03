@@ -108,6 +108,8 @@ export class EvaluacionExpressComponent implements OnInit {
     merge(
       fromEvent(this.FiltroCapital.nativeElement,'keyup'),
       fromEvent(this.FiltroCuotas.nativeElement,'keyup'),
+      fromEvent(this.FiltroInteres.nativeElement,'keyup'),
+      fromEvent(this.FiltroAporte.nativeElement,'keyup'),
     ).pipe(
       debounceTime(200),
       distinctUntilChanged(),
@@ -476,6 +478,8 @@ export class EvaluacionExpressComponent implements OnInit {
     if( this.nueva_infomacion && this.InformacionForm.value.cliente_nuevo ){
       this.CrearCliente(this.InformacionForm);
       this.nueva_infomacion = false ;
+    } else {
+      this.ActualizarCliente() ;
     }
 
     this.GenerarDDJJ("DDJJ_"+ahora);
@@ -496,13 +500,17 @@ export class EvaluacionExpressComponent implements OnInit {
   }
 
   GenerarDDJJ(nombre_archivo){
+    let direccion_completa : string ;
+
+    direccion_completa = this.CrearDireccionCompleta();
+
     this.Servicios.GenerarDDJJ(
       this.InformacionForm.value.plantilla_ddjj,
       nombre_archivo,
       this.InformacionForm.value.nombre,
       this.InformacionForm.value.dni,
       this.InformacionForm.value.direccion_distrito_nombre,
-      this.InformacionForm.value.direccion_completa,
+      this.InformacionForm.value.direccion_completa ? this.InformacionForm.value.direccion_completa : direccion_completa,
       this.ExpressForm.value.lugar,
       this.ExpressForm.value.fecha_letras
     ).subscribe(res=>{
@@ -514,23 +522,27 @@ export class EvaluacionExpressComponent implements OnInit {
   }
 
   GenerarAutorizacion(nombre_archivo){
+    let direccion_completa : string ;
+
+    direccion_completa = this.CrearDireccionCompleta();
+
     this.Servicios.GenerarAutorizacion(
       this.InformacionForm.value.plantilla_autorizacion,
       nombre_archivo,
       this.cooperativa_nombre,
-      "1",
+      "2",
       this.InformacionForm.value.nombre,
       this.InformacionForm.value.cargo_estado,
       this.InformacionForm.value.dni,
       this.InformacionForm.value.cip,
       this.InformacionForm.value.codigo,
-      this.InformacionForm.value.direccion_completa,
+      this.InformacionForm.value.direccion_completa ? this.InformacionForm.value.direccion_completa : direccion_completa,
       this.InformacionForm.value.telefono_tipo_nombre,
       this.InformacionForm.value.telefono_numero,
       this.InformacionForm.value.email ? this.InformacionForm.value.email : this.GenerarEmail(),
       this.InformacionForm.value.subsede_nombre,
       this.aporte,
-      this.cuota_estandar,
+      +this.cuota_estandar+this.aporte,
       this.numero_cuotas_estandar,
       this.ExpressForm.value.lugar,
       this.ExpressForm.value.fecha_letras,
@@ -547,9 +559,7 @@ export class EvaluacionExpressComponent implements OnInit {
   GenerarTransaccion(nombre_archivo){
     let direccion_completa : string ;
 
-    // if( !this.InformacionForm.value.direccion_completa ) {
-      direccion_completa = this.CrearDireccionCompleta();
-    // }
+    direccion_completa = this.CrearDireccionCompleta();
 
     this.Servicios.GenerarTransaccion(
       this.InformacionForm.value.plantilla_transaccion,
@@ -597,6 +607,7 @@ export class EvaluacionExpressComponent implements OnInit {
       (this.InformacionForm.value.hay_garante && this.InformacionForm.value.dni_garante)? this.InformacionForm.value.nombre_garante : "0",
       (this.InformacionForm.value.hay_garante && this.InformacionForm.value.dni_garante) ? this.InformacionForm.value.dni_garante : "0",
     ).subscribe(res=>{
+      console.log(res)
       this.generados=true;
       this.transaccion=res['data'];
     })
@@ -624,6 +635,10 @@ export class EvaluacionExpressComponent implements OnInit {
   }
 
   GenerarTarjeta(nombre_archivo){
+    let direccion_completa : string ;
+
+    direccion_completa = this.CrearDireccionCompleta();
+    
     this.Servicios.GenerarTarjeta(
       this.InformacionForm.value.plantilla_tarjeta,
       nombre_archivo,
@@ -631,16 +646,18 @@ export class EvaluacionExpressComponent implements OnInit {
       this.InformacionForm.value.dni,
       this.InformacionForm.value.cip,
       this.InformacionForm.value.codigo,
-      this.InformacionForm.value.cargo_estado,
-      this.InformacionForm.value.direccion_completa,
+      this.InformacionForm.value.cargo_estado_nombre,
+      this.InformacionForm.value.direccion_nombre,
+      this.InformacionForm.value.direccion_distrito_nombre,
       this.InformacionForm.value.direccion_provincia,
-      this.InformacionForm.value.cargo_nombre,
-      this.InformacionForm.value.cuenta_numero,
-      this.ExpressForm.value.lugar,
+      this.InformacionForm.value.direccion_departamento,
       this.InformacionForm.value.telefono_numero,
-      20, // El monto de la afiliación
+      this.InformacionForm.value.cuenta_banco_nombre,
+      this.InformacionForm.value.cuenta_numero,
+      this.ExpressForm.value.fecha_letras,
+      this.InformacionForm.value.parametro_autorizacion_1 ,
+      this.InformacionForm.value.parametro_autorizacion_2
     ).subscribe(res=>{
-      // console.log(res)
       if(res['codigo']==0){
         this.generados=true;
         this.tarjeta=res['data'];
@@ -697,6 +714,111 @@ export class EvaluacionExpressComponent implements OnInit {
         // console.log(resultado)
       })
     });
+  }
+
+  ActualizarCliente(){
+
+    let email : string, casilla : string ;
+    // Si el email y casilla ya estaban registrados, se actualizan
+    // Si son nuevos, se compara con los autogenerados. Si son diferentes, se actualizan
+    if ( this.InformacionForm.value.casilla_real === 0) {
+      if( this.InformacionForm.value.casilla==this.InformacionForm.value.casilla_consulta ) {
+        casilla = ""
+      } else {
+        casilla = this.InformacionForm.value.casilla
+      }
+    } else {
+      casilla = this.InformacionForm.value.casilla
+    }
+
+    if ( this.InformacionForm.value.email_real === 0 ) {
+      if( this.InformacionForm.value.email==this.InformacionForm.value.email_consulta ) {
+        email = "" ;
+      } else {
+        email = this.InformacionForm.value.email ;
+      }
+    } else {
+      email = this.InformacionForm.value.email ;
+    }
+
+    this.ClienteServicios.ActualizarParcial(
+      this.InformacionForm.value.id_cliente,
+      this.InformacionForm.value.subsede,
+      this.InformacionForm.value.cargo,
+      this.InformacionForm.value.cargo_estado,
+      this.InformacionForm.value.codigo,
+      this.InformacionForm.value.dni,
+      this.InformacionForm.value.nombre,
+      this.InformacionForm.value.cip,
+      email ,
+      casilla
+    ).subscribe(res=>{
+      this.ActualizarDireccion() ;
+      this.ActualizarTelefono() ;
+      this.ActualizarCuenta() ;
+    }) ;
+  }
+  
+  ActualizarDireccion() {
+    // Si se ha escrito la dirección, se actualiza o guarda
+    if( this.InformacionForm.value.direccion_completa ) {
+      if( this.InformacionForm.value.considerar_direccion ) {
+        this.ServicioDireccion.CrearDireccion(
+          this.InformacionForm.value.id_cliente,
+          this.InformacionForm.value.direccion_nombre,
+          this.InformacionForm.value.direccion_distrito
+        ).subscribe(res=>{
+        })
+      } else {
+        this.ServicioDireccion.ActualizarDireccion(
+          this.InformacionForm.value.id_direccion,
+          this.InformacionForm.value.direccion_nombre,
+          this.InformacionForm.value.direccion_distrito
+        ).subscribe(res=>{
+        })
+      }
+    }
+  }
+
+  ActualizarTelefono() {
+    // Si hay teléfono, se actualiza o guarda
+    if( this.InformacionForm.value.considerar_telefono ) {
+      this.ServicioTelefono.CrearTelefono(
+        this.InformacionForm.value.id_cliente,
+        this.InformacionForm.value.telefono_numero,
+        this.InformacionForm.value.telefono_tipo
+      ).subscribe(res=>{
+      })
+    } else {
+      this.ServicioTelefono.ActualizarTelefono(
+        this.InformacionForm.value.id_telefono,
+        this.InformacionForm.value.telefono_numero,
+        this.InformacionForm.value.telefono_tipo
+      ).subscribe(res=>{
+      })
+    }
+  }
+
+  ActualizarCuenta() {
+    // Si hay cuenta, se actualiza o guarda
+    if( this.InformacionForm.value.considerar_telefono ) {
+      this.ClienteServicios.CrearCuenta(
+        this.InformacionForm.value.id_cliente,
+        this.InformacionForm.value.cuenta_banco,
+        this.InformacionForm.value.cuenta_numero,
+        ""
+      ).subscribe(res=>{
+      })
+    } else {
+      this.ClienteServicios.ActualizarCuenta(
+        this.InformacionForm.value.id_cuenta,
+        this.InformacionForm.value.cuenta_banco,
+        this.InformacionForm.value.cuenta_numero,
+        ""
+      ).subscribe(res=>{
+        // console.log(res)
+      })
+    }
   }
 
 }

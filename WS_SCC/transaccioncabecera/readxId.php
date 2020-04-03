@@ -36,6 +36,7 @@
             "documento"=>$transaccion->documento,
             "observaciones"=>$transaccion->observaciones,
             "detalle"=>$transaccion->transaccion_detalle,
+            "archivo"=>$transaccion->archivo,
 	    );
 
 	    if(trim($transaccion->fecha)!= ''){

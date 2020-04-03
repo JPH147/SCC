@@ -18,7 +18,7 @@
         $archivo = new Plantillas($db);
         $data = json_decode(file_get_contents('php://input'), true);
 
-        if ( trim($_POST["prnombreplantilla"])!=null )
+        if ( trim($_POST["prnombrearchivo"])!=null )
         {
             $archivo->nombre_plantilla = trim($_POST["prnombreplantilla"]);
             $archivo->nombre_archivo = trim($_POST["prnombrearchivo"]);

@@ -1,0 +1,63 @@
+<mat-card class="card">
+
+  <mat-toolbar color="primary">
+    <mat-toolbar-row *ngIf="!data">Agregar usuario</mat-toolbar-row>
+    <mat-toolbar-row *ngIf="data">Editar usuario</mat-toolbar-row>
+  </mat-toolbar>
+
+  <div class = "spinner-container-emergente" *ngIf = "Cargando | async">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <form [formGroup]="UsuariosForm">
+    <ng-container *ngIf="!this.data?.pss">
+      <mat-card-content>
+        <mat-grid-list cols=2 rowHeight="70px">
+          <mat-grid-tile colspan=1>
+            <mat-form-field class="columnas-1">
+              <input matInput type="text" formControlName="nombre" placeholder="Nombre">
+            </mat-form-field>
+          </mat-grid-tile>
+          
+          <!-- <mat-grid-tile colspan=1>
+            <mat-form-field class="columnas-1">
+              <input matInput type="text" formControlName="perfil" placeholder="Perfil">
+            </mat-form-field>
+          </mat-grid-tile> -->
+          
+          <mat-grid-tile colspan=1>
+            <mat-form-field class="columnas-1">
+              <input matInput type="text" formControlName="usuario" placeholder="Usuario">
+            </mat-form-field>
+          </mat-grid-tile>
+  
+          <mat-grid-tile colspan=1 *ngIf="!this.data">
+            <mat-form-field class="columnas-1">
+              <input matInput type="password" formControlName="clave" placeholder="Contraseña">
+            </mat-form-field>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </mat-card-content>
+    </ng-container>
+    
+    <ng-container *ngIf="this.data?.pss">
+      <mat-card-content>
+        <mat-grid-list cols=2 rowHeight="70px">
+          <mat-grid-tile colspan=1>
+            <mat-form-field class="columnas-1">
+              <input matInput type="password" formControlName="clave" placeholder="Nueva contraseña">
+            </mat-form-field>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </mat-card-content>
+    </ng-container>
+
+    <mat-card-actions>
+      <mat-grid-list cols=1 rowHeight="70px">
+        <mat-grid-tile>
+          <button mat-raised-button color="primary" (click)="Guardar()" [disabled]=" UsuariosForm.invalid || (Cargando | async) "> Guardar </button>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-card-actions>
+  </form>
+</mat-card>

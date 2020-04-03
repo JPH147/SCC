@@ -22,7 +22,8 @@
             $sede->nombre=trim($_POST["prnombre"]) ;
             $sede->abreviatura = trim($_POST["prabreviatura"]) ;
             $sede->representante = trim($_POST["prrepresentante"]) ;
-            $sede->distrito = trim($_POST["prdistrito"]) ;
+            $sede->distrito = 96 ;
+            // $sede->distrito = trim($_POST["prdistrito"]) ;
             $sede->direccion = trim($_POST["prdireccion"]) ;
             $sede->telefono = trim($_POST["prtelefono"]) ;
             $sede->codigo_cooperativa = trim($_POST["prcodigocooperativa"]) ;

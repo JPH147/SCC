@@ -16,8 +16,9 @@
   try{
       $proceso = new ProcesoVinculados($db);
 
-      $proceso->id_distrito_juzgado = !empty($_GET['priddistritojuzgado']) ? trim($_GET['priddistritojuzgado']) : 0;
+      $proceso->id_instancia_juzgado = !empty($_GET['pridinstanciajuzgado']) ? trim($_GET['pridinstanciajuzgado']) : 0;
       $proceso->distrito_juzgado = !empty($_GET['prdistritojuzgado']) ? trim($_GET['prdistritojuzgado']) : '';
+      $proceso->instancia_juzgado = !empty($_GET['prinstanciajuzgado']) ? trim($_GET['prinstanciajuzgado']) : '';
       $proceso->tipo_juez = !empty($_GET['prtipo']) ? trim($_GET['prtipo']) : '';
       $proceso->instancia_juez = !empty($_GET['prinstanciajuez']) ? trim($_GET['prinstanciajuez']) : '';
       $proceso->numero_pagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : 1;

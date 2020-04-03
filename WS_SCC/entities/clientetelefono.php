@@ -17,8 +17,7 @@ Class ClienteTelefono{
         $this->conn = $db;
     }
 
-    function create()
-    {
+    function create() {
       $query = "CALL sp_crearclientetelefono(
         :id_cliente,
         :tlf_numero,
@@ -32,6 +31,30 @@ Class ClienteTelefono{
       $result->bindParam(":id_tipo", $this->id_tipo);
 
       $this->id_cliente=htmlspecialchars(strip_tags($this->id_cliente));
+      $this->tlf_numero=htmlspecialchars(strip_tags($this->tlf_numero));
+      $this->id_tipo=htmlspecialchars(strip_tags($this->id_tipo));
+
+      if($result->execute())
+      {
+       return true;
+      }
+      return false;
+    }
+
+    function update() {
+      $query = "CALL sp_actualizarclientetelefono(
+        :id_telefono,
+        :tlf_numero,
+        :id_tipo
+      )";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(":id_telefono", $this->idcliente_telefono);
+      $result->bindParam(":tlf_numero", $this->tlf_numero);
+      $result->bindParam(":id_tipo", $this->id_tipo);
+
+      $this->idcliente_telefono=htmlspecialchars(strip_tags($this->idcliente_telefono));
       $this->tlf_numero=htmlspecialchars(strip_tags($this->tlf_numero));
       $this->id_tipo=htmlspecialchars(strip_tags($this->id_tipo));
 

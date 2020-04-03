@@ -18,13 +18,11 @@
     	$data = json_decode(file_get_contents('php://input'),true);
 
         if ( ($_POST["idusuario"])!=null && !empty(trim($_POST["usr_nombre"])) 
-            && !empty(trim($_POST["usr_usuario"])) && !empty(trim($_POST["usr_clave"]))
-            && trim($_POST["idperfil"])!=null )
+            && !empty(trim($_POST["usr_usuario"])) && trim($_POST["idperfil"])!=null )
     	{
             $usuario->idusuario = trim($_POST["idusuario"]);
     		$usuario->usr_nombre = trim($_POST["usr_nombre"]);
             $usuario->usr_usuario = trim($_POST["usr_usuario"]);
-            $usuario->usr_clave = trim($_POST["usr_clave"]);
             $usuario->idperfil = trim($_POST["idperfil"]);
 
 	    	if($usuario->update())

@@ -247,12 +247,28 @@ export class ServiciosDirecciones{
 		return this.http.post(this.url + 'clientedireccion/create.php', params, {headers: headers});
 	}
 
+	ActualizarDireccion(
+		id_direccion: number,
+		nombre: string,
+		iddistrito: number,
+	): Observable<any> {
+		let params = new HttpParams()
+      .set('priddireccion', id_direccion.toString())
+      .set('drc_nombre', nombre)
+      .set('pid_distrito', iddistrito.toString())
+    
+    // console.log(params) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    
+		return this.http.post(this.url + 'clientedireccion/update.php', params, {headers: headers});
+	}
+
 	ListarDireccion(
 		id_cliente:number,
 		drc_relevancia:string,
 		pagina:number,
 		total_pagina:number,
-	// tslint:disable-next-line:no-unused-expression
 	): Observable <any>
 	{
 		return this.http.get(this.url + 'clientedireccion/read.php',{
@@ -263,11 +279,9 @@ export class ServiciosDirecciones{
 			.set('prtotalpagina', total_pagina.toString())
 		})
 		.pipe(map(res=>{
-			// console.log(res);
 			if(res['codigo'] === 0) {
 				return res
 			} else {
-				// console.log('No hay datos que mostrar');
 				return res
 			}
 		}))

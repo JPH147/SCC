@@ -51,14 +51,14 @@
           <mat-grid-tile colspan="1">
             <mat-form-field class="columnas-1">
               <input matInput placeholder="Casilla" formControlName="casilla">
-              <mat-icon matSuffix color="accent" *ngIf="ClientesForm.value.casilla_real === 0"> warning </mat-icon>
+              <mat-icon matSuffix color="accent" *ngIf="ClientesForm.value.casilla_real === 0 && ClientesForm.value.casilla==ClientesForm.value.casilla_consulta"> warning </mat-icon>
             </mat-form-field>
           </mat-grid-tile>
 
           <mat-grid-tile colspan="1">
             <mat-form-field class="columnas-1">
               <input matInput placeholder="Email" formControlName="email" email="true">
-              <mat-icon matSuffix color="accent" *ngIf="ClientesForm.value.email_real === 0"> warning </mat-icon>
+              <mat-icon matSuffix color="accent" *ngIf="ClientesForm.value.email_real === 0 && ClientesForm.value.email==ClientesForm.value.email_consulta"> warning </mat-icon>
               <mat-error>Debe ser un email válido</mat-error>
             </mat-form-field>
           </mat-grid-tile>
@@ -189,6 +189,10 @@
             <mat-form-field class="columnas-4">
               <input matInput placeholder="Dirección" formControlName="direccion_nombre">
               <mat-error>Este campo es obligatorio</mat-error>
+              <ng-container *ngIf="!ventana" matSuffix>
+                <button mat-icon-button color="accent" type="button" (click)="ConsiderarDireccion(false)" *ngIf="ClientesForm.value.considerar_direccion" matTooltip="Nueva dirección"> <mat-icon> star </mat-icon> </button>
+                <button mat-icon-button type="button" (click)="ConsiderarDireccion(true)" *ngIf="!ClientesForm.value.considerar_direccion" matTooltip="No es una nueva dirección"> <mat-icon> star_border </mat-icon> </button>
+              </ng-container>
             </mat-form-field>
           </mat-grid-tile>
 
@@ -206,12 +210,16 @@
               <input matInput placeholder="Número de telefono" maxlength="9" formControlName="telefono_numero">
               <mat-hint align="end">{{ClientesForm.value.telefono_numero?.length || 0}}/9</mat-hint>
               <mat-error>Debe ingresar entre 6 y 9 dígitos</mat-error>
+              <ng-container *ngIf="!ventana" matSuffix>
+                <button mat-icon-button color="accent" type="button" (click)="ConsiderarTelefono(false)" *ngIf="ClientesForm.value.considerar_telefono" matTooltip="Nuevo teléfono"> <mat-icon> star </mat-icon> </button>
+                <button mat-icon-button type="button" (click)="ConsiderarTelefono(true)" *ngIf="!ClientesForm.value.considerar_telefono" matTooltip="No es un nuevo teléfono"> <mat-icon> star_border </mat-icon> </button>
+              </ng-container>
             </mat-form-field>
           </mat-grid-tile>
 
           <mat-grid-tile colspan="1">
             <mat-form-field class="columnas-1">
-              <mat-select placeholder="Banco" formControlName="cuenta_banco">
+              <mat-select placeholder="Banco" formControlName="cuenta_banco" (selectionChange)="BancoSeleccionado()">
                 <mat-option *ngFor="let banco of Bancos" [value]="banco.id">{{banco.nombre}}</mat-option>
               </mat-select>
               <mat-error>Este campo es obligatorio</mat-error>
@@ -222,6 +230,10 @@
             <mat-form-field class="columnas-1">
               <input matInput placeholder="Número de cuenta" formControlName="cuenta_numero">
               <mat-error>Este campo es obligatorio</mat-error>
+              <ng-container *ngIf="!ventana" matSuffix>
+                <button mat-icon-button color="accent" type="button" (click)="ConsiderarCuenta(false)" *ngIf="ClientesForm.value.considerar_cuenta" matTooltip="Nueva cuenta"> <mat-icon> star </mat-icon> </button>
+                <button mat-icon-button type="button" (click)="ConsiderarCuenta(true)" *ngIf="!ClientesForm.value.considerar_cuenta" matTooltip="No es una nueva cuenta"> <mat-icon> star_border </mat-icon> </button>
+              </ng-container>
             </mat-form-field>
           </mat-grid-tile>
         </mat-grid-list>

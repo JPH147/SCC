@@ -28,16 +28,14 @@ export class CobranzaJudicialListarComponent implements OnInit {
   public Distritos : Array<any> = [];
 
   public ListadoProcesos: CobranzaDataSource;
-  public Columnas: string[] = ['id_tipo_documento', 'fecha_inicio', 'cliente_nombre', 'expediente', 'juzgado', 'vendedor','fecha_ultimo_documento','fecha_ultimo_documento_diferencia', 'opciones'];
+  public Columnas: string[] = ['id_tipo_documento', 'fecha_inicio', 'cliente_nombre', 'expediente', 'vendedor', 'total_documentos','fecha_ultimo_documento','fecha_ultimo_documento_diferencia', 'opciones'];
 
   @ViewChild('InputExpediente', { static: true }) FiltroExpediente: ElementRef;
   @ViewChild('InputDistrito', { static: true }) FiltroDistrito: ElementRef;
-  @ViewChild('InputJuzgado', { static: true }) FiltroJuzgado: ElementRef;
+  // @ViewChild('InputJuzgado', { static: true }) FiltroJuzgado: ElementRef;
   @ViewChild('InputDNI', { static: true }) FiltroDNI: ElementRef;
   @ViewChild('InputCliente', { static: true }) FiltroCliente: ElementRef;
   @ViewChild('InputEstado', { static: true }) FiltroEstado: MatSelect;
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(
     private router : Router ,
@@ -59,12 +57,6 @@ export class CobranzaJudicialListarComponent implements OnInit {
 
   ngAfterViewInit () {
 
-    merge(
-      this.paginator.page,
-    ).pipe(
-      tap(() => this.CargarData())
-    ).subscribe();
-
     fromEvent(this.FiltroDistrito.nativeElement, 'keyup')
     .pipe(
       debounceTime(200),
@@ -78,15 +70,14 @@ export class CobranzaJudicialListarComponent implements OnInit {
       fromEvent(this.FiltroCliente.nativeElement, 'keyup'),
       fromEvent(this.FiltroExpediente.nativeElement, 'keyup'),
       fromEvent(this.FiltroDistrito.nativeElement, 'keyup'),
-      fromEvent(this.FiltroJuzgado.nativeElement, 'keyup'),
+      // fromEvent(this.FiltroJuzgado.nativeElement, 'keyup'),
       fromEvent(this.FiltroDNI.nativeElement, 'keyup'),
-      this.sort.sortChange
+      // this.sort.sortChange
     )
     .pipe(
        debounceTime(200),
        distinctUntilChanged(),
        tap(() => {
-         this.paginator.pageIndex = 0;
          this.CargarData();
        })
     ).subscribe();
@@ -95,28 +86,26 @@ export class CobranzaJudicialListarComponent implements OnInit {
   EncontrarFecha(){
     this._judicial.ObtenerFechaAntigua().subscribe(res=>{
       this.fecha_inicio = res ;
-      this.ListadoProcesos.CargarCobranzas("","","","","",this.fecha_inicio,this.fecha_fin,-1,1,10,"fecha_inicio desc");
+      this.ListadoProcesos.CargarDistritos("","","","","",this.fecha_inicio,this.fecha_fin,-1,"fecha_inicio desc");
     })
   }
 
   CargarData() {
-    this.ListadoProcesos.CargarCobranzas(
-      this.FiltroExpediente.nativeElement.value,
+    this.ListadoProcesos.CargarDistritos(
       this.FiltroDistrito.nativeElement.value,
-      this.FiltroJuzgado.nativeElement.value,
+      "",
+      // this.FiltroJuzgado.nativeElement.value,
+      this.FiltroExpediente.nativeElement.value,
       this.FiltroDNI.nativeElement.value,
       this.FiltroCliente.nativeElement.value,
       this.fecha_inicio,
       this.fecha_fin,
       this.FiltroEstado.value,
-      this.paginator.pageIndex+1,
-      this.paginator.pageSize,
-      this.sort.active+" "+this.sort.direction
+      "fecha_inicio desc"
     );
   }
 
   CambioFiltro(){
-    this.paginator.pageIndex = 0;
     this.CargarData()
   }
 
@@ -178,9 +167,13 @@ export class CobranzaJudicialListarComponent implements OnInit {
 export class CobranzaDataSource implements DataSource<any> {
 
   private Informacion = new BehaviorSubject<any[]>([]);
+  public InformacionDistritos = new BehaviorSubject<any[]>([]);
+  public InformacionInstancias = new BehaviorSubject<any[]>([]);
   private CargandoInformacion = new BehaviorSubject<boolean>(false);
   public Cargando = this.CargandoInformacion.asObservable();
   public TotalResultados = new BehaviorSubject<number>(0);
+  public InformacionDistritosArray : Array<any> = [] ;
+  public InformacionInstanciasArray : Array<any> = [] ;
 
   constructor(
     private _judicial: CobranzaJudicialService,
@@ -195,43 +188,158 @@ export class CobranzaDataSource implements DataSource<any> {
     this.CargandoInformacion.complete();
   }
 
-  CargarInstancias(
-    expediente:string,
+  CargarDistritos(
     distrito:string,
     juzgado:string,
+    expediente:string,
     dni:string,
     nombre:string,
     fecha_inicio:Date,
     fecha_fin:Date,
     estado:number,
+    orden:string,
   ) {
-
-  }
-
-  CargarCobranzas(
-    expediente:string,
-    distrito:string,
-    juzgado:string,
-    dni:string,
-    nombre:string,
-    fecha_inicio:Date,
-    fecha_fin:Date,
-    estado:number,
-    numero_pagina:number,
-    total_pagina:number,
-    orden : string
-  ) {
-    this.CargandoInformacion.next(true);
-
-    this._judicial.Listar( expediente , distrito , juzgado , dni , nombre , fecha_inicio , fecha_fin , estado , numero_pagina , total_pagina, orden )
+    this._judicial.ListarDistritos( distrito , juzgado , expediente , dni , nombre , fecha_inicio , fecha_fin , estado )
     .pipe(
       catchError(() => of([])),
       finalize(() => this.CargandoInformacion.next(false))
     )
     .subscribe(res => {
-      this.TotalResultados.next(res['mensaje']);
-      this.Informacion.next(res['data'].procesos);
+      this.InformacionDistritos.next(res['data'].distritos)
+      this.InformacionDistritosArray = res['data'].distritos;
+      this.ObtenerInstancias(
+        juzgado ,
+        expediente ,
+        dni ,
+        nombre ,
+        fecha_inicio ,
+        fecha_fin ,
+        estado ,
+        orden ,
+      );
     });
+  }
+
+  ObtenerInstancias(
+    juzgado:string,
+    expediente:string,
+    dni:string,
+    nombre:string,
+    fecha_inicio:Date,
+    fecha_fin:Date,
+    estado:number,
+    orden:string,
+  ) {
+    this.InformacionDistritosArray.forEach((item)=>{
+      item['informacion_instancias'] = [] ;
+      item['cargando_instancias'] = true ;
+      this._judicial.ListarInstancias(
+        item.id_distrito ,
+        juzgado ,
+        expediente ,
+        dni ,
+        nombre ,
+        fecha_inicio ,
+        fecha_fin ,
+        estado
+      ).subscribe(res=>{
+        item['informacion_instancias'] = res['data'].instancias ;
+        item['cargando_instancias'] = false;
+        this.ObtenerProcesos(
+          item['informacion_instancias'],
+          expediente,
+          dni,
+          nombre,
+          fecha_inicio,
+          fecha_fin,
+          estado,
+          orden,
+        )
+      })
+    })
+  }
+
+  // CargarInstancias(
+  //   distrito:number,
+  //   juzgado:string,
+  //   expediente:string,
+  //   dni:string,
+  //   nombre:string,
+  //   fecha_inicio:Date,
+  //   fecha_fin:Date,
+  //   estado:number,
+  //   orden:string,
+  // ) {
+  //   this._judicial.ListarInstancias( distrito , juzgado , expediente , dni , nombre , fecha_inicio , fecha_fin , estado )
+  //   .pipe(
+  //     catchError(() => of([])),
+  //     finalize(() => this.CargandoInformacion.next(false))
+  //   )
+  //   .subscribe(res => {
+  //     this.InformacionInstancias.next(res['data'].instancias)
+  //     this.InformacionInstanciasArray = res['data'].instancias;
+  //     this.ObtenerProcesos(
+  //       expediente ,
+  //       juzgado ,
+  //       dni ,
+  //       nombre ,
+  //       fecha_inicio ,
+  //       fecha_fin ,
+  //       estado ,
+  //       orden ,
+  //     );
+  //   });
+  // }
+
+  ObtenerProcesos(
+    instancias:Array<any>,
+    expediente:string,
+    dni:string,
+    nombre:string,
+    fecha_inicio:Date,
+    fecha_fin:Date,
+    estado:number,
+    orden:string,
+  ){
+    instancias.forEach((item)=>{
+      item['informacion_procesos'] = new ProcesosDataSource() ;
+      item['informacion_procesos'].CargarInformacion([]);
+      item['cargando_procesos'] = true ;
+      this._judicial.ListarV2(
+        item.id_instancia ,
+        expediente ,
+        dni ,
+        nombre ,
+        fecha_inicio ,
+        fecha_fin ,
+        estado ,
+        orden
+      ).subscribe(res=>{
+        item['informacion_procesos'].CargarInformacion(res['data'].procesos);
+        item['cargando_procesos'] = false;
+      })
+    })
+  }
+}
+
+export class ProcesosDataSource implements DataSource<any> {
+
+  private InformacionDirecciones = new BehaviorSubject<any>([]);
+
+  constructor(
+  ) {
+  }
+
+  connect(collectionViewer: CollectionViewer): Observable<any> {
+    return this.InformacionDirecciones.asObservable();
+  }
+
+  disconnect(){
+    this.InformacionDirecciones.complete();
+  }
+
+  CargarInformacion( informacion ){
+    this.InformacionDirecciones.next(informacion);
   }
 
 }

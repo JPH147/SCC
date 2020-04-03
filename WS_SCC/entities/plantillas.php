@@ -92,15 +92,17 @@ Class Plantillas{
         } else {
             $templateProcessor->setValue('cip', '' );
         }
-        $templateProcessor->setValue('codigo', $this->codigo);
+        $templateProcessor->setValue('codofin', $this->codigo);
         $templateProcessor->setValue('cargo_estado', $this->cargo_estado);
         $templateProcessor->setValue('direccion', str_pad($this->direccion,45) );
+        $templateProcessor->setValue('departamento', $this->departamento);
         $templateProcessor->setValue('provincia', $this->provincia);
+        $templateProcessor->setValue('distrito', $this->distrito);
         $templateProcessor->setValue('trabajo', str_pad($this->trabajo,40) );
         $templateProcessor->setValue('cuenta', $this->cuenta_numero);
-        $templateProcessor->setValue('lugar', str_pad($this->lugar, 15) );
+        // $templateProcessor->setValue('lugar', str_pad($this->lugar, 15) );
         $templateProcessor->setValue('celular', str_pad($this->celular, 15) );
-        $templateProcessor->setValue('monto_afiliacion', $this->monto_afiliacion);
+        // $templateProcessor->setValue('monto_afiliacion', $this->monto_afiliacion);
 
         $templateProcessor->saveAs('../uploads/autogenerados/' . $this->nombre_archivo . '.docx');
 
@@ -152,7 +154,11 @@ Class Plantillas{
         } else {
             $templateProcessor->setValue('cip', '');
         }
-        $templateProcessor->setValue('codigo', ', CODOFIN: ' . $this->codigo);
+        if( $this->codigo ) {
+            $templateProcessor->setValue('codigo', ', CODOFIN: ' . $this->codigo);
+        } else {
+            $templateProcessor->setValue('codigo', '');
+        }
         $templateProcessor->setValue('ugel_nombre', $this->ugel_nombre);
         $templateProcessor->setValue('direccion', $this->direccion);
         $templateProcessor->setValue('tipo_telefono', $this->tipo_telefono);
@@ -316,16 +322,19 @@ Class Plantillas{
         $templateProcessor->setValue('cooperativa', $this->cooperativa);
         $templateProcessor->setValue('nombre', $this->nombre);
         $templateProcessor->setValue('dni', str_pad($this->dni, 8 ,"0" ,STR_PAD_LEFT) );
-        if( $this->cip ) {
-            $templateProcessor->setValue('cip', ', CIP: ' . $this->cip);
-        } else {
-            $templateProcessor->setValue('cip', '');
-        }
-        $templateProcessor->setValue('fecha', $this->fecha);
+        $templateProcessor->setValue('cip', $this->cip);
+        $templateProcessor->setValue('codofin', $this->codigo);
+        $templateProcessor->setValue('cargo_estado', $this->cargo_estado);
+        $templateProcessor->setValue('direccion', $this->direccion);
+        $templateProcessor->setValue('distrito', $this->distrito);
+        $templateProcessor->setValue('provincia', $this->provincia);
+        $templateProcessor->setValue('departamento', $this->departamento);
+        $templateProcessor->setValue('celular', $this->celular);
         $templateProcessor->setValue('banco', $this->banco);
         $templateProcessor->setValue('cuenta', $this->cuenta);
-        $templateProcessor->setValue('contacto', $this->contacto);
-        $templateProcessor->setValue('monto_afiliacion', number_format($this->monto_afiliacion,2));
+        $templateProcessor->setValue('fecha', $this->fecha);
+        $templateProcessor->setValue('autorizacion1', $this->parametro_autorizacion_1);
+        $templateProcessor->setValue('autorizacion2', $this->parametro_autorizacion_2);
 
         $templateProcessor->saveAs('../uploads/autogenerados/' . $this->nombre_archivo . '.docx');
 

@@ -15,6 +15,7 @@ export class MenuComponent implements OnInit{
 
   ngOnInit(){
     this.menu=[
+      // Maestro general
       {
         nombre: "Maestro general",
         icono: "person",
@@ -24,12 +25,12 @@ export class MenuComponent implements OnInit{
             nombre: "Clientes",
             path: "clientes"
           },
+          // {
+          //   nombre: "Evaluación",
+          //   path: "evaluacion"
+          // },
           {
             nombre: "Evaluación",
-            path: "evaluacion"
-          },
-          {
-            nombre: "Evaluación Express",
             path: "evaluacion-express"
           },
           {
@@ -42,6 +43,7 @@ export class MenuComponent implements OnInit{
           },
         ]
       },
+      // Ventas
       {
         nombre: "Ventas",
         icono: "store_mall_directory",
@@ -62,6 +64,7 @@ export class MenuComponent implements OnInit{
           }
         ]
       },
+      // Inventarios
       {
         nombre: "Inventarios",
         icono: "domain",
@@ -85,6 +88,7 @@ export class MenuComponent implements OnInit{
           }
         ]
       },
+      // Créditos
       {
         nombre: "Créditos",
         icono: "account_balance",
@@ -104,17 +108,30 @@ export class MenuComponent implements OnInit{
           },
         ]
       },
+      // Juciales
+      {
+        nombre: "Judiciales",
+        icono: "location_city",
+        disabled:false,
+        submenu:[
+          {
+            nombre: "Procesos judiciales",
+            path: "cobranza-judicial"
+          },
+        ]
+      },
+      // Cobranzas
       {
         nombre: "Cobranzas",
         icono: "gavel",
         disabled:false,
         submenu:[
           {
-            nombre: "Pendientes",
+            nombre: "Cronograma de pagos",
             path: "cobranzas"
           },
           {
-            nombre: "Deudas por cliente",
+            nombre: "Clientes morosos",
             path: "cobranzas-cliente"
           },
           {
@@ -125,12 +142,9 @@ export class MenuComponent implements OnInit{
             nombre: "Cobranzas por planilla",
             path: "cobranza-archivos"
           },
-          {
-            nombre: "Cobranzas judiciales",
-            path: "cobranza-judicial"
-          },
         ]
       },
+      // Asistencia
       {
         nombre: "Asistencia",
         icono: "access_alarms",
@@ -150,15 +164,16 @@ export class MenuComponent implements OnInit{
           },
         ]
       },
+      // Tablas maestras
       {
         nombre: "Tablas maestras",
         icono: "table_chart",
         disabled:false,
         submenu:[
-          // {
-          //   nombre: "Cooperativa",
-          //   path: ""
-          // },
+          {
+            nombre: "Usuarios",
+            path: "usuarios"
+          },
           {
             nombre: "Direcciones",
             path: "direcciones"

@@ -439,16 +439,17 @@ Class ProcesoVinculados{
   }
 
   function read_juez(){
-    $query = "CALL sp_listarjuzgadojuez(?,?,?,?,?,?)";
+    $query = "CALL sp_listarjuzgadojuez(?,?,?,?,?,?,?)";
 
     $result = $this->conn->prepare($query);
 
-    $result->bindParam(1, $this->id_distrito_juzgado);
+    $result->bindParam(1, $this->id_instancia_juzgado);
     $result->bindParam(2, $this->distrito_juzgado);
-    $result->bindParam(3, $this->tipo_juez);
-    $result->bindParam(4, $this->instancia_juez);
-    $result->bindParam(5, $this->numero_pagina);
-    $result->bindParam(6, $this->total_pagina);
+    $result->bindParam(3, $this->instancia_juzgado);
+    $result->bindParam(4, $this->tipo_juez);
+    $result->bindParam(5, $this->instancia_juez);
+    $result->bindParam(6, $this->numero_pagina);
+    $result->bindParam(7, $this->total_pagina);
 
     $result->execute();
     
@@ -465,9 +466,11 @@ Class ProcesoVinculados{
         "numero"=>$contador ,
         "id_juzgado_juez"=>$id_juzgado_juez ,
         "id_juzgado_distrito"=>$id_juzgado_distrito ,
+        "id_juzgado_instancia"=>$id_juzgado_instancia ,
         "id_tipo"=>$id_tipo ,
         "tipo"=>$tipo ,
         "juzgado_distrito"=>$juzgado_distrito ,
+        "juzgado_instancia"=>$juzgado_instancia ,
         "juzgado_juez"=>$juzgado_juez ,
       );
       array_push($procesos_list["jueces"],$items);
@@ -476,14 +479,15 @@ Class ProcesoVinculados{
   }
 
   function contar_juez(){
-    $query = "CALL sp_listarjuzgadojuezcontar(?,?,?,?)";
+    $query = "CALL sp_listarjuzgadojuezcontar(?,?,?,?,?)";
 
     $result = $this->conn->prepare($query);
 
-    $result->bindParam(1, $this->id_distrito_juzgado);
+    $result->bindParam(1, $this->id_instancia_juzgado);
     $result->bindParam(2, $this->distrito_juzgado);
-    $result->bindParam(3, $this->tipo_juez);
-    $result->bindParam(4, $this->instancia_juez);
+    $result->bindParam(3, $this->instancia_juzgado);
+    $result->bindParam(4, $this->tipo_juez);
+    $result->bindParam(5, $this->instancia_juez);
 
     $result->execute();
 

@@ -19,16 +19,11 @@
         $data = json_decode(file_get_contents('php://input'), true);
 
         if (!empty(trim($_POST["usr_nombre"])) && !empty(trim($_POST["usr_usuario"]))
-            && !empty(trim($_POST["usr_clave"])) && trim($_POST["usr_fechacreacion"])!= null 
-            && trim($_POST["usr_ultimologueo"]) != null && trim($_POST["usr_estado"])!=null
-            && trim($_POST["idperfil"])!=null )
+            && !empty(trim($_POST["usr_clave"])) && trim($_POST["idperfil"])!=null )
         {
             $usuario->usr_nombre = trim($_POST["usr_nombre"]);
             $usuario->usr_usuario = trim($_POST["usr_usuario"]);
             $usuario->usr_clave = password_hash(trim($_POST["usr_clave"]), PASSWORD_DEFAULT);
-            $usuario->usr_fechacreacion = trim($_POST["usr_fechacreacion"]);
-            $usuario->usr_ultimologueo = trim($_POST["usr_ultimologueo"]);
-            $usuario->usr_estado = trim($_POST["usr_estado"]);
             $usuario->idperfil = trim($_POST["idperfil"]);
 
             if($usuario->create())

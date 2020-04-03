@@ -692,28 +692,28 @@ export class EvaluacionArchivosComponent implements OnInit , AfterViewInit{
   }
 
   GenerarTarjeta(nombre_archivo){
-    this.Servicios.GenerarTarjeta(
-      this.EvaluacionArchivosForm.value.plantilla_tarjeta,
-      nombre_archivo,
-      this.EvaluacionArchivosForm.value.nombre,
-      this.EvaluacionArchivosForm.value.dni,
-      this.EvaluacionArchivosForm.value.cip,
-      this.EvaluacionArchivosForm.value.codigo,
-      this.EvaluacionArchivosForm.value.cargo_estado,
-      this.EvaluacionArchivosForm.value.direccion_resumen,
-      this.EvaluacionArchivosForm.value.provincia,
-      this.EvaluacionArchivosForm.value.trabajo,
-      this.EvaluacionArchivosForm.value.cuenta_numero,
-      this.EvaluacionArchivosForm.value.lugar,
-      this.EvaluacionArchivosForm.value.telefono_numero,
-      20, // El monto de la afiliación
-    ).subscribe(res=>{
-      // console.log(res)
-      if(res['codigo']==0){
-        this.generados=true;
-        this.tarjeta=res['data'];
-      }
-    })
+    // this.Servicios.GenerarTarjeta(
+    //   this.EvaluacionArchivosForm.value.plantilla_tarjeta,
+    //   nombre_archivo,
+    //   this.EvaluacionArchivosForm.value.nombre,
+    //   this.EvaluacionArchivosForm.value.dni,
+    //   this.EvaluacionArchivosForm.value.cip,
+    //   this.EvaluacionArchivosForm.value.codigo,
+    //   this.EvaluacionArchivosForm.value.cargo_estado,
+    //   this.EvaluacionArchivosForm.value.direccion_resumen,
+    //   this.EvaluacionArchivosForm.value.provincia,
+    //   this.EvaluacionArchivosForm.value.trabajo,
+    //   this.EvaluacionArchivosForm.value.cuenta_numero,
+    //   this.EvaluacionArchivosForm.value.lugar,
+    //   this.EvaluacionArchivosForm.value.telefono_numero,
+    //   20, // El monto de la afiliación
+    // ).subscribe(res=>{
+    //   // console.log(res)
+    //   if(res['codigo']==0){
+    //     this.generados=true;
+    //     this.tarjeta=res['data'];
+    //   }
+    // })
   }
 
   AbrirArchivo(nombre_archivo){

@@ -20,7 +20,8 @@
         $institucion->nombre = trim($_POST["prnombre"]) ;
         $institucion->abreviatura = trim($_POST["prabreviatura"]) ;
         $institucion->representante = trim($_POST["prrepresentante"]) ;
-        $institucion->distrito = trim($_POST["prdistrito"]) ;
+        $institucion->distrito = 96 ;
+        // $institucion->distrito = trim($_POST["prdistrito"]) ;
         $institucion->direccion = trim($_POST["prdireccion"]) ;
         $institucion->telefono = trim($_POST["prtelefono"]) ;
         $institucion->codigo_cooperativa = trim($_POST["prcodigocooperativa"]) ;

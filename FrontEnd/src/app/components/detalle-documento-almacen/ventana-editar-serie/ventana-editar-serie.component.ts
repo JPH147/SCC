@@ -5,12 +5,13 @@ import {ServiciosProductoSerie} from '../../global/productoserie';
 import {fromEvent, BehaviorSubject} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
 import {ProductoService} from '../../productos/productos.service';
+import { IngresoProductoService } from '../../ingreso-productos/ingreso-productos.service';
 
 @Component({
   selector: 'app-ventana-editar-serie',
   templateUrl: './ventana-editar-serie.component.html',
   styleUrls: ['./ventana-editar-serie.component.css'],
-  providers: [ ServiciosProductoSerie, ProductoService ]
+  providers: [ ServiciosProductoSerie, ProductoService, IngresoProductoService ]
 })
 export class VentanaEditarSerieComponent implements OnInit, AfterViewInit {
 
@@ -28,13 +29,15 @@ export class VentanaEditarSerieComponent implements OnInit, AfterViewInit {
 
   constructor(
     @Optional() @Inject(MAT_DIALOG_DATA) public data,
+    private ventana : MatDialogRef<VentanaEditarSerieComponent> ,
     private Builder: FormBuilder,
     private SServicio: ServiciosProductoSerie,
     private Articulos: ProductoService,
+    private IngresoProductoservicios: IngresoProductoService
   ) { }
 
   ngOnInit() {
-    if(this.data){
+    if(this.data.detalle){
       this.repetido=false;
       this.verificando=false;
       this.ActualizarInformacion();
@@ -49,7 +52,7 @@ export class VentanaEditarSerieComponent implements OnInit, AfterViewInit {
     this.FiltrarSerie();
     this.SServicio.ValidarSerie(
       this.Informacion.serie,
-      this.data ? this.data.id_serie : 0
+      this.data.detalle ? this.data.detalle.id_serie : 0
     ).subscribe(res=>{
       this.verificando=false;
       if (res==0) {
@@ -59,15 +62,17 @@ export class VentanaEditarSerieComponent implements OnInit, AfterViewInit {
       }
     })
 
-    fromEvent(this.FiltroProducto.nativeElement,'keyup')
-    .pipe(
-      debounceTime(10),
-      distinctUntilChanged(),
-      tap(() => {
-        this.FiltrarProductos(this.FiltroProducto.nativeElement.value);
-      })
-     ).subscribe();
-  }
+    if(this.nuevo){
+      fromEvent(this.FiltroProducto.nativeElement,'keyup')
+      .pipe(
+        debounceTime(10),
+        distinctUntilChanged(),
+        tap(() => {
+          this.FiltrarProductos(this.FiltroProducto.nativeElement.value);
+        })
+       ).subscribe();
+      }
+    }
 
   FiltrarSerie(){
     fromEvent(this.FiltroSerie.nativeElement,'keyup')
@@ -78,7 +83,7 @@ export class VentanaEditarSerieComponent implements OnInit, AfterViewInit {
         this.verificando=true;
         this.SServicio.ValidarSerie(
           this.FiltroSerie.nativeElement.value.trim(),
-          this.data ? this.data.id_serie : 0
+          this.data.detalle ? this.data.detalle.id_serie : 0
         ).subscribe(res=>{
           this.verificando=false;
           if (res==0) {
@@ -93,8 +98,8 @@ export class VentanaEditarSerieComponent implements OnInit, AfterViewInit {
 
   ActualizarInformacion(){
     this.Cargando.next(true);
-    this.SServicio.ValidarSerie(this.FiltroSerie.nativeElement.value.trim(),this.data.id_serie).subscribe(res=> {
-      this.SServicio.Seleccionar(this.data.id_serie).subscribe(res=>{
+    this.SServicio.ValidarSerie(this.FiltroSerie.nativeElement.value.trim(),this.data.detalle.id_serie).subscribe(res=> {
+      this.SServicio.Seleccionar(this.data.detalle.id_serie).subscribe(res=>{
         this.Cargando.next(false);
         this.Informacion.id=res.id_producto_serie;
         this.Informacion.id_producto=res.id_producto;
@@ -130,6 +135,61 @@ export class VentanaEditarSerieComponent implements OnInit, AfterViewInit {
     this.Informacion.id_producto = null ;
     this.producto = "" ;
     this.FiltrarProductos("");
+  }
+
+  Guardar(){
+    if (this.data.detalle) {
+      this.Actualizar();
+    } else {
+      this.Crear();
+    }
+  }
+
+  Crear(){
+    this.SServicio.CrearProductoSerie(
+      this.Informacion.id_producto,
+      this.Informacion.serie,
+      this.Informacion.color,
+      this.Informacion.almacenamiento,
+      this.Informacion.precio
+    ).subscribe(response => {
+      if( response['codigo']==0 ) {
+        this.IngresoProductoservicios.CrearTransaccionDetalle(this.data.transaccion, response['data'], 1, this.Informacion.precio, "")
+        .subscribe(resp=>{
+          if( resp['codigo']==0 ) {
+            this.ventana.close(true) ;
+          } else {
+            this.ventana.close(false) ;
+          }
+        });
+      } else {
+        this.ventana.close(false) ;
+      }
+    });
+  }
+
+  Actualizar(){
+    this.SServicio.ValidarSerie(this.Informacion.serie,this.Informacion.id).subscribe(rest=>{
+      if (rest==0) {
+        this.SServicio.Actualizar(
+          this.Informacion.id,
+          this.Informacion.id_producto,
+          this.Informacion.serie,
+          this.Informacion.color,
+          this.Informacion.almacenamiento,
+          this.Informacion.precio
+        )
+        .subscribe(res=>{
+          if(res['codigo']==0){
+            this.ventana.close(true)
+          } else {
+            this.ventana.close(false)
+          }
+        })
+      }else{
+        this.repetido = true ;
+      }
+    })
   }
 
 }

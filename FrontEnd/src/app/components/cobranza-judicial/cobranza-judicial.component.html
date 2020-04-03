@@ -2,6 +2,12 @@
   <button mat-mini-fab type="button" color="primary" (click)="Atras()"><mat-icon>keyboard_arrow_left</mat-icon></button>
 
   <ng-container>
+    <button mat-mini-fab type="button" color="accent" (click)="CambiarTipoVista(1)" class="derecha" [disabled]="id_proceso_editar" matTooltip="Editar documento"><mat-icon>edit</mat-icon></button>
+    <button mat-mini-fab type="button" color="accent" (click)="CambiarTipoVista(2)" class="derecha" [disabled]="id_proceso_agregar" matTooltip="Agregar documento"><mat-icon>note_add</mat-icon></button>
+    <button mat-mini-fab type="button" color="accent" (click)="CambiarTipoVista(3)" class="derecha" [disabled]="id_proceso_ver" matTooltip="Ver documento"><mat-icon> visibility </mat-icon></button>
+  </ng-container>
+
+  <ng-container>
     <ng-container *ngIf="id_venta || id_credito">
       <mat-card-title class="tituloProd"> Nuevo documento judicial </mat-card-title>
     </ng-container>
@@ -37,12 +43,6 @@
           <mat-grid-tile colspan="2">
             <mat-form-field class="columnas-2">
               <input matInput type="text" placeholder="Cliente" formControlName="cliente_nombre" readonly>
-            </mat-form-field>
-          </mat-grid-tile>
-
-          <mat-grid-tile colspan="1">
-            <mat-form-field class="columnas-1">
-              <input matInput type="text" placeholder="Tipo de transacción" formControlName="tipo_transaccion" readonly>
             </mat-form-field>
           </mat-grid-tile>
 
@@ -90,7 +90,7 @@
 
             <mat-grid-tile colspan=4>
               <mat-form-field class="columnas-2">
-                <mat-select placeholder="Instancia judicial" formControlName="instancia_judicial">
+                <mat-select placeholder="Instancia judicial" formControlName="instancia_judicial" (selectionChange)="InstanciaSeleccionada()">
                   <mat-option *ngFor="let instancia of Instancias" [value]="instancia.id_juzgado_instancia"> {{instancia.juzgado_instancia}} </mat-option>
                 </mat-select>
               </mat-form-field>
@@ -127,7 +127,7 @@
       <!-- Reporte del expediente -->
       <div class="seccion-secundaria">
         <mat-card-subtitle class="titulo-seccion-secundaria">
-          REPORTE DE EXPEDIENTE
+          DATOS DEL EXPEDIENTE
           <ng-container *ngIf="this.id_proceso_editar">
             <button mat-icon-button type="button" class="icono" *ngIf="editar_expediente>1" (click)="EditarExpediente(1)"><mat-icon>edit</mat-icon></button>
             <button mat-icon-button type="button" class="icono" *ngIf="editar_expediente==1" (click)="EditarExpediente(2)"><mat-icon>check</mat-icon></button>
@@ -196,13 +196,26 @@
           </mat-grid-list>
   
           <div *ngFor="let documento of Documentos">
+
             <div [ngClass]="{'contenedor': true,
                             'tipo-1': documento.tipo_documento=='Escrito',
                             'tipo-2': documento.tipo_documento=='Resolución',
                             'tipo-3': documento.tipo_documento=='Oficio'
                           }">
+              <div [ngClass]="{ 'titulo-seccion-tercera': true,
+                                'tipo-tercero-1': documento.tipo_documento=='Escrito',
+                                'tipo-tercero-2': documento.tipo_documento=='Resolución',
+                                'tipo-tercero-3': documento.tipo_documento=='Oficio'
+                              }">
+                {{ documento.tipo_documento }}&nbsp;{{ documento.numero }}
+                <span class="espacio"></span>
+                <span class="derecha">
+                  {{ documento.fecha | date : 'dd/MM/yyyy' }}
+                </span>
+              </div>
+
               <mat-grid-list cols=3 rowHeight="70px">
-                <mat-grid-tile colspan=1>
+                <!-- <mat-grid-tile colspan=1>
                   <mat-form-field class="columnas-1">
                     <input matInput type="text" placeholder="Tipo de documento" [(ngModel)]="documento.tipo_documento" [ngModelOptions]="{standalone:true}" readonly>
                   </mat-form-field>
@@ -220,7 +233,7 @@
                   <mat-form-field class="columnas-1">
                     <input matInput type="text" placeholder="Número" [(ngModel)]="documento.numero" [ngModelOptions]="{standalone:true}" readonly>
                   </mat-form-field>
-                </mat-grid-tile>
+                </mat-grid-tile> -->
   
                 <mat-grid-tile colspan=1 *ngIf="documento.id_trabajador>0">
                   <mat-form-field class="columnas-1">
@@ -235,6 +248,9 @@
                 </mat-grid-tile>
   
                 <mat-grid-tile *ngIf="documento.id_trabajador<=0">
+                </mat-grid-tile>
+  
+                <mat-grid-tile *ngIf="documento.id_estado<=0">
                 </mat-grid-tile>
 
                 <mat-grid-tile colspan=1>
@@ -270,20 +286,36 @@
       </ng-container>
 
       <!-- Detalle antiguo-->
-      <ng-container *ngIf="id_proceso_ver && DocumentosAnteriores">
+      <ng-container *ngIf="(id_proceso_ver || id_proceso_agregar ) && DocumentosAnteriores.length>0">
         <div class="seccion-secundaria">
           <mat-card-subtitle class="titulo-seccion-secundaria">
-            EXPEDIENTE ANTERIOR - {{expediente_anterior}} / {{juzgado_distrito_anterior}}
+            EXPEDIENTE ANTERIOR - {{expediente_anterior}} / {{juzgado_distrito_anterior}} - {{juzgado_instancia_anterior}}
           </mat-card-subtitle>
           
           <div *ngFor="let documento of DocumentosAnteriores">
             <div [ngClass]="{'contenedor': true,
+                          'tipo-1': documento.tipo_documento=='Escrito',
+                          'tipo-2': documento.tipo_documento=='Resolución',
+                          'tipo-3': documento.tipo_documento=='Oficio'
+                        }">
+              <div [ngClass]="{ 'titulo-seccion-tercera': true,
+                              'tipo-tercero-1': documento.tipo_documento=='Escrito',
+                              'tipo-tercero-2': documento.tipo_documento=='Resolución',
+                              'tipo-tercero-3': documento.tipo_documento=='Oficio'
+                            }">
+                {{ documento.tipo_documento }}&nbsp;{{ documento.numero }}
+                <span class="espacio"></span>
+                <span class="derecha">
+                  {{ documento.fecha | date : 'dd/MM/yyyy' }}
+                </span>
+              </div>
+              <!-- <div [ngClass]="{'contenedor': true,
                             'tipo-1': documento.tipo_documento=='Escrito',
                             'tipo-2': documento.tipo_documento=='Resolución',
                             'tipo-3': documento.tipo_documento=='Oficio'
-                          }">
+                          }"> -->
               <mat-grid-list cols=3 rowHeight="70px">
-                <mat-grid-tile colspan=1>
+                <!-- <mat-grid-tile colspan=1>
                   <mat-form-field class="columnas-1">
                     <input matInput type="text" placeholder="Tipo de documento" [(ngModel)]="documento.tipo_documento" [ngModelOptions]="{standalone:true}" readonly>
                   </mat-form-field>
@@ -301,7 +333,7 @@
                   <mat-form-field class="columnas-1">
                     <input matInput type="text" placeholder="Número" [(ngModel)]="documento.numero" [ngModelOptions]="{standalone:true}" readonly>
                   </mat-form-field>
-                </mat-grid-tile>
+                </mat-grid-tile> -->
   
                 <mat-grid-tile colspan=2 *ngIf="documento.id_trabajador>0">
                   <mat-form-field class="columnas-2">
@@ -315,7 +347,10 @@
                   </mat-form-field>
                 </mat-grid-tile>
                 
-                <mat-grid-tile>
+                <mat-grid-tile *ngIf="documento.id_trabajador<=0">
+                </mat-grid-tile>
+  
+                <mat-grid-tile *ngIf="documento.id_estado<=0">
                 </mat-grid-tile>
 
                 <mat-grid-tile colspan=1>

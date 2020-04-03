@@ -2,7 +2,7 @@
   <!-- Encabezado -->
 
   <mat-card-title>
-    <div id="tituloProd"> Listado de cuotas </div>
+    <div id="tituloProd"> Listado de clientes </div>
   </mat-card-title>
 
   <mat-grid-list cols= "4" rowHeight="70px">
@@ -109,8 +109,8 @@
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let cobranza">
           <!-- <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="['ver', cobranza.id]"><mat-icon> visibility </mat-icon></button> -->
-          <button mat-icon-button color="primary" matTooltip="Ver detalle de pagos" (click)="VerDetallePagos(cobranza)"><mat-icon> visibility </mat-icon></button>
-          <button mat-icon-button color="primary" matTooltip="Editar" (click)="EditarCuota(cobranza)"><mat-icon> edit </mat-icon></button>
+          <button mat-icon-button color="primary" matTooltip="Ver detalle de pagos" (click)="VerDetallePagos(cobranza.id_cliente)"><mat-icon> visibility </mat-icon></button>
+          <!-- <button mat-icon-button color="primary" matTooltip="Editar" (click)="EditarCuota(cobranza)"><mat-icon> edit </mat-icon></button> -->
         </mat-cell>
       </ng-container>
 

@@ -303,7 +303,8 @@ export class ProcesoJudicialVinculadosService {
   }
 
   ListarJuez(
-    id_distrito_juzgado : number,
+    id_instancia_juzgado : number,
+    instancia_juzgado : string,
     distrito_juzgado : string,
     tipo : string,
     instancia_juez : string,
@@ -311,7 +312,8 @@ export class ProcesoJudicialVinculadosService {
     total_pagina : number,
   ) :Observable<any> {
     let params = new HttpParams()
-      .set("priddistritojuzgado", id_distrito_juzgado.toString())
+      .set("pridinstanciajuzgado", id_instancia_juzgado.toString())
+      .set("prinstanciajuzgado", instancia_juzgado)
       .set("prdistritojuzgado", distrito_juzgado)
       .set("prtipo", tipo)
       .set("prinstanciajuez", instancia_juez)

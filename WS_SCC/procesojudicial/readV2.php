@@ -18,13 +18,12 @@
 
       $proceso->instancia = !empty($_GET['prinstancia']) ? trim($_GET['prinstancia']) : die();
       $proceso->expediente = !empty($_GET['prexpediente']) ? trim($_GET['prexpediente']) :'';
-      $proceso->juzgado = !empty($_GET['prjuzgado']) ? trim($_GET['prjuzgado']) : '';
       $proceso->dni = !empty($_GET['prdni']) ? trim($_GET['prdni']) : '';
       $proceso->nombre = !empty($_GET['prnombre']) ? trim($_GET['prnombre']) : '';
       $proceso->fecha_inicio = !empty($_GET['prfechainicio']) ? trim($_GET['prfechainicio']) : null;
       $proceso->fecha_fin = !empty($_GET['prfechafin']) ? trim($_GET['prfechafin']) : null;
-      $proceso->estado = !empty($_GET['prestado']) ? trim($_GET['prestado']) : 0;
-      $proceso->orden = !empty($_GET['prorden']) ? trim($_GET['prorden']) : "id asc";
+      $proceso->estado = !empty($_GET['prestado']) ? trim($_GET['prestado']) : -1;
+      $proceso->orden = !empty($_GET['prorden']) ? trim($_GET['prorden']) : "fecha_inicio desc";
 
       $proceso_list = $proceso->readV2();
 

@@ -15,7 +15,6 @@
 
     try{
     	$usuario = new Usuario($db);
-    	$data = json_decode(file_get_contents('php://input'),true);
 
     	if(trim($_POST["idusuario"])!=null)
     	{
@@ -23,11 +22,11 @@
 
 	    	if($usuario->delete())
 	        {
-	                print_json("0000", "Se eliminó el usuario satisfactoriamente.", "");
+				print_json("0000", "Se eliminó el usuario satisfactoriamente.", "");
 	        }
 	        else
 	        {
-	                print_json("9999", "Ocurrió un error al eliminar el usuario.", "");
+				print_json("9999", "Ocurrió un error al eliminar el usuario.", "");
 	        }
 	    }
     	else

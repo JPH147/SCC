@@ -45,6 +45,33 @@ Class ClienteCuenta{
         return false;
     }
 
+    function update(){
+        $query = "CALL sp_actualizarclientecuenta(
+            :prcuenta,
+            :prbanco,
+            :prcuenta,
+            :prcci
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prcuenta", $this->id_cuenta);
+        $result->bindParam(":prbanco", $this->banco);
+        $result->bindParam(":prcuenta", $this->cuenta);
+        $result->bindParam(":prcci", $this->cci);
+
+        $this->id_cuenta=htmlspecialchars(strip_tags($this->id_cuenta));
+        $this->banco=htmlspecialchars(strip_tags($this->banco));
+        $this->cuenta=htmlspecialchars(strip_tags($this->cuenta));
+        $this->cci=htmlspecialchars(strip_tags($this->cci));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
+    }
+
     function delete(){
       $query = "CALL sp_eliminarclientecuenta(:id_cuenta)";
 

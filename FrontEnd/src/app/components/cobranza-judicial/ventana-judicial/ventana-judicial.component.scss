@@ -1,0 +1,25 @@
+@import '../../../../tema.scss';
+
+.boton-tipo-1{
+  background-color: mat-color($mat_ambar);
+}
+
+.boton-tipo-2{
+  background-color: mat-color($mat_rojo);
+  color: white !important;
+}
+
+.boton-tipo-3{
+  background-color: mat-color($mat_verde);
+  color: white !important;
+}
+
+.boton-tipo-4{
+  background-color: grey;
+  color: white !important;
+}
+
+span.derecha{
+  position: absolute;
+  right: 20px;
+}

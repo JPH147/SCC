@@ -362,4 +362,59 @@ export class InstitucionesService {
     }))
   }
 
+  EliminarInstitucion(
+    id_institucion : number
+  ){
+    let params = new HttpParams()
+      .set('prid', id_institucion.toString() ) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'institucion/delete.php', params, {headers: headers});    
+  }
+
+  EliminarSede(
+    id_sede : number
+  ){
+    let params = new HttpParams()
+      .set('prid', id_sede.toString() ) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'sede/delete.php', params, {headers: headers});    
+  }
+
+  EliminarSubsede(
+    id_subsede : number
+  ){
+    let params = new HttpParams()
+      .set('prid', id_subsede.toString() ) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'subsede/delete.php', params, {headers: headers});    
+  }
+
+  EliminarCargo(
+    id_cargo : number
+  ){
+    let params = new HttpParams()
+      .set('prid', id_cargo.toString() ) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'cargo/eliminar-cargo.php', params, {headers: headers});    
+  }
+
+  EliminarCargoEstado(
+    id_cargo_estado : number
+  ){
+    let params = new HttpParams()
+      .set('prid', id_cargo_estado.toString() ) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'cargo/eliminar-cargo-estado.php', params, {headers: headers});    
+  }
+
 }

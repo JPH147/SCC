@@ -35,6 +35,7 @@ mat-card.card{
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 2;
 }
 
 .spinner-container-emergente{
@@ -93,16 +94,20 @@ mat-card.card{
   font-family: sans-serif;
 }
 
+.icono-primario{
+  color: mat-color($primary) !important;
+}
+
 .icono-ambar{
-  color: mat-color($mat_ambar);
+  color: mat-color($mat_ambar) !important;
 }
 
 .icono-rojo{
-  color: mat-color($mat_rojo);
+  color: mat-color($mat_rojo) !important;
 }
 
 .icono-verde{
-  color: mat-color($mat_verde);
+  color: mat-color($mat_verde) !important;
 }
 
 /* Estilos para la tabla */

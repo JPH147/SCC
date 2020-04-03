@@ -14,3 +14,8 @@
 .mat-column-opciones{
   max-width: 15%;
 }
+
+.toolbar-titulo2{
+  background-color: #424242;
+  color: white;
+}

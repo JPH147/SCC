@@ -1,7 +1,12 @@
 <mat-card class="card">
 
   <mat-toolbar color="primary">
-    <mat-toolbar-row> Agregar documento </mat-toolbar-row>
+    <mat-toolbar-row>
+      Agregar documento
+      <span class="derecha">
+        {{ VentanaJudicialForm.value.tipo_documento_nombre }}&nbsp;{{ VentanaJudicialForm.value.numero_resolucion }}
+      </span>
+    </mat-toolbar-row>
   </mat-toolbar>
 
   <div class = "spinner-container" *ngIf = "Cargando| async">
@@ -10,28 +15,40 @@
 
   <form [formGroup]="VentanaJudicialForm">
     <mat-card-content>
-      <mat-grid-list cols=3 rowHeight="70px">
+      <mat-grid-list cols=1 rowHeight="55px">
         <mat-grid-tile>
+          <button type="button" mat-raised-button [ngClass]="{'boton-tipo-1' : VentanaJudicialForm.value.tipo_documento == 2}" (click)="TipoDocumentoSeleccionado(2)"> Escrito </button>
+          &nbsp;
+          <button type="button" mat-raised-button [ngClass]="{'boton-tipo-2' : VentanaJudicialForm.value.tipo_documento == 3}" (click)="TipoDocumentoSeleccionado(3)"> Resolución </button>
+          &nbsp;
+          <button type="button" mat-raised-button [ngClass]="{'boton-tipo-3' : VentanaJudicialForm.value.tipo_documento == 4}" (click)="TipoDocumentoSeleccionado(4)"> Oficio </button>
+          &nbsp;
+          <button type="button" mat-raised-button [ngClass]="{'boton-tipo-4' : VentanaJudicialForm.value.tipo_documento == 5}" (click)="TipoDocumentoSeleccionado(5)"> Devolución </button>
+        </mat-grid-tile>
+      </mat-grid-list>
+
+      <mat-grid-list cols=2 rowHeight="70px">
+        <!-- <mat-grid-tile>
           <mat-form-field class="columnas-1">
             <mat-select placeholder="Tipo de documento" formControlName="tipo_documento" (selectionChange)="TipoDocumentoSeleccionado()">
               <mat-option *ngFor="let tipo of TipoDocumentos" [value]="tipo.id"> {{tipo.nombre}} </mat-option>
             </mat-select>
           </mat-form-field>
-        </mat-grid-tile>
+        </mat-grid-tile> -->
 
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
-            <input matInput [matDatepicker]="FechaInicio" placeholder="Fecha" formControlName="fecha">
+            <input matInput [matDatepicker]="FechaInicio" placeholder="Fecha" formControlName="fecha" [readonly]="primer_documento">
             <mat-datepicker-toggle matSuffix [for]="FechaInicio"></mat-datepicker-toggle>
-            <mat-datepicker #FechaInicio></mat-datepicker>
+            <mat-datepicker #FechaInicio [disabled]="primer_documento"></mat-datepicker>
           </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile>
+        <!-- <mat-grid-tile>
           <mat-form-field class="columnas-1">
             <input matInput type="number" placeholder="Número de documento" formControlName="numero_resolucion" readonly>
           </mat-form-field>
-        </mat-grid-tile>
+        </mat-grid-tile> -->
 
         <mat-grid-tile colspan=1>
           <mat-form-field class="columnas-1">
@@ -86,14 +103,14 @@
           </ng-container>
         </mat-grid-tile>
 
-        <mat-grid-tile colspan="3">
-          <mat-form-field class="columnas-3">
+        <mat-grid-tile colspan="2">
+          <mat-form-field class="columnas-2">
             <input matInput type="text" placeholder="Comentarios" formControlName="comentarios">
           </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile colspan=3 rowspan=2>
-          <mat-form-field class="columnas-3">
+        <mat-grid-tile colspan=2 rowspan=2>
+          <mat-form-field class="columnas-2">
             <textarea matInput type="text" placeholder="Sumilla" formControlName="sumilla"></textarea>
           </mat-form-field>
         </mat-grid-tile>

@@ -33,7 +33,8 @@
       </mat-grid-tile>
 
       <mat-grid-tile>
-				<button mat-raised-button color="primary" (click)="HacerVenta()">Nueva venta</button>
+        <button mat-icon-button color="primary" (click)="HacerVenta()" matTooltip="Hacer venta"> <mat-icon> store_mall_directory </mat-icon> </button>
+        <button mat-icon-button color="primary" (click)="HacerCredito()" matTooltip="Hacer Crédito"> <mat-icon> account_balance </mat-icon> </button>
       </mat-grid-tile>
 
     </mat-grid-list>

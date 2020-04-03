@@ -43,6 +43,30 @@ Class ClienteDireccion{
         return false;
     }
 
+    function update(){
+        $query = "CALL sp_actualizarclientedireccion(
+            :id_direccion,
+            :drc_nombre,
+            :pid_distrito
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":id_direccion", $this->idcliente_direccion);
+        $result->bindParam(":drc_nombre", $this->drc_nombre);
+        $result->bindParam(":pid_distrito", $this->id_distrito);
+
+        $this->idcliente_direccion=htmlspecialchars(strip_tags($this->idcliente_direccion));
+        $this->drc_nombre=htmlspecialchars(strip_tags($this->drc_nombre));
+        $this->id_distrito=htmlspecialchars(strip_tags($this->id_distrito));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
+    }
+
     function delete(){
       $query = "CALL sp_eliminarclientedireccion(:id_direccion)";
 

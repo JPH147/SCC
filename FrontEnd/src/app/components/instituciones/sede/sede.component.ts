@@ -129,6 +129,21 @@ export class SedeComponent implements OnInit {
     })
   }
  
+  Eliminar(sede) {
+    const VentanaConfirmar = this.Dialogo.open(VentanaConfirmarComponent, {
+      width: '400px',
+      data: {objeto: 'la sede', valor: sede.nombre}
+    });
+
+    VentanaConfirmar.afterClosed().subscribe(res => {
+      if (res === true) {
+        this.Servicio.EliminarSede(sede.id).subscribe(res => {
+          this.CargarData();
+        });
+      }
+    });
+  }
+
 }
 
 export class SedeDataSource implements DataSource<any> {

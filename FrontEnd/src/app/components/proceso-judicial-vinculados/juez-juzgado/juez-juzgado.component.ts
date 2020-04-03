@@ -23,9 +23,10 @@ export class JuezJuzgadoComponent implements OnInit {
   public Cuentas : Array<any>;
 
   public ListadoInstancias: InstanciaDataSource;
-  public Columnas: string[] = ["numero" , "juzgado_distrito" , "tipo" , "juzgado_instancia" , "opciones"];
+  public Columnas: string[] = ["numero" , "juzgado_distrito" , "juzgado_instancia" , "tipo" , "juzgado_juez" , "opciones"];
 
   @ViewChild('InputDistrito', { static: true }) FiltroDistrito: ElementRef;
+  @ViewChild('InputInstancia', { static: true }) FiltroInstancia: ElementRef;
   @ViewChild('InputTipo', { static: true }) FiltroTipo: ElementRef;
   @ViewChild('InputJuez', { static: true }) FiltroJuez: ElementRef;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -39,7 +40,7 @@ export class JuezJuzgadoComponent implements OnInit {
   ngOnInit() {
 
     this.ListadoInstancias = new InstanciaDataSource(this.Servicio);
-    this.ListadoInstancias.CargarInformacion("","","",1,10);
+    this.ListadoInstancias.CargarInformacion("","","","",1,10);
   }
 
   ngAfterViewInit () {
@@ -52,6 +53,7 @@ export class JuezJuzgadoComponent implements OnInit {
 
     merge(
       fromEvent(this.FiltroDistrito.nativeElement, 'keyup') ,
+      fromEvent(this.FiltroInstancia.nativeElement, 'keyup') ,
       fromEvent(this.FiltroTipo.nativeElement, 'keyup') ,
       fromEvent(this.FiltroJuez.nativeElement, 'keyup')
     )
@@ -68,6 +70,7 @@ export class JuezJuzgadoComponent implements OnInit {
   CargarData() {
     this.ListadoInstancias.CargarInformacion(
       this.FiltroDistrito.nativeElement.value,
+      this.FiltroInstancia.nativeElement.value,
       this.FiltroTipo.nativeElement.value,
       this.FiltroJuez.nativeElement.value,
       this.paginator.pageIndex+1,
@@ -150,6 +153,7 @@ export class InstanciaDataSource implements DataSource<any> {
 
   CargarInformacion(
     distrito_judicial : string ,
+    instancia_judicial : string ,
     tipo : string ,
     juez : string ,
     numero_pagina : number ,
@@ -157,7 +161,7 @@ export class InstanciaDataSource implements DataSource<any> {
   ) {
     this.CargandoInformacion.next(true);
 
-    this.Servicio.ListarJuez( 0 , distrito_judicial, tipo , juez , numero_pagina , total_pagina )
+    this.Servicio.ListarJuez( 0 , distrito_judicial, instancia_judicial, tipo , juez , numero_pagina , total_pagina )
     .pipe(
       catchError(() => of([])),
       finalize(() => this.CargandoInformacion.next(false))

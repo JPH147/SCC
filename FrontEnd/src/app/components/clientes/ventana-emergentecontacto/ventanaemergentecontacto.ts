@@ -172,7 +172,7 @@ export class VentanaEmergenteContacto {
 
   AgregarDireccion(){
     this.ServicioDireccion.CrearDireccion(this.data, this.DireccionesForm.value.nombre, this.DireccionesForm.value.distrito).subscribe(res=>{
-      console.log(res)
+      // console.log(res)
       this.CargarDataDirecciones();
     })
   }

@@ -153,6 +153,7 @@ Class TransaccionCabecera{
         $this->fecha=$row['fecha'];
         $this->documento=$row['documento'];
         $this->observaciones=$row['observaciones'];
+        $this->archivo=$row['archivo'];
         $this->transaccion_detalle=$this->detalle->readxcabecera($row['id']);
     }
 
@@ -366,7 +367,8 @@ Class TransaccionCabecera{
             :prid,
             :prproveedor,
             :prfecha,
-            :prdocumento
+            :prdocumento,
+            :prarchivo
         )";
         $result = $this->conn->prepare($query);
 
@@ -374,11 +376,13 @@ Class TransaccionCabecera{
         $result->bindParam(":prproveedor", $this->id_proveedor);
         $result->bindParam(":prfecha", $this->fecha);
         $result->bindParam(":prdocumento", $this->documento);
+        $result->bindParam(":prarchivo", $this->archivo);
 
         $this->id_transaccion=htmlspecialchars(strip_tags($this->id_transaccion));
         $this->id_proveedor=htmlspecialchars(strip_tags($this->id_proveedor)); 
         $this->fecha=htmlspecialchars(strip_tags($this->fecha));
         $this->documento=htmlspecialchars(strip_tags($this->documento));
+        $this->archivo=htmlspecialchars(strip_tags($this->archivo));
 
         if($result->execute())
         {

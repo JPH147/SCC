@@ -24,9 +24,10 @@ try
         if($var != null){
 
             $usuario_list = array(
-                "usr_nombre"=>$var->usr_nombre,
-                "usr_usuario"=>$var->usr_usuario,
-                "idperfil"=>$var->idperfil
+                "usuario"=>$var->usr_nombre,
+                "rol"=>$var->usr_usuario,
+                "id_perfil"=>$var->idperfil,
+                "perfil"=>$var->prf_nombre
             );
             print_json("0000", "Login OK", $usuario_list);
         }

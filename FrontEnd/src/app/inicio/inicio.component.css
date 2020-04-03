@@ -1,0 +1,11 @@
+.imagen{
+  max-width: 30%;
+  max-height: 50vh;
+  position: relative;
+  margin: auto;
+  margin-top: 5%
+}
+
+img{
+  width: 100%
+}

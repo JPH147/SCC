@@ -1,7 +1,6 @@
 import {ModuleWithProviders} from '@angular/core';
 import {Routes, RouterModule, RoutesRecognized} from '@angular/router';
 
-import { UsuariosComponent } from './components/usuarios/usuarios.component';
 import { ProductosComponent } from './components/productos/productos.component';
 import { StockComponent } from './components/stock/stock.component';
 import { IngresoProductosComponent } from './components/ingreso-productos/ingreso-productos.component';
@@ -52,10 +51,15 @@ import { CobranzaJudicialComponent } from './components/cobranza-judicial/cobran
 import { CobranzaJudicialGenerarComponent } from './components/cobranza-judicial-generar/cobranza-judicial-generar.component';
 import { ProcesoJudicialVinculadosComponent } from './components/proceso-judicial-vinculados/proceso-judicial-vinculados.component';
 import { ConsultarCuotasComponent } from './components/consultar-cuotas/consultar-cuotas.component';
+import { CobranzaJudicialMultipleComponent } from './components/cobranza-judicial-multiple/cobranza-judicial-multiple.component';
+import { UsuariosComponent } from './components/usuarios/usuarios.component';
+import { InicioComponent } from './inicio/inicio.component';
+import { LoginComponent } from './login/login.component';
 
 export const appRoutes: Routes = [
-  // {path: '', component: ConsultarCuotasComponent}, //prueba
-  {path: 'usuarios', component: UsuariosComponent},
+  {path: '', redirectTo: 'inicio', pathMatch: 'full'},
+  {path: 'inicio', component: InicioComponent},
+  {path: 'login', component: LoginComponent},
   {path: 'productos', component: ProductosComponent},
   {path: 'series', component: HistorialSerieComponent},
   {path: 'evaluacion', component: EvaluacionComponent},
@@ -91,12 +95,12 @@ export const appRoutes: Routes = [
   {path: 'creditos/ver/:idcredito', component: CreditosComponent},
   {path: 'creditos/editar/:idcreditoeditar', component: CreditosComponent},
   {path: 'creditos/nuevo', component: CreditosComponent},
+  {path: 'creditos/nuevo-cliente/:idcliente', component: CreditosComponent},
   {path: 'creditos/nuevo/:idpresupuesto', component: CreditosComponent},
   {path: 'creditos/nuevo/refinanciamiento/:idclienterefinanciado', component: CreditosComponent},
   {path: 'presupuesto', component: PresupuestoComponent},
   {path: 'refinanciamiento', component: RefinanciamientoComponent},
   {path: 'seguimiento', component: SeguimientosComponent},
-  {path: 'usuarios', component: UsuariosComponent},
   {path: 'proveedores', component: ProveedoresComponent},
   {path: 'direcciones', component: DireccionesComponent},
   {path: 'detalleproductos', component: DetalleProductosComponent},
@@ -116,6 +120,7 @@ export const appRoutes: Routes = [
   {path: 'cobranza-judicial/editar/:idprocesoeditar', component: CobranzaJudicialComponent},
   {path: 'cobranza-judicial/agregar/:idprocesoagregar', component: CobranzaJudicialComponent},
   {path: 'cobranza-judicial/nueva', component: CobranzaJudicialComponent},
+  {path: 'cobranza-judicial/nuevo-multiple', component: CobranzaJudicialMultipleComponent},
   {path: 'cobranza-judicial/nueva-credito/:idcredito', component: CobranzaJudicialComponent},
   {path: 'cobranza-judicial/nueva-venta/venta/:idventa', component: CobranzaJudicialComponent},
   {path: 'cobranza-judicial/nueva-venta/salida/:idventasalida', component: CobranzaJudicialComponent},
@@ -127,7 +132,9 @@ export const appRoutes: Routes = [
   {path: 'reporte-asistencia', component: ReporteAsistenciaComponent},
   {path: 'proceso-judicial-vinculados', component: ProcesoJudicialVinculadosComponent},
   {path: 'plantillas', component: PlantillasComponent},
-  {path: 'prueba', component: CobranzaJudicialComponent},
+  {path: 'usuarios', component: UsuariosComponent},
+  
+  {path: 'prueba', component: CobranzaJudicialMultipleComponent},
 ];
 
 

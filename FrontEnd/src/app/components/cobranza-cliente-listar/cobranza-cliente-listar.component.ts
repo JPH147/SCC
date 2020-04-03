@@ -2,17 +2,16 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSelect } from '@angular/material/select';
-import { MatSort } from '@angular/material/sort';
 import { Observable, BehaviorSubject, of, fromEvent, merge } from 'rxjs';
 import { catchError, finalize, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CobranzasService } from '../cobranzas-listar/cobranzas.service';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 
-import { Notificaciones } from '../global/notificacion';
 import { ArchivosService } from '../global/archivos';
 import { ServiciosTipoPago } from '../global/tipopago';
 import * as moment from 'moment';
 import {saveAs} from 'file-saver';
+import { VentanaCobranzaClienteComponent } from './ventana-cobranza-cliente/ventana-cobranza-cliente.component';
 
 @Component({
   selector: 'app-cobranza-cliente-listar',
@@ -27,7 +26,7 @@ export class CobranzaClienteListarComponent implements OnInit {
   public ListadoTipoPago: Array<any>;
 
   public ListadoCobranza: CobranzaDataSource;
-  public Columnas: string[] = ['numero', 'cliente_dni', 'cliente', 'tipo_pago', 'monto_pendiente'];
+  public Columnas: string[] = ['numero', 'cliente_dni', 'cliente', 'tipo_pago', 'monto_pendiente', 'opciones'];
 
   @ViewChild('InputCliente', { static: true }) FiltroCliente: ElementRef;
   @ViewChild('InputSubsede', { static: true }) FiltroSubSede: ElementRef;
@@ -38,6 +37,7 @@ export class CobranzaClienteListarComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(
+    private Dialogo : MatDialog ,
     private AServicio : ArchivosService,
     private Servicio: CobranzasService,
     private ServicioTipoPago: ServiciosTipoPago,
@@ -125,6 +125,13 @@ export class CobranzaClienteListarComponent implements OnInit {
     this.AServicio.ObtenerArchivo(path).subscribe(res=>{
       saveAs(res, nombre_archivo+'.xlsx');
     })
+  }
+
+  VerDetallePagos(id_cliente){
+    let Ventana = this.Dialogo.open( VentanaCobranzaClienteComponent,{
+      width: '900px' ,
+      data: { cliente: id_cliente, fecha_inicio : this.fecha_inicio, fecha_fin: this.fecha_fin }
+    } )
   }
 
 }

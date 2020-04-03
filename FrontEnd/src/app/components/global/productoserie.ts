@@ -128,8 +128,6 @@ export class ServiciosProductoSerie {
       .set('pralmacenamiento', almacenamiento)
       .set('prprecio',precio.toString());
     
-    console.log(params);
-    
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'productoserie/update.php', params, {headers: headers});

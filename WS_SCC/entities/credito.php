@@ -120,8 +120,7 @@ Class Creditos{
                 "observaciones"=>$observaciones,
                 "documentos_adjuntos"=>$documentos_adjuntos,
                 "documentos_totales"=>$documentos_totales,
-                "id_proceso_judicial" => $id_proceso_judicial,
-                "cobro_judicial" => $cobro_judicial,
+                "numero_procesos"=>$numero_procesos,
                 "estado"=>$estado,
             );
             array_push($credito_list["creditos"],$items);

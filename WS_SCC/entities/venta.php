@@ -127,8 +127,7 @@ Class Venta{
                 "monto_pagado"=>$monto_pagado,
                 "tipo_venta"=>$tipo_venta,
                 "observaciones"=>$observaciones,
-                "id_proceso_judicial"=>$id_proceso_judicial,
-                "cobro_judicial"=>$cobro_judicial,
+                "numero_procesos"=>$numero_procesos,
                 "estado"=>$estado,
             );
             array_push($venta_list["ventas"],$venta_item);
@@ -706,19 +705,16 @@ Class Venta{
     function create_canje_transaccion(){
         $query = "CALL sp_crearventacanjetransaccion(
             :pridtransaccion,
-            :prfecha,
-            :probservacion
+            :prfecha
         )";
 
         $result = $this->conn->prepare($query);
 
         $result->bindParam(":pridtransaccion", $this->id_transaccion);
         $result->bindParam(":prfecha", $this->fecha);
-        $result->bindParam(":probservacion", $this->observacion);
 
         $this->id_transaccion=htmlspecialchars(strip_tags($this->id_transaccion));
         $this->fecha=htmlspecialchars(strip_tags($this->fecha));
-        $this->observacion=htmlspecialchars(strip_tags($this->observacion));
 
         if($result->execute())
         {

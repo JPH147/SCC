@@ -52,15 +52,13 @@
 		</mat-grid-list>
 	</mat-card-content>
 
-  <!-- <mat-card-actions> -->
     <mat-grid-list cols=1 rowHeight="40px">
       <mat-grid-tile *ngIf="repetido">
         <mat-error>La serie ya se encuentra registrada.</mat-error>
       </mat-grid-tile>
       <mat-grid-tile>
-        <button mat-raised-button color="primary" [mat-dialog-close]="this.Informacion" [disabled]="repetido || verificando || (Cargando | async)">Grabar</button>
+        <button mat-raised-button color="primary" (click)="Guardar()" [disabled]="repetido || verificando || (Cargando | async)">Grabar</button>
       </mat-grid-tile>
     </mat-grid-list>
-  <!-- </mat-card-actions> -->
 
 </mat-card>

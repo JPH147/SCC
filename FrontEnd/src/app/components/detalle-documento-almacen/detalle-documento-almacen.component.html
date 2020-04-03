@@ -1,6 +1,6 @@
 <mat-card>
 	
-  <button mat-mini-fab color="primary" class="regresar" [routerLink]="['../']" *ngIf="!this.data"><mat-icon>keyboard_arrow_left</mat-icon></button>
+  <button mat-mini-fab color="primary" class="regresar" (click)="Atras()" *ngIf="!this.data"><mat-icon>keyboard_arrow_left</mat-icon></button>
 
   <mat-card-title>
     <div id="tituloProd">Detalle de documento</div>
@@ -44,8 +44,10 @@
       </mat-grid-tile>
 
       <mat-grid-tile>
-        <button mat-icon-button color="primary" matTooltip (click)="EditarDocumento()"> <mat-icon> edit </mat-icon> </button>
+        <button mat-icon-button color="primary" matTooltip (click)="AbrirDocumento(archivo_nombre)" [disabled]="!archivo_nombre"> <mat-icon> visibility </mat-icon> </button>
+        <button mat-icon-button color="primary" matTooltip (click)="EditarDocumento()" *ngIf="this.id_editar"> <mat-icon> edit </mat-icon> </button>
       </mat-grid-tile>
+
 
       <mat-grid-tile colspan=3 *ngIf="observacion">
         <strong>OBSERVACIONES: &nbsp;</strong> {{observacion}}

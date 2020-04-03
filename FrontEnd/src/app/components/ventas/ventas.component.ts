@@ -321,7 +321,6 @@ export class VentasComponent implements OnInit {
       distinctUntilChanged(),
       tap(()=>{
         if (
-          // this.FiltroMonto.nativeElement.value &&
           this.FiltroInicial.nativeElement.value &&
           this.FiltroCuota.nativeElement.value &&
           this.VentasForm.value.fechapago
@@ -589,10 +588,10 @@ export class VentasComponent implements OnInit {
       'autorizador': [null, [
       ]],
       'id_vendedor': [null, [
-        Validators.required
+        // Validators.required
       ]],
       'vendedor': [null, [
-        Validators.required
+        // Validators.required
       ]],
       'fechaventa': [{value: new Date(), disabled: false}, [
         Validators.required
@@ -1468,7 +1467,7 @@ export class VentasComponent implements OnInit {
         formulario.value.cargo,
         formulario.value.trabajo,
         "OFICINA",
-        formulario.value.id_vendedor,
+        formulario.value.id_vendedor ? formulario.value.id_vendedor : 0,
         1,
         0, // Porque no pertenece a ninguna salida de ventas
         formulario.value.tipopago,
@@ -1615,7 +1614,7 @@ export class VentasComponent implements OnInit {
         formulario.value.cargo,
         formulario.value.trabajo,
         "OFICINA",
-        formulario.value.id_vendedor,
+        formulario.value.id_vendedor ? formulario.value.id_vendedor : 0,
         1,
         0, // Porque no pertenece a ninguna salida de ventas
         formulario.value.tipopago,
@@ -1714,6 +1713,15 @@ export class VentasComponent implements OnInit {
 
       })
     })
+  }
+
+  CorregirFecha( ){
+    if ( moment(this.VentasForm.value.fechaventa).isValid() ) {
+      let ano = moment( this.VentasForm.value.fechaventa ).year() ;
+      let mes = moment( this.VentasForm.value.fechaventa ).month() ;
+      this.VentasForm.get('fechapago').setValue( new Date(ano, mes+1, 27) );
+      this.CrearCronograma() ;
+    }
   }
 
   ImprimirFormulario(){

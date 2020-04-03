@@ -6,7 +6,7 @@ import {catchError, finalize} from 'rxjs/operators';
 export class VentaDataSource implements DataSource<any> {
 
   private InformacionProductos = new BehaviorSubject<any[]>([]);
-  private CargandoInformacion = new BehaviorSubject<boolean>(false);
+  public CargandoInformacion = new BehaviorSubject<boolean>(false);
   public Cargando = this.CargandoInformacion.asObservable();
   public TotalResultados = new BehaviorSubject<number>(0);
 

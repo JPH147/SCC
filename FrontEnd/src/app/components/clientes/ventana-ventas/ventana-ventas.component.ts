@@ -78,20 +78,13 @@ export class VentanaVentasComponent implements OnInit {
   }
 
   HacerVenta(){
-    // forkJoin(
-    //   this.STelefonos.ListarTelefono(this.data.id,"1",1,50),
-    //   this.SDirecciones.ListarDireccion(this.data.id,"1",1,50)
-    // )
-    // .subscribe(res=>{
-    //   if (res[0].mensaje==0 || res[1].mensaje==0) {
-    //     this.snackBar.open("Debe agregar los datos de contacto para el cliente", "Entendido", {
-    //       duration: 5000,
-    //     });
-    //   }else{
-        this.ventana.close();
-        this.router.navigate(['/ventas/nueva', this.data.id]);
-    //   }
-    // })
+    this.ventana.close();
+    this.router.navigate(['/ventas/nueva', this.data.id]);
+  }
+
+  HacerCredito(){
+    this.ventana.close();
+    this.router.navigate(['/creditos/nuevo-cliente', this.data.id]);
   }
 
   onNoClick(): void {

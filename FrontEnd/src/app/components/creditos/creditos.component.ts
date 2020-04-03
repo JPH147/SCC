@@ -196,6 +196,16 @@ export class CreditosComponent implements OnInit, AfterViewInit {
           this.NuevoCreditoPresupuesto(this.id_presupuesto);
         }
 
+        if(params['idcliente']){
+          this.NuevoCredito();
+          this.id_cliente = +params['idcliente'] ;
+          this.CreditosForm.get('id_cliente').setValue(this.id_cliente);
+          this.ObtenerClientexId(this.id_cliente);
+          this.ObtenerDireccion(this.id_cliente);
+          this.ObtenerTelefono(this.id_cliente);
+          this.VerificarAfiliacion(this.id_cliente);
+        }
+
         if(params['idcredito']){
           this.id_credito=params['idcredito'];
           // this.id_credito=12;
@@ -1198,6 +1208,20 @@ export class CreditosComponent implements OnInit, AfterViewInit {
 
   Atras(){
     this.location.back()
+  }
+
+  FechaAfiliacionSeleccionada(){
+    this.CreditosForm.get('fecha_credito').setValue( this.CreditosForm.value.afiliacion_fecha_vencimiento ) ;
+    this.CorregirFecha();
+  }
+
+  CorregirFecha(){
+    if ( moment(this.CreditosForm.value.fecha_credito).isValid() ) {
+      let ano = moment( this.CreditosForm.value.fecha_credito ).year() ;
+      let mes = moment( this.CreditosForm.value.fecha_credito ).month() ;
+      this.CreditosForm.get('fecha_pago').setValue( new Date(ano, mes+1, 27) );
+      this.CambioFechaCredito() ;
+    }
   }
 
   Guardar(){

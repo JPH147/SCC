@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSelect } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
 import { Observable, BehaviorSubject, of, fromEvent, merge } from 'rxjs';
 import { catchError, finalize, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { InstitucionesService } from '../instituciones.service';
 import { VentanaConfirmarComponent } from '../../global/ventana-confirmar/ventana-confirmar.component';
 import { VentanaInstitucionComponent } from './ventana-institucion/ventana-institucion.component';
@@ -102,6 +102,21 @@ export class InstitucionComponent implements OnInit, AfterViewInit {
         }
       }
     })
+  }
+
+  Eliminar(institucion) {
+    const VentanaConfirmar = this.Dialogo.open(VentanaConfirmarComponent, {
+      width: '400px',
+      data: {objeto: 'la institución', valor: institucion.nombre}
+    });
+
+    VentanaConfirmar.afterClosed().subscribe(res => {
+      if (res === true) {
+        this.Servicio.EliminarInstitucion(institucion.id).subscribe(res => {
+          this.CargarData();
+        });
+      }
+    });
   }
 
 }

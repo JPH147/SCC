@@ -22,7 +22,6 @@
 
             $venta->id_transaccion=trim($_POST["prtransaccion"]);
             $venta->fecha=trim($_POST["prfecha"]);
-            $venta->observacion=trim($_POST["probservacion"]);
 
             if($venta->create_canje_transaccion())
             {

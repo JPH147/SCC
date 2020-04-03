@@ -8,6 +8,7 @@ Class Proceso{
   public $id_proceso_nuevo ;
   public $id_proceso_antiguo ;
   public $id_estado ;
+  public $id_cliente ;
   public $id_venta ;
   public $id_credito ;
   public $expediente ;
@@ -16,6 +17,9 @@ Class Proceso{
   public $juez ;
   public $especialista ;
   public $tipo_documento ;
+  public $tipo_transaccion ;
+  public $id_transaccion;
+  public $transacciones ;
   public $numero ;
   public $sumilla ;
   public $archivo ;
@@ -33,6 +37,7 @@ Class Proceso{
   public $numero_pagina ;
   public $total_pagina ;
   public $orden ;
+  public $arreglo ;
 
   public function __construct($db){
     $this->conn = $db;
@@ -141,11 +146,11 @@ Class Proceso{
       "especialista" => $row['especialista'] ,
       "fecha_inicio" => $row['fecha_inicio'] ,
       "sumilla" => $row['sumilla'] ,
-      "tipo" => $row['tipo'] ,
+      "total_documentos" => $row['total_documentos'] ,
       "codigo" => $row['codigo'] ,
       "id_cliente" => $row['id_cliente'] ,
       "cliente_dni" => $row['cliente_dni'] ,
-      "cliente_documento" => $row['cliente_documento'] ,
+      "cliente_nombre" => $row['cliente_nombre'] ,
       "numero_cuotas" => $row['numero_cuotas'] ,
       "total" => $row['total'] ,
       "monto_cuota" => $row['monto_cuota'] ,
@@ -624,19 +629,18 @@ Class Proceso{
   }
 
   function readV2(){
-    $query = "CALL sp_listarprocesojudicialV2(?,?,?,?,?,?,?,?,?)";
+    $query = "CALL sp_listarprocesojudicialV3(?,?,?,?,?,?,?,?)";
 
     $result = $this->conn->prepare($query);
 
     $result->bindParam(1, $this->instancia);
     $result->bindParam(2, $this->expediente);
-    $result->bindParam(3, $this->juzgado);
-    $result->bindParam(4, $this->dni);
-    $result->bindParam(5, $this->nombre);
-    $result->bindParam(6, $this->fecha_inicio);
-    $result->bindParam(7, $this->fecha_fin);
-    $result->bindParam(8, $this->estado);
-    $result->bindParam(9, $this->orden);
+    $result->bindParam(3, $this->dni);
+    $result->bindParam(4, $this->nombre);
+    $result->bindParam(5, $this->fecha_inicio);
+    $result->bindParam(6, $this->fecha_fin);
+    $result->bindParam(7, $this->estado);
+    $result->bindParam(8, $this->orden);
 
     $result->execute();
     
@@ -656,6 +660,7 @@ Class Proceso{
         "id_tipo_documento"=>$id_tipo_documento,
         "expediente"=>$expediente,
         "id_distrito"=>$id_distrito,
+        "id_instancia"=>$id_instancia,
         "distrito"=>$distrito,
         "juzgado"=>$juzgado,
         "vendedor"=>$vendedor,
@@ -663,13 +668,12 @@ Class Proceso{
         "fecha_ultimo_documento"=>$fecha_ultimo_documento,
         "fecha_ultimo_documento_diferencia"=>$fecha_ultimo_documento_diferencia,
         "sumilla"=>$sumilla,
-        "id_tipo"=>$id_tipo,
-        "tipo"=>$tipo,
         "id_cliente"=>$id_cliente,
         "cliente_dni"=>$cliente_dni,
         "cliente_nombre"=>$cliente_nombre,
         "total"=>$total,
-        "estado"=>$estado
+        "estado"=>$estado,
+        "total_documentos"=>$total_documentos,
       );
       array_push($procesos_list["procesos"],$items);
     }
@@ -681,9 +685,9 @@ Class Proceso{
 
     $result = $this->conn->prepare($query);
 
-    $result->bindParam(1, $this->expediente);
-    $result->bindParam(2, $this->distrito_judicial);
-    $result->bindParam(3, $this->juzgado);
+    $result->bindParam(1, $this->distrito_judicial);
+    $result->bindParam(2, $this->juzgado);
+    $result->bindParam(3, $this->expediente);
     $result->bindParam(4, $this->dni);
     $result->bindParam(5, $this->nombre);
     $result->bindParam(6, $this->fecha_inicio);
@@ -703,7 +707,6 @@ Class Proceso{
       $contador=$contador+1;
       $items = array (
         "numero"=>$contador,
-        "id"=>$id,
         "id_instancia"=>$id_instancia,
         "instancia"=>$instancia,
         "id_distrito"=>$id_distrito,
@@ -713,5 +716,151 @@ Class Proceso{
     }
     return $procesos_list;
   }
+
+  function read_procesos_distritos(){
+    $query = "CALL sp_listarprocesojudicialdistritos(?,?,?,?,?,?,?,?)";
+
+    $result = $this->conn->prepare($query);
+
+    $result->bindParam(1, $this->distrito_judicial);
+    $result->bindParam(2, $this->juzgado);
+    $result->bindParam(3, $this->expediente);
+    $result->bindParam(4, $this->dni);
+    $result->bindParam(5, $this->nombre);
+    $result->bindParam(6, $this->fecha_inicio);
+    $result->bindParam(7, $this->fecha_fin);
+    $result->bindParam(8, $this->estado);
+
+    $result->execute();
+    
+    $procesos_list=array();
+    $procesos_list["distritos"]=array();
+
+    $contador = $this->total_pagina*($this->numero_pagina-1);
+    
+    while($row = $result->fetch(PDO::FETCH_ASSOC))
+    {
+      extract($row);
+      $contador=$contador+1;
+      $items = array (
+        "numero"=>$contador,
+        "id_distrito"=>$id_distrito,
+        "distrito"=>$distrito,
+      );
+      array_push($procesos_list["distritos"],$items);
+    }
+    return $procesos_list;
+  }
+
+  function create_proceso_judicial_multiple(){
+    $query = "call sp_crearprocesojudicialmultiple(
+      :prcliente,
+      :prexpediente,
+      :prinstancia,
+      :prjuez,
+      :prespecialista,
+      :prfecha,
+      :prsumilla,
+      :prnumerocuotas,
+      :prtotal
+    )";
+
+    $result = $this->conn->prepare($query);
+
+    $result->bindParam(":prcliente", $this->id_cliente);
+    $result->bindParam(":prexpediente", $this->expediente);
+    $result->bindParam(":prinstancia", $this->instancia);
+    $result->bindParam(":prjuez", $this->juez);
+    $result->bindParam(":prespecialista", $this->especialista);
+    $result->bindParam(":prfecha", $this->fecha_inicio);
+    $result->bindParam(":prsumilla", $this->sumilla);
+    $result->bindParam(":prnumerocuotas", $this->numero_cuotas);
+    $result->bindParam(":prtotal", $this->total);
+
+    $this->id_cliente=htmlspecialchars(strip_tags($this->id_cliente));
+    $this->expediente=htmlspecialchars(strip_tags($this->expediente));
+    $this->instancia=htmlspecialchars(strip_tags($this->instancia));
+    $this->juez=htmlspecialchars(strip_tags($this->juez));
+    $this->especialista=htmlspecialchars(strip_tags($this->especialista));
+    $this->fecha_inicio=htmlspecialchars(strip_tags($this->fecha_inicio));
+    $this->sumilla=htmlspecialchars(strip_tags($this->sumilla));
+    $this->numero_cuotas=htmlspecialchars(strip_tags($this->numero_cuotas));
+    $this->total=htmlspecialchars(strip_tags($this->total));
+
+    $transacciones = json_decode( $this->transacciones ) ;
+
+    $this->arreglo = array() ;
+
+    if($result->execute())
+    {
+      while($row = $result->fetch(PDO::FETCH_ASSOC))
+      {
+        extract($row);
+        $this->id_proceso=$id;
+      }
+      return true;
+    }
+    
+    return false;
+  }
+
+  function create_proceso_judicial_transaccion() {
+    // Tipo: 1. Préstamo, 2. Venta
+    $query = "call sp_crearprocesojudicialtransacciones(
+      :prproceso,
+      :prtipo,
+      :prtransaccion
+    )";
+
+    $result = $this->conn->prepare($query);
+
+    $result->bindParam(":prproceso", $this->proceso);
+    $result->bindParam(":prtipo", $this->tipo);
+    $result->bindParam(":prtransaccion", $this->transaccion);
+
+    $this->proceso=htmlspecialchars(strip_tags($this->proceso));
+    $this->tipo=htmlspecialchars(strip_tags($this->tipo));
+    $this->transaccion=htmlspecialchars(strip_tags($this->transaccion));
+
+    if($result->execute())
+    {
+      return true;
+    }
+    
+    return false;
+  }
+
+  function read_procesosxtransaccion(){
+    $query = "CALL sp_listarprocesosjudicialxtransaccion(?,?)";
+
+    $result = $this->conn->prepare($query);
+
+    $result->bindParam(1, $this->tipo_transaccion);
+    $result->bindParam(2, $this->id_transaccion);
+
+    $result->execute();
+    
+    $procesos_list=array();
+    $procesos_list["transacciones"]=array();
+
+    $contador = $this->total_pagina*($this->numero_pagina-1);
+    
+    while($row = $result->fetch(PDO::FETCH_ASSOC))
+    {
+      extract($row);
+      $contador=$contador+1;
+      $items = array (
+        "numero"=>$contador,
+        "id_proceso"=>$id_proceso,
+        "expediente"=>$expediente,
+        "id_tipo_documento"=>$id_tipo_documento,
+        "estado"=>$estado
+      );
+      array_push($procesos_list["transacciones"],$items);
+    }
+
+    return $procesos_list;
+  }
+
 }
 ?>

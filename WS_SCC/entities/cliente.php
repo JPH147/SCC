@@ -471,6 +471,53 @@ Class Cliente{
         // return $query;
     }
 
+    function update_parcial(){
+
+        $query = "CALL sp_actualizarclienteparcial (
+            :idcliente,
+            :id_subsede,
+            :id_cargo,
+            :id_cargo_estado,
+            :clt_codigo,
+            :clt_dni,
+            :clt_nombre,
+            :clt_cip,
+            :clt_email,
+            :clt_casilla
+        )"; 
+
+        $result = $this->conn->prepare($query);
+
+        $this->idcliente=htmlspecialchars(strip_tags($this->idcliente));
+        $this->id_subsede=htmlspecialchars(strip_tags($this->id_subsede));
+        $this->id_cargo=htmlspecialchars(strip_tags($this->id_cargo));
+        $this->id_cargo_estado=htmlspecialchars(strip_tags($this->id_cargo_estado));
+        $this->clt_codigo=htmlspecialchars(strip_tags($this->clt_codigo));
+        $this->clt_dni=htmlspecialchars(strip_tags($this->clt_dni));
+        $this->clt_nombre=htmlspecialchars(strip_tags($this->clt_nombre));
+        $this->clt_cip=htmlspecialchars(strip_tags($this->clt_cip));
+        $this->clt_email=htmlspecialchars(strip_tags($this->clt_email));
+        $this->clt_casilla=htmlspecialchars(strip_tags($this->clt_casilla));
+
+        $result->bindParam(":idcliente", $this->idcliente);
+        $result->bindParam(":id_subsede", $this->id_subsede);
+        $result->bindParam(":id_cargo", $this->id_cargo);
+        $result->bindParam(":id_cargo_estado", $this->id_cargo_estado);
+        $result->bindParam(":clt_codigo", $this->clt_codigo);
+        $result->bindParam(":clt_dni", $this->clt_dni);
+        $result->bindParam(":clt_nombre", $this->clt_nombre);
+        $result->bindParam(":clt_cip", $this->clt_cip);
+        $result->bindParam(":clt_email", $this->clt_email);
+        $result->bindParam(":clt_casilla", $this->clt_casilla);
+        
+        if($result->execute())
+        {
+            return true;
+        }
+        
+        return false;
+    }
+
     function delete(){
 
         $query = "call sp_eliminarcliente(?)";

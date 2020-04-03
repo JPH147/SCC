@@ -227,7 +227,7 @@ export class EvaluacionService {
       .set('prdireccion', direccion)
       .set('prlugar', lugar)
       .set('prfecha', moment(fecha_letras).format("DD/MM/YYYY"))
-      .set('prfechaletras', moment(fecha_letras).format('LL'))
+      .set('prfechaletras', moment(fecha_letras).locale('es').format('LL'))
 
     // console.log(params);
 
@@ -256,7 +256,7 @@ export class EvaluacionService {
       .set('prnombre', nombre)
       .set('prdni', dni)
       .set('prlugar', lugar)
-      .set('prfechaletras', moment(fecha).format('LL'))
+      .set('prfechaletras', moment(fecha).locale('es').format('LL'))
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -306,7 +306,7 @@ export class EvaluacionService {
       .set('prmontocuota', monto_cuota.toString())
       .set('prnumerocuotas', numero_cuotas.toString())
       .set('prlugar', lugar)
-      .set('prfechaletras', moment(fecha).format('LL'))
+      .set('prfechaletras', moment(fecha).locale('es').format('LL'))
       .set('prparametroautorizacion1', parametro_autorizacion_1)
       .set('prparametroautorizacion2', parametro_autorizacion_2);
 
@@ -431,7 +431,7 @@ export class EvaluacionService {
       .set('prnombreaval',nombre_aval)
       .set('prdniaval',dni_aval);
 
-      // console.log("PrintTransaccion",params);
+      console.log("PrintTransaccion",params);
 
       let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -481,12 +481,15 @@ export class EvaluacionService {
     codigo : string ,
     cargo_estado : string ,
     direccion : string ,
+    distrito : string ,
     provincia : string ,
-    trabajo : string ,
-    cuenta_numero : string ,
-    lugar : string ,
+    departamento : string ,
     celular : string ,
-    monto_afiliacion : number ,
+    banco : string ,
+    cuenta_numero : string ,
+    fecha : Date ,
+    parametro_autorizacion_1 : string ,
+    parametro_autorizacion_2 : string ,
   ) :Observable <any> {
 
     let params = new HttpParams()
@@ -498,12 +501,15 @@ export class EvaluacionService {
       .set('prcodigo' , codigo)
       .set('prcargoestado' , cargo_estado)
       .set('prdireccion' , direccion)
+      .set('prdistrito' , distrito)
       .set('prprovincia' , provincia)
-      .set('prtrabajo' , trabajo)
-      .set('prcuentanumero' , cuenta_numero)
-      .set('prlugar' , lugar)
+      .set('prdepartamento' , departamento)
       .set('prcelular' , celular)
-      .set('prmontoafiliacion' , monto_afiliacion.toString());
+      .set('prbanco' , banco)
+      .set('prcuentanumero' , cuenta_numero)
+      .set('prfecha' , moment(fecha).format("DD/MM/YYYY"))
+      .set('prparametroautorizacion1', parametro_autorizacion_1 )
+      .set('prparametroautorizacion2', parametro_autorizacion_2 ) ;
 
     // console.log(params);
 
@@ -514,11 +520,10 @@ export class EvaluacionService {
   }
 
   ObtenerArchivo(
-    nombre:string
-  ): Observable<Blob>{
-
+    nombre : string
+  ) : Observable<Blob> {
     let params = new HttpParams()
-    .set('prarchivo', nombre)
+      .set('prarchivo', nombre)
 
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
 

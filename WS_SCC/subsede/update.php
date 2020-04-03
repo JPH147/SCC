@@ -23,7 +23,8 @@
             $subsede->nombre=trim($_POST["prnombre"]);
             $subsede->abreviatura=trim($_POST["prabreviatura"]);
             $subsede->representante=trim($_POST["prrepresentante"]);
-            $subsede->distrito=trim($_POST["prdistrito"]);
+            $subsede->distrito=96;
+            // $subsede->distrito=trim($_POST["prdistrito"]);
             $subsede->direccion=trim($_POST["prdireccion"]);
             $subsede->telefono=trim($_POST["prtelefono"]);
             $subsede->codigo_cooperativa=trim($_POST["prcodigocooperativa"]);

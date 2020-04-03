@@ -23,6 +23,7 @@
         $transaccion->id_proveedor = !empty($_POST["prproveedor"]);
         $transaccion->fecha = trim($_POST["prfecha"]);
         $transaccion->documento = trim($_POST["prdocumento"]);
+        $transaccion->archivo = trim($_POST["prarchivo"]);
 
         if($transaccion->update_compra())
         {

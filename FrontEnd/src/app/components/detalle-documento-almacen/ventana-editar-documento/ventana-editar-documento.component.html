@@ -2,7 +2,7 @@
 
   <mat-toolbar color="primary">
     <mat-toolbar-row>
-      Editar serie
+      Editar documento
     </mat-toolbar-row>
   </mat-toolbar>
 
@@ -46,13 +46,37 @@
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
         </mat-grid-tile>
+
+        <mat-grid-tile colspan=4>
+          <button mat-icon-button color="primary" type="button" (click)="editar_archivo = !editar_archivo" [disabled]="!archivo_nombre_antiguo" *ngIf="!editar_archivo">
+            <mat-icon class="icono-documentos"> edit </mat-icon>
+          </button>
+          <button mat-icon-button color="primary" type="button" (click)="editar_archivo = !editar_archivo" [disabled]="!archivo_nombre_antiguo" *ngIf="editar_archivo">
+            <mat-icon class="icono-documentos"> close </mat-icon>
+          </button>
+
+          <button mat-icon-button color="primary" type="button" [disabled]="!archivo_nombre_antiguo_enlace" *ngIf="!editar_archivo && archivo_nombre_antiguo">
+            <mat-icon class="icono-documentos" (click)="AbrirDocumento(archivo_nombre_antiguo_enlace)"> visibility </mat-icon>
+          </button>
+          
+          <ng-container *ngIf="!archivo_nombre && editar_archivo">
+            <input hidden #uploader type="file" (change)="SubirArchivo($event.target.files)">
+            <button mat-raised-button type="button" (click)="uploader.click()"> Seleccionar archivo </button>
+          </ng-container>
+          <ng-container *ngIf="archivo_nombre">
+            <span> {{ archivo_nombre }} </span>
+            &nbsp;
+            <button type="button" mat-icon-button color="primary" (click)="RemoverArchivo()"> <mat-icon> remove_circle_outline </mat-icon> </button>
+          </ng-container>
+        </mat-grid-tile>
+
       </mat-grid-list>
     </mat-card-content>
   </form>
 
   <mat-grid-list cols=1 rowHeight="40px">
     <mat-grid-tile>
-      <button mat-raised-button color="primary" [disabled]="DocumentoForm.invalid" [mat-dialog-close]="DocumentoForm.value">Guardar</button>
+      <button mat-raised-button color="primary" [disabled]="DocumentoForm.invalid" (click)="Guardar()">Guardar</button>
     </mat-grid-tile>
   </mat-grid-list>
   

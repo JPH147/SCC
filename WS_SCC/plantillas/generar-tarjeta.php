@@ -18,7 +18,7 @@
         $archivo = new Plantillas($db);
         $data = json_decode(file_get_contents('php://input'), true);
 
-        if ( trim($_POST["prnombre"])!=null )
+        if ( trim($_POST["prnombrearchivo"])!=null )
         {
             $archivo->nombre_plantilla = trim($_POST["prnombreplantilla"]);
             $archivo->nombre_archivo = trim($_POST["prnombrearchivo"]);
@@ -28,14 +28,17 @@
             $archivo->codigo = trim($_POST["prcodigo"]);
             $archivo->cargo_estado = trim($_POST["prcargoestado"]);
             $archivo->direccion = trim($_POST["prdireccion"]);
+            $archivo->distrito = trim($_POST["prdistrito"]);
             $archivo->provincia = trim($_POST["prprovincia"]);
-            $archivo->trabajo = trim($_POST["prtrabajo"]);
-            $archivo->cuenta_numero = trim($_POST["prcuentanumero"]);
-            $archivo->lugar = trim($_POST["prlugar"]);
+            $archivo->departamento = trim($_POST["prdepartamento"]);
             $archivo->celular = trim($_POST["prcelular"]);
-            $archivo->monto_afiliacion = trim($_POST["prmontoafiliacion"]);
+            $archivo->banco = trim($_POST["prbanco"]);
+            $archivo->cuenta = trim($_POST["prcuentanumero"]);
+            $archivo->fecha = trim($_POST["prfecha"]);
+            $archivo->parametro_autorizacion_1 = trim($_POST["prparametroautorizacion1"]);
+            $archivo->parametro_autorizacion_2 = trim($_POST["prparametroautorizacion2"]);
 
-            if($archivo->generar_tarjeta())
+            if($archivo->generar_tarjeta_socio())
             {
                 print_json("0000", "Se creó el archivo satisfactoriamente.", $archivo->nombre_archivo);
             }

@@ -5,7 +5,7 @@
     fixedInViewport="true"
     [attr.role]="'navigation'"
     [mode]=" 'side'"
-    [(opened)]="estado">
+    [(opened)]="_usuario.Usuario">
     <mat-toolbar color="primary"> Menu </mat-toolbar>
     
     <div class="menu-empresa">
@@ -20,24 +20,22 @@
       </div>
       <div class="datos-usuario">
         <div class="nombre-usuario">
-          {{usuario.nombre}}
+          {{this.usuario.nombre}}
         </div>
         <div class="rol-usuario">
-          {{usuario.rol}}
+          {{this.usuario.perfil}}
         </div>
       </div>
     </div>
     <mat-divider></mat-divider>
     <div class="menu">
-        <app-menu></app-menu>
+      <app-menu></app-menu>
     </div>
   </mat-sidenav>
 
   <mat-sidenav-content>
-    <mat-toolbar color="primary">
-      <!-- Colocar cuando se exporte para móviles -->
+    <mat-toolbar color="primary" *ngIf="_usuario.Usuario">
       <button
-        *ngIf="estado"
         type="button"
         aria-label="Toggle sidenav"
         mat-icon-button

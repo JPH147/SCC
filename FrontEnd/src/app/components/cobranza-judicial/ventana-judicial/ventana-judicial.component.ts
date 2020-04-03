@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CobranzaJudicialService } from '../cobranza-judicial.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, forkJoin } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { ServiciosVentas } from '../../global/ventas';
 import { ServiciosGenerales } from '../../global/servicios';
@@ -11,7 +11,7 @@ import { ProcesoJudicialVinculadosService } from '../../proceso-judicial-vincula
 @Component({
   selector: 'app-ventana-judicial',
   templateUrl: './ventana-judicial.component.html',
-  styleUrls: ['./ventana-judicial.component.css'],
+  styleUrls: ['./ventana-judicial.component.scss'],
   providers: [ServiciosVentas]
 })
 export class VentanaJudicialComponent implements OnInit {
@@ -27,6 +27,7 @@ export class VentanaJudicialComponent implements OnInit {
   public Estados : Array<any> ;
   public editar : boolean = false ;
   public editar_archivo : boolean = false ;
+  public primer_documento : boolean ;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private data,
@@ -42,7 +43,7 @@ export class VentanaJudicialComponent implements OnInit {
     this.CrearFormulario();
     this.ListarTipoDocumentos();
     this.ListarTrabajadores();
-    // this.ListarEstados();
+    this.VerificarDocumentos();
 
     if(this.data.proceso_detalle){
       this.editar = true ;
@@ -56,6 +57,8 @@ export class VentanaJudicialComponent implements OnInit {
       ] ],
       tipo_documento : [ { value: null, disabled : false },[
         Validators.required ,
+      ] ],
+      tipo_documento_nombre : [ { value: "", disabled : false },[
       ] ],
       fecha : [ { value: null, disabled : false }, [
         Validators.required ,
@@ -75,8 +78,23 @@ export class VentanaJudicialComponent implements OnInit {
     })
   }
 
+  VerificarDocumentos(){
+    forkJoin(
+      this._judiciales.ListarDetallexProceso( this.data.proceso ) ,
+      this._judiciales.ListarDetalleAnteriorxProceso( this.data.proceso )
+    ).subscribe(res=>{
+      console.log(res)
+      if( res[0] || res[1] ) {
+      } else {
+        this.primer_documento = true ;
+        this.VentanaJudicialForm.get('fecha').setValue(this.data.fecha) ;
+      }
+    })
+  }
+
   ListarTipoDocumentos(){
     this._vinculados.ListarDocumentosJudiciales("",1,50).subscribe(res=>{
+      // console.log( res['data'].documentos ) ;
       this.TipoDocumentos = res['data'].documentos ;
     })
   }
@@ -96,6 +114,7 @@ export class VentanaJudicialComponent implements OnInit {
   EditarProceso(){
     this.VentanaJudicialForm.get('id_proceso').setValue(this.data.proceso_detalle.id) ;
     this.VentanaJudicialForm.get('tipo_documento').setValue(this.data.proceso_detalle.id_tipo_documento) ;
+    this.VentanaJudicialForm.get('tipo_documento_nombre').setValue(this.data.proceso_detalle.tipo_documento) ;
     this.VentanaJudicialForm.get('fecha').setValue(this.data.proceso_detalle.fecha) ;
     this.VentanaJudicialForm.get('numero_resolucion').setValue(this.data.proceso_detalle.numero) ;
     this.VentanaJudicialForm.get('sumilla').setValue(this.data.proceso_detalle.sumilla) ;
@@ -129,7 +148,13 @@ export class VentanaJudicialComponent implements OnInit {
     // this.VentanaJudicialForm.get('archivo').setValue(null);
   }
 
-  TipoDocumentoSeleccionado(){
+  TipoDocumentoSeleccionado( tipo : number ){
+    this.VentanaJudicialForm.get('tipo_documento').setValue(tipo)
+
+    let tipo_documento_nombre : string ;
+    tipo_documento_nombre = this.TipoDocumentos.filter( e => e.id == tipo )[0].nombre ;
+    this.VentanaJudicialForm.get('tipo_documento_nombre').setValue(tipo_documento_nombre)
+
     if( this.VentanaJudicialForm.value.tipo_documento == 2 ) {
       this.VentanaJudicialForm.get('trabajador').enable();
       this.VentanaJudicialForm.get('trabajador').setValidators([Validators.required]) ;

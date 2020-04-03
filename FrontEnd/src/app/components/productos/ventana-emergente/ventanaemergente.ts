@@ -161,6 +161,7 @@ export class VentanaEmergenteProductos {
  
     VentanaModelo.afterClosed().subscribe(res=>{
       this.Servicios.ListarModelo(this.ProductosForm.value.marca, '').subscribe(resultado => {
+        console.log(res, resultado)
         this.Modelos=resultado;
         this.ObtenerNombreModelo(res);
      });
@@ -219,7 +220,8 @@ export class VentanaEmergenteProductos {
   ObtenerNombreModelo(id_modelo){
     this.Modelos.forEach((item)=>{
       if(item.id==id_modelo){
-        this.modelo=item.nombre
+        this.modelo=item.nombre ;
+        this.AyudarCrearNombre() ;
       }
     })
   }

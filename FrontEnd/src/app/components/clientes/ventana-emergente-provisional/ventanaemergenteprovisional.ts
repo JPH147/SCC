@@ -140,6 +140,8 @@ export class VentanaEmergenteProvisionalClientes {
 
   CrearFormulario(){
     this.ClientesForm = this.FormBuilder.group({
+      id_cliente : [ true, [
+      ]],
       cliente_nuevo : [ true, [
       ]],
       'institucion': [4, [
@@ -166,8 +168,6 @@ export class VentanaEmergenteProvisionalClientes {
       'nombre': [null, [
         Validators.required
       ]],
-      'id_cliente': [null, [
-      ]],
       'cip': ["", [
         // Validators.required
       ]],
@@ -176,9 +176,20 @@ export class VentanaEmergenteProvisionalClientes {
       ]],
       'casilla': [ "" , [
       ]],
+      // Estos dos campos guardan el email cuando es de DB
+      'email_consulta': ["", [
+      ]],
+      'casilla_consulta': [ "" , [
+      ]],
       'email_real': [1, [
       ]],
       'casilla_real': [1, [
+      ]],
+      // Si es false, no se guarda la dirección como nueva
+      // Si es true, se actualiza la dirección actual
+      considerar_direccion: [false,[
+      ]],
+      id_direccion: [0,[
       ]],
       direccion_completa: [null,[
       ]],
@@ -196,6 +207,10 @@ export class VentanaEmergenteProvisionalClientes {
       ]],
       direccion_distrito_nombre: [null,[
       ]],
+      id_telefono: [null,[
+      ]],
+      considerar_telefono: [null,[
+      ]],
       telefono_numero: [null,[
         Validators.required,
         Validators.minLength(6),
@@ -209,10 +224,14 @@ export class VentanaEmergenteProvisionalClientes {
       ]],
       telefono_tipo_nombre: [{value:1,disabled:false},[
       ]],
-      cuenta_banco: [1,[
+      id_cuenta: [null,[
+      ]],
+      considerar_cuenta: [null,[
+      ]],
+      cuenta_banco: [3,[
         // Validators.required,
       ]],
-      cuenta_banco_nombre: [1,[
+      cuenta_banco_nombre: ["BANCO DE LA NACION",[
         // Validators.required,
       ]],
       cuenta_numero:["0",[
@@ -282,6 +301,8 @@ export class VentanaEmergenteProvisionalClientes {
           this.ClientesForm.get('cip').setValue(res['data'].cip);
           this.ClientesForm.get('email').setValue(res['data'].email);
           this.ClientesForm.get('casilla').setValue(res['data'].casilla);
+          this.ClientesForm.get('email_consulta').setValue(res['data'].email);
+          this.ClientesForm.get('casilla_consulta').setValue(res['data'].casilla);
           this.ClientesForm.get('email_real').setValue(res['data'].email_real);
           this.ClientesForm.get('casilla_real').setValue(res['data'].casilla_real);
           this.ClientesForm.get('nombre').setValue(res['data'].nombre);
@@ -340,6 +361,7 @@ export class VentanaEmergenteProvisionalClientes {
   ObtenerDireccion(id) {
     this.ServicioDireccion.ListarDireccion( id, '1',1,1).subscribe(res => {
       if (res['data']) {
+        this.ClientesForm.get('id_direccion').setValue(res['data'].direcciones[0].id); // Para el editar en la vista de evaluación
         this.ListarDepartamento();
         this.ListarProvincia(res['data'].direcciones[0].departamento);
         this.ClientesForm.get('direccion_departamento').setValue(res['data'].direcciones[0].departamento);
@@ -359,6 +381,7 @@ export class VentanaEmergenteProvisionalClientes {
     this.ServicioTelefono.ListarTelefono( id, '1',1,1).subscribe(res => {
       if(res['codigo']==0){
         if (res['data']) {
+          this.ClientesForm.get('id_telefono').setValue(res['data'].telefonos[0].id); // Para el editar en la vista de evaluación
           this.ClientesForm.get('telefono_numero').setValue(res['data'].telefonos[0].tlf_numero);
           if(res['data'].telefonos[0].id_tipo==1){
             this.ClientesForm.get('telefono_tipo').setValue(res['data'].telefonos[0].id_tipo);
@@ -392,8 +415,8 @@ export class VentanaEmergenteProvisionalClientes {
 
   ObtenerCuenta(id) {
     this.ClienteServicios.ListarCuenta( id, '1',1,1).subscribe(res => {
-      // console.log(res)
       if (res['data']) {
+        this.ClientesForm.get('id_cuenta').setValue(res['data'].cuentas[0].id);
         this.ClientesForm.get('cuenta_banco').setValue(res['data'].cuentas[0].id_banco);
         this.ClientesForm.get('cuenta_banco_nombre').setValue(res['data'].cuentas[0].nombre_banco);
         this.ClientesForm.get('cuenta_numero').setValue(res['data'].cuentas[0].cuenta_numero);
@@ -707,6 +730,26 @@ export class VentanaEmergenteProvisionalClientes {
         // })
       }
     })
+  }
+
+  BancoSeleccionado() {
+    let banco = this.Bancos.filter(e => e.id == this.ClientesForm.value.cuenta_banco )[0].nombre ;
+
+    this.ClientesForm.get('cuenta_banco_nombre').setValue(banco) ;
+    console.log(banco) ;
+  }
+
+  // Cambia el estado del campo'Considerar dirección' del formulario
+  ConsiderarDireccion( considerar : boolean ){
+    this.ClientesForm.get('considerar_direccion').setValue(considerar) ;
+  }
+
+  ConsiderarTelefono( considerar : boolean ){
+    this.ClientesForm.get('considerar_telefono').setValue(considerar) ;
+  }
+
+  ConsiderarCuenta( considerar : boolean ){
+    this.ClientesForm.get('considerar_cuenta').setValue(considerar) ;
   }
 
   /* Enviar al formulario */

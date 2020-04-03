@@ -12,6 +12,7 @@ import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-con
 import {VentasServicio} from './ventas-listar.service'
 import { ClienteService } from '../clientes/clientes.service';
 import { VentaService } from '../ventas/ventas.service';
+import { CobranzaJudicialService } from '../cobranza-judicial/cobranza-judicial.service';
 
 
 @Component({
@@ -24,6 +25,7 @@ export class VentasListarComponent implements OnInit {
 
   public fecha_inicio: Date;
   public fecha_fin: Date;
+  public ListadoProcesos : Array<any> ;
 
   ListadoVentas: VentaDataSource;
   Columnas: string[] = ['numero', 'fecha', 'contrato', 'cliente_nombre', 'tipo_venta', 'monto_total', 'opciones'];
@@ -38,7 +40,8 @@ export class VentasListarComponent implements OnInit {
     //private Servicio: ProductoService,
     public Dialogo: MatDialog,
     private Servicio:VentasServicio,
-    private VServicio: VentaService
+    private VServicio: VentaService,
+    private _judiciales : CobranzaJudicialService
   ) {}
 
   ngOnInit() {
@@ -90,42 +93,47 @@ export class VentasListarComponent implements OnInit {
 
   AnularVenta(venta){
     
-    let Transacciones: Array<any>;
+    let transacciones: Array<any> = [];
     
     // Se listan las transacciones que pertenecen a esa venta
-    this.VServicio.ListarVentaTransacciones(venta.id).subscribe(res=>{
-      Transacciones=res.transaccion
-    });
-
     let Dialogo = this.Dialogo.open(VentanaConfirmarComponent,{
       data: {objeto: "la venta", valor: venta.contrato, venta:true}
     })
 
     Dialogo.afterClosed().subscribe(res=>{
+      this.ListadoVentas.CargandoInformacion.next(true) ;
       if (res) {
         if (res.respuesta) {
-          this.VServicio.EliminarVenta(venta.id, res.comentarios, res.monto).subscribe(respuesta=>{
-            
-            console.log(respuesta);
-            Transacciones.forEach((item)=>{
-              this.VServicio.CrearCanjeTransaccion(item.id,new Date(),"AJUSTE POR ANULACION").subscribe()
-            })
-
-            if (res.monto>0) {
-              this.VServicio.CrearVentaCronograma(venta.id,2,res.monto,new Date(), 1).subscribe()
-            }
-
-            this.CargarData()
-
+          this.VServicio.ListarVentaTransacciones(venta.id).subscribe(res2=>{
+            transacciones=res2.transaccion ;
+            this.VServicio.EliminarVenta(venta.id, res.comentarios, res.monto).subscribe(respuesta=>{
+              this.ListadoVentas.CargandoInformacion.next(false) ;
+              transacciones.forEach((item)=>{
+                this.VServicio.CrearCanjeTransaccion(item.id,new Date(),"AJUSTE POR ANULACION").subscribe()
+              })
+  
+              if (res.monto>0) {
+                this.VServicio.CrearVentaCronograma(venta.id,2,res.monto,new Date(), 1).subscribe()
+              }
+  
+              this.CargarData()
+            });
           });
         }
       }
     })
-
   }
 
   CambioFiltro(){
     this.paginator.pageIndex = 0;
     this.CargarData()
+  }
+
+  ListarProcesos( id_venta : number ) {
+    this.ListadoProcesos = [] ;
+
+    this._judiciales.ListarProcesosxTransaccion(2, id_venta).subscribe(res=>{
+      this.ListadoProcesos = res ;
+    })
   }
 }

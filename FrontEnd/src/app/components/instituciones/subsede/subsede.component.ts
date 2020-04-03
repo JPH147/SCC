@@ -111,6 +111,21 @@ export class SubsedeComponent implements OnInit {
     })
   }
  
+  Eliminar(subsede) {
+    const VentanaConfirmar = this.Dialogo.open(VentanaConfirmarComponent, {
+      width: '400px',
+      data: {objeto: 'la subsede', valor: subsede.nombre}
+    });
+
+    VentanaConfirmar.afterClosed().subscribe(res => {
+      if (res === true) {
+        this.Servicio.EliminarSubsede(subsede.id).subscribe(res => {
+          this.CargarData();
+        });
+      }
+    });
+  }
+
 }
 
 export class SubsedeDataSource implements DataSource<any> {

@@ -39,3 +39,49 @@
 textarea{
   overflow:hidden
 }
+
+.derecha{
+  float: right;
+}
+
+// .seccion-tercera{
+//   margin-top: 20px;
+//   margin-bottom: 20px;
+//   border-color: mat-color($primary);
+//   border-width: 1px;
+//   border-style: solid;
+//   border-radius: 5px;
+// }
+
+.titulo-seccion-tercera{
+  height: 30px;
+  font-size: 16px;
+  // background-color: mat-color($primary);
+  padding-top: 15px;
+  padding-left: 2.5%;
+  border-top-right-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.tipo-tercero-1{
+  background-color: mat-color($mat_ambar);
+  }
+
+.tipo-tercero-2{
+  background-color: mat-color($mat_rojo);
+  color: white !important;
+}
+
+.tipo-tercero-3{
+  background-color: mat-color($mat_verde);
+  color: white !important;
+}
+
+span.derecha{
+  position: absolute;
+  right: 20px;
+}
+
+.derecha{
+  margin-left: 5px;
+}

@@ -154,8 +154,6 @@ export class ClienteService {
       .set('clt_fecharegistro', moment(new Date()).format("YYYY-MM-DD"))
       .set('prestado',estado.toString())
 
-    console.log(params);
-
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     return this.http.post(this.url + 'cliente/create.php', params, {headers: headers});
   }
@@ -201,6 +199,35 @@ export class ClienteService {
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     return this.http.post(this.url + 'cliente/update.php', params, {headers: headers});
+  }
+
+  ActualizarParcial(
+    idcliente: number,
+    id_subsede: number,
+    cargo: number,
+    cargo_estado: number,
+    clt_codigo: string,
+    clt_dni: string,
+    clt_nombre: string,
+    clt_cip: string,
+    clt_email: string,
+    clt_casilla: string
+  ): Observable<any> {
+
+    let params = new HttpParams()
+      .set('idcliente', idcliente.toString())
+      .set('id_subsede', id_subsede.toString())
+      .set('prcargo', cargo.toString())
+      .set('prcargoestado', cargo_estado.toString())
+      .set('clt_codigo', clt_codigo)
+      .set('clt_dni', clt_dni)
+      .set('clt_nombre', clt_nombre)
+      .set('clt_cip', clt_cip)
+      .set('clt_email', clt_email)
+      .set('clt_casilla', clt_casilla) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    return this.http.post(this.url + 'cliente/update-parcial.php', params, {headers: headers});
   }
 
   ActualizarFoto(
@@ -255,13 +282,29 @@ export class ClienteService {
     cci:string,
   ){
     let params = new HttpParams()
-    .set('prcliente', cliente.toString())
-    .set('prbanco', banco.toString())
-    .set('prcuenta', cuenta)
-    .set('prcci', cci)
-    // console.log(params)
+      .set('prcliente', cliente.toString())
+      .set('prbanco', banco.toString())
+      .set('prcuenta', cuenta)
+      .set('prcci', cci)
+
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     return this.http.post(this.url + 'clientecuenta/create.php', params, {headers: headers});
+  }
+
+  ActualizarCuenta(
+    id_cuenta:number,
+    banco:number,
+    cuenta:string,
+    cci:string,
+  ){
+    let params = new HttpParams()
+      .set('prid', id_cuenta.toString())
+      .set('prbanco', banco.toString())
+      .set('prcuenta', cuenta)
+      .set('prcci', cci)
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    return this.http.post(this.url + 'clientecuenta/update.php', params, {headers: headers});
   }
 
   ListarCuenta(

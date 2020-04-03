@@ -13,67 +13,81 @@ Class Usuario{
     public $usr_estado;
     public $idperfil;
     public $prf_nombre;
-
+    public $numero_pagina;
+    public $total_pagina;
+    public $total_resultado;
 
     public function __construct($db){
         $this->conn = $db;
     }
 
     function read(){
-        $query = "CALL sp_listarusuario(?,?,?,?,?,?,?)";
+        $query = "CALL sp_listarusuario(?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
-        $result->bindParam(1, $this->idusuario);
-        $result->bindParam(2, $this->usr_nombre);
-        $result->bindParam(3, $this->usr_usuario);
-        $result->bindParam(4, $this->usr_ultimologueo);
-        $result->bindParam(5, $this->usr_fechacreacion);
-        $result->bindParam(6, $this->usr_estado);
-        $result->bindParam(7, $this->idperfil);
+        $result->bindParam(1, $this->usr_nombre);
+        $result->bindParam(2, $this->usr_usuario);
+        $result->bindParam(3, $this->prf_nombre);
+        $result->bindParam(4, $this->numero_pagina);
+        $result->bindParam(5, $this->total_pagina);
 
         $result->execute();
     
         $usuario_list=array();
         $usuario_list["usuarios"]=array();
+        $contador = $this->total_pagina*($this->numero_pagina-1);
 
         while($row = $result->fetch(PDO::FETCH_ASSOC))
         {
             extract($row);
+            $contador=$contador+1;
             $usuario_item = array (
-                "usr_nombre"=>$row['usr_nombre'],
-                "usr_usuario"=>$row['usr_usuario'],
-                "usr_fechacreacion"=>$row['usr_ultimologueo'],
-                "usr_ultimologueo"=>$row['usr_fechacreacion'],
-                "usr_estado"=>$row['usr_estado'],
-                "prf_nombre"=>$row['prf_nombre']
+                "numero"=>$contador,
+                "id_usuario"=>$row['idusuario'],
+                "nombre"=>$row['usr_nombre'],
+                "usuario"=>$row['usr_usuario'],
+                "fecha_creacion"=>$row['usr_ultimologueo'],
+                "ultimo_logueo"=>$row['usr_fechacreacion'],
+                "perfil"=>$row['prf_nombre']
             );
 
                 array_push($usuario_list["usuarios"],$usuario_item);
         }
         return $usuario_list;
     }
+
+    function contar(){
+        $query = "CALL sp_listarusuariocontar(?,?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->usr_nombre);
+        $result->bindParam(2, $this->usr_usuario);
+        $result->bindParam(3, $this->prf_nombre);
+
+        $result->execute();
+
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        $this->total_resultado=$row['total'];
+
+        return $this->total_resultado;
+    }
     
-    function create()
-    {
-        $query = "CALL sp_crearusuario (:usr_nombre,:usr_usuario,:usr_clave,:usr_fechacreacion,:usr_ultimologueo,:usr_estado,:idperfil)"; 
+    function create(){
+        $query = "CALL sp_crearusuario (:usr_nombre,:usr_usuario,:usr_clave,:idperfil)"; 
 
         $result = $this->conn->prepare($query);
 
         $this->usr_nombre=htmlspecialchars(strip_tags($this->usr_nombre));
         $this->usr_usuario=htmlspecialchars(strip_tags($this->usr_usuario));
         $this->usr_clave=htmlspecialchars(strip_tags($this->usr_clave));
-        $this->usr_fechacreacion=htmlspecialchars(strip_tags($this->usr_fechacreacion));
-        $this->usr_ultimologueo=htmlspecialchars(strip_tags($this->usr_ultimologueo));
-        $this->usr_estado=htmlspecialchars(strip_tags($this->usr_estado));
         $this->idperfil=htmlspecialchars(strip_tags($this->idperfil));
 
         $result->bindParam(":usr_nombre", $this->usr_nombre);
         $result->bindParam(":usr_usuario", $this->usr_usuario);
         $result->bindParam(":usr_clave", $this->usr_clave);
-        $result->bindParam(":usr_fechacreacion", $this->usr_fechacreacion);
-        $result->bindParam(":usr_ultimologueo", $this->usr_ultimologueo);
-        $result->bindParam(":usr_estado", $this->usr_estado);
         $result->bindParam(":idperfil", $this->idperfil);
 
         if($result->execute())
@@ -83,8 +97,8 @@ Class Usuario{
         
         return false;
     }
-    function readxId()
-    {
+
+    function readxId() {
         $query ="CALL sp_listarusuarioxId (?)";
         $result = $this->conn->prepare($query);
         $result->bindParam(1, $this->idusuario);
@@ -99,8 +113,8 @@ Class Usuario{
         $this->usr_estado=$row['usr_estado'];
         $this->prf_nombre= $row['prf_nombre'];
     }
-    function login($usr_usuario, $usr_clave)
-    {
+    
+    function login($usr_usuario, $usr_clave){
         $usr_clave_hash= password_hash($usr_clave, PASSWORD_DEFAULT);
         $query = "CALL sp_login('$usr_usuario')";
 
@@ -114,6 +128,7 @@ Class Usuario{
         $this->usr_usuario=$row['usr_usuario'];
         $this->usr_clave=$row['usr_clave'];
         $this->idperfil=$row['idperfil'];
+        $this->prf_nombre=$row['prf_nombre'];
 
         if(!(empty($this->usr_nombre)) && !(empty($this->usr_clave)) )
         {
@@ -132,22 +147,20 @@ Class Usuario{
             return null;
         }
     }
-    function update()
-    {
-        $query = "CALL sp_actualizarusuario (:idusuario,:usr_nombre,:usr_usuario,:usr_clave,:idperfil)"; 
+
+    function update(){
+        $query = "CALL sp_actualizarusuario (:idusuario,:usr_nombre,:usr_usuario,:idperfil)"; 
 
         $result = $this->conn->prepare($query);
 
         $this->idusuario=htmlspecialchars(strip_tags($this->idusuario));
         $this->usr_nombre=htmlspecialchars(strip_tags($this->usr_nombre));
         $this->usr_usuario=htmlspecialchars(strip_tags($this->usr_usuario));
-        $this->usr_clave=htmlspecialchars(strip_tags($this->usr_clave));
         $this->idperfil=htmlspecialchars(strip_tags($this->idperfil));
 
         $result->bindParam(":idusuario", $this->idusuario);
         $result->bindParam(":usr_nombre", $this->usr_nombre);
         $result->bindParam(":usr_usuario", $this->usr_usuario);
-        $result->bindParam(":usr_clave", $this->usr_clave);
         $result->bindParam(":idperfil", $this->idperfil);
 
         if($result->execute())
@@ -157,21 +170,40 @@ Class Usuario{
         
         return false;
     }
-    function delete()
-    {
+
+    function update_password(){
+        $query = "CALL sp_actualizarusuariopss (:idusuario,:usr_clave)"; 
+
+        $result = $this->conn->prepare($query);
+
+        $this->idusuario=htmlspecialchars(strip_tags($this->idusuario));
+        $this->usr_clave=htmlspecialchars(strip_tags($this->usr_clave));
+
+        $result->bindParam(":idusuario", $this->idusuario);
+        $result->bindParam(":usr_clave", $this->usr_clave);
+
+        if($result->execute())
+        {
+            return true;
+        }
+        
+        return false;
+    }
+
+    function delete(){
         $query = "call sp_eliminarusuario(?)";
         $result = $this->conn->prepare($query);
 
         $result->bindParam(1, $this->idusuario);
 
         if($result->execute())
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
 ?>

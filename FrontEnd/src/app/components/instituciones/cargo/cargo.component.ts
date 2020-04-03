@@ -7,6 +7,7 @@ import { Observable, BehaviorSubject, of, fromEvent, merge } from 'rxjs';
 import { catchError, finalize, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { InstitucionesService } from '../instituciones.service';
+import { VentanaConfirmarComponent } from '../../global/ventana-confirmar/ventana-confirmar.component';
 import { VentanaCargoComponent } from './ventana-cargo/ventana-cargo.component';
 import { Notificaciones } from '../../global/notificacion';
 
@@ -110,6 +111,22 @@ export class CargoComponent implements OnInit {
     })
   }
  
+  Eliminar(cargo) {
+    console.log(cargo);
+    const VentanaConfirmar = this.Dialogo.open(VentanaConfirmarComponent, {
+      width: '400px',
+      data: {objeto: 'el cargo', valor: cargo.nombre}
+    });
+
+    VentanaConfirmar.afterClosed().subscribe(res => {
+      if (res === true) {
+        this.Servicio.EliminarCargo(cargo.id_cargo).subscribe(res => {
+          this.CargarData();
+        });
+      }
+    });
+  }
+
 }
 
 export class CargoDataSource implements DataSource<any> {

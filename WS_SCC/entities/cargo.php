@@ -267,5 +267,41 @@
       return false;
     }
 
+    function delete_cargo(){
+      $query = "CALL sp_eliminarclientecargo(
+        :prcargo
+      )";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(":prcargo", $this->cargo);
+    
+      $this->cargo=htmlspecialchars(strip_tags($this->cargo));
+
+      if($result->execute())
+      {
+        return true;
+      }
+      return false;
+    }
+
+    function delete_cargo_estado(){
+      $query = "CALL sp_eliminarclientecargoestado(
+        :prcargoestado
+      )";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(":prcargoestado", $this->cargo_estado);
+    
+      $this->cargo_estado=htmlspecialchars(strip_tags($this->cargo_estado));
+
+      if($result->execute())
+      {
+        return true;
+      }
+      return false;
+    }
+
   }
 ?>

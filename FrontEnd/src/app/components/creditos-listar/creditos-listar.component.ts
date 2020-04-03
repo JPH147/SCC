@@ -8,6 +8,7 @@ import { catchError, finalize, tap, debounceTime, distinctUntilChanged } from 'r
 import { CreditosService } from '../creditos/creditos.service';
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
+import { CobranzaJudicialService } from '../cobranza-judicial/cobranza-judicial.service';
 
 @Component({
   selector: 'app-creditos-listar',
@@ -20,6 +21,7 @@ export class CreditosListarComponent implements OnInit {
   public fecha_inicio: Date;
   public fecha_fin: Date;
   public Tipos : Array<any>;
+  public ListadoProcesos : Array<any> = [] ;
 
   public ListadoCreditos: CreditosDataSource;
   public Columnas: string[] = ['numero', 'fecha', 'codigo', 'cliente_nombre', 'tipo_credito', 'monto_total', 'documentos_adjuntos', 'opciones'];
@@ -33,7 +35,8 @@ export class CreditosListarComponent implements OnInit {
 
   constructor(
     private Servicio: CreditosService,
-    private Dialogo : MatDialog
+    private Dialogo : MatDialog,
+    private _judiciales : CobranzaJudicialService
   ) { }
 
   ngOnInit() {
@@ -98,7 +101,6 @@ export class CreditosListarComponent implements OnInit {
   }
 
   AnularCredito(credito){
-   
     let Ventana = this.Dialogo.open(VentanaConfirmarComponent,{
       data: { objeto: "el crédito", valor: credito.codigo+"-"+credito.numero_credito }
     })
@@ -110,9 +112,16 @@ export class CreditosListarComponent implements OnInit {
         });
       }
     })
-
   }
- 
+
+  ListarProcesos( id_credito : number ) {
+    this.ListadoProcesos = [] ;
+
+    this._judiciales.ListarProcesosxTransaccion(1, id_credito).subscribe(res=>{
+      this.ListadoProcesos = res ;
+    })
+  }
+
 }
 
 export class CreditosDataSource implements DataSource<any> {

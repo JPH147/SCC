@@ -27,7 +27,7 @@
 
           <mat-grid-tile colspan=4>
             <mat-form-field class="columnas-2">
-              <mat-select placeholder="Instancia judicial" formControlName="instancia_judicial">
+              <mat-select placeholder="Instancia judicial" formControlName="instancia_judicial" (selectionChange)="InstanciaJudicialSeleccionada()">
                 <mat-option *ngFor="let instancia of Instancias" [value]="instancia.id_juzgado_instancia"> {{instancia.juzgado_instancia}} </mat-option>
               </mat-select>
             </mat-form-field>
@@ -35,16 +35,27 @@
 
           <mat-grid-tile colspan=3>
             <mat-form-field class="columnas-1-5">
-              <input matInput type="text" placeholder="Juez" formControlName="juez">
+              <input matInput type="text" [matAutocomplete]="autojuez" placeholder="Juez" formControlName="juez" [readonly]="TrasladoJudicialForm.value.id_juez">
+              <mat-icon color="primary" matSuffix (click)="RemoverJuez()" *ngIf="TrasladoJudicialForm.value.id_juez"> remove_circle </mat-icon>
+              <mat-autocomplete #autojuez="matAutocomplete" (optionSelected)="JuezSeleccionado($event)">
+                <mat-option *ngFor="let jueces of Jueces" [value]="jueces">
+                  {{jueces.juzgado_juez}}
+                </mat-option>
+              </mat-autocomplete>
             </mat-form-field>
           </mat-grid-tile>
 
           <mat-grid-tile colspan=3>
             <mat-form-field class="columnas-1-5">
-              <input matInput type="text" placeholder="Especialista legal" formControlName="especialista">
+              <input matInput type="text" [matAutocomplete]="autoespecialista" placeholder="Especialista legal" formControlName="especialista" [readonly]="TrasladoJudicialForm.value.id_especialista">
+              <mat-icon color="primary" matSuffix (click)="RemoverEspecialista()" *ngIf="TrasladoJudicialForm.value.id_especialista"> remove_circle </mat-icon>
+              <mat-autocomplete #autoespecialista="matAutocomplete" (optionSelected)="EspecialistaSeleccionado($event)">
+                <mat-option *ngFor="let especialista of Especialistas" [value]="especialista">
+                  {{especialista.juzgado_juez}}
+                </mat-option>
+              </mat-autocomplete>
             </mat-form-field>
           </mat-grid-tile>
-
         </mat-grid-list>
       </div>
 
@@ -57,8 +68,12 @@
 
           <mat-grid-tile colspan=2>
             <mat-form-field class="columnas-2">
-              <input matInput type="text" placeholder="Expediente" formControlName="expediente" [readonly]="proceso_igual">
+              <input matInput type="text" placeholder="Expediente" formControlName="expediente" [readonly]="proceso_igual || mismo_distrito">
             </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile *ngIf="mismo_distrito">
+            Si es un traslado entre instancias, el expediente es el mismo.
           </mat-grid-tile>
 
           <mat-grid-tile colspan=2>
@@ -72,12 +87,12 @@
 
     <mat-card-actions>
       <mat-grid-list cols=1 rowHeight="40px">
-        <mat-grid-tile *ngIf="mismo_distrito">
+        <mat-grid-tile *ngIf="misma_instancia">
           <mat-error> El distrito judicial debe se distinto </mat-error>
         </mat-grid-tile>
 
         <mat-grid-tile>
-          <button type="button" mat-raised-button color="primary" (click)="Guardar()" [disabled]=" mismo_distrito || TrasladoJudicialForm.invalid || ( Cargando | async )"> Guardar </button>
+          <button type="button" mat-raised-button color="primary" (click)="Guardar()" [disabled]=" misma_instancia || TrasladoJudicialForm.invalid || ( Cargando | async )"> Guardar </button>
         </mat-grid-tile>
       </mat-grid-list>
     </mat-card-actions>

@@ -66,6 +66,9 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
 	  public fecha_fin:Date;
     public hay_duplicados : boolean;
 
+    public archivo : File ;
+    public archivo_nombre : string = "";
+
     @ViewChildren('InputProducto') FiltroProducto: QueryList<any>;
     public productos: FormArray;
     public Series: any[] = [];
@@ -83,6 +86,7 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
       private Servicios: ServiciosGenerales,
       private IngresoProductoservicios: IngresoProductoService,
       private Articulos: ProductoService,
+      private _generales : ServiciosGenerales,
       private SSeries: ServiciosProductoSerie,
       private SDocumentos: ServiciosDocumentos,
       private SMovimineto: HistorialMovimientosService,
@@ -559,6 +563,18 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
 
   }
 
+  SubirArchivo(archivo: FileList) {
+    this.archivo = archivo.item(0);
+    this.archivo_nombre = this.archivo.name ;
+    // this.VentanaJudicialForm.get('archivo').setValue(true);
+  }
+
+  RemoverArchivo(){
+    this.archivo = null ;
+    this.archivo_nombre = "" ;
+    // this.VentanaJudicialForm.get('archivo').setValue(null);
+  }
+
   Guardar(formulario) {
 
     let tipoingreso = formulario.value.tipoIngreso;
@@ -594,34 +610,44 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
                   this.SSeries.Validacion.next(null)
                   this.enviado=false;
                 }else{
-                  this.IngresoProductoservicios.AgregarCompraMercaderia(
-                    formulario.value.almacen.id,
-                    1,
-                    1,
-                    formulario.value.proveedor.id,
-                    formulario.value.fecingreso,
-                    (formulario.value.docReferencia==null || formulario.value.docReferencia == "" )? ( this.documento_serie+"-"+this.documento_numero ) : formulario.value.docReferencia,
-                    this.documento_numero,
-                    formulario.value.observacion,
-                  ).subscribe (res => {
-                    let id_cabecera = res['data'];
-                    for (let i of formulario.value.productos) {
-                      for (let is of this.Series) {
-                        if (i.producto.id === is.id_producto) {
-                          this.SSeries.CrearProductoSerie(i.producto.id,is.serie, is.color, is.almacenamiento, is.precio).subscribe(response => {
-                            this.IngresoProductoservicios.CrearTransaccionDetalle(id_cabecera, response['data'], 1, is.precio, is.observacion).subscribe();
-                          });
+                  let nombre_documento = (formulario.value.docReferencia==null || formulario.value.docReferencia == "" ) ? ( this.documento_serie+"-"+this.documento_numero ) : formulario.value.docReferencia ;
+                  let random=(new Date()).getTime() ;
+
+                  this._generales.SubirArchivo(this.archivo).subscribe(path_archivo=>{
+                    this._generales.RenameFile(path_archivo['data'], nombre_documento, "_" + random, "movimientos almacen")
+                    .subscribe(archivo_nombre=>{
+                      this.IngresoProductoservicios.AgregarCompraMercaderia(
+                        formulario.value.almacen.id,
+                        1,
+                        1,
+                        formulario.value.proveedor.id,
+                        formulario.value.fecingreso,
+                        nombre_documento,
+                        this.documento_numero,
+                        formulario.value.observacion,
+                        archivo_nombre.mensaje
+                      ).subscribe (res => {
+                        let id_cabecera = res['data'];
+                        for (let i of formulario.value.productos) {
+                          for (let is of this.Series) {
+                            if (i.producto.id === is.id_producto) {
+                              this.SSeries.CrearProductoSerie(i.producto.id,is.serie, is.color, is.almacenamiento, is.precio).subscribe(response => {
+                                this.IngresoProductoservicios.CrearTransaccionDetalle(id_cabecera, response['data'], 1, is.precio, is.observacion).subscribe();
+                              });
+                            }
+                          }
                         }
-                      }
-                    }
-                    this.IngresoProductoForm.reset();
-                    this.enviado=false;
-                    this.Series = [];
-                    this.ResetearFormArray(this.productos);
-                    this.snackBar.open('El ingreso se guardó satisfactoriamente', '', {
-                      duration: 2000,
-                    });
-                  });
+                        this.IngresoProductoForm.reset();
+                        this.enviado=false;
+                        this.Series = [];
+                        this.ResetearFormArray(this.productos);
+                        this.RemoverArchivo();
+                        this.snackBar.open('El ingreso se guardó satisfactoriamente', '', {
+                          duration: 2000,
+                        });
+                      });
+                    })
+                  })
                 }
               }
             })

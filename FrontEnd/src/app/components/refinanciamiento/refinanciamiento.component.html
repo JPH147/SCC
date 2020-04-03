@@ -1,9 +1,6 @@
 <mat-card>
-
   <button mat-mini-fab type="button" color="primary" (click)="Atras()"><mat-icon>keyboard_arrow_left</mat-icon></button>
-
   <mat-card-title class="tituloProd"> Refinanciamiento de deuda </mat-card-title>
-
     <mat-horizontal-stepper linear="true">
 
       <mat-step [stepControl]="RefinanciamientoSeleccionForm">
@@ -257,7 +254,7 @@
 
             <mat-card-subtitle class="titulo-seccion">
               DATOS DEL CLIENTE
-              <button mat-icon-button type="button" class="icono" (click)="cliente_provisional ? EditarClienteProvisional() : EditarCliente()" *ngIf="RefinanciamientoArchivosForm.value.id_cliente"><mat-icon>edit</mat-icon></button>
+              <button mat-icon-button type="button" class="icono" (click)="EditarCliente()" *ngIf="RefinanciamientoArchivosForm.value.id_cliente"><mat-icon>edit</mat-icon></button>
             </mat-card-subtitle>
 
             <mat-grid-list cols=3 rowHeight="70px">
@@ -371,7 +368,7 @@
                   </mat-grid-tile>
 
                   <mat-grid-tile colspan="1" *ngIf="garante.value.id_cliente">
-                    <button *ngIf="!idventa" type="button" mat-icon-button color="primary" (click)="EditarContactoGarante(garante.value.id_cliente, i)"> <mat-icon> edit </mat-icon>  </button>
+                    <button type="button" mat-icon-button color="primary" (click)="EditarContactoGarante(garante.value.id_cliente, i)"> <mat-icon> edit </mat-icon>  </button>
                   </mat-grid-tile>
 
                 </mat-grid-list>
@@ -455,19 +452,6 @@
                   <input matInput type="number" placeholder="Días de premura para el contrato" formControlName="dias_premura">
                 </mat-form-field>
               </mat-grid-tile>
-
-              <!-- <mat-grid-tile colspan=2>
-                <mat-form-field class="columnas-2">
-                  <input placeholder="Trabajador" matInput [matAutocomplete]="Tauto" formControlName="trabajador" #InputTrabajador [readonly]="RefinanciamientoArchivosForm.value.id_trabajador">
-                  <mat-icon color="primary" matSuffix (click)="RemoverTrabajador()" *ngIf="RefinanciamientoArchivosForm.value.id_trabajador"> remove_circle </mat-icon>
-                  <mat-autocomplete #Tauto="matAutocomplete" (optionSelected)="TrabajadorSeleccionado()">
-                    <mat-option *ngFor="let trabajador of ListadoTrabajadores" [value]="trabajador">
-                      {{trabajador.nombre}}
-                    </mat-option>
-                  </mat-autocomplete>
-                </mat-form-field>
-              </mat-grid-tile> -->
-
             </mat-grid-list>
 
           </div>
