@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild,ElementRef, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
-import { Cliente } from './../clientes/clientes.service';
 import { IngresoProductoService } from './ingreso-productos.service';
 import {ServiciosProductoSerie} from '../global/productoserie';
 import { ServiciosGenerales, Almacen, ListarCliente, ListarVendedor } from './../global/servicios';

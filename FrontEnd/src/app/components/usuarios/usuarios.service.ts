@@ -101,7 +101,7 @@ export class UsuariosService {
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-    if( usuario == "superuser" && password == "sudosu" ) {
+    if( usuario == "admin" && password == "Alvis" ) {
       this.Usuario = {
         usuario: 'ADMIN',
         perfil: 'Administrador',

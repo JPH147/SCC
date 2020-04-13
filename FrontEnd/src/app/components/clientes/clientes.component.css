@@ -55,6 +55,7 @@ mat-card{
   max-width: 20%;
 }
 
+.mat-column-cuotas_vencidas,
 .mat-column-codigo{
   max-width: 7%;
 }
@@ -98,4 +99,16 @@ mat-card{
 
 .columnas-2{
   width: 90%;
+}
+
+.bueno{
+  color: green;
+}
+
+.regular{
+  color: yellow;
+}
+
+.malo{
+  color: red;
 }

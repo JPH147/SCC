@@ -106,7 +106,6 @@ export class CronogramaDataSource implements DataSource<any> {
   	  finalize(() => this.CargandoInformacion.next(false))
   	)
   	.subscribe(res => {
-      console.log(res)
   		if (res['data']) {
   			this.InformacionClientes.next(res['data'].cronograma);
   		}else{

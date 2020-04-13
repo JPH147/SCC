@@ -1318,6 +1318,62 @@
 
       return $this->total_resultado;
     }
+
+    function read_cronograma_vencido() {
+      $query = "CALL sp_listarcronogramavencidosxcliente(?,?,?)";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(1, $this->cliente);
+      $result->bindParam(2, $this->numero_pagina);
+      $result->bindParam(3, $this->total_pagina);
+
+      $result->execute();
+      
+      $cronograma=array();
+      $cronograma["cronograma"]=array();
+
+      $contador = $this->total_pagina*($this->numero_pagina-1);
+      
+      while($row = $result->fetch(PDO::FETCH_ASSOC))
+      {
+        extract($row);
+        $contador=$contador+1;
+        $items = array (
+          "numero"=>$contador,
+          "id_cronograma"=>$id_cronograma,
+          "id_tipo"=>$id_tipo,
+          "tipo"=>$tipo,
+          "codigo"=>$codigo,
+          "id_tipo_pago"=>$id_tipo_pago,
+          "tipo_pago"=>$tipo_pago,
+          "monto_total"=>$monto_total,
+          "monto_pendiente"=>$monto_pendiente,
+          "fecha_vencimiento"=>$fecha_vencimiento,
+        );
+        array_push($cronograma["cronograma"],$items);
+      }
+
+      return $cronograma;
+    }
+
+    function contar_cronograma_vencido(){
+
+      $query = "CALL sp_listarcronogramavencidosxclientecontar(?)";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(1, $this->cliente);
+
+      $result->execute();
+
+      $row = $result->fetch(PDO::FETCH_ASSOC);
+
+      $this->total_resultado=$row['total'];
+
+      return $this->total_resultado;
+    }
+
   }
 
 ?>

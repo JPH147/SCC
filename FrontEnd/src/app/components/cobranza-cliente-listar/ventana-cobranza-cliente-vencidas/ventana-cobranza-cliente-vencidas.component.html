@@ -1,0 +1,54 @@
+<mat-card class="card">
+
+  <mat-toolbar color="primary">
+    <mat-toolbar-row> Cuotas pendientes </mat-toolbar-row>
+  </mat-toolbar>
+
+	<mat-card-content>
+    <div class = "spinner-container" *ngIf = "ListadoCronograma.Cargando| async">
+      <mat-spinner></mat-spinner>
+    </div>
+
+    <mat-table [dataSource]="ListadoCronograma" class="mat-elevation-z8">
+
+      <ng-container matColumnDef="numero">
+        <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+        <mat-cell *matCellDef="let conograma"> {{conograma.numero}}  </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="tipo">
+        <mat-header-cell *matHeaderCellDef> Tipo </mat-header-cell>
+        <mat-cell *matCellDef="let conograma"> {{conograma.tipo}}  </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="codigo">
+        <mat-header-cell *matHeaderCellDef> Código </mat-header-cell>
+        <mat-cell *matCellDef="let conograma"> {{conograma.codigo}}  </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="fecha">
+        <mat-header-cell *matHeaderCellDef> Fecha </mat-header-cell>
+        <mat-cell *matCellDef="let conograma"> {{conograma.fecha_vencimiento | date:"dd/MM/yyyy"}} </mat-cell>
+	    </ng-container>
+
+      <ng-container matColumnDef="monto_total">
+        <mat-header-cell *matHeaderCellDef> Total </mat-header-cell>
+        <mat-cell *matCellDef="let conograma"> {{conograma.monto_total | currency:'S/.'}} </mat-cell>
+      </ng-container>
+
+      <!-- <ng-container matColumnDef="opciones">
+        <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
+        <mat-cell *matCellDef="let conograma">
+          <button mat-icon-button matTooltip="Ver detalle" color="primary" (click)="VerConograma(conograma)"><mat-icon> visibility </mat-icon></button>
+        </mat-cell>
+      </ng-container> -->
+
+      <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: Columnas;"></mat-row>
+    </mat-table>
+
+    <mat-paginator [length]="ListadoCronograma.TotalResultados | async" [pageSize]="5"></mat-paginator>
+
+	</mat-card-content>
+
+</mat-card>

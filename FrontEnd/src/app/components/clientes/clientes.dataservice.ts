@@ -1,11 +1,11 @@
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
-import {Cliente, ClienteService} from './clientes.service';
+import {ClienteService} from './clientes.service';
 import {BehaviorSubject, Observable, of} from 'rxjs';
 import {catchError, finalize} from 'rxjs/operators';
 
-export class ClienteDataSource implements DataSource<Cliente> {
+export class ClienteDataSource implements DataSource<any> {
 
-  private InformacionClientes = new BehaviorSubject<Cliente[]>([]);
+  private InformacionClientes = new BehaviorSubject<any[]>([]);
   public CargandoInformacion = new BehaviorSubject<boolean>(false);
   public Cargando = this.CargandoInformacion.asObservable();
   public TotalResultados = new BehaviorSubject<number>(0);
@@ -14,7 +14,7 @@ export class ClienteDataSource implements DataSource<Cliente> {
     private Servicio: ClienteService
   ) {}
 
-  connect(collectionViewer: CollectionViewer): Observable<Cliente[]> {
+  connect(collectionViewer: CollectionViewer): Observable<any[]> {
     return this.InformacionClientes.asObservable();
   }
 

@@ -1,4 +1,9 @@
 <?php
+
+require '../vendor/autoload.php';
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 Class Cliente{
 
     private $conn;
@@ -50,6 +55,7 @@ Class Cliente{
     public $prpagina;
     public $prtotalpagina;
 
+    public $path_reporte = '../uploads/reporte-clientes/';
 
     public function __construct($db){
         $this->conn = $db;
@@ -180,7 +186,8 @@ Class Cliente{
                 "calificacion_personal"=>$row['calificacion_personal'],
                 "aporte"=>$row['aporte'],
                 "fecharegistro"=>$row['fecha_registro'],
-                "foto"=>$row['foto']
+                "foto"=>$row['foto'],
+                "cuotas_vencidas"=>$row['cuotas_vencidas']
             );
 
             array_push($cliente_list["clientes"],$cliente_item);
@@ -645,7 +652,74 @@ Class Cliente{
         );
 
         return $cliente;
+    }
 
+    function read_comercial_unlimited() {
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+  
+        $query = "CALL sp_listarclienteestrictounlimited(?,?,?,?,?,?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->clt_codigo);
+        $result->bindParam(2, $this->clt_cip);
+        $result->bindParam(3, $this->clt_dni);
+        $result->bindParam(4, $this->clt_nombre);
+        $result->bindParam(5, $this->clt_cargo);
+        $result->bindParam(6, $this->ssd_nombre);
+        $result->bindParam(7, $this->clt_estado);
+
+        $result->execute();
+        
+        $archivo = "" ;
+        $cobranza=array();
+        $cobranza["clientes"]=array();
+  
+        $contador = 1;
+  
+        $sheet->setCellValue('A1', 'N°');
+        $sheet->setCellValue('B1', 'Código');
+        $sheet->setCellValue('C1', 'DNI');
+        $sheet->setCellValue('D1', 'Nombre');
+        $sheet->setCellValue('E1', 'CIP');
+        $sheet->setCellValue('F1', 'Email');
+        $sheet->setCellValue('G1', 'Cargo');
+        $sheet->setCellValue('H1', 'Casilla');
+        $sheet->setCellValue('I1', 'Subsede');
+        $sheet->setCellValue('J1', 'Trabajo');
+        $sheet->setCellValue('K1', 'Cuotas vencidas');
+  
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $contador=$contador+1;
+  
+            $sheet->setCellValue('A' . $contador, $contador-1 );
+            $sheet->setCellValue('B' . $contador, $codigo );
+            $sheet->setCellValue('C' . $contador, $dni );
+            $sheet->setCellValue('D' . $contador, $nombre );
+            $sheet->setCellValue('E' . $contador, $cip );
+            $sheet->setCellValue('F' . $contador, $email );
+            $sheet->setCellValue('G' . $contador, $cargo );
+            $sheet->setCellValue('H' . $contador, $casilla );
+            $sheet->setCellValue('I' . $contador, $subsede );
+            $sheet->setCellValue('J' . $contador, $trabajo );
+            $sheet->setCellValue('K' . $contador, $cuotas_vencidas );
+        }
+  
+        $writer = new Xlsx($spreadsheet);
+  
+        $archivo = $this->path_reporte.$this->archivo.'.xlsx';
+  
+        $writer->save($archivo);
+        
+        if( file_exists ( $archivo ) ){
+          return $archivo;
+        } else {
+          return false;
+        };
     }
 }
 ?>

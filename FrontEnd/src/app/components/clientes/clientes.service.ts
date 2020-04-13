@@ -14,15 +14,15 @@ export class ClienteService {
   constructor(private http: HttpClient) {}
 
   Listado(
-  codigo:string,
-  cip:string,
-  dni: string,
-  nombre: string,
-  cargo: string,
-  subsede: string,
-  prpagina: number,
-  prtotalpagina: number,
-  estado : number
+    codigo:string,
+    cip:string,
+    dni: string,
+    nombre: string,
+    cargo: string,
+    subsede: string,
+    prpagina: number,
+    prtotalpagina: number,
+    estado : number
   ): Observable<any>  {
      return this.http.get(this.url + 'cliente/read.php',{
        params: new HttpParams()
@@ -52,15 +52,15 @@ export class ClienteService {
   }
 
   ListadoComercial(
-  codigo:string,
-  cip:string,
-  dni: string,
-  nombre: string,
-  cargo: string,
-  subsede: string,
-  prpagina: number,
-  prtotalpagina: number,
-  estado : number
+    codigo:string,
+    cip:string,
+    dni: string,
+    nombre: string,
+    cargo: string,
+    subsede: string,
+    prpagina: number,
+    prtotalpagina: number,
+    estado : number
   ): Observable<any>  {
      return this.http.get(this.url + 'cliente/read-comercial.php',{
        params: new HttpParams()
@@ -468,24 +468,36 @@ export class ClienteService {
      }
    }));
   }
+
+  ListarClientesUnlimited(
+    archivo:string,
+    codigo:string,
+    cip:string,
+    dni: string,
+    nombre: string,
+    cargo: string,
+    subsede: string,
+    estado : number
+  ) : Observable <any> {
+    let params = new HttpParams()
+      .set('prarchivo',archivo)
+      .set('prcodigo',codigo)
+      .set('prcip',cip)
+      .set('prdni',dni)
+      .set('prnombre',nombre)
+      .set('prcargo',cargo)
+      .set('prsubsede',subsede)
+      .set('prestado', estado.toString())
+
+    return this.http.get(this.url + 'cliente/read-comercial-unlimited.php', {params})
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res['data'];
+      } else {
+        console.log('No hay datos que mostrar');
+        console.log(res);
+        return false;
+      }
+    }));
+  }
 }
-
-export interface Cliente {
-  id: number;
-  numero: number;
-  institucion: string;
-  codigo: string;
-  dni: string;
-  nombre: string;
-  cip: string;
-  email: string;
-  casilla: string;
-  trabajo: string;
-  cargo: string;
-  calificacioncrediticia: string;
-  calificacionpersonal: string;
-  aporte: number;
-  foto: string;
-}
-
-

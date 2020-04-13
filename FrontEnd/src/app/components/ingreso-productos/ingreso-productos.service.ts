@@ -1,5 +1,4 @@
 import { URL } from './../global/url';
-// import { IngresoProductoService } from './ingreso-producto.service';
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';

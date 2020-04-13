@@ -19,6 +19,9 @@ import {ServiciosDirecciones} from '../global/direcciones';
 import { Notificaciones } from '../global/notificacion';
 import {VentanaFotoComponent} from './ventana-foto/ventana-foto.component';
 import { VentanaVentasComponent } from './ventana-ventas/ventana-ventas.component'
+import { ArchivosService } from '../global/archivos';
+import {saveAs} from 'file-saver';
+import { VentanaCobranzaClienteVencidasComponent } from '../cobranza-cliente-listar/ventana-cobranza-cliente-vencidas/ventana-cobranza-cliente-vencidas.component'
 
 @Component({
   selector: 'app-clientes',
@@ -30,7 +33,10 @@ import { VentanaVentasComponent } from './ventana-ventas/ventana-ventas.componen
 export class ClientesComponent implements OnInit {
 
   ListadoCliente: ClienteDataSource;
-  Columnas: string[] = ['numero', 'foto', 'codigo' , 'dni', 'nombrecliente', 'cargo' ,  'opciones'];
+  public Columnas: string[] = [];
+  public ColumnasGeneral: string[] = ['numero', 'foto', 'codigo' , 'dni', 'nombrecliente', 'cargo' ,  'opciones'];
+  public ColumnasComercial: string[] = ['numero', 'foto', 'codigo' , 'dni', 'nombrecliente', 'cargo' , 'cuotas_vencidas',  'opciones'];
+  public relacion : boolean = false ;
   public maestro;
   public estado: number ;
   
@@ -52,13 +58,15 @@ export class ClientesComponent implements OnInit {
     private STelefonos: ServiciosTelefonos,
     private SDirecciones: ServiciosDirecciones,
     private Notificacion: Notificaciones,
-    private router: Router
+    private router: Router,
+    private AServicio : ArchivosService,    
   ) {}
 
   ngOnInit() {
     this.ListadoCliente = new ClienteDataSource(this.Servicio);
     this.ListadoCliente.CargarClientes(false,'','', '','','','',1, 10,1);
     this.estado=1;
+    this.Columnas = this.ColumnasGeneral ;
   }
 
   ngAfterViewInit() {
@@ -68,8 +76,7 @@ export class ClientesComponent implements OnInit {
       fromEvent(this.FiltroCodigo.nativeElement, 'keyup'),
       fromEvent(this.FiltroCIP.nativeElement, 'keyup'),
       fromEvent(this.FiltroCargo.nativeElement, 'keyup'),
-      fromEvent(this.FiltroSubsede.nativeElement, 'keyup'),
-      this.FiltroRelacion.change
+      fromEvent(this.FiltroSubsede.nativeElement, 'keyup')
     ).pipe(
       debounceTime(200),
       distinctUntilChanged(),
@@ -78,6 +85,21 @@ export class ClientesComponent implements OnInit {
           this.paginator.pageIndex=0;
           this.CargarData();
         // }
+      })
+     ).subscribe();
+
+     this.FiltroRelacion.change
+     .pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      tap(() => {
+        if( this.FiltroRelacion.checked ) {
+          this.Columnas = this.ColumnasComercial ;
+        } else {
+          this.Columnas = this.ColumnasGeneral ;
+        }
+        this.paginator.pageIndex=0;
+        this.CargarData();
       })
      ).subscribe();
 
@@ -107,16 +129,12 @@ export class ClientesComponent implements OnInit {
   }
   
   Agregar() {
-    // tslint:disable-next-line:prefer-const
     let VentanaClientes = this.DialogoClientes.open(VentanaEmergenteClientes, {
       width: '1200px'
     });
 
     VentanaClientes.afterClosed().subscribe(res => {
      this.CargarData();
-     /*this.snackBar.open('Se creó el cliente satisfactoriamente.', '', {
-       duration: 2500
-     });*/
    });
   }
 
@@ -153,8 +171,6 @@ export class ClientesComponent implements OnInit {
   }
 
   AgregarDatoContacto(cliente) {
-    // tslint:disable-next-line:prefer-const
-    // console.log(cliente);
     let VentanaContacto = this.DialogoContacto.open(VentanaEmergenteContacto, {
       width: '1200px',
       data: cliente
@@ -248,6 +264,39 @@ export class ClientesComponent implements OnInit {
         })
       }
     });
+  }
+
+  ExportToExcel(){
+    let nombre_archivo : string = "reporte_clientes_" + new Date().getTime();
+
+    this.Servicio.ListarClientesUnlimited(
+      nombre_archivo,
+      this.FiltroCodigo.nativeElement.value,
+      this.FiltroCIP.nativeElement.value,
+      this.FiltroDni.nativeElement.value,
+      this.FiltroNombre.nativeElement.value,
+      this.FiltroCargo.nativeElement.value,
+      this.FiltroSubsede.nativeElement.value,
+      this.estado
+    ).subscribe(res=>{
+      if(res){
+        this.AbrirArchivo(nombre_archivo,res);
+      }
+    })
+  }
+
+  AbrirArchivo(nombre_archivo,path){
+    this.AServicio.ObtenerArchivo(path).subscribe(res=>{
+      saveAs(res, nombre_archivo+'.xlsx');
+    })
+  }
+
+  VerDetalle(cliente){
+    console.log(cliente)
+    let Ventana = this.DialogoClientes.open( VentanaCobranzaClienteVencidasComponent,{
+      width: '900px' ,
+      data: { cliente: cliente.id }
+    } )
   }
 
 }

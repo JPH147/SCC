@@ -649,4 +649,27 @@ export class CobranzasService {
       }
     }));
   }
+
+  
+  // Esta función muestra las cuotas vencidas por cliente
+  ListarCronogramaVencidoxCliente(
+    cliente : number,
+    numero_pagina : number,
+    total_pagina : number,
+  ) : Observable <any> {
+    let params = new HttpParams()
+      .set('prcliente', cliente.toString())
+      .set('prpagina', numero_pagina.toString())
+      .set('prtotalpagina', total_pagina.toString())
+
+    return this.http.get(this.url + 'cobranza/read-cronograma-vencidosxcliente.php', {params})
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res;
+      } else {
+        console.log('No hay datos que mostrar');
+        return res;
+      }
+    }));
+  }
 }
