@@ -414,8 +414,6 @@ export class CobranzasService {
       .set('probservaciones', observaciones)
       .set('prdetalle', JSON.stringify(detalle) );
 
-    console.log(params);
-
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'cobranza/create-directa.php', params, {headers: headers});
@@ -567,6 +565,7 @@ export class CobranzasService {
     tipo_pago : number,
     fecha_inicio : Date,
     fecha_fin : Date,
+    nivel_mora : number,
     numero_pagina : number,
     total_pagina : number,
   ) : Observable <any> {
@@ -576,8 +575,9 @@ export class CobranzasService {
       .set('prsubsede', subsede)
       .set('prinstitucion', institucion)
       .set('prtipopago', tipo_pago.toString())
-      .set('prfechainicio', moment(fecha_inicio).format("YYYY-MM-DD"))
-      .set('prfechafin', moment(fecha_fin).format("YYYY-MM-DD"))
+      .set('prfechainicio', fecha_inicio ? moment(fecha_inicio).format("YYYY-MM-DD") : "")
+      .set('prfechafin', fecha_fin ? moment(fecha_fin).format("YYYY-MM-DD") : "")
+      .set('prnivelmora', nivel_mora.toString())
       .set('prpagina', numero_pagina.toString())
       .set('prtotalpagina', total_pagina.toString())
 
@@ -601,6 +601,7 @@ export class CobranzasService {
     tipo_pago : number,
     fecha_inicio : Date,
     fecha_fin : Date,
+    nivel_mora : number,
   ) : Observable <any> {
     let params = new HttpParams()
       .set('prarchivo', nombre_archivo)  
@@ -609,8 +610,9 @@ export class CobranzasService {
       .set('prsubsede', subsede)
       .set('prinstitucion', institucion)
       .set('prtipopago', tipo_pago.toString())
-      .set('prfechainicio', moment(fecha_inicio).format("YYYY-MM-DD"))
-      .set('prfechafin', moment(fecha_fin).format("YYYY-MM-DD"));
+      .set('prfechainicio', fecha_inicio ? moment(fecha_inicio).format("YYYY-MM-DD") : null)
+      .set('prfechafin', fecha_fin ? moment(fecha_fin).format("YYYY-MM-DD") : null)
+      .set('prnivelmora', nivel_mora.toString());
 
     return this.http.get(this.url + 'cobranza/read-cobranzasxcliente-unlimited.php', {params})
     .pipe(map(res => {
@@ -634,17 +636,19 @@ export class CobranzasService {
   ) : Observable <any> {
     let params = new HttpParams()
       .set('prcliente', cliente.toString())
-      .set('prfechainicio', moment(fecha_inicio).format("YYYY-MM-DD"))
-      .set('prfechafin', moment(fecha_fin).format("YYYY-MM-DD"))
+      .set('prfechainicio', fecha_inicio ? moment(fecha_inicio).format("YYYY-MM-DD") : "")
+      .set('prfechafin', fecha_fin ? moment(fecha_fin).format("YYYY-MM-DD") : "")
       .set('prpagina', numero_pagina.toString())
       .set('prtotalpagina', total_pagina.toString())
+
+    console.log(params)
 
     return this.http.get(this.url + 'cobranza/read-cronogramaxcliente.php', {params})
     .pipe(map(res => {
       if (res['codigo'] === 0) {
         return res;
       } else {
-        console.log('No hay datos que mostrar');
+        console.log('No hay datos que mostrar', res);
         return res;
       }
     }));

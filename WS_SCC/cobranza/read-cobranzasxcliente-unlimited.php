@@ -24,6 +24,7 @@
         $cobranza->tipo_pago = !empty($_GET['prtipopago']) ? trim($_GET['prtipopago']) : 0;
         $cobranza->fecha_inicio = !empty($_GET['prfechainicio']) ? trim($_GET['prfechainicio']) : null;
         $cobranza->fecha_fin = !empty($_GET['prfechafin']) ? trim($_GET['prfechafin']) : null;
+        $cobranza->nivel_mora = !empty($_GET['prnivelmora']) ? trim($_GET['prnivelmora']) : 0;
 
         $cobranza_list = $cobranza->read_cobranzasxclienteunlimited();
 

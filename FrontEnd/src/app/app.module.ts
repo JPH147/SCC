@@ -197,6 +197,7 @@ import { LoginComponent } from './login/login.component';
 import { InicioComponent } from './inicio/inicio.component';
 import { VentanaCobranzaClienteComponent } from './components/cobranza-cliente-listar/ventana-cobranza-cliente/ventana-cobranza-cliente.component';
 import { VentanaCobranzaClienteVencidasComponent } from './components/cobranza-cliente-listar/ventana-cobranza-cliente-vencidas/ventana-cobranza-cliente-vencidas.component';
+import { CobranzaClienteListarMorososComponent } from './components/cobranza-cliente-listar-morosos/cobranza-cliente-listar-morosos.component';
 
 export const CUSTOM_DATE_FORMAT = {
   parse: {
@@ -413,7 +414,8 @@ export const CUSTOM_DATE_FORMAT = {
     LoginComponent,
     InicioComponent,
     VentanaCobranzaClienteComponent,
-    VentanaCobranzaClienteVencidasComponent
+    VentanaCobranzaClienteVencidasComponent,
+    CobranzaClienteListarMorososComponent
    ],
   entryComponents: [
     AppComponent,

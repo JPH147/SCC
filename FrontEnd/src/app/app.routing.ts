@@ -55,6 +55,7 @@ import { CobranzaJudicialMultipleComponent } from './components/cobranza-judicia
 import { UsuariosComponent } from './components/usuarios/usuarios.component';
 import { InicioComponent } from './inicio/inicio.component';
 import { LoginComponent } from './login/login.component';
+import { CobranzaClienteListarMorososComponent } from './components/cobranza-cliente-listar-morosos/cobranza-cliente-listar-morosos.component';
 
 export const appRoutes: Routes = [
   {path: '', redirectTo: 'inicio', pathMatch: 'full'},
@@ -107,6 +108,7 @@ export const appRoutes: Routes = [
   {path: 'evaluacion-reglas', component: ReglasEvaluacionComponent},
   {path: 'cobranzas', component: CobranzasListarComponent},
   {path: 'cobranzas-cliente', component: CobranzaClienteListarComponent},
+  {path: 'cobranzas-cliente-morosos', component: CobranzaClienteListarMorososComponent},
   {path: 'cobranza-directa', component: CobranzaDirectaListarComponent},
   {path: 'cobranza-directa/nueva', component: CobranzaDirectaComponent},
   {path: 'cobranza-directa/ver/:idcobranza', component: CobranzaDirectaComponent},

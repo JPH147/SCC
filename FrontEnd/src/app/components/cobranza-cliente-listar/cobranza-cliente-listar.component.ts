@@ -46,8 +46,8 @@ export class CobranzaClienteListarComponent implements OnInit {
   ngOnInit() {
     this.ListarTipoPago();
 
-    this.fecha_inicio= moment(new Date()).startOf('month').toDate()
-    this.fecha_fin =  moment(new Date()).endOf('month').toDate()
+    this.fecha_inicio = null
+    this.fecha_fin = new Date()
 
     this.ListadoCobranza = new CobranzaDataSource(this.Servicio);
     this.ListadoCobranza.CargarCronograma( "" , "", "", "", 0, this.fecha_inicio, this.fecha_fin,1, 10 );
@@ -113,7 +113,8 @@ export class CobranzaClienteListarComponent implements OnInit {
       this.FiltroInstitucion.nativeElement.value,
       this.FiltroTipo.value,
       this.fecha_inicio,
-      this.fecha_fin
+      this.fecha_fin,
+      1
     ).subscribe(res=>{
       if(res){
         this.AbrirArchivo(nombre_archivo,res);
@@ -169,7 +170,7 @@ export class CobranzaDataSource implements DataSource<any> {
   ) {
     this.CargandoInformacion.next(true);
 
-    this.Servicio.ListarCobranzasxcliente( cliente, sede, subsede, institucion, tipo_pago, fecha_inicio, fecha_fin, numero_pagina, total_pagina )
+    this.Servicio.ListarCobranzasxcliente( cliente, sede, subsede, institucion, tipo_pago, fecha_inicio, fecha_fin, 1,numero_pagina, total_pagina )
     .pipe(
       catchError(() => of([])),
       finalize(() => this.CargandoInformacion.next(false))
@@ -179,5 +180,4 @@ export class CobranzaDataSource implements DataSource<any> {
       this.InformacionCobranzas.next(res['data'].cobranza);
     });
   }
-
 }

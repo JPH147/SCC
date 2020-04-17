@@ -46,6 +46,7 @@
     public $solo_directas;
     public $observaciones;
     public $detalle_cabecera;
+    public $nivel_mora;
 
     public function __construct($db){
       $this->conn = $db;
@@ -1127,7 +1128,7 @@
     }
 
     function read_cobranzasxcliente() {
-      $query = "CALL sp_listarcobranzasxcliente(?,?,?,?,?,?,?,?,?)";
+      $query = "CALL sp_listarcobranzasxcliente(?,?,?,?,?,?,?,?,?,?)";
 
       $result = $this->conn->prepare($query);
 
@@ -1138,8 +1139,9 @@
       $result->bindParam(5, $this->tipo_pago);
       $result->bindParam(6, $this->fecha_inicio);
       $result->bindParam(7, $this->fecha_fin);
-      $result->bindParam(8, $this->numero_pagina);
-      $result->bindParam(9, $this->total_pagina);
+      $result->bindParam(8, $this->nivel_mora);
+      $result->bindParam(9, $this->numero_pagina);
+      $result->bindParam(10, $this->total_pagina);
 
       $result->execute();
       
@@ -1172,7 +1174,7 @@
     // Estas funciones retornan la deuda acumulada de los clientes
     function contar_cobranzasxcliente(){
 
-      $query = "CALL sp_listarcobranzasxclientecontar(?,?,?,?,?,?,?)";
+      $query = "CALL sp_listarcobranzasxclientecontar(?,?,?,?,?,?,?,?)";
 
       $result = $this->conn->prepare($query);
 
@@ -1183,6 +1185,7 @@
       $result->bindParam(5, $this->tipo_pago);
       $result->bindParam(6, $this->fecha_inicio);
       $result->bindParam(7, $this->fecha_fin);
+      $result->bindParam(8, $this->nivel_mora);
 
       $result->execute();
 
@@ -1198,7 +1201,7 @@
       $spreadsheet = new Spreadsheet();
       $sheet = $spreadsheet->getActiveSheet();
 
-      $query = "CALL sp_listarcobranzasxclienteunlimited(?,?,?,?,?,?,?)";
+      $query = "CALL sp_listarcobranzasxclienteunlimited(?,?,?,?,?,?,?,?)";
 
       $result = $this->conn->prepare($query);
 
@@ -1209,6 +1212,7 @@
       $result->bindParam(5, $this->tipo_pago);
       $result->bindParam(6, $this->fecha_inicio);
       $result->bindParam(7, $this->fecha_fin);
+      $result->bindParam(8, $this->nivel_mora);
 
       $result->execute();
       
