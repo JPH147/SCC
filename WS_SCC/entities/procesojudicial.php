@@ -861,6 +861,52 @@ Class Proceso{
 
     return $procesos_list;
   }
+    
+  function read_documentostransaccionxproceso() {
+    $query = "CALL sp_listardocumentostransaccionxproceso(?)";
 
+    $result = $this->conn->prepare($query);
+
+    $result->bindParam(1, $this->id_proceso);
+    $result->execute();
+    
+    $documentos=array();
+    $documentos["documentos"]=array();
+
+    while($row = $result->fetch(PDO::FETCH_ASSOC))
+    {
+      extract($row);
+      $items = array (
+        "id_credito"=>$id_credito,
+        "pdf_foto_credito"=>$pdf_foto_credito,
+        "pdf_dni_credito"=>$pdf_dni_credito,
+        "pdf_cip_credito"=>$pdf_cip_credito,
+        "pdf_planilla_credito"=>$pdf_planilla_credito,
+        "pdf_voucher_credito"=>$pdf_voucher_credito,
+        "pdf_recibo_credito"=>$pdf_recibo_credito,
+        "pdf_casilla_credito"=>$pdf_casilla_credito,
+        "pdf_transaccion_credito"=>$pdf_transaccion_credito,
+        "pdf_autorizacion_credito"=>$pdf_autorizacion_credito,
+        "pdf_tarjeta_credito"=>$pdf_tarjeta_credito,
+        "pdf_compromiso_credito"=>$pdf_compromiso_credito,
+        "pdf_letra_credito"=>$pdf_letra_credito,
+        "pdf_ddjj_credito"=>$pdf_ddjj_credito,
+        "pdf_otros_credito"=>$pdf_otros_credito,
+        "id_venta"=>$id_venta,
+        "foto_pdf_venta"=>$foto_pdf_venta,
+        "contrato_pdf_venta"=> $contrato_pdf_venta,
+        "dni_pdf_venta"=>$dni_pdf_venta,
+        "cip_pdf_venta"=>$cip_pdf_venta,
+        "planilla_pdf_venta"=>$planilla_pdf_venta,
+        "letra_pdf_venta"=>$letra_pdf_venta,
+        "voucher_pdf_venta"=>$voucher_pdf_venta,
+        "autorizacion_pdf_venta"=>$autorizacion_pdf_venta,
+        "otros_pdf_venta"=>$otros_pdf_venta,
+      );
+      array_push($documentos["documentos"],$items);
+    }
+
+    return $documentos;
+  }
 }
 ?>

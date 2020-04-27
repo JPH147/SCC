@@ -50,6 +50,7 @@ import { RouterModule } from '@angular/router';
 import {appRoutes} from './app.routing';
 import {Notificaciones} from './components/global/notificacion';
 import { ServiciosGenerales } from './components/global/servicios';
+import { ChartistModule } from 'ng-chartist';
 
 /* Imports del software */
 import {AppComponent} from './app.component';
@@ -198,6 +199,10 @@ import { InicioComponent } from './inicio/inicio.component';
 import { VentanaCobranzaClienteComponent } from './components/cobranza-cliente-listar/ventana-cobranza-cliente/ventana-cobranza-cliente.component';
 import { VentanaCobranzaClienteVencidasComponent } from './components/cobranza-cliente-listar/ventana-cobranza-cliente-vencidas/ventana-cobranza-cliente-vencidas.component';
 import { CobranzaClienteListarMorososComponent } from './components/cobranza-cliente-listar-morosos/cobranza-cliente-listar-morosos.component';
+import { ReporteMorosidadComponent } from './inicio/reporte-morosidad/reporte-morosidad.component';
+
+import { VentanaEmergenteIntegralEditarComponent } from './components/clientes/ventana-emergente-integral-editar/ventana-emergente-integral-editar.component';
+import { VentanaEmergenteIntegralAgregarComponent } from './components/clientes/ventana-emergente-integral-agregar/ventana-emergente-integral-agregar.component';
 
 export const CUSTOM_DATE_FORMAT = {
   parse: {
@@ -261,6 +266,7 @@ export const CUSTOM_DATE_FORMAT = {
     MatNativeDateModule,
     ReactiveFormsModule,
     LayoutModule,
+    ChartistModule,
     RouterModule.forRoot(appRoutes),
     ImageUploadModule.forRoot()
   ],
@@ -415,7 +421,10 @@ export const CUSTOM_DATE_FORMAT = {
     InicioComponent,
     VentanaCobranzaClienteComponent,
     VentanaCobranzaClienteVencidasComponent,
-    CobranzaClienteListarMorososComponent
+    CobranzaClienteListarMorososComponent,
+    ReporteMorosidadComponent,
+    VentanaEmergenteIntegralEditarComponent,
+    VentanaEmergenteIntegralAgregarComponent
    ],
   entryComponents: [
     AppComponent,
@@ -435,7 +444,6 @@ export const CUSTOM_DATE_FORMAT = {
     FileUpload,
     FileUploadProveedores,
     FileUploadVendedores,
-    VentanaEmergenteContacto,
     VentanaEmergenteStock,
     VentasComponent,
     ImagenProductoComponent,
@@ -487,7 +495,10 @@ export const CUSTOM_DATE_FORMAT = {
     VentanaUsuariosComponent,
     VentanaPermisosComponent,
     VentanaCobranzaClienteComponent,
-    VentanaCobranzaClienteVencidasComponent
+    VentanaCobranzaClienteVencidasComponent,
+    VentanaEmergenteIntegralEditarComponent,
+    VentanaEmergenteIntegralAgregarComponent,
+    VentanaEmergenteContacto,
   ],
   bootstrap: [AppComponent],
   providers: [

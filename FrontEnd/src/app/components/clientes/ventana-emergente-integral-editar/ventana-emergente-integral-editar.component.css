@@ -1,0 +1,66 @@
+.input-ventanaa{ 
+  width:85%
+}
+
+.input-ventana{ 
+  width:88%
+}
+
+.input-ventanac{ 
+  width:92%
+}
+
+.mat-card-header{
+  background-color: #673ab7;
+  color: #fff;
+  padding-top: 20px;
+  justify-content: center;
+}
+
+.card{
+  padding: 0px;
+  overflow: hidden;
+}
+
+.mat-card-title{
+  font-weight: bold;
+  align-content: center; 
+  font-size: 16px;
+}
+
+.subtitulo{
+  margin-left: 20px;
+  margin-bottom: 0px !important;
+  margin-top: 20px;
+  font-weight: bold;
+  color: #006064;
+}
+
+.grande{
+	width: 86.67%
+}
+
+.mat-column-cuenta-numero,
+.mat-column-cuenta-opciones,
+.mat-column-cuenta-relevancia{
+	max-width: 10%
+}
+
+.mat-column-telefono-numero,
+.mat-column-telefono-opciones,
+.mat-column-telefono-relevancia{
+	max-width: 10%
+}
+
+.mat-column-direccion-numero,
+.mat-column-direccion-opciones,
+.mat-column-direccion-relevancia{
+	max-width: 10%
+}
+
+mat-table{
+  width: 93.33%;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+}

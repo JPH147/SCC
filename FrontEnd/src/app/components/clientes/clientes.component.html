@@ -44,7 +44,7 @@
     <mat-grid-tile colspan=1>
       <mat-icon>search</mat-icon>
       <mat-form-field class="columnas-1">
-        <input matInput placeholder="Nombre" #InputNombre>
+        <input matInput placeholder="Apellidos y nombres" #InputNombre>
       </mat-form-field>
     </mat-grid-tile>
 
@@ -110,9 +110,10 @@
       <ng-container matColumnDef="cuotas_vencidas">
         <mat-header-cell *matHeaderCellDef> Cuotas vencidas </mat-header-cell>
         <mat-cell *matCellDef="let cliente"> 
-          <mat-icon *ngIf="cliente.cuotas_vencidas == 0" class="bueno" (click)="VerDetalle(cliente)"> brightness_1 </mat-icon>
-          <mat-icon *ngIf="cliente.cuotas_vencidas > 0 && cliente.cuotas_vencidas < 2" class="regular" (click)="VerDetalle(cliente)"> brightness_1 </mat-icon>
-          <mat-icon *ngIf="cliente.cuotas_vencidas >= 2" class="malo" (click)="VerDetalle(cliente)"> brightness_1 </mat-icon>
+          <mat-icon *ngIf="cliente.cuotas_vencidas == 0 && cliente.verificado==0" class="bueno-pendiente" (click)="VerDetalle(cliente, true)"> brightness_1 </mat-icon>
+          <mat-icon *ngIf="cliente.cuotas_vencidas == 0 && cliente.verificado==1" class="bueno" (click)="VerDetalle(cliente, false)"> brightness_1 </mat-icon>
+          <mat-icon *ngIf="cliente.cuotas_vencidas > 0 && cliente.cuotas_vencidas < 3" class="regular" (click)="VerDetalle(cliente, false)"> brightness_1 </mat-icon>
+          <mat-icon *ngIf="cliente.cuotas_vencidas >= 3" class="malo" (click)="VerDetalle(cliente, false)"> brightness_1 </mat-icon>
         </mat-cell>
       </ng-container>      
 
@@ -120,7 +121,7 @@
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let cliente">
           <ng-container *ngIf="estado==1">
-            <button mat-icon-button matTooltip="Agregar datos de contacto" (click)="AgregarDatoContacto(cliente.id)" color="primary"><mat-icon> local_phone </mat-icon></button>
+            <!-- <button mat-icon-button matTooltip="Agregar datos de contacto" (click)="AgregarDatoContacto(cliente.id)" color="primary"><mat-icon> local_phone </mat-icon></button> -->
             <button mat-icon-button matTooltip="Subir foto" color="primary" (click)="SubirImagen(cliente)"><mat-icon> add_a_photo </mat-icon></button>
             <!-- <button mat-icon-button matTooltip="Realizar venta" color="primary" (click)="HacerVenta(cliente.id)"><mat-icon> add_shopping_cart </mat-icon></button> -->
             <button mat-icon-button matTooltip="Ver ventas" color="primary" (click)="VerVentas(cliente)"><mat-icon> monetization_on </mat-icon></button>

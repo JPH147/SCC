@@ -23,3 +23,9 @@ mat-panel-title{
 	color: #dedede !important;
 	padding-left: 8px
 }
+
+.inicio{
+	padding: 0 24px;
+	cursor: pointer;
+	font-size: 18px;
+}

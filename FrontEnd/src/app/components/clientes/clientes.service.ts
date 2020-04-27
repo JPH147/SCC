@@ -5,7 +5,9 @@ import {map} from 'rxjs/operators';
 import {URL,URLIMAGENES} from '../global/url';
 import * as moment from 'moment';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 
 export class ClienteService {
 
@@ -499,5 +501,15 @@ export class ClienteService {
         return false;
       }
     }));
+  }
+  
+  VerificarPagosCliente(
+    id_cliente:number
+  ){
+    let params = new HttpParams()
+    .set('idcliente', id_cliente.toString())
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    return this.http.post(this.url + 'cliente/verificar-pagos.php', params, {headers: headers});
   }
 }

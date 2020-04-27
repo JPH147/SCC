@@ -45,6 +45,7 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
   public penalidad_porcentaje : number ;
   public editar_expediente : number = 3 ;
   public editar_juzgado : number = 3 ;
+  public DocumentosTransaccion : Array<any> = [] ;
 
   constructor(
     private router : Router ,
@@ -207,7 +208,8 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
     this.Cargando.next(true);
     forkJoin(
       this._judicial.ListarxId( id_proceso ) ,
-      this._judicial.ListarDetallexProceso( id_proceso )  
+      this._judicial.ListarDetallexProceso( id_proceso ) ,
+      this._judicial.ListarDocumentosTransaccionxProceso( id_proceso )
     )
     .pipe(
       finalize(()=>this.Cargando.next(false))
@@ -246,6 +248,7 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
                           }) ;
                         }
       this.CargarDetalleAnterior(id_proceso);
+      this.DocumentosTransaccion = res[2];
     })
   }
 
@@ -505,7 +508,6 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
   }
 
   AbrirDocumento(archivo){
-    // console.log(archivo);
     if(archivo){
       window.open(archivo, "_blank");
     }

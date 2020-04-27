@@ -19,7 +19,7 @@ import { Router } from '@angular/router';
 
 export class VentanaVentasComponent implements OnInit {
 
-  public estado : string;
+  public estado : number;
   public fecha : Date;
 
   @ViewChild('InputDocumento', { static: true }) FiltroDocumento: ElementRef;
@@ -38,10 +38,10 @@ export class VentanaVentasComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.estado="0";
+    this.estado=0;
     this.fecha = new Date();
     this.ListadoVentas = new VentasClienteDataSource(this.Servicio);
-    this.ListadoVentas.CargarVentas(this.data.id, "", this.fecha, '0', 1, 5);
+    this.ListadoVentas.CargarVentas(this.data.id, "", this.fecha, 0, 1, 5);
   }
 
   ngAfterViewInit(){
@@ -74,7 +74,8 @@ export class VentanaVentasComponent implements OnInit {
       this.fecha,
       this.estado,
       this.paginator.pageIndex+1,
-      this.paginator.pageSize)
+      this.paginator.pageSize
+    )
   }
 
   HacerVenta(){
@@ -128,7 +129,7 @@ export class VentasClienteDataSource implements DataSource<any> {
     id_cliente: number,
     documento:string,
     fecha:Date,
-    estado:string,
+    estado:number,
     pagina: number,
     total_pagina: number
   ){

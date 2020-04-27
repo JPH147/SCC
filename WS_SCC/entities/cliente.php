@@ -187,7 +187,8 @@ Class Cliente{
                 "aporte"=>$row['aporte'],
                 "fecharegistro"=>$row['fecha_registro'],
                 "foto"=>$row['foto'],
-                "cuotas_vencidas"=>$row['cuotas_vencidas']
+                "cuotas_vencidas"=>$row['cuotas_vencidas'],
+                "verificado"=>$row['verificado'],
             );
 
             array_push($cliente_list["clientes"],$cliente_item);
@@ -721,5 +722,22 @@ Class Cliente{
           return false;
         };
     }
+
+    function verificar_transaccion(){
+        $query = "call sp_actualizarverificartransaccioncronograma(?)";
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->idcliente);
+
+        if($result->execute())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
 }
 ?>

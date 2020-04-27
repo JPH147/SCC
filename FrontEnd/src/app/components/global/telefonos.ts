@@ -5,7 +5,9 @@ import {map} from 'rxjs/operators';
 import {URL} from './url';
 
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 
 export class ServiciosTelefonos {
 

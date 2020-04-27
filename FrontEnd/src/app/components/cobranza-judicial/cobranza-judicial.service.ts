@@ -609,4 +609,21 @@ export class CobranzaJudicialService {
     }));
   }
 
+  ListarDocumentosTransaccionxProceso(
+    id_proceso : number , // 1. Préstamo, 2. Venta
+  ) :Observable<any> {
+    let params = new HttpParams()
+      .set('prid',id_proceso.toString()) ;
+
+    return this.http.get(this.url + 'procesojudicial/read-documentostransaccionesxproceso.php', {params})
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res['data'].documentos;
+      } else {
+        console.log('No hay datos que mostrar');
+        return [];
+      }
+    }));
+  }
+
 }

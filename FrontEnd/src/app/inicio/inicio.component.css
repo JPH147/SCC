@@ -1,6 +1,6 @@
 .imagen{
-  max-width: 30%;
-  max-height: 50vh;
+  max-width: 10%;
+  max-height: 10vh;
   position: relative;
   margin: auto;
   margin-top: 5%
@@ -8,4 +8,8 @@
 
 img{
   width: 100%
+}
+
+.dashboard-card{
+  width: 90%;
 }

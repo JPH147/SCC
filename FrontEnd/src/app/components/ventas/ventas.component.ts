@@ -1310,7 +1310,6 @@ export class VentasComponent implements OnInit {
   }
 
   EditarContactoCliente(){
-
     let id_cliente = this.VentasForm.value.id_cliente ? this.VentasForm.value.id_cliente : this.idcliente;
 
     let VentanaContacto = this.Dialogo.open(VentanaEmergenteContacto, {

@@ -44,13 +44,13 @@
 
           <mat-grid-tile colspan="2">
             <mat-form-field class="columnas-2">
-              <input matInput placeholder="Nombre" formControlName="nombre"  >
+              <input matInput placeholder="Apellidos y nombres" formControlName="nombre"  >
             </mat-form-field>
           </mat-grid-tile>
 
           <mat-grid-tile colspan="1">
             <mat-form-field class="columnas-1">
-              <input matInput placeholder="Casilla" formControlName="casilla">
+              <input matInput placeholder="Casilla física (SINOE)" formControlName="casilla">
               <mat-icon matSuffix color="accent" *ngIf="ClientesForm.value.casilla_real === 0 && ClientesForm.value.casilla==ClientesForm.value.casilla_consulta"> warning </mat-icon>
             </mat-form-field>
           </mat-grid-tile>
@@ -87,7 +87,7 @@
           
           <mat-grid-tile colspan="2">
             <mat-form-field class="columnas-2">
-              <input matInput placeholder="Nombre del garante" formControlName="nombre_garante">
+              <input matInput placeholder="Apellidos y nombres del garante" formControlName="nombre_garante">
             </mat-form-field>
           </mat-grid-tile>
         </mat-grid-list>
@@ -134,7 +134,7 @@
 
           <mat-grid-tile colspan="2">
             <mat-form-field class="columnas-2">
-              <mat-select placeholder='Estado' formControlName="cargo_estado">
+              <mat-select placeholder='Situación' formControlName="cargo_estado">
                 <mat-option *ngFor="let estado of Estados" [value] = "estado.id"> {{estado.nombre}} </mat-option>
               </mat-select>
             </mat-form-field>

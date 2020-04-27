@@ -301,7 +301,7 @@ export class VentaService {
     cliente:number,
     documento:string,
     fecha: Date,
-    estado:string,
+    estado:number,
     pagina:number,
     total_pagina:number,
   ){
@@ -310,7 +310,7 @@ export class VentaService {
       .set('prcliente',cliente.toString())
       .set('prdocumento',documento)
       .set('prfecha', moment(fecha).format("YYYY-MM-DD"))
-      .set('prestado',estado)
+      .set('prestado',estado.toString())
       .set('prpagina',pagina.toString())
       .set('prtotalpagina',total_pagina.toString())
 

@@ -36,19 +36,23 @@
         <mat-cell *matCellDef="let conograma"> {{conograma.monto_total | currency:'S/.'}} </mat-cell>
       </ng-container>
 
-      <!-- <ng-container matColumnDef="opciones">
-        <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
-        <mat-cell *matCellDef="let conograma">
-          <button mat-icon-button matTooltip="Ver detalle" color="primary" (click)="VerConograma(conograma)"><mat-icon> visibility </mat-icon></button>
-        </mat-cell>
-      </ng-container> -->
+      <ng-container matColumnDef="estado">
+        <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
+        <mat-cell *matCellDef="let conograma"> {{conograma.estado==1 ? "Pendiente" : "Pagado"}} </mat-cell>
+      </ng-container>
 
       <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>
       <mat-row *matRowDef="let row; columns: Columnas;"></mat-row>
     </mat-table>
 
     <mat-paginator [length]="ListadoCronograma.TotalResultados | async" [pageSize]="5"></mat-paginator>
-
-	</mat-card-content>
-
+  </mat-card-content>
+  
+  <mat-card-actions *ngIf="data.por_verificar">
+    <mat-grid-list cols=1 rowHeight="65px">
+      <mat-grid-tile>
+        <button mat-raised-button color="accent" (click)="Verificar()"> Verificar </button>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-card-actions>
 </mat-card>

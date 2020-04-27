@@ -1,0 +1,494 @@
+<mat-card class="card">
+
+  <mat-toolbar color="primary">
+    <mat-toolbar-row *ngIf="!data"><h4>Agregar Cliente</h4></mat-toolbar-row>
+    <mat-toolbar-row *ngIf="data">Editar cliente</mat-toolbar-row>
+  </mat-toolbar>
+
+
+  <div class = "spinner-container" *ngIf = "Cargando| async">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <mat-tab-group >
+    <mat-tab label="Datos generales">
+      <mat-card-content>
+        <form [formGroup]="ClientesForm" (ngSubmit)="Guardar(ClientesForm)">
+          <mat-card-content>
+
+            <ng-container>
+              <mat-card-subtitle class="subtitulo">
+                Datos Generales
+              </mat-card-subtitle>
+
+              <mat-grid-list cols="4" rowHeight="70px">
+
+                <mat-grid-tile colspan="1">
+                  <mat-form-field class="input-ventanaa">
+                    <input matInput placeholder="Código" formControlName="codigo" maxlength="10">
+                    <mat-hint align="end">{{ClientesForm.value.codigo?.length || 0}}/10</mat-hint>
+                  </mat-form-field>
+                </mat-grid-tile>
+
+                <mat-grid-tile colspan="1">
+                  <mat-form-field class="input-ventanaa">
+                    <input matInput placeholder="DNI"  formControlName="dni" maxlength="8" #InputCliente>
+                    <mat-error *ngIf="ClientesForm.get('dni').invalid">Debes escribir 8 dígitos</mat-error>
+                    <mat-hint align="end">{{ClientesForm.value.dni?.length || 0}}/8</mat-hint>
+                  </mat-form-field>
+                </mat-grid-tile>
+
+                <mat-grid-tile colspan="2">
+                  <mat-form-field class="input-ventana">
+                    <input matInput placeholder="Apellidos y nombres" formControlName="nombre"  >
+                  </mat-form-field>
+                </mat-grid-tile>
+
+                <mat-grid-tile colspan="1">
+                  <mat-form-field class="input-ventanaa">
+                    <input matInput placeholder="Casilla física (SINOE)" formControlName="casilla">
+                  </mat-form-field>
+                </mat-grid-tile>       
+            
+                <mat-grid-tile colspan="2">
+                  <mat-form-field class="input-ventana">
+                    <input matInput placeholder="Email" formControlName="email" email="true">
+                    <mat-error>Debe ser un email válido</mat-error>
+                  </mat-form-field>
+                </mat-grid-tile>
+
+                <!-- <mat-grid-tile *ngIf="this.data">
+                  <mat-form-field class="input-ventana">
+                    <input matInput placeholder="Dirección" formControlName="direccion" readonly>
+                  </mat-form-field>
+                </mat-grid-tile>
+
+                <mat-grid-tile *ngIf="this.data">
+                  <mat-form-field class="input-ventana">
+                    <input matInput placeholder="Teléfono" formControlName="telefono" readonly>
+                  </mat-form-field>
+                </mat-grid-tile>
+
+                <mat-grid-tile *ngIf="this.data">
+                  <mat-form-field class="input-ventana">
+                    <input matInput placeholder="Cuenta" formControlName="cuenta" readonly>
+                  </mat-form-field>
+                </mat-grid-tile> -->
+
+              </mat-grid-list>
+            </ng-container>
+
+            <ng-container>
+              <mat-card-subtitle class="subtitulo">
+                Datos Centro de Trabajo
+              </mat-card-subtitle>
+
+              <mat-grid-list cols="4" rowHeight="70px">
+
+                <mat-grid-tile colspan="1">
+                  <mat-form-field class="input-ventanaa"> 
+                    <mat-select placeholder='Institucion' formControlName="institucion" (selectionChange)="InstitucionSeleccionada($event)">
+                      <mat-option *ngFor="let institucion of Institucion" [value] = "institucion.id"> {{institucion.nombre}} </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </mat-grid-tile>
+
+                <mat-grid-tile colspan="2">
+                  <mat-form-field class="input-ventanac">
+                    <mat-select placeholder='Sede' formControlName="sede" (selectionChange)="SedeSeleccionada($event)">
+                      <mat-option *ngFor="let sede of Sede" [value] = "sede.id"> {{sede.nombre}} </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </mat-grid-tile>
+
+                <mat-grid-tile colspan="1">
+                  <mat-form-field class="input-ventanaa">
+                    <mat-select placeholder='Subsede' formControlName="subsede" >
+                      <mat-option *ngFor="let subsede of Subsede" [value] = "subsede.id"> {{subsede.nombre}} </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </mat-grid-tile>
+
+                <mat-grid-tile colspan="1">
+                  <mat-form-field class="input-ventanaa">
+                    <mat-select placeholder='Cargo' formControlName="cargo">
+                      <mat-option *ngFor="let cargo of Cargos" [value] = "cargo.id"> {{cargo.nombre}} </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </mat-grid-tile>
+
+                <mat-grid-tile colspan="2">
+                  <mat-form-field class="input-ventanac">
+                    <mat-select placeholder='Situación' formControlName="cargo_estado" >
+                      <mat-option *ngFor="let estado of Estados" [value] = "estado.id"> {{estado.nombre}} </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </mat-grid-tile>
+
+                <mat-grid-tile colspan="1">
+                  <mat-form-field class="input-ventanaa">
+                    <input matInput placeholder="CIP" formControlName="cip" maxlength="10">
+                    <mat-hint align="end">{{ClientesForm.value.cip?.length || 0}}/10</mat-hint>
+                  </mat-form-field>
+                </mat-grid-tile>
+
+              </mat-grid-list>
+            </ng-container>
+
+            <ng-container>
+              <mat-card-subtitle class="subtitulo">
+                Datos Direccion Centro de Trabajo
+              </mat-card-subtitle>
+
+              <mat-grid-list cols="3" rowHeight="70px">
+
+                <mat-grid-tile colspan="1">
+                  <mat-form-field class="input-ventanaa">
+                    <mat-select placeholder='Departamento' formControlName="departamento" (selectionChange)="DepartamentoSeleccionado($event)" >
+                      <mat-option *ngFor="let departamento of Departamentos" [value]="departamento.nombre">
+                        {{ departamento.nombre | uppercase }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </mat-grid-tile>
+
+                <mat-grid-tile colspan="1">
+                  <mat-form-field class="input-ventanaa">
+                    <mat-select placeholder='Provincia' formControlName="provincia" (selectionChange)="ProvinciaSeleccionada($event)">
+                      <mat-option *ngFor="let provincia of Provincias" [value]="provincia.nombre">
+                        {{ provincia.nombre | uppercase }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </mat-grid-tile>
+
+                <mat-grid-tile colspan="1">
+                  <mat-form-field class="input-ventanaa">
+                    <mat-select placeholder='Distrito' formControlName="distrito" >
+                      <mat-option *ngFor="let distrito of Distritos" [value]="distrito.id">
+                        {{ distrito.nombre | uppercase }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </mat-grid-tile>
+
+                <mat-grid-tile colspan="2">
+                  <mat-form-field class="input-ventanac">
+                    <input matInput placeholder="Dirección" formControlName="trabajo">
+                  </mat-form-field>
+                </mat-grid-tile>
+
+              </mat-grid-list>
+            </ng-container>
+
+            <ng-container>
+              <mat-card-subtitle class="subtitulo">
+                Información Complementaria
+              </mat-card-subtitle>
+
+              <mat-grid-list cols="4" rowHeight="70px">
+
+                <mat-grid-tile colspan="1">
+                  <mat-form-field class="input-ventanaa">
+                    <input matInput placeholder="Capacidad de pago" formControlName="capacidad_pago">
+                    <span matPrefix>S/. &nbsp; </span>
+                  </mat-form-field>
+                </mat-grid-tile>
+
+                <mat-grid-tile colspan="1">
+                  <mat-form-field class="input-ventanaa">
+                    <input matInput placeholder="Descuento máximo" formControlName="descuento_maximo">
+                    <span matPrefix>S/. &nbsp; </span>
+                  </mat-form-field>
+                </mat-grid-tile>
+
+                <mat-grid-tile colspan="1">
+                  <mat-form-field class="input-ventanaa">
+                    <input matInput placeholder="Calificación personal"  formControlName="calificacion_personal">
+                  </mat-form-field>
+                </mat-grid-tile>
+
+                <!-- <mat-grid-tile colspan="1">
+                  <mat-form-field class="input-ventanaa">
+                    <input matInput placeholder="Aporte" formControlName="aporte">
+                    <span matPrefix>S/. &nbsp; </span>
+                  </mat-form-field>
+                </mat-grid-tile> -->
+
+              </mat-grid-list>
+            </ng-container>
+
+          </mat-card-content>
+
+          <mat-card-actions>
+            <mat-grid-list cols=1 rowHeight="65px">
+
+              <mat-grid-tile *ngIf="cliente_nuevo==2">
+                <mat-error> El DNI ya se ha registrado anteriormente. </mat-error>
+              </mat-grid-tile>
+
+              <mat-grid-tile>
+                <button type="submit" mat-raised-button color="primary" [disabled]="( Cargando | async )||  ClientesForm.invalid || cliente_nuevo==2" matTooltip="Grabar"> Guardar </button>
+                <!-- <button type="button" mat-raised-button (click)="Imprimir()">Imprimir</button> -->
+              </mat-grid-tile>
+            </mat-grid-list>
+          </mat-card-actions>
+
+        </form>
+      </mat-card-content>
+    </mat-tab>
+
+    <mat-tab label="Telefonos">
+      <mat-card-content>
+        <form [formGroup]="TelefonosForm">
+          <mat-grid-list cols=4 rowHeight="70px">
+
+            <mat-grid-tile>
+              <mat-form-field>
+                <mat-select placeholder="Tipo" formControlName="tipo">
+                  <mat-option *ngFor="let tipo of Tipos" [value]="tipo.id">{{tipo.viewValue}}</mat-option>
+                </mat-select>
+                <mat-error>Este campo es obligatorio</mat-error>
+              </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile colspan=2>
+              <mat-form-field class="columnas-2">
+                <input matInput placeholder="Número" formControlName="telefono" maxlength=9>
+                <mat-error>Debe ingresar entre 6 y 9 dígitos</mat-error>
+                <mat-hint align="end">{{TelefonosForm.value.telefono?.length || 0}}/9</mat-hint>
+              </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+              <button mat-raised-button color="primary" type="button" [disabled]="TelefonosForm.invalid" (click)="AgregarTelefono()">Agregar</button>
+            </mat-grid-tile>
+
+          </mat-grid-list>
+        </form>
+
+        <div class = "spinner-container" *ngIf = "ListadoTelefonos.Cargando| async">
+          <mat-spinner></mat-spinner>
+        </div>
+
+        <mat-table [dataSource]="ListadoTelefonos" class="mat-elevation-z8">
+
+          <ng-container matColumnDef="telefono-numero">
+            <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+            <mat-cell *matCellDef="let telefono"> {{telefono.numero}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="telefono-tipo">
+            <mat-header-cell *matHeaderCellDef> Tipo </mat-header-cell>
+            <mat-cell *matCellDef="let telefono" [ngSwitch]="telefono.id_tipo">
+              <ng-container *ngSwitchCase=1> Celular </ng-container>
+              <ng-container *ngSwitchCase=2> Casa </ng-container>
+              <ng-container *ngSwitchCase=3> Trabajo </ng-container>
+              <ng-container *ngSwitchCase=4> Otro </ng-container>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="telefono-numero_telefono">
+            <mat-header-cell *matHeaderCellDef> Número </mat-header-cell>
+            <mat-cell *matCellDef="let telefono"> {{telefono.tlf_numero}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="telefono-relevancia">
+            <mat-header-cell *matHeaderCellDef> Relevancia </mat-header-cell>
+            <mat-cell *matCellDef="let telefono">
+              <button mat-icon-button *ngIf="telefono.tlf_relevancia==2" (click)="EstablecerTelefonoPrimario(telefono.id)"> <mat-icon> star_border </mat-icon> </button>
+              <button mat-icon-button *ngIf="telefono.tlf_relevancia==1" color="accent"> <mat-icon> star </mat-icon> </button>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="telefono-opciones">
+            <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
+            <mat-cell *matCellDef="let telefono">
+              <button mat-icon-button matTooltip="Eliminar" color="primary" (click)="EliminarTelefono(telefono)"><mat-icon> delete </mat-icon></button>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="ColumnasTelefonos"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: ColumnasTelefonos;"></mat-row>
+        </mat-table>
+
+        <mat-paginator #PaginadorTelefonos [length]="ListadoTelefonos.TotalResultados | async" [pageSize]="5"></mat-paginator>
+
+      </mat-card-content>
+    </mat-tab>
+
+    <mat-tab label="Direcciones">
+      <mat-card-content>
+        
+        <form [formGroup]="DireccionesForm">
+          <mat-grid-list cols=4 rowHeight="70px">
+
+            <mat-grid-tile>
+              <mat-form-field>
+                <mat-select placeholder="Departamento" formControlName="departamento" (selectionChange)="DepartamentoSeleccionado2($event)">
+                  <mat-option *ngFor="let departamento of LstDepartamento" [value]="departamento.nombre">{{departamento.nombre  | uppercase }}</mat-option>
+                </mat-select>
+                <mat-error>Este campo es obligatorio</mat-error>
+              </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+              <mat-form-field>
+                <mat-select placeholder="Provincia" formControlName="provincia" (selectionChange)="ProvinciaSeleccionada2($event)">
+                  <mat-option *ngFor="let provincia of LstProvincia" [value]="provincia.nombre">{{provincia.nombre  | uppercase }}</mat-option>
+                </mat-select>
+                <mat-error>Este campo es obligatorio</mat-error>
+              </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+              <mat-form-field>
+                <mat-select placeholder="Distrito" formControlName="distrito">
+                  <mat-option *ngFor="let distrito of LstDistrito" [value]="distrito.id">{{distrito.nombre  | uppercase }}</mat-option>
+                </mat-select>
+                <mat-error>Este campo es obligatorio</mat-error>
+              </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile colspan=3>
+              <mat-form-field class="grande">
+                <input matInput placeholder="Dirección" formControlName="nombre">
+                <mat-error>Este campo es obligatorio</mat-error>
+              </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+              <button mat-raised-button color="primary" type="button" [disabled]="DireccionesForm.invalid" (click)="AgregarDireccion()">Agregar</button>
+            </mat-grid-tile>
+
+          </mat-grid-list>
+        </form>
+
+        <div class = "spinner-container" *ngIf = "ListadoDirecciones.Cargando| async">
+          <mat-spinner></mat-spinner>
+        </div>
+
+        <mat-table [dataSource]="ListadoDirecciones" class="mat-elevation-z8">
+
+          <ng-container matColumnDef="direccion-numero">
+            <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+            <mat-cell *matCellDef="let direccion"> {{direccion.numero}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="direccion-nombre">
+            <mat-header-cell *matHeaderCellDef> Número </mat-header-cell>
+            <mat-cell *matCellDef="let direccion"> {{direccion.direccioncompleta}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="direccion-relevancia">
+            <mat-header-cell *matHeaderCellDef> Relevancia </mat-header-cell>
+            <mat-cell *matCellDef="let direccion">
+              <button mat-icon-button *ngIf="direccion.relevancia==2" (click)="EstablecerDireccionPrimaria(direccion.id)"> <mat-icon> star_border </mat-icon> </button>
+              <button mat-icon-button *ngIf="direccion.relevancia==1" color="accent"> <mat-icon> star </mat-icon> </button>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="direccion-opciones">
+            <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
+            <mat-cell *matCellDef="let direccion">
+              <button mat-icon-button matTooltip="Eliminar" color="primary" (click)="EliminarDireccion(direccion)"><mat-icon> delete </mat-icon></button>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="ColumnasDirecciones"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: ColumnasDirecciones;"></mat-row>
+        </mat-table>
+
+        <mat-paginator #PaginadorDirecciones [length]="ListadoDirecciones.TotalResultados | async" [pageSize]="5"></mat-paginator>
+
+      </mat-card-content>
+    </mat-tab>
+
+    <mat-tab label="Cuentas bancarias">
+
+      <mat-card-content>
+        
+        <form [formGroup]="CuentasForm">
+          <mat-grid-list cols=4 rowHeight="70px">
+
+            <mat-grid-tile>
+              <mat-form-field>
+                <mat-select placeholder="Banco" formControlName="banco">
+                  <mat-option *ngFor="let banco of Bancos" [value]="banco.id">{{banco.nombre}}</mat-option>
+                </mat-select>
+                <mat-error>Este campo es obligatorio</mat-error>
+              </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+              <mat-form-field>
+                <input matInput placeholder="Número" formControlName="cuenta">
+                <mat-error>Este campo es obligatorio</mat-error>
+              </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+              <mat-form-field>
+                <input matInput placeholder="CCI" formControlName="cci">
+                <mat-error>El CCI debe tener 20 dígitos</mat-error>
+              </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+              <button mat-raised-button color="primary" type="button" [disabled]="CuentasForm.invalid" (click)="AgregarCuenta()">Agregar</button>
+            </mat-grid-tile>
+
+          </mat-grid-list>
+        </form>
+
+        <div class = "spinner-container" *ngIf = "ListadoCuentas.Cargando| async">
+          <mat-spinner></mat-spinner>
+        </div>
+
+        <mat-table [dataSource]="ListadoCuentas" class="mat-elevation-z8">
+
+          <ng-container matColumnDef="cuenta-numero">
+            <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+            <mat-cell *matCellDef="let cuenta"> {{cuenta.numero}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="cuenta-banco">
+            <mat-header-cell *matHeaderCellDef> Banco </mat-header-cell>
+            <mat-cell *matCellDef="let cuenta"> {{cuenta.nombre_banco}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="cuenta-cuenta">
+            <mat-header-cell *matHeaderCellDef> Cuenta </mat-header-cell>
+            <mat-cell *matCellDef="let cuenta"> {{cuenta.cuenta_numero}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="cuenta-cci">
+            <mat-header-cell *matHeaderCellDef> CCI </mat-header-cell>
+            <mat-cell *matCellDef="let cuenta"> {{cuenta.cuenta_cci}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="cuenta-relevancia">
+            <mat-header-cell *matHeaderCellDef> Relevancia </mat-header-cell>
+            <mat-cell *matCellDef="let cuenta">
+              <button mat-icon-button *ngIf="cuenta.relevancia==2" (click)="EstablecerCuentaPrimaria(cuenta.id)"> <mat-icon> star_border </mat-icon> </button>
+              <button mat-icon-button *ngIf="cuenta.relevancia==1" color="accent"> <mat-icon> star </mat-icon> </button>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="cuenta-opciones">
+            <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
+            <mat-cell *matCellDef="let cuenta">
+              <button mat-icon-button matTooltip="Eliminar" color="primary" (click)="EliminarCuenta(cuenta)"><mat-icon> delete </mat-icon></button>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="ColumnasCuentas"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: ColumnasCuentas;"></mat-row>
+        </mat-table>
+
+        <mat-paginator #PaginadorCuentas [length]="ListadoCuentas.TotalResultados | async" [pageSize]="5"></mat-paginator>
+
+      </mat-card-content>
+    </mat-tab>
+  </mat-tab-group>
+</mat-card>

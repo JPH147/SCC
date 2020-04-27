@@ -5,11 +5,8 @@
   </mat-toolbar>
 
   <mat-tab-group >
-
     <mat-tab label="Telefonos">
-
       <mat-card-content>
-        
         <form [formGroup]="TelefonosForm">
           <mat-grid-list cols=4 rowHeight="70px">
 
@@ -134,10 +131,6 @@
           </mat-grid-list>
         </form>
 
-        <div class = "spinner-container" *ngIf = "ListadoDirecciones.Cargando| async">
-          <mat-spinner></mat-spinner>
-        </div>
-
         <mat-table [dataSource]="ListadoDirecciones" class="mat-elevation-z8">
 
           <ng-container matColumnDef="direccion-numero">
@@ -175,7 +168,6 @@
     </mat-tab>
 
     <mat-tab label="Cuentas bancarias">
-
       <mat-card-content>
         
         <form [formGroup]="CuentasForm">

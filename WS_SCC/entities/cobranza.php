@@ -1354,6 +1354,7 @@
           "monto_total"=>$monto_total,
           "monto_pendiente"=>$monto_pendiente,
           "fecha_vencimiento"=>$fecha_vencimiento,
+          "estado"=>$estado,
         );
         array_push($cronograma["cronograma"],$items);
       }
@@ -1368,6 +1369,54 @@
       $result = $this->conn->prepare($query);
 
       $result->bindParam(1, $this->cliente);
+
+      $result->execute();
+
+      $row = $result->fetch(PDO::FETCH_ASSOC);
+
+      $this->total_resultado=$row['total'];
+
+      return $this->total_resultado;
+    }
+
+    // Esta función recibe de por sí un parámetro 1
+    function contar_cobranzasxcliente_morosos1(){
+
+      $query = "CALL sp_listarcobranzasxclientecontar(?,?,?,?,?,?,?,1)";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(1, $this->cliente);
+      $result->bindParam(2, $this->sede);
+      $result->bindParam(3, $this->subsede);
+      $result->bindParam(4, $this->institucion);
+      $result->bindParam(5, $this->tipo_pago);
+      $result->bindParam(6, $this->fecha_inicio);
+      $result->bindParam(7, $this->fecha_fin);
+
+      $result->execute();
+
+      $row = $result->fetch(PDO::FETCH_ASSOC);
+
+      $this->total_resultado=$row['total'];
+
+      return $this->total_resultado;
+    }
+
+    // Esta función recibe de por sí un parámetro 1
+    function contar_cobranzasxcliente_morosos2(){
+
+      $query = "CALL sp_listarcobranzasxclientecontar(?,?,?,?,?,?,?,2)";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(1, $this->cliente);
+      $result->bindParam(2, $this->sede);
+      $result->bindParam(3, $this->subsede);
+      $result->bindParam(4, $this->institucion);
+      $result->bindParam(5, $this->tipo_pago);
+      $result->bindParam(6, $this->fecha_inicio);
+      $result->bindParam(7, $this->fecha_fin);
 
       $result->execute();
 

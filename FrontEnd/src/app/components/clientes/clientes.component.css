@@ -101,6 +101,10 @@ mat-card{
   width: 90%;
 }
 
+.bueno-pendiente{
+  color: cyan;
+}
+
 .bueno{
   color: green;
 }

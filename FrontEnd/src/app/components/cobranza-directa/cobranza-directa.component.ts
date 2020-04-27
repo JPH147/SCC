@@ -338,7 +338,7 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
             //   }
             // })
             // setTimeout(()=>{
-              // this.router.navigate(['/cobranza-directa']);
+              this.router.navigate(['/cobranza-directa']);
               this.Notificacion.Snack("Se creó la cobranza con éxito!","");
             // }, 300)
           } else {

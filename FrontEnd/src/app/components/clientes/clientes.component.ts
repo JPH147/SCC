@@ -1,27 +1,27 @@
-import {Component, OnInit, ViewChild, AfterViewInit, ElementRef} from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatSort } from '@angular/material/sort';
-import {merge, Observable, of , fromEvent, forkJoin } from 'rxjs';
+import { merge, fromEvent, forkJoin } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
-import {ClienteService} from './clientes.service';
-import {ClienteDataSource} from './clientes.dataservice';
-import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
-import { FileUpload } from './file-upload/fileupload';
+import { ClienteService } from './clientes.service';
+import { ClienteDataSource } from './clientes.dataservice';
+import { VentanaConfirmarComponent } from '../global/ventana-confirmar/ventana-confirmar.component';
 import { Router } from '@angular/router';
-import { VentanaEmergenteContacto} from './ventana-emergentecontacto/ventanaemergentecontacto';
-import { VentanaObservacionesComponent} from './ventana-observaciones/ventana-observaciones.component';
-import { VentanaEmergenteClientes } from './ventana-emergente/ventanaemergente';
-import {ServiciosTelefonos} from '../global/telefonos';
-import {ServiciosDirecciones} from '../global/direcciones';
+import { ServiciosTelefonos } from '../global/telefonos';
+import { ServiciosDirecciones } from '../global/direcciones';
 import { Notificaciones } from '../global/notificacion';
-import {VentanaFotoComponent} from './ventana-foto/ventana-foto.component';
+import { VentanaFotoComponent } from './ventana-foto/ventana-foto.component';
 import { VentanaVentasComponent } from './ventana-ventas/ventana-ventas.component'
 import { ArchivosService } from '../global/archivos';
-import {saveAs} from 'file-saver';
+import { VentanaEmergenteContacto} from './ventana-emergentecontacto/ventanaemergentecontacto';
+import { VentanaObservacionesComponent} from './ventana-observaciones/ventana-observaciones.component';
+import { VentanaEmergenteIntegralEditarComponent } from './ventana-emergente-integral-editar/ventana-emergente-integral-editar.component';
+import { VentanaEmergenteIntegralAgregarComponent } from './ventana-emergente-integral-agregar/ventana-emergente-integral-agregar.component';
 import { VentanaCobranzaClienteVencidasComponent } from '../cobranza-cliente-listar/ventana-cobranza-cliente-vencidas/ventana-cobranza-cliente-vencidas.component'
+import { saveAs } from 'file-saver';
+import { FileUpload } from './file-upload/fileupload';
 
 @Component({
   selector: 'app-clientes',
@@ -30,7 +30,7 @@ import { VentanaCobranzaClienteVencidasComponent } from '../cobranza-cliente-lis
   providers: [ClienteService, ServiciosTelefonos, ServiciosDirecciones, Notificaciones]
 })
 
-export class ClientesComponent implements OnInit {
+export class ClientesComponent implements OnInit, AfterViewInit {
 
   ListadoCliente: ClienteDataSource;
   public Columnas: string[] = [];
@@ -129,7 +129,7 @@ export class ClientesComponent implements OnInit {
   }
   
   Agregar() {
-    let VentanaClientes = this.DialogoClientes.open(VentanaEmergenteClientes, {
+    let VentanaClientes = this.DialogoClientes.open(VentanaEmergenteIntegralAgregarComponent, {
       width: '1200px'
     });
 
@@ -141,6 +141,7 @@ export class ClientesComponent implements OnInit {
   Eliminar(cliente) {
     let VentanaConfirmar = this.DialogoClientes.open(VentanaConfirmarComponent, {
       width: '400px',
+      maxHeight: '80vh',
       data: {objeto: 'el cliente', valor: cliente.nombre}
     });
     
@@ -154,8 +155,9 @@ export class ClientesComponent implements OnInit {
   }
 
   Editar(id, confirmar) {
-    let VentanaClientes = this.DialogoClientes.open(VentanaEmergenteClientes, {
+    let VentanaClientes = this.DialogoClientes.open(VentanaEmergenteIntegralEditarComponent, {
       width: '1200px',
+      maxHeight: '80vh',
       data: {id: id, confirmar: confirmar},
     });
     VentanaClientes.afterClosed().subscribe (res => {
@@ -291,12 +293,16 @@ export class ClientesComponent implements OnInit {
     })
   }
 
-  VerDetalle(cliente){
+  VerDetalle(cliente, por_verificar){
     console.log(cliente)
     let Ventana = this.DialogoClientes.open( VentanaCobranzaClienteVencidasComponent,{
       width: '900px' ,
-      data: { cliente: cliente.id }
-    } )
+      data: { cliente: cliente.id, por_verificar : por_verificar }
+    } ) ;
+
+    Ventana.afterClosed().subscribe(res=>{
+      console.log(res)
+    })
   }
 
 }

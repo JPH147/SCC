@@ -25,9 +25,9 @@
       <mat-grid-tile>
         <mat-form-field>
           <mat-select placeholder="Estado" [(ngModel)]="estado" (selectionChange)="CargarData()">
-          	<mat-option [value]="'0'">Todas</mat-option>
-          	<mat-option [value]="'PENDIENTE'">Pendientes</mat-option>
-          	<mat-option [value]="'PAGADO'">Pagadas</mat-option>
+          	<mat-option [value]="0">Todas</mat-option>
+          	<mat-option [value]="1">Pagadas</mat-option>
+          	<mat-option [value]="2">Pendientes</mat-option>
           </mat-select>
         </mat-form-field>
       </mat-grid-tile>
