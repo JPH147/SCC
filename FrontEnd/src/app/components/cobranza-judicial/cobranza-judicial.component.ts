@@ -513,6 +513,14 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
     }
   }
 
+  AbrirDocumentoTransaccion(archivo, indicador){
+    // indicador 1. Venta, 2. Credito
+    let url = URLIMAGENES.carpeta + (indicador == 1 ? 'venta/' : 'credito/')
+    if(archivo){
+      window.open(url+archivo, "_blank");
+    }
+  }
+
   Atras(){
     this.location.back();
   }
