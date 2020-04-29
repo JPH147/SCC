@@ -179,7 +179,7 @@ export class MenuComponent implements OnInit{
             path: "usuarios"
           },
           {
-            nombre: "Direcciones",
+            nombre: "Departamentos",
             path: "direcciones"
           },
           {
@@ -191,7 +191,7 @@ export class MenuComponent implements OnInit{
             path: "proceso-judicial-vinculados"
           },
           {
-            nombre: "Plantillas",
+            nombre: "Transacciones",
             path: "plantillas"
           },
           {
@@ -203,7 +203,7 @@ export class MenuComponent implements OnInit{
             path: "proveedores"
           },
           {
-            nombre: "Talonarios",
+            nombre: "Talonarios / Contratos",
             path: "talonarios"
           },
           {
