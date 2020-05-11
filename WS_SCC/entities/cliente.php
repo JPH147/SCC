@@ -739,5 +739,35 @@ Class Cliente{
         }
     }
     
+    function prueba_subida_cliente(){
+        $file = "./prueba.txt";
+
+        if ( !file_exists($file) ) {
+            return "Arhivo no existe";
+        }
+
+        $fp = fopen($file, "r");
+
+        $querys=array();
+        $contador = 0 ;
+
+        while ( !feof($fp) ) {
+            $current_line = fgets ($fp);
+            // echo($current_line);
+            $query = $current_line;
+
+            $result = $this->conn->prepare($query);
+
+            $result->bindParam(1, $this->idcliente);
+
+            if($result->execute())
+            {
+                $contador = $contador + 1 ;
+            }
+        }
+
+        fclose($fp);
+        return $contador;
+    }
 }
 ?>
