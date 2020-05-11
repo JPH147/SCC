@@ -4,7 +4,7 @@
     class="sidenav"
     fixedInViewport="true"
     [attr.role]="'navigation'"
-    [mode]=" 'side'"
+    [mode]="'side'"
     [(opened)]="_usuario.Usuario">
     <mat-toolbar color="primary"> Menu </mat-toolbar>
     
@@ -44,7 +44,7 @@
       </button>
      <span>Sistema de Créditos y Cobranzas</span>
      <span class="espacio"></span>
-     <ng-container *ngIf="estado">
+     <ng-container>
        <mat-icon class="icono">chat</mat-icon>
        <mat-icon class="icono">account_circle</mat-icon>
      </ng-container>
