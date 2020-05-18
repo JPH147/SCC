@@ -26,12 +26,12 @@ export class AppComponent {
     };
 
     // Descomentar para producción
-    if( this._usuario.Usuario ) {
-      this.router.navigate(['inicio']) ;
-    } else {
-      this.router.navigate(['login']) ;
-      this.estado = false ;
-    }
+    // if( this._usuario.Usuario ) {
+    //   this.router.navigate(['inicio']) ;
+    // } else {
+    //   this.router.navigate(['login']) ;
+    //   this.estado = false ;
+    // }
 
     this._usuario.UsuarioS.subscribe(res=>{
       if(res){

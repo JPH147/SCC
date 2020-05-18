@@ -11,8 +11,8 @@ import * as moment from 'moment';
 export class UsuariosService {
 
   public url: string = URL.url;
-  // public Usuario : any = true ;  // Se coloca TRUE solo en desarrollo
-  public Usuario : any ; 
+  // public Usuario : any ; 
+  public Usuario : any = true ;  // Se coloca TRUE solo en desarrollo
   public UsuarioS = new BehaviorSubject<any>("") ;
 
   constructor(

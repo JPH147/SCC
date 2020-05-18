@@ -11,6 +11,9 @@ import { ClienteCuentaDataSource, ClienteTelefonoDataSource, ClienteDireccionDat
 import { debounceTime, distinctUntilChanged, tap} from 'rxjs/operators'
 import {VentanaConfirmarComponent} from '../../global/ventana-confirmar/ventana-confirmar.component';
 import { ServiciosVentas } from '../../global/ventas';
+import { VentanaEditarTelefonoComponent } from '../ventana-editar-telefono/ventana-editar-telefono.component';
+import { VentanaEditarDireccionComponent } from '../ventana-editar-direccion/ventana-editar-direccion.component';
+import { VentanaEditarCuentaComponent } from '../ventana-editar-cuenta/ventana-editar-cuenta.component';
 
 @Component({
   selector: 'app-ventana-emergente-integral-editar',
@@ -586,6 +589,18 @@ export class VentanaEmergenteIntegralEditarComponent implements OnInit {
     })
   }
 
+  EditarTelefono( telefono ) {
+    let Ventana = this.Dialogo.open(VentanaEditarTelefonoComponent, {
+      width: '900px',
+      data: { tipos : this.Tipos, telefono: telefono }
+    });
+    Ventana.afterClosed().subscribe(res => {
+      if (res === true) {
+        this.CargarDataTelefonos()
+      }
+    });
+  }
+
   EliminarTelefono(telefono){
     let VentanaConfirmar = this.Dialogo.open(VentanaConfirmarComponent, {
       width: '400px',
@@ -600,6 +615,18 @@ export class VentanaEmergenteIntegralEditarComponent implements OnInit {
     });
   }
 
+  EditarDireccion( direccion ) {
+    let Ventana = this.Dialogo.open(VentanaEditarDireccionComponent, {
+      width: '900px',
+      data: { direccion: direccion }
+    });
+    Ventana.afterClosed().subscribe(res => {
+      if (res === true) {
+        this.CargarDataDirecciones()
+      }
+    });
+  }
+
   EliminarDireccion(direccion){
     let VentanaConfirmar = this.Dialogo.open(VentanaConfirmarComponent, {
       width: '400px',
@@ -610,6 +637,19 @@ export class VentanaEmergenteIntegralEditarComponent implements OnInit {
         this.ServicioDireccion.EliminarDireccion(direccion.id).subscribe(res=>{
           this.CargarDataDirecciones()
         })
+      }
+    });
+  }
+
+  EditarCuenta( cuenta ) {
+    console.log(cuenta) ;
+    let Ventana = this.Dialogo.open(VentanaEditarCuentaComponent, {
+      width: '900px',
+      data: { cuenta: cuenta }
+    });
+    Ventana.afterClosed().subscribe(res => {
+      if (res === true) {
+        this.CargarDataCuentas()
       }
     });
   }

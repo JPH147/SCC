@@ -47,7 +47,7 @@ Class ClienteCuenta{
 
     function update(){
         $query = "CALL sp_actualizarclientecuenta(
-            :prcuenta,
+            :prid,
             :prbanco,
             :prcuenta,
             :prcci
@@ -55,7 +55,7 @@ Class ClienteCuenta{
 
         $result = $this->conn->prepare($query);
 
-        $result->bindParam(":prcuenta", $this->id_cuenta);
+        $result->bindParam(":prid", $this->id_cuenta);
         $result->bindParam(":prbanco", $this->banco);
         $result->bindParam(":prcuenta", $this->cuenta);
         $result->bindParam(":prcci", $this->cci);

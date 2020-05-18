@@ -125,7 +125,7 @@ Class ClienteDireccion{
 
     function contar(){
 
-        $query = "CALL sp_listarclientetelefonocontar(:pid_cliente, :pdrc_relevancia)";
+        $query = "CALL sp_listarclientedireccioncontar(:pid_cliente, :pdrc_relevancia)";
 
         $result = $this->conn->prepare($query);
 

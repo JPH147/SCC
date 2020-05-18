@@ -304,6 +304,7 @@
           <ng-container matColumnDef="telefono-opciones">
             <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
             <mat-cell *matCellDef="let telefono">
+              <button mat-icon-button matTooltip="Editar" color="primary" (click)="EditarTelefono(telefono)"><mat-icon> edit </mat-icon></button>
               <button mat-icon-button matTooltip="Eliminar" color="primary" (click)="EliminarTelefono(telefono)"><mat-icon> delete </mat-icon></button>
             </mat-cell>
           </ng-container>
@@ -391,6 +392,7 @@
           <ng-container matColumnDef="direccion-opciones">
             <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
             <mat-cell *matCellDef="let direccion">
+              <button mat-icon-button matTooltip="Editar" color="primary" (click)="EditarDireccion(direccion)"><mat-icon> edit </mat-icon></button>
               <button mat-icon-button matTooltip="Eliminar" color="primary" (click)="EliminarDireccion(direccion)"><mat-icon> delete </mat-icon></button>
             </mat-cell>
           </ng-container>
@@ -478,6 +480,7 @@
           <ng-container matColumnDef="cuenta-opciones">
             <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
             <mat-cell *matCellDef="let cuenta">
+              <button mat-icon-button matTooltip="Editar" color="primary" (click)="EditarCuenta(cuenta)"><mat-icon> edit </mat-icon></button>
               <button mat-icon-button matTooltip="Eliminar" color="primary" (click)="EliminarCuenta(cuenta)"><mat-icon> delete </mat-icon></button>
             </mat-cell>
           </ng-container>

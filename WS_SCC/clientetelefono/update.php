@@ -25,11 +25,11 @@
 
             if($clientetelefono->update())
             {
-                print_json("0000", "Se creó el telefono satisfactoriamente.", "");
+                print_json("0000", "Se actualizó el telefono satisfactoriamente.", "");
             }
             else
             {
-                print_json("9999", "Ocurrió un error al crear el telefono.", "");
+                print_json("9999", "Ocurrió un error al actualizar el telefono.", "");
             }
         }
         else
@@ -39,7 +39,7 @@
     }
     catch(Exception $exception)
     {
-        print_json("9999", "Ocurrió un error al eliminar el cliente.", $exception->getMessage());
+        print_json("9999", "Ocurrió un error al actualizr el teléfono.", $exception->getMessage());
     }
 
 ?>

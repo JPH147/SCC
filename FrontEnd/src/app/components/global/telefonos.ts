@@ -40,13 +40,20 @@ export class ServiciosTelefonos {
   ): Observable<any> {
 
     let params = new HttpParams()
-    .set('prid', id_telefono.toString())
-    .set('tlf_numero', tlf_numero)
-    .set('id_tipo', id_tipo.toString())
+      .set('prid', id_telefono.toString())
+      .set('tlf_numero', tlf_numero)
+      .set('id_tipo', id_tipo.toString())
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-    return this.http.post(this.url + 'clientetelefono/update.php', params, {headers: headers});
+    return this.http.post(this.url + 'clientetelefono/update.php', params, {headers: headers})
+    .pipe(map(res=>{
+      if (res['codigo'] == 0) {
+        return true ;
+      } else {
+        return false ;
+      }
+    }));
   }
 
   ListarTelefono(

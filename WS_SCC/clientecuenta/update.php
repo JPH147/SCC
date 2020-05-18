@@ -17,7 +17,7 @@
         $clientecuenta = new ClienteCuenta($db);
         $data = json_decode(file_get_contents('php://input'), true);
 
-        if (($_POST["prid"])!=null)
+        if ( trim($_POST["prid"]) !=null )
         {
             $clientecuenta->id_cuenta = trim($_POST["prid"]);
             $clientecuenta->banco = trim($_POST["prbanco"]);
@@ -26,11 +26,11 @@
 
             if($clientecuenta->update())
             {
-                print_json("0000", "Se creó la cuenta satisfactoriamente.", "");
+                print_json("0000", "Se actualizó la cuenta satisfactoriamente.", "");
             }
             else
             {
-                print_json("9999", "Ocurrió un error al crear la cuenta.", "");
+                print_json("0001", "Ocurrió un error al actualizar la cuenta.", "");
             }
         }
         else
@@ -40,7 +40,7 @@
     }
     catch(Exception $exception)
     {
-        print_json("9999", "Ocurrió un error al eliminar la cuenta.", $exception->getMessage());
+        print_json("9999", "Ocurrió un error al actualizar la cuenta.", $exception->getMessage());
     }
 
 ?>

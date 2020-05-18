@@ -203,6 +203,9 @@ import { ReporteMorosidadComponent } from './inicio/reporte-morosidad/reporte-mo
 
 import { VentanaEmergenteIntegralEditarComponent } from './components/clientes/ventana-emergente-integral-editar/ventana-emergente-integral-editar.component';
 import { VentanaEmergenteIntegralAgregarComponent } from './components/clientes/ventana-emergente-integral-agregar/ventana-emergente-integral-agregar.component';
+import { VentanaEditarDireccionComponent } from './components/clientes/ventana-editar-direccion/ventana-editar-direccion.component';
+import { VentanaEditarTelefonoComponent } from './components/clientes/ventana-editar-telefono/ventana-editar-telefono.component';
+import { VentanaEditarCuentaComponent } from './components/clientes/ventana-editar-cuenta/ventana-editar-cuenta.component';
 
 export const CUSTOM_DATE_FORMAT = {
   parse: {
@@ -424,7 +427,10 @@ export const CUSTOM_DATE_FORMAT = {
     CobranzaClienteListarMorososComponent,
     ReporteMorosidadComponent,
     VentanaEmergenteIntegralEditarComponent,
-    VentanaEmergenteIntegralAgregarComponent
+    VentanaEmergenteIntegralAgregarComponent,
+    VentanaEditarDireccionComponent,
+    VentanaEditarTelefonoComponent,
+    VentanaEditarCuentaComponent
    ],
   entryComponents: [
     AppComponent,
@@ -499,6 +505,9 @@ export const CUSTOM_DATE_FORMAT = {
     VentanaEmergenteIntegralEditarComponent,
     VentanaEmergenteIntegralAgregarComponent,
     VentanaEmergenteContacto,
+    VentanaEditarTelefonoComponent,
+    VentanaEditarDireccionComponent,
+    VentanaEditarCuentaComponent,
   ],
   bootstrap: [AppComponent],
   providers: [
