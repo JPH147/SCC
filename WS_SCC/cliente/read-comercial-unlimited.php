@@ -21,8 +21,8 @@
         $cliente->clt_cip = !empty($_GET['prcip']) ? trim($_GET['prcip']) : '';
         $cliente->clt_dni = !empty($_GET['prdni']) ? trim($_GET['prdni']) : '';
         $cliente->clt_nombre = !empty($_GET['prnombre']) ? trim($_GET['prnombre']) : '';
-        $cliente->inst_nombre = !empty($_GET['prinstitucion']) ? trim($_GET['prinstitucion']) : '';
-        $cliente->sd_nombre = !empty($_GET['prsede']) ? trim($_GET['prsede']) : '';
+        $cliente->inst_nombre = !empty($_GET['prinstitucion']) ? trim($_GET['prinstitucion']) : 0 ;
+        $cliente->sd_nombre = !empty($_GET['prsede']) ? trim($_GET['prsede']) : 0 ;
         $cliente->clt_estado = !empty($_GET['prestado']) ? trim($_GET['prestado']) : 1;
 
         $cliente_archivo = $cliente->read_comercial_unlimited();
