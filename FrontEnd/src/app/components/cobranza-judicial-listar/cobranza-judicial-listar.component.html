@@ -161,12 +161,12 @@
         
               <ng-container matColumnDef="fecha_ultimo_documento_diferencia">
                 <mat-header-cell *matHeaderCellDef> Días transcurridos </mat-header-cell>
-                <mat-cell *matCellDef="let proceso"> {{proceso.fecha_ultimo_documento_diferencia}} </mat-cell>
+                <mat-cell *matCellDef="let proceso" class="centrar"> {{proceso.fecha_ultimo_documento_diferencia}} </mat-cell>
               </ng-container>
         
               <ng-container matColumnDef="total_documentos">
                 <mat-header-cell *matHeaderCellDef> Número documentos </mat-header-cell>
-                <mat-cell *matCellDef="let proceso"> {{proceso.total_documentos}} </mat-cell>
+                <mat-cell *matCellDef="let proceso" class="centrar"> {{proceso.total_documentos}} </mat-cell>
               </ng-container>
         
               <ng-container matColumnDef="opciones">

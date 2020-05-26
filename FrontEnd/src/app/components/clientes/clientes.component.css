@@ -52,11 +52,10 @@ mat-card{
 .mat-column-sede,
 .mat-column-cargo
 {
-  max-width: 15%;
+  max-width: 12%;
 }
 
-.mat-column-cuotas_vencidas,
-.mat-column-codigo{
+.mat-column-cuotas_vencidas{
   max-width: 7%;
 }
 
@@ -65,9 +64,10 @@ mat-card{
   max-width: 20%;
 }
 
+.mat-column-codigo,
 .mat-column-dni
 {
-  max-width: 8%;
+  max-width: 12%;
 }
 
 .mat-expansion-panel-header-title

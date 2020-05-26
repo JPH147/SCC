@@ -3,8 +3,8 @@ import { MatCheckbox } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { merge, fromEvent, forkJoin } from 'rxjs';
-import { debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
+import { merge, fromEvent, forkJoin, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, tap, takeUntil} from 'rxjs/operators';
 import { ClienteService } from './clientes.service';
 import { ClienteDataSource } from './clientes.dataservice';
 import { VentanaConfirmarComponent } from '../global/ventana-confirmar/ventana-confirmar.component';
@@ -22,6 +22,8 @@ import { VentanaEmergenteIntegralAgregarComponent } from './ventana-emergente-in
 import { VentanaCobranzaClienteVencidasComponent } from '../cobranza-cliente-listar/ventana-cobranza-cliente-vencidas/ventana-cobranza-cliente-vencidas.component'
 import { saveAs } from 'file-saver';
 import { FileUpload } from './file-upload/fileupload';
+import { ServiciosGenerales } from '../global/servicios';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-clientes',
@@ -32,21 +34,17 @@ import { FileUpload } from './file-upload/fileupload';
 
 export class ClientesComponent implements OnInit, AfterViewInit {
 
-  ListadoCliente: ClienteDataSource;
+  public sbj = new Subject();
+  public ListadoCliente: ClienteDataSource;
   public Columnas: string[] = [];
   public ColumnasGeneral: string[] = ['numero', 'foto', 'codigo' , 'dni', 'nombrecliente', 'cargo' ,  'opciones'];
   public ColumnasComercial: string[] = ['numero', 'foto', 'codigo' , 'dni', 'nombrecliente', 'cargo' , 'cuotas_vencidas',  'opciones'];
-  public relacion : boolean = false ;
-  public maestro;
   public estado: number ;
-  
-  @ViewChild('InputCodigo', { static: true }) FiltroCodigo: ElementRef;
-  @ViewChild('InputCIP', { static: true }) FiltroCIP: ElementRef;
-  @ViewChild('InputDNI', { static: true }) FiltroDni: ElementRef;
-  @ViewChild('InputNombre', { static: true }) FiltroNombre: ElementRef;
-  @ViewChild('InputCargo', { static: true }) FiltroCargo: ElementRef;
-  @ViewChild('InputSubsede', { static: true }) FiltroSubsede: ElementRef;
-  @ViewChild('InputRelacion', { static: false }) FiltroRelacion : MatCheckbox ;
+  public ClienteForm : FormGroup ;
+
+  public Instituciones : Array<any> ;
+  public Sedes : Array<any> ;
+
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(
@@ -59,41 +57,47 @@ export class ClientesComponent implements OnInit, AfterViewInit {
     private SDirecciones: ServiciosDirecciones,
     private Notificacion: Notificaciones,
     private router: Router,
-    private AServicio : ArchivosService,    
+    private AServicio : ArchivosService,
+    private _generales : ServiciosGenerales,
+    private _builder : FormBuilder
   ) {}
 
   ngOnInit() {
+    this.CrearFormulario() ;
+
     this.ListadoCliente = new ClienteDataSource(this.Servicio);
-    this.ListadoCliente.CargarClientes(false,'','', '','','','',1, 10,1);
+    this.ListadoCliente.CargarClientes(false,'','', '','',0,0,1, 10,1);
     this.estado=1;
     this.Columnas = this.ColumnasGeneral ;
+
+    this.ListarInstitucion() ;
   }
 
   ngAfterViewInit() {
     merge(
-      fromEvent(this.FiltroDni.nativeElement, 'keyup'),
-      fromEvent(this.FiltroNombre.nativeElement, 'keyup'),
-      fromEvent(this.FiltroCodigo.nativeElement, 'keyup'),
-      fromEvent(this.FiltroCIP.nativeElement, 'keyup'),
-      fromEvent(this.FiltroCargo.nativeElement, 'keyup'),
-      fromEvent(this.FiltroSubsede.nativeElement, 'keyup')
+      this.ClienteForm.get('dni').valueChanges ,
+      this.ClienteForm.get('codigo').valueChanges ,
+      this.ClienteForm.get('cip').valueChanges ,
+      this.ClienteForm.get('nombre').valueChanges ,
+      this.ClienteForm.get('institucion').valueChanges ,
+      this.ClienteForm.get('sede').valueChanges
     ).pipe(
       debounceTime(200),
       distinctUntilChanged(),
-      tap((e : KeyboardEvent) => {
-        // if(e.keyCode==13){
-          this.paginator.pageIndex=0;
-          this.CargarData();
-        // }
+      takeUntil(this.sbj),
+      tap(() => {
+        this.sbj.next() ;
+        this.paginator.pageIndex=0 ;
+        this.CargarData() ;
       })
      ).subscribe();
 
-     this.FiltroRelacion.change
+     this.ClienteForm.get('relacion').valueChanges
      .pipe(
       debounceTime(200),
       distinctUntilChanged(),
       tap(() => {
-        if( this.FiltroRelacion.checked ) {
+        if( this.ClienteForm.get('relacion').value ) {
           this.Columnas = this.ColumnasComercial ;
         } else {
           this.Columnas = this.ColumnasGeneral ;
@@ -113,17 +117,29 @@ export class ClientesComponent implements OnInit, AfterViewInit {
      ).subscribe();
   }
 
+  CrearFormulario(){
+    this.ClienteForm = this._builder.group({
+      dni : [ "" ] ,
+      codigo : [ "" ] ,
+      cip : [ "" ] ,
+      nombre : [ "" ] ,
+      institucion : [ 0 ] ,
+      sede : [ 0 ] ,
+      relacion : [ false ] ,
+    })
+  }
+
   CargarData() {
     this.ListadoCliente.CargarClientes(
-      this.FiltroRelacion.checked,
-      this.FiltroCodigo.nativeElement.value,
-      this.FiltroCIP.nativeElement.value,
-      this.FiltroDni.nativeElement.value,
-      this.FiltroNombre.nativeElement.value,
-      this.FiltroCargo.nativeElement.value,
-      this.FiltroSubsede.nativeElement.value,
-      this.paginator.pageIndex+1,
-      this.paginator.pageSize,
+      this.ClienteForm.get('relacion').value ,
+      this.ClienteForm.get('codigo').value ,
+      this.ClienteForm.get('cip').value ,
+      this.ClienteForm.get('dni').value ,
+      this.ClienteForm.get('nombre').value ,
+      this.ClienteForm.get('institucion').value ,
+      this.ClienteForm.get('sede').value || 0 ,
+      this.paginator.pageIndex+1 ,
+      this.paginator.pageSize ,
       this.estado
     );
   }
@@ -233,9 +249,9 @@ export class ClientesComponent implements OnInit, AfterViewInit {
   VerPendientes(){
     this.estado=5;
     this.paginator.pageIndex=0;
-    this.FiltroCodigo.nativeElement.value = "" ;
-    this.FiltroDni.nativeElement.value = "" ;
-    this.FiltroNombre.nativeElement.value = "" ;
+    this.ClienteForm.get('codigo').setValue("") ;
+    this.ClienteForm.get('dni').setValue("") ;
+    this.ClienteForm.get('nombre').setValue("") ;
 
     this.CargarData();
   }
@@ -243,9 +259,9 @@ export class ClientesComponent implements OnInit, AfterViewInit {
   VerTodos(){
     this.estado=1;
     this.paginator.pageIndex=0;
-    this.FiltroCodigo.nativeElement.value = "" ;
-    this.FiltroDni.nativeElement.value = "" ;
-    this.FiltroNombre.nativeElement.value = "" ;
+    this.ClienteForm.get('codigo').setValue("") ;
+    this.ClienteForm.get('dni').setValue("") ;
+    this.ClienteForm.get('nombre').setValue("") ;
     
     this.CargarData();
   }
@@ -273,12 +289,12 @@ export class ClientesComponent implements OnInit, AfterViewInit {
 
     this.Servicio.ListarClientesUnlimited(
       nombre_archivo,
-      this.FiltroCodigo.nativeElement.value,
-      this.FiltroCIP.nativeElement.value,
-      this.FiltroDni.nativeElement.value,
-      this.FiltroNombre.nativeElement.value,
-      this.FiltroCargo.nativeElement.value,
-      this.FiltroSubsede.nativeElement.value,
+      this.ClienteForm.get('codigo').value ,
+      this.ClienteForm.get('cip').value ,
+      this.ClienteForm.get('dni').value ,
+      this.ClienteForm.get('nombre').value ,
+      this.ClienteForm.get('institucion').value ,
+      this.ClienteForm.get('sede').value ,
       this.estado
     ).subscribe(res=>{
       if(res){
@@ -303,6 +319,34 @@ export class ClientesComponent implements OnInit, AfterViewInit {
     Ventana.afterClosed().subscribe(res=>{
       console.log(res)
     })
+  }
+
+  ListarInstitucion(){
+    this._generales.ListarInstitucion().subscribe( res => {
+      this.Instituciones = res ;
+    });
+  }
+
+  ListarSede() {
+    this._generales.ListarSede( this.ClienteForm.get('institucion').value , '' ).subscribe(res => {
+      this.Sedes=  res ;
+  })}
+
+  InstitucionSeleccionada(event) {
+    if ( event.value == 0 ) {
+      this.ClienteForm.get('sede').setValue(0) ;
+      this.ClienteForm.get('sede').disable() ;
+    } else {
+      this.ListarSede() ;
+      this.ClienteForm.get('sede').setValue(0) ;
+      this.ClienteForm.get('sede').enable() ;
+    }
+    this.CargarData() ;
+  }
+
+/* Se muestran los modelos cuando se selecciona una marca */
+  SedeSeleccionada() {
+    this.CargarData() ;
   }
 
 }

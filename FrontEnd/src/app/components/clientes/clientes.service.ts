@@ -16,14 +16,14 @@ export class ClienteService {
   constructor(private http: HttpClient) {}
 
   Listado(
-    codigo:string,
-    cip:string,
-    dni: string,
-    nombre: string,
-    cargo: string,
-    subsede: string,
-    prpagina: number,
-    prtotalpagina: number,
+    codigo:string ,
+    cip:string ,
+    dni: string ,
+    nombre: string ,
+    institucion: number ,
+    sede: number ,
+    prpagina: number ,
+    prtotalpagina: number ,
     estado : number
   ): Observable<any>  {
      return this.http.get(this.url + 'cliente/read.php',{
@@ -32,8 +32,8 @@ export class ClienteService {
        .set('prcip',cip)
        .set('prdni',dni)
        .set('prnombre',nombre)
-       .set('prcargo',cargo)
-       .set('prsubsede',subsede)
+       .set('prinstitucion',institucion.toString() )
+       .set('prsede',sede.toString() )
        .set('prpagina',prpagina.toString())
        .set('prtotalpagina',prtotalpagina.toString())
        .set('prestado', estado.toString())
@@ -54,12 +54,12 @@ export class ClienteService {
   }
 
   ListadoComercial(
-    codigo:string,
-    cip:string,
-    dni: string,
-    nombre: string,
-    cargo: string,
-    subsede: string,
+    codigo:string ,
+    cip:string ,
+    dni: string ,
+    nombre: string ,
+    institucion: number ,
+    sede: number ,
     prpagina: number,
     prtotalpagina: number,
     estado : number
@@ -70,8 +70,8 @@ export class ClienteService {
        .set('prcip',cip)
        .set('prdni',dni)
        .set('prnombre',nombre)
-       .set('prcargo',cargo)
-       .set('prsubsede',subsede)
+       .set('prinstitucion',institucion.toString() )
+       .set('prsede',sede.toString() )
        .set('prpagina',prpagina.toString())
        .set('prtotalpagina',prtotalpagina.toString())
        .set('prestado', estado.toString())
@@ -487,8 +487,8 @@ export class ClienteService {
     cip:string,
     dni: string,
     nombre: string,
-    cargo: string,
-    subsede: string,
+    institucion: string,
+    sede: string,
     estado : number
   ) : Observable <any> {
     let params = new HttpParams()
@@ -497,8 +497,8 @@ export class ClienteService {
       .set('prcip',cip)
       .set('prdni',dni)
       .set('prnombre',nombre)
-      .set('prcargo',cargo)
-      .set('prsubsede',subsede)
+      .set('prinstitucion',institucion.toString() )
+      .set('prsede',sede.toString() )
       .set('prestado', estado.toString())
 
     return this.http.get(this.url + 'cliente/read-comercial-unlimited.php', {params})
@@ -506,8 +506,7 @@ export class ClienteService {
       if (res['codigo'] === 0) {
         return res['data'];
       } else {
-        console.log('No hay datos que mostrar');
-        console.log(res);
+        console.log('No hay datos que mostrar', res);
         return false;
       }
     }));

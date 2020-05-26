@@ -238,11 +238,13 @@
       </mat-card-content>
     </mat-tab>
 
-    <mat-tab label="Telefonos">
+    <mat-tab>
+      <ng-template matTabLabel>
+        <span matBadgeColor="accent" [matBadge]="(ListadoTelefonos.TotalResultados | async)" [matBadgeHidden]="(ListadoTelefonos.TotalResultados | async)==0" matBadgeOverlap="false">Telefonos</span>
+      </ng-template>
       <mat-card-content>
         <form [formGroup]="TelefonosForm">
           <mat-grid-list cols=4 rowHeight="70px">
-
             <mat-grid-tile>
               <mat-form-field>
                 <mat-select placeholder="Tipo" formControlName="tipo">
@@ -318,7 +320,10 @@
       </mat-card-content>
     </mat-tab>
 
-    <mat-tab label="Direcciones">
+    <mat-tab>
+      <ng-template matTabLabel>
+        <span matBadgeColor="accent" [matBadge]="(ListadoDirecciones.TotalResultados | async)" [matBadgeHidden]="(ListadoDirecciones.TotalResultados | async)==0" matBadgeOverlap="false">Direcciones</span>
+      </ng-template>
       <mat-card-content>
         
         <form [formGroup]="DireccionesForm">
@@ -406,10 +411,12 @@
       </mat-card-content>
     </mat-tab>
 
-    <mat-tab label="Cuentas bancarias">
+    <mat-tab>
+      <ng-template matTabLabel>
+        <span matBadgeColor="accent" [matBadge]="(ListadoCuentas.TotalResultados | async)" [matBadgeHidden]="(ListadoCuentas.TotalResultados | async)==0" matBadgeOverlap="false">Cuentas bancarias</span>
+      </ng-template>
 
       <mat-card-content>
-        
         <form [formGroup]="CuentasForm">
           <mat-grid-list cols=4 rowHeight="70px">
 

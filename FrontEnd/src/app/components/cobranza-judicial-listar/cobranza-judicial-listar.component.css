@@ -15,7 +15,16 @@
   max-width: 15%;
 }
 
+.mat-column-total ,
+.mat-column-fecha_ultimo_documento {
+  max-width: 10%;
+}
+
 .toolbar-titulo2{
   background-color: #424242;
   color: white;
+}
+
+.centrar{
+  justify-content: center;
 }

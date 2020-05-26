@@ -29,8 +29,8 @@ export class ClienteDataSource implements DataSource<any> {
     cip:string,
     dni: string,
     nombre: string,
-    cargo: string,
-    subsede: string,
+    institucion: number,
+    sede: number,
     prpagina: number,
     prtotalpagina: number,
     estado : number
@@ -38,7 +38,7 @@ export class ClienteDataSource implements DataSource<any> {
   this.CargandoInformacion.next(true);
 
   if( relacion ) {
-    this.Servicio.ListadoComercial( codigo, cip, dni, nombre, cargo, subsede, prpagina, prtotalpagina, estado)
+    this.Servicio.ListadoComercial( codigo, cip, dni, nombre, institucion, sede, prpagina, prtotalpagina, estado)
     .pipe(catchError(() => of([])),
     finalize(() => this.CargandoInformacion.next(false))
     )
@@ -47,7 +47,7 @@ export class ClienteDataSource implements DataSource<any> {
       this.InformacionClientes.next(res['data'].clientes);
     });
   } else {
-    this.Servicio.Listado( codigo, cip, dni, nombre, cargo, subsede, prpagina, prtotalpagina, estado)
+    this.Servicio.Listado( codigo, cip, dni, nombre, institucion, sede, prpagina, prtotalpagina, estado)
     .pipe(catchError(() => of([])),
     finalize(() => this.CargandoInformacion.next(false))
     )

@@ -62,7 +62,7 @@ Class Cliente{
     }
 
     function read(){
-        $query = "CALL sp_listarcliente (?,?,?,?,?,?,?,?,?)";
+        $query = "CALL sp_listarcliente(?,?,?,?,?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
@@ -70,8 +70,8 @@ Class Cliente{
         $result->bindParam(2, $this->clt_cip);
         $result->bindParam(3, $this->clt_dni);
         $result->bindParam(4, $this->clt_nombre);
-        $result->bindParam(5, $this->clt_cargo);
-        $result->bindParam(6, $this->ssd_nombre);
+        $result->bindParam(5, $this->inst_nombre);
+        $result->bindParam(6, $this->sd_nombre);
         $result->bindParam(7, $this->prpagina);
         $result->bindParam(8, $this->prtotalpagina);
         $result->bindParam(9, $this->clt_estado);
@@ -96,6 +96,8 @@ Class Cliente{
                 "email"=>$row['email'],
                 "casilla"=>$row['casilla'],
                 "trabajo"=>$row['trabajo'],
+                "institucion"=>$row['institucion'],
+                "sede"=>$row['sede'],
                 "subsede"=>$row['subsede'],
                 "cargo"=>$row['cargo'],
                 "capacidad_pago"=>$row['capacidad_pago'],
@@ -122,8 +124,8 @@ Class Cliente{
         $result->bindParam(2, $this->clt_cip);
         $result->bindParam(3, $this->clt_dni);
         $result->bindParam(4, $this->clt_nombre);
-        $result->bindParam(5, $this->clt_cargo);
-        $result->bindParam(6, $this->ssd_nombre);
+        $result->bindParam(5, $this->inst_nombre);
+        $result->bindParam(6, $this->sd_nombre);
         $result->bindParam(7, $this->prpagina);
         $result->bindParam(8, $this->prtotalpagina);
         $result->bindParam(9, $this->clt_estado);
@@ -152,8 +154,8 @@ Class Cliente{
         $result->bindParam(2, $this->clt_cip);
         $result->bindParam(3, $this->clt_dni);
         $result->bindParam(4, $this->clt_nombre);
-        $result->bindParam(5, $this->clt_cargo);
-        $result->bindParam(6, $this->ssd_nombre);
+        $result->bindParam(5, $this->inst_nombre);
+        $result->bindParam(6, $this->sd_nombre);
         $result->bindParam(7, $this->prpagina);
         $result->bindParam(8, $this->prtotalpagina);
         $result->bindParam(9, $this->clt_estado);
@@ -178,6 +180,8 @@ Class Cliente{
                 "email"=>$row['email'],
                 "casilla"=>$row['casilla'],
                 "trabajo"=>$row['trabajo'],
+                "institucion"=>$row['institucion'],
+                "sede"=>$row['sede'],
                 "subsede"=>$row['subsede'],
                 "cargo"=>$row['cargo'],
                 "capacidad_pago"=>$row['capacidad_pago'],
@@ -206,8 +210,8 @@ Class Cliente{
         $result->bindParam(2, $this->clt_cip);
         $result->bindParam(3, $this->clt_dni);
         $result->bindParam(4, $this->clt_nombre);
-        $result->bindParam(5, $this->clt_cargo);
-        $result->bindParam(6, $this->ssd_nombre);
+        $result->bindParam(5, $this->inst_nombre);
+        $result->bindParam(6, $this->sd_nombre);
         $result->bindParam(7, $this->prpagina);
         $result->bindParam(8, $this->prtotalpagina);
         $result->bindParam(9, $this->clt_estado);
@@ -668,8 +672,8 @@ Class Cliente{
         $result->bindParam(2, $this->clt_cip);
         $result->bindParam(3, $this->clt_dni);
         $result->bindParam(4, $this->clt_nombre);
-        $result->bindParam(5, $this->clt_cargo);
-        $result->bindParam(6, $this->ssd_nombre);
+        $result->bindParam(5, $this->inst_nombre);
+        $result->bindParam(6, $this->sd_nombre);
         $result->bindParam(7, $this->clt_estado);
 
         $result->execute();
@@ -688,9 +692,11 @@ Class Cliente{
         $sheet->setCellValue('F1', 'Email');
         $sheet->setCellValue('G1', 'Cargo');
         $sheet->setCellValue('H1', 'Casilla');
-        $sheet->setCellValue('I1', 'Subsede');
-        $sheet->setCellValue('J1', 'Trabajo');
-        $sheet->setCellValue('K1', 'Cuotas vencidas');
+        $sheet->setCellValue('I1', 'Institución');
+        $sheet->setCellValue('J1', 'Sede');
+        $sheet->setCellValue('K1', 'Subsede');
+        $sheet->setCellValue('L1', 'Trabajo');
+        $sheet->setCellValue('M1', 'Cuotas vencidas');
   
         while($row = $result->fetch(PDO::FETCH_ASSOC))
         {
@@ -706,8 +712,10 @@ Class Cliente{
             $sheet->setCellValue('G' . $contador, $cargo );
             $sheet->setCellValue('H' . $contador, $casilla );
             $sheet->setCellValue('I' . $contador, $subsede );
-            $sheet->setCellValue('J' . $contador, $trabajo );
-            $sheet->setCellValue('K' . $contador, $cuotas_vencidas );
+            $sheet->setCellValue('J' . $contador, $institucion );
+            $sheet->setCellValue('K' . $contador, $sede );
+            $sheet->setCellValue('L' . $contador, $trabajo );
+            $sheet->setCellValue('M' . $contador, $cuotas_vencidas );
         }
   
         $writer = new Xlsx($spreadsheet);
