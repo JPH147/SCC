@@ -133,9 +133,9 @@ export class VentasComponent implements OnInit {
   @ViewChild('InputFechaPago', { static: true }) FiltroFecha: ElementRef;
   @ViewChild('InputInicial', { static: true }) FiltroInicial: ElementRef;
   @ViewChild('InputCuota', { static: true }) FiltroCuota: ElementRef;
-  @ViewChild('Cliente', { static: false }) ClienteAutoComplete: ElementRef;
-  @ViewChild('Vendedor', { static: false }) VendedorAutoComplete: ElementRef;
-  @ViewChild('Autorizador', { static: false }) AutorizadorAutoComplete: ElementRef;
+  @ViewChild('Cliente') ClienteAutoComplete: ElementRef;
+  @ViewChild('Vendedor') VendedorAutoComplete: ElementRef;
+  @ViewChild('Autorizador') AutorizadorAutoComplete: ElementRef;
   @ViewChildren('InputProducto') FiltroProducto:QueryList<any>;
   @ViewChildren('InputPrecio') FiltroPrecio:QueryList<any>;
   @ViewChild(MatSort, { static: true }) sort: MatSort;

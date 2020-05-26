@@ -33,10 +33,10 @@ export class SalidaVendedoresComponent implements OnInit {
   
   public Cargando = new BehaviorSubject<boolean>(false);
 
-  @ViewChild('InputVendedor', { static: false }) FiltroVendedor: ElementRef;
+  @ViewChild('InputVendedor') FiltroVendedor: ElementRef;
   @ViewChildren('InputProducto') FiltroProducto: QueryList<any>;
-  @ViewChild('InputAlmacen', { static: false }) FiltroAlmacen: MatSelect;
-  @ViewChild('InputProductoEditar', { static: false }) FiltroProductoEditar: ElementRef;
+  @ViewChild('InputAlmacen') FiltroAlmacen: MatSelect;
+  @ViewChild('InputProductoEditar') FiltroProductoEditar: ElementRef;
   public SalidaVendedoresForm:FormGroup;
   public Sucursales: Array<any>;
   public Vendedor: Array<any>;

@@ -25,7 +25,7 @@ export class HistorialSerieComponent implements OnInit {
 
   @ViewChild('InputserieProducto', { static: true }) FiltroProductos: ElementRef;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  @ViewChild(MatSort, { static: false }) sort: MatSort;
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(
     private AServicio : ArchivosService,

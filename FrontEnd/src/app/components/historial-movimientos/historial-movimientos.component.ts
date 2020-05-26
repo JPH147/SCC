@@ -19,7 +19,7 @@ export class HistorialMovimientosComponent implements OnInit {
 
 	@ViewChild('InputAlmacen', { static: true }) FiltroAlmacen: ElementRef;
 	@ViewChild('InputTipo', { static: true }) FiltroTipo: MatSelect;
-  @ViewChild('InputEstadoTransferencia', { static: false }) FiltroEstadoTransferencia: MatSelect;
+  @ViewChild('InputEstadoTransferencia') FiltroEstadoTransferencia: MatSelect;
 	@ViewChild('InputReferente', { static: true }) FiltroReferente: ElementRef;
 	@ViewChild('InputDocumento', { static: true }) FiltroDocumento: ElementRef;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;

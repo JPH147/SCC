@@ -33,7 +33,7 @@ export class CobranzaClienteListarComponent implements OnInit {
   @ViewChild('InputSede', { static: true }) FiltroSede: ElementRef;
   @ViewChild('InputInstitución', { static: true }) FiltroInstitucion: ElementRef;
   @ViewChild('InputTipoPago', { static: true }) FiltroTipo: MatSelect;
-  @ViewChild('InputEstado', { static: false }) FiltroEstado: MatSelect;
+  @ViewChild('InputEstado') FiltroEstado: MatSelect;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(

@@ -59,7 +59,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   @ViewChild('InputInicial', { static: true }) FiltroInicial: ElementRef;
   @ViewChild('InputCuota', { static: true }) FiltroCuota: ElementRef;
   @ViewChildren('InputPrecio') FiltroPrecio:QueryList<any>;
-  @ViewChild(MatSort, { static: false }) sort: MatSort;
+  @ViewChild(MatSort) sort: MatSort;
 
   public foto: string;
   public dni: string;

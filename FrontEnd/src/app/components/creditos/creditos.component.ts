@@ -132,8 +132,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   @ViewChild('InputCapital', { static: true }) FiltroCapital: ElementRef;
   @ViewChild('InputCuota', { static: true }) FiltroCuota: ElementRef;
   @ViewChild('InputInteres', { static: true }) FiltroInteres: ElementRef;
-  @ViewChild('Vendedor', { static: false }) VendedorAutoComplete : ElementRef;
-  @ViewChild('Autorizador', { static: false }) AutorizadorAutoComplete: ElementRef;
+  @ViewChild('Vendedor') VendedorAutoComplete : ElementRef;
+  @ViewChild('Autorizador') AutorizadorAutoComplete: ElementRef;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   public ListadoVendedores: Array<any>;

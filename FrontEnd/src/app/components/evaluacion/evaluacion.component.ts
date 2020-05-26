@@ -23,9 +23,9 @@ export class EvaluacionComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatStepper, { static: true }) stepper: MatStepper;
   @ViewChild('InputInteres', { static: true }) FiltroInteres : ElementRef ;
-  @ViewChild('InputCliente', { static: false }) FiltroCliente : ElementRef;
+  @ViewChild('InputCliente') FiltroCliente : ElementRef;
 
-  @ViewChild('InputDNI', { static: false }) FiltroDNI : ElementRef;
+  @ViewChild('InputDNI') FiltroDNI : ElementRef;
 
   public Cargando = new BehaviorSubject<boolean>(false);
   public EvaluacionForm : FormGroup;

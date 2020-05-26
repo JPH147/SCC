@@ -29,10 +29,10 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
 })
   export class IngresoProductosComponent implements OnInit {
 
-    @ViewChild('Proveedor', { static: false }) FiltroProveedor: ElementRef;
-    @ViewChild('Cliente', { static: false }) FiltroCliente: ElementRef;
-    @ViewChild('Vendedor', { static: false }) FiltroVendedor: ElementRef;
-    @ViewChild('docRefencia', { static: false }) FiltroReferencia: ElementRef;
+    @ViewChild('Proveedor') FiltroProveedor: ElementRef;
+    @ViewChild('Cliente') FiltroCliente: ElementRef;
+    @ViewChild('Vendedor') FiltroVendedor: ElementRef;
+    @ViewChild('docRefencia') FiltroReferencia: ElementRef;
 
     public IngresoProductoForm: FormGroup;
     public contador: number;

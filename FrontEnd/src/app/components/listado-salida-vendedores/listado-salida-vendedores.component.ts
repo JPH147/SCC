@@ -23,7 +23,7 @@ export class ListadoSalidaVendedoresComponent implements OnInit {
   @ViewChild('InputPecosa', { static: true }) FiltroPecosa: ElementRef;
   @ViewChild('InputDestino', { static: true }) FiltroDestino: ElementRef;
   @ViewChild('InputSucursal', { static: true }) FiltroSucursal: MatSelect;
-  @ViewChild('InputSerie', { static: false }) FiltroSerie: ElementRef;
+  @ViewChild('InputSerie') FiltroSerie: ElementRef;
   @ViewChild('InputVendedor', { static: true }) FiltroVendedor: ElementRef;
   @ViewChild('InputEstado', { static: true }) FiltroEstado: MatSelect;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;

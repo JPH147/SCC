@@ -15,7 +15,7 @@ import { IngresoProductoService } from '../../ingreso-productos/ingreso-producto
 })
 export class VentanaEditarSerieComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('InputProducto', { static: false }) FiltroProducto: ElementRef;
+  @ViewChild('InputProducto') FiltroProducto: ElementRef;
   @ViewChild('InputSerie', { static: true }) FiltroSerie: ElementRef;
 	public EditarSerieForm: FormGroup;
   public Informacion:any = {id:null, id_producto:null,serie:"", color:"", almacenamiento:"",precio:0};
