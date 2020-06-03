@@ -206,6 +206,12 @@ mat-row:nth-child(even){
   display: none !important;
 }
 
+// Esto oculta las flechitas del paginador
+.large .mat-paginator-navigation-previous,
+.large .mat-paginator-navigation-next{
+  display : none ;
+}
+
 // Para que en el botón de subir archivo no se muestre el "o arrástrelo"
 .img-ul-drag-box-msg{
   display: none !important;

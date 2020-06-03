@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
-import { MatCheckbox } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -66,7 +65,7 @@ export class ClientesComponent implements OnInit, AfterViewInit {
     this.CrearFormulario() ;
 
     this.ListadoCliente = new ClienteDataSource(this.Servicio);
-    this.ListadoCliente.CargarClientes(false,'','', '','',0,0,1, 10,1);
+    this.ListadoCliente.CargarClientes(false,'','', '','',4,3,1, 10,1);
     this.estado=1;
     this.Columnas = this.ColumnasGeneral ;
 
@@ -74,6 +73,8 @@ export class ClientesComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
+    this.sbj.next() ;
+    
     merge(
       this.ClienteForm.get('dni').valueChanges ,
       this.ClienteForm.get('codigo').valueChanges ,
@@ -86,7 +87,6 @@ export class ClientesComponent implements OnInit, AfterViewInit {
       distinctUntilChanged(),
       takeUntil(this.sbj),
       tap(() => {
-        this.sbj.next() ;
         this.paginator.pageIndex=0 ;
         this.CargarData() ;
       })
@@ -333,6 +333,7 @@ export class ClientesComponent implements OnInit, AfterViewInit {
   })}
 
   InstitucionSeleccionada(event) {
+    // console.log(event)
     if ( event.value == 0 ) {
       this.ClienteForm.get('sede').setValue(0) ;
       this.ClienteForm.get('sede').disable() ;

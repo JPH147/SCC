@@ -19,8 +19,8 @@
       </mat-form-field>
     </mat-grid-tile>
 
-    <mat-grid-tile colspan="1">
-      <mat-form-field class="columnas-1">
+    <mat-grid-tile colspan="2">
+      <mat-form-field class="columnas-2">
         <mat-select placeholder='Selecciona Sede' formControlName="sede" (selectionChange)="SedeSeleccionada($event)">
           <mat-option *ngFor="let sede of Sede" [value] = "sede.id"> {{sede.nombre}} </mat-option>
         </mat-select>

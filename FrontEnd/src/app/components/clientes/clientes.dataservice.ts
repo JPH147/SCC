@@ -35,26 +35,31 @@ export class ClienteDataSource implements DataSource<any> {
     prtotalpagina: number,
     estado : number
   ){
-  this.CargandoInformacion.next(true);
+    this.CargandoInformacion.next(true);
 
-  if( relacion ) {
-    this.Servicio.ListadoComercial( codigo, cip, dni, nombre, institucion, sede, prpagina, prtotalpagina, estado)
-    .pipe(catchError(() => of([])),
-    finalize(() => this.CargandoInformacion.next(false))
-    )
-    .subscribe(res => {
-      this.TotalResultados.next(res['mensaje']);
-      this.InformacionClientes.next(res['data'].clientes);
-    });
-  } else {
-    this.Servicio.Listado( codigo, cip, dni, nombre, institucion, sede, prpagina, prtotalpagina, estado)
-    .pipe(catchError(() => of([])),
-    finalize(() => this.CargandoInformacion.next(false))
-    )
-    .subscribe(res => {
+    // if( codigo == '' && cip == '' && dni == '' && nombre == '' && estado == 1 ) {
+    //   institucion = 4 ;
+    //   sede = 3 ;
+    // }
+
+    if( relacion ) {
+      this.Servicio.ListadoComercial( codigo, cip, dni, nombre, institucion, sede, prpagina, prtotalpagina, estado)
+      .pipe(catchError(() => of([])),
+      finalize(() => this.CargandoInformacion.next(false))
+      )
+      .subscribe(res => {
         this.TotalResultados.next(res['mensaje']);
         this.InformacionClientes.next(res['data'].clientes);
       });
+    } else {
+      this.Servicio.Listado( codigo, cip, dni, nombre, institucion, sede, prpagina, prtotalpagina, estado)
+      .pipe(catchError(() => of([])),
+      finalize(() => this.CargandoInformacion.next(false))
+      )
+      .subscribe(res => {
+          this.TotalResultados.next(res['mensaje']);
+          this.InformacionClientes.next(res['data'].clientes);
+        });
     }
   }
 

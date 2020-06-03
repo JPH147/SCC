@@ -33,12 +33,12 @@
   
       <mat-grid-tile>
         <ng-container *ngIf="estado==1">
-          <button mat-raised-button (click)="VerPendientes()">Ver pendientes</button>
-          <button mat-raised-button color="primary" (click)="Agregar()">Agregar</button>
+          <button tabIndex=-1 mat-raised-button (click)="VerPendientes()">Ver pendientes</button>
+          <button tabIndex=-1 mat-raised-button color="primary" (click)="Agregar()">Agregar</button>
         </ng-container>
         <ng-container *ngIf="estado==5">
-          <button mat-raised-button (click)="VerTodos()">Ver todos</button>
-          <button mat-raised-button color="warn" (click)="DescartarTodos()">Descartar todos</button>
+          <button tabIndex=-1 mat-raised-button (click)="VerTodos()">Ver todos</button>
+          <button tabIndex=-1 mat-raised-button color="warn" (click)="DescartarTodos()">Descartar todos</button>
         </ng-container>
       </mat-grid-tile>
   
