@@ -25,6 +25,7 @@ export class CreditosListarAfiliacionesComponent implements OnInit {
   public Columnas: string[] = ['numero', 'fecha', 'codigo', 'cliente_nombre', 'monto_total', 'documentos_adjuntos', 'opciones'];
 
   @ViewChild('InputCliente', { static: true }) FiltroCliente: ElementRef;
+  @ViewChild('InputDNI', { static: true }) FiltroDNI: ElementRef;
   // @ViewChild('InputTipo') FiltroTipo: MatSelect;
   // @ViewChild('InputEstado') FiltroEstado: MatSelect;
   @ViewChild('InputDocumentos', { static: true }) FiltroDocumentos: MatSelect;
@@ -41,7 +42,7 @@ export class CreditosListarAfiliacionesComponent implements OnInit {
     this.fecha_fin = null ;
 
     this.ListadoCreditos = new CreditosDataSource(this.Servicio);
-    this.ListadoCreditos.CargarCreditos("",1,0,this.fecha_inicio,this.fecha_fin,1,1,10,"fecha desc");
+    this.ListadoCreditos.CargarCreditos("","",1,0,this.fecha_inicio,this.fecha_fin,1,1,10,"fecha desc");
   }
 
   ngAfterViewInit () {
@@ -57,7 +58,10 @@ export class CreditosListarAfiliacionesComponent implements OnInit {
       tap(() => this.CargarData())
     ).subscribe();
 
-    fromEvent(this.FiltroCliente.nativeElement, 'keyup')
+    merge(
+      fromEvent(this.FiltroCliente.nativeElement, 'keyup') ,
+      fromEvent(this.FiltroDNI.nativeElement, 'keyup') ,
+    )
     .pipe(
        debounceTime(200),
        distinctUntilChanged(),
@@ -77,6 +81,7 @@ export class CreditosListarAfiliacionesComponent implements OnInit {
   CargarData() {
     this.ListadoCreditos.CargarCreditos(
       this.FiltroCliente.nativeElement.value,
+      this.FiltroDNI.nativeElement.value,
       1,
       this.FiltroDocumentos.value,
       this.fecha_inicio,

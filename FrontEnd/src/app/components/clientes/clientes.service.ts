@@ -24,7 +24,8 @@ export class ClienteService {
     sede: number ,
     prpagina: number ,
     prtotalpagina: number ,
-    estado : number
+    estado : number ,
+    tiempo : number
   ): Observable<any>  {
      return this.http.get(this.url + 'cliente/read.php',{
        params: new HttpParams()
@@ -43,8 +44,10 @@ export class ClienteService {
                                 item.foto = URLIMAGENES.carpeta + 'cliente/' + item.foto;
                                 item.dni = item.dni.substring(1,item.dni.length);
                                 item.codigo = item.codigo.substring(1,item.codigo.length);
+                                item.cip = item.cip.substring(1,item.cip.length);
                                 return item;
                               })
+        res['tiempo'] = tiempo ;
         return res;
       }else {
         console.log('No hay datos que mostrar');
@@ -248,15 +251,15 @@ export class ClienteService {
 
   Seleccionar(
     id: number
-  // tslint:disable-next-line:whitespace
   ):Observable<any> {
     return this.http.get(this.url + 'cliente/readxId.php?idcliente=' + id)
     .pipe(map(res => {
       if (res['codigo'] === 0) {
-          return res['data'];
+        res['data']['dni'] = res['data']['dni'].substring(1,res['data']['dni'].length);
+        res['data']['codigo'] = res['data']['codigo'].substring(1,res['data']['codigo'].length);
+        return res['data'] ;
       } else {
-        // console.log(res)
-        console.log('No hay datos que mostrar');
+        console.log('No hay datos que mostrar', res);
       }
     }));
   }

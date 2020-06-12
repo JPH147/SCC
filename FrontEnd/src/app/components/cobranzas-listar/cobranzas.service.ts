@@ -74,6 +74,27 @@ export class CobranzasService {
     }));
   }
 
+  ListarPNPClientes(
+    sede : number ,
+    fecha_inicio : Date ,
+    fecha_fin : Date
+  ){
+    // Se envía null para que se muestren las deudas hasta la fecha
+    let params = new HttpParams()
+      .set('prsede', sede.toString() )
+      .set('prfechafin', moment(fecha_fin).format("YYYY-MM-DD") );
+
+    return this.http.get(this.url + 'cobranza/read-pnp-clientes.php', {params})
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res;
+      } else {
+        console.log('No hay datos que mostrar');
+        return [];
+      }
+    }));
+  }
+
   VerificarPagoSede(
     sede : number,
     fecha_fin : Date

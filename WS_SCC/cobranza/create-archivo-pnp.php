@@ -46,7 +46,7 @@
         };
         foreach ( $resultante as $item ) {
             $comodin = (
-                str_pad( $item['codofin'] , 9, " ", STR_PAD_LEFT) .
+                str_pad( $item['codofin'] , 9, "0", STR_PAD_LEFT) .
                 $codigo .
                 str_pad( $item['monto_pendiente']*100 , 12, "0", STR_PAD_LEFT) .
                 "000000000000" .

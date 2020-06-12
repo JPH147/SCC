@@ -67,7 +67,7 @@ ngAfterViewInit () {
    	this.FiltroDepartamento.nativeElement.value,
    	this.FiltroProvincia.nativeElement.value,
    	this.FiltroDistrito.nativeElement.value,
-    this.paginator.pageIndex,
+    this.paginator.pageIndex+1,
     this.paginator.pageSize,
 	);
  }

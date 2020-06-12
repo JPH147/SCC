@@ -1,7 +1,6 @@
 <mat-card class="card">
 
   <mat-toolbar color="primary">
-    <mat-toolbar-row *ngIf="!data"><h4>Agregar Cliente</h4></mat-toolbar-row>
     <mat-toolbar-row *ngIf="data">Editar cliente</mat-toolbar-row>
   </mat-toolbar>
 
@@ -229,7 +228,6 @@
 
               <mat-grid-tile>
                 <button type="submit" mat-raised-button color="primary" [disabled]="( Cargando | async )||  ClientesForm.invalid || cliente_nuevo==2" matTooltip="Grabar"> Guardar </button>
-                <!-- <button type="button" mat-raised-button (click)="Imprimir()">Imprimir</button> -->
               </mat-grid-tile>
             </mat-grid-list>
           </mat-card-actions>

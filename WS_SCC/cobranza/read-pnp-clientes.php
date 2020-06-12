@@ -20,14 +20,7 @@
         $cobranza->fecha_inicio = !empty($_GET['prfechainicio']) ? trim($_GET['prfechainicio']) : null;
         $cobranza->fecha_fin = !empty($_GET['prfechafin']) ? trim($_GET['prfechafin']) : null;
 
-        // $cobranza->read_pnp_total();
-
-        /*$cobranza_totales = array(
-            "cantidad" => $cobranza->cantidad,
-            "total" => $cobranza->total
-	    );*/
-
-        $cobranza_list = $cobranza->read_pnp();
+        $cobranza_list = $cobranza->read_pnp_clientes();
 
         if (count(array_filter($cobranza_list))>0)
         { 

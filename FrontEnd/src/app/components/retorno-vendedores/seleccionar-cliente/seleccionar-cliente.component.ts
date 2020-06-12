@@ -81,6 +81,7 @@ export class ClienteDataSource implements DataSource<any> {
   public CargandoInformacion = new BehaviorSubject<boolean>(false);
   public Cargando = this.CargandoInformacion.asObservable();
   public TotalResultados = new BehaviorSubject<number>(0);
+  private tiempo_consulta = new BehaviorSubject<number>(0)
 
   constructor(
     private Servicio: ClienteService
@@ -104,24 +105,20 @@ export class ClienteDataSource implements DataSource<any> {
   ){
     this.CargandoInformacion.next(true);
 
-    this.Servicio.Listado( codigo, cip, dni, nombre,0,0, prpagina, 5,1)
+    this.tiempo_consulta.next(new Date().getTime()) ;
+
+    this.Servicio.Listado( codigo, cip, dni, nombre,0,0, prpagina, 5,1, this.tiempo_consulta.value)
     .pipe(catchError(() => of([])),
       finalize(() => this.CargandoInformacion.next(false))
     ).subscribe(res => {
-      res['data'].clientes.forEach((item)=>{
-        let dni : string = item.dni;
-        let dni_longitud : number = (item.dni).toString().length;
-
-        for(let i = dni_longitud; i<8 ; i++){
-          dni = "0" + dni ;
-        }
-        item.dni = dni ;
-      });
-      
-      this.TotalResultados.next(res['mensaje']);
       if(res['data']){
+        if( res['tiempo'] == this.tiempo_consulta.value ) {
+          this.TotalResultados.next(res['mensaje']);
+          this.InformacionClientes.next(res['data'].clientes);
+        }
         this.InformacionClientes.next(res['data'].clientes);
       }else{
+        this.TotalResultados.next(0);
         this.InformacionClientes.next([])
       }
     });

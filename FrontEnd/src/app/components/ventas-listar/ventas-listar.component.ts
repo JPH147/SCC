@@ -31,6 +31,7 @@ export class VentasListarComponent implements OnInit {
   Columnas: string[] = ['numero', 'fecha', 'contrato', 'cliente_nombre', 'tipo_venta', 'monto_total', 'opciones'];
 
   @ViewChild('InputCliente', { static: true }) FiltroCliente: ElementRef;
+  @ViewChild('InputDNI', { static: true }) FiltroDNI: ElementRef;
   @ViewChild('InputTipo', { static: true }) FiltroTipo: MatSelect;
   @ViewChild('InputEstado', { static: true }) FiltroEstado: MatSelect;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -50,7 +51,7 @@ export class VentasListarComponent implements OnInit {
     this.fecha_fin = null ;
 
     this.ListadoVentas = new VentaDataSource(this.Servicio);
-    this.ListadoVentas.CargarVentas("",0,this.fecha_inicio,this.fecha_fin,1,1,10,"fecha desc");
+    this.ListadoVentas.CargarVentas("","",0,this.fecha_inicio,this.fecha_fin,1,1,10,"fecha desc");
  }
 
 // tslint:disable-next-line:use-life-cycle-interface
@@ -67,7 +68,10 @@ export class VentasListarComponent implements OnInit {
       tap(() => this.CargarData())
     ).subscribe();
 
-    fromEvent(this.FiltroCliente.nativeElement, 'keyup')
+    merge(
+      fromEvent(this.FiltroCliente.nativeElement, 'keyup') ,
+      fromEvent(this.FiltroDNI.nativeElement, 'keyup') ,
+    )
     .pipe(
        debounceTime(200),
        distinctUntilChanged(),
@@ -81,6 +85,7 @@ export class VentasListarComponent implements OnInit {
   CargarData() {
     this.ListadoVentas.CargarVentas(
       this.FiltroCliente.nativeElement.value,
+      this.FiltroDNI.nativeElement.value,
       this.FiltroTipo.value,
       this.fecha_inicio,
       this.fecha_fin,
@@ -131,7 +136,6 @@ export class VentasListarComponent implements OnInit {
 
   ListarProcesos( id_venta : number ) {
     this.ListadoProcesos = [] ;
-
     this._judiciales.ListarProcesosxTransaccion(2, id_venta).subscribe(res=>{
       this.ListadoProcesos = res ;
     })

@@ -13,21 +13,18 @@
 
     <mat-grid-tile colspan="1">
       <mat-form-field class="columnas-1">
-        <mat-select placeholder='Selecciona Institución'  formControlName="institucion" (selectionChange)="InstitucionSeleccionada($event)">
+        <mat-select placeholder='Selecciona Institución'  formControlName="institucion" (selectionChange)="ListarSede()">
           <mat-option *ngFor="let institucion of Institucion" [value]="institucion.id"> {{institucion.nombre}} </mat-option>
         </mat-select>
       </mat-form-field>
     </mat-grid-tile>
 
-    <mat-grid-tile colspan="2">
-      <mat-form-field class="columnas-2">
-        <mat-select placeholder='Selecciona Sede' formControlName="sede" (selectionChange)="SedeSeleccionada($event)">
+    <mat-grid-tile colspan="3">
+      <mat-form-field class="columnas-3">
+        <mat-select placeholder='Selecciona Sede' formControlName="sede" (selectionChange)="SedeSeleccionada()">
           <mat-option *ngFor="let sede of Sede" [value] = "sede.id"> {{sede.nombre}} </mat-option>
         </mat-select>
       </mat-form-field>
-    </mat-grid-tile>
-
-    <mat-grid-tile>
     </mat-grid-tile>
 
     <mat-grid-tile>
@@ -36,17 +33,26 @@
         <mat-datepicker-toggle matSuffix [for]="FFin"></mat-datepicker-toggle>
         <mat-datepicker #FFin startView="year"
                         (yearSelected)="AnoElegido($event)"
-                        (monthSelected)="MesElegico($event, FFin)"></mat-datepicker>
+                        (monthSelected)="MesElegido($event, FFin)"></mat-datepicker>
       </mat-form-field>
     </mat-grid-tile>
 
+    <mat-grid-tile>
+    </mat-grid-tile>
+
+    <mat-grid-tile>
+    </mat-grid-tile>
+
+    <mat-grid-tile>
+      <button mat-raised-button color="primary" (click)="EmitirInformacion()" [disabled]="cargando"> Buscar cuotas </button>
+    </mat-grid-tile>
   </mat-grid-list>
 
   </form>
 
   <!-- Para Ministerio del Interior  -->
   <ng-container *ngIf="CobranzaForm.value.institucion==4 "> 
-    <app-cobranza-pnp [sede_seleccionada]="sede"></app-cobranza-pnp>
+    <app-cobranza-pnp [sede_seleccionada]="sede" (cargando)="cargando = $event"></app-cobranza-pnp>
   </ng-container>
 
 </mat-card>

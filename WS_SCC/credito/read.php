@@ -17,6 +17,7 @@
         $credito = new Creditos($db);
 
         $credito->cliente = !empty($_GET['prcliente']) ? trim($_GET['prcliente']) :'';
+        $credito->cliente_dni = !empty($_GET['prdni']) ? trim($_GET['prdni']) :'';
         $credito->tipo_credito = !empty($_GET['prtipo_credito']) ? trim($_GET['prtipo_credito']) : 0;
         $credito->documentos = !empty($_GET['prdocumentos']) ? trim($_GET['prdocumentos']) : 0;
         $credito->fecha_inicio = !empty($_GET['prfecha_inicio']) ? trim($_GET['prfecha_inicio']) : null;

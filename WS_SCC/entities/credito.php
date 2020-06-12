@@ -75,19 +75,20 @@ Class Creditos{
 
     function read(){
 
-        $query = "CALL sp_listarcredito(?,?,?,?,?,?,?,?,?)";
+        $query = "CALL sp_listarcredito(?,?,?,?,?,?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
         $result->bindParam(1, $this->cliente);
-        $result->bindParam(2, $this->tipo_credito);
-        $result->bindParam(3, $this->documentos);
-        $result->bindParam(4, $this->fecha_inicio);
-        $result->bindParam(5, $this->fecha_fin);
-        $result->bindParam(6, $this->estado);
-        $result->bindParam(7, $this->numero_pagina);
-        $result->bindParam(8, $this->total_pagina);
-        $result->bindParam(9, $this->orden);
+        $result->bindParam(2, $this->cliente_dni);
+        $result->bindParam(3, $this->tipo_credito);
+        $result->bindParam(4, $this->documentos);
+        $result->bindParam(5, $this->fecha_inicio);
+        $result->bindParam(6, $this->fecha_fin);
+        $result->bindParam(7, $this->estado);
+        $result->bindParam(8, $this->numero_pagina);
+        $result->bindParam(9, $this->total_pagina);
+        $result->bindParam(10, $this->orden);
 
         $result->execute();
         
@@ -131,16 +132,17 @@ Class Creditos{
 
     function contar(){
 
-        $query = "CALL sp_listarcreditocontar(?,?,?,?,?,?)";
+        $query = "CALL sp_listarcreditocontar(?,?,?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
         $result->bindParam(1, $this->cliente);
-        $result->bindParam(2, $this->tipo_credito);
-        $result->bindParam(3, $this->documentos);
-        $result->bindParam(4, $this->fecha_inicio);
-        $result->bindParam(5, $this->fecha_fin);
-        $result->bindParam(6, $this->estado);
+        $result->bindParam(2, $this->cliente_dni);
+        $result->bindParam(3, $this->tipo_credito);
+        $result->bindParam(4, $this->documentos);
+        $result->bindParam(5, $this->fecha_inicio);
+        $result->bindParam(6, $this->fecha_fin);
+        $result->bindParam(7, $this->estado);
 
         $result->execute();
 

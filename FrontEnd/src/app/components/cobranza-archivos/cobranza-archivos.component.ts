@@ -45,6 +45,7 @@ export class CobranzaArchivosComponent implements OnInit {
   public sede = new BehaviorSubject<any>( { institucion: 0 , sede :0 } );
   public Institucion : Array<any>;
   public Sede: Array<any>;
+  public cargando : boolean = false ;
 
   constructor(
     private location: Location,
@@ -54,8 +55,9 @@ export class CobranzaArchivosComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.CrearFormulario();
-    this.ListarInstitucion();
+    this.CrearFormulario() ;
+    this.ListarInstitucion() ;
+    this.ListarSede() ;
   }
 
   Atras(){
@@ -64,8 +66,8 @@ export class CobranzaArchivosComponent implements OnInit {
 
   CrearFormulario(){
     this.CobranzaForm = this.FormBuilder.group({
-      institucion: [null, [Validators.required]],
-      sede: [null, [Validators.required]],
+      institucion: [4, [Validators.required]],
+      sede: [3, [Validators.required]],
       fecha_fin: moment(),
     })
   }
@@ -76,17 +78,14 @@ export class CobranzaArchivosComponent implements OnInit {
     })
   }
 
-  ListarSede(i) {
-    this.GServicios.ListarSede(i, '').subscribe(res => {
+  ListarSede() {
+    this.GServicios.ListarSede( this.CobranzaForm.get('institucion').value, '').subscribe(res => {
       this.Sede = res
   })}
 
-  InstitucionSeleccionada(event) {
-    this.ListarSede(event.value);
-  }
-
-  SedeSeleccionada(event) {
-    this.EmitirInformacion();
+  SedeSeleccionada() {
+    // this.EmitirInformacion();
+    // console.log(this.CobranzaForm.value)
   }
 
   EmitirInformacion(){
@@ -99,17 +98,27 @@ export class CobranzaArchivosComponent implements OnInit {
   }
   
   AnoElegido(ano_normalizado: Moment) {
-    const ano_seleccionado = this.CobranzaForm.value.fecha_fin;
+    let ano_seleccionado : moment.Moment ;
+    // Se colocó este 'if' para que cuando el valor inicial de 'fecha_fin' sea null, no haya errores en consola
+    if( this.CobranzaForm.value.fecha_fin ) {
+      ano_seleccionado = this.CobranzaForm.value.fecha_fin ;
+    } else {
+      ano_seleccionado = moment() ;
+    }
     ano_seleccionado.year(ano_normalizado.year());
     this.CobranzaForm.get('fecha_fin').setValue(ano_seleccionado);
   }
 
-  MesElegico(mes_normalizado: Moment, datepicker: MatDatepicker<Moment>) {
-    const mes_seleccionado = this.CobranzaForm.value.fecha_fin;
+  MesElegido(mes_normalizado: Moment, datepicker: MatDatepicker<Moment>) {
+    let mes_seleccionado : moment.Moment ;
+    // Se colocó este 'if' para que cuando el valor inicial de 'fecha_fin' sea null, no haya errores en consola
+    if( this.CobranzaForm.value.fecha_fin ) {
+      mes_seleccionado = this.CobranzaForm.value.fecha_fin ;
+    } else {
+      mes_seleccionado = moment() ;
+    }
     mes_seleccionado.month(mes_normalizado.month());
     this.CobranzaForm.get('fecha_fin').setValue(moment(mes_seleccionado).endOf('month'));
     datepicker.close();
-    this.EmitirInformacion();
   }
-
 }

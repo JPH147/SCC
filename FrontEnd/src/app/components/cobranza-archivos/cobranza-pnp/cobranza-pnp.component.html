@@ -11,15 +11,17 @@
 
     <mat-grid-list cols=4 rowHeight="70px">
       <mat-grid-tile>
-        <mat-form-field class="columnas-1">
-          <input type="text" matInput placeholder="Total de cobros" [(ngModel)]="ListadoCobranzaPNP.totales.cantidad">
+        <mat-form-field class="columnas-1" appearance="fill">
+          <mat-label> Total de cuotas </mat-label>
+          <input type="text" matInput placeholder="Total de cuotas" [(ngModel)]="ListadoCobranzaPNP.totales.cantidad" readonly>
         </mat-form-field>
       </mat-grid-tile>
   
       <mat-grid-tile>
-        <span matPrefix>S/. &nbsp;</span>
-        <mat-form-field class="columnas-1">
-          <input type="text" matInput placeholder="Total de recaudación" [(ngModel)]="ListadoCobranzaPNP.totales.total">
+        <mat-form-field class="columnas-1" appearance="fill">
+          <span matPrefix>S/. &nbsp;</span>
+          <mat-label> Total de recaudación </mat-label>
+          <input type="text" matInput placeholder="Total de recaudación" [(ngModel)]="ListadoCobranzaPNP.totales.total" readonly>
         </mat-form-field>
       </mat-grid-tile>
     </mat-grid-list>
@@ -61,9 +63,10 @@
       </ng-container>
   
       <ng-container matColumnDef="opciones">
-        <mat-header-cell *matHeaderCellDef> Considerar </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let cuota">
-          <mat-checkbox color="primary" [(ngModel)]="cuota.considerar" (change)="CalcularTotales()"></mat-checkbox>
+          <button mat-icon-button type="button" color="primary" matTooltip="Editar cuotas" (click)="EditarCuotas(cuota)"> <mat-icon> edit </mat-icon> </button>
+          <!-- <mat-checkbox color="primary" [(ngModel)]="cuota.considerar" (change)="CalcularTotales()"></mat-checkbox> -->
         </mat-cell>
       </ng-container>
   

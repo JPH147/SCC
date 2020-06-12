@@ -92,7 +92,7 @@ Class Cliente{
                 "codigo"=> "'". $row['codigo'],
                 "dni"=> "'" . $row['dni'],
                 "nombre"=>$row['nombre'],
-                "cip"=>$row['cip'],
+                "cip"=> "'" . $row['cip'],
                 "email"=>$row['email'],
                 "casilla"=>$row['casilla'],
                 "trabajo"=>$row['trabajo'],
@@ -387,8 +387,8 @@ Class Cliente{
         $this->cargo=$row['crg_nombre'];
         $this->id_cargo_estado=$row['id_cargo_estado'];
         $this->cargo_estado=$row['cargo_estado'];
-        $this->clt_codigo=$row['clt_codigo'];
-        $this->clt_dni=$row['clt_dni'];
+        $this->clt_codigo="'".$row['clt_codigo'];
+        $this->clt_dni="'".$row['clt_dni'];
         $this->clt_nombre=$row['clt_nombre'];
         $this->clt_foto=$row['clt_foto'];
         $this->clt_cip= $row['clt_cip'];

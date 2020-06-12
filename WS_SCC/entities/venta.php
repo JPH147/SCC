@@ -86,18 +86,19 @@ Class Venta{
 
     function read(){
 
-        $query = "CALL sp_listarventa(?,?,?,?,?,?,?,?)";
+        $query = "CALL sp_listarventa(?,?,?,?,?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
         $result->bindParam(1, $this->cliente);
-        $result->bindParam(2, $this->tipo_venta);
-        $result->bindParam(3, $this->fecha_inicio);
-        $result->bindParam(4, $this->fecha_fin);
-        $result->bindParam(5, $this->estado);
-        $result->bindParam(6, $this->numero_pagina);
-        $result->bindParam(7, $this->total_pagina);
-        $result->bindParam(8, $this->orden);
+        $result->bindParam(2, $this->cliente_dni);
+        $result->bindParam(3, $this->tipo_venta);
+        $result->bindParam(4, $this->fecha_inicio);
+        $result->bindParam(5, $this->fecha_fin);
+        $result->bindParam(6, $this->estado);
+        $result->bindParam(7, $this->numero_pagina);
+        $result->bindParam(8, $this->total_pagina);
+        $result->bindParam(9, $this->orden);
 
         $result->execute();
         
@@ -138,15 +139,16 @@ Class Venta{
 
     function contar(){
 
-        $query = "CALL sp_listarventacontar(?,?,?,?,?)";
+        $query = "CALL sp_listarventacontar(?,?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
         $result->bindParam(1, $this->cliente);
-        $result->bindParam(2, $this->tipo_venta);
-        $result->bindParam(3, $this->fecha_inicio);
-        $result->bindParam(4, $this->fecha_fin);
-        $result->bindParam(5, $this->estado);
+        $result->bindParam(2, $this->cliente_dni);
+        $result->bindParam(3, $this->tipo_venta);
+        $result->bindParam(4, $this->fecha_inicio);
+        $result->bindParam(5, $this->fecha_fin);
+        $result->bindParam(6, $this->estado);
 
         $result->execute();
 

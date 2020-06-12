@@ -19,6 +19,7 @@ export class CreditosService {
 
   Listar(
     cliente:string,
+    documento:string,
     tipo_credito:number,
     documentos:number,
     fecha_inicio:Date,
@@ -31,6 +32,7 @@ export class CreditosService {
 
     let params = new HttpParams()
       .set('prcliente',cliente)
+      .set('prdni',documento)
       .set('prtipo_credito',tipo_credito.toString())
       .set('prdocumentos',documentos.toString())
       .set('prfecha_inicio', fecha_inicio ? moment(fecha_inicio).format('YYYY-MM-DD') : "" )

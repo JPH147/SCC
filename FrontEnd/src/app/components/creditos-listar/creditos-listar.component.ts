@@ -27,6 +27,7 @@ export class CreditosListarComponent implements OnInit {
   public Columnas: string[] = ['numero', 'fecha', 'codigo', 'cliente_nombre', 'tipo_credito', 'monto_total', 'documentos_adjuntos', 'opciones'];
 
   @ViewChild('InputCliente', { static: true }) FiltroCliente: ElementRef;
+  @ViewChild('InputDNI', { static: true }) FiltroDNI: ElementRef;
   @ViewChild('InputTipo', { static: true }) FiltroTipo: MatSelect;
   @ViewChild('InputEstado', { static: true }) FiltroEstado: MatSelect;
   @ViewChild('InputDocumentos', { static: true }) FiltroDocumentos: MatSelect;
@@ -47,7 +48,7 @@ export class CreditosListarComponent implements OnInit {
     this.fecha_fin = null
 
     this.ListadoCreditos = new CreditosDataSource(this.Servicio);
-    this.ListadoCreditos.CargarCreditos("",99 ,0,this.fecha_inicio,this.fecha_fin,1,1,10,"fecha desc");
+    this.ListadoCreditos.CargarCreditos("","",99 ,0,this.fecha_inicio,this.fecha_fin,1,1,10,"fecha desc");
   }
 
   ngAfterViewInit () {
@@ -63,7 +64,10 @@ export class CreditosListarComponent implements OnInit {
       tap(() => this.CargarData())
     ).subscribe();
 
-    fromEvent(this.FiltroCliente.nativeElement, 'keyup')
+    merge(
+      fromEvent(this.FiltroCliente.nativeElement, 'keyup') ,
+      fromEvent(this.FiltroDNI.nativeElement, 'keyup') ,
+    )
     .pipe(
        debounceTime(200),
        distinctUntilChanged(),
@@ -84,6 +88,7 @@ export class CreditosListarComponent implements OnInit {
   CargarData() {
     this.ListadoCreditos.CargarCreditos(
       this.FiltroCliente.nativeElement.value,
+      this.FiltroDNI.nativeElement.value,
       this.FiltroTipo.value,
       this.FiltroDocumentos.value,
       this.fecha_inicio,
@@ -146,6 +151,7 @@ export class CreditosDataSource implements DataSource<any> {
 
   CargarCreditos(
     cliente:string,
+    documento:string,
     tipo_credito:number,
     estado_documentos:number,
     fecha_inicio:Date,
@@ -157,7 +163,7 @@ export class CreditosDataSource implements DataSource<any> {
   ) {
     this.CargandoInformacion.next(true);
 
-    this.Servicio.Listar( cliente, tipo_credito, estado_documentos, fecha_inicio, fecha_fin, estado, pagina_inicio, pagina_final, orden )
+    this.Servicio.Listar( cliente, documento, tipo_credito, estado_documentos, fecha_inicio, fecha_fin, estado, pagina_inicio, pagina_final, orden )
     .pipe(
       catchError(() => of([])),
       finalize(() => this.CargandoInformacion.next(false))

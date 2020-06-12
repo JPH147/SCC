@@ -16,24 +16,22 @@
     {
         $cobranza = new Cobranzas($db);
 
-        if ( ($_POST["prmonto"])!=null )
+        if (($_POST["prcliente"])!=null)
         {
-            $cobranza->cobranza_directa=trim($_POST["prcobranzadirecta"]);
-            $cobranza->cobranza_archivos=trim($_POST["prcobranzaarchivos"]);
-            $cobranza->cobranza_judicial=trim($_POST["prcobranzajudicial"]);
-            $cobranza->cobranza_manual=trim($_POST["prcobranzamanual"]);
-            $cobranza->credito_cronograma=trim($_POST["prcreditocronograma"]);
-            $cobranza->venta_cronograma=trim($_POST["prventacronograma"]);
+            $cobranza->cliente=trim($_POST["prcliente"]);
+            $cobranza->tipo_cobranza=trim($_POST["prtipocobranza"]);
+            $cobranza->comprobante=trim($_POST["prcomprobante"]);
+            $cobranza->vendedor=trim($_POST["prvendedor"]);
             $cobranza->monto=trim($_POST["prmonto"]);
-            $cobranza->fecha=trim($_POST["prfecha"]);
+            $cobranza->observaciones=trim($_POST["probservaciones"]);
 
-            if($cobranza->create_detalle())
+            if($cobranza->crear_cobranza_manual())
             {
-                print_json("0000", "Se creó el detalle satisfactoriamente.", true);
+              print_json("0000", "Se creó la cobranza satisfactoriamente.", $cobranza->id_cobranza);
             }
             else
             {
-                print_json("9999", "Ocurrió un error al crear el detalle.", "");
+              print_json("9999", "Ocurrió un error al crear la cobranza.", "");
             }
         }
         else
@@ -43,7 +41,7 @@
     }
     catch(Exception $exception)
     {
-        print_json("9999", "Ocurrió un error al crear el detalle.", $exception->getMessage());
+      print_json("9999", "Ocurrió un error al crear la cobranza.", $exception->getMessage());
     }
 
 ?>

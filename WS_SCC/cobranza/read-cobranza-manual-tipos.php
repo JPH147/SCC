@@ -16,25 +16,19 @@
     try{
         $cobranza = new Cobranzas($db);
 
-        $cobranza->sede = !empty($_GET['prsede']) ? trim($_GET['prsede']) : die();
-        $cobranza->fecha_inicio = !empty($_GET['prfechainicio']) ? trim($_GET['prfechainicio']) : null;
-        $cobranza->fecha_fin = !empty($_GET['prfechafin']) ? trim($_GET['prfechafin']) : null;
+        $cobranza->nombre = !empty($_GET['prnombre']) ? trim($_GET['prnombre']) : '';
+        $cobranza->numero_pagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : 1;
+        $cobranza->total_pagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : 20;
 
-        // $cobranza->read_pnp_total();
-
-        /*$cobranza_totales = array(
-            "cantidad" => $cobranza->cantidad,
-            "total" => $cobranza->total
-	    );*/
-
-        $cobranza_list = $cobranza->read_pnp();
+        $cobranza_list = $cobranza->read_cobranza_manual_tipos();
+        $cobranza_contar = $cobranza->contar_cobranza_manual_tipos();
 
         if (count(array_filter($cobranza_list))>0)
         { 
-            print_json("0000", 0, $cobranza_list);
+          print_json("0000", $cobranza_contar, $cobranza_list);
         }
         else
-        { print_json("0001", 1, $cobranza_list); }
+        { print_json("0001", $cobranza_contar, $cobranza_list); }
     }
 
     catch(Exception $exception)

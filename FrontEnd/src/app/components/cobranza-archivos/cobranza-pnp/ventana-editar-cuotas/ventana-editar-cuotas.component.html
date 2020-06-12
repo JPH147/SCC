@@ -1,0 +1,53 @@
+<mat-card class="card">
+  <mat-toolbar color="primary">
+    <mat-toolbar-row> Cuotas de {{data.cliente}} </mat-toolbar-row>
+  </mat-toolbar>
+
+  <mat-card-content>
+    <mat-table [dataSource]="ListadoCobranza" class="mat-elevation-z8">
+    
+      <ng-container matColumnDef="tipo">
+        <mat-header-cell *matHeaderCellDef> Tipo </mat-header-cell>
+        <mat-cell *matCellDef="let cuota"> {{ cuota.tipo }} </mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="codigo">
+        <mat-header-cell *matHeaderCellDef> Documento </mat-header-cell>
+        <mat-cell *matCellDef="let cuota"> {{ cuota.codigo }} </mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="fecha">
+        <mat-header-cell *matHeaderCellDef> Vencimiento </mat-header-cell>
+        <mat-cell *matCellDef="let cuota"> {{ cuota.fecha | date : 'dd/MM/yyyy' }} </mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="cliente">
+        <mat-header-cell *matHeaderCellDef> Cliente </mat-header-cell>
+        <mat-cell *matCellDef="let cuota"> {{ cuota.cliente }} </mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="monto">
+        <mat-header-cell *matHeaderCellDef> Monto </mat-header-cell>
+        <mat-cell *matCellDef="let cuota"> {{ cuota.monto_pendiente | currency : 'S/. ' }} </mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="opciones">
+        <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
+        <mat-cell *matCellDef="let cuota">
+          <mat-checkbox color="primary" [(ngModel)]="cuota.considerar"></mat-checkbox>
+        </mat-cell>
+      </ng-container>
+  
+      <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: Columnas;"></mat-row>
+    </mat-table>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <mat-grid-list cols="1" rowHeight="40px">
+      <mat-grid-tile>
+        <button mat-raised-button color="primary" (click)="Guardar()"> Guardar </button>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-card-actions>
+</mat-card>

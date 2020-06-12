@@ -15,6 +15,7 @@ export class VentasServicio {
 
   Listado(
     cliente:string,
+    dni:string,
     tipo_venta:number,
     fecha_inicio:Date,
     fecha_fin:Date,
@@ -24,9 +25,9 @@ export class VentasServicio {
     orden:string
   ): Observable<any> {
 
-    
     let params = new HttpParams()
       .set('prcliente',cliente)
+      .set('prdni',dni)
       .set('prtipo_venta',tipo_venta.toString())
       .set('prfecha_inicio', fecha_inicio ? moment(fecha_inicio).format('YYYY-MM-DD') : "" )
       .set('prfecha_fin', fecha_fin ? moment(fecha_fin).format('YYYY-MM-DD') : "" )

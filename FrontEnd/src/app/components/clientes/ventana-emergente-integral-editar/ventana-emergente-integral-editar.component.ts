@@ -280,7 +280,6 @@ export class VentanaEmergenteIntegralEditarComponent implements OnInit {
 
   VerificarDNI(dni){
     this.ClienteServicios.BuscarClienteDNI(dni).subscribe(res=>{
-      console.log(res);
       if(res['codigo']==1){
         this.cliente_nuevo = 1;
       } else {
@@ -290,7 +289,7 @@ export class VentanaEmergenteIntegralEditarComponent implements OnInit {
   }
 
   AsignarInformacion(objeto){
-   this.ClientesForm.get('institucion').setValue(objeto.institucion);
+    this.ClientesForm.get('institucion').setValue(objeto.institucion);
     this.ListarSede(objeto.institucion);
     this.ClientesForm.get('sede').setValue(objeto.sede);
     this.ListarSubsede(objeto.sede);

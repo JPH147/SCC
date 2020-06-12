@@ -149,25 +149,25 @@ export class MenuComponent implements OnInit{
         ]
       },
       // Asistencia
-      {
-        nombre: "Asistencia",
-        icono: "access_alarms",
-        disabled:false,
-        submenu:[
-          {
-            nombre: "Trabajadores",
-            path: "trabajadores"
-          },
-          {
-            nombre: "Registro",
-            path: "registro-horas"
-          },
-          {
-            nombre: "Reporte",
-            path: "reporte-asistencia"
-          },
-        ]
-      },
+      // {
+      //   nombre: "Asistencia",
+      //   icono: "access_alarms",
+      //   disabled:false,
+      //   submenu:[
+      //     {
+      //       nombre: "Trabajadores",
+      //       path: "trabajadores"
+      //     },
+      //     {
+      //       nombre: "Registro",
+      //       path: "registro-horas"
+      //     },
+      //     {
+      //       nombre: "Reporte",
+      //       path: "reporte-asistencia"
+      //     },
+      //   ]
+      // },
       // Tablas maestras
       {
         nombre: "Tablas maestras",

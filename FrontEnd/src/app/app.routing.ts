@@ -136,7 +136,7 @@ export const appRoutes: Routes = [
   {path: 'plantillas', component: PlantillasComponent},
   {path: 'usuarios', component: UsuariosComponent},
   
-  {path: 'prueba', component: CobranzaJudicialMultipleComponent},
+  {path: 'prueba', component: CobranzaArchivosComponent},
 ];
 
 

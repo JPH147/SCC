@@ -57,7 +57,7 @@ ngAfterViewInit () {
  CargarData() {
    this.ListadoDepartamentos.CargarDepartamentos(
    	this.FiltroDepartamento.nativeElement.value,
-    this.paginator.pageIndex,
+    this.paginator.pageIndex+1,
     this.paginator.pageSize,
 	);
  }

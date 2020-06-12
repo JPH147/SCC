@@ -1,13 +1,9 @@
 <mat-card>
-
-  <!-- Encabezado -->
   <mat-card-title>
     <div id = "tituloProd"> Listado de créditos</div>
   </mat-card-title>
 
-  <!-- Filtros Productos, tipo  Marca Modelo -->
   <mat-grid-list cols= "4" rowHeight="70px">
-
     <mat-grid-tile>
       <mat-icon>search</mat-icon>
       <mat-form-field>
@@ -18,10 +14,7 @@
     <mat-grid-tile>
       <mat-icon>search</mat-icon>
       <mat-form-field>
-        <mat-select #InputTipo placeholder="Tipo de crédito" (selectionChange)="CambioFiltro()" [value]=99>
-          <mat-option [value]=99> Todos </mat-option>
-          <mat-option *ngFor="let tipo of Tipos" [value]="tipo.id"> {{tipo.nombre}} </mat-option>
-        </mat-select>
+        <input matInput placeholder="DNI" #InputDNI>
       </mat-form-field>
     </mat-grid-tile>
 
@@ -38,6 +31,16 @@
         <input matInput [matDatepicker]="fin" placeholder="Fecha de fin" [(ngModel)]="fecha_fin" (dateChange)="CambioFiltro()">
         <mat-datepicker-toggle matSuffix [for]="fin"></mat-datepicker-toggle>
         <mat-datepicker #fin disabled="false"></mat-datepicker>
+      </mat-form-field>
+    </mat-grid-tile>
+
+    <mat-grid-tile>
+      <mat-icon>search</mat-icon>
+      <mat-form-field>
+        <mat-select #InputTipo placeholder="Tipo de crédito" (selectionChange)="CambioFiltro()" [value]=99>
+          <mat-option [value]=99> Todos </mat-option>
+          <mat-option *ngFor="let tipo of Tipos" [value]="tipo.id"> {{tipo.nombre}} </mat-option>
+        </mat-select>
       </mat-form-field>
     </mat-grid-tile>
 
@@ -60,9 +63,6 @@
           <mat-option [value]=2>Completados</mat-option>
         </mat-select>
       </mat-form-field>
-    </mat-grid-tile>
-
-    <mat-grid-tile>
     </mat-grid-tile>
     
     <mat-grid-tile>

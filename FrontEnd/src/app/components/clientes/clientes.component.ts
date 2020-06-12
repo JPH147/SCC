@@ -1,9 +1,9 @@
-import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, HostListener } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { merge, fromEvent, forkJoin, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, tap, takeUntil} from 'rxjs/operators';
+import { merge, fromEvent, forkJoin, Subject, of, empty } from 'rxjs';
+import { debounceTime, distinctUntilChanged, tap, takeUntil, switchMap, takeLast} from 'rxjs/operators';
 import { ClienteService } from './clientes.service';
 import { ClienteDataSource } from './clientes.dataservice';
 import { VentanaConfirmarComponent } from '../global/ventana-confirmar/ventana-confirmar.component';
@@ -33,7 +33,6 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 
 export class ClientesComponent implements OnInit, AfterViewInit {
 
-  public sbj = new Subject();
   public ListadoCliente: ClienteDataSource;
   public Columnas: string[] = [];
   public ColumnasGeneral: string[] = ['numero', 'foto', 'codigo' , 'dni', 'nombrecliente', 'cargo' ,  'opciones'];
@@ -43,6 +42,8 @@ export class ClientesComponent implements OnInit, AfterViewInit {
 
   public Instituciones : Array<any> ;
   public Sedes : Array<any> ;
+
+  public nueva_consulta : boolean = false ; // Esto se hace para saber cuándo se hace la primera búsqueda
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
@@ -65,16 +66,15 @@ export class ClientesComponent implements OnInit, AfterViewInit {
     this.CrearFormulario() ;
 
     this.ListadoCliente = new ClienteDataSource(this.Servicio);
-    this.ListadoCliente.CargarClientes(false,'','', '','',4,3,1, 10,1);
+    this.ListadoCliente.CargarClientes(false,'','', '','',4,3,1,10,1);
     this.estado=1;
     this.Columnas = this.ColumnasGeneral ;
 
     this.ListarInstitucion() ;
+    this.ListarSede() ;
   }
 
   ngAfterViewInit() {
-    this.sbj.next() ;
-    
     merge(
       this.ClienteForm.get('dni').valueChanges ,
       this.ClienteForm.get('codigo').valueChanges ,
@@ -85,8 +85,12 @@ export class ClientesComponent implements OnInit, AfterViewInit {
     ).pipe(
       debounceTime(200),
       distinctUntilChanged(),
-      takeUntil(this.sbj),
       tap(() => {
+        if ( !this.nueva_consulta ) {
+          this.ClienteForm.get('institucion').setValue(0) ;
+          this.ClienteForm.get('sede').setValue(0) ;
+        }
+        this.nueva_consulta = true ;
         this.paginator.pageIndex=0 ;
         this.CargarData() ;
       })
@@ -97,6 +101,7 @@ export class ClientesComponent implements OnInit, AfterViewInit {
       debounceTime(200),
       distinctUntilChanged(),
       tap(() => {
+        this.nueva_consulta = true ;
         if( this.ClienteForm.get('relacion').value ) {
           this.Columnas = this.ColumnasComercial ;
         } else {
@@ -123,8 +128,8 @@ export class ClientesComponent implements OnInit, AfterViewInit {
       codigo : [ "" ] ,
       cip : [ "" ] ,
       nombre : [ "" ] ,
-      institucion : [ 0 ] ,
-      sede : [ 0 ] ,
+      institucion : [ 4 ] ,
+      sede : [ 3 ] ,
       relacion : [ false ] ,
     })
   }
@@ -136,8 +141,8 @@ export class ClientesComponent implements OnInit, AfterViewInit {
       this.ClienteForm.get('cip').value ,
       this.ClienteForm.get('dni').value ,
       this.ClienteForm.get('nombre').value ,
-      this.ClienteForm.get('institucion').value ,
-      this.ClienteForm.get('sede').value || 0 ,
+      this.nueva_consulta ? this.ClienteForm.get('institucion').value : 4 ,
+      this.nueva_consulta ? (this.ClienteForm.get('sede').value || 0) : 3 ,
       this.paginator.pageIndex+1 ,
       this.paginator.pageSize ,
       this.estado
@@ -176,8 +181,11 @@ export class ClientesComponent implements OnInit, AfterViewInit {
       maxHeight: '80vh',
       data: {id: id, confirmar: confirmar},
     });
+
     VentanaClientes.afterClosed().subscribe (res => {
-      this.CargarData();
+      if( res ) {
+        this.CargarData();
+      }
     });
   }
 
@@ -333,7 +341,6 @@ export class ClientesComponent implements OnInit, AfterViewInit {
   })}
 
   InstitucionSeleccionada(event) {
-    // console.log(event)
     if ( event.value == 0 ) {
       this.ClienteForm.get('sede').setValue(0) ;
       this.ClienteForm.get('sede').disable() ;

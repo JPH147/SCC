@@ -16,9 +16,9 @@
     try{
         $cliente = new Cliente($db);
 
-        $cliente->clt_codigo = !empty($_GET['prcodigo']) ? trim($_GET['prcodigo']) : '';
-        $cliente->clt_cip = !empty($_GET['prcip']) ? trim($_GET['prcip']) : '';
-        $cliente->clt_dni = !empty($_GET['prdni']) ? trim($_GET['prdni']) : '';
+        $cliente->clt_codigo = strlen($_GET['prcodigo']) > 0 ? trim($_GET['prcodigo']) : '';
+        $cliente->clt_cip = strlen($_GET['prcip']) > 0 ? trim($_GET['prcip']) : '';
+        $cliente->clt_dni = strlen($_GET['prdni']) > 0 ? trim($_GET['prdni']) : '';
         $cliente->clt_nombre = !empty($_GET['prnombre']) ? trim($_GET['prnombre']) : '';
         $cliente->inst_nombre = !empty($_GET['prinstitucion']) ? trim($_GET['prinstitucion']) : 0;
         $cliente->sd_nombre = !empty($_GET['prsede']) ? trim($_GET['prsede']) : 0;

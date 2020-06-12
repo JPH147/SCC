@@ -18,11 +18,7 @@
     <mat-grid-tile>
       <mat-icon>search</mat-icon>
       <mat-form-field>
-        <mat-select #InputTipo placeholder="Tipo de venta" (selectionChange)="CambioFiltro()" [value]=0>
-          <mat-option [value]=0>Todas</mat-option>
-          <mat-option [value]="1">Directa</mat-option>
-          <mat-option [value]="2">Salida de vendedores</mat-option>
-        </mat-select>
+        <input matInput placeholder="DNI" #InputDNI>
       </mat-form-field>
     </mat-grid-tile>
 
@@ -43,6 +39,17 @@
     </mat-grid-tile>
 
     <mat-grid-tile>
+      <mat-icon>search</mat-icon>
+      <mat-form-field>
+        <mat-select #InputTipo placeholder="Tipo de venta" (selectionChange)="CambioFiltro()" [value]=0>
+          <mat-option [value]=0>Todas</mat-option>
+          <mat-option [value]="1">Directa</mat-option>
+          <mat-option [value]="2">Salida de vendedores</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </mat-grid-tile>
+
+    <mat-grid-tile>
       <mat-form-field>
         <mat-select #InputEstado placeholder="Estado" [value]=1 (selectionChange)="CambioFiltro()">
           <mat-option [value]="0">Todas</mat-option>
@@ -52,9 +59,6 @@
           <mat-option [value]="2">Anuladas</mat-option>
         </mat-select>
       </mat-form-field>
-    </mat-grid-tile>
-
-    <mat-grid-tile>
     </mat-grid-tile>
 
     <mat-grid-tile>

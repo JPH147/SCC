@@ -16,6 +16,13 @@
     </mat-grid-tile>
 
     <mat-grid-tile>
+      <mat-icon>search</mat-icon>
+      <mat-form-field>
+        <input matInput placeholder="DNI" #InputDNI>
+      </mat-form-field>
+    </mat-grid-tile>
+
+    <mat-grid-tile>
       <mat-form-field>
         <input matInput [matDatepicker]="inicio" placeholder="Fecha de inicio" [(ngModel)]="fecha_inicio" (dateChange)="CambioFiltro()" readonly>
         <mat-datepicker-toggle matSuffix [for]="inicio"></mat-datepicker-toggle>

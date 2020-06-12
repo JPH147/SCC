@@ -847,6 +847,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     let id_cliente : number = this.CreditosForm.value.id_cliente ;
     let VentanaClientes = this.Dialogo.open(VentanaEmergenteClientes, {
       width: '1200px',
+      maxHeight : '80vh' ,
       data: {id: id_cliente, confirmar: false},
     });
     VentanaClientes.afterClosed().subscribe (res => {
