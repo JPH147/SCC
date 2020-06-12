@@ -115,7 +115,7 @@
             <button mat-icon-button [matMenuTriggerFor]="menu1" color="primary" matTooltip="Ver documento" ><mat-icon> visibility </mat-icon></button>
             <mat-menu #menu1="matMenu">
               <button mat-menu-item [routerLink]="[venta.id]">Documento completo</button>
-              <button mat-menu-item>Cronograma de pagos</button>
+              <!-- <button mat-menu-item>Cronograma de pagos</button> -->
             </mat-menu>
             <button mat-icon-button color="primary" matTooltip="Editar" [routerLink]="['editar', venta.id]"
               [disabled]="venta.monto_pagado>0 || venta.estado!=1 || venta.id_proceso_judicial"><mat-icon> edit </mat-icon></button>
@@ -142,15 +142,15 @@
             <button mat-icon-button [matMenuTriggerFor]="menu2" color="primary" matTooltip="Ver documento" ><mat-icon> visibility </mat-icon></button>
             <mat-menu #menu2="matMenu">
               <button mat-menu-item [routerLink]="['salida', venta.id]">Documento completo</button>
-              <button mat-menu-item>Cronograma de pagos</button>
+              <!-- <button mat-menu-item>Cronograma de pagos</button> -->
             </mat-menu>
             <button mat-icon-button color="primary" matTooltip="Editar" [routerLink]="['salida', 'editar', venta.id]"
               [disabled]="venta.monto_pagado>0 || venta.estado!=1 || venta.id_proceso_judicial"><mat-icon> edit </mat-icon></button>
             <button mat-icon-button color="primary" matTooltip="Canjear" [disabled]="true"><mat-icon> import_export </mat-icon></button>
-            <button mat-icon-button color="primary" matTooltip="Abrir proceso judicial" [routerLink]="['../cobranza-judicial','nueva-venta','salida',venta.id]"
+            <!-- <button mat-icon-button color="primary" matTooltip="Abrir proceso judicial" [routerLink]="['../cobranza-judicial','nueva-venta','salida',venta.id]"
               [disabled]="venta.estado!=1">
               <mat-icon [matBadge]="venta.numero_procesos" [matBadgeHidden]="venta.numero_procesos==0 || venta.estado!=1" matBadgeSize="small" matBadgeColor="accent"> gavel </mat-icon>
-            </button>
+            </button> -->
 
             <button mat-icon-button color="primary" matTooltip="Abrir proceso judicial" [matMenuTriggerFor]="menu3" (click)="ListarProcesos(venta.id)"
               [disabled]="venta.estado!=1">

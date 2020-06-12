@@ -146,6 +146,10 @@ export class MenuComponent implements OnInit{
             nombre: "Cobranzas por planilla",
             path: "cobranza-archivos"
           },
+          {
+            nombre: "Cobranzas manuales",
+            path: "cobranza-manual"
+          },
         ]
       },
       // Asistencia

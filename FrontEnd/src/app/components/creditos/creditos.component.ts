@@ -23,6 +23,7 @@ import { SeguimientosService } from '../seguimientos/seguimientos.service';
 import { RefinanciamientoService } from '../refinanciamiento/refinanciamiento.service';
 import { VentanaPagosComponent } from '../cobranzas-listar/ventana-pagos/ventana-pagos.component';
 import { VentanaEmergenteClientes } from '../clientes/ventana-emergente/ventanaemergente' ;
+import { VentanaCrearCobranzaManualComponent } from '../cobranza-manual/ventana-crear-cobranza-manual/ventana-crear-cobranza-manual.component';
 
 @Component({
   selector: 'app-creditos',
@@ -1035,7 +1036,6 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   }
 
   SubirArchivo(evento, orden){
-
     if(this.id_credito_editar){
       if ( orden == 1 ) this.foto_nuevo = evento.serverResponse.response.body.data;
       if ( orden == 2 ) this.dni_nuevo = evento.serverResponse.response.body.data;
@@ -1631,6 +1631,24 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       })
     })
 
+  }
+
+  RegistrarPago(cronograma){
+    let Ventana = this.Dialogo.open(VentanaCrearCobranzaManualComponent,{
+      data : { cliente : this.CreditosForm.get('id_cliente').value, pendiente : cronograma.monto_pendiente, cronograma : cronograma.id_cronograma, tipo : 1 } ,
+      width : '1200px' ,
+      maxHeight : '80vh'
+    }) ;
+
+    Ventana.afterClosed().subscribe(res=>{
+      if(res) {
+        this.Notificacion.Snack("Se registró el pago satisfactoriamente", "") ;
+        this.ObtenerCronograma(this.id_credito, "fecha_vencimiento asc") ;
+      }
+      if(res===false) {
+        this.Notificacion.Snack("Ocurrió un error al registrar el pago", "") ;
+      }
+    })
   }
 
   Imprimir(){

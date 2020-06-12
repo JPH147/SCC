@@ -207,6 +207,9 @@ import { VentanaEditarDireccionComponent } from './components/clientes/ventana-e
 import { VentanaEditarTelefonoComponent } from './components/clientes/ventana-editar-telefono/ventana-editar-telefono.component';
 import { VentanaEditarCuentaComponent } from './components/clientes/ventana-editar-cuenta/ventana-editar-cuenta.component';
 import { VentanaEditarCuotasComponent } from './components/cobranza-archivos/cobranza-pnp/ventana-editar-cuotas/ventana-editar-cuotas.component';
+import { CobranzaManualComponent } from './components/cobranza-manual/cobranza-manual.component';
+import { VentanaCrearCobranzaManualComponent } from './components/cobranza-manual/ventana-crear-cobranza-manual/ventana-crear-cobranza-manual.component';
+import { CobranzaManualListarComponent } from './components/cobranza-manual-listar/cobranza-manual-listar.component';
 
 export const CUSTOM_DATE_FORMAT = {
   parse: {
@@ -432,7 +435,10 @@ export const CUSTOM_DATE_FORMAT = {
     VentanaEditarDireccionComponent,
     VentanaEditarTelefonoComponent,
     VentanaEditarCuentaComponent,
-    VentanaEditarCuotasComponent
+    VentanaEditarCuotasComponent,
+    CobranzaManualComponent,
+    VentanaCrearCobranzaManualComponent,
+    CobranzaManualListarComponent
    ],
   entryComponents: [
     AppComponent,

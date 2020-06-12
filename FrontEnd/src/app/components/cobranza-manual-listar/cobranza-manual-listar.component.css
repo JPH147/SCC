@@ -1,0 +1,11 @@
+.mat-column-numero{
+  max-width: 5%
+}
+
+.mat-column-tipo,
+.mat-column-comprobante,
+.mat-column-total,
+.mat-column-fecha,
+.mat-column-opciones{
+  max-width: 10%;
+}

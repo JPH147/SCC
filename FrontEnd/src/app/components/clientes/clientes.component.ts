@@ -7,7 +7,7 @@ import { debounceTime, distinctUntilChanged, tap, takeUntil, switchMap, takeLast
 import { ClienteService } from './clientes.service';
 import { ClienteDataSource } from './clientes.dataservice';
 import { VentanaConfirmarComponent } from '../global/ventana-confirmar/ventana-confirmar.component';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ServiciosTelefonos } from '../global/telefonos';
 import { ServiciosDirecciones } from '../global/direcciones';
 import { Notificaciones } from '../global/notificacion';
@@ -49,6 +49,7 @@ export class ClientesComponent implements OnInit, AfterViewInit {
 
   constructor(
     private Servicio: ClienteService,
+    private Dialogo: MatDialog,
     private DialogoClientes: MatDialog,
     private DialogFileUpload: MatDialog,
     private DialogoContacto: MatDialog,
@@ -56,7 +57,8 @@ export class ClientesComponent implements OnInit, AfterViewInit {
     private STelefonos: ServiciosTelefonos,
     private SDirecciones: ServiciosDirecciones,
     private Notificacion: Notificaciones,
-    private router: Router,
+    private router : Router ,
+    private route : ActivatedRoute ,
     private AServicio : ArchivosService,
     private _generales : ServiciosGenerales,
     private _builder : FormBuilder
@@ -72,6 +74,25 @@ export class ClientesComponent implements OnInit, AfterViewInit {
 
     this.ListarInstitucion() ;
     this.ListarSede() ;
+
+    this.route.queryParams
+      .subscribe(params => {
+        if( !this.nueva_consulta ) {
+          if( params.documento && !this.nueva_consulta ) {
+            this.ClienteForm.get('dni').setValue( params.documento ) ;
+            this.ClienteForm.get('institucion').setValue(0) ;
+            this.ClienteForm.get('sede').setValue(0) ;
+            this.nueva_consulta = true ;
+  
+            this.ListadoCliente.CargarClientes(false,'','',this.ClienteForm.get('dni').value,'',0,0,1,10,1) ;
+            if( params.ventana && this.Dialogo.openDialogs.length == 0 ) {
+              this.VerVentas(params.ventana, params.nombre) ;
+            }
+          } else {
+            this.ListadoCliente.CargarClientes(false,'','', '','',4,3,1,10,1);
+          }
+        }
+      });
   }
 
   ngAfterViewInit() {
@@ -93,6 +114,15 @@ export class ClientesComponent implements OnInit, AfterViewInit {
         this.nueva_consulta = true ;
         this.paginator.pageIndex=0 ;
         this.CargarData() ;
+      })
+     ).subscribe();
+
+     this.ClienteForm.get('dni').valueChanges
+     .pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      tap(() => {
+        this.AsignarQuery(0,"") ;
       })
      ).subscribe();
 
@@ -219,11 +249,20 @@ export class ClientesComponent implements OnInit, AfterViewInit {
     })
   }
 
-  VerVentas(cliente){
-    let VentanaContacto = this.DialogoContacto.open(VentanaVentasComponent, {
+  VerVentas(id_cliente, nombre){
+    this.AsignarQuery( id_cliente, nombre ) ;
+    let Ventana = this.Dialogo.open(VentanaVentasComponent, {
       width: '900px',
-      data: {id: cliente.id, nombre: cliente.nombre}
+      data: {id: id_cliente, nombre: nombre}
     });
+
+    Ventana.afterClosed().subscribe(res=>{
+      if(res) {
+
+      } else {
+        this.AsignarQuery(0,"") ;
+      }
+    })
   }
 
   SubirImagen(id) {
@@ -355,6 +394,27 @@ export class ClientesComponent implements OnInit, AfterViewInit {
 /* Se muestran los modelos cuando se selecciona una marca */
   SedeSeleccionada() {
     this.CargarData() ;
+  }
+
+  AsignarQuery( id_cliente : number, nombre : string ) {
+    // console.log( id_cliente, this.ClienteForm.get('dni').value.length )
+    if( this.ClienteForm.get('dni').value.length == 8 ) {
+      if( id_cliente > 0 ) {
+        this.router.navigate(['.'], {
+          relativeTo: this.route,
+          queryParams: { documento : this.ClienteForm.get('dni').value, ventana : id_cliente, nombre : nombre } ,
+          // queryParamsHandling: 'merge'
+        });
+      } else {
+        this.router.navigate(['.'], {
+          relativeTo: this.route,
+          queryParams: { documento : this.ClienteForm.get('dni').value } ,
+          // queryParamsHandling: 'merge'
+        });
+      }
+    } else {
+      this.router.navigate(['.'], { relativeTo: this.route });
+    }
   }
 
 }

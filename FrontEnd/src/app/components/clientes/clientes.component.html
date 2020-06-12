@@ -13,7 +13,7 @@
       <mat-grid-tile>
         <mat-icon>search</mat-icon>
         <mat-form-field class="columnas-1">
-          <input matInput placeholder="DNI" formControlName="dni">
+          <input matInput placeholder="DNI" formControlName="dni" maxlength=8>
         </mat-form-field>
       </mat-grid-tile>
   
@@ -130,7 +130,7 @@
             <!-- <button mat-icon-button matTooltip="Agregar datos de contacto" (click)="AgregarDatoContacto(cliente.id)" color="primary"><mat-icon> local_phone </mat-icon></button> -->
             <button mat-icon-button matTooltip="Subir foto" color="primary" (click)="SubirImagen(cliente)"><mat-icon> add_a_photo </mat-icon></button>
             <!-- <button mat-icon-button matTooltip="Realizar venta" color="primary" (click)="HacerVenta(cliente.id)"><mat-icon> add_shopping_cart </mat-icon></button> -->
-            <button mat-icon-button matTooltip="Ver ventas" color="primary" (click)="VerVentas(cliente)"><mat-icon> monetization_on </mat-icon></button>
+            <button mat-icon-button matTooltip="Ver ventas" color="primary" (click)="VerVentas(cliente.id, cliente.nombre)"><mat-icon> monetization_on </mat-icon></button>
             <button mat-icon-button matTooltip="Agregar observaciones" color="primary" (click)="AgregarObservaciones(cliente.id)"><mat-icon> assignment</mat-icon></button>
             <button mat-icon-button matTooltip="Editar" color="primary" (click)="Editar(cliente.id, false)"><mat-icon> edit </mat-icon></button>
             <button mat-icon-button matTooltip="Eliminar" color="primary" (click)="Eliminar(cliente)"><mat-icon> delete </mat-icon></button>

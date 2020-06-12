@@ -20,6 +20,7 @@
         {
             $cobranza->cliente=trim($_POST["prcliente"]);
             $cobranza->tipo_cobranza=trim($_POST["prtipocobranza"]);
+            $cobranza->fecha=trim($_POST["prfecha"]);
             $cobranza->comprobante=trim($_POST["prcomprobante"]);
             $cobranza->vendedor=trim($_POST["prvendedor"]);
             $cobranza->monto=trim($_POST["prmonto"]);

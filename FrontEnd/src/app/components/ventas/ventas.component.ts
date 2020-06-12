@@ -25,6 +25,7 @@ import { CreditosService } from "../creditos/creditos.service";
 import { SeguimientosService } from "../seguimientos/seguimientos.service";
 import { VentanaPagosComponent } from '../cobranzas-listar/ventana-pagos/ventana-pagos.component';
 import { VentanaEmergenteClientes } from '../clientes/ventana-emergente/ventanaemergente' ;
+import { VentanaCrearCobranzaManualComponent } from "../cobranza-manual/ventana-crear-cobranza-manual/ventana-crear-cobranza-manual.component";
 
 @Component({
   selector: 'app-ventas',
@@ -333,12 +334,9 @@ export class VentasComponent implements OnInit {
   }
 
   SeleccionarVentaxId(id_venta){
-
     this.Servicio.SeleccionarVenta(id_venta).subscribe(res=>{
-
       this.talonario=res.talonario_serie+" - "+res.talonario_contrato;
 
-      this.ObtenerClientexId(res);
       this.VentasForm.get('id_cliente').setValue(res.id_cliente);
       this.VentasForm.get('cliente').setValue(res.cliente_nombre);
       this.VentasForm.get('dni').setValue(res.cliente_dni);
@@ -793,7 +791,6 @@ export class VentasComponent implements OnInit {
   }
 
   ObtenerClientexId(id_cliente) {
-
     this.ClienteServicio.Seleccionar(id_cliente).subscribe(res => {
       if (res) {
         this.VentasForm.get('id_cliente').setValue(res.id);
@@ -1722,6 +1719,24 @@ export class VentasComponent implements OnInit {
       this.VentasForm.get('fechapago').setValue( new Date(ano, mes+1, 27) );
       this.CrearCronograma() ;
     }
+  }
+
+  RegistrarPago(cronograma){
+    let Ventana = this.Dialogo.open(VentanaCrearCobranzaManualComponent,{
+      data : { cliente : this.VentasForm.get('id_cliente').value, pendiente : cronograma.monto_pendiente, cronograma : cronograma.id_cronograma, tipo : 2 } ,
+      width : '1200px' ,
+      maxHeight : '80vh'
+    }) ;
+
+    Ventana.afterClosed().subscribe(res=>{
+      if(res) {
+        this.Notificacion.Snack("Se registró el pago satisfactoriamente", "") ;
+        this.ActualizarOrdenCronograma(this.idventa, "fecha_vencimiento asc") ;
+      }
+      if(res===false) {
+        this.Notificacion.Snack("Ocurrió un error al registrar el pago", "") ;
+      }
+    })
   }
 
   ImprimirFormulario(){

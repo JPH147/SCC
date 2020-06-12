@@ -24,6 +24,7 @@ import { SalidaVendedoresService } from "../salida-vendedores/salida-vendedores.
 import { VentanaEmergenteContacto} from '../clientes/ventana-emergentecontacto/ventanaemergentecontacto';
 import {SeleccionarClienteComponent} from '../retorno-vendedores/seleccionar-cliente/seleccionar-cliente.component';
 import { SeguimientosService } from "../seguimientos/seguimientos.service";
+import { VentanaCrearCobranzaManualComponent } from "../cobranza-manual/ventana-crear-cobranza-manual/ventana-crear-cobranza-manual.component";
 
 @Component({
   selector: 'app-ventas-salida',
@@ -104,6 +105,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   public autorizacion_editar: boolean= false;
   public otros_editar: boolean= false;
   public papeles_editar : boolean = false;
+  public total_cronograma_editado:number;
 
   constructor(
     private Servicio: VentaService,
@@ -130,7 +132,6 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
     this.ruta=URLIMAGENES.urlimages;
 
     this.route.params.subscribe(params => {
-      // console.log(params)
       if(params['idventa']){
         this.Columnas= ['numero', 'monto_cuota','fecha_vencimiento', 'monto_interes','monto_pagado', 'fecha_cancelacion', 'monto_pendiente','estado', 'opciones'];
         this.id_venta = +params['idventa'];
@@ -743,11 +744,11 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   }
 
   CalcularTotalCronograma(){
-    let total_cronograma_editado: number = 0;
+    this.total_cronograma_editado = 0;
     this.Cronograma.forEach((item)=>{
-      total_cronograma_editado=total_cronograma_editado+item.monto_cuota*1;
+      this.total_cronograma_editado=this.total_cronograma_editado+item.monto_cuota*1;
     })
-    this.diferencia= Math.abs(Math.round((this.VentasSalidaForm.value.montototal-total_cronograma_editado)*100)/100);
+    this.diferencia= Math.abs(Math.round((this.VentasSalidaForm.value.montototal-this.total_cronograma_editado)*100)/100);
   }
 
   EditarCronograma(estado){
@@ -1122,6 +1123,24 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
         }, 300)
 
       })
+    })
+  }
+
+  RegistrarPago(cronograma){
+    let Ventana = this.Dialogo.open(VentanaCrearCobranzaManualComponent,{
+      data : { cliente : this.VentasSalidaForm.get('id_cliente').value, pendiente : cronograma.monto_pendiente, cronograma : cronograma.id_cronograma, tipo : 2 } ,
+      width : '1200px' ,
+      maxHeight : '80vh'
+    }) ;
+
+    Ventana.afterClosed().subscribe(res=>{
+      if(res) {
+        this.Notificacion.Snack("Se registró el pago satisfactoriamente", "") ;
+        this.ActualizarOrdenCronograma(this.id_venta, "fecha_vencimiento asc") ;
+      }
+      if(res===false) {
+        this.Notificacion.Snack("Ocurrió un error al registrar el pago", "") ;
+      }
     })
   }
 

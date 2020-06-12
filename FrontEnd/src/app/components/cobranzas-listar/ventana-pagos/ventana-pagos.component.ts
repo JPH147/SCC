@@ -51,13 +51,16 @@ export class VentanaPagosComponent implements OnInit {
   }
 
   Ver(cuota){
-    console.log(cuota);
     if( cuota.id_tipo==2 ) {
       this.router.navigate(['cobranza-directa','ver',cuota.id_cobranza_directa]);
       this.ventana.close();
     }
     if( cuota.id_tipo==1 ) {
       this.router.navigate(['cobranza-archivos','ver',cuota.id_cobranza_archivos]);
+      this.ventana.close();
+    }
+    if( cuota.id_tipo==5 ) {
+      this.router.navigate(['cobranza-manual','ver',cuota.id_cobranza_manual]);
       this.ventana.close();
     }
   }

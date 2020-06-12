@@ -56,6 +56,8 @@ import { UsuariosComponent } from './components/usuarios/usuarios.component';
 import { InicioComponent } from './inicio/inicio.component';
 import { LoginComponent } from './login/login.component';
 import { CobranzaClienteListarMorososComponent } from './components/cobranza-cliente-listar-morosos/cobranza-cliente-listar-morosos.component';
+import { CobranzaManualComponent } from './components/cobranza-manual/cobranza-manual.component';
+import { CobranzaManualListarComponent } from './components/cobranza-manual-listar/cobranza-manual-listar.component';
 
 export const appRoutes: Routes = [
   {path: '', redirectTo: 'inicio', pathMatch: 'full'},
@@ -65,7 +67,6 @@ export const appRoutes: Routes = [
   {path: 'series', component: HistorialSerieComponent},
   {path: 'evaluacion', component: EvaluacionComponent},
   {path: 'evaluacion-express', component: EvaluacionExpressComponent},
-  // {path: 'evaluacion/:idpresupuesto', component: EvaluacionComponent},
   {path: 'movimientos', component: HistorialMovimientosComponent},
   {path: 'movimientos/ver/:id', component: DetalleDocumentoAlmacenComponent},
   {path: 'movimientos/editar/:ideditar', component: DetalleDocumentoAlmacenComponent},
@@ -128,6 +129,8 @@ export const appRoutes: Routes = [
   {path: 'cobranza-judicial/nueva-venta/salida/:idventasalida', component: CobranzaJudicialComponent},
   {path: 'cobranza-judicial/generar/nuevo/:idprocesonuevo', component: CobranzaJudicialGenerarComponent},
   {path: 'cobranza-judicial/generar/ver/:idprocesover', component: CobranzaJudicialGenerarComponent},
+  {path: 'cobranza-manual', component: CobranzaManualListarComponent},
+  {path: 'cobranza-manual/ver/:idcobranza', component: CobranzaManualComponent},
   {path: 'instituciones', component: InstitucionesComponent},
   {path: 'trabajadores', component: TrabajadoresComponent},
   {path: 'registro-horas', component: RegistroHorasComponent},

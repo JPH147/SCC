@@ -1,0 +1,107 @@
+<mat-card class="principal">
+  <button mat-mini-fab type="button" color="primary" (click)="Atras()"><mat-icon>keyboard_arrow_left</mat-icon></button>
+  
+  <mat-card-title>
+    <div class="tituloProd"> Detalle de cobranza manual </div>
+  </mat-card-title>
+
+  <mat-card-content>
+    <div class="seccion">
+      <mat-card-subtitle class="titulo-seccion">
+        DATOS DEL DOCUMENTO
+      </mat-card-subtitle>
+      <form [formGroup]="CobranzaForm">
+        <mat-grid-list cols="4" rowHeight="70px">
+          <mat-grid-tile colspan=2>
+            <mat-form-field class="columnas-2">
+              <input matInput type="text" placeholder="Cliente" formControlName="cliente" readonly>
+            </mat-form-field>
+          </mat-grid-tile>
+  
+          <mat-grid-tile colspan=2>
+            <mat-form-field class="columnas-2">
+              <input matInput type="text" placeholder="Receptor" formControlName="vendedor" readonly>
+            </mat-form-field>
+          </mat-grid-tile>
+  
+          <mat-grid-tile>
+            <mat-form-field class="columnas-1">
+              <input matInput type="text" placeholder="Tipo de cobro" formControlName="tipo" readonly>
+            </mat-form-field>
+          </mat-grid-tile>
+  
+          <mat-grid-tile>
+            <mat-form-field class="columnas-1">
+              <input matInput type="text" placeholder="Comprobante" formControlName="comprobante" readonly>
+            </mat-form-field>
+          </mat-grid-tile>
+  
+          <mat-grid-tile>
+            <mat-form-field class="columnas-1">
+              <input matInput type="text" placeholder="Monto" formControlName="monto" readonly>
+            </mat-form-field>
+          </mat-grid-tile>
+  
+          <mat-grid-tile>
+            <mat-form-field class="columnas-1">
+              <input matInput [matDatepicker]="inicio" placeholder="Fecha" formControlName="fecha" readonly>
+              <mat-datepicker-toggle matSuffix [for]="inicio"></mat-datepicker-toggle>
+              <mat-datepicker #inicio disabled="true"></mat-datepicker>
+            </mat-form-field>
+          </mat-grid-tile>
+          
+          <mat-grid-tile colspan=4>
+            <mat-form-field class="columnas-4">
+              <input matInput type="text" placeholder="Observaciones" formControlName="observaciones" readonly>
+            </mat-form-field>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </form>
+    </div>
+
+    <div class="seccion">
+      <mat-card-subtitle class="titulo-seccion">
+        DETALLE DE PAGOS
+      </mat-card-subtitle>
+
+      <div class = "spinner-container" *ngIf = "Cargando| async">
+        <mat-spinner></mat-spinner>
+      </div>
+
+      <mat-grid-list cols="4" rowHeight="70px" *ngFor="let cuota of Detalle">
+        <mat-grid-tile>
+          <mat-form-field>
+            <input matInput type="text" placeholder="Tipo" [(ngModel)]="cuota.tipo" readonly>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field>
+            <input matInput type="text" placeholder="Documento" [(ngModel)]="cuota.codigo" readonly>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field>
+            <input matInput type="text" placeholder="Fecha de vencimiento" [(ngModel)]="cuota.fecha_vencimiento" readonly>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <!-- <mat-grid-tile>
+          <span matPrefix>S/. &nbsp;</span>
+          <mat-form-field>
+            <input matInput type="text" placeholder="Monto pendiente" [(ngModel)]="cuota.monto_pendiente" readonly>
+          </mat-form-field>
+        </mat-grid-tile> -->
+
+        <mat-grid-tile>
+          <span matPrefix>S/. &nbsp;</span>
+          <mat-form-field>
+            <input matInput type="text" placeholder="Pago" [(ngModel)]="cuota.pagar">
+          </mat-form-field>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </div>
+  </mat-card-content>
+
+</mat-card>

@@ -337,7 +337,7 @@
     </div>
 
     <!-- Seguimiento de documentos -->
-    <div class="seccion" *ngIf="VentasSalidaForm.value.papeles">
+    <!-- <div class="seccion" *ngIf="VentasSalidaForm.value.papeles">
       
       <mat-card-subtitle class="titulo-seccion">
         DATOS DE SEGUIMIENTO
@@ -419,7 +419,7 @@
         
       </mat-grid-list>
 
-    </div>
+    </div> -->
 
     <!-- Vendedores -->
     <div class="seccion" *ngIf="Vendedores.length>0">
@@ -974,6 +974,7 @@
             <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
             <mat-cell *matCellDef="let cronograma">
               <button mat-icon-button color="primary" [disabled]="cronograma.monto_pagado==0" (click)="VerDetallePagos(cronograma)"> <mat-icon> visibility </mat-icon> </button>
+              <button mat-icon-button color="primary" [disabled]="cronograma.estado == 'Pagado'" (click)="RegistrarPago(cronograma)"> <mat-icon> payment </mat-icon> </button>
             </mat-cell>
           </ng-container>
 

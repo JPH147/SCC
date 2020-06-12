@@ -473,6 +473,7 @@ export class CobranzasService {
     cobranza_directa : number,
     cobranza_archivos : number,
     cobranza_judicial : number,
+    cobranza_manual : number,
     credito_cronograma : number,
     venta_cronograma : number,
     monto : string,
@@ -482,6 +483,7 @@ export class CobranzasService {
       .set('prcobranzadirecta', cobranza_directa.toString()  )
       .set('prcobranzaarchivos', cobranza_archivos.toString()  )
       .set('prcobranzajudicial', cobranza_judicial.toString()  )
+      .set('prcobranzamanual', cobranza_manual.toString()  )
       .set('prcreditocronograma', credito_cronograma.toString()  )
       .set('prventacronograma', venta_cronograma.toString()  )
       .set('prmonto', monto.toString() )
@@ -720,6 +722,98 @@ export class CobranzasService {
       } else {
         console.log('No hay datos que mostrar',res);
         return false;
+      }
+    }));
+  }
+
+  ListarTiposCobranzaManual(
+    nombre : string,
+    numero_pagina : number,
+    total_pagina : number,
+  ) : Observable <any> {
+    let params = new HttpParams()
+      .set('prnombre', nombre )
+      .set('prpagina', numero_pagina.toString() )
+      .set('prtotalpagina', total_pagina.toString() ) ;
+
+    return this.http.get(this.url + 'cobranza/read-cobranza-manual-tipos.php', {params})
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res;
+      } else {
+        console.log('No hay datos que mostrar');
+        return [];
+      }
+    }));
+  }
+
+  CrearCobranzaManual(
+    cliente : number ,
+    tipo_cobranza : number ,
+    fecha : Date ,
+    comprobante : string ,
+    vendedor : number ,
+    monto : number ,
+    observaciones : string ,
+  ){
+    let params = new HttpParams()
+      .set('prcliente', cliente.toString() )
+      .set('prtipocobranza', tipo_cobranza.toString() )
+      .set('prfecha', moment(fecha).format("YYYY-MM-DD") )
+      .set('prcomprobante', comprobante )
+      .set('prvendedor', vendedor.toString() )
+      .set('prmonto', monto.toString() )
+      .set('probservaciones', observaciones) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'cobranza/create-manual.php', params, {headers: headers});
+  }
+
+  ListarCobranzasManuales(
+    cliente : string ,
+    cliente_dni : string ,
+    vendedor : string ,
+    tipo : number ,
+    fecha_inicio : Date ,
+    fecha_fin : Date ,
+    numero_pagina : number ,
+    total_pagina : number ,
+  ){
+    let params = new HttpParams()
+      .set('prcliente', cliente)
+      .set('prdni', cliente_dni)
+      .set('prvendedor', vendedor)
+      .set('prtipo', tipo.toString())
+      .set('prfechainicio', moment(fecha_inicio).format("YYYY-MM-DD"))
+      .set('prfechafin', moment(fecha_fin).format("YYYY-MM-DD"))
+      .set('prnumeropagina', numero_pagina.toString())
+      .set('prtotalpagina', total_pagina.toString());
+
+    return this.http.get(this.url + 'cobranza/read-cobranzas-manuales.php', {params})
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res ;
+      } else {
+        console.log('No hay datos que mostrar');
+        return false ;
+      }
+    }));
+  }
+
+  SeleccionarCobranzaManual(
+    id_cobranza : number ,
+  ) : Observable<any> {
+    let params = new HttpParams()
+      .set('prid', id_cobranza.toString() ) ;
+
+    return this.http.get(this.url + 'cobranza/read-cobranza-manualxID.php', {params})
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res['data'] ;
+      } else {
+        console.log('No hay datos que mostrar');
+        return false ;
       }
     }));
   }

@@ -50,7 +50,8 @@ export class ClienteService {
         res['tiempo'] = tiempo ;
         return res;
       }else {
-        console.log('No hay datos que mostrar');
+        console.log('No hay datos que mostrar', res);
+        res['tiempo'] = tiempo ;
         return res;
       }
     }));

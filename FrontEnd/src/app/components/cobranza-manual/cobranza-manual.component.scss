@@ -1,0 +1,21 @@
+@import '../../../tema.scss';
+
+$primary: map-get($theme, primary);
+
+.seccion{
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border-color: mat-color($primary);
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 5px;
+}
+
+.titulo-seccion{
+  height: 30px;
+  font-size: 16px;
+  background-color: mat-color($primary);
+  color: white !important;
+  padding-top: 15px;
+  padding-left: 2.5%;
+}

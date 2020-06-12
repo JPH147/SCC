@@ -94,15 +94,15 @@ export class VentanaVentasComponent implements OnInit {
 
   VerVenta(transaccion){
     if(transaccion.id_tipo<3){
-      this.router.navigate(['/creditos/ver', transaccion.id]);
+      this.router.navigate(['/creditos/ver', transaccion.id], {queryParams: {}});
     }
     if(transaccion.id_tipo==3){
-      this.router.navigate(['/ventas', transaccion.id]);
+      this.router.navigate(['/ventas', transaccion.id], {queryParams: {}});
     }
     if(transaccion.id_tipo==4){
-      this.router.navigate(['/ventas', 'salida', transaccion.id]);
+      this.router.navigate(['/ventas', 'salida', transaccion.id], {queryParams: {}});
     }
-    this.ventana.close();
+    this.ventana.close(true);
   }
 
 }
