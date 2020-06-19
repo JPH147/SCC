@@ -1271,12 +1271,13 @@
 
       $sheet->setCellValue('A1', 'N°');
       $sheet->setCellValue('B1', 'DNI');
-      $sheet->setCellValue('C1', 'Cliente');
-      $sheet->setCellValue('D1', 'Tipo de pago');
-      $sheet->setCellValue('E1', 'Subsede');
-      $sheet->setCellValue('F1', 'Sede');
-      $sheet->setCellValue('G1', 'Institución');
-      $sheet->setCellValue('H1', 'Monto pendiente');
+      $sheet->setCellValue('C1', 'Codigo');
+      $sheet->setCellValue('D1', 'Cliente');
+      $sheet->setCellValue('E1', 'Tipo de pago');
+      $sheet->setCellValue('F1', 'Subsede');
+      $sheet->setCellValue('G1', 'Sede');
+      $sheet->setCellValue('H1', 'Institución');
+      $sheet->setCellValue('I1', 'Monto pendiente');
 
       while($row = $result->fetch(PDO::FETCH_ASSOC))
       {
@@ -1285,12 +1286,13 @@
 
           $sheet->setCellValue('A' . $contador, $contador-1 );
           $sheet->setCellValue('B' . $contador, $cliente_dni );
-          $sheet->setCellValue('C' . $contador, $cliente );
-          $sheet->setCellValue('D' . $contador, $tipo_pago );
-          $sheet->setCellValue('E' . $contador, $subsede );
-          $sheet->setCellValue('F' . $contador, $sede );
-          $sheet->setCellValue('G' . $contador, $institucion );
-          $sheet->setCellValue('H' . $contador, $monto_pendiente );
+          $sheet->setCellValue('C' . $contador, $cliente_codigo );
+          $sheet->setCellValue('D' . $contador, $cliente );
+          $sheet->setCellValue('E' . $contador, $tipo_pago );
+          $sheet->setCellValue('F' . $contador, $subsede );
+          $sheet->setCellValue('G' . $contador, $sede );
+          $sheet->setCellValue('H' . $contador, $institucion );
+          $sheet->setCellValue('I' . $contador, $monto_pendiente );
       }
 
       $writer = new Xlsx($spreadsheet);

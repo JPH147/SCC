@@ -717,6 +717,29 @@ Class Proceso{
     return $procesos_list;
   }
 
+  function read_procesos_instancias_contar(){
+    $query = "CALL sp_listarprocesojudicialinstanciascontar(?,?,?,?,?,?,?,?)";
+
+    $result = $this->conn->prepare($query);
+
+    $result->bindParam(1, $this->distrito_judicial);
+    $result->bindParam(2, $this->juzgado);
+    $result->bindParam(3, $this->expediente);
+    $result->bindParam(4, $this->dni);
+    $result->bindParam(5, $this->nombre);
+    $result->bindParam(6, $this->fecha_inicio);
+    $result->bindParam(7, $this->fecha_fin);
+    $result->bindParam(8, $this->estado);
+
+    $result->execute();
+
+    $row = $result->fetch(PDO::FETCH_ASSOC);
+
+    $this->total_resultado=$row['total'];
+
+    return $this->total_resultado;
+  }
+
   function read_procesos_distritos(){
     $query = "CALL sp_listarprocesojudicialdistritos(?,?,?,?,?,?,?,?)";
 
@@ -750,6 +773,29 @@ Class Proceso{
       array_push($procesos_list["distritos"],$items);
     }
     return $procesos_list;
+  }
+
+  function read_procesos_distritos_contar(){
+    $query = "CALL sp_listarprocesojudicialdistritoscontar(?,?,?,?,?,?,?,?)";
+
+    $result = $this->conn->prepare($query);
+
+    $result->bindParam(1, $this->distrito_judicial);
+    $result->bindParam(2, $this->juzgado);
+    $result->bindParam(3, $this->expediente);
+    $result->bindParam(4, $this->dni);
+    $result->bindParam(5, $this->nombre);
+    $result->bindParam(6, $this->fecha_inicio);
+    $result->bindParam(7, $this->fecha_fin);
+    $result->bindParam(8, $this->estado);
+
+    $result->execute();
+
+    $row = $result->fetch(PDO::FETCH_ASSOC);
+
+    $this->total_resultado=$row['total'];
+
+    return $this->total_resultado;
   }
 
   function create_proceso_judicial_multiple(){

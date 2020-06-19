@@ -243,8 +243,10 @@ export class CobranzaDataSource implements DataSource<any> {
         fecha_fin ,
         estado
       ).subscribe(res=>{
+        item['total_procesos'] = 0 ;
+        item['total_instancias'] = res['data'].instancias.length ;
         item['informacion_instancias'] = res['data'].instancias ;
-        item['cargando_instancias'] = false;
+        item['cargando_instancias'] = false ;
         this.ObtenerProcesos(
           item['informacion_instancias'],
           expediente,
@@ -258,38 +260,6 @@ export class CobranzaDataSource implements DataSource<any> {
       })
     })
   }
-
-  // CargarInstancias(
-  //   distrito:number,
-  //   juzgado:string,
-  //   expediente:string,
-  //   dni:string,
-  //   nombre:string,
-  //   fecha_inicio:Date,
-  //   fecha_fin:Date,
-  //   estado:number,
-  //   orden:string,
-  // ) {
-  //   this._judicial.ListarInstancias( distrito , juzgado , expediente , dni , nombre , fecha_inicio , fecha_fin , estado )
-  //   .pipe(
-  //     catchError(() => of([])),
-  //     finalize(() => this.CargandoInformacion.next(false))
-  //   )
-  //   .subscribe(res => {
-  //     this.InformacionInstancias.next(res['data'].instancias)
-  //     this.InformacionInstanciasArray = res['data'].instancias;
-  //     this.ObtenerProcesos(
-  //       expediente ,
-  //       juzgado ,
-  //       dni ,
-  //       nombre ,
-  //       fecha_inicio ,
-  //       fecha_fin ,
-  //       estado ,
-  //       orden ,
-  //     );
-  //   });
-  // }
 
   ObtenerProcesos(
     instancias:Array<any>,
@@ -305,6 +275,7 @@ export class CobranzaDataSource implements DataSource<any> {
       item['informacion_procesos'] = new ProcesosDataSource() ;
       item['informacion_procesos'].CargarInformacion([]);
       item['cargando_procesos'] = true ;
+      // item['total_procesos'] = 0 ;
       this._judicial.ListarV2(
         item.id_instancia ,
         expediente ,
@@ -315,9 +286,27 @@ export class CobranzaDataSource implements DataSource<any> {
         estado ,
         orden
       ).subscribe(res=>{
+        item['total_procesos'] = res['data'].procesos.length ;
         item['informacion_procesos'].CargarInformacion(res['data'].procesos);
         item['cargando_procesos'] = false;
+        this.CalcularTotalDistrito(item.id_distrito) ;
       })
+    })
+  }
+
+  CalcularTotalDistrito(
+    id_distrito : number
+  ){
+    this.InformacionDistritosArray.forEach( distrito =>{
+      if( distrito.id_distrito == id_distrito ) {
+        distrito['total_procesos'] =  distrito['informacion_instancias'].reduce((acumulador, instancia) => {
+          if ( instancia['total_procesos'] ) {
+            return acumulador + instancia['total_procesos'] ;
+          } else {
+            return acumulador ;
+          }
+        }, 0);
+      }
     })
   }
 }

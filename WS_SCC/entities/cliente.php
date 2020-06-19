@@ -691,12 +691,16 @@ Class Cliente{
         $sheet->setCellValue('E1', 'CIP');
         $sheet->setCellValue('F1', 'Email');
         $sheet->setCellValue('G1', 'Cargo');
-        $sheet->setCellValue('H1', 'Casilla');
-        $sheet->setCellValue('I1', 'Institución');
-        $sheet->setCellValue('J1', 'Sede');
-        $sheet->setCellValue('K1', 'Subsede');
-        $sheet->setCellValue('L1', 'Trabajo');
-        $sheet->setCellValue('M1', 'Cuotas vencidas');
+        $sheet->setCellValue('H1', 'Situacion');
+        $sheet->setCellValue('I1', 'Casilla');
+        $sheet->setCellValue('J1', 'Institución');
+        $sheet->setCellValue('K1', 'Sede');
+        $sheet->setCellValue('L1', 'Subsede');
+        $sheet->setCellValue('M1', 'Trabajo');
+        $sheet->setCellValue('N1', 'Distrito');
+        $sheet->setCellValue('O1', 'Provincia');
+        $sheet->setCellValue('P1', 'Departamento');
+        $sheet->setCellValue('Q1', 'Cuotas vencidas');
   
         while($row = $result->fetch(PDO::FETCH_ASSOC))
         {
@@ -710,12 +714,16 @@ Class Cliente{
             $sheet->setCellValue('E' . $contador, $cip );
             $sheet->setCellValue('F' . $contador, $email );
             $sheet->setCellValue('G' . $contador, $cargo );
-            $sheet->setCellValue('H' . $contador, $casilla );
-            $sheet->setCellValue('I' . $contador, $subsede );
-            $sheet->setCellValue('J' . $contador, $institucion );
-            $sheet->setCellValue('K' . $contador, $sede );
-            $sheet->setCellValue('L' . $contador, $trabajo );
-            $sheet->setCellValue('M' . $contador, $cuotas_vencidas );
+            $sheet->setCellValue('H' . $contador, $cargo_estado );
+            $sheet->setCellValue('I' . $contador, $casilla );
+            $sheet->setCellValue('J' . $contador, $subsede );
+            $sheet->setCellValue('K' . $contador, $institucion );
+            $sheet->setCellValue('L' . $contador, $sede );
+            $sheet->setCellValue('M' . $contador, $trabajo );
+            $sheet->setCellValue('N' . $contador, $distrito );
+            $sheet->setCellValue('O' . $contador, $provincia );
+            $sheet->setCellValue('P' . $contador, $departamento );
+            $sheet->setCellValue('Q' . $contador, $cuotas_vencidas );
         }
   
         $writer = new Xlsx($spreadsheet);
