@@ -18,7 +18,9 @@
 
         $cobranza->cliente = !empty($_GET['prcliente']) ? trim($_GET['prcliente']) : die() ;
         $cobranza->monto = !empty($_GET['prmonto']) ? trim($_GET['prmonto']) : 1000;
+        $cobranza->id_transaccion = !empty($_GET['prtransaccion']) ? trim($_GET['prtransaccion']) : 0;
         $cobranza->solo_directas = !empty($_GET['prsolodirectas']) ? trim($_GET['prsolodirectas']) : 0;
+        $cobranza->fecha_referencia = !empty($_GET['prfechareferencia']) ? trim($_GET['prfechareferencia']) : null;
         $cobranza->id_cobranza = !empty($_GET['prcobranza']) ? trim($_GET['prcobranza']) : die() ;
 
         $cobranza_list = $cobranza->seleccionar_cuotas_pagar_SIN_directa();

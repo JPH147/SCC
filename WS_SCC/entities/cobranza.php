@@ -13,6 +13,7 @@
     public $path_reporte = '../uploads/reporte-cobranzas/';
 
     public $id_cobranza;
+    public $id_transaccion;
     public $total_resultado;
     public $archivo;
     public $contenido;
@@ -23,6 +24,10 @@
     public $cobranza_manual;
     public $credito_cronograma;
     public $venta_cronograma;
+
+    public $tipo_transaccion ;
+    public $cronograma ;
+    public $interes ;
 
     public $cabecera;
     public $cliente;
@@ -675,7 +680,8 @@
             "cooperativa_cuenta"=>$cooperativa_cuenta,
             "banco"=>$banco,
             "numero_operacion"=>$numero_operacion,
-            "monto"=>$monto
+            "monto"=>$monto,
+            "fecha_referencia"=>$fecha_referencia,
           );
           array_push($cronograma["cobranzas"],$items);
       }
@@ -706,7 +712,6 @@
     }
 
     function read_cobranza_directaxId(){
-
       $query ="call sp_listarcobranzadirectaxId(?)";
         
       $result = $this->conn->prepare($query);
@@ -729,12 +734,13 @@
         "banco" => $row['banco'] ,
         "numero_operacion" => $row['numero_operacion'] ,
         "monto" => $row['monto'] ,
+        "id_transaccion" => $row['id_transaccion'] ,
+        "fecha_referencia" => $row['fecha_referencia'] ,
         "solo_directas" => $row['solo_directas'] ,
         "archivo" => $row['archivo'] ,
         "observaciones" => $row['observaciones'] ,
         "detalle" => $Detalle
       );
-
       return $resultado;
     }
 
@@ -778,8 +784,10 @@
         :prcuenta,
         :properacion,
         :prmonto,
+        :prtransaccion,
         :prestricto,
         :prarchivo,
+        :prfechareferencia,
         :probservaciones
       )";
 
@@ -790,18 +798,27 @@
       $result->bindParam(":prcuenta", $this->cuenta);
       $result->bindParam(":properacion", $this->operacion);
       $result->bindParam(":prmonto", $this->monto);
+      $result->bindParam(":prtransaccion", $this->transaccion);
       $result->bindParam(":prestricto", $this->solo_directas);
       $result->bindParam(":prarchivo", $this->archivo);
+      $result->bindParam(":prfechareferencia", $this->fecha_referencia);
       $result->bindParam(":probservaciones", $this->observaciones);
-
+      
       $this->fecha=htmlspecialchars(strip_tags($this->fecha));
       $this->cliente=htmlspecialchars(strip_tags($this->cliente));
       $this->cuenta=htmlspecialchars(strip_tags($this->cuenta));
       $this->operacion=htmlspecialchars(strip_tags($this->operacion));
       $this->monto=htmlspecialchars(strip_tags($this->monto));
+      $this->transaccion=htmlspecialchars(strip_tags($this->transaccion));
       $this->solo_directas=htmlspecialchars(strip_tags($this->solo_directas));
       $this->archivo=htmlspecialchars(strip_tags($this->archivo));
       $this->observaciones=htmlspecialchars(strip_tags($this->observaciones));
+      
+      if ($this->fecha_referencia) {
+        $this->fecha_referencia=htmlspecialchars(strip_tags($this->fecha_referencia));
+      } else {
+        $this->fecha_referencia = null ;
+      }
 
       if($result->execute())
       {
@@ -821,8 +838,10 @@
         :prcuenta,
         :properacion,
         :prmonto,
+        :prtransaccion,
         :prestricto,
         :prarchivo,
+        :prfechareferencia,
         :probservaciones
       )";
 
@@ -834,8 +853,10 @@
       $result->bindParam(":prcuenta", $this->cuenta);
       $result->bindParam(":properacion", $this->operacion);
       $result->bindParam(":prmonto", $this->monto);
+      $result->bindParam(":prtransaccion", $this->transaccion);
       $result->bindParam(":prestricto", $this->solo_directas);
       $result->bindParam(":prarchivo", $this->archivo);
+      $result->bindParam(":prfechareferencia", $this->fecha_referencia);
       $result->bindParam(":probservaciones", $this->observaciones);
 
       $this->id_cobranza=htmlspecialchars(strip_tags($this->id_cobranza));
@@ -844,8 +865,10 @@
       $this->cuenta=htmlspecialchars(strip_tags($this->cuenta));
       $this->operacion=htmlspecialchars(strip_tags($this->operacion));
       $this->monto=htmlspecialchars(strip_tags($this->monto));
+      $this->transaccion=htmlspecialchars(strip_tags($this->transaccion));
       $this->solo_directas=htmlspecialchars(strip_tags($this->solo_directas));
       $this->archivo=htmlspecialchars(strip_tags($this->archivo));
+      $this->fecha_referencia=htmlspecialchars(strip_tags($this->fecha_referencia));
       $this->observaciones=htmlspecialchars(strip_tags($this->observaciones));
 
       if($result->execute())
@@ -904,13 +927,15 @@
     }
 
     function seleccionar_cuotas_pagar(){
-      $query = "CALL sp_listarcobranzasposiblescuotas(?,?,?)";
+      $query = "CALL sp_listarcobranzasposiblescuotas(?,?,?,?,?)";
 
       $result = $this->conn->prepare($query);
 
       $result->bindParam(1, $this->cliente);
       $result->bindParam(2, $this->monto);
-      $result->bindParam(3, $this->solo_directas);
+      $result->bindParam(3, $this->id_transaccion);
+      $result->bindParam(4, $this->solo_directas);
+      $result->bindParam(5, $this->fecha_referencia);
 
       $result->execute();
 
@@ -931,6 +956,7 @@
             "codigo" => $codigo ,
             "capital" => $capital ,
             "interes" => $interes ,
+            "interes_considerado" => $interes_considerado ,
             "monto_total" => $monto_total ,
             "monto_pendiente" => $monto_pendiente ,
             "fecha_vencimiento" => $fecha_vencimiento ,
@@ -947,14 +973,16 @@
     }
 
     function seleccionar_cuotas_pagar_SIN_directa(){
-      $query = "CALL sp_listarcobranzasposiblescuotasSINdirecta(?,?,?,?)";
+      $query = "CALL sp_listarcobranzasposiblescuotasSINdirecta(?,?,?,?,?,?)";
 
       $result = $this->conn->prepare($query);
 
       $result->bindParam(1, $this->cliente);
       $result->bindParam(2, $this->monto);
-      $result->bindParam(3, $this->solo_directas);
-      $result->bindParam(4, $this->id_cobranza);
+      $result->bindParam(3, $this->id_transaccion);
+      $result->bindParam(4, $this->solo_directas);
+      $result->bindParam(5, $this->fecha_referencia);
+      $result->bindParam(6, $this->id_cobranza);
 
       $result->execute();
 
@@ -975,6 +1003,7 @@
             "codigo" => $codigo ,
             "capital" => $capital ,
             "interes" => $interes ,
+            "interes_considerado" => $interes_considerado ,
             "monto_total" => $monto_total ,
             "monto_pendiente" => $monto_pendiente ,
             "fecha_vencimiento" => $fecha_vencimiento ,
@@ -987,7 +1016,6 @@
       }
 
       return $cronograma;
-
     }
 
     function seleccionar_cuotas_pagadas_planilla(){
@@ -1691,6 +1719,33 @@
       };
 
       return $cuentas;
+    }
+
+    function actualizar_interes_cronograma(){
+      $query = "CALL sp_actualizarinterescronograma(
+        :prtipo,
+        :prtransaccion,
+        :prcronograma,
+        :printeres
+      )";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(":prtipo", $this->tipo_transaccion);
+      $result->bindParam(":prtransaccion", $this->transaccion);
+      $result->bindParam(":prcronograma", $this->cronograma);
+      $result->bindParam(":printeres", $this->interes);
+
+      $this->tipo_transaccion=htmlspecialchars(strip_tags($this->tipo_transaccion));
+      $this->transaccion=htmlspecialchars(strip_tags($this->transaccion));
+      $this->cronograma=htmlspecialchars(strip_tags($this->cronograma));
+      $this->interes=htmlspecialchars(strip_tags($this->interes));
+
+      if($result->execute())
+      {
+        return true;
+      }
+      return false;
     }
   }
 

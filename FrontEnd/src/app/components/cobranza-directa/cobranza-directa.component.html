@@ -28,7 +28,7 @@
 
         <mat-grid-tile colspan="2" *ngIf="(CobranzaDirectaForm.value.id_cliente)">
           <mat-form-field class="columnas-2">
-            <input #Cliente placeholder="Cliente" matInput formControlName="cliente" [readonly]="id_cobranza">
+            <input #Cliente placeholder="Cliente" matInput formControlName="cliente" readonly>
             <mat-icon color="primary" matSuffix (click)="RemoverCliente()" *ngIf="!id_cobranza"> remove_circle </mat-icon>
           </mat-form-field>
         </mat-grid-tile>
@@ -69,12 +69,55 @@
         </mat-grid-tile>
 
         <mat-grid-tile>
+          <mat-form-field>
+            <mat-select placeholder="Documento" formControlName="documento" (selectionChange)="DocumentoSeleccionado()">
+              <mat-option [value]=0> Todos </mat-option>
+              <mat-option *ngFor="let documento of Documentos" [value]="documento.id"> {{documento.documento}} </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
           <mat-checkbox color="primary" formControlName="solo_directas" (change)="ListarPosiblesCuotas()">Solo modo de pago directo</mat-checkbox>
         </mat-grid-tile>
 
+        <mat-grid-tile>
+          <mat-checkbox color="primary" formControlName="interes" (change)="InteresSeleccionado()"> Interés a la fecha </mat-checkbox>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan="1">
+          <mat-form-field class="columnas-1">
+            <input matInput [matDatepicker]="fechareferencia" placeholder="Fecha de referencia" formControlName="fecha_referencia" (dateChange)="ListarPosiblesCuotas()" readonly>
+            <mat-datepicker-toggle matSuffix [for]="fechareferencia"></mat-datepicker-toggle>
+            <mat-datepicker #fechareferencia [disabled]="id_cobranza || !CobranzaDirectaForm.value.interes"></mat-datepicker>
+          </mat-form-field>
+        </mat-grid-tile>
+
         <ng-container>
-            <mat-grid-tile colspan="1" *ngIf="!id_cobranza && !id_cobranza_editar">
-              <image-upload
+          <mat-grid-tile colspan="2" *ngIf="!id_cobranza && !id_cobranza_editar">
+            <image-upload
+              class="cargar-imagen"
+              [max]="1"
+              url="{{ruta}}"
+              [buttonCaption]="'Voucher'"
+              [extensions]="['pdf']"
+              [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
+              (uploadFinished)="SubirVoucher($event)">
+            </image-upload>  
+          </mat-grid-tile>
+
+          <mat-grid-tile  colspan="2" *ngIf="id_cobranza">
+            <button mat-icon-button color="primary" [disabled]="!archivo">
+              <mat-icon class="icono-documentos" (click)="AbrirDocumento(archivo)"> visibility </mat-icon>
+            </button>
+          </mat-grid-tile>
+
+          <mat-grid-tile  colspan="2" *ngIf="id_cobranza_editar">
+            <ng-container>
+              <button mat-icon-button color="primary" *ngIf="!archivo_editar">
+                <mat-icon class="icono-documentos" (click)="AbrirDocumento(archivo)"> visibility </mat-icon>
+              </button>
+              <image-upload  *ngIf="archivo_editar"
                 class="cargar-imagen"
                 [max]="1"
                 url="{{ruta}}"
@@ -83,42 +126,17 @@
                 [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
                 (uploadFinished)="SubirVoucher($event)">
               </image-upload>  
-            </mat-grid-tile>
-
-            <mat-grid-tile *ngIf="id_cobranza">
-              <button mat-icon-button color="primary" [disabled]="!archivo">
-                <mat-icon class="icono-documentos" (click)="AbrirDocumento(archivo)"> visibility </mat-icon>
+            </ng-container>
+            
+            <ng-container>
+              <button mat-icon-button color="primary" (click)="archivo_editar =  true" [disabled]="!archivo" *ngIf="!archivo_editar">
+                <mat-icon class="icono-documentos"> edit </mat-icon>
               </button>
-            </mat-grid-tile>
-
-            <mat-grid-tile *ngIf="id_cobranza_editar">
-
-              <ng-container>
-                <button mat-icon-button color="primary" *ngIf="!archivo_editar">
-                  <mat-icon class="icono-documentos" (click)="AbrirDocumento(archivo)"> visibility </mat-icon>
-                </button>
-                <image-upload  *ngIf="archivo_editar"
-                  class="cargar-imagen"
-                  [max]="1"
-                  url="{{ruta}}"
-                  [buttonCaption]="'Voucher'"
-                  [extensions]="['pdf']"
-                  [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
-                  (uploadFinished)="SubirVoucher($event)">
-                </image-upload>  
-              </ng-container>
-              
-
-              <ng-container>
-                <button mat-icon-button color="primary" (click)="archivo_editar =  true" [disabled]="!archivo" *ngIf="!archivo_editar">
-                  <mat-icon class="icono-documentos"> edit </mat-icon>
-                </button>
-                <button mat-icon-button color="primary" (click)="archivo_editar = false" [disabled]="!archivo" *ngIf="archivo_editar">
-                  <mat-icon class="icono-documentos"> close </mat-icon>
-                </button>
-              </ng-container>
-            </mat-grid-tile>
-
+              <button mat-icon-button color="primary" (click)="archivo_editar = false" [disabled]="!archivo" *ngIf="archivo_editar">
+                <mat-icon class="icono-documentos"> close </mat-icon>
+              </button>
+            </ng-container>
+          </mat-grid-tile>
         </ng-container>
 
         <mat-grid-tile colspan="4">
@@ -126,7 +144,6 @@
             <input matInput placeholder="Observaciones" formControlName="observaciones" [readonly]="id_cobranza">
           </mat-form-field>
         </mat-grid-tile>
-
       </mat-grid-list>
 
     </div>

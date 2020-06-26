@@ -102,8 +102,8 @@
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let cobranza">
           <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="['ver', cobranza.id]"><mat-icon> visibility </mat-icon></button>
-          <button mat-icon-button color="primary" matTooltip="Editar" [routerLink]="['editar', cobranza.id]"><mat-icon> edit </mat-icon></button>
-          <button mat-icon-button color="primary" matTooltip="Eliminar" (click)="EliminarCobranza(cobranza)"><mat-icon> delete </mat-icon></button>
+          <button mat-icon-button color="primary" matTooltip="Editar" [routerLink]="['editar', cobranza.id]" [disabled]="cobranza.fecha_referencia"><mat-icon> edit </mat-icon></button>
+          <button mat-icon-button color="primary" matTooltip="Eliminar" (click)="EliminarCobranza(cobranza)" [disabled]="cobranza.fecha_referencia"><mat-icon> delete </mat-icon></button>
         </mat-cell>
       </ng-container>
 

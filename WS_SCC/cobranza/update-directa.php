@@ -24,8 +24,10 @@
             $cobranza->cuenta=trim($_POST["prcuenta"]);
             $cobranza->operacion=trim($_POST["properacion"]);
             $cobranza->monto=trim($_POST["prmonto"]);
+            $cobranza->id_transaccion=trim($_POST["prtransaccion"]);
             $cobranza->solo_directas=trim($_POST["prsolodirectas"]);
             $cobranza->archivo=trim($_POST["prarchivo"]);
+            $cobranza->fecha_referencia=trim($_POST["prfechareferencia"]) == 0 ? null : trim($_POST["prfechareferencia"]);
             $cobranza->observaciones=trim($_POST["probservaciones"]);
             $cobranza->detalle_cabecera = json_decode( trim($_POST["prdetalle"]) );
 

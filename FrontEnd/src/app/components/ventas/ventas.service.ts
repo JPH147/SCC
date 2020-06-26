@@ -304,7 +304,7 @@ export class VentaService {
     estado:number,
     pagina:number,
     total_pagina:number,
-  ){
+  ) : Observable<any> {
 
     let params = new HttpParams()
       .set('prcliente',cliente.toString())

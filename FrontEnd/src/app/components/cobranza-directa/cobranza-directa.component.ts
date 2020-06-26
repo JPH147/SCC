@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angula
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
-import { fromEvent, BehaviorSubject, forkJoin } from 'rxjs';
+import { fromEvent, BehaviorSubject, forkJoin, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { Notificaciones } from '../global/notificacion';
@@ -10,6 +10,8 @@ import { URLIMAGENES } from '../global/url';
 import { ServiciosGenerales } from '../global/servicios';
 import { CobranzasService } from '../cobranzas-listar/cobranzas.service';
 import { SeleccionarClienteComponent } from '../retorno-vendedores/seleccionar-cliente/seleccionar-cliente.component';
+import { VentaService } from '../ventas/ventas.service';
+
 import * as moment from 'moment' ;
 
 @Component({
@@ -43,6 +45,8 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
   public archivo_antiguo : string ;
   public archivo_nuevo : string = "" ;
 
+  public Documentos : Array<any> = [] ; // Esta variable contiene los documentos por cliente
+
   constructor(
     private Builder : FormBuilder ,
     private Dialogo : MatDialog ,
@@ -52,6 +56,7 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
     private ServiciosGenerales : ServiciosGenerales ,
     private Notificacion : Notificaciones ,
     private Servicio : CobranzasService ,
+    private _ventas : VentaService ,
   ) { }
 
   ngOnInit() {
@@ -126,7 +131,13 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
       ] ],
       solo_directas: [ { value : true , disabled : false } , [
       ] ],
+      documento: [ { value : 0 , disabled : false } , [
+      ] ],
       observaciones: [ { value : "" , disabled : false } , [
+      ] ],
+      interes: [ { value : false , disabled : false } , [
+      ] ],
+      fecha_referencia: [ { value : null , disabled : true } , [
       ] ],
     })
   }
@@ -136,8 +147,17 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
     this.Servicio.SeleccionarCobranzaDirecta(id_cobranza).subscribe(res=>{
       this.enviado = false ;
       this.CobranzaDirectaForm.get('id_cliente').setValue(res.id_cliente) ;
+      this.ListarTransacciones() ;
       this.CobranzaDirectaForm.get('cliente').setValue(res.cliente) ;
       this.CobranzaDirectaForm.get('fecha').setValue(moment(res.fecha).toDate()) ;
+
+      this.CobranzaDirectaForm.get('documento').setValue(res.id_transaccion) ;
+
+      if (res.fecha_referencia) {
+        this.CobranzaDirectaForm.get('interes').setValue( true ) ;
+        this.CobranzaDirectaForm.get('fecha_referencia').enable()
+        this.CobranzaDirectaForm.get('fecha_referencia').setValue(res.fecha_referencia) ;
+      }
 
       this.CobranzaDirectaForm.get('numero_operacion').setValue(res.numero_operacion) ;
       this.CobranzaDirectaForm.get('monto').setValue(res.monto) ;
@@ -148,7 +168,11 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
 
       if( this.id_cobranza ) {
         this.CobranzaDirectaForm.get('cuenta_bancaria').setValue(res.banco) ;
-        this.CobranzaDirectaForm.get('solo_directas').disable();
+        this.CobranzaDirectaForm.get('solo_directas').disable() ;
+        this.CobranzaDirectaForm.get('interes').disable() ;
+        this.CobranzaDirectaForm.get('fecha_referencia').disable() ;
+        this.CobranzaDirectaForm.get('documento').disable() ;
+
         this.Cuotas = res.detalle ;
       }
 
@@ -168,6 +192,20 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
     })
   }
 
+  ListarTransacciones(){
+    this._ventas.ListarVentasxCliente(
+      this.CobranzaDirectaForm.get('id_cliente').value ,
+      "" ,
+      new Date() ,
+      0 ,
+      1 ,
+      50
+    ).subscribe(transacciones=>{
+      // console.log(ventas) ;
+      this.Documentos = transacciones['data'].ventas ;
+    })
+  }
+
   ListarCuentas(){
     this.Servicio.ListarCuentas().subscribe(res=>{
       this.cuentas = res['data'].cuentas;
@@ -181,11 +219,11 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
 
     Ventana.afterClosed().subscribe(res=>{
       if(res){
-        console.log(res)
         this.CobranzaDirectaForm.get('id_cliente').setValue(res.id);
         this.CobranzaDirectaForm.get('cliente').setValue(res.nombre);
+        this.ListarTransacciones() ;
         if( this.CobranzaDirectaForm.value.monto ) {
-          this.ListarPosiblesCuotas();
+          this.ListarPosiblesCuotas() ;
         }
       }
     })
@@ -194,6 +232,32 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
   RemoverCliente(){
     this.CobranzaDirectaForm.get('id_cliente').setValue(null);
     this.CobranzaDirectaForm.get('cliente').setValue(null);
+    this.Cuotas = [] ;
+    this.Documentos = [] ;
+  }
+
+  DocumentoSeleccionado(){
+    // console.log( this.CobranzaDirectaForm.get('id_cliente').value, this.CobranzaDirectaForm.get('documento').value ) ;
+    if ( this.CobranzaDirectaForm.get('documento').value == 0 ) {
+      this.CobranzaDirectaForm.get('solo_directas').setValue( true ) ;
+      this.CobranzaDirectaForm.get('solo_directas').enable() ;
+    } else {
+      this.CobranzaDirectaForm.get('solo_directas').setValue( false ) ;
+      this.CobranzaDirectaForm.get('solo_directas').disable() ;
+    }
+    this.ListarPosiblesCuotas() ;
+  }
+
+  InteresSeleccionado(){
+    if ( this.CobranzaDirectaForm.get('interes').value ) {
+      if( !this.CobranzaDirectaForm.get('fecha_referencia').value ) {
+        this.CobranzaDirectaForm.get('fecha_referencia').setValue(new Date()) ;
+      }
+      this.CobranzaDirectaForm.get('fecha_referencia').enable() ;
+    } else {
+      this.CobranzaDirectaForm.get('fecha_referencia').disable() ;
+    }
+    this.ListarPosiblesCuotas() ;
   }
 
   ListarPosiblesCuotas(){
@@ -205,7 +269,13 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
         let monto : number = this.CobranzaDirectaForm.get('monto').value ;
   
         if( !this.id_cobranza_editar ) {
-          this.Servicio.ListarPosiblesCuotas(this.CobranzaDirectaForm.value.id_cliente,this.CobranzaDirectaForm.value.monto,this.CobranzaDirectaForm.value.solo_directas).subscribe(res=>{
+          this.Servicio.ListarPosiblesCuotas(
+            this.CobranzaDirectaForm.get('id_cliente').value,
+            this.CobranzaDirectaForm.get('monto').value,
+            this.CobranzaDirectaForm.get('documento').value,
+            this.CobranzaDirectaForm.get('solo_directas').value || false ,
+            this.CobranzaDirectaForm.get('interes').value ? this.CobranzaDirectaForm.get('fecha_referencia').value : null ,
+          ).subscribe(res=>{
             this.Cargando.next(false) ;
             if(res['data']){
               this.Cuotas = res['data'].cuotas ;
@@ -227,11 +297,19 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
         }
   
         if( this.id_cobranza_editar ) {
-          this.Servicio.ListarPosiblesCuotasSinDirecta(this.CobranzaDirectaForm.value.id_cliente,this.CobranzaDirectaForm.value.monto,this.CobranzaDirectaForm.value.solo_directas,this.id_cobranza_editar).subscribe(res=>{
+          this.Servicio.ListarPosiblesCuotasSinDirecta(
+            this.CobranzaDirectaForm.get('id_cliente').value,
+            this.CobranzaDirectaForm.get('monto').value,
+            this.CobranzaDirectaForm.get('documento').value,
+            this.CobranzaDirectaForm.get('solo_directas').value || false ,
+            this.CobranzaDirectaForm.get('interes').value ? this.CobranzaDirectaForm.get('fecha_referencia').value : null ,
+            this.id_cobranza_editar
+          ).subscribe(res=>{
             this.Cargando.next(false) ;
             if(res['data']){
               this.Cuotas = res['data'].cuotas ;
               this.Cuotas.forEach((item)=>{
+                console.log(item) ;
                 if( monto > item.monto_pendiente ){
                   item.pagar = item.monto_pendiente ;
                   monto = monto - item.monto_pendiente ;
@@ -318,29 +396,34 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
           this.CobranzaDirectaForm.value.cuenta_bancaria ,
           this.CobranzaDirectaForm.value.numero_operacion ,
           this.CobranzaDirectaForm.value.monto ,
+          this.CobranzaDirectaForm.value.documento ,
           this.CobranzaDirectaForm.value.solo_directas ,
           respuesta[1].mensaje,
+          this.CobranzaDirectaForm.get('interes').value ? this.CobranzaDirectaForm.get('fecha_referencia').value : null ,
           this.CobranzaDirectaForm.value.observaciones,
           this.Cuotas
         ).subscribe(res=>{
           if(res['codigo']==0){
-            // this.Cuotas.forEach((item)=>{
-            //   if( item.pagar > 0 ) {
-            //     this.Servicio.CrearDetalleCobranza(
-            //       res['data'],
-            //       0,
-            //       0,
-            //       item.id_tipo < 3 ? item.id_cronograma : 0 ,
-            //       item.id_tipo == 3 ? item.id_cronograma : 0 ,
-            //       item.pagar ,
-            //       this.CobranzaDirectaForm.value.fecha
-            //     ).subscribe()
-            //   }
-            // })
-            // setTimeout(()=>{
+            // En caso haya habido un cambio en el interés, se deben actualizar las cuotas para que todo cuadre
+            let cuotas_actualizar : Array<Observable<any>> = [] ;
+
+            this.Cuotas.map( item => {
+              if( item.interes != item.interes_considerado ) {
+                let interes_exceso = item.interes_considerado - item.interes ;
+                cuotas_actualizar.push(this.Servicio.ActualizarInteresCronograma(item.id_tipo, item.id, item.id_cronograma,interes_exceso))
+              }
+              return item ;
+            })
+
+            if ( cuotas_actualizar.length > 0 ) {
+              forkJoin( cuotas_actualizar ).subscribe(res=>{console.log(res)}) ;
+            }
+            //// ------------<
+
+            setTimeout(()=>{
               this.router.navigate(['/cobranza-directa']);
               this.Notificacion.Snack("Se creó la cobranza con éxito!","");
-            // }, 300)
+            }, 500)
           } else {
             this.router.navigate(['/cobranza-directa']);
             this.Notificacion.Snack("Ocurrió un error al crear la cobranza.", "")
@@ -366,31 +449,34 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
           this.CobranzaDirectaForm.value.cuenta_bancaria ,
           this.CobranzaDirectaForm.value.numero_operacion ,
           this.CobranzaDirectaForm.value.monto ,
+          this.CobranzaDirectaForm.value.documento ,
           this.CobranzaDirectaForm.value.solo_directas ,
           this.archivo_editar ? resultado.mensaje : this.archivo_antiguo,
+          this.CobranzaDirectaForm.get('interes').value ? this.CobranzaDirectaForm.get('fecha_referencia').value : null ,
           this.CobranzaDirectaForm.value.observaciones,
           this.Cuotas
         ).subscribe(res=>{
           if(res['codigo']==0){
-            // this.Cuotas.forEach((item)=>{
-            //   if( item.pagar > 0 ) {
-            //     this.Servicio.CrearDetalleCobranza(
-            //       res['data'],
-            //       0,
-            //       0,
-            //       item.id_tipo < 3 ? item.id_cronograma : 0 ,
-            //       item.id_tipo == 3 ? item.id_cronograma : 0 ,
-            //       item.pagar ,
-            //       this.CobranzaDirectaForm.value.fecha
-            //     ).subscribe()
-            //   }
-            // })
+            // En caso haya habido un cambio en el interés, se deben actualizar las cuotas para que todo cuadre
+            let cuotas_actualizar : Array<Observable<any>> = [] ;
+
+            this.Cuotas.map( item => {
+              if( item.interes != item.interes_considerado ) {
+                let interes_exceso = item.interes_considerado - item.interes ;
+                cuotas_actualizar.push(this.Servicio.ActualizarInteresCronograma(item.id_tipo, item.id, item.id_cronograma,interes_exceso))
+              }
+              return item ;
+            })
+
+            if ( cuotas_actualizar.length > 0 ) {
+              forkJoin( cuotas_actualizar ).subscribe(res=>{console.log(res)}) ;
+            }
+            //// ------------<
 
             setTimeout(()=>{
               this.router.navigate(['/cobranza-directa']);
               this.Notificacion.Snack("Se actualizó la cobranza con éxito!","");
             }, 500)
-
           } else {
             this.router.navigate(['/cobranza-directa']);
             this.Notificacion.Snack("Ocurrió un error al actualizar la cobranza.", "")

@@ -357,14 +357,13 @@ export class ClientesComponent implements OnInit, AfterViewInit {
   }
 
   VerDetalle(cliente, por_verificar){
-    console.log(cliente)
     let Ventana = this.DialogoClientes.open( VentanaCobranzaClienteVencidasComponent,{
       width: '900px' ,
       data: { cliente: cliente.id, por_verificar : por_verificar }
     } ) ;
 
     Ventana.afterClosed().subscribe(res=>{
-      console.log(res)
+      // console.log(res)
     })
   }
 

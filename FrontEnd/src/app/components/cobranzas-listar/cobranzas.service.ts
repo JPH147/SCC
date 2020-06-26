@@ -346,13 +346,17 @@ export class CobranzasService {
   ListarPosiblesCuotas(
     id_cliente : number ,
     monto : number ,
+    id_transaccion : number ,
     considerar_solo_directas : boolean ,
+    fecha_referencia : Date ,
   ):Observable<any>{
 
     let params = new HttpParams()
       .set('prcliente', id_cliente.toString())
       .set('prmonto', monto.toString())
-      .set('prsolodirectas', considerar_solo_directas ? "1" : "0" );
+      .set('prtransaccion', id_transaccion.toString())
+      .set('prsolodirectas', considerar_solo_directas ? "1" : "0" )
+      .set('prfechareferencia', fecha_referencia ? moment(fecha_referencia).format("YYYY-MM-DD") : "0" ) ;
 
     return this.http.get( this.url + 'cobranza/read-posibles-cuotas.php', { params } )
     .pipe(map(res=>{
@@ -368,15 +372,19 @@ export class CobranzasService {
   ListarPosiblesCuotasSinDirecta(
     id_cliente : number ,
     monto : number ,
+    id_transaccion : number ,
     considerar_solo_directas : boolean ,
+    fecha_referencia : Date ,
+    // Esta variable está para cuando se va a editar una cobranza, que no se la considere como parte del cálculo
     id_cobranza : number ,
   ):Observable<any>{
-
     let params = new HttpParams()
       .set('prcliente', id_cliente.toString())
       .set('prmonto', monto.toString())
       .set('prsolodirectas', considerar_solo_directas ? "1" : "0" )
-      .set('prcobranza', id_cobranza.toString());
+      .set('prtransaccion', id_transaccion.toString())
+      .set('prfechareferencia', fecha_referencia ? moment(fecha_referencia).format("YYYY-MM-DD") : "0" )
+      .set('prcobranza', id_cobranza.toString()) ;
 
     return this.http.get( this.url + 'cobranza/read-posibles-cuotas-SIN-directa.php', { params } )
     .pipe(map(res=>{
@@ -419,19 +427,23 @@ export class CobranzasService {
     cuenta : string,
     operacion : string,
     monto : number,
+    id_transaccion : number ,
     considerar_solo_directas : boolean ,
     archivo : string,
+    fecha_referencia : Date,
     observaciones : string,
     detalle : Array<any>
-  ){
+  ) :Observable<any> {
     let params = new HttpParams()
       .set('prfecha', moment(fecha).format("YYYY-MM-DD"))
       .set('prcliente', cliente.toString())
       .set('prcuenta', cuenta)
       .set('properacion', operacion)
       .set('prmonto', monto.toString())
+      .set('prtransaccion', id_transaccion.toString() )
       .set('prsolodirectas', considerar_solo_directas ? "1" : "0" )
       .set('prarchivo', archivo)
+      .set('prfechareferencia', fecha_referencia ? moment(fecha_referencia).format("YYYY-MM-DD") : "0" )
       .set('probservaciones', observaciones)
       .set('prdetalle', JSON.stringify(detalle) );
 
@@ -447,8 +459,10 @@ export class CobranzasService {
     cuenta : string,
     operacion : string,
     monto : number,
+    id_transaccion : number ,
     considerar_solo_directas : boolean ,
     archivo : string,
+    fecha_referencia : Date,
     observaciones : string,
     detalle : Array<any>
   ){
@@ -459,14 +473,35 @@ export class CobranzasService {
       .set('prcuenta', cuenta)
       .set('properacion', operacion)
       .set('prmonto', monto.toString())
+      .set('prtransaccion', id_transaccion.toString() )
       .set('prsolodirectas', considerar_solo_directas ? "1" : "0" )
       .set('prarchivo', archivo)
+      .set('prfechareferencia', fecha_referencia ? moment(fecha_referencia).format("YYYY-MM-DD") : "0" )
       .set('probservaciones', observaciones)
       .set('prdetalle', JSON.stringify(detalle) );
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'cobranza/update-directa.php', params, {headers: headers});
+  }
+
+  ActualizarInteresCronograma(
+    tipo : number ,
+    id_transaccion : number ,
+    id_cronograma : number ,
+    interes : number
+  ) : Observable<any> {
+    let params = new HttpParams()
+      .set('prtipo', tipo.toString() )
+      .set('prtransaccion', id_transaccion.toString() )
+      .set('prcronograma', id_cronograma.toString() )
+      .set('printeres', interes.toString() ) ;
+
+    console.log(params) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'cobranza/actualizar-interes-cronograma.php', params, {headers: headers});
   }
 
   CrearDetalleCobranza(
