@@ -23,6 +23,9 @@ import { saveAs } from 'file-saver';
 import { FileUpload } from './file-upload/fileupload';
 import { ServiciosGenerales } from '../global/servicios';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { Rol } from '../usuarios/usuarios.service';
+import { EstadoSesion } from '../usuarios/usuarios.reducer';
 
 @Component({
   selector: 'app-clientes',
@@ -42,12 +45,14 @@ export class ClientesComponent implements OnInit, AfterViewInit {
 
   public Instituciones : Array<any> ;
   public Sedes : Array<any> ;
+  public permiso : Rol ;
 
   public nueva_consulta : boolean = false ; // Esto se hace para saber cuándo se hace la primera búsqueda
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(
+    private _store : Store<EstadoSesion> ,
     private Servicio: ClienteService,
     private Dialogo: MatDialog,
     private DialogoClientes: MatDialog,
@@ -65,6 +70,12 @@ export class ClientesComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit() {
+    this._store.select('permisos').subscribe(permiso =>{
+      if( permiso ) {
+        this.permiso = permiso ;
+      }
+    })
+
     this.CrearFormulario() ;
 
     this.ListadoCliente = new ClienteDataSource(this.Servicio);
@@ -76,23 +87,23 @@ export class ClientesComponent implements OnInit, AfterViewInit {
     this.ListarSede() ;
 
     this.route.queryParams
-      .subscribe(params => {
-        if( !this.nueva_consulta ) {
-          if( params.documento && !this.nueva_consulta ) {
-            this.ClienteForm.get('dni').setValue( params.documento ) ;
-            this.ClienteForm.get('institucion').setValue(0) ;
-            this.ClienteForm.get('sede').setValue(0) ;
-            this.nueva_consulta = true ;
-  
-            this.ListadoCliente.CargarClientes(false,'','',this.ClienteForm.get('dni').value,'',0,0,1,10,1) ;
-            if( params.ventana && this.Dialogo.openDialogs.length == 0 ) {
-              this.VerVentas(params.ventana, params.nombre) ;
-            }
-          } else {
-            this.ListadoCliente.CargarClientes(false,'','', '','',4,3,1,10,1);
+    .subscribe(params => {
+      if( !this.nueva_consulta ) {
+        if( params.documento && !this.nueva_consulta ) {
+          this.ClienteForm.get('dni').setValue( params.documento ) ;
+          this.ClienteForm.get('institucion').setValue(0) ;
+          this.ClienteForm.get('sede').setValue(0) ;
+          this.nueva_consulta = true ;
+
+          this.ListadoCliente.CargarClientes(false,'','',this.ClienteForm.get('dni').value,'',0,0,1,10,1) ;
+          if( params.ventana && this.Dialogo.openDialogs.length == 0 ) {
+            this.VerVentas(params.ventana, params.nombre) ;
           }
+        } else {
+          this.ListadoCliente.CargarClientes(false,'','', '','',4,3,1,10,1);
         }
-      });
+      }
+    });
   }
 
   ngAfterViewInit() {

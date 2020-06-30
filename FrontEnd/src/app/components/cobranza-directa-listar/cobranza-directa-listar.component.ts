@@ -8,6 +8,9 @@ import { catchError, finalize, tap, debounceTime, distinctUntilChanged } from 'r
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { CobranzasService } from '../cobranzas-listar/cobranzas.service';
 import { VentanaConfirmarComponent } from '../global/ventana-confirmar/ventana-confirmar.component';
+import { Rol } from '../usuarios/usuarios.service';
+import { Store } from '@ngrx/store';
+import { EstadoSesion } from '../usuarios/usuarios.reducer';
 
 @Component({
   selector: 'app-cobranza-directa-listar',
@@ -30,12 +33,20 @@ export class CobranzaDirectaListarComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
+  public permiso : Rol ;
+
   constructor(
+    private _store : Store<EstadoSesion> ,
     private Servicio: CobranzasService,
     private Dialogo : MatDialog
   ) { }
 
   ngOnInit() {
+    this._store.select('permisos').subscribe(permiso =>{
+      if( permiso ) {
+        this.permiso = permiso ;
+      }
+    })
 
     this.fecha_inicio= new Date((new Date()).valueOf() - 1000*60*60*24*60)
     this.fecha_fin=new Date()

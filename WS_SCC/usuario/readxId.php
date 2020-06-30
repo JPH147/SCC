@@ -24,7 +24,8 @@ try
         "usr_fechacreacion"=>$usuario->usr_fechacreacion,
         "usr_ultimologueo"=>$usuario->usr_ultimologueo,
         "usr_estado"=>$usuario->usr_estado,
-        "prf_nombre"=>$usuario->prf_nombre
+        "perfil"=>$usuario->prf_nombre,
+        "id_perfil"=>$usuario->idperfil
     );
 
     if(trim($usuario->usr_nombre)!= '' && trim($usuario->usr_usuario)!=''){

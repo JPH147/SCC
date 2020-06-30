@@ -33,12 +33,18 @@
   
       <mat-grid-tile>
         <ng-container *ngIf="estado==1">
-          <button tabindex="-1" type="button" mat-raised-button (click)="VerPendientes()">Ver pendientes</button>
-          <button tabindex="-1" type="button" mat-raised-button color="primary" (click)="Agregar()">Agregar</button>
+          <ng-container *ngIf="permiso?.maestro_general?.clientes?.confirmar_pendientes">
+            <button tabindex="-1" type="button" mat-raised-button (click)="VerPendientes()">Ver pendientes</button>
+          </ng-container>
+          <ng-container *ngIf="permiso?.maestro_general?.clientes?.agregar">
+            <button tabindex="-1" type="button" mat-raised-button color="primary" (click)="Agregar()">Agregar</button>
+          </ng-container>
         </ng-container>
         <ng-container *ngIf="estado==5">
-          <button tabindex="-1" type="button" mat-raised-button (click)="VerTodos()">Ver todos</button>
-          <button tabindex="-1" type="button" mat-raised-button color="warn" (click)="DescartarTodos()">Descartar todos</button>
+          <ng-container *ngIf="permiso?.maestro_general?.clientes?.confirmar_pendientes">
+            <button tabindex="-1" type="button" mat-raised-button (click)="VerTodos()">Ver todos</button>
+            <button tabindex="-1" type="button" mat-raised-button color="warn" (click)="DescartarTodos()">Descartar todos</button>
+          </ng-container>
         </ng-container>
       </mat-grid-tile>
   
@@ -127,17 +133,27 @@
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let cliente">
           <ng-container *ngIf="estado==1">
-            <!-- <button mat-icon-button matTooltip="Agregar datos de contacto" (click)="AgregarDatoContacto(cliente.id)" color="primary"><mat-icon> local_phone </mat-icon></button> -->
-            <button mat-icon-button matTooltip="Subir foto" color="primary" (click)="SubirImagen(cliente)"><mat-icon> add_a_photo </mat-icon></button>
-            <!-- <button mat-icon-button matTooltip="Realizar venta" color="primary" (click)="HacerVenta(cliente.id)"><mat-icon> add_shopping_cart </mat-icon></button> -->
-            <button mat-icon-button matTooltip="Ver ventas" color="primary" (click)="VerVentas(cliente.id, cliente.nombre)"><mat-icon> monetization_on </mat-icon></button>
-            <button mat-icon-button matTooltip="Agregar observaciones" color="primary" (click)="AgregarObservaciones(cliente.id)"><mat-icon> assignment</mat-icon></button>
-            <button mat-icon-button matTooltip="Editar" color="primary" (click)="Editar(cliente.id, false)"><mat-icon> edit </mat-icon></button>
-            <button mat-icon-button matTooltip="Eliminar" color="primary" (click)="Eliminar(cliente)"><mat-icon> delete </mat-icon></button>
+            <ng-container *ngIf="permiso?.maestro_general?.clientes?.subir_foto">
+              <button mat-icon-button matTooltip="Subir foto" color="primary" (click)="SubirImagen(cliente)"><mat-icon> add_a_photo </mat-icon></button>
+            </ng-container>
+            <ng-container *ngIf="permiso?.maestro_general?.clientes?.ver_ventas">
+              <button mat-icon-button matTooltip="Ver ventas" color="primary" (click)="VerVentas(cliente.id, cliente.nombre)"><mat-icon> monetization_on </mat-icon></button>
+            </ng-container>
+            <ng-container *ngIf="permiso?.maestro_general?.clientes?.crear_observaciones">
+              <button mat-icon-button matTooltip="Agregar observaciones" color="primary" (click)="AgregarObservaciones(cliente.id)"><mat-icon> assignment</mat-icon></button>
+            </ng-container>
+            <ng-container *ngIf="permiso?.maestro_general?.clientes?.editar">
+              <button mat-icon-button matTooltip="Editar" color="primary" (click)="Editar(cliente.id, false)"><mat-icon> edit </mat-icon></button>
+            </ng-container>
+            <ng-container *ngIf="permiso?.maestro_general?.clientes?.eliminar">
+              <button mat-icon-button matTooltip="Eliminar" color="primary" (click)="Eliminar(cliente)"><mat-icon> delete </mat-icon></button>
+            </ng-container>
           </ng-container>
           <ng-container *ngIf="estado==5">
-            <button mat-icon-button matTooltip="Confirmar" color="primary" (click)="Editar(cliente.id, true)"><mat-icon> check </mat-icon></button>
-            <button mat-icon-button matTooltip="Eliminar" color="primary" (click)="Eliminar(cliente)"><mat-icon> delete </mat-icon></button>
+            <ng-container *ngIf="permiso?.maestro_general?.clientes?.confirmar_pendientes">
+              <button mat-icon-button matTooltip="Confirmar" color="primary" (click)="Editar(cliente.id, true)"><mat-icon> check </mat-icon></button>
+              <button mat-icon-button matTooltip="Eliminar" color="primary" (click)="Eliminar(cliente)"><mat-icon> delete </mat-icon></button>
+            </ng-container>
           </ng-container>
         </mat-cell>
       </ng-container>

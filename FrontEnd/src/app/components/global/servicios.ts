@@ -442,10 +442,10 @@ EditarModelo(
 
       let ID: string;
 
-      if (id == null ) {
-        ID = "";
-      } else {
+      if (id > 0 ) {
         ID = id.toString();
+      } else {
+        ID = "";
       }
 
       return this.http.get(this.url + 'sucursal/read.php', {

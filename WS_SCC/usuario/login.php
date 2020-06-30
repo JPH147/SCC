@@ -27,7 +27,8 @@ try
                 "usuario"=>$var->usr_nombre,
                 "rol"=>$var->usr_usuario,
                 "id_perfil"=>$var->idperfil,
-                "perfil"=>$var->prf_nombre
+                "perfil"=>$var->prf_nombre ,
+                "permisos"=>json_decode($var->permisos) ,
             );
             print_json("0000", "Login OK", $usuario_list);
         }

@@ -261,7 +261,7 @@
             </mat-grid-tile>
 
             <mat-grid-tile>
-              <button mat-raised-button color="primary" type="button" [disabled]="TelefonosForm.invalid" (click)="AgregarTelefono()">Agregar</button>
+              <button mat-raised-button color="primary" type="button" [disabled]="TelefonosForm.invalid || (Cargando | async)" (click)="AgregarTelefono()">Agregar</button>
             </mat-grid-tile>
 
           </mat-grid-list>
@@ -362,7 +362,7 @@
             </mat-grid-tile>
 
             <mat-grid-tile>
-              <button mat-raised-button color="primary" type="button" [disabled]="DireccionesForm.invalid" (click)="AgregarDireccion()">Agregar</button>
+              <button mat-raised-button color="primary" type="button" [disabled]="DireccionesForm.invalid || (Cargando | async)" (click)="AgregarDireccion()">Agregar</button>
             </mat-grid-tile>
 
           </mat-grid-list>
@@ -442,7 +442,7 @@
             </mat-grid-tile>
 
             <mat-grid-tile>
-              <button mat-raised-button color="primary" type="button" [disabled]="CuentasForm.invalid" (click)="AgregarCuenta()">Agregar</button>
+              <button mat-raised-button color="primary" type="button" [disabled]="CuentasForm.invalid || (Cargando | async)" (click)="AgregarCuenta()">Agregar</button>
             </mat-grid-tile>
 
           </mat-grid-list>

@@ -33,8 +33,12 @@
       </mat-grid-tile>
 
       <mat-grid-tile>
-        <button mat-icon-button color="primary" (click)="HacerVenta()" matTooltip="Hacer venta"> <mat-icon> store_mall_directory </mat-icon> </button>
-        <button mat-icon-button color="primary" (click)="HacerCredito()" matTooltip="Hacer Crédito"> <mat-icon> account_balance </mat-icon> </button>
+        <mat-grid-tile *ngIf="permiso?.ventas?.listado_ventas?.agregar">
+          <button mat-icon-button color="primary" (click)="HacerVenta()" matTooltip="Hacer venta"> <mat-icon> store_mall_directory </mat-icon> </button>
+        </mat-grid-tile>
+        <mat-grid-tile *ngIf="permiso?.creditos?.listado_creditos?.agregar">
+          <button mat-icon-button color="primary" (click)="HacerCredito()" matTooltip="Hacer Crédito"> <mat-icon> account_balance </mat-icon> </button>
+        </mat-grid-tile>
       </mat-grid-tile>
 
     </mat-grid-list>

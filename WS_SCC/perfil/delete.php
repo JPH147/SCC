@@ -16,29 +16,27 @@
   {
     $perfil = new Perfil($db);
 
-    if (!empty(trim($_POST["prnombre"])))
+    if (!empty(trim($_POST["prid"])))
     {
-      $perfil->nombre = trim($_POST["prnombre"]);
-      $perfil->resumen = trim($_POST["prresumen"]);
-      $perfil->permisos = trim($_POST["prpermisos"]);
+      $perfil->id_perfil = trim($_POST["prid"]);
 
-      if($perfil->create())
+      if($perfil->delete())
       {
-        print_json("0000", "Se creó el perfil satisfactoriamente.", true);
+        print_json("0000", "Se eliminó el perfil satisfactoriamente.", true);
       }
       else
       {
-        print_json("9999", "Ocurrió un error al crear el perfil.", false);
+        print_json("9999", "Ocurrió un error al eliminar el perfil.", false);
       }
     }
     else
     {
-        print_json("9999", "Los campos no pueden estar vacíos.", "");
+      print_json("9999", "Los campos no pueden estar vacíos.", "");
     }
   }
   catch(Exception $exception)
   {
-    print_json("9999", "Ocurrió un error al crear el perfil.", $exception->getMessage());
+    print_json("9999", "Ocurrió un error al eliminar el perfil.", $exception->getMessage());
   }
 
 ?>

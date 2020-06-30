@@ -47,8 +47,12 @@
         <mat-grid-tile>
         </mat-grid-tile>
         <mat-grid-tile>
-          <button mat-raised-button color="primary" [routerLink]="['ingresoproductos']" class="opciones">Ingreso</button>
-          <button mat-raised-button color="primary" [routerLink]="['salidaproductos']" class="opciones">Salida</button>
+          <ng-container *ngIf="permiso?.inventarios?.stock?.registrar_ingreso">
+            <button mat-raised-button color="primary" [routerLink]="['ingresoproductos']" class="opciones">Ingreso</button>
+          </ng-container>
+          <ng-container *ngIf="permiso?.inventarios?.stock?.registrar_salida">
+            <button mat-raised-button color="primary" [routerLink]="['salidaproductos']" class="opciones">Salida</button>
+          </ng-container>
         </mat-grid-tile>
       </mat-grid-list>
 

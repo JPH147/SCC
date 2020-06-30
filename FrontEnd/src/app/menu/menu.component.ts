@@ -1,4 +1,7 @@
 import {Component, OnInit} from '@angular/core';
+import { Store } from '@ngrx/store';
+import { EstadoSesion } from '../components/usuarios/usuarios.reducer';
+import { Rol } from '../components/usuarios/usuarios.service';
 
 @Component({
   selector: 'app-menu',
@@ -8,22 +11,32 @@ import {Component, OnInit} from '@angular/core';
 })
 export class MenuComponent implements OnInit{
 
-  public menu: Menu[];
+  public Menu: Menu[];
 
-  constructor( ) {
-  }
+  constructor(
+    private _store : Store<EstadoSesion> ,
+  ) { }
 
   ngOnInit(){
-    this.menu=[
+    this._store.select('permisos').subscribe(permiso =>{
+      if ( permiso ) {
+        this.CrearMenu(permiso) ;
+      }
+    })
+  }
+
+  CrearMenu( permiso : Rol ) {
+    this.Menu=[
       // Maestro general
       {
         nombre: "Maestro general",
         icono: "person",
-        disabled:false,
+        mostrar: true,
         submenu:[
           {
             nombre: "Clientes",
-            path: "clientes"
+            path: "clientes",
+            mostrar : true ,
           },
           // {
           //   nombre: "Evaluación",
@@ -31,15 +44,18 @@ export class MenuComponent implements OnInit{
           // },
           {
             nombre: "Evaluación",
-            path: "evaluacion-express"
+            path: "evaluacion-express",
+            mostrar : true ,
           },
           {
             nombre: "Presupuestos",
-            path: "presupuesto"
+            path: "presupuesto",
+            mostrar : false , // Se retiró por no uso 20-06-2020
           },
           {
             nombre: "Seguimiento de documentos",
-            path: "seguimiento"
+            path: "seguimiento",
+            mostrar : true ,
           },
         ]
       },
@@ -47,20 +63,23 @@ export class MenuComponent implements OnInit{
       {
         nombre: "Ventas",
         icono: "store_mall_directory",
-        disabled:false,
+        mostrar: permiso.ventas.general,
         submenu:[
 
           {
             nombre: "Ventas",
-            path: "ventas"
+            path: "ventas" ,
+            mostrar : permiso.ventas.listado_ventas.general ,
           },
           {
             nombre: "Salida de ventas",
-            path: "salidavendedores"
+            path: "salidavendedores" ,
+            mostrar : permiso.ventas.salida_ventas.general ,
           },
           {
             nombre: "Comisiones",
-            path: "comisiones"
+            path: "comisiones" ,
+            mostrar : permiso.ventas.comision_vendedores.general ,
           }
         ]
       },
@@ -68,23 +87,27 @@ export class MenuComponent implements OnInit{
       {
         nombre: "Inventarios",
         icono: "domain",
-        disabled:false,
+        mostrar: permiso.inventarios.general,
         submenu:[
           {
             nombre: "Productos",
-            path: "productos"
+            path: "productos" ,
+            mostrar : permiso.inventarios.productos.general ,
           },
           {
             nombre: "Stock",
-            path: "stock"
+            path: "stock" ,
+            mostrar : permiso.inventarios.stock.general ,
           },
           {
             nombre: "Historial de documentos",
-            path: "movimientos"
+            path: "movimientos" ,
+            mostrar : permiso.inventarios.documentos_almacen.general ,
           },
           {
             nombre: "Historial de series",
-            path: "series"
+            path: "series" ,
+            mostrar : permiso.inventarios.historial_series.general ,
           }
         ]
       },
@@ -92,19 +115,22 @@ export class MenuComponent implements OnInit{
       {
         nombre: "Créditos",
         icono: "account_balance",
-        disabled:false,
+        mostrar: permiso.creditos.general,
         submenu:[
           {
             nombre: "Préstamos",
-            path: "creditos"
+            path: "creditos" ,
+            mostrar : permiso.creditos.listado_creditos.general ,
           },
           {
             nombre: "Afiliaciones",
-            path: "afiliaciones"
+            path: "afiliaciones" ,
+            mostrar : permiso.creditos.afiliaciones.general ,
           },
           {
             nombre: "Refinanciamientos",
-            path: "refinanciamiento"
+            path: "refinanciamiento" ,
+            mostrar : permiso.creditos.refinanciamientos.general ,
           },
         ]
       },
@@ -112,11 +138,12 @@ export class MenuComponent implements OnInit{
       {
         nombre: "Judiciales",
         icono: "location_city",
-        disabled:false,
+        mostrar: permiso.procesos_judiciales.general,
         submenu:[
           {
             nombre: "Procesos judiciales",
-            path: "cobranza-judicial"
+            path: "cobranza-judicial" ,
+            mostrar : permiso.procesos_judiciales.listado_procesos.general
           },
         ]
       },
@@ -124,31 +151,37 @@ export class MenuComponent implements OnInit{
       {
         nombre: "Cobranzas",
         icono: "gavel",
-        disabled:false,
+        mostrar: permiso.cobranzas.general,
         submenu:[
           {
             nombre: "Cronograma de pagos",
-            path: "cobranzas"
+            path: "cobranzas" ,
+            mostrar : permiso.cobranzas.cronograma.general ,
           },
           {
             nombre: "Clientes morosos I",
-            path: "cobranzas-cliente"
+            path: "cobranzas-cliente" ,
+            mostrar : permiso.cobranzas.clientes_morosos.general ,
           },
           {
             nombre: "Clientes muy morosos II",
-            path: "cobranzas-cliente-morosos"
+            path: "cobranzas-cliente-morosos" ,
+            mostrar : permiso.cobranzas.clientes_morosos.general ,
           },
           {
             nombre: "Cobranzas directas",
-            path: "cobranza-directa"
+            path: "cobranza-directa" ,
+            mostrar : permiso.cobranzas.cobranzas_directas.general ,
           },
           {
             nombre: "Cobranzas por planilla",
-            path: "cobranza-archivos"
+            path: "cobranza-archivos" ,
+            mostrar : permiso.cobranzas.cobranzas_planilla.general ,
           },
           {
             nombre: "Cobranzas manuales",
-            path: "cobranza-manual"
+            path: "cobranza-manual" ,
+            mostrar : permiso.cobranzas.cobranzas_manuales.general ,
           },
         ]
       },
@@ -176,43 +209,52 @@ export class MenuComponent implements OnInit{
       {
         nombre: "Tablas maestras",
         icono: "table_chart",
-        disabled:false,
+        mostrar: permiso.tablas_maestras.general ,
         submenu:[
           {
             nombre: "Usuarios",
-            path: "usuarios"
+            path: "usuarios",
+            mostrar : permiso.tablas_maestras.usuarios ,
           },
           {
             nombre: "Departamentos",
-            path: "direcciones"
+            path: "direcciones",
+            mostrar : permiso.tablas_maestras.direcciones ,
           },
           {
             nombre: "Instituciones",
-            path: "instituciones"
+            path: "instituciones",
+            mostrar : permiso.tablas_maestras.instituciones ,
           },
           {
             nombre: "Procesos judiciales",
-            path: "proceso-judicial-vinculados"
+            path: "proceso-judicial-vinculados",
+            mostrar : permiso.tablas_maestras.procesos_judiciales ,
           },
           {
-            nombre: "Transacciones",
-            path: "plantillas"
+            nombre: "Plantillas",
+            path: "plantillas",
+            mostrar : permiso.tablas_maestras.plantillas ,
           },
           {
             nombre: "Productos",
-            path: "detalleproductos"
+            path: "detalleproductos",
+            mostrar : permiso.tablas_maestras.productos ,
           },
           {
             nombre: "Proveedores",
-            path: "proveedores"
+            path: "proveedores",
+            mostrar : permiso.tablas_maestras.proveedores ,
           },
           {
             nombre: "Talonarios / Contratos",
-            path: "talonarios"
+            path: "talonarios",
+            mostrar : permiso.tablas_maestras.talonarios ,
           },
           {
-            nombre: "Vendedores",
-            path: "vendedores"
+            nombre: "Trabajadores",
+            path: "trabajadores",
+            mostrar : permiso.tablas_maestras.trabajadores ,
           },
         ]
       },
@@ -224,11 +266,12 @@ export class MenuComponent implements OnInit{
 export interface Menu{
   nombre: string,
   icono:string,
-  disabled:boolean,
+  mostrar:boolean,
   submenu: Submenu[]
 }
 
 export interface Submenu{
   nombre:string,
   path:string,
+  mostrar : boolean
 }

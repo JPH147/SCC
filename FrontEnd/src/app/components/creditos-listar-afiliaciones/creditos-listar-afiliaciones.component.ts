@@ -7,6 +7,9 @@ import { catchError, finalize, tap, debounceTime, distinctUntilChanged } from 'r
 import { CreditosService } from '../creditos/creditos.service';
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import { CreditosDataSource } from '../creditos-listar/creditos-listar.component';
+import { EstadoSesion } from '../usuarios/usuarios.reducer';
+import { Store } from '@ngrx/store';
+import { Rol } from '../usuarios/usuarios.service';
 
 @Component({
   selector: 'app-creditos-listar-afiliaciones',
@@ -16,23 +19,23 @@ import { CreditosDataSource } from '../creditos-listar/creditos-listar.component
 })
 
 export class CreditosListarAfiliacionesComponent implements OnInit {
-
-  public fecha_inicio: Date;
-  public fecha_fin: Date;
-  public Tipos : Array<any>;
-
-  public ListadoCreditos: CreditosDataSource;
-  public Columnas: string[] = ['numero', 'fecha', 'codigo', 'cliente_nombre', 'monto_total', 'documentos_adjuntos', 'opciones'];
-
+  
   @ViewChild('InputCliente', { static: true }) FiltroCliente: ElementRef;
   @ViewChild('InputDNI', { static: true }) FiltroDNI: ElementRef;
-  // @ViewChild('InputTipo') FiltroTipo: MatSelect;
-  // @ViewChild('InputEstado') FiltroEstado: MatSelect;
   @ViewChild('InputDocumentos', { static: true }) FiltroDocumentos: MatSelect;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
+  public ListadoCreditos: CreditosDataSource;
+  public Columnas: string[] = ['numero', 'fecha', 'codigo', 'cliente_nombre', 'monto_total', 'documentos_adjuntos', 'opciones'];
+
+  public fecha_inicio: Date;
+  public fecha_fin: Date;
+  public Tipos : Array<any>;
+  public permiso : Rol ;
+
   constructor(
+    private _store : Store<EstadoSesion> ,
     private Servicio: CreditosService
   ) { }
 
@@ -46,6 +49,11 @@ export class CreditosListarAfiliacionesComponent implements OnInit {
   }
 
   ngAfterViewInit () {
+    this._store.select('permisos').subscribe(permiso =>{
+      if( permiso ) {
+        this.permiso = permiso ;
+      }
+    })
 
     this.sort.sortChange.subscribe(res => {
       this.paginator.pageIndex = 0;

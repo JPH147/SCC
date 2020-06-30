@@ -55,7 +55,9 @@
         </mat-grid-tile>
 
         <mat-grid-tile *ngIf="!id_venta">
-          <button type="button" mat-icon-button color="primary" (click)="EditarContactoCliente()"> <mat-icon> edit </mat-icon>  </button>
+          <ng-container *ngIf="permiso?.maestro_general?.clientes?.editar">
+            <button type="button" mat-icon-button color="primary" (click)="EditarContactoCliente()"> <mat-icon> edit </mat-icon>  </button>
+          </ng-container>
           <mat-checkbox color="primary" formControlName="garante">Garante</mat-checkbox>
         </mat-grid-tile>
 

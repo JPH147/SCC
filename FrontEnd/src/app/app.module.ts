@@ -48,10 +48,17 @@ import { MatMomentDateModule, MomentDateAdapter } from '@angular/material-moment
 
 import { RouterModule } from '@angular/router';
 import {appRoutes} from './app.routing';
-import {Notificaciones} from './components/global/notificacion';
-import { ServiciosGenerales } from './components/global/servicios';
 import { ChartistModule } from 'ng-chartist';
 
+// ngRx
+import { StoreModule } from '@ngrx/store';
+import { PermisosSesion } from './components/usuarios/usuarios.reducer';
+
+// Cookies
+import { CookieService } from 'ngx-cookie-service' ;
+
+import {Notificaciones} from './components/global/notificacion';
+import { ServiciosGenerales } from './components/global/servicios';
 /* Imports del software */
 import {AppComponent} from './app.component';
 import {MenuComponent} from './menu/menu.component';
@@ -275,7 +282,8 @@ export const CUSTOM_DATE_FORMAT = {
     LayoutModule,
     ChartistModule,
     RouterModule.forRoot(appRoutes),
-    ImageUploadModule.forRoot()
+    ImageUploadModule.forRoot(),
+    StoreModule.forRoot({ permisos : PermisosSesion }, {}) ,
   ],
   declarations: [
     AppComponent,
@@ -519,8 +527,9 @@ export const CUSTOM_DATE_FORMAT = {
   ],
   bootstrap: [AppComponent],
   providers: [
-    Notificaciones,
-    ServiciosGenerales,
+    CookieService ,
+    Notificaciones ,
+    ServiciosGenerales ,
     {provide: DateAdapter, useClass: MomentDateAdapter},
     {provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMAT},
     {provide: MAT_DATE_LOCALE, useValue: 'es-ES'},

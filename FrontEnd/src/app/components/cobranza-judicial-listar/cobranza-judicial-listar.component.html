@@ -77,7 +77,9 @@
     </mat-grid-tile>
 
     <mat-grid-tile>
-      <button mat-raised-button color="primary" [routerLink]="['nuevo-multiple']"> Nuevo </button>
+      <ng-container *ngIf="permiso?.procesos_judiciales?.listado_procesos?.agregar">
+        <button mat-raised-button color="primary" [routerLink]="['nuevo-multiple']"> Nuevo </button>
+      </ng-container>
     </mat-grid-tile>
   </mat-grid-list>
 
@@ -177,15 +179,22 @@
                 <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
                 <mat-cell *matCellDef="let proceso">
                   <button mat-icon-button color="primary" matTooltip="Ver seguimiento de documentos" [routerLink]="['ver',proceso.id]"><mat-icon> visibility </mat-icon></button>
-                  <button mat-icon-button [matMenuTriggerFor]="menu2" color="primary" matTooltip="Editar expediente" ><mat-icon> edit </mat-icon></button>
-                  <mat-menu #menu2="matMenu">
-                    <!-- <button mat-menu-item color="primary" [routerLink]="['editar',proceso.id]" [disabled]="proceso.id_tipo_documento==0"> Editar expediente </button> -->
-                    <button mat-menu-item color="primary" (click)="AgregarDocumentos(proceso)" *ngIf="proceso.id_tipo_documento>0 && proceso.id_tipo_documento!=4" [disabled]="proceso.id_tipo_documento==5"> Agregar documentos </button>
-                    <button mat-menu-item color="primary" (click)="CambiarSede(proceso)" [disabled]="proceso.id_tipo_documento!=3"> Registrar traslado </button>
-                  </mat-menu>
-                  <button mat-icon-button color="primary" matTooltip="Ver cronograma" [routerLink]="['/cobranza-judicial','generar','ver', proceso.id]" *ngIf="proceso.id_tipo_documento==0"><mat-icon> notes </mat-icon></button>
-                  <button mat-icon-button color="primary" matTooltip="Realizar cronograma" [routerLink]="['/cobranza-judicial','generar','nuevo', proceso.id]" *ngIf="proceso.id_tipo_documento==4"><mat-icon> next_week </mat-icon></button>
-                  <button mat-icon-button color="primary" matTooltip="Eliminar" (click)="EliminarProceso(proceso)" [disabled]="proceso.id_tipo_documento>=4"><mat-icon> delete </mat-icon></button>
+                  <ng-container *ngIf="permiso?.procesos_judiciales?.listado_procesos?.editar">
+                    <button mat-icon-button [matMenuTriggerFor]="menu2" color="primary" matTooltip="Editar expediente" ><mat-icon> edit </mat-icon></button>
+                    <mat-menu #menu2="matMenu">
+                      <button mat-menu-item color="primary" (click)="AgregarDocumentos(proceso)" *ngIf="proceso.id_tipo_documento>0 && proceso.id_tipo_documento!=4" [disabled]="proceso.id_tipo_documento==5"> Agregar documentos </button>
+                      <button mat-menu-item color="primary" (click)="CambiarSede(proceso)" [disabled]="proceso.id_tipo_documento!=3"> Registrar traslado </button>
+                    </mat-menu>
+                  </ng-container>
+                  <ng-container *ngIf="permiso?.procesos_judiciales?.listado_procesos?.ver_cronograma">
+                    <button mat-icon-button color="primary" matTooltip="Ver cronograma" [routerLink]="['/cobranza-judicial','generar','ver', proceso.id]" *ngIf="proceso.id_tipo_documento==0"><mat-icon> notes </mat-icon></button>
+                  </ng-container>
+                  <ng-container *ngIf="permiso?.procesos_judiciales?.listado_procesos?.realizar_cronograma">
+                    <button mat-icon-button color="primary" matTooltip="Realizar cronograma" [routerLink]="['/cobranza-judicial','generar','nuevo', proceso.id]" *ngIf="proceso.id_tipo_documento==4"><mat-icon> next_week </mat-icon></button>
+                  </ng-container>
+                  <ng-container *ngIf="permiso?.procesos_judiciales?.listado_procesos?.eliminar">
+                    <button mat-icon-button color="primary" matTooltip="Eliminar" (click)="EliminarProceso(proceso)" [disabled]="proceso.id_tipo_documento>=4"><mat-icon> delete </mat-icon></button>
+                  </ng-container>
                 </mat-cell>
               </ng-container>
         

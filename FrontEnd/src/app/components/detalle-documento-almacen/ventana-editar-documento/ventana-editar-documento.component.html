@@ -6,6 +6,10 @@
     </mat-toolbar-row>
   </mat-toolbar>
 
+  <div class="spinner-container-emergente" *ngIf="Cargando | async">
+    <mat-spinner></mat-spinner>
+  </div>
+
   <form [formGroup]="DocumentoForm">
     <mat-card-content>
       <mat-grid-list cols="4" rowHeight="70px">
@@ -76,7 +80,7 @@
 
   <mat-grid-list cols=1 rowHeight="40px">
     <mat-grid-tile>
-      <button mat-raised-button color="primary" [disabled]="DocumentoForm.invalid" (click)="Guardar()">Guardar</button>
+      <button mat-raised-button color="primary" [disabled]="DocumentoForm.invalid || (Cargando | async)" (click)="Guardar()">Guardar</button>
     </mat-grid-tile>
   </mat-grid-list>
   

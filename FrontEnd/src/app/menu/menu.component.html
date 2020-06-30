@@ -6,15 +6,23 @@
 </div>
 
 <mat-accordion>
-  <mat-expansion-panel [hideToggle]=true *ngFor="let m of menu" [disabled]="m.disabled">
-    <mat-expansion-panel-header [collapsedHeight]="'50px'">
-      <mat-panel-title>
-        <div><mat-icon> {{m.icono}} </mat-icon></div>
-        <div class="titulo"> {{m.nombre | uppercase}} </div>
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-    <mat-nav-list class="lista-opciones">
-       <a mat-list-item class="lista-opciones" *ngFor="let s of m.submenu" [routerLink]="[s.path]"> {{s.nombre}} </a>
-    </mat-nav-list>
-  </mat-expansion-panel>
+  <ng-container *ngFor="let menu of Menu">
+    <ng-container *ngIf="menu.mostrar">
+      <mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header [collapsedHeight]="'50px'">
+          <mat-panel-title>
+            <div><mat-icon> {{menu.icono}} </mat-icon></div>
+            <div class="titulo"> {{menu.nombre | uppercase}} </div>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-nav-list class="lista-opciones">
+          <ng-container *ngFor="let sub of menu.submenu">
+            <ng-container *ngIf="sub.mostrar">
+              <a mat-list-item class="lista-opciones" [routerLink]="[sub.path]"> {{sub.nombre}} </a>
+            </ng-container>
+          </ng-container>
+        </mat-nav-list>
+      </mat-expansion-panel>
+    </ng-container>
+    </ng-container>
 </mat-accordion>

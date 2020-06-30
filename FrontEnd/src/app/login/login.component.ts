@@ -4,6 +4,8 @@ import { BehaviorSubject, merge } from 'rxjs';
 import { UsuariosService } from '../components/usuarios/usuarios.service';
 import { debounceTime, distinctUntilChanged, tap, finalize } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { AsignarPermisos } from '../components/usuarios/usuarios.reducer' ;
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-login',
@@ -15,11 +17,12 @@ export class LoginComponent implements OnInit, AfterViewInit {
   public Cargando = new BehaviorSubject<boolean>(false) ;
   public LoginForm : FormGroup ;
   public error : boolean = false ;
-
+  
   constructor(
     private _usuarios : UsuariosService ,
     private _builder : FormBuilder ,
-    private _router : Router
+    private _router : Router ,
+    private _store : Store ,
   ) { }
 
   ngOnInit() {
@@ -61,9 +64,11 @@ export class LoginComponent implements OnInit, AfterViewInit {
         this.Cargando.next(false) ;
       })
     )
-    .subscribe(res=>{
-      if( res ) {
-        this._router.navigate(['inicio'])
+    .subscribe(usuario=>{
+      if( usuario ) {
+        let asignarPermisos = new AsignarPermisos( usuario['permisos'] ) ;
+        this._store.dispatch(asignarPermisos) ;
+        this._router.navigate(['inicio']) ;
       } else {
         this.error = true ;
       }

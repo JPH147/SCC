@@ -12,6 +12,9 @@ import { VentanaPagosComponent } from './ventana-pagos/ventana-pagos.component';
 
 import { Notificaciones } from '../global/notificacion';
 import { VentanaEditarPagoComponent } from './ventana-editar-pago/ventana-editar-pago.component';
+import { Rol } from '../usuarios/usuarios.service';
+import { Store } from '@ngrx/store';
+import { EstadoSesion } from '../usuarios/usuarios.reducer';
 
 @Component({
   selector: 'app-cobranzas-listar',
@@ -35,13 +38,21 @@ export class CobranzasListarComponent implements OnInit {
   @ViewChild('InputEstado', { static: true }) FiltroEstado: MatSelect;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
+  public permiso : Rol ;
+
   constructor(
+    private _store : Store<EstadoSesion> ,
     private Dialogo: MatDialog,
     private Notificacion : Notificaciones ,
     private Servicio: CobranzasService
   ) { }
 
   ngOnInit() {
+    this._store.select('permisos').subscribe(permiso =>{
+      if( permiso ) {
+        this.permiso = permiso ;
+      }
+    })
 
     this.fecha_inicio= new Date()
     this.fecha_fin = new Date((new Date()).valueOf() + 1000*60*60*24*30)

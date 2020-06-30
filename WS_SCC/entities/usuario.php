@@ -2,7 +2,6 @@
 Class Usuario{
 
     private $conn;
-    private $table_name = "usuario";
 
     public $idusuario;
     public $usr_nombre;
@@ -13,6 +12,7 @@ Class Usuario{
     public $usr_estado;
     public $idperfil;
     public $prf_nombre;
+    public $permisos;
     public $numero_pagina;
     public $total_pagina;
     public $total_resultado;
@@ -49,7 +49,8 @@ Class Usuario{
                 "usuario"=>$row['usr_usuario'],
                 "fecha_creacion"=>$row['usr_ultimologueo'],
                 "ultimo_logueo"=>$row['usr_fechacreacion'],
-                "perfil"=>$row['prf_nombre']
+                "id_perfil"=>$row['id_perfil'],
+                "perfil"=>$row['perfil'],
             );
 
                 array_push($usuario_list["usuarios"],$usuario_item);
@@ -99,7 +100,7 @@ Class Usuario{
     }
 
     function readxId() {
-        $query ="CALL sp_listarusuarioxId (?)";
+        $query ="CALL sp_listarusuarioxId(?)";
         $result = $this->conn->prepare($query);
         $result->bindParam(1, $this->idusuario);
         $result->execute();
@@ -111,7 +112,8 @@ Class Usuario{
         $this->usr_ultimologueo=$row['usr_ultimologueo'];
         $this->usr_fechacreacion=$row['usr_fechacreacion'];
         $this->usr_estado=$row['usr_estado'];
-        $this->prf_nombre= $row['prf_nombre'];
+        $this->prf_nombre= $row['perfil'];
+        $this->idperfil= $row['id_perfil'];
     }
     
     function login($usr_usuario, $usr_clave){
@@ -128,7 +130,8 @@ Class Usuario{
         $this->usr_usuario=$row['usr_usuario'];
         $this->usr_clave=$row['usr_clave'];
         $this->idperfil=$row['idperfil'];
-        $this->prf_nombre=$row['prf_nombre'];
+        $this->prf_nombre=$row['nombre'];
+        $this->permisos=$row['permisos'];
 
         if(!(empty($this->usr_nombre)) && !(empty($this->usr_clave)) )
         {
@@ -139,12 +142,12 @@ Class Usuario{
                 return $this;
             }
             else{
-                return null;
+                return false;
             }
         }
         else
         {
-            return null;
+            return false;
         }
     }
 
@@ -204,6 +207,23 @@ Class Usuario{
         {
             return false;
         }
+    }
+
+    function verificar_usuario(){
+        $query = "CALL sp_verificarusuario(?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->usr_usuario);
+        $result->bindParam(2, $this->idusuario);
+        
+        $result->execute();
+
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        $this->total_resultado=$row['total'];
+
+        return $this->total_resultado;
     }
 }
 ?>

@@ -4,6 +4,9 @@ import { merge, fromEvent, BehaviorSubject, Observable, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap, catchError, finalize } from 'rxjs/operators';
 import { CobranzasService } from '../cobranzas-listar/cobranzas.service';
 import { MatPaginator } from '@angular/material/paginator';
+import { Rol } from '../usuarios/usuarios.service';
+import { Store } from '@ngrx/store';
+import { EstadoSesion } from '../usuarios/usuarios.reducer';
 
 @Component({
   selector: 'app-cobranza-manual-listar',
@@ -25,12 +28,20 @@ export class CobranzaManualListarComponent implements OnInit, AfterViewInit {
   public tipo_cobranza : number ;
 
   public Tipos : Array<any> ;
+  public permiso : Rol ;
 
   constructor(
+    private _store : Store<EstadoSesion> ,
     private _cobranzas : CobranzasService ,
   ) { }
 
   ngOnInit(): void {
+    this._store.select('permisos').subscribe(permiso =>{
+      if( permiso ) {
+        this.permiso = permiso ;
+      }
+    })
+
     this.fecha_inicio = new Date((new Date()).valueOf() - 1000*60*60*24*30) ;
     this.fecha_fin = new Date() ;
     this.tipo_cobranza = 0 ;

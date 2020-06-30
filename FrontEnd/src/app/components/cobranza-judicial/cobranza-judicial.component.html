@@ -2,9 +2,15 @@
   <button mat-mini-fab type="button" color="primary" (click)="Atras()"><mat-icon>keyboard_arrow_left</mat-icon></button>
 
   <ng-container>
-    <button mat-mini-fab type="button" color="accent" (click)="CambiarTipoVista(1)" class="derecha" [disabled]="id_proceso_editar" matTooltip="Editar documento"><mat-icon>edit</mat-icon></button>
-    <button mat-mini-fab type="button" color="accent" (click)="CambiarTipoVista(2)" class="derecha" [disabled]="id_proceso_agregar" matTooltip="Agregar documento"><mat-icon>note_add</mat-icon></button>
-    <button mat-mini-fab type="button" color="accent" (click)="CambiarTipoVista(3)" class="derecha" [disabled]="id_proceso_ver" matTooltip="Ver documento"><mat-icon> visibility </mat-icon></button>
+    <ng-container *ngIf="permiso?.procesos_judiciales?.listado_procesos?.editar">
+      <button mat-mini-fab type="button" color="accent" (click)="CambiarTipoVista(1)" class="derecha" [disabled]="id_proceso_editar" matTooltip="Editar documento"><mat-icon>edit</mat-icon></button>
+    </ng-container>
+    <ng-container *ngIf="permiso?.procesos_judiciales?.listado_procesos?.agregar_documentos">
+      <button mat-mini-fab type="button" color="accent" (click)="CambiarTipoVista(2)" class="derecha" [disabled]="id_proceso_agregar" matTooltip="Agregar documento"><mat-icon>note_add</mat-icon></button>
+    </ng-container>
+    <ng-container>
+      <button mat-mini-fab type="button" color="accent" (click)="CambiarTipoVista(3)" class="derecha" [disabled]="id_proceso_ver" matTooltip="Ver documento"><mat-icon> visibility </mat-icon></button>
+    </ng-container>
   </ng-container>
 
   <ng-container>

@@ -25,6 +25,9 @@ import { VentanaEmergenteContacto} from '../clientes/ventana-emergentecontacto/v
 import {SeleccionarClienteComponent} from '../retorno-vendedores/seleccionar-cliente/seleccionar-cliente.component';
 import { SeguimientosService } from "../seguimientos/seguimientos.service";
 import { VentanaCrearCobranzaManualComponent } from "../cobranza-manual/ventana-crear-cobranza-manual/ventana-crear-cobranza-manual.component";
+import { Rol } from "../usuarios/usuarios.service";
+import { EstadoSesion } from "../usuarios/usuarios.reducer";
+import { Store } from "@ngrx/store";
 
 @Component({
   selector: 'app-ventas-salida',
@@ -107,7 +110,10 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   public papeles_editar : boolean = false;
   public total_cronograma_editado:number;
 
+  public permiso : Rol ;
+
   constructor(
+    private _store : Store<EstadoSesion> ,
     private Servicio: VentaService,
     private ClienteServicio: ClienteService,
     private DireccionServicio: ServiciosDirecciones,
@@ -126,6 +132,11 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit() {
+    this._store.select('permisos').subscribe(permiso =>{
+      if( permiso ) {
+        this.permiso = permiso ;
+      }
+    })
 
     this.editar_cronograma=3;
 

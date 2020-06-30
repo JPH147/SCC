@@ -24,6 +24,9 @@ import { RefinanciamientoService } from '../refinanciamiento/refinanciamiento.se
 import { VentanaPagosComponent } from '../cobranzas-listar/ventana-pagos/ventana-pagos.component';
 import { VentanaEmergenteClientes } from '../clientes/ventana-emergente/ventanaemergente' ;
 import { VentanaCrearCobranzaManualComponent } from '../cobranza-manual/ventana-crear-cobranza-manual/ventana-crear-cobranza-manual.component';
+import { EstadoSesion } from '../usuarios/usuarios.reducer';
+import { Rol } from '../usuarios/usuarios.service';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-creditos',
@@ -142,7 +145,10 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   public ListadoSucursales: Array<any>;
   public ListadoTipoPago: Array<any>;
 
+  public permiso : Rol ;
+
   constructor(
+    private _store : Store<EstadoSesion> ,
     private Servicio: CreditosService,
     private ClienteServicio: ClienteService,
     private DireccionServicio: ServiciosDirecciones,
@@ -162,6 +168,11 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit() {
+    this._store.select('permisos').subscribe(permiso =>{
+      if( permiso ) {
+        this.permiso = permiso ;
+      }
+    })
 
     this.CrearFormulario();
 

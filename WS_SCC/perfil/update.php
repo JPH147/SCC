@@ -16,13 +16,14 @@
   {
     $perfil = new Perfil($db);
 
-    if (!empty(trim($_POST["prnombre"])))
+    if (!empty(trim($_POST["prid"])))
     {
+      $perfil->id_perfil = trim($_POST["prid"]);
       $perfil->nombre = trim($_POST["prnombre"]);
       $perfil->resumen = trim($_POST["prresumen"]);
       $perfil->permisos = trim($_POST["prpermisos"]);
 
-      if($perfil->create())
+      if($perfil->update())
       {
         print_json("0000", "Se creó el perfil satisfactoriamente.", true);
       }

@@ -2,8 +2,8 @@
 export var URL = {
   // url: '//localhost/SCC/WS_SCC/',
   // url: '//localhost:8080/', // Cuando el servidor se crea desde la línea de comandos
-  // url: '../SCC/WS_SCC/', // Cuando se compila el proyecto de prueba
-  url:'../WS_SCC/', // URL de Alvis
+  url: '../SCC/WS_SCC/', // Cuando se compila el proyecto de prueba
+  // url:'../WS_SCC/', // URL de Alvis
   // url: 'https://coopalvis.com/WS_SCC/', // Para probar los servicios del hosting de Alvis
   // url: 'http://192.168.1.200/SCC/WS_SCC/', // Cuando se utiliza la PC principal
   // url: 'https://genussolucionesti.com/SCC/WS_SCC/', // En caso no funcione localmente el PHP

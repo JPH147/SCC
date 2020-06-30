@@ -55,7 +55,9 @@
     </mat-grid-tile>
     
     <mat-grid-tile>
-      <button mat-raised-button color="primary" [routerLink]="['nueva']"> Nuevo </button>
+      <ng-container *ngIf="permiso?.cobranzas?.cobranzas_directas?.agregar">
+        <button mat-raised-button color="primary" [routerLink]="['nueva']"> Nuevo </button>
+      </ng-container>
     </mat-grid-tile>
 
   </mat-grid-list>
@@ -101,9 +103,15 @@
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let cobranza">
-          <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="['ver', cobranza.id]"><mat-icon> visibility </mat-icon></button>
-          <button mat-icon-button color="primary" matTooltip="Editar" [routerLink]="['editar', cobranza.id]" [disabled]="cobranza.fecha_referencia"><mat-icon> edit </mat-icon></button>
-          <button mat-icon-button color="primary" matTooltip="Eliminar" (click)="EliminarCobranza(cobranza)" [disabled]="cobranza.fecha_referencia"><mat-icon> delete </mat-icon></button>
+          <ng-container>
+            <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="['ver', cobranza.id]"><mat-icon> visibility </mat-icon></button>
+          </ng-container>
+          <ng-container *ngIf="permiso?.cobranzas?.cobranzas_directas?.editar">
+            <button mat-icon-button color="primary" matTooltip="Editar" [routerLink]="['editar', cobranza.id]" [disabled]="cobranza.fecha_referencia"><mat-icon> edit </mat-icon></button>
+          </ng-container>
+          <ng-container *ngIf="permiso?.cobranzas?.cobranzas_directas?.eliminar">
+            <button mat-icon-button color="primary" matTooltip="Eliminar" (click)="EliminarCobranza(cobranza)" [disabled]="cobranza.fecha_referencia"><mat-icon> delete </mat-icon></button>
+          </ng-container>
         </mat-cell>
       </ng-container>
 

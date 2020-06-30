@@ -100,7 +100,9 @@
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let credito">
           <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="['/creditos','ver', credito.id]"><mat-icon> visibility </mat-icon></button>
-          <button mat-icon-button color="primary" matTooltip="Editar" [disabled]="credito.estado==2 || credito.tipo_credito == 'Aporte de socio'" [routerLink]="['/creditos','editar', credito.id]"><mat-icon> edit </mat-icon></button>
+          <ng-container *ngIf="permiso?.creditos?.afiliaciones?.editar">
+            <button mat-icon-button color="primary" matTooltip="Editar" [disabled]="credito.estado==2 || credito.tipo_credito == 'Aporte de socio'" [routerLink]="['/creditos','editar', credito.id]"><mat-icon> edit </mat-icon></button>
+          </ng-container>
           <!--<button mat-icon-button color="primary" matTooltip="Canjear" [disabled]="venta.estado!=1" [routerLink]="['nueva', venta.id, venta.id_cliente]" *ngIf="venta.tipo_venta!='Salida'"><mat-icon> import_export </mat-icon></button>
           <button mat-icon-button color="primary" matTooltip="Anular" [disabled]="venta.estado!=1" (click)="AnularVenta(venta)" *ngIf="venta.tipo_venta!='Salida'"><mat-icon> delete </mat-icon></button> -->
         </mat-cell>

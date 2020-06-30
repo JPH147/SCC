@@ -549,20 +549,25 @@ export class VentanaEmergenteIntegralEditarComponent implements OnInit {
   }
 
   AgregarTelefono(){
+    this.Cargando.next(true) ;
     this.ServicioTelefono.CrearTelefono(this.data.id, this.TelefonosForm.value.telefono, this.TelefonosForm.value.tipo).subscribe(res=>{
+      this.Cargando.next(false) ;
       this.CargarDataTelefonos();
     })
   }
 
   AgregarDireccion(){
+    this.Cargando.next(true) ;
     this.ServicioDireccion.CrearDireccion(this.data.id, this.DireccionesForm.value.nombre, this.DireccionesForm.value.distrito).subscribe(res=>{
-      // console.log(res)
+      this.Cargando.next(false) ;
       this.CargarDataDirecciones();
     })
   }
 
   AgregarCuenta(){
+    this.Cargando.next(true) ;
     this.ClienteServicios.CrearCuenta(this.data.id, this.CuentasForm.value.banco, this.CuentasForm.value.cuenta, this.CuentasForm.value.cci).subscribe(res=>{
+      this.Cargando.next(false) ;
       this.CargarDataCuentas();
     })
   }

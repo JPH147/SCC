@@ -62,8 +62,10 @@
         </mat-grid-tile>
 
         <mat-grid-tile *ngIf="!idventa">
+          <ng-container *ngIf="permiso?.maestro_general?.clientes?.editar">
             <button type="button" mat-icon-button color="primary" (click)="EditarCliente()" matTooltip="Editar cliente" [disabled]="!VentasForm.value.id_cliente"> <mat-icon> edit </mat-icon> </button>
             <button type="button" mat-icon-button color="primary" (click)="EditarContactoCliente()" matTooltip="Cambiar datos de contacto" [disabled]="!VentasForm.value.id_cliente"> <mat-icon> local_phone </mat-icon> </button>
+          </ng-container>
           <mat-checkbox color="primary" formControlName="garante" (change)="HayGarante($event)">Garante</mat-checkbox>
         </mat-grid-tile>
 
@@ -1201,7 +1203,9 @@
             <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
             <mat-cell *matCellDef="let cronograma">
               <button mat-icon-button color="primary" [disabled]="cronograma.monto_pagado==0" (click)="VerDetallePagos(cronograma)"> <mat-icon> visibility </mat-icon> </button>
-              <button mat-icon-button color="primary" [disabled]="cronograma.estado == 'Pagado'" (click)="RegistrarPago(cronograma)"> <mat-icon> payment </mat-icon> </button>
+              <ng-container *ngIf="permiso?.cobranzas?.cobranzas_manuales?.agregar">
+                <button mat-icon-button color="primary" [disabled]="cronograma.estado == 'Pagado'" (click)="RegistrarPago(cronograma)"> <mat-icon> payment </mat-icon> </button>
+              </ng-container>
             </mat-cell>
           </ng-container>
 

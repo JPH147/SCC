@@ -12,6 +12,9 @@ import { Router } from '@angular/router';
 import { ProcesoJudicialVinculadosService } from '../proceso-judicial-vinculados/proceso-judicial-vinculados.service';
 import { VentanaCambioDistritoComponent } from './ventana-cambio-distrito/ventana-cambio-distrito.component';
 import { Notificaciones } from '../global/notificacion';
+import { Store } from '@ngrx/store';
+import { EstadoSesion } from '../usuarios/usuarios.reducer';
+import { Rol } from '../usuarios/usuarios.service';
 
 @Component({
   selector: 'app-cobranza-judicial-listar',
@@ -21,23 +24,25 @@ import { Notificaciones } from '../global/notificacion';
 
 export class CobranzaJudicialListarComponent implements OnInit {
 
+  @ViewChild('InputExpediente', { static: true }) FiltroExpediente: ElementRef;
+  @ViewChild('InputDistrito', { static: true }) FiltroDistrito: ElementRef;
+  @ViewChild('InputDNI', { static: true }) FiltroDNI: ElementRef;
+  @ViewChild('InputCliente', { static: true }) FiltroCliente: ElementRef;
+  @ViewChild('InputEstado', { static: true }) FiltroEstado: MatSelect;
+
+  public ListadoProcesos: CobranzaDataSource;
+  public Columnas: string[] = ['id_tipo_documento', 'fecha_inicio', 'cliente_nombre', 'expediente', 'vendedor', 'total_documentos','fecha_ultimo_documento','fecha_ultimo_documento_diferencia', 'opciones'];
+  
   public fecha_inicio: Date;
   public fecha_fin: Date;
   public TipoDocumentos : Array<any> ;
   public Cuentas : Array<any> = [];
   public Distritos : Array<any> = [];
 
-  public ListadoProcesos: CobranzaDataSource;
-  public Columnas: string[] = ['id_tipo_documento', 'fecha_inicio', 'cliente_nombre', 'expediente', 'vendedor', 'total_documentos','fecha_ultimo_documento','fecha_ultimo_documento_diferencia', 'opciones'];
-
-  @ViewChild('InputExpediente', { static: true }) FiltroExpediente: ElementRef;
-  @ViewChild('InputDistrito', { static: true }) FiltroDistrito: ElementRef;
-  // @ViewChild('InputJuzgado', { static: true }) FiltroJuzgado: ElementRef;
-  @ViewChild('InputDNI', { static: true }) FiltroDNI: ElementRef;
-  @ViewChild('InputCliente', { static: true }) FiltroCliente: ElementRef;
-  @ViewChild('InputEstado', { static: true }) FiltroEstado: MatSelect;
+  public permiso : Rol ;
 
   constructor(
+    private _store : Store<EstadoSesion> ,
     private router : Router ,
     private Dialogo : MatDialog ,
     private Notificaciones : Notificaciones ,
@@ -46,6 +51,12 @@ export class CobranzaJudicialListarComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this._store.select('permisos').subscribe(permiso =>{
+      if( permiso ) {
+        this.permiso = permiso ;
+      }
+    })
+
     this.ListarTipoDocumentos();
     this.EncontrarFecha();
     this.ListarDistritos();

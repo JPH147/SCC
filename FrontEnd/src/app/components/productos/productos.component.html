@@ -1,11 +1,8 @@
 <mat-card>
-  <!-- Encabezado -->
-
   <mat-card-title>
     <div id = "tituloProd"> Listado de productos</div>
   </mat-card-title>
 
-  <!-- Filtros Productos, tipo  Marca Modelo -->
   <mat-grid-list cols= "4" rowHeight="90px">
     <mat-grid-tile>
       <mat-icon>search</mat-icon>
@@ -53,7 +50,9 @@
       </mat-form-field>
     </mat-grid-tile>
     <mat-grid-tile>
-      <button mat-raised-button (click)="Agregar()" color="primary">Agregar</button>
+      <ng-container *ngIf="permiso?.inventarios?.productos?.agregar">
+        <button mat-raised-button (click)="Agregar()" color="primary">Agregar</button>
+      </ng-container>
     </mat-grid-tile>
   </mat-grid-list>
 
@@ -110,13 +109,16 @@
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let producto">
-          <button mat-icon-button color="primary" (click)="CargarImagen(producto)" matTooltip="Cargar Imagen"><mat-icon> add_a_photo </mat-icon></button>
-          <button mat-icon-button color="primary" (click)="Editar(producto.id)" matTooltip="Editar"><mat-icon> edit </mat-icon></button>
-          <div>
+          <ng-container *ngIf="permiso?.inventarios?.productos?.subir_foto">
+            <button mat-icon-button color="primary" (click)="CargarImagen(producto)" matTooltip="Cargar Imagen"><mat-icon> add_a_photo </mat-icon></button>
+          </ng-container>
+          <ng-container *ngIf="permiso?.inventarios?.productos?.editar">
+            <button mat-icon-button color="primary" (click)="Editar(producto.id)" matTooltip="Editar"><mat-icon> edit </mat-icon></button>
+          </ng-container>
+          <ng-container *ngIf="permiso?.inventarios?.productos?.eliminar">
             <button mat-icon-button color="primary" (click)="Eliminar(producto)" matTooltip="Eliminar" *ngIf="producto.estado==1"><mat-icon> delete </mat-icon></button>  
-          </div>
-          
-          <button mat-icon-button color="accent" (click)="Activar(producto.id)" matTooltip="Restaurar" *ngIf="producto.estado!=1"><mat-icon> delete_forever </mat-icon></button>
+            <button mat-icon-button color="accent" (click)="Activar(producto.id)" matTooltip="Restaurar" *ngIf="producto.estado!=1"><mat-icon> delete_forever </mat-icon></button>
+          </ng-container>
         </mat-cell>
       </ng-container>
 

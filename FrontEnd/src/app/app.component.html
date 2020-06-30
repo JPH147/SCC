@@ -46,9 +46,11 @@
      <span>Sistema de Créditos y Cobranzas</span>
      <span class="espacio"></span>
      <ng-container>
-       <mat-icon class="icono">chat</mat-icon>
-       <mat-icon class="icono">account_circle</mat-icon>
-     </ng-container>
+       <button mat-icon-button [matMenuTriggerFor]="menu1" class="icono" color="primary" matTooltip="Mi cuenta" ><mat-icon> account_circle </mat-icon></button>
+        <mat-menu #menu1="matMenu">
+          <button mat-menu-item (click)="CerrarSesion()"> Cerrar sesión </button>
+        </mat-menu>
+      </ng-container>
     </mat-toolbar>
     <router-outlet></router-outlet>
   </mat-sidenav-content>

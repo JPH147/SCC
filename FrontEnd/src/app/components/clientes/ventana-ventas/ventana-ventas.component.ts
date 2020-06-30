@@ -9,6 +9,9 @@ import { VentaService } from '../../ventas/ventas.service';
 import {ServiciosTelefonos} from '../../global/telefonos';
 import {ServiciosDirecciones} from '../../global/direcciones';
 import { Router } from '@angular/router';
+import { Rol } from '../../usuarios/usuarios.service';
+import { Store } from '@ngrx/store';
+import { EstadoSesion } from '../../usuarios/usuarios.reducer';
 
 @Component({
   selector: 'app-ventana-ventas',
@@ -19,15 +22,19 @@ import { Router } from '@angular/router';
 
 export class VentanaVentasComponent implements OnInit {
 
+  @ViewChild('InputDocumento', { static: true }) FiltroDocumento: ElementRef;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+
   public estado : number;
   public fecha : Date;
 
-  @ViewChild('InputDocumento', { static: true }) FiltroDocumento: ElementRef;
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   ListadoVentas: VentasClienteDataSource;
   Columnas: string[] = [ 'documento', 'tipo','fecha', 'total', 'estado', 'opciones'];
 
+  public permiso : Rol ;
+
   constructor(
+    private _store : Store<EstadoSesion> ,
     @Inject(MAT_DIALOG_DATA) public data,
     public ventana: MatDialogRef<VentanaVentasComponent>,
     private Servicio: VentaService,
@@ -38,6 +45,12 @@ export class VentanaVentasComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this._store.select('permisos').subscribe(permiso =>{
+      if( permiso ) {
+        this.permiso = permiso ;
+      }
+    })
+
     this.estado=0;
     this.fecha = new Date();
     this.ListadoVentas = new VentasClienteDataSource(this.Servicio);

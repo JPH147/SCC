@@ -8,6 +8,9 @@ import { MatPaginator } from '@angular/material/paginator';
 import {saveAs} from 'file-saver';
 import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
 import * as moment from 'moment' ;
+import { Rol } from '../usuarios/usuarios.service';
+import { Store } from '@ngrx/store';
+import { EstadoSesion } from '../usuarios/usuarios.reducer';
 
 @Component({
   selector: 'app-cobranza-archivos-listar',
@@ -16,21 +19,28 @@ import * as moment from 'moment' ;
 })
 export class CobranzaArchivosListarComponent implements OnInit {
   
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+
   public ListadoCobranzas: CobranzasDataSource;
   public Columnas: string[] = ['numero', 'fecha_creacion','sede', 'fecha_fin', 'cantidad', 'monto', 'estado', 'opciones'];
 
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  public permiso : Rol ;
 
   constructor(
+    private _store : Store<EstadoSesion> ,
     private Dialogo : MatDialog ,
     private Servicio : CobranzasService
   ) { }
 
   ngOnInit() {
+    this._store.select('permisos').subscribe(permiso =>{
+      if( permiso ) {
+        this.permiso = permiso ;
+      }
+    })
 
     this.ListadoCobranzas = new CobranzasDataSource(this.Servicio);
     this.ListadoCobranzas.CargarCronograma(1,10);
-
   }
 
   ngAfterViewInit () {

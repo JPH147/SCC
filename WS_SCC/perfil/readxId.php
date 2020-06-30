@@ -14,19 +14,20 @@ $db = $database->getConnection();
 $perfil = new Perfil($db);
 try
 {
-    $perfil->idperfil = isset($_GET['idperfil']) ? trim($_GET['idperfil']) : die();
+    $perfil->id_perfil = isset($_GET['prid']) ? trim($_GET['prid']) : die();
     
     $perfil->readxId();
 
     $perfil_list = array(
-        "prf_nombre"=>$perfil->prf_nombre
+        "nombre"=>$perfil->nombre ,
+        "permisos"=>json_decode($perfil->permisos)
     );
 
-    if(!empty(trim($perfil->prf_nombre))){
+    if(!empty(trim($perfil->nombre))){
         print_json("0000", "OK", $perfil_list);
     }
     else{
-        print_json("0001", "No se encuentra perfil registrado con el id " . $perfil->idperfil , null);
+        print_json("0001", "No se encuentra perfil registrado con el id " . $perfil->id_perfil , null);
 
     }
 

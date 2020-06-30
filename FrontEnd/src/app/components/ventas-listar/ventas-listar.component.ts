@@ -13,6 +13,9 @@ import {VentasServicio} from './ventas-listar.service'
 import { ClienteService } from '../clientes/clientes.service';
 import { VentaService } from '../ventas/ventas.service';
 import { CobranzaJudicialService } from '../cobranza-judicial/cobranza-judicial.service';
+import { Store } from '@ngrx/store';
+import { EstadoSesion } from '../usuarios/usuarios.reducer';
+import { Rol } from '../usuarios/usuarios.service';
 
 
 @Component({
@@ -26,6 +29,7 @@ export class VentasListarComponent implements OnInit {
   public fecha_inicio: Date;
   public fecha_fin: Date;
   public ListadoProcesos : Array<any> ;
+  public permiso : Rol ;
 
   ListadoVentas: VentaDataSource;
   Columnas: string[] = ['numero', 'fecha', 'contrato', 'cliente_nombre', 'tipo_venta', 'monto_total', 'opciones'];
@@ -38,14 +42,19 @@ export class VentasListarComponent implements OnInit {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(
-    //private Servicio: ProductoService,
+    private _store : Store<EstadoSesion> ,
     public Dialogo: MatDialog,
     private Servicio:VentasServicio,
     private VServicio: VentaService,
-    private _judiciales : CobranzaJudicialService
+    private _judiciales : CobranzaJudicialService ,
   ) {}
 
   ngOnInit() {
+    this._store.select('permisos').subscribe(permiso =>{
+      if( permiso ) {
+        this.permiso = permiso ;
+      }
+    })
 
     this.fecha_inicio = null ;
     this.fecha_fin = null ;

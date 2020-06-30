@@ -3,7 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {FormGroup, FormBuilder} from '@angular/forms';
 import {ServiciosProductoSerie} from '../../global/productoserie';
 import {fromEvent, BehaviorSubject} from 'rxjs';
-import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, tap, finalize} from 'rxjs/operators';
 import {ProductoService} from '../../productos/productos.service';
 import { IngresoProductoService } from '../../ingreso-productos/ingreso-productos.service';
 
@@ -15,13 +15,14 @@ import { IngresoProductoService } from '../../ingreso-productos/ingreso-producto
 })
 export class VentanaEditarSerieComponent implements OnInit, AfterViewInit {
 
+  public Cargando = new BehaviorSubject<boolean>(false);
+  
   @ViewChild('InputProducto') FiltroProducto: ElementRef;
   @ViewChild('InputSerie', { static: true }) FiltroSerie: ElementRef;
 	public EditarSerieForm: FormGroup;
   public Informacion:any = {id:null, id_producto:null,serie:"", color:"", almacenamiento:"",precio:0};
   public repetido: boolean;
   public verificando:boolean;
-  public Cargando = new BehaviorSubject<boolean>(false);
   public nuevo : boolean = false ;
   public id_producto : number ;
   public producto : string ;
@@ -138,6 +139,7 @@ export class VentanaEditarSerieComponent implements OnInit, AfterViewInit {
   }
 
   Guardar(){
+    this.Cargando.next(true) ;
     if (this.data.detalle) {
       this.Actualizar();
     } else {
@@ -155,6 +157,11 @@ export class VentanaEditarSerieComponent implements OnInit, AfterViewInit {
     ).subscribe(response => {
       if( response['codigo']==0 ) {
         this.IngresoProductoservicios.CrearTransaccionDetalle(this.data.transaccion, response['data'], 1, this.Informacion.precio, "")
+        .pipe(
+          finalize(()=>{
+            this.Cargando.next(false) ;
+          })
+        )
         .subscribe(resp=>{
           if( resp['codigo']==0 ) {
             this.ventana.close(true) ;
@@ -178,6 +185,11 @@ export class VentanaEditarSerieComponent implements OnInit, AfterViewInit {
           this.Informacion.color,
           this.Informacion.almacenamiento,
           this.Informacion.precio
+        )
+        .pipe(
+          finalize(()=>{
+            this.Cargando.next(false) ;
+          })
         )
         .subscribe(res=>{
           if(res['codigo']==0){

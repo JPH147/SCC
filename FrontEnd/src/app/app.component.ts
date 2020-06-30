@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { UsuariosService } from './components/usuarios/usuarios.service';
 import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service' ;
+import { Store } from '@ngrx/store';
+import { AsignarPermisos } from './components/usuarios/usuarios.reducer';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +17,9 @@ export class AppComponent {
 
   constructor(
     public _usuario : UsuariosService ,
-    private router : Router 
+    private _cookie : CookieService ,
+    private router : Router ,
+    private _store : Store ,
   ) { }
 
   ngOnInit() {
@@ -25,13 +30,7 @@ export class AppComponent {
       perfil: '',
     };
 
-    // Descomentar para producción -------------------------------------->
-    if( this._usuario.Usuario ) {
-      this.router.navigate(['inicio']) ;
-    } else {
-      this.router.navigate(['login']) ;
-      this.estado = false ;
-    }
+    this.VerificarUsuario() ;
 
     this._usuario.UsuarioS.subscribe(res=>{
       if(res){
@@ -39,7 +38,33 @@ export class AppComponent {
           nombre: res.usuario ,
           perfil: res.perfil ,
         }
+        this._cookie.set('usuario', JSON.stringify(res ))
       }
     })
- }
+  }
+
+  VerificarUsuario(){
+    if ( this._cookie.check('usuario') ) {
+      let usuario = JSON.parse( this._cookie.get('usuario') ) ;
+      this._usuario.AsignarUsuario( usuario ) ;
+      this._usuario.SeleccionarPerfil(usuario.id_perfil).subscribe(perfil=>{
+        let asignarPermisos = new AsignarPermisos( perfil['permisos'] ) ;
+        this._store.dispatch(asignarPermisos) ;
+      })
+
+      this.router.navigate(['inicio']) ;
+    } else {
+      this.router.navigate(['login']) ;
+      this.estado = false ;
+    }
+  }
+
+  CerrarSesion(){
+    this._usuario.LogOut().subscribe(res=>{
+      this.router.navigate(['login']) ;
+      this.estado = false ;
+      let asignarPermisos = new AsignarPermisos( null ) ;
+      this._store.dispatch(asignarPermisos) ;
+    })
+  }
 }

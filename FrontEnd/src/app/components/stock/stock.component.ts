@@ -9,6 +9,9 @@ import { StockService } from './stock.service';
 import {StockDataSource} from './stock.dataservice';
 import { FormControl } from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
+import { Store } from '@ngrx/store';
+import { EstadoSesion } from '../usuarios/usuarios.reducer';
+import { Rol } from '../usuarios/usuarios.service';
 
 @Component({
   selector: 'app-stock',
@@ -30,13 +33,21 @@ export class StockComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
+  public permiso : Rol ;
+
   constructor(
-    private http: HttpClient,
+    private _store : Store<EstadoSesion> ,
     private Servicio: StockService,
     public DialogoStock: MatDialog,
   ) { }
 
   ngOnInit() {
+    this._store.select('permisos').subscribe(permiso =>{
+      if( permiso ) {
+        this.permiso = permiso ;
+      }
+    })
+
     this.Listadodata = new StockDataSource(this.Servicio);
     this.Listadodata.CargarStock('', '', '', '', '', 1, 10, 'descripcion asc');
     this.Listadodata.Totalresultados.subscribe(res => {

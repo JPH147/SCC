@@ -4,6 +4,10 @@
     <mat-toolbar-row><h4>Datos de contacto</h4></mat-toolbar-row>
   </mat-toolbar>
 
+  <div class="spinner-container-emergente" *ngIf="Cargando | async">
+    <mat-spinner></mat-spinner>
+  </div>
+
   <mat-tab-group >
     <mat-tab label="Telefonos">
       <mat-card-content>
@@ -28,15 +32,11 @@
             </mat-grid-tile>
 
             <mat-grid-tile>
-              <button mat-raised-button color="primary" type="button" [disabled]="TelefonosForm.invalid" (click)="AgregarTelefono()">Agregar</button>
+              <button mat-raised-button color="primary" type="button" [disabled]="TelefonosForm.invalid || (Cargando | async)" (click)="AgregarTelefono()">Agregar</button>
             </mat-grid-tile>
 
           </mat-grid-list>
         </form>
-
-        <div class = "spinner-container" *ngIf = "ListadoTelefonos.Cargando| async">
-          <mat-spinner></mat-spinner>
-        </div>
 
         <mat-table [dataSource]="ListadoTelefonos" class="mat-elevation-z8">
 
@@ -125,7 +125,7 @@
             </mat-grid-tile>
 
             <mat-grid-tile>
-              <button mat-raised-button color="primary" type="button" [disabled]="DireccionesForm.invalid" (click)="AgregarDireccion()">Agregar</button>
+              <button mat-raised-button color="primary" type="button" [disabled]="DireccionesForm.invalid || (Cargando | async)" (click)="AgregarTelefono()" (click)="AgregarDireccion()">Agregar</button>
             </mat-grid-tile>
 
           </mat-grid-list>
@@ -197,7 +197,7 @@
             </mat-grid-tile>
 
             <mat-grid-tile>
-              <button mat-raised-button color="primary" type="button" [disabled]="CuentasForm.invalid" (click)="AgregarCuenta()">Agregar</button>
+              <button mat-raised-button color="primary" type="button" [disabled]="CuentasForm.invalid || (Cargando | async)" (click)="AgregarTelefono()" (click)="AgregarCuenta()">Agregar</button>
             </mat-grid-tile>
 
           </mat-grid-list>

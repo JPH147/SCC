@@ -12,6 +12,9 @@ import {ProductoDataSource} from './productos.dataservice';
 import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
 import {ImagenProductoComponent} from './imagen-producto/imagen-producto.component'
 import { VentanaFotoComponent } from '../clientes/ventana-foto/ventana-foto.component';
+import { Store } from '@ngrx/store';
+import { EstadoSesion } from '../usuarios/usuarios.reducer';
+import { Rol } from '../usuarios/usuarios.service';
 
 @Component({
   selector: 'app-productos',
@@ -24,8 +27,7 @@ export class ProductosComponent implements OnInit {
 
   ListadoProductos: ProductoDataSource;
   Columnas: string[] = ['numero','foto', 'descripcion', 'tipo', 'marca', 'modelo', 'unidad_medida','precio', 'opciones'];
-  // tslint:disable-next-line:no-inferrable-types
-
+  
   @ViewChild('InputProducto', { static: true }) FiltroProductos: ElementRef;
   @ViewChild('InputTipo', { static: true }) FiltroTipo: ElementRef;
   @ViewChild('InputMarca', { static: true }) FiltroMarca: ElementRef;
@@ -36,7 +38,10 @@ export class ProductosComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
+  public permiso : Rol ;
+
   constructor(
+    private _store : Store<EstadoSesion> ,
     private Servicio: ProductoService,
     public DialogoProductos: MatDialog,
     public snackBar: MatSnackBar,
@@ -44,12 +49,16 @@ export class ProductosComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this._store.select('permisos').subscribe(permiso =>{
+      if( permiso ) {
+        this.permiso = permiso ;
+      }
+    })
+
    this.ListadoProductos = new ProductoDataSource(this.Servicio);
-   // tslint:disable-next-line:quotemark
    this.ListadoProductos.CargarProductos('', '', '', '',null,null, 1, 10, "descripcion", "asc",1);
  }
 
-// tslint:disable-next-line:use-life-cycle-interface
   ngAfterViewInit () {
 
     this.sort.sortChange.subscribe(res => {

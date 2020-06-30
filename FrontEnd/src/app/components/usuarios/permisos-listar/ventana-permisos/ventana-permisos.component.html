@@ -1,1 +1,1084 @@
-<p>ventana-permisos works!</p>
+<mat-card class="card">
+
+  <mat-toolbar color="primary">
+    <mat-toolbar-row *ngIf="!data"> Agregar perfil </mat-toolbar-row>
+    <mat-toolbar-row *ngIf="data"> Editar perfil </mat-toolbar-row>
+  </mat-toolbar>
+
+  <div class = "spinner-container-emergente" *ngIf = "Cargando | async">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <mat-card-content>
+    <form [formGroup]="RolesForm">
+      <mat-grid-list cols=2 rowHeight="70px">
+        <mat-grid-tile>
+          <mat-form-field class="columnas-2">
+            <input matInput type="text" placeholder="Nombre del rol" formControlName="nombre" [readonly]="data.ver">
+            <mat-error> Debe escribir un nombre </mat-error>
+          </mat-form-field>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </form>
+
+    <ng-container class="permisos" *ngIf="Permiso">
+      <!-- Maestro general -->
+      <ng-container>
+        <mat-card-title class="titulo-categoria">
+          Maestro general
+          <span class="espacio"></span>
+          <ng-container *ngIf="!data.ver">
+            <mat-slide-toggle color="primary" [(ngModel)]="Permiso.maestro_general.general"
+              (change)="VerificarAtributosPadre('maestro_general', $event.checked)"></mat-slide-toggle>
+          </ng-container>
+          <ng-container *ngIf="data.ver">
+            <mat-icon *ngIf="Permiso.maestro_general.general" color="primary"> check </mat-icon>
+            <mat-icon *ngIf="!Permiso.maestro_general.general" color="warn"> close </mat-icon>
+          </ng-container>
+        </mat-card-title>
+
+        <ng-container *ngIf="Permiso.maestro_general.general">
+          <!-- Clientes -->
+          <ng-container>
+            <mat-card-subtitle class="subtitulo-categoria">
+              Relación de clientes
+              <span class="espacio"></span>
+              <ng-container *ngIf="!data.ver">
+                <mat-slide-toggle color="accent" [(ngModel)]="Permiso.maestro_general.clientes.general"
+                  (change)="VerificarAtributosHijo('maestro_general','clientes', $event.checked)"></mat-slide-toggle>
+              </ng-container>
+              <ng-container *ngIf="data.ver">
+                <mat-icon [color]="Permiso.maestro_general.clientes.general ? 'accent' : 'warn' ">
+                  {{ Permiso.maestro_general.clientes.general ? 'check' : 'close' }} </mat-icon>
+              </ng-container>
+            </mat-card-subtitle>
+        
+            <ng-container *ngIf="Permiso.maestro_general.clientes.general">
+              <mat-grid-list cols="4" rowHeight="45px">
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.maestro_general.clientes.agregar"> Agregar </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.maestro_general.clientes.agregar ? 'accent' : 'warn'">
+                      {{ Permiso.maestro_general.clientes.agregar ? 'check' : 'close' }} </mat-icon> &nbsp; Agregar
+                  </ng-container>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.maestro_general.clientes.editar"> Editar </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.maestro_general.clientes.editar ? 'accent' : 'warn'">
+                      {{ Permiso.maestro_general.clientes.editar ? 'check' : 'close' }} </mat-icon> &nbsp; Editar
+                  </ng-container>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.maestro_general.clientes.eliminar"> Eliminar </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.maestro_general.clientes.eliminar ? 'accent' : 'warn'">
+                      {{ Permiso.maestro_general.clientes.eliminar ? 'check' : 'close' }} </mat-icon> &nbsp; Eliminar
+                  </ng-container>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.maestro_general.clientes.confirmar_pendientes"> Confirmar pendientes </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.maestro_general.clientes.confirmar_pendientes ? 'accent' : 'warn'">
+                      {{ Permiso.maestro_general.clientes.confirmar_pendientes ? 'check' : 'close' }} </mat-icon> &nbsp; Confirmar pendientes
+                  </ng-container>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.maestro_general.clientes.subir_foto"> Subir foto </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.maestro_general.clientes.subir_foto ? 'accent' : 'warn'">
+                      {{ Permiso.maestro_general.clientes.subir_foto ? 'check' : 'close' }} </mat-icon> &nbsp; Subir foto
+                  </ng-container>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.maestro_general.clientes.ver_ventas"> Ver ventas </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.maestro_general.clientes.ver_ventas ? 'accent' : 'warn'">
+                      {{ Permiso.maestro_general.clientes.ver_ventas ? 'check' : 'close' }} </mat-icon> &nbsp; Ver ventas
+                  </ng-container>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.maestro_general.clientes.crear_observaciones"> Añadir observaciones </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.maestro_general.clientes.crear_observaciones ? 'accent' : 'warn'">
+                      {{ Permiso.maestro_general.clientes.crear_observaciones ? 'check' : 'close' }} </mat-icon> &nbsp; Añadir observaciones
+                  </ng-container>
+                </mat-grid-tile>
+              </mat-grid-list>
+            </ng-container>
+          </ng-container>
+
+          <!-- Evaluación -->
+          <ng-container>
+            <mat-card-subtitle class="subtitulo-categoria">
+              Evaluación
+              <span class="espacio"></span>
+              <ng-container *ngIf="!data.ver">
+                <mat-slide-toggle color="accent" [(ngModel)]="Permiso.maestro_general.evaluacion.general"
+                  (change)="VerificarAtributosHijo('maestro_general','evaluacion', $event.checked)"></mat-slide-toggle>
+              </ng-container>
+              <ng-container *ngIf="data.ver">
+                <mat-icon [color]="Permiso.maestro_general.evaluacion.general ? 'accent' : 'warn' ">
+                  {{ Permiso.maestro_general.evaluacion.general ? 'check' : 'close' }} </mat-icon>
+              </ng-container>
+            </mat-card-subtitle>
+          </ng-container>
+
+          <!-- Seguimiento de documentos -->
+          <ng-container>
+            <mat-card-subtitle class="subtitulo-categoria">
+              Seguimiento de documentos
+              <span class="espacio"></span>
+              <ng-container *ngIf="!data.ver">
+                <mat-slide-toggle color="accent" [(ngModel)]="Permiso.maestro_general.seguimiento_documentos.general"
+                  (change)="VerificarAtributosHijo('maestro_general','seguimiento_documentos', $event.checked)"></mat-slide-toggle>
+              </ng-container>
+              <ng-container *ngIf="data.ver">
+                <mat-icon [color]="Permiso.maestro_general.seguimiento_documentos.general ? 'accent' : 'warn' ">
+                  {{ Permiso.maestro_general.seguimiento_documentos.general ? 'check' : 'close' }} </mat-icon>
+              </ng-container>
+            </mat-card-subtitle>
+        
+            <ng-container *ngIf="Permiso.maestro_general.seguimiento_documentos.general">
+              <mat-grid-list cols="4" rowHeight="45px">
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.maestro_general.seguimiento_documentos.editar"> Editar </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.maestro_general.seguimiento_documentos.editar ? 'accent' : 'warn'">
+                      {{ Permiso.maestro_general.seguimiento_documentos.editar ? 'check' : 'close' }} </mat-icon> &nbsp; Editar
+                  </ng-container>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.maestro_general.seguimiento_documentos.eliminar"> Eliminar </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.maestro_general.seguimiento_documentos.eliminar ? 'accent' : 'warn'">
+                      {{ Permiso.maestro_general.seguimiento_documentos.eliminar ? 'check' : 'close' }} </mat-icon> &nbsp; Eliminar
+                  </ng-container>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.maestro_general.seguimiento_documentos.registrar_entrega"> Registrar entrega </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.maestro_general.seguimiento_documentos.registrar_entrega ? 'accent' : 'warn'">
+                      {{ Permiso.maestro_general.seguimiento_documentos.registrar_entrega ? 'check' : 'close' }} </mat-icon> &nbsp; Registrar entrega
+                  </ng-container>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.maestro_general.seguimiento_documentos.ver_documento"> Ver documento referente </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.maestro_general.seguimiento_documentos.ver_documento ? 'accent' : 'warn'">
+                      {{ Permiso.maestro_general.seguimiento_documentos.ver_documento ? 'check' : 'close' }} </mat-icon> &nbsp; Ver documento referente
+                  </ng-container>
+                </mat-grid-tile>
+              </mat-grid-list>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+
+      <!-- Ventas -->
+      <ng-container>
+        <mat-card-title class="titulo-categoria">
+          Ventas
+          <span class="espacio"></span>
+          <ng-container *ngIf="!data.ver">
+            <mat-slide-toggle color="primary" [(ngModel)]="Permiso.ventas.general"
+              (change)="VerificarAtributosPadre('ventas', $event.checked)"></mat-slide-toggle>
+          </ng-container>
+          <ng-container *ngIf="data.ver">
+            <mat-icon *ngIf="Permiso.ventas.general" color="primary"> check </mat-icon>
+            <mat-icon *ngIf="!Permiso.ventas.general" color="warn"> close </mat-icon>
+          </ng-container>
+        </mat-card-title>
+        
+        <ng-container *ngIf="Permiso.ventas.general">
+          <!-- Listado -->
+          <ng-container>
+            <mat-card-subtitle class="subtitulo-categoria">
+              Listado
+              <span class="espacio"></span>
+              <ng-container *ngIf="!data.ver">
+                <mat-slide-toggle color="accent" [(ngModel)]="Permiso.ventas.listado_ventas.general"
+                  (change)="VerificarAtributosHijo('ventas','listado_ventas', $event.checked)"></mat-slide-toggle>
+              </ng-container>
+              <ng-container *ngIf="data.ver">
+                <mat-icon [color]="Permiso.ventas.listado_ventas.general ? 'accent' : 'warn' ">
+                  {{ Permiso.ventas.listado_ventas.general ? 'check' : 'close' }} </mat-icon>
+              </ng-container>
+            </mat-card-subtitle>
+        
+            <ng-container *ngIf="Permiso.ventas.listado_ventas.general">
+              <mat-grid-list cols="4" rowHeight="45px">
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.ventas.listado_ventas.agregar"> Agregar </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.ventas.listado_ventas.agregar ? 'accent' : 'warn'">
+                      {{ Permiso.ventas.listado_ventas.agregar ? 'check' : 'close' }} </mat-icon> &nbsp; Agregar
+                  </ng-container>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.ventas.listado_ventas.editar"> Editar </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.ventas.listado_ventas.editar ? 'accent' : 'warn'">
+                      {{ Permiso.ventas.listado_ventas.editar ? 'check' : 'close' }} </mat-icon> &nbsp; Editar
+                  </ng-container>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.ventas.listado_ventas.eliminar"> Eliminar </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.ventas.listado_ventas.eliminar ? 'accent' : 'warn'">
+                      {{ Permiso.ventas.listado_ventas.eliminar ? 'check' : 'close' }} </mat-icon> &nbsp; Eliminar
+                  </ng-container>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.ventas.listado_ventas.realizar_canjes"> Realizar canjes </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.ventas.listado_ventas.realizar_canjes ? 'accent' : 'warn'">
+                      {{ Permiso.ventas.listado_ventas.realizar_canjes ? 'check' : 'close' }} </mat-icon> &nbsp; Realizar canjes
+                  </ng-container>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.ventas.listado_ventas.abrir_procesos"> Abrir expedientes </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.ventas.listado_ventas.abrir_procesos ? 'accent' : 'warn'">
+                      {{ Permiso.ventas.listado_ventas.abrir_procesos ? 'check' : 'close' }} </mat-icon> &nbsp; Abrir procesos
+                  </ng-container>
+                </mat-grid-tile>
+              </mat-grid-list>
+            </ng-container>
+          </ng-container>
+      
+          <!-- Salida de ventas -->
+          <ng-container>
+            <mat-card-subtitle class="subtitulo-categoria">
+              Salida de vendedores
+              <span class="espacio"></span>
+              <ng-container *ngIf="!data.ver">
+                <mat-slide-toggle color="accent" [(ngModel)]="Permiso.ventas.salida_ventas.general"
+                  (change)="VerificarAtributosHijo('ventas','salida_ventas', $event.checked)"></mat-slide-toggle>
+              </ng-container>
+              <ng-container *ngIf="data.ver">
+                <mat-icon [color]="Permiso.ventas.salida_ventas.general ? 'accent' : 'warn' ">
+                  {{ Permiso.ventas.salida_ventas.general ? 'check' : 'close' }} </mat-icon>
+              </ng-container>
+            </mat-card-subtitle>
+        
+            <ng-container *ngIf="Permiso.ventas.salida_ventas.general">
+              <mat-grid-list cols="4" rowHeight="45px">
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.ventas.salida_ventas.agregar"> Agregar </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.ventas.salida_ventas.agregar ? 'accent' : 'warn'">
+                      {{ Permiso.ventas.salida_ventas.agregar ? 'check' : 'close' }} </mat-icon> &nbsp; Agregar
+                  </ng-container>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.ventas.salida_ventas.editar"> Editar </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.ventas.salida_ventas.editar ? 'accent' : 'warn'">
+                      {{ Permiso.ventas.salida_ventas.editar ? 'check' : 'close' }} </mat-icon> &nbsp; Editar
+                  </ng-container>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.ventas.salida_ventas.eliminar"> Eliminar </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.ventas.salida_ventas.eliminar ? 'accent' : 'warn'">
+                      {{ Permiso.ventas.salida_ventas.eliminar ? 'check' : 'close' }} </mat-icon> &nbsp; Eliminar
+                  </ng-container>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.ventas.salida_ventas.registrar_retorno"> Regitrar retorno </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.ventas.salida_ventas.registrar_retorno ? 'accent' : 'warn'">
+                      {{ Permiso.ventas.salida_ventas.registrar_retorno ? 'check' : 'close' }} </mat-icon> &nbsp; Regitrar retorno
+                  </ng-container>
+                </mat-grid-tile>
+              </mat-grid-list>
+            </ng-container>
+          </ng-container>
+      
+          <!-- Comisión de vendedores -->
+          <ng-container>
+            <mat-card-subtitle class="subtitulo-categoria">
+              Comisión de vendedores
+              <span class="espacio"></span>
+              <ng-container *ngIf="!data.ver">
+                <mat-slide-toggle color="accent" [(ngModel)]="Permiso.ventas.comision_vendedores.general"
+                  (change)="VerificarAtributosHijo('ventas','comision_vendedores', $event.checked)"></mat-slide-toggle>
+              </ng-container>
+              <ng-container *ngIf="data.ver">
+                <mat-icon [color]="Permiso.ventas.comision_vendedores.general ? 'accent' : 'warn' ">
+                  {{ Permiso.ventas.comision_vendedores.general ? 'check' : 'close' }} </mat-icon>
+              </ng-container>
+            </mat-card-subtitle>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+
+      <!-- Inventarios -->
+      <ng-container>
+        <mat-card-title class="titulo-categoria">
+          Inventarios
+          <span class="espacio"></span>
+          <ng-container *ngIf="!data.ver">
+            <mat-slide-toggle color="primary" [(ngModel)]="Permiso.inventarios.general"
+              (change)="VerificarAtributosPadre('inventarios', $event.checked)"></mat-slide-toggle>
+          </ng-container>
+          <ng-container *ngIf="data.ver">
+            <mat-icon *ngIf="Permiso.inventarios.general" color="primary"> check </mat-icon>
+            <mat-icon *ngIf="!Permiso.inventarios.general" color="warn"> close </mat-icon>
+          </ng-container>
+        </mat-card-title>
+        
+        <ng-container *ngIf="Permiso.inventarios.general">
+          <!-- Productos -->
+          <ng-container>
+            <mat-card-subtitle class="subtitulo-categoria">
+              Productos
+              <span class="espacio"></span>
+              <ng-container *ngIf="!data.ver">
+                <mat-slide-toggle color="accent" [(ngModel)]="Permiso.inventarios.productos.general"
+                  (change)="VerificarAtributosHijo('inventarios','productos', $event.checked)"></mat-slide-toggle>
+              </ng-container>
+              <ng-container *ngIf="data.ver">
+                <mat-icon [color]="Permiso.inventarios.productos.general ? 'accent' : 'warn' ">
+                  {{ Permiso.inventarios.productos.general ? 'check' : 'close' }} </mat-icon>
+              </ng-container>
+            </mat-card-subtitle>
+        
+            <ng-container *ngIf="Permiso.inventarios.productos.general">
+              <mat-grid-list cols="4" rowHeight="45px">
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.inventarios.productos.agregar"> Agregar </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.inventarios.productos.agregar ? 'accent' : 'warn'">
+                      {{ Permiso.inventarios.productos.agregar ? 'check' : 'close' }} </mat-icon> &nbsp; Agregar
+                  </ng-container>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.inventarios.productos.editar"> Editar </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.inventarios.productos.editar ? 'accent' : 'warn'">
+                      {{ Permiso.inventarios.productos.editar ? 'check' : 'close' }} </mat-icon> &nbsp; Editar
+                  </ng-container>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.inventarios.productos.eliminar"> Eliminar </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.inventarios.productos.eliminar ? 'accent' : 'warn'">
+                      {{ Permiso.inventarios.productos.eliminar ? 'check' : 'close' }} </mat-icon> &nbsp; Eliminar
+                  </ng-container>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.inventarios.productos.subir_foto"> Subir foto </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.inventarios.productos.subir_foto ? 'accent' : 'warn'">
+                      {{ Permiso.inventarios.productos.subir_foto ? 'check' : 'close' }} </mat-icon> &nbsp; Subir foto
+                  </ng-container>
+                </mat-grid-tile>
+              </mat-grid-list>
+            </ng-container>
+          </ng-container>
+
+          <!-- Stock -->
+          <ng-container>
+            <mat-card-subtitle class="subtitulo-categoria">
+              Stock
+              <span class="espacio"></span>
+              <ng-container *ngIf="!data.ver">
+                <mat-slide-toggle color="accent" [(ngModel)]="Permiso.inventarios.stock.general"
+                  (change)="VerificarAtributosHijo('inventarios','stock', $event.checked)"></mat-slide-toggle>
+              </ng-container>
+              <ng-container *ngIf="data.ver">
+                <mat-icon [color]="Permiso.inventarios.stock.general ? 'accent' : 'warn' ">
+                  {{ Permiso.inventarios.stock.general ? 'check' : 'close' }} </mat-icon>
+              </ng-container>
+            </mat-card-subtitle>
+        
+            <ng-container *ngIf="Permiso.inventarios.stock.general">
+              <mat-grid-list cols="4" rowHeight="45px">
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.inventarios.stock.registrar_ingreso"> Registrar ingreso </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.inventarios.stock.registrar_ingreso ? 'accent' : 'warn'">
+                      {{ Permiso.inventarios.stock.registrar_ingreso ? 'check' : 'close' }} </mat-icon> &nbsp; Registrar ingreso
+                  </ng-container>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.inventarios.stock.registrar_salida"> Registrar salida </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.inventarios.stock.registrar_salida ? 'accent' : 'warn'">
+                      {{ Permiso.inventarios.stock.registrar_salida ? 'check' : 'close' }} </mat-icon> &nbsp; Registrar salida
+                  </ng-container>
+                </mat-grid-tile>
+              </mat-grid-list>
+            </ng-container>
+          </ng-container>
+
+          <!-- Documentos de almacén -->
+          <ng-container>
+            <mat-card-subtitle class="subtitulo-categoria">
+              Documentos de almacén
+              <span class="espacio"></span>
+              <ng-container *ngIf="!data.ver">
+                <mat-slide-toggle color="accent" [(ngModel)]="Permiso.inventarios.documentos_almacen.general"
+                  (change)="VerificarAtributosHijo('inventarios','documentos_almacen', $event.checked)"></mat-slide-toggle>
+              </ng-container>
+              <ng-container *ngIf="data.ver">
+                <mat-icon [color]="Permiso.inventarios.documentos_almacen.general ? 'accent' : 'warn' ">
+                  {{ Permiso.inventarios.documentos_almacen.general ? 'check' : 'close' }} </mat-icon>
+              </ng-container>
+            </mat-card-subtitle>
+        
+            <ng-container *ngIf="Permiso.inventarios.documentos_almacen.general">
+              <mat-grid-list cols="4" rowHeight="45px">
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.inventarios.documentos_almacen.editar"> Editar </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.inventarios.documentos_almacen.editar ? 'accent' : 'warn'">
+                      {{ Permiso.inventarios.documentos_almacen.editar ? 'check' : 'close' }} </mat-icon> &nbsp; Editar
+                  </ng-container>
+                </mat-grid-tile>
+              </mat-grid-list>
+            </ng-container>
+          </ng-container>
+
+          <!-- Historial de series -->
+          <ng-container>
+            <mat-card-subtitle class="subtitulo-categoria">
+              Historial de series
+              <span class="espacio"></span>
+              <ng-container *ngIf="!data.ver">
+                <mat-slide-toggle color="accent" [(ngModel)]="Permiso.inventarios.historial_series.general"
+                  (change)="VerificarAtributosHijo('inventarios','historial_series', $event.checked)"></mat-slide-toggle>
+              </ng-container>
+              <ng-container *ngIf="data.ver">
+                <mat-icon [color]="Permiso.inventarios.historial_series.general ? 'accent' : 'warn' ">
+                  {{ Permiso.inventarios.historial_series.general ? 'check' : 'close' }} </mat-icon>
+              </ng-container>
+            </mat-card-subtitle>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+
+      <!-- Créditos -->
+      <ng-container>
+        <mat-card-title class="titulo-categoria">
+          Créditos
+          <span class="espacio"></span>
+          <ng-container *ngIf="!data.ver">
+            <mat-slide-toggle color="primary" [(ngModel)]="Permiso.creditos.general"
+              (change)="VerificarAtributosPadre('creditos', $event.checked)"></mat-slide-toggle>
+          </ng-container>
+          <ng-container *ngIf="data.ver">
+            <mat-icon *ngIf="Permiso.creditos.general" color="primary"> check </mat-icon>
+            <mat-icon *ngIf="!Permiso.creditos.general" color="warn"> close </mat-icon>
+          </ng-container>
+        </mat-card-title>
+        
+        <ng-container *ngIf="Permiso.creditos.general">
+          <!-- Listado -->
+          <ng-container>
+            <mat-card-subtitle class="subtitulo-categoria">
+              Listado
+              <span class="espacio"></span>
+              <ng-container *ngIf="!data.ver">
+                <mat-slide-toggle color="accent" [(ngModel)]="Permiso.creditos.listado_creditos.general"
+                  (change)="VerificarAtributosHijo('creditos','listado_creditos', $event.checked)"></mat-slide-toggle>
+              </ng-container>
+              <ng-container *ngIf="data.ver">
+                <mat-icon [color]="Permiso.creditos.listado_creditos.general ? 'accent' : 'warn' ">
+                  {{ Permiso.creditos.listado_creditos.general ? 'check' : 'close' }} </mat-icon>
+              </ng-container>
+            </mat-card-subtitle>
+        
+            <ng-container *ngIf="Permiso.creditos.listado_creditos.general">
+              <mat-grid-list cols="4" rowHeight="45px">
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.creditos.listado_creditos.agregar"> Agregar </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.creditos.listado_creditos.agregar ? 'accent' : 'warn'">
+                      {{ Permiso.creditos.listado_creditos.agregar ? 'check' : 'close' }} </mat-icon> &nbsp; Agregar
+                  </ng-container>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.creditos.listado_creditos.editar"> Editar </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.creditos.listado_creditos.editar ? 'accent' : 'warn'">
+                      {{ Permiso.creditos.listado_creditos.editar ? 'check' : 'close' }} </mat-icon> &nbsp; Editar
+                  </ng-container>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.creditos.listado_creditos.eliminar"> Eliminar </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.creditos.listado_creditos.eliminar ? 'accent' : 'warn'">
+                      {{ Permiso.creditos.listado_creditos.eliminar ? 'check' : 'close' }} </mat-icon> &nbsp; Eliminar
+                  </ng-container>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.creditos.listado_creditos.abrir_procesos"> Abrir expedientes </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.creditos.listado_creditos.abrir_procesos ? 'accent' : 'warn'">
+                      {{ Permiso.creditos.listado_creditos.abrir_procesos ? 'check' : 'close' }} </mat-icon> &nbsp; Abrir procesos
+                  </ng-container>
+                </mat-grid-tile>
+              </mat-grid-list>
+            </ng-container>
+          </ng-container>
+
+          <!-- Afiliaciones -->
+          <ng-container>
+            <mat-card-subtitle class="subtitulo-categoria">
+              Afiliaciones
+              <span class="espacio"></span>
+              <ng-container *ngIf="!data.ver">
+                <mat-slide-toggle color="accent" [(ngModel)]="Permiso.creditos.afiliaciones.general"
+                  (change)="VerificarAtributosHijo('creditos','afiliaciones', $event.checked)"></mat-slide-toggle>
+              </ng-container>
+              <ng-container *ngIf="data.ver">
+                <mat-icon [color]="Permiso.creditos.afiliaciones.general ? 'accent' : 'warn' ">
+                  {{ Permiso.creditos.afiliaciones.general ? 'check' : 'close' }} </mat-icon>
+              </ng-container>
+            </mat-card-subtitle>
+        
+            <ng-container *ngIf="Permiso.creditos.afiliaciones.general">
+              <mat-grid-list cols="4" rowHeight="45px">
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.creditos.afiliaciones.agregar"> Agregar </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.creditos.afiliaciones.agregar ? 'accent' : 'warn'">
+                      {{ Permiso.creditos.afiliaciones.agregar ? 'check' : 'close' }} </mat-icon> &nbsp; Agregar
+                  </ng-container>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.creditos.afiliaciones.editar"> Editar </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.creditos.afiliaciones.editar ? 'accent' : 'warn'">
+                      {{ Permiso.creditos.afiliaciones.editar ? 'check' : 'close' }} </mat-icon> &nbsp; Editar
+                  </ng-container>
+                </mat-grid-tile>
+              </mat-grid-list>
+            </ng-container>
+          </ng-container>
+      
+          <!-- Refinanciamiento -->
+          <ng-container>
+            <mat-card-subtitle class="subtitulo-categoria">
+              Refinanciamiento
+              <span class="espacio"></span>
+              <ng-container *ngIf="!data.ver">
+                <mat-slide-toggle color="accent" [(ngModel)]="Permiso.creditos.refinanciamientos.general"
+                  (change)="VerificarAtributosHijo('creditos','refinanciamientos', $event.checked)"></mat-slide-toggle>
+              </ng-container>
+              <ng-container *ngIf="data.ver">
+                <mat-icon [color]="Permiso.creditos.refinanciamientos.general ? 'accent' : 'warn' ">
+                  {{ Permiso.creditos.refinanciamientos.general ? 'check' : 'close' }} </mat-icon>
+              </ng-container>
+            </mat-card-subtitle>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+
+      <!-- Procesos judiciales -->
+      <ng-container>
+        <mat-card-title class="titulo-categoria">
+          Procesos judiciales
+          <span class="espacio"></span>
+          <ng-container *ngIf="!data.ver">
+            <mat-slide-toggle color="primary" [(ngModel)]="Permiso.procesos_judiciales.general"
+              (change)="VerificarAtributosPadre('procesos_judiciales', $event.checked)"></mat-slide-toggle>
+          </ng-container>
+          <ng-container *ngIf="data.ver">
+            <mat-icon *ngIf="Permiso.procesos_judiciales.general" color="primary"> check </mat-icon>
+            <mat-icon *ngIf="!Permiso.procesos_judiciales.general" color="warn"> close </mat-icon>
+          </ng-container>
+        </mat-card-title>
+        
+        <ng-container *ngIf="Permiso.procesos_judiciales.general">
+          <!-- Listado -->
+          <ng-container>
+            <mat-card-subtitle class="subtitulo-categoria">
+              Listado
+              <span class="espacio"></span>
+              <ng-container *ngIf="!data.ver">
+                <mat-slide-toggle color="accent" [(ngModel)]="Permiso.procesos_judiciales.listado_procesos.general"
+                  (change)="VerificarAtributosHijo('procesos_judiciales','listado_procesos', $event.checked)"></mat-slide-toggle>
+              </ng-container>
+              <ng-container *ngIf="data.ver">
+                <mat-icon [color]="Permiso.procesos_judiciales.listado_procesos.general ? 'accent' : 'warn' ">
+                  {{ Permiso.procesos_judiciales.listado_procesos.general ? 'check' : 'close' }} </mat-icon>
+              </ng-container>
+            </mat-card-subtitle>
+        
+            <ng-container *ngIf="Permiso.procesos_judiciales.listado_procesos.general">
+              <mat-grid-list cols="4" rowHeight="45px">
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.procesos_judiciales.listado_procesos.agregar"> Agregar </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.procesos_judiciales.listado_procesos.agregar ? 'accent' : 'warn'">
+                      {{ Permiso.procesos_judiciales.listado_procesos.agregar ? 'check' : 'close' }} </mat-icon> &nbsp; Agregar
+                  </ng-container>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.procesos_judiciales.listado_procesos.editar"> Editar </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.procesos_judiciales.listado_procesos.editar ? 'accent' : 'warn'">
+                      {{ Permiso.procesos_judiciales.listado_procesos.editar ? 'check' : 'close' }} </mat-icon> &nbsp; Editar
+                  </ng-container>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.procesos_judiciales.listado_procesos.eliminar"> Eliminar </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.procesos_judiciales.listado_procesos.eliminar ? 'accent' : 'warn'">
+                      {{ Permiso.procesos_judiciales.listado_procesos.eliminar ? 'check' : 'close' }} </mat-icon> &nbsp; Eliminar
+                  </ng-container>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.procesos_judiciales.listado_procesos.agregar_documentos"> Agregar documentos </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.procesos_judiciales.listado_procesos.agregar_documentos ? 'accent' : 'warn'">
+                      {{ Permiso.procesos_judiciales.listado_procesos.agregar_documentos ? 'check' : 'close' }} </mat-icon> &nbsp; Agregar documentos
+                  </ng-container>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.procesos_judiciales.listado_procesos.ver_cronograma"> Ver cronograma </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.procesos_judiciales.listado_procesos.ver_cronograma ? 'accent' : 'warn'">
+                      {{ Permiso.procesos_judiciales.listado_procesos.ver_cronograma ? 'check' : 'close' }} </mat-icon> &nbsp; Ver cronograma
+                  </ng-container>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.procesos_judiciales.listado_procesos.realizar_cronograma"> Realizar cronograma </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.procesos_judiciales.listado_procesos.realizar_cronograma ? 'accent' : 'warn'">
+                      {{ Permiso.procesos_judiciales.listado_procesos.realizar_cronograma ? 'check' : 'close' }} </mat-icon> &nbsp; Realizar cronograma
+                  </ng-container>
+                </mat-grid-tile>
+              </mat-grid-list>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+
+      <!-- Cobranzas -->
+      <ng-container>
+        <mat-card-title class="titulo-categoria">
+          Cobranzas
+          <span class="espacio"></span>
+          <ng-container *ngIf="!data.ver">
+            <mat-slide-toggle color="primary" [(ngModel)]="Permiso.cobranzas.general"
+              (change)="VerificarAtributosPadre('cobranzas', $event.checked)"></mat-slide-toggle>
+          </ng-container>
+          <ng-container *ngIf="data.ver">
+            <mat-icon *ngIf="Permiso.cobranzas.general" color="primary"> check </mat-icon>
+            <mat-icon *ngIf="!Permiso.cobranzas.general" color="warn"> close </mat-icon>
+          </ng-container>
+        </mat-card-title>
+        
+        <ng-container *ngIf="Permiso.cobranzas.general">
+          <!-- Cronograma -->
+          <ng-container>
+            <mat-card-subtitle class="subtitulo-categoria">
+              Cronograma
+              <span class="espacio"></span>
+              <ng-container *ngIf="!data.ver">
+                <mat-slide-toggle color="accent" [(ngModel)]="Permiso.cobranzas.cronograma.general"
+                  (change)="VerificarAtributosHijo('cobranzas','cronograma', $event.checked)"></mat-slide-toggle>
+              </ng-container>
+              <ng-container *ngIf="data.ver">
+                <mat-icon [color]="Permiso.cobranzas.cronograma.general ? 'accent' : 'warn' ">
+                  {{ Permiso.cobranzas.cronograma.general ? 'check' : 'close' }} </mat-icon>
+              </ng-container>
+            </mat-card-subtitle>
+        
+            <ng-container *ngIf="Permiso.cobranzas.cronograma.general">
+              <mat-grid-list cols="4" rowHeight="45px">
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.cobranzas.cronograma.editar"> Editar </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.cobranzas.cronograma.editar ? 'accent' : 'warn'">
+                      {{ Permiso.cobranzas.cronograma.editar ? 'check' : 'close' }} </mat-icon> &nbsp; Editar
+                  </ng-container>
+                </mat-grid-tile>
+              </mat-grid-list>
+            </ng-container>
+          </ng-container>
+
+          <!-- Clientes morosos -->
+          <ng-container>
+            <mat-card-subtitle class="subtitulo-categoria">
+              Clientes morosos
+              <span class="espacio"></span>
+              <ng-container *ngIf="!data.ver">
+                <mat-slide-toggle color="accent" [(ngModel)]="Permiso.cobranzas.clientes_morosos.general"
+                  (change)="VerificarAtributosHijo('cobranzas','clientes_morosos', $event.checked)"></mat-slide-toggle>
+              </ng-container>
+              <ng-container *ngIf="data.ver">
+                <mat-icon [color]="Permiso.cobranzas.clientes_morosos.general ? 'accent' : 'warn' ">
+                  {{ Permiso.cobranzas.clientes_morosos.general ? 'check' : 'close' }} </mat-icon>
+              </ng-container>
+            </mat-card-subtitle>
+          </ng-container>
+
+          <!-- Cobranza directa -->
+          <ng-container>
+            <mat-card-subtitle class="subtitulo-categoria">
+              Cobranzas Directas
+              <span class="espacio"></span>
+              <ng-container *ngIf="!data.ver">
+                <mat-slide-toggle color="accent" [(ngModel)]="Permiso.cobranzas.cobranzas_directas.general"
+                  (change)="VerificarAtributosHijo('cobranzas','cobranzas_directas', $event.checked)"></mat-slide-toggle>
+              </ng-container>
+              <ng-container *ngIf="data.ver">
+                <mat-icon [color]="Permiso.cobranzas.cobranzas_directas.general ? 'accent' : 'warn' ">
+                  {{ Permiso.cobranzas.cobranzas_directas.general ? 'check' : 'close' }} </mat-icon>
+              </ng-container>
+            </mat-card-subtitle>
+        
+            <ng-container *ngIf="Permiso.cobranzas.cobranzas_directas.general">
+              <mat-grid-list cols="4" rowHeight="45px">
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.cobranzas.cobranzas_directas.agregar"> Agregar </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.cobranzas.cobranzas_directas.agregar ? 'accent' : 'warn'">
+                      {{ Permiso.cobranzas.cobranzas_directas.agregar ? 'check' : 'close' }} </mat-icon> &nbsp; Agregar
+                  </ng-container>
+                </mat-grid-tile>
+
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.cobranzas.cobranzas_directas.editar"> Editar </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.cobranzas.cobranzas_directas.editar ? 'accent' : 'warn'">
+                      {{ Permiso.cobranzas.cobranzas_directas.editar ? 'check' : 'close' }} </mat-icon> &nbsp; Editar
+                  </ng-container>
+                </mat-grid-tile>
+
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.cobranzas.cobranzas_directas.eliminar"> Eliminar </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.cobranzas.cobranzas_directas.eliminar ? 'accent' : 'warn'">
+                      {{ Permiso.cobranzas.cobranzas_directas.eliminar ? 'check' : 'close' }} </mat-icon> &nbsp; Eliminar
+                  </ng-container>
+                </mat-grid-tile>
+              </mat-grid-list>
+            </ng-container>
+          </ng-container>
+
+          <!-- Cobranza planillas -->
+          <ng-container>
+            <mat-card-subtitle class="subtitulo-categoria">
+              Cobranzas por planilla
+              <span class="espacio"></span>
+              <ng-container *ngIf="!data.ver">
+                <mat-slide-toggle color="accent" [(ngModel)]="Permiso.cobranzas.cobranzas_planilla.general"
+                  (change)="VerificarAtributosHijo('cobranzas','cobranzas_planilla', $event.checked)"></mat-slide-toggle>
+              </ng-container>
+              <ng-container *ngIf="data.ver">
+                <mat-icon [color]="Permiso.cobranzas.cobranzas_planilla.general ? 'accent' : 'warn' ">
+                  {{ Permiso.cobranzas.cobranzas_planilla.general ? 'check' : 'close' }} </mat-icon>
+              </ng-container>
+            </mat-card-subtitle>
+        
+            <ng-container *ngIf="Permiso.cobranzas.cobranzas_planilla.general">
+              <mat-grid-list cols="4" rowHeight="45px">
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.cobranzas.cobranzas_planilla.agregar"> Agregar </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.cobranzas.cobranzas_planilla.agregar ? 'accent' : 'warn'">
+                      {{ Permiso.cobranzas.cobranzas_planilla.agregar ? 'check' : 'close' }} </mat-icon> &nbsp; Agregar
+                  </ng-container>
+                </mat-grid-tile>
+
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.cobranzas.cobranzas_planilla.eliminar"> Eliminar </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.cobranzas.cobranzas_planilla.eliminar ? 'accent' : 'warn'">
+                      {{ Permiso.cobranzas.cobranzas_planilla.eliminar ? 'check' : 'close' }} </mat-icon> &nbsp; Eliminar
+                  </ng-container>
+                </mat-grid-tile>
+
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.cobranzas.cobranzas_planilla.descargar_archivo"> Descargar archivo </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.cobranzas.cobranzas_planilla.descargar_archivo ? 'accent' : 'warn'">
+                      {{ Permiso.cobranzas.cobranzas_planilla.descargar_archivo ? 'check' : 'close' }} </mat-icon> &nbsp; Descargar archivo
+                  </ng-container>
+                </mat-grid-tile>
+
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.cobranzas.cobranzas_planilla.registrar_pago"> Registrar pago </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.cobranzas.cobranzas_planilla.registrar_pago ? 'accent' : 'warn'">
+                      {{ Permiso.cobranzas.cobranzas_planilla.registrar_pago ? 'check' : 'close' }} </mat-icon> &nbsp; Registrar pago
+                  </ng-container>
+                </mat-grid-tile>
+              </mat-grid-list>
+            </ng-container>
+          </ng-container>
+
+          <!-- Cobranza manuales -->
+          <ng-container>
+            <mat-card-subtitle class="subtitulo-categoria">
+              Cobranzas Manuales
+              <span class="espacio"></span>
+              <ng-container *ngIf="!data.ver">
+                <mat-slide-toggle color="accent" [(ngModel)]="Permiso.cobranzas.cobranzas_manuales.general"
+                  (change)="VerificarAtributosHijo('cobranzas','cobranzas_manuales', $event.checked)"></mat-slide-toggle>
+              </ng-container>
+              <ng-container *ngIf="data.ver">
+                <mat-icon [color]="Permiso.cobranzas.cobranzas_manuales.general ? 'accent' : 'warn' ">
+                  {{ Permiso.cobranzas.cobranzas_manuales.general ? 'check' : 'close' }} </mat-icon>
+              </ng-container>
+            </mat-card-subtitle>
+        
+            <ng-container *ngIf="Permiso.cobranzas.cobranzas_manuales.general">
+              <mat-grid-list cols="4" rowHeight="45px">
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.cobranzas.cobranzas_manuales.agregar"> Agregar </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.cobranzas.cobranzas_manuales.agregar ? 'accent' : 'warn'">
+                      {{ Permiso.cobranzas.cobranzas_manuales.agregar ? 'check' : 'close' }} </mat-icon> &nbsp; Agregar
+                  </ng-container>
+                </mat-grid-tile>
+
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.cobranzas.cobranzas_manuales.editar"> Editar </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.cobranzas.cobranzas_manuales.editar ? 'accent' : 'warn'">
+                      {{ Permiso.cobranzas.cobranzas_manuales.editar ? 'check' : 'close' }} </mat-icon> &nbsp; Editar
+                  </ng-container>
+                </mat-grid-tile>
+
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.cobranzas.cobranzas_manuales.eliminar"> Eliminar </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.cobranzas.cobranzas_manuales.eliminar ? 'accent' : 'warn'">
+                      {{ Permiso.cobranzas.cobranzas_manuales.eliminar ? 'check' : 'close' }} </mat-icon> &nbsp; Eliminar
+                  </ng-container>
+                </mat-grid-tile>
+              </mat-grid-list>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+
+      <!-- Tablas maestras -->
+      <ng-container>
+        <mat-card-title class="titulo-categoria">
+          Tablas maestras
+          <span class="espacio"></span>
+          <ng-container *ngIf="!data.ver">
+            <mat-slide-toggle color="primary" [(ngModel)]="Permiso.tablas_maestras.general"
+              (change)="VerificarAtributosPadre('tablas_maestras', $event.checked)"></mat-slide-toggle>
+          </ng-container>
+          <ng-container *ngIf="data.ver">
+            <mat-icon *ngIf="Permiso.tablas_maestras.general" color="primary"> check </mat-icon>
+            <mat-icon *ngIf="!Permiso.tablas_maestras.general" color="warn"> close </mat-icon>
+          </ng-container>
+        </mat-card-title>
+        
+        <ng-container *ngIf="Permiso.tablas_maestras.general">
+          <mat-grid-list cols="4" rowHeight="45px">
+            <mat-grid-tile>
+              <ng-container *ngIf="!data.ver">
+                <mat-checkbox [(ngModel)]="Permiso.tablas_maestras.usuarios"> Usuarios </mat-checkbox>
+              </ng-container>
+              <ng-container *ngIf="data.ver">
+                <mat-icon [color]="Permiso.tablas_maestras.usuarios ? 'accent' : 'warn'">
+                  {{ Permiso.tablas_maestras.usuarios ? 'check' : 'close' }} </mat-icon> &nbsp; Usuarios
+              </ng-container>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+              <ng-container *ngIf="!data.ver">
+                <mat-checkbox [(ngModel)]="Permiso.tablas_maestras.direcciones"> Direcciones </mat-checkbox>
+              </ng-container>
+              <ng-container *ngIf="data.ver">
+                <mat-icon [color]="Permiso.tablas_maestras.direcciones ? 'accent' : 'warn'">
+                  {{ Permiso.tablas_maestras.direcciones ? 'check' : 'close' }} </mat-icon> &nbsp; Direcciones
+              </ng-container>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+              <ng-container *ngIf="!data.ver">
+                <mat-checkbox [(ngModel)]="Permiso.tablas_maestras.instituciones"> Instituciones </mat-checkbox>
+              </ng-container>
+              <ng-container *ngIf="data.ver">
+                <mat-icon [color]="Permiso.tablas_maestras.instituciones ? 'accent' : 'warn'">
+                  {{ Permiso.tablas_maestras.instituciones ? 'check' : 'close' }} </mat-icon> &nbsp; Instituciones
+              </ng-container>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+              <ng-container *ngIf="!data.ver">
+                <mat-checkbox [(ngModel)]="Permiso.tablas_maestras.procesos_judiciales"> Procesos judiciales </mat-checkbox>
+              </ng-container>
+              <ng-container *ngIf="data.ver">
+                <mat-icon [color]="Permiso.tablas_maestras.procesos_judiciales ? 'accent' : 'warn'">
+                  {{ Permiso.tablas_maestras.procesos_judiciales ? 'check' : 'close' }} </mat-icon> &nbsp; Procesos judiciales
+              </ng-container>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+              <ng-container *ngIf="!data.ver">
+                <mat-checkbox [(ngModel)]="Permiso.tablas_maestras.plantillas"> Plantillas </mat-checkbox>
+              </ng-container>
+              <ng-container *ngIf="data.ver">
+                <mat-icon [color]="Permiso.tablas_maestras.plantillas ? 'accent' : 'warn'">
+                  {{ Permiso.tablas_maestras.plantillas ? 'check' : 'close' }} </mat-icon> &nbsp; Plantillas
+              </ng-container>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+              <ng-container *ngIf="!data.ver">
+                <mat-checkbox [(ngModel)]="Permiso.tablas_maestras.productos"> Productos </mat-checkbox>
+              </ng-container>
+              <ng-container *ngIf="data.ver">
+                <mat-icon [color]="Permiso.tablas_maestras.productos ? 'accent' : 'warn'">
+                  {{ Permiso.tablas_maestras.productos ? 'check' : 'close' }} </mat-icon> &nbsp; Productos
+              </ng-container>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+              <ng-container *ngIf="!data.ver">
+                <mat-checkbox [(ngModel)]="Permiso.tablas_maestras.proveedores"> Proveedores </mat-checkbox>
+              </ng-container>
+              <ng-container *ngIf="data.ver">
+                <mat-icon [color]="Permiso.tablas_maestras.proveedores ? 'accent' : 'warn'">
+                  {{ Permiso.tablas_maestras.proveedores ? 'check' : 'close' }} </mat-icon> &nbsp; Proveedores
+              </ng-container>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+              <ng-container *ngIf="!data.ver">
+                <mat-checkbox [(ngModel)]="Permiso.tablas_maestras.talonarios"> Talonarios </mat-checkbox>
+              </ng-container>
+              <ng-container *ngIf="data.ver">
+                <mat-icon [color]="Permiso.tablas_maestras.talonarios ? 'accent' : 'warn'">
+                  {{ Permiso.tablas_maestras.talonarios ? 'check' : 'close' }} </mat-icon> &nbsp; Talonarios
+              </ng-container>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+              <ng-container *ngIf="!data.ver">
+                <mat-checkbox [(ngModel)]="Permiso.tablas_maestras.trabajadores"> Trabajadores </mat-checkbox>
+              </ng-container>
+              <ng-container *ngIf="data.ver">
+                <mat-icon [color]="Permiso.tablas_maestras.trabajadores ? 'accent' : 'warn'">
+                  {{ Permiso.tablas_maestras.trabajadores ? 'check' : 'close' }} </mat-icon> &nbsp; Trabajadores
+              </ng-container>
+            </mat-grid-tile>
+          </mat-grid-list>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <mat-grid-list cols=1 rowHeight="70px">
+      <mat-grid-tile>
+        <button mat-raised-button color="primary" [disabled]="( Cargando | async )" (click)="Guardar()"> Guardar </button>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-card-actions>
+
+</mat-card>

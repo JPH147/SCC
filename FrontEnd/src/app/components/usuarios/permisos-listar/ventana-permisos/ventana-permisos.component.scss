@@ -1,0 +1,27 @@
+@import 'src/tema.scss';
+
+$primary: map-get($theme, primary) ;
+$accent: map-get($theme, accent) ;
+
+mat-card-content{
+  padding: 0 20px;
+}
+
+.titulo-categoria{
+  color: mat-color($primary) ;
+  display : flex ; // Para que el botón se vaya al extremo
+  margin-left: 20px;
+}
+
+.subtitulo-categoria{
+  color: mat-color($accent) ;
+  display : flex ; // Para que el botón se vaya al extremo
+  font-size: 20px;
+  margin-left: 20px;
+  margin-top: 10px !important;
+}
+
+mat-checkbox {
+  position: absolute;
+  left: 20px;
+}

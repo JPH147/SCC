@@ -16,6 +16,9 @@ import { EvaluacionService } from '../evaluacion/evaluacion.service';
 import { VentanaConfirmarComponent } from '../global/ventana-confirmar/ventana-confirmar.component';
 import { URLIMAGENES } from '../../components/global/url' ;
 import { ProcesoJudicialVinculadosService } from '../proceso-judicial-vinculados/proceso-judicial-vinculados.service';
+import { Store } from '@ngrx/store';
+import { EstadoSesion } from '../usuarios/usuarios.reducer';
+import { Rol } from '../usuarios/usuarios.service';
 
 @Component({
   selector: 'app-cobranza-judicial',
@@ -46,8 +49,10 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
   public editar_expediente : number = 3 ;
   public editar_juzgado : number = 3 ;
   public DocumentosTransaccion : Array<any> = [] ;
+  public permiso : Rol ;
 
   constructor(
+    private _store : Store<EstadoSesion> ,
     private router : Router ,
     private route : ActivatedRoute ,
     private Dialogo : MatDialog ,
@@ -62,6 +67,12 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit() {
+    this._store.select('permisos').subscribe(permiso =>{
+      if( permiso ) {
+        this.permiso = permiso ;
+      }
+    })
+
     this.CrearFormulario() ;
     this.ListarDistritosJudiciales() ;
 

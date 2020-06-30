@@ -47,7 +47,7 @@ export class ListadoSalidaVendedoresComponent implements OnInit {
     this.fecha_inicio = null ;
     this.fecha_fin = null ;
 
-    this.General.ListarSucursal(null,"").subscribe(res=>this.Sucursales=res)
+    this.General.ListarSucursal(0,"").subscribe(res=>this.Sucursales=res)
 
     this.ListadoSalida = new ListadoSalidaVendedoresDataSource(this.Servicio);
     this.ListadoSalida.CargarDatos("", null, this.fecha_inicio, this.fecha_fin, "","", 0,1, 10, "fecha desc");
@@ -55,16 +55,11 @@ export class ListadoSalidaVendedoresComponent implements OnInit {
 }
 
   ngAfterViewInit(){
-
-    this.paginator.page.subscribe(res => {
-      this.CargarData();
-    });
-
     merge(
-      this.sort.sortChange,
       fromEvent(this.FiltroPecosa.nativeElement,'keyup'),
       fromEvent(this.FiltroDestino.nativeElement,'keyup'),
-      fromEvent(this.FiltroVendedor.nativeElement,'keyup')
+      fromEvent(this.FiltroVendedor.nativeElement,'keyup'),
+      this.sort.sortChange,
     ).pipe(
        debounceTime(200),
        distinctUntilChanged(),
@@ -73,6 +68,16 @@ export class ListadoSalidaVendedoresComponent implements OnInit {
         this.CargarData();
        })
     ).subscribe();
+
+    this.paginator.page
+    .pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      tap(() => {
+       this.paginator.pageIndex = 0;
+       this.CargarData();
+      })
+   ).subscribe();
   }
 
   CargarGastos(salida){

@@ -21,7 +21,7 @@ export class UsuariosListarComponent implements OnInit {
   @ViewChild('InputRol', { static: true }) FiltroRol: ElementRef;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  public Columnas : Array<string> = ["numero", "nombre", "usuario", "opciones"] ;
+  public Columnas : Array<string> = ["numero", "nombre", "usuario", "perfil", "opciones"] ;
   public ListadoUsuarios : UsuariosDataSource ;
 
   constructor(
@@ -173,5 +173,4 @@ export class UsuariosDataSource implements DataSource<any> {
       this.Informacion.next(res['data'].usuarios);
     });
   }
-
 }

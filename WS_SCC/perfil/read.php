@@ -10,38 +10,30 @@
     $database = new Database();
     $db = $database->getConnection();
 
-try
-{
-    $perfil = new Perfil($db);
-    $result = $perfil->read();
-    $num = $result->rowCount();
-
-    if($num>0)
+    try
     {
-        $perfil_list=array();
-        $perfil_list["perfiles"]=array();
+        $perfil = new Perfil($db);
 
-        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        $perfil->nombre = !empty($_GET['prnombre']) ? trim($_GET['prnombre']) : "" ;
+        $perfil->numero_pagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : 1 ;
+        $perfil->total_pagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : 20 ;
+
+        $perfil_list = $perfil->read();
+        $perfil_total = $perfil->contar();
+
+        if (count($perfil_list)>0)
         {
-            extract($row);
-            $perfil_item = array (
-                "idperfil"=>$idperfil,
-                "prf_nombre"=>$prf_nombre
-            );
-
-            array_push($perfil_list["perfiles"],$perfil_item);
+            print_json("0000", $perfil_total, $perfil_list);
         }
-        print_json("0000", "OK", $perfil_list);
+        else
+        {
+            print_json("0001", "No existen usuarios registrados", 0);
+        }
     }
-    else
-    {
-        print_json("0001", "No existen perfiles registrados", null);
 
+    catch(Exception $exception)
+    {
+        print_json("9999", "Ocurrió un error", $exception->getMessage());
     }
-}
-catch(Exception $exception)
-{
-    print_json("9999", "Ocurrió un error", $exception->getMessage());
-}
 
 ?>

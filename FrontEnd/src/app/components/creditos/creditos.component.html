@@ -64,8 +64,10 @@
 
         <ng-container *ngIf="id_tipo>1">
           <mat-grid-tile *ngIf="!id_credito">
-            <button type="button" mat-icon-button color="primary" (click)="EditarCliente()" matTooltip="Editar cliente" [disabled]="!CreditosForm.value.id_cliente"> <mat-icon> edit </mat-icon> </button>
-            <button type="button" mat-icon-button color="primary" (click)="EditarContactoCliente()" matTooltip="Cambiar datos de contacto" [disabled]="!CreditosForm.value.id_cliente"> <mat-icon> local_phone </mat-icon> </button>
+            <ng-container *ngIf="permiso?.maestro_general?.clientes?.editar">
+              <button type="button" mat-icon-button color="primary" (click)="EditarCliente()" matTooltip="Editar cliente" [disabled]="!CreditosForm.value.id_cliente"> <mat-icon> edit </mat-icon> </button>
+              <button type="button" mat-icon-button color="primary" (click)="EditarContactoCliente()" matTooltip="Cambiar datos de contacto" [disabled]="!CreditosForm.value.id_cliente"> <mat-icon> local_phone </mat-icon> </button>
+            </ng-container>
             <mat-checkbox color="primary" formControlName="garante" (change)="HayGarante($event)" *ngIf="!id_presupuesto">Garante</mat-checkbox>
           </mat-grid-tile>
         </ng-container>
@@ -1327,7 +1329,9 @@
             <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
             <mat-cell *matCellDef="let cronograma">
               <button mat-icon-button color="primary" [disabled]="cronograma.monto_pagado==0" (click)="VerDetallePagos(cronograma)"> <mat-icon> visibility </mat-icon> </button>
-              <button mat-icon-button color="primary" [disabled]="cronograma.estado == 'Pagado'" (click)="RegistrarPago(cronograma)"> <mat-icon> payment </mat-icon> </button>
+              <ng-container *ngIf="permiso?.cobranzas?.cobranzas_manuales?.agregar">
+                <button mat-icon-button color="primary" [disabled]="cronograma.estado == 'Pagado'" (click)="RegistrarPago(cronograma)"> <mat-icon> payment </mat-icon> </button>
+              </ng-container>
             </mat-cell>
           </ng-container>
 

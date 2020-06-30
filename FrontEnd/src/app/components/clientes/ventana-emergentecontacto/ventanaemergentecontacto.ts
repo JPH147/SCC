@@ -11,6 +11,7 @@ import { ClienteService } from '../clientes.service'
 import {ServiciosVentas} from '../../global/ventas';
 import {catchError, finalize, debounceTime, distinctUntilChanged, tap} from 'rxjs/operators'
 import {VentanaConfirmarComponent} from '../../global/ventana-confirmar/ventana-confirmar.component';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-ventanaemergentecontacto',
@@ -21,6 +22,8 @@ import {VentanaConfirmarComponent} from '../../global/ventana-confirmar/ventana-
 
 // tslint:disable-next-line:component-class-suffix
 export class VentanaEmergenteContacto {
+  public Cargando = new BehaviorSubject<boolean>(false) ;
+
   // Telefonos
   public ListadoTelefonos: ClienteTelefonoDataSource;
   public ColumnasTelefonos: string[] = [ 'telefono-numero', 'telefono-tipo', 'telefono-numero_telefono', 'telefono-relevancia', 'telefono-opciones'];
@@ -165,20 +168,25 @@ export class VentanaEmergenteContacto {
   }
 
   AgregarTelefono(){
+    this.Cargando.next(true) ;
     this.ServicioTelefono.CrearTelefono(this.data, this.TelefonosForm.value.telefono, this.TelefonosForm.value.tipo).subscribe(res=>{
+      this.Cargando.next(false) ;
       this.CargarDataTelefonos();
     })
   }
 
   AgregarDireccion(){
+    this.Cargando.next(true) ;
     this.ServicioDireccion.CrearDireccion(this.data, this.DireccionesForm.value.nombre, this.DireccionesForm.value.distrito).subscribe(res=>{
-      // console.log(res)
+      this.Cargando.next(false) ;
       this.CargarDataDirecciones();
     })
   }
 
   AgregarCuenta(){
+    this.Cargando.next(true) ;
     this.Servicio.CrearCuenta(this.data, this.CuentasForm.value.banco, this.CuentasForm.value.cuenta, this.CuentasForm.value.cci).subscribe(res=>{
+      this.Cargando.next(false) ;
       this.CargarDataCuentas();
     })
   }

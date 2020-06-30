@@ -12,18 +12,20 @@
   <form [formGroup]="UsuariosForm">
     <ng-container *ngIf="!this.data?.pss">
       <mat-card-content>
-        <mat-grid-list cols=2 rowHeight="70px">
+        <mat-grid-list [cols]="this.data ? 3 : 2" rowHeight="70px">
           <mat-grid-tile colspan=1>
             <mat-form-field class="columnas-1">
               <input matInput type="text" formControlName="nombre" placeholder="Apellidos y nombres">
             </mat-form-field>
           </mat-grid-tile>
           
-          <!-- <mat-grid-tile colspan=1>
+          <mat-grid-tile colspan=1>
             <mat-form-field class="columnas-1">
-              <input matInput type="text" formControlName="perfil" placeholder="Perfil">
+              <mat-select placeholder="Perfil" formControlName="perfil">
+                <mat-option *ngFor="let perfil of Perfiles" [value]="perfil.id_perfil"> {{ perfil.nombre }} </mat-option>
+              </mat-select>
             </mat-form-field>
-          </mat-grid-tile> -->
+          </mat-grid-tile>
           
           <mat-grid-tile colspan=1>
             <mat-form-field class="columnas-1">
@@ -54,6 +56,9 @@
 
     <mat-card-actions>
       <mat-grid-list cols=1 rowHeight="70px">
+        <mat-grid-tile *ngIf="!this.UsuariosForm.get('usuario_unico').value">
+          <mat-error> El nombre de usuario ya existe </mat-error>
+        </mat-grid-tile>
         <mat-grid-tile>
           <button mat-raised-button color="primary" (click)="Guardar()" [disabled]=" UsuariosForm.invalid || (Cargando | async) "> Guardar </button>
         </mat-grid-tile>

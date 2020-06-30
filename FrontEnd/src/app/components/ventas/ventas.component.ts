@@ -26,6 +26,9 @@ import { SeguimientosService } from "../seguimientos/seguimientos.service";
 import { VentanaPagosComponent } from '../cobranzas-listar/ventana-pagos/ventana-pagos.component';
 import { VentanaEmergenteClientes } from '../clientes/ventana-emergente/ventanaemergente' ;
 import { VentanaCrearCobranzaManualComponent } from "../cobranza-manual/ventana-crear-cobranza-manual/ventana-crear-cobranza-manual.component";
+import { Rol } from "../usuarios/usuarios.service";
+import { Store } from "@ngrx/store";
+import { EstadoSesion } from "../usuarios/usuarios.reducer";
 
 @Component({
   selector: 'app-ventas',
@@ -147,7 +150,10 @@ export class VentasComponent implements OnInit {
   public id_presupuesto : number ;
   public hay_presupuesto_vendedor : boolean ;
 
+  public permiso : Rol ;
+
   constructor(
+    private _store : Store<EstadoSesion> ,
     private Servicio: VentaService,
     private ClienteServicio: ClienteService,
     private DireccionServicio: ServiciosDirecciones,
@@ -166,6 +172,11 @@ export class VentasComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this._store.select('permisos').subscribe(permiso =>{
+      if( permiso ) {
+        this.permiso = permiso ;
+      }
+    })
 
     this.contador = 1;
     this.Series=[];

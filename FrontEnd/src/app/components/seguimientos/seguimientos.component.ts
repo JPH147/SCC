@@ -10,6 +10,9 @@ import { VentanaSeguimientosComponent } from './ventana-seguimientos/ventana-seg
 import { VentanaEntregaSeguimientosComponent } from './ventana-entrega-seguimientos/ventana-entrega-seguimientos.component';
 import { VentanaConfirmarComponent } from '../global/ventana-confirmar/ventana-confirmar.component';
 import { Notificaciones } from '../global/notificacion';
+import { Store } from '@ngrx/store';
+import { EstadoSesion } from '../usuarios/usuarios.reducer';
+import { Rol } from '../usuarios/usuarios.service';
 
 @Component({
   selector: 'app-seguimientos',
@@ -19,25 +22,32 @@ import { Notificaciones } from '../global/notificacion';
 
 export class SeguimientosComponent implements OnInit {
 
-  public fecha_inicio: Date;
-  public fecha_fin: Date;
-
-  public ListadoSeguimientos: SeguimientosDataSource;
-  public Columnas: string[] = ['numero', 'fecha', 'documento', 'cliente', 'courier', 'numero_seguimiento', 'estado', 'opciones'];
-
   @ViewChild('InputCliente', { static: true }) FiltroCliente: ElementRef;
   @ViewChild('InputNumero', { static: true }) FiltroNumero: ElementRef;
   @ViewChild('InputCourier', { static: true }) FiltroCourier: ElementRef;
   @ViewChild('InputEstado', { static: true }) FiltroEstado: MatSelect;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-
+  
+  public Columnas: string[] = ['numero', 'fecha', 'documento', 'cliente', 'courier', 'numero_seguimiento', 'estado', 'opciones'];
+  public fecha_inicio: Date;
+  
+  public fecha_fin: Date;
+  public ListadoSeguimientos: SeguimientosDataSource;
+  public permiso : Rol ;
+  
   constructor(
+    private _store : Store<EstadoSesion> ,
     private Dialogo : MatDialog ,
     private Notificacion : Notificaciones ,
-    private Servicio : SeguimientosService
+    private Servicio : SeguimientosService ,
   ) { }
 
   ngOnInit() {
+    this._store.select('permisos').subscribe(permiso =>{
+      if( permiso ) {
+        this.permiso = permiso ;
+      }
+    })
 
     this.fecha_inicio = null ;
     this.fecha_fin = null ;

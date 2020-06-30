@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { DetalleDocumentoAlmacenService } from '../detalle-documento-almacen.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-ventana-editar-documento',
@@ -12,6 +13,8 @@ import { DetalleDocumentoAlmacenService } from '../detalle-documento-almacen.ser
   providers: [ DetalleDocumentoAlmacenService, ServiciosGenerales ]
 })
 export class VentanaEditarDocumentoComponent implements OnInit {
+
+  public Cargando = new BehaviorSubject<boolean>(false) ;
 
   public proveedores : Array<any> ;
   public DocumentoForm : FormGroup ;

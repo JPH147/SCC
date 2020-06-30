@@ -58,6 +58,7 @@ import { LoginComponent } from './login/login.component';
 import { CobranzaClienteListarMorososComponent } from './components/cobranza-cliente-listar-morosos/cobranza-cliente-listar-morosos.component';
 import { CobranzaManualComponent } from './components/cobranza-manual/cobranza-manual.component';
 import { CobranzaManualListarComponent } from './components/cobranza-manual-listar/cobranza-manual-listar.component';
+import { PermisosListarComponent } from './components/usuarios/permisos-listar/permisos-listar.component';
 
 export const appRoutes: Routes = [
   {path: '', redirectTo: 'inicio', pathMatch: 'full'},
@@ -81,7 +82,7 @@ export const appRoutes: Routes = [
   {path: 'salidavendedores/retorno/:idsalida', component: RetornoVendedoresCierreComponent},
   {path: 'comisiones', component: ComisionesComponent},
   {path: 'clientes', component: ClientesComponent},
-  {path: 'vendedores', component: VendedoresComponent},
+  {path: 'trabajadores', component: VendedoresComponent},
   {path: 'talonarios', component: TalonariosComponent},
   {path: 'ventas', component: VentasListarComponent},
   {path: 'ventas/nueva', component: VentasComponent},
@@ -139,7 +140,7 @@ export const appRoutes: Routes = [
   {path: 'plantillas', component: PlantillasComponent},
   {path: 'usuarios', component: UsuariosComponent},
   
-  {path: 'prueba', component: CobranzaDirectaComponent},
+  {path: 'prueba', component: PermisosListarComponent},
 ];
 
 

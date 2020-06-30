@@ -309,7 +309,7 @@
     
         <mat-grid-tile>
           <mat-form-field class="formulario">
-            <input matInput #fechainicio [matDatepicker]="fechainicio" placeholder="Fecha" formControlName="gasto_fecha">
+            <input matInput [matDatepicker]="fechainicio" placeholder="Fecha" formControlName="gasto_fecha">
             <mat-datepicker-toggle matSuffix [for]="fechainicio"></mat-datepicker-toggle>
             <mat-datepicker #fechainicio></mat-datepicker>
           </mat-form-field>
@@ -421,7 +421,7 @@
 
           <mat-grid-tile *ngIf="id_salida_editar">
             <mat-form-field class="formulario">
-              <input matInput #fecha_talonarios [matDatepicker]="fecha_talonarios" placeholder="Fecha de entrega" formControlName="fecha_talonarios">
+              <input matInput [matDatepicker]="fecha_talonarios" placeholder="Fecha de entrega" formControlName="fecha_talonarios">
               <mat-datepicker-toggle matSuffix [for]="fecha_talonarios"></mat-datepicker-toggle>
               <mat-datepicker #fecha_talonarios></mat-datepicker>
             </mat-form-field>
@@ -685,7 +685,7 @@
 
           <mat-grid-tile>
             <mat-form-field>
-                <input matInput #fechaproducto [matDatepicker]="fechaproducto" placeholder="Fecha de entrega" formControlName="fecha_productos">
+                <input matInput [matDatepicker]="fechaproducto" placeholder="Fecha de entrega" formControlName="fecha_productos">
                 <mat-datepicker-toggle matSuffix [for]="fechaproducto"></mat-datepicker-toggle>
                 <mat-datepicker #fechaproducto></mat-datepicker>
             </mat-form-field>

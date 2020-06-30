@@ -8,6 +8,9 @@ import {merge, Observable, of as observableOf, from, fromEvent} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap, delay, catchError, map, startWith, switchMap} from 'rxjs/operators';
 import {ServiciosGenerales} from '../global/servicios';
 import * as moment from 'moment';
+import { Rol } from '../usuarios/usuarios.service';
+import { Store } from '@ngrx/store';
+import { EstadoSesion } from '../usuarios/usuarios.reducer';
 
 @Component({
   selector: 'app-historial-movimientos',
@@ -32,12 +35,20 @@ export class HistorialMovimientosComponent implements OnInit {
   ListadoMovimientos: HistorialMovimientosDataService;
   Columnas: string[] = ['numero', 'movimiento','tipo','almacen', 'referencia', 'referente', 'documento', 'fecha', 'opciones'];
 
+  public permiso : Rol ;
+
   constructor(
+    private _store : Store<EstadoSesion> ,
   	private Servicio: HistorialMovimientosService,
     private SGenerales: ServiciosGenerales
   ) { }
 
   ngOnInit() {
+    this._store.select('permisos').subscribe(permiso =>{
+      if( permiso ) {
+        this.permiso = permiso ;
+      }
+    })
 
   	this.fecha_inicio = null ;
   	this.fecha_fin = null ;

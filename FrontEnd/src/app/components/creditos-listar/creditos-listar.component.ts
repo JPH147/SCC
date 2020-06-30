@@ -9,6 +9,9 @@ import { CreditosService } from '../creditos/creditos.service';
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
 import { CobranzaJudicialService } from '../cobranza-judicial/cobranza-judicial.service';
+import { EstadoSesion } from '../usuarios/usuarios.reducer';
+import { Store } from '@ngrx/store';
+import { Rol } from '../usuarios/usuarios.service';
 
 @Component({
   selector: 'app-creditos-listar',
@@ -18,14 +21,6 @@ import { CobranzaJudicialService } from '../cobranza-judicial/cobranza-judicial.
 })
 export class CreditosListarComponent implements OnInit {
 
-  public fecha_inicio: Date;
-  public fecha_fin: Date;
-  public Tipos : Array<any>;
-  public ListadoProcesos : Array<any> = [] ;
-
-  public ListadoCreditos: CreditosDataSource;
-  public Columnas: string[] = ['numero', 'fecha', 'codigo', 'cliente_nombre', 'tipo_credito', 'monto_total', 'documentos_adjuntos', 'opciones'];
-
   @ViewChild('InputCliente', { static: true }) FiltroCliente: ElementRef;
   @ViewChild('InputDNI', { static: true }) FiltroDNI: ElementRef;
   @ViewChild('InputTipo', { static: true }) FiltroTipo: MatSelect;
@@ -34,13 +29,29 @@ export class CreditosListarComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
+  public ListadoCreditos: CreditosDataSource;
+  public Columnas: string[] = ['numero', 'fecha', 'codigo', 'cliente_nombre', 'tipo_credito', 'monto_total', 'documentos_adjuntos', 'opciones'];
+  
+  public fecha_inicio: Date;
+  public fecha_fin: Date;
+  public Tipos : Array<any>;
+  public ListadoProcesos : Array<any> = [] ;
+
+  public permiso : Rol ;
+
   constructor(
+    private _store : Store<EstadoSesion> ,
     private Servicio: CreditosService,
     private Dialogo : MatDialog,
     private _judiciales : CobranzaJudicialService
   ) { }
 
   ngOnInit() {
+    this._store.select('permisos').subscribe(permiso =>{
+      if( permiso ) {
+        this.permiso = permiso ;
+      }
+    })
 
     this.ListarTiposCredito();
 

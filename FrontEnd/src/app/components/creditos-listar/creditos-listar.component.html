@@ -66,7 +66,9 @@
     </mat-grid-tile>
     
     <mat-grid-tile>
-      <button mat-raised-button color="primary" [routerLink]="['nuevo']"> Nuevo </button>
+      <ng-container *ngIf="permiso?.creditos?.listado_creditos?.agregar">
+        <button mat-raised-button color="primary" [routerLink]="['nuevo']"> Nuevo </button>
+      </ng-container>
     </mat-grid-tile>
 
   </mat-grid-list>
@@ -121,25 +123,31 @@
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let credito">
           <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="['ver', credito.id]"><mat-icon> visibility </mat-icon></button>
-          <button mat-icon-button color="primary" matTooltip="Editar" [routerLink]="['editar', credito.id]"
-            [disabled]="credito.monto_pagado>0 || credito.estado!=1 || credito.tipo_credito == 'Aporte de socio' || credito.id_proceso_judicial"><mat-icon> edit </mat-icon></button>
-          <button mat-icon-button color="primary" [matMenuTriggerFor]="menu3" (click)="ListarProcesos(credito.id)"
-            [disabled]="credito.estado!=1">
-            <mat-icon [matBadge]="credito.numero_procesos" [matBadgeHidden]="credito.numero_procesos==0 || credito.estado!=1" matBadgeSize="small" matBadgeColor="accent"> gavel </mat-icon>
-          </button>
-          <mat-menu #menu3="matMenu">
-            <button mat-menu-item *ngFor="let proceso of ListadoProcesos" [routerLink]="['../cobranza-judicial','ver',proceso.id_proceso]">
-              <ng-container *ngIf="proceso.id_tipo_documento==0"> <mat-icon class="icono-primario" matTooltip="Ya tiene cronograma"> star </mat-icon> </ng-container>
-              <ng-container *ngIf="proceso.id_tipo_documento==1"> <mat-icon matTooltip="Aún no hay documentos"> fiber_manual_record </mat-icon> </ng-container>
-              <ng-container *ngIf="proceso.id_tipo_documento==2"> <mat-icon class="icono-ambar" matTooltip="Se presentó un escrito"> info </mat-icon> </ng-container>
-              <ng-container *ngIf="proceso.id_tipo_documento==3"> <mat-icon class="icono-rojo" matTooltip="Se emitió una resolución"> error </mat-icon> </ng-container>
-              <ng-container *ngIf="proceso.id_tipo_documento==4"> <mat-icon class="icono-verde" matTooltip="Se emitió el oficio"> check_circle </mat-icon> </ng-container>
-              {{proceso.expediente}}
+          <ng-container *ngIf="permiso?.creditos?.listado_creditos?.editar">
+            <button mat-icon-button color="primary" matTooltip="Editar" [routerLink]="['editar', credito.id]"
+              [disabled]="credito.monto_pagado>0 || credito.estado!=1 || credito.tipo_credito == 'Aporte de socio' || credito.id_proceso_judicial"><mat-icon> edit </mat-icon></button>
+          </ng-container>
+          <ng-container *ngIf="permiso?.creditos?.listado_creditos?.abrir_procesos">
+            <button mat-icon-button color="primary" [matMenuTriggerFor]="menu3" (click)="ListarProcesos(credito.id)"
+              [disabled]="credito.estado!=1">
+              <mat-icon [matBadge]="credito.numero_procesos" [matBadgeHidden]="credito.numero_procesos==0 || credito.estado!=1" matBadgeSize="small" matBadgeColor="accent"> gavel </mat-icon>
             </button>
-            <button mat-menu-item [routerLink]="['../cobranza-judicial','nueva-credito',credito.id]" > <mat-icon> add </mat-icon> Nuevo proceso </button>
-          </mat-menu>
-          <button mat-icon-button color="primary" matTooltip="Anular"
-            [disabled]="credito.monto_pagado>0 || credito.estado!=1 || credito.id_proceso_judicial" (click)="AnularCredito(credito)"><mat-icon> delete </mat-icon></button>
+            <mat-menu #menu3="matMenu">
+              <button mat-menu-item *ngFor="let proceso of ListadoProcesos" [routerLink]="['../cobranza-judicial','ver',proceso.id_proceso]">
+                <ng-container *ngIf="proceso.id_tipo_documento==0"> <mat-icon class="icono-primario" matTooltip="Ya tiene cronograma"> star </mat-icon> </ng-container>
+                <ng-container *ngIf="proceso.id_tipo_documento==1"> <mat-icon matTooltip="Aún no hay documentos"> fiber_manual_record </mat-icon> </ng-container>
+                <ng-container *ngIf="proceso.id_tipo_documento==2"> <mat-icon class="icono-ambar" matTooltip="Se presentó un escrito"> info </mat-icon> </ng-container>
+                <ng-container *ngIf="proceso.id_tipo_documento==3"> <mat-icon class="icono-rojo" matTooltip="Se emitió una resolución"> error </mat-icon> </ng-container>
+                <ng-container *ngIf="proceso.id_tipo_documento==4"> <mat-icon class="icono-verde" matTooltip="Se emitió el oficio"> check_circle </mat-icon> </ng-container>
+                {{proceso.expediente}}
+              </button>
+              <button mat-menu-item [routerLink]="['../cobranza-judicial','nueva-credito',credito.id]" > <mat-icon> add </mat-icon> Nuevo proceso </button>
+            </mat-menu>
+          </ng-container>
+          <ng-container *ngIf="permiso?.creditos?.listado_creditos?.eliminar">
+            <button mat-icon-button color="primary" matTooltip="Anular"
+              [disabled]="credito.monto_pagado>0 || credito.estado!=1 || credito.id_proceso_judicial" (click)="AnularCredito(credito)"><mat-icon> delete </mat-icon></button>
+          </ng-container>
         </mat-cell>
       </ng-container>
 
