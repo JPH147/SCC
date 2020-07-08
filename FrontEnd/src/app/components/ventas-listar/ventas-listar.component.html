@@ -113,15 +113,15 @@
         <mat-cell *matCellDef="let venta">
           <ng-container *ngIf="venta.tipo_venta!='Salida'">
             <ng-container>
-              <button mat-icon-button [matMenuTriggerFor]="menu1" color="primary" matTooltip="Ver documento" ><mat-icon> visibility </mat-icon></button>
-              <mat-menu #menu1="matMenu">
+              <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="[venta.id]"><mat-icon> visibility </mat-icon></button>
+              <!-- <mat-menu #menu1="matMenu">
                 <button mat-menu-item [routerLink]="[venta.id]">Documento completo</button>
-                <!-- <button mat-menu-item>Cronograma de pagos</button> -->
-              </mat-menu>
+                <button mat-menu-item>Cronograma de pagos</button>
+              </mat-menu> -->
             </ng-container>
             <ng-container  *ngIf="permiso?.ventas?.listado_ventas?.editar">
               <button mat-icon-button color="primary" matTooltip="Editar" [routerLink]="['editar', venta.id]"
-                [disabled]="venta.monto_pagado>0 || venta.estado!=1 || venta.id_proceso_judicial"><mat-icon> edit </mat-icon></button>
+                [disabled]="venta.monto_pagado>0 || venta.estado!=1 || venta.numero_procesos>0"><mat-icon> edit </mat-icon></button>
             </ng-container>
             <ng-container  *ngIf="permiso?.ventas?.listado_ventas?.realizar_canjes">
               <button mat-icon-button color="primary" matTooltip="Canjear" [disabled]="venta.estado!=1"
@@ -152,15 +152,15 @@
           
           <ng-container *ngIf="venta.tipo_venta=='Salida'">
             <ng-container>
-              <button mat-icon-button [matMenuTriggerFor]="menu2" color="primary" matTooltip="Ver documento" ><mat-icon> visibility </mat-icon></button>
-              <mat-menu #menu2="matMenu">
+              <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="['salida',venta.id]"><mat-icon> visibility </mat-icon></button>
+              <!-- <mat-menu #menu2="matMenu">
                 <button mat-menu-item [routerLink]="['salida', venta.id]">Documento completo</button>
-                <!-- <button mat-menu-item>Cronograma de pagos</button> -->
-              </mat-menu>
+                <button mat-menu-item>Cronograma de pagos</button>
+              </mat-menu> -->
             </ng-container>
             <ng-container  *ngIf="permiso?.ventas?.listado_ventas?.editar">
               <button mat-icon-button color="primary" matTooltip="Editar" [routerLink]="['salida', 'editar', venta.id]"
-                [disabled]="venta.monto_pagado>0 || venta.estado!=1 || venta.id_proceso_judicial"><mat-icon> edit </mat-icon></button>
+                [disabled]="venta.monto_pagado>0 || venta.estado!=1 || venta.numero_procesos>0"><mat-icon> edit </mat-icon></button>
             </ng-container>
             <button mat-icon-button color="primary" matTooltip="Canjear" [disabled]="true"><mat-icon> import_export </mat-icon></button>
             <ng-container  *ngIf="permiso?.ventas?.listado_ventas?.abrir_procesos">

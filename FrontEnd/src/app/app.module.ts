@@ -153,7 +153,7 @@ import { CourierComponent } from './components/courier/courier.component';
 import { VentanaCourierComponent } from './components/courier/ventana-courier/ventana-courier.component';
 import { CreditosListarAfiliacionesComponent } from './components/creditos-listar-afiliaciones/creditos-listar-afiliaciones.component';
 import { PlantillasComponent } from './components/plantillas/plantillas.component';
-import { VentanaPlantillasComponent } from './components/plantillas/ventana-plantillas/ventana-plantillas.component';
+import { VentanaPlantillasComponent } from './components/plantillas/documentos/ventana-plantillas/ventana-plantillas.component';
 import { RefinanciamientoComponent } from './components/refinanciamiento/refinanciamiento.component';
 import { VerPlantillasComponent } from './components/evaluacion/ver-plantillas/ver-plantillas.component';
 import { CobranzaDirectaComponent } from './components/cobranza-directa/cobranza-directa.component';
@@ -217,6 +217,10 @@ import { VentanaEditarCuotasComponent } from './components/cobranza-archivos/cob
 import { CobranzaManualComponent } from './components/cobranza-manual/cobranza-manual.component';
 import { VentanaCrearCobranzaManualComponent } from './components/cobranza-manual/ventana-crear-cobranza-manual/ventana-crear-cobranza-manual.component';
 import { CobranzaManualListarComponent } from './components/cobranza-manual-listar/cobranza-manual-listar.component';
+import { CooperativaConfiguracionComponent } from './components/cooperativa-configuracion/cooperativa-configuracion.component';
+import { CooperativaDireccionesComponent } from './components/plantillas/cooperativa-direcciones/cooperativa-direcciones.component';
+import { VentanaCooperativaDireccionesComponent } from './components/plantillas/cooperativa-direcciones/ventana-cooperativa-direcciones/ventana-cooperativa-direcciones.component';
+import { DocumentosComponent } from './components/plantillas/documentos/documentos.component';
 
 export const CUSTOM_DATE_FORMAT = {
   parse: {
@@ -446,7 +450,11 @@ export const CUSTOM_DATE_FORMAT = {
     VentanaEditarCuotasComponent,
     CobranzaManualComponent,
     VentanaCrearCobranzaManualComponent,
-    CobranzaManualListarComponent
+    CobranzaManualListarComponent,
+    CooperativaConfiguracionComponent,
+    CooperativaDireccionesComponent,
+    VentanaCooperativaDireccionesComponent,
+    DocumentosComponent
    ],
   entryComponents: [
     AppComponent,

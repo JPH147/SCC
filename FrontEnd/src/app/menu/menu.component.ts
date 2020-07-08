@@ -21,8 +21,27 @@ export class MenuComponent implements OnInit{
     this._store.select('permisos').subscribe(permiso =>{
       if ( permiso ) {
         this.CrearMenu(permiso) ;
+      } else {
+        // this.CrearRecuperacion() ;
       }
     })
+  }
+
+  CrearRecuperacion(){
+    this.Menu=[
+      {
+        nombre: "Tablas maestras",
+        icono: "table_chart",
+        mostrar : true ,
+        submenu:[
+          {
+            nombre: "Usuarios",
+            path: "usuarios",
+            mostrar : true ,
+          },
+        ]
+      },
+    ]
   }
 
   CrearMenu( permiso : Rol ) {
@@ -43,7 +62,7 @@ export class MenuComponent implements OnInit{
           //   path: "evaluacion"
           // },
           {
-            nombre: "Evaluación",
+            nombre: "Transacciones",
             path: "evaluacion-express",
             mostrar : true ,
           },
@@ -153,20 +172,25 @@ export class MenuComponent implements OnInit{
         icono: "gavel",
         mostrar: permiso.cobranzas.general,
         submenu:[
+          // {
+          //   nombre: "Cronograma de pagos",
+          //   path: "cobranzas" ,
+          //   mostrar : permiso.cobranzas.cronograma.general ,
+          // },
+          // {
+          //   nombre: "Clientes morosos I",
+          //   path: "cobranzas-cliente" ,
+          //   mostrar : permiso.cobranzas.clientes_morosos.general ,
+          // },
+          // {
+          //   nombre: "Clientes muy morosos II",
+          //   path: "cobranzas-cliente-morosos" ,
+          //   mostrar : permiso.cobranzas.clientes_morosos.general ,
+          // },
           {
-            nombre: "Cronograma de pagos",
-            path: "cobranzas" ,
-            mostrar : permiso.cobranzas.cronograma.general ,
-          },
-          {
-            nombre: "Clientes morosos I",
-            path: "cobranzas-cliente" ,
-            mostrar : permiso.cobranzas.clientes_morosos.general ,
-          },
-          {
-            nombre: "Clientes muy morosos II",
-            path: "cobranzas-cliente-morosos" ,
-            mostrar : permiso.cobranzas.clientes_morosos.general ,
+            nombre: "Cobranzas por planilla",
+            path: "cobranza-archivos" ,
+            mostrar : permiso.cobranzas.cobranzas_planilla.general ,
           },
           {
             nombre: "Cobranzas directas",
@@ -174,14 +198,14 @@ export class MenuComponent implements OnInit{
             mostrar : permiso.cobranzas.cobranzas_directas.general ,
           },
           {
-            nombre: "Cobranzas por planilla",
-            path: "cobranza-archivos" ,
-            mostrar : permiso.cobranzas.cobranzas_planilla.general ,
-          },
-          {
             nombre: "Cobranzas manuales",
             path: "cobranza-manual" ,
             mostrar : permiso.cobranzas.cobranzas_manuales.general ,
+          },
+          {
+            nombre: "Cobranzas judiciales",
+            path: "" ,
+            mostrar : permiso.procesos_judiciales.listado_procesos.general ,
           },
         ]
       },
@@ -210,11 +234,18 @@ export class MenuComponent implements OnInit{
         nombre: "Tablas maestras",
         icono: "table_chart",
         mostrar: permiso.tablas_maestras.general ,
+        // mostrar : true ,
         submenu:[
+          {
+            nombre: "Cooperativa",
+            path: "configuracion",
+            mostrar : permiso.tablas_maestras.cooperativa ,
+          },
           {
             nombre: "Usuarios",
             path: "usuarios",
             mostrar : permiso.tablas_maestras.usuarios ,
+            // mostrar : true ,
           },
           {
             nombre: "Departamentos",

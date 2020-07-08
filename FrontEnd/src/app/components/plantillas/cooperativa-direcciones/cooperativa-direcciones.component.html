@@ -1,0 +1,106 @@
+<mat-card>
+
+  <mat-card-title>
+    <div class = "tituloProd"> Listado de direcciones</div>
+  </mat-card-title>
+
+  <form [formGroup]="DireccionForm">
+    <mat-grid-list cols=4 rowHeight="70px">
+      <mat-grid-tile>
+        <mat-icon>search</mat-icon>
+        <mat-form-field class="columnas-1">
+          <input matInput placeholder="Departamento" formControlName="departamento">
+        </mat-form-field>
+      </mat-grid-tile>
+  
+      <mat-grid-tile>
+        <mat-icon>search</mat-icon>
+        <mat-form-field class="columnas-1">
+          <input matInput placeholder="Provincia" formControlName="provincia">
+        </mat-form-field>
+      </mat-grid-tile>
+    
+      <mat-grid-tile>
+        <mat-icon>search</mat-icon>
+        <mat-form-field class="columnas-1">
+          <input matInput placeholder="Distrito" formControlName="distrito">
+        </mat-form-field>
+      </mat-grid-tile>
+    
+      <mat-grid-tile>
+        <mat-icon>search</mat-icon>
+        <mat-form-field class="columnas-1">
+          <input matInput placeholder="Direccion" formControlName="direccion">
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <mat-icon>search</mat-icon>
+        <mat-form-field class="columnas-1">
+          <mat-select placeholder="Transaccion" formControlName="relevancia">
+            <mat-option [value]="0"> Todas </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <mat-icon>search</mat-icon>
+        <mat-form-field class="columnas-1">
+          <mat-select placeholder="Principal" formControlName="principal">
+            <mat-option [value]="0"> Todas </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </form>
+
+  <mat-card-content>
+
+    <div class = "spinner-container" *ngIf = "ListadoDirecciones.Cargando| async">
+      <mat-spinner></mat-spinner>
+    </div>
+
+    <mat-table [dataSource]="ListadoDirecciones" class="mat-elevation-z8">
+
+      <ng-container matColumnDef="numero">
+        <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+        <mat-cell *matCellDef="let direccion"> {{direccion.numero}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="departamento">
+        <mat-header-cell *matHeaderCellDef> Departamento </mat-header-cell>
+        <mat-cell *matCellDef="let direccion"> {{direccion.departamento}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="provincia">
+        <mat-header-cell *matHeaderCellDef> Provincia </mat-header-cell>
+        <mat-cell *matCellDef="let direccion"> {{direccion.provincia}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="distrito">
+        <mat-header-cell *matHeaderCellDef> Distrito </mat-header-cell>
+        <mat-cell *matCellDef="let direccion"> {{direccion.distrito}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="cooperativa_direccion">
+        <mat-header-cell *matHeaderCellDef> Dirección </mat-header-cell>
+        <mat-cell *matCellDef="let direccion"> {{direccion.cooperativa_direccion}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="opciones">
+        <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
+        <mat-cell *matCellDef="let direccion">
+          <button mat-icon-button color="primary" (click)="Editar(direccion)" matTooltip="Editar" matTooltip="Editar"><mat-icon> edit </mat-icon></button>
+          <!-- <button mat-icon-button color="primary" (click)="Eliminar(direccion)" matTooltip="Eliminar" matTooltip="Eliminar"><mat-icon> delete </mat-icon></button> -->
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: Columnas;"></mat-row>
+    </mat-table>
+
+    <mat-paginator [length]="ListadoDirecciones.TotalResultados | async" [pageSize]="10" [pageSizeOptions]="[10,15,20]">
+    </mat-paginator>
+    
+  </mat-card-content>
+</mat-card>

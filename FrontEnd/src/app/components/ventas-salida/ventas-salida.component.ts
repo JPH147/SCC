@@ -28,6 +28,8 @@ import { VentanaCrearCobranzaManualComponent } from "../cobranza-manual/ventana-
 import { Rol } from "../usuarios/usuarios.service";
 import { EstadoSesion } from "../usuarios/usuarios.reducer";
 import { Store } from "@ngrx/store";
+import { VentanaConfirmarComponent } from "../global/ventana-confirmar/ventana-confirmar.component";
+import { CobranzaJudicialService } from "../cobranza-judicial/cobranza-judicial.service";
 
 @Component({
   selector: 'app-ventas-salida',
@@ -111,6 +113,11 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   public total_cronograma_editado:number;
 
   public permiso : Rol ;
+  public idventa : number ;
+  public estado : number ;
+  public ListadoProcesos : Array<any> = [] ;
+  public numero_procesos : number = 0 ;
+  public monto_pagado : number = 0 ;
 
   constructor(
     private _store : Store<EstadoSesion> ,
@@ -129,6 +136,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
     private Notificacion: Notificaciones,
     private router: Router,
     private SgServicio : SeguimientosService,
+    private _judiciales : CobranzaJudicialService ,
   ) { }
 
   ngOnInit() {
@@ -144,16 +152,17 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
 
     this.route.params.subscribe(params => {
       if(params['idventa']){
-        this.Columnas= ['numero', 'monto_cuota','fecha_vencimiento', 'monto_interes','monto_pagado', 'fecha_cancelacion', 'monto_pendiente','estado', 'opciones'];
+        this.idventa = +params['idventa'];
         this.id_venta = +params['idventa'];
+        this.Columnas= ['numero', 'monto_cuota','fecha_vencimiento', 'monto_interes','monto_pagado', 'fecha_cancelacion', 'monto_pendiente','estado', 'opciones'];
         this.SeleccionarVentaxId(this.id_venta);
       }
       if(params['idventaeditar']){
-        this.Columnas= ['numero', 'fecha_vencimiento_ver', 'monto_cuota_ver'];
+        this.idventa = +params['idventa'];
         this.id_venta_editar = +params['idventaeditar'];
+        this.Columnas= ['numero', 'fecha_vencimiento_ver', 'monto_cuota_ver'];
         this.SeleccionarVentaxId(this.id_venta_editar);
       }
-    
     })
 
     this.CrearFormulario();
@@ -283,10 +292,12 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   }
 
   SeleccionarVentaxId(id_venta){
+    this.ListarProcesos(id_venta) ;
+    this.Cargando.next(true) ;
 
     this.Servicio.SeleccionarVentaSalida(id_venta).subscribe(res=>{
-      
-      // console.log(res)
+
+      this.Cargando.next(false) ;
 
       this.id_salida = res.id_salida;
 
@@ -309,15 +320,16 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       this.VentasSalidaForm.get('cuotas').setValue(res.numero_cuotas);
       this.VentasSalidaForm.get('montototal').setValue(res.monto_total);
       this.VentasSalidaForm.get('contrato').setValue(res.contrato);
+      this.estado = res.estado ;
       
       this.Productos=res.productos.productos
       
       this.Cronograma=res.cronograma.cronograma;
+      this.CalcularTotalPagado( this.Cronograma ) ;
       
       this.ListadoVentas.Informacion.next(this.Cronograma);
       
       this.SServicio.ListarComisiones(res.id_salida).subscribe(res=>{
-        // console.log(res);
         this.Vendedores=res;
       })
 
@@ -381,11 +393,9 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
             this.VentasSalidaForm['controls'].garantes['controls'][index].get('transaccion_pdf').setValue(voucher);
           })
         }
-
       }
 
       if(this.id_venta_editar){
-
         if( res['courier'].id ){
           this.VentasSalidaForm.get('papeles_courier').setValue(res['courier'].id_courier);
           this.papeles_antiguo=res['courier'].foto;
@@ -478,8 +488,6 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
         }
 
       }
-      
-      this.Cargando.next(false);
     })
 
   }
@@ -770,6 +778,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   // Cuando se cambia el orden del cronograma
   ActualizarOrdenCronograma(id, orden){
     this.Servicio.ListarCronograma(id, orden).subscribe(res=>{
+      this.CalcularTotalPagado( res['data'].cronograma ) ;
       this.ListadoVentas.Informacion.next(res['data'].cronograma);
     })
   }
@@ -1004,6 +1013,64 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
     if(this.id_venta_editar){
       this.ActualizarVenta(formulario)
     }
+  }
+
+  CambiarTipoVista( tipo : string ){
+    if( tipo == 'ver' ) {
+      this.id_venta = this.idventa ;
+      this.id_venta_editar = null ;
+    }
+    if( tipo == 'editar' ) {
+      this.id_venta = null ;
+      this.id_venta_editar = this.idventa ;
+    }
+    this.SeleccionarVentaxId(this.idventa)
+  }  
+
+  ListarProcesos( id_venta : number ) {
+    this.ListadoProcesos = [] ;
+    this._judiciales.ListarProcesosxTransaccion(2, id_venta).subscribe(res=>{
+      this.numero_procesos = res.length ;
+      this.ListadoProcesos = res ;
+    })
+  }
+
+  CalcularTotalPagado( cronograma : Array<any> ) {
+    this.monto_pagado = cronograma.reduce((acumulador, elemento)=>{
+      return acumulador + elemento.monto_pagado*1 ;
+    }, 0) ;
+  }
+
+  AnularVenta(){
+    let transacciones: Array<any> = [];
+    
+    // Se listan las transacciones que pertenecen a esa venta
+    let Dialogo = this.Dialogo.open(VentanaConfirmarComponent,{
+      data: {objeto: "la venta", valor: this.numero_contrato, venta:true}
+    })
+
+    Dialogo.afterClosed().subscribe(res=>{
+      this.Cargando.next(true) ;
+      if (res) {
+        if (res.respuesta) {
+          this.Servicio.ListarVentaTransacciones(this.idventa).subscribe(res2=>{
+            transacciones=res2.transaccion ;
+            this.Servicio.EliminarVenta(this.idventa, res.comentarios, res.monto).subscribe(respuesta=>{
+              this.Cargando.next(false) ;
+              transacciones.forEach((item)=>{
+                this.Servicio.CrearCanjeTransaccion(item.id,new Date(),"AJUSTE POR ANULACION").subscribe() ;
+              })
+  
+              if (res.monto>0) {
+                this.Servicio.CrearVentaCronograma(this.idventa,2,res.monto,new Date(), 1).subscribe() ;
+              }
+  
+              this.router.navigate(['/ventas']) ;
+            });
+          });
+        }
+      }
+    })
   }
 
   ActualizarVenta(formulario){

@@ -59,7 +59,6 @@ export class HistorialMovimientosDataService implements DataSource<any> {
   .subscribe(res => {
     this.TotalResultados.next(res['mensaje']);
     this.InformacionProductos.next(res['data'].transacciones)
-    // console.log(res)
     });
   }
 

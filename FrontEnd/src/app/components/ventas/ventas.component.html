@@ -2,9 +2,53 @@
 
   <button mat-mini-fab type="button" color="primary" (click)="Atras()"><mat-icon>keyboard_arrow_left</mat-icon></button>
 
+  <ng-container *ngIf="id_venta">
+    <ng-container *ngIf="permiso?.ventas?.listado_ventas?.eliminar">
+      <button mat-mini-fab type="button" color="primary" matTooltip="Anular" class="derecha"
+        [disabled]="(Cargando|async) || monto_pagado>0 || estado!=1 || numero_procesos>0"
+        (click)="AnularVenta()"><mat-icon> delete </mat-icon></button>
+    </ng-container>
+
+    <ng-container  *ngIf="permiso?.ventas?.listado_ventas?.abrir_procesos">
+      <button mat-mini-fab type="button" color="primary" matTooltip="Abrir proceso judicial"
+        [matMenuTriggerFor]="menu3" [disabled]="(Cargando|async) || estado!=1" class="derecha">
+        <mat-icon [matBadge]="numero_procesos" [matBadgeHidden]="numero_procesos==0 || estado!=1"
+          matBadgeColor="accent"> gavel </mat-icon>
+      </button>
+      <mat-menu #menu3="matMenu">
+        <button mat-menu-item *ngFor="let proceso of ListadoProcesos" [routerLink]="['/cobranza-judicial','ver',proceso.id_proceso]">
+          <ng-container *ngIf="proceso.id_tipo_documento==0"> <mat-icon class="icono-primario" matTooltip="Ya tiene cronograma"> star </mat-icon> </ng-container>
+          <ng-container *ngIf="proceso.id_tipo_documento==1"> <mat-icon matTooltip="Aún no hay documentos"> fiber_manual_record </mat-icon> </ng-container>
+          <ng-container *ngIf="proceso.id_tipo_documento==2"> <mat-icon class="icono-ambar" matTooltip="Se presentó un escrito"> info </mat-icon> </ng-container>
+          <ng-container *ngIf="proceso.id_tipo_documento==3"> <mat-icon class="icono-rojo" matTooltip="Se emitió una resolución"> error </mat-icon> </ng-container>
+          <ng-container *ngIf="proceso.id_tipo_documento==4"> <mat-icon class="icono-verde" matTooltip="Se emitió el oficio"> check_circle </mat-icon> </ng-container>
+          {{proceso.expediente}}
+        </button>
+        <button mat-menu-item [routerLink]="['/cobranza-judicial','nueva-venta','venta',id_venta]" > <mat-icon> add </mat-icon> Nuevo proceso </button>
+      </mat-menu>
+    </ng-container>
+
+    <ng-container *ngIf="permiso?.ventas?.listado_ventas?.realizar_canjes">
+      <button mat-mini-fab type="button" color="primary" matTooltip="Canjear" [disabled]="(Cargando|async) || estado!=1" class="derecha"
+        [routerLink]="['/ventas','nueva', id_venta, this.VentasForm.get('id_cliente').value]"><mat-icon> import_export </mat-icon></button>
+    </ng-container>
+
+    <ng-container *ngIf="permiso?.ventas?.listado_ventas?.editar">
+      <ng-container *ngIf="idventa">
+        <button mat-mini-fab type="button" color="primary" (click)="CambiarTipoVista('editar')" class="derecha"
+          [disabled]="(Cargando|async) || monto_pagado>0 || estado!=1 || numero_procesos>0" matTooltip="Editar documento"><mat-icon>edit</mat-icon></button>
+      </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="idventa_editar">
+      <button mat-mini-fab type="button" color="primary" (click)="CambiarTipoVista('ver')" class="derecha"
+        [disabled]="(Cargando|async)" matTooltip="Ver documento"><mat-icon> visibility </mat-icon></button>
+    </ng-container>
+  </ng-container>
+
   <mat-card-title class="tituloProd" *ngIf="!idventa && !idventa_editar">Nueva venta</mat-card-title>
   <mat-card-title class="tituloProd" *ngIf="idventa || idventa_editar">Venta {{talonario}}</mat-card-title>
-  
+
   <mat-card-subtitle *ngIf="venta_canje"> Venta a canjear por la {{talonario}} </mat-card-subtitle>
   <mat-card-subtitle *ngIf="venta_canjeada"> Esta venta ha sido canjeada por la {{talonario}} </mat-card-subtitle>
   <mat-card-subtitle *ngIf="venta_refinanciada"> Esta venta ha sido refinanciada por el crédito {{codigo_credito}} </mat-card-subtitle>

@@ -6,7 +6,7 @@ import { ServiciosGenerales, Institucion, Sede, Subsede } from '../../global/ser
 import { fromEvent, BehaviorSubject, Observable, forkJoin } from 'rxjs';
 import { ClienteService } from '../clientes.service';
 import { ServiciosDirecciones } from '../../global/direcciones';
-import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, tap, finalize } from 'rxjs/operators';
 import { ServiciosVentas } from '../../global/ventas';
 import { ServiciosTelefonos } from '../../global/telefonos';
 
@@ -473,6 +473,7 @@ export class VentanaEmergenteIntegralAgregarComponent implements OnInit, AfterVi
   }
 
   Guardar(){
+    this.Cargando.next(true) ;
     this.ClienteServicios.Agregar(
       this.ClientesForm.value.subsede,
       this.ClientesForm.value.cargo,
@@ -490,12 +491,24 @@ export class VentanaEmergenteIntegralAgregarComponent implements OnInit, AfterVi
       this.ClientesForm.value.calificacion_personal,
       this.ClientesForm.value.aporte,
       1
-    ).subscribe(res =>{
-      this.GuardarRelacionados(res['data']) ;
+    )
+    .pipe(
+      finalize(()=>{
+        this.Cargando.next(false) ;
+      })
+    )
+    .subscribe(res =>{
+      if( this.Direcciones.length > 0 || this.Telefonos.length>0 || this.Cuentas.length>0 ) {
+        this.GuardarRelacionados(res['data']) ;
+      } else {
+        this.ventana.close(true) ;
+      }
     });
   }
 
   GuardarRelacionados(id_cliente){
+    this.Cargando.next(true) ;
+
     let relacionados : Array<Observable<any>> = [] ;
 
     this.Direcciones.forEach(item=>{
@@ -517,6 +530,11 @@ export class VentanaEmergenteIntegralAgregarComponent implements OnInit, AfterVi
     })
 
     forkJoin(relacionados)
+    .pipe(
+      finalize(()=>{
+        this.Cargando.next(false) ;
+      })
+    )
     .subscribe(res=>{
       console.log(res)
       this.Cargando.next(false) ;

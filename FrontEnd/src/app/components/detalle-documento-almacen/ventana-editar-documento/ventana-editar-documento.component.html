@@ -14,28 +14,15 @@
     <mat-card-content>
       <mat-grid-list cols="4" rowHeight="70px">
 
-        <ng-container *ngIf="!DocumentoForm.value.id_proveedor">
-          <mat-grid-tile colspan=2>
-            <mat-form-field class="columnas-2">
-              <input #Proveedor placeholder="Proveedor" matInput [matAutocomplete]="auto" formControlName="proveedor">
-              <mat-error> Debe ingresar Proveedor </mat-error>
-              <mat-autocomplete #auto="matAutocomplete" [displayWith] = "displayProveedor" (optionSelected)="ProveedorSeleccionado()">
-                <mat-option *ngFor="let proveedor of proveedores" [value]="proveedor">
-                  {{proveedor.nombre}}
-                </mat-option>
-              </mat-autocomplete>
-            </mat-form-field>
-          </mat-grid-tile>
-        </ng-container>
-
-        <ng-container *ngIf="DocumentoForm.value.id_proveedor">
-          <mat-grid-tile colspan=2>
-            <mat-form-field class="columnas-2">
-              <input matInput placeholder="Proveedor" formControlName="proveedor_nombre" readonly>
-              <mat-icon color="primary" matSuffix (click)="RemoverProveedor()"> remove_circle </mat-icon>
-            </mat-form-field>
-          </mat-grid-tile>
-        </ng-container>
+        <mat-grid-tile colspan=2>
+          <mat-form-field class="columnas-2">
+            <mat-select placeholder="Proveedor" formControlName="proveedor">
+              <mat-option *ngFor="let proveedor of proveedores" [value]="proveedor.id">
+                {{proveedor.nombre}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
 
         <mat-grid-tile>
           <mat-form-field class="columnas-1">

@@ -1,9 +1,9 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormGroup , FormBuilder , Validators } from '@angular/forms';
-import { PlantillasService } from '../plantillas.service';
-import {URLIMAGENES} from '../../global/url';
-import {ServiciosGenerales} from '../../global/servicios';
+import { PlantillasService } from '../../plantillas.service';
+import {URLIMAGENES} from '../../../global/url';
+import {ServiciosGenerales} from '../../../global/servicios';
 import { FileUploader } from 'ng2-file-upload';
 
 @Component({

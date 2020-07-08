@@ -297,6 +297,8 @@ export class VentanaEmergenteProvisionalClientes {
           this.ClientesForm.get('cargo_estado').setValue(res['data'].id_cargo_estado) ;
           this.ClientesForm.get('cargo_estado_nombre').setValue(res['data'].cargo_estado) ;
 
+          console.log( res['data'] ) ;
+          
           this.ClientesForm.get('codigo').setValue(res['data'].codigo);
           this.ClientesForm.get('cip').setValue(res['data'].cip);
           this.ClientesForm.get('email').setValue(res['data'].email);
@@ -585,6 +587,11 @@ export class VentanaEmergenteProvisionalClientes {
     this.ClienteServicios.ListarCargoEstado(i).subscribe(res=>{
       this.Estados=res['estados']
     })
+  }
+
+  CargoEstadoSeleccionado(evento){
+    let cargo_estado_nombre = this.Estados.find(e => e.id == evento.value ) ;
+    this.ClientesForm.get('cargo_estado_nombre').setValue(cargo_estado_nombre.nombre) ;
   }
 
   GenerarEmail() : string {

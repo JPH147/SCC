@@ -187,6 +187,7 @@ export class VentanaPermisosComponent implements OnInit {
       } ,
       tablas_maestras : {
         general : permisos.tablas_maestras?.general || false ,
+        cooperativa : permisos.tablas_maestras?.cooperativa || false ,
         usuarios : permisos.tablas_maestras?.usuarios || false ,
         direcciones : permisos.tablas_maestras?.direcciones || false ,
         instituciones : permisos.tablas_maestras?.instituciones || false ,
@@ -330,6 +331,7 @@ export class VentanaPermisosComponent implements OnInit {
       } ,
       tablas_maestras : {
         general : false ,
+        cooperativa : false ,
         usuarios : false ,
         direcciones : false ,
         instituciones : false ,

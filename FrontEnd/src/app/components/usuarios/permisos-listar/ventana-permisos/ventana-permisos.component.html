@@ -125,7 +125,7 @@
           <!-- Evaluación -->
           <ng-container>
             <mat-card-subtitle class="subtitulo-categoria">
-              Evaluación
+              Transacciones
               <span class="espacio"></span>
               <ng-container *ngIf="!data.ver">
                 <mat-slide-toggle color="accent" [(ngModel)]="Permiso.maestro_general.evaluacion.general"
@@ -978,6 +978,16 @@
         
         <ng-container *ngIf="Permiso.tablas_maestras.general">
           <mat-grid-list cols="4" rowHeight="45px">
+            <mat-grid-tile>
+              <ng-container *ngIf="!data.ver">
+                <mat-checkbox [(ngModel)]="Permiso.tablas_maestras.cooperativa"> Cooperativa </mat-checkbox>
+              </ng-container>
+              <ng-container *ngIf="data.ver">
+                <mat-icon [color]="Permiso.tablas_maestras.cooperativa ? 'accent' : 'warn'">
+                  {{ Permiso.tablas_maestras.cooperativa ? 'check' : 'close' }} </mat-icon> &nbsp; Cooperativa
+              </ng-container>
+            </mat-grid-tile>
+
             <mat-grid-tile>
               <ng-container *ngIf="!data.ver">
                 <mat-checkbox [(ngModel)]="Permiso.tablas_maestras.usuarios"> Usuarios </mat-checkbox>

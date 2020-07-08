@@ -27,6 +27,8 @@ import { VentanaCrearCobranzaManualComponent } from '../cobranza-manual/ventana-
 import { EstadoSesion } from '../usuarios/usuarios.reducer';
 import { Rol } from '../usuarios/usuarios.service';
 import { Store } from '@ngrx/store';
+import { CobranzaJudicialService } from '../cobranza-judicial/cobranza-judicial.service';
+import { VentanaConfirmarComponent } from '../global/ventana-confirmar/ventana-confirmar.component';
 
 @Component({
   selector: 'app-creditos',
@@ -146,6 +148,11 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   public ListadoTipoPago: Array<any>;
 
   public permiso : Rol ;
+  public id_credito_estandar : number ;
+  public estado : number ;
+  public ListadoProcesos : Array<any> = [] ;
+  public numero_procesos : number = 0 ;
+  public monto_pagado : number = 0 ;
 
   constructor(
     private _store : Store<EstadoSesion> ,
@@ -164,7 +171,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     private route : ActivatedRoute,
     private Notificacion: Notificaciones,
     private router: Router,
-    private changeDetector : ChangeDetectorRef
+    private changeDetector : ChangeDetectorRef ,
+    private _judiciales : CobranzaJudicialService ,
   ) { }
 
   ngOnInit() {
@@ -219,12 +227,14 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         }
 
         if(params['idcredito']){
+          this.id_credito_estandar = +params['idcredito'] ;
           this.id_credito=params['idcredito'];
           // this.id_credito=12;
           this.SeleccionarCredito(this.id_credito);
         }
 
         if(params['idcreditoeditar']){
+          this.id_credito_estandar = +params['idcreditoeditar'] ;
           this.id_credito_editar=params['idcreditoeditar'];
           // this.id_credito_editar=12;
           this.SeleccionarCredito(this.id_credito_editar);
@@ -260,7 +270,6 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-
     if (this.id_credito) {
       this.sort.sortChange
       .pipe(
@@ -510,8 +519,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     // this.VerificarAfiliacion(this.id_cliente);
   }
 
-  SeleccionarCredito(id_credito){
-    
+  SeleccionarCredito(id_credito) {
+    this.ListarProcesos(id_credito) ;
     let observacion_corregida : string;
     let codigo_string : string;
     let codigo_largo : number;
@@ -555,6 +564,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       this.CreditosForm.get('id_vendedor').setValue(res.id_vendedor > 0 ? res.id_vendedor : null);
       this.CreditosForm.get('autorizador').setValue(res.id_autorizador> 0 ? res.autorizador : null);
       this.CreditosForm.get('id_autorizador').setValue(res.id_autorizador > 0 ? res.id_autorizador : null);
+
+      this.estado = res.id_estado ;
 
       observacion_corregida = res.observaciones == "" ? "No hay observaciones" : res.observaciones;
 
@@ -600,7 +611,6 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       }
 
       if( this.id_credito ) {
-
         this.CreditosForm.get('interes_diario').disable();
         this.CreditosForm.get('tipo_credito').setValue(res.tipo);
         this.CreditosForm.get('sucursal').setValue(res.sucursal);
@@ -645,6 +655,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
 
         this.ColumnasCronograma= ['numero', 'fecha_vencimiento_ver', 'monto_cuota_ver'];
         this.Cronograma = res.cronograma;
+        this.CalcularTotalPagado(this.Cronograma) ;
         this.ListadoCronograma.AsignarInformacion(this.Cronograma);
 
         this.foto_antiguo=res.pdf_foto;
@@ -700,16 +711,14 @@ export class CreditosComponent implements OnInit, AfterViewInit {
             this.CreditosForm['controls'].garantes['controls'][index].get('planilla_pdf').setValue(planilla);
           })
         }
-
       }
-
     })
-
   }
 
   ObtenerCronograma(id_credito, orden){
     this.Servicio.ObtenerCrongrama(id_credito, orden).subscribe(res=>{
       this.Cronograma = res;
+      this.CalcularTotalPagado(this.Cronograma) ;
       this.ListadoCronograma.AsignarInformacion(this.Cronograma);
     })
   }
@@ -1234,6 +1243,47 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       this.CreditosForm.get('fecha_pago').setValue( new Date(ano, mes+1, 27) );
       this.CambioFechaCredito() ;
     }
+  }
+
+  CambiarTipoVista( tipo : string ){
+    if( tipo == 'ver' ) {
+      this.id_credito = this.id_credito_estandar ;
+      this.id_credito_editar = null ;
+    }
+    if( tipo == 'editar' ) {
+      this.id_credito = null ;
+      this.id_credito_editar = this.id_credito_estandar ;
+    }
+    this.SeleccionarCredito(this.id_credito_estandar)
+  }  
+
+  ListarProcesos( id_venta : number ) {
+    this.ListadoProcesos = [] ;
+    this._judiciales.ListarProcesosxTransaccion(1, id_venta).subscribe(res=>{
+      this.numero_procesos = res.length ;
+      this.ListadoProcesos = res ;
+    })
+  }
+
+  CalcularTotalPagado( cronograma : Array<any> ) {
+    this.monto_pagado = cronograma.reduce((acumulador, elemento)=>{
+      return acumulador + elemento.monto_pagado*1 ;
+    }, 0) ;
+  }
+
+  AnularCredito(){
+    let Dialogo = this.Dialogo.open(VentanaConfirmarComponent,{
+      data: {objeto: "el crédito", valor: this.CreditosForm.getRawValue().codigo }
+    })
+
+    Dialogo.afterClosed().subscribe(res=>{
+      this.Cargando.next(true) ;
+      if (res) {
+        this.Servicio.EliminarCredito(this.id_credito_estandar).subscribe(res=>{
+          this.router.navigate(['/creditos']) ;
+        });
+      }
+    })
   }
 
   Guardar(){

@@ -3,6 +3,10 @@
     <mat-toolbar-row><h4>Agregar Cliente</h4></mat-toolbar-row>
   </mat-toolbar>
 
+  <div class = "spinner-container-emergente" *ngIf = "Cargando| async">
+    <mat-spinner></mat-spinner>
+  </div>
+
   <mat-horizontal-stepper linear="true">
     <mat-step [stepControl]="ClientesForm">
       <form [formGroup]="ClientesForm">
@@ -447,7 +451,7 @@
       <mat-grid-list cols=1 rowHeight="65px">
         <mat-grid-tile>
           <button mat-raised-button matStepperPrevious> Atrás </button>
-          <button mat-raised-button color="primary" (click)="Guardar()"> Guardar </button>
+          <button mat-raised-button color="primary" (click)="Guardar()" [disabled]="(Cargando | async)"> Guardar </button>
         </mat-grid-tile>
       </mat-grid-list>
     </mat-step>

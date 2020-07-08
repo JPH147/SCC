@@ -97,18 +97,18 @@ class Institucion{
 
 		$result = $this->conn->prepare($query);
 
-        $result->bindParam(1, $this->nombre);
+		$result->bindParam(1, $this->nombre);
 
 		$result->execute();
 
-        $row = $result->fetch(PDO::FETCH_ASSOC);
+		$row = $result->fetch(PDO::FETCH_ASSOC);
 
-        $this->total_resultado=$row['total'];
+		$this->total_resultado=$row['total'];
 
-        return $this->total_resultado;
+		return $this->total_resultado;
 	}
 
-    function delete(){
+	function delete(){
 		$query = "CALL sp_eliminarinstitucion(
 		  :prinstitucion
 		)";
@@ -126,7 +126,7 @@ class Institucion{
 		return false;
 	}
 
-    function create(){
+	function create(){
 		$query = "CALL sp_crearinstitucion(
 			:prnombre,
 			:prabreviatura,
@@ -162,7 +162,7 @@ class Institucion{
 		return false;
 	}
 
-    function update(){
+	function update(){
 		$query = "CALL sp_actualizarinstitucion(
 			:prid,
 			:prnombre,

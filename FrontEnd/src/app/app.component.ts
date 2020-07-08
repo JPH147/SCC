@@ -36,6 +36,7 @@ export class AppComponent {
       if(res){
         this.usuario = {
           nombre: res.usuario ,
+          id_perfil: res.id_perfil ,
           perfil: res.perfil ,
         }
         this._cookie.set('usuario', JSON.stringify(res ))
@@ -46,6 +47,7 @@ export class AppComponent {
   VerificarUsuario(){
     if ( this._cookie.check('usuario') ) {
       let usuario = JSON.parse( this._cookie.get('usuario') ) ;
+      // console.log(usuario) ;
       this._usuario.AsignarUsuario( usuario ) ;
       this._usuario.SeleccionarPerfil(usuario.id_perfil).subscribe(perfil=>{
         let asignarPermisos = new AsignarPermisos( perfil['permisos'] ) ;

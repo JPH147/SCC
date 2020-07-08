@@ -2,6 +2,45 @@
 
   <button mat-mini-fab type="button" color="primary" (click)="Atras()"><mat-icon>keyboard_arrow_left</mat-icon></button>
 
+  <ng-container *ngIf="id_credito_estandar">
+    <ng-container *ngIf="permiso?.creditos?.listado_creditos?.eliminar">
+      <button mat-mini-fab type="button" color="primary" matTooltip="Anular" class="derecha"
+        [disabled]="(Cargando|async) || monto_pagado>0 || estado!=1 || numero_procesos>0 || id_tipo==1"
+        (click)="AnularCredito()"><mat-icon> delete </mat-icon></button>
+    </ng-container>
+
+    <ng-container  *ngIf="permiso?.creditos?.listado_creditos?.abrir_procesos">
+      <button mat-mini-fab type="button" color="primary" matTooltip="Abrir proceso judicial" class="derecha"
+        [matMenuTriggerFor]="menu3" [disabled]="(Cargando|async) || estado!=1 || id_tipo==1">
+        <mat-icon [matBadge]="numero_procesos" [matBadgeHidden]="numero_procesos==0 || estado!=1"
+          matBadgeColor="accent"> gavel </mat-icon>
+      </button>
+      <mat-menu #menu3="matMenu">
+        <button mat-menu-item *ngFor="let proceso of ListadoProcesos" [routerLink]="['/cobranza-judicial','ver',proceso.id_proceso]">
+          <ng-container *ngIf="proceso.id_tipo_documento==0"> <mat-icon class="icono-primario" matTooltip="Ya tiene cronograma"> star </mat-icon> </ng-container>
+          <ng-container *ngIf="proceso.id_tipo_documento==1"> <mat-icon matTooltip="Aún no hay documentos"> fiber_manual_record </mat-icon> </ng-container>
+          <ng-container *ngIf="proceso.id_tipo_documento==2"> <mat-icon class="icono-ambar" matTooltip="Se presentó un escrito"> info </mat-icon> </ng-container>
+          <ng-container *ngIf="proceso.id_tipo_documento==3"> <mat-icon class="icono-rojo" matTooltip="Se emitió una resolución"> error </mat-icon> </ng-container>
+          <ng-container *ngIf="proceso.id_tipo_documento==4"> <mat-icon class="icono-verde" matTooltip="Se emitió el oficio"> check_circle </mat-icon> </ng-container>
+          {{proceso.expediente}}
+        </button>
+        <button mat-menu-item [routerLink]="['/cobranza-judicial','nueva-credito',id_credito_estandar]" > <mat-icon> add </mat-icon> Nuevo proceso </button>
+      </mat-menu>
+    </ng-container>
+
+    <ng-container *ngIf="permiso?.creditos?.listado_creditos?.editar">
+      <ng-container *ngIf="id_credito">
+        <button mat-mini-fab type="button" color="primary" (click)="CambiarTipoVista('editar')" class="derecha"
+          [disabled]="(Cargando|async) || monto_pagado>0 || estado!=1 || numero_procesos>0" matTooltip="Editar documento"><mat-icon>edit</mat-icon></button>
+      </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="id_credito_editar">
+      <button mat-mini-fab type="button" color="primary" (click)="CambiarTipoVista('ver')" class="derecha"
+        [disabled]="(Cargando|async)" matTooltip="Ver documento"><mat-icon> visibility </mat-icon></button>
+    </ng-container>
+  </ng-container>
+
   <ng-container *ngIf="id_tipo>1">
     <mat-card-title class="tituloProd" *ngIf="!id_credito && !id_credito_editar">Nuevo préstamo</mat-card-title>
     <mat-card-title class="tituloProd" *ngIf="id_credito || id_credito_editar">Préstamo N° {{CreditosForm.getRawValue().codigo}}</mat-card-title>
@@ -346,7 +385,7 @@
           <mat-form-field class="columnas-1">
              <input matInput [matDatepicker]="picker" [placeholder]="id_tipo==1 ? 'Fecha de la afiliación' : 'Fecha del crédito'" formControlName="fecha_credito" (dateChange)="CorregirFecha()"  [readonly]="id_credito || id_tipo==1 || cliente_refinanciado">
              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-             <mat-datepicker #picker [disabled]="id_credito || id_tipo==1 || cliente_refinanciado"></mat-datepicker>
+             <mat-datepicker #picker [disabled]="id_credito || cliente_refinanciado"></mat-datepicker>
           </mat-form-field>
         </mat-grid-tile>
 
@@ -1190,7 +1229,7 @@
           <mat-form-field class="columnas-1">
             <input matInput [matDatepicker]="InputFechaPago" placeholder="Inicio de pagos" [min]="CreditosForm.value.fecha_credito" formControlName="fecha_pago" (dateChange)="CrearCronograma()" [readonly]="id_credito || id_tipo==1 || id_presupuesto || cliente_refinanciado">
             <mat-datepicker-toggle matSuffix [for]="InputFechaPago"></mat-datepicker-toggle>
-            <mat-datepicker #InputFechaPago [disabled]="id_credito || id_tipo==1 || id_presupuesto || cliente_refinanciado"></mat-datepicker>
+            <mat-datepicker #InputFechaPago [disabled]="id_credito || id_presupuesto || cliente_refinanciado"></mat-datepicker>
           </mat-form-field>
         </mat-grid-tile>
 

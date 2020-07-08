@@ -127,7 +127,8 @@
         <mat-cell *matCellDef="let movimiento">
           <button mat-icon-button color="primary" matTooltip="Ver detalle" [routerLink]="['ver',movimiento.id]"><mat-icon> visibility </mat-icon></button>
           <ng-container *ngIf="permiso?.inventarios?.documentos_almacen?.editar">
-            <button mat-icon-button color="primary" matTooltip="Editar documento" [routerLink]="['editar',movimiento.id]"><mat-icon> edit </mat-icon></button>
+            <button mat-icon-button color="primary" matTooltip="Editar documento" [routerLink]="['editar',movimiento.id]"
+              [disabled]="movimiento.referencia != 'Proveedor'"><mat-icon> edit </mat-icon></button>
           </ng-container>       
         </mat-cell>
       </ng-container>

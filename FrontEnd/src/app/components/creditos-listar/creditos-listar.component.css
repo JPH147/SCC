@@ -44,3 +44,7 @@ mat-card{
 .mat-column-opciones{
   max-width: 15%;
 }
+
+.derecha{
+  margin: 0 5px;
+}

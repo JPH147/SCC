@@ -192,7 +192,8 @@ export class ClientesComponent implements OnInit, AfterViewInit {
   
   Agregar() {
     let VentanaClientes = this.DialogoClientes.open(VentanaEmergenteIntegralAgregarComponent, {
-      width: '1200px'
+      width: '1200px' ,
+      maxHeight : '80vh'
     });
 
     VentanaClientes.afterClosed().subscribe(res => {

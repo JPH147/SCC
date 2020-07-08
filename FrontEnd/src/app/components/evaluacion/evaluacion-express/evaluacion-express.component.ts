@@ -53,6 +53,7 @@ export class EvaluacionExpressComponent implements OnInit {
   public ListadoVendedores : Array<any>;
   public numero_cuotas_estandar : number ;
   public cuota_estandar : number ;
+  public cuota_mensual_estandar : number ;
   public nueva_infomacion : boolean = false ;
 
   public informacion_cooperativa : any;
@@ -290,6 +291,8 @@ export class EvaluacionExpressComponent implements OnInit {
     let numero_cuotas = moment(this.fecha_inicio).diff(moment(this.fecha_prestamo), 'months') ;
     this.numero_cuotas_estandar = numero_cuotas ;
     this.cuota_estandar = total/numero_cuotas ;
+
+    // console.log(total, numero_cuotas , this.cuota_estandar, this.numero_cuotas_estandar)
     // Se reemplazó numero_cuotas por (mes_pago - mes_credito)
 
     // Si el crédito es antes de quincena, se paga a fin de mes los intereses truncados
@@ -331,6 +334,9 @@ export class EvaluacionExpressComponent implements OnInit {
     let monto : number = ( (total)/this.cuotas ) ;
 
     for (let j = 1; j<=this.cuotas; j++) {
+      // Se le da valor para tener la cuota mensual
+      this.cuota_mensual_estandar = monto+ aporte ;
+
       fecha=moment(fecha_corregida).add(j-1, 'months').toDate();
       this.cronograma.push({
         numero: i+j-1,
@@ -458,7 +464,7 @@ export class EvaluacionExpressComponent implements OnInit {
         // // this.InformacionForm.get("email").setValue(email) ;
         // console.log(email)
         email = email.replace("ñ","n") ;
-        console.log(email);
+        // console.log(email);
         return email;
       }
     // }
@@ -532,7 +538,7 @@ export class EvaluacionExpressComponent implements OnInit {
       this.cooperativa_nombre,
       "2",
       this.InformacionForm.value.nombre,
-      this.InformacionForm.value.cargo_estado,
+      this.InformacionForm.value.cargo_estado_nombre,
       this.InformacionForm.value.dni,
       this.InformacionForm.value.cip,
       this.InformacionForm.value.codigo,
@@ -542,8 +548,8 @@ export class EvaluacionExpressComponent implements OnInit {
       this.InformacionForm.value.email ? this.InformacionForm.value.email : this.GenerarEmail(),
       this.InformacionForm.value.subsede_nombre,
       this.aporte,
-      +this.cuota_estandar+this.aporte,
-      this.numero_cuotas_estandar,
+      +this.cuota_mensual_estandar,
+      this.cuotas,
       this.ExpressForm.value.lugar,
       this.ExpressForm.value.fecha_letras,
       this.InformacionForm.value.parametro_autorizacion_1 ,
@@ -607,7 +613,7 @@ export class EvaluacionExpressComponent implements OnInit {
       (this.InformacionForm.value.hay_garante && this.InformacionForm.value.dni_garante)? this.InformacionForm.value.nombre_garante : "0",
       (this.InformacionForm.value.hay_garante && this.InformacionForm.value.dni_garante) ? this.InformacionForm.value.dni_garante : "0",
     ).subscribe(res=>{
-      console.log(res)
+      // console.log(res)
       this.generados=true;
       this.transaccion=res['data'];
     })

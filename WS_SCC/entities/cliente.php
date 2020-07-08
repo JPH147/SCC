@@ -355,7 +355,6 @@ Class Cliente{
         $result->bindParam(":clt_aporte", $this->clt_aporte);
         $result->bindParam(":clt_fecharegistro", $this->clt_fecharegistro);
         $result->bindParam(":clt_estado", $this->clt_estado);
-        
 
         if($result->execute())
         {

@@ -101,14 +101,14 @@ export class UsuariosService {
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-    if( usuario == "admin" && password == "Alvis" ) {
-      this.Usuario = {
-        usuario: 'ADMIN',
-        perfil: 'Administrador',
-      }
-      this.UsuarioS.next(this.Usuario) ;
-      return of(true) ;
-    } else {
+    // if( usuario == "admin" && password == "Alvis" ) {
+    //   this.Usuario = {
+    //     usuario: 'ADMIN',
+    //     perfil: 'Administrador',
+    //   }
+    //   this.UsuarioS.next(this.Usuario) ;
+    //   return of(true) ;
+    // } else {
       return this.http.post(this.url + 'usuario/login.php', params, {headers: headers})
       .pipe(map(usuario=>{
         if ( usuario['codigo'] == 0 ) {
@@ -118,7 +118,7 @@ export class UsuariosService {
           return false ;
         }
       })) ;
-    }
+    // }
   }
 
   LogOut() : Observable<any> {
@@ -419,6 +419,7 @@ export type Rol = {
   } ,
   tablas_maestras : {
     general : boolean ,
+    cooperativa : boolean ,
     usuarios : boolean ,
     direcciones : boolean ,
     instituciones : boolean ,

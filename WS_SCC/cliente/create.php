@@ -29,7 +29,7 @@
             $cliente->clt_dni = trim($_POST["clt_dni"]);
             $cliente->clt_nombre = trim($_POST["clt_nombre"]);
             $cliente->clt_foto = "Unknown.png";
-            $cliente->clt_cip = trim($_POST["clt_cip"]);
+            $cliente->clt_cip = strlen($_GET['clt_cip']) > 0 ? trim($_GET['clt_cip']) : 0 ;
             $cliente->clt_email = trim($_POST["clt_email"]);
             $cliente->clt_casilla = trim($_POST["clt_casilla"]);
             $cliente->id_distrito = trim($_POST["prdistrito"]);

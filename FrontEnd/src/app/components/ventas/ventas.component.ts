@@ -29,6 +29,8 @@ import { VentanaCrearCobranzaManualComponent } from "../cobranza-manual/ventana-
 import { Rol } from "../usuarios/usuarios.service";
 import { Store } from "@ngrx/store";
 import { EstadoSesion } from "../usuarios/usuarios.reducer";
+import { CobranzaJudicialService } from "../cobranza-judicial/cobranza-judicial.service";
+import { VentanaConfirmarComponent } from "../global/ventana-confirmar/ventana-confirmar.component";
 
 @Component({
   selector: 'app-ventas',
@@ -151,6 +153,11 @@ export class VentasComponent implements OnInit {
   public hay_presupuesto_vendedor : boolean ;
 
   public permiso : Rol ;
+  public id_venta : number ;
+  public estado : number ;
+  public ListadoProcesos : Array<any> = [] ;
+  public numero_procesos : number = 0 ;
+  public monto_pagado : number = 0 ;
 
   constructor(
     private _store : Store<EstadoSesion> ,
@@ -169,6 +176,7 @@ export class VentasComponent implements OnInit {
     private router: Router,
     private CServicio : CreditosService,
     private SServicio : SeguimientosService,
+    private _judiciales : CobranzaJudicialService ,
   ) { }
 
   ngOnInit() {
@@ -237,16 +245,18 @@ export class VentasComponent implements OnInit {
 
         // Cuando se ve una venta
         if(params['idventa']){
+          this.id_venta = +params['idventa'] ;
+          this.idventa = +params['idventa'] ;
           this.Columnas= ['numero','tipo_pago','fecha_vencimiento', 'monto_cuota', 'monto_interes','monto_pagado', 'fecha_cancelacion','estado', 'opciones'];
-          this.idventa = +params['idventa'];
           // this.idventa=77;
           this.SeleccionarVentaxId(this.idventa);
         }
   
         // Cuando se edita una venta
         if (params['ideditar']) {
-          this.Columnas= ['numero', 'fecha_vencimiento_ver', 'monto_cuota_ver'];
+          this.id_venta = +params['idventa'] ;
           this.idventa_editar=params['ideditar'];
+          this.Columnas= ['numero', 'fecha_vencimiento_ver', 'monto_cuota_ver'];
           this.SeleccionarVentaxId(this.idventa_editar)
         }
       } else {
@@ -345,7 +355,11 @@ export class VentasComponent implements OnInit {
   }
 
   SeleccionarVentaxId(id_venta){
+    this.ListarProcesos(id_venta) ;
+    this.Cargando.next(true) ;
+
     this.Servicio.SeleccionarVenta(id_venta).subscribe(res=>{
+      this.Cargando.next(false);
       this.talonario=res.talonario_serie+" - "+res.talonario_contrato;
 
       this.VentasForm.get('id_cliente').setValue(res.id_cliente);
@@ -371,6 +385,7 @@ export class VentasComponent implements OnInit {
       this.anulacion_observacion=res.anulacion_observacion;
       this.anulacion_monto=res.anulacion_monto;
       this.total_cronograma_editado=res.monto_total;
+      this.estado = res.estado ;
 
       if( res.id_venta_canje && res.estado==3 ) {
         this.venta_canjeada = true ;
@@ -426,7 +441,8 @@ export class VentasComponent implements OnInit {
         this.VentasForm.get('tipopago').setValue(res.idtipopago);
 
         this.Cronograma=res.cronograma.cronograma;
-
+        this.CalcularTotalPagado(this.Cronograma) ;
+        
         this.ListadoVentas.Informacion.next(this.Cronograma);
         this.edicion_productos=res.productos.productos;
 
@@ -508,7 +524,6 @@ export class VentasComponent implements OnInit {
 
           })
         }
-
       }
 
       if (this.idventa) {
@@ -548,13 +563,8 @@ export class VentasComponent implements OnInit {
             this.VentasForm['controls'].garantes['controls'][index].get('transaccion_pdf').setValue(voucher);
           })
         }
-
       }
-
-      this.Cargando.next(false);
-
       this.sucursal=res.id_sucursal;
-
     })
   }
 
@@ -772,6 +782,7 @@ export class VentasComponent implements OnInit {
   // Cuando se cambia el orden del cronograma
   ActualizarOrdenCronograma(id, orden){
     this.Servicio.ListarCronograma(id, orden).subscribe(res=>{
+      this.CalcularTotalPagado( res['data'].cronograma ) ;
       this.ListadoVentas.Informacion.next(res['data'].cronograma);
     })
   }
@@ -1433,8 +1444,65 @@ export class VentasComponent implements OnInit {
     this.identificador_documento = this.VentasForm.value.talonario + "-" + contrato ;
   }
 
-  Guardar(formulario){
+  CambiarTipoVista( tipo : string ){
+    if( tipo == 'ver' ) {
+      this.idventa = this.id_venta ;
+      this.idventa_editar = null ;
+    }
+    if( tipo == 'editar' ) {
+      this.idventa = null ;
+      this.idventa_editar = this.id_venta ;
+    }
+    this.SeleccionarVentaxId(this.id_venta)
+  }  
+
+  ListarProcesos( id_venta : number ) {
+    this.ListadoProcesos = [] ;
+    this._judiciales.ListarProcesosxTransaccion(2, id_venta).subscribe(res=>{
+      this.numero_procesos = res.length ;
+      this.ListadoProcesos = res ;
+    })
+  }
+
+  CalcularTotalPagado( cronograma : Array<any> ) {
+    this.monto_pagado = cronograma.reduce((acumulador, elemento)=>{
+      return acumulador + elemento.monto_pagado*1 ;
+    }, 0) ;
+  }
+
+  AnularVenta(){
+    let transacciones: Array<any> = [];
     
+    // Se listan las transacciones que pertenecen a esa venta
+    let Dialogo = this.Dialogo.open(VentanaConfirmarComponent,{
+      data: {objeto: "la venta", valor: this.talonario, venta:true}
+    })
+
+    Dialogo.afterClosed().subscribe(res=>{
+      this.Cargando.next(true) ;
+      if (res) {
+        if (res.respuesta) {
+          this.Servicio.ListarVentaTransacciones(this.id_venta).subscribe(res2=>{
+            transacciones=res2.transaccion ;
+            this.Servicio.EliminarVenta(this.id_venta, res.comentarios, res.monto).subscribe(respuesta=>{
+              this.Cargando.next(false) ;
+              transacciones.forEach((item)=>{
+                this.Servicio.CrearCanjeTransaccion(item.id,new Date(),"AJUSTE POR ANULACION").subscribe() ;
+              })
+  
+              if (res.monto>0) {
+                this.Servicio.CrearVentaCronograma(this.id_venta,2,res.monto,new Date(), 1).subscribe() ;
+              }
+  
+              this.router.navigate(['/ventas']) ;
+            });
+          });
+        }
+      }
+    })
+  }
+
+  Guardar(formulario){
     this.Cargando.next(true);
 
     if (this.idventa_editar) {
@@ -1494,8 +1562,6 @@ export class VentasComponent implements OnInit {
         resultado[8].mensaje,
         formulario.value.observaciones,
       ).subscribe(res=>{
-
-        console.log(res);
 
         // Se crean los productos y se generan los documentos en almacén para cuadrar
         if(!this.id_presupuesto){

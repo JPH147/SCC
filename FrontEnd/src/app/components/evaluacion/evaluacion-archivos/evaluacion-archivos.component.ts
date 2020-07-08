@@ -19,7 +19,7 @@ import { VerPlantillasComponent } from '../ver-plantillas/ver-plantillas.compone
 import {Notificaciones} from '../../global/notificacion';
 import * as moment from 'moment';
 import {saveAs} from 'file-saver';
-import { VentanaPlantillasComponent } from '../../plantillas/ventana-plantillas/ventana-plantillas.component';
+import { VentanaPlantillasComponent } from '../../plantillas/documentos/ventana-plantillas/ventana-plantillas.component';
 import { SeleccionarClienteComponent } from '../../retorno-vendedores/seleccionar-cliente/seleccionar-cliente.component';
 
 @Component({

@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { ServiciosGenerales } from '../../global/servicios';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, tap, finalize } from 'rxjs/operators';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { DetalleDocumentoAlmacenService } from '../detalle-documento-almacen.service';
 import { BehaviorSubject } from 'rxjs';
@@ -21,7 +21,7 @@ export class VentanaEditarDocumentoComponent implements OnInit {
   public Hoy = new Date();
   public archivo : File ;
   public archivo_nombre : string = "";
-  public archivo_nombre_antiguo : string ;
+  public archivo_nombre_antiguo : string = "";
   public archivo_nombre_antiguo_enlace : string ;
   public editar_archivo : boolean ;
 
@@ -36,36 +36,36 @@ export class VentanaEditarDocumentoComponent implements OnInit {
 
   ngOnInit() {
     this.CrearFormulario();
-    this.ListarProveedor('');
+    this.ListarProveedor();
     this.AsignarInformacion();
     console.log(this.data)
   }
 
-  ngAfterViewInit(){
-    this.DocumentoForm.get('proveedor').valueChanges
-    .pipe(
-      debounceTime(10),
-      distinctUntilChanged(),
-      tap(() => {
-        this.ListarProveedor(this.DocumentoForm.value.proveedor);
-      })
-     ).subscribe();
-  }
+  // ngAfterViewInit(){
+  //   this.DocumentoForm.get('proveedor').valueChanges
+  //   .pipe(
+  //     debounceTime(10),
+  //     distinctUntilChanged(),
+  //     tap(() => {
+  //       this.ListarProveedor(this.DocumentoForm.value.proveedor);
+  //     })
+  //    ).subscribe();
+  // }
 
   CrearFormulario(){
     this.DocumentoForm = this.Builder.group({
-      id_proveedor: [{ value:null,disabled:false }, [Validators.required] ],
+      // id_proveedor: [{ value:null,disabled:false }, [Validators.required] ],
       proveedor: [{ value:null,disabled:false }, [] ],
-      proveedor_nombre: [{ value:"",disabled:false }, [] ],
+      // proveedor_nombre: [{ value:"",disabled:false }, [] ],
       fecha: [{ value: new Date() ,disabled:false }],
       documento: [{ value:"",disabled:false }],
     });
   }
 
   AsignarInformacion(){
-    this.DocumentoForm.get('id_proveedor').setValue(this.data.id_referente) ;
-    this.DocumentoForm.get('id_proveedor').setValue(this.data.id_referente) ;
-    this.DocumentoForm.get('proveedor_nombre').setValue(this.data.referente) ;
+    this.DocumentoForm.get('proveedor').setValue(this.data.id_referente) ;
+    // this.DocumentoForm.get('id_proveedor').setValue(this.data.id_referente) ;
+    // this.DocumentoForm.get('proveedor_nombre').setValue(this.data.referente) ;
     this.DocumentoForm.get('fecha').setValue(this.data.fecha) ;
     this.DocumentoForm.get('documento').setValue(this.data.documento) ;
 
@@ -74,27 +74,27 @@ export class VentanaEditarDocumentoComponent implements OnInit {
     this.editar_archivo = this.data.archivo_nombre ? false : true ;
   }
 
-  displayProveedor(proveedor?: any): string | undefined {
-    return proveedor ? proveedor.nombre : "";
-  }
+  // displayProveedor(proveedor?: any): string | undefined {
+  //   return proveedor ? proveedor.nombre : "";
+  // }
 
-  ListarProveedor(nombre: string) {
-    this.Servicios.ListarProveedor(nombre).subscribe( res => {
+  ListarProveedor() {
+    this.Servicios.ListarProveedor('').subscribe( res => {
       this.proveedores = res ;
     });
   }
 
-  ProveedorSeleccionado(evento){
-    this.proveedores=[];
-    this.DocumentoForm.get('id_proveedor').setValue(evento.option.value.id) ;
-    this.DocumentoForm.get('proveedor_nombre').setValue(evento.option.value.nombre) ;
-  }
+  // ProveedorSeleccionado(evento){
+  //   this.proveedores=[];
+  //   this.DocumentoForm.get('id_proveedor').setValue(evento.option.value.id) ;
+  //   this.DocumentoForm.get('proveedor_nombre').setValue(evento.option.value.nombre) ;
+  // }
 
-  RemoverProveedor(){
-    this.DocumentoForm.get('id_proveedor').setValue(null) ;
-    this.DocumentoForm.get('proveedor_nombre').setValue("") ;
-    this.ListarProveedor("");
-  }
+  // RemoverProveedor(){
+  //   this.DocumentoForm.get('id_proveedor').setValue(null) ;
+  //   this.DocumentoForm.get('proveedor_nombre').setValue("") ;
+  //   this.ListarProveedor("");
+  // }
 
   SubirArchivo(archivo: FileList) {
     this.archivo = archivo.item(0);
@@ -110,7 +110,7 @@ export class VentanaEditarDocumentoComponent implements OnInit {
 
   Guardar(){
     let random=(new Date()).getTime() ;
-
+    this.Cargando.next(true) ;
 
     if( this.archivo ) {
       this._generales.SubirArchivo(this.archivo).subscribe(path_archivo=>{
@@ -118,11 +118,17 @@ export class VentanaEditarDocumentoComponent implements OnInit {
         .subscribe(archivo_nombre=>{
           this.Servicio.ActualizarCabecera(
             this.data.id,
-            this.DocumentoForm.value.id_proveedor,
+            this.DocumentoForm.value.proveedor,
             this.DocumentoForm.value.fecha,
             this.DocumentoForm.value.documento,
             archivo_nombre.mensaje,
-          ).subscribe(res=>{
+          )
+          .pipe(
+            finalize(()=>{
+              this.Cargando.next(false) ;
+            })
+          )
+          .subscribe(res=>{
             this.ventana.close(res)
           })
         })
@@ -130,11 +136,17 @@ export class VentanaEditarDocumentoComponent implements OnInit {
     } else {
       this.Servicio.ActualizarCabecera(
         this.data.id,
-        this.DocumentoForm.value.id_proveedor,
+        this.DocumentoForm.value.proveedor,
         this.DocumentoForm.value.fecha,
         this.DocumentoForm.value.documento,
-        "",
-      ).subscribe(res=>{
+        this.archivo_nombre_antiguo,
+      )
+      .pipe(
+        finalize(()=>{
+          this.Cargando.next(false) ;
+        })
+      )
+      .subscribe(res=>{
         this.ventana.close(res)
       })
     }

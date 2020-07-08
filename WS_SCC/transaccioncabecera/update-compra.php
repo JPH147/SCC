@@ -20,7 +20,7 @@
     	if(trim($_POST["prid"])!=null)
     	{
         $transaccion->id_transaccion = trim($_POST["prid"]);
-        $transaccion->id_proveedor = !empty($_POST["prproveedor"]);
+        $transaccion->id_proveedor = trim($_POST["prproveedor"]);
         $transaccion->fecha = trim($_POST["prfecha"]);
         $transaccion->documento = trim($_POST["prdocumento"]);
         $transaccion->archivo = trim($_POST["prarchivo"]);

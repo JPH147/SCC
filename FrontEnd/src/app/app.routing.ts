@@ -59,6 +59,7 @@ import { CobranzaClienteListarMorososComponent } from './components/cobranza-cli
 import { CobranzaManualComponent } from './components/cobranza-manual/cobranza-manual.component';
 import { CobranzaManualListarComponent } from './components/cobranza-manual-listar/cobranza-manual-listar.component';
 import { PermisosListarComponent } from './components/usuarios/permisos-listar/permisos-listar.component';
+import { CooperativaDireccionesComponent } from './components/plantillas/cooperativa-direcciones/cooperativa-direcciones.component';
 
 export const appRoutes: Routes = [
   {path: '', redirectTo: 'inicio', pathMatch: 'full'},
@@ -139,6 +140,7 @@ export const appRoutes: Routes = [
   {path: 'proceso-judicial-vinculados', component: ProcesoJudicialVinculadosComponent},
   {path: 'plantillas', component: PlantillasComponent},
   {path: 'usuarios', component: UsuariosComponent},
+  {path: 'configuracion', component: CooperativaDireccionesComponent},
   
   {path: 'prueba', component: PermisosListarComponent},
 ];

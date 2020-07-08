@@ -161,7 +161,12 @@ export class ClienteService {
       .set('prestado',estado.toString())
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-    return this.http.post(this.url + 'cliente/create.php', params, {headers: headers});
+    return this.http.post(this.url + 'cliente/create.php', params, {headers: headers})
+    .pipe(
+      map(res=>{
+      console.log(params, res)
+      return res;
+    }));
   }
 
   Actualizar(
