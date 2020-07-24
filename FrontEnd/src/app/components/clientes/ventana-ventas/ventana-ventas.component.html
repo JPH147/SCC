@@ -33,12 +33,12 @@
       </mat-grid-tile>
 
       <mat-grid-tile>
-        <mat-grid-tile *ngIf="permiso?.ventas?.listado_ventas?.agregar">
+        <ng-container *ngIf="permiso?.ventas?.listado_ventas?.agregar">
           <button mat-icon-button color="primary" (click)="HacerVenta()" matTooltip="Hacer venta"> <mat-icon> store_mall_directory </mat-icon> </button>
-        </mat-grid-tile>
-        <mat-grid-tile *ngIf="permiso?.creditos?.listado_creditos?.agregar">
+        </ng-container>
+        <ng-container *ngIf="permiso?.creditos?.listado_creditos?.agregar">
           <button mat-icon-button color="primary" (click)="HacerCredito()" matTooltip="Hacer Crédito"> <mat-icon> account_balance </mat-icon> </button>
-        </mat-grid-tile>
+        </ng-container>
       </mat-grid-tile>
 
     </mat-grid-list>
@@ -51,33 +51,40 @@
 
       <ng-container matColumnDef="documento">
         <mat-header-cell *matHeaderCellDef> Documento </mat-header-cell>
-        <mat-cell *matCellDef="let venta"> {{venta.documento}}  </mat-cell>
+        <mat-cell *matCellDef="let transaccion"> {{transaccion.documento}}  </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="tipo">
         <mat-header-cell *matHeaderCellDef> Tipo </mat-header-cell>
-        <mat-cell *matCellDef="let venta"> {{venta.tipo}}  </mat-cell>
+        <mat-cell *matCellDef="let transaccion"> {{transaccion.tipo}}  </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="fecha">
         <mat-header-cell *matHeaderCellDef> Fecha </mat-header-cell>
-        <mat-cell *matCellDef="let venta"> {{venta.fecha | date:"dd/MM/yyyy"}} </mat-cell>
+        <mat-cell *matCellDef="let transaccion"> {{transaccion.fecha | date:"dd/MM/yyyy"}} </mat-cell>
 	    </ng-container>
 
       <ng-container matColumnDef="total">
         <mat-header-cell *matHeaderCellDef> Total </mat-header-cell>
-        <mat-cell *matCellDef="let venta"> {{venta.total | currency:'S/.'}} </mat-cell>
+        <mat-cell *matCellDef="let transaccion"> {{transaccion.total | currency:'S/.'}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="estado">
         <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
-        <mat-cell *matCellDef="let venta"> {{venta.estado}} ({{venta.cuotas_pagadas}}/{{venta.total_cuotas}}) </mat-cell>
+        <mat-cell *matCellDef="let transaccion"> {{transaccion.estado}} ({{transaccion.cuotas_pagadas}}/{{transaccion.total_cuotas}}) </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
-        <mat-cell *matCellDef="let venta">
-          <button mat-icon-button matTooltip="Ver detalle" color="primary" (click)="VerVenta(venta)"><mat-icon> visibility </mat-icon></button>
+        <mat-cell *matCellDef="let transaccion">
+          <ng-container *ngIf="
+            (transaccion.id_tipo==1 && permiso.creditos.afiliaciones.general) ||
+            (transaccion.id_tipo==2 && permiso.creditos.listado_creditos.general) ||
+            (transaccion.id_tipo==3 && permiso.ventas.listado_ventas.general) ||
+            (transaccion.id_tipo==4 && permiso.ventas.salida_ventas.general)
+          ">
+          </ng-container>
+          <button mat-icon-button matTooltip="Ver detalle" color="primary" (click)="VerVenta(transaccion)"><mat-icon> visibility </mat-icon></button>
         </mat-cell>
       </ng-container>
 

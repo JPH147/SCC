@@ -149,7 +149,7 @@ Class Proceso{
       "total_documentos" => $row['total_documentos'] ,
       "codigo" => $row['codigo'] ,
       "id_cliente" => $row['id_cliente'] ,
-      "cliente_dni" => $row['cliente_dni'] ,
+      "cliente_dni" => "'" . $row['cliente_dni'] ,
       "cliente_nombre" => $row['cliente_nombre'] ,
       "numero_cuotas" => $row['numero_cuotas'] ,
       "total" => $row['total'] ,
@@ -924,6 +924,8 @@ Class Proceso{
       extract($row);
       $items = array (
         "id_credito"=>$id_credito,
+        "documento_credito"=>$documento_credito,
+        "credito_tipo"=>$credito_tipo,
         "pdf_foto_credito"=>$pdf_foto_credito,
         "pdf_dni_credito"=>$pdf_dni_credito,
         "pdf_cip_credito"=>$pdf_cip_credito,
@@ -939,6 +941,8 @@ Class Proceso{
         "pdf_ddjj_credito"=>$pdf_ddjj_credito,
         "pdf_otros_credito"=>$pdf_otros_credito,
         "id_venta"=>$id_venta,
+        "documento_venta"=>$documento_venta,
+        "venta_tipo"=>$venta_tipo,
         "foto_pdf_venta"=>$foto_pdf_venta,
         "contrato_pdf_venta"=> $contrato_pdf_venta,
         "dni_pdf_venta"=>$dni_pdf_venta,

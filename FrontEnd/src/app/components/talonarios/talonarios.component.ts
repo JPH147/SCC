@@ -64,7 +64,6 @@ export class TalonariosComponent implements OnInit {
   }
 
   Eliminar(talonario) {
-
     const VentanaConfirmar = this.Dialogo.open(VentanaConfirmarComponent, {
       width: '400px',
       data: {objeto: 'el talonario', valor: talonario.serie}
@@ -72,7 +71,7 @@ export class TalonariosComponent implements OnInit {
 
     VentanaConfirmar.afterClosed().subscribe(res => {
       if (res === true) {
-        this.Servicio.ActualizarTalonarios(talonario.serie, 0).subscribe(res => {
+        this.Servicio.ActualizarTalonarios(talonario.serie, -1).subscribe(res => {
           this.CargarData();
         });
       }

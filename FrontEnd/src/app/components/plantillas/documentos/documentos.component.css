@@ -4,17 +4,7 @@
   text-align: center;
   font-family: sans-serif;
 }
-    
-mat-card{
-  width: 80%;
-  position: relative;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 20px;
-  margin-bottom: 10px;
-  min-height: 300px;
-}
-    
+
 .spinner-container{
   position: absolute;
   top: 200px;
@@ -27,10 +17,6 @@ mat-card{
 
 .mat-column-numero{
   max-width: 5%;
-}
-
-.mat-column-plantilla{
-  max-width: 20%
 }
 
 .mat-column-opciones{

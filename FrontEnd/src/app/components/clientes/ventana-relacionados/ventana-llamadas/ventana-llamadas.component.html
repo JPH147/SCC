@@ -1,0 +1,28 @@
+<div class="contenedor">
+  <div class = "spinner-container" *ngIf = "ListadoLlamadas.Cargando| async">
+    <mat-spinner></mat-spinner>
+  </div>
+  
+  <mat-table [dataSource]="ListadoLlamadas" class="mat-elevation-z8">
+  
+    <ng-container matColumnDef="numero">
+      <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+      <mat-cell *matCellDef="let llamada"> {{llamada.numero}} </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="fecha">
+      <mat-header-cell *matHeaderCellDef> Fecha </mat-header-cell>
+      <mat-cell *matCellDef="let llamada"> {{llamada.fecha | date:"dd/MM/yyyy HH:mm:ss"}} </mat-cell>
+    </ng-container>
+  
+    <ng-container matColumnDef="opciones">
+      <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
+      <mat-cell *matCellDef="let llamada">
+        <button mat-icon-button type="button" matTooltip="Ver archivo" color="primary" (click)="VerArchivo(llamada.archivo)"><mat-icon> visibility </mat-icon></button>
+      </mat-cell>
+    </ng-container>
+  
+    <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: Columnas;"></mat-row>
+  </mat-table>
+</div>

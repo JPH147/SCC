@@ -41,16 +41,22 @@ export class StockService {
     }
     }));
   }
-}
 
-// tslint:disable-next-line:class-name
-export interface stock {
-  numero: number;
-  almacen: string;
-  tipo: string;
-  marca: string;
-  modelo: string;
-  descripcion: string;
-  unidad_medida: string;
-  cantidad: number;
+  VerificarStockSerie(
+    serie: number,
+  ): Observable<any> {
+    let params = new HttpParams()
+      .set('prserie', serie.toString() ) ;
+
+    return this.http.get(this.url + 'stock/verificar-serie.php', {params} )
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res['data'] ;
+      } else {
+        console.log(res) ;
+        return false ;
+    }
+    }));
+  }
+
 }

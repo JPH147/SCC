@@ -60,6 +60,7 @@ import { CobranzaManualComponent } from './components/cobranza-manual/cobranza-m
 import { CobranzaManualListarComponent } from './components/cobranza-manual-listar/cobranza-manual-listar.component';
 import { PermisosListarComponent } from './components/usuarios/permisos-listar/permisos-listar.component';
 import { CooperativaDireccionesComponent } from './components/plantillas/cooperativa-direcciones/cooperativa-direcciones.component';
+import { AfiliacionesComponent } from './components/afiliaciones/afiliaciones.component';
 
 export const appRoutes: Routes = [
   {path: '', redirectTo: 'inicio', pathMatch: 'full'},
@@ -98,6 +99,9 @@ export const appRoutes: Routes = [
   {path: 'creditos', component: CreditosListarComponent},
   {path: 'creditos/ver/:idcredito', component: CreditosComponent},
   {path: 'creditos/editar/:idcreditoeditar', component: CreditosComponent},
+  {path: 'afiliaciones/nueva', component: AfiliacionesComponent},
+  {path: 'afiliaciones/ver/:idcredito', component: AfiliacionesComponent},
+  {path: 'afiliaciones/editar/:idcreditoeditar', component: AfiliacionesComponent},
   {path: 'creditos/nuevo', component: CreditosComponent},
   {path: 'creditos/nuevo-cliente/:idcliente', component: CreditosComponent},
   {path: 'creditos/nuevo/:idpresupuesto', component: CreditosComponent},
@@ -142,7 +146,7 @@ export const appRoutes: Routes = [
   {path: 'usuarios', component: UsuariosComponent},
   {path: 'configuracion', component: CooperativaDireccionesComponent},
   
-  {path: 'prueba', component: PermisosListarComponent},
+  {path: 'prueba', component: SalidaProductosComponent},
 ];
 
 

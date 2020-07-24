@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { EvaluacionCoutasDataSource } from '../evaluacion-cuotas/evaluacion-cuotas.component';
-import { merge, fromEvent } from 'rxjs';
+import { merge, fromEvent, BehaviorSubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { EvaluacionService } from '../evaluacion.service';
@@ -20,6 +20,8 @@ import { Notificaciones } from '../../global/notificacion';
 })
 
 export class EvaluacionExpressComponent implements OnInit {
+
+  public HacerReseteo = new BehaviorSubject<boolean>(false) ;
 
   @ViewChild('InputCapital', { static: true }) FiltroCapital : ElementRef ;
   @ViewChild('InputCuotas', { static: true }) FiltroCuotas : ElementRef ;
@@ -825,6 +827,10 @@ export class EvaluacionExpressComponent implements OnInit {
         // console.log(res)
       })
     }
+  }
+
+  ResetearFormularios() {
+    this.HacerReseteo.next(true) ;
   }
 
 }

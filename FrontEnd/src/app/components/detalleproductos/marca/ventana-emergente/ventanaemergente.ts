@@ -45,6 +45,9 @@ export class VentanaEmergenteMarca {
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnInit() {
     this.MarcaForm = this.FormBuilder.group({
+      'nombre_anterior': [null, [
+        Validators.required
+      ]],
       'nombre': [null, [
         Validators.required
       ]],
@@ -53,6 +56,7 @@ export class VentanaEmergenteMarca {
       ]]
     });
 
+    
     this.Servicios.ListarTipoProductos(null,'', '').subscribe(res=>{
       this.lsttipos = res;
       if (this.data) {
@@ -62,9 +66,10 @@ export class VentanaEmergenteMarca {
             this.ObtenerArreglo();
           })
         } else {
-          this.MarcaForm.get('nombre').setValue(this.data.marca);
-          this.Servicios.ListarTipoProductos(this.data.idtipo,"","").subscribe(rest=>{
-            this.MarcaForm.get('idtipo').setValue(this.data.idtipo);
+          this.MarcaForm.get('nombre_anterior').setValue(this.data.nombre);
+          this.MarcaForm.get('nombre').setValue(this.data.nombre);
+          this.MarcaForm.get('idtipo').setValue(this.data.id_tipo);
+          this.Servicios.ListarTipoProductos(this.data.id_tipo,"","").subscribe(rest=>{
             this.ObtenerArreglo();
           })
         }
@@ -82,10 +87,16 @@ export class VentanaEmergenteMarca {
       distinctUntilChanged(),
       tap(()=>{
         if (this.producto_seleccionado) {
-          this.Servicios.ListarMarca2(this.producto_seleccionado,this.FiltroMarca.nativeElement.value.trim(),1,1).subscribe(res=>{
-            // console.log(res)
+          let arrayValidado : Array<any> ;
+          this.Servicios.ListarMarca(this.MarcaForm.value.idtipo,this.FiltroMarca.nativeElement.value.trim()).subscribe(res=>{
+            if ( this.MarcaForm.get('nombre_anterior').value ) {
+              arrayValidado = res.filter( elemento => elemento.nombre != this.MarcaForm.get('nombre_anterior').value ) ;
+            } else {
+              arrayValidado = res ;
+            }
+            arrayValidado = res.filter( elemento => elemento.nombre == this.MarcaForm.get('nombre').value ) ;
             if (res) {
-              this.total=res['data'].marca.length;
+              this.total=arrayValidado.length;
             }else{
               this.total=0
             }
@@ -96,7 +107,9 @@ export class VentanaEmergenteMarca {
   }
 
   ObtenerArreglo(){
-    this.producto_seleccionado = this.lsttipos.filter(e=>e.id==this.MarcaForm.value.idtipo)[0].nombre;
+    if ( this.lsttipos.filter(e=>e.id==this.MarcaForm.value.idtipo)[0] ) {
+      this.producto_seleccionado = this.lsttipos.filter(e=>e.id==this.MarcaForm.value.idtipo)[0].nombre;
+    }
   }
 
   Guardar(formulario) {

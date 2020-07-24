@@ -355,6 +355,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       ]],
       afiliacion_tipo_pago :[{value: 1, disabled: false},[
       ]],
+      afiliacion_fecha_afiliacion :[{value: moment(new Date()), disabled: false},[
+      ]],
       afiliacion_fecha_vencimiento :[{value: moment(new Date()).add(1, 'months').endOf('month').toDate(), disabled: false},[
       ]],
       /////////////////////////////////////////////////////////////// 
@@ -1287,7 +1289,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   }
 
   Guardar(){
-    console.log(this.Cronograma);
+    // console.log(this.Cronograma);
     if(this.id_credito_editar){
       if(this.id_tipo==1){
         this.ActualizarAfiliacion()
@@ -1305,7 +1307,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     this.Servicio.Crear(
       1,
       this.CreditosForm.value.sucursal,
-      this.CreditosForm.value.fecha_credito,
+      this.CreditosForm.value.afiliacion_fecha_afiliacion,
       this.numero_afiliacion,
       0,
       0,
@@ -1316,7 +1318,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       this.CreditosForm.value.cargo,
       this.CreditosForm.value.trabajo,
       this.CreditosForm.value.tipo_pago,
-      this.CreditosForm.value.fecha_credito,
+      this.CreditosForm.value.afiliacion_fecha_vencimiento,
       0,
       this.CreditosForm.value.afiliacion_monto,
       this.numero_cuotas,
@@ -1343,7 +1345,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         this.CreditosForm.value.tipo_pago,
         this.CreditosForm.value.afiliacion_monto,
         this.numero_cuotas,
-        this.CreditosForm.value.fecha_credito
+        this.CreditosForm.value.afiliacion_fecha_vencimiento
       ).subscribe()
 
     })
@@ -1391,28 +1393,21 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         "",
         "",
         this.CreditosForm.value.observaciones
-      ).subscribe(res=>{
-        // console.log(res)
-  
-        this.Cronograma.forEach((item)=>{
-          this.Servicio.CrearCronograma(
-            res['data'],
-            this.CreditosForm.value.tipo_pago,
-            item.monto_cuota,
-            0,
-            item.fecha_vencimiento
-          ).subscribe()
-        })
-  
-        setTimeout(()=>{
+      ).subscribe(res=>{  
+        this.Servicio.CrearCronogramaAfiliacion(
+          res['data'],
+          this.CreditosForm.value.tipo_pago,
+          this.CreditosForm.value.afiliacion_monto,
+          this.numero_cuotas,
+          this.CreditosForm.value.fecha_pago
+        ).subscribe( resultado =>{
           this.router.navigate(['/creditos']);
           if(res['codigo']==0){
             this.Notificacion.Snack("Se actualizó la afiliación con éxito!","");
           }else{
             this.Notificacion.Snack("Ocurrió un error al actualizar la afiliación","");
           }
-        }, 300)
-
+        })
       })
     })
   }

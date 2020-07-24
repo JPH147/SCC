@@ -29,6 +29,7 @@ export class VentanaPagosComponent implements OnInit {
   ngOnInit() {
    this.ListadoPagos = new PagosDataSource(this.Servicio);
    this.ListadoPagos.CargarPagos( this.data.tipo , this.data.cuota , 1 , 5 );
+   console.log(this.data) ;
   }
 
   ngAfterViewInit(){

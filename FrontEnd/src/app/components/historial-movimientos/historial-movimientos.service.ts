@@ -45,7 +45,23 @@ export class  HistorialMovimientosService {
       } else {
         console.log('No hay datos para mostrar');
         return res;
-    }
+      }
+    }));
+  }
+
+  EliminarMovimiento(
+    id_cabecera : number
+  ) :Observable<any> {
+    let params = new HttpParams()
+      .set('prid', id_cabecera.toString() ) ;
+
+    return this.http.post(this.url + 'transaccioncabecera/delete.php', params ).pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return true ;
+      } else {
+        console.log('No hay datos para mostrar', res);
+        return false ;
+      }
     }));
   }
 }

@@ -73,8 +73,18 @@ Class Plantillas{
     public $parametro_autorizacion_1;
     public $parametro_autorizacion_2;
 
+    public $tipo_plantilla;
+    public $usuario;
+    public $comentarios;
+    public $archivos;
+
+    public $tipo ;
+    public $relevancia ;
+    public $id_plantilla ;
+
     public $path_originales = '../plantillas/archivos/';
     public $path_estandar = '../plantillas/estaticos/';
+    public $path_nuevo = '../uploads/plantillas/';
     public $path = '../uploads/autogenerados/';
 
     public function __construct($db){
@@ -525,6 +535,157 @@ Class Plantillas{
             return $nombre_corregido;
         }
     }
+
+    function read_tipo() {
+        $query = "CALL sp_listarplantillastipo()";
+
+        $result = $this->conn->prepare($query);
+
+        $result->execute();
+
+        $listado=array();
+
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+		{
+            extract($row);
+            $item = array (
+                "id"=>$id,
+                "nombre"=>$nombre,
+            );
+            array_push($listado, $item);
+        }
+
+        return $listado;
+    }
+
+    function crear_plantilla(){
+        $query = "CALL sp_crearplantillas(
+            :prtipoplantilla,
+            :fecha,
+            :prusuario,
+            :prcomentarios,
+            :prarchivos
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prtipoplantilla", $this->tipo_plantilla);
+        $result->bindParam(":fecha", $this->fecha);
+        $result->bindParam(":prusuario", $this->usuario);
+        $result->bindParam(":prcomentarios", $this->comentarios);
+        $result->bindParam(":prarchivos", $this->archivos);
+
+        $this->tipo_plantilla=htmlspecialchars(strip_tags($this->tipo_plantilla));
+        $this->fecha=htmlspecialchars(strip_tags($this->fecha));
+        $this->usuario=htmlspecialchars(strip_tags($this->usuario));
+        $this->comentarios=htmlspecialchars(strip_tags($this->comentarios));
+        $this->archivos=htmlspecialchars(strip_tags($this->archivos));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    function read(){
+
+        $query = "CALL sp_listarplantillas(?,?,?,?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->tipo);
+        $result->bindParam(2, $this->relevancia);
+        $result->bindParam(3, $this->usuario);
+        $result->bindParam(4, $this->numero_pagina);
+        $result->bindParam(5, $this->total_pagina);
+
+        $result->execute();
+        
+        $plantillas_list=array();
+        $plantillas_list["plantillas"]=array();
+
+        $contador = $this->total_pagina*($this->numero_pagina-1);
+        
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $contador=$contador+1;
+            $items = array (
+                "numero"=>$contador,
+                "id_plantilla"=>$id_plantilla,
+                "id_tipo_plantilla"=>$id_tipo_plantilla,
+                "tipo_plantilla"=>$tipo_plantilla,
+                "fecha"=>$fecha,
+                "usuario"=>$usuario,
+                "comentarios"=>$comentarios,
+                "archivo"=>$archivo,
+                "relevancia"=>$relevancia,
+            );
+            array_push($plantillas_list["plantillas"],$items);
+        }
+
+        return $plantillas_list;
+    }
+
+    function contar(){
+
+        $query = "CALL sp_listarplantillascontar(?,?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->tipo);
+        $result->bindParam(2, $this->relevancia);
+        $result->bindParam(3, $this->usuario);
+
+        $result->execute();
+
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        $this->total_resultado=$row['total'];
+
+        return $this->total_resultado;
+    }
+
+    function eliminar_plantilla(){
+        $query = "CALL sp_eliminarplantilla(
+            :prplantilla
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prplantilla", $this->id_plantilla);
+
+        $this->id_plantilla=htmlspecialchars(strip_tags($this->id_plantilla));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    function actualizar_plantilla_relevancia(){
+        $query = "CALL sp_actualizarplantillarelevancia(
+            :prplantilla ,
+            :prtipo
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prplantilla", $this->id_plantilla);
+        $result->bindParam(":prtipo", $this->tipo_plantilla);
+
+        $this->id_plantilla=htmlspecialchars(strip_tags($this->id_plantilla));
+        $this->tipo_plantilla=htmlspecialchars(strip_tags($this->tipo_plantilla));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
+    }
+    
 
 }
 

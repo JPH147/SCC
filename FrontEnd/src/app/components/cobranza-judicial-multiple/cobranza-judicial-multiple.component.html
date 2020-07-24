@@ -2,13 +2,13 @@
 
   <button mat-mini-fab type="button" color="primary" (click)="Atras()"><mat-icon>keyboard_arrow_left</mat-icon></button>
   <mat-card-title class="tituloProd"> Crear proceso judicial </mat-card-title>
+
+  <div class = "spinner-container" *ngIf = "(ListadoTransacciones.Cargando | async) || (Cargando | async)">
+    <mat-spinner></mat-spinner>
+  </div>
+
   <mat-horizontal-stepper linear="true">
-
     <mat-step [stepControl]="JudicialDocumentosForm">
-      <div class = "spinner-container" *ngIf = "ListadoTransacciones.Cargando| async">
-        <mat-spinner></mat-spinner>
-      </div>
-
       <form [formGroup]="JudicialDocumentosForm">
         <ng-template matStepLabel>Seleccionar transacciones</ng-template>
         <mat-grid-list class="contenido-tab" cols="4" rowHeight="70px">

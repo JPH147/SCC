@@ -24,6 +24,7 @@ try
         if($var != null){
 
             $usuario_list = array(
+                "id"=>$var->idusuario,
                 "usuario"=>$var->usr_nombre,
                 "rol"=>$var->usr_usuario,
                 "id_perfil"=>$var->idperfil,

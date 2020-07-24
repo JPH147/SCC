@@ -23,11 +23,11 @@
 
 	    	if($transaccion->delete())
 	        {
-	                print_json("0000", "Se eliminó la transaccion satisfactoriamente.", "");
+						print_json("0000", "Se eliminó la transaccion satisfactoriamente.", true);
 	        }
 	        else
 	        {
-	                print_json("9999", "Ocurrió un error al eliminar la transaccion.", "");
+						print_json("9999", "Ocurrió un error al eliminar la transaccion.", false);
 	        }
 	    }
     	else

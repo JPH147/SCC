@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
-import {stock, StockService } from './stock.service';
+import {StockService } from './stock.service';
 import {BehaviorSubject, Observable, of} from 'rxjs';
 import {catchError, finalize, subscribeOn} from 'rxjs/operators';
 import { ReturnStatement } from '@angular/compiler';
 import {ServiciosProductoSerie} from '../global/productoserie';
 
-export class StockDataSource implements DataSource <stock> {
+export class StockDataSource implements DataSource <any> {
 
-  private InformacionStock = new BehaviorSubject<stock[]> ([]);
+  private InformacionStock = new BehaviorSubject<any[]> ([]);
   private CargandoInformacion = new BehaviorSubject<boolean>(false);
   public Cargando = this.CargandoInformacion.asObservable();
   public Totalresultados = new BehaviorSubject<number> (0);
@@ -17,7 +17,7 @@ export class StockDataSource implements DataSource <stock> {
     private Servicio: StockService,
   ) {}
   
-  connect(CollectionViewer: CollectionViewer): Observable<stock[]> {
+  connect(CollectionViewer: CollectionViewer): Observable<any[]> {
     return this.InformacionStock.asObservable();
    }
 
@@ -50,16 +50,16 @@ export class StockDataSource implements DataSource <stock> {
 
 }
 
-export class StockSerieDataSource implements DataSource <stock> {
+export class StockSerieDataSource implements DataSource <any> {
 
-  private InformacionStock = new BehaviorSubject<stock[]> ([]);
+  private InformacionStock = new BehaviorSubject<any[]> ([]);
   private CargandoInformacion = new BehaviorSubject<boolean>(false);
   public Cargando = this.CargandoInformacion.asObservable();
   public Totalresultados = new BehaviorSubject<number> (0);
 
   constructor (private Servicio: ServiciosProductoSerie) {}
 
-  connect(CollectionViewer: CollectionViewer): Observable<stock[]> {
+  connect(CollectionViewer: CollectionViewer): Observable<any[]> {
     return this.InformacionStock.asObservable();
     }
 

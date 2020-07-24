@@ -1,0 +1,13 @@
+.contenedor{
+  position: relative;
+  width: 90%;
+  margin: 20px auto;
+}
+
+.mat-column-numero{
+	max-width: 10%
+}
+
+.mat-column-opciones{
+  max-width: 20%;
+}

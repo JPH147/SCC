@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {CollectionViewer, DataSource} from "@angular/cdk/collections";
 import { Observable, forkJoin,fromEvent, merge, BehaviorSubject, of} from 'rxjs';
 import { PlantillasService } from '../plantillas.service';
@@ -6,6 +6,11 @@ import { VentanaPlantillasComponent } from './ventana-plantillas/ventana-plantil
 import {saveAs} from 'file-saver';
 import { MatDialog } from '@angular/material/dialog';
 import { Notificaciones } from '../../global/notificacion';
+import { VentanaDocumentosComponent } from './ventana-documentos/ventana-documentos.component';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { distinctUntilChanged, debounceTime, tap, finalize } from 'rxjs/operators';
+import { MatPaginator } from '@angular/material/paginator';
+import { VentanaConfirmarComponent } from '../../global/ventana-confirmar/ventana-confirmar.component';
 
 @Component({
   selector: 'app-documentos',
@@ -13,6 +18,8 @@ import { Notificaciones } from '../../global/notificacion';
   styleUrls: ['./documentos.component.css']
 })
 export class DocumentosComponent implements OnInit {
+
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   public ListadoPlantillas : PlantillasDataSource;
   public Columnas : Array<string> ;
@@ -25,23 +32,53 @@ export class DocumentosComponent implements OnInit {
   public ListadoCompromiso : Array<any>;
   public ListadoCarta : Array<any>;
 
+  public Tipos : Array<any> = [] ;
+  public PlantillasForm : FormGroup ;
+
   constructor(
     private Servicio : PlantillasService ,
     private Notificacion : Notificaciones ,
-    private Dialogo : MatDialog
+    private Dialogo : MatDialog ,
+    private _builder : FormBuilder
   ) { }
 
   ngOnInit() {
-    this.ListadoPlantillas = new PlantillasDataSource();
-    this.Columnas= ["numero", "planilla", "referente", "opciones"];
-    this.CrearDocumentos();
-    this.CrearDocumentosPlantillas();
-    this.CrearListado();
+    this.ListarTiposPlantilla() ;
+    this.CrearFormulario() ;
+    
+    this.ListadoPlantillas = new PlantillasDataSource(this.Servicio);
+    this.ListadoPlantillas.CargarInformacion(0,0,"",1,10) ;
+
+    this.Columnas= ["numero", "tipo_plantilla" ,"fecha" ,"usuario" ,"comentarios" ,"opciones"];
   }
 
-  CrearListado(){
-    this.Listado = this.ListadoTransaccion;
-    this.ListadoPlantillas.CargarInformacion(this.Listado);
+  ngAfterViewInit(){
+    this.PlantillasForm.get('usuario').valueChanges
+    .pipe(
+      distinctUntilChanged() ,
+      debounceTime(200) ,
+      tap(()=>{
+        this.paginator.pageIndex = 0;
+        this.CargarInformacion() ;
+      })
+    ).subscribe() ;
+    
+    this.paginator.page
+    .pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      tap(() => {
+        this.CargarInformacion();
+      })
+    ).subscribe();
+  }
+
+  CrearFormulario(){
+    this.PlantillasForm = this._builder.group({
+      tipo : [ { value : 0 , disabled : false } ] ,
+      relevancia : [ { value : 0 , disabled : false } ] ,
+      usuario : [ { value : "" , disabled : false } ] ,
+    })
   }
 
   Descargar(nombre_archivo){
@@ -50,77 +87,86 @@ export class DocumentosComponent implements OnInit {
     })
   }
 
-  Subir(plantilla){
-    let Ventana = this.Dialogo.open(VentanaPlantillasComponent, {
-      width: '900px',
-      data: plantilla
+  ListarTiposPlantilla() {
+    this.Servicio.ListarTipos().subscribe(res=>{
+      this.Tipos = res ;
+    })
+  }
+
+  CargarInformacion() {
+    this.ListadoPlantillas.CargarInformacion(
+      this.PlantillasForm.get('tipo').value ,
+      this.PlantillasForm.get('relevancia').value ,
+      this.PlantillasForm.get('usuario').value ,
+      this.paginator.pageIndex + 1 ,
+      this.paginator.pageSize
+    )
+  }
+
+  Agregar() {
+    let Ventana = this.Dialogo.open(VentanaDocumentosComponent, {
+      width : '900px' ,
     });
 
     Ventana.afterClosed().subscribe(res=>{
       if(res) {
-        this.Notificacion.Snack("Se actualizó el archivo satisfactoriamente","");
+        this.CargarInformacion() ;
+        this.Notificacion.Snack("Se creó el archivo satisfactoriamente","");
       }
       if(res===false) {
-        this.Notificacion.Snack("Ocurrió un error al actualizar el archivo","");
+        this.Notificacion.Snack("Ocurrió un error al crear el archivo","");
       }
     })
   }
 
-  CrearDocumentos(){
-    this.Documentos = [
-      {id:1, nombre: "Transacción"},
-      {id:2, nombre: "Autorización"},
-      {id:3, nombre: "Declaración jurada"},
-      {id:4, nombre: "Tarjeta de socio"},
-      {id:5, nombre: "Compromiso de pago"},
-      {id:6, nombre: "Carta del aval"},
-    ]
+  EstablecerPlantillaPrimaria(plantilla) {
+    this.ListadoPlantillas.CargandoInformacion.next(true) ;
+
+    let nombre_archivo = this.ObtenerNombreArchivo(plantilla.id_tipo_plantilla) ;
+    
+    this.Servicio.CopiarPlantilla( nombre_archivo, plantilla.archivo )
+    .subscribe(res=>{
+      if ( res ) {
+        this.ListadoPlantillas.CargandoInformacion.next(false) ;
+        this.Servicio.ActualizarPlantillaRelevancia(plantilla.id_plantilla, plantilla.id_tipo_plantilla)
+        .subscribe(resultado => {
+          if ( resultado ) {
+            this.Notificacion.Snack("Se actualizó la plantilla satisfactoriamente","") ;
+            this.CargarInformacion();
+          } else {
+            this.Notificacion.Snack("Ocurrió un error al actualizar la plantilla","") ;
+          }
+        });
+      } else {
+        this.Notificacion.Snack("Ocurrió un error al actualizar la plantilla","") ;
+        this.ListadoPlantillas.CargandoInformacion.next(false) ;
+      }
+    })
+
   }
 
-  CrearDocumentosPlantillas(){
-    this.ListadoTransaccion = [
-      {numero: 1, nombre: "transaccion_X.docx", referente: "Todos"},
-      // {numero: 1, nombre: "transaccion_1.docx", referente: "Policía Nacional del Perú"},
-      // {numero: 2, nombre: "transaccion_2.docx", referente: "Caja Pensión"},
-      // {numero: 3, nombre: "transaccion_3.docx", referente: "Ejército"},
-      // {numero: 4, nombre: "transaccion_4.docx", referente: "Ministerio de educación"},
-      // {numero: 5, nombre: "transaccion_5.docx", referente: "Ministerio de salud"},
-      // {numero: 6, nombre: "transaccion_6.docx", referente: "Otros"}
-    ];
-    this.ListadoAutorizacion = [
-      {numero: 1, nombre: "autorizacion_X.docx", referente: "Todos"},
-      // {numero: 2, nombre: "autorizacion_2.docx", referente: "Caja Pensión"},
-      // {numero: 3, nombre: "autorizacion_3.docx", referente: "Ejército"},
-      // {numero: 4, nombre: "autorizacion_4.docx", referente: "Ministerio de educación"},
-      // {numero: 5, nombre: "autorizacion_5.docx", referente: "Ministerio de salud"},
-      // {numero: 6, nombre: "autorizacion_6.docx", referente: "Otros"}
-    ];
-    this.ListadoDDJJ = [
-      {numero: 1, nombre: "ddjj_X.docx", referente: "Todos"}
-    ];
-    this.ListadoTarjeta = [
-      {numero: 1, nombre: "tarjeta_X.docx", referente: "Todos"},
-      // {numero: 1, nombre: "tarjeta_1.docx", referente: "PNP, Caja Pensión y Ejército"},
-      // {numero: 2, nombre: "tarjeta_2.docx", referente: "MINEDU, MINSA y otros"},
-    ];
-    this.ListadoCompromiso = [
-      {numero: 1, nombre: "compromiso_X.docx", referente: "Todos"},
-      // {numero: 1, nombre: "compromiso_1.docx", referente: "PNP, Caja Pensión y Ejército"},
-      // {numero: 2, nombre: "compromiso_2.docx", referente: "MINEDU, MINSA y otros"},
-    ];
-    this.ListadoCarta = [
-      {numero: 1, nombre: "carta_aval.docx", referente: "Avales"}
-    ];
+  ObtenerNombreArchivo( tipo_plantilla ) : string {
+    if (tipo_plantilla==1) return "transaccion_X.docx" ;
+    if (tipo_plantilla==2) return "autorizacion_X.docx" ;
+    if (tipo_plantilla==3) return "ddjj_X.docx" ;
+    if (tipo_plantilla==4) return "tarjeta_X.docx" ;
+    if (tipo_plantilla==5) return "compromiso_X.docx" ;
+    if (tipo_plantilla==6) return "carta_aval.docx" ;
   }
 
-  CambioDocumento(evento){
-    if (evento.value==1) this.Listado = this.ListadoTransaccion;
-    if (evento.value==2) this.Listado = this.ListadoAutorizacion;
-    if (evento.value==3) this.Listado = this.ListadoDDJJ;
-    if (evento.value==4) this.Listado = this.ListadoTarjeta;
-    if (evento.value==5) this.Listado = this.ListadoCompromiso;
-    if (evento.value==6) this.Listado = this.ListadoCarta;
-    this.ListadoPlantillas.CargarInformacion(this.Listado);
+  Eliminar( plantilla ){
+    const VentanaConfirmar = this.Dialogo.open(VentanaConfirmarComponent, {
+      width: '400px',
+      data: {objeto: 'el plantilla', valor: plantilla.comentario}
+    });
+
+    VentanaConfirmar.afterClosed().subscribe(res => {
+      if (res === true) {
+        this.Servicio.EliminarPlantilla(plantilla.id_plantilla).subscribe(res => {
+          this.CargarInformacion();
+        });
+      }
+    });
   }
 
 }
@@ -128,11 +174,12 @@ export class DocumentosComponent implements OnInit {
 export class PlantillasDataSource implements DataSource<any>{
 
   private InformacionPlantillas = new BehaviorSubject<any[]>([]);
-  private CargandoInformacion = new BehaviorSubject<boolean>(false);
+  public CargandoInformacion = new BehaviorSubject<boolean>(false);
   public Cargando = this.CargandoInformacion.asObservable();
   public TotalResultados = new BehaviorSubject<number>(0);
 
   constructor(
+    private _plantillas : PlantillasService
   ) { }
 
   connect(collectionViewer: CollectionViewer): Observable<any[]> {
@@ -144,8 +191,35 @@ export class PlantillasDataSource implements DataSource<any>{
     this.CargandoInformacion.complete();
   }
 
-  CargarInformacion(listado){
-    this.InformacionPlantillas.next(listado);
+  CargarInformacion(
+    tipo : number ,
+    relevancia : number ,
+    usuario : string ,
+    numero_pagina : number ,
+    total_pagina : number ,
+  ){
+    this.CargandoInformacion.next(true) ;
+    this._plantillas.ListarPlantillas(
+      tipo ,
+      relevancia ,
+      usuario ,
+      numero_pagina ,
+      total_pagina ,
+    )
+    .pipe(
+      finalize(()=>{
+        this.CargandoInformacion.next(false) ;
+      })
+    )
+    .subscribe( res=> {
+      if ( res ) {
+        this.InformacionPlantillas.next( res['data'].plantillas ) ;
+        this.TotalResultados.next( res['mensaje'] ) ;
+      } else {
+        this.InformacionPlantillas.next( [] ) ;
+        this.TotalResultados.next( 0 ) ;
+      }
+    })
   }
 
 }

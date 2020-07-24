@@ -7,6 +7,7 @@ Class Stock{
     public $tipo;
     public $marca;
     public $modelo;
+    public $serie;
     public $descripcion;
     public $unidad_medida;
     public $cantidad;
@@ -73,6 +74,22 @@ Class Stock{
         $result->bindParam(3, $this->marca);
         $result->bindParam(4, $this->modelo);
         $result->bindParam(5, $this->descripcion);
+
+        $result->execute();
+
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        $this->total_resultado=$row['total'];
+
+        return $this->total_resultado;
+    }
+        
+    function VerificarStockxSerie(){
+        $query = "CALL sp_verificarstockproductoserie(?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->serie);
 
         $result->execute();
 

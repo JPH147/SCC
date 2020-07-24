@@ -42,6 +42,9 @@ export class VentanaEmergenteTipo {
   ngOnInit(){
 
     this.TipoForm = this.FormBuilder.group({
+      'nombre_anterior': [null,[
+        Validators.required
+      ]],
       'nombre': [null,[
         Validators.required
       ]],
@@ -57,8 +60,10 @@ export class VentanaEmergenteTipo {
       }
     });
 
+
     if(this.data){
       this.TipoForm.get('nombre').setValue(this.data.nombre);
+      this.TipoForm.get('nombre_anterior').setValue(this.data.nombre);
       this.TipoForm.get('idunidadmedida').setValue(this.data.idunidad);
     }
 
@@ -70,14 +75,21 @@ export class VentanaEmergenteTipo {
       debounceTime(200),
       distinctUntilChanged(),
       tap(()=>{
-        // console.log("holaa")
         this.Servicios.ListarTipoProductos2(null,this.FiltroTipo.nativeElement.value.trim(),"",1,1).subscribe(res=>{
-          // console.log(res)
-          if (res) {
-            this.total=res['data'].tipo_productos.length;
-            // console.log(this.total)
-            // console.log("hola")
-          }else{
+          let arrayValidado : Array<any> ;
+          if( res ) {
+            if ( this.TipoForm.get('nombre_anterior').value ) {
+              arrayValidado = res['data'].tipo_productos.filter( elemento => elemento.nombre != this.TipoForm.get('nombre_anterior').value ) ;
+            } else {
+              arrayValidado = res['data'].tipo_productos ;
+            }
+            arrayValidado = res['data'].tipo_productos.filter( elemento => elemento.nombre == this.TipoForm.get('nombre').value ) ;
+            if ( res['data'].tipo_productos ) {
+              this.total=arrayValidado.length;
+            }else{
+              this.total=0
+            }
+          } else{
             this.total=0
           }
         })

@@ -1,7 +1,7 @@
 // tslint:disable-next-line:no-var-keyword
 export var URL = {
-  // url: '//localhost/SCC/WS_SCC/',
-  url: '//localhost:8080/', // Cuando el servidor se crea desde la línea de comandos
+  url: '//localhost/SCC/WS_SCC/',
+  // url: '//localhost:8080/', // Cuando el servidor se crea desde la línea de comandos
   // url: '../SCC/WS_SCC/', // Cuando se compila el proyecto de prueba
   // url:'../WS_SCC/', // URL de Alvis
   // url: 'https://coopalvis.com/WS_SCC/', // Para probar los servicios del hosting de Alvis
@@ -13,4 +13,8 @@ export var URL = {
 export var URLIMAGENES = {
   urlimages: URL.url+'file/upload.php',
   carpeta: URL.url+'uploads/',
+};
+
+export var URLLLAMADAS = {
+  carpeta: URL.url+'../ACR/',
 };

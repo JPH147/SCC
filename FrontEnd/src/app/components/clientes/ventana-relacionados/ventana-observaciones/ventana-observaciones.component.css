@@ -29,3 +29,9 @@
 .mat-column-opciones{
 	max-width: 10%
 }
+
+form{
+  position: relative;
+  width: 90%;
+  margin: 0 auto;
+}

@@ -195,10 +195,9 @@ class Talonario{
 
         if($result->execute())
         {
-            return true;
+					return true;
         }
         return false;
-
     }
 
 	function verificar_serie(){

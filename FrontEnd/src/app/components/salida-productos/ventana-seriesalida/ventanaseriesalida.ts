@@ -15,12 +15,17 @@ import {ServiciosProductoSerie} from '../../global/productoserie';
   providers:[ServiciosProductoSerie]
 })
 
-// tslint:disable-next-line:class-name
 export class ventanaseriesalida  implements OnInit {
+
   public SeriesProductosForm:FormGroup;
   public series: FormArray;
   public Productos:Array<any>;
   public contador:number=0
+
+  public total_seleccionado : number = 0 ;
+  public total_series : number = 0 ;
+  public estado_chackbox_general : boolean = false ;
+  public intermitente_chackbox_general : boolean = false ;
 
   constructor(
      @Inject(MAT_DIALOG_DATA) public data,
@@ -138,4 +143,52 @@ export class ventanaseriesalida  implements OnInit {
      });
   }
 
+  CambioSeleccion(){
+    this.ContarSeleccionados() ;
+    if( this.total_seleccionado == 0 ) {
+      this.intermitente_chackbox_general = false ;
+      this.estado_chackbox_general = false ;
+    } else {
+      if( this.total_seleccionado == this.total_series ) {
+        this.intermitente_chackbox_general = false ;
+        this.estado_chackbox_general = true ;
+      }
+      if( this.total_seleccionado > 0 && this.total_seleccionado < this.total_series ) {
+        this.intermitente_chackbox_general = true ;
+      }
+    }
+  }
+
+  ContarSeleccionados(){
+    let series : Array<any> = this.SeriesProductosForm.get('series').value ;
+    this.total_series = series.length ;
+    this.total_seleccionado = series.reduce((acumulador, elemento)=>{
+      if ( elemento.considerar ) {
+        return acumulador + 1 ;
+      } else {
+        return acumulador ;
+      }
+    }, 0) ;
+  }
+
+  CambioSeleccionGeneral(){
+    if ( this.intermitente_chackbox_general ) {
+      this.CambiarTodasConsideraciones(false) ;
+    } else {
+      if( this.estado_chackbox_general ) {
+        this.CambiarTodasConsideraciones(true) ;
+      }
+      if ( !this.estado_chackbox_general ) {
+        this.CambiarTodasConsideraciones(false) ;
+      }
+    }
+    this.ContarSeleccionados() ;
+  }
+
+  CambiarTodasConsideraciones( valor : boolean ) {
+    this.SeriesProductosForm.get('series')['controls'].map((control)=>{
+      control.get('considerar').setValue(valor) ;
+      return control ;
+    })
+  }
 }

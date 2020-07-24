@@ -49,6 +49,15 @@ export class UsuariosListarComponent implements OnInit {
          this.CargarData();
        })
     ).subscribe();
+
+    this.paginator.page
+    .pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      tap(() => {
+        this.CargarData();
+      })
+    ).subscribe();
   }
 
   Agregar(){

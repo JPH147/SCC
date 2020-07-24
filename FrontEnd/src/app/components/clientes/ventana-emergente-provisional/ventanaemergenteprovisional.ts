@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit, AfterViewInit, ElementRef, ViewChild, Optional, Output, EventEmitter} from '@angular/core';
+import {Component, Inject, OnInit, AfterViewInit, ElementRef, ViewChild, Optional, Output, EventEmitter, Input} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import {FormControl, FormGroup, FormBuilder,FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
@@ -21,6 +21,8 @@ import { SeleccionarClienteComponent } from '../../retorno-vendedores/selecciona
 // tslint:disable-next-line:component-class-suffix
 export class VentanaEmergenteProvisionalClientes {
   
+  @Input() public reseteoFormularios = new BehaviorSubject<boolean>(false) ;
+
   public Cargando = new BehaviorSubject<boolean>(false) ;
   @Output() cliente_output = new EventEmitter();
   @ViewChild('InputCliente', { static: true }) FiltroCliente : ElementRef;
@@ -97,6 +99,12 @@ export class VentanaEmergenteProvisionalClientes {
     this.ListarSubsede(3);
     this.ListarCargos(3);
     this.ListarEstadosCargo(3);
+
+    this.reseteoFormularios.subscribe( res =>{
+      if ( res ) {
+        this.Resetear() ;
+      }
+    } )
   }
 
   ngAfterViewInit(){
@@ -684,6 +692,7 @@ export class VentanaEmergenteProvisionalClientes {
     this.ClientesForm.get('cargo_estado_nombre').setValue("ACTIVIDAD") ;
     this.ClientesForm.get('telefono_tipo').setValue(1) ;
     this.ClientesForm.get('cuenta_banco').setValue(1) ;
+    this.ClientesForm.get('dni_garante').setValue("") ;
     this.ListarSede(4,true);
     this.ListarSubsede(3);
     this.ListarCargos(3);

@@ -243,7 +243,7 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
       this.JudicialForm.get('fecha_inicio').setValue(moment(res[0].fecha_inicio).toDate()) ;
       this.JudicialForm.get('sumilla').setValue(res[0].sumilla) ;
       this.JudicialForm.get('id_cliente').setValue(res[0].id_cliente) ;
-      this.JudicialForm.get('cliente_documento').setValue(res[0].cliente_dni) ;
+      this.JudicialForm.get('cliente_documento').setValue( res[0].cliente_dni.substring(1, res[0].cliente_dni.length ) ) ;
       this.JudicialForm.get('cliente_nombre').setValue(res[0].cliente_nombre) ;
       this.JudicialForm.get('codigo_documento').setValue(res[0].codigo) ;
       this.JudicialForm.get('total').setValue(res[0].total) ;
@@ -534,6 +534,19 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
 
   Atras(){
     this.location.back();
+  }
+
+  VerCredito( id_credito ){
+    this.router.navigate(["/creditos", 'ver', id_credito])
+  }
+
+  VerVenta( id_venta, tipo ){
+    if ( tipo == 1 ) {
+      this.router.navigate(["/ventas", id_venta])
+    }
+    if ( tipo == 2 ) {
+      this.router.navigate(["/ventas", 'salida', id_venta])
+    }
   }
 
   Guardar(){

@@ -315,8 +315,6 @@ export class ServiciosVentas{
 			.set('prserie',serie)
 			.set('prestado',estado.toString())
   
-    console.log(params)
-
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 	
 		return this.http.post(this.url + 'talonario/update.php', params, {headers: headers});

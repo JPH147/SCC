@@ -696,7 +696,7 @@ Class Creditos{
     function crear_cronograma_afiliacion(){
         $query = "CALL sp_crearcreditocronogramaafiliacion(
             :prcredito,
-            :prcredito,
+            :prtipopago,
             :prmonto,
             :prcuotas,
             :prprimeracuota
@@ -797,8 +797,45 @@ Class Creditos{
 
     // Este SP muestra las ventas y créditos que puede refinanciar
     function read_transacciones(){
-
         $query = "CALL sp_listartransaccionesxcliente(?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->cliente);
+
+        $result->execute();
+        
+        $credito_list=array();
+        $credito_list["transacciones"]=array();
+
+        $contador = 0;
+        
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $contador=$contador+1;
+
+            $items = array (
+                "numero"=>$contador,
+                "id"=>$id,
+                "id_tipo"=>$id_tipo,
+                "tipo"=>$tipo,
+                "fecha"=>$fecha,
+                "documento"=>$documento,
+                "total"=>$total,
+                "monto_pendiente"=>$monto_pendiente,
+                "considerar"=>false,
+            );
+            array_push($credito_list["transacciones"],$items);
+        }
+
+        return $credito_list;
+    }
+
+    // Este SP muestra las ventas y créditos que puede refinanciar incluido interés
+    // se utiliza para generar un proceso judicial múltiple
+    function read_transacciones_interes(){
+        $query = "CALL sp_listartransaccionesxclienteconinteres(?)";
 
         $result = $this->conn->prepare($query);
 

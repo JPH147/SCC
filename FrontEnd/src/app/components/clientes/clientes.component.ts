@@ -15,7 +15,7 @@ import { VentanaFotoComponent } from './ventana-foto/ventana-foto.component';
 import { VentanaVentasComponent } from './ventana-ventas/ventana-ventas.component'
 import { ArchivosService } from '../global/archivos';
 import { VentanaEmergenteContacto} from './ventana-emergentecontacto/ventanaemergentecontacto';
-import { VentanaObservacionesComponent} from './ventana-observaciones/ventana-observaciones.component';
+import { VentanaRelacionadosComponent} from './ventana-relacionados/ventana-relacionados.component';
 import { VentanaEmergenteIntegralEditarComponent } from './ventana-emergente-integral-editar/ventana-emergente-integral-editar.component';
 import { VentanaEmergenteIntegralAgregarComponent } from './ventana-emergente-integral-agregar/ventana-emergente-integral-agregar.component';
 import { VentanaCobranzaClienteVencidasComponent } from '../cobranza-cliente-listar/ventana-cobranza-cliente-vencidas/ventana-cobranza-cliente-vencidas.component'
@@ -246,8 +246,9 @@ export class ClientesComponent implements OnInit, AfterViewInit {
   }
 
   AgregarObservaciones(id){
-    let VentanaContacto = this.DialogoContacto.open(VentanaObservacionesComponent, {
+    let VentanaContacto = this.DialogoContacto.open(VentanaRelacionadosComponent, {
       width: '1200px',
+      maxHeight : '80vh',
       data: id
     });
 

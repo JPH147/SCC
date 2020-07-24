@@ -117,7 +117,7 @@ import { AgregarProductoComponent } from './components/evaluacion/agregar-produc
 import { EvaluacionOrdenComponent } from './components/evaluacion/evaluacion-orden/evaluacion-orden.component';
 import { VentanaProductosComponent } from './components/ventas/ventana-productos/ventana-productos.component';
 import { ReglasEvaluacionComponent } from './components/tablas-maestras/reglas-evaluacion/reglas-evaluacion.component';
-import { VentanaObservacionesComponent } from './components/clientes/ventana-observaciones/ventana-observaciones.component';
+import { VentanaObservacionesComponent } from './components/clientes/ventana-relacionados/ventana-observaciones/ventana-observaciones.component';
 import { VentanaFotoComponent } from './components/clientes/ventana-foto/ventana-foto.component';
 import { VentanaVentasComponent } from './components/clientes/ventana-ventas/ventana-ventas.component';
 import { ComisionesDetalleComponent } from './components/comisiones/comisiones-detalle/comisiones-detalle.component';
@@ -221,6 +221,10 @@ import { CooperativaConfiguracionComponent } from './components/cooperativa-conf
 import { CooperativaDireccionesComponent } from './components/plantillas/cooperativa-direcciones/cooperativa-direcciones.component';
 import { VentanaCooperativaDireccionesComponent } from './components/plantillas/cooperativa-direcciones/ventana-cooperativa-direcciones/ventana-cooperativa-direcciones.component';
 import { DocumentosComponent } from './components/plantillas/documentos/documentos.component';
+import { VentanaDocumentosComponent as VentanaDocumentosComponent2 } from './components/plantillas/documentos/ventana-documentos/ventana-documentos.component';
+import { AfiliacionesComponent } from './components/afiliaciones/afiliaciones.component';
+import { VentanaRelacionadosComponent } from './components/clientes/ventana-relacionados/ventana-relacionados.component';
+import { VentanaLlamadasComponent } from './components/clientes/ventana-relacionados/ventana-llamadas/ventana-llamadas.component';
 
 export const CUSTOM_DATE_FORMAT = {
   parse: {
@@ -454,7 +458,11 @@ export const CUSTOM_DATE_FORMAT = {
     CooperativaConfiguracionComponent,
     CooperativaDireccionesComponent,
     VentanaCooperativaDireccionesComponent,
-    DocumentosComponent
+    DocumentosComponent,
+    VentanaDocumentosComponent2,
+    AfiliacionesComponent,
+    VentanaRelacionadosComponent,
+    VentanaLlamadasComponent
    ],
   entryComponents: [
     AppComponent,

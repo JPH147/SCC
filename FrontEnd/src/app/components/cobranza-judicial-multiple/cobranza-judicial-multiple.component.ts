@@ -269,6 +269,7 @@ export class CobranzaJudicialMultipleComponent implements OnInit {
   }
 
   Guardar(){
+    this.Cargando.next(true) ;
     let transacciones = this.ListadoTransacciones.InformacionTransacciones.value ;
 
     transacciones = transacciones.filter( e=> e.considerar ) ;
@@ -284,8 +285,16 @@ export class CobranzaJudicialMultipleComponent implements OnInit {
       this.JudicialInformacionForm.value.numero_cuotas ,
       this.JudicialInformacionForm.value.total ,
       transacciones
-    ).subscribe(res=>{
-      this._router.navigate(['cobranza-judicial']) ;
+    )
+    .pipe(
+      finalize(()=>{
+        this.Cargando.next(false) ;
+      })
+    )
+    .subscribe(res=>{
+      if( res ) {
+        this._router.navigate(['/cobranza-judicial', 'agregar', res] )
+      }
     })
   }
 }
@@ -294,7 +303,6 @@ export class TransaccionesDataSource implements DataSource<any> {
   public InformacionTransacciones = new BehaviorSubject<any[]>([]);
   private CargandoInformacion = new BehaviorSubject<boolean>(false);
   public Cargando = this.CargandoInformacion.asObservable();
-  public Cronograma : Array<any> = [] ;
 
   constructor(
     private _refinanciamiento: RefinanciamientoService
@@ -314,13 +322,12 @@ export class TransaccionesDataSource implements DataSource<any> {
   ) {
     this.CargandoInformacion.next(true);
 
-    this._refinanciamiento.ListarTransacciones( cliente )
+    this._refinanciamiento.ListarTransaccionesConInteres( cliente )
     .pipe(
       catchError(() => of([])),
       finalize(() => this.CargandoInformacion.next(false))
     )
     .subscribe(res => {
-      this.Cronograma = res['mensaje'];
       this.InformacionTransacciones.next(res['data'].transacciones);
     });
   }

@@ -286,13 +286,13 @@ Class TransaccionCabecera{
         $result->bindParam(1, $this->id_transaccion);
 
         if($result->execute())
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     /* Actualizar producto */
@@ -470,6 +470,5 @@ Class TransaccionCabecera{
         $this->serie=$row['serie'];
         $this->proxnumero=$row['numero'];
     }
-
 }
 ?>

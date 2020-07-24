@@ -16,7 +16,7 @@
 
     $archivo=trim($_POST["prarchivo"]);
 
-    $file = $plantillas->path_originales.$archivo;
+    $file = $plantillas->path_nuevo.$archivo;
 
     if (file_exists($file)) {
         return readfile($file);

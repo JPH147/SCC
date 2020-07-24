@@ -4,19 +4,24 @@ import {HistorialMovimientosDataService} from './historial-movimientos.dataservi
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSelect } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
-import {merge, Observable, of as observableOf, from, fromEvent} from 'rxjs';
-import {debounceTime, distinctUntilChanged, tap, delay, catchError, map, startWith, switchMap} from 'rxjs/operators';
+import {merge, Observable, of as observableOf, from, fromEvent, forkJoin} from 'rxjs';
+import {debounceTime, distinctUntilChanged, tap, delay, catchError, map, startWith, switchMap, finalize} from 'rxjs/operators';
 import {ServiciosGenerales} from '../global/servicios';
 import * as moment from 'moment';
 import { Rol } from '../usuarios/usuarios.service';
 import { Store } from '@ngrx/store';
 import { EstadoSesion } from '../usuarios/usuarios.reducer';
+import { StockService } from '../stock/stock.service';
+import { DetalleDocumentoAlmacenService } from '../detalle-documento-almacen/detalle-documento-almacen.service';
+import { MatDialog } from '@angular/material/dialog';
+import { VentanaConfirmarComponent } from '../global/ventana-confirmar/ventana-confirmar.component';
+import { Notificaciones } from '../global/notificacion';
 
 @Component({
   selector: 'app-historial-movimientos',
   templateUrl: './historial-movimientos.component.html',
   styleUrls: ['./historial-movimientos.component.css'],
-  providers: [HistorialMovimientosService,ServiciosGenerales]
+  providers: [HistorialMovimientosService,ServiciosGenerales, StockService, DetalleDocumentoAlmacenService]
 })
 export class HistorialMovimientosComponent implements OnInit {
 
@@ -38,9 +43,13 @@ export class HistorialMovimientosComponent implements OnInit {
   public permiso : Rol ;
 
   constructor(
+    private Dialogo : MatDialog ,
     private _store : Store<EstadoSesion> ,
   	private Servicio: HistorialMovimientosService,
-    private SGenerales: ServiciosGenerales
+    private SGenerales: ServiciosGenerales ,
+    private _stock : StockService ,
+    private _detalle : DetalleDocumentoAlmacenService ,
+    private _notificacion : Notificaciones
   ) { }
 
   ngOnInit() {
@@ -92,6 +101,53 @@ export class HistorialMovimientosComponent implements OnInit {
   CargarInformacionEspecial(){
     this.paginator.pageIndex = 0;
     this.CargarInformacion();
+  }
+
+  EliminarMovimiento( movimiento ) {
+    this.ListadoMovimientos.CargandoInformacion.next(true) ;
+    let verificacion : Array<Observable<any>> = [] ;
+
+    this._detalle.SeleccionarCabecera(
+      movimiento.id
+    ).subscribe( documento => {
+      let detalle = documento['data'].detalle ;
+      if ( detalle.length == 0 ) {
+        this.ListadoMovimientos.CargandoInformacion.next(false) ;
+        this.AnularMovimiento(movimiento) ;
+      } else {
+        detalle.map( (item)=>{
+          verificacion.push( this._stock.VerificarStockSerie( item.id_serie) ) ;
+          return item ;
+        })
+        forkJoin(verificacion)
+        .pipe(
+          finalize(()=>{
+            this.ListadoMovimientos.CargandoInformacion.next(false) ;
+          })
+        )
+        .subscribe( stock_series =>{
+          if ( stock_series.every( elemento => elemento == 1 ) ) {
+            this.AnularMovimiento(movimiento) ;
+          } else {
+            this._notificacion.Snack("No se puede eliminar porque una de las series ha salido del almacén", "") ;
+          }
+        })
+      }
+    } )
+  }
+
+  AnularMovimiento(movimiento){
+    let Ventana = this.Dialogo.open(VentanaConfirmarComponent ,{
+      data: { objeto: "el movimiento", valor: '' }
+    })
+
+    Ventana.afterClosed().subscribe(res=>{
+      if (res) {
+        this.Servicio.EliminarMovimiento(movimiento.id).subscribe( res=>{
+          this.CargarInformacion() ;
+        });
+      }
+    })
   }
 
   CargarInformacion(){

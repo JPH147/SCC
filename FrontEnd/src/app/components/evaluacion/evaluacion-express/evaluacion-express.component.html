@@ -6,52 +6,9 @@
     <mat-card-title class="tituloProd"> Generador de archivos </mat-card-title>
   </ng-container>
 
-  <!-- Archivos a generar -->
-  <ng-container>
-    <mat-grid-list cols=5 rowHeight="60px">
-      <mat-grid-tile>
-        Autorizacion
-      </mat-grid-tile>
-      <mat-grid-tile>
-        Declaracion jurada
-      </mat-grid-tile>
-      <mat-grid-tile>
-        Transacción
-      </mat-grid-tile>
-      <mat-grid-tile>
-        Tarjeta de socio
-      </mat-grid-tile>
-      <mat-grid-tile>
-        Compromiso de pago
-      </mat-grid-tile>
-    </mat-grid-list>
-
-    <mat-grid-list cols=5 rowHeight="45px">
-      <mat-grid-tile>
-        <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(autorizacion)" [disabled]="!autorizacion"> <mat-icon> arrow_downward </mat-icon> </button>
-      </mat-grid-tile>
-
-      <mat-grid-tile>
-        <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(ddjj)" [disabled]="!ddjj"> <mat-icon> arrow_downward </mat-icon> </button>
-      </mat-grid-tile>
-
-      <mat-grid-tile>
-        <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(transaccion)" [disabled]="!transaccion"> <mat-icon> arrow_downward </mat-icon> </button>
-      </mat-grid-tile>
-
-      <mat-grid-tile>
-        <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(tarjeta)" [disabled]="!tarjeta"> <mat-icon> arrow_downward </mat-icon> </button>
-      </mat-grid-tile>
-
-      <mat-grid-tile>
-        <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(compromiso)" [disabled]="!compromiso"> <mat-icon> arrow_downward </mat-icon> </button>
-      </mat-grid-tile>
-    </mat-grid-list>
-  </ng-container>
-
   <form [formGroup]="ExpressForm">
     <mat-card-content>
-      <app-ventanaemergenteprovisional (cliente_output)="ObtenerCliente($event)">  </app-ventanaemergenteprovisional>
+      <app-ventanaemergenteprovisional (cliente_output)="ObtenerCliente($event)" [reseteoFormularios]="HacerReseteo">  </app-ventanaemergenteprovisional>
 
       <!-- Información de las cuotas -->
       <div class="seccion">
@@ -226,10 +183,52 @@
           [disabled]=" ExpressForm.invalid || InformacionForm.invalid || cronograma.length==0 ">
           Generar
         </button>
-        <!-- <button mat-raised-button (click)="Print()"> Imprimir </button> -->
+        <button mat-raised-button type="button" (click)="ResetearFormularios()"> Limpiar </button>
       </mat-grid-tile>
     </mat-grid-list>
-    
   </mat-card-actions>
+
+  <!-- Archivos a generar -->
+  <ng-container>
+    <mat-grid-list cols=5 rowHeight="60px">
+      <mat-grid-tile>
+        Autorizacion
+      </mat-grid-tile>
+      <mat-grid-tile>
+        Declaracion jurada
+      </mat-grid-tile>
+      <mat-grid-tile>
+        Transacción
+      </mat-grid-tile>
+      <mat-grid-tile>
+        Tarjeta de socio
+      </mat-grid-tile>
+      <mat-grid-tile>
+        Compromiso de pago
+      </mat-grid-tile>
+    </mat-grid-list>
+
+    <mat-grid-list cols=5 rowHeight="45px">
+      <mat-grid-tile>
+        <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(autorizacion)" [disabled]="!autorizacion"> <mat-icon> arrow_circle_down </mat-icon> </button>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(ddjj)" [disabled]="!ddjj"> <mat-icon> arrow_circle_down </mat-icon> </button>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(transaccion)" [disabled]="!transaccion"> <mat-icon> arrow_circle_down </mat-icon> </button>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(tarjeta)" [disabled]="!tarjeta"> <mat-icon> arrow_circle_down </mat-icon> </button>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(compromiso)" [disabled]="!compromiso"> <mat-icon> arrow_circle_down </mat-icon> </button>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </ng-container>
 
 </mat-card>

@@ -22,7 +22,6 @@ export class MenuComponent implements OnInit{
       if ( permiso ) {
         this.CrearMenu(permiso) ;
       } else {
-        // this.CrearRecuperacion() ;
       }
     })
   }

@@ -106,7 +106,10 @@ Class Cliente{
                 "calificacion_personal"=>$row['calificacion_personal'],
                 "aporte"=>$row['aporte'],
                 "fecharegistro"=>$row['fecha_registro'],
-                "foto"=>$row['foto']
+                "foto"=>$row['foto'],
+                "total_creditos"=>$row['total_creditos'],
+                "total_ventas"=>$row['total_ventas'],
+                "total_transacciones"=>$row['total_transacciones'],
             );
 
             array_push($cliente_list["clientes"],$cliente_item);
@@ -193,6 +196,9 @@ Class Cliente{
                 "foto"=>$row['foto'],
                 "cuotas_vencidas"=>$row['cuotas_vencidas'],
                 "verificado"=>$row['verificado'],
+                "total_creditos"=>$row['total_creditos'],
+                "total_ventas"=>$row['total_ventas'],
+                "total_transacciones"=>$row['total_transacciones'],
             );
 
             array_push($cliente_list["clientes"],$cliente_item);
@@ -783,6 +789,79 @@ Class Cliente{
 
         fclose($fp);
         return $contador;
+    }
+
+    function obtener_llamadas(){
+        $path = '../../ACR/' ;
+
+        $query = "CALL sp_listarclientetelefononumeros(?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(1, $this->idcliente);
+
+        $result->execute();
+    
+        $telefonos_cliente=array();
+
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            // $cliente_item = array (
+            //     "numero"=>$row['numero'],
+            // );
+
+            array_push($telefonos_cliente,$row['numero']);
+        }
+
+        // Desde aquí se verifica en la carpeta
+        $files = scandir($path);
+        
+        $llamadas = array() ;
+        $files = array_diff(scandir($path), array('.', '..'));
+        
+        $contador = 0 ;
+
+        foreach($files as $archivo) {
+            foreach ($telefonos_cliente as $telefono) {
+                if (strpos($archivo, $telefono) !== FALSE) {
+                    $contador = $contador + 1 ;
+
+                    $ano = substr($archivo,0,4);
+                    $mes = substr($archivo,5,2);
+                    $dia = substr($archivo,8,2);
+                    $hora = substr($archivo,11,2);
+                    $minuto = substr($archivo,14,2);
+                    $segundo = substr($archivo,17,2);
+
+                    $fecha = $ano . "-" . $mes . "-" . $dia . " " . $hora . ":" . $minuto . ":" . $segundo;
+                    $informacion = array(
+                        "numero" => $contador ,
+                        "fecha" => $fecha ,
+                        "archivo" => $archivo
+                    ) ;
+                    array_push($llamadas, $informacion) ;
+                }
+            }
+        }
+
+        return $llamadas;
+    }
+
+    function obtener_llamads2(){
+        $path = '../../ACR/' ;
+
+        $archivos=array();
+        if (is_dir($path)){
+            if ($carpeta = opendir($path)){
+              while (($file = readdir($carpeta)) !== false){
+                array_push($archivos, $file) ;
+              }
+              closedir($carpeta);
+            }
+        }
+
+        return $archivos;
     }
 }
 ?>

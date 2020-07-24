@@ -35,6 +35,7 @@ export class AppComponent {
     this._usuario.UsuarioS.subscribe(res=>{
       if(res){
         this.usuario = {
+          id : res.id ,
           nombre: res.usuario ,
           id_perfil: res.id_perfil ,
           perfil: res.perfil ,
@@ -54,7 +55,7 @@ export class AppComponent {
         this._store.dispatch(asignarPermisos) ;
       })
 
-      this.router.navigate(['inicio']) ;
+      // this.router.navigate(['inicio']) ;
     } else {
       this.router.navigate(['login']) ;
       this.estado = false ;

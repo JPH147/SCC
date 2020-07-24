@@ -9,7 +9,7 @@ $primary: map-get($theme, primary);
 
 body{
 	margin: 0px;
-	// height: 100vh;
+	min-width: 1200px;
 }
 
 mat-card.principal{

@@ -37,10 +37,10 @@ export class ServiciosGenerales {
     .set('prum',unidad_medida)
   })
   .pipe(map(res => {
-      if (res['codigo'] === 0 ) {
-        return res['data'].tipo_productos;
+    if (res['codigo'] === 0 ) {
+      return res['data'].tipo_productos;
     } else {
-        // console.log('No hay datos que mostrar');
+      return [] ;
     }
   }));
   }
@@ -153,7 +153,7 @@ export class ServiciosGenerales {
       if (res['codigo'] === 0) {
         return res['data'].marca;
       } else {
-          // console.log('No hay datos que mostrar');
+        return [] ;
       }
   }));
   }
@@ -214,7 +214,7 @@ export class ServiciosGenerales {
         if (res['codigo'] === 0){
           return res = res['data'];
         } else {
-          // console.log('No hay datos que mostrar');
+          return [] ;
         }
       }));
     }
@@ -234,9 +234,9 @@ export class ServiciosGenerales {
       return this.http.get(this.url + 'productomodelo/read.php?prmarca=' + id_marca + '&prnombre=' + nombre)
       .pipe(map(res => {
       if (res['codigo'] === 0 ) {
-          return res['data'].modelo;
+        return res['data'].modelo;
       } else {
-        // console.log('No hay datos que mostrar');
+        return [] ;
       }
     }));
 }
@@ -424,6 +424,9 @@ EditarModelo(
       return this.http.get(this.url + 'cliente/read.php', {
         params: new  HttpParams()
         .set('pclt_nombre', nombre)
+        .set('prcodigo', "")
+        .set('prcip', "")
+        .set('prdni', "")
       })
       .pipe(map(res => {
           if (res['codigo'] === 0) {
@@ -701,11 +704,11 @@ EditarModelo(
       }
 
       return this.http.get(this.url + 'file/rename.php', {
-      params: new  HttpParams()
-      .set('nameimg', nameimg.trim())
-      .set('tipodoc', tipodoc.trim())
-      .set('numdoc', numdoc.trim())
-      .set('prgrupo',grupo.trim())
+        params: new  HttpParams()
+          .set('nameimg', nameimg.trim())
+          .set('tipodoc', tipodoc.trim())
+          .set('numdoc', numdoc.trim())
+          .set('prgrupo',grupo.trim())
       })
       .pipe(map(res => {
         if (res['codigo'] === 0) {

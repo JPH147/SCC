@@ -26,6 +26,7 @@ mat-card{
 }
 
 
+.mat-column-opciones,
 .mat-column-referencia,
 .mat-column-documento,
 .mat-column-almacen,
@@ -34,9 +35,8 @@ mat-card{
   max-width: 10%;
 }
 
-.mat-column-opciones,
 .mat-column-numero{
-  max-width: 6%;
+  max-width: 5%;
 }
 
 .mat-column-referente{

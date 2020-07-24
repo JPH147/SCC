@@ -62,6 +62,12 @@
         <ng-container *ngIf="id_proceso_ver && DocumentosTransaccion.length>0">
           <ng-container *ngFor="let documento of DocumentosTransaccion">
             <ng-container *ngIf="documento.id_credito">
+              <mat-card-title class="subtitulo-categoria">
+                {{ documento.documento_credito }}
+                <span class="espacio"></span>
+                <button mat-icon-button color="accent" (click)="VerCredito(documento.id_credito)"> <mat-icon> visibility </mat-icon> </button>
+              </mat-card-title>
+
               <mat-grid-list cols=7 rowHeight="20px">
                 <mat-grid-tile>
                   Foto
@@ -212,6 +218,12 @@
             </ng-container>
 
             <ng-container *ngIf="documento.id_venta">
+              <mat-card-title class="subtitulo-categoria">
+                {{ documento.documento_venta }}
+                <span class="espacio"></span>
+                <button mat-icon-button color="accent" (click)="VerVenta(documento.id_venta, documento.venta_tipo)"> <mat-icon> visibility </mat-icon> </button>
+              </mat-card-title>
+
               <mat-grid-list cols=9 rowHeight="20px">
                 <mat-grid-tile>
                   Foto

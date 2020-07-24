@@ -120,7 +120,7 @@ export class ClienteService {
 
     let headers = new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded');
     return this.http.post(this.url + 'cliente/delete.php', params, {headers: headers});
-	  }
+  }
 
   Agregar(
     id_subsede:number,
@@ -403,6 +403,22 @@ export class ClienteService {
        .set('prcliente', id_observacion.toString())
        .set('prpagina', pagina_inicio.toString())
        .set('prtotalpagina', total_pagina.toString())
+     }).pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res;
+      }else {
+        console.log('No hay datos que mostrar');
+        return res;
+      }
+    }));
+  }
+
+  ListarLlamadas(
+    id_cliente:number,
+  ) :Observable<any> {
+    return this.http.get(this.url + 'cliente/llamadas.php',{
+       params: new HttpParams()
+       .set('prid', id_cliente.toString())
      }).pipe(map(res => {
       if (res['codigo'] === 0) {
         return res;

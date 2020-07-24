@@ -20,7 +20,6 @@
         
         if (($_POST["prcredito"])!=null)
         {
-
             $credito->id_credito=trim($_POST["prcredito"]);
             $credito->tipo_pago=trim($_POST["prtipopago"]);
             $credito->monto=trim($_POST["prmonto"]);

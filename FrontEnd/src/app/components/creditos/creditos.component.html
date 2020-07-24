@@ -154,12 +154,19 @@
 
         <mat-grid-tile>
           <mat-form-field>
+            <input matInput [matDatepicker]="afiliacion2" placeholder="Fecha de afiliación"  formControlName="afiliacion_fecha_afiliacion" [readonly]="id_credito || id_tipo==1">
+            <mat-datepicker-toggle matSuffix [for]="afiliacion2"></mat-datepicker-toggle>
+            <mat-datepicker #afiliacion2 [disabled]="id_credito"></mat-datepicker>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field>
             <input matInput [matDatepicker]="afiliacion" placeholder="Fecha de pago"  formControlName="afiliacion_fecha_vencimiento" [readonly]="id_credito || id_tipo==1" (dateChange)="FechaAfiliacionSeleccionada()">
             <mat-datepicker-toggle matSuffix [for]="afiliacion"></mat-datepicker-toggle>
             <mat-datepicker #afiliacion [disabled]="id_credito"></mat-datepicker>
           </mat-form-field>
         </mat-grid-tile>
-
       </mat-grid-list>
     </div>
 

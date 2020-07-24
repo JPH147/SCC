@@ -61,7 +61,6 @@ export class VentanaTalonarioComponent implements OnInit, AfterViewInit {
 
   VerificarRegistroSerie(){
     this.Servicios.VerificarTalonario(this.FiltroSerie.nativeElement.value).subscribe(res=>{
-      console.log(res)
       if(res){
         this.repetido=true ;
       } else {

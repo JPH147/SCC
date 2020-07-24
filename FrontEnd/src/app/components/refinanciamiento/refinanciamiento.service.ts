@@ -16,6 +16,7 @@ export class RefinanciamientoService {
     private http : HttpClient
   ) { }
 
+  // Este se utiliza para los refinanciamientos
   ListarTransacciones(
     id_cliente:number
   ): Observable<any> {
@@ -26,6 +27,27 @@ export class RefinanciamientoService {
     // console.log(params);
 
     return this.http.get(this.url + 'credito/read-transacciones.php', {params})
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res;
+      } else {
+        console.log('No hay datos que mostrar');
+        return res;
+      }
+    }));
+  }
+
+  // Este se utiliza para los procesos judiciales
+  ListarTransaccionesConInteres(
+    id_cliente:number
+  ): Observable<any> {
+
+    let params = new HttpParams()
+      .set('prcliente',id_cliente.toString());
+
+    // console.log(params);
+
+    return this.http.get(this.url + 'credito/read-transaccionesconinteres.php', {params})
     .pipe(map(res => {
       if (res['codigo'] === 0) {
         return res;

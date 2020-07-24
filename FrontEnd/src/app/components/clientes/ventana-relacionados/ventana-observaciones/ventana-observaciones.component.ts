@@ -4,11 +4,11 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { MatPaginator } from '@angular/material/paginator';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import {catchError, finalize, debounceTime, distinctUntilChanged, tap} from 'rxjs/operators'
-import { ClienteService } from '../clientes.service'
+import { ClienteService } from '../../clientes.service'
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'
-import {VentanaConfirmarComponent} from '../../global/ventana-confirmar/ventana-confirmar.component';
-import { ServiciosGenerales } from '../../global/servicios';
-import { URLIMAGENES } from '../../global/url';
+import {VentanaConfirmarComponent} from '../../../global/ventana-confirmar/ventana-confirmar.component';
+import { ServiciosGenerales } from '../../../global/servicios';
+import { URLIMAGENES } from '../../../global/url';
 
 @Component({
   selector: 'app-ventana-observaciones',
@@ -37,10 +37,10 @@ export class VentanaObservacionesComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-   this.ListadoObservaciones = new ObservacionesDataSource(this.Servicio);
-   this.ListadoObservaciones.CargarClientes(this.data,1, 5);
+    this.ListadoObservaciones = new ObservacionesDataSource(this.Servicio);
+    this.ListadoObservaciones.CargarClientes(this.data,1, 5);
 
-   this.CrearFormulario();
+    this.CrearFormulario();
   }
 
   ngAfterViewInit(){
@@ -171,5 +171,4 @@ export class ObservacionesDataSource implements DataSource<any> {
   		}
     });
   }
-
 }

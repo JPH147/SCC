@@ -40,7 +40,12 @@ export class CreditosListarAfiliacionesComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
+    this._store.select('permisos').subscribe(permiso =>{
+      if( permiso ) {
+        this.permiso = permiso ;
+      }
+    })
+    
     this.fecha_inicio = null ;
     this.fecha_fin = null ;
 
@@ -49,12 +54,6 @@ export class CreditosListarAfiliacionesComponent implements OnInit {
   }
 
   ngAfterViewInit () {
-    this._store.select('permisos').subscribe(permiso =>{
-      if( permiso ) {
-        this.permiso = permiso ;
-      }
-    })
-
     this.sort.sortChange.subscribe(res => {
       this.paginator.pageIndex = 0;
     });

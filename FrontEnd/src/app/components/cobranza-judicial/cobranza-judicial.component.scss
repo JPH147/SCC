@@ -85,3 +85,12 @@ span.derecha{
 .derecha{
   margin-left: 5px;
 }
+
+.subtitulo-categoria{
+  color: mat-color($accent) ;
+  display : flex ; // Para que el botón se vaya al extremo
+  font-size: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 10px !important;
+}

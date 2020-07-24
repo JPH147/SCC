@@ -46,6 +46,8 @@ export class VentanaEmergenteModelo {
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnInit() {
     this.ModeloForm = this.FormBuilder.group({
+      'nombre_anterior': [ {value:null, disabled: false}, [
+      ]],
       'nombre': [ {value:null, disabled: true}, [
         Validators.required
       ]],
@@ -77,7 +79,8 @@ export class VentanaEmergenteModelo {
         })
 
       }else{
-       this.ModeloForm.get('nombre').setValue(this.data.modelo);
+        this.ModeloForm.get('nombre_anterior').setValue(this.data.modelo);
+        this.ModeloForm.get('nombre').setValue(this.data.modelo);
         this.Servicios.SeleccionarMarca(this.data.id_marca).subscribe(res=>{
           this.ModeloForm.get('id_tipo').setValue(res['id_tipo']);
           this.ListarMarcas(res['id_tipo']);
@@ -97,10 +100,15 @@ export class VentanaEmergenteModelo {
       distinctUntilChanged(),
       tap(()=>{
         if (this.ModeloForm.value.idmarca) {
+          let arrayValidado : Array<any> ;
           this.Servicios.ListarModelo(this.ModeloForm.value.idmarca,this.FiltroModelo.nativeElement.value.trim()).subscribe(res=>{
-            // console.log(res);
+            if ( this.ModeloForm.get('nombre_anterior').value ) {
+              arrayValidado = res.filter( elemento => elemento.nombre != this.ModeloForm.get('nombre_anterior').value ) ;
+            } else {
+              arrayValidado = res ;
+            }
             if (res) {
-              this.total=res.length;
+              this.total=arrayValidado.length;
             }else{
               this.total=0
             }

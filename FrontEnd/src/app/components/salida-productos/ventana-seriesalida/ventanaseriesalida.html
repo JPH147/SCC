@@ -1,18 +1,27 @@
 <mat-card class="card">
 
-  <form [formGroup]="SeriesProductosForm">
-  
-    <mat-card-header>
-      <mat-card-title>Ingresa Series</mat-card-title>
-    </mat-card-header>
-    
-    <mat-card-content>
+  <mat-toolbar color="primary">
+    <mat-toolbar-row>
+      <span> Seleccionar series </span>
+      <span class="espacio"></span>
+    </mat-toolbar-row>
+  </mat-toolbar>
 
+  <mat-grid-list cols=1 rowHeight="40px">
+    <mat-grid-tile>
+      <mat-checkbox color="primary"
+      [(ngModel)]="estado_chackbox_general"
+      [indeterminate]="intermitente_chackbox_general "
+      (change)="CambioSeleccionGeneral()"
+      ></mat-checkbox>
+    </mat-grid-tile>
+  </mat-grid-list>
+  
+  <form [formGroup]="SeriesProductosForm">
+    <mat-card-content>
       <div formArrayName="series" *ngFor="let serie of SeriesProductosForm['controls'].series['controls'];let i = index">
         <div [formGroupName]="i">
-          
           <mat-grid-list cols=5 rowHeight="70px">
-          
             <mat-grid-tile colspan=2>
               <mat-form-field class="formulario-grande">
                 <input matInput placeholder="Serie" formControlName="serie_mostrar">
@@ -32,14 +41,11 @@
             </mat-grid-tile>
 
             <mat-grid-tile colspan=1>
-              <mat-checkbox formControlName="considerar" color="primary"></mat-checkbox>
+              <mat-checkbox formControlName="considerar" color="primary" (change)="CambioSeleccion()"></mat-checkbox>
             </mat-grid-tile>
-          
           </mat-grid-list>
-          
         </div>
       </div>
-
     </mat-card-content>
 
     <mat-card-actions>
@@ -49,7 +55,5 @@
         </mat-grid-tile>
       </mat-grid-list>
     </mat-card-actions>
-
   </form>
-
 </mat-card>
