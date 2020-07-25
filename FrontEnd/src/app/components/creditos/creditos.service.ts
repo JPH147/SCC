@@ -144,6 +144,7 @@ export class CreditosService {
     cliente_trabajo:string,
     tipo_pago:number,
     fecha_pago:Date,
+    interes_diario:number,
     interes:number,
     capital:number,
     cuotas:number,
@@ -180,6 +181,7 @@ export class CreditosService {
       .set('prclientetrabajo',cliente_trabajo)
       .set('prtipopago',tipo_pago.toString())
       .set('prfechapago',moment(fecha_pago).format("YYYY-MM-DD"))
+      .set('printeresdiario',interes_diario.toString())
       .set('printeres',interes.toString())
       .set('prcapital',capital.toString())
       .set('prcuotas',cuotas.toString())
@@ -305,6 +307,7 @@ export class CreditosService {
     cliente_trabajo:string,
     tipo_pago:number,
     fecha_pago:Date,
+    interes_diario:number,
     interes:number,
     capital:number,
     cuotas:number,
@@ -339,6 +342,7 @@ export class CreditosService {
       .set('prclientetrabajo',cliente_trabajo)
       .set('prtipopago',tipo_pago.toString())
       .set('prfechapago',moment(fecha_pago).format("YYYY-MM-DD"))
+      .set('printeresdiario',interes_diario.toString())
       .set('printeres',interes.toString())
       .set('prcapital',capital.toString())
       .set('prcuotas',cuotas.toString())

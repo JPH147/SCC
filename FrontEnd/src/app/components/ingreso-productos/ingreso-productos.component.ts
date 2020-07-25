@@ -10,7 +10,7 @@ import {Observable, fromEvent, of} from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {debounceTime, distinctUntilChanged, tap, delay, map} from 'rxjs/operators';
-import {ProductoService} from '../productos/productos.service';
+import {ProductoService} from '../detalleproductos/productos/productos.service';
 import {ServiciosDocumentos} from '../global/documentos';
 import { HistorialMovimientosService } from '../historial-movimientos/historial-movimientos.service';
 

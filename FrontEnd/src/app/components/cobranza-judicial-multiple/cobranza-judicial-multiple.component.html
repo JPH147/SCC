@@ -134,6 +134,7 @@
             <mat-grid-tile colspan=4>
               <mat-form-field class="columnas-2">
                 <input matInput type="text" placeholder="Expediente" formControlName="expediente">
+                <mat-error *ngIf="JudicialInformacionForm.get('expediente').invalid"> El expediente ya existe </mat-error>
               </mat-form-field>
             </mat-grid-tile>
   

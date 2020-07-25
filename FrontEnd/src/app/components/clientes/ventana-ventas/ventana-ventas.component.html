@@ -1,21 +1,19 @@
 <mat-card class="card">
-
   <mat-toolbar color="primary">
     <mat-toolbar-row>Ventas a {{data.nombre}} </mat-toolbar-row>
   </mat-toolbar>
 
 	<mat-card-content>
 
-    <mat-grid-list cols=4 rowHeight="70px">
-
+    <mat-grid-list cols=3 rowHeight="70px">
       <mat-grid-tile>
-        <mat-form-field>
+        <mat-form-field class="columnas-1">
           <input matInput placeholder="Documento" #InputDocumento>
         </mat-form-field>
       </mat-grid-tile>
 
       <mat-grid-tile>
-        <mat-form-field>
+        <mat-form-field class="columnas-1">
           <input matInput [matDatepicker]="inicio" placeholder="Hasta la fecha" [(ngModel)]="fecha" (dateChange)="CargarData()">
           <mat-datepicker-toggle matSuffix [for]="inicio"></mat-datepicker-toggle>
           <mat-datepicker #inicio disabled="false"></mat-datepicker>
@@ -23,7 +21,7 @@
       </mat-grid-tile>
 
       <mat-grid-tile>
-        <mat-form-field>
+        <mat-form-field class="columnas-1">
           <mat-select placeholder="Estado" [(ngModel)]="estado" (selectionChange)="CargarData()">
           	<mat-option [value]="0">Todas</mat-option>
           	<mat-option [value]="1">Pagadas</mat-option>
@@ -31,23 +29,24 @@
           </mat-select>
         </mat-form-field>
       </mat-grid-tile>
+    </mat-grid-list>
 
-      <mat-grid-tile>
+    <mat-grid-list cols=1 rowHeight="50px" class="botones-contenedor">
+      <mat-grid-tile colspan=1>
         <ng-container *ngIf="permiso?.ventas?.listado_ventas?.agregar">
-          <button mat-icon-button color="primary" (click)="HacerVenta()" matTooltip="Hacer venta"> <mat-icon> store_mall_directory </mat-icon> </button>
+          <button mat-raised-button color="primary" (click)="HacerVenta()" class="nueva-transaccion"> <mat-icon> store_mall_directory </mat-icon> Nueva venta </button>
         </ng-container>
         <ng-container *ngIf="permiso?.creditos?.listado_creditos?.agregar">
-          <button mat-icon-button color="primary" (click)="HacerCredito()" matTooltip="Hacer Crédito"> <mat-icon> account_balance </mat-icon> </button>
+          <button mat-raised-button color="primary" (click)="HacerCredito()" class="nueva-transaccion"> <mat-icon> account_balance </mat-icon> Nuevo préstamo </button>
         </ng-container>
       </mat-grid-tile>
-
     </mat-grid-list>
 
     <div class = "spinner-container" *ngIf = "ListadoVentas.Cargando| async">
       <mat-spinner></mat-spinner>
     </div>
 
-    <mat-table [dataSource]="ListadoVentas" class="mat-elevation-z8">
+    <!-- <mat-table [dataSource]="ListadoVentas" class="mat-elevation-z8">
 
       <ng-container matColumnDef="documento">
         <mat-header-cell *matHeaderCellDef> Documento </mat-header-cell>
@@ -91,8 +90,54 @@
       <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>
       <mat-row *matRowDef="let row; columns: Columnas;"></mat-row>
     </mat-table>
+    <mat-paginator [length]="ListadoVentas.TotalResultados | async" [pageSize]="5"></mat-paginator> -->
 
-    <mat-paginator [length]="ListadoVentas.TotalResultados | async" [pageSize]="5"></mat-paginator>
+    <div class="venta-contenedor">
+      <div class="venta-contenido" *ngFor="let transaccion of (ListadoVentas.Informacion | async)">
+        <mat-list role="list">
+          <mat-list-item role="listitem" class="titulo">
+            <span class="centrar"> {{ transaccion.tipo }} </span>
+          </mat-list-item>
+          <mat-list-item role="listitem">
+            <strong> Documento </strong>
+            <span class="espacio"></span>
+            <span> {{ transaccion.documento }} </span>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+          <mat-list-item role="listitem">
+            <strong> Estado </strong>
+            <span class="espacio"></span>
+            <span> {{ transaccion.estado }} </span>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+          <mat-list-item role="listitem">
+            <strong> Fecha </strong>
+            <span class="espacio"></span>
+            <span> {{ transaccion.fecha | date :'dd/MM/yyyy' }} </span>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+          <mat-list-item role="listitem">
+            <strong> Total de cuotas </strong>
+            <span class="espacio"></span>
+            <span> {{ transaccion.total_cuotas }} </span>
+          </mat-list-item>          <mat-divider></mat-divider>
+          <mat-list-item role="listitem">
+            <strong> Cuotas pagadas </strong>
+            <span class="espacio"></span>
+            <span> {{ transaccion.cuotas_pagadas }} </span>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+          <mat-list-item role="listitem">
+            <strong> Total </strong>
+            <span class="espacio"></span>
+            <span> {{ transaccion.total | currency:'S/.' }} </span>
+          </mat-list-item>
+          <mat-list-item role="listitem">
+            <button mat-button color="accent" class="centrar" (click)="VerVenta(transaccion)"> Ver documento </button>
+          </mat-list-item>
+        </mat-list>
+      </div>
+    </div>
 
 	</mat-card-content>
 

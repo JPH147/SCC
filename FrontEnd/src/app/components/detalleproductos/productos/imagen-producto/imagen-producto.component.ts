@@ -2,11 +2,11 @@ import {Component, Inject, OnInit, AfterViewInit} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {FormControl, FormGroup, FormBuilder,FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
-import {ServiciosGenerales} from '../../global/servicios';
+import {ServiciosGenerales} from '../../../global/servicios';
 import { NgControl } from '@angular/forms';
 import {ProductoService} from '../productos.service';
 import { FileHolder } from 'angular2-image-upload';
-import {URL} from '../../global/url';
+import {URL} from '../../../global/url';
 import * as moment from 'moment';
 
 @Component({

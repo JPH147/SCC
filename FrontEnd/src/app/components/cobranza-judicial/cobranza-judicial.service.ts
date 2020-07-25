@@ -626,4 +626,21 @@ export class CobranzaJudicialService {
     }));
   }
 
+  ContarProcesoJudicialExpediente(
+    expediente : string
+  ) : Observable<number> {
+    let params = new HttpParams()
+      .set( 'prexpediente', expediente ) ;
+
+    return this.http.get(this.url + 'procesojudicial/verificar-procesojudicial.php', { params } )
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res['data'] ;
+      } else {
+        console.log('No hay datos que mostrar');
+        return 0 ;
+      }
+    }));
+  }
+
 }

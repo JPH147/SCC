@@ -62,7 +62,7 @@ import { ServiciosGenerales } from './components/global/servicios';
 /* Imports del software */
 import {AppComponent} from './app.component';
 import {MenuComponent} from './menu/menu.component';
-import { ProductosComponent } from './components/productos/productos.component';
+import { ProductosComponent } from './components/detalleproductos/productos/productos.component';
 import { StockComponent } from './components/stock/stock.component';
 import { IngresoProductosComponent } from './components/ingreso-productos/ingreso-productos.component';
 import { SalidaProductosComponent } from './components/salida-productos/salida-productos.component';
@@ -72,7 +72,7 @@ import { ComisionesComponent } from './components/comisiones/comisiones.componen
 import { ClientesComponent } from './components/clientes/clientes.component';
 import { VentasComponent } from './components/ventas/ventas.component';
 import { ListadoSalidaVendedoresComponent } from './components/listado-salida-vendedores/listado-salida-vendedores.component';
-import {VentanaEmergenteProductos} from './components/productos/ventana-emergente/ventanaemergente';
+import {VentanaEmergenteProductos} from './components/detalleproductos/productos/ventana-emergente/ventanaemergente';
 import {ventanaseries} from './components/ingreso-productos/ventana-series/ventanaseries';
 import {VentanaDetalle} from './components/ingreso-productos/ventana-detalle/ventanadetalle';
 import {VentanaFecha} from './components/ingreso-productos/ventana-fecha/ventanafecha';
@@ -96,7 +96,7 @@ import {FileUpload} from './components/clientes/file-upload/fileupload';
 import {VentanaEmergenteContacto} from './components/clientes/ventana-emergentecontacto/ventanaemergentecontacto';
 import {VentanaEmergenteStock } from './components/stock/ventana-emergentestock/ventanaemergentestock';
 import { VentasListarComponent } from './components/ventas-listar/ventas-listar.component';
-import {ImagenProductoComponent} from './components/productos/imagen-producto/imagen-producto.component';
+import {ImagenProductoComponent} from './components/detalleproductos/productos/imagen-producto/imagen-producto.component';
 import { HistorialSerieComponent } from './components/historial-serie/historial-serie.component';
 import { ProveedoresMovimientosComponent } from './components/proveedores/proveedores-movimientos/proveedores-movimientos.component';
 import { HistorialMovimientosComponent } from './components/historial-movimientos/historial-movimientos.component';

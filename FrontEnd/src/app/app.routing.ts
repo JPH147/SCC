@@ -1,7 +1,7 @@
 import {ModuleWithProviders} from '@angular/core';
 import {Routes, RouterModule, RoutesRecognized} from '@angular/router';
 
-import { ProductosComponent } from './components/productos/productos.component';
+import { ProductosComponent } from './components/detalleproductos/productos/productos.component';
 import { StockComponent } from './components/stock/stock.component';
 import { IngresoProductosComponent } from './components/ingreso-productos/ingreso-productos.component';
 import { SalidaProductosComponent } from './components/salida-productos/salida-productos.component';
@@ -146,7 +146,7 @@ export const appRoutes: Routes = [
   {path: 'usuarios', component: UsuariosComponent},
   {path: 'configuracion', component: CooperativaDireccionesComponent},
   
-  {path: 'prueba', component: SalidaProductosComponent},
+  {path: 'prueba', component: CreditosComponent},
 ];
 
 

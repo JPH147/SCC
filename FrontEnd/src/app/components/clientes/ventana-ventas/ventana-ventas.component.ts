@@ -1,9 +1,8 @@
 import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { BehaviorSubject, Observable, of, merge, fromEvent, forkJoin } from 'rxjs';
+import { BehaviorSubject, Observable, of, merge, fromEvent } from 'rxjs';
 import {catchError, finalize, debounceTime, distinctUntilChanged, tap} from 'rxjs/operators'
 import { VentaService } from '../../ventas/ventas.service';
 import {ServiciosTelefonos} from '../../global/telefonos';
@@ -16,14 +15,14 @@ import { EstadoSesion } from '../../usuarios/usuarios.reducer';
 @Component({
   selector: 'app-ventana-ventas',
   templateUrl: './ventana-ventas.component.html',
-  styleUrls: ['./ventana-ventas.component.css'],
+  styleUrls: ['./ventana-ventas.component.scss'],
   providers: [VentaService, ServiciosTelefonos, ServiciosDirecciones]
 })
 
 export class VentanaVentasComponent implements OnInit {
 
   @ViewChild('InputDocumento', { static: true }) FiltroDocumento: ElementRef;
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  // @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   public estado : number;
   public fecha : Date;
@@ -38,9 +37,6 @@ export class VentanaVentasComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data,
     public ventana: MatDialogRef<VentanaVentasComponent>,
     private Servicio: VentaService,
-    private STelefonos: ServiciosTelefonos,
-    private SDirecciones: ServiciosDirecciones,
-    private snackBar: MatSnackBar,
     private router: Router
   ) { }
 
@@ -65,19 +61,19 @@ export class VentanaVentasComponent implements OnInit {
      debounceTime(200),
      distinctUntilChanged(),
      tap(() => {
-       this.paginator.pageIndex=0
+      //  this.paginator.pageIndex=0
        this.CargarData();
      })
     ).subscribe();
 
-    this.paginator.page
-    .pipe(
-     debounceTime(200),
-     distinctUntilChanged(),
-     tap(() => {
-       this.CargarData();
-     })
-    ).subscribe();
+    // this.paginator.page
+    // .pipe(
+    //  debounceTime(200),
+    //  distinctUntilChanged(),
+    //  tap(() => {
+    //    this.CargarData();
+    //  })
+    // ).subscribe();
   }
 
   CargarData(){
@@ -86,8 +82,8 @@ export class VentanaVentasComponent implements OnInit {
       this.FiltroDocumento.nativeElement.value,
       this.fecha,
       this.estado,
-      this.paginator.pageIndex+1,
-      this.paginator.pageSize
+      1 ,
+      50
     )
   }
 
@@ -127,6 +123,7 @@ export class VentanaVentasComponent implements OnInit {
 export class VentasClienteDataSource implements DataSource<any> {
 
   private InformacionClientes = new BehaviorSubject<any[]>([]);
+  public Informacion = this.InformacionClientes.asObservable();
   private CargandoInformacion = new BehaviorSubject<boolean>(false);
   public Cargando = this.CargandoInformacion.asObservable();
   public TotalResultados = new BehaviorSubject<number>(0);
@@ -164,7 +161,7 @@ export class VentasClienteDataSource implements DataSource<any> {
   	)
   	.subscribe(res => {
   		if (res['data']) {
-  			this.InformacionClientes.next(res['data'].ventas);
+        this.InformacionClientes.next(res['data'].ventas);
   		}else{
   			this.InformacionClientes.next([])
   		}

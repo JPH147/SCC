@@ -85,6 +85,15 @@ export class CobranzaJudicialMultipleComponent implements OnInit {
         }
       })
     ).subscribe() ;
+
+    this.JudicialInformacionForm.get('expediente').valueChanges
+    .pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      tap(()=>{
+        this.VerificarExpedienteDuplicado() ;
+      })
+    ).subscribe() ;
   }
 
   Atras(){
@@ -266,6 +275,18 @@ export class CobranzaJudicialMultipleComponent implements OnInit {
     cuota = this.JudicialInformacionForm.value.total / this.JudicialInformacionForm.value.numero_cuotas ;
     cuota = Math.round(cuota*100) / 100 ;
     this.JudicialInformacionForm.get('monto_cuota').setValue(cuota);
+  }
+
+  VerificarExpedienteDuplicado(){
+    this._judiciales.ContarProcesoJudicialExpediente(
+      this.JudicialDocumentosForm.get('expediente').value
+    ).subscribe(  res =>{
+      if( res > 0 ){
+        this.JudicialDocumentosForm.get('expediente').setErrors({ repetido : true })
+      } else {
+        this.JudicialDocumentosForm.get('expediente').setErrors(null)
+      }
+    })
   }
 
   Guardar(){

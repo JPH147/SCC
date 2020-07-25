@@ -958,5 +958,21 @@ Class Proceso{
 
     return $documentos;
   }
+
+  function verificar_procesojudicial_expediente() {
+    $query = "CALL sp_listarprocesojudicialexpedientecontar(?)";
+
+    $result = $this->conn->prepare($query);
+
+    $result->bindParam(1, $this->expediente);
+
+    $result->execute();
+
+    $row = $result->fetch(PDO::FETCH_ASSOC);
+
+    $this->total_resultado=$row['total'];
+
+    return $this->total_resultado;
+  }
 }
 ?>

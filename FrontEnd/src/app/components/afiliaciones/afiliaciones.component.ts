@@ -142,7 +142,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
   // @ViewChild('InputInteres', { static: true }) FiltroInteres: ElementRef;
   // @ViewChild('Vendedor') VendedorAutoComplete : ElementRef;
   // @ViewChild('Autorizador') AutorizadorAutoComplete: ElementRef;
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
 
   public ListadoVendedores: Array<any>;
   public ListadoAudorizadores: Array<any>;
@@ -155,6 +155,13 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
   public ListadoProcesos : Array<any> = [] ;
   public numero_procesos : number = 0 ;
   public monto_pagado : number = 0 ;
+
+  public totales_monto_total : number ;
+  public totales_interes_generado : number ;
+  public totales_monto_pagado : number ;
+  public totales_total_cuotas : number ;
+  public totales_total_pendiente : number ;
+  public totales_total_pagadas : number ;
 
   constructor(
     private _store : Store<EstadoSesion> ,
@@ -539,6 +546,13 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
       this.CreditosForm.get('id_autorizador').setValue(res.id_autorizador > 0 ? res.id_autorizador : null);
 
       this.estado = res.id_estado ;
+
+      this.totales_monto_total = res.monto_total ;
+      this.totales_interes_generado = res.interes_generado ;
+      this.totales_monto_pagado = res.monto_pagado ;
+      this.totales_total_cuotas = res.total_cuotas ;
+      this.totales_total_pendiente = res.total_pendiente ;
+      this.totales_total_pagadas = res.total_pagadas ;
 
       observacion_corregida = res.observaciones == "" ? "No hay observaciones" : res.observaciones;
 
@@ -1027,10 +1041,12 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
     if( tipo == 'ver' ) {
       this.id_credito = this.id_credito_estandar ;
       this.id_credito_editar = null ;
+      this.ColumnasCronograma = ['numero', 'tipo_pago','fecha_vencimiento', 'monto', 'interes_generado','monto_pagado', 'fecha_cancelacion','estado', 'opciones'];
     }
     if( tipo == 'editar' ) {
       this.id_credito = null ;
       this.id_credito_editar = this.id_credito_estandar ;
+      this.ColumnasCronograma= ['numero', 'fecha_vencimiento_ver', 'monto_cuota_ver'];
     }
     this.SeleccionarCredito(this.id_credito_estandar)
   }  
@@ -1096,6 +1112,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
         this.CreditosForm.value.trabajo,
         this.CreditosForm.value.tipo_pago,
         this.CreditosForm.value.fecha_pago,
+        0,
         0,
         this.CreditosForm.value.monto_cuota,
         this.numero_cuotas,
@@ -1163,6 +1180,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
         this.CreditosForm.value.trabajo,
         this.CreditosForm.value.tipo_pago,
         this.CreditosForm.value.fecha_pago,
+        0,
         0,
         this.CreditosForm.value.monto_cuota,
         this.numero_cuotas,

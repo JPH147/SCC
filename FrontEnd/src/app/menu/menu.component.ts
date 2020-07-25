@@ -109,7 +109,7 @@ export class MenuComponent implements OnInit{
         submenu:[
           {
             nombre: "Productos",
-            path: "productos" ,
+            path: "detalleproductos" ,
             mostrar : permiso.inventarios.productos.general ,
           },
           {
@@ -266,11 +266,11 @@ export class MenuComponent implements OnInit{
             path: "plantillas",
             mostrar : permiso.tablas_maestras.plantillas ,
           },
-          {
-            nombre: "Productos",
-            path: "detalleproductos",
-            mostrar : permiso.tablas_maestras.productos ,
-          },
+          // {
+          //   nombre: "Productos",
+          //   path: "detalleproductos",
+          //   mostrar : permiso.tablas_maestras.productos ,
+          // },
           {
             nombre: "Proveedores",
             path: "proveedores",

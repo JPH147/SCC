@@ -9,12 +9,12 @@ import {merge, Observable, fromEvent} from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
 import {ProductoService} from './productos.service';
 import {ProductoDataSource} from './productos.dataservice';
-import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
+import {VentanaConfirmarComponent} from '../../global/ventana-confirmar/ventana-confirmar.component';
 import {ImagenProductoComponent} from './imagen-producto/imagen-producto.component'
-import { VentanaFotoComponent } from '../clientes/ventana-foto/ventana-foto.component';
+import { VentanaFotoComponent } from '../../clientes/ventana-foto/ventana-foto.component';
 import { Store } from '@ngrx/store';
-import { EstadoSesion } from '../usuarios/usuarios.reducer';
-import { Rol } from '../usuarios/usuarios.service';
+import { EstadoSesion } from '../../usuarios/usuarios.reducer';
+import { Rol } from '../../usuarios/usuarios.service';
 
 @Component({
   selector: 'app-productos',

@@ -18,6 +18,7 @@ Class Creditos{
 
     public $monto;
     public $capital;
+    public $interes_diario;
     public $interes;
     public $fecha;
     public $interes_generado;
@@ -61,7 +62,9 @@ Class Creditos{
     public $pdf_ddjj;
     public $pdf_otros;
     public $observacion;
-
+    public $monto_total;
+    public $total_pendiente;
+    public $total_pagadas;
     public $garante;
     public $cronograma;
     public $orden;
@@ -191,6 +194,7 @@ Class Creditos{
         $this->id_tipo_pago = $row['id_tipo_pago'];
         $this->tipo_pago = $row['tipo_pago'];
         $this->fecha_pago = $row['fecha_pago'];
+        $this->interes_diario = $row['interes_diario'];
         $this->interes = $row['interes'];
         $this->capital = $row['capital'];
         $this->numero_cuotas = $row['numero_cuotas'];
@@ -212,6 +216,12 @@ Class Creditos{
         $this->observaciones = $row['observaciones'];
         $this->id_credito_refinanciado = $row['id_credito_refinanciado'];
         $this->credito_refinanciado = $row['credito_refinanciado'];
+        $this->monto_total = $row['monto_total'] ;
+        $this->interes_generado = $row['interes_generado'] ;
+        $this->monto_pagado = $row['monto_pagado'] ;
+        $this->total_cuotas = $row['total_cuotas'] ;
+        $this->total_pendiente = $row['total_pendiente'] ;
+        $this->total_pagadas = $row['total_pagadas'] ;
         $this->id_estado = $row['id_estado'];
         $this->estado = $row['estado'];
         $this->courier = $Courier;
@@ -408,6 +418,7 @@ Class Creditos{
             :prclientetrabajo,
             :prtipopago,
             :prfechapago,
+            :printeresdiario,
             :printeres,
             :prcapital,
             :prcuotas,
@@ -446,6 +457,7 @@ Class Creditos{
         $result->bindParam(":prtipopago", $this->tipo_pago);
         $result->bindParam(":prfechapago", $this->fecha_pago);
         $result->bindParam(":printeres", $this->interes);
+        $result->bindParam(":printeresdiario", $this->interes_diario);
         $result->bindParam(":prcapital", $this->capital);
         $result->bindParam(":prcuotas", $this->cuotas);
         $result->bindParam(":prtotal", $this->total);
@@ -479,6 +491,7 @@ Class Creditos{
         $this->cliente_trabajo=htmlspecialchars(strip_tags($this->cliente_trabajo));
         $this->tipo_pago=htmlspecialchars(strip_tags($this->tipo_pago));
         $this->fecha_pago=htmlspecialchars(strip_tags($this->fecha_pago));
+        $this->interes_diario=htmlspecialchars(strip_tags($this->interes_diario));
         $this->interes=htmlspecialchars(strip_tags($this->interes));
         $this->capital=htmlspecialchars(strip_tags($this->capital));
         $this->cuotas=htmlspecialchars(strip_tags($this->cuotas));
@@ -525,6 +538,7 @@ Class Creditos{
             :prclientetrabajo,
             :prtipopago,
             :prfechapago,
+            :printeresdiario,
             :printeres,
             :prcapital,
             :prcuotas,
@@ -560,6 +574,7 @@ Class Creditos{
         $result->bindParam(":prclientetrabajo", $this->cliente_trabajo);
         $result->bindParam(":prtipopago", $this->tipo_pago);
         $result->bindParam(":prfechapago", $this->fecha_pago);
+        $result->bindParam(":printeresdiario", $this->interes_diario);
         $result->bindParam(":printeres", $this->interes);
         $result->bindParam(":prcapital", $this->capital);
         $result->bindParam(":prcuotas", $this->cuotas);
@@ -592,6 +607,7 @@ Class Creditos{
         $this->cliente_trabajo=htmlspecialchars(strip_tags($this->cliente_trabajo));
         $this->tipo_pago=htmlspecialchars(strip_tags($this->tipo_pago));
         $this->fecha_pago=htmlspecialchars(strip_tags($this->fecha_pago));
+        $this->interes_diario=htmlspecialchars(strip_tags($this->interes_diario));
         $this->interes=htmlspecialchars(strip_tags($this->interes));
         $this->capital=htmlspecialchars(strip_tags($this->capital));
         $this->cuotas=htmlspecialchars(strip_tags($this->cuotas));

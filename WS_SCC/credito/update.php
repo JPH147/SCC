@@ -33,6 +33,7 @@
             $credito->cliente_trabajo=trim($_POST["prclientetrabajo"]);
             $credito->tipo_pago=trim($_POST["prtipopago"]);
             $credito->fecha_pago=trim($_POST["prfechapago"]);
+            $credito->interes_interes=!empty($_POST["printeresdiario"]) ? trim($_POST["printeresdiario"]) : 0;
             $credito->interes=trim($_POST["printeres"]);
             $credito->capital=trim($_POST["prcapital"]);
             $credito->cuotas=trim($_POST["prcuotas"]);

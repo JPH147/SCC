@@ -78,6 +78,11 @@ Class Venta{
     public $observacion;
     public $numero_pagina;
     public $total_pagina;
+    public $monto_total;
+    public $interes_generado;
+    public $monto_pagado;
+    public $total_pendiente;
+    public $total_pagadas;
 
     public function __construct($db){
         $this->conn = $db;
@@ -434,6 +439,12 @@ Class Venta{
         $this->credito_refinanciado=$row['credito_refinanciado'];
         $this->anulacion_observacion=$row['anulacion_observacion'];
         $this->anulacion_monto=$row['anulacion_monto'];
+        $this->monto_total = $row['monto_total'] ;
+        $this->interes_generado = $row['interes_generado'] ;
+        $this->monto_pagado = $row['monto_pagado'] ;
+        $this->total_cuotas = $row['total_cuotas'] ;
+        $this->total_pendiente = $row['total_pendiente'] ;
+        $this->total_pagadas = $row['total_pagadas'] ;
         $this->courier = $Courier;
         $this->cronograma=$Cronograma;
         $this->productos=$Productos;

@@ -1,0 +1,73 @@
+@import '../../../../tema.scss';
+
+$accent: map-get($theme, accent);
+
+.card{
+  padding: 0px;
+  overflow: hidden;
+  padding-bottom: 10px;
+}
+
+.spinner-container{
+  position: absolute;
+  top: 50px;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mat-column-opciones{
+	max-width: 10%
+}
+
+mat-table{
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
+}
+
+.titulo{
+  background-color: mat-color($accent);
+  color: white !important;
+}
+
+.venta-contenedor{
+  overflow-x: scroll;
+  white-space: nowrap;
+  margin: 0 10px;
+}
+
+.venta-contenido{
+  display: inline-block ;
+  width: 272px ;
+  border-color: mat-color($accent);
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 5px;
+  margin: 0 10px ;
+  margin-bottom: 10px;
+}
+
+mat-list{
+  padding-top: 0px !important;
+}
+
+mat-divider{
+  position: relative !important ;
+}
+
+.centrar{
+  position: relative;
+  margin: 0 auto;
+}
+
+.nueva-transaccion{
+  margin: 0 5px;
+}
+
+.botones-contenedor{
+  margin-bottom: 15px;
+}

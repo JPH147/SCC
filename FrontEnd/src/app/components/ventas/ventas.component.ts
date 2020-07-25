@@ -144,7 +144,7 @@ export class VentasComponent implements OnInit {
   @ViewChild('Autorizador') AutorizadorAutoComplete: ElementRef;
   @ViewChildren('InputProducto') FiltroProducto:QueryList<any>;
   @ViewChildren('InputPrecio') FiltroPrecio:QueryList<any>;
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
 
   public ListadoVentas: VentaDataSource;
   public Columnas: string[];
@@ -158,6 +158,13 @@ export class VentasComponent implements OnInit {
   public ListadoProcesos : Array<any> = [] ;
   public numero_procesos : number = 0 ;
   public monto_pagado : number = 0 ;
+
+  public totales_monto_total : number = 0 ;
+  public totales_interes_generado : number = 0 ;
+  public totales_monto_pagado : number = 0 ;
+  public totales_total_cuotas : number = 0 ;
+  public totales_total_pendiente : number = 0 ;
+  public totales_total_pagadas : number = 0 ;
 
   constructor(
     private _store : Store<EstadoSesion> ,
@@ -358,6 +365,13 @@ export class VentasComponent implements OnInit {
     this.ListarProcesos(id_venta) ;
     this.Cargando.next(true) ;
 
+    if (this.idventa_editar) {
+      this.Columnas = ['numero', 'fecha_vencimiento_ver', 'monto_cuota_ver'];
+    }
+    if (this.idventa) {
+      this.Columnas= ['numero','tipo_pago','fecha_vencimiento', 'monto_cuota', 'monto_interes','monto_pagado', 'fecha_cancelacion','estado', 'opciones'];
+    }
+
     this.Servicio.SeleccionarVenta(id_venta).subscribe(res=>{
       this.Cargando.next(false);
       this.talonario=res.talonario_serie+" - "+res.talonario_contrato;
@@ -386,6 +400,13 @@ export class VentasComponent implements OnInit {
       this.anulacion_monto=res.anulacion_monto;
       this.total_cronograma_editado=res.monto_total;
       this.estado = res.estado ;
+
+      this.totales_monto_total = res.monto_total ;
+      this.totales_interes_generado = res.interes_generado ;
+      this.totales_monto_pagado = res.monto_pagado ;
+      this.totales_total_cuotas = res.total_cuotas ;
+      this.totales_total_pendiente = res.total_pendiente ;
+      this.totales_total_pagadas = res.total_pagadas ;
 
       if( res.id_venta_canje && res.estado==3 ) {
         this.venta_canjeada = true ;
@@ -1448,10 +1469,12 @@ export class VentasComponent implements OnInit {
     if( tipo == 'ver' ) {
       this.idventa = this.id_venta ;
       this.idventa_editar = null ;
+      this.Columnas= ['numero','tipo_pago','fecha_vencimiento', 'monto_cuota', 'monto_interes','monto_pagado', 'fecha_cancelacion','estado', 'opciones'];
     }
     if( tipo == 'editar' ) {
       this.idventa = null ;
       this.idventa_editar = this.id_venta ;
+      this.Columnas= ['numero', 'fecha_vencimiento_ver', 'monto_cuota_ver'];
     }
     this.SeleccionarVentaxId(this.id_venta)
   }  

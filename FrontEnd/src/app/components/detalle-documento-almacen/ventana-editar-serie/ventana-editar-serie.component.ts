@@ -4,7 +4,7 @@ import {FormGroup, FormBuilder} from '@angular/forms';
 import {ServiciosProductoSerie} from '../../global/productoserie';
 import {fromEvent, BehaviorSubject} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap, finalize} from 'rxjs/operators';
-import {ProductoService} from '../../productos/productos.service';
+import {ProductoService} from '../../detalleproductos/productos/productos.service';
 import { IngresoProductoService } from '../../ingreso-productos/ingreso-productos.service';
 
 @Component({

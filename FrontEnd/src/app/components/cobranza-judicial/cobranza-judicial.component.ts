@@ -151,6 +151,15 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
           this.ListarEspecialistas();
         })
       ).subscribe() ;
+      
+      this.JudicialForm.get('expediente').valueChanges
+      .pipe(
+        debounceTime(200),
+        distinctUntilChanged(),
+        tap(()=>{
+          this.VerificarExpedienteDuplicado() ;
+        })
+      ).subscribe() ;
     }
   }
 
@@ -623,6 +632,18 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
         }
       })
     }
+  }
+
+  VerificarExpedienteDuplicado(){
+    this._judicial.ContarProcesoJudicialExpediente(
+      this.JudicialForm.get('expediente').value
+    ).subscribe(  res =>{
+      if( res > 0 ){
+        this.JudicialForm.get('expediente').setErrors({ repetido : true })
+      } else {
+        this.JudicialForm.get('expediente').setErrors(null)
+      }
+    })
   }
 
 }

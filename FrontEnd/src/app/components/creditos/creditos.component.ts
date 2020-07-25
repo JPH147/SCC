@@ -140,7 +140,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   @ViewChild('InputInteres', { static: true }) FiltroInteres: ElementRef;
   @ViewChild('Vendedor') VendedorAutoComplete : ElementRef;
   @ViewChild('Autorizador') AutorizadorAutoComplete: ElementRef;
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
 
   public ListadoVendedores: Array<any>;
   public ListadoAudorizadores: Array<any>;
@@ -153,6 +153,13 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   public ListadoProcesos : Array<any> = [] ;
   public numero_procesos : number = 0 ;
   public monto_pagado : number = 0 ;
+
+  public totales_monto_total : number ;
+  public totales_interes_generado : number ;
+  public totales_monto_pagado : number ;
+  public totales_total_cuotas : number ;
+  public totales_total_pendiente : number ;
+  public totales_total_pagadas : number ;
 
   constructor(
     private _store : Store<EstadoSesion> ,
@@ -306,9 +313,10 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       }
   
        merge(
-        fromEvent(this.FiltroCuota.nativeElement,'keyup'),
-        fromEvent(this.FiltroCapital.nativeElement,'keyup'),
-        fromEvent(this.FiltroInteres.nativeElement,'keyup')
+        fromEvent(this.FiltroCuota.nativeElement,'keyup') ,
+        fromEvent(this.FiltroCapital.nativeElement,'keyup') ,
+        fromEvent(this.FiltroInteres.nativeElement,'keyup') ,
+        this.CreditosForm.get('interes_diario_monto').valueChanges
       ).pipe(
         debounceTime(200),
         distinctUntilChanged(),
@@ -375,6 +383,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       ]],
       interes_diario: [{value: (moment(new Date()).date()>15 ? false : true), disabled: false},[
       ]],
+      interes_diario_monto: [{value: 0, disabled: false},[ // Es el número del crédito
+      ]],
       fecha_pago: [{value: moment(new Date()).add(1, 'months').toDate(), disabled: false},[
         Validators.required,
       ]],
@@ -405,7 +415,6 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       vendedor: [{value: null, disabled: false},[
       ]],
       id_autorizador: [{value: null, disabled: false},[
-        Validators.required
       ]],
       autorizador: [{value: null, disabled: false},[
       ]],
@@ -557,6 +566,19 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       this.CreditosForm.get('direccion').setValue(res.cliente_direccion);
       this.CreditosForm.get('telefono').setValue(res.cliente_telefono);
       this.CreditosForm.get('fecha_pago').setValue(moment(res.fecha_pago).toDate());
+      this.CreditosForm.get('interes_diario_monto').setValue(res.interes_diario);
+
+      if ( this.CreditosForm.get('interes_diario_monto').value > 0 ) {
+        this.CreditosForm.get('interes_diario').setValue(true) ;
+      }
+
+      this.totales_monto_total = res.monto_total ;
+      this.totales_interes_generado = res.interes_generado ;
+      this.totales_monto_pagado = res.monto_pagado ;
+      this.totales_total_cuotas = res.total_cuotas ;
+      this.totales_total_pendiente = res.total_pendiente ;
+      this.totales_total_pagadas = res.total_pagadas ;
+
       this.CreditosForm.get('interes').setValue(res.interes);
       this.CreditosForm.get('capital').setValue(res.capital);
       this.CreditosForm.get('cuotas').setValue(res.numero_cuotas);
@@ -1116,6 +1138,11 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     }
   }
 
+  CambiarInteresPorDia(){
+    this.CreditosForm.get('interes_diario_monto').setValue(0) ;
+    this.CrearCronograma() ;
+  }
+
   /*Cronograma */
   CrearCronograma(){
 
@@ -1141,7 +1168,18 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       let mes_credito :number = moment(this.CreditosForm.value.fecha_credito).month();
       let ano_credito :number = moment(this.CreditosForm.value.fecha_credito).year();
       let dias_mes : number = moment(this.CreditosForm.value.fecha_credito).daysInMonth();
-      let interes_truncado = Math.round( ((dias_mes - dia_credito) / dias_mes) * interes * 100 ) / 100;
+
+      // Se calcula el interés por día
+      let interes_truncado : number = 0 ;
+      if( this.CreditosForm.value.interes_diario ) {
+        if ( this.CreditosForm.get('interes_diario_monto').value > 0 ) {
+          interes_truncado = this.CreditosForm.get('interes_diario_monto').value ;
+
+        } else {
+          interes_truncado = Math.round( ((dias_mes - dia_credito) / dias_mes) * interes * 100 ) / 100 ;
+          this.CreditosForm.get('interes_diario_monto').setValue(interes_truncado) ;
+        }
+      }
 
       // Si el crédito es antes de quincena, se paga a fin de mes los intereses truncados
       if( this.CreditosForm.value.interes_diario ){
@@ -1251,10 +1289,12 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     if( tipo == 'ver' ) {
       this.id_credito = this.id_credito_estandar ;
       this.id_credito_editar = null ;
+      this.ColumnasCronograma = ['numero', 'tipo_pago','fecha_vencimiento', 'monto', 'interes_generado','monto_pagado', 'fecha_cancelacion','estado', 'opciones'];
     }
     if( tipo == 'editar' ) {
       this.id_credito = null ;
       this.id_credito_editar = this.id_credito_estandar ;
+      this.ColumnasCronograma= ['numero', 'fecha_vencimiento_ver', 'monto_cuota_ver'];
     }
     this.SeleccionarCredito(this.id_credito_estandar)
   }  
@@ -1320,6 +1360,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       this.CreditosForm.value.tipo_pago,
       this.CreditosForm.value.afiliacion_fecha_vencimiento,
       0,
+      0,
       this.CreditosForm.value.afiliacion_monto,
       this.numero_cuotas,
       +this.CreditosForm.value.afiliacion_monto * this.numero_cuotas,
@@ -1374,7 +1415,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         this.CreditosForm.value.trabajo,
         this.CreditosForm.value.tipo_pago,
         this.CreditosForm.value.fecha_pago,
-        this.CreditosForm.value.interes,
+        0,
+        0,
         this.CreditosForm.value.capital,
         this.CreditosForm.value.cuotas,
         this.CreditosForm.value.total,
@@ -1458,6 +1500,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         this.CreditosForm.value.trabajo,
         this.CreditosForm.value.tipo_pago,
         this.CreditosForm.value.fecha_pago,
+        this.CreditosForm.value.interes_diario_monto,
         this.CreditosForm.value.interes,
         this.CreditosForm.value.capital,
         this.CreditosForm.value.cuotas,
@@ -1595,6 +1638,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         this.CreditosForm.value.trabajo,
         this.CreditosForm.value.tipo_pago,
         this.CreditosForm.value.fecha_pago,
+        this.CreditosForm.value.interes_diario_monto,
         this.CreditosForm.value.interes,
         this.CreditosForm.value.capital,
         this.CreditosForm.value.cuotas,
