@@ -119,6 +119,14 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   public numero_procesos : number = 0 ;
   public monto_pagado : number = 0 ;
 
+  public totales_monto_total : number = 0 ;
+  public totales_interes_generado : number = 0 ;
+  public totales_monto_pagado : number = 0 ;
+  public totales_monto_pendiente : number = 0 ;
+  public totales_total_cuotas : number = 0 ;
+  public totales_total_pendiente : number = 0 ;
+  public totales_total_pagadas : number = 0 ;
+
   constructor(
     private _store : Store<EstadoSesion> ,
     private Servicio: VentaService,
@@ -322,6 +330,14 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       this.VentasSalidaForm.get('contrato').setValue(res.contrato);
       this.estado = res.estado ;
       
+      this.totales_monto_total = res.monto_total ;
+      this.totales_interes_generado = res.interes_generado ;
+      this.totales_monto_pagado = res.monto_pagado ;
+      this.totales_monto_pendiente = res.monto_pendiente ;
+      this.totales_total_cuotas = res.total_cuotas ;
+      this.totales_total_pendiente = res.total_pendiente ;
+      this.totales_total_pagadas = res.total_pagadas ;
+
       this.Productos=res.productos.productos
       
       this.Cronograma=res.cronograma.cronograma;
@@ -1019,10 +1035,12 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
     if( tipo == 'ver' ) {
       this.id_venta = this.idventa ;
       this.id_venta_editar = null ;
+      this.Columnas= ['numero', 'monto_cuota','fecha_vencimiento', 'monto_interes','monto_pagado', 'fecha_cancelacion', 'monto_pendiente','estado', 'opciones'];
     }
     if( tipo == 'editar' ) {
       this.id_venta = null ;
       this.id_venta_editar = this.idventa ;
+      this.Columnas= ['numero', 'fecha_vencimiento_ver', 'monto_cuota_ver'];
     }
     this.SeleccionarVentaxId(this.idventa)
   }  

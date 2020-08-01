@@ -17,6 +17,7 @@ export class VentasServicio {
     cliente:string,
     dni:string,
     tipo_venta:number,
+    estado_pagos:number,
     fecha_inicio:Date,
     fecha_fin:Date,
     estado:number,
@@ -29,6 +30,7 @@ export class VentasServicio {
       .set('prcliente',cliente)
       .set('prdni',dni)
       .set('prtipo_venta',tipo_venta.toString())
+      .set('prestadopagos',estado_pagos.toString())
       .set('prfecha_inicio', fecha_inicio ? moment(fecha_inicio).format('YYYY-MM-DD') : "" )
       .set('prfecha_fin', fecha_fin ? moment(fecha_fin).format('YYYY-MM-DD') : "" )
       .set('prestado',estado.toString())

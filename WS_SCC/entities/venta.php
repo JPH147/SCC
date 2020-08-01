@@ -81,8 +81,10 @@ Class Venta{
     public $monto_total;
     public $interes_generado;
     public $monto_pagado;
+    public $monto_pendiente;
     public $total_pendiente;
     public $total_pagadas;
+    public $estado_pagos;
 
     public function __construct($db){
         $this->conn = $db;
@@ -91,19 +93,20 @@ Class Venta{
 
     function read(){
 
-        $query = "CALL sp_listarventa(?,?,?,?,?,?,?,?,?)";
+        $query = "CALL sp_listarventa(?,?,?,?,?,?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
         $result->bindParam(1, $this->cliente);
         $result->bindParam(2, $this->cliente_dni);
         $result->bindParam(3, $this->tipo_venta);
-        $result->bindParam(4, $this->fecha_inicio);
-        $result->bindParam(5, $this->fecha_fin);
-        $result->bindParam(6, $this->estado);
-        $result->bindParam(7, $this->numero_pagina);
-        $result->bindParam(8, $this->total_pagina);
-        $result->bindParam(9, $this->orden);
+        $result->bindParam(4, $this->estado_pagos);
+        $result->bindParam(5, $this->fecha_inicio);
+        $result->bindParam(6, $this->fecha_fin);
+        $result->bindParam(7, $this->estado);
+        $result->bindParam(8, $this->numero_pagina);
+        $result->bindParam(9, $this->total_pagina);
+        $result->bindParam(10, $this->orden);
 
         $result->execute();
         
@@ -144,16 +147,17 @@ Class Venta{
 
     function contar(){
 
-        $query = "CALL sp_listarventacontar(?,?,?,?,?,?)";
+        $query = "CALL sp_listarventacontar(?,?,?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
         $result->bindParam(1, $this->cliente);
         $result->bindParam(2, $this->cliente_dni);
         $result->bindParam(3, $this->tipo_venta);
-        $result->bindParam(4, $this->fecha_inicio);
-        $result->bindParam(5, $this->fecha_fin);
-        $result->bindParam(6, $this->estado);
+        $result->bindParam(4, $this->estado_pagos);
+        $result->bindParam(5, $this->fecha_inicio);
+        $result->bindParam(6, $this->fecha_fin);
+        $result->bindParam(7, $this->estado);
 
         $result->execute();
 
@@ -442,6 +446,7 @@ Class Venta{
         $this->monto_total = $row['monto_total'] ;
         $this->interes_generado = $row['interes_generado'] ;
         $this->monto_pagado = $row['monto_pagado'] ;
+        $this->monto_pendiente = $row['monto_pendiente'] ;
         $this->total_cuotas = $row['total_cuotas'] ;
         $this->total_pendiente = $row['total_pendiente'] ;
         $this->total_pagadas = $row['total_pagadas'] ;
@@ -504,6 +509,13 @@ Class Venta{
         $this->canje_talonario_contrato=$row['canje_talonario_contrato'];
         $this->anulacion_observacion=$row['anulacion_observacion'];
         $this->anulacion_monto=$row['anulacion_monto'];
+        $this->monto_total = $row['monto_total'] ;
+        $this->interes_generado = $row['interes_generado'] ;
+        $this->monto_pagado = $row['monto_pagado'] ;
+        $this->monto_pendiente = $row['monto_pendiente'] ;
+        $this->total_cuotas = $row['total_cuotas'] ;
+        $this->total_pendiente = $row['total_pendiente'] ;
+        $this->total_pagadas = $row['total_pagadas'] ;
         $this->courier = $Courier;
         $this->cronograma=$Cronograma;
         $this->productos=$Productos;

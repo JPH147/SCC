@@ -57,10 +57,12 @@
 
     <mat-grid-tile>
       <mat-form-field>
-        <mat-select #InputDocumentos placeholder="Documentos adjuntos" [value]=0 (selectionChange)="CambioFiltro()">
+        <mat-select #InputDocumentos placeholder="Estado de los pagos" [value]=0 (selectionChange)="CambioFiltro()">
           <mat-option [value]=0>Todos</mat-option>
-          <mat-option [value]=1>Pendientes</mat-option>
-          <mat-option [value]=2>Completados</mat-option>
+          <mat-option [value]=1>En curso y al día</mat-option>
+          <mat-option [value]=2>En curso y atrasados</mat-option>
+          <mat-option [value]=3>Finalizado y cancelados</mat-option>
+          <mat-option [value]=4>Finalizado y pendientes</mat-option>
         </mat-select>
       </mat-form-field>
     </mat-grid-tile>
@@ -100,7 +102,7 @@
       </ng-container>
 
       <ng-container matColumnDef="tipo_credito">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo de crédito </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </mat-header-cell>
         <mat-cell *matCellDef="let credito"> {{credito.tipo_credito}} </mat-cell>
       </ng-container>
 

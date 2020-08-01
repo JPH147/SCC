@@ -69,6 +69,7 @@
             "monto_total" => $credito->monto_total,
             "interes_generado" => $credito->interes_generado,
             "monto_pagado" => $credito->monto_pagado,
+            "monto_pendiente" => $credito->monto_pendiente,
             "total_cuotas" => $credito->total_cuotas,
             "total_pendiente" => $credito->total_pendiente,
             "total_pagadas" => $credito->total_pagadas,

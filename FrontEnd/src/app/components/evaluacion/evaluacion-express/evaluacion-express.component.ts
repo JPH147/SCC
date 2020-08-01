@@ -492,19 +492,9 @@ export class EvaluacionExpressComponent implements OnInit {
 
     this.GenerarDDJJ("DDJJ_"+ahora);
     this.GenerarCompromiso("Compromiso_"+ahora);
-
-    // if(this.InformacionForm.value.email && this.InformacionForm.value.codigo){
-      this.GenerarAutorizacion("Autorizacion_"+ahora);
-    // }
-
-    // if(this.InformacionForm.value.cuenta_numero){
-      this.GenerarTarjeta("Tarjeta_"+ahora);
-    // }
-
-    // if(this.InformacionForm.value.email && this.InformacionForm.value.casilla){
-      this.GenerarTransaccion("Transaccion_"+ahora);
-    // }
-
+    this.GenerarAutorizacion("Autorizacion_"+ahora);
+    this.GenerarTarjeta("Tarjeta_"+ahora);
+    this.GenerarTransaccion("Transaccion_"+ahora);
   }
 
   GenerarDDJJ(nombre_archivo){
@@ -567,6 +557,8 @@ export class EvaluacionExpressComponent implements OnInit {
   GenerarTransaccion(nombre_archivo){
     let direccion_completa : string ;
 
+    console.log(this.cronograma) ;
+    
     direccion_completa = this.CrearDireccionCompleta();
 
     this.Servicios.GenerarTransaccion(
@@ -699,8 +691,7 @@ export class EvaluacionExpressComponent implements OnInit {
       20,
       5
     ).subscribe(res =>{
-      // this.ClientesForm.reset();
-      // console.log(res)
+      console.log(res)
 
       if(res['codigo']==0){
         this.Notificacion.Snack("Se creó el cliente satisfactoriamente.","")
@@ -710,16 +701,16 @@ export class EvaluacionExpressComponent implements OnInit {
 
       if(this.InformacionForm.value.cuenta_numero){
         this.ClienteServicios.CrearCuenta(res['data'], this.InformacionForm.value.cuenta_banco, this.InformacionForm.value.cuenta_numero, "").subscribe(resultado=>{
-          // console.log(resultado)
+          console.log(resultado)
         })
       }
 
       this.ServicioTelefono.CrearTelefono(res['data'], this.InformacionForm.value.telefono_numero, this.InformacionForm.value.telefono_tipo).subscribe(resultado=>{
-        // console.log(resultado)
+        console.log(resultado)
       })
 
       this.ServicioDireccion.CrearDireccion(res['data'], this.InformacionForm.value.direccion_nombre, this.InformacionForm.value.direccion_distrito).subscribe(resultado=>{
-        // console.log(resultado)
+        console.log(resultado)
       })
     });
   }

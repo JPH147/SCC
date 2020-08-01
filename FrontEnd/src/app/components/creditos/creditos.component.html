@@ -1378,6 +1378,26 @@
             <mat-footer-row *matFooterRowDef="ColumnasCronograma"></mat-footer-row>
           </ng-container>
         </mat-table>
+
+        <mat-grid-list cols="3" rowHeight="70px">
+          <mat-grid-tile>
+            <strong > Total: </strong>
+            &nbsp;
+            {{ totales_monto_total | currency:'S/.' }} ({{totales_total_cuotas}} cuotas)
+          </mat-grid-tile>
+          
+          <mat-grid-tile>
+            <strong > Pagado: </strong>
+            &nbsp;
+            {{ totales_monto_pagado | currency:'S/.' }} ({{totales_total_pagadas}} cuotas)
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <strong > Pendiente: </strong>
+            &nbsp;
+            {{ totales_monto_pendiente | currency:'S/.' }} ({{totales_total_pendiente}} cuotas)
+          </mat-grid-tile>
+        </mat-grid-list>
       </ng-container>
 
       <ng-container *ngIf="!id_credito">

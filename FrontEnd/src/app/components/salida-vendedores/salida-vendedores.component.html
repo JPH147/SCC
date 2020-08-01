@@ -61,7 +61,7 @@
             <mat-chip-list #chipList>
               <mat-chip *ngFor="let departamento of departamentos" [selectable]="true" [removable]="true" (removed)="remove(departamento)">
                 {{departamento.name}}
-                <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                <mat-icon matChipRemove>cancel</mat-icon>
               </mat-chip>
               <input placeholder="Destino"
               formControlName="destino"
@@ -284,7 +284,7 @@
 
     </div>
 
-    <div class="seccion" *ngIf="id_salida_editar">
+    <div class="seccion" *ngIf="!id_salida">
 
       <mat-card-subtitle class="titulo-seccion">
           DATOS DE LOS VIATICOS
@@ -296,7 +296,9 @@
           <mat-form-field class="formulario">
             <mat-select placeholder="Vendedor" formControlName="gasto_vendedor" (selectionChange)="ViaticoSeleccionado($event)">
               <mat-option [value]=0>Ninguno</mat-option>
-              <mat-option *ngFor="let vendedor of VendedoresViaticos" [value]="vendedor">{{vendedor.vendedor}}</mat-option>
+              <mat-option *ngFor="let vendedor of VendedoresViaticos" [value]="vendedor">
+                {{ id_salida_editar ? vendedor.vendedor : vendedor.nombre }}
+              </mat-option>
             </mat-select>
           </mat-form-field>
         </mat-grid-tile>
@@ -332,7 +334,7 @@
     
         <mat-grid-tile>
           <button mat-raised-button color="primary" (click)="AgregarGasto()"
-          [disabled]="SalidaVendedoresForm.value.gasto_vendedor==0 || SalidaVendedoresForm.get('gasto_monto').invalid || SalidaVendedoresForm.get('gasto_tipo').invalid"
+            [disabled]="SalidaVendedoresForm.value.gasto_vendedor==0 || SalidaVendedoresForm.get('gasto_monto').invalid || SalidaVendedoresForm.get('gasto_tipo').invalid"
           >Agregar</button>
         </mat-grid-tile>
     

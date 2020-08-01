@@ -4,7 +4,13 @@
 }
 
 .mat-column-opciones{
-	max-width: 10%
+	max-width: 7%
+}
+
+.mat-column-serie,
+.mat-column-color,
+.mat-column-almacenamiento{
+	max-width: 20%
 }
 
 mat-card-content{
@@ -16,4 +22,8 @@ mat-card-content{
 
 .spinner-container{
 	top: 100px !important;
+}
+
+mat-card-actions{
+	margin-bottom: 10px !important;
 }

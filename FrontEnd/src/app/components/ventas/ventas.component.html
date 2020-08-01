@@ -46,8 +46,8 @@
     </ng-container>
   </ng-container>
 
-  <mat-card-title class="tituloProd" *ngIf="!idventa && !idventa_editar">Nueva venta</mat-card-title>
-  <mat-card-title class="tituloProd" *ngIf="idventa || idventa_editar">Venta {{talonario}}</mat-card-title>
+  <mat-card-title class="tituloProd" *ngIf="!idventa && !idventa_editar"> Nuevo contrato de venta </mat-card-title>
+  <mat-card-title class="tituloProd" *ngIf="idventa || idventa_editar"> Contrato de venta {{talonario}} </mat-card-title>
 
   <mat-card-subtitle *ngIf="venta_canje"> Venta a canjear por la {{talonario}} </mat-card-subtitle>
   <mat-card-subtitle *ngIf="venta_canjeada"> Esta venta ha sido canjeada por la {{talonario}} </mat-card-subtitle>
@@ -614,7 +614,9 @@
 
       <mat-grid-list cols="4" rowHeight="50px" *ngIf="!idventa && !id_presupuesto">
         <mat-grid-tile colspan="4">
-          <button mat-mini-fab color="primary" (click)="AgregarProducto()" matTooltip="Agregar productos" type="button" [disabled]="!this.sucursal"><mat-icon>add</mat-icon></button>
+          <!-- <button mat-mini-fab color="primary" (click)="AgregarProducto()" matTooltip="Agregar productos" type="button" [disabled]="!this.sucursal"><mat-icon>add</mat-icon></button> -->
+          <button mat-mini-fab color="primary" (click)="SeleccionarSeries()" matTooltip="Seleccionar productos" type="button"
+            [disabled]="!this.sucursal"><mat-icon>playlist_add</mat-icon></button>
         </mat-grid-tile>
       </mat-grid-list>
 
@@ -660,7 +662,12 @@
               </mat-grid-tile>
 
               <mat-grid-tile>
-                <button  mat-icon-button type="button" color="primary" class="boton" matTooltip="Eliminar producto" (click)="EliminarProductos(i,producto)" [disabled]="VentasForm['controls'].productos['controls'].length==1"><mat-icon>delete</mat-icon></button>
+                <ng-container *ngIf="producto.value.estado != 3">
+                  <button mat-icon-button type="button" color="primary" class="boton" matTooltip="Eliminar producto" (click)="EliminarProductos(i,producto)" [disabled]="VentasForm['controls'].productos['controls'].length==1"><mat-icon>delete</mat-icon></button>
+                </ng-container>
+                <ng-container *ngIf="producto.value.estado == 3">
+                  <button mat-icon-button type="button" color="primary" class="boton" matTooltip="Restaurar producto" (click)="DeseliminarProductos(i)" [disabled]="VentasForm['controls'].productos['controls'].length==1"><mat-icon>delete_forever</mat-icon></button>
+                </ng-container>
               </mat-grid-tile>
 
             </mat-grid-list>
@@ -724,27 +731,27 @@
             <input matInput type="text" placeholder="Tipo de pago" formControlName="tipopago" [readonly]="idventa">
           </mat-form-field>
         </mat-grid-tile>
-
-        <mat-grid-tile>
-          <mat-form-field class="columnas-1">
-            <input matInput placeholder="Monto total" formControlName="montototal" [readonly]="id_presupuesto">
-            <span matPrefix>S/ &nbsp;</span>
-          </mat-form-field>
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          <mat-form-field class="columnas-1">
-            <input matInput placeholder="N° de cuotas" maxlength=3 formControlName="cuotas" #InputCuota [readonly]="idventa || id_presupuesto">
-            <mat-error>Solo debe ingresar valores númericos</mat-error>
-          </mat-form-field>
-        </mat-grid-tile>
-
+        
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
             <input matInput placeholder="Cuota inicial" formControlName="inicial" #InputInicial [readonly]="idventa || id_presupuesto">
             <mat-error>Solo debe ingresar valores númericos</mat-error>
             <span matPrefix>S/ &nbsp;</span>
             <mat-hint *ngIf="monto_inicial_canje">Se dejó a cuenta S/. {{monto_inicial_canje}}</mat-hint>
+          </mat-form-field>
+        </mat-grid-tile>
+        
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput placeholder="N° de cuotas" maxlength=3 formControlName="cuotas" #InputCuota [readonly]="idventa || id_presupuesto">
+            <mat-error>Solo debe ingresar valores númericos</mat-error>
+          </mat-form-field>
+        </mat-grid-tile>
+        
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput placeholder="Monto total" formControlName="montototal" readonly>
+            <span matPrefix>S/ &nbsp;</span>
           </mat-form-field>
         </mat-grid-tile>
 
@@ -1244,6 +1251,26 @@
             <mat-footer-row *matFooterRowDef="Columnas"></mat-footer-row>
           </ng-container>
         </mat-table>
+
+        <mat-grid-list cols="3" rowHeight="70px">
+          <mat-grid-tile>
+            <strong > Total: </strong>
+            &nbsp;
+            {{ totales_monto_total | currency:'S/.' }} ({{totales_total_cuotas}} cuotas)
+          </mat-grid-tile>
+          
+          <mat-grid-tile>
+            <strong > Pagado: </strong>
+            &nbsp;
+            {{ totales_monto_pagado | currency:'S/.' }} ({{totales_total_pagadas}} cuotas)
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <strong > Pendiente: </strong>
+            &nbsp;
+            {{ totales_monto_pendiente | currency:'S/.' }} ({{totales_total_pendiente}} cuotas)
+          </mat-grid-tile>
+        </mat-grid-list>
       </ng-container>
 
       <ng-container *ngIf="!idventa">

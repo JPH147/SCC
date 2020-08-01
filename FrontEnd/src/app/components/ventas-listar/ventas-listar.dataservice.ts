@@ -25,6 +25,7 @@ constructor(private Servicio: VentasServicio) { }
     cliente:string,
     dni:string,
     tipo_venta:number,
+    estado_pagos:number,
     fecha_inicio:Date,
     fecha_fin:Date,
     estado:number,
@@ -34,7 +35,7 @@ constructor(private Servicio: VentasServicio) { }
   ) {
   this.CargandoInformacion.next(true);
 
-  this.Servicio.Listado(cliente,dni,tipo_venta,fecha_inicio,fecha_fin,estado,pagina_inicio,pagina_final,orden)
+  this.Servicio.Listado(cliente,dni,tipo_venta,estado_pagos,fecha_inicio,fecha_fin,estado,pagina_inicio,pagina_final,orden)
   .pipe(
     catchError(() => of([])),
     finalize(() => this.CargandoInformacion.next(false))

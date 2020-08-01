@@ -8,6 +8,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { VentanaObservacionesComponent } from '../ventana-observaciones/ventana-observaciones.component';
 
 import { URLLLAMADAS } from '../../../global/url' ;
+import { Notificaciones } from 'src/app/components/global/notificacion';
 
 @Component({
   selector: 'app-ventana-llamadas',
@@ -24,13 +25,15 @@ export class VentanaLlamadasComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
     public ventana: MatDialogRef<VentanaObservacionesComponent>,
-    private Servicio: ClienteService,) { }
+    private Servicio: ClienteService,
+    private _notificaciones : Notificaciones ,
+  ) { }
 
   ngOnInit(): void {
     this.ListadoLlamadas = new LlamadasDataSource(this.Servicio);
     this.ListadoLlamadas.CargarClientes(this.data);
 
-    this.Columnas = ['numero', 'fecha', 'opciones']
+    this.Columnas = ['numero', 'fecha', 'telefono', 'opciones']
   }
 
   VerArchivo( nombre_archivo ) {
@@ -38,12 +41,31 @@ export class VentanaLlamadasComponent implements OnInit {
       window.open( this.ruta + nombre_archivo , "_blank");
     }
   }
+
+  EliminarArchivo( nombre_archivo ) {
+    this.ListadoLlamadas.CargandoInformacion.next(true) ;
+
+    this.Servicio.EliminarArchivo(nombre_archivo)
+    .pipe(
+      finalize(()=>{
+        this.ListadoLlamadas.CargandoInformacion.next(false) ;
+      })
+    )
+    .subscribe(res=>{
+      if ( res ) {
+        this._notificaciones.Snack("Se eliminó el archivo satisfactoriamente","") ;
+        this.ListadoLlamadas.CargarClientes(this.data) ;
+      } else {
+        this._notificaciones.Snack("Ocurrió un error al eliminar el archivo","") ;
+      }
+    })
+  }
 }
 
 export class LlamadasDataSource implements DataSource<any> {
 
   private InformacionClientes = new BehaviorSubject<any[]>([]);
-  private CargandoInformacion = new BehaviorSubject<boolean>(false);
+  public CargandoInformacion = new BehaviorSubject<boolean>(false);
   public Cargando = this.CargandoInformacion.asObservable();
   public TotalResultados = new BehaviorSubject<number>(0);
 

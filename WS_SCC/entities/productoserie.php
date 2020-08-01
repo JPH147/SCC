@@ -107,6 +107,9 @@ Class ProductoSerie{
             $producto_serie_item = array (
                 "numero"=>$contador,
                 "id_serie"=>$id_serie,
+                "id_producto"=>$id_producto,
+                "producto"=>$producto,
+                "precio"=>$precio,
                 "serie"=>$serie,
                 "color"=>$color,
                 "almacenamiento"=>$almacenamiento,
@@ -122,7 +125,7 @@ Class ProductoSerie{
 
     function contar_sucursal(){
 
-        $query = "CALL sp_listarproductoseriecontarxsucursal(?,?,?)";
+        $query = "CALL sp_listarproductoseriexsucursalcontar(?,?,?)";
 
         $result = $this->conn->prepare($query);
 

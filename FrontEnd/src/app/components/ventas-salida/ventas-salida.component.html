@@ -46,7 +46,7 @@
     </ng-container>
   </ng-container>
 
-  <mat-card-title class="tituloProd">Venta {{numero_contrato}}</mat-card-title>
+  <mat-card-title class="tituloProd"> Contrato de venta {{numero_contrato}} </mat-card-title>
 
   <form [formGroup]="VentasSalidaForm">
 
@@ -950,7 +950,95 @@
         <button mat-icon-button class="icono" *ngIf="id_venta_editar && editar_cronograma==1" (click)="EditarCronograma(2)"><mat-icon>check</mat-icon></button>
       </mat-card-subtitle>
 
-      <ng-container>
+      <ng-container *ngIf="idventa">
+        <mat-table [dataSource]="ListadoVentas" class="mat-elevation-z8" matSort matSortActive="fecha_vencimiento" matSortDirection="asc" matSortDisableClear>
+
+          <ng-container matColumnDef="numero">
+            <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma"> {{cronograma.numero}} </mat-cell>
+            <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="monto_cuota">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Monto </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_cuota | currency:'S/.' }} </mat-cell>
+            <mat-footer-cell *matFooterCellDef> TOTALES </mat-footer-cell>
+            <mat-footer-cell *matFooterCellDef> {{ totales_monto_total | currency:'S/.' }} </mat-footer-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="fecha_vencimiento">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Vencimiento </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma"> {{cronograma.fecha_vencimiento | date: 'dd/MM/yyyy'}} </mat-cell>
+            <mat-footer-cell *matFooterCellDef> - </mat-footer-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="monto_interes">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Interés </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_interes | currency:'S/.'}}</mat-cell>
+            <mat-footer-cell *matFooterCellDef> {{ totales_interes_generado | currency:'S/.' }} </mat-footer-cell>
+          </ng-container>
+          
+          <ng-container matColumnDef="monto_pagado">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Total pagado </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_pagado | currency:'S/.'}}</mat-cell>
+            <mat-footer-cell *matFooterCellDef> {{ totales_monto_pagado | currency:'S/.' }} </mat-footer-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="fecha_cancelacion">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de cancelación </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma"> {{cronograma.fecha_cancelacion | date: 'dd/MM/yyyy'}} </mat-cell>
+            <mat-footer-cell *matFooterCellDef> - </mat-footer-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="monto_pendiente">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Pendiente de pago </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_pendiente | currency:'S/.'}}</mat-cell>
+            <mat-footer-cell *matFooterCellDef> - </mat-footer-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="estado">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma"> {{cronograma.estado==1 ? "Por pagar" : "Pagado" }} </mat-cell>
+            <mat-footer-cell *matFooterCellDef> {{ totales_total_pagadas }} / {{ totales_total_cuotas }} </mat-footer-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="opciones">
+            <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
+            <mat-cell *matCellDef="let cronograma">
+              <button mat-icon-button color="primary" [disabled]="cronograma.monto_pagado==0" (click)="VerDetallePagos(cronograma)"> <mat-icon> visibility </mat-icon> </button>
+              <button mat-icon-button color="primary" [disabled]="cronograma.estado == 'Pagado'" (click)="RegistrarPago(cronograma)"> <mat-icon> payment </mat-icon> </button>
+            </mat-cell>
+            <mat-footer-cell *matFooterCellDef> - </mat-footer-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: Columnas;"></mat-row>
+          <mat-footer-row *matFooterRowDef="Columnas"></mat-footer-row>
+
+        </mat-table>
+
+        <mat-grid-list cols="3" rowHeight="70px">
+          <mat-grid-tile>
+            <strong > Total: </strong>
+            &nbsp;
+            {{ totales_monto_total | currency:'S/.' }} ({{totales_total_cuotas}} cuotas)
+          </mat-grid-tile>
+          
+          <mat-grid-tile>
+            <strong > Pagado: </strong>
+            &nbsp;
+            {{ totales_monto_pagado | currency:'S/.' }} ({{totales_total_pagadas}} cuotas)
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <strong > Pendiente: </strong>
+            &nbsp;
+            {{ totales_monto_pendiente | currency:'S/.' }} ({{totales_total_pendiente}} cuotas)
+          </mat-grid-tile>
+        </mat-grid-list>
+      </ng-container>
+
+      <ng-container *ngIf="!idventa">
         <mat-table [dataSource]="ListadoVentas" class="mat-elevation-z8" matSort matSortActive="fecha_vencimiento" matSortDirection="asc" matSortDisableClear>
 
           <ng-container matColumnDef="numero">
@@ -958,7 +1046,6 @@
             <mat-cell *matCellDef="let cronograma"> {{cronograma.numero}} </mat-cell>
           </ng-container>
 
-          <!-- Sin el sort -->
           <ng-container matColumnDef="monto_cuota_ver">
             <mat-header-cell *matHeaderCellDef> Monto </mat-header-cell>
             <mat-cell *matCellDef="let cronograma">
@@ -980,55 +1067,11 @@
             </mat-cell>
           </ng-container>
 
-          <!-- Con el sort -->
-          <ng-container matColumnDef="monto_cuota">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Monto </mat-header-cell>
-            <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_cuota | currency:'S/.' }} </mat-cell>
-          </ng-container>
-
-          <ng-container matColumnDef="fecha_vencimiento">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Vencimiento </mat-header-cell>
-            <mat-cell *matCellDef="let cronograma"> {{cronograma.fecha_vencimiento | date: 'dd/MM/yyyy'}} </mat-cell>
-          </ng-container>
-
-          <ng-container matColumnDef="monto_interes">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Interés </mat-header-cell>
-            <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_interes | currency:'S/.'}}</mat-cell>
-          </ng-container>
-
-          <ng-container matColumnDef="monto_pagado">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Total pagado </mat-header-cell>
-            <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_pagado | currency:'S/.'}}</mat-cell>
-          </ng-container>
-
-          <ng-container matColumnDef="fecha_cancelacion">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de cancelación </mat-header-cell>
-            <mat-cell *matCellDef="let cronograma"> {{cronograma.fecha_cancelacion | date: 'dd/MM/yyyy'}} </mat-cell>
-          </ng-container>
-
-          <ng-container matColumnDef="monto_pendiente">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Pendiente de pago </mat-header-cell>
-            <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_pendiente | currency:'S/.'}}</mat-cell>
-          </ng-container>
-
-          <ng-container matColumnDef="estado">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
-            <mat-cell *matCellDef="let cronograma"> {{cronograma.estado==1 ? "Por pagar" : "Pagado" }} </mat-cell>
-          </ng-container>
-
-          <ng-container matColumnDef="opciones">
-            <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
-            <mat-cell *matCellDef="let cronograma">
-              <button mat-icon-button color="primary" [disabled]="cronograma.monto_pagado==0" (click)="VerDetallePagos(cronograma)"> <mat-icon> visibility </mat-icon> </button>
-              <button mat-icon-button color="primary" [disabled]="cronograma.estado == 'Pagado'" (click)="RegistrarPago(cronograma)"> <mat-icon> payment </mat-icon> </button>
-            </mat-cell>
-          </ng-container>
-
           <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>
           <mat-row *matRowDef="let row; columns: Columnas;"></mat-row>
-
         </mat-table>
       </ng-container>
+
 
       <mat-error class="error-monto" *ngIf="diferencia>0.05 && editar_cronograma<3">
         Las cuotas deben sumar {{VentasSalidaForm.value.montototal}}.  {{ VentasSalidaForm.value.montototal>this.total_cronograma_editado ? 'Falta:' : 'Excede en:' }} {{diferencia}}.

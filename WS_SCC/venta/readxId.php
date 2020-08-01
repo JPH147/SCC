@@ -69,6 +69,7 @@
 				"monto_total"=>$venta->monto_total,
 				"interes_generado"=>$venta->interes_generado,
 				"monto_pagado"=>$venta->monto_pagado,
+				"monto_pendiente"=>$venta->monto_pendiente,
 				"total_cuotas"=>$venta->total_cuotas,
 				"total_pendiente"=>$venta->total_pendiente,
 				"total_pagadas"=>$venta->total_pagadas,

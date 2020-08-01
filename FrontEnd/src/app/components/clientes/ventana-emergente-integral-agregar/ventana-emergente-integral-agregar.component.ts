@@ -468,7 +468,7 @@ export class VentanaEmergenteIntegralAgregarComponent implements OnInit, AfterVi
     if( this.Cuentas.length == 1 ) {
       this.EstablecerCuentaPrimaria(1) ;
     } ;
-    this.ListadoCuentas.AsignarCuentas(this.Telefonos) ;
+    this.ListadoCuentas.AsignarCuentas(this.Cuentas) ;
     this.CuentasAgregarForm.reset() ;
   }
 
@@ -536,8 +536,7 @@ export class VentanaEmergenteIntegralAgregarComponent implements OnInit, AfterVi
       })
     )
     .subscribe(res=>{
-      console.log(res)
-      this.Cargando.next(false) ;
+      // console.log(res)
       this.ventana.close(true);
     })
   }

@@ -21,8 +21,8 @@
         {
             $clientecuenta->id_cliente = trim($_POST["prcliente"]);
             $clientecuenta->banco = trim($_POST["prbanco"]);
-            $clientecuenta->cuenta = trim($_POST["prcuenta"]);
-            $clientecuenta->cci = trim($_POST["prcci"]);
+            $clientecuenta->cuenta = str_replace( "-","",trim($_POST["prcuenta"]) ) ;
+            $clientecuenta->cci = str_replace( "-","",trim($_POST["prcci"]) ) ;
 
             if($clientecuenta->create())
             {

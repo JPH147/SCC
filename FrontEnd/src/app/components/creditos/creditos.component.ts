@@ -157,6 +157,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   public totales_monto_total : number ;
   public totales_interes_generado : number ;
   public totales_monto_pagado : number ;
+  public totales_monto_pendiente : number ;
   public totales_total_cuotas : number ;
   public totales_total_pendiente : number ;
   public totales_total_pagadas : number ;
@@ -575,6 +576,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       this.totales_monto_total = res.monto_total ;
       this.totales_interes_generado = res.interes_generado ;
       this.totales_monto_pagado = res.monto_pagado ;
+      this.totales_monto_pendiente = res.monto_pendiente ;
       this.totales_total_cuotas = res.total_cuotas ;
       this.totales_total_pendiente = res.total_pendiente ;
       this.totales_total_pagadas = res.total_pagadas ;

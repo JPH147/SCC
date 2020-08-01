@@ -274,4 +274,9 @@ export class ViaticosDataSource implements DataSource<any>{
       this.Informacion.next(res['data'].viaticos)
     })
   }
+
+  // Esto se utiliza cuando se agrega los valores en la vista
+  AgregarInformacion(array){
+    this.Informacion.next(array)
+  }
 }

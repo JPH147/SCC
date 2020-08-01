@@ -62,6 +62,15 @@
     </mat-grid-tile>
 
     <mat-grid-tile>
+      <mat-form-field>
+        <mat-select #InputDocumentos placeholder="Estado de los pagos" [value]=0 (selectionChange)="CambioFiltro()">
+          <mat-option [value]=0>Todos</mat-option>
+          <mat-option [value]=1>En curso y al día</mat-option>
+          <mat-option [value]=2>En curso y atrasados</mat-option>
+          <mat-option [value]=3>Finalizado y cancelados</mat-option>
+          <mat-option [value]=4>Finalizado y pendientes</mat-option>
+        </mat-select>
+      </mat-form-field>
     </mat-grid-tile>
     
     <mat-grid-tile *ngIf="permiso?.ventas?.listado_ventas?.agregar">

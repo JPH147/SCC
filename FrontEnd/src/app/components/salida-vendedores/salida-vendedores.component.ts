@@ -531,7 +531,12 @@ export class SalidaVendedoresComponent implements OnInit {
       comision_retenida: this.SalidaVendedoresForm.value.vendedor_comision_retenida
     }); 
 
-    this.ResetearVendedor()
+    this.ResetearVendedor() ;
+
+    // Se hace esto para que se pueda seleccionar un vendedor cuando se crea la salida
+    if ( !this.id_salida_editar ) {
+      this.ListarVendedorLocal() ;
+    }
 
     this.SalidaVendedoresForm.get("vendedores").setValue(this.Vendedores.length);
     this.ListadoVendedores.AgregarInformacion(this.Vendedores);
@@ -553,6 +558,10 @@ export class SalidaVendedoresComponent implements OnInit {
       }
 
     });
+  }
+
+  ListarVendedorLocal(){
+    this.VendedoresViaticos = this.Vendedores ;
   }
 
   VendedorSeleccionado(event){
@@ -1010,28 +1019,31 @@ export class SalidaVendedoresComponent implements OnInit {
 
   AgregarGasto(){
 
-    this.Viaticos.push({
-      numero: this.Viaticos.length+1,
-      fecha: this.SalidaVendedoresForm.value.gasto_fecha,
-      id_vendedor: this.SalidaVendedoresForm.value.gasto_vendedor.id_vendedor,
-      vendedor: this.SalidaVendedoresForm.value.gasto_vendedor.vendedor,
-      monto: this.SalidaVendedoresForm.value.gasto_monto,
-      id_tipo: this.SalidaVendedoresForm.value.gasto_tipo.id,
-      tipo: this.SalidaVendedoresForm.value.gasto_tipo.nombre,
-      observacion: this.SalidaVendedoresForm.value.gasto_observacion,
-      nuevo: true
-    })
-    
-    this.ListadoGastos.AgregarInformacion(this.Viaticos);
-
-    this.SalidaVendedoresForm.get('gasto_monto').clearValidators();
-    this.SalidaVendedoresForm.get('gasto_tipo').clearValidators();
-
-    this.SalidaVendedoresForm.get('gasto_vendedor').setValue(0);
-    this.SalidaVendedoresForm.get('gasto_monto').setValue(null);
-    this.SalidaVendedoresForm.get('gasto_tipo').setValue(null);
-    this.SalidaVendedoresForm.get('gasto_fecha').setValue(new Date());
-    this.SalidaVendedoresForm.get('gasto_observacion').setValue("");
+    // if ( this.id_salida_editar ) {
+      this.Viaticos.push({
+        numero: this.Viaticos.length+1,
+        fecha: this.SalidaVendedoresForm.value.gasto_fecha,
+        // Se diferencia cuando la lista de los vendedores viene de la DB (id_salida_editar) o se lista a partir de datos locales
+        id_vendedor: this.id_salida_editar ? this.SalidaVendedoresForm.value.gasto_vendedor.id_vendedor : this.SalidaVendedoresForm.value.gasto_vendedor.id,
+        vendedor: this.id_salida_editar ? this.SalidaVendedoresForm.value.gasto_vendedor.vendedor : this.SalidaVendedoresForm.value.gasto_vendedor.nombre,
+        monto: this.SalidaVendedoresForm.value.gasto_monto,
+        id_tipo: this.SalidaVendedoresForm.value.gasto_tipo.id,
+        tipo: this.SalidaVendedoresForm.value.gasto_tipo.nombre,
+        observacion: this.SalidaVendedoresForm.value.gasto_observacion,
+        nuevo: true
+      })
+      
+      this.ListadoGastos.AgregarInformacion(this.Viaticos);
+  
+      this.SalidaVendedoresForm.get('gasto_monto').clearValidators();
+      this.SalidaVendedoresForm.get('gasto_tipo').clearValidators();
+  
+      this.SalidaVendedoresForm.get('gasto_vendedor').setValue(0);
+      this.SalidaVendedoresForm.get('gasto_monto').setValue(null);
+      this.SalidaVendedoresForm.get('gasto_tipo').setValue(null);
+      this.SalidaVendedoresForm.get('gasto_fecha').setValue(new Date());
+      this.SalidaVendedoresForm.get('gasto_observacion').setValue("");
+    // }
 
   }
 
@@ -1098,6 +1110,20 @@ export class SalidaVendedoresComponent implements OnInit {
             item.id_serie,
             item.precio,
             formulario.value.fecha_salida,
+          ).subscribe()
+        }
+      })
+
+      // Se agregan los nuevos viáticos
+      this.Viaticos.forEach((item)=>{
+        if(item.nuevo){
+          this.LServicios.CrearGasto(
+            res.data,
+            item.fecha,
+            item.id_vendedor,
+            item.monto,
+            item.id_tipo,
+            item.observacion
           ).subscribe()
         }
       })

@@ -33,6 +33,7 @@ export class VentasListarComponent implements OnInit {
   ListadoVentas: VentaDataSource;
   Columnas: string[] = ['numero', 'fecha', 'contrato', 'cliente_nombre', 'tipo_venta', 'monto_total', 'opciones'];
 
+  @ViewChild('InputDocumentos', { static: true }) FiltroDocumentos: MatSelect;
   @ViewChild('InputCliente', { static: true }) FiltroCliente: ElementRef;
   @ViewChild('InputDNI', { static: true }) FiltroDNI: ElementRef;
   @ViewChild('InputTipo', { static: true }) FiltroTipo: MatSelect;
@@ -59,10 +60,9 @@ export class VentasListarComponent implements OnInit {
     this.fecha_fin = null ;
 
     this.ListadoVentas = new VentaDataSource(this.Servicio);
-    this.ListadoVentas.CargarVentas("","",0,this.fecha_inicio,this.fecha_fin,1,1,10,"fecha desc");
+    this.ListadoVentas.CargarVentas("","",0,0,this.fecha_inicio,this.fecha_fin,1,1,10,"fecha desc");
  }
 
-// tslint:disable-next-line:use-life-cycle-interface
   ngAfterViewInit () {
 
     this.sort.sortChange.subscribe(res => {
@@ -95,6 +95,7 @@ export class VentasListarComponent implements OnInit {
       this.FiltroCliente.nativeElement.value,
       this.FiltroDNI.nativeElement.value,
       this.FiltroTipo.value,
+      this.FiltroDocumentos.value,
       this.fecha_inicio,
       this.fecha_fin,
       this.FiltroEstado.value,

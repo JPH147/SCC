@@ -219,6 +219,7 @@ Class Creditos{
         $this->monto_total = $row['monto_total'] ;
         $this->interes_generado = $row['interes_generado'] ;
         $this->monto_pagado = $row['monto_pagado'] ;
+        $this->monto_pendiente = $row['monto_pendiente'] ;
         $this->total_cuotas = $row['total_cuotas'] ;
         $this->total_pendiente = $row['total_pendiente'] ;
         $this->total_pagadas = $row['total_pagadas'] ;

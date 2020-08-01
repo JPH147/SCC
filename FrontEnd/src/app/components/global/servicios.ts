@@ -755,6 +755,7 @@ export interface TipoTransaccion {
 export interface Almacen {
   numero: number;
   id_almacen: number;
+  nombre : string ,
   Alm_nombre: string;
 }
 

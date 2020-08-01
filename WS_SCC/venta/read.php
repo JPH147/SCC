@@ -17,6 +17,7 @@
         $venta->cliente = !empty($_GET['prcliente']) ? trim($_GET['prcliente']) :'';
         $venta->cliente_dni = !empty($_GET['prdni']) ? trim($_GET['prdni']) :'';
         $venta->tipo_venta = !empty($_GET['prtipo_venta']) ? trim($_GET['prtipo_venta']) : 0;
+        $venta->estado_pagos = !empty($_GET['prestadopagos']) ? trim($_GET['prestadopagos']) : 0;
         $venta->fecha_inicio = !empty($_GET['prfecha_inicio']) ? trim($_GET['prfecha_inicio']) : null;
         $venta->fecha_fin = !empty($_GET['prfecha_fin']) ? trim($_GET['prfecha_fin']) : null;
         $venta->estado = !empty($_GET['prestado']) ? trim($_GET['prestado']) : 0;

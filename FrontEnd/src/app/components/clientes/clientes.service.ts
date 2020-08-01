@@ -429,6 +429,23 @@ export class ClienteService {
     }));
   }
 
+  EliminarArchivo(
+    nombre_archivo:string,
+  ) :Observable<boolean> {
+    let params = new HttpParams()
+      .set('prarchivo', nombre_archivo) ;
+
+    return this.http.post(this.url + 'cliente/eliminar-llamada.php',params).pipe(map(res => {
+      console.log(res) ;
+      if (res['codigo'] === 0) {
+        return res['data'];
+      }else {
+        console.log('No hay datos que mostrar');
+        return false;
+      }
+    }));
+  }
+
   EliminarObservacion(
     id_observacion:number
   ){

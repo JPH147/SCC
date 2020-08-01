@@ -70,7 +70,7 @@ export class VentasComponent implements OnInit {
   public garantes: FormArray;
   public Producto:Array<any>;
   public Cronograma: Array<any>;
-  public Series: Array<any>;
+  public Series: Array<number>;
   public Autorizador: Array<any>;
   public ProductosComprados: Array<any>;
   public Transacciones: Array<any>;
@@ -162,6 +162,7 @@ export class VentasComponent implements OnInit {
   public totales_monto_total : number = 0 ;
   public totales_interes_generado : number = 0 ;
   public totales_monto_pagado : number = 0 ;
+  public totales_monto_pendiente : number = 0 ;
   public totales_total_cuotas : number = 0 ;
   public totales_total_pendiente : number = 0 ;
   public totales_total_pagadas : number = 0 ;
@@ -404,6 +405,7 @@ export class VentasComponent implements OnInit {
       this.totales_monto_total = res.monto_total ;
       this.totales_interes_generado = res.interes_generado ;
       this.totales_monto_pagado = res.monto_pagado ;
+      this.totales_monto_pendiente = res.monto_pendiente ;
       this.totales_total_cuotas = res.total_cuotas ;
       this.totales_total_pendiente = res.total_pendiente ;
       this.totales_total_pagadas = res.total_pagadas ;
@@ -669,7 +671,7 @@ export class VentasComponent implements OnInit {
       ]],
       papeles_observaciones: [{value: "", disabled: false},[
       ]],
-      productos: this.FormBuilder.array([this.CrearProducto()]),
+      productos: this.FormBuilder.array([]),
       garantes: this.FormBuilder.array([]),
     });
   }
@@ -714,7 +716,15 @@ export class VentasComponent implements OnInit {
       this.productos['controls'][index].get('precio').disable()
       this.productos['controls'][index].get('estado').setValue(3);
     }
-      this.CalcularTotales();
+    this.CalcularTotales();
+  }
+
+  DeseliminarProductos(index){
+    this.productos['controls'][index].get('descripcion').enable()
+    this.productos['controls'][index].get('serie').enable()
+    this.productos['controls'][index].get('precio').enable()
+    this.productos['controls'][index].get('estado').setValue(2);
+    this.CalcularTotales();
   }
 
   CrearGarante(bool): FormGroup{
@@ -814,6 +824,7 @@ export class VentasComponent implements OnInit {
     let i=0;
 
     this.edicion_productos.forEach((item=>{
+      this.AgregarProducto();
       this.VentasForm.get('productos')['controls'][i].get("id_producto").setValue(item.id_producto);
       this.VentasForm.get('productos')['controls'][i].get("descripcion").setValue(item.nombre);
       this.VentasForm.get('productos')['controls'][i].get("id_serie").setValue(item.id_serie);
@@ -821,10 +832,6 @@ export class VentasComponent implements OnInit {
       this.VentasForm.get('productos')['controls'][i].get("precio").setValue(item.precio);
       this.VentasForm.get('productos')['controls'][i].get("estado").setValue(estado);
       i++;
-      this.AgregarProducto();
-      if (i==this.edicion_productos.length) {
-        this.productos.removeAt(i);
-      }
     }))
   }
 
@@ -935,8 +942,11 @@ export class VentasComponent implements OnInit {
   }
 
   ListarSucursales(){
-    this.ServiciosGenerales.ListarSucursal(null,"").subscribe(res=>{
-      this.Sucursales=res
+    this.ServiciosGenerales.ListarSucursal(null,"").subscribe(sucursales=>{
+      this.Sucursales=sucursales ;
+      if ( this.Sucursales.length == 1 ) {
+        this.VentasForm.get('sucursal').setValue(this.Sucursales[0].id) ;
+      }
     })
   }
 
@@ -957,9 +967,17 @@ export class VentasComponent implements OnInit {
 
   ResetearProductosFormArray(){
     if (this.productos) {
-      this.productos.reset()
-      while (this.productos.length !== 1) {
-        this.productos.removeAt(0)
+      let productos = this.productos.value ;
+      
+      productos = productos.filter(elemento => elemento.estado==2 || elemento.estado==3)
+
+      if( productos.length > 0 ) {
+        this.productos.setValue(productos) ;
+      } else {
+        this.productos.reset() ;
+        while (this.productos.length !== 0) {
+          this.productos.removeAt(0)
+        }
       }
     }
   }
@@ -995,9 +1013,39 @@ export class VentasComponent implements OnInit {
 
     Ventana.afterClosed().subscribe(res=>{
       if (res) {
-        producto.get('id_serie').setValue(res.id_serie);
-        producto.get('serie').setValue(res.serie);
-        this.Series.push(res.id_serie)
+        producto.get('id_serie').setValue(res.id_serie) ;
+        producto.get('serie').setValue(res.serie) ;
+        this.Series.push(res.id_serie) ;
+      }
+    })
+  }
+
+  SeleccionarSeries(){
+    console.log(this.VentasForm['controls'].productos.value) ;
+    let Ventana = this.Dialogo.open(VentanaProductosComponent,{
+      width: '1200px',
+      data: {sucursal: this.sucursal, series: this.Series, productos : this.VentasForm['controls'].productos.value }
+    })
+
+    Ventana.afterClosed().subscribe(res=>{
+      if (res) {
+        this.Series = [] ;
+        this.ResetearProductosFormArray() ;
+        res.map( (producto, index) => {
+          if ( producto.estado != 2 ) {
+            this.AgregarProducto() ;
+            this.VentasForm['controls'].productos['controls'][index].get('id_producto').setValue( producto.id_producto );
+            this.VentasForm['controls'].productos['controls'][index].get('nombre').setValue( producto.producto );
+            this.VentasForm['controls'].productos['controls'][index].get('descripcion').setValue( producto.producto );
+            this.VentasForm['controls'].productos['controls'][index].get('id_serie').setValue( producto.id_serie );
+            this.VentasForm['controls'].productos['controls'][index].get('serie').setValue( producto.serie );
+            this.VentasForm['controls'].productos['controls'][index].get('precio').setValue( producto.precio );
+  
+            this.Series.push(producto.id_serie) ;
+            return producto ;
+          }
+        } ) ;
+        this.CalcularTotales() ;
       }
     })
   }
@@ -1601,11 +1649,7 @@ export class VentasComponent implements OnInit {
 
         // Se genera el cronograma
         this.Cronograma.forEach((item)=>{
-          // if(item.numero==0){
-          //   this.Servicio.CrearVentaCronograma(res['data'],item.monto_cuota,item.fecha_vencimiento,1).subscribe(res=>console.log(res))
-          // }else{
-            this.Servicio.CrearVentaCronograma(res['data'],formulario.value.tipopago,item.monto_cuota,item.fecha_vencimiento,1).subscribe()
-          // }
+          this.Servicio.CrearVentaCronograma(res['data'],formulario.value.tipopago,item.monto_cuota,item.fecha_vencimiento,1).subscribe()
         });
         
         // Se agregan los datos del courier

@@ -553,6 +553,8 @@ export class VentanaEmergenteIntegralEditarComponent implements OnInit {
     this.ServicioTelefono.CrearTelefono(this.data.id, this.TelefonosForm.value.telefono, this.TelefonosForm.value.tipo).subscribe(res=>{
       this.Cargando.next(false) ;
       this.CargarDataTelefonos();
+      this.TelefonosForm.reset() ;
+      this.TelefonosForm.get("tipo").setValue(1) ;
     })
   }
 
@@ -561,6 +563,7 @@ export class VentanaEmergenteIntegralEditarComponent implements OnInit {
     this.ServicioDireccion.CrearDireccion(this.data.id, this.DireccionesForm.value.nombre, this.DireccionesForm.value.distrito).subscribe(res=>{
       this.Cargando.next(false) ;
       this.CargarDataDirecciones();
+      this.DireccionesForm.reset() ;
     })
   }
 
@@ -569,6 +572,7 @@ export class VentanaEmergenteIntegralEditarComponent implements OnInit {
     this.ClienteServicios.CrearCuenta(this.data.id, this.CuentasForm.value.banco, this.CuentasForm.value.cuenta, this.CuentasForm.value.cci).subscribe(res=>{
       this.Cargando.next(false) ;
       this.CargarDataCuentas();
+      this.CuentasForm.reset() ;
     })
   }
 

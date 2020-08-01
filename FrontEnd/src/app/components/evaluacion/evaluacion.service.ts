@@ -431,8 +431,6 @@ export class EvaluacionService {
       .set('prnombreaval',nombre_aval)
       .set('prdniaval',dni_aval);
 
-      console.log("PrintTransaccion",params);
-
       let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
       return this.http.post( this.url + 'plantillas/generar-transaccion.php', params, {headers : headers} )

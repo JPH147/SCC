@@ -17,11 +17,9 @@
     try
     {
         $cliente = new Cliente($db);
-        $data = json_decode(file_get_contents('php://input'), true);
 
         if ( !empty(trim($_POST["clt_dni"])))
         {
-
             $cliente->id_sub_sede = trim($_POST["prsubsede"]);
             $cliente->id_cargo = trim($_POST["prcargo"]);
             $cliente->id_cargo_estado = trim($_POST["prcargoestado"]);
@@ -29,7 +27,7 @@
             $cliente->clt_dni = trim($_POST["clt_dni"]);
             $cliente->clt_nombre = trim($_POST["clt_nombre"]);
             $cliente->clt_foto = "Unknown.png";
-            $cliente->clt_cip = strlen($_GET['clt_cip']) > 0 ? trim($_GET['clt_cip']) : 0 ;
+            $cliente->clt_cip = !empty($_POST['clt_cip']) ? trim($_POST['clt_cip']) : "0" ;
             $cliente->clt_email = trim($_POST["clt_email"]);
             $cliente->clt_casilla = trim($_POST["clt_casilla"]);
             $cliente->id_distrito = trim($_POST["prdistrito"]);

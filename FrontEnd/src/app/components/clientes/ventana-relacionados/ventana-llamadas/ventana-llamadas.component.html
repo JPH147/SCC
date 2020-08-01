@@ -14,11 +14,17 @@
       <mat-header-cell *matHeaderCellDef> Fecha </mat-header-cell>
       <mat-cell *matCellDef="let llamada"> {{llamada.fecha | date:"dd/MM/yyyy HH:mm:ss"}} </mat-cell>
     </ng-container>
-  
+      
+    <ng-container matColumnDef="telefono">
+      <mat-header-cell *matHeaderCellDef> Teléfono </mat-header-cell>
+      <mat-cell *matCellDef="let llamada"> {{llamada.telefono}} </mat-cell>
+    </ng-container>
+
     <ng-container matColumnDef="opciones">
       <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
       <mat-cell *matCellDef="let llamada">
         <button mat-icon-button type="button" matTooltip="Ver archivo" color="primary" (click)="VerArchivo(llamada.archivo)"><mat-icon> visibility </mat-icon></button>
+        <button mat-icon-button type="button" matTooltip="Eliminar archivo" color="primary" (click)="EliminarArchivo(llamada.archivo)"><mat-icon> delete </mat-icon></button>
       </mat-cell>
     </ng-container>
   

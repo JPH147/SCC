@@ -4,6 +4,8 @@ require '../vendor/autoload.php';
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
+date_default_timezone_set('America/Lima');
+
 Class Cliente{
 
     private $conn;
@@ -49,6 +51,7 @@ Class Cliente{
 
     public $cargo;
     public $cargo_estado;
+    public $archivo;
 
     public $clt_aporteinicio;
     public $clt_aportefin;
@@ -807,10 +810,6 @@ Class Cliente{
         while($row = $result->fetch(PDO::FETCH_ASSOC))
         {
             extract($row);
-            // $cliente_item = array (
-            //     "numero"=>$row['numero'],
-            // );
-
             array_push($telefonos_cliente,$row['numero']);
         }
 
@@ -835,33 +834,39 @@ Class Cliente{
                     $segundo = substr($archivo,17,2);
 
                     $fecha = $ano . "-" . $mes . "-" . $dia . " " . $hora . ":" . $minuto . ":" . $segundo;
+
+                    $dateTime = new DateTime($fecha);
                     $informacion = array(
                         "numero" => $contador ,
                         "fecha" => $fecha ,
-                        "archivo" => $archivo
+                        "archivo" => $archivo ,
+                        "telefono" => $telefono ,
+                        "date" => $dateTime
                     ) ;
                     array_push($llamadas, $informacion) ;
                 }
             }
         }
 
+        usort($llamadas, function ($item1, $item2) {
+            return $item2['date'] <=> $item1['date'];
+        });
+
         return $llamadas;
     }
 
-    function obtener_llamads2(){
+    function eliminar_llamada(){
         $path = '../../ACR/' ;
 
-        $archivos=array();
-        if (is_dir($path)){
-            if ($carpeta = opendir($path)){
-              while (($file = readdir($carpeta)) !== false){
-                array_push($archivos, $file) ;
-              }
-              closedir($carpeta);
-            }
-        }
+        $archivo = $path.$this->archivo ;
 
-        return $archivos;
+        $contador = 0 ;
+
+        if ( unlink($archivo) ) {
+            return true ;
+        } else {
+            return false ;
+        }
     }
 }
 ?>
