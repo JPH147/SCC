@@ -126,3 +126,8 @@ mat-table{
 mat-list{
   margin-bottom: 24px;
 }
+
+mat-table{
+  max-height: 800px ;
+  overflow-y: scroll ;
+}

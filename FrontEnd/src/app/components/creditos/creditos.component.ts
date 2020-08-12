@@ -29,6 +29,7 @@ import { Rol } from '../usuarios/usuarios.service';
 import { Store } from '@ngrx/store';
 import { CobranzaJudicialService } from '../cobranza-judicial/cobranza-judicial.service';
 import { VentanaConfirmarComponent } from '../global/ventana-confirmar/ventana-confirmar.component';
+import { VentanaGenerarPagoTransaccionComponent } from '../cobranzas-listar/ventana-generar-pago-transaccion/ventana-generar-pago-transaccion.component';
 
 @Component({
   selector: 'app-creditos',
@@ -138,8 +139,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   @ViewChild('InputCapital', { static: true }) FiltroCapital: ElementRef;
   @ViewChild('InputCuota', { static: true }) FiltroCuota: ElementRef;
   @ViewChild('InputInteres', { static: true }) FiltroInteres: ElementRef;
-  @ViewChild('Vendedor') VendedorAutoComplete : ElementRef;
-  @ViewChild('Autorizador') AutorizadorAutoComplete: ElementRef;
+  @ViewChild('Vendedor', { static: false }) VendedorAutoComplete : ElementRef;
+  @ViewChild('Autorizador', { static: false }) AutorizadorAutoComplete: ElementRef;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
 
   public ListadoVendedores: Array<any>;
@@ -313,7 +314,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
          ).subscribe();
       }
   
-       merge(
+      merge(
         fromEvent(this.FiltroCuota.nativeElement,'keyup') ,
         fromEvent(this.FiltroCapital.nativeElement,'keyup') ,
         fromEvent(this.FiltroInteres.nativeElement,'keyup') ,
@@ -333,6 +334,35 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       ).subscribe()
     }
 
+  }
+
+  ActualizarObservables() {
+    merge(
+      fromEvent(this.FiltroCuota.nativeElement,'keyup') ,
+      fromEvent(this.FiltroCapital.nativeElement,'keyup') ,
+      fromEvent(this.FiltroInteres.nativeElement,'keyup') ,
+      this.CreditosForm.get('interes_diario_monto').valueChanges
+    ).pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      tap(()=>{
+        if (
+          this.FiltroCapital.nativeElement.value &&
+          this.FiltroCuota.nativeElement.value &&
+          this.CreditosForm.value.fecha_pago
+        ) {
+          this.CrearCronograma()
+        }
+      })
+    ).subscribe()
+  }
+
+  pad(caracter : string, tamano : number): string {
+    let s = caracter ;
+    for (let index = caracter.length ; index < tamano; index++ ) {
+      s = "0" + s ;
+    }
+    return s;
   }
 
   CrearFormulario(){
@@ -561,7 +591,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       this.CreditosForm.get('id_cliente').setValue(res.id_cliente);
       this.CreditosForm.get('fecha_credito').setValue(moment(res.fecha).toDate());
       this.CreditosForm.get('cliente').setValue(res.cliente);
-      this.CreditosForm.get('dni').setValue(res.cliente_dni);
+      this.CreditosForm.get('dni').setValue( this.pad(res.cliente_dni.toString(),8) );
       this.CreditosForm.get('cargo').setValue(res.cliente_cargo);
       this.CreditosForm.get('trabajo').setValue(res.cliente_trabajo);
       this.CreditosForm.get('direccion').setValue(res.cliente_direccion);
@@ -1297,6 +1327,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       this.id_credito = null ;
       this.id_credito_editar = this.id_credito_estandar ;
       this.ColumnasCronograma= ['numero', 'fecha_vencimiento_ver', 'monto_cuota_ver'];
+      this.ActualizarObservables() ;
     }
     this.SeleccionarCredito(this.id_credito_estandar)
   }  
@@ -1328,6 +1359,20 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         });
       }
     })
+  }
+
+  AgregarPagos(){
+    let ventana = this.Dialogo.open(VentanaGenerarPagoTransaccionComponent,{
+      width: '1200px' ,
+      maxHeight: '80vh' ,
+      data : { tipo : 1, id_cliente : this.CreditosForm.get('id_cliente').value, id_credito : this.id_credito }
+    })
+
+    ventana.afterClosed().subscribe( resultado=>{
+      if ( resultado === true ) {
+        this.Notificacion.Snack("Se crearon los pagos satisfactoriamente","") ;
+      }
+    } )
   }
 
   Guardar(){
@@ -1603,7 +1648,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   ActualizarCredito(){
     this.Cargando.next(true) ;
     let random=(new Date()).getTime() ;
-    let identificador = this.CreditosForm.value.codigo ;
+    let identificador = random.toString() ;
     let dni = this.CreditosForm.value.dni ;
     let fecha = moment(this.CreditosForm.value.fechaventa).format("DD_MM_YYYY") ;
 

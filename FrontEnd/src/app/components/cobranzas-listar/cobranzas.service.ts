@@ -511,7 +511,7 @@ export class CobranzasService {
     cobranza_manual : number,
     credito_cronograma : number,
     venta_cronograma : number,
-    monto : string,
+    monto : number,
     fecha : Date
   ){
     let params = new HttpParams()

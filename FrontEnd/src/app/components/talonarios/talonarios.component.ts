@@ -63,6 +63,22 @@ export class TalonariosComponent implements OnInit {
     )
   }
 
+  Editar(talonario) {
+    let Ventana = this.Dialogo.open(VentanaTalonarioComponent,{
+      width: '900px' ,
+      data : talonario
+    })
+
+    Ventana.afterClosed().subscribe(res=>{
+      if(res){
+        this.CargarData();
+        this.notificacion.Snack("Se creó el talonario satisfactoriamente","")
+      }else{
+        this.notificacion.Snack("Ocurrió un error al crear al talonario","")
+      }
+    })
+  }
+
   Eliminar(talonario) {
     const VentanaConfirmar = this.Dialogo.open(VentanaConfirmarComponent, {
       width: '400px',

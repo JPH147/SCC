@@ -41,7 +41,7 @@
           </mat-error>
         </mat-grid-tile>
         <mat-grid-tile>
-          <button type="button" mat-raised-button color="primary" [disabled]="TalonariosForm.invalid || (TalonariosForm.value.numero_inicio>=TalonariosForm.value.numero_fin) || repetido" (click)="Guardar()"> Guardar </button>
+          <button type="button" mat-raised-button color="primary" [disabled]="(Cargando | async) || TalonariosForm.invalid || (TalonariosForm.value.numero_inicio>=TalonariosForm.value.numero_fin) || repetido" (click)="Guardar()"> Guardar </button>
         </mat-grid-tile>
       </mat-grid-list>
     </mat-card-actions>

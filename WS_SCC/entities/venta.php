@@ -130,13 +130,16 @@ Class Venta{
                 "fecha"=>$fecha,
                 "fecha_inicio"=>$fecha_inicio,
                 "monto_inicial"=>$monto_inicial,
-                "numero_coutas"=>$numero_coutas,
+                "numero_cuotas"=>$numero_cuotas,
                 "tipo_pago"=>$tipo_pago,
                 "monto_total"=>$monto_total,
                 "monto_pagado"=>$monto_pagado,
                 "tipo_venta"=>$tipo_venta,
                 "observaciones"=>$observaciones,
+                "cuotas_pendientes"=>$cuotas_pendientes,
+                "cuotas_pagadas"=>$cuotas_pagadas,
                 "numero_procesos"=>$numero_procesos,
+                "ultima_fecha_pago"=>$ultima_fecha_pago,
                 "estado"=>$estado,
             );
             array_push($venta_list["ventas"],$venta_item);

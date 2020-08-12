@@ -121,6 +121,18 @@
         <mat-cell *matCellDef="let credito"> {{credito.documentos_adjuntos}} / {{credito.documentos_totales}} </mat-cell>
       </ng-container>
 
+      <ng-container matColumnDef="cuotas_pagadas">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Cuotas pagadas </mat-header-cell>
+        <mat-cell *matCellDef="let credito"> {{credito.cuotas_pagadas}} / {{credito.numero_cuotas}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="ultima_fecha_pago">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Última fecha de pago </mat-header-cell>
+        <mat-cell *matCellDef="let credito">
+          {{credito.ultima_fecha_pago ? (credito.ultima_fecha_pago | date:'dd/MM/yyyy') : '-' }}
+        </mat-cell>
+      </ng-container>
+
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let credito">

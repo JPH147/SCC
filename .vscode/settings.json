@@ -1,7 +1,5 @@
 {
-    "tslint.enable": false,
     "workbench.colorCustomizations": {
         "activityBar.background": "#004D40",
     },
-    "git.ignoreLimitWarning": true
 }

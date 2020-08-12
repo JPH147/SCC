@@ -950,7 +950,7 @@
         <button mat-icon-button class="icono" *ngIf="id_venta_editar && editar_cronograma==1" (click)="EditarCronograma(2)"><mat-icon>check</mat-icon></button>
       </mat-card-subtitle>
 
-      <ng-container *ngIf="idventa">
+      <ng-container *ngIf="id_venta">
         <mat-table [dataSource]="ListadoVentas" class="mat-elevation-z8" matSort matSortActive="fecha_vencimiento" matSortDirection="asc" matSortDisableClear>
 
           <ng-container matColumnDef="numero">
@@ -1038,7 +1038,7 @@
         </mat-grid-list>
       </ng-container>
 
-      <ng-container *ngIf="!idventa">
+      <ng-container *ngIf="!id_venta">
         <mat-table [dataSource]="ListadoVentas" class="mat-elevation-z8" matSort matSortActive="fecha_vencimiento" matSortDirection="asc" matSortDisableClear>
 
           <ng-container matColumnDef="numero">
@@ -1049,14 +1049,12 @@
           <ng-container matColumnDef="monto_cuota_ver">
             <mat-header-cell *matHeaderCellDef> Monto </mat-header-cell>
             <mat-cell *matCellDef="let cronograma">
-
               <ng-container *ngIf="editar_cronograma>1 || cronograma.numero==0">
                 {{ cronograma.monto_cuota | currency:'S/.' }}
               </ng-container>
               <ng-container *ngIf="editar_cronograma==1 && cronograma.numero>0">
                 <input type="text" [(ngModel)]="cronograma.monto_cuota" [ngModelOptions]="{standalone: true}">
               </ng-container>
-
             </mat-cell>
           </ng-container>
 
@@ -1067,7 +1065,7 @@
             </mat-cell>
           </ng-container>
 
-          <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>
+          <mat-header-row *matHeaderRowDef="Columnas; sticky: true"></mat-header-row>
           <mat-row *matRowDef="let row; columns: Columnas;"></mat-row>
         </mat-table>
       </ng-container>

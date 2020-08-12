@@ -435,7 +435,7 @@
             <mat-footer-cell *matFooterCellDef> - </mat-footer-cell>
           </ng-container>
 
-          <mat-header-row *matHeaderRowDef="ColumnasCronograma"></mat-header-row>
+          <mat-header-row *matHeaderRowDef="ColumnasCronograma; sticky: true"></mat-header-row>
           <mat-row *matRowDef="let row; columns: ColumnasCronograma"></mat-row>
           <ng-container *ngIf="id_credito">
             <mat-footer-row *matFooterRowDef="ColumnasCronograma"></mat-footer-row>

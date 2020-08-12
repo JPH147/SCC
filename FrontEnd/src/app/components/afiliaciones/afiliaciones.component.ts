@@ -314,7 +314,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
       //    ).subscribe();
       // }
   
-       merge(
+      merge(
         this.CreditosForm.get('monto_cuota').valueChanges ,
         this.CreditosForm.get('cuotas').valueChanges ,
       ).pipe(
@@ -332,6 +332,25 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
       ).subscribe()
     }
 
+  }
+
+  ActualizarObservables() {
+    merge(
+      this.CreditosForm.get('monto_cuota').valueChanges ,
+      this.CreditosForm.get('cuotas').valueChanges ,
+    ).pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      tap(()=>{
+        if (
+          this.CreditosForm.get('monto_cuota').value &&
+          this.CreditosForm.get('cuotas').value &&
+          this.CreditosForm.value.fecha_pago
+        ) {
+          this.CrearCronograma()
+        }
+      })
+    ).subscribe()
   }
 
   CrearFormulario(){
@@ -497,6 +516,14 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
     // this.VerificarAfiliacion(this.id_cliente);
   }
 
+  pad(caracter : string, tamano : number): string {
+    let s = caracter ;
+    for (let index = caracter.length ; index < tamano; index++ ) {
+      s = "0" + s ;
+    }
+    return s;
+  }
+
   SeleccionarCredito(id_credito) {
     this.Cargando.next(true);
 
@@ -529,7 +556,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
       this.CreditosForm.get('id_cliente').setValue(res.id_cliente);
       this.CreditosForm.get('fecha_credito').setValue(moment(res.fecha).toDate());
       this.CreditosForm.get('cliente').setValue(res.cliente);
-      this.CreditosForm.get('dni').setValue(res.cliente_dni);
+      this.CreditosForm.get('dni').setValue( this.pad(res.cliente_dni.toString(),8) );
       this.CreditosForm.get('cargo').setValue(res.cliente_cargo);
       this.CreditosForm.get('trabajo').setValue(res.cliente_trabajo);
       this.CreditosForm.get('direccion').setValue(res.cliente_direccion);
@@ -1047,6 +1074,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
       this.id_credito = null ;
       this.id_credito_editar = this.id_credito_estandar ;
       this.ColumnasCronograma= ['numero', 'fecha_vencimiento_ver', 'monto_cuota_ver'];
+      this.ActualizarObservables() ;
     }
     this.SeleccionarCredito(this.id_credito_estandar)
   }  
@@ -1160,7 +1188,8 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
   ActualizarAfiliacion(){
     this.Cargando.next(true) ;
 
-    let identificador = this.CreditosForm.value.codigo ;
+    let random=(new Date()).getTime() ;
+    let identificador = random.toString() ;
     let dni = this.CreditosForm.value.dni ;
     let fecha = moment(this.CreditosForm.value.fecha_credito).format("DD_MM_YYYY") ;
 

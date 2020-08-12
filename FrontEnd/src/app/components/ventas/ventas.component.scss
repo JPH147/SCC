@@ -133,3 +133,8 @@ mat-list{
 mat-footer-cell{
   font-weight: bold ;
 }
+
+mat-table{
+  max-height: 800px ;
+  overflow-y: scroll ;
+}

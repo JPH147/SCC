@@ -101,7 +101,7 @@ export class EvaluacionExpressComponent implements OnInit {
     this.interes_por_dia=false;
     this.interes_diario=0;
     this.fecha_prestamo=new Date();
-    this.fecha_inicio=moment(new Date()).add(1,'month').toDate();
+    this.fecha_inicio=moment(new Date()).toDate();
     this.CorregirFecha(this.fecha_inicio);
 
     this.InformacionForm = this.Builder.group({});

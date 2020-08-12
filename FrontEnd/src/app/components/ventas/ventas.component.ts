@@ -270,7 +270,7 @@ export class VentasComponent implements OnInit {
       } else {
         this.papeles_editar = true;
       }
-   });
+    });
   }
   
   ngAfterViewInit() {
@@ -284,65 +284,85 @@ export class VentasComponent implements OnInit {
       ).subscribe();
     }
 
-  if (!this.idventa) {
+    if (!this.idventa) {
 
-     fromEvent(this.VendedorAutoComplete.nativeElement, 'keyup')
-    .pipe(
-      debounceTime(10),
-      distinctUntilChanged(),
-      tap(() => {
-        if( this.VentasForm.value.vendedor ){
-          this.ListarVendedor(this.VentasForm.value.vendedor);
+      fromEvent(this.VendedorAutoComplete.nativeElement, 'keyup')
+      .pipe(
+        debounceTime(10),
+        distinctUntilChanged(),
+        tap(() => {
+          if( this.VentasForm.value.vendedor ){
+            this.ListarVendedor(this.VentasForm.value.vendedor);
+          }
+        })
+      ).subscribe();
+
+      fromEvent(this.AutorizadorAutoComplete.nativeElement, 'keyup')
+      .pipe(
+        debounceTime(10),
+        distinctUntilChanged(),
+        tap(() => {
+          if( this.VentasForm.value.autorizador ){
+            this.ListarAutorizador(this.VentasForm.value.autorizador);
+          }
+        })
+      ).subscribe();
+      
+      this.FiltroProducto.changes.subscribe(res=>{
+        for (let i in this.FiltroProducto['_results']) {
+          fromEvent(this.FiltroProducto['_results'][i].nativeElement,'keyup')
+          .pipe(
+            debounceTime(100),
+            distinctUntilChanged(),
+            tap(()=>{
+              if (this.FiltroProducto['_results'][i]) {
+                if (this.FiltroProducto['_results'][i].nativeElement.value) {
+                  this.BuscarProducto(this.sucursal,this.FiltroProducto['_results'][i].nativeElement.value)
+                }
+              }
+            })
+          ).subscribe()
         }
       })
-     ).subscribe();
 
-     fromEvent(this.AutorizadorAutoComplete.nativeElement, 'keyup')
-    .pipe(
-      debounceTime(10),
-      distinctUntilChanged(),
-      tap(() => {
-        if( this.VentasForm.value.autorizador ){
-          this.ListarAutorizador(this.VentasForm.value.autorizador);
+      this.FiltroPrecio.changes.subscribe(res=>{
+        for (let i in this.FiltroPrecio['_results']) {
+          fromEvent(this.FiltroPrecio['_results'][i].nativeElement,'keyup')
+          .pipe(
+            debounceTime(100),
+            distinctUntilChanged(),
+            tap(()=>{
+              if (this.FiltroPrecio['_results'][i]) {
+                if (this.FiltroPrecio['_results'][i].nativeElement.value) {
+                  // this.VentasForm.get('montototal').setValue(0);
+                  this.CalcularTotales();
+                }
+              }
+            })
+          ).subscribe()
         }
       })
-     ).subscribe();
-     
-    this.FiltroProducto.changes.subscribe(res=>{
-      for (let i in this.FiltroProducto['_results']) {
-        fromEvent(this.FiltroProducto['_results'][i].nativeElement,'keyup')
-        .pipe(
-          debounceTime(100),
-          distinctUntilChanged(),
-          tap(()=>{
-            if (this.FiltroProducto['_results'][i]) {
-              if (this.FiltroProducto['_results'][i].nativeElement.value) {
-                this.BuscarProducto(this.sucursal,this.FiltroProducto['_results'][i].nativeElement.value)
-              }
-            }
-          })
-        ).subscribe()
-      }
-    })
 
-    this.FiltroPrecio.changes.subscribe(res=>{
-      for (let i in this.FiltroPrecio['_results']) {
-        fromEvent(this.FiltroPrecio['_results'][i].nativeElement,'keyup')
-        .pipe(
-          debounceTime(100),
-          distinctUntilChanged(),
-          tap(()=>{
-            if (this.FiltroPrecio['_results'][i]) {
-              if (this.FiltroPrecio['_results'][i].nativeElement.value) {
-                // this.VentasForm.get('montototal').setValue(0);
-                this.CalcularTotales();
-              }
-            }
-          })
-        ).subscribe()
-      }
-    })
+      merge(
+        fromEvent(this.FiltroInicial.nativeElement,'keyup'),
+        fromEvent(this.FiltroCuota.nativeElement,'keyup')
+      ).pipe(
+        debounceTime(200),
+        distinctUntilChanged(),
+        tap(()=>{
+          if (
+            this.FiltroInicial.nativeElement.value &&
+            this.FiltroCuota.nativeElement.value &&
+            this.VentasForm.value.fechapago
+          ) {
+            this.CrearCronograma()
+          }
+        })
+      ).subscribe()
+    }
+  }
 
+  ActualizarObservables() {
     merge(
       fromEvent(this.FiltroInicial.nativeElement,'keyup'),
       fromEvent(this.FiltroCuota.nativeElement,'keyup')
@@ -360,13 +380,20 @@ export class VentasComponent implements OnInit {
       })
     ).subscribe()
   }
+  
+  pad(caracter : string, tamano : number): string {
+    let s = caracter ;
+    for (let index = caracter.length ; index < tamano; index++ ) {
+      s = "0" + s ;
+    }
+    return s;
   }
 
   SeleccionarVentaxId(id_venta){
     this.ListarProcesos(id_venta) ;
     this.Cargando.next(true) ;
 
-    if (this.idventa_editar) {
+    if (!this.idventa) {
       this.Columnas = ['numero', 'fecha_vencimiento_ver', 'monto_cuota_ver'];
     }
     if (this.idventa) {
@@ -379,7 +406,8 @@ export class VentasComponent implements OnInit {
 
       this.VentasForm.get('id_cliente').setValue(res.id_cliente);
       this.VentasForm.get('cliente').setValue(res.cliente_nombre);
-      this.VentasForm.get('dni').setValue(res.cliente_dni);
+
+      this.VentasForm.get('dni').setValue( this.pad(res.cliente_dni.toString(),8) );
       this.VentasForm.get('cargo').setValue(res.cliente_cargo_nombre);
       this.VentasForm.get('trabajo').setValue(res.cliente_trabajo);
       this.VentasForm.get('direccion').setValue(res.cliente_direccion);
@@ -886,9 +914,9 @@ export class VentasComponent implements OnInit {
         monto_cuota: monto
       })
 
-      this.ListadoVentas.Informacion.next(this.Cronograma);
+      this.ListadoVentas.AsignarCuotas(this.Cronograma) ;
     }
-
+    
     this.CalcularTotalCronograma()
 
   }
@@ -946,6 +974,7 @@ export class VentasComponent implements OnInit {
       this.Sucursales=sucursales ;
       if ( this.Sucursales.length == 1 ) {
         this.VentasForm.get('sucursal').setValue(this.Sucursales[0].id) ;
+        this.sucursal=this.Sucursales[0].id ;
       }
     })
   }
@@ -1523,6 +1552,7 @@ export class VentasComponent implements OnInit {
       this.idventa = null ;
       this.idventa_editar = this.id_venta ;
       this.Columnas= ['numero', 'fecha_vencimiento_ver', 'monto_cuota_ver'];
+      this.ActualizarObservables() ;
     }
     this.SeleccionarVentaxId(this.id_venta)
   }  
@@ -1722,7 +1752,7 @@ export class VentasComponent implements OnInit {
   ActualizarVenta(formulario){
 
     let random=(new Date()).getTime();
-    let identificador = this.identificador_documento ;
+    let identificador = random.toString() ;
     let dni = this.VentasForm.value.dni ;
     let fecha = moment(this.VentasForm.value.fechaventa).format("DD_MM_YYYY") ;
     
@@ -1902,6 +1932,10 @@ export class VentaDataSource implements DataSource<any>{
   }
 
   disconnect(){
-    this.Informacion.complete()
+    // this.Informacion.complete()
+  }
+
+  AsignarCuotas(cronograma) {
+    this.Informacion.next(cronograma) ;
   }
 }

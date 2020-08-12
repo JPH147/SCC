@@ -1,0 +1,67 @@
+<mat-card class="card">
+  <mat-toolbar color="primary">
+    <mat-toolbar-row> Agregar pagos </mat-toolbar-row>
+  </mat-toolbar>
+
+  <div class = "spinner-container-emergente" *ngIf = "Cargando | async">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <mat-card-content>
+    <mat-grid-list cols="1" rowHeight="50px">
+      <mat-grid-tile colspan="1">
+        <button mat-mini-fab color="primary" (click)="AgregarPagoForm()" matTooltip="Agregar aval" type="button"><mat-icon>add</mat-icon></button>
+      </mat-grid-tile>
+    </mat-grid-list>
+
+    <form [formGroup]="PagosForm">
+      <div formArrayName="PagoArrayForm" *ngFor="let pago of PagosForm['controls'].PagoArrayForm['controls']; let i = index">
+        <div [formGroupName]="i">
+          <mat-grid-list cols="5" rowHeight="70px">
+            <mat-grid-tile>
+              <mat-form-field class="columnas-1">
+                <input matInput [matDatepicker]="picker" placeholder="Fecha de pago" formControlName="fecha_pago">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+             </mat-form-field>
+            </mat-grid-tile>
+      
+            <mat-grid-tile>
+              <mat-form-field class="columnas-1">
+                <input matInput formControlName="pago_directo" placeholder="Pago directo">
+                <mat-error> Debe ingresar un número </mat-error>
+              </mat-form-field>
+            </mat-grid-tile>
+            
+            <mat-grid-tile>
+              <mat-form-field class="columnas-1">
+                <input matInput formControlName="pago_planilla" placeholder="Pago planilla">
+                <mat-error> Debe ingresar un número </mat-error>
+              </mat-form-field>
+            </mat-grid-tile>
+            
+            <mat-grid-tile>
+              <mat-form-field class="columnas-1">
+                <input matInput formControlName="pago_judicial" placeholder="Pago judicial">
+                <mat-error> Debe ingresar un número </mat-error>
+              </mat-form-field>
+            </mat-grid-tile>
+                        
+            <mat-grid-tile>
+              <button type="button" mat-icon-button color="primary" (click)="EliminarPago(i)"> <mat-icon> delete </mat-icon>  </button>
+            </mat-grid-tile>
+          </mat-grid-list>
+        </div>
+      </div>
+    </form>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <mat-grid-list cols="1" rowHeight="50px">
+      <mat-grid-tile colspan="1">
+        <button mat-raised-button color="primary" (click)="Guardar()" type="button" [disabled]="PagosForm.invalid"> Guardar </button>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-card-actions>
+
+</mat-card>

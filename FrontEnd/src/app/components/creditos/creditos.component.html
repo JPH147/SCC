@@ -1308,8 +1308,13 @@
       </mat-card-subtitle>
 
       <ng-container *ngIf="id_credito">
-        <mat-table [dataSource]="ListadoCronograma" class="mat-elevation-z8" matSort matSortActive="fecha_vencimiento" matSortDirection="asc" matSortDisableClear>
+        <!-- <mat-grid-list cols="1" rowHeight="50px">
+          <mat-grid-tile>
+            <button mat-raised-button color="primary" (click)="AgregarPagos()"> Agregar pagos </button>
+          </mat-grid-tile>
+        </mat-grid-list> -->
 
+        <mat-table [dataSource]="ListadoCronograma" class="mat-elevation-z8" matSort matSortActive="fecha_vencimiento" matSortDirection="asc" matSortDisableClear>
           <ng-container matColumnDef="numero">
             <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
             <mat-cell *matCellDef="let cronograma"> {{cronograma.numero}} </mat-cell>
@@ -1372,7 +1377,7 @@
             <mat-footer-cell *matFooterCellDef> - </mat-footer-cell>
           </ng-container>
 
-          <mat-header-row *matHeaderRowDef="ColumnasCronograma"></mat-header-row>
+          <mat-header-row *matHeaderRowDef="ColumnasCronograma; sticky: true"></mat-header-row>
           <mat-row *matRowDef="let row; columns: ColumnasCronograma"></mat-row>
           <ng-container *ngIf="id_credito">
             <mat-footer-row *matFooterRowDef="ColumnasCronograma"></mat-footer-row>
@@ -1453,6 +1458,5 @@
         </mat-grid-tile>
       </mat-grid-list>
     </mat-card-actions>
-
   </form>
 </mat-card>

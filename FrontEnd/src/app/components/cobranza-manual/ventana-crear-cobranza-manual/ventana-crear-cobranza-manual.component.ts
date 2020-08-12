@@ -112,7 +112,7 @@ export class VentanaCrearCobranzaManualComponent implements OnInit, AfterViewIni
     this.ListarVendedor("");
   }
 
-  Guardar(){
+  Guardar() {
     if ( this.CobranzaForm.get('monto').value > 0 ) {
       this.Cargando.next(true) ;
   

@@ -31,7 +31,7 @@ export class VentasListarComponent implements OnInit {
   public permiso : Rol ;
 
   ListadoVentas: VentaDataSource;
-  Columnas: string[] = ['numero', 'fecha', 'contrato', 'cliente_nombre', 'tipo_venta', 'monto_total', 'opciones'];
+  Columnas: string[] = ['numero', 'fecha', 'contrato', 'cliente_nombre', 'tipo_venta', 'monto_total', 'cuotas_pagadas' , 'ultima_fecha_pago', 'opciones'];
 
   @ViewChild('InputDocumentos', { static: true }) FiltroDocumentos: MatSelect;
   @ViewChild('InputCliente', { static: true }) FiltroCliente: ElementRef;

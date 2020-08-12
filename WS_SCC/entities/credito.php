@@ -125,6 +125,9 @@ Class Creditos{
                 "documentos_adjuntos"=>$documentos_adjuntos,
                 "documentos_totales"=>$documentos_totales,
                 "numero_procesos"=>$numero_procesos,
+                "cuotas_pendientes"=>$cuotas_pendientes,
+                "cuotas_pagadas"=>$cuotas_pagadas,
+                "ultima_fecha_pago"=>$ultima_fecha_pago,
                 "estado"=>$estado,
             );
             array_push($credito_list["creditos"],$items);

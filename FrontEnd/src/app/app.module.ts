@@ -46,6 +46,8 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { Configuracion } from '../paginador_espanol';
 import { MatMomentDateModule, MomentDateAdapter } from '@angular/material-moment-adapter';
 
+import {TableVirtualScrollModule} from 'ng-table-virtual-scroll';
+
 import { RouterModule } from '@angular/router';
 import {appRoutes} from './app.routing';
 import { ChartistModule } from 'ng-chartist';
@@ -225,6 +227,7 @@ import { VentanaDocumentosComponent as VentanaDocumentosComponent2 } from './com
 import { AfiliacionesComponent } from './components/afiliaciones/afiliaciones.component';
 import { VentanaRelacionadosComponent } from './components/clientes/ventana-relacionados/ventana-relacionados.component';
 import { VentanaLlamadasComponent } from './components/clientes/ventana-relacionados/ventana-llamadas/ventana-llamadas.component';
+import { VentanaGenerarPagoTransaccionComponent } from './components/cobranzas-listar/ventana-generar-pago-transaccion/ventana-generar-pago-transaccion.component';
 
 export const CUSTOM_DATE_FORMAT = {
   parse: {
@@ -289,6 +292,7 @@ export const CUSTOM_DATE_FORMAT = {
     ReactiveFormsModule,
     LayoutModule,
     ChartistModule,
+    TableVirtualScrollModule,
     RouterModule.forRoot(appRoutes),
     ImageUploadModule.forRoot(),
     StoreModule.forRoot({ permisos : PermisosSesion }, {}) ,
@@ -462,7 +466,8 @@ export const CUSTOM_DATE_FORMAT = {
     VentanaDocumentosComponent2,
     AfiliacionesComponent,
     VentanaRelacionadosComponent,
-    VentanaLlamadasComponent
+    VentanaLlamadasComponent,
+    VentanaGenerarPagoTransaccionComponent
    ],
   entryComponents: [
     AppComponent,

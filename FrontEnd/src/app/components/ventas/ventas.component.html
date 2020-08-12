@@ -616,7 +616,7 @@
         <mat-grid-tile colspan="4">
           <!-- <button mat-mini-fab color="primary" (click)="AgregarProducto()" matTooltip="Agregar productos" type="button" [disabled]="!this.sucursal"><mat-icon>add</mat-icon></button> -->
           <button mat-mini-fab color="primary" (click)="SeleccionarSeries()" matTooltip="Seleccionar productos" type="button"
-            [disabled]="!this.sucursal"><mat-icon>playlist_add</mat-icon></button>
+            [disabled]="!sucursal"><mat-icon>playlist_add</mat-icon></button>
         </mat-grid-tile>
       </mat-grid-list>
 
@@ -1188,7 +1188,7 @@
             <mat-cell *matCellDef="let cronograma"> {{cronograma.numero}} </mat-cell>
             <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
           </ng-container>
-         
+        
           <ng-container matColumnDef="tipo_pago">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo de pago </mat-header-cell>
             <mat-cell *matCellDef="let cronograma"> {{cronograma.tipo_pago}} </mat-cell>
@@ -1245,13 +1245,12 @@
             <mat-footer-cell *matFooterCellDef> - </mat-footer-cell>
           </ng-container>
 
-          <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>
+          <mat-header-row *matHeaderRowDef="Columnas; sticky: true"></mat-header-row>
           <mat-row *matRowDef="let row; columns: Columnas;"></mat-row>
           <ng-container *ngIf="idventa">
             <mat-footer-row *matFooterRowDef="Columnas"></mat-footer-row>
           </ng-container>
         </mat-table>
-
         <mat-grid-list cols="3" rowHeight="70px">
           <mat-grid-tile>
             <strong > Total: </strong>
@@ -1274,7 +1273,7 @@
       </ng-container>
 
       <ng-container *ngIf="!idventa">
-        <mat-table [dataSource]="ListadoVentas" class="mat-elevation-z8" matSort matSortActive="fecha_vencimiento" matSortDirection="asc" matSortDisableClear>
+        <mat-table [dataSource]="ListadoVentas" class="mat-elevation-z8">
 
           <ng-container matColumnDef="numero">
             <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
