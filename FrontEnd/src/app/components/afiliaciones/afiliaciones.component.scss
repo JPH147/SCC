@@ -126,6 +126,10 @@ mat-table{
   transform: translate(-20px, -12.5px);
 }
 
+.derecha{
+  margin: 0 5px ;
+}
+
 mat-list{
   margin-top: 10px;
   margin-bottom: 24px;
@@ -137,5 +141,5 @@ mat-footer-cell{
 
 mat-table{
   max-height: 800px ;
-  overflow-y: scroll ;
+  overflow-x: hidden ;
 }

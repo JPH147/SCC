@@ -154,6 +154,35 @@ export class VentaService {
     return this.http.post(this.url + 'venta/update.php', params, {headers: headers}); 
   }
 
+  ActualizarVentaDocumentos(
+    id:number,
+    foto:string,
+    pdfdni:string,
+    pdfcip:string,
+    pdfcontrato:string,
+    pdfvoucher:string,
+    pdfplanilla:string,
+    pdfletra:string,
+    pdfautorizacion:string,
+    pdfotros:string,
+  ): Observable<any> {
+    let params = new HttpParams()
+    .set('prid',id.toString())
+    .set('prfoto',foto)
+    .set('prpdfdni',pdfdni)
+    .set('prpdfcip',pdfcip)
+    .set('prpdfcontrato',pdfcontrato)
+    .set('prpdfvoucher',pdfvoucher)
+    .set('prpdfplanilla',pdfplanilla)
+    .set('prpdfletra',pdfletra)
+    .set('prpdfautorizacion',pdfautorizacion)
+    .set('prpdfotros',pdfotros) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'venta/update-documentos.php', params, {headers: headers}); 
+  }
+
   // estado: 1. Por pagar, 2. Pagado
   CrearVentaCronograma(
     venta:number,

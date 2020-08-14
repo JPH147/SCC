@@ -645,6 +645,71 @@ Class Creditos{
         return false;
     }
 
+    function actualizar_documentos(){
+        $query = "CALL sp_actualizarcreditodocumentos(
+            :prcredito,
+            :prpdffoto,
+            :prpdfdni,
+            :prpdfcip,
+            :prpdfplanilla,
+            :prpdfvoucher,
+            :prpdfrecibo,
+            :prpdfcasilla,
+            :prpdftransaccion,
+            :prpdfautorizacion,
+            :prpdftarjeta,
+            :prpdfcompromiso,
+            :prpdfletra,
+            :prpdfddjj,
+            :prpdfotros
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prcredito", $this->id_credito);
+        $result->bindParam(":prpdffoto", $this->pdf_foto);
+        $result->bindParam(":prpdfdni", $this->pdf_dni);
+        $result->bindParam(":prpdfcip", $this->pdf_cip);
+        $result->bindParam(":prpdfplanilla", $this->pdf_planilla);
+        $result->bindParam(":prpdfvoucher", $this->pdf_voucher);
+        $result->bindParam(":prpdfrecibo", $this->pdf_recibo);
+        $result->bindParam(":prpdfcasilla", $this->pdf_casilla);
+        $result->bindParam(":prpdftransaccion", $this->pdf_transaccion);
+        $result->bindParam(":prpdfautorizacion", $this->pdf_autorizacion);
+        $result->bindParam(":prpdftarjeta", $this->pdf_tarjeta);
+        $result->bindParam(":prpdfcompromiso", $this->pdf_compromiso);
+        $result->bindParam(":prpdfletra", $this->pdf_letra);
+        $result->bindParam(":prpdfddjj", $this->pdf_ddjj);
+        $result->bindParam(":prpdfotros", $this->pdf_otros);
+
+        $this->id_credito=htmlspecialchars(strip_tags($this->id_credito));
+        $this->pdf_foto=htmlspecialchars(strip_tags($this->pdf_foto));
+        $this->pdf_dni=htmlspecialchars(strip_tags($this->pdf_dni));
+        $this->pdf_cip=htmlspecialchars(strip_tags($this->pdf_cip));
+        $this->pdf_planilla=htmlspecialchars(strip_tags($this->pdf_planilla));
+        $this->pdf_voucher=htmlspecialchars(strip_tags($this->pdf_voucher));
+        $this->pdf_recibo=htmlspecialchars(strip_tags($this->pdf_recibo));
+        $this->pdf_casilla=htmlspecialchars(strip_tags($this->pdf_casilla));
+        $this->pdf_transaccion=htmlspecialchars(strip_tags($this->pdf_transaccion));
+        $this->pdf_autorizacion=htmlspecialchars(strip_tags($this->pdf_autorizacion));
+        $this->pdf_tarjeta=htmlspecialchars(strip_tags($this->pdf_tarjeta));
+        $this->pdf_compromiso=htmlspecialchars(strip_tags($this->pdf_compromiso));
+        $this->pdf_letra=htmlspecialchars(strip_tags($this->pdf_letra));
+        $this->pdf_ddjj=htmlspecialchars(strip_tags($this->pdf_ddjj));
+        $this->pdf_otros=htmlspecialchars(strip_tags($this->pdf_otros));
+
+        if($result->execute())
+        {
+            while($row = $result->fetch(PDO::FETCH_ASSOC))
+            {
+                extract($row);
+                $this->id_credito=$id;
+            }
+            return true;
+        }
+        return false;
+    }
+
     function crear_garante(){
         $query = "CALL sp_crearcreditogarante(
             :prcredito,
@@ -736,6 +801,25 @@ Class Creditos{
         $this->total_cuotas=htmlspecialchars(strip_tags($this->total_cuotas));
         $this->fecha=htmlspecialchars(strip_tags($this->fecha));
 
+
+        if($result->execute())
+        {
+            // return true ;
+            return $this->actualizar_cuotas_afiliacion_presente() ;
+        }
+        return false;
+    }
+
+    function actualizar_cuotas_afiliacion_presente() : bool {
+        $query = "CALL sp_actualizarafiliacioncuotasalpresente(
+            :prcredito
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prcredito", $this->id_credito);
+
+        $this->id_credito=htmlspecialchars(strip_tags($this->id_credito));
 
         if($result->execute())
         {

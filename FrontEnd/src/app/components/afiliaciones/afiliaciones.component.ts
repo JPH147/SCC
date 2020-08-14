@@ -138,7 +138,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
   public papeles_editar : boolean = false;
 
   @ViewChild('InputCapital', { static: true }) FiltroCapital: ElementRef;
-  @ViewChild('InputCuota', { static: true }) FiltroCuota: ElementRef;
+  // @ViewChild('InputCuota', { static: true }) FiltroCuota: ElementRef;
   // @ViewChild('InputInteres', { static: true }) FiltroInteres: ElementRef;
   // @ViewChild('Vendedor') VendedorAutoComplete : ElementRef;
   // @ViewChild('Autorizador') AutorizadorAutoComplete: ElementRef;
@@ -162,6 +162,8 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
   public totales_total_cuotas : number ;
   public totales_total_pendiente : number ;
   public totales_total_pagadas : number ;
+
+  public editar_documentos : boolean = false ;
 
   constructor(
     private _store : Store<EstadoSesion> ,
@@ -289,31 +291,6 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
     }
 
     if(!this.id_credito && !this.id_presupuesto){
-
-      // if(this.id_tipo>1){
-      //   fromEvent(this.VendedorAutoComplete.nativeElement, 'keyup')
-      //   .pipe(
-      //     debounceTime(10),
-      //     distinctUntilChanged(),
-      //     tap(() => {
-      //       if( this.VendedorAutoComplete.nativeElement.value ){
-      //         this.ListarVendedor(this.VendedorAutoComplete.nativeElement.value);
-      //       }
-      //     })
-      //    ).subscribe();
-    
-      //    fromEvent(this.AutorizadorAutoComplete.nativeElement, 'keyup')
-      //   .pipe(
-      //     debounceTime(10),
-      //     distinctUntilChanged(),
-      //     tap(() => {
-      //       if( this.AutorizadorAutoComplete.nativeElement.value ){
-      //         this.ListarAutorizador(this.AutorizadorAutoComplete.nativeElement.value);
-      //       }
-      //     })
-      //    ).subscribe();
-      // }
-  
       merge(
         this.CreditosForm.get('monto_cuota').valueChanges ,
         this.CreditosForm.get('cuotas').valueChanges ,
@@ -412,12 +389,12 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
         Validators.required ,
         Validators.min(1) ,
       ]],
-      cuotas: [{value: 0, disabled: false},[
+      cuotas: [{value: 1, disabled: false},[
         Validators.required,
         Validators.min(1),
         Validators.max(100)
       ]],
-      total: [{value: null, disabled: false},[
+      total: [{value: 20, disabled: false},[
         Validators.required
       ]],
       id_vendedor: [{value: null, disabled: false},[
@@ -627,6 +604,11 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
 
       }
 
+      if ( this.editar_documentos ) {
+        this.tarjeta_antiguo=res.pdf_tarjeta;
+        res.pdf_tarjeta!="" ? this.tarjeta_editar=false : this.tarjeta_editar=true;
+      }
+
       if ( this.id_credito_editar ) {
         if( res['courier'].id ){
           this.CreditosForm.get('papeles_courier').setValue(res['courier'].id_courier);
@@ -792,15 +774,14 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
 
   VerificarCondicionesAfiliacion(id_cliente){
     this.Servicio.SeleccionarParametros().subscribe(res=>{
-      // console.log(res)
       if(!this.cliente_afiliado) this.numero_afiliacion = res.numero;
-      // this.ObtenerNumero(id_cliente);
       this.CreditosForm.get('codigo').setValue(this.numero_afiliacion) ;
-      // this.CreditosForm.get('afiliacion_tiempo').setValue(res.tiempo) ;
       this.CreditosForm.get('monto_cuota').setValue(res.monto) ;
-      this.CreditosForm.get('cuotas').setValue( 12 * res.tiempo ) ;
+      // this.CreditosForm.get('cuotas').setValue( 12 * res.tiempo ) ;
+      this.CreditosForm.get('cuotas').setValue(1) ;
       this.CrearCronograma() ;
-      this.numero_cuotas = +res.tiempo*12;
+      // this.numero_cuotas = +res.tiempo*12;
+      this.numero_cuotas = 1 ;
       // this.CreditosForm.get('afiliacion_monto').setValue(res.monto) ;
     })
   }
@@ -857,7 +838,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
     this.CreditosForm.get('direccion').setValue("");
     this.CreditosForm.get('telefono').setValue("");
 
-    this.CreditosForm.get('numero').setValue(null)
+    // this.CreditosForm.get('numero').setValue(null)
     this.CreditosForm.get('codigo').setValue(null);
     // this.cliente_afiliado=true;
   }
@@ -938,7 +919,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
   }
 
   SubirArchivo(evento, orden){
-    if(this.id_credito_editar){
+    if(this.id_credito_editar || this.editar_documentos ){
       if ( orden == 10 ) this.tarjeta_nuevo = evento.serverResponse.response.body.data;
     }else{
       if ( orden == 10 ) this.tarjeta = evento.serverResponse.response.body.data;
@@ -959,7 +940,6 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
 
   /*Cronograma */
   CrearCronograma(){
-
     if(this.CreditosForm.get('cuotas').valid && this.CreditosForm.value.interes>=0 && !this.cliente_refinanciado){
       
       this.Cronograma=[];
@@ -988,7 +968,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
       // Se calcula el monto de las cuotas normales
       let monto : number = this.CreditosForm.value.monto_cuota*1 ;
   
-      for (let j = 1; j<=this.FiltroCuota.nativeElement.value; j++) {
+      for (let j = 1; j<=this.CreditosForm.get('cuotas').value; j++) {
         fecha=moment(fecha_corregida).add(j-1, 'months').toDate();
         this.Cronograma.push({
           numero: i+j-1,
@@ -1068,11 +1048,19 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
     if( tipo == 'ver' ) {
       this.id_credito = this.id_credito_estandar ;
       this.id_credito_editar = null ;
+      this.editar_documentos = false ;
+      this.ColumnasCronograma = ['numero', 'tipo_pago','fecha_vencimiento', 'monto', 'interes_generado','monto_pagado', 'fecha_cancelacion','estado', 'opciones'];
+    }
+    if( tipo == 'editar_documentos' ) {
+      this.id_credito = this.id_credito_estandar ;
+      this.id_credito_editar = null ;
+      this.editar_documentos = true ;
       this.ColumnasCronograma = ['numero', 'tipo_pago','fecha_vencimiento', 'monto', 'interes_generado','monto_pagado', 'fecha_cancelacion','estado', 'opciones'];
     }
     if( tipo == 'editar' ) {
       this.id_credito = null ;
       this.id_credito_editar = this.id_credito_estandar ;
+      this.editar_documentos = false ;
       this.ColumnasCronograma= ['numero', 'fecha_vencimiento_ver', 'monto_cuota_ver'];
       this.ActualizarObservables() ;
     }
@@ -1242,7 +1230,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
             this.Cargando.next(false) ;
           })
         )
-        .subscribe( () =>{
+        .subscribe(() =>{
           this.router.navigate(['/afiliaciones']);
           if(res['codigo']==0){
             this.Notificacion.Snack("Se actualizó la afiliación con éxito!","");
@@ -1269,6 +1257,43 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
       if(res===false) {
         this.Notificacion.Snack("Ocurrió un error al registrar el pago", "") ;
       }
+    })
+  }
+
+  GuardarNuevosDocumentos() {
+    this.Cargando.next(true) ;
+
+    let random=(new Date()).getTime() ;
+    let identificador = random.toString() ;
+    let dni = this.CreditosForm.value.dni ;
+    let fecha = moment(this.CreditosForm.value.fecha_credito).format("DD_MM_YYYY") ;
+
+    this.ServiciosGenerales.RenameFile(this.tarjeta_nuevo, dni + '_TARJETA_' + fecha, identificador.toString() , "credito")
+    .subscribe(resultado=>{
+      this.Servicio.ActualizarDocumentos(
+        this.id_credito ,
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        this.tarjeta_editar ? resultado.mensaje : this.tarjeta_antiguo ,
+        "",
+        "",
+        "",
+        "",
+      ).subscribe(res=>{  
+        this.router.navigate(['/afiliaciones']);
+        if(res['codigo']==0){
+          this.Notificacion.Snack("Se actualizó la afiliación con éxito!","");
+        }else{
+          this.Notificacion.Snack("Ocurrió un error al actualizar la afiliación","");
+        }
+      })
     })
   }
 

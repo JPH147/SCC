@@ -29,6 +29,11 @@
     </ng-container>
 
     <ng-container *ngIf="permiso?.creditos?.listado_creditos?.editar">
+      <button mat-mini-fab type="button" [color]="editar_documentos ? 'accent' : 'primary'" (click)="CambiarTipoVista('editar_documentos')" class="derecha"
+        [disabled]="(Cargando|async)" matTooltip="Editar documentos adjuntos"><mat-icon>attach_file</mat-icon></button>
+    </ng-container>
+
+    <ng-container *ngIf="permiso?.creditos?.listado_creditos?.editar">
       <ng-container *ngIf="id_credito">
         <button mat-mini-fab type="button" color="primary" (click)="CambiarTipoVista('editar')" class="derecha"
           [disabled]="(Cargando|async) || monto_pagado>0 || estado!=1 || numero_procesos>0" matTooltip="Editar documento"><mat-icon>edit</mat-icon></button>
@@ -585,7 +590,7 @@
         DOCUMENTOS ADJUNTOS
       </mat-card-subtitle>
 
-      <mat-grid-list cols="7" rowHeight="100px" *ngIf="!id_credito && !id_credito_editar">
+      <mat-grid-list cols="7" rowHeight="100px" *ngIf="!id_credito && !id_credito_editar && !editar_documentos">
 
         <mat-grid-tile>
           <image-upload
@@ -757,7 +762,7 @@
 
       </mat-grid-list>
 
-      <mat-grid-list cols=7 rowHeight="60px" *ngIf="id_credito_editar && id_tipo>1">
+      <mat-grid-list cols=7 rowHeight="60px" *ngIf="(id_credito_editar || editar_documentos) && id_tipo>1">
 
         <mat-grid-tile>
           <button mat-icon-button color="primary" (click)="foto_editar = true" [disabled]="!foto" *ngIf="!foto_editar">
@@ -824,7 +829,7 @@
         
       </mat-grid-list>
 
-      <mat-grid-list cols=7 rowHeight="20px" *ngIf="(id_credito || id_credito_editar) && id_tipo>1">
+      <mat-grid-list cols=7 rowHeight="20px" *ngIf="(id_credito || id_credito_editar || editar_documentos) && id_tipo>1">
 
         <mat-grid-tile>
           Foto
@@ -856,7 +861,7 @@
 
       </mat-grid-list>
 
-      <mat-grid-list cols=7 rowHeight="60px" *ngIf="(id_credito || id_credito_editar) && id_tipo>1">
+      <mat-grid-list cols=7 rowHeight="60px" *ngIf="(id_credito || id_credito_editar || editar_documentos) && id_tipo>1">
 
         <mat-grid-tile>
 
@@ -988,11 +993,11 @@
       </mat-grid-list>
 
       <!-- Solo para dar la sensación de espacio -->
-      <mat-list *ngIf="(id_credito || id_credito_editar) && id_tipo>1">
+      <mat-list *ngIf="(id_credito || id_credito_editar || editar_documentos) && id_tipo>1">
         <mat-divider></mat-divider>
       </mat-list>
 
-      <mat-grid-list cols=7 rowHeight="60px" *ngIf="id_credito_editar">
+      <mat-grid-list cols=7 rowHeight="60px" *ngIf="id_credito_editar || editar_documentos">
 
         <mat-grid-tile *ngIf="id_tipo>1">
           <button mat-icon-button color="primary"  (click)="transaccion_editar = true" [disabled]="!transaccion" *ngIf="!transaccion_editar">
@@ -1059,7 +1064,7 @@
 
       </mat-grid-list>
 
-      <mat-grid-list cols=7 rowHeight="20px" *ngIf="id_credito || id_credito_editar">
+      <mat-grid-list cols=7 rowHeight="20px" *ngIf="id_credito || id_credito_editar || editar_documentos">
 
         <mat-grid-tile *ngIf="id_tipo>1">
           Transaccion
@@ -1091,7 +1096,7 @@
 
       </mat-grid-list>
 
-      <mat-grid-list cols=7 rowHeight="60px" *ngIf="id_credito || id_credito_editar">
+      <mat-grid-list cols=7 rowHeight="60px" *ngIf="id_credito || id_credito_editar || editar_documentos">
 
         <mat-grid-tile *ngIf="id_tipo>1">
 
@@ -1221,6 +1226,12 @@
 
       </mat-grid-list>
 
+      <mat-grid-list cols=1 rowHeight="50px" *ngIf="editar_documentos">
+        <mat-grid-tile>
+          <button mat-raised-button type="button" color="primary"
+            [disabled]="Cargando | async" (click)="GuardarNuevosDocumentos()"> Actualizar documentos </button>
+        </mat-grid-tile>
+      </mat-grid-list>
     </div>
 
     <!-- Documento -->

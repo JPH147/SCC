@@ -384,6 +384,56 @@ Class Venta{
         return false;
     }
 
+    function update_documentos(){
+        $query = "CALL sp_actualizarventadocumentos(
+            :prid,
+            :prfoto,
+            :prpdfcontrato,
+            :prpdfdni,
+            :prpdfcip,
+            :prpdfplanilla,
+            :prpdfletra,
+            :prpdfvoucher,
+            :prpdfautorizacion,
+            :prpdfotros
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prid", $this->id_venta);
+        $result->bindParam(":prfoto", $this->foto);
+        $result->bindParam(":prpdfcontrato", $this->pdfcontrato);
+        $result->bindParam(":prpdfdni", $this->pdfdni);
+        $result->bindParam(":prpdfcip", $this->pdfcip);
+        $result->bindParam(":prpdfplanilla", $this->pdfplanilla);
+        $result->bindParam(":prpdfletra", $this->pdfletra);
+        $result->bindParam(":prpdfvoucher", $this->pdfvoucher);
+        $result->bindParam(":prpdfautorizacion", $this->pdfautorizacion);
+        $result->bindParam(":prpdfotros", $this->vnt_otros_pdf);
+
+        $this->id_venta=htmlspecialchars(strip_tags($this->id_venta));
+        $this->foto=htmlspecialchars(strip_tags($this->foto));
+        $this->pdfcontrato=htmlspecialchars(strip_tags($this->pdfcontrato));
+        $this->pdfdni=htmlspecialchars(strip_tags($this->pdfdni));
+        $this->pdfcip=htmlspecialchars(strip_tags($this->pdfcip));
+        $this->pdfplanilla=htmlspecialchars(strip_tags($this->pdfplanilla));
+        $this->pdfletra=htmlspecialchars(strip_tags($this->pdfletra));
+        $this->pdfvoucher=htmlspecialchars(strip_tags($this->pdfvoucher));
+        $this->pdfautorizacion=htmlspecialchars(strip_tags($this->pdfautorizacion));
+        $this->vnt_otros_pdf=htmlspecialchars(strip_tags($this->vnt_otros_pdf));
+
+        if($result->execute())
+        {
+            while($row = $result->fetch(PDO::FETCH_ASSOC))
+            {
+                extract($row);
+                $this->id_venta=$id;
+            }
+            return true;
+        }
+        return false;
+    }
+
     function readxId(){
 
         $query ="call sp_listarventaxId(?)";

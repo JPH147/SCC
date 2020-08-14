@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { Rol } from '../../usuarios/usuarios.service';
 import { Store } from '@ngrx/store';
 import { EstadoSesion } from '../../usuarios/usuarios.reducer';
+import { ClienteService } from '../clientes.service';
 
 @Component({
   selector: 'app-ventana-ventas',
@@ -37,6 +38,7 @@ export class VentanaVentasComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data,
     public ventana: MatDialogRef<VentanaVentasComponent>,
     private Servicio: VentaService,
+    private _clientes : ClienteService ,
     private router: Router
   ) { }
 
@@ -51,6 +53,8 @@ export class VentanaVentasComponent implements OnInit {
     this.fecha = new Date();
     this.ListadoVentas = new VentasClienteDataSource(this.Servicio);
     this.ListadoVentas.CargarVentas(this.data.id, "", this.fecha, 0, 1, 5);
+
+    console.log(this.data.cliente)
   }
 
   ngAfterViewInit(){
@@ -116,6 +120,10 @@ export class VentanaVentasComponent implements OnInit {
       this.router.navigate(['/ventas', 'salida', transaccion.id], {queryParams: {}});
     }
     this.ventana.close(true);
+  }
+
+  VerPlanilla() {
+    this._clientes.ObtenerInformacionPlanillaPNP2(this.data.cliente.codigo, this.data.cliente.dni)
   }
 
 }

@@ -38,7 +38,7 @@ export class VentanaObservacionesComponent implements OnInit {
 
   ngOnInit() {
     this.ListadoObservaciones = new ObservacionesDataSource(this.Servicio);
-    this.ListadoObservaciones.CargarClientes(this.data,1, 5);
+    this.ListadoObservaciones.CargarClientes(this.data.id_cliente,1, 5);
 
     this.CrearFormulario();
   }
@@ -78,7 +78,7 @@ export class VentanaObservacionesComponent implements OnInit {
   }
 
   CargarData(){
-  	this.ListadoObservaciones.CargarClientes(this.data, this.paginator.pageIndex+1, this.paginator.pageSize)
+  	this.ListadoObservaciones.CargarClientes(this.data.id_cliente, this.paginator.pageIndex+1, this.paginator.pageSize)
   }
 
   Eliminar(id){
@@ -104,7 +104,7 @@ export class VentanaObservacionesComponent implements OnInit {
       this.ServiciosGenerales.RenameFile(archivo['data'], "observacion", "_"+random, "observacion" )
       .subscribe(path_archivo=>{
         this.Servicio.CrearObservacion(
-          this.data,
+          this.data.id_cliente,
           this.ObservacionesForm.value.fecha,
           this.ObservacionesForm.value.observacion,
           path_archivo.mensaje

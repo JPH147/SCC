@@ -363,11 +363,52 @@ export class CreditosService {
       .set('prpdfotros',pdf_otros)
       .set('probservacion',observacion)
 
-    console.log(params);
+    // console.log(params);
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'credito/update.php', params, {headers: headers});
+
+  }
+
+  ActualizarDocumentos(
+    id_credito:number,
+    pdf_foto:string,
+    pdf_dni:string,
+    pdf_cip:string,
+    pdf_planilla:string,
+    pdf_voucher:string,
+    pdf_recibo:string,
+    pdf_casilla:string,
+    pdf_transaccion:string,
+    pdf_autorizacion:string,
+    pdf_tarjeta:string,
+    pdf_compromiso:string,
+    pdf_letra:string,
+    pdf_ddjj:string,
+    pdf_otros:string
+  ) :Observable<any> {
+
+    let params = new HttpParams()
+      .set('prcredito',id_credito.toString())
+      .set('prpdffoto',pdf_foto)
+      .set('prpdfdni',pdf_dni)
+      .set('prpdfcip',pdf_cip)
+      .set('prpdfplanilla',pdf_planilla)
+      .set('prpdfvoucher',pdf_voucher)
+      .set('prpdfrecibo',pdf_recibo)
+      .set('prpdfcasilla',pdf_casilla)
+      .set('prpdftransaccion',pdf_transaccion)
+      .set('prpdfautorizacion',pdf_autorizacion)
+      .set('prpdftarjeta',pdf_tarjeta)
+      .set('prpdfcompromiso',pdf_compromiso)
+      .set('prpdfletra',pdf_letra)
+      .set('prpdfddjj',pdf_ddjj)
+      .set('prpdfotros',pdf_otros) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'credito/update-documentos.php', params, {headers: headers});
 
   }
 

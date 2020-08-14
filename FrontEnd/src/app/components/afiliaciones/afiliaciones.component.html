@@ -10,6 +10,11 @@
     </ng-container>
 
     <ng-container *ngIf="permiso?.creditos?.listado_creditos?.editar">
+      <button mat-mini-fab type="button" [color]="editar_documentos ? 'accent' : 'primary'" (click)="CambiarTipoVista('editar_documentos')" class="derecha"
+        [disabled]="(Cargando|async)" matTooltip="Editar documentos adjuntos"><mat-icon>attach_file</mat-icon></button>
+    </ng-container>
+
+    <ng-container *ngIf="permiso?.creditos?.listado_creditos?.editar">
       <ng-container *ngIf="id_credito">
         <button mat-mini-fab type="button" color="primary" (click)="CambiarTipoVista('editar')" class="derecha"
           [disabled]="(Cargando|async) || monto_pagado>0 || estado!=1 || numero_procesos>0" matTooltip="Editar documento"><mat-icon>edit</mat-icon></button>
@@ -262,7 +267,7 @@
         DOCUMENTOS ADJUNTOS
       </mat-card-subtitle>
 
-      <mat-grid-list cols="7" rowHeight="100px" *ngIf="!id_credito && !id_credito_editar">
+      <mat-grid-list cols="7" rowHeight="100px" *ngIf="!id_credito && !id_credito_editar && !editar_documentos">
         <mat-grid-tile>
           <image-upload
             class="cargar-imagen"
@@ -276,24 +281,24 @@
         </mat-grid-tile>
       </mat-grid-list>
 
-      <mat-grid-list cols=7 rowHeight="60px" *ngIf="id_credito_editar">
+      <mat-grid-list cols=7 rowHeight="60px" *ngIf="id_credito_editar || editar_documentos">
         <mat-grid-tile>
-          <button mat-icon-button color="primary"  (click)="tarjeta_editar = true" [disabled]="!tarjeta" *ngIf="!tarjeta_editar">
+          <button mat-icon-button color="primary" (click)="tarjeta_editar = true" [disabled]="!tarjeta" *ngIf="!tarjeta_editar">
             <mat-icon class="icono-documentos"> edit </mat-icon>
           </button>
-          <button mat-icon-button color="primary"  (click)="tarjeta_editar = false" [disabled]="!tarjeta" *ngIf="tarjeta_editar">
+          <button mat-icon-button color="primary" (click)="tarjeta_editar = false" [disabled]="!tarjeta" *ngIf="tarjeta_editar">
             <mat-icon class="icono-documentos"> close </mat-icon>
           </button>
         </mat-grid-tile>
       </mat-grid-list>
 
-      <mat-grid-list cols=7 rowHeight="20px" *ngIf="id_credito || id_credito_editar">
+      <mat-grid-list cols=7 rowHeight="20px" *ngIf="id_credito || id_credito_editar || editar_documentos">
         <mat-grid-tile>
           Tarjeta de socio
         </mat-grid-tile>
       </mat-grid-list>
 
-      <mat-grid-list cols=7 rowHeight="60px" *ngIf="id_credito || id_credito_editar">
+      <mat-grid-list cols=7 rowHeight="60px" *ngIf="id_credito || id_credito_editar || editar_documentos">
         <mat-grid-tile>
           <button mat-icon-button color="primary" [disabled]="!tarjeta" *ngIf="!tarjeta_editar">
             <mat-icon class="icono-documentos" (click)="AbrirDocumento(tarjeta)"> visibility </mat-icon>
@@ -308,6 +313,13 @@
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
             (uploadFinished)="SubirArchivo($event, 10)">
           </image-upload>
+        </mat-grid-tile>
+      </mat-grid-list>
+
+      <mat-grid-list cols=1 rowHeight="50px" *ngIf="editar_documentos">
+        <mat-grid-tile>
+          <button mat-raised-button type="button" color="primary"
+            [disabled]="Cargando | async" (click)="GuardarNuevosDocumentos()"> Actualizar documentos </button>
         </mat-grid-tile>
       </mat-grid-list>
     </div>
@@ -347,7 +359,8 @@
           </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile>
+        <!-- Se comenta porque ahora se crea la primera cuota y las siguientes se crean automáticamente -->
+        <!-- <mat-grid-tile>
           <mat-form-field class="columnas-1">
             <input matInput type="number" placeholder="N° de cuotas" max=100 min=0 formControlName="cuotas" #InputCuota [readonly]="id_credito || id_presupuesto || cliente_refinanciado">
             <mat-error>El número de cuotas debe ser menor a 100.</mat-error>
@@ -359,7 +372,7 @@
             <input matInput placeholder="Monto total" formControlName="total" readonly>
             <span matPrefix>S/ &nbsp;</span>
           </mat-form-field>
-        </mat-grid-tile>
+        </mat-grid-tile> -->
 
       </mat-grid-list>
     </div>

@@ -163,6 +163,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   public totales_total_pendiente : number ;
   public totales_total_pagadas : number ;
 
+  public editar_documentos : boolean = false ;
+
   constructor(
     private _store : Store<EstadoSesion> ,
     private Servicio: CreditosService,
@@ -687,7 +689,38 @@ export class CreditosComponent implements OnInit, AfterViewInit {
             this.CreditosForm['controls'].garantes['controls'][index].get('planilla_pdf').setValue(planilla);
           })
         }
+      }
 
+      if ( this.editar_documentos ) {
+        this.foto_antiguo=res.pdf_foto;
+        this.dni_antiguo=res.pdf_dni;
+        this.cip_antiguo=res.pdf_cip;
+        this.planilla_antiguo=res.pdf_planilla;
+        this.voucher_antiguo=res.pdf_voucher;
+        this.recibo_antiguo=res.pdf_recibo;
+        this.casilla_antiguo=res.pdf_casilla;
+        this.transaccion_antiguo=res.pdf_transaccion;
+        this.autorizacion_antiguo=res.pdf_autorizacion;
+        this.tarjeta_antiguo=res.pdf_tarjeta;
+        this.compromiso_antiguo=res.pdf_compromiso;
+        this.letra_antiguo=res.pdf_letra;
+        this.ddjj_antiguo=res.pdf_ddjj;
+        this.otros_antiguo=res.pdf_otros;
+
+        res.pdf_foto!="" ? this.foto_editar=false : this.foto_editar=true;
+        res.pdf_dni!="" ? this.dni_editar=false : this.dni_editar=true;
+        res.pdf_cip!="" ? this.cip_editar=false : this.cip_editar=true;
+        res.pdf_planilla!="" ? this.planilla_editar=false : this.planilla_editar=true;
+        res.pdf_voucher!="" ? this.voucher_editar=false : this.voucher_editar=true;
+        res.pdf_recibo!="" ? this.recibo_editar=false : this.recibo_editar=true;
+        res.pdf_casilla!="" ? this.casilla_editar=false : this.casilla_editar=true;
+        res.pdf_transaccion!="" ? this.transaccion_editar=false : this.transaccion_editar=true;
+        res.pdf_autorizacion!="" ? this.autorizacion_editar=false : this.autorizacion_editar=true;
+        res.pdf_tarjeta!="" ? this.tarjeta_editar=false : this.tarjeta_editar=true;
+        res.pdf_compromiso!="" ? this.compromiso_editar=false : this.compromiso_editar=true;
+        res.pdf_letra!="" ? this.letra_editar=false : this.letra_editar=true;
+        res.pdf_ddjj!="" ? this.ddjj_editar=false : this.ddjj_editar=true;
+        res.pdf_otros!="" ? this.otros_editar=false : this.otros_editar=true;
       }
 
       if ( this.id_credito_editar ) {
@@ -1112,7 +1145,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   }
 
   SubirArchivo(evento, orden){
-    if(this.id_credito_editar){
+    if(this.id_credito_editar || this.editar_documentos){
       if ( orden == 1 ) this.foto_nuevo = evento.serverResponse.response.body.data;
       if ( orden == 2 ) this.dni_nuevo = evento.serverResponse.response.body.data;
       if ( orden == 3 ) this.cip_nuevo = evento.serverResponse.response.body.data;
@@ -1321,11 +1354,19 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     if( tipo == 'ver' ) {
       this.id_credito = this.id_credito_estandar ;
       this.id_credito_editar = null ;
+      this.editar_documentos = false ;
+      this.ColumnasCronograma = ['numero', 'tipo_pago','fecha_vencimiento', 'monto', 'interes_generado','monto_pagado', 'fecha_cancelacion','estado', 'opciones'];
+    }
+    if( tipo == 'editar_documentos' ) {
+      this.id_credito = this.id_credito_estandar ;
+      this.id_credito_editar = null ;
+      this.editar_documentos = true ;
       this.ColumnasCronograma = ['numero', 'tipo_pago','fecha_vencimiento', 'monto', 'interes_generado','monto_pagado', 'fecha_cancelacion','estado', 'opciones'];
     }
     if( tipo == 'editar' ) {
       this.id_credito = null ;
       this.id_credito_editar = this.id_credito_estandar ;
+      this.editar_documentos = false ;
       this.ColumnasCronograma= ['numero', 'fecha_vencimiento_ver', 'monto_cuota_ver'];
       this.ActualizarObservables() ;
     }
@@ -1775,6 +1816,60 @@ export class CreditosComponent implements OnInit, AfterViewInit {
           }
         }, 300)
 
+      })
+    })
+
+  }
+
+  GuardarNuevosDocumentos(){
+    this.Cargando.next(true) ;
+    let random=(new Date()).getTime() ;
+    let identificador = random.toString() ;
+    let dni = this.CreditosForm.value.dni ;
+    let fecha = moment(this.CreditosForm.value.fechaventa).format("DD_MM_YYYY") ;
+
+    return forkJoin(
+      this.ServiciosGenerales.RenameFile(this.foto_nuevo, dni + '_FOTO_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.dni_nuevo, dni + '_DNI_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.cip_nuevo, dni + '_CIP_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.planilla_nuevo, dni + '_PLANILLA_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.voucher_nuevo, dni + '_VOUCHER_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.recibo_nuevo, dni + '_RECIBO_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.casilla_nuevo, dni + '_CASILLA_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.transaccion_nuevo, dni + '_TRANSACCION_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.autorizacion_nuevo, dni + '_AUTORIAZACION_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.tarjeta_nuevo, dni + '_TARJETA_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.compromiso_nuevo, dni + '_COMPROMISO_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.letra_nuevo, dni + '_LETRA_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.ddjj_nuevo, dni + '_DDJJ_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.otros_nuevo, dni + '_OTROS_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.papeles_nuevo, dni + '_PAPELES_' + fecha, identificador ,"credito"),
+    ).subscribe(resultado=>{
+      this.Servicio.ActualizarDocumentos(
+        this.id_credito,
+        this.foto_editar ? resultado[0].mensaje : this.foto_antiguo,
+        this.dni_editar ? resultado[1].mensaje : this.dni_antiguo,
+        this.cip_editar ? resultado[2].mensaje : this.cip_antiguo,
+        this.planilla_editar ? resultado[3].mensaje : this.planilla_antiguo,
+        this.voucher_editar ? resultado[4].mensaje : this.voucher_antiguo,
+        this.recibo_editar ? resultado[5].mensaje : this.recibo_antiguo,
+        this.casilla_editar ? resultado[6].mensaje : this.casilla_antiguo,
+        this.transaccion_editar ? resultado[7].mensaje : this.transaccion_antiguo,
+        this.autorizacion_editar ? resultado[8].mensaje : this.autorizacion_antiguo,
+        this.tarjeta_editar ? resultado[9].mensaje : this.tarjeta_antiguo,
+        this.compromiso_editar ? resultado[10].mensaje : this.compromiso_antiguo,
+        this.letra_editar ? resultado[11].mensaje : this.letra_antiguo,
+        this.ddjj_editar ? resultado[12].mensaje : this.ddjj_antiguo,
+        this.otros_editar ? resultado[13].mensaje : this.otros_antiguo
+      ).subscribe(res=>{
+        setTimeout(()=>{
+          this.router.navigate(['/creditos']);
+          if(res['codigo']==0){
+            this.Notificacion.Snack("Se actualizó el crédito con éxito!","");
+          }else{
+            this.Notificacion.Snack("Ocurrió un error al actualizar el crédito","");
+          }
+        }, 300)
       })
     })
 

@@ -127,6 +127,8 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   public totales_total_pendiente : number = 0 ;
   public totales_total_pagadas : number = 0 ;
 
+  public editar_documentos : boolean = false ;
+
   constructor(
     private _store : Store<EstadoSesion> ,
     private Servicio: VentaService,
@@ -409,6 +411,46 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
             this.VentasSalidaForm['controls'].garantes['controls'][index].get('transaccion_pdf').setValue(voucher);
           })
         }
+      }
+
+
+      if ( this.editar_documentos ) {
+        this.foto_antiguo=res.foto;
+        res.foto!="" ? this.foto=URLIMAGENES.carpeta+'venta/'+res.foto : null;
+        res.foto!="" ? this.foto_editar=false : this.foto_editar=true;
+
+        this.dni_antiguo=res.dni_pdf;
+        res.dni_pdf!="" ? this.dni=URLIMAGENES.carpeta+'venta/'+res.dni_pdf : null;
+        res.dni_pdf!="" ? this.dni_editar=false : this.dni_editar=true;
+
+        this.cip_antiguo=res.cip_pdf;
+        res.cip_pdf!="" ? this.cip=URLIMAGENES.carpeta+'venta/'+res.cip_pdf : null;
+        res.cip_pdf!="" ? this.cip_editar=false : this.cip_editar=true;
+
+        this.contrato_antiguo=res.contrato_pdf;
+        res.contrato_pdf!="" ? this.contrato=URLIMAGENES.carpeta+'venta/'+res.contrato_pdf : null;
+        res.contrato_pdf!="" ? this.contrato_editar=false : this.contrato_editar=true;
+
+        this.transaccion_antiguo=res.voucher_pdf;
+        res.voucher_pdf!="" ? this.transaccion=URLIMAGENES.carpeta+'venta/'+res.voucher_pdf : null;
+        res.voucher_pdf!="" ? this.transaccion_editar=false : this.transaccion_editar=true;
+
+        this.planilla_antiguo=res.planilla_pdf;
+        res.planilla_pdf!="" ? this.planilla=URLIMAGENES.carpeta+'venta/'+res.planilla_pdf : null;
+        res.planilla_pdf!="" ? this.planilla_editar=false : this.planilla_editar=true;
+
+        this.letra_antiguo=res.letra_pdf;
+        res.letra_pdf!="" ? this.letra=URLIMAGENES.carpeta+'venta/'+res.letra_pdf : null;
+        res.letra_pdf!="" ? this.letra_editar=false : this.letra_editar=true;
+
+        this.autorizacion_antiguo=res.autorizacion_pdf;
+        res.autorizacion_pdf!="" ? this.autorizacion=URLIMAGENES.carpeta+'venta/'+res.autorizacion_pdf : null;
+        res.autorizacion_pdf!="" ? this.autorizacion_editar=false : this.autorizacion_editar=true;
+
+        this.otros_antiguo=res.otros_pdf;
+        res.otros_pdf!="" ? this.otros=URLIMAGENES.carpeta+'venta/'+res.otros_pdf : null;
+        res.otros_pdf!="" ? this.otros_editar=false : this.otros_editar=true;
+
       }
 
       if(this.id_venta_editar){
@@ -800,7 +842,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   }
 
   SubirFoto(evento){
-    if (!this.id_venta_editar) {
+    if (!this.id_venta_editar && !this.editar_documentos) {
       this.foto=evento.serverResponse.response.body.data;
     }else{
       this.foto_nuevo=evento.serverResponse.response.body.data;
@@ -808,7 +850,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   }
 
   SubirDNI(evento){
-    if (!this.id_venta_editar) {
+    if (!this.id_venta_editar && !this.editar_documentos) {
       this.dni=evento.serverResponse.response.body.data;
     }else{
       this.dni_nuevo=evento.serverResponse.response.body.data;
@@ -816,7 +858,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   }
 
   SubirCIP(evento){
-    if (!this.id_venta_editar) {
+    if (!this.id_venta_editar && !this.editar_documentos) {
       this.cip=evento.serverResponse.response.body.data;
     }else{
       this.cip_nuevo=evento.serverResponse.response.body.data;
@@ -824,7 +866,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   }
 
   SubirContrato(evento){
-    if (!this.id_venta_editar) {
+    if (!this.id_venta_editar && !this.editar_documentos) {
       this.contrato=evento.serverResponse.response.body.data;
     }else{
       this.contrato_nuevo=evento.serverResponse.response.body.data;
@@ -832,7 +874,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   }
 
   SubirTransaccion(evento){
-    if (!this.id_venta_editar) {
+    if (!this.id_venta_editar && !this.editar_documentos) {
       this.transaccion=evento.serverResponse.response.body.data;
     }else{
       this.transaccion_nuevo=evento.serverResponse.response.body.data;
@@ -840,7 +882,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   }
 
   SubirPlanilla(evento){
-    if (!this.id_venta_editar) {
+    if (!this.id_venta_editar && !this.editar_documentos) {
       this.planilla=evento.serverResponse.response.body.data;
     }else{
       this.planilla_nuevo=evento.serverResponse.response.body.data;
@@ -848,7 +890,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   }
 
   SubirLetra(evento){
-    if (!this.id_venta_editar) {
+    if (!this.id_venta_editar && !this.editar_documentos) {
       this.letra=evento.serverResponse.response.body.data;
     }else{
       this.letra_nuevo=evento.serverResponse.response.body.data;
@@ -856,7 +898,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   }
 
   SubirAutorizacion(evento){
-    if (!this.id_venta_editar) {
+    if (!this.id_venta_editar && !this.editar_documentos) {
       this.autorizacion=evento.serverResponse.response.body.data;
     }else{
       this.autorizacion_nuevo=evento.serverResponse.response.body.data;
@@ -864,7 +906,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   }
 
   SubirOtros(evento){
-    if (!this.id_venta_editar) {
+    if (!this.id_venta_editar && !this.editar_documentos) {
       this.otros=evento.serverResponse.response.body.data;
     }else{
       this.otros_nuevo=evento.serverResponse.response.body.data;
@@ -1035,11 +1077,19 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
     if( tipo == 'ver' ) {
       this.id_venta = this.idventa ;
       this.id_venta_editar = null ;
+      this.editar_documentos = false ;
+      this.Columnas= ['numero', 'monto_cuota','fecha_vencimiento', 'monto_interes','monto_pagado', 'fecha_cancelacion', 'monto_pendiente','estado', 'opciones'];
+    }
+    if( tipo == 'editar_documentos' ) {
+      this.id_venta = this.idventa ;
+      this.id_venta_editar = null ;
+      this.editar_documentos = true ;
       this.Columnas= ['numero', 'monto_cuota','fecha_vencimiento', 'monto_interes','monto_pagado', 'fecha_cancelacion', 'monto_pendiente','estado', 'opciones'];
     }
     if( tipo == 'editar' ) {
       this.id_venta = null ;
       this.id_venta_editar = this.idventa ;
+      this.editar_documentos = false ;
       this.Columnas= ['numero', 'fecha_vencimiento_ver', 'monto_cuota_ver'];
     }
     this.SeleccionarVentaxId(this.idventa)
@@ -1093,6 +1143,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
 
   ActualizarVenta(formulario){
 
+    this.Cargando.next(true) ;
     let random=(new Date()).getTime();
 
     return forkJoin(
@@ -1142,7 +1193,6 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
         this.otros_editar ? resultado[8].mensaje : this.otros_antiguo,
         formulario.value.observaciones
       ).subscribe(res=>{
-
         // Productos antiguos
         this.Productos.forEach((item)=>{
           // console.log(item)
@@ -1209,6 +1259,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
         }
 
         setTimeout(()=>{
+          this.Cargando.next(false) ;
           this.Atras();
   
           if(res['codigo']==0){
@@ -1218,6 +1269,47 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
           }
         }, 300)
 
+      })
+    })
+  }
+
+  GuardarNuevosDocumentos(){
+    this.Cargando.next(true) ;
+    let random=(new Date()).getTime();
+
+    return forkJoin(
+      this.ServiciosGenerales.RenameFile(this.foto_nuevo,'DNI',random.toString(),"venta"),
+      this.ServiciosGenerales.RenameFile(this.dni_nuevo,'DNI',random.toString(),"venta"),
+      this.ServiciosGenerales.RenameFile(this.cip_nuevo,'CIP',random.toString(),"venta"),
+      this.ServiciosGenerales.RenameFile(this.contrato_nuevo,'CONTRATO',random.toString(),"venta"),
+      this.ServiciosGenerales.RenameFile(this.transaccion_nuevo,'TRANSACCION',random.toString(),"venta"),
+      this.ServiciosGenerales.RenameFile(this.planilla_nuevo,'PLANILLA',random.toString(),"venta"),
+      this.ServiciosGenerales.RenameFile(this.letra_nuevo,'LETRA',random.toString(),"venta"),
+      this.ServiciosGenerales.RenameFile(this.autorizacion_nuevo,'AUTORIZACION',random.toString(),"venta"),
+      this.ServiciosGenerales.RenameFile(this.otros_nuevo,'AUTORIZACION',random.toString(),"venta"),
+      this.ServiciosGenerales.RenameFile(this.papeles_nuevo,'PAPELES',random.toString(),"venta"),
+    ).subscribe(resultado=>{
+      this.Servicio.ActualizarVentaDocumentos(
+        this.id_venta,
+        this.foto_editar ? resultado[0].mensaje : this.foto_antiguo,
+        this.dni_editar ? resultado[1].mensaje : this.dni_antiguo,
+        this.cip_editar ? resultado[2].mensaje : this.cip_antiguo,
+        this.contrato_editar ? resultado[3].mensaje : this.contrato_antiguo,
+        this.transaccion_editar ? resultado[4].mensaje : this.transaccion_antiguo,
+        this.planilla_editar ? resultado[5].mensaje : this.planilla_antiguo,
+        this.letra_editar ? resultado[6].mensaje : this.letra_antiguo,
+        this.autorizacion_editar ? resultado[7].mensaje : this.autorizacion_antiguo,
+        this.otros_editar ? resultado[8].mensaje : this.otros_antiguo,
+      ).subscribe(res=>{
+        this.Cargando.next(false) ;
+        setTimeout(()=>{
+          this.Atras();
+            if(res['codigo']==0){
+            this.Notificacion.Snack("Se editó la venta con éxito!","");
+          }else{
+            this.Notificacion.Snack("Ocurrió un error al editar la venta","");
+          }
+        }, 300)
       })
     })
   }

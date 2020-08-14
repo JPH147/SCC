@@ -46,8 +46,6 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { Configuracion } from '../paginador_espanol';
 import { MatMomentDateModule, MomentDateAdapter } from '@angular/material-moment-adapter';
 
-import {TableVirtualScrollModule} from 'ng-table-virtual-scroll';
-
 import { RouterModule } from '@angular/router';
 import {appRoutes} from './app.routing';
 import { ChartistModule } from 'ng-chartist';
@@ -292,7 +290,6 @@ export const CUSTOM_DATE_FORMAT = {
     ReactiveFormsModule,
     LayoutModule,
     ChartistModule,
-    TableVirtualScrollModule,
     RouterModule.forRoot(appRoutes),
     ImageUploadModule.forRoot(),
     StoreModule.forRoot({ permisos : PermisosSesion }, {}) ,

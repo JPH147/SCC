@@ -31,7 +31,7 @@ export class VentanaLlamadasComponent implements OnInit {
 
   ngOnInit(): void {
     this.ListadoLlamadas = new LlamadasDataSource(this.Servicio);
-    this.ListadoLlamadas.CargarClientes(this.data);
+    this.ListadoLlamadas.CargarLlamadas(this.data.id_cliente);
 
     this.Columnas = ['numero', 'fecha', 'telefono', 'opciones']
   }
@@ -54,7 +54,7 @@ export class VentanaLlamadasComponent implements OnInit {
     .subscribe(res=>{
       if ( res ) {
         this._notificaciones.Snack("Se eliminó el archivo satisfactoriamente","") ;
-        this.ListadoLlamadas.CargarClientes(this.data) ;
+        this.ListadoLlamadas.CargarLlamadas(this.data.id_cliente) ;
       } else {
         this._notificaciones.Snack("Ocurrió un error al eliminar el archivo","") ;
       }
@@ -80,7 +80,7 @@ export class LlamadasDataSource implements DataSource<any> {
     this.CargandoInformacion.complete();
   }
 
-  CargarClientes(
+  CargarLlamadas(
     id_cliente: number,
   ){
     this.CargandoInformacion.next(true);
@@ -90,7 +90,6 @@ export class LlamadasDataSource implements DataSource<any> {
       finalize(() => this.CargandoInformacion.next(false))
     )
     .subscribe(res => {
-      console.log(res)
   		if (res['data']) {
   			this.InformacionClientes.next(res['data']);
   		}else{

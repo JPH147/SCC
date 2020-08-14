@@ -97,7 +97,7 @@ export class ClientesComponent implements OnInit, AfterViewInit {
 
           this.ListadoCliente.CargarClientes(false,'','',this.ClienteForm.get('dni').value,'',0,0,1,10,1) ;
           if( params.ventana && this.Dialogo.openDialogs.length == 0 ) {
-            this.VerVentas(params.ventana, params.nombre) ;
+            this.VerVentas(params.ventana, params.nombre, false) ;
           }
         } else {
           this.ListadoCliente.CargarClientes(false,'','', '','',4,3,1,10,1);
@@ -245,28 +245,28 @@ export class ClientesComponent implements OnInit, AfterViewInit {
     });
   }
 
-  AgregarObservaciones(id){
+  AgregarObservaciones(cliente){
     let VentanaContacto = this.DialogoContacto.open(VentanaRelacionadosComponent, {
       width: '1200px',
       maxHeight : '80vh',
-      data: id
+      data: { id_cliente: cliente.id, dni : cliente.dni, codigo : cliente.codigo }
     });
 
     VentanaContacto.afterClosed().subscribe(res=>{
-      if ( res ) {
-        this.Notificacion.Snack("Se creó la observación satisfactoriamente.","")
-      }
-      if ( res===false ) {
-        this.Notificacion.Snack("Ocurrió un error al crear la observación.","")
-      }
+      // if ( res ) {
+      //   this.Notificacion.Snack("Se creó la observación satisfactoriamente.","")
+      // }
+      // if ( res===false ) {
+      //   this.Notificacion.Snack("Ocurrió un error al crear la observación.","")
+      // }
     })
   }
 
-  VerVentas(id_cliente, nombre){
+  VerVentas( id_cliente, nombre, cliente ){
     this.AsignarQuery( id_cliente, nombre ) ;
     let Ventana = this.Dialogo.open(VentanaVentasComponent, {
       width: '900px',
-      data: {id: id_cliente, nombre: nombre}
+      data: {id: id_cliente, nombre: nombre, cliente: cliente}
     });
 
     Ventana.afterClosed().subscribe(res=>{
@@ -408,20 +408,18 @@ export class ClientesComponent implements OnInit, AfterViewInit {
     this.CargarData() ;
   }
 
+  // Esto se utiliza para estalecer los params de la URL
   AsignarQuery( id_cliente : number, nombre : string ) {
-    // console.log( id_cliente, this.ClienteForm.get('dni').value.length )
     if( this.ClienteForm.get('dni').value.length == 8 ) {
       if( id_cliente > 0 ) {
         this.router.navigate(['.'], {
           relativeTo: this.route,
           queryParams: { documento : this.ClienteForm.get('dni').value, ventana : id_cliente, nombre : nombre } ,
-          // queryParamsHandling: 'merge'
         });
       } else {
         this.router.navigate(['.'], {
           relativeTo: this.route,
           queryParams: { documento : this.ClienteForm.get('dni').value } ,
-          // queryParamsHandling: 'merge'
         });
       }
     } else {

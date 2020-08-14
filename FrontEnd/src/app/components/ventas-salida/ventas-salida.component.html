@@ -29,8 +29,13 @@
     </ng-container>
 
     <ng-container *ngIf="permiso?.ventas?.listado_ventas?.realizar_canjes">
-      <button mat-mini-fab type="button" color="primary" matTooltip="Canjear" [disabled]="true" class="derecha"
+      <button mat-mini-fab type="button" [color]="editar_documentos ? 'accent' : 'primary'" matTooltip="Canjear" [disabled]="true" class="derecha"
         [routerLink]="['/ventas','nueva', idventa, this.VentasSalidaForm.get('id_cliente').value]"><mat-icon> import_export </mat-icon></button>
+    </ng-container>
+
+    <ng-container *ngIf="permiso?.ventas?.listado_ventas?.editar">
+      <button mat-mini-fab type="button" color="primary" (click)="CambiarTipoVista('editar_documentos')" class="derecha"
+        [disabled]="(Cargando | async)" matTooltip="Editar documentos adjuntos"><mat-icon>attach_file</mat-icon></button>
     </ng-container>
 
     <ng-container *ngIf="permiso?.ventas?.listado_ventas?.editar">
@@ -650,7 +655,7 @@
         DOCUMENTOS ADJUNTOS
       </mat-card-subtitle>
 
-      <mat-grid-list cols=9 rowHeight="60px" *ngIf="id_venta_editar">
+      <mat-grid-list cols=9 rowHeight="60px" *ngIf="id_venta_editar || editar_documentos">
 
         <mat-grid-tile>
           <button mat-icon-button color="primary" (click)="foto_editar = true" [disabled]="!foto" *ngIf="!foto_editar">
@@ -734,7 +739,7 @@
         </mat-grid-tile>
       </mat-grid-list>
 
-      <mat-grid-list cols=9 rowHeight="20px" *ngIf="id_venta || id_venta_editar">
+      <mat-grid-list cols=9 rowHeight="20px" *ngIf="id_venta || id_venta_editar || editar_documentos">
 
         <mat-grid-tile>
           Foto
@@ -774,7 +779,7 @@
 
       </mat-grid-list>
 
-      <mat-grid-list cols=9 rowHeight="60px" *ngIf="id_venta || id_venta_editar">
+      <mat-grid-list cols=9 rowHeight="60px" *ngIf="id_venta || id_venta_editar || editar_documentos">
 
         <mat-grid-tile>
 
@@ -938,7 +943,14 @@
           </image-upload>
 
         </mat-grid-tile>
-      </mat-grid-list> 
+      </mat-grid-list>
+      
+      <mat-grid-list cols=1 rowHeight="50px" *ngIf="editar_documentos">
+        <mat-grid-tile>
+          <button mat-raised-button type="button" color="primary"
+            [disabled]="Cargando | async" (click)="GuardarNuevosDocumentos()"> Actualizar documentos </button>
+        </mat-grid-tile>
+      </mat-grid-list>
     </div>
 
     <!-- Cronograma -->

@@ -22,24 +22,6 @@
         {
 
             $venta->id_venta=trim($_POST["prid"]);
-            $venta->fecha=trim($_POST["prfecha"]);
-            $venta->sucursal=trim($_POST["prsucursal"]);
-            $venta->talonario=trim($_POST["prtalonario"]);
-            $venta->id_autorizador=trim($_POST["prautorizador"]);
-            $venta->id_cliente=trim($_POST["prcliente"]);
-            $venta->id_clientedireccion=trim($_POST["prclientedireccion"]);
-            $venta->id_clientetelefono=trim($_POST["prclientetelefono"]);
-            $venta->clientecargo=trim($_POST["prclientecargo"]);
-            $venta->clientetrabajo=trim($_POST["prclientetrabajo"]);
-            $venta->lugar=trim($_POST["prlugar"]);
-            $venta->vendedor=trim($_POST["prvendedor"]);
-            $venta->tipoventa=trim($_POST["prtipoventa"]);
-            $venta->salida_venta=trim($_POST["prsalida"]);
-            $venta->tipopago=trim($_POST["prtipopago"]);
-            $venta->inicial=trim($_POST["prinicial"]);
-            $venta->cuotas=trim($_POST["prcuotas"]);
-            $venta->total=trim($_POST["prtotal"]);
-            $venta->fechainicio=trim($_POST["prfechainicio"]);
             $venta->foto=trim($_POST["prfoto"]);
             $venta->pdfcontrato=trim($_POST["prpdfcontrato"]);
             $venta->pdfdni=trim($_POST["prpdfdni"]);
@@ -49,9 +31,8 @@
             $venta->pdfvoucher=trim($_POST["prpdfvoucher"]);
             $venta->pdfautorizacion=trim($_POST["prpdfautorizacion"]);
             $venta->vnt_otros_pdf=trim($_POST["prpdfotros"]);
-            $venta->observaciones=trim($_POST["probservaciones"]);
 
-            if($venta->update())
+            if($venta->update_documentos())
             {
                 print_json("0000", "Se actualizó la venta satisfactoriamente.", $venta->id_venta);
             }

@@ -167,6 +167,8 @@ export class VentasComponent implements OnInit {
   public totales_total_pendiente : number = 0 ;
   public totales_total_pagadas : number = 0 ;
 
+  public editar_documentos : boolean = false ;
+
   constructor(
     private _store : Store<EstadoSesion> ,
     private Servicio: VentaService,
@@ -471,6 +473,83 @@ export class VentasComponent implements OnInit {
         res['courier'].foto !="" ? this.papeles=URLIMAGENES.carpeta+'venta/'+res['courier'].foto : null;
       }
 
+      if (this.idventa) {
+
+        this.ActualizarOrdenCronograma(this.idventa,"fecha_vencimiento asc");
+
+        this.VentasForm.get('sucursal').setValue(res.nombre_sucursal);
+        this.VentasForm.get('contrato').setValue(res.talonario_contrato);
+        this.VentasForm.get('observaciones').setValue(res.observacion=="" ? "No hay observaciones" : res.observacion);
+        this.VentasForm.get('tipopago').setValue(res.tipo_pago);
+        this.ProductosComprados=res.productos.productos;
+
+        res.foto!="" ? this.foto=URLIMAGENES.carpeta+'venta/'+res.foto : null;
+        res.dni_pdf!="" ? this.dni=URLIMAGENES.carpeta+'venta/'+res.dni_pdf : null;
+        res.cip_pdf!="" ? this.cip=URLIMAGENES.carpeta+'venta/'+res.cip_pdf : null;
+        res.contrato_pdf!="" ? this.contrato=URLIMAGENES.carpeta+'venta/'+res.contrato_pdf : null;
+        res.voucher_pdf!="" ? this.transaccion=URLIMAGENES.carpeta+'venta/'+res.voucher_pdf : null;
+        res.planilla_pdf!="" ? this.planilla=URLIMAGENES.carpeta+'venta/'+res.planilla_pdf : null;
+        res.letra_pdf!="" ? this.letra=URLIMAGENES.carpeta+'venta/'+res.letra_pdf : null;
+        res.autorizacion_pdf!="" ? this.autorizacion=URLIMAGENES.carpeta+'venta/'+res.autorizacion_pdf : null;
+        res.otros_pdf!="" ? this.otros=URLIMAGENES.carpeta+'venta/'+res.otros_pdf : null;
+
+        if(res['garantes'].garantes.length>0){
+
+          res['garantes'].garantes.forEach((item,index)=>{
+  
+            let dni = item.dni_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.dni_pdf : null ;
+            let cip = item.cip_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.cip_pdf : null ;
+            let planilla = item.planilla_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.planilla_pdf : null ;
+            let letra = item.letra_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.letra_pdf : null ;
+            let voucher = item.voucher_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.voucher_pdf : null ;
+  
+            this.VentasForm['controls'].garantes['controls'][index].get('dni_pdf').setValue(dni);
+            this.VentasForm['controls'].garantes['controls'][index].get('cip_pdf').setValue(cip);
+            this.VentasForm['controls'].garantes['controls'][index].get('planilla_pdf').setValue(planilla);
+            this.VentasForm['controls'].garantes['controls'][index].get('letra_pdf').setValue(letra);
+            this.VentasForm['controls'].garantes['controls'][index].get('transaccion_pdf').setValue(voucher);
+          })
+        }
+      }
+
+      if ( this.editar_documentos ) {
+        this.foto_antiguo=res.foto;
+        res.foto!="" ? this.foto=URLIMAGENES.carpeta+'venta/'+res.foto : null;
+        res.foto!="" ? this.foto_editar=false : this.foto_editar=true;
+
+        this.dni_antiguo=res.dni_pdf;
+        res.dni_pdf!="" ? this.dni=URLIMAGENES.carpeta+'venta/'+res.dni_pdf : null;
+        res.dni_pdf!="" ? this.dni_editar=false : this.dni_editar=true;
+
+        this.cip_antiguo=res.cip_pdf;
+        res.cip_pdf!="" ? this.cip=URLIMAGENES.carpeta+'venta/'+res.cip_pdf : null;
+        res.cip_pdf!="" ? this.cip_editar=false : this.cip_editar=true;
+
+        this.contrato_antiguo=res.contrato_pdf;
+        res.contrato_pdf!="" ? this.contrato=URLIMAGENES.carpeta+'venta/'+res.contrato_pdf : null;
+        res.contrato_pdf!="" ? this.contrato_editar=false : this.contrato_editar=true;
+
+        this.transaccion_antiguo=res.voucher_pdf;
+        res.voucher_pdf!="" ? this.transaccion=URLIMAGENES.carpeta+'venta/'+res.voucher_pdf : null;
+        res.voucher_pdf!="" ? this.transaccion_editar=false : this.transaccion_editar=true;
+
+        this.planilla_antiguo=res.planilla_pdf;
+        res.planilla_pdf!="" ? this.planilla=URLIMAGENES.carpeta+'venta/'+res.planilla_pdf : null;
+        res.planilla_pdf!="" ? this.planilla_editar=false : this.planilla_editar=true;
+
+        this.letra_antiguo=res.letra_pdf;
+        res.letra_pdf!="" ? this.letra=URLIMAGENES.carpeta+'venta/'+res.letra_pdf : null;
+        res.letra_pdf!="" ? this.letra_editar=false : this.letra_editar=true;
+
+        this.autorizacion_antiguo=res.autorizacion_pdf;
+        res.autorizacion_pdf!="" ? this.autorizacion=URLIMAGENES.carpeta+'venta/'+res.autorizacion_pdf : null;
+        res.autorizacion_pdf!="" ? this.autorizacion_editar=false : this.autorizacion_editar=true;
+
+        this.otros_antiguo=res.otros_pdf;
+        res.otros_pdf!="" ? this.otros=URLIMAGENES.carpeta+'venta/'+res.otros_pdf : null;
+        res.otros_pdf!="" ? this.otros_editar=false : this.otros_editar=true;
+      }
+
       if (this.idventa_editar) {
 
         if( res['courier'].id ){
@@ -577,44 +656,6 @@ export class VentasComponent implements OnInit {
         }
       }
 
-      if (this.idventa) {
-
-        this.ActualizarOrdenCronograma(this.idventa,"fecha_vencimiento asc");
-
-        this.VentasForm.get('sucursal').setValue(res.nombre_sucursal);
-        this.VentasForm.get('contrato').setValue(res.talonario_contrato);
-        this.VentasForm.get('observaciones').setValue(res.observacion=="" ? "No hay observaciones" : res.observacion);
-        this.VentasForm.get('tipopago').setValue(res.tipo_pago);
-        this.ProductosComprados=res.productos.productos;
-
-        res.foto!="" ? this.foto=URLIMAGENES.carpeta+'venta/'+res.foto : null;
-        res.dni_pdf!="" ? this.dni=URLIMAGENES.carpeta+'venta/'+res.dni_pdf : null;
-        res.cip_pdf!="" ? this.cip=URLIMAGENES.carpeta+'venta/'+res.cip_pdf : null;
-        res.contrato_pdf!="" ? this.contrato=URLIMAGENES.carpeta+'venta/'+res.contrato_pdf : null;
-        res.voucher_pdf!="" ? this.transaccion=URLIMAGENES.carpeta+'venta/'+res.voucher_pdf : null;
-        res.planilla_pdf!="" ? this.planilla=URLIMAGENES.carpeta+'venta/'+res.planilla_pdf : null;
-        res.letra_pdf!="" ? this.letra=URLIMAGENES.carpeta+'venta/'+res.letra_pdf : null;
-        res.autorizacion_pdf!="" ? this.autorizacion=URLIMAGENES.carpeta+'venta/'+res.autorizacion_pdf : null;
-        res.otros_pdf!="" ? this.otros=URLIMAGENES.carpeta+'venta/'+res.otros_pdf : null;
-
-        if(res['garantes'].garantes.length>0){
-
-          res['garantes'].garantes.forEach((item,index)=>{
-  
-            let dni = item.dni_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.dni_pdf : null ;
-            let cip = item.cip_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.cip_pdf : null ;
-            let planilla = item.planilla_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.planilla_pdf : null ;
-            let letra = item.letra_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.letra_pdf : null ;
-            let voucher = item.voucher_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.voucher_pdf : null ;
-  
-            this.VentasForm['controls'].garantes['controls'][index].get('dni_pdf').setValue(dni);
-            this.VentasForm['controls'].garantes['controls'][index].get('cip_pdf').setValue(cip);
-            this.VentasForm['controls'].garantes['controls'][index].get('planilla_pdf').setValue(planilla);
-            this.VentasForm['controls'].garantes['controls'][index].get('letra_pdf').setValue(letra);
-            this.VentasForm['controls'].garantes['controls'][index].get('transaccion_pdf').setValue(voucher);
-          })
-        }
-      }
       this.sucursal=res.id_sucursal;
     })
   }
@@ -1173,7 +1214,7 @@ export class VentasComponent implements OnInit {
   }
 
   SubirFoto(evento){
-    if (!this.idventa_editar) {
+    if (!this.idventa_editar && !this.editar_documentos) {
       this.foto=evento.serverResponse.response.body.data;
     }else{
       this.foto_nuevo=evento.serverResponse.response.body.data;
@@ -1181,7 +1222,7 @@ export class VentasComponent implements OnInit {
   }
 
   SubirDNI(evento){
-    if (!this.idventa_editar) {
+    if (!this.idventa_editar && !this.editar_documentos) {
       this.dni=evento.serverResponse.response.body.data;
     }else{
       this.dni_nuevo=evento.serverResponse.response.body.data;
@@ -1189,7 +1230,7 @@ export class VentasComponent implements OnInit {
   }
 
   SubirCIP(evento){
-    if (!this.idventa_editar) {
+    if (!this.idventa_editar && !this.editar_documentos) {
       this.cip=evento.serverResponse.response.body.data;
     }else{
       this.cip_nuevo=evento.serverResponse.response.body.data;
@@ -1197,7 +1238,7 @@ export class VentasComponent implements OnInit {
   }
 
   SubirContrato(evento){
-    if (!this.idventa_editar) {
+    if (!this.idventa_editar && !this.editar_documentos) {
       this.contrato=evento.serverResponse.response.body.data;
     }else{
       this.contrato_nuevo=evento.serverResponse.response.body.data;
@@ -1206,7 +1247,7 @@ export class VentasComponent implements OnInit {
 
   SubirTransaccion(evento){
     console.log(evento);
-    if (!this.idventa_editar) {
+    if (!this.idventa_editar && !this.editar_documentos) {
       this.transaccion=evento.serverResponse.response.body.data;
     }else{
       this.transaccion_nuevo=evento.serverResponse.response.body.data;
@@ -1214,7 +1255,7 @@ export class VentasComponent implements OnInit {
   }
 
   SubirPlanilla(evento){
-    if (!this.idventa_editar) {
+    if (!this.idventa_editar && !this.editar_documentos) {
       this.planilla=evento.serverResponse.response.body.data;
     }else{
       this.planilla_nuevo=evento.serverResponse.response.body.data;
@@ -1222,7 +1263,7 @@ export class VentasComponent implements OnInit {
   }
 
   SubirLetra(evento){
-    if (!this.idventa_editar) {
+    if (!this.idventa_editar && !this.editar_documentos) {
       this.letra=evento.serverResponse.response.body.data;
     }else{
       this.letra_nuevo=evento.serverResponse.response.body.data;
@@ -1230,7 +1271,7 @@ export class VentasComponent implements OnInit {
   }
 
   SubirAutorizacion(evento){
-    if (!this.idventa_editar) {
+    if (!this.idventa_editar && !this.editar_documentos) {
       this.autorizacion=evento.serverResponse.response.body.data;
     }else{
       this.autorizacion_nuevo=evento.serverResponse.response.body.data;
@@ -1238,7 +1279,7 @@ export class VentasComponent implements OnInit {
   }
 
   SubirOtros(evento){
-    if (!this.idventa_editar) {
+    if (!this.idventa_editar && !this.editar_documentos) {
       this.otros=evento.serverResponse.response.body.data;
     }else{
       this.otros_nuevo=evento.serverResponse.response.body.data;
@@ -1546,11 +1587,19 @@ export class VentasComponent implements OnInit {
     if( tipo == 'ver' ) {
       this.idventa = this.id_venta ;
       this.idventa_editar = null ;
+      this.editar_documentos = false ;
+      this.Columnas= ['numero','tipo_pago','fecha_vencimiento', 'monto_cuota', 'monto_interes','monto_pagado', 'fecha_cancelacion','estado', 'opciones'];
+    }
+    if( tipo == 'editar_documentos' ) {
+      this.idventa = this.id_venta ;
+      this.idventa_editar = null ;
+      this.editar_documentos = true ;
       this.Columnas= ['numero','tipo_pago','fecha_vencimiento', 'monto_cuota', 'monto_interes','monto_pagado', 'fecha_cancelacion','estado', 'opciones'];
     }
     if( tipo == 'editar' ) {
       this.idventa = null ;
       this.idventa_editar = this.id_venta ;
+      this.editar_documentos = false ;
       this.Columnas= ['numero', 'fecha_vencimiento_ver', 'monto_cuota_ver'];
       this.ActualizarObservables() ;
     }
@@ -1614,7 +1663,7 @@ export class VentasComponent implements OnInit {
   }
 
   GuardarVenta(formulario) {
-
+    this.Cargando.next(true) ;
     let random=(new Date()).getTime()
     let identificador = this.identificador_documento ;
     let dni = this.VentasForm.value.dni ;
@@ -1663,7 +1712,7 @@ export class VentasComponent implements OnInit {
         resultado[8].mensaje,
         formulario.value.observaciones,
       ).subscribe(res=>{
-
+        
         // Se crean los productos y se generan los documentos en almacén para cuadrar
         if(!this.id_presupuesto){
           formulario.value.productos.forEach((item)=>{
@@ -1736,6 +1785,7 @@ export class VentasComponent implements OnInit {
         }
 
         setTimeout(()=>{
+          this.Cargando.next(false) ;
           this.router.navigate(['/ventas']);
   
           if(res['codigo']==0){
@@ -1750,6 +1800,7 @@ export class VentasComponent implements OnInit {
   }
 
   ActualizarVenta(formulario){
+    this.Cargando.next(true) ;
 
     let random=(new Date()).getTime();
     let identificador = random.toString() ;
@@ -1874,7 +1925,7 @@ export class VentasComponent implements OnInit {
 
         setTimeout(()=>{
           this.router.navigate(['/ventas']);
-  
+          this.Cargando.next(false) ;
           if(res['codigo']==0){
             this.Notificacion.Snack("Se editó la venta con éxito!","");
           }else{
@@ -1882,6 +1933,50 @@ export class VentasComponent implements OnInit {
           }
         }, 300)
 
+      })
+    })
+  }
+
+  GuardarNuevosDocumentos(){
+    this.Cargando.next(true) ;
+    let random=(new Date()).getTime();
+    let identificador = random.toString() ;
+    let dni = this.VentasForm.value.dni ;
+    let fecha = moment(this.VentasForm.value.fechaventa).format("DD_MM_YYYY") ;
+    
+    return forkJoin(
+      this.ServiciosGenerales.RenameFile(this.foto_nuevo, dni + '_FOTO_' + fecha, identificador, "venta"),
+      this.ServiciosGenerales.RenameFile(this.dni_nuevo, dni + '_DNI_' + fecha, identificador, "venta"),
+      this.ServiciosGenerales.RenameFile(this.cip_nuevo, dni + '_CIP_' + fecha, identificador, "venta"),
+      this.ServiciosGenerales.RenameFile(this.contrato_nuevo, dni + '_CONTRATO_' + fecha, identificador, "venta"),
+      this.ServiciosGenerales.RenameFile(this.transaccion_nuevo, dni + '_TRANSACCION_' + fecha, identificador, "venta"),
+      this.ServiciosGenerales.RenameFile(this.planilla_nuevo, dni + '_PLANILLA_' + fecha, identificador, "venta"),
+      this.ServiciosGenerales.RenameFile(this.letra_nuevo, dni + '_LETRA_' + fecha, identificador, "venta"),
+      this.ServiciosGenerales.RenameFile(this.autorizacion_nuevo, dni + '_AUTORIZACION_' + fecha, identificador, "venta"),
+      this.ServiciosGenerales.RenameFile(this.otros_nuevo, dni + '_OTROS_' + fecha, identificador, "venta"),
+      this.ServiciosGenerales.RenameFile(this.papeles_nuevo, dni + '_PAPELES_' + fecha, identificador, "venta")
+    ).subscribe(resultado=>{
+      this.Servicio.ActualizarVentaDocumentos(
+        this.idventa,
+        this.foto_editar ? resultado[0].mensaje : this.foto_antiguo,
+        this.dni_editar ? resultado[1].mensaje : this.dni_antiguo,
+        this.cip_editar ? resultado[2].mensaje : this.cip_antiguo,
+        this.contrato_editar ? resultado[3].mensaje : this.contrato_antiguo,
+        this.transaccion_editar ? resultado[4].mensaje : this.transaccion_antiguo,
+        this.planilla_editar ? resultado[5].mensaje : this.planilla_antiguo,
+        this.letra_editar ? resultado[6].mensaje : this.letra_antiguo,
+        this.autorizacion_editar ? resultado[7].mensaje : this.autorizacion_antiguo,
+        this.otros_editar ? resultado[8].mensaje : this.otros_antiguo,
+      ).subscribe(res=>{
+        setTimeout(()=>{
+          this.router.navigate(['/ventas']);
+          this.Cargando.next(false) ;
+          if(res['codigo']==0){
+            this.Notificacion.Snack("Se editó la venta con éxito!","");
+          }else{
+            this.Notificacion.Snack("Ocurrió un error al editar la venta","");
+          }
+        }, 300)
       })
     })
   }

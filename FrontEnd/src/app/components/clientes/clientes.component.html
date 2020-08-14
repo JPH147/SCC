@@ -87,8 +87,6 @@
     </div>
 
     <mat-table [dataSource]="ListadoCliente" class="mat-elevation-z8">
-
-
       <ng-container matColumnDef="numero">
         <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
         <mat-cell *matCellDef="let cliente"> {{cliente.numero}} </mat-cell>
@@ -137,12 +135,12 @@
               <button mat-icon-button matTooltip="Subir foto" color="primary" (click)="SubirImagen(cliente)"><mat-icon> add_a_photo </mat-icon></button>
             </ng-container>
             <ng-container *ngIf="permiso?.maestro_general?.clientes?.ver_ventas">
-              <button mat-icon-button matTooltip="Ver ventas" color="primary" (click)="VerVentas(cliente.id, cliente.nombre)">
+              <button mat-icon-button matTooltip="Ver ventas" color="primary" (click)="VerVentas(cliente.id, cliente.nombre, cliente)">
                 <mat-icon [matBadge]="cliente.total_transacciones" [matBadgeHidden]="cliente.total_transacciones == 0"
                 matBadgeSize="small" matBadgeColor="accent"> monetization_on </mat-icon></button>
             </ng-container>
             <ng-container *ngIf="permiso?.maestro_general?.clientes?.crear_observaciones">
-              <button mat-icon-button matTooltip="Ver observaciones" color="primary" (click)="AgregarObservaciones(cliente.id)"><mat-icon> assignment</mat-icon></button>
+              <button mat-icon-button matTooltip="Ver observaciones" color="primary" (click)="AgregarObservaciones(cliente)"><mat-icon> assignment</mat-icon></button>
             </ng-container>
             <ng-container *ngIf="permiso?.maestro_general?.clientes?.editar">
               <button mat-icon-button matTooltip="Editar" color="primary" (click)="Editar(cliente.id, false)"><mat-icon> edit </mat-icon></button>

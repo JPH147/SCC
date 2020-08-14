@@ -34,6 +34,11 @@
     </ng-container>
 
     <ng-container *ngIf="permiso?.ventas?.listado_ventas?.editar">
+      <button mat-mini-fab type="button" [color]="editar_documentos ? 'accent' : 'primary'" (click)="CambiarTipoVista('editar_documentos')" class="derecha"
+        [disabled]="(Cargando | async)" matTooltip="Editar documentos adjuntos"><mat-icon>attach_file</mat-icon></button>
+    </ng-container>
+
+    <ng-container *ngIf="permiso?.ventas?.listado_ventas?.editar">
       <ng-container *ngIf="idventa">
         <button mat-mini-fab type="button" color="primary" (click)="CambiarTipoVista('editar')" class="derecha"
           [disabled]="(Cargando|async) || monto_pagado>0 || estado!=1 || numero_procesos>0" matTooltip="Editar documento"><mat-icon>edit</mat-icon></button>
@@ -765,7 +770,7 @@
         DOCUMENTOS ADJUNTOS
       </mat-card-subtitle>
 
-      <mat-grid-list cols=9 rowHeight="100px" *ngIf="!idventa && !idventa_editar">
+      <mat-grid-list cols=9 rowHeight="100px" *ngIf="!idventa && !idventa_editar && !editar_documentos">
 
         <mat-grid-tile>
           <image-upload
@@ -876,7 +881,7 @@
         </mat-grid-tile>
       </mat-grid-list>
 
-      <mat-grid-list cols=9 rowHeight="60px" *ngIf="idventa_editar">
+      <mat-grid-list cols=9 rowHeight="60px" *ngIf="idventa_editar || editar_documentos">
 
         <mat-grid-tile>
           <button mat-icon-button color="primary" (click)="EditarFoto()" [disabled]="!foto" *ngIf="!foto_editar">
@@ -960,7 +965,7 @@
         </mat-grid-tile>
       </mat-grid-list>
 
-      <mat-grid-list cols=9 rowHeight="20px" *ngIf="idventa || idventa_editar">
+      <mat-grid-list cols=9 rowHeight="20px" *ngIf="idventa || idventa_editar || editar_documentos">
 
         <mat-grid-tile>
           Foto
@@ -1000,7 +1005,7 @@
 
       </mat-grid-list>
 
-      <mat-grid-list cols=9 rowHeight="60px" *ngIf="idventa || idventa_editar">
+      <mat-grid-list cols=9 rowHeight="60px" *ngIf="idventa || idventa_editar || editar_documentos">
 
         <mat-grid-tile>
 
@@ -1166,6 +1171,12 @@
         </mat-grid-tile>
       </mat-grid-list>
 
+      <mat-grid-list cols=1 rowHeight="50px" *ngIf="editar_documentos">
+        <mat-grid-tile>
+          <button mat-raised-button type="button" color="primary"
+            [disabled]="Cargando | async" (click)="GuardarNuevosDocumentos()"> Actualizar documentos </button>
+        </mat-grid-tile>
+      </mat-grid-list>
     </div>
 
     <!-- Cronograma -->

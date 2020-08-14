@@ -563,4 +563,47 @@ export class ClienteService {
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     return this.http.post(this.url + 'cliente/verificar-pagos.php', params, {headers: headers});
   }
+
+  // ObtenerInformacionPlanillaPNP(
+  //   codofin : string ,
+  //   dni : string
+  // ) {
+  //   let ruta = "https://web.policia.gob.pe/direcfin/planillavirtual/login.aspx" ;
+
+  //   let params = new HttpParams()
+  //     .set('ctl00$ContentPlaceHolder1$TxtCodofin', codofin)
+  //     .set('ctl00$ContentPlaceHolder1$TxtDni', dni)
+  //     .set('__LASTFOCUS','')
+  //     .set('__EVENTTARGET','')
+  //     .set('__EVENTARGUMENT','')
+  //     .set('__VIEWSTATE', "/wEPDwULLTE4MjY2NTIwOTRkGAEFHl9fQ29udHJvbHNSZXF1aXJlUG9zdEJhY2tLZXlfXxYBBSRjdGwwMCRDb250ZW50UGxhY2VIb2xkZXIxJENtZEFjZXB0YXKtvbEi+t6PaIR9GdtJFbp/qrG/nfKonZ50GyQNiOsp2w==")
+  //     .set('__VIEWSTATEGENERATOR', "D902F79F")
+  //     .set('__EVENTVALIDATION', "/wEdAAR/TYl0FlT3s+s0J3IFwBNbYcNlAiQTQxy8nNiEDKCFKbDQsk7kPEnOCDnVntnorHTdll5ONmnTUQcgAElqwGadKhWPU0AL+Kv/fDfboEMUYaX+c723BT660knFUE9d/54=")
+  //     .set('ContentPlaceHolder1', "57")
+  //     .set('ContentPlaceHolder1', "16") ;
+
+  //   return this.http.post(ruta, params, { responseType: 'text' })
+  // }
+
+  ObtenerInformacionPlanillaPNP2(
+    codofin : string ,
+    dni : string
+  ) {
+    
+    // let params = new HttpParams()
+    // .set('prcodofin', codofin)
+    // .set('prdni', dni) ;
+
+    let ruta = this.url + 'otros/planilla-policia.php' +
+      '?prcodofin='+codofin+'&prdni='+dni ;
+
+    window.open(ruta, "_blank") ;
+
+    // return this.http.post(ruta, params, { responseType: 'text' })
+    // .pipe(
+    //   map(pagina =>{
+    //     window.open(pagina, "_blank") ;
+    //   })
+    // )
+  }
 }

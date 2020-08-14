@@ -22,22 +22,6 @@
         {
 
             $credito->id_credito=trim($_POST["prcredito"]);
-            $credito->sucursal=trim($_POST["prsucursal"]);
-            $credito->fecha_credito=trim($_POST["prfecha"]);
-            $credito->autorizador=trim($_POST["prautorizador"]);
-            $credito->vendedor=trim($_POST["prvendedor"]);
-            $credito->cliente=trim($_POST["prcliente"]);
-            $credito->cliente_direccion=trim($_POST["prclientedireccion"]);
-            $credito->cliente_telefono=trim($_POST["prclientetelefono"]);
-            $credito->cliente_cargo=trim($_POST["prclientecargo"]);
-            $credito->cliente_trabajo=trim($_POST["prclientetrabajo"]);
-            $credito->tipo_pago=trim($_POST["prtipopago"]);
-            $credito->fecha_pago=trim($_POST["prfechapago"]);
-            $credito->interes_diario=!empty($_POST["printeresdiario"]) ? trim($_POST["printeresdiario"]) : 0;
-            $credito->interes=trim($_POST["printeres"]);
-            $credito->capital=trim($_POST["prcapital"]);
-            $credito->cuotas=trim($_POST["prcuotas"]);
-            $credito->total=trim($_POST["prtotal"]);
             $credito->pdf_foto=trim($_POST["prpdffoto"]);
             $credito->pdf_dni=trim($_POST["prpdfdni"]);
             $credito->pdf_cip=trim($_POST["prpdfcip"]);
@@ -52,9 +36,8 @@
             $credito->pdf_letra=trim($_POST["prpdfletra"]);
             $credito->pdf_ddjj=trim($_POST["prpdfddjj"]);
             $credito->pdf_otros=trim($_POST["prpdfotros"]);
-            $credito->observacion=trim($_POST["probservacion"]);
 
-            if($credito->actualizar())
+            if($credito->actualizar_documentos())
             {
                 print_json("0000", "Se actualizó el credito satisfactoriamente.", $credito->id_credito);
             }

@@ -1,6 +1,10 @@
 <mat-card class="card">
   <mat-toolbar color="primary">
-    <mat-toolbar-row>Ventas a {{data.nombre}} </mat-toolbar-row>
+    <mat-toolbar-row>
+      Ventas a {{data.nombre}}
+      <!-- <span class="espacio"></span>
+      <button mat-button type="button" (click)="VerPlanilla()" *ngIf="data.cliente.id_sede == 3"> Ver planilla </button> -->
+    </mat-toolbar-row>
   </mat-toolbar>
 
 	<mat-card-content>
@@ -45,52 +49,6 @@
     <div class = "spinner-container" *ngIf = "ListadoVentas.Cargando| async">
       <mat-spinner></mat-spinner>
     </div>
-
-    <!-- <mat-table [dataSource]="ListadoVentas" class="mat-elevation-z8">
-
-      <ng-container matColumnDef="documento">
-        <mat-header-cell *matHeaderCellDef> Documento </mat-header-cell>
-        <mat-cell *matCellDef="let transaccion"> {{transaccion.documento}}  </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="tipo">
-        <mat-header-cell *matHeaderCellDef> Tipo </mat-header-cell>
-        <mat-cell *matCellDef="let transaccion"> {{transaccion.tipo}}  </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="fecha">
-        <mat-header-cell *matHeaderCellDef> Fecha </mat-header-cell>
-        <mat-cell *matCellDef="let transaccion"> {{transaccion.fecha | date:"dd/MM/yyyy"}} </mat-cell>
-	    </ng-container>
-
-      <ng-container matColumnDef="total">
-        <mat-header-cell *matHeaderCellDef> Total </mat-header-cell>
-        <mat-cell *matCellDef="let transaccion"> {{transaccion.total | currency:'S/.'}} </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="estado">
-        <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
-        <mat-cell *matCellDef="let transaccion"> {{transaccion.estado}} ({{transaccion.cuotas_pagadas}}/{{transaccion.total_cuotas}}) </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="opciones">
-        <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
-        <mat-cell *matCellDef="let transaccion">
-          <ng-container *ngIf="
-            (transaccion.id_tipo==1 && permiso.creditos.afiliaciones.general) ||
-            (transaccion.id_tipo==2 && permiso.creditos.listado_creditos.general) ||
-            (transaccion.id_tipo==3 && permiso.ventas.listado_ventas.general) ||
-            (transaccion.id_tipo==4 && permiso.ventas.salida_ventas.general)
-          ">
-          </ng-container>
-          <button mat-icon-button matTooltip="Ver detalle" color="primary" (click)="VerVenta(transaccion)"><mat-icon> visibility </mat-icon></button>
-        </mat-cell>
-      </ng-container>
-
-      <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: Columnas;"></mat-row>
-    </mat-table>
-    <mat-paginator [length]="ListadoVentas.TotalResultados | async" [pageSize]="5"></mat-paginator> -->
 
     <div class="venta-contenedor">
       <div class="venta-contenido" *ngFor="let transaccion of (ListadoVentas.Informacion | async)">
