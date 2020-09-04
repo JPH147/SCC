@@ -1,31 +1,45 @@
 <mat-card class="card">
   <mat-toolbar color="primary">
-    <mat-toolbar-row> Agregar pagos </mat-toolbar-row>
+    <mat-toolbar-row>
+      Agregar pagos
+      <span class="espacio"></span>
+      Total de pagos : {{ total_pagos | currency:'S/.' }}
+    </mat-toolbar-row>
   </mat-toolbar>
 
   <div class = "spinner-container-emergente" *ngIf = "Cargando | async">
     <mat-spinner></mat-spinner>
   </div>
 
-  <mat-card-content>
-    <mat-grid-list cols="1" rowHeight="50px">
-      <mat-grid-tile colspan="1">
-        <button mat-mini-fab color="primary" (click)="AgregarPagoForm()" matTooltip="Agregar aval" type="button"><mat-icon>add</mat-icon></button>
-      </mat-grid-tile>
-    </mat-grid-list>
+  <mat-grid-list cols="1" rowHeight="70px">
+    <mat-grid-tile colspan="1">
+      <button mat-mini-fab color="primary" (click)="CrearPago()" matTooltip="Agregar pago" class="boton-agregar"
+        type="button"><mat-icon>add</mat-icon></button>
+    </mat-grid-tile>
+  </mat-grid-list>
 
+  <mat-card-content>
     <form [formGroup]="PagosForm">
-      <div formArrayName="PagoArrayForm" *ngFor="let pago of PagosForm['controls'].PagoArrayForm['controls']; let i = index">
+      <div formArrayName="PagoArrayForm" *ngFor="let Pago of PagosForm['controls'].PagoArrayForm['controls']; let i = index">
         <div [formGroupName]="i">
-          <mat-grid-list cols="5" rowHeight="70px">
+          <mat-grid-list cols="6" rowHeight="70px">
             <mat-grid-tile>
-              <mat-form-field class="columnas-1">
-                <input matInput [matDatepicker]="picker" placeholder="Fecha de pago" formControlName="fecha_pago">
+              <mat-form-field class="columnas-1" appearance="fill">
+                <mat-label> Fecha de pago </mat-label>
+                <input matInput [matDatepicker]="picker" placeholder="Fecha de pago" formControlName="fecha_pago" readonly>
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
+                <mat-datepicker #picker [disabled]="Pago.get('tipo').value==1"></mat-datepicker>
              </mat-form-field>
             </mat-grid-tile>
-      
+  
+            <mat-grid-tile>
+              <mat-form-field class="columnas-1" appearance="fill">
+                <mat-label> Monto de la cuota </mat-label>
+                <input matInput formControlName="monto_cuota" placeholder="Monto de la cuota" readonly>
+                <mat-error> Debe ingresar un número </mat-error>
+              </mat-form-field>
+            </mat-grid-tile>
+
             <mat-grid-tile>
               <mat-form-field class="columnas-1">
                 <input matInput formControlName="pago_directo" placeholder="Pago directo">
@@ -48,7 +62,7 @@
             </mat-grid-tile>
                         
             <mat-grid-tile>
-              <button type="button" mat-icon-button color="primary" (click)="EliminarPago(i)"> <mat-icon> delete </mat-icon>  </button>
+              <button type="button" mat-icon-button color="primary" [disabled]="Pago.get('tipo').value==1" (click)="EliminarPago(i)"> <mat-icon> delete </mat-icon>  </button>
             </mat-grid-tile>
           </mat-grid-list>
         </div>
@@ -58,8 +72,12 @@
 
   <mat-card-actions>
     <mat-grid-list cols="1" rowHeight="50px">
+      <mat-grid-tile *ngIf="data.pendiente < total_pagos">
+        <mat-error> El total de pagos ({{total_pagos}}) es mayor que el monto pendiente ({{data.pendiente}}) </mat-error>
+      </mat-grid-tile>
       <mat-grid-tile colspan="1">
-        <button mat-raised-button color="primary" (click)="Guardar()" type="button" [disabled]="PagosForm.invalid"> Guardar </button>
+        <button mat-raised-button color="primary" (click)="Guardar()" type="button"
+          [disabled]="PagosForm.invalid || data.pendiente < total_pagos || (Cargando | async)"> Guardar </button>
       </mat-grid-tile>
     </mat-grid-list>
   </mat-card-actions>

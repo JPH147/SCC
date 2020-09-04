@@ -35,6 +35,7 @@
             $credito->pdf_compromiso=trim($_POST["prpdfcompromiso"]);
             $credito->pdf_letra=trim($_POST["prpdfletra"]);
             $credito->pdf_ddjj=trim($_POST["prpdfddjj"]);
+            $credito->pdf_oficio=trim($_POST["prpdfoficio"]);
             $credito->pdf_otros=trim($_POST["prpdfotros"]);
 
             if($credito->actualizar_documentos())

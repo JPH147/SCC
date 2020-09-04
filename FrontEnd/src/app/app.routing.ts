@@ -146,7 +146,7 @@ export const appRoutes: Routes = [
   {path: 'usuarios', component: UsuariosComponent},
   {path: 'configuracion', component: CooperativaDireccionesComponent},
   
-  {path: 'prueba', component: VentasComponent},
+  {path: 'prueba', component: EvaluacionExpressComponent},
 ];
 
 

@@ -2,7 +2,7 @@
 
   <!-- Encabezado -->
   <mat-card-title>
-    <div class = "tituloProd"> Listado de procesos judiciales </div>
+    <div class = "tituloProd"> Listado de procesos judiciales ({{total_procesos}}) </div>
   </mat-card-title>
 
   <!-- Filtros Productos, tipo  Marca Modelo -->
@@ -127,6 +127,7 @@
                   <ng-container *ngIf="proceso.id_tipo_documento==3"> <mat-icon class="icono-rojo" matTooltip="Se emitió una resolución"> error </mat-icon> </ng-container>
                   <ng-container *ngIf="proceso.id_tipo_documento==4"> <mat-icon class="icono-verde" matTooltip="Se emitió el oficio"> check_circle </mat-icon> </ng-container>
                   <ng-container *ngIf="proceso.id_tipo_documento==5"> <mat-icon class="icono-rojo" matTooltip="Se solicitó devolución"> cancel </mat-icon> </ng-container>
+                  <ng-container *ngIf="proceso.id_tipo_documento==6"> <mat-icon class="icono-anaranjado" matTooltip="Se emitió una nota"> info </mat-icon> </ng-container>
                 </mat-cell>
               </ng-container>
         

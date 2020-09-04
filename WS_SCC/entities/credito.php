@@ -60,6 +60,7 @@ Class Creditos{
     public $pdf_compromiso;
     public $pdf_letra;
     public $pdf_ddjj;
+    public $pdf_oficio;
     public $pdf_otros;
     public $observacion;
     public $monto_total;
@@ -215,6 +216,7 @@ Class Creditos{
         $this->pdf_compromiso = $row['pdf_compromiso'];
         $this->pdf_letra = $row['pdf_letra'];
         $this->pdf_ddjj = $row['pdf_ddjj'];
+        $this->pdf_oficio=$row['pdf_oficio'];
         $this->pdf_otros = $row['pdf_otros'];
         $this->observaciones = $row['observaciones'];
         $this->id_credito_refinanciado = $row['id_credito_refinanciado'];
@@ -440,6 +442,7 @@ Class Creditos{
             :prpdfcompromiso,
             :prpdfletra,
             :prpdfddjj,
+            :prpdfoficio,
             :pdfotros,
             :probservacion
         )";
@@ -478,6 +481,7 @@ Class Creditos{
         $result->bindParam(":prpdfcompromiso", $this->pdf_compromiso);
         $result->bindParam(":prpdfletra", $this->pdf_letra);
         $result->bindParam(":prpdfddjj", $this->pdf_ddjj);
+        $result->bindParam(":prpdfoficio", $this->pdf_oficio);        
         $result->bindParam(":pdfotros", $this->pdf_otros);
         $result->bindParam(":probservacion", $this->observacion);
 
@@ -513,6 +517,7 @@ Class Creditos{
         $this->pdf_compromiso=htmlspecialchars(strip_tags($this->pdf_compromiso));
         $this->pdf_letra=htmlspecialchars(strip_tags($this->pdf_letra));
         $this->pdf_ddjj=htmlspecialchars(strip_tags($this->pdf_ddjj));
+        $this->pdf_oficio=htmlspecialchars(strip_tags($this->pdf_oficio));
         $this->pdf_otros=htmlspecialchars(strip_tags($this->pdf_otros));
         $this->observacion=htmlspecialchars(strip_tags($this->observacion));
 
@@ -560,6 +565,7 @@ Class Creditos{
             :prpdfcompromiso,
             :prpdfletra,
             :prpdfddjj,
+            :prpdfoficio,
             :prpdfotros,
             :probservacion
         )";
@@ -596,6 +602,7 @@ Class Creditos{
         $result->bindParam(":prpdfcompromiso", $this->pdf_compromiso);
         $result->bindParam(":prpdfletra", $this->pdf_letra);
         $result->bindParam(":prpdfddjj", $this->pdf_ddjj);
+        $result->bindParam(":prpdfoficio", $this->pdf_oficio);
         $result->bindParam(":prpdfotros", $this->pdf_otros);
         $result->bindParam(":probservacion", $this->observacion);
 
@@ -629,6 +636,7 @@ Class Creditos{
         $this->pdf_compromiso=htmlspecialchars(strip_tags($this->pdf_compromiso));
         $this->pdf_letra=htmlspecialchars(strip_tags($this->pdf_letra));
         $this->pdf_ddjj=htmlspecialchars(strip_tags($this->pdf_ddjj));
+        $this->pdf_oficio=htmlspecialchars(strip_tags($this->pdf_oficio));
         $this->pdf_otros=htmlspecialchars(strip_tags($this->pdf_otros));
         $this->observacion=htmlspecialchars(strip_tags($this->observacion));
 
@@ -661,6 +669,7 @@ Class Creditos{
             :prpdfcompromiso,
             :prpdfletra,
             :prpdfddjj,
+            :prpdfoficio,
             :prpdfotros
         )";
 
@@ -680,6 +689,7 @@ Class Creditos{
         $result->bindParam(":prpdfcompromiso", $this->pdf_compromiso);
         $result->bindParam(":prpdfletra", $this->pdf_letra);
         $result->bindParam(":prpdfddjj", $this->pdf_ddjj);
+        $result->bindParam(":prpdfoficio", $this->pdf_oficio);
         $result->bindParam(":prpdfotros", $this->pdf_otros);
 
         $this->id_credito=htmlspecialchars(strip_tags($this->id_credito));
@@ -696,6 +706,7 @@ Class Creditos{
         $this->pdf_compromiso=htmlspecialchars(strip_tags($this->pdf_compromiso));
         $this->pdf_letra=htmlspecialchars(strip_tags($this->pdf_letra));
         $this->pdf_ddjj=htmlspecialchars(strip_tags($this->pdf_ddjj));
+        $this->pdf_oficio=htmlspecialchars(strip_tags($this->pdf_oficio));
         $this->pdf_otros=htmlspecialchars(strip_tags($this->pdf_otros));
 
         if($result->execute())

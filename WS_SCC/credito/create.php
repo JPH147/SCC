@@ -36,8 +36,8 @@
             $credito->interes_diario=!empty($_POST["printeresdiario"]) ? trim($_POST["printeresdiario"]) : 0;
             $credito->interes=trim($_POST["printeres"]);
             $credito->capital=trim($_POST["prcapital"]);
-            $credito->cuotas=trim($_POST["prcuotas"]);
-            $credito->total=trim($_POST["prtotal"]);
+            $credito->cuotas= trim($_POST["prcuotas"]);
+            $credito->total= trim($_POST["prtotal"]);
             $credito->pdf_foto=trim($_POST["prpdffoto"]);
             $credito->pdf_dni=trim($_POST["prpdfdni"]);
             $credito->pdf_cip=trim($_POST["prpdfcip"]);
@@ -51,6 +51,7 @@
             $credito->pdf_compromiso=trim($_POST["prpdfcompromiso"]);
             $credito->pdf_letra=trim($_POST["prpdfletra"]);
             $credito->pdf_ddjj=trim($_POST["prpdfddjj"]);
+            $credito->pdf_oficio=trim($_POST["prpdfoficio"]);
             $credito->pdf_otros=trim($_POST["prpdfotros"]);
             $credito->observacion=trim($_POST["probservacion"]);
 

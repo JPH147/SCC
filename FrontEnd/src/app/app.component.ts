@@ -55,7 +55,7 @@ export class AppComponent {
         this._store.dispatch(asignarPermisos) ;
       })
 
-      this.router.navigate(['inicio']) ;
+      // this.router.navigate(['inicio']) ;
     } else {
       this.router.navigate(['login']) ;
       this.estado = false ;

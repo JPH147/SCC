@@ -40,6 +40,7 @@ export class CobranzaJudicialListarComponent implements OnInit {
   public Distritos : Array<any> = [];
 
   public permiso : Rol ;
+  public total_procesos : number = 0 ;
 
   constructor(
     private _store : Store<EstadoSesion> ,
@@ -97,11 +98,14 @@ export class CobranzaJudicialListarComponent implements OnInit {
   EncontrarFecha(){
     this._judicial.ObtenerFechaAntigua().subscribe(res=>{
       this.fecha_inicio = res ;
-      this.ListadoProcesos.CargarDistritos("","","","","",this.fecha_inicio,this.fecha_fin,-1,"fecha_inicio desc");
+      this.ListadoProcesos.CargarDistritos("","","","","",this.fecha_inicio,this.fecha_fin,-1,"fecha_inicio desc") ;
+      this.CalcularTotal() ;
     })
   }
 
   CargarData() {
+    this.CalcularTotal() ;
+
     this.ListadoProcesos.CargarDistritos(
       this.FiltroDistrito.nativeElement.value,
       "",
@@ -135,6 +139,16 @@ export class CobranzaJudicialListarComponent implements OnInit {
         this.Notificaciones.Snack("Ocurrió un error al crear el traslado.","")
       }
     })
+  }
+
+  CalcularTotal() {
+    this._judicial.ContarProcesosJudiciales(
+      this.fecha_inicio,
+      this.fecha_fin,
+      this.FiltroEstado.value,
+    ).subscribe( total =>{
+      this.total_procesos = total ;
+    } )
   }
 
   ListarDistritos(){

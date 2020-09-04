@@ -226,6 +226,12 @@ import { AfiliacionesComponent } from './components/afiliaciones/afiliaciones.co
 import { VentanaRelacionadosComponent } from './components/clientes/ventana-relacionados/ventana-relacionados.component';
 import { VentanaLlamadasComponent } from './components/clientes/ventana-relacionados/ventana-llamadas/ventana-llamadas.component';
 import { VentanaGenerarPagoTransaccionComponent } from './components/cobranzas-listar/ventana-generar-pago-transaccion/ventana-generar-pago-transaccion.component';
+import { DocumentoTransaccionComponent } from './components/plantillas/documento-transaccion/documento-transaccion.component';
+import { DocumentoAutorizacionComponent } from './components/plantillas/documento-autorizacion/documento-autorizacion.component';
+import { DocumentoDeclaracionComponent } from './components/plantillas/documento-declaracion/documento-declaracion.component';
+import { DocumentoTarjetaComponent } from './components/plantillas/documento-tarjeta/documento-tarjeta.component';
+import { DocumentoCompromisoComponent } from './components/plantillas/documento-compromiso/documento-compromiso.component';
+import { DocumentoCartaComponent } from './components/plantillas/documento-carta/documento-carta.component';
 
 export const CUSTOM_DATE_FORMAT = {
   parse: {
@@ -464,7 +470,13 @@ export const CUSTOM_DATE_FORMAT = {
     AfiliacionesComponent,
     VentanaRelacionadosComponent,
     VentanaLlamadasComponent,
-    VentanaGenerarPagoTransaccionComponent
+    VentanaGenerarPagoTransaccionComponent,
+    DocumentoTransaccionComponent,
+    DocumentoAutorizacionComponent,
+    DocumentoDeclaracionComponent,
+    DocumentoTarjetaComponent,
+    DocumentoCompromisoComponent,
+    DocumentoCartaComponent
    ],
   entryComponents: [
     AppComponent,

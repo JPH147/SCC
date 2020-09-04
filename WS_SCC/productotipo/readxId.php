@@ -21,10 +21,10 @@
 	    $productotipo->readxId();
 
 	    $producto_list = array(
-	        "id"=>$productotipo->id_tipo_producto,
-            "nombre"=>$productotipo->tprd_nombre,
-            "idunidad"=>$productotipo->idunidadmedida,
-
+				"id"=>$productotipo->id_tipo_producto,
+				"nombre"=>$productotipo->tprd_nombre,
+				"idunidad"=>$productotipo->idunidadmedida,
+				"tiene_serie"=>$productotipo->tiene_serie,
 	    );
 
 	    if(trim($productotipo->id_tipo_producto)!= null){

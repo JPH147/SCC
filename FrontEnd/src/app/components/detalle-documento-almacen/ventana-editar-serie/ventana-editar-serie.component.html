@@ -25,7 +25,7 @@
         </mat-form-field>
       </mat-grid-tile>
 
-      <mat-grid-tile>
+      <mat-grid-tile [hidden]="!hay_serie">
         <mat-form-field class="columnas-1">
           <input matInput placeholder="Serie" [(ngModel)]="this.Informacion.serie" #InputSerie>
         </mat-form-field>

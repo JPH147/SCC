@@ -7,6 +7,7 @@ class Tipo_Producto{
 	public $id_tipo_producto;
 	public $tprd_nombre;
 	public $und_nombre;
+	public $tiene_serie;
 	public $numero_pagina;
 	public $total_pagina;
 	
@@ -40,7 +41,8 @@ class Tipo_Producto{
 				// "numero"=>$contador,
 				"id"=>$id_tipo_producto,
 				"nombre"=>$tprd_nombre,
-				"unidad_medida"=>$und_nombre
+				"unidad_medida"=>$und_nombre,
+				"tiene_serie"=>$tiene_serie,
 			);
 			array_push($tipo_producto_list["tipo_productos"],$tipo_producto_fila);
 		}
@@ -74,7 +76,8 @@ class Tipo_Producto{
 				"numero"=>$contador,
 				"id"=>$id_tipo_producto,
 				"nombre"=>$tprd_nombre,
-				"unidad_medida"=>$und_nombre
+				"unidad_medida"=>$und_nombre,
+				"tiene_serie"=>$tiene_serie,
 			);
 			array_push($tipo_producto_list["tipo_productos"],$tipo_producto_fila);
 		}
@@ -132,12 +135,13 @@ class Tipo_Producto{
 
 	function create() {
 
-        $query = "CALL sp_creartipoproducto (:prnombre, :idunidadmedida)";
+        $query = "CALL sp_creartipoproducto (:prnombre, :prtieneserie,:idunidadmedida)";
         $result = $this->conn->prepare($query);
 		$this->tprd_nombre = htmlspecialchars(strip_tags($this->tprd_nombre));
         $this->idunidadmedida = htmlspecialchars(strip_tags($this->idunidadmedida));
 
-		$result->bindParam(":prnombre",$this->tprd_nombre);
+				$result->bindParam(":prnombre",$this->tprd_nombre);
+        $result->bindParam(":prtieneserie", $this->tiene_serie);
         $result->bindParam(":idunidadmedida", $this->idunidadmedida);
 
         if($result->execute())
@@ -151,16 +155,18 @@ class Tipo_Producto{
 	}
 	
 	function update() {
-        $query = "call sp_actualizartipoproducto(:id, :nombre, :idunidad)";
+        $query = "call sp_actualizartipoproducto(:id, :nombre, :prtieneserie,:idunidad)";
         
         $result = $this->conn->prepare($query);
 
         $result->bindParam(":id", $this->id_tipo_producto);
         $result->bindParam(":nombre", $this->tprd_nombre);
+        $result->bindParam(":prtieneserie", $this->tiene_serie);
         $result->bindParam(":idunidad", $this->idunidadmedida);
 
         $this->id_tipo_producto=htmlspecialchars(strip_tags($this->id_tipo_producto));
-        $this->tprd_nombre=htmlspecialchars(strip_tags($this->tprd_nombre));
+				$this->tprd_nombre=htmlspecialchars(strip_tags($this->tprd_nombre));
+				$this->tiene_serie=htmlspecialchars(strip_tags($this->tiene_serie));
         $this->idunidadmedida=htmlspecialchars(strip_tags($this->idunidadmedida));
 
         if($result->execute())
@@ -187,6 +193,7 @@ class Tipo_Producto{
         
         $this->id_tipo_producto=$row['id'];
         $this->tprd_nombre=$row['nombre'];
+        $this->tiene_serie=$row['tiene_serie'];
         $this->idunidadmedida=$row['idunidad'];
 	}
 	

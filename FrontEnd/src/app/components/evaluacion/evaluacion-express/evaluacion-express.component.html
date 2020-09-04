@@ -58,9 +58,16 @@
             </mat-form-field>
           </mat-grid-tile>
 
-          <mat-grid-tile>
-            <mat-checkbox color="primary" [(ngModel)]="interes_por_dia" [ngModelOptions]="{standalone:true}" (change)="CambioInteresDiario($event)" [disabled]="interes_diario_deshabilitado">Interés por día</mat-checkbox>
-          </mat-grid-tile>
+          <ng-container>
+            <mat-grid-tile *ngIf="tipo == 1">
+              <mat-checkbox color="primary" [(ngModel)]="interes_por_dia" [ngModelOptions]="{standalone:true}" (change)="CambioInteresDiario($event)" [disabled]="interes_diario_deshabilitado">Interés por día</mat-checkbox>
+            </mat-grid-tile>
+
+            <mat-grid-tile *ngIf="tipo == 2">
+              <button mat-mini-fab color="primary" (click)="SeleccionarSeries()" matTooltip="Seleccionar productos" type="button">
+                <mat-icon>playlist_add</mat-icon></button>
+            </mat-grid-tile>
+          </ng-container>
     
           <mat-grid-tile>
             <mat-form-field>
@@ -72,6 +79,32 @@
         </mat-grid-list>
       </div>
 
+      <!-- Productos -->
+      <div class="seccion" *ngIf="tipo == 2 && Series.length > 0">
+
+        <mat-card-subtitle class="titulo-seccion especial">
+          Productos
+        </mat-card-subtitle>
+
+        <div formArrayName="productos" *ngFor="let producto of ExpressForm['controls'].productos['controls']; let i = index">
+          <div [formGroupName]="i">
+            <mat-grid-list cols=3 rowHeight="70px">
+              <mat-grid-tile colspan=2>
+                <mat-form-field class="columnas-2">
+                  <input matInput placeholder="Producto" formControlName="descripcion" readonly>
+                </mat-form-field>
+              </mat-grid-tile>
+    
+              <mat-grid-tile>
+                <mat-form-field class="columnas-1">
+                  <input matInput placeholder="IMEI" formControlName="serie" readonly>
+               </mat-form-field>
+              </mat-grid-tile>
+            </mat-grid-list>
+          </div>
+        </div>
+      </div>
+      
       <!-- Información adicional -->
       <div class="seccion">
 
@@ -154,29 +187,6 @@
 
   <mat-card-actions>
 
-    <mat-grid-list cols=1 rowHeight=40px *ngIf="InformacionForm.value.nombre">
-      <!-- <mat-grid-tile *ngIf="!InformacionForm.value.email">
-        <mat-error> 
-          <strong>Falta el email: </strong> No se pueden generar la autorización ni la transacción.
-        </mat-error>
-      </mat-grid-tile> -->
-      <!-- <mat-grid-tile *ngIf="!InformacionForm.value.casilla">
-        <mat-error>
-          <strong>Falta la casilla: </strong>No se puede generar la transacción.
-        </mat-error>
-      </mat-grid-tile> -->
-      <!-- <mat-grid-tile *ngIf="!InformacionForm.value.codigo">
-        <mat-error>
-          <strong>Falta el código: </strong>No se puede generar la autorización.
-        </mat-error>
-      </mat-grid-tile> -->
-      <!-- <mat-grid-tile *ngIf="!InformacionForm.value.cuenta_numero">
-        <mat-error>
-          <strong>Falta la cuenta: </strong>No se puede generar la tarjeta de socio.
-        </mat-error>
-      </mat-grid-tile> -->
-    </mat-grid-list>
-
     <mat-grid-list cols=1 rowHeight=40px>
       <mat-grid-tile>
         <button mat-raised-button type="button" [color]="!generados ? 'primary' : 'null'" (click)="GenerarArchivos()"
@@ -184,6 +194,7 @@
           Generar
         </button>
         <button mat-raised-button type="button" (click)="ResetearFormularios()"> Limpiar </button>
+        <!-- <button mat-raised-button type="button" (click)="Print()"> Print </button> -->
       </mat-grid-tile>
     </mat-grid-list>
   </mat-card-actions>

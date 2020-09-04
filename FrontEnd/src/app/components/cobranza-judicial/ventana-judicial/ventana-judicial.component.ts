@@ -48,6 +48,9 @@ export class VentanaJudicialComponent implements OnInit {
     if(this.data.proceso_detalle){
       this.editar = true ;
       this.EditarProceso();
+    } else {
+      this.VentanaJudicialForm.get('tipo_documento').setValue(this.data.tipo_documento) ;
+      this.TipoDocumentoSeleccionado( this.data.tipo_documento ) ;
     }
   }
 
@@ -94,8 +97,8 @@ export class VentanaJudicialComponent implements OnInit {
 
   ListarTipoDocumentos(){
     this._vinculados.ListarDocumentosJudiciales("",1,50).subscribe(res=>{
-      // console.log( res['data'].documentos ) ;
       this.TipoDocumentos = res['data'].documentos ;
+      this.ObtenerNombreDocumentoJudicial() ;
     })
   }
 
@@ -151,10 +154,9 @@ export class VentanaJudicialComponent implements OnInit {
   TipoDocumentoSeleccionado( tipo : number ){
     this.VentanaJudicialForm.get('tipo_documento').setValue(tipo)
 
-    let tipo_documento_nombre : string ;
-    tipo_documento_nombre = this.TipoDocumentos.filter( e => e.id == tipo )[0].nombre ;
-    this.VentanaJudicialForm.get('tipo_documento_nombre').setValue(tipo_documento_nombre)
-
+    this.ObtenerNombreDocumentoJudicial() ;
+    this.ObtenerNumeroDocumento() ;
+    this.ListarEstados() ;
     if( this.VentanaJudicialForm.value.tipo_documento == 2 ) {
       this.VentanaJudicialForm.get('trabajador').enable();
       this.VentanaJudicialForm.get('trabajador').setValidators([Validators.required]) ;
@@ -163,8 +165,14 @@ export class VentanaJudicialComponent implements OnInit {
       this.VentanaJudicialForm.get('trabajador').disable();
       this.VentanaJudicialForm.get('trabajador').setValidators([]) ;
     }
-    this.ListarEstados();
-    this.ObtenerNumeroDocumento()
+  }
+
+  ObtenerNombreDocumentoJudicial() {
+    if ( this.TipoDocumentos && this.VentanaJudicialForm.get('tipo_documento').value ) {
+      let tipo_documento_nombre : string ;
+      tipo_documento_nombre = this.TipoDocumentos.filter( e => e.id == this.VentanaJudicialForm.get('tipo_documento').value )[0].nombre ;
+      this.VentanaJudicialForm.get('tipo_documento_nombre').setValue(tipo_documento_nombre)
+    }
   }
 
   ObtenerNumeroDocumento(){

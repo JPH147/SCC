@@ -643,4 +643,25 @@ export class CobranzaJudicialService {
     }));
   }
 
+  ContarProcesosJudiciales(
+    fecha_inicio : Date ,
+    fecha_fin : Date ,
+    estado : number
+  ) : Observable<number> {
+    let params = new HttpParams()
+      .set('prfechainicio', moment(fecha_inicio).format('YYYY-MM-DD'))
+      .set('prfechafin',moment(fecha_fin).format('YYYY-MM-DD'))
+      .set('prestado',estado.toString()) ;
+
+    return this.http.get(this.url + 'procesojudicial/read-total.php', {params})
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return (res['mensaje'] as number);
+      } else {
+        console.log('No hay datos que mostrar');
+        return 0;
+      }
+    }));
+  }
+
 }

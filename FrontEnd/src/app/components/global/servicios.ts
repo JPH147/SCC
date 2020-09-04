@@ -82,25 +82,30 @@ export class ServiciosGenerales {
 
   CrearTipoProducto(
     nombre: string,
-		id: number
+    tiene_serie : number,
+    id_unidad_medida: number,
 	):Observable<any>{
 		let params=new HttpParams()
 						.set('tprd_nombre', nombre)
-						.set('idunidadmedida', id.toString());
+            .set('prtieneserie', tiene_serie.toString())
+						.set('idunidadmedida', id_unidad_medida.toString());
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 		return this.http.post(this.url+'productotipo/create.php',params,{headers:headers});
   }
   
   EditarTipoProducto(id:number,
     nombre: string,
-    idunidadmedida: number):Observable<any>{
-      let params=new HttpParams()
-              .set('id', id.toString())
-              .set('nombre', nombre.toString())
-              .set('idunidad', idunidadmedida.toString());
-      let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-      return this.http.post(this.url+'productotipo/update.php',params,{headers:headers});
-    }
+    tiene_serie: number,
+    idunidadmedida: number
+  ):Observable<any>{
+    let params=new HttpParams()
+            .set('id', id.toString())
+            .set('nombre', nombre.toString())
+            .set('prtieneserie', tiene_serie.toString())
+            .set('idunidad', idunidadmedida.toString());
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    return this.http.post(this.url+'productotipo/update.php',params,{headers:headers});
+  }
 
     SeleccionarTipo(
       id:number

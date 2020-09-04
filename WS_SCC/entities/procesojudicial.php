@@ -121,6 +121,24 @@ Class Proceso{
     return $this->total_resultado;
   }
 
+  function contarV2() {
+    $query = "CALL sp_listarprocesojudicialcontarV2(?,?,?)";
+    
+    $result = $this->conn->prepare($query);
+
+    $result->bindParam(1, $this->fecha_inicio);
+    $result->bindParam(2, $this->fecha_fin);
+    $result->bindParam(3, $this->estado);
+
+    $result->execute();
+
+    $row = $result->fetch(PDO::FETCH_ASSOC);
+
+    $this->total_resultado=$row['total'];
+
+    return $this->total_resultado;
+  }
+
   function readxId(){
 
     $query ="call sp_listarprocesojudicialxId(?)";

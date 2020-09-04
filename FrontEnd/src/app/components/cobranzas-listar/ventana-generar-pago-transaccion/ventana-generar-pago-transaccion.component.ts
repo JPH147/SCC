@@ -1,24 +1,32 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, AfterViewInit } from '@angular/core';
 
 import { FormArray, FormGroup, FormBuilder, Validators, ValidatorFn, AbstractControl } from '@angular/forms' ;
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject, merge, Observable, forkJoin } from 'rxjs';
 import { CobranzasService } from '../cobranzas.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { finalize } from 'rxjs/operators';
+import { finalize, debounceTime, distinctUntilChanged, takeUntil, map } from 'rxjs/operators';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-ventana-generar-pago-transaccion',
   templateUrl: './ventana-generar-pago-transaccion.component.html',
   styleUrls: ['./ventana-generar-pago-transaccion.component.css']
 })
-export class VentanaGenerarPagoTransaccionComponent implements OnInit {
+export class VentanaGenerarPagoTransaccionComponent implements OnInit, AfterViewInit {
+
+  private changesUnsubscribe = new Subject() ;
 
   public Cargando = new BehaviorSubject<boolean>(false) ;
   public PagosForm : FormGroup ;
   public PagoArrayForm : FormArray ;
 
+  public total_pagos : number = 0 ;
+  public total_pagos_directos : number = 0 ;
+  public total_pagos_judiciales : number = 0 ;
+  public total_pagos_planilla : number = 0 ;
+
   constructor(
-    @Inject(MAT_DIALOG_DATA) private data : any ,
+    @Inject(MAT_DIALOG_DATA) public data : any ,
     private ventana : MatDialogRef<VentanaGenerarPagoTransaccionComponent> ,
     private _builder : FormBuilder ,
     private _cobranzas : CobranzasService ,
@@ -28,18 +36,81 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit {
     this.CrearFormulario() ;
   }
 
+  ngAfterViewInit() {
+    this.SuscribirFormArray() ;
+  }
+
+  SuscribirFormArray(){
+    this.changesUnsubscribe.next();
+
+    merge(
+      ...this.PagoArrayForm.controls.map( (control: AbstractControl, index: number) =>
+        control.get('pago_directo').valueChanges.pipe(
+          debounceTime(200) ,
+          distinctUntilChanged() ,
+          takeUntil(this.changesUnsubscribe),
+          map( value => ({
+            index : index ,
+            valor : value
+          }))
+        )
+      )
+    )
+    .subscribe(() => {
+      this.CalcularTotalPagosDirectos() ;
+    });
+
+    merge(
+      ...this.PagoArrayForm.controls.map( (control: AbstractControl, index: number) =>
+        control.get('pago_planilla').valueChanges.pipe(
+          debounceTime(200) ,
+          distinctUntilChanged() ,
+          takeUntil(this.changesUnsubscribe),
+          map( value => ({
+            index : index ,
+            valor : value
+          }))
+        )
+      )
+    )
+    .subscribe(() => {
+      this.CalcularTotalPagosPlanilla() ;
+    });
+
+    merge(
+      ...this.PagoArrayForm.controls.map( (control: AbstractControl, index: number) =>
+        control.get('pago_judicial').valueChanges.pipe(
+          debounceTime(200) ,
+          distinctUntilChanged() ,
+          takeUntil(this.changesUnsubscribe),
+          map( value => ({
+            index : index ,
+            valor : value
+          }))
+        )
+      )
+    )
+    .subscribe(() => {
+      this.CalcularTotalPagosJudiciales() ;
+    });
+  }
+
   CrearFormulario(){
     this.PagosForm = this._builder.group({
-      PagoArrayForm : this._builder.array([this.CrearFormArray()])
+      PagoArrayForm : this._builder.array([])
     }) ;
 
     this.PagoArrayForm = this.PagosForm.get('PagoArrayForm') as FormArray ;
+
+    this.EstablecerControlesArray() ;
   }
 
-  CrearFormArray() : FormGroup {
+  CrearFormArray( tipo : number ) : FormGroup {
     return this._builder.group({
       fecha_pago : [ { value : new Date(), disabled : false },[
         Validators.required
+      ] ] ,
+      monto_cuota : [ { value : 0, disabled : false },[
       ] ] ,
       pago_directo : [ { value : 0, disabled : false },[
         this.NumeroDecimal ,
@@ -53,11 +124,41 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit {
         this.NumeroDecimal ,
         Validators.required
       ] ] ,
+      // 1. Generado para que coincida con el mes de la cuota
+      // 2. Creado por el usuario
+      tipo : [ { value : tipo, disabled : false },[
+      ] ] ,
     })
   }
 
-  AgregarPagoForm() {
-    this.PagoArrayForm.push(this.CrearFormArray()) ;
+  AgregarPagoForm(tipo : number) {
+    this.PagoArrayForm.push(this.CrearFormArray(tipo)) ;
+  }
+
+  CrearPago() {
+    // Calculamos el index del último elemento
+    // El index será la longitud del form actual -1
+    let longitud_form : number = this.PagoArrayForm.length ;
+
+    // Obtenemos la fecha del último elemento
+    let ultima_fecha : Date = this.PagoArrayForm.controls[longitud_form-1].get('fecha_pago').value ;
+
+    // Agregamos un mes a la última fecha
+    let proxima_fecha = moment(ultima_fecha).add(1, 'month').toDate() ;
+
+    // Creamos un nuevo elemento
+    this.AgregarPagoForm(2) ;
+
+    // Cambiamos la fecha del último elemento creado
+    this.PagoArrayForm.controls[longitud_form].get('fecha_pago').setValue(proxima_fecha) ;
+  }
+
+  EstablecerControlesArray() {
+    this.data.cronograma.forEach( (item, index) =>{
+      this.AgregarPagoForm(1) ;
+      this.PagoArrayForm.controls[index].get('fecha_pago').setValue(item.fecha_vencimiento) ;
+      this.PagoArrayForm.controls[index].get('monto_cuota').setValue(this.data.tipo == 1 ? item.monto : item.monto_cuota) ;
+    })
   }
 
   NumeroDecimal(): ValidatorFn {
@@ -75,25 +176,58 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit {
     this.PagoArrayForm.removeAt(index) ;
   }
 
+  CalcularTotalPagosDirectos() {
+    this.total_pagos_directos = 0 ;
+    this.PagoArrayForm.value.forEach(elemento => {
+      this.total_pagos_directos = this.total_pagos_directos + elemento.pago_directo*1 ;
+    });
+    this.CalcularTotalGeneral() ;
+  }
+
+  CalcularTotalPagosJudiciales() {
+    this.total_pagos_judiciales = 0 ;
+    this.PagoArrayForm.value.forEach(elemento => {
+      this.total_pagos_judiciales = this.total_pagos_judiciales + elemento.pago_judicial*1 ;
+    });
+    this.CalcularTotalGeneral() ;
+  }
+
+  CalcularTotalPagosPlanilla() {
+    this.total_pagos_planilla = 0 ;
+    this.PagoArrayForm.value.forEach(elemento => {
+      this.total_pagos_planilla = this.total_pagos_planilla + elemento.pago_planilla*1 ;
+    });
+    this.CalcularTotalGeneral() ;
+  }
+
+  CalcularTotalGeneral() {
+    this.total_pagos = this.total_pagos_directos + this.total_pagos_judiciales + this.total_pagos_planilla ;
+  }
+
   Guardar() {
     let pagos = this.PagoArrayForm.value ;
+    let array_obserables : Array<Observable<any>> = [] ;
 
     pagos.map(elemento => {
       if ( elemento.pago_directo > 0 ) {
-        this.CrearPagoManual(1,elemento.pago_directo, elemento.fecha_pago)
+        array_obserables.push( this.CrearPagoManual(1,elemento.pago_directo, elemento.fecha_pago) ) ;
       }
       if ( elemento.pago_planilla > 0 ) {
-        this.CrearPagoManual(2,elemento.pago_planilla, elemento.fecha_pago)
+        array_obserables.push( this.CrearPagoManual(2,elemento.pago_planilla, elemento.fecha_pago) ) ;
       }
       if ( elemento.pago_judicial > 0 ) {
-        this.CrearPagoManual(3,elemento.pago_judicial, elemento.fecha_pago)
+        array_obserables.push( this.CrearPagoManual(3,elemento.pago_judicial, elemento.fecha_pago) ) ;
       }
       return elemento ;
     }) ;
-    this.ventana.close(true) ;
+
+    forkJoin(array_obserables)
+    .subscribe(() =>{
+      this.ventana.close(true) ;
+    })
   }
 
-  CrearPagoManual( tipo : number , monto_pagado : number, fecha: Date ) {
+  CrearPagoManual( tipo : number , monto_pagado : number, fecha: Date ) : Observable<any> {
     this.Cargando.next(true) ;
 
     let tipo_pago : string ;
@@ -115,33 +249,27 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit {
         break;
     }
 
-    this._cobranzas.CrearCobranzaManual(
-      this.data.cliente ,
-      tipo + 2 ,
-      fecha ,
-      (new Date()).getTime().toString() ,
-      0 ,
-      monto_pagado ,
-      "Regularización de pago " + tipo_pago ,
-    )
-    .subscribe(res=>{
-      this._cobranzas.CrearDetalleCobranza(
-        0 ,
-        0 ,
-        0 ,
-        res['data'] ,
-        this.data.tipo == 1 ? this.data.id_credito : 0 ,
-        this.data.tipo == 2 ? this.data.id_venta : 0 ,
-        monto_pagado ,
-        fecha
+    if ( this.data.tipo == 1 ) {
+      return this._cobranzas.CrearCobranzaManualCredito(
+        this.data.id_credito ,
+        tipo + 2 ,
+        fecha ,
+        (new Date()).getTime().toString() ,
+        Math.round(100*monto_pagado)/100 ,
+        "Regularización de pago " + tipo_pago ,
       )
-      .pipe(
-        finalize(()=>{
-          this.Cargando.next(false) ;
-        })
+    }
+
+    if ( this.data.tipo == 2 ) {
+      return this._cobranzas.CrearCobranzaManualVenta(
+        this.data.id_venta ,
+        tipo + 2 ,
+        fecha ,
+        (new Date()).getTime().toString() ,
+        Math.round(100*monto_pagado)/100 ,
+        "Regularización de pago " + tipo_pago ,
       )
-      .subscribe()
-    })
+    }
   }
 
 }

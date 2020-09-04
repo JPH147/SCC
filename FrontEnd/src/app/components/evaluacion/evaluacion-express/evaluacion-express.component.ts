@@ -2,7 +2,7 @@ import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { EvaluacionCoutasDataSource } from '../evaluacion-cuotas/evaluacion-cuotas.component';
 import { merge, fromEvent, BehaviorSubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { EvaluacionService } from '../evaluacion.service';
 import * as moment from 'moment';
 import { ServiciosGenerales } from '../../global/servicios';
@@ -11,6 +11,8 @@ import { ClienteService } from '../../clientes/clientes.service';
 import { ServiciosDirecciones } from '../../global/direcciones';
 import { ServiciosTelefonos } from '../../global/telefonos';
 import { Notificaciones } from '../../global/notificacion';
+import { MatDialog } from '@angular/material/dialog';
+import { VentanaProductosComponent } from '../../ventas/ventana-productos/ventana-productos.component';
 
 @Component({
   selector: 'app-evaluacion-express',
@@ -77,19 +79,23 @@ export class EvaluacionExpressComponent implements OnInit {
   public presidente_direccion : string ;
   public interes_diario_deshabilitado : boolean = false ;
 
+  public Series : Array<number> = [] ;
+  public productos: FormArray;
+
   constructor(
     private Builder : FormBuilder ,
+    private Dialogo : MatDialog ,
     private ServiciosGenerales : ServiciosGenerales,
     private ClienteServicios: ClienteService,
     private ServicioDireccion: ServiciosDirecciones,
     private ServicioTelefono: ServiciosTelefonos,
     private Servicios : EvaluacionService,
-    private Notificacion: Notificaciones
+    private Notificacion: Notificaciones ,
   ) { }
 
   ngOnInit() {
     this.ListadoCronograma = new EvaluacionCoutasDataSource;
-    this.CrearFormulario();
+    this.CrearFormularios();
     this.ObtenerDatosCooperativa();
     this.ListarVendedor("");
     
@@ -102,7 +108,7 @@ export class EvaluacionExpressComponent implements OnInit {
     this.interes_diario=0;
     this.fecha_prestamo=new Date();
     this.fecha_inicio=moment(new Date()).toDate();
-    this.CorregirFecha(this.fecha_inicio);
+    this.CorregirFecha();
 
     this.InformacionForm = this.Builder.group({});
   }
@@ -149,20 +155,21 @@ export class EvaluacionExpressComponent implements OnInit {
 
   }
   
-  CorregirFecha(fecha : Date){
-    let ano = moment( fecha ).year() ;
-    let mes = moment( fecha ).month() ;
-    this.fecha_inicio = new Date(ano, mes, 27) ;
+  CorregirFecha(){
+    this.fecha_inicio = moment(new Date()).add(1,'month').endOf('month').toDate() ;
   }
 
-  CrearFormulario(){
+  CrearFormularios(){
     this.ExpressForm = this.Builder.group({
       lugar : [ "Ate Vitarte",[Validators.required] ],
       id_vendedor : [ null,[Validators.required] ],
       vendedor_dni : [ "",[] ],
       vendedor : [ "",[] ],
       fecha_letras : [ new Date(),[Validators.required] ],
-    })
+      productos: this.Builder.array([]),
+    }) ;
+
+    this.productos = this.ExpressForm.get('productos') as FormArray;
   }
 
   ObtenerDatosCooperativa(){
@@ -226,8 +233,8 @@ export class EvaluacionExpressComponent implements OnInit {
       this.interes = 15 ;
       this.aporte = 20 ;
       this.interes_por_dia = false ;
-      this.fecha_inicio=moment(new Date()).add(1,'month').toDate();
-      this.CorregirFecha(this.fecha_inicio);
+      this.fecha_inicio=moment(new Date()).add(1,'month').endOf('month').toDate();
+      this.CorregirFecha();
       this.ExpressForm.get('lugar').setValue("Ate Vitarte")
       this.ExpressForm.get('fecha_letras').setValue(new Date())
     }
@@ -290,9 +297,10 @@ export class EvaluacionExpressComponent implements OnInit {
     let dias_mes : number = moment(this.fecha_prestamo).daysInMonth();
     let interes_truncado = Math.round( ((dias_mes - dia_credito) / dias_mes) * interes * 100 ) / 100;
 
-    let numero_cuotas = moment(this.fecha_inicio).diff(moment(this.fecha_prestamo), 'months') ;
-    this.numero_cuotas_estandar = numero_cuotas ;
-    this.cuota_estandar = total/numero_cuotas ;
+    let numero_cuotas = +moment(this.fecha_inicio).diff(moment(this.fecha_prestamo), 'months') ;
+
+    this.numero_cuotas_estandar = +this.cuotas ;
+    this.cuota_estandar = total/+this.cuotas ;
 
     // console.log(total, numero_cuotas , this.cuota_estandar, this.numero_cuotas_estandar)
     // Se reemplazó numero_cuotas por (mes_pago - mes_credito)
@@ -440,12 +448,105 @@ export class EvaluacionExpressComponent implements OnInit {
   }
 
   Print(){
-    this.CrearDireccionCompleta() ;
-    this.GenerarEmail() ;
-    // console.log("Express",this.ExpressForm);
-    // console.log("Informacion",this.InformacionForm);
+    console.log("Express",this.ExpressForm);
+    console.log("Informacion",this.InformacionForm);
   }
   
+  CrearProducto(): FormGroup{
+    return this.Builder.group({
+      'id_producto': [{value: null, disabled: false}, [
+        Validators.required
+      ]],
+      'nombre': [{value: "", disabled: false}, [
+      ]],
+      'descripcion': [{value: "", disabled: false}, [
+      ]],
+      'id_serie': [{value: null, disabled: false}, [
+        Validators.required
+      ]],
+      'serie': [{value: null, disabled: false}, [
+      ]],
+      'precio': [{value:null, disabled: false}, [
+      ]],
+      'estado': [{value:1, disabled: false}, [
+      ]],
+    })
+  }
+
+  AgregarProducto():void{
+    this.productos.push(this.CrearProducto());
+  };
+
+  EliminarProductos(index,producto){
+    if (producto.value.estado==1) {
+      this.productos.removeAt(index);
+      this.Series.splice( this.Series.indexOf(producto.value.id_serie), 1 );
+    }
+    if (producto.value.estado==2) {
+      this.productos['controls'][index].get('descripcion').disable()
+      this.productos['controls'][index].get('serie').disable()
+      this.productos['controls'][index].get('precio').disable()
+      this.productos['controls'][index].get('estado').setValue(3);
+    }
+  }
+
+  ResetearProductosFormArray(){
+    if (this.productos) {
+      let productos = this.productos.value ;
+      
+      productos = productos.filter(elemento => elemento.estado==2 || elemento.estado==3)
+
+      if( productos.length > 0 ) {
+        this.productos.setValue(productos) ;
+      } else {
+        this.productos.reset() ;
+        while (this.productos.length !== 0) {
+          this.productos.removeAt(0)
+        }
+      }
+    }
+  }
+
+  SeleccionarSeries(){
+    let Ventana = this.Dialogo.open(VentanaProductosComponent,{
+      width: '1200px',
+      data: {sucursal: 1, series: this.Series, productos : this.ExpressForm['controls'].productos.value }
+    })
+
+    Ventana.afterClosed().subscribe(res=>{
+      if (res) {
+        this.Series = [] ;
+        this.ResetearProductosFormArray() ;
+        res.map( (producto, index) => {
+          if ( producto.estado != 2 ) {
+            this.AgregarProducto() ;
+            this.ExpressForm['controls'].productos['controls'][index].get('id_producto').setValue( producto.id_producto );
+            this.ExpressForm['controls'].productos['controls'][index].get('nombre').setValue( producto.producto );
+            this.ExpressForm['controls'].productos['controls'][index].get('descripcion').setValue( producto.producto );
+            this.ExpressForm['controls'].productos['controls'][index].get('id_serie').setValue( producto.id_serie );
+            this.ExpressForm['controls'].productos['controls'][index].get('serie').setValue( producto.serie );
+            this.ExpressForm['controls'].productos['controls'][index].get('precio').setValue( producto.precio );
+  
+            this.Series.push(producto.id_serie) ;
+            return producto ;
+          }
+        }) ;
+        this.CalcularTotales() ;
+      }
+    })
+  }
+
+  CalcularTotales(){
+    // let total = 0 ;
+
+    // this.VentasForm['controls'].productos['controls'].map((item)=>{
+    //   if(item.value.precio && item.value.estado!=3){
+        
+    //   }
+    //   return item
+    // })
+  }
+
   GenerarEmail() : string {
     // if( !this.ClientesForm.value.email ){
       let apellido : string, nombres : string, primer_nombre : string ;
@@ -557,7 +658,7 @@ export class EvaluacionExpressComponent implements OnInit {
   GenerarTransaccion(nombre_archivo){
     let direccion_completa : string ;
 
-    console.log(this.cronograma) ;
+    // console.log(this.cronograma) ;
     
     direccion_completa = this.CrearDireccionCompleta();
 
@@ -602,8 +703,8 @@ export class EvaluacionExpressComponent implements OnInit {
       this.ExpressForm.value.vendedor,
       this.ExpressForm.value.vendedor_dni,
       this.cronograma,
-      1,
-      [],
+      this.tipo,
+      this.productos.value ,
       (this.InformacionForm.value.hay_garante && this.InformacionForm.value.dni_garante)? this.InformacionForm.value.nombre_garante : "0",
       (this.InformacionForm.value.hay_garante && this.InformacionForm.value.dni_garante) ? this.InformacionForm.value.dni_garante : "0",
     ).subscribe(res=>{
@@ -761,7 +862,7 @@ export class EvaluacionExpressComponent implements OnInit {
   ActualizarDireccion() {
     // Si se ha escrito la dirección, se actualiza o guarda
     if( this.InformacionForm.value.direccion_completa ) {
-      if( this.InformacionForm.value.considerar_direccion ) {
+      if( !this.InformacionForm.value.id_direccion ) {
         this.ServicioDireccion.CrearDireccion(
           this.InformacionForm.value.id_cliente,
           this.InformacionForm.value.direccion_nombre,
@@ -781,7 +882,7 @@ export class EvaluacionExpressComponent implements OnInit {
 
   ActualizarTelefono() {
     // Si hay teléfono, se actualiza o guarda
-    if( this.InformacionForm.value.considerar_telefono ) {
+    if( !this.InformacionForm.value.id_telefono ) {
       this.ServicioTelefono.CrearTelefono(
         this.InformacionForm.value.id_cliente,
         this.InformacionForm.value.telefono_numero,
@@ -800,7 +901,7 @@ export class EvaluacionExpressComponent implements OnInit {
 
   ActualizarCuenta() {
     // Si hay cuenta, se actualiza o guarda
-    if( this.InformacionForm.value.considerar_telefono ) {
+    if( !this.InformacionForm.value.id_cuenta ) {
       this.ClienteServicios.CrearCuenta(
         this.InformacionForm.value.id_cliente,
         this.InformacionForm.value.cuenta_banco,

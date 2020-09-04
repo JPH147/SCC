@@ -12,7 +12,6 @@ import { ActivatedRoute, Router, NavigationStart } from '@angular/router';
 import { ServiciosTelefonos } from '../global/telefonos';
 import { ServiciosDirecciones } from '../global/direcciones';
 import { ServiciosGenerales } from '../global/servicios';
-import * as moment from 'moment';
 import { Location } from '@angular/common';
 import { Notificaciones } from '../global/notificacion';
 import { URLIMAGENES } from '../global/url';
@@ -30,6 +29,10 @@ import { Store } from '@ngrx/store';
 import { CobranzaJudicialService } from '../cobranza-judicial/cobranza-judicial.service';
 import { VentanaConfirmarComponent } from '../global/ventana-confirmar/ventana-confirmar.component';
 import { VentanaGenerarPagoTransaccionComponent } from '../cobranzas-listar/ventana-generar-pago-transaccion/ventana-generar-pago-transaccion.component';
+
+import * as moment from 'moment';
+import {default as _rollupMoment, Moment} from 'moment';
+import { MatDatepicker } from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-creditos',
@@ -85,6 +88,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   public compromiso : string = "";
   public letra : string = "";
   public ddjj : string = "";
+  public oficio : string = "";
   public otros : string = "";
   public papeles : string = "";
 
@@ -101,6 +105,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   public compromiso_antiguo : string = "";
   public letra_antiguo : string = "";
   public ddjj_antiguo : string = "";
+  public oficio_antiguo : string = "";
   public otros_antiguo : string = "";
   public papeles_antiguo : string = "";
 
@@ -117,6 +122,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   public compromiso_nuevo : string = "";
   public letra_nuevo : string = "";
   public ddjj_nuevo : string = "";
+  public oficio_nuevo : string = "";
   public otros_nuevo : string = "";
   public papeles_nuevo : string = "";
 
@@ -133,6 +139,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   public compromiso_editar : boolean = false;
   public letra_editar : boolean = false;
   public ddjj_editar : boolean = false;
+  public oficio_editar : boolean = false;
   public otros_editar : boolean = false;
   public papeles_editar : boolean = false;
 
@@ -212,7 +219,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     this.ListadoCronograma = new CronogramaDataSource();
 
     this.cliente_afiliado = true;
-    this.numero_cuotas = 60;
+    this.numero_cuotas = 1;
     this.monto_cuota = 20;
 
     this.route.params.subscribe(params => {
@@ -398,7 +405,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       ]],
       afiliacion_fecha_afiliacion :[{value: moment(new Date()), disabled: false},[
       ]],
-      afiliacion_fecha_vencimiento :[{value: moment(new Date()).add(1, 'months').endOf('month').toDate(), disabled: false},[
+      afiliacion_fecha_vencimiento :[{value: moment(new Date()).endOf('month').toDate(), disabled: false},[
       ]],
       /////////////////////////////////////////////////////////////// 
       garante :[{value: false, disabled: false},[
@@ -418,7 +425,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       ]],
       interes_diario_monto: [{value: 0, disabled: false},[ // Es el número del crédito
       ]],
-      fecha_pago: [{value: moment(new Date()).add(1, 'months').toDate(), disabled: false},[
+      fecha_pago: [{value: moment(new Date()).endOf('month').toDate(), disabled: false},[
         Validators.required,
       ]],
       ////////
@@ -465,6 +472,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       papeles_seguimiento: [{value: "", disabled: false},[
       ]],
       papeles_observaciones: [{value: "", disabled: false},[
+      ]],
+      fecha_fin_mes: [{ value : true, disabled : false },[
       ]],
       garantes: this.Builder.array([])
     })
@@ -601,6 +610,15 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       this.CreditosForm.get('fecha_pago').setValue(moment(res.fecha_pago).toDate());
       this.CreditosForm.get('interes_diario_monto').setValue(res.interes_diario);
 
+      // Si la fecha de pago es el último día del mes, se activa el control 'fecha_fin_mes'
+      let fecha_pago = this.CreditosForm.get('fecha_pago').value ;
+      let ultimo_fecha_pago  = moment(this.CreditosForm.get('fecha_pago').value).endOf('month').toDate() ;
+      if ( moment(fecha_pago).isBefore(ultimo_fecha_pago, 'day') ) {
+        this.CreditosForm.get('fecha_fin_mes').setValue(false) ;
+      } else {
+        this.CreditosForm.get('fecha_fin_mes').setValue(true) ;
+      }
+
       if ( this.CreditosForm.get('interes_diario_monto').value > 0 ) {
         this.CreditosForm.get('interes_diario').setValue(true) ;
       }
@@ -641,6 +659,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       res.pdf_letra!="" ? this.letra=URLIMAGENES.carpeta+'credito/'+res.pdf_letra : null;
       res.pdf_ddjj!="" ? this.ddjj=URLIMAGENES.carpeta+'credito/'+res.pdf_ddjj : null;
       res.pdf_otros!="" ? this.otros=URLIMAGENES.carpeta+'credito/'+res.pdf_otros : null;
+      res.pdf_oficio!="" ? this.oficio=URLIMAGENES.carpeta+'credito/'+res.pdf_oficio : null;
 
       if( res.id_credito_refinanciado ) {
         this.credito_refinanciado = true ;
@@ -706,6 +725,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         this.letra_antiguo=res.pdf_letra;
         this.ddjj_antiguo=res.pdf_ddjj;
         this.otros_antiguo=res.pdf_otros;
+        this.oficio_antiguo=res.pdf_oficio;
 
         res.pdf_foto!="" ? this.foto_editar=false : this.foto_editar=true;
         res.pdf_dni!="" ? this.dni_editar=false : this.dni_editar=true;
@@ -720,6 +740,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         res.pdf_compromiso!="" ? this.compromiso_editar=false : this.compromiso_editar=true;
         res.pdf_letra!="" ? this.letra_editar=false : this.letra_editar=true;
         res.pdf_ddjj!="" ? this.ddjj_editar=false : this.ddjj_editar=true;
+        res.pdf_oficio!="" ? this.oficio_editar=false : this.oficio_editar=true;
         res.pdf_otros!="" ? this.otros_editar=false : this.otros_editar=true;
       }
 
@@ -761,6 +782,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         this.letra_antiguo=res.pdf_letra;
         this.ddjj_antiguo=res.pdf_ddjj;
         this.otros_antiguo=res.pdf_otros;
+        this.oficio_antiguo=res.pdf_oficio;
 
         res.pdf_foto!="" ? this.foto_editar=false : this.foto_editar=true;
         res.pdf_dni!="" ? this.dni_editar=false : this.dni_editar=true;
@@ -776,6 +798,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         res.pdf_letra!="" ? this.letra_editar=false : this.letra_editar=true;
         res.pdf_ddjj!="" ? this.ddjj_editar=false : this.ddjj_editar=true;
         res.pdf_otros!="" ? this.otros_editar=false : this.otros_editar=true;
+        res.pdf_oficio!="" ? this.oficio_editar=false : this.oficio_editar=true;
 
         if(res['garantes'].garantes.length>0){
           res['garantes'].garantes.forEach((item,index)=>{
@@ -805,7 +828,9 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   }
 
   ObtenerCronograma(id_credito, orden){
+    this.Cargando.next(true) ;
     this.Servicio.ObtenerCrongrama(id_credito, orden).subscribe(res=>{
+      this.Cargando.next(false) ;
       this.Cronograma = res;
       this.CalcularTotalPagado(this.Cronograma) ;
       this.ListadoCronograma.AsignarInformacion(this.Cronograma);
@@ -891,7 +916,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       if(!this.cliente_afiliado) this.numero_afiliacion = res.numero;
       this.ObtenerNumero(id_cliente);
       this.CreditosForm.get('afiliacion_tiempo').setValue(res.tiempo)
-      this.numero_cuotas = +res.tiempo*12;
+      // this.numero_cuotas = +res.tiempo*12;
+      this.numero_cuotas = 1 ;
       this.CreditosForm.get('afiliacion_monto').setValue(res.monto)
     })
   }
@@ -1161,6 +1187,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       if ( orden == 13 ) this.ddjj_nuevo = evento.serverResponse.response.body.data;
       if ( orden == 14 ) this.otros_nuevo = evento.serverResponse.response.body.data;
       if ( orden == 15 ) this.papeles_nuevo = evento.serverResponse.response.body.data;
+      if ( orden == 16 ) this.oficio_nuevo = evento.serverResponse.response.body.data;
     }else{
       if ( orden == 1 ) this.foto = evento.serverResponse.response.body.data;
       if ( orden == 2 ) this.dni = evento.serverResponse.response.body.data;
@@ -1177,6 +1204,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       if ( orden == 13 ) this.ddjj = evento.serverResponse.response.body.data;
       if ( orden == 14 ) this.otros = evento.serverResponse.response.body.data;
       if ( orden == 15 ) this.papeles = evento.serverResponse.response.body.data;
+      if ( orden == 16 ) this.oficio = evento.serverResponse.response.body.data;
     }
   }
 
@@ -1343,11 +1371,53 @@ export class CreditosComponent implements OnInit, AfterViewInit {
 
   CorregirFecha(){
     if ( moment(this.CreditosForm.value.fecha_credito).isValid() ) {
-      let ano = moment( this.CreditosForm.value.fecha_credito ).year() ;
-      let mes = moment( this.CreditosForm.value.fecha_credito ).month() ;
-      this.CreditosForm.get('fecha_pago').setValue( new Date(ano, mes+1, 27) );
+      // let ano = moment( this.CreditosForm.value.fecha_credito ).year() ;
+      // let mes = moment( this.CreditosForm.value.fecha_credito ).month() ;
+      // this.CreditosForm.get('fecha_pago').setValue( new Date(ano, mes+1, 27) );
+
+      let fecha = this.CreditosForm.value.fecha_credito ;
+      this.CreditosForm.get('fecha_pago').setValue( new Date(moment(fecha).endOf('month').toDate()) )
+      this.CrearCronograma() ;
       this.CambioFechaCredito() ;
     }
+  }
+
+  CorregirFechaPago() {
+    if ( this.CreditosForm.get('fecha_fin_mes').value ) {
+      let fecha = this.CreditosForm.value.fecha_pago ;
+      this.CreditosForm.get('fecha_pago').setValue( new Date(moment(fecha).endOf('month').toDate()) )
+      this.CrearCronograma() ;
+    }
+  }
+
+  FechaPagoSeleccionada() {
+    let fecha_credito = this.CreditosForm.get('fecha_credito').value ;
+    let fecha_pago = this.CreditosForm.get('fecha_pago').value ;
+    if ( fecha_pago < fecha_credito ) {
+      this.CreditosForm.get('fecha_pago').setErrors({'fecha_adelantada': true}) ;
+    } else {
+      this.CreditosForm.get('fecha_pago').setErrors(null) ;
+    }
+    this.CrearCronograma() ;
+  }
+
+  
+  CorregirFechaAfiliacion(){
+    if ( moment(this.CreditosForm.value.afiliacion_fecha_afiliacion).isValid() ) {
+      let fecha = this.CreditosForm.value.afiliacion_fecha_afiliacion ;
+      this.CreditosForm.get('afiliacion_fecha_vencimiento').setValue( new Date(moment(fecha).endOf('month').toDate()) )
+    }
+  }
+
+  FechaPagoAfiliacionSeleccionada() {
+    let afiliacion_fecha_afiliacion = this.CreditosForm.get('afiliacion_fecha_afiliacion').value ;
+    let fecha_pago = this.CreditosForm.get('afiliacion_fecha_vencimiento').value ;
+    if ( fecha_pago < afiliacion_fecha_afiliacion ) {
+      this.CreditosForm.get('afiliacion_fecha_vencimiento').setErrors({'fecha_adelantada': true}) ;
+    } else {
+      this.CreditosForm.get('afiliacion_fecha_vencimiento').setErrors(null) ;
+    }
+    this.CrearCronograma() ;
   }
 
   CambiarTipoVista( tipo : string ){
@@ -1406,12 +1476,13 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     let ventana = this.Dialogo.open(VentanaGenerarPagoTransaccionComponent,{
       width: '1200px' ,
       maxHeight: '80vh' ,
-      data : { tipo : 1, id_cliente : this.CreditosForm.get('id_cliente').value, id_credito : this.id_credito }
+      data : { tipo : 1, id_credito : this.id_credito, cronograma : this.Cronograma, pendiente : this.totales_monto_pendiente }
     })
 
     ventana.afterClosed().subscribe( resultado=>{
       if ( resultado === true ) {
         this.Notificacion.Snack("Se crearon los pagos satisfactoriamente","") ;
+        this.SeleccionarCredito(this.id_credito) ;
       }
     } )
   }
@@ -1466,6 +1537,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       "",
       "",
       "",
+      "",
       ""
     ).subscribe(res=>{
 
@@ -1506,8 +1578,9 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         0,
         0,
         this.CreditosForm.value.capital,
-        this.CreditosForm.value.cuotas,
-        this.CreditosForm.value.total,
+        this.numero_cuotas,
+        this.CreditosForm.value.total * this.numero_cuotas,
+        "",
         "",
         "",
         "",
@@ -1563,6 +1636,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       this.ServiciosGenerales.RenameFile(this.compromiso, dni + '_COMPROMISO_' + fecha, identificador ,"credito"),
       this.ServiciosGenerales.RenameFile(this.letra, dni + '_LETRA_' + fecha, identificador ,"credito"),
       this.ServiciosGenerales.RenameFile(this.ddjj, dni + '_DDJJ_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.oficio, dni + '_OFICIO_' + fecha, identificador ,"credito"),
       this.ServiciosGenerales.RenameFile(this.otros, dni + '_OTROS_' + fecha, identificador ,"credito"),
       this.ServiciosGenerales.RenameFile(this.papeles, dni + '_PAPELES_' + fecha, identificador ,"credito"),
     ).subscribe(resultado=>{
@@ -1607,6 +1681,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         resultado[11].mensaje,
         resultado[12].mensaje,
         resultado[13].mensaje,
+        resultado[14].mensaje,
         this.CreditosForm.value.observaciones
       ).subscribe(res=>{
         
@@ -1666,7 +1741,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
             this.CreditosForm.value.papeles_courier,
             this.CreditosForm.value.papeles_fecha_envio,
             this.CreditosForm.value.papeles_seguimiento,
-            resultado[14].mensaje,
+            resultado[15].mensaje,
             this.CreditosForm.value.papeles_observaciones
           ).subscribe();
         }
@@ -1707,6 +1782,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       this.ServiciosGenerales.RenameFile(this.compromiso_nuevo, dni + '_COMPROMISO_' + fecha, identificador ,"credito"),
       this.ServiciosGenerales.RenameFile(this.letra_nuevo, dni + '_LETRA_' + fecha, identificador ,"credito"),
       this.ServiciosGenerales.RenameFile(this.ddjj_nuevo, dni + '_DDJJ_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.oficio_nuevo, dni + '_OTROS_' + fecha, identificador ,"credito"),
       this.ServiciosGenerales.RenameFile(this.otros_nuevo, dni + '_OTROS_' + fecha, identificador ,"credito"),
       this.ServiciosGenerales.RenameFile(this.papeles_nuevo, dni + '_PAPELES_' + fecha, identificador ,"credito"),
     ).subscribe(resultado=>{
@@ -1744,7 +1820,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         this.compromiso_editar ? resultado[10].mensaje : this.compromiso_antiguo,
         this.letra_editar ? resultado[11].mensaje : this.letra_antiguo,
         this.ddjj_editar ? resultado[12].mensaje : this.ddjj_antiguo,
-        this.otros_editar ? resultado[13].mensaje : this.otros_antiguo,
+        this.oficio_editar ? resultado[13].mensaje : this.oficio_antiguo,
+        this.otros_editar ? resultado[14].mensaje : this.otros_antiguo,
         this.CreditosForm.value.observaciones
       ).subscribe(res=>{
         // console.log(res)
@@ -1790,7 +1867,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
               this.CreditosForm.value.papeles_courier,
               this.CreditosForm.value.papeles_fecha_envio,
               this.CreditosForm.value.papeles_seguimiento,
-              this.papeles_editar ? resultado[14].mensaje : this.papeles_antiguo,
+              this.papeles_editar ? resultado[15].mensaje : this.papeles_antiguo,
               this.CreditosForm.value.papeles_observaciones
             ).subscribe();
           }
@@ -1842,8 +1919,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       this.ServiciosGenerales.RenameFile(this.compromiso_nuevo, dni + '_COMPROMISO_' + fecha, identificador ,"credito"),
       this.ServiciosGenerales.RenameFile(this.letra_nuevo, dni + '_LETRA_' + fecha, identificador ,"credito"),
       this.ServiciosGenerales.RenameFile(this.ddjj_nuevo, dni + '_DDJJ_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.oficio_nuevo, dni + '_OFICIO_' + fecha, identificador ,"credito"),
       this.ServiciosGenerales.RenameFile(this.otros_nuevo, dni + '_OTROS_' + fecha, identificador ,"credito"),
-      this.ServiciosGenerales.RenameFile(this.papeles_nuevo, dni + '_PAPELES_' + fecha, identificador ,"credito"),
     ).subscribe(resultado=>{
       this.Servicio.ActualizarDocumentos(
         this.id_credito,
@@ -1860,7 +1937,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         this.compromiso_editar ? resultado[10].mensaje : this.compromiso_antiguo,
         this.letra_editar ? resultado[11].mensaje : this.letra_antiguo,
         this.ddjj_editar ? resultado[12].mensaje : this.ddjj_antiguo,
-        this.otros_editar ? resultado[13].mensaje : this.otros_antiguo
+        this.oficio_editar ? resultado[13].mensaje : this.oficio_antiguo,
+        this.otros_editar ? resultado[14].mensaje : this.otros_antiguo
       ).subscribe(res=>{
         setTimeout(()=>{
           this.router.navigate(['/creditos']);
@@ -1891,6 +1969,58 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         this.Notificacion.Snack("Ocurrió un error al registrar el pago", "") ;
       }
     })
+  }
+
+  AnoElegido(ano_normalizado: Moment) {
+    let ano_seleccionado : moment.Moment ;
+    // Se colocó este 'if' para que cuando el valor inicial de 'fecha_fin' sea null, no haya errores en consola
+    if( this.CreditosForm.value.fecha_pago ) {
+      ano_seleccionado = moment(this.CreditosForm.value.fecha_pago) ;
+    } else {
+      ano_seleccionado = moment() ;
+    }
+    ano_seleccionado.year(ano_normalizado.year());
+    this.CreditosForm.get('fecha_pago').setValue(ano_seleccionado);
+  }
+
+  MesElegido(mes_normalizado: Moment, datepicker: MatDatepicker<Moment>) {
+    let mes_seleccionado : moment.Moment ;
+    // Se colocó este 'if' para que cuando el valor inicial de 'fecha_fin' sea null, no haya errores en consola
+    if( this.CreditosForm.value.fecha_pago ) {
+      mes_seleccionado = moment(this.CreditosForm.value.fecha_pago) ;
+    } else {
+      mes_seleccionado = moment() ;
+    }
+    mes_seleccionado.month(mes_normalizado.month());
+    this.CreditosForm.get('fecha_pago').setValue(moment(mes_seleccionado).endOf('month').toDate());
+    datepicker.close();
+    this.FechaPagoSeleccionada() ;
+  }
+
+  AnoElegido2(ano_normalizado: Moment) {
+    let ano_seleccionado : moment.Moment ;
+    // Se colocó este 'if' para que cuando el valor inicial de 'fecha_fin' sea null, no haya errores en consola
+    if( this.CreditosForm.value.afiliacion_fecha_vencimiento ) {
+      ano_seleccionado = moment(this.CreditosForm.value.afiliacion_fecha_vencimiento) ;
+    } else {
+      ano_seleccionado = moment() ;
+    }
+    ano_seleccionado.year(ano_normalizado.year());
+    this.CreditosForm.get('afiliacion_fecha_vencimiento').setValue(ano_seleccionado);
+  }
+
+  MesElegido2(mes_normalizado: Moment, datepicker: MatDatepicker<Moment>) {
+    let mes_seleccionado : moment.Moment ;
+    // Se colocó este 'if' para que cuando el valor inicial de 'fecha_fin' sea null, no haya errores en consola
+    if( this.CreditosForm.value.afiliacion_fecha_vencimiento ) {
+      mes_seleccionado = moment(this.CreditosForm.value.afiliacion_fecha_vencimiento) ;
+    } else {
+      mes_seleccionado = moment() ;
+    }
+    mes_seleccionado.month(mes_normalizado.month());
+    this.CreditosForm.get('afiliacion_fecha_vencimiento').setValue(moment(mes_seleccionado).endOf('month').toDate());
+    datepicker.close();
+    this.FechaPagoAfiliacionSeleccionada() ;
   }
 
   Imprimir(){

@@ -46,7 +46,6 @@ export class VentanaEmergenteMarca {
   ngOnInit() {
     this.MarcaForm = this.FormBuilder.group({
       'nombre_anterior': [null, [
-        Validators.required
       ]],
       'nombre': [null, [
         Validators.required

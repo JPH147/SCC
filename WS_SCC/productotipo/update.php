@@ -20,6 +20,7 @@
         {
             $productotipo->id_tipo_producto = trim($_POST["id"]);
             $productotipo->tprd_nombre = trim($_POST["nombre"]);
+            $productotipo->tiene_serie  = trim($_POST["prtieneserie"]);
             $productotipo->idunidadmedida = trim($_POST["idunidad"]);
 
 

@@ -305,7 +305,7 @@ export class VentanaEmergenteProvisionalClientes {
           this.ClientesForm.get('cargo_estado').setValue(res['data'].id_cargo_estado) ;
           this.ClientesForm.get('cargo_estado_nombre').setValue(res['data'].cargo_estado) ;
 
-          console.log( res['data'] ) ;
+          // console.log( res['data'] ) ;
           
           this.ClientesForm.get('codigo').setValue(res['data'].codigo);
           this.ClientesForm.get('cip').setValue(res['data'].cip);

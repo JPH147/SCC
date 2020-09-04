@@ -47,6 +47,8 @@ export class VentanaDocumentosComponent implements OnInit {
     this.CrearFormulario() ;
     this.ListarTiposPlantilla() ;
     this.Verificarusuario() ;
+
+    this.PlantillasForm.get('tipo_plantilla').setValue(this.data.tipo_plantilla) ;
   }
 
   CrearFormulario() {

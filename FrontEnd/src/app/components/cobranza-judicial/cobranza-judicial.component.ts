@@ -459,9 +459,9 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
     this.JudicialForm.get('especialista').setValue("");
   }
 
-  AgregarDocumento(){
+  AgregarDocumento( tipo_documento : number  ){
     let Ventana = this.Dialogo.open(VentanaJudicialComponent,{
-      data: { proceso : this.id_proceso_agregar, fecha : this.JudicialForm.value.fecha_inicio } ,
+      data: { proceso : this.id_proceso_agregar, fecha : this.JudicialForm.value.fecha_inicio, tipo_documento : tipo_documento } ,
       width: '900px'
     });
 

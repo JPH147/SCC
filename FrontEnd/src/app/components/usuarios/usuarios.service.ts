@@ -315,6 +315,7 @@ export type Rol = {
       eliminar : boolean ,
       realizar_canjes : boolean ,
       abrir_procesos : boolean ,
+      agregar_pagos_masivos : boolean ,
     } ,
     salida_ventas : {
       general : boolean ,
@@ -357,11 +358,14 @@ export type Rol = {
       editar : boolean ,
       eliminar : boolean ,
       abrir_procesos : boolean ,
+      agregar_pagos_masivos : boolean ,
     } ,
     afiliaciones : {
       general : boolean ,
       agregar : boolean ,
       editar : boolean ,
+      eliminar : boolean ,
+      agregar_pagos_masivos : boolean ,
     } ,
     refinanciamientos : {
       general : boolean ,

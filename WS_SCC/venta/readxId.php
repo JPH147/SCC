@@ -55,6 +55,7 @@
 				"letra_pdf"=>$venta->letra_pdf,
 				"voucher_pdf"=>$venta->voucher_pdf,
 				"autorizacion_pdf"=>$venta->autorizacion_pdf,
+				"oficio_pdf"=>$venta->oficio_pdf,
 				"otros_pdf"=>$venta->otros_pdf,
 				"observacion"=>$venta->observacion,
 				"lugar_venta"=>$venta->lugar_venta,

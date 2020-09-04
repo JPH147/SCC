@@ -272,7 +272,16 @@
                   </ng-container>
                   <ng-container *ngIf="data.ver">
                     <mat-icon [color]="Permiso.ventas.listado_ventas.abrir_procesos ? 'accent' : 'warn'">
-                      {{ Permiso.ventas.listado_ventas.abrir_procesos ? 'check' : 'close' }} </mat-icon> &nbsp; Abrir procesos
+                      {{ Permiso.ventas.listado_ventas.abrir_procesos ? 'check' : 'close' }} </mat-icon> &nbsp; Abrir expedientes
+                  </ng-container>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.ventas.listado_ventas.agregar_pagos_masivos"> Agregar pagos </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.ventas.listado_ventas.agregar_pagos_masivos ? 'accent' : 'warn'">
+                      {{ Permiso.ventas.listado_ventas.agregar_pagos_masivos ? 'check' : 'close' }} </mat-icon> &nbsp; Agregar pagos
                   </ng-container>
                 </mat-grid-tile>
               </mat-grid-list>
@@ -583,6 +592,15 @@
                       {{ Permiso.creditos.listado_creditos.abrir_procesos ? 'check' : 'close' }} </mat-icon> &nbsp; Abrir procesos
                   </ng-container>
                 </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.creditos.listado_creditos.agregar_pagos_masivos"> Agregar pagos </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.creditos.listado_creditos.agregar_pagos_masivos ? 'accent' : 'warn'">
+                      {{ Permiso.creditos.listado_creditos.agregar_pagos_masivos ? 'check' : 'close' }} </mat-icon> &nbsp; Agregar pagos
+                  </ng-container>
+                </mat-grid-tile>
               </mat-grid-list>
             </ng-container>
           </ng-container>
@@ -620,6 +638,24 @@
                   <ng-container *ngIf="data.ver">
                     <mat-icon [color]="Permiso.creditos.afiliaciones.editar ? 'accent' : 'warn'">
                       {{ Permiso.creditos.afiliaciones.editar ? 'check' : 'close' }} </mat-icon> &nbsp; Editar
+                  </ng-container>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.creditos.afiliaciones.eliminar"> Elimianr </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.creditos.afiliaciones.eliminar ? 'accent' : 'warn'">
+                      {{ Permiso.creditos.afiliaciones.eliminar ? 'check' : 'close' }} </mat-icon> &nbsp; Elimianr
+                  </ng-container>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.creditos.afiliaciones.agregar_pagos_masivos"> Agregar pagos </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.creditos.afiliaciones.agregar_pagos_masivos ? 'accent' : 'warn'">
+                      {{ Permiso.creditos.afiliaciones.agregar_pagos_masivos ? 'check' : 'close' }} </mat-icon> &nbsp; Agregar pagos
                   </ng-container>
                 </mat-grid-tile>
               </mat-grid-list>

@@ -69,6 +69,7 @@ Class Producto{
                 "numero"=>$contador,
                 "id"=>$id,
                 "tipo"=>$tipo,
+                "tiene_serie"=>$tiene_serie,
                 "marca"=>$marca,
                 "modelo"=>$modelo,
                 "descripcion"=>$descripcion,

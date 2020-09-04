@@ -91,6 +91,7 @@ export class VentanaPermisosComponent implements OnInit {
           eliminar : permisos.ventas?.listado_ventas?.eliminar || false ,
           realizar_canjes : permisos.ventas?.listado_ventas?.realizar_canjes || false ,
           abrir_procesos : permisos.ventas?.listado_ventas?.abrir_procesos || false ,
+          agregar_pagos_masivos : permisos.ventas?.listado_ventas?.agregar_pagos_masivos || false ,
         } ,
         salida_ventas : {
           general : permisos.ventas?.salida_ventas?.general || false ,
@@ -134,11 +135,14 @@ export class VentanaPermisosComponent implements OnInit {
           editar : permisos.creditos?.listado_creditos?.editar || false ,
           eliminar : permisos.creditos?.listado_creditos?.eliminar || false ,
           abrir_procesos : permisos.creditos?.listado_creditos?.abrir_procesos || false ,
+          agregar_pagos_masivos : permisos.creditos?.listado_creditos?.agregar_pagos_masivos || false ,
         } ,
         afiliaciones : {
           general : permisos.creditos?.afiliaciones?.general || false ,
           agregar : permisos.creditos?.afiliaciones?.agregar || false ,
           editar : permisos.creditos?.afiliaciones?.editar || false ,
+          eliminar : permisos.creditos?.afiliaciones?.eliminar || false ,
+          agregar_pagos_masivos : permisos.creditos?.afiliaciones?.agregar_pagos_masivos || false ,
         } ,
         refinanciamientos : {
           general : permisos.creditos?.refinanciamientos?.general || false ,
@@ -235,6 +239,7 @@ export class VentanaPermisosComponent implements OnInit {
           eliminar : false ,
           realizar_canjes : false ,
           abrir_procesos : false ,
+          agregar_pagos_masivos : false ,
         } ,
         salida_ventas : {
           general : false ,
@@ -278,11 +283,14 @@ export class VentanaPermisosComponent implements OnInit {
           editar : false ,
           eliminar : false ,
           abrir_procesos : false ,
+          agregar_pagos_masivos : false ,
         } ,
         afiliaciones : {
           general : false ,
           agregar : false ,
           editar : false ,
+          eliminar : false ,
+          agregar_pagos_masivos : false ,
         } ,
         refinanciamientos : {
           general : false ,

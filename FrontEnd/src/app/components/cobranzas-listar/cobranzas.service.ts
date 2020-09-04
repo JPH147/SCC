@@ -852,4 +852,64 @@ export class CobranzasService {
       }
     }));
   }
+
+  CrearRegularizacionPagoCredito(
+    cobranza_manual : number ,
+    credito : number ,
+    monto : number ,
+    fecha : Date ,
+  ){
+    let params = new HttpParams()
+      .set('prcobranzamanual', cobranza_manual.toString() )
+      .set('prcredito', credito.toString() )
+      .set('prmonto', monto.toString() )
+      .set('prfecha', moment(fecha).format("YYYY-MM-DD") ) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'cobranza/create-regularizacion-pago-credito.php', params, {headers: headers});
+  }
+
+  CrearCobranzaManualCredito(
+    credito : number ,
+    tipo_cobranza : number ,
+    fecha : Date ,
+    comprobante : string ,
+    total : number ,
+    observacion : string ,
+  ){
+    let params = new HttpParams()
+      .set('prcredito', credito.toString() )
+      .set('prtipocobranza', tipo_cobranza.toString() )
+      .set('prfecha', moment(fecha).format("YYYY-MM-DD") )
+      .set('prcomprobante', comprobante )
+      .set('prtotal', total.toString() )
+      .set('probservacion', observacion ) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'cobranza/create-manual-credito.php', params, {headers: headers});
+  }
+
+  CrearCobranzaManualVenta(
+    venta : number ,
+    tipo_cobranza : number ,
+    fecha : Date ,
+    comprobante : string ,
+    total : number ,
+    observacion : string ,
+  ){
+    let params = new HttpParams()
+      .set('prventa', venta.toString() )
+      .set('prtipocobranza', tipo_cobranza.toString() )
+      .set('prfecha', moment(fecha).format("YYYY-MM-DD") )
+      .set('prcomprobante', comprobante )
+      .set('prtotal', total.toString() )
+      .set('probservacion', observacion ) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'cobranza/create-manual-venta.php', params, {headers: headers});
+  }
+
 }

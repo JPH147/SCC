@@ -37,8 +37,8 @@
     </mat-grid-list>
   
     <mat-card-content>
-      <mat-grid-list cols=5 rowHeight="70px" *ngFor="let serie of seriearticulo">
-        <mat-grid-tile>
+      <mat-grid-list [cols]="this.data.tiene_serie == 1 ? 5 : 4" rowHeight="70px" *ngFor="let serie of seriearticulo">
+        <mat-grid-tile *ngIf="this.data.tiene_serie == 1">
           <mat-form-field class="columnas-1">
             <input matInput placeholder="Serie" [(ngModel)]="serie.serie" #InputSerie>
             <mat-hint class="error" *ngIf="serie.repetidoBD">La serie ya existe</mat-hint>

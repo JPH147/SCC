@@ -44,10 +44,15 @@
             <mat-cell *matCellDef="let tipo"> {{tipo.nombre}} </mat-cell>
           </ng-container>
 
+          <ng-container matColumnDef="tiene_serie">
+            <mat-header-cell *matHeaderCellDef> Tiene serie </mat-header-cell>
+            <mat-cell *matCellDef="let tipo"> {{tipo.tiene_serie == 1 ? 'Con serie' : 'Sin serie'}} </mat-cell>
+          </ng-container>
+
           <ng-container matColumnDef="unidadmedida">
-                <mat-header-cell *matHeaderCellDef> Unidad de Medida </mat-header-cell>
-                <mat-cell *matCellDef="let tipo"> {{tipo.unidad_medida}} </mat-cell>
-              </ng-container>
+            <mat-header-cell *matHeaderCellDef> Unidad de Medida </mat-header-cell>
+            <mat-cell *matCellDef="let tipo"> {{tipo.unidad_medida}} </mat-cell>
+          </ng-container>
     
          <ng-container matColumnDef="opciones">
             <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>

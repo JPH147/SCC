@@ -24,7 +24,7 @@ export class ventanaseries  implements OnInit {
   public seriearticulo: Array<any> = [];
   public numero: number;
   public series: Array <string>;
-  public contador: number;
+  public contador: number = 0;
   public serie: Array<any>;
   public colores: Array<any>;
   public invalidBD:boolean;
@@ -48,8 +48,9 @@ export class ventanaseries  implements OnInit {
     this.invalidV=false;
     this.invalidBD=false;
     this.invalidP=false;
-    this.contador = 1;
-    this.seriearticulo = [{numero: this.contador, producto:this.data.producto,serie: '', color:'', almacenamiento:'', observacion:"", precio: this.precio_minimo, repetidoBD:false, repetidoV:false, repetidoP:false} ];
+    // this.contador = 1;
+    // this.seriearticulo = [{numero: this.contador, producto:this.data.producto,serie: '', color:'', almacenamiento:'', observacion:"", precio: this.precio_minimo, repetidoBD:false, repetidoV:false, repetidoP:false} ];
+    this.AgregarSerieVS() ;
     this.ListarColores("");
 
     if (this.data.series.length>0) {
@@ -79,10 +80,12 @@ export class ventanaseries  implements OnInit {
   }
 
   ngAfterViewInit(){
-    this.ValidarBD();
     this.FiltrarColores();
-    this.FiltrarSerie();
-    this.FiltrarSerieVista();
+    if ( this.data.tiene_serie == 1 ) {
+      this.ValidarBD();
+      this.FiltrarSerie();
+      this.FiltrarSerieVista();
+    }
   }
 
   SeleccionarNumeroSeries(){
@@ -176,7 +179,17 @@ export class ventanaseries  implements OnInit {
 
   AgregarSerieVS() {
     this.contador++;
-    this.seriearticulo.push({numero: this.contador, producto: this.data.producto, serie: '', color:'', almacenamiento:'', observacion:"", precio: this.precio_minimo, repetidoBD:false, repetidoV:false, repetidoP:false});
+    if ( this.data.tiene_serie == 1 ) {
+      this.seriearticulo.push({numero: this.contador, producto: this.data.producto, serie: '', color:'', almacenamiento:'', observacion:"", precio: this.precio_minimo, repetidoBD:false, repetidoV:false, repetidoP:false});
+    } else {
+      // Si no hay serie, se genera un número aleatorio y se guarda así
+      let random : number = new Date().getTime() ;
+      let posicion = this.seriearticulo.length + 1;
+      let serie_creada : string = random + "-" + posicion ;
+      this.seriearticulo.push({numero: this.contador, producto: this.data.producto, serie: serie_creada, color:'', almacenamiento:'', observacion:"", precio: this.precio_minimo, repetidoBD:false, repetidoV:false, repetidoP:false});
+
+      console.log(this.seriearticulo) ;
+    }
   }
 
   EliminarElemento(array,value){
@@ -327,7 +340,8 @@ export class ventanaseries  implements OnInit {
   }
 
   Aceptar() {
-    return this.seriearticulo
+    return this.seriearticulo ;
+    // this.ventana.close(this.seriearticulo)
   }
 
 }

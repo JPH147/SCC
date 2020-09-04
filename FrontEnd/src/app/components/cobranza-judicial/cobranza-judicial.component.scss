@@ -24,6 +24,10 @@
   border-left-color: mat-color($mat_verde);
 }
 
+.tipo-5{
+  border-left-color: mat-color($mat_naranja);
+}
+
 .icono{
   float: right;
   transform: translate(-20px, -12.5px);
@@ -77,6 +81,10 @@ textarea{
   color: white !important;
 }
 
+.tipo-tercero-5{
+  background-color: mat-color($mat_naranja);
+}
+
 span.derecha{
   position: absolute;
   right: 20px;
@@ -93,4 +101,27 @@ span.derecha{
   margin-left: 20px;
   margin-right: 20px;
   margin-top: 10px !important;
+}
+
+.boton-tipo-1{
+  color: mat-color($mat_ambar);
+}
+
+.boton-tipo-2{
+  color: mat-color($mat_rojo);
+  // color: white !important;
+}
+
+.boton-tipo-3{
+  color: mat-color($mat_verde);
+  // color: white !important;
+}
+
+.boton-tipo-4{
+  color: grey;
+  // color: white !important;
+}
+
+.boton-tipo-5{
+  color: mat-color($mat_naranja);
 }

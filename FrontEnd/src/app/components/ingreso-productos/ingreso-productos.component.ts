@@ -509,14 +509,13 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
     const serieventana = this.DialogoSerie.open(ventanaseries, {
       width: '1200px',
       maxHeight : '80vh',
-      data: {producto: producto.get('producto').value.id, series:this.Series}
+      data: {producto: producto.get('producto').value.id, tiene_serie: producto.get('producto').value.tiene_serie,series:this.Series}
     });
 
-    serieventana.afterClosed().subscribe(res=>{
+    serieventana.afterClosed().subscribe(nuevas_series=>{
+      if (nuevas_series) {
 
-      if (res) {
-
-        this.Duplicados(res).subscribe(resultado=>{
+        this.Duplicados(nuevas_series).subscribe(resultado=>{
           if(resultado > 0) {
             this.hay_duplicados = true;
           } else {
@@ -526,14 +525,14 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
 
         let contador=0;
 
-        for (let i of res) {
+        for (let i of nuevas_series) {
           this.EliminarElemento2(this.Series,i.producto);
         }
 
-        for (let i of res) {
+        for (let i of nuevas_series) {
           if (i.serie != '') {
             this.Series.push({id_producto: producto.get('producto').value.id, serie: i.serie, color:i.color, almacenamiento: i.almacenamiento, observacion:i.observacion, precio:i.precio});
-            contador++
+            contador++ ;
           }
         }
         this.IngresoProductoForm.get('productos')['controls'][index].get('cantidad').setValue(contador)

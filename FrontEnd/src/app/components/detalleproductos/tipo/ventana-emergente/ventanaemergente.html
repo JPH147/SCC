@@ -16,13 +16,18 @@
           <mat-grid-tile *ngIf="total>0">
             <mat-error>Ya existe este tipo de producto</mat-error>
           </mat-grid-tile>
+
           <mat-grid-tile>
-                <mat-form-field>
-                    <mat-select placeholder="Unidad de Medida" formControlName="idunidadmedida">
-                        <mat-option *ngFor="let um of lstunidades" [value]="um.id">{{um.nombre}}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </mat-grid-tile>
+            <mat-checkbox color="primary" formControlName="tiene_serie"> Tiene serie </mat-checkbox>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <mat-form-field>
+                <mat-select placeholder="Unidad de Medida" formControlName="idunidadmedida">
+                    <mat-option *ngFor="let um of lstunidades" [value]="um.id">{{um.nombre}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+          </mat-grid-tile>
         </mat-grid-list>
 
       </mat-card-content>

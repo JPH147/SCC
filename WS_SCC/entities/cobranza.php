@@ -59,6 +59,9 @@
     public $vendedor;
     public $cliente_dni ;
 
+    public $credito ;
+    public $venta ;
+
     public function __construct($db){
       $this->conn = $db;
     }
@@ -1740,6 +1743,103 @@
       $this->transaccion=htmlspecialchars(strip_tags($this->transaccion));
       $this->cronograma=htmlspecialchars(strip_tags($this->cronograma));
       $this->interes=htmlspecialchars(strip_tags($this->interes));
+
+      if($result->execute())
+      {
+        return true;
+      }
+      return false;
+    }
+
+    // Esta función se utiliza cuando se sube un pago masivo, el procedimiento
+    // calcula y paga la cuota correspondiente
+    function crear_regularizacion_pago_credito(){
+      $query = "CALL sp_actualizarinterescronograma(
+        :prcobranzamanual,
+        :prcredito,
+        :prmonto,
+        :prfecha
+      )";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(":prcobranzamanual", $this->cobranza_manual);
+      $result->bindParam(":prcredito", $this->credito);
+      $result->bindParam(":prmonto", $this->monto);
+      $result->bindParam(":prfecha", $this->fecha);
+
+      $this->cobranza_manual=htmlspecialchars(strip_tags($this->cobranza_manual));
+      $this->credito=htmlspecialchars(strip_tags($this->credito));
+      $this->monto=htmlspecialchars(strip_tags($this->monto));
+      $this->fecha=htmlspecialchars(strip_tags($this->fecha));
+
+      if($result->execute())
+      {
+        return true;
+      }
+      return false;
+    }
+
+    // Esta función crea una cobranza manual desde pagos pasivos
+    function create_cobranza_manual_credito(){
+      $query = "CALL sp_crearcobranzamanualcredito(
+        :prcredito,
+        :prtipocobranza,
+        :prfecha,
+        :prcomprobante,
+        :prtotal,
+        :probservacion
+      )";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(":prcredito", $this->credito);
+      $result->bindParam(":prtipocobranza", $this->tipo_cobranza);
+      $result->bindParam(":prfecha", $this->fecha);
+      $result->bindParam(":prcomprobante", $this->comprobante);
+      $result->bindParam(":prtotal", $this->total);
+      $result->bindParam(":probservacion", $this->observacion);
+
+      $this->credito=htmlspecialchars(strip_tags($this->credito));
+      $this->tipo_cobranza=htmlspecialchars(strip_tags($this->tipo_cobranza));
+      $this->fecha=htmlspecialchars(strip_tags($this->fecha));
+      $this->comprobante=htmlspecialchars(strip_tags($this->comprobante));
+      $this->total=htmlspecialchars(strip_tags($this->total));
+      $this->observacion=htmlspecialchars(strip_tags($this->observacion));
+
+      if($result->execute())
+      {
+        return true;
+      }
+      return false;
+    }
+
+    // Esta función crea una cobranza manual desde pagos pasivos
+    function create_cobranza_manual_venta(){
+      $query = "CALL sp_crearcobranzamanualventa(
+        :prventa,
+        :prtipocobranza,
+        :prfecha,
+        :prcomprobante,
+        :prtotal,
+        :probservacion
+      )";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(":prventa", $this->venta);
+      $result->bindParam(":prtipocobranza", $this->tipo_cobranza);
+      $result->bindParam(":prfecha", $this->fecha);
+      $result->bindParam(":prcomprobante", $this->comprobante);
+      $result->bindParam(":prtotal", $this->total);
+      $result->bindParam(":probservacion", $this->observacion);
+
+      $this->venta=htmlspecialchars(strip_tags($this->venta));
+      $this->tipo_cobranza=htmlspecialchars(strip_tags($this->tipo_cobranza));
+      $this->fecha=htmlspecialchars(strip_tags($this->fecha));
+      $this->comprobante=htmlspecialchars(strip_tags($this->comprobante));
+      $this->total=htmlspecialchars(strip_tags($this->total));
+      $this->observacion=htmlspecialchars(strip_tags($this->observacion));
 
       if($result->execute())
       {

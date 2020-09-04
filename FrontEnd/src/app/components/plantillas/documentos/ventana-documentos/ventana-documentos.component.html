@@ -10,7 +10,7 @@
   <form [formGroup]="PlantillasForm">
     <mat-card-content>
       <mat-grid-list cols=3 rowHeight="70px">
-        <mat-grid-tile>
+        <mat-grid-tile *ngIf="!data.tipo_plantilla">
           <mat-form-field class="columnas-1">
             <mat-select placeholder="Tipo de plantilla" formControlName="tipo_plantilla">
               <mat-option *ngFor="let tipo of Tipos" [value]="tipo.id"> {{ tipo.nombre }} </mat-option>

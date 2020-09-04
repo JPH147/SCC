@@ -162,6 +162,7 @@ export class CreditosService {
     pdf_compromiso:string,
     pdf_letra:string,
     pdf_ddjj:string,
+    pdf_oficio:string,
     pdf_otros:string,
     observacion:string
   ) :Observable<any> {
@@ -199,8 +200,11 @@ export class CreditosService {
       .set('prpdfcompromiso',pdf_compromiso)
       .set('prpdfletra',pdf_letra)
       .set('prpdfddjj',pdf_ddjj)
+      .set('prpdfoficio',pdf_oficio)
       .set('prpdfotros',pdf_otros)
-      .set('probservacion',observacion)
+      .set('probservacion',observacion) ;
+
+    console.log(params)
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -325,6 +329,7 @@ export class CreditosService {
     pdf_compromiso:string,
     pdf_letra:string,
     pdf_ddjj:string,
+    pdf_oficio:string,
     pdf_otros:string,
     observacion:string
   ) :Observable<any> {
@@ -360,6 +365,7 @@ export class CreditosService {
       .set('prpdfcompromiso',pdf_compromiso)
       .set('prpdfletra',pdf_letra)
       .set('prpdfddjj',pdf_ddjj)
+      .set('prpdfoficio',pdf_oficio)
       .set('prpdfotros',pdf_otros)
       .set('probservacion',observacion)
 
@@ -386,6 +392,7 @@ export class CreditosService {
     pdf_compromiso:string,
     pdf_letra:string,
     pdf_ddjj:string,
+    pdf_oficio:string,
     pdf_otros:string
   ) :Observable<any> {
 
@@ -404,6 +411,7 @@ export class CreditosService {
       .set('prpdfcompromiso',pdf_compromiso)
       .set('prpdfletra',pdf_letra)
       .set('prpdfddjj',pdf_ddjj)
+      .set('prpdfoficio',pdf_oficio) 
       .set('prpdfotros',pdf_otros) ;
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');

@@ -13,9 +13,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {ServiciosTelefonos} from '../global/telefonos';
 import {ServiciosDirecciones} from '../global/direcciones';
 import {ServiciosGenerales} from '../global/servicios';
-// import {VentanaProductosComponent} from './ventana-productos/ventana-productos.component';
-import { FileHolder } from 'angular2-image-upload';
-import * as moment from 'moment';
 import {Location} from '@angular/common';
 import {Notificaciones} from '../global/notificacion';
 import {URLIMAGENES} from '../global/url'
@@ -30,6 +27,11 @@ import { EstadoSesion } from "../usuarios/usuarios.reducer";
 import { Store } from "@ngrx/store";
 import { VentanaConfirmarComponent } from "../global/ventana-confirmar/ventana-confirmar.component";
 import { CobranzaJudicialService } from "../cobranza-judicial/cobranza-judicial.service";
+
+import * as moment from 'moment';
+import {default as _rollupMoment, Moment} from 'moment';
+import { MatDatepicker } from '@angular/material/datepicker';
+import { VentanaGenerarPagoTransaccionComponent } from "../cobranzas-listar/ventana-generar-pago-transaccion/ventana-generar-pago-transaccion.component";
 
 @Component({
   selector: 'app-ventas-salida',
@@ -75,6 +77,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   public planilla: string;
   public letra: string;
   public autorizacion: string;
+  public oficio: string;
   public otros: string;
   public papeles : string = "";
 
@@ -86,6 +89,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   public planilla_nuevo: string;
   public letra_nuevo: string;
   public autorizacion_nuevo: string;
+  public oficio_nuevo: string;
   public otros_nuevo: string;
   public papeles_antiguo : string = "";
 
@@ -97,6 +101,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   public planilla_antiguo: string;
   public letra_antiguo: string;
   public autorizacion_antiguo: string;
+  public oficio_antiguo: string;
   public otros_antiguo: string;
   public papeles_nuevo : string = "";
 
@@ -108,6 +113,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   public planilla_editar: boolean= false;
   public letra_editar: boolean= false;
   public autorizacion_editar: boolean= false;
+  public oficio_editar: boolean= false;
   public otros_editar: boolean= false;
   public papeles_editar : boolean = false;
   public total_cronograma_editado:number;
@@ -270,7 +276,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       'fechaventa': [{value: new Date(), disabled: false}, [
         Validators.required
       ]],
-      'fechapago': [{value: new Date((new Date()).valueOf() + 1000*60*60*24*30), disabled: false}, [
+      'fechapago': [{value: moment(new Date()).add(1,'months').endOf('month').toDate(), disabled: false}, [
         Validators.required
       ]],
       'tipopago': [null, [
@@ -290,14 +296,16 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       ]],
       'observaciones': ["", [
       ]],
-      productos: this.FormBuilder.array([]),
-      garantes: this.FormBuilder.array([]),
       papeles : [ { value : null , disabled : false } ,[] ],
       papeles_id : [ { value : null , disabled : false } ,[] ],
       papeles_fecha_envio : [ { value : null , disabled : false } ,[] ],
       papeles_courier : [ { value : null , disabled : false } ,[] ],
       papeles_seguimiento : [ { value : null , disabled : false } ,[] ],
       papeles_observaciones : [ { value : null , disabled : false } ,[] ],
+      fecha_fin_mes: [{value: true, disabled: false},[
+      ]],
+      productos: this.FormBuilder.array([]),
+      garantes: this.FormBuilder.array([]),
     });
   }
 
@@ -330,6 +338,16 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       this.VentasSalidaForm.get('cuotas').setValue(res.numero_cuotas);
       this.VentasSalidaForm.get('montototal').setValue(res.monto_total);
       this.VentasSalidaForm.get('contrato').setValue(res.contrato);
+
+      // Si la fecha de pago es el último día del mes, se activa el control 'fecha_fin_mes'
+      let fecha_pago = this.VentasSalidaForm.get('fechapago').value ;
+      let ultimo_fecha_pago  = moment(this.VentasSalidaForm.get('fechapago').value).endOf('month').toDate() ;
+      if ( moment(fecha_pago).isBefore(ultimo_fecha_pago, 'day') ) {
+        this.VentasSalidaForm.get('fecha_fin_mes').setValue(false) ;
+      } else {
+        this.VentasSalidaForm.get('fecha_fin_mes').setValue(true) ;
+      }
+
       this.estado = res.estado ;
       
       this.totales_monto_total = res.monto_total ;
@@ -392,6 +410,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
         this.planilla = res.planilla_pdf!="" ? URLIMAGENES.carpeta+'venta/'+res.planilla_pdf : null;
         this.letra = res.letra_pdf!="" ? URLIMAGENES.carpeta+'venta/'+res.letra_pdf : null;
         this.autorizacion = res.autorizacion_pdf!="" ? URLIMAGENES.carpeta+'venta/'+res.autorizacion_pdf : null;
+        this.oficio = res.oficio_pdf!="" ? URLIMAGENES.carpeta+'venta/'+res.oficio_pdf : null;
         this.otros = res.otros_pdf!="" ? URLIMAGENES.carpeta+'venta/'+res.otros_pdf : null;
 
         if(res['garantes'].garantes.length>0){
@@ -446,6 +465,10 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
         this.autorizacion_antiguo=res.autorizacion_pdf;
         res.autorizacion_pdf!="" ? this.autorizacion=URLIMAGENES.carpeta+'venta/'+res.autorizacion_pdf : null;
         res.autorizacion_pdf!="" ? this.autorizacion_editar=false : this.autorizacion_editar=true;
+
+        this.oficio_antiguo=res.oficio_pdf;
+        res.oficio_pdf!="" ? this.oficio=URLIMAGENES.carpeta+'venta/'+res.oficio_pdf : null;
+        res.oficio_pdf!="" ? this.oficio_editar=false : this.oficio_editar=true;
 
         this.otros_antiguo=res.otros_pdf;
         res.otros_pdf!="" ? this.otros=URLIMAGENES.carpeta+'venta/'+res.otros_pdf : null;
@@ -503,6 +526,10 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
         this.autorizacion_antiguo=res.autorizacion_pdf;
         res.autorizacion_pdf!="" ? this.autorizacion=URLIMAGENES.carpeta+'venta/'+res.autorizacion_pdf : null;
         res.autorizacion_pdf!="" ? this.autorizacion_editar=false : this.autorizacion_editar=true;
+
+        this.oficio_antiguo=res.oficio_pdf;
+        res.oficio_pdf!="" ? this.oficio=URLIMAGENES.carpeta+'venta/'+res.oficio_pdf : null;
+        res.oficio_pdf!="" ? this.oficio_editar=false : this.oficio_editar=true;
 
         this.otros_antiguo=res.otros_pdf;
         res.otros_pdf!="" ? this.otros=URLIMAGENES.carpeta+'venta/'+res.otros_pdf : null;
@@ -835,7 +862,10 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
 
   // Cuando se cambia el orden del cronograma
   ActualizarOrdenCronograma(id, orden){
+    this.Cargando.next(true) ;
     this.Servicio.ListarCronograma(id, orden).subscribe(res=>{
+      this.Cargando.next(false) ;
+      this.Cronograma = res['data'].cronograma ;
       this.CalcularTotalPagado( res['data'].cronograma ) ;
       this.ListadoVentas.Informacion.next(res['data'].cronograma);
     })
@@ -910,6 +940,14 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       this.otros=evento.serverResponse.response.body.data;
     }else{
       this.otros_nuevo=evento.serverResponse.response.body.data;
+    }
+  }
+
+  SubirOficio(evento){
+    if (!this.id_venta_editar && !this.editar_documentos) {
+      this.oficio=evento.serverResponse.response.body.data;
+    }else{
+      this.oficio_nuevo=evento.serverResponse.response.body.data;
     }
   }
 
@@ -1109,6 +1147,21 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
     }, 0) ;
   }
 
+  AgregarPagos(){
+    let ventana = this.Dialogo.open(VentanaGenerarPagoTransaccionComponent,{
+      width: '1200px' ,
+      maxHeight: '80vh' ,
+      data : { tipo : 2, id_venta : this.idventa, cronograma : this.Cronograma, pendiente : this.totales_monto_pendiente }
+    })
+
+    ventana.afterClosed().subscribe( resultado=>{
+      if ( resultado === true ) {
+        this.Notificacion.Snack("Se crearon los pagos satisfactoriamente","") ;
+        this.SeleccionarVentaxId(this.id_venta);
+      }
+    })
+  }
+
   AnularVenta(){
     let transacciones: Array<any> = [];
     
@@ -1156,6 +1209,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       this.ServiciosGenerales.RenameFile(this.letra_nuevo,'LETRA',random.toString(),"venta"),
       this.ServiciosGenerales.RenameFile(this.autorizacion_nuevo,'AUTORIZACION',random.toString(),"venta"),
       this.ServiciosGenerales.RenameFile(this.otros_nuevo,'AUTORIZACION',random.toString(),"venta"),
+      this.ServiciosGenerales.RenameFile(this.oficio_nuevo,'AUTORIZACION',random.toString(),"venta"),
       this.ServiciosGenerales.RenameFile(this.papeles_nuevo,'PAPELES',random.toString(),"venta"),
     ).subscribe(resultado=>{
 
@@ -1191,6 +1245,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
         this.letra_editar ? resultado[6].mensaje : this.letra_antiguo,
         this.autorizacion_editar ? resultado[7].mensaje : this.autorizacion_antiguo,
         this.otros_editar ? resultado[8].mensaje : this.otros_antiguo,
+        this.oficio_editar ? resultado[9].mensaje : this.oficio_antiguo,
         formulario.value.observaciones
       ).subscribe(res=>{
         // Productos antiguos
@@ -1212,7 +1267,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
             this.VentasSalidaForm.value.papeles_courier,
             this.VentasSalidaForm.value.papeles_fecha_envio,
             this.VentasSalidaForm.value.papeles_seguimiento,
-            this.papeles_editar ? resultado[9].mensaje : this.papeles_antiguo,
+            this.papeles_editar ? resultado[10].mensaje : this.papeles_antiguo,
             this.VentasSalidaForm.value.papeles_observaciones
           ).subscribe();
         }
@@ -1286,8 +1341,8 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       this.ServiciosGenerales.RenameFile(this.planilla_nuevo,'PLANILLA',random.toString(),"venta"),
       this.ServiciosGenerales.RenameFile(this.letra_nuevo,'LETRA',random.toString(),"venta"),
       this.ServiciosGenerales.RenameFile(this.autorizacion_nuevo,'AUTORIZACION',random.toString(),"venta"),
-      this.ServiciosGenerales.RenameFile(this.otros_nuevo,'AUTORIZACION',random.toString(),"venta"),
-      this.ServiciosGenerales.RenameFile(this.papeles_nuevo,'PAPELES',random.toString(),"venta"),
+      this.ServiciosGenerales.RenameFile(this.oficio_nuevo,'OFICIO',random.toString(),"venta"),
+      this.ServiciosGenerales.RenameFile(this.otros_nuevo,'OTROS',random.toString(),"venta"),
     ).subscribe(resultado=>{
       this.Servicio.ActualizarVentaDocumentos(
         this.id_venta,
@@ -1299,7 +1354,8 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
         this.planilla_editar ? resultado[5].mensaje : this.planilla_antiguo,
         this.letra_editar ? resultado[6].mensaje : this.letra_antiguo,
         this.autorizacion_editar ? resultado[7].mensaje : this.autorizacion_antiguo,
-        this.otros_editar ? resultado[8].mensaje : this.otros_antiguo,
+        this.oficio_editar ? resultado[8].mensaje : this.oficio_antiguo,
+        this.otros_editar ? resultado[9].mensaje : this.otros_antiguo,
       ).subscribe(res=>{
         this.Cargando.next(false) ;
         setTimeout(()=>{
@@ -1330,6 +1386,49 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
         this.Notificacion.Snack("Ocurrió un error al registrar el pago", "") ;
       }
     })
+  }
+
+  CorregirFechaPago() {
+    if ( this.VentasSalidaForm.get('fecha_fin_mes').value ) {
+      let fecha = this.VentasSalidaForm.value.fechapago ;
+      this.VentasSalidaForm.get('fechapago').setValue( new Date(moment(fecha).endOf('month').toDate()) ) ;
+      this.CrearCronograma() ;
+    }
+  }
+
+  FechaPagoSeleccionada() {
+    let fecha_credito = this.VentasSalidaForm.get('fechaventa').value ;
+    let fecha_pago = this.VentasSalidaForm.get('fechapago').value ;
+    if ( fecha_pago < fecha_credito ) {
+      this.VentasSalidaForm.get('fechapago').setErrors({'fecha_adelantada': true}) ;
+    } else {
+      this.VentasSalidaForm.get('fechapago').setErrors(null) ;
+    }
+    this.CrearCronograma() ;
+  }
+
+  AnoElegido(ano_normalizado: Moment) {
+    let ano_seleccionado : moment.Moment ;
+    if( this.VentasSalidaForm.value.fechapago ) {
+      ano_seleccionado = moment(this.VentasSalidaForm.value.fechapago) ;
+    } else {
+      ano_seleccionado = moment() ;
+    }
+    ano_seleccionado.year(ano_normalizado.year());
+    this.VentasSalidaForm.get('fechapago').setValue(ano_seleccionado);
+  }
+
+  MesElegido(mes_normalizado: Moment, datepicker: MatDatepicker<Moment>) {
+    let mes_seleccionado : moment.Moment ;
+    if( this.VentasSalidaForm.value.fechapago ) {
+      mes_seleccionado = moment(this.VentasSalidaForm.value.fechapago) ;
+    } else {
+      mes_seleccionado = moment() ;
+    }
+    mes_seleccionado.month(mes_normalizado.month());
+    this.VentasSalidaForm.get('fechapago').setValue(moment(mes_seleccionado).endOf('month').toDate());
+    datepicker.close();
+    this.FechaPagoSeleccionada() ;
   }
 
 }

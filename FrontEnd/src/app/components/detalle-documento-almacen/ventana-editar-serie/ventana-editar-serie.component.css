@@ -5,3 +5,7 @@
 .spinner-container{
   top: 100px;
 }
+
+[hidden] {
+  display: none !important;
+}

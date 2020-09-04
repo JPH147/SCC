@@ -24,6 +24,7 @@ Class Venta{
     public $nombre_autorizador;
     public $foto;
     public $vnt_contrato_pdf;
+    public $oficio_pdf;
     public $tipo_documento;
     public $documento;
     public $vnt_dni_pdf;
@@ -32,6 +33,7 @@ Class Venta{
     public $vnt_letra_pdf;
     public $vnt_voucher_pdf;
     public $vnt_autorizacion_pdf;
+    public $pdf_oficio ;
     public $vnt_otros_pdf;
     public $vnt_fecha_inicio;
     public $vnt_inicial;
@@ -200,6 +202,7 @@ Class Venta{
             :prpdfletra,
             :prpdfvoucher,
             :prpdfautorizacion,
+            :prpdfoficio,
             :prpdfotros,
             :probservaciones
         )";
@@ -232,6 +235,7 @@ Class Venta{
         $result->bindParam(":prpdfletra", $this->pdfletra);
         $result->bindParam(":prpdfvoucher", $this->pdfvoucher);
         $result->bindParam(":prpdfautorizacion", $this->pdfautorizacion);
+        $result->bindParam(":prpdfoficio", $this->pdf_oficio);
         $result->bindParam(":prpdfotros", $this->vnt_otros_pdf);
         $result->bindParam(":probservaciones", $this->observaciones);
 
@@ -261,6 +265,7 @@ Class Venta{
         $this->pdfletra=htmlspecialchars(strip_tags($this->pdfletra));
         $this->pdfvoucher=htmlspecialchars(strip_tags($this->pdfvoucher));
         $this->pdfautorizacion=htmlspecialchars(strip_tags($this->pdfautorizacion));
+        $this->pdf_oficio=htmlspecialchars(strip_tags($this->pdf_oficio));
         $this->vnt_otros_pdf=htmlspecialchars(strip_tags($this->vnt_otros_pdf));
         $this->observaciones=htmlspecialchars(strip_tags($this->observaciones));
 
@@ -306,6 +311,7 @@ Class Venta{
             :prpdfletra,
             :prpdfvoucher,
             :prpdfautorizacion,
+            :prpdfoficio,
             :prpdfotros,
             :probservaciones
         )";
@@ -339,6 +345,7 @@ Class Venta{
         $result->bindParam(":prpdfletra", $this->pdfletra);
         $result->bindParam(":prpdfvoucher", $this->pdfvoucher);
         $result->bindParam(":prpdfautorizacion", $this->pdfautorizacion);
+        $result->bindParam(":prpdfoficio", $this->pdf_oficio);
         $result->bindParam(":prpdfotros", $this->vnt_otros_pdf);
         $result->bindParam(":probservaciones", $this->observaciones);
 
@@ -370,6 +377,7 @@ Class Venta{
         $this->pdfvoucher=htmlspecialchars(strip_tags($this->pdfvoucher));
         $this->pdfautorizacion=htmlspecialchars(strip_tags($this->pdfautorizacion));
         $this->vnt_otros_pdf=htmlspecialchars(strip_tags($this->vnt_otros_pdf));
+        $this->vnt_otros_pdf=htmlspecialchars(strip_tags($this->vnt_otros_pdf));
         $this->observaciones=htmlspecialchars(strip_tags($this->observaciones));
 
         if($result->execute())
@@ -395,6 +403,7 @@ Class Venta{
             :prpdfletra,
             :prpdfvoucher,
             :prpdfautorizacion,
+            :prpdfoficio,
             :prpdfotros
         )";
 
@@ -409,6 +418,7 @@ Class Venta{
         $result->bindParam(":prpdfletra", $this->pdfletra);
         $result->bindParam(":prpdfvoucher", $this->pdfvoucher);
         $result->bindParam(":prpdfautorizacion", $this->pdfautorizacion);
+        $result->bindParam(":prpdfoficio", $this->pdf_oficio);
         $result->bindParam(":prpdfotros", $this->vnt_otros_pdf);
 
         $this->id_venta=htmlspecialchars(strip_tags($this->id_venta));
@@ -420,6 +430,7 @@ Class Venta{
         $this->pdfletra=htmlspecialchars(strip_tags($this->pdfletra));
         $this->pdfvoucher=htmlspecialchars(strip_tags($this->pdfvoucher));
         $this->pdfautorizacion=htmlspecialchars(strip_tags($this->pdfautorizacion));
+        $this->pdf_oficio=htmlspecialchars(strip_tags($this->pdf_oficio));
         $this->vnt_otros_pdf=htmlspecialchars(strip_tags($this->vnt_otros_pdf));
 
         if($result->execute())
@@ -485,6 +496,7 @@ Class Venta{
         $this->letra_pdf=$row['letra_pdf'];
         $this->voucher_pdf=$row['voucher_pdf'];
         $this->autorizacion_pdf=$row['autorizacion_pdf'];
+        $this->oficio_pdf=$row['oficio_pdf'];
         $this->otros_pdf=$row['otros_pdf'];
         $this->observacion=$row['observacion'];
         $this->lugar_venta=$row['lugar_venta'];
@@ -553,6 +565,7 @@ Class Venta{
         $this->letra_pdf=$row['letra_pdf'];
         $this->voucher_pdf=$row['voucher_pdf'];
         $this->autorizacion_pdf=$row['autorizacion_pdf'];
+        $this->oficio_pdf=$row['oficio_pdf'];
         $this->otros_pdf=$row['otros_pdf'];
         $this->observacion=$row['observacion'];
         $this->lugar_venta=$row['lugar_venta'];

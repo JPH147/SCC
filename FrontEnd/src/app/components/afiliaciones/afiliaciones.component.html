@@ -3,18 +3,18 @@
   <button mat-mini-fab type="button" color="primary" (click)="Atras()"><mat-icon>keyboard_arrow_left</mat-icon></button>
 
   <ng-container *ngIf="id_credito_estandar">
-    <ng-container *ngIf="permiso?.creditos?.listado_creditos?.eliminar">
+    <ng-container *ngIf="permiso?.creditos?.afiliaciones?.eliminar">
       <button mat-mini-fab type="button" color="primary" matTooltip="Anular" class="derecha"
         [disabled]="(Cargando|async) || monto_pagado>0 || estado!=1 || numero_procesos>0"
         (click)="AnularCredito()"><mat-icon> delete </mat-icon></button>
     </ng-container>
 
-    <ng-container *ngIf="permiso?.creditos?.listado_creditos?.editar">
+    <ng-container *ngIf="permiso?.creditos?.afiliaciones?.editar">
       <button mat-mini-fab type="button" [color]="editar_documentos ? 'accent' : 'primary'" (click)="CambiarTipoVista('editar_documentos')" class="derecha"
         [disabled]="(Cargando|async)" matTooltip="Editar documentos adjuntos"><mat-icon>attach_file</mat-icon></button>
     </ng-container>
 
-    <ng-container *ngIf="permiso?.creditos?.listado_creditos?.editar">
+    <ng-container *ngIf="permiso?.creditos?.afiliaciones?.editar">
       <ng-container *ngIf="id_credito">
         <button mat-mini-fab type="button" color="primary" (click)="CambiarTipoVista('editar')" class="derecha"
           [disabled]="(Cargando|async) || monto_pagado>0 || estado!=1 || numero_procesos>0" matTooltip="Editar documento"><mat-icon>edit</mat-icon></button>
@@ -273,7 +273,7 @@
             class="cargar-imagen"
             [max]="1"
             url="{{ruta}}"
-            [buttonCaption]="'Tarjeta de socio'"
+            [buttonCaption]="'Tarjeta'"
             [extensions]="['png, jpg, jpeg']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
             (uploadFinished)="SubirArchivo($event, 10)">
@@ -294,7 +294,7 @@
 
       <mat-grid-list cols=7 rowHeight="20px" *ngIf="id_credito || id_credito_editar || editar_documentos">
         <mat-grid-tile>
-          Tarjeta de socio
+          Tarjeta
         </mat-grid-tile>
       </mat-grid-list>
 
@@ -333,24 +333,24 @@
   
       <mat-grid-list cols="4" rowHeight="70px">
 
-        <mat-grid-tile>
+        <mat-grid-tile *ngIf="!CreditosForm.value.fecha_fin_mes">
           <mat-form-field class="columnas-1">
-            <input matInput [matDatepicker]="InputFechaPago" placeholder="Inicio de pagos" [min]="CreditosForm.value.fecha_credito" formControlName="fecha_pago" (dateChange)="CrearCronograma()" [readonly]="id_credito || id_presupuesto || cliente_refinanciado">
+            <input matInput [matDatepicker]="InputFechaPago" placeholder="Inicio de pagos" [min]="CreditosForm.value.fecha_credito" formControlName="fecha_pago" (dateChange)="FechaPagoSeleccionada()" [readonly]="id_credito || id_presupuesto || cliente_refinanciado">
             <mat-datepicker-toggle matSuffix [for]="InputFechaPago"></mat-datepicker-toggle>
             <mat-datepicker #InputFechaPago [disabled]="id_credito || id_presupuesto || cliente_refinanciado"></mat-datepicker>
           </mat-form-field>
         </mat-grid-tile>
 
-        <!-- <mat-grid-tile>
+        <mat-grid-tile *ngIf="CreditosForm.value.fecha_fin_mes">
           <mat-form-field class="columnas-1">
-            <input matInput type="number" placeholder="Interés" formControlName="interes" #InputInteres [readonly] = "id_credito|| id_presupuesto || cliente_refinanciado ">
-            <span matSuffix> % </span>
+            <input matInput [matDatepicker]="FFin" placeholder="Inicio de pagos" [min]="CreditosForm.value.fecha_credito" formControlName="fecha_pago" readonly>
+            <mat-datepicker-toggle matSuffix [for]="FFin"></mat-datepicker-toggle>
+            <mat-datepicker #FFin startView="year"
+                            [disabled]="id_credito || id_presupuesto || cliente_refinanciado"
+                            (yearSelected)="AnoElegido($event)"
+                            (monthSelected)="MesElegido($event, FFin)"></mat-datepicker>
           </mat-form-field>
         </mat-grid-tile>
-        
-        <mat-grid-tile *ngIf="id_tipo>1">
-          <mat-checkbox color="primary" formControlName="interes_diario" (change)="CrearCronograma()"> Interés por día </mat-checkbox>
-        </mat-grid-tile> -->
 
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
@@ -359,21 +359,12 @@
           </mat-form-field>
         </mat-grid-tile>
 
-        <!-- Se comenta porque ahora se crea la primera cuota y las siguientes se crean automáticamente -->
-        <!-- <mat-grid-tile>
-          <mat-form-field class="columnas-1">
-            <input matInput type="number" placeholder="N° de cuotas" max=100 min=0 formControlName="cuotas" #InputCuota [readonly]="id_credito || id_presupuesto || cliente_refinanciado">
-            <mat-error>El número de cuotas debe ser menor a 100.</mat-error>
-          </mat-form-field>
+        <mat-grid-tile></mat-grid-tile>
+
+        <!-- Para que sólo se muestre cuando se va a editar o en una afiliación nueva -->
+        <mat-grid-tile *ngIf="!(id_credito || id_presupuesto || cliente_refinanciado)">
+          <mat-checkbox color="primary" formControlName="fecha_fin_mes" (change)="CorregirFechaPago()"> Fin de mes </mat-checkbox>
         </mat-grid-tile>
-
-        <mat-grid-tile>
-          <mat-form-field class="columnas-1">
-            <input matInput placeholder="Monto total" formControlName="total" readonly>
-            <span matPrefix>S/ &nbsp;</span>
-          </mat-form-field>
-        </mat-grid-tile> -->
-
       </mat-grid-list>
     </div>
 
@@ -385,6 +376,14 @@
       </mat-card-subtitle>
 
       <ng-container *ngIf="id_credito">
+        <ng-container *ngIf="permiso?.creditos?.afiliaciones?.agregar_pagos_masivos">
+          <mat-grid-list cols="1" rowHeight="50px">
+            <mat-grid-tile>
+              <button mat-raised-button color="primary" (click)="AgregarPagos()" [disabled]="(Cargando | async) || totales_monto_pendiente==0"> Agregar pagos </button>
+            </mat-grid-tile>
+          </mat-grid-list>
+        </ng-container>
+        
         <mat-table [dataSource]="ListadoCronograma" class="mat-elevation-z8" matSort matSortActive="fecha_vencimiento" matSortDirection="asc" matSortDisableClear>
           <ng-container matColumnDef="numero">
             <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
@@ -454,6 +453,26 @@
             <mat-footer-row *matFooterRowDef="ColumnasCronograma"></mat-footer-row>
           </ng-container>
         </mat-table>
+
+        <mat-grid-list cols="3" rowHeight="70px">
+          <mat-grid-tile>
+            <strong > Total: </strong>
+            &nbsp;
+            {{ totales_monto_total | currency:'S/.' }} ({{totales_total_cuotas}} cuotas)
+          </mat-grid-tile>
+          
+          <mat-grid-tile>
+            <strong > Pagado: </strong>
+            &nbsp;
+            {{ totales_monto_pagado | currency:'S/.' }} ({{totales_total_pagadas}} cuotas)
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <strong > Pendiente: </strong>
+            &nbsp;
+            {{ totales_monto_pendiente | currency:'S/.' }} ({{totales_total_pendiente}} cuotas)
+          </mat-grid-tile>
+        </mat-grid-list>
       </ng-container>
 
       <ng-container *ngIf="!id_credito">
@@ -504,7 +523,7 @@
                       CreditosForm.invalid ||
                       (!id_credito_estandar && cliente_afiliado)"
           > Guardar </button>
-          <!-- <button  mat-raised-button (click)="Imprimir()"> Print </button> -->
+          <button  mat-raised-button (click)="Imprimir()"> Print </button>
         </mat-grid-tile>
       </mat-grid-list>
     </mat-card-actions>

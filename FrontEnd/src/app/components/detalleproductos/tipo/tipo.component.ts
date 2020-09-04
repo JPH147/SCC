@@ -19,7 +19,7 @@ import { VentanaEmergenteTipo } from './ventana-emergente/ventanaemergente';
 export class TipoComponent implements OnInit {
 
     ListadoTipo: TipoDataSource;
-    Columnas: string[] = ['numero', 'nombre', 'unidadmedida', 'opciones'];
+    Columnas: string[] = ['numero', 'nombre', 'tiene_serie', 'unidadmedida', 'opciones'];
     @ViewChild('InputTipo', { static: true }) FiltroTipo: ElementRef;
     @ViewChild('InputUM', { static: true }) FiltroUM: ElementRef;
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;

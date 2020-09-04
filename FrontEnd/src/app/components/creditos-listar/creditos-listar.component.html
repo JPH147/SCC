@@ -139,7 +139,7 @@
           <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="['ver', credito.id]"><mat-icon> visibility </mat-icon></button>
           <ng-container *ngIf="permiso?.creditos?.listado_creditos?.editar">
             <button mat-icon-button color="primary" matTooltip="Editar" [routerLink]="['editar', credito.id]"
-              [disabled]="credito.monto_pagado>0 || credito.estado!=1 || credito.numero_procesos > 0"><mat-icon> edit </mat-icon></button>
+              [disabled]="credito.monto_pagado>0 || credito.estado!=1 || credito.numero_procesos > 0 || credito.monto_pagado>0"><mat-icon> edit </mat-icon></button>
           </ng-container>
           <ng-container *ngIf="permiso?.creditos?.listado_creditos?.abrir_procesos">
             <button mat-icon-button color="primary" [matMenuTriggerFor]="menu3" (click)="ListarProcesos(credito.id)"

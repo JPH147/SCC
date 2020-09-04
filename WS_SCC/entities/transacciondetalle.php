@@ -105,6 +105,7 @@ Class TransaccionDetalle{
                 "numero"=>$contador,
                 "id"=>$id,
                 "producto"=>$producto,
+                "tiene_serie"=>$tiene_serie,
                 "serie"=>$serie,
                 "id_serie"=>$id_serie,
                 "color"=>$color,

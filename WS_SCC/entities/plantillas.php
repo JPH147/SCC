@@ -221,6 +221,7 @@ Class Plantillas{
         $templateProcessor->setValue('fecha_letras', $this->fecha_letras);
         $templateProcessor->setValue('monto_total', number_format($this->monto_total,2));
         $templateProcessor->setValue('monto_total_letras', $this->monto_total_letras);
+
         $templateProcessor->setValue('monto_cuotas', number_format($this->monto_cuota,2));
         $templateProcessor->setValue('monto_cuotas_letras', $this->monto_cuota_letras);
         $templateProcessor->setValue('ugel_nombre', $this->ugel_nombre);
@@ -243,21 +244,23 @@ Class Plantillas{
         $templateProcessor->setValue('vendedor_dni', $this->vendedor_dni);
         
         // Para registrar el tipo de transacción
-        // switch ($this->tipo) {
-        //     case 2:
-        //         $tipo_transaccion = " un préstamo en dinero o venta de equipo celular y/o otros ";
-        //         $templateProcessor->setValue('tipo_transaccion', $tipo_transaccion);
-        //         break;
-        //     case 3:
-        //         $this->prueba=[];
-        //         $tipo_transaccion =" una venta de " ;
-        //         $this->productos = json_decode($this->productos) ;
-        //         foreach ( $this->productos as $producto ) {
-        //             $tipo_transaccion = $tipo_transaccion . ", " . $producto->descripcion . " con IMEI " . $producto->serie ;
-        //         }
-        //         $templateProcessor->setValue('tipo_transaccion', $tipo_transaccion);
-        //         break;
-        // }
+        switch ($this->tipo) {
+            case 1:
+                $tipo_transaccion = " un préstamo en dinero ";
+                $templateProcessor->setValue('tipo_transaccion', $tipo_transaccion);
+                break;
+            case 2:
+                $this->prueba=[];
+                $tipo_transaccion =" una venta de " ;
+                // echo $this->productos ;
+                $this->productos = json_decode($this->productos) ;
+                // print_r($this->productos) ;
+                foreach ( $this->productos as $producto ) {
+                    $tipo_transaccion = $tipo_transaccion . ", " . $producto->descripcion . " con IMEI " . $producto->serie ;
+                }
+                $templateProcessor->setValue('tipo_transaccion', $tipo_transaccion);
+                break;
+        }
 
         // En caso haya algún garante
         if( $this->nombre_aval == "0" ) {

@@ -460,7 +460,16 @@
   
           <mat-grid-list cols=1 rowHeight="55px" *ngIf="id_proceso_agregar">
             <mat-grid-tile>
-              <button class="derecha" type="button" mat-mini-fab colos="primary" (click)="AgregarDocumento()"> <mat-icon> add </mat-icon> </button>
+              <!-- <button class="derecha" type="button" mat-mini-fab colos="primary" (click)="AgregarDocumento()"> <mat-icon> add </mat-icon> </button> -->
+                <button type="button" mat-raised-button (click)="AgregarDocumento(2)"> Escrito </button>
+                &nbsp;
+                <button type="button" mat-raised-button (click)="AgregarDocumento(3)"> Resolución </button>
+                &nbsp;
+                <button type="button" mat-raised-button (click)="AgregarDocumento(4)"> Oficio </button>
+                &nbsp;
+                <button type="button" mat-raised-button (click)="AgregarDocumento(5)"> Devolución </button>
+                &nbsp;
+                <button type="button" mat-raised-button (click)="AgregarDocumento(6)"> Nota </button>
             </mat-grid-tile>
           </mat-grid-list>
   
@@ -469,12 +478,14 @@
             <div [ngClass]="{'contenedor': true,
                             'tipo-1': documento.tipo_documento=='Escrito',
                             'tipo-2': documento.tipo_documento=='Resolución',
-                            'tipo-3': documento.tipo_documento=='Oficio'
+                            'tipo-3': documento.tipo_documento=='Oficio',
+                            'tipo-5': documento.tipo_documento=='Nota'
                           }">
               <div [ngClass]="{ 'titulo-seccion-tercera': true,
                                 'tipo-tercero-1': documento.tipo_documento=='Escrito',
                                 'tipo-tercero-2': documento.tipo_documento=='Resolución',
-                                'tipo-tercero-3': documento.tipo_documento=='Oficio'
+                                'tipo-tercero-3': documento.tipo_documento=='Oficio',
+                                'tipo-tercero-5': documento.tipo_documento=='Nota'
                               }">
                 {{ documento.tipo_documento }}&nbsp;{{ documento.numero }}
                 <span class="espacio"></span>
@@ -555,7 +566,7 @@
       </ng-container>
 
       <!-- Detalle antiguo-->
-      <ng-container *ngIf="(id_proceso_ver || id_proceso_agregar ) && DocumentosAnteriores.length>0">
+      <ng-container *ngIf="!id_proceso_agregar && DocumentosAnteriores.length>0">
         <div class="seccion-secundaria">
           <mat-card-subtitle class="titulo-seccion-secundaria">
             EXPEDIENTE ANTERIOR - {{expediente_anterior}} / {{juzgado_distrito_anterior}} - {{juzgado_instancia_anterior}}
@@ -565,12 +576,14 @@
             <div [ngClass]="{'contenedor': true,
                           'tipo-1': documento.tipo_documento=='Escrito',
                           'tipo-2': documento.tipo_documento=='Resolución',
-                          'tipo-3': documento.tipo_documento=='Oficio'
+                          'tipo-3': documento.tipo_documento=='Oficio',
+                          'tipo-5': documento.tipo_documento=='Nota'
                         }">
               <div [ngClass]="{ 'titulo-seccion-tercera': true,
                               'tipo-tercero-1': documento.tipo_documento=='Escrito',
                               'tipo-tercero-2': documento.tipo_documento=='Resolución',
-                              'tipo-tercero-3': documento.tipo_documento=='Oficio'
+                              'tipo-tercero-3': documento.tipo_documento=='Oficio',
+                              'tipo-tercero-5': documento.tipo_documento=='Nota'
                             }">
                 {{ documento.tipo_documento }}&nbsp;{{ documento.numero }}
                 <span class="espacio"></span>

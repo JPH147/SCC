@@ -42,6 +42,7 @@ export class VentaService {
     pdfplanilla:string,
     pdfletra:string,
     pdfautorizacion:string,
+    pdf_oficio:string,
     pdfotros:string,
     observaciones:string,
   ): Observable<any> {
@@ -73,6 +74,7 @@ export class VentaService {
       .set('prpdfplanilla',pdfplanilla)
       .set('prpdfletra',pdfletra)
       .set('prpdfautorizacion',pdfautorizacion)
+      .set('prpdfoficio', pdf_oficio)
       .set('prpdfotros',pdfotros)
       .set('probservaciones',observaciones)
 
@@ -113,6 +115,7 @@ export class VentaService {
     pdfplanilla:string,
     pdfletra:string,
     pdfautorizacion:string,
+    pdf_oficio:string,
     pdfotros:string,
     observaciones:string,
   ): Observable<any> {
@@ -144,6 +147,7 @@ export class VentaService {
     .set('prpdfplanilla',pdfplanilla)
     .set('prpdfletra',pdfletra)
     .set('prpdfautorizacion',pdfautorizacion)
+    .set('prpdfoficio', pdf_oficio)
     .set('prpdfotros',pdfotros)
     .set('probservaciones',observaciones)
 
@@ -164,6 +168,7 @@ export class VentaService {
     pdfplanilla:string,
     pdfletra:string,
     pdfautorizacion:string,
+    pdfoficio:string,
     pdfotros:string,
   ): Observable<any> {
     let params = new HttpParams()
@@ -176,6 +181,7 @@ export class VentaService {
     .set('prpdfplanilla',pdfplanilla)
     .set('prpdfletra',pdfletra)
     .set('prpdfautorizacion',pdfautorizacion)
+    .set('prpdfoficio',pdfoficio) 
     .set('prpdfotros',pdfotros) ;
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');

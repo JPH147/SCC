@@ -714,14 +714,26 @@
       </mat-card-subtitle>
 
       <mat-grid-list cols="4" rowHeight="70px">
+        <ng-container>
+          <mat-grid-tile *ngIf="!VentasForm.value.fecha_fin_mes">
+            <mat-form-field class="columnas-1">
+               <input matInput [matDatepicker]="InputFechaPago" placeholder="Inicio de pagos" [min]="VentasForm.value.fechaventa" formControlName="fechapago" (dateChange)="FechaPagoSeleccionada()"  [readonly]="idventa || id_presupuesto">
+               <mat-datepicker-toggle matSuffix [for]="InputFechaPago"></mat-datepicker-toggle>
+               <mat-datepicker #InputFechaPago [disabled]="idventa || id_presupuesto"></mat-datepicker>
+            </mat-form-field>
+          </mat-grid-tile>
 
-        <mat-grid-tile>
-          <mat-form-field class="columnas-1">
-             <input matInput [matDatepicker]="InputFechaPago" placeholder="Inicio de pagos" [min]="VentasForm.value.fechaventa" formControlName="fechapago" (dateChange)="CrearCronograma()"  [readonly]="idventa || id_presupuesto">
-             <mat-datepicker-toggle matSuffix [for]="InputFechaPago"></mat-datepicker-toggle>
-             <mat-datepicker #InputFechaPago [disabled]="idventa || id_presupuesto"></mat-datepicker>
-          </mat-form-field>
-        </mat-grid-tile>
+          <mat-grid-tile *ngIf="VentasForm.value.fecha_fin_mes">
+            <mat-form-field class="columnas-1">
+              <input matInput [matDatepicker]="FFin" placeholder="Inicio de pagos" [min]="VentasForm.value.fechaventa" formControlName="fechapago" readonly>
+              <mat-datepicker-toggle matSuffix [for]="FFin"></mat-datepicker-toggle>
+              <mat-datepicker #FFin startView="year"
+                              [disabled]="idventa || id_presupuesto"
+                              (yearSelected)="AnoElegido($event)"
+                              (monthSelected)="MesElegido($event, FFin)"></mat-datepicker>
+            </mat-form-field>
+          </mat-grid-tile>
+        </ng-container>
 
         <mat-grid-tile *ngIf="!idventa">
           <mat-form-field class="columnas-1">
@@ -737,6 +749,10 @@
           </mat-form-field>
         </mat-grid-tile>
         
+        <mat-grid-tile *ngIf="!(idventa || id_presupuesto)">
+          <mat-checkbox color="primary" formControlName="fecha_fin_mes" (change)="CorregirFechaPago()"> Fin de mes </mat-checkbox>
+        </mat-grid-tile>
+
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
             <input matInput placeholder="Cuota inicial" formControlName="inicial" #InputInicial [readonly]="idventa || id_presupuesto">
@@ -770,7 +786,7 @@
         DOCUMENTOS ADJUNTOS
       </mat-card-subtitle>
 
-      <mat-grid-list cols=9 rowHeight="100px" *ngIf="!idventa && !idventa_editar && !editar_documentos">
+      <mat-grid-list cols=5 rowHeight="100px" *ngIf="!idventa && !idventa_editar && !editar_documentos">
 
         <mat-grid-tile>
           <image-upload
@@ -873,6 +889,18 @@
             class="cargar-imagen"
             [max]="1"
             url="{{ruta}}"
+            [buttonCaption]="'Oficio'"
+            [extensions]="['pdf']"
+            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
+            (uploadFinished)="SubirOficio($event)">
+          </image-upload>  
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <image-upload
+            class="cargar-imagen"
+            [max]="1"
+            url="{{ruta}}"
             [buttonCaption]="'Otros'"
             [extensions]="['pdf']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
@@ -880,8 +908,8 @@
           </image-upload>  
         </mat-grid-tile>
       </mat-grid-list>
-
-      <mat-grid-list cols=9 rowHeight="60px" *ngIf="idventa_editar || editar_documentos">
+      
+      <mat-grid-list cols=5 rowHeight="60px" *ngIf="idventa_editar || editar_documentos">
 
         <mat-grid-tile>
           <button mat-icon-button color="primary" (click)="EditarFoto()" [disabled]="!foto" *ngIf="!foto_editar">
@@ -927,45 +955,9 @@
             <mat-icon class="icono-documentos"> close </mat-icon>
           </button>
         </mat-grid-tile>
-
-        <mat-grid-tile>
-          <button mat-icon-button color="primary" (click)="EditarPlanilla()" [disabled]="!planilla" *ngIf="!planilla_editar">
-            <mat-icon class="icono-documentos"> edit </mat-icon>
-          </button>
-          <button mat-icon-button color="primary" (click)="NoEditarPlanilla()" [disabled]="!planilla" *ngIf="planilla_editar">
-            <mat-icon class="icono-documentos"> close </mat-icon>
-          </button>
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          <button mat-icon-button color="primary" (click)="EditarEditar()" [disabled]="!letra" *ngIf="!letra_editar">
-            <mat-icon class="icono-documentos"> edit </mat-icon>
-          </button>
-          <button mat-icon-button color="primary" (click)="NoEditarEditar()" [disabled]="!letra" *ngIf="letra_editar">
-            <mat-icon class="icono-documentos"> close </mat-icon>
-          </button>
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          <button mat-icon-button color="primary"  (click)="EditarAutorizacion()" [disabled]="!autorizacion" *ngIf="!autorizacion_editar">
-            <mat-icon class="icono-documentos"> edit </mat-icon>
-          </button>
-          <button mat-icon-button color="primary"  (click)="NoEditarAutorizacion()" [disabled]="!autorizacion" *ngIf="autorizacion_editar">
-            <mat-icon class="icono-documentos"> close </mat-icon>
-          </button>
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          <button mat-icon-button color="primary"  (click)="EditarOtros()" [disabled]="!otros" *ngIf="!otros_editar">
-            <mat-icon class="icono-documentos"> edit </mat-icon>
-          </button>
-          <button mat-icon-button color="primary"  (click)="NoEditarOtros()" [disabled]="!otros" *ngIf="otros_editar">
-            <mat-icon class="icono-documentos"> close </mat-icon>
-          </button>
-        </mat-grid-tile>
       </mat-grid-list>
 
-      <mat-grid-list cols=9 rowHeight="20px" *ngIf="idventa || idventa_editar || editar_documentos">
+      <mat-grid-list cols=5 rowHeight="20px" *ngIf="idventa || idventa_editar || editar_documentos">
 
         <mat-grid-tile>
           Foto
@@ -986,26 +978,9 @@
         <mat-grid-tile>
           Transacción
         </mat-grid-tile>
-
-        <mat-grid-tile>
-          Planilla
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          Letra
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          Autorización
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          Otros
-        </mat-grid-tile>
-
       </mat-grid-list>
 
-      <mat-grid-list cols=9 rowHeight="60px" *ngIf="idventa || idventa_editar || editar_documentos">
+      <mat-grid-list cols=5 rowHeight="60px" *ngIf="idventa || idventa_editar || editar_documentos">
 
         <mat-grid-tile>
 
@@ -1097,7 +1072,90 @@
           </image-upload>  
 
         </mat-grid-tile>
+      </mat-grid-list>
 
+      <mat-grid-list cols=1 rowHeight="50px" *ngIf="editar_documentos">
+        <mat-grid-tile>
+          <button mat-raised-button type="button" color="primary"
+            [disabled]="Cargando | async" (click)="GuardarNuevosDocumentos()"> Actualizar documentos </button>
+        </mat-grid-tile>
+      </mat-grid-list>
+
+      <mat-list *ngIf="(idventa || idventa_editar || editar_documentos)">
+        <mat-divider></mat-divider>
+      </mat-list>
+
+      <mat-grid-list cols=5 rowHeight="60px" *ngIf="idventa_editar || editar_documentos">
+        <mat-grid-tile>
+          <button mat-icon-button color="primary" (click)="EditarPlanilla()" [disabled]="!planilla" *ngIf="!planilla_editar">
+            <mat-icon class="icono-documentos"> edit </mat-icon>
+          </button>
+          <button mat-icon-button color="primary" (click)="NoEditarPlanilla()" [disabled]="!planilla" *ngIf="planilla_editar">
+            <mat-icon class="icono-documentos"> close </mat-icon>
+          </button>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <button mat-icon-button color="primary" (click)="EditarEditar()" [disabled]="!letra" *ngIf="!letra_editar">
+            <mat-icon class="icono-documentos"> edit </mat-icon>
+          </button>
+          <button mat-icon-button color="primary" (click)="NoEditarEditar()" [disabled]="!letra" *ngIf="letra_editar">
+            <mat-icon class="icono-documentos"> close </mat-icon>
+          </button>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <button mat-icon-button color="primary"  (click)="EditarAutorizacion()" [disabled]="!autorizacion" *ngIf="!autorizacion_editar">
+            <mat-icon class="icono-documentos"> edit </mat-icon>
+          </button>
+          <button mat-icon-button color="primary"  (click)="NoEditarAutorizacion()" [disabled]="!autorizacion" *ngIf="autorizacion_editar">
+            <mat-icon class="icono-documentos"> close </mat-icon>
+          </button>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <button mat-icon-button color="primary"  (click)="EditarOficio()" [disabled]="!oficio" *ngIf="!oficio_editar">
+            <mat-icon class="icono-documentos"> edit </mat-icon>
+          </button>
+          <button mat-icon-button color="primary"  (click)="NoEditarOficio()" [disabled]="!oficio" *ngIf="oficio_editar">
+            <mat-icon class="icono-documentos"> close </mat-icon>
+          </button>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <button mat-icon-button color="primary"  (click)="EditarOtros()" [disabled]="!otros" *ngIf="!otros_editar">
+            <mat-icon class="icono-documentos"> edit </mat-icon>
+          </button>
+          <button mat-icon-button color="primary"  (click)="NoEditarOtros()" [disabled]="!otros" *ngIf="otros_editar">
+            <mat-icon class="icono-documentos"> close </mat-icon>
+          </button>
+        </mat-grid-tile>
+      </mat-grid-list>
+
+      <mat-grid-list cols=5 rowHeight="20px" *ngIf="idventa || idventa_editar || editar_documentos">
+        <mat-grid-tile>
+          Planilla
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          Letra
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          Autorización
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          Oficio
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          Otros
+        </mat-grid-tile>
+
+      </mat-grid-list>
+
+      <mat-grid-list cols=5 rowHeight="60px" *ngIf="idventa || idventa_editar || editar_documentos">
         <mat-grid-tile>
 
           <button mat-icon-button color="primary" [disabled]="!planilla" *ngIf="!planilla_editar">
@@ -1153,7 +1211,22 @@
         </mat-grid-tile>
 
         <mat-grid-tile>
+          <button mat-icon-button color="primary" [disabled]="!oficio" *ngIf="!oficio_editar">
+            <mat-icon class="icono-documentos" (click)="AbrirDocumento(oficio)"> visibility </mat-icon>
+          </button>
 
+          <image-upload
+            class="cargar-imagen" *ngIf="oficio_editar"
+            [max]="1"
+            url="{{ruta}}"
+            [buttonCaption]="'Adjuntar'"
+            [extensions]="['pdf']"
+            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
+            (uploadFinished)="SubirOficio($event)">
+          </image-upload>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
           <button mat-icon-button color="primary" [disabled]="!otros" *ngIf="!otros_editar">
             <mat-icon class="icono-documentos" (click)="AbrirDocumento(otros)"> visibility </mat-icon>
           </button>
@@ -1167,14 +1240,6 @@
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
             (uploadFinished)="SubirOtros($event)">
           </image-upload>
-
-        </mat-grid-tile>
-      </mat-grid-list>
-
-      <mat-grid-list cols=1 rowHeight="50px" *ngIf="editar_documentos">
-        <mat-grid-tile>
-          <button mat-raised-button type="button" color="primary"
-            [disabled]="Cargando | async" (click)="GuardarNuevosDocumentos()"> Actualizar documentos </button>
         </mat-grid-tile>
       </mat-grid-list>
     </div>
@@ -1192,6 +1257,14 @@
       </mat-card-subtitle>
 
       <ng-container *ngIf="idventa">
+        <ng-container *ngIf="permiso?.ventas?.listado_ventas?.agregar_pagos_masivos">
+          <mat-grid-list cols="1" rowHeight="50px">
+            <mat-grid-tile>
+              <button mat-raised-button color="primary" (click)="AgregarPagos()" [disabled]="Cargando | async"> Agregar pagos </button>
+            </mat-grid-tile>
+          </mat-grid-list>
+        </ng-container>
+
         <mat-table [dataSource]="ListadoVentas" class="mat-elevation-z8" matSort matSortActive="fecha_vencimiento" matSortDirection="asc" matSortDisableClear>
 
           <ng-container matColumnDef="numero">

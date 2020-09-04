@@ -18,7 +18,7 @@ export class VentanaEditarSerieComponent implements OnInit, AfterViewInit {
   public Cargando = new BehaviorSubject<boolean>(false);
   
   @ViewChild('InputProducto') FiltroProducto: ElementRef;
-  @ViewChild('InputSerie', { static: true }) FiltroSerie: ElementRef;
+  @ViewChild('InputSerie', { static: false }) FiltroSerie: ElementRef;
 	public EditarSerieForm: FormGroup;
   public Informacion:any = {id:null, id_producto:null,serie:"", color:"", almacenamiento:"",precio:0};
   public repetido: boolean;
@@ -27,6 +27,7 @@ export class VentanaEditarSerieComponent implements OnInit, AfterViewInit {
   public id_producto : number ;
   public producto : string ;
   public Producto: Array<any>;
+  public hay_serie : boolean = true ;
 
   constructor(
     @Optional() @Inject(MAT_DIALOG_DATA) public data,
@@ -42,9 +43,16 @@ export class VentanaEditarSerieComponent implements OnInit, AfterViewInit {
       this.repetido=false;
       this.verificando=false;
       this.ActualizarInformacion();
+      if ( this.data.detalle.tiene_serie == 1 ) {
+        this.hay_serie = true ;
+      } else {
+        this.hay_serie = false ;
+      }
     } else {
       this.nuevo = true ;
     }
+
+    console.log(this.data.detalle.tiene_serie) ;
 
     this.FiltrarProductos("");
   }
@@ -99,7 +107,23 @@ export class VentanaEditarSerieComponent implements OnInit, AfterViewInit {
 
   ActualizarInformacion(){
     this.Cargando.next(true);
-    this.SServicio.ValidarSerie(this.FiltroSerie.nativeElement.value.trim(),this.data.detalle.id_serie).subscribe(res=> {
+    if ( this.data.detalle.tiene_serie == 1 ) {
+      // this.hay_serie = true ;
+
+      this.SServicio.ValidarSerie(this.data.detalle.serie,this.data.detalle.id_serie).subscribe(res=> {
+        this.SServicio.Seleccionar(this.data.detalle.id_serie).subscribe(res=>{
+          this.Cargando.next(false);
+          this.Informacion.id=res.id_producto_serie;
+          this.Informacion.id_producto=res.id_producto;
+          this.Informacion.serie=res.serie;
+          this.Informacion.color=res.color;
+          this.Informacion.almacenamiento=res.almacenamiento;
+          this.Informacion.precio=res.precio;
+        })
+      })
+    } else {
+      // this.hay_serie = false ;
+
       this.SServicio.Seleccionar(this.data.detalle.id_serie).subscribe(res=>{
         this.Cargando.next(false);
         this.Informacion.id=res.id_producto_serie;
@@ -109,7 +133,7 @@ export class VentanaEditarSerieComponent implements OnInit, AfterViewInit {
         this.Informacion.almacenamiento=res.almacenamiento;
         this.Informacion.precio=res.precio;
       })
-    })
+    }
 
   }
 
@@ -130,12 +154,18 @@ export class VentanaEditarSerieComponent implements OnInit, AfterViewInit {
   ProductoSeleccionado(evento){
     this.Producto=[];
     this.Informacion.id_producto = evento.option.value.id ;
+    if (evento.option.value.tiene_serie == 1 ) {
+      this.hay_serie = true ;
+    } else {
+      this.hay_serie = false ;
+    }
   }
 
   RemoverProducto(){
     this.Informacion.id_producto = null ;
     this.producto = "" ;
     this.FiltrarProductos("");
+    this.hay_serie = true ;
   }
 
   Guardar(){
@@ -148,6 +178,9 @@ export class VentanaEditarSerieComponent implements OnInit, AfterViewInit {
   }
 
   Crear(){
+    if ( !this.hay_serie ) {
+      this.Informacion.serie = new Date().getTime() + "-" + 1 ;
+    }
     this.SServicio.CrearProductoSerie(
       this.Informacion.id_producto,
       this.Informacion.serie,

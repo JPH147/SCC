@@ -62,6 +62,7 @@
             "pdf_compromiso" => $credito->pdf_compromiso,
             "pdf_letra" => $credito->pdf_letra,
             "pdf_ddjj" => $credito->pdf_ddjj,
+            "pdf_oficio" => $credito->pdf_oficio,
             "pdf_otros" => $credito->pdf_otros,
             "observaciones" => $credito->observaciones,
             "id_credito_refinanciado" => $credito->id_credito_refinanciado,
