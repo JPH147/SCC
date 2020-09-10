@@ -455,6 +455,26 @@ export class VentaService {
     }));
   }
 
+  ListarCrongramaPagosxPeriodo(
+    id_venta:number,
+  ) : Observable <any> {
+
+    let params = new HttpParams()
+      .set('prventa',id_venta.toString()) ;
+
+    // console.log(params)
+
+    return this.http.get(this.url + 'venta/read-periodos-cuotas-pagos.php', {params})
+    .pipe(map(res=>{
+      if(res['codigo'] === 0){
+        return res['data'] ;
+      }else{
+        console.log('No hay datos que mostrar');
+        return [] ;
+      }
+    }))
+  }
+
   ListarPagosCronograma(
     id_cronograma:number,
     pagina_inicio:number,

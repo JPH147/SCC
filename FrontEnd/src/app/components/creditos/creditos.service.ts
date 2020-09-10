@@ -496,6 +496,26 @@ export class CreditosService {
     }))
   }
 
+  ObtenerCrongramaPagosxPeriodo(
+    id_credito: number
+  ) : Observable <any> {
+
+    let params = new HttpParams()
+    .set('prcredito', id_credito.toString()) ;
+
+    // console.log(params)
+
+    return this.http.get(this.url + 'credito/read-periodos-cuotas-pagos.php', {params})
+    .pipe(map(res=>{
+      if(res['codigo'] === 0){
+        return res['data'] ;
+      }else{
+        console.log('No hay datos que mostrar');
+        return [] ;
+      }
+    }))
+  }
+
   SeleccionarParametros(){
 
     return this.http.get(this.url + 'credito/seleccionar-parametros-afiliacion.php')

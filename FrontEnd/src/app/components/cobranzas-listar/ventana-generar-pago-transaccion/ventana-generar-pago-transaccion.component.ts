@@ -154,11 +154,30 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit, AfterView
   }
 
   EstablecerControlesArray() {
-    this.data.cronograma.forEach( (item, index) =>{
+    this.data.cronograma.map( (item, index) =>{
       this.AgregarPagoForm(1) ;
       this.PagoArrayForm.controls[index].get('fecha_pago').setValue(item.fecha_vencimiento) ;
       this.PagoArrayForm.controls[index].get('monto_cuota').setValue(this.data.tipo == 1 ? item.monto : item.monto_cuota) ;
+      return item ;
     })
+
+    this.AgregarContolesFechaActual() ;
+  }
+
+  AgregarContolesFechaActual() {
+    let longitud_form = this.PagoArrayForm.value.length ;
+    let ultima_fecha = this.PagoArrayForm.controls[longitud_form-1].get('fecha_pago').value ;
+
+    let meses_hasta_hoy = moment(new Date()).diff(moment(ultima_fecha), 'months') ;
+
+    for (let index = 0; index < meses_hasta_hoy; index++) {
+      let fecha_nueva = moment(ultima_fecha).add(index+1, 'months').toDate() ;
+
+      this.AgregarPagoForm(2) ;
+      this.PagoArrayForm.controls[longitud_form+index].get('fecha_pago').setValue(fecha_nueva) ;
+      this.PagoArrayForm.controls[longitud_form+index].get('monto_cuota').setValue(0) ;
+    }
+
   }
 
   NumeroDecimal(): ValidatorFn {

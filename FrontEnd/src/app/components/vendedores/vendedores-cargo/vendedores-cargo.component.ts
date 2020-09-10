@@ -1,12 +1,12 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
-import { ServiciosVentas } from '../global/ventas';
+import { ServiciosVentas } from '../../global/ventas';
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {BehaviorSubject, Observable, of, fromEvent, merge} from 'rxjs';
 import {catchError, finalize, debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import {Notificaciones} from '../global/notificacion';
-import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
+import {Notificaciones} from '../../global/notificacion';
+import {VentanaConfirmarComponent} from '../../global/ventana-confirmar/ventana-confirmar.component';
 import { VentanaVendedoresCargoComponent } from './ventana-vendedores-cargo/ventana-vendedores-cargo.component';
 
 @Component({

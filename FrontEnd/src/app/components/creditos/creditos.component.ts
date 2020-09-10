@@ -70,7 +70,9 @@ export class CreditosComponent implements OnInit, AfterViewInit {
 
   public ListadoCronograma: CronogramaDataSource;
   public ColumnasCronograma: Array<string>;
+  public ColumnasCronogramaPeriodo: Array<string> = ["numero", "periodo", "monto_cuota", "monto_pago_manual" ,"total_planilla" ,"total_directo" ,"total_judicial" ] ;
   public Cronograma: Array<any> = [];
+  public Cronograma_Periodos: Array<any> = [];
   public total_cronograma_editado: number;
   public diferencia: number;
   public hay_presupuesto_vendedor : boolean;
@@ -288,15 +290,6 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    if (this.id_credito) {
-      this.sort.sortChange
-      .pipe(
-        tap(() =>{
-          this.ObtenerCronograma(this.id_credito, this.sort.active + " " + this.sort.direction);
-        })
-      ).subscribe();
-    }
-
     if(!this.id_credito && !this.id_presupuesto){
 
       if(this.id_tipo>1){
@@ -475,7 +468,10 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       ]],
       fecha_fin_mes: [{ value : true, disabled : false },[
       ]],
-      garantes: this.Builder.array([])
+      garantes: this.Builder.array([]),
+      // 1. Ver cuotas, 2. Ver periodos
+      vista_cronograma: [{ value : 2, disabled : false },[
+      ]],
     })
   }
 
@@ -829,11 +825,21 @@ export class CreditosComponent implements OnInit, AfterViewInit {
 
   ObtenerCronograma(id_credito, orden){
     this.Cargando.next(true) ;
+
     this.Servicio.ObtenerCrongrama(id_credito, orden).subscribe(res=>{
       this.Cargando.next(false) ;
       this.Cronograma = res;
       this.CalcularTotalPagado(this.Cronograma) ;
-      this.ListadoCronograma.AsignarInformacion(this.Cronograma);
+      if ( this.CreditosForm.get('vista_cronograma').value == 1 ) {
+        this.ListadoCronograma.AsignarInformacion(this.Cronograma);
+      }
+    })
+
+    this.Servicio.ObtenerCrongramaPagosxPeriodo(id_credito).subscribe(res=>{
+      this.Cronograma_Periodos = res;
+      if ( this.CreditosForm.get('vista_cronograma').value == 2 ) {
+        this.ListadoCronograma.AsignarInformacion(this.Cronograma_Periodos);
+      }
     })
   }
 
@@ -2025,6 +2031,14 @@ export class CreditosComponent implements OnInit, AfterViewInit {
 
   Imprimir(){
     console.log(this.CreditosForm)
+  }
+
+  CambiarVistaCronograma() {
+    if ( this.CreditosForm.get('vista_cronograma').value == 1 ) {
+      this.ListadoCronograma.AsignarInformacion(this.Cronograma);
+    } else {
+      this.ListadoCronograma.AsignarInformacion(this.Cronograma_Periodos);
+    }
   }
 
 }

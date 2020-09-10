@@ -74,6 +74,7 @@ export class VentasComponent implements OnInit {
   public garantes: FormArray;
   public Producto:Array<any>;
   public Cronograma: Array<any>;
+  public Cronograma_Periodos : Array<any> ;
   public Series: Array<number>;
   public Autorizador: Array<any>;
   public ProductosComprados: Array<any>;
@@ -156,6 +157,7 @@ export class VentasComponent implements OnInit {
 
   public ListadoVentas: VentaDataSource;
   public Columnas: string[];
+  public ColumnasCronogramaPeriodo: Array<string> = ["numero", "periodo", "monto_cuota", "monto_pago_manual" ,"total_planilla" ,"total_directo" ,"total_judicial" ] ;
 
   public id_presupuesto : number ;
   public hay_presupuesto_vendedor : boolean ;
@@ -284,15 +286,6 @@ export class VentasComponent implements OnInit {
   }
   
   ngAfterViewInit() {
-
-    if (this.idventa) {
-      this.sort.sortChange
-      .pipe(
-        tap(() =>{
-          this.ActualizarOrdenCronograma(this.idventa, this.sort.active + " " + this.sort.direction)
-        })
-      ).subscribe();
-    }
 
     if (!this.idventa) {
 
@@ -770,6 +763,9 @@ export class VentasComponent implements OnInit {
       ]],
       productos: this.FormBuilder.array([]),
       garantes: this.FormBuilder.array([]),
+      // 1. Ver cuotas, 2. Ver periodos
+      vista_cronograma: [{ value : 2, disabled : false },[
+      ]],
     });
   }
 
@@ -914,7 +910,17 @@ export class VentasComponent implements OnInit {
       this.Cargando.next(false) ;
       this.Cronograma = res['data'].cronograma ;
       this.CalcularTotalPagado( this.Cronograma ) ;
-      this.ListadoVentas.Informacion.next(this.Cronograma);
+
+      if ( this.VentasForm.get('vista_cronograma').value == 1 ) {
+        this.ListadoVentas.Informacion.next(this.Cronograma);
+      }
+    })
+
+    this.Servicio.ListarCrongramaPagosxPeriodo(id).subscribe(res=>{
+      this.Cronograma_Periodos = res ;
+      if ( this.VentasForm.get('vista_cronograma').value == 2 ) {
+        this.ListadoVentas.Informacion.next(this.Cronograma_Periodos);
+      }
     })
   }
 
@@ -2126,6 +2132,14 @@ export class VentasComponent implements OnInit {
 
   ImprimirFormulario(){
     console.log(this.VentasForm)
+  }
+
+  CambiarVistaCronograma() {
+    if ( this.VentasForm.get('vista_cronograma').value == 1 ) {
+      this.ListadoVentas.Informacion.next(this.Cronograma);
+    } else {
+      this.ListadoVentas.Informacion.next(this.Cronograma_Periodos);
+    }
   }
 
 }

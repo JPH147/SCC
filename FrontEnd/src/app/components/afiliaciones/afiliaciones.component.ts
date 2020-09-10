@@ -72,7 +72,9 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
 
   public ListadoCronograma: CronogramaDataSource;
   public ColumnasCronograma: Array<string>;
-  public Cronograma: Array<any> = [];
+  public ColumnasCronogramaPeriodo: Array<string> = ["numero", "periodo", "monto_cuota", "monto_pago_manual" ,"total_planilla" ,"total_directo" ,"total_judicial" ] ;
+  public Cronograma : Array<any> = [] ;
+  public Cronograma_Periodos : Array<any> = [] ;
   public total_cronograma_editado: number;
   public diferencia: number;
   public hay_presupuesto_vendedor : boolean;
@@ -285,15 +287,6 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    if (this.id_credito) {
-      this.sort.sortChange
-      .pipe(
-        tap(() =>{
-          this.ObtenerCronograma(this.id_credito, this.sort.active + " " + this.sort.direction);
-        })
-      ).subscribe();
-    }
-
     if(!this.id_credito && !this.id_presupuesto){
       merge(
         this.CreditosForm.get('monto_cuota').valueChanges ,
@@ -426,6 +419,9 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
       papeles_observaciones: [{value: "", disabled: false},[
       ]],
       fecha_fin_mes: [{ value : true, disabled : false },[
+      ]],
+      // 1. Ver cuotas, 2. Ver periodos
+      vista_cronograma: [{ value : 2, disabled : false },[
       ]],
     })
   }
@@ -606,7 +602,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
 
         this.ColumnasCronograma = ['numero', 'tipo_pago','fecha_vencimiento', 'monto', 'interes_generado','monto_pagado', 'fecha_cancelacion','estado', 'opciones'];
         this.ObtenerCronograma(this.id_credito, "fecha_vencimiento asc");
-
+        
         if(res['garantes'].garantes.length>0){
           res['garantes'].garantes.forEach((item,index)=>{
             let dni = item.dni_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.dni_pdf : null ;
@@ -708,10 +704,22 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
   }
 
   ObtenerCronograma(id_credito, orden){
+    this.Cargando.next(true) ;
+
     this.Servicio.ObtenerCrongrama(id_credito, orden).subscribe(res=>{
+      this.Cargando.next(false) ;
       this.Cronograma = res;
       this.CalcularTotalPagado(this.Cronograma) ;
-      this.ListadoCronograma.AsignarInformacion(this.Cronograma);
+      if ( this.CreditosForm.get('vista_cronograma').value == 1 ) {
+        this.ListadoCronograma.AsignarInformacion(this.Cronograma);
+      }
+    })
+
+    this.Servicio.ObtenerCrongramaPagosxPeriodo(id_credito).subscribe(res=>{
+      this.Cronograma_Periodos = res;
+      if ( this.CreditosForm.get('vista_cronograma').value == 2 ) {
+        this.ListadoCronograma.AsignarInformacion(this.Cronograma_Periodos);
+      }
     })
   }
 
@@ -1382,4 +1390,11 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
     console.log(this.CreditosForm)
   }
 
+  CambiarVistaCronograma() {
+    if ( this.CreditosForm.get('vista_cronograma').value == 1 ) {
+      this.ListadoCronograma.AsignarInformacion(this.Cronograma);
+    } else {
+      this.ListadoCronograma.AsignarInformacion(this.Cronograma_Periodos);
+    }
+  }
 }

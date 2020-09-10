@@ -51,9 +51,12 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   public Vendedores:Array<any> = [];
   public Productos:Array<any>;
   public Cronograma: Array<any>;
+  public Cronograma_Periodos: Array<any>;  
   public VentasSalidaForm:FormGroup;
   public ListadoVentas: VentaDataSource;
   public Columnas: string[];
+  public ColumnasCronogramaPeriodo: Array<string> = ["numero", "periodo", "monto_cuota", "monto_pago_manual" ,"total_planilla" ,"total_directo" ,"total_judicial" ] ;
+  
   public ruta:string;
   public ProductosComprados: Array<any>;
   public ListadoTipoPago: Array<any>;
@@ -186,16 +189,6 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-
-    if (this.id_venta) {
-      this.sort.sortChange
-      .pipe(
-        tap(() =>{
-          this.ActualizarOrdenCronograma(this.id_venta, this.sort.active + " " + this.sort.direction)
-        })
-      ).subscribe();
-    }
-
     if(!this.id_venta){
 
       this.FiltroPrecio.changes.subscribe(res=>{
@@ -306,6 +299,9 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       ]],
       productos: this.FormBuilder.array([]),
       garantes: this.FormBuilder.array([]),
+      // 1. Ver cuotas, 2. Ver periodos
+      vista_cronograma: [{ value : 2, disabled : false },[
+      ]],
     });
   }
 
@@ -866,8 +862,18 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
     this.Servicio.ListarCronograma(id, orden).subscribe(res=>{
       this.Cargando.next(false) ;
       this.Cronograma = res['data'].cronograma ;
-      this.CalcularTotalPagado( res['data'].cronograma ) ;
-      this.ListadoVentas.Informacion.next(res['data'].cronograma);
+      this.CalcularTotalPagado( this.Cronograma ) ;
+
+      if ( this.VentasSalidaForm.get('vista_cronograma').value == 1 ) {
+        this.ListadoVentas.Informacion.next(this.Cronograma);
+      }
+    })
+
+    this.Servicio.ListarCrongramaPagosxPeriodo(id).subscribe(res=>{
+      this.Cronograma_Periodos = res ;
+      if ( this.VentasSalidaForm.get('vista_cronograma').value == 2 ) {
+        this.ListadoVentas.Informacion.next(this.Cronograma_Periodos);
+      }
     })
   }
 
@@ -1429,6 +1435,14 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
     this.VentasSalidaForm.get('fechapago').setValue(moment(mes_seleccionado).endOf('month').toDate());
     datepicker.close();
     this.FechaPagoSeleccionada() ;
+  }
+
+  CambiarVistaCronograma() {
+    if ( this.VentasSalidaForm.get('vista_cronograma').value == 1 ) {
+      this.ListadoVentas.Informacion.next(this.Cronograma);
+    } else {
+      this.ListadoVentas.Informacion.next(this.Cronograma_Periodos);
+    }
   }
 
 }

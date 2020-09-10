@@ -45,7 +45,7 @@ export class CobranzaManualListarComponent implements OnInit, AfterViewInit {
     this.fecha_inicio = new Date((new Date()).valueOf() - 1000*60*60*24*30) ;
     this.fecha_fin = new Date() ;
     this.tipo_cobranza = 0 ;
-    this.Columnas = ['numero', 'tipo','cliente', "vendedor", 'comprobante', 'total', 'fecha', 'opciones'] ;
+    this.Columnas = ['numero', 'tipo','cliente','comprobante', 'total', 'fecha', 'opciones'] ;
 
     this.ListadoCobranza = new CobranzaDataSource(this._cobranzas);
     this.ListadoCobranza.CargarCronograma("","","", 0, this.fecha_inicio, this.fecha_fin, 1, 10) ;

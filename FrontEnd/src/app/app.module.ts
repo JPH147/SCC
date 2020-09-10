@@ -139,8 +139,8 @@ import { RegistroHorasComponent } from './components/registro-horas/registro-hor
 import { ReporteAsistenciaComponent } from './components/reporte-asistencia/reporte-asistencia.component';
 import { ConsultarClienteComponent } from './components/clientes/consultar-cliente/consultar-cliente.component';
 import { VendedoresComponent } from './components/vendedores/vendedores.component';
-import { FileUploadVendedores } from './components/vendedores-listado/file-upload/fileupload';
-import { VentanaVendedorComponent } from './components/vendedores-listado/ventana-vendedor/ventana-vendedor';
+import { FileUploadVendedores } from './components/vendedores/vendedores-listado/file-upload/fileupload';
+import { VentanaVendedorComponent } from './components/vendedores/vendedores-listado/ventana-vendedor/ventana-vendedor';
 import { TalonariosComponent } from './components/talonarios/talonarios.component';
 import { VentanaTalonarioComponent } from './components/talonarios/ventana-talonario/ventana-talonario.component';
 import { EvaluacionArchivosComponent } from './components/evaluacion/evaluacion-archivos/evaluacion-archivos.component';
@@ -181,15 +181,14 @@ import { CargoComponent } from './components/instituciones/cargo/cargo.component
 import { CargoEstadoComponent } from './components/instituciones/cargo-estado/cargo-estado.component';
 import { VentanaCargoEstadoComponent } from './components/instituciones/cargo-estado/ventana-cargo-estado/ventana-cargo-estado.component';
 import { VentanaCargoComponent } from './components/instituciones/cargo/ventana-cargo/ventana-cargo.component';
-import { VendedoresCargoComponent } from './components/vendedores-cargo/vendedores-cargo.component';
-import { VentanaVendedoresCargoComponent } from './components/vendedores-cargo/ventana-vendedores-cargo/ventana-vendedores-cargo.component';
-import { VendedoresListadoComponent } from './components/vendedores-listado/vendedores-listado.component';
+import { VendedoresCargoComponent } from './components/vendedores/vendedores-cargo/vendedores-cargo.component';
+import { VentanaVendedoresCargoComponent } from './components/vendedores/vendedores-cargo/ventana-vendedores-cargo/ventana-vendedores-cargo.component';
+import { VendedoresListadoComponent } from './components/vendedores/vendedores-listado/vendedores-listado.component';
 import { DistritoJudicialComponent } from './components/proceso-judicial-vinculados/distrito-judicial/distrito-judicial.component';
 import { VentanaDistritoJudicialComponent } from './components/proceso-judicial-vinculados/distrito-judicial/ventana-distrito-judicial/ventana-distrito-judicial.component';
 import { InstanciaJudicialComponent } from './components/proceso-judicial-vinculados/instancia-judicial/instancia-judicial.component';
 import { VentanaInstanciaJudicialComponent } from './components/proceso-judicial-vinculados/instancia-judicial/ventana-instancia-judicial/ventana-instancia-judicial.component';
 import { ProcesoJudicialVinculadosComponent } from './components/proceso-judicial-vinculados/proceso-judicial-vinculados.component';
-import { ConsultarCuotasComponent } from './components/consultar-cuotas/consultar-cuotas.component';
 import { VentanaCambioDistritoComponent } from './components/cobranza-judicial-listar/ventana-cambio-distrito/ventana-cambio-distrito.component';
 import { EstadoDocumentosComponent } from './components/proceso-judicial-vinculados/estado-documentos/estado-documentos.component';
 import { VentanaDocumentosComponent } from './components/proceso-judicial-vinculados/estado-documentos/ventana-documentos/ventana-documentos.component';
@@ -435,7 +434,6 @@ export const CUSTOM_DATE_FORMAT = {
     InstanciaJudicialComponent,
     VentanaInstanciaJudicialComponent,
     ProcesoJudicialVinculadosComponent,
-    ConsultarCuotasComponent,
     VentanaCambioDistritoComponent,
     EstadoDocumentosComponent,
     VentanaDocumentosComponent,
