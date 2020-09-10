@@ -2,12 +2,12 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { PlantillasService } from '../plantillas.service';
 import {saveAs} from 'file-saver';
 import { MatDialog } from '@angular/material/dialog';
-import { Notificaciones } from '../../global/notificacion';
+import { Notificaciones } from 'src/app/core/servicios/notificacion';
 import { VentanaDocumentosComponent } from '../documentos/ventana-documentos/ventana-documentos.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { distinctUntilChanged, debounceTime, tap } from 'rxjs/operators';
 import { MatPaginator } from '@angular/material/paginator';
-import { VentanaConfirmarComponent } from '../../global/ventana-confirmar/ventana-confirmar.component';
+import { VentanaConfirmarComponent } from 'src/app/compartido/componentes/ventana-confirmar/ventana-confirmar.component';
 import { PlantillasDataSource } from '../documentos/documentos.component';
 
 @Component({

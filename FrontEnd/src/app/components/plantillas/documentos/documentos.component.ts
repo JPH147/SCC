@@ -1,16 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {CollectionViewer, DataSource} from "@angular/cdk/collections";
-import { Observable, forkJoin,fromEvent, merge, BehaviorSubject, of} from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { PlantillasService } from '../plantillas.service';
-import { VentanaPlantillasComponent } from './ventana-plantillas/ventana-plantillas.component';
 import {saveAs} from 'file-saver';
 import { MatDialog } from '@angular/material/dialog';
-import { Notificaciones } from '../../global/notificacion';
+import { Notificaciones } from 'src/app/core/servicios/notificacion';
 import { VentanaDocumentosComponent } from './ventana-documentos/ventana-documentos.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { distinctUntilChanged, debounceTime, tap, finalize } from 'rxjs/operators';
 import { MatPaginator } from '@angular/material/paginator';
-import { VentanaConfirmarComponent } from '../../global/ventana-confirmar/ventana-confirmar.component';
+import { VentanaConfirmarComponent } from '../../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';
 
 @Component({
   selector: 'app-documentos',

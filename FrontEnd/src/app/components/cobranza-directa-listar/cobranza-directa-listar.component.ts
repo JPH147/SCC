@@ -7,10 +7,10 @@ import { Observable, BehaviorSubject, of, fromEvent, merge } from 'rxjs';
 import { catchError, finalize, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { CobranzasService } from '../cobranzas-listar/cobranzas.service';
-import { VentanaConfirmarComponent } from '../global/ventana-confirmar/ventana-confirmar.component';
-import { Rol } from '../usuarios/usuarios.service';
+import { VentanaConfirmarComponent } from '../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';
+import { Rol } from 'src/app/compartido/modelos/login.modelos';
 import { Store } from '@ngrx/store';
-import { EstadoSesion } from '../usuarios/usuarios.reducer';
+import { EstadoSesion } from '../../compartido/reducers/permisos.reducer';
 
 @Component({
   selector: 'app-cobranza-directa-listar',

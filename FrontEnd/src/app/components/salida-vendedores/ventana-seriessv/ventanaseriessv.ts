@@ -1,12 +1,7 @@
 import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
-import { MatButton } from '@angular/material/button';
-import { MatCard } from '@angular/material/card';
-import { MatDatepicker } from '@angular/material/datepicker';
-import { MatInputModule } from '@angular/material/input';
-import { MatTableModule } from '@angular/material/table';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import {FormControl, FormGroup, FormBuilder, FormArray,Validators} from '@angular/forms';
-import {ServiciosProductoSerie} from '../../global/productoserie'
+import { FormGroup, FormBuilder, FormArray,Validators} from '@angular/forms';
+import {ServiciosProductoSerie} from 'src/app/core/servicios/productoserie'
 import { BehaviorSubject, fromEvent } from 'rxjs';
 import { tap } from 'rxjs/operators';
 

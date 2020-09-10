@@ -5,11 +5,11 @@ import { Location } from '@angular/common';
 import { fromEvent, BehaviorSubject, forkJoin, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
-import { Notificaciones } from '../global/notificacion';
-import { URLIMAGENES } from '../global/url';
-import { ServiciosGenerales } from '../global/servicios';
+import { Notificaciones } from 'src/app/core/servicios/notificacion';
+import { URLIMAGENES } from 'src/app/core/servicios/url';
+import { ServiciosGenerales } from 'src/app/core/servicios/servicios';
 import { CobranzasService } from '../cobranzas-listar/cobranzas.service';
-import { SeleccionarClienteComponent } from '../retorno-vendedores/seleccionar-cliente/seleccionar-cliente.component';
+import { SeleccionarClienteComponent } from '../../compartido/componentes/seleccionar-cliente/seleccionar-cliente.component';
 import { VentaService } from '../ventas/ventas.service';
 
 import * as moment from 'moment' ;

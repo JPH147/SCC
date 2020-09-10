@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild,ElementRef, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
 import { IngresoProductoService } from './ingreso-productos.service';
-import {ServiciosProductoSerie} from '../global/productoserie';
-import { ServiciosGenerales, Almacen, ListarCliente, ListarVendedor } from './../global/servicios';
+import {ServiciosProductoSerie} from 'src/app/core/servicios/productoserie';
+import { ServiciosGenerales, Almacen, ListarCliente, ListarVendedor } from 'src/app/core/servicios/servicios';
 import { ventanaseries } from './ventana-series/ventanaseries';
 import { VentanaFecha } from './ventana-fecha/ventanafecha';
 import { VentanaDetalle } from './ventana-detalle/ventanadetalle';
@@ -11,7 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {debounceTime, distinctUntilChanged, tap, delay, map} from 'rxjs/operators';
 import {ProductoService} from '../detalleproductos/productos/productos.service';
-import {ServiciosDocumentos} from '../global/documentos';
+import {ServiciosDocumentos} from 'src/app/core/servicios/documentos';
 import { HistorialMovimientosService } from '../historial-movimientos/historial-movimientos.service';
 
 @Component({

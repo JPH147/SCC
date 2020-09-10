@@ -9,7 +9,7 @@ import * as moment from 'moment';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CreditosService } from '../creditos/creditos.service';
 import { VentanaEmergenteProvisionalClientes } from '../clientes/ventana-emergente-provisional/ventanaemergenteprovisional' ;
-import { SeleccionarClienteComponent } from '../retorno-vendedores/seleccionar-cliente/seleccionar-cliente.component';
+import { SeleccionarClienteComponent } from '../../compartido/componentes/seleccionar-cliente/seleccionar-cliente.component';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({

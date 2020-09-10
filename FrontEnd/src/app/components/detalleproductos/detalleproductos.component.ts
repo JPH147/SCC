@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {ServiciosDirecciones} from '../global/direcciones';
 import {TipoComponent} from "./tipo/tipo.component";
 import {MarcaComponent} from "./marca/marca.component";
 import {ModeloComponent} from "./modelo/modelo.component";
-import { ServiciosGenerales } from '../global/servicios';
+import { ServiciosGenerales } from 'src/app/core/servicios/servicios';
 import {BehaviorSubject} from 'rxjs';
 
 @Component({

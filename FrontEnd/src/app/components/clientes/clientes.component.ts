@@ -6,14 +6,14 @@ import { merge, fromEvent, forkJoin, Subject, of, empty } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap, takeUntil, switchMap, takeLast} from 'rxjs/operators';
 import { ClienteService } from './clientes.service';
 import { ClienteDataSource } from './clientes.dataservice';
-import { VentanaConfirmarComponent } from '../global/ventana-confirmar/ventana-confirmar.component';
+import { VentanaConfirmarComponent } from '../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ServiciosTelefonos } from '../global/telefonos';
-import { ServiciosDirecciones } from '../global/direcciones';
-import { Notificaciones } from '../global/notificacion';
+import { ServiciosTelefonos } from 'src/app/core/servicios/telefonos';
+import { ServiciosDirecciones } from 'src/app/core/servicios/direcciones';
+import { Notificaciones } from 'src/app/core/servicios/notificacion';
 import { VentanaFotoComponent } from './ventana-foto/ventana-foto.component';
 import { VentanaVentasComponent } from './ventana-ventas/ventana-ventas.component'
-import { ArchivosService } from '../global/archivos';
+import { ArchivosService } from '../../core/servicios/archivos';
 import { VentanaEmergenteContacto} from './ventana-emergentecontacto/ventanaemergentecontacto';
 import { VentanaRelacionadosComponent} from './ventana-relacionados/ventana-relacionados.component';
 import { VentanaEmergenteIntegralEditarComponent } from './ventana-emergente-integral-editar/ventana-emergente-integral-editar.component';
@@ -21,11 +21,11 @@ import { VentanaEmergenteIntegralAgregarComponent } from './ventana-emergente-in
 import { VentanaCobranzaClienteVencidasComponent } from '../cobranza-cliente-listar/ventana-cobranza-cliente-vencidas/ventana-cobranza-cliente-vencidas.component'
 import { saveAs } from 'file-saver';
 import { FileUpload } from './file-upload/fileupload';
-import { ServiciosGenerales } from '../global/servicios';
+import { ServiciosGenerales } from 'src/app/core/servicios/servicios';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Rol } from '../usuarios/usuarios.service';
-import { EstadoSesion } from '../usuarios/usuarios.reducer';
+import { Rol } from 'src/app/compartido/modelos/login.modelos';
+import { EstadoSesion } from '../../compartido/reducers/permisos.reducer';
 
 @Component({
   selector: 'app-clientes',

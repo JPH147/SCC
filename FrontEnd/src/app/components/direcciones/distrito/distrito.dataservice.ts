@@ -1,5 +1,5 @@
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
-import {ServiciosDirecciones, Distrito} from '../../global/direcciones';
+import {ServiciosDirecciones, Distrito} from 'src/app/core/servicios/direcciones';
 import {BehaviorSubject, Observable, of} from 'rxjs';
 import {catchError, finalize} from 'rxjs/operators';
 

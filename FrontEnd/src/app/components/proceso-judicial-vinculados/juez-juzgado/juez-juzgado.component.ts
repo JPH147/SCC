@@ -1,15 +1,13 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSelect } from '@angular/material/select';
-import { MatSort } from '@angular/material/sort';
 import { Observable, BehaviorSubject, of, fromEvent, merge } from 'rxjs';
 import { catchError, finalize, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { ProcesoJudicialVinculadosService } from '../proceso-judicial-vinculados.service';
-import { VentanaConfirmarComponent } from '../../global/ventana-confirmar/ventana-confirmar.component';
+import { VentanaConfirmarComponent } from '../../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';
 import { VentanaJuezJuzgadoComponent } from './ventana-juez-juzgado/ventana-juez-juzgado.component';
-import { Notificaciones } from '../../global/notificacion';
+import { Notificaciones } from 'src/app/core/servicios/notificacion';
 
 @Component({
   selector: 'app-juez-juzgado',

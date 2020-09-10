@@ -3,14 +3,14 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dial
 import { MatPaginator } from '@angular/material/paginator';
 import {FormGroup, FormBuilder, FormArray , Validators} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
-import {ServiciosTelefonos} from '../../global/telefonos';
-import {ServiciosDirecciones} from '../../global/direcciones';
+import {ServiciosTelefonos} from 'src/app/core/servicios/telefonos';
+import {ServiciosDirecciones} from 'src/app/core/servicios/direcciones';
 import { NgControl } from '@angular/forms';
 import { ClienteCuentaDataSource, ClienteTelefonoDataSource, ClienteDireccionDataSource } from './ventanaemergenteservice.dataservice';
 import { ClienteService } from '../clientes.service'
-import {ServiciosVentas} from '../../global/ventas';
+import {ServiciosVentas} from 'src/app/core/servicios/ventas';
 import {catchError, finalize, debounceTime, distinctUntilChanged, tap} from 'rxjs/operators'
-import {VentanaConfirmarComponent} from '../../global/ventana-confirmar/ventana-confirmar.component';
+import {VentanaConfirmarComponent} from 'src/app/compartido/componentes/ventana-confirmar/ventana-confirmar.component';
 import { BehaviorSubject } from 'rxjs';
 
 @Component({

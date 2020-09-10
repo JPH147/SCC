@@ -1,9 +1,10 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Rol, UsuariosService } from '../../usuarios.service';
+import { UsuariosService } from '../../usuarios.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { finalize } from 'rxjs/operators';
+import { Rol } from 'src/app/compartido/modelos/login.modelos';
 
 @Component({
   selector: 'app-ventana-permisos',

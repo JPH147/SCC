@@ -1,10 +1,10 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { SeleccionarClienteComponent } from '../retorno-vendedores/seleccionar-cliente/seleccionar-cliente.component';
+import { SeleccionarClienteComponent } from '../../compartido/componentes/seleccionar-cliente/seleccionar-cliente.component';
 import { VentanaJudicialComponent } from './ventana-judicial/ventana-judicial.component';
 import { CobranzaJudicialService } from './cobranza-judicial.service';
-import { Notificaciones } from '../global/notificacion';
+import { Notificaciones } from 'src/app/core/servicios/notificacion';
 import { finalize, map, distinctUntilChanged, tap, debounceTime } from 'rxjs/operators';
 import { BehaviorSubject, forkJoin, merge } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -13,12 +13,12 @@ import { CreditosService } from '../creditos/creditos.service';
 import { VentaService } from '../ventas/ventas.service';
 import * as moment from 'moment'
 import { EvaluacionService } from '../evaluacion/evaluacion.service';
-import { VentanaConfirmarComponent } from '../global/ventana-confirmar/ventana-confirmar.component';
-import { URLIMAGENES } from '../../components/global/url' ;
+import { VentanaConfirmarComponent } from '../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';
+import { URLIMAGENES } from 'src/app/core/servicios/url' ;
 import { ProcesoJudicialVinculadosService } from '../proceso-judicial-vinculados/proceso-judicial-vinculados.service';
 import { Store } from '@ngrx/store';
-import { EstadoSesion } from '../usuarios/usuarios.reducer';
-import { Rol } from '../usuarios/usuarios.service';
+import { EstadoSesion } from '../../compartido/reducers/permisos.reducer';
+import { Rol } from 'src/app/compartido/modelos/login.modelos';
 
 @Component({
   selector: 'app-cobranza-judicial',

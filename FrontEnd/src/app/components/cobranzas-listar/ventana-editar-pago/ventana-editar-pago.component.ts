@@ -3,7 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import * as moment from 'moment';
 
-import { ServiciosTipoPago } from '../../global/tipopago';
+import { ServiciosTipoPago } from 'src/app/core/servicios/tipopago';
 import { CobranzasService } from '../cobranzas.service';
 
 @Component({

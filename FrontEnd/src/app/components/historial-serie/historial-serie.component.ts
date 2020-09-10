@@ -9,7 +9,7 @@ import { MatSort } from '@angular/material/sort';
 import { merge, fromEvent } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import {saveAs} from 'file-saver';
-import { ArchivosService } from '../global/archivos';
+import { ArchivosService } from 'src/app/core/servicios/archivos';
 
 @Component({
   selector: 'app-historial-serie',

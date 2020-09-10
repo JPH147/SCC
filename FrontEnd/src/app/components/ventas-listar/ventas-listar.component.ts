@@ -7,14 +7,14 @@ import {merge, fromEvent} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
 import {ProductoService} from '../detalleproductos/productos/productos.service';
 import {VentaDataSource} from './ventas-listar.dataservice';
-import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
+import {VentanaConfirmarComponent} from '../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';
 import {VentasServicio} from './ventas-listar.service'
 import { ClienteService } from '../clientes/clientes.service';
 import { VentaService } from '../ventas/ventas.service';
 import { CobranzaJudicialService } from '../cobranza-judicial/cobranza-judicial.service';
 import { Store } from '@ngrx/store';
-import { EstadoSesion } from '../usuarios/usuarios.reducer';
-import { Rol } from '../usuarios/usuarios.service';
+import { EstadoSesion } from '../../compartido/reducers/permisos.reducer';
+import { Rol } from 'src/app/compartido/modelos/login.modelos';
 
 
 @Component({

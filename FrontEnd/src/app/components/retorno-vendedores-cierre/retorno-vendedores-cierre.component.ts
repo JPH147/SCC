@@ -6,8 +6,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {SalidaVendedoresService} from '../salida-vendedores/salida-vendedores.service';
 import { BehaviorSubject } from 'rxjs';
 import {ProductosDataSource, TalonariosDataSource, VentasDataSource} from '../retorno-vendedores/retorno-vendedores.component';
-import {ServiciosVentas} from '../global/ventas';
-import {ServiciosProductoSerie} from '../global/productoserie';
+import {ServiciosVentas} from 'src/app/core/servicios/ventas';
+import {ServiciosProductoSerie} from 'src/app/core/servicios/productoserie';
 
 @Component({
   selector: 'app-retorno-vendedores-cierre',

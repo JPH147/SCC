@@ -1,16 +1,16 @@
-import {Component, Inject, OnInit, AfterViewInit, ElementRef, ViewChild} from '@angular/core';
+import { Component, Inject, OnInit, ViewChild, ElementRef} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import {FormControl, FormGroup, FormBuilder,FormGroupDirective, NgForm, Validators} from '@angular/forms';
-import {ServiciosGenerales, Institucion, Sede, Subsede} from '../../global/servicios';
+import { FormGroup, FormBuilder, Validators} from '@angular/forms';
+import { ServiciosGenerales, Institucion, Sede, Subsede} from 'src/app/core/servicios/servicios';
 import { fromEvent, BehaviorSubject } from 'rxjs';
-import {ClienteService} from '../clientes.service';
-import {ServiciosDirecciones} from '../../global/direcciones';
-import {ServiciosTelefonos} from '../../global/telefonos';
+import { ClienteService} from '../clientes.service';
+import { ServiciosDirecciones} from 'src/app/core/servicios/direcciones';
+import { ServiciosTelefonos} from 'src/app/core/servicios/telefonos';
 import { MatPaginator } from '@angular/material/paginator';
 import { ClienteCuentaDataSource, ClienteTelefonoDataSource, ClienteDireccionDataSource } from '../ventana-emergentecontacto/ventanaemergenteservice.dataservice';
 import { debounceTime, distinctUntilChanged, tap} from 'rxjs/operators'
-import {VentanaConfirmarComponent} from '../../global/ventana-confirmar/ventana-confirmar.component';
-import { ServiciosVentas } from '../../global/ventas';
+import { VentanaConfirmarComponent} from '../../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';
+import { ServiciosVentas } from 'src/app/core/servicios/ventas';
 import { VentanaEditarTelefonoComponent } from '../ventana-editar-telefono/ventana-editar-telefono.component';
 import { VentanaEditarDireccionComponent } from '../ventana-editar-direccion/ventana-editar-direccion.component';
 import { VentanaEditarCuentaComponent } from '../ventana-editar-cuenta/ventana-editar-cuenta.component';

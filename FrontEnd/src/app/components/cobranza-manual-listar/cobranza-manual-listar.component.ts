@@ -4,9 +4,9 @@ import { merge, fromEvent, BehaviorSubject, Observable, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap, catchError, finalize } from 'rxjs/operators';
 import { CobranzasService } from '../cobranzas-listar/cobranzas.service';
 import { MatPaginator } from '@angular/material/paginator';
-import { Rol } from '../usuarios/usuarios.service';
+import { Rol } from 'src/app/compartido/modelos/login.modelos';
 import { Store } from '@ngrx/store';
-import { EstadoSesion } from '../usuarios/usuarios.reducer';
+import { EstadoSesion } from '../../compartido/reducers/permisos.reducer';
 
 @Component({
   selector: 'app-cobranza-manual-listar',

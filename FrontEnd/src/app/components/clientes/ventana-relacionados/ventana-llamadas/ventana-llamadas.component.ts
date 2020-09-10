@@ -7,8 +7,8 @@ import { catchError, finalize } from 'rxjs/operators';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { VentanaObservacionesComponent } from '../ventana-observaciones/ventana-observaciones.component';
 
-import { URLLLAMADAS } from '../../../global/url' ;
-import { Notificaciones } from 'src/app/components/global/notificacion';
+import { URLLLAMADAS } from 'src/app/core/servicios/url' ;
+import { Notificaciones } from 'src/app/core/servicios/notificacion';
 
 @Component({
   selector: 'app-ventana-llamadas',

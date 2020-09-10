@@ -4,10 +4,10 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSelect } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
-import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
+import {VentanaConfirmarComponent} from '../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';
 import {ListadoSalidaVendedoresService} from './listado-salida-vendedores.service';
 import {ListadoSalidaVendedoresDataSource} from './listado-salida-vendedores.dataservice'
-import {ServiciosGenerales} from '../global/servicios'
+import {ServiciosGenerales} from 'src/app/core/servicios/servicios'
 import {merge, Observable, fromEvent} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
 

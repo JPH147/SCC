@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {ServiciosDirecciones} from '../global/direcciones'
+import {ServiciosDirecciones} from 'src/app/core/servicios/direcciones'
 
 @Component({
   selector: 'app-direcciones',

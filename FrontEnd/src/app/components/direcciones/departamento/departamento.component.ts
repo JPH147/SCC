@@ -1,13 +1,12 @@
-import {Component, OnInit, ViewChild, AfterViewInit, ElementRef} from '@angular/core';
-import {merge, Observable, fromEvent} from 'rxjs';
+import {Component, OnInit, ViewChild, ElementRef} from '@angular/core';
+import { fromEvent} from 'rxjs';
 import {DepartamentoDataSource} from './departamento.dataservice';
-import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
-import {ServiciosDirecciones, Departamento} from '../../global/direcciones';
+import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
+import {ServiciosDirecciones} from 'src/app/core/servicios/direcciones';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
 import {VentanaEmergenteDepartamento} from './ventana-emergente/ventanaemergente';
-import {VentanaConfirmarComponent} from '../../global/ventana-confirmar/ventana-confirmar.component'
+import {VentanaConfirmarComponent} from 'src/app/compartido/componentes/ventana-confirmar/ventana-confirmar.component'
 
 @Component({
   selector: 'app-departamento',

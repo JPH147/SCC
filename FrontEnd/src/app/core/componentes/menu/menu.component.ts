@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import { Store } from '@ngrx/store';
-import { EstadoSesion } from '../components/usuarios/usuarios.reducer';
-import { Rol } from '../components/usuarios/usuarios.service';
+import { EstadosGlobales } from 'src/app/compartido/reducers/estados';
+import { Rol } from 'src/app/compartido/modelos/login.modelos';
 
 @Component({
   selector: 'app-menu',
@@ -14,7 +14,7 @@ export class MenuComponent implements OnInit{
   public Menu: Menu[];
 
   constructor(
-    private _store : Store<EstadoSesion> ,
+    private _store : Store<EstadosGlobales> ,
   ) { }
 
   ngOnInit(){

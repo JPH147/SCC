@@ -5,22 +5,22 @@ import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { EvaluacionService } from '../evaluacion.service';
-import { ServiciosDirecciones } from '../../global/direcciones';
-import { ServiciosTelefonos } from '../../global/telefonos';
+import { ServiciosDirecciones } from 'src/app/core/servicios/direcciones';
+import { ServiciosTelefonos } from 'src/app/core/servicios/telefonos';
 import { ClienteService } from '../../clientes/clientes.service';
-import { ServiciosGenerales } from '../../global/servicios';
+import { ServiciosGenerales } from 'src/app/core/servicios/servicios';
 import { TrabajadoresService } from '../../trabajadores/trabajadores.service';
 import { VentanaEmergenteContacto} from '../../clientes/ventana-emergentecontacto/ventanaemergentecontacto';
 import { VentanaEmergenteClientes } from '../../clientes/ventana-emergente/ventanaemergente';
 import { VentanaEmergenteProvisionalClientes } from '../../clientes/ventana-emergente-provisional/ventanaemergenteprovisional' ;
 import { VentanaProductosComponent } from '../../ventas/ventana-productos/ventana-productos.component';
-import { VentanaConfirmarComponent } from '../../global/ventana-confirmar/ventana-confirmar.component';
+import { VentanaConfirmarComponent } from '../../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';
 import { VerPlantillasComponent } from '../ver-plantillas/ver-plantillas.component';
-import {Notificaciones} from '../../global/notificacion';
+import {Notificaciones} from 'src/app/core/servicios/notificacion';
 import * as moment from 'moment';
 import {saveAs} from 'file-saver';
 import { VentanaPlantillasComponent } from '../../plantillas/documentos/ventana-plantillas/ventana-plantillas.component';
-import { SeleccionarClienteComponent } from '../../retorno-vendedores/seleccionar-cliente/seleccionar-cliente.component';
+import { SeleccionarClienteComponent } from '../../../compartido/componentes/seleccionar-cliente/seleccionar-cliente.component';
 
 @Component({
   selector: 'app-evaluacion-archivos',

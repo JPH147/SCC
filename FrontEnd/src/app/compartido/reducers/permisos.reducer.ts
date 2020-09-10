@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store' ;
-import { Rol } from './usuarios.service';
+import { Rol } from 'src/app/compartido/modelos/login.modelos';
 
 export const login = '[usuario] LOGIN' ;
 export const logout = '[usuario] LOGOUT' ;

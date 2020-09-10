@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http'
-import { Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { URL, URLIMAGENES } from '../global/url';
-import * as moment from 'moment';
+import { Observable } from 'rxjs';
+import { URL, URLIMAGENES } from 'src/app/core/servicios/url';
 
 @Injectable({
   providedIn: 'root'

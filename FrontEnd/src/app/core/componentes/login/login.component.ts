@@ -1,11 +1,10 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { BehaviorSubject, merge } from 'rxjs';
-import { UsuariosService } from '../components/usuarios/usuarios.service';
 import { debounceTime, distinctUntilChanged, tap, finalize } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { AsignarPermisos } from '../components/usuarios/usuarios.reducer' ;
 import { Store } from '@ngrx/store';
+import { LoginService } from '../../servicios/login.service';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +18,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   public error : boolean = false ;
   
   constructor(
-    private _usuarios : UsuariosService ,
+    private _login : LoginService ,
     private _builder : FormBuilder ,
     private _router : Router ,
     private _store : Store ,
@@ -55,7 +54,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   IniciarSesion(){
     this.Cargando.next(true) ;
-    this._usuarios.TryLogin(
+    this._login.TryLogin(
       this.LoginForm.value.usuario ,
       this.LoginForm.value.password
     )
@@ -66,8 +65,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     )
     .subscribe(usuario=>{
       if( usuario ) {
-        let asignarPermisos = new AsignarPermisos( usuario['permisos'] ) ;
-        this._store.dispatch(asignarPermisos) ;
+        this._login.AsignarUsuario( usuario ) ;
         this._router.navigate(['inicio']) ;
       } else {
         this.error = true ;

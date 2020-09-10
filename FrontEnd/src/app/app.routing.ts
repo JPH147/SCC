@@ -52,8 +52,8 @@ import { CobranzaJudicialGenerarComponent } from './components/cobranza-judicial
 import { ProcesoJudicialVinculadosComponent } from './components/proceso-judicial-vinculados/proceso-judicial-vinculados.component';
 import { CobranzaJudicialMultipleComponent } from './components/cobranza-judicial-multiple/cobranza-judicial-multiple.component';
 import { UsuariosComponent } from './components/usuarios/usuarios.component';
-import { InicioComponent } from './inicio/inicio.component';
-import { LoginComponent } from './login/login.component';
+import { InicioComponent } from './core/componentes/inicio/inicio.component';
+import { LoginComponent } from './core/componentes/login/login.component';
 import { CobranzaClienteListarMorososComponent } from './components/cobranza-cliente-listar-morosos/cobranza-cliente-listar-morosos.component';
 import { CobranzaManualComponent } from './components/cobranza-manual/cobranza-manual.component';
 import { CobranzaManualListarComponent } from './components/cobranza-manual-listar/cobranza-manual-listar.component';

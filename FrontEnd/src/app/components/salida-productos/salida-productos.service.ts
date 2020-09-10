@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { URL } from './../global/url';
+import { URL } from 'src/app/core/servicios/url';
 import { Injectable } from '@angular/core';
 import * as moment from 'moment';
 

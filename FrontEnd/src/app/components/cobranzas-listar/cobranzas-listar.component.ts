@@ -10,11 +10,11 @@ import { CobranzasService } from './cobranzas.service';
 import { VentanaTipoReporteComponent } from './ventana-tipo-reporte/ventana-tipo-reporte.component';
 import { VentanaPagosComponent } from './ventana-pagos/ventana-pagos.component';
 
-import { Notificaciones } from '../global/notificacion';
+import { Notificaciones } from 'src/app/core/servicios/notificacion';
 import { VentanaEditarPagoComponent } from './ventana-editar-pago/ventana-editar-pago.component';
-import { Rol } from '../usuarios/usuarios.service';
+import { Rol } from 'src/app/compartido/modelos/login.modelos';
 import { Store } from '@ngrx/store';
-import { EstadoSesion } from '../usuarios/usuarios.reducer';
+import { EstadoSesion } from '../../compartido/reducers/permisos.reducer';
 
 @Component({
   selector: 'app-cobranzas-listar',

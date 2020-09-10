@@ -1,12 +1,10 @@
-import {Component, Inject, OnInit, AfterViewInit} from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import {FormControl, FormGroup, FormBuilder,FormGroupDirective, NgForm, Validators} from '@angular/forms';
-import {ErrorStateMatcher} from '@angular/material/core';
-import {ServiciosGenerales} from '../../global/servicios';
-import { NgControl } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
+import {ServiciosGenerales} from 'src/app/core/servicios/servicios';
 import { ProveedorService } from '../proveedores.service';
 import { FileHolder } from '../../../../../node_modules/angular2-image-upload';
-import {URL} from '../../global/url';
+import {URL} from 'src/app/core/servicios/url';
 
 @Component({
   selector: 'app-fileupload',

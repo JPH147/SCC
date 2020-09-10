@@ -6,9 +6,9 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import {catchError, finalize, debounceTime, distinctUntilChanged, tap} from 'rxjs/operators'
 import { ClienteService } from '../../clientes.service'
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'
-import {VentanaConfirmarComponent} from '../../../global/ventana-confirmar/ventana-confirmar.component';
-import { ServiciosGenerales } from '../../../global/servicios';
-import { URLIMAGENES } from '../../../global/url';
+import {VentanaConfirmarComponent} from '../../../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';
+import { ServiciosGenerales } from 'src/app/core/servicios/servicios';
+import { URLIMAGENES } from 'src/app/core/servicios/url';
 
 @Component({
   selector: 'app-ventana-observaciones',

@@ -1,16 +1,16 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import {FormArray, FormGroup, FormBuilder, Validators, AbstractControl} from '@angular/forms';
-import {ServiciosTipoPago} from '../../global/tipopago';
+import {ServiciosTipoPago} from 'src/app/core/servicios/tipopago';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import {SeleccionarClienteComponent} from '../seleccionar-cliente/seleccionar-cliente.component';
-import {ServiciosTelefonos} from '../../global/telefonos';
-import {ServiciosDirecciones} from '../../global/direcciones';
+import {SeleccionarClienteComponent} from '../../../compartido/componentes/seleccionar-cliente/seleccionar-cliente.component';
+import {ServiciosTelefonos} from 'src/app/core/servicios/telefonos';
+import {ServiciosDirecciones} from 'src/app/core/servicios/direcciones';
 import { VentanaEmergenteContacto} from '../../clientes/ventana-emergentecontacto/ventanaemergentecontacto';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import {BehaviorSubject, Observable, forkJoin} from 'rxjs';
 import {VentaService} from '../../ventas/ventas.service';
 import {SalidaVendedoresService} from '../../salida-vendedores/salida-vendedores.service';
-import {Notificaciones} from '../../global/notificacion';
+import {Notificaciones} from 'src/app/core/servicios/notificacion';
 import * as moment from 'moment';
 
 @Component({

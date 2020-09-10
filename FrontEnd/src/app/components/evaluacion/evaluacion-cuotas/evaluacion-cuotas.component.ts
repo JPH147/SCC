@@ -7,7 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import {AgregarProductoComponent} from '../agregar-producto/agregar-producto.component';
 import { ReglasEvaluacionService } from '../../tablas-maestras/reglas-evaluacion/reglas-evaluacion.service';
 import * as moment from 'moment';
-import { ServiciosGenerales } from '../../global/servicios';
+import { ServiciosGenerales } from 'src/app/core/servicios/servicios';
 import { ChangeDetectorRef } from "@angular/core";
 
 @Component({

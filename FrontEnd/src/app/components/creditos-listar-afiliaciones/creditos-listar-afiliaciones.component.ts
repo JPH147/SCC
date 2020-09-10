@@ -7,9 +7,9 @@ import { catchError, finalize, tap, debounceTime, distinctUntilChanged } from 'r
 import { CreditosService } from '../creditos/creditos.service';
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import { CreditosDataSource } from '../creditos-listar/creditos-listar.component';
-import { EstadoSesion } from '../usuarios/usuarios.reducer';
+import { EstadoSesion } from '../../compartido/reducers/permisos.reducer';
 import { Store } from '@ngrx/store';
-import { Rol } from '../usuarios/usuarios.service';
+import { Rol } from 'src/app/compartido/modelos/login.modelos';
 
 @Component({
   selector: 'app-creditos-listar-afiliaciones',

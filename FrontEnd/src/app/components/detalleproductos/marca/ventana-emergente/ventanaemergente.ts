@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import {FormControl, FormGroup, FormBuilder,FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
 import { NgControl } from '@angular/forms';
-import { ServiciosGenerales } from '../../../global/servicios';
+import { ServiciosGenerales } from 'src/app/core/servicios/servicios';
 import {fromEvent,merge} from 'rxjs';
 import {debounceTime, tap, distinctUntilChanged} from 'rxjs/operators'
 

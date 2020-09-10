@@ -6,7 +6,7 @@ import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import {VentanaTrabajadoresComponent} from './ventana-trabajador/ventana-trabajador.component';
-import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
+import {VentanaConfirmarComponent} from '../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';
 
 @Component({
   selector: 'app-trabajadores',

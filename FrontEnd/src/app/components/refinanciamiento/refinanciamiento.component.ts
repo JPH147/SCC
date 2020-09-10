@@ -6,17 +6,17 @@ import { catchError , finalize, debounceTime, distinctUntilChanged, tap } from '
 import { Router } from '@angular/router';
 import {Location} from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
-import { SeleccionarClienteComponent } from '../retorno-vendedores/seleccionar-cliente/seleccionar-cliente.component';
+import { SeleccionarClienteComponent } from '../../compartido/componentes/seleccionar-cliente/seleccionar-cliente.component';
 import { VentanaEmergenteContacto} from '../clientes/ventana-emergentecontacto/ventanaemergentecontacto';
-import { VentanaConfirmarComponent } from '../global/ventana-confirmar/ventana-confirmar.component';
+import { VentanaConfirmarComponent } from '../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';
 import { VentanaEmergenteClientes } from '../clientes/ventana-emergente/ventanaemergente';
 import { RefinanciamientoService } from './refinanciamiento.service';
 import { CreditosService } from '../creditos/creditos.service';
 import { ClienteService } from '../clientes/clientes.service' ;
-import { ServiciosDirecciones } from '../global/direcciones';
-import { ServiciosTelefonos } from '../global/telefonos';
+import { ServiciosDirecciones } from 'src/app/core/servicios/direcciones';
+import { ServiciosTelefonos } from 'src/app/core/servicios/telefonos';
 import { EvaluacionService } from '../evaluacion/evaluacion.service' ;
-import { ServiciosGenerales } from '../global/servicios' ;
+import { ServiciosGenerales } from 'src/app/core/servicios/servicios' ;
 import * as moment from 'moment' ;
 import {saveAs} from 'file-saver';
 

@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit, AfterViewInit, ViewChild, ElementRef} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormGroup, FormBuilder, Validators, AbstractControl} from '@angular/forms';
-import { ServiciosVentas } from '../../global/ventas';
+import { ServiciosVentas } from 'src/app/core/servicios/ventas';
 import { fromEvent, BehaviorSubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged , tap, finalize } from 'rxjs/operators';
 

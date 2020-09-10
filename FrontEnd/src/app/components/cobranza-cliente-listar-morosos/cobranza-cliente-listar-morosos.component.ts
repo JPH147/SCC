@@ -7,8 +7,8 @@ import { catchError, finalize, tap, debounceTime, distinctUntilChanged } from 'r
 import { CobranzasService } from '../cobranzas-listar/cobranzas.service';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 
-import { ArchivosService } from '../global/archivos';
-import { ServiciosTipoPago } from '../global/tipopago';
+import { ArchivosService } from 'src/app/core/servicios/archivos';
+import { ServiciosTipoPago } from 'src/app/core/servicios/tipopago';
 import * as moment from 'moment';
 import {saveAs} from 'file-saver';
 import { VentanaCobranzaClienteComponent } from '../cobranza-cliente-listar/ventana-cobranza-cliente/ventana-cobranza-cliente.component';

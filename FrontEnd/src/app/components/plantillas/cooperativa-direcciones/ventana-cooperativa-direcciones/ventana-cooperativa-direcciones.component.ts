@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ServiciosDirecciones } from '../../../global/direcciones';
+import { ServiciosDirecciones } from 'src/app/core/servicios/direcciones';
 import { CooperativaConfiguracionService } from '../../../cooperativa-configuracion/cooperativa-configuracion.service';
 import { BehaviorSubject } from 'rxjs';
 

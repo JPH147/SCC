@@ -2,7 +2,7 @@ import { Component, OnInit, Inject, AfterViewInit } from '@angular/core';
 
 import { FormArray, FormGroup, FormBuilder, Validators, ValidatorFn, AbstractControl } from '@angular/forms' ;
 import { BehaviorSubject, Subject, merge, Observable, forkJoin } from 'rxjs';
-import { CobranzasService } from '../cobranzas.service';
+import { CobranzasService } from '../../../components/cobranzas-listar/cobranzas.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { finalize, debounceTime, distinctUntilChanged, takeUntil, map } from 'rxjs/operators';
 import * as moment from 'moment';

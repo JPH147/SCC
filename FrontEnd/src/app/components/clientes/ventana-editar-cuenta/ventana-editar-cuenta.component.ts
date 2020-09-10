@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { ServiciosVentas } from '../../global/ventas';
+import { ServiciosVentas } from 'src/app/core/servicios/ventas';
 import { ClienteService } from '../clientes.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';

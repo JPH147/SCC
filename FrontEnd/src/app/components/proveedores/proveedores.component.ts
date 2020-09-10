@@ -9,7 +9,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { ProveedoresMovimientosComponent } from './proveedores-movimientos/proveedores-movimientos.component'
 import { VentanaEmergenteProveedores } from './ventana-emergente/ventana-emergente.component';
-import { VentanaConfirmarComponent } from '../global/ventana-confirmar/ventana-confirmar.component';
+import { VentanaConfirmarComponent } from '../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';
 import { FileUploadProveedores } from './file-upload/fileupload';
 import { VentanaFotoComponent } from '../clientes/ventana-foto/ventana-foto.component';
 

@@ -1,13 +1,11 @@
 import {Component, OnInit, ViewChild, AfterViewInit, ElementRef} from '@angular/core';
 import {merge, Observable, fromEvent} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
-import {ServiciosDirecciones, Departamento} from '../../global/direcciones';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import {VentanaConfirmarComponent} from '../../global/ventana-confirmar/ventana-confirmar.component'
+import {VentanaConfirmarComponent} from 'src/app/compartido/componentes/ventana-confirmar/ventana-confirmar.component'
 import { ModeloDataSource } from './modelo.data.service';
-import { ServiciosGenerales } from '../../global/servicios';
+import { ServiciosGenerales } from 'src/app/core/servicios/servicios';
 import { VentanaEmergenteModelo } from './ventana-emergente/ventanaemergente';
 
 @Component({

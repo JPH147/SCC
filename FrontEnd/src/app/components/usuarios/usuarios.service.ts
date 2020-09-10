@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http'
 import {map} from 'rxjs/operators';
-import {URL} from '../global/url';
-import * as moment from 'moment';
+import {URL} from 'src/app/core/servicios/url';
+import { LoginService } from 'src/app/core/servicios/login.service';
+import { Rol } from 'src/app/compartido/modelos/login.modelos';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,7 @@ export class UsuariosService {
 
   constructor(
     private http : HttpClient ,
+    private _login : LoginService
   ) { }
 
   ListarUsuarios(
@@ -89,41 +91,6 @@ export class UsuariosService {
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'usuario/update-pss.php', params, {headers: headers});    
-  }
-
-  TryLogin(
-    usuario : string ,
-    password : string
-  ) : Observable<any> {
-    let params = new HttpParams()
-      .set('usr_usuario', usuario )
-      .set('usr_clave', password );
-
-    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-
-    return this.http.post(this.url + 'usuario/login.php', params, {headers: headers})
-    .pipe(map(usuario=>{
-      if ( usuario['codigo'] == 0 ) {
-        this.AsignarUsuario( usuario['data'] ) ;
-        return usuario['data'] ;
-      } else {
-        return false ;
-      }
-    })) ;
-  }
-
-  LogOut() : Observable<any> {
-    this.Usuario = false ;
-    this.UsuarioS.next(this.Usuario) ;
-    return of(true) ;
-  }
-
-  AsignarUsuario(
-    usuario : any
-  ){
-    this.Usuario = usuario ;
-    localStorage.setItem('usuario', JSON.stringify(this.Usuario)) ; // Se guarda en localStorage
-    this.UsuarioS.next(this.Usuario) ;
   }
 
   EliminarUsuario(
@@ -221,21 +188,7 @@ export class UsuariosService {
   SeleccionarPerfil(
     id_perfil : number
   ) :Observable<any> {
-    let params = new HttpParams()
-      .set('prid', id_perfil.toString() ) ;
-
-    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-
-    return this.http.get(this.url + 'perfil/readxId.php', { params : params, headers : headers })
-    .pipe(
-      map(respuesta=>{
-        if ( respuesta['codigo'] == 0 ) {
-          return respuesta['data'] ;
-        } else {
-          return false ;
-        }
-      })
-    )
+    return this._login.SeleccionarPerfil(id_perfil) ;
   }
 
   EliminarPerfil(
@@ -278,151 +231,5 @@ export class UsuariosService {
         }
       })
     )
-  }
-
-}
-
-export type Rol = {
-  maestro_general : {
-    general : boolean ,
-    clientes : {
-      general : boolean ,
-      agregar : boolean ,
-      editar : boolean ,
-      eliminar : boolean ,
-      confirmar_pendientes : boolean ,
-      subir_foto : boolean ,
-      ver_ventas : boolean ,
-      crear_observaciones : boolean ,
-    } ,
-    evaluacion : {
-      general : boolean ,
-    } ,
-    seguimiento_documentos : {
-      general : boolean ,
-      editar : boolean ,
-      eliminar : boolean ,
-      registrar_entrega : boolean ,
-      ver_documento : boolean ,
-    }
-  } ,
-  ventas : {
-    general : boolean ,
-    listado_ventas : {
-      general : boolean ,
-      agregar : boolean ,
-      editar : boolean ,
-      eliminar : boolean ,
-      realizar_canjes : boolean ,
-      abrir_procesos : boolean ,
-      agregar_pagos_masivos : boolean ,
-    } ,
-    salida_ventas : {
-      general : boolean ,
-      agregar : boolean ,
-      editar : boolean ,
-      eliminar : boolean ,
-      registrar_retorno : boolean ,
-    } ,
-    comision_vendedores : {
-      general : boolean ,
-    } ,
-  } ,
-  inventarios : {
-    general : boolean ,
-    productos : {
-      general : boolean ,
-      agregar : boolean ,
-      editar : boolean ,
-      eliminar : boolean ,
-      subir_foto : boolean ,
-    } ,
-    stock : {
-      general : boolean ,
-      registrar_ingreso : boolean ,
-      registrar_salida : boolean ,
-    } ,
-    documentos_almacen : {
-      general : boolean ,
-      editar : boolean ,
-    } ,
-    historial_series : {
-      general : boolean ,
-    }
-  } ,
-  creditos : {
-    general : boolean ,
-    listado_creditos : {
-      general : boolean ,
-      agregar : boolean ,
-      editar : boolean ,
-      eliminar : boolean ,
-      abrir_procesos : boolean ,
-      agregar_pagos_masivos : boolean ,
-    } ,
-    afiliaciones : {
-      general : boolean ,
-      agregar : boolean ,
-      editar : boolean ,
-      eliminar : boolean ,
-      agregar_pagos_masivos : boolean ,
-    } ,
-    refinanciamientos : {
-      general : boolean ,
-    } ,
-  } ,
-  procesos_judiciales : {
-    general : boolean ,
-    listado_procesos : {
-      general : boolean ,
-      agregar : boolean ,
-      editar : boolean ,
-      eliminar : boolean ,
-      agregar_documentos : boolean ,
-      ver_cronograma : boolean ,
-      realizar_cronograma : boolean ,
-    } ,
-  } ,
-  cobranzas : {
-    general : boolean ,
-    cronograma : {
-      general : boolean ,
-      editar : boolean ,
-    } ,
-    clientes_morosos : {
-      general : boolean ,
-    } ,
-    cobranzas_directas : {
-      general : boolean ,
-      agregar : boolean ,
-      editar : boolean ,
-      eliminar : boolean ,
-    } ,
-    cobranzas_planilla : {
-      general : boolean ,
-      agregar : boolean ,
-      descargar_archivo : boolean ,
-      registrar_pago : boolean ,
-      eliminar : boolean ,
-    } ,
-    cobranzas_manuales : {
-      general : boolean ,
-      agregar : boolean ,
-      editar : boolean ,
-      eliminar : boolean ,
-    }
-  } ,
-  tablas_maestras : {
-    general : boolean ,
-    cooperativa : boolean ,
-    usuarios : boolean ,
-    direcciones : boolean ,
-    instituciones : boolean ,
-    procesos_judiciales : boolean ,
-    plantillas : boolean ,
-    productos : boolean ,
-    proveedores : boolean ,
-    talonarios : boolean ,
-    trabajadores : boolean ,
   }
 }

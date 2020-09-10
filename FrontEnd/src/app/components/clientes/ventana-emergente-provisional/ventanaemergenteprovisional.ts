@@ -2,14 +2,14 @@ import {Component, Inject, OnInit, AfterViewInit, ElementRef, ViewChild, Optiona
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import {FormControl, FormGroup, FormBuilder,FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
-import {ServiciosGenerales, Institucion, Sede, Subsede} from '../../global/servicios';
+import {ServiciosGenerales, Institucion, Sede, Subsede} from 'src/app/core/servicios/servicios';
 import { fromEvent, BehaviorSubject } from 'rxjs';
 import {ClienteService} from '../clientes.service';
-import {ServiciosDirecciones} from '../../global/direcciones';
-import {ServiciosTelefonos} from '../../global/telefonos';
-import {ServiciosVentas} from '../../global/ventas';
+import {ServiciosDirecciones} from 'src/app/core/servicios/direcciones';
+import {ServiciosTelefonos} from 'src/app/core/servicios/telefonos';
+import {ServiciosVentas} from 'src/app/core/servicios/ventas';
 import { debounceTime, distinctUntilChanged, tap, finalize } from 'rxjs/operators';
-import { SeleccionarClienteComponent } from '../../retorno-vendedores/seleccionar-cliente/seleccionar-cliente.component';
+import { SeleccionarClienteComponent } from 'src/app/compartido/componentes/seleccionar-cliente/seleccionar-cliente.component';
 
 @Component({
   selector: 'app-ventanaemergenteprovisional',

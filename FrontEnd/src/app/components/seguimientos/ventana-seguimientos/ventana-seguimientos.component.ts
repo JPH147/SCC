@@ -1,10 +1,10 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormGroup , FormBuilder , Validators } from '@angular/forms';
+import { FormGroup , FormBuilder } from '@angular/forms';
 import * as moment from 'moment' ;
-import { URLIMAGENES } from '../../global/url'
+import { URLIMAGENES } from 'src/app/core/servicios/url'
 import { SeguimientosService } from '../seguimientos.service';
-import { ServiciosGenerales } from '../../global/servicios';
+import { ServiciosGenerales } from 'src/app/core/servicios/servicios';
 
 @Component({
   selector: 'app-ventana-seguimientos',

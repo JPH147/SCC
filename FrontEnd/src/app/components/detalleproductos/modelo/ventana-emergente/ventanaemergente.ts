@@ -1,11 +1,9 @@
-import {Component, Inject, OnInit, AfterViewInit, ViewChild, ElementRef} from '@angular/core';
+import {Component, Inject, ViewChild, ElementRef} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSelect } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import {FormControl, FormGroup, FormBuilder,FormGroupDirective, NgForm, Validators} from '@angular/forms';
-import {ErrorStateMatcher} from '@angular/material/core';
-import { NgControl } from '@angular/forms';
-import { ServiciosGenerales } from '../../../global/servicios';
+import { FormGroup, FormBuilder, Validators} from '@angular/forms';
+import { ServiciosGenerales } from 'src/app/core/servicios/servicios';
 import {fromEvent,merge} from 'rxjs';
 import {debounceTime, tap, distinctUntilChanged} from 'rxjs/operators'
 

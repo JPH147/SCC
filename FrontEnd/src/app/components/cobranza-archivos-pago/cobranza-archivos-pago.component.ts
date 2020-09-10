@@ -7,7 +7,7 @@ import { PlantillasService } from '../plantillas/plantillas.service';
 import { finalize } from 'rxjs/operators';
 import { isNgTemplate } from '@angular/compiler';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Notificaciones } from '../global/notificacion';
+import { Notificaciones } from 'src/app/core/servicios/notificacion';
 
 @Component({
   selector: 'app-cobranza-archivos-pago',

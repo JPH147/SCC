@@ -1,11 +1,11 @@
 import {Component, Inject, OnInit, AfterViewInit, ElementRef, ViewChild} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {FormControl, FormGroup, FormBuilder,FormGroupDirective, NgForm, Validators} from '@angular/forms';
-import {ServiciosGenerales, Institucion, Sede, Subsede} from '../../global/servicios';
+import {ServiciosGenerales, Institucion, Sede, Subsede} from 'src/app/core/servicios/servicios';
 import { fromEvent, BehaviorSubject } from 'rxjs';
 import {ClienteService} from '../clientes.service';
-import {ServiciosDirecciones} from '../../global/direcciones';
-import {ServiciosTelefonos} from '../../global/telefonos';
+import {ServiciosDirecciones} from 'src/app/core/servicios/direcciones';
+import {ServiciosTelefonos} from 'src/app/core/servicios/telefonos';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 
 @Component({

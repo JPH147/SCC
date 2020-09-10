@@ -10,8 +10,8 @@ import {StockDataSource} from './stock.dataservice';
 import { FormControl } from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
 import { Store } from '@ngrx/store';
-import { EstadoSesion } from '../usuarios/usuarios.reducer';
-import { Rol } from '../usuarios/usuarios.service';
+import { EstadoSesion } from '../../compartido/reducers/permisos.reducer';
+import { Rol } from 'src/app/compartido/modelos/login.modelos';
 
 @Component({
   selector: 'app-stock',

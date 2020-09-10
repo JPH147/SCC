@@ -1,9 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import {FormControl, FormGroup, FormBuilder,FormGroupDirective, NgForm, Validators} from '@angular/forms';
+import { FormGroup, FormBuilder, Validators} from '@angular/forms';
 import { ProveedorService } from '../proveedores.service';
-import { ServiciosGenerales } from '../../global/servicios';
-import { TipoDocumento } from '../../global/tipodocumento';
+import { ServiciosGenerales } from 'src/app/core/servicios/servicios';
 
 
 @Component({
@@ -13,7 +12,7 @@ import { TipoDocumento } from '../../global/tipodocumento';
   providers:[ProveedorService, ServiciosGenerales]
 })
 
-export class VentanaEmergenteProveedores {
+export class VentanaEmergenteProveedores implements OnInit {
   public selectedValue: string;
   public ProveedoresForm: FormGroup;
   public TipoDocumento: any;

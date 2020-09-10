@@ -1,13 +1,10 @@
-import {Component, Inject, OnInit, AfterViewInit} from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import {FormControl, FormGroup, FormBuilder,FormGroupDirective, NgForm, Validators} from '@angular/forms';
-import {ErrorStateMatcher} from '@angular/material/core';
-import {ServiciosGenerales} from '../../../global/servicios';
-import { NgControl } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
+import {ServiciosGenerales} from 'src/app/core/servicios/servicios';
 import {ProductoService} from '../productos.service';
 import { FileHolder } from 'angular2-image-upload';
-import {URL} from '../../../global/url';
-import * as moment from 'moment';
+import { URL } from 'src/app/core/servicios/url';
 
 @Component({
   selector: 'app-imagen-producto',

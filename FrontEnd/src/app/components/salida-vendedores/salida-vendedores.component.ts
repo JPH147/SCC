@@ -8,8 +8,8 @@ import {Observable, fromEvent, BehaviorSubject} from 'rxjs';
 import {COMMA} from '@angular/cdk/keycodes';
 import { tap, debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {SalidaVendedoresService} from './salida-vendedores.service';
-import {ServiciosGenerales, Almacen} from '../global/servicios';
-import {ServiciosVentas} from '../global/ventas';
+import {ServiciosGenerales, Almacen} from 'src/app/core/servicios/servicios';
+import {ServiciosVentas} from 'src/app/core/servicios/ventas';
 import { ventanaseriessv } from './ventana-seriessv/ventanaseriessv';
 import {StockService} from '../stock/stock.service';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
@@ -20,7 +20,7 @@ import {ProductosDataSource , TalonariosDataSource } from '../retorno-vendedores
 import {ViaticosDataSource} from '../retorno-vendedores-cierre/retorno-vendedores-cierre.component';
 import {ListadoSalidaVendedoresService} from '../listado-salida-vendedores/listado-salida-vendedores.service';
 // import {GastosSalidaDataSource} from '../listado-salida-vendedores/ventana-emergente-gastos/ventanaemergente-gastos';
-import {ServiciosProductoSerie} from '../global/productoserie';
+import {ServiciosProductoSerie} from 'src/app/core/servicios/productoserie';
 
 @Component({
   selector: 'app-salida-vendedores',
@@ -128,7 +128,6 @@ export class SalidaVendedoresComponent implements OnInit {
     this.ConsultarComisionRetenida();
 
     this.Global.ListarSucursal(null,"").subscribe(res=>this.Sucursales=res);
-    // this.Global.ListarAlmacen().subscribe(res=>this.Almacenes=res);
 
     this.CrearFormulario();
 

@@ -1,10 +1,9 @@
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import {catchError, finalize, debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
+import {catchError, finalize } from 'rxjs/operators';
 import { ClienteService } from '../clientes.service';
-import {ServiciosTelefonos} from '../../global/telefonos';
-import {ServiciosDirecciones} from '../../global/direcciones';
-import {VentanaConfirmarComponent} from '../../global/ventana-confirmar/ventana-confirmar.component';
+import {ServiciosTelefonos} from 'src/app/core/servicios/telefonos';
+import {ServiciosDirecciones} from 'src/app/core/servicios/direcciones';
 
 export class ClienteCuentaDataSource implements DataSource<any> {
 

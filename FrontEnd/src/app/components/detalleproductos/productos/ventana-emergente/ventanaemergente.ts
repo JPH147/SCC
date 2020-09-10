@@ -1,11 +1,9 @@
-import {Component, Inject, OnInit, AfterViewInit, ViewChild, ElementRef} from '@angular/core';
+import {Component, Inject, ViewChild, ElementRef} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import {FormControl, FormGroup, FormBuilder, Validators} from '@angular/forms';
-import {ErrorStateMatcher} from '@angular/material/core';
-import {ServiciosGenerales, TipoProductoModelo, MarcaModelo, ModeloModelo} from '../../../global/servicios';
-import { NgControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {ServiciosGenerales, TipoProductoModelo, MarcaModelo, ModeloModelo} from 'src/app/core/servicios/servicios';
 import {ProductoService} from '../productos.service';
-import {merge,fromEvent} from 'rxjs';
+import { fromEvent} from 'rxjs';
 import {tap, debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import { VentanaEmergenteTipo } from '../../tipo/ventana-emergente/ventanaemergente';
 import { VentanaEmergenteModelo } from '../../modelo/ventana-emergente/ventanaemergente';

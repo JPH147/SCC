@@ -2,13 +2,13 @@ import {Component, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angular
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ServiciosGenerales, Institucion, Sede, Subsede } from '../../global/servicios';
+import { ServiciosGenerales, Institucion, Sede, Subsede } from 'src/app/core/servicios/servicios';
 import { fromEvent, BehaviorSubject, Observable, forkJoin } from 'rxjs';
 import { ClienteService } from '../clientes.service';
-import { ServiciosDirecciones } from '../../global/direcciones';
+import { ServiciosDirecciones } from 'src/app/core/servicios/direcciones';
 import { debounceTime, distinctUntilChanged, tap, finalize } from 'rxjs/operators';
-import { ServiciosVentas } from '../../global/ventas';
-import { ServiciosTelefonos } from '../../global/telefonos';
+import { ServiciosVentas } from 'src/app/core/servicios/ventas';
+import { ServiciosTelefonos } from 'src/app/core/servicios/telefonos';
 
 @Component({
   selector: 'app-ventana-emergente-integral-agregar',

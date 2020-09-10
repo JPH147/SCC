@@ -4,37 +4,37 @@ import {FormArray, FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {VentaService} from './ventas.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSort } from '@angular/material/sort';
-import {ServiciosTipoDocumento, TipoDocumento} from '../global/tipodocumento';
-import {ServiciosTipoPago, TipoPago} from '../global/tipopago';
+import {ServiciosTipoDocumento, TipoDocumento} from 'src/app/core/servicios/tipodocumento';
+import {ServiciosTipoPago, TipoPago} from 'src/app/core/servicios/tipopago';
 import {ClienteService } from '../clientes/clientes.service';
 import {ClienteDataSource} from '../clientes/clientes.dataservice';
 import { forkJoin,fromEvent, merge, BehaviorSubject} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
-import {ServiciosTelefonos, Telefono} from '../global/telefonos';
-import {ServiciosDirecciones, Direccion} from '../global/direcciones';
-import {ServiciosGenerales, Talonario, Serie} from '../global/servicios';
+import {ServiciosTelefonos, Telefono} from 'src/app/core/servicios/telefonos';
+import {ServiciosDirecciones, Direccion} from 'src/app/core/servicios/direcciones';
+import {ServiciosGenerales, Talonario, Serie} from 'src/app/core/servicios/servicios';
 import {VentanaProductosComponent} from './ventana-productos/ventana-productos.component';
 import {Location} from '@angular/common';
-import {Notificaciones} from '../global/notificacion';
-import {URLIMAGENES} from '../global/url'
-import {SeleccionarClienteComponent} from '../retorno-vendedores/seleccionar-cliente/seleccionar-cliente.component';
+import {Notificaciones} from 'src/app/core/servicios/notificacion';
+import {URLIMAGENES} from 'src/app/core/servicios/url'
+import {SeleccionarClienteComponent} from '../../compartido/componentes/seleccionar-cliente/seleccionar-cliente.component';
 import { VentanaEmergenteContacto} from '../clientes/ventana-emergentecontacto/ventanaemergentecontacto';
 import { CreditosService } from "../creditos/creditos.service";
 import { SeguimientosService } from "../seguimientos/seguimientos.service";
 import { VentanaPagosComponent } from '../cobranzas-listar/ventana-pagos/ventana-pagos.component';
 import { VentanaEmergenteClientes } from '../clientes/ventana-emergente/ventanaemergente' ;
 import { VentanaCrearCobranzaManualComponent } from "../cobranza-manual/ventana-crear-cobranza-manual/ventana-crear-cobranza-manual.component";
-import { Rol } from "../usuarios/usuarios.service";
+import { Rol } from 'src/app/compartido/modelos/login.modelos';
 import { Store } from "@ngrx/store";
-import { EstadoSesion } from "../usuarios/usuarios.reducer";
+import { EstadoSesion } from "../../compartido/reducers/permisos.reducer";
 import { CobranzaJudicialService } from "../cobranza-judicial/cobranza-judicial.service";
-import { VentanaConfirmarComponent } from "../global/ventana-confirmar/ventana-confirmar.component";
+import { VentanaConfirmarComponent } from "../../compartido/componentes/ventana-confirmar/ventana-confirmar.component";
 
 import * as moment from 'moment';
 import {default as _rollupMoment, Moment} from 'moment';
 import { MatDatepicker } from '@angular/material/datepicker';
-import { VentanaGenerarPagoTransaccionComponent } from "../cobranzas-listar/ventana-generar-pago-transaccion/ventana-generar-pago-transaccion.component";
+import { VentanaGenerarPagoTransaccionComponent } from "../../compartido/componentes/ventana-generar-pago-transaccion/ventana-generar-pago-transaccion.component";
 
 @Component({
   selector: 'app-ventas',

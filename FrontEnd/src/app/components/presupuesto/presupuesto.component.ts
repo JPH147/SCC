@@ -7,7 +7,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSelect } from '@angular/material/select';
 import { CreditosService } from '../creditos/creditos.service';
 import {VentanaArchivosComponent } from './ventana-archivos/ventana-archivos.component';
-import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
+import {VentanaConfirmarComponent} from '../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';
 
 @Component({
   selector: 'app-presupuesto',

@@ -7,11 +7,11 @@ import { Observable, BehaviorSubject, of, fromEvent, merge } from 'rxjs';
 import { catchError, finalize, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CreditosService } from '../creditos/creditos.service';
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
-import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
+import {VentanaConfirmarComponent} from '../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';
 import { CobranzaJudicialService } from '../cobranza-judicial/cobranza-judicial.service';
-import { EstadoSesion } from '../usuarios/usuarios.reducer';
+import { EstadoSesion } from '../../compartido/reducers/permisos.reducer';
 import { Store } from '@ngrx/store';
-import { Rol } from '../usuarios/usuarios.service';
+import { Rol } from 'src/app/compartido/modelos/login.modelos';
 
 @Component({
   selector: 'app-creditos-listar',

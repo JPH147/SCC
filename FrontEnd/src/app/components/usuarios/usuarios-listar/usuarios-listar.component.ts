@@ -6,8 +6,8 @@ import { UsuariosService } from '../usuarios.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { VentanaUsuariosComponent } from './ventana-usuarios/ventana-usuarios.component' ;
-import { Notificaciones } from '../../global/notificacion';
-import { VentanaConfirmarComponent } from '../../global/ventana-confirmar/ventana-confirmar.component';
+import { Notificaciones } from 'src/app/core/servicios/notificacion';
+import { VentanaConfirmarComponent } from '../../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';
 
 @Component({
   selector: 'app-usuarios-listar',

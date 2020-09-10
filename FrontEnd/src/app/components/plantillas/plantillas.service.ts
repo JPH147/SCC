@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable,of } from 'rxjs';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http'
 import {map} from 'rxjs/operators';
-import {URL, URLIMAGENES} from '../global/url';
+import {URL, URLIMAGENES} from 'src/app/core/servicios/url';
 import * as moment from 'moment';
 
 @Injectable({

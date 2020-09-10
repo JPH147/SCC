@@ -1,67 +1,15 @@
-
-import {CdkTableModule} from '@angular/cdk/table';
-import {CdkTreeModule} from '@angular/cdk/tree';
 import {HttpClientModule} from '@angular/common/http';
 import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MAT_DATE_LOCALE, MAT_DATE_FORMATS, DateAdapter} from '@angular/material/core';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatBadgeModule } from '@angular/material/badge';
-import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
-import { MatButtonModule } from '@angular/material/button';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { MatCardModule } from '@angular/material/card';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatGridListModule } from '@angular/material/grid-list';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatListModule } from '@angular/material/list';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatPaginatorModule, MatPaginatorIntl } from '@angular/material/paginator';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatRadioModule } from '@angular/material/radio';
-import { MatSelectModule } from '@angular/material/select';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatSliderModule } from '@angular/material/slider';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatSortModule } from '@angular/material/sort';
-import { MatStepperModule } from '@angular/material/stepper';
-import { MatTableModule } from '@angular/material/table';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatTreeModule } from '@angular/material/tree';
-import {BrowserModule} from '@angular/platform-browser';
-import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { LayoutModule } from '@angular/cdk/layout';
-import { Configuracion } from '../paginador_espanol';
-import { MatMomentDateModule, MomentDateAdapter } from '@angular/material-moment-adapter';
 
 import { RouterModule } from '@angular/router';
-import {appRoutes} from './app.routing';
-import { ChartistModule } from 'ng-chartist';
-
-// ngRx
-import { StoreModule } from '@ngrx/store';
-import { PermisosSesion } from './components/usuarios/usuarios.reducer';
+import { appRoutes } from './app.routing';
 
 // Cookies
 import { CookieService } from 'ngx-cookie-service' ;
 
-import {Notificaciones} from './components/global/notificacion';
-import { ServiciosGenerales } from './components/global/servicios';
 /* Imports del software */
 import {AppComponent} from './app.component';
-import {MenuComponent} from './menu/menu.component';
 import { ProductosComponent } from './components/detalleproductos/productos/productos.component';
 import { StockComponent } from './components/stock/stock.component';
 import { IngresoProductosComponent } from './components/ingreso-productos/ingreso-productos.component';
@@ -89,7 +37,6 @@ import { DistritoComponent } from './components/direcciones/distrito/distrito.co
 import { VentanaEmergenteDepartamento} from './components/direcciones/departamento/ventana-emergente/ventanaemergente';
 import {VentanaEmergenteProvincia} from './components/direcciones/provincia/ventana-emergente/ventanaemergente';
 import {VentanaEmergenteDistrito } from './components/direcciones/distrito/ventana-emergente/ventanaemergente';
-import { VentanaConfirmarComponent } from './components/global/ventana-confirmar/ventana-confirmar.component';
 import { VentanaEmergenteGastos } from './components/listado-salida-vendedores/ventana-emergente-gastos/ventanaemergente-gastos';
 import { ImageUploadModule } from 'angular2-image-upload';
 import {FileUpload} from './components/clientes/file-upload/fileupload';
@@ -123,7 +70,6 @@ import { VentanaVentasComponent } from './components/clientes/ventana-ventas/ven
 import { ComisionesDetalleComponent } from './components/comisiones/comisiones-detalle/comisiones-detalle.component';
 import { VentanaCronogramaComponent } from './components/ventas/ventana-cronograma/ventana-cronograma.component';
 import { AgregarVentaComponent } from './components/retorno-vendedores/agregar-venta/agregar-venta.component';
-import { SeleccionarClienteComponent } from './components/retorno-vendedores/seleccionar-cliente/seleccionar-cliente.component';
 import { RetornoVendedoresCierreComponent } from './components/retorno-vendedores-cierre/retorno-vendedores-cierre.component';
 import { VentasSalidaComponent } from './components/ventas-salida/ventas-salida.component';
 import { CreditosComponent } from './components/creditos/creditos.component';
@@ -200,12 +146,9 @@ import { PermisosListarComponent } from './components/usuarios/permisos-listar/p
 import { VentanaUsuariosComponent } from './components/usuarios/usuarios-listar/ventana-usuarios/ventana-usuarios.component';
 import { VentanaPermisosComponent } from './components/usuarios/permisos-listar/ventana-permisos/ventana-permisos.component';
 import { UsuariosComponent } from './components/usuarios/usuarios.component';
-import { LoginComponent } from './login/login.component';
-import { InicioComponent } from './inicio/inicio.component';
 import { VentanaCobranzaClienteComponent } from './components/cobranza-cliente-listar/ventana-cobranza-cliente/ventana-cobranza-cliente.component';
 import { VentanaCobranzaClienteVencidasComponent } from './components/cobranza-cliente-listar/ventana-cobranza-cliente-vencidas/ventana-cobranza-cliente-vencidas.component';
 import { CobranzaClienteListarMorososComponent } from './components/cobranza-cliente-listar-morosos/cobranza-cliente-listar-morosos.component';
-import { ReporteMorosidadComponent } from './inicio/reporte-morosidad/reporte-morosidad.component';
 
 import { VentanaEmergenteIntegralEditarComponent } from './components/clientes/ventana-emergente-integral-editar/ventana-emergente-integral-editar.component';
 import { VentanaEmergenteIntegralAgregarComponent } from './components/clientes/ventana-emergente-integral-agregar/ventana-emergente-integral-agregar.component';
@@ -224,7 +167,6 @@ import { VentanaDocumentosComponent as VentanaDocumentosComponent2 } from './com
 import { AfiliacionesComponent } from './components/afiliaciones/afiliaciones.component';
 import { VentanaRelacionadosComponent } from './components/clientes/ventana-relacionados/ventana-relacionados.component';
 import { VentanaLlamadasComponent } from './components/clientes/ventana-relacionados/ventana-llamadas/ventana-llamadas.component';
-import { VentanaGenerarPagoTransaccionComponent } from './components/cobranzas-listar/ventana-generar-pago-transaccion/ventana-generar-pago-transaccion.component';
 import { DocumentoTransaccionComponent } from './components/plantillas/documento-transaccion/documento-transaccion.component';
 import { DocumentoAutorizacionComponent } from './components/plantillas/documento-autorizacion/documento-autorizacion.component';
 import { DocumentoDeclaracionComponent } from './components/plantillas/documento-declaracion/documento-declaracion.component';
@@ -232,76 +174,27 @@ import { DocumentoTarjetaComponent } from './components/plantillas/documento-tar
 import { DocumentoCompromisoComponent } from './components/plantillas/documento-compromiso/documento-compromiso.component';
 import { DocumentoCartaComponent } from './components/plantillas/documento-carta/documento-carta.component';
 
-export const CUSTOM_DATE_FORMAT = {
-  parse: {
-    dateInput: 'DD/MM/YYYY',
-  },
-  display: {
-    dateInput: 'DD/MM/YYYY',
-    monthYearLabel: 'MMMM YYYY',
-    dateA11yLabel: 'DD/MM/YYYY',
-    monthYearA11yLabel: 'MMMM YYYY',
-  },
-};
+import { MaterialModule } from './material/material.module';
+import { CoreModule } from './core/core.module';
+import { CompartidoModule } from './compartido/compartido.module';
+
 
 @NgModule({
   exports:[
     RouterModule
   ],
   imports: [
-    MatMomentDateModule,
-    MatNativeDateModule,
-    CdkTableModule,
-    CdkTreeModule,
-    MatAutocompleteModule,
-    MatBadgeModule,
-    MatBottomSheetModule,
-    MatButtonModule,
-    MatButtonToggleModule,
-    MatCardModule,
-    MatCheckboxModule,
-    MatChipsModule,
-    MatStepperModule,
-    MatDatepickerModule,
-    MatDialogModule,
-    MatDividerModule,
-    MatExpansionModule,
-    MatGridListModule,
-    MatIconModule,
-    MatInputModule,
-    MatListModule,
-    MatMenuModule,
-    MatPaginatorModule,
-    MatProgressBarModule,
-    MatProgressSpinnerModule,
-    MatRadioModule,
-    MatRippleModule,
-    MatSelectModule,
-    MatSidenavModule,
-    MatSliderModule,
-    MatSlideToggleModule,
-    MatSnackBarModule,
-    MatSortModule,
-    MatTableModule,
-    MatTabsModule,
-    MatToolbarModule,
-    MatTooltipModule,
-    MatTreeModule,
-    BrowserModule,
-    BrowserAnimationsModule,
     FormsModule,
-    HttpClientModule,
-    MatNativeDateModule,
     ReactiveFormsModule,
-    LayoutModule,
-    ChartistModule,
+    HttpClientModule,
+    MaterialModule ,
+    CoreModule ,
+    CompartidoModule ,
     RouterModule.forRoot(appRoutes),
     ImageUploadModule.forRoot(),
-    StoreModule.forRoot({ permisos : PermisosSesion }, {}) ,
   ],
   declarations: [
     AppComponent,
-    MenuComponent,
     ProductosComponent,
     StockComponent,
     IngresoProductosComponent,
@@ -321,7 +214,6 @@ export const CUSTOM_DATE_FORMAT = {
     VentanaEmergenteProvisionalClientes,
     ProveedoresComponent,
     ventanaseriessv,
-    VentanaConfirmarComponent,
     DireccionesComponent,
     DepartamentoComponent,
     ProvinciaComponent,
@@ -369,7 +261,6 @@ export const CUSTOM_DATE_FORMAT = {
     ComisionesDetalleComponent,
     VentanaCronogramaComponent,
     AgregarVentaComponent,
-    SeleccionarClienteComponent,
     RetornoVendedoresCierreComponent,
     VentasSalidaComponent,
     CreditosComponent,
@@ -445,12 +336,9 @@ export const CUSTOM_DATE_FORMAT = {
     VentanaUsuariosComponent,
     VentanaPermisosComponent,
     UsuariosComponent,
-    LoginComponent,
-    InicioComponent,
     VentanaCobranzaClienteComponent,
     VentanaCobranzaClienteVencidasComponent,
     CobranzaClienteListarMorososComponent,
-    ReporteMorosidadComponent,
     VentanaEmergenteIntegralEditarComponent,
     VentanaEmergenteIntegralAgregarComponent,
     VentanaEditarDireccionComponent,
@@ -468,7 +356,6 @@ export const CUSTOM_DATE_FORMAT = {
     AfiliacionesComponent,
     VentanaRelacionadosComponent,
     VentanaLlamadasComponent,
-    VentanaGenerarPagoTransaccionComponent,
     DocumentoTransaccionComponent,
     DocumentoAutorizacionComponent,
     DocumentoDeclaracionComponent,
@@ -486,7 +373,6 @@ export const CUSTOM_DATE_FORMAT = {
     VentanaEmergenteClientes,
     VentanaEmergenteProvisionalClientes,
     ventanaseriessv,
-    VentanaConfirmarComponent,
     VentanaEmergenteDepartamento,
     VentanaEmergenteProvincia,
     VentanaEmergenteDistrito,
@@ -515,7 +401,6 @@ export const CUSTOM_DATE_FORMAT = {
     ComisionesDetalleComponent,
     VentanaCronogramaComponent,
     AgregarVentaComponent,
-    SeleccionarClienteComponent,
     VentanaTrabajadoresComponent,
     VentanaVendedorComponent,
     VentanaTalonarioComponent,
@@ -556,12 +441,6 @@ export const CUSTOM_DATE_FORMAT = {
   bootstrap: [AppComponent],
   providers: [
     CookieService ,
-    Notificaciones ,
-    ServiciosGenerales ,
-    {provide: DateAdapter, useClass: MomentDateAdapter},
-    {provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMAT},
-    {provide: MAT_DATE_LOCALE, useValue: 'es-ES'},
-    { provide: MatPaginatorIntl, useValue: Configuracion() }
   ]
 })
 

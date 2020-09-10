@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { SeleccionarClienteComponent } from '../retorno-vendedores/seleccionar-cliente/seleccionar-cliente.component';
+import { SeleccionarClienteComponent } from '../../compartido/componentes/seleccionar-cliente/seleccionar-cliente.component';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { RefinanciamientoService } from '../refinanciamiento/refinanciamiento.service';
 import { Observable, of , BehaviorSubject , merge, fromEvent } from 'rxjs';

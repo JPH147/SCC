@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output,EventEmitter,ViewChild, ViewChildren, 
 import {fromEvent, merge} from 'rxjs';
 import {tap, debounceTime, distinctUntilChanged} from'rxjs/operators';
 import {EvaluacionService} from '../evaluacion.service';
-import {Notificaciones} from '../../global/notificacion';
+import {Notificaciones} from 'src/app/core/servicios/notificacion';
 
 @Component({
   selector: 'app-evaluacion-capacidad',

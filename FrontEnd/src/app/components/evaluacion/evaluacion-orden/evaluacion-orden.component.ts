@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import {Observable, BehaviorSubject} from 'rxjs';
 import {CollectionViewer} from '@angular/cdk/collections';
 import {EvaluacionService} from '../evaluacion.service';
-import {Notificaciones} from '../../global/notificacion';
+import {Notificaciones} from 'src/app/core/servicios/notificacion';
 
 @Component({
   selector: 'app-evaluacion-orden',

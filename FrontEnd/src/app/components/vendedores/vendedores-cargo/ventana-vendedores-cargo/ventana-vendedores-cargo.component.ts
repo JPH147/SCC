@@ -1,9 +1,7 @@
-import {Component, Inject, OnInit, AfterViewInit, ViewChild, ElementRef} from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import {Component, Inject, OnInit } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormGroup, FormBuilder, Validators} from '@angular/forms';
-import { ServiciosVentas } from '../../../global/ventas';
-import {merge,fromEvent} from 'rxjs';
-import {tap, debounceTime, distinctUntilChanged} from 'rxjs/operators';
+import { ServiciosVentas } from 'src/app/core/servicios/ventas';
 
 @Component({
   selector: 'app-ventana-vendedores-cargo',

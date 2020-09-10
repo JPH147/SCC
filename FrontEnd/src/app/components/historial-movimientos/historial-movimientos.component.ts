@@ -1,21 +1,20 @@
-import { Component, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import {HistorialMovimientosService} from './historial-movimientos.service'
 import {HistorialMovimientosDataService} from './historial-movimientos.dataservice'
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSelect } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
-import {merge, Observable, of as observableOf, from, fromEvent, forkJoin} from 'rxjs';
-import {debounceTime, distinctUntilChanged, tap, delay, catchError, map, startWith, switchMap, finalize} from 'rxjs/operators';
-import {ServiciosGenerales} from '../global/servicios';
-import * as moment from 'moment';
-import { Rol } from '../usuarios/usuarios.service';
+import {merge, Observable, fromEvent, forkJoin} from 'rxjs';
+import {debounceTime, distinctUntilChanged, tap, finalize} from 'rxjs/operators';
+import {ServiciosGenerales} from 'src/app/core/servicios/servicios';
+import { Rol } from 'src/app/compartido/modelos/login.modelos';
 import { Store } from '@ngrx/store';
-import { EstadoSesion } from '../usuarios/usuarios.reducer';
+import { EstadoSesion } from '../../compartido/reducers/permisos.reducer';
 import { StockService } from '../stock/stock.service';
 import { DetalleDocumentoAlmacenService } from '../detalle-documento-almacen/detalle-documento-almacen.service';
 import { MatDialog } from '@angular/material/dialog';
-import { VentanaConfirmarComponent } from '../global/ventana-confirmar/ventana-confirmar.component';
-import { Notificaciones } from '../global/notificacion';
+import { VentanaConfirmarComponent } from '../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';
+import { Notificaciones } from 'src/app/core/servicios/notificacion';
 
 @Component({
   selector: 'app-historial-movimientos',

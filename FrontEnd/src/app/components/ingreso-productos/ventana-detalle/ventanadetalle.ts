@@ -1,14 +1,6 @@
-import { Component, OnInit, Inject, ViewChildren, QueryList, } from '@angular/core';
-import {FormControl} from '@angular/forms';
-import { MatButton } from '@angular/material/button';
-import { MatCard } from '@angular/material/card';
-import { MatDatepicker } from '@angular/material/datepicker';
+import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatInputModule } from '@angular/material/input';
-import { MatTableModule } from '@angular/material/table';
-import {ServiciosProductoSerie} from '../../global/productoserie';
-import {fromEvent} from 'rxjs';
-import {tap, distinctUntilChanged, debounceTime} from 'rxjs/operators';
+import {ServiciosProductoSerie} from 'src/app/core/servicios/productoserie';
 
 @Component({
   selector: 'app-ventanadetalle',

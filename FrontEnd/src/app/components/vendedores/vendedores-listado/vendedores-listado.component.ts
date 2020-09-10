@@ -1,15 +1,15 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
-import { ServiciosVentas } from '../global/ventas';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { ServiciosVentas } from 'src/app/core/servicios/ventas';
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {BehaviorSubject, Observable, of, fromEvent, merge} from 'rxjs';
 import {catchError, finalize, debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import {VentanaConfirmarComponent} from '../global/ventana-confirmar/ventana-confirmar.component';
+import {VentanaConfirmarComponent} from 'src/app/compartido/componentes/ventana-confirmar/ventana-confirmar.component';
 import {VentanaVendedorComponent} from './ventana-vendedor/ventana-vendedor';
-import {Notificaciones} from '../global/notificacion';
+import {Notificaciones} from 'src/app/core/servicios/notificacion';
 import { FileUploadVendedores } from './file-upload/fileupload';
-import { VentanaFotoComponent } from '../clientes/ventana-foto/ventana-foto.component';
+import { VentanaFotoComponent } from 'src/app/components/clientes/ventana-foto/ventana-foto.component';
 
 @Component({
   selector: 'app-vendedores-listado',

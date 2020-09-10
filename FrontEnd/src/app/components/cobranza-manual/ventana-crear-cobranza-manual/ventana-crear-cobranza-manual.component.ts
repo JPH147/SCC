@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, Inject } from '@angular/core';
 import { CobranzasService } from '../../cobranzas-listar/cobranzas.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ServiciosGenerales } from '../../global/servicios';
+import { ServiciosGenerales } from 'src/app/core/servicios/servicios';
 import { fromEvent, BehaviorSubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap, finalize } from 'rxjs/operators';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';

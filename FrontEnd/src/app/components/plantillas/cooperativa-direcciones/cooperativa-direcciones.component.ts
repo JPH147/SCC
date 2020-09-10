@@ -5,9 +5,9 @@ import { MatPaginator } from '@angular/material/paginator';
 import { Observable, BehaviorSubject, of, fromEvent, merge } from 'rxjs';
 import { catchError, finalize, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CooperativaConfiguracionService } from '../../cooperativa-configuracion/cooperativa-configuracion.service';
-import { VentanaConfirmarComponent } from '../../global/ventana-confirmar/ventana-confirmar.component';
+import { VentanaConfirmarComponent } from '../../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';
 import { VentanaCooperativaDireccionesComponent } from './ventana-cooperativa-direcciones/ventana-cooperativa-direcciones.component';
-import { Notificaciones } from '../../global/notificacion';
+import { Notificaciones } from 'src/app/core/servicios/notificacion';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({

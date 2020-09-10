@@ -6,7 +6,7 @@ import { finalize } from 'rxjs/operators';
 import { CobranzaJudicialService } from '../cobranza-judicial/cobranza-judicial.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import * as moment from 'moment';
-import { Notificaciones } from '../global/notificacion';
+import { Notificaciones } from 'src/app/core/servicios/notificacion';
 import { Location } from '@angular/common';
 
 @Component({

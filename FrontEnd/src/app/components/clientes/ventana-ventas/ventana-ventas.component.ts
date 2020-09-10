@@ -5,12 +5,12 @@ import { MatPaginator } from '@angular/material/paginator';
 import { BehaviorSubject, Observable, of, merge, fromEvent } from 'rxjs';
 import {catchError, finalize, debounceTime, distinctUntilChanged, tap} from 'rxjs/operators'
 import { VentaService } from '../../ventas/ventas.service';
-import {ServiciosTelefonos} from '../../global/telefonos';
-import {ServiciosDirecciones} from '../../global/direcciones';
+import {ServiciosTelefonos} from 'src/app/core/servicios/telefonos';
+import {ServiciosDirecciones} from 'src/app/core/servicios/direcciones';
 import { Router } from '@angular/router';
-import { Rol } from '../../usuarios/usuarios.service';
+import { Rol } from 'src/app/compartido/modelos/login.modelos';
 import { Store } from '@ngrx/store';
-import { EstadoSesion } from '../../usuarios/usuarios.reducer';
+import { EstadoSesion } from 'src/app/compartido/reducers/permisos.reducer';
 import { ClienteService } from '../clientes.service';
 
 @Component({

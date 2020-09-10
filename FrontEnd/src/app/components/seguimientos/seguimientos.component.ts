@@ -8,11 +8,11 @@ import { SeguimientosService } from './seguimientos.service';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { VentanaSeguimientosComponent } from './ventana-seguimientos/ventana-seguimientos.component';
 import { VentanaEntregaSeguimientosComponent } from './ventana-entrega-seguimientos/ventana-entrega-seguimientos.component';
-import { VentanaConfirmarComponent } from '../global/ventana-confirmar/ventana-confirmar.component';
-import { Notificaciones } from '../global/notificacion';
+import { VentanaConfirmarComponent } from '../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';
+import { Notificaciones } from 'src/app/core/servicios/notificacion';
 import { Store } from '@ngrx/store';
-import { EstadoSesion } from '../usuarios/usuarios.reducer';
-import { Rol } from '../usuarios/usuarios.service';
+import { EstadoSesion } from '../../compartido/reducers/permisos.reducer';
+import { Rol } from 'src/app/compartido/modelos/login.modelos';
 
 @Component({
   selector: 'app-seguimientos',

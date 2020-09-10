@@ -5,7 +5,7 @@ import { Observable, BehaviorSubject, of } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 import * as moment from 'moment';
 import { Router } from '@angular/router';
-import {Notificaciones} from '../../global/notificacion';
+import {Notificaciones} from 'src/app/core/servicios/notificacion';
 import { MatDialog } from '@angular/material/dialog';
 import { VentanaEditarCuotasComponent } from './ventana-editar-cuotas/ventana-editar-cuotas.component';
 

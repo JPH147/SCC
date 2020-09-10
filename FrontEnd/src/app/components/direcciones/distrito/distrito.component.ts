@@ -1,12 +1,11 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import {ServiciosDirecciones, Provincia} from '../../global/direcciones';
-import {merge, Observable, fromEvent} from 'rxjs';
+import {ServiciosDirecciones } from 'src/app/core/servicios/direcciones';
+import {merge, fromEvent} from 'rxjs';
 import {DistritoDataSource} from './distrito.dataservice'
-import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import {VentanaConfirmarComponent} from '../../global/ventana-confirmar/ventana-confirmar.component'
+import {VentanaConfirmarComponent} from '../../../compartido/componentes/ventana-confirmar/ventana-confirmar.component'
 import {VentanaEmergenteDistrito} from './ventana-emergente/ventanaemergente'
 // import {ViewEncapsulation} from '@angular/core';
 

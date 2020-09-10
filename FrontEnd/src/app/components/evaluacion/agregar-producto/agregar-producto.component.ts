@@ -5,7 +5,7 @@ import {ProductoService } from '../../detalleproductos/productos/productos.servi
 import { BehaviorSubject,Observable, fromEvent, merge } from 'rxjs';
 import {tap, debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {CollectionViewer} from '@angular/cdk/collections';
-import { ServiciosGenerales, Almacen } from './../../global/servicios';
+import { ServiciosGenerales, Almacen } from 'src/app/core/servicios/servicios';
 
 @Component({
   selector: 'app-agregar-producto',

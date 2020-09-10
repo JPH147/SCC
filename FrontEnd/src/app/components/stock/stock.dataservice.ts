@@ -4,7 +4,7 @@ import {StockService } from './stock.service';
 import {BehaviorSubject, Observable, of} from 'rxjs';
 import {catchError, finalize, subscribeOn} from 'rxjs/operators';
 import { ReturnStatement } from '@angular/compiler';
-import {ServiciosProductoSerie} from '../global/productoserie';
+import {ServiciosProductoSerie} from 'src/app/core/servicios/productoserie';
 
 export class StockDataSource implements DataSource <any> {
 

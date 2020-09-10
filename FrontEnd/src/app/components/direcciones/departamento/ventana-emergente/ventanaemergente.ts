@@ -1,10 +1,8 @@
-import {Component, Inject, OnInit, AfterViewInit} from '@angular/core';
+import {Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import {FormControl, FormGroup, FormBuilder,FormGroupDirective, NgForm, Validators} from '@angular/forms';
-import {ErrorStateMatcher} from '@angular/material/core';
-import { NgControl } from '@angular/forms';
-import {ServiciosDirecciones, Departamento} from '../../../global/direcciones'
+import { FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {ServiciosDirecciones, Departamento} from 'src/app/core/servicios/direcciones'
 
 @Component({
   selector: 'app-ventanaemergentedepartamento',

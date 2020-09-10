@@ -1,18 +1,16 @@
 import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList } from '@angular/core';
 import { SalidaProductosService } from './salida-productos.service';
-import { ServiciosGenerales, Almacen, ListarCliente, ListarVendedor } from './../global/servicios';
+import { ServiciosGenerales } from 'src/app/core/servicios/servicios';
 import { ventanaseriesalida } from './ventana-seriesalida/ventanaseriesalida';
-import {FormControl, FormBuilder, FormGroup, Validators, FormArray} from '@angular/forms';
-import {Observable, fromEvent} from 'rxjs';
-import {map, startWith, debounceTime, tap, distinctUntilChanged} from 'rxjs/operators';
-import {SelectionModel} from '@angular/cdk/collections';
+import { FormBuilder, FormGroup, Validators, FormArray} from '@angular/forms';
+import { fromEvent} from 'rxjs';
+import {  debounceTime, tap, distinctUntilChanged} from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import {StockService} from '../stock/stock.service'
-import {ServiciosProductoSerie} from '../global/productoserie'
+import {ServiciosProductoSerie} from 'src/app/core/servicios/productoserie'
 import {IngresoProductoService} from '../ingreso-productos/ingreso-productos.service'
-import {ServiciosDocumentos} from '../global/documentos';
+import {ServiciosDocumentos} from 'src/app/core/servicios/documentos';
 
 @Component({
   selector: 'app-salida-productos',

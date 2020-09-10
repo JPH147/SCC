@@ -5,12 +5,12 @@ import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { EvaluacionService } from '../evaluacion.service';
 import * as moment from 'moment';
-import { ServiciosGenerales } from '../../global/servicios';
+import { ServiciosGenerales } from 'src/app/core/servicios/servicios';
 import {saveAs} from 'file-saver';
 import { ClienteService } from '../../clientes/clientes.service';
-import { ServiciosDirecciones } from '../../global/direcciones';
-import { ServiciosTelefonos } from '../../global/telefonos';
-import { Notificaciones } from '../../global/notificacion';
+import { ServiciosDirecciones } from 'src/app/core/servicios/direcciones';
+import { ServiciosTelefonos } from 'src/app/core/servicios/telefonos';
+import { Notificaciones } from 'src/app/core/servicios/notificacion';
 import { MatDialog } from '@angular/material/dialog';
 import { VentanaProductosComponent } from '../../ventas/ventana-productos/ventana-productos.component';
 

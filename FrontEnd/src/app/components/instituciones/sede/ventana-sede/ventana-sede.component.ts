@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { InstitucionesService } from '../../instituciones.service';
 import { BehaviorSubject } from 'rxjs';
-import { ServiciosGenerales } from 'src/app/components/global/servicios';
+import { ServiciosGenerales } from 'src/app/core/servicios/servicios';
 
 @Component({
   selector: 'app-ventana-sede',

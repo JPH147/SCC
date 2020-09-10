@@ -7,12 +7,12 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { VentanaEditarSerieComponent } from './ventana-editar-serie/ventana-editar-serie.component'
-import { ServiciosProductoSerie } from '../global/productoserie';
+import { ServiciosProductoSerie } from 'src/app/core/servicios/productoserie';
 import * as moment from 'moment';
-import { VentanaConfirmarComponent } from '../global/ventana-confirmar/ventana-confirmar.component';
+import { VentanaConfirmarComponent } from '../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';
 import { IngresoProductoService } from '../ingreso-productos/ingreso-productos.service';
 import { VentanaEditarDocumentoComponent } from './ventana-editar-documento/ventana-editar-documento.component';
-import { URLIMAGENES } from '../global/url' ;
+import { URLIMAGENES } from 'src/app/core/servicios/url' ;
 import { Location } from '@angular/common';
 
 @Component({

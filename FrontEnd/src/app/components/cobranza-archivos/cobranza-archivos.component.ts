@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators} from '@angular/forms';
 import { CobranzasService } from '../cobranzas-listar/cobranzas.service';
-import { ServiciosGenerales } from '../global/servicios';
+import { ServiciosGenerales } from 'src/app/core/servicios/servicios';
 import { Location } from '@angular/common';
 import * as moment from 'moment';
 import { BehaviorSubject } from 'rxjs';

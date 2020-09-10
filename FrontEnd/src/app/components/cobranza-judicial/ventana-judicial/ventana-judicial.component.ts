@@ -4,8 +4,8 @@ import { CobranzaJudicialService } from '../cobranza-judicial.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BehaviorSubject, forkJoin } from 'rxjs';
 import { finalize } from 'rxjs/operators';
-import { ServiciosVentas } from '../../global/ventas';
-import { ServiciosGenerales } from '../../global/servicios';
+import { ServiciosVentas } from 'src/app/core/servicios/ventas';
+import { ServiciosGenerales } from 'src/app/core/servicios/servicios';
 import { ProcesoJudicialVinculadosService } from '../../proceso-judicial-vinculados/proceso-judicial-vinculados.service';
 
 @Component({

@@ -7,8 +7,8 @@ import { UsuariosService } from '../usuarios.service';
 import { CollectionViewer } from '@angular/cdk/collections';
 import { catchError, finalize, debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { MatPaginator } from '@angular/material/paginator';
-import { Notificaciones } from '../../global/notificacion';
-import { VentanaConfirmarComponent } from '../../global/ventana-confirmar/ventana-confirmar.component';
+import { Notificaciones } from 'src/app/core/servicios/notificacion';
+import { VentanaConfirmarComponent } from '../../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';
 
 @Component({
   selector: 'app-permisos-listar',
