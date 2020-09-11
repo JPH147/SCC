@@ -3,7 +3,7 @@ import { Location } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';
 import { FormGroup , FormBuilder , Validators } from '@angular/forms';
 import { CobranzasService } from '../cobranzas-listar/cobranzas.service';
-import { PlantillasService } from '../plantillas/plantillas.service';
+import { PlantillasService } from '../../modulo-maestro/plantillas/plantillas.service';
 import { finalize } from 'rxjs/operators';
 import { isNgTemplate } from '@angular/compiler';
 import { ActivatedRoute, Router } from '@angular/router';

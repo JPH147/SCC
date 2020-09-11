@@ -15,7 +15,7 @@ import * as moment from 'moment'
 import { EvaluacionService } from '../../modulo-clientes/evaluacion/evaluacion.service';
 import { VentanaConfirmarComponent } from '../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';
 import { URLIMAGENES } from 'src/app/core/servicios/url' ;
-import { ProcesoJudicialVinculadosService } from '../proceso-judicial-vinculados/proceso-judicial-vinculados.service';
+import { ProcesoJudicialVinculadosService } from '../../modulo-maestro/proceso-judicial-vinculados/proceso-judicial-vinculados.service';
 import { Store } from '@ngrx/store';
 import { EstadoSesion } from '../../compartido/reducers/permisos.reducer';
 import { Rol } from 'src/app/compartido/modelos/login.modelos';

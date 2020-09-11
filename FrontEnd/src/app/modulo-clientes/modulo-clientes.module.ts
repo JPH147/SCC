@@ -4,8 +4,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { MaterialModule } from '../material/material.module';
-import { ModuloClientesRoutingModule } from './modulo-clientes-routing.module';
 import { ImageUploadModule } from 'angular2-image-upload';
+import { ModuloClientesRoutingModule } from './modulo-clientes-routing.module';
 
 import { CompartidoModule } from '../compartido/compartido.module';
 

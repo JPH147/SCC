@@ -5,10 +5,7 @@ import { RetornoVendedoresComponent } from './components/retorno-vendedores/reto
 import { ComisionesComponent } from './components/comisiones/comisiones.component';
 import { VentasComponent } from './components/ventas/ventas.component';
 import { ListadoSalidaVendedoresComponent } from './components/listado-salida-vendedores/listado-salida-vendedores.component';
-import { ProveedoresComponent } from './components/proveedores/proveedores.component';
-import { DireccionesComponent } from './components/direcciones/direcciones.component';
 import { VentasListarComponent } from './components/ventas-listar/ventas-listar.component';
-import { ReglasEvaluacionComponent } from './components/tablas-maestras/reglas-evaluacion/reglas-evaluacion.component';
 import { RetornoVendedoresCierreComponent } from './components/retorno-vendedores-cierre/retorno-vendedores-cierre.component';
 import { VentasSalidaComponent } from './components/ventas-salida/ventas-salida.component';
 import { CreditosListarComponent } from './components/creditos-listar/creditos-listar.component';
@@ -22,25 +19,18 @@ import { CobranzaArchivosListarComponent } from './components/cobranza-archivos-
 import { TrabajadoresComponent } from './components/trabajadores/trabajadores.component';
 import { RegistroHorasComponent } from './components/registro-horas/registro-horas.component';
 import { ReporteAsistenciaComponent } from './components/reporte-asistencia/reporte-asistencia.component';
-import { VendedoresComponent } from './components/vendedores/vendedores.component';
-import { TalonariosComponent } from './components/talonarios/talonarios.component';
 import { PresupuestoComponent } from './components/presupuesto/presupuesto.component';
-import { PlantillasComponent } from './components/plantillas/plantillas.component';
 import { RefinanciamientoComponent } from './components/refinanciamiento/refinanciamiento.component';
 import { CobranzaDirectaComponent } from './components/cobranza-directa/cobranza-directa.component';
 import { CobranzaDirectaListarComponent } from './components/cobranza-directa-listar/cobranza-directa-listar.component';
-import { InstitucionesComponent } from './components/instituciones/instituciones.component';
 import { CobranzaClienteListarComponent } from './components/cobranza-cliente-listar/cobranza-cliente-listar.component';
 import { CobranzaJudicialListarComponent } from './components/cobranza-judicial-listar/cobranza-judicial-listar.component';
 import { CobranzaJudicialComponent } from './components/cobranza-judicial/cobranza-judicial.component';
 import { CobranzaJudicialGenerarComponent } from './components/cobranza-judicial-generar/cobranza-judicial-generar.component';
-import { ProcesoJudicialVinculadosComponent } from './components/proceso-judicial-vinculados/proceso-judicial-vinculados.component';
 import { CobranzaJudicialMultipleComponent } from './components/cobranza-judicial-multiple/cobranza-judicial-multiple.component';
-import { UsuariosComponent } from './components/usuarios/usuarios.component';
 import { CobranzaClienteListarMorososComponent } from './components/cobranza-cliente-listar-morosos/cobranza-cliente-listar-morosos.component';
 import { CobranzaManualComponent } from './components/cobranza-manual/cobranza-manual.component';
 import { CobranzaManualListarComponent } from './components/cobranza-manual-listar/cobranza-manual-listar.component';
-import { CooperativaDireccionesComponent } from './components/plantillas/cooperativa-direcciones/cooperativa-direcciones.component';
 import { AfiliacionesComponent } from './components/afiliaciones/afiliaciones.component';
 import { NgModule } from '@angular/core';
 
@@ -60,6 +50,12 @@ export const appRoutes: Routes = [
     loadChildren : () =>
       import('./modulo-inventarios/modulo-inventarios.module').then( m => m.ModuloInventariosModule ) ,
   } ,
+  {
+    path: 'maestro' , 
+    loadChildren : () =>
+      import('./modulo-maestro/modulo-maestro.module').then( m => m.ModuloMaestroModule ) ,
+  } ,
+  
 
   {path: 'salidavendedores', component: ListadoSalidaVendedoresComponent},
   {path: 'salidavendedores/ver/:idsalida', component: SalidaVendedoresComponent},
@@ -68,8 +64,6 @@ export const appRoutes: Routes = [
   {path: 'salidavendedores/rendicion/:idsalida', component: RetornoVendedoresComponent},
   {path: 'salidavendedores/retorno/:idsalida', component: RetornoVendedoresCierreComponent},
   {path: 'comisiones', component: ComisionesComponent},
-  {path: 'trabajadores', component: VendedoresComponent},
-  {path: 'talonarios', component: TalonariosComponent},
   {path: 'ventas', component: VentasListarComponent},
   {path: 'ventas/nueva', component: VentasComponent},
   {path: 'ventas/nueva/:idcliente', component: VentasComponent},
@@ -92,8 +86,6 @@ export const appRoutes: Routes = [
   {path: 'creditos/nuevo/refinanciamiento/:idclienterefinanciado', component: CreditosComponent},
   {path: 'presupuesto', component: PresupuestoComponent},
   {path: 'refinanciamiento', component: RefinanciamientoComponent},
-  {path: 'proveedores', component: ProveedoresComponent},
-  {path: 'direcciones', component: DireccionesComponent},
   {path: 'cobranzas', component: CobranzasListarComponent},
   {path: 'cobranzas-cliente', component: CobranzaClienteListarComponent},
   {path: 'cobranzas-cliente-morosos', component: CobranzaClienteListarMorososComponent},
@@ -118,15 +110,9 @@ export const appRoutes: Routes = [
   {path: 'cobranza-judicial/generar/ver/:idprocesover', component: CobranzaJudicialGenerarComponent},
   {path: 'cobranza-manual', component: CobranzaManualListarComponent},
   {path: 'cobranza-manual/ver/:idcobranza', component: CobranzaManualComponent},
-  {path: 'instituciones', component: InstitucionesComponent},
   {path: 'trabajadores', component: TrabajadoresComponent},
   {path: 'registro-horas', component: RegistroHorasComponent},
   {path: 'reporte-asistencia', component: ReporteAsistenciaComponent},
-  {path: 'proceso-judicial-vinculados', component: ProcesoJudicialVinculadosComponent},
-  {path: 'plantillas', component: PlantillasComponent},
-  {path: 'usuarios', component: UsuariosComponent},
-  {path: 'configuracion', component: CooperativaDireccionesComponent},
-  {path: 'evaluacion-reglas', component: ReglasEvaluacionComponent},
 ];
 
 @NgModule({

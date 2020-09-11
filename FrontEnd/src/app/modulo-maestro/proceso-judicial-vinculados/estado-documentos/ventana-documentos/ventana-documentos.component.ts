@@ -9,7 +9,7 @@ import { BehaviorSubject } from 'rxjs';
   templateUrl: './ventana-documentos.component.html',
   styleUrls: ['./ventana-documentos.component.css']
 })
-export class VentanaDocumentosComponent implements OnInit {
+export class VentanaEstadoDocumentosComponent implements OnInit {
 
   public Cargando = new BehaviorSubject<boolean>(false);
   public EstadosForm : FormGroup ;
@@ -17,7 +17,7 @@ export class VentanaDocumentosComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data : any,
-    private ventana : MatDialogRef<VentanaDocumentosComponent>,
+    private ventana : MatDialogRef<VentanaEstadoDocumentosComponent>,
     private Builder : FormBuilder,
     private _distritos : ProcesoJudicialVinculadosService
   ) { }

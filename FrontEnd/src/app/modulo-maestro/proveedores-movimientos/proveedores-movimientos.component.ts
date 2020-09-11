@@ -1,12 +1,12 @@
 import { Component, OnInit, Inject, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
-import {MovimientosProveedorDataSource} from '../proveedores.dataservice';
+import {MovimientosProveedorDataSource} from '../proveedores/proveedores.dataservice';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import {ProveedorService} from '../proveedores.service';
+import {ProveedorService} from '../proveedores/proveedores.service';
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {fromEvent, merge} from 'rxjs';
 import {tap, debounceTime, distinctUntilChanged} from 'rxjs/operators';
-import {DetalleDocumentoAlmacenComponent} from '../../../modulo-inventarios/detalle-documento-almacen/detalle-documento-almacen.component'
+import {DetalleDocumentoAlmacenComponent} from '../../modulo-inventarios/detalle-documento-almacen/detalle-documento-almacen.component'
 
 @Component({
   selector: 'app-proveedores-movimientos',

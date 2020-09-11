@@ -10,7 +10,6 @@ import { URL } from 'src/app/core/servicios/url';
   selector: 'app-fileupload',
   templateUrl: './fileupload.html',
   styleUrls: ['./fileupload.css'],
-  providers:[ServiciosGenerales, ServiciosVentas]
 })
 
 // tslint:disable-next-line:component-class-suffix

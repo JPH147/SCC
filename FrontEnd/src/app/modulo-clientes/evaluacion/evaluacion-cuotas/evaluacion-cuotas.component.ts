@@ -5,7 +5,7 @@ import {tap, debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {CollectionViewer} from '@angular/cdk/collections';
 import { MatDialog } from '@angular/material/dialog';
 import {AgregarProductoComponent} from '../agregar-producto/agregar-producto.component';
-import { ReglasEvaluacionService } from '../../../components/tablas-maestras/reglas-evaluacion/reglas-evaluacion.service';
+import { ReglasEvaluacionService } from '../../../modulo-maestro/reglas-evaluacion/reglas-evaluacion.service';
 import * as moment from 'moment';
 import { ServiciosGenerales } from 'src/app/core/servicios/servicios';
 import { ChangeDetectorRef } from "@angular/core";

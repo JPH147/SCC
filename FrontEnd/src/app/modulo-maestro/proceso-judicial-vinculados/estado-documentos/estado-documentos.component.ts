@@ -6,7 +6,7 @@ import { catchError, finalize, tap, debounceTime, distinctUntilChanged } from 'r
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { ProcesoJudicialVinculadosService } from '../proceso-judicial-vinculados.service';
 import { VentanaConfirmarComponent } from '../../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';
-import { VentanaDocumentosComponent } from './ventana-documentos/ventana-documentos.component';
+import { VentanaEstadoDocumentosComponent } from './ventana-documentos/ventana-documentos.component';
 import { Notificaciones } from 'src/app/core/servicios/notificacion';
 
 @Component({
@@ -70,7 +70,7 @@ export class EstadoDocumentosComponent implements OnInit {
   }
 
   Editar(estado){
-    let Ventana = this.Dialogo.open( VentanaDocumentosComponent, {
+    let Ventana = this.Dialogo.open( VentanaEstadoDocumentosComponent, {
       width: '900px',
       data: estado
     })
@@ -89,7 +89,7 @@ export class EstadoDocumentosComponent implements OnInit {
   }
 
   Agregar(){
-    let Ventana = this.Dialogo.open( VentanaDocumentosComponent, {
+    let Ventana = this.Dialogo.open( VentanaEstadoDocumentosComponent, {
       width: '900px',
     })
 

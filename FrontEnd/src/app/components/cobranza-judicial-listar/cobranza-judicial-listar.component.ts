@@ -9,7 +9,7 @@ import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { CobranzaJudicialService } from '../cobranza-judicial/cobranza-judicial.service';
 import { VentanaConfirmarComponent } from '../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';
 import { Router } from '@angular/router';
-import { ProcesoJudicialVinculadosService } from '../proceso-judicial-vinculados/proceso-judicial-vinculados.service';
+import { ProcesoJudicialVinculadosService } from '../../modulo-maestro/proceso-judicial-vinculados/proceso-judicial-vinculados.service';
 import { VentanaCambioDistritoComponent } from './ventana-cambio-distrito/ventana-cambio-distrito.component';
 import { Notificaciones } from 'src/app/core/servicios/notificacion';
 import { Store } from '@ngrx/store';

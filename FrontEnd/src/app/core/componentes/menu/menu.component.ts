@@ -241,7 +241,7 @@ export class MenuComponent implements OnInit{
       {
         nombre: "Tablas maestras",
         icono: "table_chart",
-        path: '',
+        path: 'maestro',
         mostrar: permiso.tablas_maestras.general ,
         submenu:[
           {

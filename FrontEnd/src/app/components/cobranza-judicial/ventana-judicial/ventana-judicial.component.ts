@@ -6,7 +6,7 @@ import { BehaviorSubject, forkJoin } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { ServiciosVentas } from 'src/app/core/servicios/ventas';
 import { ServiciosGenerales } from 'src/app/core/servicios/servicios';
-import { ProcesoJudicialVinculadosService } from '../../proceso-judicial-vinculados/proceso-judicial-vinculados.service';
+import { ProcesoJudicialVinculadosService } from '../../../modulo-maestro/proceso-judicial-vinculados/proceso-judicial-vinculados.service';
 
 @Component({
   selector: 'app-ventana-judicial',

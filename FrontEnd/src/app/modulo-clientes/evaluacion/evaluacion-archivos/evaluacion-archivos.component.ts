@@ -19,7 +19,6 @@ import { VerPlantillasComponent } from '../ver-plantillas/ver-plantillas.compone
 import {Notificaciones} from 'src/app/core/servicios/notificacion';
 import * as moment from 'moment';
 import {saveAs} from 'file-saver';
-import { VentanaPlantillasComponent } from '../../../components/plantillas/documentos/ventana-plantillas/ventana-plantillas.component';
 import { SeleccionarClienteComponent } from '../../../compartido/componentes/seleccionar-cliente/seleccionar-cliente.component';
 
 @Component({

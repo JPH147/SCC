@@ -5,8 +5,9 @@ import {catchError, map, startWith, switchMap} from 'rxjs/operators';
 import {URL,URLIMAGENES} from 'src/app/core/servicios/url';
 import * as moment from 'moment';
 
-@Injectable()
-
+@Injectable({
+  providedIn: 'root'
+})
 export class ProveedorService {
 
   public url: string = URL.url;

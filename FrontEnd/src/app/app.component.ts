@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
-import { UsuariosService } from './components/usuarios/usuarios.service';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service' ;
 import { Store } from '@ngrx/store';
-import { AsignarPermisos, RemoverPermisos } from './compartido/reducers/permisos.reducer';
 import { LoginService } from './core/servicios/login.service';
 import { EstadosGlobales } from './compartido/reducers/estados';
 import { usuario } from './compartido/modelos/login.modelos';

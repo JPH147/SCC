@@ -7,10 +7,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
-import { ProveedoresMovimientosComponent } from './proveedores-movimientos/proveedores-movimientos.component'
+import { ProveedoresMovimientosComponent } from '../proveedores-movimientos/proveedores-movimientos.component'
 import { VentanaEmergenteProveedores } from './ventana-emergente/ventana-emergente.component';
 import { VentanaConfirmarComponent } from '../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';
-import { FileUploadProveedores } from './file-upload/fileupload';
+import { FileUploadProveedores } from '../file-upload/fileupload';
 import { VentanaFotoComponent } from '../../compartido/componentes/ventana-foto/ventana-foto.component';
 
 @Component({

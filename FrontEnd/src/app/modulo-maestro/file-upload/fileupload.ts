@@ -2,15 +2,14 @@ import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import {ServiciosGenerales} from 'src/app/core/servicios/servicios';
-import { ProveedorService } from '../proveedores.service';
-import { FileHolder } from '../../../../../node_modules/angular2-image-upload';
+import { ProveedorService } from '../proveedores/proveedores.service';
+import { FileHolder } from 'angular2-image-upload';
 import {URL} from 'src/app/core/servicios/url';
 
 @Component({
   selector: 'app-fileupload',
   templateUrl: './fileupload.html',
   styleUrls: ['./fileupload.css'],
-  providers:[ServiciosGenerales, ProveedorService]
 })
 
 // tslint:disable-next-line:component-class-suffix

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { VentanaDocumentosComponent } from './ventana-documentos.component';
+import { VentanaEstadoDocumentosComponent } from './ventana-documentos.component';
 
 describe('VentanaDocumentosComponent', () => {
-  let component: VentanaDocumentosComponent;
-  let fixture: ComponentFixture<VentanaDocumentosComponent>;
+  let component: VentanaEstadoDocumentosComponent;
+  let fixture: ComponentFixture<VentanaEstadoDocumentosComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ VentanaDocumentosComponent ]
+      declarations: [ VentanaEstadoDocumentosComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(VentanaDocumentosComponent);
+    fixture = TestBed.createComponent(VentanaEstadoDocumentosComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

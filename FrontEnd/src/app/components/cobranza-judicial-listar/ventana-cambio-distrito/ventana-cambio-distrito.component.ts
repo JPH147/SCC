@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'
-import { ProcesoJudicialVinculadosService } from '../../proceso-judicial-vinculados/proceso-judicial-vinculados.service';
+import { ProcesoJudicialVinculadosService } from '../../../modulo-maestro/proceso-judicial-vinculados/proceso-judicial-vinculados.service';
 import { BehaviorSubject } from 'rxjs';
 import { CobranzaJudicialService } from '../../cobranza-judicial/cobranza-judicial.service';
 

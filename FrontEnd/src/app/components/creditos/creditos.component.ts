@@ -17,7 +17,7 @@ import { Notificaciones } from 'src/app/core/servicios/notificacion';
 import { URLIMAGENES } from 'src/app/core/servicios/url';
 import { SeleccionarClienteComponent } from '../../compartido/componentes/seleccionar-cliente/seleccionar-cliente.component';
 import { VentanaEmergenteContacto} from '../../compartido/componentes/ventana-emergentecontacto/ventanaemergentecontacto';
-import { ReglasEvaluacionService } from '../tablas-maestras/reglas-evaluacion/reglas-evaluacion.service';
+import { ReglasEvaluacionService } from '../../modulo-maestro/reglas-evaluacion/reglas-evaluacion.service';
 import { SeguimientosService } from '../../modulo-clientes/seguimientos/seguimientos.service';
 import { RefinanciamientoService } from '../refinanciamiento/refinanciamiento.service';
 import { VentanaPagosComponent } from '../cobranzas-listar/ventana-pagos/ventana-pagos.component';
