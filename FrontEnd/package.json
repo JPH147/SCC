@@ -23,7 +23,7 @@
     "@angular/platform-browser": "^10.1.1",
     "@angular/platform-browser-dynamic": "^10.1.1",
     "@angular/router": "^10.1.1",
-    "@ngrx/store": "^9.2.0",
+    "@ngrx/store": "^10.0.0",
     "angular2-image-upload": "^1.0.0-rc.2",
     "chartist": "^0.11.4",
     "core-js": "^2.6.11",
@@ -32,7 +32,7 @@
     "ng-chartist": "^4.1.0",
     "ng2-file-upload": "^1.4.0",
     "ngx-cookie-service": "^3.0.4",
-    "rxjs": "^6.5.5",
+    "rxjs": "^6.6.3",
     "tslib": "^2.0.0",
     "written-number": "^0.9.1",
     "zone.js": "~0.10.2"
