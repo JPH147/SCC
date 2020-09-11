@@ -139,7 +139,7 @@ export class MenuComponent implements OnInit{
       {
         nombre: "Créditos",
         icono: "account_balance",
-        path: '',
+        path: 'creditos',
         mostrar: permiso.creditos.general,
         submenu:[
           {

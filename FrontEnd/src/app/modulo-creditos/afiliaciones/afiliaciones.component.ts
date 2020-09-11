@@ -1,14 +1,13 @@
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, AfterViewInit } from '@angular/core';
-import { CollectionViewer, DataSource } from "@angular/cdk/collections";
 import { CreditosService } from '../creditos/creditos.service';
 import { FormArray, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSort } from '@angular/material/sort';
 import { ServiciosTipoPago } from 'src/app/core/servicios/tipopago';
 import { ClienteService  } from '../../modulo-clientes/clientes/clientes.service';
-import { forkJoin,fromEvent, merge, BehaviorSubject} from 'rxjs';
+import { merge, BehaviorSubject} from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap, map, finalize } from 'rxjs/operators';
-import { ActivatedRoute, Router, NavigationStart } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ServiciosTelefonos } from 'src/app/core/servicios/telefonos';
 import { ServiciosDirecciones } from 'src/app/core/servicios/direcciones';
 import { ServiciosGenerales } from 'src/app/core/servicios/servicios';
@@ -39,7 +38,6 @@ import { VentanaGenerarPagoTransaccionComponent } from '../../compartido/compone
   selector: 'app-afiliaciones',
   templateUrl: './afiliaciones.component.html',
   styleUrls: ['./afiliaciones.component.scss'],
-  providers: [CreditosService, ClienteService, ServiciosDirecciones, ServiciosTelefonos, ServiciosGenerales, ServiciosTipoPago, ReglasEvaluacionService]
 })
 export class AfiliacionesComponent implements OnInit, AfterViewInit {
 

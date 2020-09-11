@@ -38,7 +38,6 @@ import { MatDatepicker } from '@angular/material/datepicker';
   selector: 'app-creditos',
   templateUrl: './creditos.component.html',
   styleUrls: ['./creditos.component.scss'],
-  providers: [CreditosService, ClienteService, ServiciosDirecciones, ServiciosTelefonos, ServiciosGenerales, ServiciosTipoPago, ReglasEvaluacionService]
 })
 export class CreditosComponent implements OnInit, AfterViewInit {
 

@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { SeleccionarClienteComponent } from '../../compartido/componentes/seleccionar-cliente/seleccionar-cliente.component';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
-import { RefinanciamientoService } from '../../components/refinanciamiento/refinanciamiento.service';
+import { RefinanciamientoService } from '../../modulo-creditos/refinanciamiento/refinanciamiento.service';
 import { Observable, of , BehaviorSubject , merge } from 'rxjs';
 import { catchError, finalize, debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { Location } from '@angular/common';

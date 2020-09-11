@@ -20,7 +20,7 @@ import {Notificaciones} from 'src/app/core/servicios/notificacion';
 import {URLIMAGENES} from 'src/app/core/servicios/url'
 import {SeleccionarClienteComponent} from '../../compartido/componentes/seleccionar-cliente/seleccionar-cliente.component';
 import { VentanaEmergenteContacto} from '../../compartido/componentes/ventana-emergentecontacto/ventanaemergentecontacto';
-import { CreditosService } from "../creditos/creditos.service";
+import { CreditosService } from "../../modulo-creditos/creditos/creditos.service";
 import { SeguimientosService } from "../../modulo-clientes/seguimientos/seguimientos.service";
 import { VentanaPagosComponent } from '../../compartido/componentes/ventana-pagos/ventana-pagos.component';
 import { VentanaEmergenteClientes } from '../../compartido/componentes/ventana-emergente/ventanaemergente' ;

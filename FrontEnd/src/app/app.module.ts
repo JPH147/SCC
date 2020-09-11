@@ -34,17 +34,12 @@ import { VentanaCronogramaComponent } from './components/ventas/ventana-cronogra
 import { AgregarVentaComponent } from './components/retorno-vendedores/agregar-venta/agregar-venta.component';
 import { RetornoVendedoresCierreComponent } from './components/retorno-vendedores-cierre/retorno-vendedores-cierre.component';
 import { VentasSalidaComponent } from './components/ventas-salida/ventas-salida.component';
-import { CreditosComponent } from './components/creditos/creditos.component';
-import { CreditosListarComponent } from './components/creditos-listar/creditos-listar.component';
 import { VentanaTrabajadoresComponent } from './components/trabajadores/ventana-trabajador/ventana-trabajador.component';
 import { TrabajadoresComponent } from './components/trabajadores/trabajadores.component';
 import { RegistroHorasComponent } from './components/registro-horas/registro-horas.component';
 import { ReporteAsistenciaComponent } from './components/reporte-asistencia/reporte-asistencia.component';
 import { PresupuestoComponent } from './components/presupuesto/presupuesto.component';
 import { VentanaArchivosComponent } from './components/presupuesto/ventana-archivos/ventana-archivos.component';
-import { CreditosListarAfiliacionesComponent } from './components/creditos-listar-afiliaciones/creditos-listar-afiliaciones.component';
-import { RefinanciamientoComponent } from './components/refinanciamiento/refinanciamiento.component';
-import { AfiliacionesComponent } from './components/afiliaciones/afiliaciones.component';
 
 @NgModule({
   exports:[
@@ -79,17 +74,12 @@ import { AfiliacionesComponent } from './components/afiliaciones/afiliaciones.co
     AgregarVentaComponent,
     RetornoVendedoresCierreComponent,
     VentasSalidaComponent,
-    CreditosComponent,
-    CreditosListarComponent,
     TrabajadoresComponent,
     RegistroHorasComponent,
     ReporteAsistenciaComponent,
     VentanaTrabajadoresComponent,
     PresupuestoComponent,
     VentanaArchivosComponent,
-    CreditosListarAfiliacionesComponent,
-    RefinanciamientoComponent,
-    AfiliacionesComponent,
    ],
   bootstrap: [AppComponent],
   providers: [

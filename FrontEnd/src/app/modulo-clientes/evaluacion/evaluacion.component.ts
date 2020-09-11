@@ -7,7 +7,7 @@ import {tap, debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {EvaluacionService} from './evaluacion.service';
 import * as moment from 'moment';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { CreditosService } from '../../components/creditos/creditos.service';
+import { CreditosService } from '../../modulo-creditos/creditos/creditos.service';
 import { VentanaEmergenteProvisionalClientes } from '../ventana-emergente-provisional/ventanaemergenteprovisional' ;
 import { SeleccionarClienteComponent } from '../../compartido/componentes/seleccionar-cliente/seleccionar-cliente.component';
 import { ActivatedRoute } from '@angular/router';

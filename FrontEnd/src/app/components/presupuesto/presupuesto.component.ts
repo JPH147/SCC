@@ -5,7 +5,7 @@ import { catchError, finalize, tap, debounceTime, distinctUntilChanged } from 'r
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSelect } from '@angular/material/select';
-import { CreditosService } from '../creditos/creditos.service';
+import { CreditosService } from '../../modulo-creditos/creditos/creditos.service';
 import {VentanaArchivosComponent } from './ventana-archivos/ventana-archivos.component';
 import {VentanaConfirmarComponent} from '../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';
 
