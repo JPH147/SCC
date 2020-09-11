@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-
+import { CompartidoModule } from '../compartido/compartido.module';
 import { ImageUploadModule } from 'angular2-image-upload';
 import { MaterialModule } from '../material/material.module';
 
@@ -137,6 +137,7 @@ import { VentanaParametrosPlantillasComponent } from './instituciones/sede/venta
     ReactiveFormsModule ,
     RouterModule ,
     MaterialModule ,
+    CompartidoModule ,
     ImageUploadModule ,
   ]
 })

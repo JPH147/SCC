@@ -177,22 +177,22 @@ export class MenuComponent implements OnInit{
       {
         nombre: "Cobranzas",
         icono: "gavel",
-        path: '',
+        path: 'cobranzas',
         mostrar: permiso.cobranzas.general,
         submenu:[
           // {
           //   nombre: "Cronograma de pagos",
-          //   path: "cobranzas" ,
+          //   path: "listado" ,
           //   mostrar : permiso.cobranzas.cronograma.general ,
           // },
           // {
           //   nombre: "Clientes morosos I",
-          //   path: "cobranzas-cliente" ,
+          //   path: "listado-cliente" ,
           //   mostrar : permiso.cobranzas.clientes_morosos.general ,
           // },
           // {
           //   nombre: "Clientes muy morosos II",
-          //   path: "cobranzas-cliente-morosos" ,
+          //   path: "listado-cliente-morosos" ,
           //   mostrar : permiso.cobranzas.clientes_morosos.general ,
           // },
           {

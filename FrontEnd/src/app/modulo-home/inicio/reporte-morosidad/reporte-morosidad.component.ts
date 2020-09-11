@@ -7,7 +7,7 @@ import {
   IChartistBarChart,
 } from 'chartist';
 import { ChartEvent, ChartType } from 'ng-chartist';
-import { CobranzasService } from 'src/app/components/cobranzas-listar/cobranzas.service';
+import { CobranzasService } from 'src/app/modulo-cobranzas/cobranzas-listar/cobranzas.service';
 import { BehaviorSubject } from 'rxjs';
 
 @Component({

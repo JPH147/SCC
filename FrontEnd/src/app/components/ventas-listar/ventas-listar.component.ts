@@ -11,7 +11,7 @@ import {VentanaConfirmarComponent} from '../../compartido/componentes/ventana-co
 import {VentasServicio} from './ventas-listar.service'
 import { ClienteService } from '../../modulo-clientes/clientes/clientes.service';
 import { VentaService } from '../ventas/ventas.service';
-import { CobranzaJudicialService } from '../cobranza-judicial/cobranza-judicial.service';
+import { CobranzaJudicialService } from '../../modulo-cobranzas/cobranza-judicial/cobranza-judicial.service';
 import { Store } from '@ngrx/store';
 import { EstadoSesion } from '../../compartido/reducers/permisos.reducer';
 import { Rol } from 'src/app/compartido/modelos/login.modelos';

@@ -9,8 +9,8 @@ import { finalize, map, distinctUntilChanged, tap, debounceTime } from 'rxjs/ope
 import { BehaviorSubject, forkJoin, merge } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { CreditosService } from '../creditos/creditos.service';
-import { VentaService } from '../ventas/ventas.service';
+import { CreditosService } from '../../components/creditos/creditos.service';
+import { VentaService } from '../../components/ventas/ventas.service';
 import * as moment from 'moment'
 import { EvaluacionService } from '../../modulo-clientes/evaluacion/evaluacion.service';
 import { VentanaConfirmarComponent } from '../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';

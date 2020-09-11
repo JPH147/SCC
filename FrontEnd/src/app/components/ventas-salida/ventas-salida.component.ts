@@ -21,12 +21,12 @@ import { SalidaVendedoresService } from "../salida-vendedores/salida-vendedores.
 import { VentanaEmergenteContacto} from '../../compartido/componentes/ventana-emergentecontacto/ventanaemergentecontacto';
 import {SeleccionarClienteComponent} from 'src/app/compartido/componentes/seleccionar-cliente/seleccionar-cliente.component';
 import { SeguimientosService } from "../../modulo-clientes/seguimientos/seguimientos.service";
-import { VentanaCrearCobranzaManualComponent } from "../cobranza-manual/ventana-crear-cobranza-manual/ventana-crear-cobranza-manual.component";
+import { VentanaCrearCobranzaManualComponent } from "../../modulo-cobranzas/cobranza-manual/ventana-crear-cobranza-manual/ventana-crear-cobranza-manual.component";
 import { Rol } from 'src/app/compartido/modelos/login.modelos';
 import { EstadoSesion } from "../../compartido/reducers/permisos.reducer";
 import { Store } from "@ngrx/store";
 import { VentanaConfirmarComponent } from "../../compartido/componentes/ventana-confirmar/ventana-confirmar.component";
-import { CobranzaJudicialService } from "../cobranza-judicial/cobranza-judicial.service";
+import { CobranzaJudicialService } from "../../modulo-cobranzas/cobranza-judicial/cobranza-judicial.service";
 
 import * as moment from 'moment';
 import {default as _rollupMoment, Moment} from 'moment';

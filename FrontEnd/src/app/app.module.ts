@@ -36,11 +36,6 @@ import { RetornoVendedoresCierreComponent } from './components/retorno-vendedore
 import { VentasSalidaComponent } from './components/ventas-salida/ventas-salida.component';
 import { CreditosComponent } from './components/creditos/creditos.component';
 import { CreditosListarComponent } from './components/creditos-listar/creditos-listar.component';
-import { CobranzasListarComponent } from './components/cobranzas-listar/cobranzas-listar.component';
-import { CobranzaPnpComponent } from './components/cobranza-archivos/cobranza-pnp/cobranza-pnp.component';
-import { CobranzaArchivosListarComponent } from './components/cobranza-archivos-listar/cobranza-archivos-listar.component';
-import { CobranzaArchivosComponent } from './components/cobranza-archivos/cobranza-archivos.component';
-import { CobranzaArchivosPagoComponent } from './components/cobranza-archivos-pago/cobranza-archivos-pago.component';
 import { VentanaTrabajadoresComponent } from './components/trabajadores/ventana-trabajador/ventana-trabajador.component';
 import { TrabajadoresComponent } from './components/trabajadores/trabajadores.component';
 import { RegistroHorasComponent } from './components/registro-horas/registro-horas.component';
@@ -49,27 +44,6 @@ import { PresupuestoComponent } from './components/presupuesto/presupuesto.compo
 import { VentanaArchivosComponent } from './components/presupuesto/ventana-archivos/ventana-archivos.component';
 import { CreditosListarAfiliacionesComponent } from './components/creditos-listar-afiliaciones/creditos-listar-afiliaciones.component';
 import { RefinanciamientoComponent } from './components/refinanciamiento/refinanciamiento.component';
-import { CobranzaDirectaComponent } from './components/cobranza-directa/cobranza-directa.component';
-import { CobranzaDirectaListarComponent } from './components/cobranza-directa-listar/cobranza-directa-listar.component';
-import { VentanaPagosComponent } from './components/cobranzas-listar/ventana-pagos/ventana-pagos.component';
-import { VentanaTipoReporteComponent } from './components/cobranzas-listar/ventana-tipo-reporte/ventana-tipo-reporte.component';
-import { VentanaEditarPagoComponent } from './components/cobranzas-listar/ventana-editar-pago/ventana-editar-pago.component';
-import { CobranzaArchivosDetalleComponent } from './components/cobranza-archivos-detalle/cobranza-archivos-detalle.component';
-import { CobranzaJudicialListarComponent } from './components/cobranza-judicial-listar/cobranza-judicial-listar.component';
-import { CobranzaJudicialComponent } from './components/cobranza-judicial/cobranza-judicial.component';
-import { CobranzaJudicialGenerarComponent } from './components/cobranza-judicial-generar/cobranza-judicial-generar.component';
-import { CobranzaClienteListarComponent } from './components/cobranza-cliente-listar/cobranza-cliente-listar.component';
-import { VentanaJudicialComponent } from './components/cobranza-judicial/ventana-judicial/ventana-judicial.component';
-import { VentanaCambioDistritoComponent } from './components/cobranza-judicial-listar/ventana-cambio-distrito/ventana-cambio-distrito.component';
-import { CobranzaJudicialMultipleComponent } from './components/cobranza-judicial-multiple/cobranza-judicial-multiple.component';
-import { VentanaCobranzaClienteComponent } from './components/cobranza-cliente-listar/ventana-cobranza-cliente/ventana-cobranza-cliente.component';
-import { VentanaCobranzaClienteVencidasComponent } from './components/cobranza-cliente-listar/ventana-cobranza-cliente-vencidas/ventana-cobranza-cliente-vencidas.component';
-import { CobranzaClienteListarMorososComponent } from './components/cobranza-cliente-listar-morosos/cobranza-cliente-listar-morosos.component';
-
-import { VentanaEditarCuotasComponent } from './components/cobranza-archivos/cobranza-pnp/ventana-editar-cuotas/ventana-editar-cuotas.component';
-import { CobranzaManualComponent } from './components/cobranza-manual/cobranza-manual.component';
-import { VentanaCrearCobranzaManualComponent } from './components/cobranza-manual/ventana-crear-cobranza-manual/ventana-crear-cobranza-manual.component';
-import { CobranzaManualListarComponent } from './components/cobranza-manual-listar/cobranza-manual-listar.component';
 import { AfiliacionesComponent } from './components/afiliaciones/afiliaciones.component';
 
 @NgModule({
@@ -107,10 +81,6 @@ import { AfiliacionesComponent } from './components/afiliaciones/afiliaciones.co
     VentasSalidaComponent,
     CreditosComponent,
     CreditosListarComponent,
-    CobranzaArchivosComponent,
-    CobranzasListarComponent,
-    CobranzaPnpComponent,
-    CobranzaArchivosListarComponent,
     TrabajadoresComponent,
     RegistroHorasComponent,
     ReporteAsistenciaComponent,
@@ -119,27 +89,6 @@ import { AfiliacionesComponent } from './components/afiliaciones/afiliaciones.co
     VentanaArchivosComponent,
     CreditosListarAfiliacionesComponent,
     RefinanciamientoComponent,
-    CobranzaDirectaComponent,
-    CobranzaDirectaListarComponent,
-    VentanaPagosComponent,
-    CobranzaArchivosPagoComponent,
-    VentanaTipoReporteComponent,
-    VentanaEditarPagoComponent,
-    CobranzaArchivosDetalleComponent,
-    CobranzaJudicialListarComponent,
-    CobranzaJudicialComponent,
-    CobranzaClienteListarComponent,
-    VentanaJudicialComponent,
-    CobranzaJudicialGenerarComponent,
-    VentanaCambioDistritoComponent,
-    CobranzaJudicialMultipleComponent,
-    VentanaCobranzaClienteComponent,
-    VentanaCobranzaClienteVencidasComponent,
-    CobranzaClienteListarMorososComponent,
-    VentanaEditarCuotasComponent,
-    CobranzaManualComponent,
-    VentanaCrearCobranzaManualComponent,
-    CobranzaManualListarComponent,
     AfiliacionesComponent,
    ],
   bootstrap: [AppComponent],

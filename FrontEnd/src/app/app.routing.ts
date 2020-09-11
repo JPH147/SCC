@@ -11,26 +11,11 @@ import { VentasSalidaComponent } from './components/ventas-salida/ventas-salida.
 import { CreditosListarComponent } from './components/creditos-listar/creditos-listar.component';
 import { CreditosListarAfiliacionesComponent } from './components/creditos-listar-afiliaciones/creditos-listar-afiliaciones.component';
 import { CreditosComponent } from './components/creditos/creditos.component';
-import { CobranzasListarComponent } from './components/cobranzas-listar/cobranzas-listar.component';
-import { CobranzaArchivosComponent } from './components/cobranza-archivos/cobranza-archivos.component';
-import { CobranzaArchivosPagoComponent } from './components/cobranza-archivos-pago/cobranza-archivos-pago.component';
-import { CobranzaArchivosDetalleComponent } from './components/cobranza-archivos-detalle/cobranza-archivos-detalle.component';
-import { CobranzaArchivosListarComponent } from './components/cobranza-archivos-listar/cobranza-archivos-listar.component';
 import { TrabajadoresComponent } from './components/trabajadores/trabajadores.component';
 import { RegistroHorasComponent } from './components/registro-horas/registro-horas.component';
 import { ReporteAsistenciaComponent } from './components/reporte-asistencia/reporte-asistencia.component';
 import { PresupuestoComponent } from './components/presupuesto/presupuesto.component';
 import { RefinanciamientoComponent } from './components/refinanciamiento/refinanciamiento.component';
-import { CobranzaDirectaComponent } from './components/cobranza-directa/cobranza-directa.component';
-import { CobranzaDirectaListarComponent } from './components/cobranza-directa-listar/cobranza-directa-listar.component';
-import { CobranzaClienteListarComponent } from './components/cobranza-cliente-listar/cobranza-cliente-listar.component';
-import { CobranzaJudicialListarComponent } from './components/cobranza-judicial-listar/cobranza-judicial-listar.component';
-import { CobranzaJudicialComponent } from './components/cobranza-judicial/cobranza-judicial.component';
-import { CobranzaJudicialGenerarComponent } from './components/cobranza-judicial-generar/cobranza-judicial-generar.component';
-import { CobranzaJudicialMultipleComponent } from './components/cobranza-judicial-multiple/cobranza-judicial-multiple.component';
-import { CobranzaClienteListarMorososComponent } from './components/cobranza-cliente-listar-morosos/cobranza-cliente-listar-morosos.component';
-import { CobranzaManualComponent } from './components/cobranza-manual/cobranza-manual.component';
-import { CobranzaManualListarComponent } from './components/cobranza-manual-listar/cobranza-manual-listar.component';
 import { AfiliacionesComponent } from './components/afiliaciones/afiliaciones.component';
 import { NgModule } from '@angular/core';
 
@@ -55,8 +40,12 @@ export const appRoutes: Routes = [
     loadChildren : () =>
       import('./modulo-maestro/modulo-maestro.module').then( m => m.ModuloMaestroModule ) ,
   } ,
+  {
+    path: 'cobranzas' , 
+    loadChildren : () =>
+      import('./modulo-cobranzas/modulo-cobranzas.module').then( m => m.ModuloCobranzasModule ) ,
+  } ,
   
-
   {path: 'salidavendedores', component: ListadoSalidaVendedoresComponent},
   {path: 'salidavendedores/ver/:idsalida', component: SalidaVendedoresComponent},
   {path: 'salidavendedores/editar/:idsalidaeditar', component: SalidaVendedoresComponent},
@@ -86,30 +75,6 @@ export const appRoutes: Routes = [
   {path: 'creditos/nuevo/refinanciamiento/:idclienterefinanciado', component: CreditosComponent},
   {path: 'presupuesto', component: PresupuestoComponent},
   {path: 'refinanciamiento', component: RefinanciamientoComponent},
-  {path: 'cobranzas', component: CobranzasListarComponent},
-  {path: 'cobranzas-cliente', component: CobranzaClienteListarComponent},
-  {path: 'cobranzas-cliente-morosos', component: CobranzaClienteListarMorososComponent},
-  {path: 'cobranza-directa', component: CobranzaDirectaListarComponent},
-  {path: 'cobranza-directa/nueva', component: CobranzaDirectaComponent},
-  {path: 'cobranza-directa/ver/:idcobranza', component: CobranzaDirectaComponent},
-  {path: 'cobranza-directa/editar/:idcobranzaeditar', component: CobranzaDirectaComponent},
-  {path: 'cobranza-archivos', component: CobranzaArchivosListarComponent},
-  {path: 'cobranza-archivos/ver/:idcobranza', component: CobranzaArchivosDetalleComponent},
-  {path: 'cobranza-archivos/generar', component: CobranzaArchivosComponent},
-  {path: 'cobranza-archivos/cobrar/:id', component: CobranzaArchivosPagoComponent},
-  {path: 'cobranza-judicial', component: CobranzaJudicialListarComponent},
-  {path: 'cobranza-judicial/ver/:idprocesover', component: CobranzaJudicialComponent},
-  {path: 'cobranza-judicial/editar/:idprocesoeditar', component: CobranzaJudicialComponent},
-  {path: 'cobranza-judicial/agregar/:idprocesoagregar', component: CobranzaJudicialComponent},
-  {path: 'cobranza-judicial/nueva', component: CobranzaJudicialComponent},
-  {path: 'cobranza-judicial/nuevo-multiple', component: CobranzaJudicialMultipleComponent},
-  {path: 'cobranza-judicial/nueva-credito/:idcredito', component: CobranzaJudicialComponent},
-  {path: 'cobranza-judicial/nueva-venta/venta/:idventa', component: CobranzaJudicialComponent},
-  {path: 'cobranza-judicial/nueva-venta/salida/:idventasalida', component: CobranzaJudicialComponent},
-  {path: 'cobranza-judicial/generar/nuevo/:idprocesonuevo', component: CobranzaJudicialGenerarComponent},
-  {path: 'cobranza-judicial/generar/ver/:idprocesover', component: CobranzaJudicialGenerarComponent},
-  {path: 'cobranza-manual', component: CobranzaManualListarComponent},
-  {path: 'cobranza-manual/ver/:idcobranza', component: CobranzaManualComponent},
   {path: 'trabajadores', component: TrabajadoresComponent},
   {path: 'registro-horas', component: RegistroHorasComponent},
   {path: 'reporte-asistencia', component: ReporteAsistenciaComponent},

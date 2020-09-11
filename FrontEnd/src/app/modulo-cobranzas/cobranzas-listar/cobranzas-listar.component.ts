@@ -8,7 +8,7 @@ import { Observable, BehaviorSubject, of, fromEvent, merge } from 'rxjs';
 import { catchError, finalize, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CobranzasService } from './cobranzas.service';
 import { VentanaTipoReporteComponent } from './ventana-tipo-reporte/ventana-tipo-reporte.component';
-import { VentanaPagosComponent } from './ventana-pagos/ventana-pagos.component';
+import { VentanaPagosComponent } from '../../compartido/componentes/ventana-pagos/ventana-pagos.component';
 
 import { Notificaciones } from 'src/app/core/servicios/notificacion';
 import { VentanaEditarPagoComponent } from './ventana-editar-pago/ventana-editar-pago.component';

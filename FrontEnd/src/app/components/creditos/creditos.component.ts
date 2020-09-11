@@ -20,13 +20,13 @@ import { VentanaEmergenteContacto} from '../../compartido/componentes/ventana-em
 import { ReglasEvaluacionService } from '../../modulo-maestro/reglas-evaluacion/reglas-evaluacion.service';
 import { SeguimientosService } from '../../modulo-clientes/seguimientos/seguimientos.service';
 import { RefinanciamientoService } from '../refinanciamiento/refinanciamiento.service';
-import { VentanaPagosComponent } from '../cobranzas-listar/ventana-pagos/ventana-pagos.component';
+import { VentanaPagosComponent } from '../../compartido/componentes/ventana-pagos/ventana-pagos.component';
 import { VentanaEmergenteClientes } from '../../compartido/componentes/ventana-emergente/ventanaemergente' ;
-import { VentanaCrearCobranzaManualComponent } from '../cobranza-manual/ventana-crear-cobranza-manual/ventana-crear-cobranza-manual.component';
+import { VentanaCrearCobranzaManualComponent } from '../../modulo-cobranzas/cobranza-manual/ventana-crear-cobranza-manual/ventana-crear-cobranza-manual.component';
 import { EstadoSesion } from '../../compartido/reducers/permisos.reducer';
 import { Rol } from 'src/app/compartido/modelos/login.modelos';
 import { Store } from '@ngrx/store';
-import { CobranzaJudicialService } from '../cobranza-judicial/cobranza-judicial.service';
+import { CobranzaJudicialService } from '../../modulo-cobranzas/cobranza-judicial/cobranza-judicial.service';
 import { VentanaConfirmarComponent } from '../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';
 import { VentanaGenerarPagoTransaccionComponent } from '../../compartido/componentes/ventana-generar-pago-transaccion/ventana-generar-pago-transaccion.component';
 

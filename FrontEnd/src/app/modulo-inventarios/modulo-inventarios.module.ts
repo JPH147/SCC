@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
+import { CompartidoModule } from '../compartido/compartido.module';
 import { MaterialModule } from '../material/material.module';
 import { ImageUploadModule } from 'angular2-image-upload';
 
@@ -64,6 +65,7 @@ import { VentanaEmergenteTipo } from './detalleproductos/tipo/ventana-emergente/
     ReactiveFormsModule ,
     RouterModule ,
     MaterialModule ,
+    CompartidoModule ,
     ImageUploadModule ,
   ]
 })

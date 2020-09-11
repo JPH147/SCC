@@ -4,7 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError , finalize , debounceTime , distinctUntilChanged , tap } from 'rxjs/operators'
-import { CobranzasService } from '../cobranzas.service';
+import { CobranzasService } from '../../../modulo-cobranzas/cobranzas-listar/cobranzas.service';
 import { Router } from '@angular/router';
 
 @Component({

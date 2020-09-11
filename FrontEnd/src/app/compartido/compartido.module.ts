@@ -15,6 +15,7 @@ import { VentanaEditarTelefonoComponent } from './componentes/ventana-editar-tel
 import { VentanaVentasComponent } from './componentes/ventana-ventas/ventana-ventas.component';
 import { VentanaEmergenteContacto } from './componentes/ventana-emergentecontacto/ventanaemergentecontacto';
 import { VentanaFotoComponent } from './componentes/ventana-foto/ventana-foto.component';
+import { VentanaPagosComponent } from './componentes/ventana-pagos/ventana-pagos.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { VentanaFotoComponent } from './componentes/ventana-foto/ventana-foto.co
     VentanaVentasComponent ,
     VentanaEmergenteContacto ,
     VentanaFotoComponent ,
+    VentanaPagosComponent ,
   ],
   imports: [
     CommonModule ,

@@ -8,7 +8,7 @@ import { catchError, finalize, tap, debounceTime, distinctUntilChanged } from 'r
 import { CreditosService } from '../creditos/creditos.service';
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {VentanaConfirmarComponent} from '../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';
-import { CobranzaJudicialService } from '../cobranza-judicial/cobranza-judicial.service';
+import { CobranzaJudicialService } from '../../modulo-cobranzas/cobranza-judicial/cobranza-judicial.service';
 import { EstadoSesion } from '../../compartido/reducers/permisos.reducer';
 import { Store } from '@ngrx/store';
 import { Rol } from 'src/app/compartido/modelos/login.modelos';
