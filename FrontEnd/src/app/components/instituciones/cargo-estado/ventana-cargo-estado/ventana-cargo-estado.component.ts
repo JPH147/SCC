@@ -4,7 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { InstitucionesService } from '../../instituciones.service';
 import { BehaviorSubject } from 'rxjs';
 import { ServiciosGenerales } from 'src/app/core/servicios/servicios';
-import { ClienteService } from 'src/app/components/clientes/clientes.service';
+import { ClienteService } from 'src/app/modulo-clientes/clientes/clientes.service';
 
 @Component({
   selector: 'app-ventana-cargo-estado',

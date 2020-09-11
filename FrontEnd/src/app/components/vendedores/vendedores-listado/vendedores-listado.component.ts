@@ -9,7 +9,7 @@ import {VentanaConfirmarComponent} from 'src/app/compartido/componentes/ventana-
 import {VentanaVendedorComponent} from './ventana-vendedor/ventana-vendedor';
 import {Notificaciones} from 'src/app/core/servicios/notificacion';
 import { FileUploadVendedores } from './file-upload/fileupload';
-import { VentanaFotoComponent } from 'src/app/components/clientes/ventana-foto/ventana-foto.component';
+import { VentanaFotoComponent } from 'src/app/compartido/componentes/ventana-foto/ventana-foto.component';
 
 @Component({
   selector: 'app-vendedores-listado',

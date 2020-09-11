@@ -11,7 +11,7 @@ import {ProductoService} from './productos.service';
 import {ProductoDataSource} from './productos.dataservice';
 import {VentanaConfirmarComponent} from '../../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';
 import {ImagenProductoComponent} from './imagen-producto/imagen-producto.component'
-import { VentanaFotoComponent } from '../../clientes/ventana-foto/ventana-foto.component';
+import { VentanaFotoComponent } from '../../../compartido/componentes/ventana-foto/ventana-foto.component';
 import { Store } from '@ngrx/store';
 import { EstadoSesion } from '../../../compartido/reducers/permisos.reducer';
 import { Rol } from 'src/app/compartido/modelos/login.modelos';

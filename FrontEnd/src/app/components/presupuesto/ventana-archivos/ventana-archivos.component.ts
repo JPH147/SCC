@@ -1,6 +1,6 @@
 import { Component, OnInit , Inject} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { EvaluacionService } from '../../evaluacion/evaluacion.service';
+import { EvaluacionService } from '../../../modulo-clientes/evaluacion/evaluacion.service';
 import {saveAs} from 'file-saver';
 
 @Component({
@@ -33,7 +33,6 @@ export class VentanaArchivosComponent implements OnInit {
 
   AbrirArchivo(nombre_archivo){
     this.Servicios.ObtenerArchivo(nombre_archivo).subscribe(res=>{
-      console.log(res);
       saveAs(res, nombre_archivo+'.docx');
     })
   }

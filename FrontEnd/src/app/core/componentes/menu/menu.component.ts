@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import { Store } from '@ngrx/store';
 import { EstadosGlobales } from 'src/app/compartido/reducers/estados';
 import { Rol } from 'src/app/compartido/modelos/login.modelos';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-menu',
@@ -14,6 +15,7 @@ export class MenuComponent implements OnInit{
   public Menu: Menu[];
 
   constructor(
+    private _router : Router ,
     private _store : Store<EstadosGlobales> ,
   ) { }
 
@@ -32,6 +34,7 @@ export class MenuComponent implements OnInit{
         nombre: "Tablas maestras",
         icono: "table_chart",
         mostrar : true ,
+        path : "tablas-maestras" ,
         submenu:[
           {
             nombre: "Usuarios",
@@ -49,6 +52,7 @@ export class MenuComponent implements OnInit{
       {
         nombre: "Maestro general",
         icono: "person",
+        path: 'clientes',
         mostrar: true,
         submenu:[
           {
@@ -81,6 +85,7 @@ export class MenuComponent implements OnInit{
       {
         nombre: "Ventas",
         icono: "store_mall_directory",
+        path: '',
         mostrar: permiso.ventas.general,
         submenu:[
 
@@ -105,6 +110,7 @@ export class MenuComponent implements OnInit{
       {
         nombre: "Inventarios",
         icono: "domain",
+        path: '',
         mostrar: permiso.inventarios.general,
         submenu:[
           {
@@ -133,6 +139,7 @@ export class MenuComponent implements OnInit{
       {
         nombre: "Créditos",
         icono: "account_balance",
+        path: '',
         mostrar: permiso.creditos.general,
         submenu:[
           {
@@ -156,6 +163,7 @@ export class MenuComponent implements OnInit{
       {
         nombre: "Judiciales",
         icono: "location_city",
+        path: '',
         mostrar: permiso.procesos_judiciales.general,
         submenu:[
           {
@@ -169,6 +177,7 @@ export class MenuComponent implements OnInit{
       {
         nombre: "Cobranzas",
         icono: "gavel",
+        path: '',
         mostrar: permiso.cobranzas.general,
         submenu:[
           // {
@@ -232,8 +241,8 @@ export class MenuComponent implements OnInit{
       {
         nombre: "Tablas maestras",
         icono: "table_chart",
+        path: '',
         mostrar: permiso.tablas_maestras.general ,
-        // mostrar : true ,
         submenu:[
           {
             nombre: "Cooperativa",
@@ -244,7 +253,6 @@ export class MenuComponent implements OnInit{
             nombre: "Usuarios",
             path: "usuarios",
             mostrar : permiso.tablas_maestras.usuarios ,
-            // mostrar : true ,
           },
           {
             nombre: "Departamentos",
@@ -266,11 +274,6 @@ export class MenuComponent implements OnInit{
             path: "plantillas",
             mostrar : permiso.tablas_maestras.plantillas ,
           },
-          // {
-          //   nombre: "Productos",
-          //   path: "detalleproductos",
-          //   mostrar : permiso.tablas_maestras.productos ,
-          // },
           {
             nombre: "Proveedores",
             path: "proveedores",
@@ -291,12 +294,17 @@ export class MenuComponent implements OnInit{
     ]
   }
 
+  Navegar(path_principal : string , path_secundario: string) {
+    this._router.navigate([path_principal, path_secundario])
+  }
+
 }
 
 export interface Menu{
-  nombre: string,
-  icono:string,
-  mostrar:boolean,
+  nombre: string ,
+  icono:string ,
+  mostrar:boolean ,
+  path : string ,
   submenu: Submenu[]
 }
 

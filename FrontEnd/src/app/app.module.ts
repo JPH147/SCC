@@ -1,9 +1,11 @@
 import {HttpClientModule} from '@angular/common/http';
 import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { RouterModule } from '@angular/router';
-import { appRoutes } from './app.routing';
+import { AppRoutingModule } from './app.routing';
 
 // Cookies
 import { CookieService } from 'ngx-cookie-service' ;
@@ -17,7 +19,6 @@ import { SalidaProductosComponent } from './components/salida-productos/salida-p
 import { SalidaVendedoresComponent } from './components/salida-vendedores/salida-vendedores.component';
 import { RetornoVendedoresComponent } from './components/retorno-vendedores/retorno-vendedores.component';
 import { ComisionesComponent } from './components/comisiones/comisiones.component';
-import { ClientesComponent } from './components/clientes/clientes.component';
 import { VentasComponent } from './components/ventas/ventas.component';
 import { ListadoSalidaVendedoresComponent } from './components/listado-salida-vendedores/listado-salida-vendedores.component';
 import {VentanaEmergenteProductos} from './components/detalleproductos/productos/ventana-emergente/ventanaemergente';
@@ -25,8 +26,6 @@ import {ventanaseries} from './components/ingreso-productos/ventana-series/venta
 import {VentanaDetalle} from './components/ingreso-productos/ventana-detalle/ventanadetalle';
 import {VentanaFecha} from './components/ingreso-productos/ventana-fecha/ventanafecha';
 import { ventanaseriesalida } from './components/salida-productos/ventana-seriesalida/ventanaseriesalida';
-import {VentanaEmergenteClientes} from './components/clientes/ventana-emergente/ventanaemergente';
-import { VentanaEmergenteProvisionalClientes } from './components/clientes/ventana-emergente-provisional/ventanaemergenteprovisional';
 import { ProveedoresComponent } from './components/proveedores/proveedores.component';
 import { FileUploadProveedores } from './components/proveedores/file-upload/fileupload';
 import { ventanaseriessv } from './components/salida-vendedores/ventana-seriessv/ventanaseriessv';
@@ -39,8 +38,6 @@ import {VentanaEmergenteProvincia} from './components/direcciones/provincia/vent
 import {VentanaEmergenteDistrito } from './components/direcciones/distrito/ventana-emergente/ventanaemergente';
 import { VentanaEmergenteGastos } from './components/listado-salida-vendedores/ventana-emergente-gastos/ventanaemergente-gastos';
 import { ImageUploadModule } from 'angular2-image-upload';
-import {FileUpload} from './components/clientes/file-upload/fileupload';
-import {VentanaEmergenteContacto} from './components/clientes/ventana-emergentecontacto/ventanaemergentecontacto';
 import {VentanaEmergenteStock } from './components/stock/ventana-emergentestock/ventanaemergentestock';
 import { VentasListarComponent } from './components/ventas-listar/ventas-listar.component';
 import {ImagenProductoComponent} from './components/detalleproductos/productos/imagen-producto/imagen-producto.component';
@@ -57,16 +54,7 @@ import { VentanaEditarSerieComponent } from './components/detalle-documento-alma
 import { VentanaEmergenteTipo } from './components/detalleproductos/tipo/ventana-emergente/ventanaemergente';
 import { VentanaEmergenteModelo } from './components/detalleproductos/modelo/ventana-emergente/ventanaemergente';
 import { VentanaEmergenteMarca } from './components/detalleproductos/marca/ventana-emergente/ventanaemergente';
-import { EvaluacionComponent } from './components/evaluacion/evaluacion.component';
-import { EvaluacionCapacidadComponent } from './components/evaluacion/evaluacion-capacidad/evaluacion-capacidad.component';
-import { EvaluacionCuotasComponent } from './components/evaluacion/evaluacion-cuotas/evaluacion-cuotas.component';
-import { AgregarProductoComponent } from './components/evaluacion/agregar-producto/agregar-producto.component';
-import { EvaluacionOrdenComponent } from './components/evaluacion/evaluacion-orden/evaluacion-orden.component';
 import { VentanaProductosComponent } from './components/ventas/ventana-productos/ventana-productos.component';
-import { ReglasEvaluacionComponent } from './components/tablas-maestras/reglas-evaluacion/reglas-evaluacion.component';
-import { VentanaObservacionesComponent } from './components/clientes/ventana-relacionados/ventana-observaciones/ventana-observaciones.component';
-import { VentanaFotoComponent } from './components/clientes/ventana-foto/ventana-foto.component';
-import { VentanaVentasComponent } from './components/clientes/ventana-ventas/ventana-ventas.component';
 import { ComisionesDetalleComponent } from './components/comisiones/comisiones-detalle/comisiones-detalle.component';
 import { VentanaCronogramaComponent } from './components/ventas/ventana-cronograma/ventana-cronograma.component';
 import { AgregarVentaComponent } from './components/retorno-vendedores/agregar-venta/agregar-venta.component';
@@ -83,25 +71,19 @@ import { VentanaTrabajadoresComponent } from './components/trabajadores/ventana-
 import { TrabajadoresComponent } from './components/trabajadores/trabajadores.component';
 import { RegistroHorasComponent } from './components/registro-horas/registro-horas.component';
 import { ReporteAsistenciaComponent } from './components/reporte-asistencia/reporte-asistencia.component';
-import { ConsultarClienteComponent } from './components/clientes/consultar-cliente/consultar-cliente.component';
 import { VendedoresComponent } from './components/vendedores/vendedores.component';
 import { FileUploadVendedores } from './components/vendedores/vendedores-listado/file-upload/fileupload';
 import { VentanaVendedorComponent } from './components/vendedores/vendedores-listado/ventana-vendedor/ventana-vendedor';
 import { TalonariosComponent } from './components/talonarios/talonarios.component';
 import { VentanaTalonarioComponent } from './components/talonarios/ventana-talonario/ventana-talonario.component';
-import { EvaluacionArchivosComponent } from './components/evaluacion/evaluacion-archivos/evaluacion-archivos.component';
 import { PresupuestoComponent } from './components/presupuesto/presupuesto.component';
 import { VentanaArchivosComponent } from './components/presupuesto/ventana-archivos/ventana-archivos.component';
-import { SeguimientosComponent } from './components/seguimientos/seguimientos.component';
-import { VentanaSeguimientosComponent } from './components/seguimientos/ventana-seguimientos/ventana-seguimientos.component';
-import { VentanaEntregaSeguimientosComponent } from './components/seguimientos/ventana-entrega-seguimientos/ventana-entrega-seguimientos.component';
 import { CourierComponent } from './components/courier/courier.component';
 import { VentanaCourierComponent } from './components/courier/ventana-courier/ventana-courier.component';
 import { CreditosListarAfiliacionesComponent } from './components/creditos-listar-afiliaciones/creditos-listar-afiliaciones.component';
 import { PlantillasComponent } from './components/plantillas/plantillas.component';
 import { VentanaPlantillasComponent } from './components/plantillas/documentos/ventana-plantillas/ventana-plantillas.component';
 import { RefinanciamientoComponent } from './components/refinanciamiento/refinanciamiento.component';
-import { VerPlantillasComponent } from './components/evaluacion/ver-plantillas/ver-plantillas.component';
 import { CobranzaDirectaComponent } from './components/cobranza-directa/cobranza-directa.component';
 import { CobranzaDirectaListarComponent } from './components/cobranza-directa-listar/cobranza-directa-listar.component';
 import { VentanaPagosComponent } from './components/cobranzas-listar/ventana-pagos/ventana-pagos.component';
@@ -116,7 +98,6 @@ import { CobranzaJudicialListarComponent } from './components/cobranza-judicial-
 import { CobranzaJudicialComponent } from './components/cobranza-judicial/cobranza-judicial.component';
 import { CobranzaJudicialGenerarComponent } from './components/cobranza-judicial-generar/cobranza-judicial-generar.component';
 import { CobranzaClienteListarComponent } from './components/cobranza-cliente-listar/cobranza-cliente-listar.component';
-import { EvaluacionExpressComponent } from './components/evaluacion/evaluacion-express/evaluacion-express.component';
 import { VentanaJudicialComponent } from './components/cobranza-judicial/ventana-judicial/ventana-judicial.component';
 import { VentanaEditarDocumentoComponent } from './components/detalle-documento-almacen/ventana-editar-documento/ventana-editar-documento.component';
 import { VentanaInstitucionComponent } from './components/instituciones/institucion/ventana-institucion/ventana-institucion.component';
@@ -150,11 +131,6 @@ import { VentanaCobranzaClienteComponent } from './components/cobranza-cliente-l
 import { VentanaCobranzaClienteVencidasComponent } from './components/cobranza-cliente-listar/ventana-cobranza-cliente-vencidas/ventana-cobranza-cliente-vencidas.component';
 import { CobranzaClienteListarMorososComponent } from './components/cobranza-cliente-listar-morosos/cobranza-cliente-listar-morosos.component';
 
-import { VentanaEmergenteIntegralEditarComponent } from './components/clientes/ventana-emergente-integral-editar/ventana-emergente-integral-editar.component';
-import { VentanaEmergenteIntegralAgregarComponent } from './components/clientes/ventana-emergente-integral-agregar/ventana-emergente-integral-agregar.component';
-import { VentanaEditarDireccionComponent } from './components/clientes/ventana-editar-direccion/ventana-editar-direccion.component';
-import { VentanaEditarTelefonoComponent } from './components/clientes/ventana-editar-telefono/ventana-editar-telefono.component';
-import { VentanaEditarCuentaComponent } from './components/clientes/ventana-editar-cuenta/ventana-editar-cuenta.component';
 import { VentanaEditarCuotasComponent } from './components/cobranza-archivos/cobranza-pnp/ventana-editar-cuotas/ventana-editar-cuotas.component';
 import { CobranzaManualComponent } from './components/cobranza-manual/cobranza-manual.component';
 import { VentanaCrearCobranzaManualComponent } from './components/cobranza-manual/ventana-crear-cobranza-manual/ventana-crear-cobranza-manual.component';
@@ -165,8 +141,6 @@ import { VentanaCooperativaDireccionesComponent } from './components/plantillas/
 import { DocumentosComponent } from './components/plantillas/documentos/documentos.component';
 import { VentanaDocumentosComponent as VentanaDocumentosComponent2 } from './components/plantillas/documentos/ventana-documentos/ventana-documentos.component';
 import { AfiliacionesComponent } from './components/afiliaciones/afiliaciones.component';
-import { VentanaRelacionadosComponent } from './components/clientes/ventana-relacionados/ventana-relacionados.component';
-import { VentanaLlamadasComponent } from './components/clientes/ventana-relacionados/ventana-llamadas/ventana-llamadas.component';
 import { DocumentoTransaccionComponent } from './components/plantillas/documento-transaccion/documento-transaccion.component';
 import { DocumentoAutorizacionComponent } from './components/plantillas/documento-autorizacion/documento-autorizacion.component';
 import { DocumentoDeclaracionComponent } from './components/plantillas/documento-declaracion/documento-declaracion.component';
@@ -177,21 +151,26 @@ import { DocumentoCartaComponent } from './components/plantillas/documento-carta
 import { MaterialModule } from './material/material.module';
 import { CoreModule } from './core/core.module';
 import { CompartidoModule } from './compartido/compartido.module';
-
+import { ReglasEvaluacionComponent } from './components/tablas-maestras/reglas-evaluacion/reglas-evaluacion.component';
+import { StoreModule } from '@ngrx/store';
+import { ReducersGlobales } from './compartido/reducers/estados';
 
 @NgModule({
   exports:[
     RouterModule
   ],
   imports: [
+    BrowserModule ,
+    BrowserAnimationsModule ,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
     MaterialModule ,
     CoreModule ,
     CompartidoModule ,
-    RouterModule.forRoot(appRoutes),
+    AppRoutingModule ,
     ImageUploadModule.forRoot(),
+    StoreModule.forRoot(ReducersGlobales) ,
   ],
   declarations: [
     AppComponent,
@@ -202,7 +181,6 @@ import { CompartidoModule } from './compartido/compartido.module';
     SalidaVendedoresComponent,
     RetornoVendedoresComponent,
     ComisionesComponent,
-    ClientesComponent,
     VentasComponent,
     ListadoSalidaVendedoresComponent,
     VentanaEmergenteProductos,
@@ -210,8 +188,6 @@ import { CompartidoModule } from './compartido/compartido.module';
     VentanaFecha,
     VentanaDetalle,
     ventanaseriesalida,
-    VentanaEmergenteClientes,
-    VentanaEmergenteProvisionalClientes,
     ProveedoresComponent,
     ventanaseriessv,
     DireccionesComponent,
@@ -222,10 +198,8 @@ import { CompartidoModule } from './compartido/compartido.module';
     VentanaEmergenteProvincia,
     VentanaEmergenteDistrito,
     VentanaEmergenteGastos,
-    FileUpload,
     FileUploadProveedores,
     FileUploadVendedores,
-    VentanaEmergenteContacto,
     VentanaEmergenteStock,
     VentasListarComponent,
     ImagenProductoComponent,
@@ -248,16 +222,7 @@ import { CompartidoModule } from './compartido/compartido.module';
     VentanaEmergenteTipo,
     VentanaEmergenteModelo,
     VentanaEmergenteMarca,
-    EvaluacionComponent,
-    EvaluacionCapacidadComponent,
-    EvaluacionCuotasComponent,
-    AgregarProductoComponent,
-    EvaluacionOrdenComponent,
     VentanaProductosComponent,
-    ReglasEvaluacionComponent,
-    VentanaObservacionesComponent,
-    VentanaFotoComponent,
-    VentanaVentasComponent,
     ComisionesDetalleComponent,
     VentanaCronogramaComponent,
     AgregarVentaComponent,
@@ -273,24 +238,18 @@ import { CompartidoModule } from './compartido/compartido.module';
     RegistroHorasComponent,
     ReporteAsistenciaComponent,
     VentanaTrabajadoresComponent,
-    ConsultarClienteComponent,
     VendedoresComponent,
     TalonariosComponent,
     VentanaVendedorComponent,
     VentanaTalonarioComponent,
-    EvaluacionArchivosComponent,
     PresupuestoComponent,
     VentanaArchivosComponent,
-    SeguimientosComponent,
-    VentanaSeguimientosComponent,
-    VentanaEntregaSeguimientosComponent,
     CourierComponent,
     VentanaCourierComponent,
     CreditosListarAfiliacionesComponent,
     PlantillasComponent,
     VentanaPlantillasComponent,
     RefinanciamientoComponent,
-    VerPlantillasComponent,
     CobranzaDirectaComponent,
     CobranzaDirectaListarComponent,
     VentanaPagosComponent,
@@ -305,7 +264,6 @@ import { CompartidoModule } from './compartido/compartido.module';
     CobranzaJudicialListarComponent,
     CobranzaJudicialComponent,
     CobranzaClienteListarComponent,
-    EvaluacionExpressComponent,
     VentanaJudicialComponent,
     CobranzaJudicialGenerarComponent,
     VentanaEditarDocumentoComponent,
@@ -339,11 +297,6 @@ import { CompartidoModule } from './compartido/compartido.module';
     VentanaCobranzaClienteComponent,
     VentanaCobranzaClienteVencidasComponent,
     CobranzaClienteListarMorososComponent,
-    VentanaEmergenteIntegralEditarComponent,
-    VentanaEmergenteIntegralAgregarComponent,
-    VentanaEditarDireccionComponent,
-    VentanaEditarTelefonoComponent,
-    VentanaEditarCuentaComponent,
     VentanaEditarCuotasComponent,
     CobranzaManualComponent,
     VentanaCrearCobranzaManualComponent,
@@ -354,14 +307,13 @@ import { CompartidoModule } from './compartido/compartido.module';
     DocumentosComponent,
     VentanaDocumentosComponent2,
     AfiliacionesComponent,
-    VentanaRelacionadosComponent,
-    VentanaLlamadasComponent,
     DocumentoTransaccionComponent,
     DocumentoAutorizacionComponent,
     DocumentoDeclaracionComponent,
     DocumentoTarjetaComponent,
     DocumentoCompromisoComponent,
-    DocumentoCartaComponent
+    DocumentoCartaComponent,
+    ReglasEvaluacionComponent
    ],
   entryComponents: [
     AppComponent,
@@ -370,14 +322,11 @@ import { CompartidoModule } from './compartido/compartido.module';
     VentanaDetalle,
     VentanaFecha,
     ventanaseriesalida,
-    VentanaEmergenteClientes,
-    VentanaEmergenteProvisionalClientes,
     ventanaseriessv,
     VentanaEmergenteDepartamento,
     VentanaEmergenteProvincia,
     VentanaEmergenteDistrito,
     VentanaEmergenteGastos,
-    FileUpload,
     FileUploadProveedores,
     FileUploadVendedores,
     VentanaEmergenteStock,
@@ -393,11 +342,7 @@ import { CompartidoModule } from './compartido/compartido.module';
     VentanaEmergenteTipo,
     VentanaEmergenteModelo,
     VentanaEmergenteMarca,
-    AgregarProductoComponent,
     VentanaProductosComponent,
-    VentanaObservacionesComponent,
-    VentanaFotoComponent,
-    VentanaVentasComponent,
     ComisionesDetalleComponent,
     VentanaCronogramaComponent,
     AgregarVentaComponent,
@@ -405,11 +350,8 @@ import { CompartidoModule } from './compartido/compartido.module';
     VentanaVendedorComponent,
     VentanaTalonarioComponent,
     VentanaArchivosComponent,
-    VentanaSeguimientosComponent,
-    VentanaEntregaSeguimientosComponent,
     VentanaCourierComponent,
     VentanaPlantillasComponent,
-    VerPlantillasComponent,
     VentanaPagosComponent,
     VentanaTipoReporteComponent,
     VentanaEditarPagoComponent,
@@ -431,12 +373,6 @@ import { CompartidoModule } from './compartido/compartido.module';
     VentanaPermisosComponent,
     VentanaCobranzaClienteComponent,
     VentanaCobranzaClienteVencidasComponent,
-    VentanaEmergenteIntegralEditarComponent,
-    VentanaEmergenteIntegralAgregarComponent,
-    VentanaEmergenteContacto,
-    VentanaEditarTelefonoComponent,
-    VentanaEditarDireccionComponent,
-    VentanaEditarCuentaComponent,
   ],
   bootstrap: [AppComponent],
   providers: [

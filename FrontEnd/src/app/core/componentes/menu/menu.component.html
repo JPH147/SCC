@@ -18,7 +18,7 @@
         <mat-nav-list class="lista-opciones">
           <ng-container *ngFor="let sub of menu.submenu">
             <ng-container *ngIf="sub.mostrar">
-              <a mat-list-item class="lista-opciones" [routerLink]="[sub.path]"> {{sub.nombre}} </a>
+              <a mat-list-item class="lista-opciones" (click)="Navegar(menu.path,sub.path)"> {{sub.nombre}} </a>
             </ng-container>
           </ng-container>
         </mat-nav-list>

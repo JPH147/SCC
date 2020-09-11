@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild, AfterViewInit, ElementRef, Inject} from '@angular/core';
-import {ClienteService} from 'src/app/components/clientes/clientes.service';
+import {ClienteService} from 'src/app/modulo-clientes/clientes/clientes.service';
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {BehaviorSubject, Observable, of, merge, fromEvent} from 'rxjs';
 import {catchError, finalize,debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';

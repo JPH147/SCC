@@ -6,7 +6,7 @@ import { BehaviorSubject, Observable, of, merge, fromEvent, forkJoin } from 'rxj
 import {catchError, finalize, debounceTime, distinctUntilChanged, tap} from 'rxjs/operators'
 import { Router } from '@angular/router';
 import { CobranzasService } from '../../cobranzas-listar/cobranzas.service';
-import { ClienteService } from '../../clientes/clientes.service';
+import { ClienteService } from '../../../modulo-clientes/clientes/clientes.service';
 @Component({
   selector: 'app-ventana-cobranza-cliente-vencidas',
   templateUrl: './ventana-cobranza-cliente-vencidas.component.html',

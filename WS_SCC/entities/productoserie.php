@@ -160,6 +160,7 @@ Class ProductoSerie{
         $this->color=$row['color'];
         $this->almacenamiento=$row['almacenamiento'];
         $this->precio_compra=$row['precio'];
+        $this->tiene_serie=$row['tiene_serie'];
     }
 
     /* Crear producto */

@@ -12,7 +12,7 @@ import { Location } from '@angular/common';
 import { CreditosService } from '../creditos/creditos.service';
 import { VentaService } from '../ventas/ventas.service';
 import * as moment from 'moment'
-import { EvaluacionService } from '../evaluacion/evaluacion.service';
+import { EvaluacionService } from '../../modulo-clientes/evaluacion/evaluacion.service';
 import { VentanaConfirmarComponent } from '../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';
 import { URLIMAGENES } from 'src/app/core/servicios/url' ;
 import { ProcesoJudicialVinculadosService } from '../proceso-judicial-vinculados/proceso-judicial-vinculados.service';

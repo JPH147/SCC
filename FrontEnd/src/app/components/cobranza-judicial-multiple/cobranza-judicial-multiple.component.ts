@@ -8,7 +8,7 @@ import { Observable, of , BehaviorSubject , merge, fromEvent } from 'rxjs';
 import { catchError, finalize, debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { Location } from '@angular/common';
 import { ProcesoJudicialVinculadosService } from '../proceso-judicial-vinculados/proceso-judicial-vinculados.service';
-import { EvaluacionService } from '../evaluacion/evaluacion.service';
+import { EvaluacionService } from '../../modulo-clientes/evaluacion/evaluacion.service';
 import { CobranzaJudicialService } from '../cobranza-judicial/cobranza-judicial.service';
 import { Router } from '@angular/router';
 

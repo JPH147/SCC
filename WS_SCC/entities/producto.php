@@ -146,6 +146,7 @@ Class Producto{
         $this->prd_descripcion=$row['prd_descripcion'];
         $this->und_nombre=$row['und_nombre'];
         $this->prd_precio=$row['prd_precio'];
+        $this->tiene_serie=$row['tiene_serie'];
     }
 
    function read_sucursal(){

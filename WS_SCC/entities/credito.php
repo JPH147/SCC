@@ -1084,6 +1084,43 @@ Class Creditos{
         return false;
     }
 
+    function read_periodos_cuotas_pagos(){
+
+        $query = "CALL sp_listarcronogramacreditopagosxmes(?)";
+  
+        $result = $this->conn->prepare($query);
+  
+        $result->bindParam(1, $this->id_credito);
+  
+        $result->execute();
+        
+        $cronograma_list=array();
+        $contador = 0;
+  
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $contador=$contador+1;
+            $cronograma_item = array (
+                  "numero" => $contador,
+                  "periodo" => $periodo ,
+                  "monto_cuota" => $monto_cuota ,
+                  "monto_pago_manual" => $monto_pago_manual ,
+                  "monto_pago_manual_directo" => $monto_pago_manual_directo ,
+                  "monto_pago_manual_planilla" => $monto_pago_manual_planilla ,
+                  "monto_pago_manual_judicial" => $monto_pago_manual_judicial ,
+                  "monto_directo" => $monto_directo ,
+                  "monto_planilla" => $monto_planilla ,
+                  "total_planilla" => $total_planilla ,
+                  "total_directo" => $total_directo ,
+                  "total_judicial" => $total_judicial
+            );
+            array_push($cronograma_list,$cronograma_item);
+        }
+  
+        return $cronograma_list;
+    }
+
 }
 
 ?>

@@ -38,8 +38,6 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatMomentDateModule, MomentDateAdapter } from '@angular/material-moment-adapter';
 
@@ -96,8 +94,6 @@ const ModulosMaterial = [
   MatToolbarModule,
   MatTooltipModule,
   MatTreeModule,
-  BrowserModule,
-  BrowserAnimationsModule,
   LayoutModule,
   MatNativeDateModule,
 ] ;

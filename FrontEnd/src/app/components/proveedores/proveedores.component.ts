@@ -11,7 +11,7 @@ import { ProveedoresMovimientosComponent } from './proveedores-movimientos/prove
 import { VentanaEmergenteProveedores } from './ventana-emergente/ventana-emergente.component';
 import { VentanaConfirmarComponent } from '../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';
 import { FileUploadProveedores } from './file-upload/fileupload';
-import { VentanaFotoComponent } from '../clientes/ventana-foto/ventana-foto.component';
+import { VentanaFotoComponent } from '../../compartido/componentes/ventana-foto/ventana-foto.component';
 
 @Component({
   selector: 'app-proveedores',

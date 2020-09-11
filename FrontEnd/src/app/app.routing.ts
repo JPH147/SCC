@@ -1,5 +1,4 @@
-import {ModuleWithProviders} from '@angular/core';
-import {Routes, RouterModule, RoutesRecognized} from '@angular/router';
+import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 
 import { ProductosComponent } from './components/detalleproductos/productos/productos.component';
 import { StockComponent } from './components/stock/stock.component';
@@ -8,7 +7,7 @@ import { SalidaProductosComponent } from './components/salida-productos/salida-p
 import { SalidaVendedoresComponent } from './components/salida-vendedores/salida-vendedores.component';
 import { RetornoVendedoresComponent } from './components/retorno-vendedores/retorno-vendedores.component';
 import { ComisionesComponent } from './components/comisiones/comisiones.component';
-import { ClientesComponent } from './components/clientes/clientes.component';
+import { ClientesComponent } from './modulo-clientes/clientes/clientes.component';
 import { VentasComponent } from './components/ventas/ventas.component';
 import { ListadoSalidaVendedoresComponent } from './components/listado-salida-vendedores/listado-salida-vendedores.component';
 import { ProveedoresComponent } from './components/proveedores/proveedores.component';
@@ -18,8 +17,6 @@ import { HistorialSerieComponent } from './components/historial-serie/historial-
 import { HistorialMovimientosComponent } from './components/historial-movimientos/historial-movimientos.component';
 import { DetalleProductosComponent } from './components/detalleproductos/detalleproductos.component';
 import { DetalleDocumentoAlmacenComponent } from './components/detalle-documento-almacen/detalle-documento-almacen.component';
-import { EvaluacionExpressComponent } from './components/evaluacion/evaluacion-express/evaluacion-express.component';
-import { EvaluacionComponent } from './components/evaluacion/evaluacion.component';
 import { ReglasEvaluacionComponent } from './components/tablas-maestras/reglas-evaluacion/reglas-evaluacion.component';
 import { RetornoVendedoresCierreComponent } from './components/retorno-vendedores-cierre/retorno-vendedores-cierre.component';
 import { VentasSalidaComponent } from './components/ventas-salida/ventas-salida.component';
@@ -34,12 +31,10 @@ import { CobranzaArchivosListarComponent } from './components/cobranza-archivos-
 import { TrabajadoresComponent } from './components/trabajadores/trabajadores.component';
 import { RegistroHorasComponent } from './components/registro-horas/registro-horas.component';
 import { ReporteAsistenciaComponent } from './components/reporte-asistencia/reporte-asistencia.component';
-import { ConsultarClienteComponent } from './components/clientes/consultar-cliente/consultar-cliente.component';
 import { VendedoresComponent } from './components/vendedores/vendedores.component';
 import { TalonariosComponent } from './components/talonarios/talonarios.component';
 import { PresupuestoComponent } from './components/presupuesto/presupuesto.component';
-import { SeguimientosComponent } from './components/seguimientos/seguimientos.component';
-import { CourierComponent } from './components/courier/courier.component';
+import { SeguimientosComponent } from './modulo-clientes/seguimientos/seguimientos.component';
 import { PlantillasComponent } from './components/plantillas/plantillas.component';
 import { RefinanciamientoComponent } from './components/refinanciamiento/refinanciamiento.component';
 import { CobranzaDirectaComponent } from './components/cobranza-directa/cobranza-directa.component';
@@ -52,23 +47,29 @@ import { CobranzaJudicialGenerarComponent } from './components/cobranza-judicial
 import { ProcesoJudicialVinculadosComponent } from './components/proceso-judicial-vinculados/proceso-judicial-vinculados.component';
 import { CobranzaJudicialMultipleComponent } from './components/cobranza-judicial-multiple/cobranza-judicial-multiple.component';
 import { UsuariosComponent } from './components/usuarios/usuarios.component';
-import { InicioComponent } from './core/componentes/inicio/inicio.component';
-import { LoginComponent } from './core/componentes/login/login.component';
 import { CobranzaClienteListarMorososComponent } from './components/cobranza-cliente-listar-morosos/cobranza-cliente-listar-morosos.component';
 import { CobranzaManualComponent } from './components/cobranza-manual/cobranza-manual.component';
 import { CobranzaManualListarComponent } from './components/cobranza-manual-listar/cobranza-manual-listar.component';
-import { PermisosListarComponent } from './components/usuarios/permisos-listar/permisos-listar.component';
 import { CooperativaDireccionesComponent } from './components/plantillas/cooperativa-direcciones/cooperativa-direcciones.component';
 import { AfiliacionesComponent } from './components/afiliaciones/afiliaciones.component';
+import { NgModule } from '@angular/core';
 
 export const appRoutes: Routes = [
-  {path: '', redirectTo: 'inicio', pathMatch: 'full'},
-  {path: 'inicio', component: InicioComponent},
-  {path: 'login', component: LoginComponent},
+  {
+    path: '' , 
+    loadChildren : () =>
+      import('./core/core.module').then( m => m.CoreModule ) ,
+  } ,
+
+  {
+    path: 'clientes' , 
+    loadChildren : () =>
+      import('./modulo-clientes/modulo-clientes.module').then( m => m.ModuloClientesModule ) ,
+  } ,
+
   {path: 'productos', component: ProductosComponent},
   {path: 'series', component: HistorialSerieComponent},
-  {path: 'evaluacion', component: EvaluacionComponent},
-  {path: 'evaluacion-express', component: EvaluacionExpressComponent},
+
   {path: 'movimientos', component: HistorialMovimientosComponent},
   {path: 'movimientos/ver/:id', component: DetalleDocumentoAlmacenComponent},
   {path: 'movimientos/editar/:ideditar', component: DetalleDocumentoAlmacenComponent},
@@ -82,7 +83,6 @@ export const appRoutes: Routes = [
   {path: 'salidavendedores/rendicion/:idsalida', component: RetornoVendedoresComponent},
   {path: 'salidavendedores/retorno/:idsalida', component: RetornoVendedoresCierreComponent},
   {path: 'comisiones', component: ComisionesComponent},
-  {path: 'clientes', component: ClientesComponent},
   {path: 'trabajadores', component: VendedoresComponent},
   {path: 'talonarios', component: TalonariosComponent},
   {path: 'ventas', component: VentasListarComponent},
@@ -107,11 +107,9 @@ export const appRoutes: Routes = [
   {path: 'creditos/nuevo/refinanciamiento/:idclienterefinanciado', component: CreditosComponent},
   {path: 'presupuesto', component: PresupuestoComponent},
   {path: 'refinanciamiento', component: RefinanciamientoComponent},
-  {path: 'seguimiento', component: SeguimientosComponent},
   {path: 'proveedores', component: ProveedoresComponent},
   {path: 'direcciones', component: DireccionesComponent},
   {path: 'detalleproductos', component: DetalleProductosComponent},
-  {path: 'evaluacion-reglas', component: ReglasEvaluacionComponent},
   {path: 'cobranzas', component: CobranzasListarComponent},
   {path: 'cobranzas-cliente', component: CobranzaClienteListarComponent},
   {path: 'cobranzas-cliente-morosos', component: CobranzaClienteListarMorososComponent},
@@ -144,8 +142,14 @@ export const appRoutes: Routes = [
   {path: 'plantillas', component: PlantillasComponent},
   {path: 'usuarios', component: UsuariosComponent},
   {path: 'configuracion', component: CooperativaDireccionesComponent},
-  
-  {path: 'prueba', component: EvaluacionExpressComponent},
+  {path: 'evaluacion-reglas', component: ReglasEvaluacionComponent},
 ];
 
+@NgModule({
+  imports: [RouterModule.forRoot(appRoutes, {
+    preloadingStrategy : PreloadAllModules ,
+  })],
+  exports: [RouterModule]
+})
 
+export class AppRoutingModule { }

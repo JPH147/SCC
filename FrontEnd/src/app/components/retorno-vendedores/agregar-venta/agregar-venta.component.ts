@@ -5,7 +5,7 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dial
 import {SeleccionarClienteComponent} from '../../../compartido/componentes/seleccionar-cliente/seleccionar-cliente.component';
 import {ServiciosTelefonos} from 'src/app/core/servicios/telefonos';
 import {ServiciosDirecciones} from 'src/app/core/servicios/direcciones';
-import { VentanaEmergenteContacto} from '../../clientes/ventana-emergentecontacto/ventanaemergentecontacto';
+import { VentanaEmergenteContacto} from '../../../compartido/componentes/ventana-emergentecontacto/ventanaemergentecontacto';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import {BehaviorSubject, Observable, forkJoin} from 'rxjs';
 import {VentaService} from '../../ventas/ventas.service';
