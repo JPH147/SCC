@@ -12,7 +12,7 @@ import { ServiciosDirecciones } from 'src/app/core/servicios/direcciones';
 import { ServiciosTelefonos } from 'src/app/core/servicios/telefonos';
 import { Notificaciones } from 'src/app/core/servicios/notificacion';
 import { MatDialog } from '@angular/material/dialog';
-import { VentanaProductosComponent } from '../../../components/ventas/ventana-productos/ventana-productos.component';
+import { VentanaProductosComponent } from '../../../modulo-ventas/ventas/ventana-productos/ventana-productos.component';
 
 @Component({
   selector: 'app-evaluacion-express',

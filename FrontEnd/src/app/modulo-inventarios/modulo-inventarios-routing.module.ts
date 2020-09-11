@@ -11,6 +11,7 @@ import { IngresoProductosComponent } from './ingreso-productos/ingreso-productos
 import { SalidaProductosComponent } from './salida-productos/salida-productos.component';
 
 const routes: Routes = [
+  {path: '', redirectTo: 'stock', pathMatch: 'full'} ,
   {path: 'productos', component: ProductosComponent},
   {path: 'detalleproductos', component: DetalleProductosComponent},
   {path: 'series', component: HistorialSerieComponent},

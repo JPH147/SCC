@@ -17,7 +17,6 @@ import * as moment from 'moment';
   selector: 'app-agregar-venta',
   templateUrl: './agregar-venta.component.html',
   styleUrls: ['./agregar-venta.component.css'],
-  providers: [SalidaVendedoresService,ServiciosTipoPago, ServiciosTelefonos, ServiciosDirecciones, VentaService]
 })
 export class AgregarVentaComponent implements OnInit {
 

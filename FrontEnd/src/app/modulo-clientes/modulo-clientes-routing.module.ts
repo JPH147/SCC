@@ -7,6 +7,7 @@ import { SeguimientosComponent } from './seguimientos/seguimientos.component';
 import { ClientesComponent } from './clientes/clientes.component';
 
 const routes: Routes = [
+  { path: '', redirectTo: 'listado', pathMatch: 'full' } ,
   { path: 'listado', component: ClientesComponent },
   { path: 'evaluacion', component: EvaluacionComponent },
   { path: 'evaluacion-express', component: EvaluacionExpressComponent },

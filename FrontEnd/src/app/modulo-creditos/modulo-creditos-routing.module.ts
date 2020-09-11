@@ -8,6 +8,7 @@ import { AfiliacionesComponent } from './afiliaciones/afiliaciones.component';
 import { RefinanciamientoComponent } from './refinanciamiento/refinanciamiento.component';
 
 const routes: Routes = [
+  {path: '', redirectTo: 'creditos', pathMatch: 'full'} ,
   {path: 'afiliaciones', component: CreditosListarAfiliacionesComponent},
   {path: 'creditos', component: CreditosListarComponent},
   {path: 'creditos/ver/:idcredito', component: CreditosComponent},

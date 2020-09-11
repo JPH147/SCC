@@ -14,6 +14,7 @@ import { ReglasEvaluacionComponent } from './reglas-evaluacion/reglas-evaluacion
 
 
 const routes: Routes = [
+  {path: '', redirectTo: 'configuracion', pathMatch: 'full'} ,
   {path: 'plantillas', component: PlantillasComponent} ,
   {path: 'configuracion', component: CooperativaDireccionesComponent} ,
   {path: 'trabajadores', component: VendedoresComponent} ,

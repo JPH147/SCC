@@ -18,6 +18,7 @@ import { CobranzaManualListarComponent } from './cobranza-manual-listar/cobranza
 import { CobranzaManualComponent } from './cobranza-manual/cobranza-manual.component';
 
 const routes: Routes = [
+  {path: '', redirectTo: 'listado', pathMatch: 'full'} ,
   {path: 'listado', component: CobranzasListarComponent},
   {path: 'listado-cliente', component: CobranzaClienteListarComponent},
   {path: 'listado-cliente-morosos', component: CobranzaClienteListarMorososComponent},

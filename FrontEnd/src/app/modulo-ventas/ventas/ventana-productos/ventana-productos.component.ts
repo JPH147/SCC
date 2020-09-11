@@ -11,7 +11,6 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
   selector: 'app-ventana-productos',
   templateUrl: './ventana-productos.component.html',
   styleUrls: ['./ventana-productos.component.css'],
-  providers: [ServiciosProductoSerie]
 })
 export class VentanaProductosComponent implements OnInit, AfterViewInit {
 

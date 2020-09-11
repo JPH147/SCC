@@ -2,7 +2,7 @@ import {Component, Inject, OnInit, AfterViewInit, ViewChild} from '@angular/core
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import {VentaService} from '../ventas.service';
+import {VentaService} from '../ventas/ventas.service';
 import {BehaviorSubject, Observable, of} from 'rxjs';
 import {catchError, finalize,debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
 
@@ -10,7 +10,6 @@ import {catchError, finalize,debounceTime, distinctUntilChanged, tap} from 'rxjs
   selector: 'app-ventana-cronograma',
   templateUrl: './ventana-cronograma.component.html',
   styleUrls: ['./ventana-cronograma.component.css'],
-  providers: [VentaService]
 })
 export class VentanaCronogramaComponent implements OnInit {
 
@@ -25,9 +24,6 @@ export class VentanaCronogramaComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-  	if (this.data) {
-  		console.log(this.data)
-  	}
    this.ListadoPagos = new CronogramaPagosDataSource(this.Servicio);
    this.ListadoPagos.CargarPagos(this.data.id,1, 5);
   }

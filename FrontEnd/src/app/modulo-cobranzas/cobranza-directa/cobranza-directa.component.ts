@@ -10,7 +10,7 @@ import { URLIMAGENES } from 'src/app/core/servicios/url';
 import { ServiciosGenerales } from 'src/app/core/servicios/servicios';
 import { CobranzasService } from '../cobranzas-listar/cobranzas.service';
 import { SeleccionarClienteComponent } from '../../compartido/componentes/seleccionar-cliente/seleccionar-cliente.component';
-import { VentaService } from '../../components/ventas/ventas.service';
+import { VentaService } from '../../modulo-ventas/ventas/ventas.service';
 
 import * as moment from 'moment' ;
 

@@ -85,7 +85,7 @@ export class MenuComponent implements OnInit{
       {
         nombre: "Ventas",
         icono: "store_mall_directory",
-        path: '',
+        path: 'ventas',
         mostrar: permiso.ventas.general,
         submenu:[
 
@@ -163,7 +163,7 @@ export class MenuComponent implements OnInit{
       {
         nombre: "Judiciales",
         icono: "location_city",
-        path: '',
+        path: 'cobranzas',
         mostrar: permiso.procesos_judiciales.general,
         submenu:[
           {
@@ -221,6 +221,7 @@ export class MenuComponent implements OnInit{
       // {
       //   nombre: "Asistencia",
       //   icono: "access_alarms",
+      //   path: "aistencia",
       //   disabled:false,
       //   submenu:[
       //     {

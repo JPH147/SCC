@@ -16,7 +16,7 @@ import {ServiciosGenerales} from 'src/app/core/servicios/servicios';
 import {Location} from '@angular/common';
 import {Notificaciones} from 'src/app/core/servicios/notificacion';
 import {URLIMAGENES} from 'src/app/core/servicios/url'
-import {VentanaCronogramaComponent} from '../ventas/ventana-cronograma/ventana-cronograma.component';
+import {VentanaCronogramaComponent} from '../ventana-cronograma/ventana-cronograma.component';
 import { SalidaVendedoresService } from "../salida-vendedores/salida-vendedores.service";
 import { VentanaEmergenteContacto} from '../../compartido/componentes/ventana-emergentecontacto/ventanaemergentecontacto';
 import {SeleccionarClienteComponent} from 'src/app/compartido/componentes/seleccionar-cliente/seleccionar-cliente.component';
@@ -37,7 +37,6 @@ import { VentanaGenerarPagoTransaccionComponent } from "../../compartido/compone
   selector: 'app-ventas-salida',
   templateUrl: './ventas-salida.component.html',
   styleUrls: ['./ventas-salida.component.scss'],
-  providers: [VentaService, ServiciosTipoDocumento, ServiciosTipoPago, ClienteService, ServiciosTelefonos, ServiciosDirecciones, ServiciosGenerales, Notificaciones, SalidaVendedoresService]
 })
 
 export class VentasSalidaComponent implements OnInit, AfterViewInit {

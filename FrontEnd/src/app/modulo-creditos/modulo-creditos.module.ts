@@ -23,16 +23,16 @@ import { RefinanciamientoComponent } from './refinanciamiento/refinanciamiento.c
     CreditosListarComponent ,
     CreditosListarAfiliacionesComponent ,
     RefinanciamientoComponent ,
+  ],
+  imports: [
+    ModuloCreditosRoutingModule ,
+    CommonModule,
     FormsModule ,
     ReactiveFormsModule ,
     RouterModule ,
     CompartidoModule ,
     MaterialModule ,
     ImageUploadModule ,
-  ],
-  imports: [
-    CommonModule,
-    ModuloCreditosRoutingModule
   ]
 })
 export class ModuloCreditosModule { }

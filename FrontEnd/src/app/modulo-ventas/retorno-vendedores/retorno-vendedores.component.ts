@@ -12,7 +12,6 @@ import { VentanaEmergenteGastos} from '../listado-salida-vendedores/ventana-emer
   selector: 'app-retorno-vendedores',
   templateUrl: './retorno-vendedores.component.html',
   styleUrls: ['./retorno-vendedores.component.scss'],
-  providers: [SalidaVendedoresService]
 })
 
 export class RetornoVendedoresComponent implements OnInit {

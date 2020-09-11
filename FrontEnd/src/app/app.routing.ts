@@ -1,18 +1,5 @@
-import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
-
-import { SalidaVendedoresComponent } from './components/salida-vendedores/salida-vendedores.component';
-import { RetornoVendedoresComponent } from './components/retorno-vendedores/retorno-vendedores.component';
-import { ComisionesComponent } from './components/comisiones/comisiones.component';
-import { VentasComponent } from './components/ventas/ventas.component';
-import { ListadoSalidaVendedoresComponent } from './components/listado-salida-vendedores/listado-salida-vendedores.component';
-import { VentasListarComponent } from './components/ventas-listar/ventas-listar.component';
-import { RetornoVendedoresCierreComponent } from './components/retorno-vendedores-cierre/retorno-vendedores-cierre.component';
-import { VentasSalidaComponent } from './components/ventas-salida/ventas-salida.component';
-import { TrabajadoresComponent } from './components/trabajadores/trabajadores.component';
-import { RegistroHorasComponent } from './components/registro-horas/registro-horas.component';
-import { ReporteAsistenciaComponent } from './components/reporte-asistencia/reporte-asistencia.component';
-import { PresupuestoComponent } from './components/presupuesto/presupuesto.component';
 import { NgModule } from '@angular/core';
+import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 
 export const appRoutes: Routes = [
   {
@@ -45,27 +32,16 @@ export const appRoutes: Routes = [
     loadChildren : () =>
       import('./modulo-creditos/modulo-creditos.module').then( m => m.ModuloCreditosModule ) ,
   } ,
-
-  {path: 'salidavendedores', component: ListadoSalidaVendedoresComponent},
-  {path: 'salidavendedores/ver/:idsalida', component: SalidaVendedoresComponent},
-  {path: 'salidavendedores/editar/:idsalidaeditar', component: SalidaVendedoresComponent},
-  {path: 'salidavendedores/ingreso', component: SalidaVendedoresComponent},
-  {path: 'salidavendedores/rendicion/:idsalida', component: RetornoVendedoresComponent},
-  {path: 'salidavendedores/retorno/:idsalida', component: RetornoVendedoresCierreComponent},
-  {path: 'comisiones', component: ComisionesComponent},
-  {path: 'ventas', component: VentasListarComponent},
-  {path: 'ventas/nueva', component: VentasComponent},
-  {path: 'ventas/nueva/:idcliente', component: VentasComponent},
-  {path: 'ventas/nueva/presupuesto/:idpresupuesto', component: VentasComponent},
-  {path: 'ventas/nueva/:idventacanje/:idcliente', component: VentasComponent},
-  {path: 'ventas/editar/:ideditar', component: VentasComponent},
-  {path: 'ventas/:idventa', component: VentasComponent},
-  {path: 'ventas/salida/:idventa', component: VentasSalidaComponent},
-  {path: 'ventas/salida/editar/:idventaeditar', component: VentasSalidaComponent},
-  {path: 'presupuesto', component: PresupuestoComponent},
-  {path: 'trabajadores', component: TrabajadoresComponent},
-  {path: 'registro-horas', component: RegistroHorasComponent},
-  {path: 'reporte-asistencia', component: ReporteAsistenciaComponent},
+  {
+    path: 'ventas' , 
+    loadChildren : () =>
+      import('./modulo-ventas/modulo-ventas.module').then( m => m.ModuloVentasModule ) ,
+  } ,
+  {
+    path: 'asistencia' , 
+    loadChildren : () =>
+      import('./modulo-asistencia/modulo-asistencia.module').then( m => m.ModuloAsistenciaModule ) ,
+  } ,
 ];
 
 @NgModule({

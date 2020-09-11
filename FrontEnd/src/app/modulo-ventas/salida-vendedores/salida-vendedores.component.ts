@@ -19,14 +19,12 @@ import * as moment from 'moment';
 import {ProductosDataSource , TalonariosDataSource } from '../retorno-vendedores/retorno-vendedores.component';
 import {ViaticosDataSource} from '../retorno-vendedores-cierre/retorno-vendedores-cierre.component';
 import {ListadoSalidaVendedoresService} from '../listado-salida-vendedores/listado-salida-vendedores.service';
-// import {GastosSalidaDataSource} from '../listado-salida-vendedores/ventana-emergente-gastos/ventanaemergente-gastos';
 import {ServiciosProductoSerie} from 'src/app/core/servicios/productoserie';
 
 @Component({
   selector: 'app-salida-vendedores',
   templateUrl: './salida-vendedores.component.html',
   styleUrls: ['./salida-vendedores.component.scss'],
-  providers: [SalidaVendedoresService,ServiciosGenerales,ServiciosVentas,StockService,ListadoSalidaVendedoresService,ServiciosProductoSerie]
 })
 
 export class SalidaVendedoresComponent implements OnInit {

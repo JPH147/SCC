@@ -21,7 +21,6 @@ import { Rol } from 'src/app/compartido/modelos/login.modelos';
   selector: 'app-ventas-listar',
   templateUrl: './ventas-listar.component.html',
   styleUrls: ['./ventas-listar.component.css'],
-  providers:[VentasServicio,ProductoService, ClienteService, VentaService]
 })
 export class VentasListarComponent implements OnInit {
 

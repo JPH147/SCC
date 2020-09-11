@@ -4,7 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { BehaviorSubject, Observable, of, merge, fromEvent } from 'rxjs';
 import {catchError, finalize, debounceTime, distinctUntilChanged, tap} from 'rxjs/operators'
-import { VentaService } from '../../../components/ventas/ventas.service';
+import { VentaService } from '../../../modulo-ventas/ventas/ventas.service';
 import {ServiciosTelefonos} from 'src/app/core/servicios/telefonos';
 import {ServiciosDirecciones} from 'src/app/core/servicios/direcciones';
 import { Router } from '@angular/router';

@@ -40,7 +40,6 @@ import { VentanaGenerarPagoTransaccionComponent } from "../../compartido/compone
   selector: 'app-ventas',
   templateUrl: './ventas.component.html',
   styleUrls: ['./ventas.component.scss'],
-  providers: [VentaService, ServiciosTipoDocumento, ServiciosTipoPago, ClienteService,ServiciosTelefonos, ServiciosDirecciones, ServiciosGenerales, Notificaciones]
 })
 
 export class VentasComponent implements OnInit {

@@ -13,7 +13,6 @@ import {ServiciosProductoSerie} from 'src/app/core/servicios/productoserie';
   selector: 'app-retorno-vendedores-cierre',
   templateUrl: './retorno-vendedores-cierre.component.html',
   styleUrls: ['./retorno-vendedores-cierre.component.scss'],
-  providers: [SalidaVendedoresService, ServiciosVentas,ServiciosProductoSerie]
 })
 export class RetornoVendedoresCierreComponent implements OnInit {
 
