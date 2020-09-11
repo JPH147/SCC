@@ -4,7 +4,7 @@ import { BehaviorSubject, merge } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap, finalize } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { LoginService } from '../../servicios/login.service';
+import { LoginService } from '../../core/servicios/login.service';
 
 @Component({
   selector: 'app-login',

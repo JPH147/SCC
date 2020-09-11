@@ -6,7 +6,7 @@ import {ProveedorService} from '../proveedores.service';
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {fromEvent, merge} from 'rxjs';
 import {tap, debounceTime, distinctUntilChanged} from 'rxjs/operators';
-import {DetalleDocumentoAlmacenComponent} from '../../detalle-documento-almacen/detalle-documento-almacen.component'
+import {DetalleDocumentoAlmacenComponent} from '../../../modulo-inventarios/detalle-documento-almacen/detalle-documento-almacen.component'
 
 @Component({
   selector: 'app-proveedores-movimientos',

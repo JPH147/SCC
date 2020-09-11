@@ -4,7 +4,9 @@ import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {URL,URLIMAGENES} from 'src/app/core/servicios/url';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 
 export class ProductoService {
 

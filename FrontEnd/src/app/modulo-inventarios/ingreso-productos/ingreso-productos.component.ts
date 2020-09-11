@@ -1,15 +1,15 @@
-import { Component, OnInit, ViewChild,ElementRef, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild,ElementRef, ViewChildren, QueryList } from '@angular/core';
 import { IngresoProductoService } from './ingreso-productos.service';
 import {ServiciosProductoSerie} from 'src/app/core/servicios/productoserie';
-import { ServiciosGenerales, Almacen, ListarCliente, ListarVendedor } from 'src/app/core/servicios/servicios';
+import { ServiciosGenerales } from 'src/app/core/servicios/servicios';
 import { ventanaseries } from './ventana-series/ventanaseries';
 import { VentanaFecha } from './ventana-fecha/ventanafecha';
 import { VentanaDetalle } from './ventana-detalle/ventanadetalle';
-import { FormControl, FormBuilder, FormGroup, Validators, PatternValidator,FormArray, FormControlName } from '@angular/forms';
+import { FormControl, FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import {Observable, fromEvent, of} from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import {debounceTime, distinctUntilChanged, tap, delay, map} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import {ProductoService} from '../detalleproductos/productos/productos.service';
 import {ServiciosDocumentos} from 'src/app/core/servicios/documentos';
 import { HistorialMovimientosService } from '../historial-movimientos/historial-movimientos.service';
@@ -17,15 +17,7 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
 @Component({
   selector: 'app-ingreso-productos',
   templateUrl: './ingreso-productos.component.html',
-  styleUrls: ['./ingreso-productos.component.css'],
-  providers: [
-    ServiciosGenerales,
-    IngresoProductoService,
-    ProductoService,
-    ServiciosProductoSerie,
-    ServiciosDocumentos,
-    HistorialMovimientosService
-  ]
+  styleUrls: ['./ingreso-productos.component.css']
 })
   export class IngresoProductosComponent implements OnInit {
 

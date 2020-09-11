@@ -11,7 +11,7 @@ import {SalidaVendedoresService} from './salida-vendedores.service';
 import {ServiciosGenerales, Almacen} from 'src/app/core/servicios/servicios';
 import {ServiciosVentas} from 'src/app/core/servicios/ventas';
 import { ventanaseriessv } from './ventana-seriessv/ventanaseriessv';
-import {StockService} from '../stock/stock.service';
+import {StockService} from '../../modulo-inventarios/stock/stock.service';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import {Location} from '@angular/common';
 import { ActivatedRoute} from '@angular/router';

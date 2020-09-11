@@ -1,22 +1,13 @@
 import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 
-import { ProductosComponent } from './components/detalleproductos/productos/productos.component';
-import { StockComponent } from './components/stock/stock.component';
-import { IngresoProductosComponent } from './components/ingreso-productos/ingreso-productos.component';
-import { SalidaProductosComponent } from './components/salida-productos/salida-productos.component';
 import { SalidaVendedoresComponent } from './components/salida-vendedores/salida-vendedores.component';
 import { RetornoVendedoresComponent } from './components/retorno-vendedores/retorno-vendedores.component';
 import { ComisionesComponent } from './components/comisiones/comisiones.component';
-import { ClientesComponent } from './modulo-clientes/clientes/clientes.component';
 import { VentasComponent } from './components/ventas/ventas.component';
 import { ListadoSalidaVendedoresComponent } from './components/listado-salida-vendedores/listado-salida-vendedores.component';
 import { ProveedoresComponent } from './components/proveedores/proveedores.component';
 import { DireccionesComponent } from './components/direcciones/direcciones.component';
 import { VentasListarComponent } from './components/ventas-listar/ventas-listar.component';
-import { HistorialSerieComponent } from './components/historial-serie/historial-serie.component';
-import { HistorialMovimientosComponent } from './components/historial-movimientos/historial-movimientos.component';
-import { DetalleProductosComponent } from './components/detalleproductos/detalleproductos.component';
-import { DetalleDocumentoAlmacenComponent } from './components/detalle-documento-almacen/detalle-documento-almacen.component';
 import { ReglasEvaluacionComponent } from './components/tablas-maestras/reglas-evaluacion/reglas-evaluacion.component';
 import { RetornoVendedoresCierreComponent } from './components/retorno-vendedores-cierre/retorno-vendedores-cierre.component';
 import { VentasSalidaComponent } from './components/ventas-salida/ventas-salida.component';
@@ -34,7 +25,6 @@ import { ReporteAsistenciaComponent } from './components/reporte-asistencia/repo
 import { VendedoresComponent } from './components/vendedores/vendedores.component';
 import { TalonariosComponent } from './components/talonarios/talonarios.component';
 import { PresupuestoComponent } from './components/presupuesto/presupuesto.component';
-import { SeguimientosComponent } from './modulo-clientes/seguimientos/seguimientos.component';
 import { PlantillasComponent } from './components/plantillas/plantillas.component';
 import { RefinanciamientoComponent } from './components/refinanciamiento/refinanciamiento.component';
 import { CobranzaDirectaComponent } from './components/cobranza-directa/cobranza-directa.component';
@@ -58,24 +48,19 @@ export const appRoutes: Routes = [
   {
     path: '' , 
     loadChildren : () =>
-      import('./core/core.module').then( m => m.CoreModule ) ,
+      import('./modulo-home/modulo-home.module').then( m => m.ModuloHomeModule ) ,
   } ,
-
   {
     path: 'clientes' , 
     loadChildren : () =>
       import('./modulo-clientes/modulo-clientes.module').then( m => m.ModuloClientesModule ) ,
   } ,
+  {
+    path: 'inventarios' , 
+    loadChildren : () =>
+      import('./modulo-inventarios/modulo-inventarios.module').then( m => m.ModuloInventariosModule ) ,
+  } ,
 
-  {path: 'productos', component: ProductosComponent},
-  {path: 'series', component: HistorialSerieComponent},
-
-  {path: 'movimientos', component: HistorialMovimientosComponent},
-  {path: 'movimientos/ver/:id', component: DetalleDocumentoAlmacenComponent},
-  {path: 'movimientos/editar/:ideditar', component: DetalleDocumentoAlmacenComponent},
-  {path: 'stock', component: StockComponent},
-  {path: 'stock/ingresoproductos', component: IngresoProductosComponent},
-  {path: 'stock/salidaproductos', component: SalidaProductosComponent},
   {path: 'salidavendedores', component: ListadoSalidaVendedoresComponent},
   {path: 'salidavendedores/ver/:idsalida', component: SalidaVendedoresComponent},
   {path: 'salidavendedores/editar/:idsalidaeditar', component: SalidaVendedoresComponent},
@@ -109,7 +94,6 @@ export const appRoutes: Routes = [
   {path: 'refinanciamiento', component: RefinanciamientoComponent},
   {path: 'proveedores', component: ProveedoresComponent},
   {path: 'direcciones', component: DireccionesComponent},
-  {path: 'detalleproductos', component: DetalleProductosComponent},
   {path: 'cobranzas', component: CobranzasListarComponent},
   {path: 'cobranzas-cliente', component: CobranzaClienteListarComponent},
   {path: 'cobranzas-cliente-morosos', component: CobranzaClienteListarMorososComponent},

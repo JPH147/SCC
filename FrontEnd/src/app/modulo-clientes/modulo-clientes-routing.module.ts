@@ -7,7 +7,7 @@ import { SeguimientosComponent } from './seguimientos/seguimientos.component';
 import { ClientesComponent } from './clientes/clientes.component';
 
 const routes: Routes = [
-  { path: 'clientes', component: ClientesComponent },
+  { path: 'listado', component: ClientesComponent },
   { path: 'evaluacion', component: EvaluacionComponent },
   { path: 'evaluacion-express', component: EvaluacionExpressComponent },
   { path: 'seguimiento', component: SeguimientosComponent },

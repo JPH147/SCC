@@ -1,6 +1,6 @@
-import {HttpClientModule} from '@angular/common/http';
-import {NgModule} from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -12,20 +12,11 @@ import { CookieService } from 'ngx-cookie-service' ;
 
 /* Imports del software */
 import {AppComponent} from './app.component';
-import { ProductosComponent } from './components/detalleproductos/productos/productos.component';
-import { StockComponent } from './components/stock/stock.component';
-import { IngresoProductosComponent } from './components/ingreso-productos/ingreso-productos.component';
-import { SalidaProductosComponent } from './components/salida-productos/salida-productos.component';
 import { SalidaVendedoresComponent } from './components/salida-vendedores/salida-vendedores.component';
 import { RetornoVendedoresComponent } from './components/retorno-vendedores/retorno-vendedores.component';
 import { ComisionesComponent } from './components/comisiones/comisiones.component';
 import { VentasComponent } from './components/ventas/ventas.component';
 import { ListadoSalidaVendedoresComponent } from './components/listado-salida-vendedores/listado-salida-vendedores.component';
-import {VentanaEmergenteProductos} from './components/detalleproductos/productos/ventana-emergente/ventanaemergente';
-import {ventanaseries} from './components/ingreso-productos/ventana-series/ventanaseries';
-import {VentanaDetalle} from './components/ingreso-productos/ventana-detalle/ventanadetalle';
-import {VentanaFecha} from './components/ingreso-productos/ventana-fecha/ventanafecha';
-import { ventanaseriesalida } from './components/salida-productos/ventana-seriesalida/ventanaseriesalida';
 import { ProveedoresComponent } from './components/proveedores/proveedores.component';
 import { FileUploadProveedores } from './components/proveedores/file-upload/fileupload';
 import { ventanaseriessv } from './components/salida-vendedores/ventana-seriessv/ventanaseriessv';
@@ -38,22 +29,8 @@ import {VentanaEmergenteProvincia} from './components/direcciones/provincia/vent
 import {VentanaEmergenteDistrito } from './components/direcciones/distrito/ventana-emergente/ventanaemergente';
 import { VentanaEmergenteGastos } from './components/listado-salida-vendedores/ventana-emergente-gastos/ventanaemergente-gastos';
 import { ImageUploadModule } from 'angular2-image-upload';
-import {VentanaEmergenteStock } from './components/stock/ventana-emergentestock/ventanaemergentestock';
 import { VentasListarComponent } from './components/ventas-listar/ventas-listar.component';
-import {ImagenProductoComponent} from './components/detalleproductos/productos/imagen-producto/imagen-producto.component';
-import { HistorialSerieComponent } from './components/historial-serie/historial-serie.component';
-import { ProveedoresMovimientosComponent } from './components/proveedores/proveedores-movimientos/proveedores-movimientos.component';
-import { HistorialMovimientosComponent } from './components/historial-movimientos/historial-movimientos.component';
-import { DetalleProductosComponent} from './components/detalleproductos/detalleproductos.component';
-import {TipoComponent} from './components/detalleproductos/tipo/tipo.component';
-import { ModeloComponent } from './components/detalleproductos/modelo/modelo.component';
-import { MarcaComponent } from './components/detalleproductos/marca/marca.component';
 import { VentanaEmergenteProveedores } from './components/proveedores/ventana-emergente/ventana-emergente.component';
-import { DetalleDocumentoAlmacenComponent } from './components/detalle-documento-almacen/detalle-documento-almacen.component';
-import { VentanaEditarSerieComponent } from './components/detalle-documento-almacen/ventana-editar-serie/ventana-editar-serie.component';
-import { VentanaEmergenteTipo } from './components/detalleproductos/tipo/ventana-emergente/ventanaemergente';
-import { VentanaEmergenteModelo } from './components/detalleproductos/modelo/ventana-emergente/ventanaemergente';
-import { VentanaEmergenteMarca } from './components/detalleproductos/marca/ventana-emergente/ventanaemergente';
 import { VentanaProductosComponent } from './components/ventas/ventana-productos/ventana-productos.component';
 import { ComisionesDetalleComponent } from './components/comisiones/comisiones-detalle/comisiones-detalle.component';
 import { VentanaCronogramaComponent } from './components/ventas/ventana-cronograma/ventana-cronograma.component';
@@ -99,7 +76,6 @@ import { CobranzaJudicialComponent } from './components/cobranza-judicial/cobran
 import { CobranzaJudicialGenerarComponent } from './components/cobranza-judicial-generar/cobranza-judicial-generar.component';
 import { CobranzaClienteListarComponent } from './components/cobranza-cliente-listar/cobranza-cliente-listar.component';
 import { VentanaJudicialComponent } from './components/cobranza-judicial/ventana-judicial/ventana-judicial.component';
-import { VentanaEditarDocumentoComponent } from './components/detalle-documento-almacen/ventana-editar-documento/ventana-editar-documento.component';
 import { VentanaInstitucionComponent } from './components/instituciones/institucion/ventana-institucion/ventana-institucion.component';
 import { VentanaSedeComponent } from './components/instituciones/sede/ventana-sede/ventana-sede.component';
 import { VentanaSubsedeComponent } from './components/instituciones/subsede/ventana-subsede/ventana-subsede.component';
@@ -154,6 +130,7 @@ import { CompartidoModule } from './compartido/compartido.module';
 import { ReglasEvaluacionComponent } from './components/tablas-maestras/reglas-evaluacion/reglas-evaluacion.component';
 import { StoreModule } from '@ngrx/store';
 import { ReducersGlobales } from './compartido/reducers/estados';
+import { ProveedoresMovimientosComponent } from './components/proveedores/proveedores-movimientos/proveedores-movimientos.component';
 
 @NgModule({
   exports:[
@@ -174,21 +151,13 @@ import { ReducersGlobales } from './compartido/reducers/estados';
   ],
   declarations: [
     AppComponent,
-    ProductosComponent,
-    StockComponent,
-    IngresoProductosComponent,
-    SalidaProductosComponent,
     SalidaVendedoresComponent,
     RetornoVendedoresComponent,
     ComisionesComponent,
     VentasComponent,
     ListadoSalidaVendedoresComponent,
-    VentanaEmergenteProductos,
-    ventanaseries,
-    VentanaFecha,
-    VentanaDetalle,
-    ventanaseriesalida,
     ProveedoresComponent,
+    ProveedoresMovimientosComponent ,
     ventanaseriessv,
     DireccionesComponent,
     DepartamentoComponent,
@@ -200,28 +169,8 @@ import { ReducersGlobales } from './compartido/reducers/estados';
     VentanaEmergenteGastos,
     FileUploadProveedores,
     FileUploadVendedores,
-    VentanaEmergenteStock,
     VentasListarComponent,
-    ImagenProductoComponent,
-    HistorialSerieComponent,
-    ProveedoresMovimientosComponent,
-    HistorialMovimientosComponent,
-    DetalleProductosComponent,
-    TipoComponent,
-    MarcaComponent,
-    ModeloComponent,
-    DetalleDocumentoAlmacenComponent,
-    VentanaEditarSerieComponent,
-    VentanaEmergenteTipo,
     VentanaEmergenteProveedores,
-    DetalleDocumentoAlmacenComponent,
-    VentanaEditarSerieComponent,
-    VentanaEmergenteTipo,
-    DetalleDocumentoAlmacenComponent,
-    VentanaEditarSerieComponent,
-    VentanaEmergenteTipo,
-    VentanaEmergenteModelo,
-    VentanaEmergenteMarca,
     VentanaProductosComponent,
     ComisionesDetalleComponent,
     VentanaCronogramaComponent,
@@ -266,7 +215,6 @@ import { ReducersGlobales } from './compartido/reducers/estados';
     CobranzaClienteListarComponent,
     VentanaJudicialComponent,
     CobranzaJudicialGenerarComponent,
-    VentanaEditarDocumentoComponent,
     VentanaInstitucionComponent,
     VentanaSedeComponent,
     VentanaSubsedeComponent,
@@ -315,65 +263,6 @@ import { ReducersGlobales } from './compartido/reducers/estados';
     DocumentoCartaComponent,
     ReglasEvaluacionComponent
    ],
-  entryComponents: [
-    AppComponent,
-    VentanaEmergenteProductos,
-    ventanaseries,
-    VentanaDetalle,
-    VentanaFecha,
-    ventanaseriesalida,
-    ventanaseriessv,
-    VentanaEmergenteDepartamento,
-    VentanaEmergenteProvincia,
-    VentanaEmergenteDistrito,
-    VentanaEmergenteGastos,
-    FileUploadProveedores,
-    FileUploadVendedores,
-    VentanaEmergenteStock,
-    VentasComponent,
-    ImagenProductoComponent,
-    ProveedoresMovimientosComponent,
-    VentanaEditarSerieComponent,
-    VentanaEmergenteTipo,
-    VentanaEmergenteProveedores,
-    VentanaEditarSerieComponent,
-    VentanaEmergenteTipo,
-    VentanaEditarSerieComponent,
-    VentanaEmergenteTipo,
-    VentanaEmergenteModelo,
-    VentanaEmergenteMarca,
-    VentanaProductosComponent,
-    ComisionesDetalleComponent,
-    VentanaCronogramaComponent,
-    AgregarVentaComponent,
-    VentanaTrabajadoresComponent,
-    VentanaVendedorComponent,
-    VentanaTalonarioComponent,
-    VentanaArchivosComponent,
-    VentanaCourierComponent,
-    VentanaPlantillasComponent,
-    VentanaPagosComponent,
-    VentanaTipoReporteComponent,
-    VentanaEditarPagoComponent,
-    VentanaJudicialComponent,
-    VentanaEditarDocumentoComponent,
-    VentanaInstitucionComponent,
-    VentanaSedeComponent,
-    VentanaSubsedeComponent,
-    VentanaParametrosPlantillasComponent,
-    VentanaCargoEstadoComponent,
-    VentanaCargoComponent,
-    VentanaVendedoresCargoComponent,
-    VentanaDistritoJudicialComponent,
-    VentanaInstanciaJudicialComponent,
-    VentanaCambioDistritoComponent,
-    VentanaDocumentosComponent,
-    VentanaJuezJuzgadoComponent,
-    VentanaUsuariosComponent,
-    VentanaPermisosComponent,
-    VentanaCobranzaClienteComponent,
-    VentanaCobranzaClienteVencidasComponent,
-  ],
   bootstrap: [AppComponent],
   providers: [
     CookieService ,

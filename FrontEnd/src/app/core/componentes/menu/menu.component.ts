@@ -57,7 +57,7 @@ export class MenuComponent implements OnInit{
         submenu:[
           {
             nombre: "Clientes",
-            path: "clientes",
+            path: "listado",
             mostrar : true ,
           },
           // {
@@ -110,7 +110,7 @@ export class MenuComponent implements OnInit{
       {
         nombre: "Inventarios",
         icono: "domain",
-        path: '',
+        path: 'inventarios',
         mostrar: permiso.inventarios.general,
         submenu:[
           {

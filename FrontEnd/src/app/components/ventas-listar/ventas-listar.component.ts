@@ -5,7 +5,7 @@ import { MatSelect } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
 import {merge, fromEvent} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
-import {ProductoService} from '../detalleproductos/productos/productos.service';
+import {ProductoService} from '../../modulo-inventarios/detalleproductos/productos/productos.service';
 import {VentaDataSource} from './ventas-listar.dataservice';
 import {VentanaConfirmarComponent} from '../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';
 import {VentasServicio} from './ventas-listar.service'

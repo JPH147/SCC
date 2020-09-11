@@ -20,8 +20,8 @@ import { Notificaciones } from 'src/app/core/servicios/notificacion';
   selector: 'app-historial-movimientos',
   templateUrl: './historial-movimientos.component.html',
   styleUrls: ['./historial-movimientos.component.css'],
-  providers: [HistorialMovimientosService,ServiciosGenerales, StockService, DetalleDocumentoAlmacenService]
 })
+
 export class HistorialMovimientosComponent implements OnInit {
 
 	@ViewChild('InputAlmacen', { static: true }) FiltroAlmacen: ElementRef;
