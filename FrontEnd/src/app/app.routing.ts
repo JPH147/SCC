@@ -42,6 +42,11 @@ export const appRoutes: Routes = [
     loadChildren : () =>
       import('./modulo-asistencia/modulo-asistencia.module').then( m => m.ModuloAsistenciaModule ) ,
   } ,
+  {
+    path: 'reportes' , 
+    loadChildren : () =>
+      import('./modulo-reportes/modulo-reportes.module').then( m => m.ModuloReportesModule ) ,
+  } ,
 ];
 
 @NgModule({

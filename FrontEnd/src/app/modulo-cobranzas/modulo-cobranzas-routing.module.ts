@@ -2,8 +2,6 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { CobranzasListarComponent } from './cobranzas-listar/cobranzas-listar.component';
-import { CobranzaClienteListarComponent } from './cobranza-cliente-listar/cobranza-cliente-listar.component';
-import { CobranzaClienteListarMorososComponent } from './cobranza-cliente-listar-morosos/cobranza-cliente-listar-morosos.component';
 import { CobranzaDirectaListarComponent } from './cobranza-directa-listar/cobranza-directa-listar.component';
 import { CobranzaDirectaComponent } from './cobranza-directa/cobranza-directa.component';
 import { CobranzaArchivosListarComponent } from './cobranza-archivos-listar/cobranza-archivos-listar.component';
@@ -20,8 +18,6 @@ import { CobranzaManualComponent } from './cobranza-manual/cobranza-manual.compo
 const routes: Routes = [
   {path: '', redirectTo: 'listado', pathMatch: 'full'} ,
   {path: 'listado', component: CobranzasListarComponent},
-  {path: 'listado-cliente', component: CobranzaClienteListarComponent},
-  {path: 'listado-cliente-morosos', component: CobranzaClienteListarMorososComponent},
   {path: 'cobranza-directa', component: CobranzaDirectaListarComponent},
   {path: 'cobranza-directa/nueva', component: CobranzaDirectaComponent},
   {path: 'cobranza-directa/ver/:idcobranza', component: CobranzaDirectaComponent},

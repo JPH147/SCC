@@ -18,7 +18,7 @@ import { VentanaEmergenteContacto} from '../../compartido/componentes/ventana-em
 import { VentanaRelacionadosComponent} from './ventana-relacionados/ventana-relacionados.component';
 import { VentanaEmergenteIntegralEditarComponent } from '../ventana-emergente-integral-editar/ventana-emergente-integral-editar.component';
 import { VentanaEmergenteIntegralAgregarComponent } from '../ventana-emergente-integral-agregar/ventana-emergente-integral-agregar.component';
-import { VentanaCobranzaClienteVencidasComponent } from '../../modulo-cobranzas/cobranza-cliente-listar/ventana-cobranza-cliente-vencidas/ventana-cobranza-cliente-vencidas.component'
+import { VentanaCobranzaClienteVencidasComponent } from '../../compartido/componentes/ventana-cobranza-cliente-vencidas/ventana-cobranza-cliente-vencidas.component'
 import { saveAs } from 'file-saver';
 import { FileUpload } from '../file-upload/fileupload';
 import { ServiciosGenerales } from 'src/app/core/servicios/servicios';

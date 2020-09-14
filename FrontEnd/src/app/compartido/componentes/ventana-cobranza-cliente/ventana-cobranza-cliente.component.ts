@@ -5,30 +5,29 @@ import { MatPaginator } from '@angular/material/paginator';
 import { BehaviorSubject, Observable, of, merge, fromEvent, forkJoin } from 'rxjs';
 import {catchError, finalize, debounceTime, distinctUntilChanged, tap} from 'rxjs/operators'
 import { Router } from '@angular/router';
-import { CobranzasService } from '../../cobranzas-listar/cobranzas.service';
-import { ClienteService } from '../../../modulo-clientes/clientes/clientes.service';
+import { CobranzasService } from '../../../modulo-cobranzas/cobranzas-listar/cobranzas.service';
+
 @Component({
-  selector: 'app-ventana-cobranza-cliente-vencidas',
-  templateUrl: './ventana-cobranza-cliente-vencidas.component.html',
-  styleUrls: ['./ventana-cobranza-cliente-vencidas.component.css']
+  selector: 'app-ventana-cobranza-cliente',
+  templateUrl: './ventana-cobranza-cliente.component.html',
+  styleUrls: ['./ventana-cobranza-cliente.component.css']
 })
-export class VentanaCobranzaClienteVencidasComponent implements OnInit {
+export class VentanaCobranzaClienteComponent implements OnInit {
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   public ListadoCronograma: CronogramaDataSource;
-  public Columnas: string[] = [ 'numero', 'tipo', 'codigo', 'fecha', 'monto_total', 'estado'];
+  public Columnas: string[] = [ 'numero', 'tipo', 'codigo', 'fecha', 'monto_total'];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
-    public ventana: MatDialogRef<VentanaCobranzaClienteVencidasComponent>,
+    public ventana: MatDialogRef<VentanaCobranzaClienteComponent>,
     private Servicio: CobranzasService,
-    private router: Router,
-    private _clientes : ClienteService
+    private router: Router
   ) { }
 
   ngOnInit() {
     this.ListadoCronograma = new CronogramaDataSource(this.Servicio);
-    this.ListadoCronograma.CargarCronograma(this.data.cliente, 1, 5);
+    this.ListadoCronograma.CargarCronograma(this.data.cliente, this.data.fecha_inicio, this.data.fecha_fin, 1, 5);
   }
 
   ngAfterViewInit(){
@@ -45,22 +44,14 @@ export class VentanaCobranzaClienteVencidasComponent implements OnInit {
   CargarData(){
   	this.ListadoCronograma.CargarCronograma(
       this.data.cliente,
+      this.data.fecha_inicio,
+      this.data.fecha_fin,
       this.paginator.pageIndex+1,
       this.paginator.pageSize)
   }
 
   onNoClick(): void {
     this.ventana.close();
-  }
-
-  Verificar(){
-    this._clientes.VerificarPagosCliente(this.data.cliente).subscribe(res=>{
-      if( res['codigo']===0 ) {
-        this.ventana.close( true )
-      } else {
-        this.ventana.close( false )
-      }
-    })
   }
 }
 
@@ -84,12 +75,16 @@ export class CronogramaDataSource implements DataSource<any> {
 
   CargarCronograma(
     id_cliente: number,
+    fecha_inicio:Date,
+    fecha_fin:Date,
     pagina: number,
     total_pagina: number
   ){
   	this.CargandoInformacion.next(true);
-  	this.Servicio.ListarCronogramaVencidoxCliente(
+  	this.Servicio.ListarCronogramaxCliente(
   		id_cliente,
+  		fecha_inicio,
+  		fecha_fin,
   		pagina ,
   		total_pagina
   	)

@@ -13,10 +13,6 @@ import { CobranzaPnpComponent } from './cobranza-archivos/cobranza-pnp/cobranza-
 import { CobranzaArchivosDetalleComponent } from './cobranza-archivos-detalle/cobranza-archivos-detalle.component';
 import { CobranzaArchivosListarComponent } from './cobranza-archivos-listar/cobranza-archivos-listar.component';
 import { CobranzaArchivosPagoComponent } from './cobranza-archivos-pago/cobranza-archivos-pago.component';
-import { CobranzaClienteListarComponent } from './cobranza-cliente-listar/cobranza-cliente-listar.component';
-import { VentanaCobranzaClienteComponent } from './cobranza-cliente-listar/ventana-cobranza-cliente/ventana-cobranza-cliente.component';
-import { VentanaCobranzaClienteVencidasComponent } from './cobranza-cliente-listar/ventana-cobranza-cliente-vencidas/ventana-cobranza-cliente-vencidas.component';
-import { CobranzaClienteListarMorososComponent } from './cobranza-cliente-listar-morosos/cobranza-cliente-listar-morosos.component';
 import { CobranzaDirectaComponent } from './cobranza-directa/cobranza-directa.component';
 import { CobranzaDirectaListarComponent } from './cobranza-directa-listar/cobranza-directa-listar.component';
 import { CobranzaJudicialComponent } from './cobranza-judicial/cobranza-judicial.component';
@@ -41,10 +37,6 @@ import { VentanaEditarCuotasComponent } from './cobranza-archivos/cobranza-pnp/v
     CobranzaArchivosDetalleComponent ,
     CobranzaArchivosListarComponent ,
     CobranzaArchivosPagoComponent ,
-    CobranzaClienteListarComponent ,
-    VentanaCobranzaClienteComponent ,
-    VentanaCobranzaClienteVencidasComponent ,
-    CobranzaClienteListarMorososComponent ,
     CobranzaDirectaComponent ,
     CobranzaDirectaListarComponent ,
     CobranzaJudicialComponent ,

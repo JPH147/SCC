@@ -217,6 +217,25 @@ export class MenuComponent implements OnInit{
           },
         ]
       },
+      // Reportes
+      {
+        nombre: "Reportes",
+        icono: "dashboard",
+        path: 'reportes',
+        mostrar: permiso.cobranzas.general,
+        submenu:[
+          {
+            nombre: "Clientes morosos I",
+            path: "listado-cliente" ,
+            mostrar : permiso.cobranzas.clientes_morosos.general ,
+          },
+          {
+            nombre: "Clientes muy morosos II",
+            path: "listado-cliente-morosos" ,
+            mostrar : permiso.cobranzas.clientes_morosos.general ,
+          },
+        ]
+      },
       // Asistencia
       // {
       //   nombre: "Asistencia",

@@ -4,22 +4,22 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSelect } from '@angular/material/select';
 import { Observable, BehaviorSubject, of, fromEvent, merge } from 'rxjs';
 import { catchError, finalize, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { CobranzasService } from '../cobranzas-listar/cobranzas.service';
+import { CobranzasService } from '../../modulo-cobranzas/cobranzas-listar/cobranzas.service';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 
 import { ArchivosService } from 'src/app/core/servicios/archivos';
 import { ServiciosTipoPago } from 'src/app/core/servicios/tipopago';
 import * as moment from 'moment';
 import {saveAs} from 'file-saver';
-import { VentanaCobranzaClienteComponent } from './ventana-cobranza-cliente/ventana-cobranza-cliente.component';
+import { VentanaCobranzaClienteComponent } from '../../compartido/componentes/ventana-cobranza-cliente/ventana-cobranza-cliente.component';
 
 @Component({
-  selector: 'app-cobranza-cliente-listar',
-  templateUrl: './cobranza-cliente-listar.component.html',
-  styleUrls: ['./cobranza-cliente-listar.component.scss'],
+  selector: 'app-cobranza-cliente-listar-morosos',
+  templateUrl: './cobranza-cliente-listar-morosos.component.html',
+  styleUrls: ['./cobranza-cliente-listar-morosos.component.scss'],
   providers : [ServiciosTipoPago]
 })
-export class CobranzaClienteListarComponent implements OnInit {
+export class CobranzaClienteListarMorososComponent implements OnInit {
 
   public fecha_inicio: Date;
   public fecha_fin: Date;
@@ -48,7 +48,6 @@ export class CobranzaClienteListarComponent implements OnInit {
 
     this.fecha_inicio = null
     this.fecha_fin = new Date()
-
     this.ListadoCobranza = new CobranzaDataSource(this.Servicio);
     this.ListadoCobranza.CargarCronograma( "" , "", "", "", 0, this.fecha_inicio, this.fecha_fin,1, 10 );
   }
@@ -114,7 +113,7 @@ export class CobranzaClienteListarComponent implements OnInit {
       this.FiltroTipo.value,
       this.fecha_inicio,
       this.fecha_fin,
-      1
+      2
     ).subscribe(res=>{
       if(res){
         this.AbrirArchivo(nombre_archivo,res);
@@ -170,7 +169,7 @@ export class CobranzaDataSource implements DataSource<any> {
   ) {
     this.CargandoInformacion.next(true);
 
-    this.Servicio.ListarCobranzasxcliente( cliente, sede, subsede, institucion, tipo_pago, fecha_inicio, fecha_fin, 1,numero_pagina, total_pagina )
+    this.Servicio.ListarCobranzasxcliente( cliente, sede, subsede, institucion, tipo_pago, fecha_inicio, fecha_fin, 2,numero_pagina, total_pagina )
     .pipe(
       catchError(() => of([])),
       finalize(() => this.CargandoInformacion.next(false))
