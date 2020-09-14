@@ -162,12 +162,12 @@ export class CobranzaPnpComponent implements OnInit {
           } else {
             this.notificacion.Snack("Ocurrió un error al registrar la cobranza.","") ;
           }
-          this.router.navigate(['/cobranza-archivos']) ;
+          this.router.navigate(['/cobranzas','cobranza-archivos']) ;
         })
       } else {
         this.ListadoCobranzaPNP.CargandoInformacion.next(true) ;
         this.notificacion.Snack("Ocurrió un error al crear el archivo, inténtelo nuevamente en un momento.","")
-        this.router.navigate(['/cobranza-archivos']) ;
+        this.router.navigate(['/cobranzas','cobranza-archivos']) ;
       }
     })
   }

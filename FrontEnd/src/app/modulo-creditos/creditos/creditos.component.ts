@@ -1376,14 +1376,10 @@ export class CreditosComponent implements OnInit, AfterViewInit {
 
   CorregirFecha(){
     if ( moment(this.CreditosForm.value.fecha_credito).isValid() ) {
-      // let ano = moment( this.CreditosForm.value.fecha_credito ).year() ;
-      // let mes = moment( this.CreditosForm.value.fecha_credito ).month() ;
-      // this.CreditosForm.get('fecha_pago').setValue( new Date(ano, mes+1, 27) );
-
       let fecha = this.CreditosForm.value.fecha_credito ;
       this.CreditosForm.get('fecha_pago').setValue( new Date(moment(fecha).endOf('month').toDate()) )
-      this.CrearCronograma() ;
       this.CambioFechaCredito() ;
+      this.FechaPagoSeleccionada() ;
     }
   }
 
@@ -1391,14 +1387,16 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     if ( this.CreditosForm.get('fecha_fin_mes').value ) {
       let fecha = this.CreditosForm.value.fecha_pago ;
       this.CreditosForm.get('fecha_pago').setValue( new Date(moment(fecha).endOf('month').toDate()) )
-      this.CrearCronograma() ;
+      this.FechaPagoSeleccionada() ;
     }
   }
 
   FechaPagoSeleccionada() {
     let fecha_credito = this.CreditosForm.get('fecha_credito').value ;
     let fecha_pago = this.CreditosForm.get('fecha_pago').value ;
-    if ( fecha_pago < fecha_credito ) {
+    
+    let diferencia = moment(fecha_pago).diff(fecha_credito, 'days') ;
+    if ( diferencia < 0 ) {
       this.CreditosForm.get('fecha_pago').setErrors({'fecha_adelantada': true}) ;
     } else {
       this.CreditosForm.get('fecha_pago').setErrors(null) ;
@@ -1471,7 +1469,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       this.Cargando.next(true) ;
       if (res) {
         this.Servicio.EliminarCredito(this.id_credito_estandar).subscribe(res=>{
-          this.router.navigate(['/creditos']) ;
+          this.router.navigate(['/creditos','creditos']) ;
         });
       }
     })
@@ -1609,7 +1607,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
           this.numero_cuotas,
           this.CreditosForm.value.fecha_pago
         ).subscribe( resultado =>{
-          this.router.navigate(['/creditos']);
+          this.router.navigate(['/creditos','creditos']);
           if(res['codigo']==0){
             this.Notificacion.Snack("Se actualizó la afiliación con éxito!","");
           }else{
@@ -1752,7 +1750,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         }
 
         setTimeout(()=>{
-          this.router.navigate(['/creditos']);
+          this.router.navigate(['/creditos','creditos']);
           if(res['codigo']==0){
             this.Notificacion.Snack("Se creó el crédito con éxito!","");
           }else{
@@ -1890,7 +1888,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         }
 
         setTimeout(()=>{
-          this.router.navigate(['/creditos']);
+          this.router.navigate(['/creditos','creditos']);
           if(res['codigo']==0){
             this.Notificacion.Snack("Se actualizó el crédito con éxito!","");
           }else{
@@ -1946,7 +1944,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         this.otros_editar ? resultado[14].mensaje : this.otros_antiguo
       ).subscribe(res=>{
         setTimeout(()=>{
-          this.router.navigate(['/creditos']);
+          this.router.navigate(['/creditos','creditos']);
           if(res['codigo']==0){
             this.Notificacion.Snack("Se actualizó el crédito con éxito!","");
           }else{

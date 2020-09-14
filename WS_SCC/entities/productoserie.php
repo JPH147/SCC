@@ -156,7 +156,7 @@ Class ProductoSerie{
         $this->id_producto_serie=$row['id'];
         $this->id_producto=$row['id_producto'];
         $this->producto=$row['producto'];
-        $this->serie=$row['serie'];
+        $this->serie=$row['serie'] . " ";
         $this->color=$row['color'];
         $this->almacenamiento=$row['almacenamiento'];
         $this->precio_compra=$row['precio'];

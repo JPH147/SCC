@@ -8,7 +8,7 @@ import { catchError, finalize, tap, debounceTime, distinctUntilChanged } from 'r
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { CobranzaJudicialService } from '../cobranza-judicial/cobranza-judicial.service';
 import { VentanaConfirmarComponent } from '../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ProcesoJudicialVinculadosService } from '../../modulo-maestro/proceso-judicial-vinculados/proceso-judicial-vinculados.service';
 import { VentanaCambioDistritoComponent } from './ventana-cambio-distrito/ventana-cambio-distrito.component';
 import { Notificaciones } from 'src/app/core/servicios/notificacion';
@@ -44,6 +44,7 @@ export class CobranzaJudicialListarComponent implements OnInit {
 
   constructor(
     private _store : Store<EstadoSesion> ,
+    private route : ActivatedRoute ,
     private router : Router ,
     private Dialogo : MatDialog ,
     private Notificaciones : Notificaciones ,
@@ -174,11 +175,11 @@ export class CobranzaJudicialListarComponent implements OnInit {
   }
 
   EjecutarCobranza(proceso){
-    this.router.navigate(['/cobranza-judicial','generar','nuevo', proceso.id] )
+    this.router.navigate(['generar','nuevo', proceso.id], { relativeTo: this.route } )
   }
 
   AgregarDocumentos(proceso){
-    this.router.navigate(['/cobranza-judicial', 'agregar', proceso.id] )
+    this.router.navigate(['agregar', proceso.id], { relativeTo: this.route } )
   }
 
   ListarTipoDocumentos(){

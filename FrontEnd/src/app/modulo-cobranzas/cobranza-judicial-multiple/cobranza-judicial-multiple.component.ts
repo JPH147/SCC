@@ -314,7 +314,7 @@ export class CobranzaJudicialMultipleComponent implements OnInit {
     )
     .subscribe(res=>{
       if( res ) {
-        this._router.navigate(['/cobranza-judicial', 'agregar', res] )
+        this._router.navigate(['/cobranzas','cobranza-judicial', 'agregar', res] )
       }
     })
   }

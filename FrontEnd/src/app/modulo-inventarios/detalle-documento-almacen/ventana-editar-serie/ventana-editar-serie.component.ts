@@ -52,8 +52,6 @@ export class VentanaEditarSerieComponent implements OnInit, AfterViewInit {
       this.nuevo = true ;
     }
 
-    console.log(this.data.detalle.tiene_serie) ;
-
     this.FiltrarProductos("");
   }
 
@@ -181,31 +179,48 @@ export class VentanaEditarSerieComponent implements OnInit, AfterViewInit {
     if ( !this.hay_serie ) {
       this.Informacion.serie = new Date().getTime() + "-" + 1 ;
     }
-    this.SServicio.CrearProductoSerie(
-      this.Informacion.id_producto,
-      this.Informacion.serie,
-      this.Informacion.color,
-      this.Informacion.almacenamiento,
-      this.Informacion.precio
-    ).subscribe(response => {
-      if( response['codigo']==0 ) {
-        this.IngresoProductoservicios.CrearTransaccionDetalle(this.data.transaccion, response['data'], 1, this.Informacion.precio, "")
-        .pipe(
-          finalize(()=>{
-            this.Cargando.next(false) ;
-          })
-        )
-        .subscribe(resp=>{
-          if( resp['codigo']==0 ) {
-            this.ventana.close(true) ;
-          } else {
-            this.ventana.close(false) ;
-          }
-        });
+
+    this.IngresoProductoservicios.CrearTransaccionDetalleCompra(
+      this.data.transaccion ,
+      this.Informacion.id_producto ,
+      this.Informacion.serie ,
+      this.Informacion.color ,
+      this.Informacion.almacenamiento ,
+      1 ,
+      this.Informacion.precio ,
+      ""
+    ).subscribe(res=>{
+      if( res['codigo']==0 ) {
+        this.ventana.close(true) ;
       } else {
         this.ventana.close(false) ;
       }
     });
+    // this.SServicio.CrearProductoSerie(
+    //   this.Informacion.id_producto,
+    //   this.Informacion.serie,
+    //   this.Informacion.color,
+    //   this.Informacion.almacenamiento,
+    //   this.Informacion.precio
+    // ).subscribe(response => {
+    //   if( response['codigo']==0 ) {
+    //     this.IngresoProductoservicios.CrearTransaccionDetalle(this.data.transaccion, response['data'], 1, this.Informacion.precio, "")
+    //     .pipe(
+    //       finalize(()=>{
+    //         this.Cargando.next(false) ;
+    //       })
+    //     )
+    //     .subscribe(resp=>{
+    //       if( resp['codigo']==0 ) {
+    //         this.ventana.close(true) ;
+    //       } else {
+    //         this.ventana.close(false) ;
+    //       }
+    //     });
+    //   } else {
+    //     this.ventana.close(false) ;
+    //   }
+    // });
   }
 
   Actualizar(){

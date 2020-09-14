@@ -273,8 +273,8 @@ export class VentasComponent implements OnInit {
   
         // Cuando se edita una venta
         if (params['ideditar']) {
-          this.id_venta = +params['idventa'] ;
-          this.idventa_editar=params['ideditar'];
+          this.id_venta = +params['ideditar'] ;
+          this.idventa_editar=+params['ideditar'];
           this.Columnas= ['numero', 'fecha_vencimiento_ver', 'monto_cuota_ver'];
           this.SeleccionarVentaxId(this.idventa_editar)
         }
@@ -287,7 +287,6 @@ export class VentasComponent implements OnInit {
   ngAfterViewInit() {
 
     if (!this.idventa) {
-
       fromEvent(this.VendedorAutoComplete.nativeElement, 'keyup')
       .pipe(
         debounceTime(10),
@@ -336,7 +335,6 @@ export class VentasComponent implements OnInit {
             tap(()=>{
               if (this.FiltroPrecio['_results'][i]) {
                 if (this.FiltroPrecio['_results'][i].nativeElement.value) {
-                  // this.VentasForm.get('montototal').setValue(0);
                   this.CalcularTotales();
                 }
               }
@@ -365,6 +363,45 @@ export class VentasComponent implements OnInit {
   }
 
   ActualizarObservables() {
+    fromEvent(this.VendedorAutoComplete.nativeElement, 'keyup')
+    .pipe(
+      debounceTime(10),
+      distinctUntilChanged(),
+      tap(() => {
+        if( this.VentasForm.value.vendedor ){
+          this.ListarVendedor(this.VentasForm.value.vendedor);
+        }
+      })
+    ).subscribe();
+
+    fromEvent(this.AutorizadorAutoComplete.nativeElement, 'keyup')
+    .pipe(
+      debounceTime(10),
+      distinctUntilChanged(),
+      tap(() => {
+        if( this.VentasForm.value.autorizador ){
+          this.ListarAutorizador(this.VentasForm.value.autorizador);
+        }
+      })
+    ).subscribe();
+
+    this.FiltroPrecio.changes.subscribe(res=>{
+      for (let i in this.FiltroPrecio['_results']) {
+        fromEvent(this.FiltroPrecio['_results'][i].nativeElement,'keyup')
+        .pipe(
+          debounceTime(100),
+          distinctUntilChanged(),
+          tap(()=>{
+            if (this.FiltroPrecio['_results'][i]) {
+              if (this.FiltroPrecio['_results'][i].nativeElement.value) {
+                this.CalcularTotales();
+              }
+            }
+          })
+        ).subscribe()
+      }
+    })
+
     merge(
       fromEvent(this.FiltroInicial.nativeElement,'keyup'),
       fromEvent(this.FiltroCuota.nativeElement,'keyup')
@@ -380,7 +417,7 @@ export class VentasComponent implements OnInit {
           this.CrearCronograma()
         }
       })
-    ).subscribe()
+    ).subscribe() ;
   }
   
   pad(caracter : string, tamano : number): string {
@@ -1697,7 +1734,7 @@ export class VentasComponent implements OnInit {
                 this.Servicio.CrearVentaCronograma(this.id_venta,2,res.monto,new Date(), 1).subscribe() ;
               }
   
-              this.router.navigate(['/ventas']) ;
+              this.router.navigate(['/ventas','ventas']) ;
             });
           });
         }
@@ -1856,7 +1893,7 @@ export class VentasComponent implements OnInit {
 
         setTimeout(()=>{
           this.Cargando.next(false) ;
-          this.router.navigate(['/ventas']);
+          this.router.navigate(['/ventas','ventas']);
   
           if(res['codigo']==0){
             this.Notificacion.Snack("Se agregó la venta con éxito!","");
@@ -1996,7 +2033,7 @@ export class VentasComponent implements OnInit {
         }
 
         setTimeout(()=>{
-          this.router.navigate(['/ventas']);
+          this.router.navigate(['/ventas','ventas']);
           this.Cargando.next(false) ;
           if(res['codigo']==0){
             this.Notificacion.Snack("Se editó la venta con éxito!","");
@@ -2042,7 +2079,7 @@ export class VentasComponent implements OnInit {
         this.otros_editar ? resultado[9].mensaje : this.otros_antiguo,
       ).subscribe(res=>{
         setTimeout(()=>{
-          this.router.navigate(['/ventas']);
+          this.router.navigate(['/ventas','ventas']);
           this.Cargando.next(false) ;
           if(res['codigo']==0){
             this.Notificacion.Snack("Se editó la venta con éxito!","");
@@ -2056,13 +2093,9 @@ export class VentasComponent implements OnInit {
 
   CorregirFecha( ){
     if ( moment(this.VentasForm.value.fechaventa).isValid() ) {
-      // let ano = moment( this.VentasForm.value.fechaventa ).year() ;
-      // let mes = moment( this.VentasForm.value.fechaventa ).month() ;
-      // this.VentasForm.get('fechapago').setValue( new Date(ano, mes+1, 27) );
-
       let fecha = this.VentasForm.value.fechaventa ;
       this.VentasForm.get('fechapago').setValue( new Date(moment(fecha).endOf('month').toDate()) ) ;
-      this.CrearCronograma() ;
+      this.FechaPagoSeleccionada() ;
     }
   }
 
@@ -2070,14 +2103,17 @@ export class VentasComponent implements OnInit {
     if ( this.VentasForm.get('fecha_fin_mes').value ) {
       let fecha = this.VentasForm.value.fechapago ;
       this.VentasForm.get('fechapago').setValue( new Date(moment(fecha).endOf('month').toDate()) ) ;
-      this.CrearCronograma() ;
+      this.FechaPagoSeleccionada() ;
     }
   }
 
   FechaPagoSeleccionada() {
-    let fecha_credito = this.VentasForm.get('fechaventa').value ;
+    let fecha_venta = this.VentasForm.get('fechaventa').value ;
     let fecha_pago = this.VentasForm.get('fechapago').value ;
-    if ( fecha_pago < fecha_credito ) {
+
+    let diferencia = moment(fecha_pago).diff(fecha_venta, 'days') ;
+
+    if ( diferencia < 0 ) {
       this.VentasForm.get('fechapago').setErrors({'fecha_adelantada': true}) ;
     } else {
       this.VentasForm.get('fechapago').setErrors(null) ;

@@ -421,11 +421,11 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
             //// ------------<
 
             setTimeout(()=>{
-              this.router.navigate(['/cobranza-directa']);
+              this.router.navigate(['/cobranzas','cobranza-directa']);
               this.Notificacion.Snack("Se creó la cobranza con éxito!","");
             }, 500)
           } else {
-            this.router.navigate(['/cobranza-directa']);
+            this.router.navigate(['/cobranzas','cobranza-directa']);
             this.Notificacion.Snack("Ocurrió un error al crear la cobranza.", "")
           }
         })
@@ -474,16 +474,16 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
             //// ------------<
 
             setTimeout(()=>{
-              this.router.navigate(['/cobranza-directa']);
+              this.router.navigate(['/cobranzas','cobranza-directa']);
               this.Notificacion.Snack("Se actualizó la cobranza con éxito!","");
             }, 500)
           } else {
-            this.router.navigate(['/cobranza-directa']);
+            this.router.navigate(['/cobranzas','cobranza-directa']);
             this.Notificacion.Snack("Ocurrió un error al actualizar la cobranza.", "")
           }
         })
       } else {
-        this.router.navigate(['/cobranza-directa']);
+        this.router.navigate(['/cobranzas','cobranza-directa']);
         this.Notificacion.Snack("Ocurrió un error al subir el archivo.", "")
       }
     })

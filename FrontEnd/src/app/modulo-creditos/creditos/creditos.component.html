@@ -16,7 +16,7 @@
           matBadgeColor="accent"> gavel </mat-icon>
       </button>
       <mat-menu #menu3="matMenu">
-        <button mat-menu-item *ngFor="let proceso of ListadoProcesos" [routerLink]="['/cobranza-judicial','ver',proceso.id_proceso]">
+        <button mat-menu-item *ngFor="let proceso of ListadoProcesos" [routerLink]="['/cobranzas','cobranza-judicial','ver',proceso.id_proceso]">
           <ng-container *ngIf="proceso.id_tipo_documento==0"> <mat-icon class="icono-primario" matTooltip="Ya tiene cronograma"> star </mat-icon> </ng-container>
           <ng-container *ngIf="proceso.id_tipo_documento==1"> <mat-icon matTooltip="Aún no hay documentos"> fiber_manual_record </mat-icon> </ng-container>
           <ng-container *ngIf="proceso.id_tipo_documento==2"> <mat-icon class="icono-ambar" matTooltip="Se presentó un escrito"> info </mat-icon> </ng-container>
@@ -24,7 +24,7 @@
           <ng-container *ngIf="proceso.id_tipo_documento==4"> <mat-icon class="icono-verde" matTooltip="Se emitió el oficio"> check_circle </mat-icon> </ng-container>
           {{proceso.expediente}}
         </button>
-        <button mat-menu-item [routerLink]="['/cobranza-judicial','nueva-credito',id_credito_estandar]" > <mat-icon> add </mat-icon> Nuevo proceso </button>
+        <button mat-menu-item [routerLink]="['/cobranzas','cobranza-judicial','nueva-credito',id_credito_estandar]" > <mat-icon> add </mat-icon> Nuevo proceso </button>
       </mat-menu>
     </ng-container>
 

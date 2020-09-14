@@ -546,15 +546,15 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
   }
 
   VerCredito( id_credito ){
-    this.router.navigate(["/creditos", 'ver', id_credito])
+    this.router.navigate(["/creditos",'creditos', 'ver', id_credito])
   }
 
   VerVenta( id_venta, tipo ){
     if ( tipo == 1 ) {
-      this.router.navigate(["/ventas", id_venta])
+      this.router.navigate(["/ventas",'ventas',id_venta])
     }
     if ( tipo == 2 ) {
-      this.router.navigate(["/ventas", 'salida', id_venta])
+      this.router.navigate(["/ventas",'ventas','salida', id_venta])
     }
   }
 
@@ -579,7 +579,7 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
       if(res){
         console.log(res)
         this.Notificacion.Snack("Se creó con éxito el proceso","");
-        this.router.navigate(['/cobranza-judicial','agregar',res]);
+        this.router.navigate(['/cobranzas','cobranza-judicial','agregar',res]);
       } else {
         this.Notificacion.Snack("Ocurrió un error al crear el proceso","")
       }

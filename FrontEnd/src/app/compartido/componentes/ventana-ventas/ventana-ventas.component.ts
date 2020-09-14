@@ -93,12 +93,12 @@ export class VentanaVentasComponent implements OnInit {
 
   HacerVenta(){
     this.ventana.close();
-    this.router.navigate(['/ventas/nueva', this.data.id]);
+    this.router.navigate(['/ventas','ventas','nueva', this.data.id]);
   }
 
   HacerCredito(){
     this.ventana.close();
-    this.router.navigate(['/creditos/nuevo-cliente', this.data.id]);
+    this.router.navigate(['/creditos','creditos','nuevo-cliente', this.data.id]);
   }
 
   onNoClick(): void {
@@ -108,16 +108,16 @@ export class VentanaVentasComponent implements OnInit {
   VerVenta(transaccion){
     console.log(transaccion) ;
     if(transaccion.id_tipo==1){
-      this.router.navigate(['/afiliaciones/ver', transaccion.id], {queryParams: {}});
+      this.router.navigate(['/creditos','afiliaciones','ver', transaccion.id], {queryParams: {}});
     }
     if(transaccion.id_tipo==2){
-      this.router.navigate(['/creditos/ver', transaccion.id], {queryParams: {}});
+      this.router.navigate(['/creditos','creditos','ver', transaccion.id], {queryParams: {}});
     }
     if(transaccion.id_tipo==3){
-      this.router.navigate(['/ventas', transaccion.id], {queryParams: {}});
+      this.router.navigate(['/ventas','ventas', transaccion.id], {queryParams: {}});
     }
     if(transaccion.id_tipo==4){
-      this.router.navigate(['/ventas', 'salida', transaccion.id], {queryParams: {}});
+      this.router.navigate(['/ventas','ventas','salida', transaccion.id], {queryParams: {}});
     }
     this.ventana.close(true);
   }

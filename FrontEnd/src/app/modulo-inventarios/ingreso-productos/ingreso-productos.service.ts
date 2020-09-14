@@ -147,6 +147,30 @@ constructor(private http: HttpClient) {}
     return this.http.post(this.url + 'transacciondetalle/create.php', params, {headers: headers});
   }
 
+  CrearTransaccionDetalleCompra(
+    id_cabecera : number ,
+    id_producto : number ,
+    producto_serie : string ,
+    color : string ,
+    almacenamiento : string ,
+    cantidad : number,
+    precio : number,
+    observacion:string
+  ): Observable<any> {
+
+    let params = new HttpParams()
+    .set('prcabecera', id_cabecera.toString())
+    .set('prproducto', id_producto.toString())
+    .set('prserie', producto_serie.toString())
+    .set('prcolor', color.toString())
+    .set('pralmacenamiento', almacenamiento.toString())
+    .set('prprecio', precio.toString())
+    .set('prcantidad', cantidad.toString())
+    .set('probservacion', observacion)
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    return this.http.post(this.url + 'transacciondetalle/create-compra.php', params, {headers: headers});
+  }
 
   ObtenerNumeroDocumento(
     almacen:number,

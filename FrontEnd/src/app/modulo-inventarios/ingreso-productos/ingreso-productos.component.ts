@@ -13,6 +13,7 @@ import {debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import {ProductoService} from '../detalleproductos/productos/productos.service';
 import {ServiciosDocumentos} from 'src/app/core/servicios/documentos';
 import { HistorialMovimientosService } from '../historial-movimientos/historial-movimientos.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-ingreso-productos',
@@ -81,6 +82,7 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
       private SSeries: ServiciosProductoSerie,
       private SDocumentos: ServiciosDocumentos,
       private SMovimineto: HistorialMovimientosService,
+      private _location : Location
     ) {}
 
     ngOnInit() {
@@ -556,13 +558,11 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
   SubirArchivo(archivo: FileList) {
     this.archivo = archivo.item(0);
     this.archivo_nombre = this.archivo.name ;
-    // this.VentanaJudicialForm.get('archivo').setValue(true);
   }
 
   RemoverArchivo(){
     this.archivo = null ;
     this.archivo_nombre = "" ;
-    // this.VentanaJudicialForm.get('archivo').setValue(null);
   }
 
   Guardar(formulario) {
@@ -621,9 +621,16 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
                         for (let i of formulario.value.productos) {
                           for (let is of this.Series) {
                             if (i.producto.id === is.id_producto) {
-                              this.SSeries.CrearProductoSerie(i.producto.id,is.serie, is.color, is.almacenamiento, is.precio).subscribe(response => {
-                                this.IngresoProductoservicios.CrearTransaccionDetalle(id_cabecera, response['data'], 1, is.precio, is.observacion).subscribe();
-                              });
+                              this.IngresoProductoservicios.CrearTransaccionDetalleCompra(
+                                id_cabecera ,
+                                i.producto.id ,
+                                is.serie ,
+                                is.color ,
+                                is.almacenamiento ,
+                                1 ,
+                                is.precio ,
+                                is.observacion
+                              ).subscribe() ;
                             }
                           }
                         }
@@ -650,6 +657,10 @@ import { HistorialMovimientosService } from '../historial-movimientos/historial-
         }
       })
     }
+  }
+
+  Atras() {
+    this._location.back() ;
   }
 
 }

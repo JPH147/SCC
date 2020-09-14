@@ -124,7 +124,6 @@
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let cobranza">
-          <!-- <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="['ver', cobranza.id]"><mat-icon> visibility </mat-icon></button> -->
           <button mat-icon-button color="primary" matTooltip="Ver detalle de pagos" (click)="VerDetallePagos(cobranza)"><mat-icon> visibility </mat-icon></button>
           <ng-container *ngIf="permiso?.cobranzas?.cronograma?.editar">
             <button mat-icon-button color="primary" matTooltip="Editar" (click)="EditarCuota(cobranza)"><mat-icon> edit </mat-icon></button>

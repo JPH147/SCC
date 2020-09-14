@@ -53,20 +53,6 @@ export class VentanaCobranzaClienteComponent implements OnInit {
   onNoClick(): void {
     this.ventana.close();
   }
-
-  // VerConograma(transaccion){
-  //   if(transaccion.id_tipo<3){
-  //     this.router.navigate(['/creditos/ver', transaccion.id]);
-  //   }
-  //   if(transaccion.id_tipo==3){
-  //     this.router.navigate(['/ventas', transaccion.id]);
-  //   }
-  //   if(transaccion.id_tipo==4){
-  //     this.router.navigate(['/ventas', 'salida', transaccion.id]);
-  //   }
-  //   this.ventana.close();
-  // }
-
 }
 
 export class CronogramaDataSource implements DataSource<any> {

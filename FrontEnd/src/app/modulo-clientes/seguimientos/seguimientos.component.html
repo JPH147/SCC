@@ -118,9 +118,9 @@
             <button mat-icon-button color="primary" matTooltip="Registrar entrega" [disabled]="seguimiento.id_estado==2" (click)="RegistrarEntrega(seguimiento.id)"><mat-icon> assignment_return </mat-icon></button>
           </ng-container>
           <ng-container *ngIf="permiso?.maestro_general?.seguimiento_documentos?.ver_documento">
-            <button mat-icon-button color="primary" *ngIf="seguimiento.salida" matTooltip="Ver venta" [routerLink]="['/ventas', 'salida', seguimiento.id_transaccion]"><mat-icon> description </mat-icon></button>
-            <button mat-icon-button color="primary" *ngIf="!seguimiento.salida && seguimiento.id_tipo==1" matTooltip="Ver venta" [routerLink]="['/ventas', seguimiento.id_transaccion]"><mat-icon> description </mat-icon></button>
-            <button mat-icon-button color="primary" *ngIf="seguimiento.id_tipo==2" matTooltip="Ver crédito" [routerLink]="['/creditos', 'ver', seguimiento.id_transaccion]"><mat-icon> description </mat-icon></button>
+            <button mat-icon-button color="primary" *ngIf="seguimiento.salida" matTooltip="Ver venta" [routerLink]="['/ventas', 'ventas', 'salida', seguimiento.id_transaccion]"><mat-icon> description </mat-icon></button>
+            <button mat-icon-button color="primary" *ngIf="!seguimiento.salida && seguimiento.id_tipo==1" matTooltip="Ver venta" [routerLink]="['/ventas', 'ventas', seguimiento.id_transaccion]"><mat-icon> description </mat-icon></button>
+            <button mat-icon-button color="primary" *ngIf="seguimiento.id_tipo==2" matTooltip="Ver crédito" [routerLink]="['/creditos', 'creditos', 'ver', seguimiento.id_transaccion]"><mat-icon> description </mat-icon></button>
           </ng-container>
           <ng-container *ngIf="permiso?.maestro_general?.seguimiento_documentos?.eliminar">
             <button mat-icon-button color="primary" matTooltip="Eliminar" [disabled]="seguimiento.id_estado==2" (click)="EliminarSeguimiento(seguimiento)"> <mat-icon>delete</mat-icon> </button>

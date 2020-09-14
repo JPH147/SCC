@@ -1,6 +1,6 @@
 <mat-card>
   <!-- Cabecera de Ingreso de Productos -->
-  <button mat-mini-fab type="button" color="primary" [routerLink]="['../']"><mat-icon>keyboard_arrow_left</mat-icon></button>
+  <button mat-mini-fab type="button" color="primary" (click)="Atras()"><mat-icon>keyboard_arrow_left</mat-icon></button>
 
   <mat-card-title>
     <div id = "tituloProd"> Ingreso de Productos Nro. {{documento_serie}}-{{documento_numero}}</div>
@@ -187,7 +187,7 @@
             </tr>
             <tr *ngFor="let detalle of detalle_transacciones">
               <td class="detalle-columnas" id="detalle-numero">{{detalle.numero}}</td> 
-              <td class="detalle-columnas" id="detalle-producto">{{detalle.fecha || dd/MM/yy}}</td>
+              <td class="detalle-columnas" id="detalle-producto">{{detalle.fecha | date: 'dd/MM/yyyy'}}</td>
               <td class="detalle-columnas" id="detalle-serie">{{detalle.movimiento_serie}}-{{detalle.movimiento_numero}}</td> 
               <td class="detalle-columnas" id="detalle-color">{{detalle.documento}}</td>
               <td class="detalle-columnas" id="detalle-almacenamiento">{{detalle.almacen}}</td>

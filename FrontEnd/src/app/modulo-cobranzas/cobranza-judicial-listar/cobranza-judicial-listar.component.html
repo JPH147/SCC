@@ -188,10 +188,10 @@
                     </mat-menu>
                   </ng-container>
                   <ng-container *ngIf="permiso?.procesos_judiciales?.listado_procesos?.ver_cronograma">
-                    <button mat-icon-button color="primary" matTooltip="Ver cronograma" [routerLink]="['/cobranza-judicial','generar','ver', proceso.id]" *ngIf="proceso.id_tipo_documento==0"><mat-icon> notes </mat-icon></button>
+                    <button mat-icon-button color="primary" matTooltip="Ver cronograma" [routerLink]="['generar','ver', proceso.id]" *ngIf="proceso.id_tipo_documento==0"><mat-icon> notes </mat-icon></button>
                   </ng-container>
                   <ng-container *ngIf="permiso?.procesos_judiciales?.listado_procesos?.realizar_cronograma">
-                    <button mat-icon-button color="primary" matTooltip="Realizar cronograma" [routerLink]="['/cobranza-judicial','generar','nuevo', proceso.id]" *ngIf="proceso.id_tipo_documento==4"><mat-icon> next_week </mat-icon></button>
+                    <button mat-icon-button color="primary" matTooltip="Realizar cronograma" [routerLink]="['generar','nuevo', proceso.id]" *ngIf="proceso.id_tipo_documento==4"><mat-icon> next_week </mat-icon></button>
                   </ng-container>
                   <ng-container *ngIf="permiso?.procesos_judiciales?.listado_procesos?.eliminar">
                     <button mat-icon-button color="primary" matTooltip="Eliminar" (click)="EliminarProceso(proceso)" [disabled]="proceso.id_tipo_documento>=4"><mat-icon> delete </mat-icon></button>

@@ -51,7 +51,7 @@ class SerieProducto{
         "transaccion" => $transaccion,
         "producto" => $producto,
 				"tenedor" => $tenedor,
-				"serie" => trim($serie)
+				"serie" => $serie . " "
 			);
 			array_push($serieproducto_list["series"],$serieproducto_fila);
 		}

@@ -91,8 +91,8 @@
           <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
           <mat-cell *matCellDef="let talonario">
             <button mat-icon-button color="primary" matTooltip="Hacer venta" [disabled]="talonario.id_estado==3 || talonario.id_venta" (click)="RegistrarVenta(talonario)"><mat-icon> attach_money </mat-icon></button>
-            <button mat-icon-button color="primary" matTooltip="Ver documento" [disabled]="talonario.id_estado==3 || !talonario.id_venta" [routerLink]="['/ventas','salida', talonario.id_venta]"><mat-icon> visibility </mat-icon></button>
-            <button mat-icon-button color="primary" matTooltip="Editar documento" [disabled]="talonario.id_estado==3 || !talonario.id_venta" [routerLink]="['/ventas','salida', 'editar', talonario.id_venta]"><mat-icon> edit </mat-icon></button>
+            <button mat-icon-button color="primary" matTooltip="Ver documento" [disabled]="talonario.id_estado==3 || !talonario.id_venta" [routerLink]="['/ventas','ventas','salida', talonario.id_venta]"><mat-icon> visibility </mat-icon></button>
+            <button mat-icon-button color="primary" matTooltip="Editar documento" [disabled]="talonario.id_estado==3 || !talonario.id_venta" [routerLink]="['/ventas','ventas','salida', 'editar', talonario.id_venta]"><mat-icon> edit </mat-icon></button>
             <button mat-icon-button color="primary" matTooltip="Anular talonario" [disabled]="talonario.id_estado==3 || talonario.id_venta" (click)="AnularTalonario(talonario.id,3)" *ngIf="talonario.id_estado!=3"><mat-icon> delete </mat-icon></button>
             <button mat-icon-button color="accent" matTooltip="Reactivar talonario" (click)="AnularTalonario(talonario.id,1)" *ngIf="talonario.id_estado==3"><mat-icon> delete_forever </mat-icon></button>
           </mat-cell>
@@ -171,7 +171,7 @@
       </mat-grid-tile>
 
       <mat-grid-tile>
-        <button mat-raised-button color="primary" [routerLink]="['../../retorno', id_salida]" [disabled]="estado_ventas>0"> Finalizar salida </button>
+        <button mat-raised-button color="primary" [routerLink]="['/ventas','salidavendedores','retorno', id_salida]" [disabled]="estado_ventas>0"> Finalizar salida </button>
       </mat-grid-tile>
       
     </mat-grid-list>

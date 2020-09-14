@@ -1317,7 +1317,7 @@ export class RefinanciamientoComponent implements OnInit, AfterViewInit {
       cronograma : this.Cronograma
     }
 
-    this.route.navigate(['/creditos', 'nuevo', 'refinanciamiento', id_cliente ], {state: data } )
+    this.route.navigate(['/creditos','creditos', 'nuevo', 'refinanciamiento', id_cliente ], {state: data } )
   }
 
 }

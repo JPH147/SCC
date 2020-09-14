@@ -214,7 +214,7 @@ export class RetornoVendedoresCierreComponent implements OnInit {
       }
 
       setTimeout(()=>{
-        this.router.navigate(['/salidavendedores']);
+        this.router.navigate(['/ventas','salidavendedores']);
       },1000)
 
     })

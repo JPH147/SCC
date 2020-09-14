@@ -5,7 +5,9 @@ import {map} from 'rxjs/operators';
 import {URL} from 'src/app/core/servicios/url';
 import * as moment from 'moment';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 
 export class ListadoSalidaVendedoresService {
 

@@ -11,6 +11,7 @@ import {StockService} from '../stock/stock.service'
 import {ServiciosProductoSerie} from 'src/app/core/servicios/productoserie'
 import {IngresoProductoService} from '../ingreso-productos/ingreso-productos.service'
 import {ServiciosDocumentos} from 'src/app/core/servicios/documentos';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-salida-productos',
@@ -48,9 +49,9 @@ export class SalidaProductosComponent implements OnInit {
     private Servicios: ServiciosGenerales,
     private SalidaProductosServicios: SalidaProductosService,
     private Articulos: StockService,
-    private SSeries:ServiciosProductoSerie,
     private IServicios: IngresoProductoService,
     private SDocumentos: ServiciosDocumentos,
+    private _location : Location ,
   ) {}
 
 
@@ -326,6 +327,10 @@ GuardarTransferenciaAlmacen(formulario) {
       this.enviado=false;
     }
   })
+}
+
+Atras() {
+  this._location.back() ;
 }
 
 }

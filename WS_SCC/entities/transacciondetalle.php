@@ -15,6 +15,7 @@ Class TransaccionDetalle{
     public $observacion;
     public $color;
     public $almacenamiento;
+    public $producto_serie ;
 
     public function __construct($db){
         $this->conn = $db;
@@ -106,7 +107,7 @@ Class TransaccionDetalle{
                 "id"=>$id,
                 "producto"=>$producto,
                 "tiene_serie"=>$tiene_serie,
-                "serie"=>$serie,
+                "serie"=>$serie . " ",
                 "id_serie"=>$id_serie,
                 "color"=>$color,
                 "almacenamiento"=>$almacenamiento,
@@ -177,15 +178,14 @@ Class TransaccionDetalle{
     }
 
     /* Crear producto */
-    function create()
-    {
+    function create() {
         $query = "call sp_creartransacciondetalle(
             :prcabecera,
             :prproductoserie,
             :prcantidad,
             :prprecio,
             :probservacion
-            )";
+        )";
 
         $result = $this->conn->prepare($query);
 
@@ -207,6 +207,46 @@ Class TransaccionDetalle{
         }
         
         return false;
+    }
+
+    function create_compra() {
+        $query = "call sp_creartransacciondetallecompra(
+            :prcabecera,
+            :prproducto,
+            :prserie,
+            :prcolor,
+            :pralmacenamiento,
+            :prprecio,
+            :prcantidad,
+            :probservacion
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prcabecera", $this->id_cabecera);
+        $result->bindParam(":prproducto", $this->id_producto);
+        $result->bindParam(":prserie", $this->producto_serie);
+        $result->bindParam(":prcolor", $this->color);
+        $result->bindParam(":pralmacenamiento", $this->almacenamiento);
+        $result->bindParam(":prprecio", $this->precio);
+        $result->bindParam(":prcantidad", $this->cantidad);
+        $result->bindParam(":probservacion", $this->observacion);
+
+        $this->id_cabecera=htmlspecialchars(strip_tags($this->id_cabecera));
+        $this->id_producto=htmlspecialchars(strip_tags($this->id_producto));
+        $this->producto_serie=htmlspecialchars(strip_tags($this->producto_serie));
+        $this->color=htmlspecialchars(strip_tags($this->color));
+        $this->almacenamiento=htmlspecialchars(strip_tags($this->almacenamiento));
+        $this->precio=htmlspecialchars(strip_tags($this->precio));
+        $this->cantidad=htmlspecialchars(strip_tags($this->cantidad));
+        $this->observacion=htmlspecialchars(strip_tags($this->observacion));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        
+        return false;        
     }
 
     /* Eliminar producto */

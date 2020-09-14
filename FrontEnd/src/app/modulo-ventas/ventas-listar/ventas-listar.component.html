@@ -135,10 +135,6 @@
           <ng-container *ngIf="venta.tipo_venta!='Salida'">
             <ng-container>
               <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="[venta.id]"><mat-icon> visibility </mat-icon></button>
-              <!-- <mat-menu #menu1="matMenu">
-                <button mat-menu-item [routerLink]="[venta.id]">Documento completo</button>
-                <button mat-menu-item>Cronograma de pagos</button>
-              </mat-menu> -->
             </ng-container>
             <ng-container  *ngIf="permiso?.ventas?.listado_ventas?.editar">
               <button mat-icon-button color="primary" matTooltip="Editar" [routerLink]="['editar', venta.id]"
@@ -154,7 +150,7 @@
                 <mat-icon [matBadge]="venta.numero_procesos" [matBadgeHidden]="venta.numero_procesos==0 || venta.estado!=1" matBadgeSize="small" matBadgeColor="accent"> gavel </mat-icon>
               </button>
               <mat-menu #menu3="matMenu">
-                <button mat-menu-item *ngFor="let proceso of ListadoProcesos" [routerLink]="['../cobranza-judicial','ver',proceso.id_proceso]">
+                <button mat-menu-item *ngFor="let proceso of ListadoProcesos" [routerLink]="['/cobranzas','cobranza-judicial','ver',proceso.id_proceso]">
                   <ng-container *ngIf="proceso.id_tipo_documento==0"> <mat-icon class="icono-primario" matTooltip="Ya tiene cronograma"> star </mat-icon> </ng-container>
                   <ng-container *ngIf="proceso.id_tipo_documento==1"> <mat-icon matTooltip="Aún no hay documentos"> fiber_manual_record </mat-icon> </ng-container>
                   <ng-container *ngIf="proceso.id_tipo_documento==2"> <mat-icon class="icono-ambar" matTooltip="Se presentó un escrito"> info </mat-icon> </ng-container>
@@ -162,7 +158,7 @@
                   <ng-container *ngIf="proceso.id_tipo_documento==4"> <mat-icon class="icono-verde" matTooltip="Se emitió el oficio"> check_circle </mat-icon> </ng-container>
                   {{proceso.expediente}}
                 </button>
-                <button mat-menu-item [routerLink]="['../cobranza-judicial','nueva-venta','venta',venta.id]" > <mat-icon> add </mat-icon> Nuevo proceso </button>
+                <button mat-menu-item [routerLink]="['/cobranzas','cobranza-judicial','nueva-venta','venta',venta.id]" > <mat-icon> add </mat-icon> Nuevo proceso </button>
               </mat-menu>
             </ng-container>
             <ng-container  *ngIf="permiso?.ventas?.listado_ventas?.eliminar">
@@ -174,10 +170,6 @@
           <ng-container *ngIf="venta.tipo_venta=='Salida'">
             <ng-container>
               <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="['salida',venta.id]"><mat-icon> visibility </mat-icon></button>
-              <!-- <mat-menu #menu2="matMenu">
-                <button mat-menu-item [routerLink]="['salida', venta.id]">Documento completo</button>
-                <button mat-menu-item>Cronograma de pagos</button>
-              </mat-menu> -->
             </ng-container>
             <ng-container  *ngIf="permiso?.ventas?.listado_ventas?.editar">
               <button mat-icon-button color="primary" matTooltip="Editar" [routerLink]="['salida', 'editar', venta.id]"
@@ -190,7 +182,7 @@
                 <mat-icon [matBadge]="venta.numero_procesos" [matBadgeHidden]="venta.numero_procesos==0 || venta.estado!=1" matBadgeSize="small" matBadgeColor="accent"> gavel </mat-icon>
               </button>
               <mat-menu #menu3="matMenu">
-                <button mat-menu-item *ngFor="let proceso of ListadoProcesos" [routerLink]="['../cobranza-judicial','ver',proceso.id_proceso]">
+                <button mat-menu-item *ngFor="let proceso of ListadoProcesos" [routerLink]="['/cobranzas','cobranza-judicial','ver',proceso.id_proceso]">
                   <ng-container *ngIf="proceso.id_tipo_documento==0"> <mat-icon class="icono-primario" matTooltip="Ya tiene cronograma"> star </mat-icon> </ng-container>
                   <ng-container *ngIf="proceso.id_tipo_documento==1"> <mat-icon matTooltip="Aún no hay documentos"> fiber_manual_record </mat-icon> </ng-container>
                   <ng-container *ngIf="proceso.id_tipo_documento==2"> <mat-icon class="icono-ambar" matTooltip="Se presentó un escrito"> info </mat-icon> </ng-container>
@@ -198,7 +190,7 @@
                   <ng-container *ngIf="proceso.id_tipo_documento==4"> <mat-icon class="icono-verde" matTooltip="Se emitió el oficio"> check_circle </mat-icon> </ng-container>
                   {{proceso.expediente}}
                 </button>
-                <button mat-menu-item [routerLink]="['../cobranza-judicial','nueva-venta','salida',venta.id]" > <mat-icon> add </mat-icon> Nuevo proceso </button>
+                <button mat-menu-item [routerLink]="['/cobranzas','cobranza-judicial','nueva-venta','salida',venta.id]" > <mat-icon> add </mat-icon> Nuevo proceso </button>
               </mat-menu>
             </ng-container>
             <ng-container  *ngIf="permiso?.ventas?.listado_ventas?.eliminar">

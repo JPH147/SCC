@@ -175,7 +175,7 @@ export class CobranzaArchivosPagoComponent implements OnInit {
               } else {
                 this.notificacion.Snack("Ocurrió un error al registrar el pago.","")
               }
-              this.router.navigate(['/cobranza-archivos']);
+              this.router.navigate(['/cobranzas','cobranza-archivos']);
             })
           }
         });

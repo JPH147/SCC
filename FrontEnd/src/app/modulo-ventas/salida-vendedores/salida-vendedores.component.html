@@ -517,7 +517,7 @@
         <ng-container matColumnDef="opciones">
           <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
           <mat-cell *matCellDef="let talonario">
-            <button mat-icon-button type="button" matTooltip="Ver venta" color="primary" [disabled]="talonario.id_estado==3 || !talonario.id_venta" [routerLink]="['/ventas','salida', talonario.id_venta]"><mat-icon> visibility </mat-icon></button>
+            <button mat-icon-button type="button" matTooltip="Ver venta" color="primary" [disabled]="talonario.id_estado==3 || !talonario.id_venta" [routerLink]="['/ventas','ventas','salida', talonario.id_venta]"><mat-icon> visibility </mat-icon></button>
           </mat-cell>
         </ng-container>
 
@@ -646,7 +646,7 @@
           <ng-container matColumnDef="opciones">
             <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
             <mat-cell *matCellDef="let producto">
-              <button mat-icon-button type="button" matTooltip="Ver venta" color="primary" [disabled]="!producto.id_venta" [routerLink]="['/ventas','salida', producto.id_venta]"><mat-icon> visibility </mat-icon></button>
+              <button mat-icon-button type="button" matTooltip="Ver venta" color="primary" [disabled]="!producto.id_venta" [routerLink]="['/ventas','ventas','salida', producto.id_venta]"><mat-icon> visibility </mat-icon></button>
             </mat-cell>
           </ng-container>
 

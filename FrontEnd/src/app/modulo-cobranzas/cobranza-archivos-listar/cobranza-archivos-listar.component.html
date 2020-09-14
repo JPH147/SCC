@@ -71,7 +71,7 @@
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let cobranza">
           <ng-container>
-            <button mat-icon-button color="primary" matTooltip="Ver" [routerLink]="['./ver', cobranza.id]"> <mat-icon> visibility </mat-icon> </button>
+            <button mat-icon-button color="primary" matTooltip="Ver" [routerLink]="['ver', cobranza.id]"> <mat-icon> visibility </mat-icon> </button>
           </ng-container>
           <ng-container *ngIf="permiso?.cobranzas?.cobranzas_planilla?.descargar_archivo">
             <button mat-icon-button color="primary" matTooltip="Descargar archivo" (click)="AbrirArchivo(cobranza.archivo)"> <mat-icon> cloud_download </mat-icon> </button>

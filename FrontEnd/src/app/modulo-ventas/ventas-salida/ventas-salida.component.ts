@@ -1075,7 +1075,9 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       total_productos_nuevos = total_productos_nuevos + item.value.precio*1;
     })
 
-    this.VentasSalidaForm.get('montototal').setValue(total_productos_antiguos+ total_productos_nuevos);
+    let total = total_productos_nuevos + total_productos_antiguos - this.VentasSalidaForm.get('inicial').value ;
+
+    this.VentasSalidaForm.get('montototal').setValue(total);
 
     this.CrearCronograma();
 
@@ -1191,7 +1193,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
                 this.Servicio.CrearVentaCronograma(this.idventa,2,res.monto,new Date(), 1).subscribe() ;
               }
   
-              this.router.navigate(['/ventas']) ;
+              this.router.navigate(['/ventas','ventas']) ;
             });
           });
         }
@@ -1397,14 +1399,17 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
     if ( this.VentasSalidaForm.get('fecha_fin_mes').value ) {
       let fecha = this.VentasSalidaForm.value.fechapago ;
       this.VentasSalidaForm.get('fechapago').setValue( new Date(moment(fecha).endOf('month').toDate()) ) ;
-      this.CrearCronograma() ;
+      this.FechaPagoSeleccionada() ;
+      // this.CrearCronograma() ;
     }
   }
 
   FechaPagoSeleccionada() {
-    let fecha_credito = this.VentasSalidaForm.get('fechaventa').value ;
+    let fecha_venta = this.VentasSalidaForm.get('fechaventa').value ;
     let fecha_pago = this.VentasSalidaForm.get('fechapago').value ;
-    if ( fecha_pago < fecha_credito ) {
+
+    let diferencia = moment(fecha_pago).diff(fecha_venta, 'days') ;
+    if ( diferencia < 0 ) {
       this.VentasSalidaForm.get('fechapago').setErrors({'fecha_adelantada': true}) ;
     } else {
       this.VentasSalidaForm.get('fechapago').setErrors(null) ;
