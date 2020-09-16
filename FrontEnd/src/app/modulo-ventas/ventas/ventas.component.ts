@@ -2159,7 +2159,10 @@ export class VentasComponent implements OnInit {
     } else {
       mes_seleccionado = moment() ;
     }
-    mes_seleccionado.month(mes_normalizado.month());
+
+    mes_seleccionado.year(mes_normalizado.year()) ;
+    mes_seleccionado.month(mes_normalizado.month()) ;
+
     this.VentasForm.get('fechapago').setValue(moment(mes_seleccionado).endOf('month').toDate());
     datepicker.close();
     this.FechaPagoSeleccionada() ;

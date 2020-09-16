@@ -1435,7 +1435,10 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
     } else {
       mes_seleccionado = moment() ;
     }
+
+    mes_seleccionado.year(mes_normalizado.year()) ;
     mes_seleccionado.month(mes_normalizado.month());
+    
     this.VentasSalidaForm.get('fechapago').setValue(moment(mes_seleccionado).endOf('month').toDate());
     datepicker.close();
     this.FechaPagoSeleccionada() ;

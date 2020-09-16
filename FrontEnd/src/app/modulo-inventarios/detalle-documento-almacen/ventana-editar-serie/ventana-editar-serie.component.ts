@@ -113,7 +113,7 @@ export class VentanaEditarSerieComponent implements OnInit, AfterViewInit {
           this.Cargando.next(false);
           this.Informacion.id=res.id_producto_serie;
           this.Informacion.id_producto=res.id_producto;
-          this.Informacion.serie=res.serie;
+          this.Informacion.serie=(res.serie).trim() ;
           this.Informacion.color=res.color;
           this.Informacion.almacenamiento=res.almacenamiento;
           this.Informacion.precio=res.precio;
