@@ -31,7 +31,7 @@ export class ServiciosDirecciones{
 		})
 		.pipe(map(res=>{
 			if(res['codigo']===0){
-				return res=res
+				return res
 			}else{
 				console.log('No hay datos que mostrar')
 			}
@@ -48,7 +48,7 @@ export class ServiciosDirecciones{
 		})
 		.pipe(map(res=>{
 			if(res['codigo']===0){
-				return res=res['data']
+				return res['data']
 			}else{
 				console.log('No hay datos que mostrar')
 			}
@@ -103,7 +103,7 @@ export class ServiciosDirecciones{
 		return this.http.get(this.url+'direccionprovincia/read.php',{params})
 		.pipe(map(res=>{
 			if(res['codigo']===0){
-				return res=res
+				return res ;
 			}else{
 				console.log('No hay datos que mostrar')
 			}
@@ -120,7 +120,7 @@ export class ServiciosDirecciones{
 		})
 		.pipe(map(res=>{
 			if(res['codigo']===0){
-				return res=res['data']
+				return res['data']
 			}else{
 				console.log('No hay datos que mostrar')
 			}
@@ -179,7 +179,7 @@ export class ServiciosDirecciones{
 		})
 		.pipe(map(res=>{
 			if(res['codigo']===0){
-				return res=res
+				return res ;
 			}else{
 				console.log('No hay datos que mostrar')
 			}
@@ -196,7 +196,7 @@ export class ServiciosDirecciones{
 		})
 		.pipe(map(res=>{
 			if(res['codigo']===0){
-				return res=res['data']
+				return res['data']
 			}else{
 				console.log('No hay datos que mostrar')
 			}

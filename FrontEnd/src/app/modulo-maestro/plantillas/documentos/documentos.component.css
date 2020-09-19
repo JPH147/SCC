@@ -22,3 +22,7 @@
 .mat-column-opciones{
   max-width: 10%;
 }
+
+.mat-column-numero {
+  max-width: 5%;
+}

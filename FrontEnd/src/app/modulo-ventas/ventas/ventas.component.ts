@@ -35,6 +35,8 @@ import * as moment from 'moment';
 import {default as _rollupMoment, Moment} from 'moment';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { VentanaGenerarPagoTransaccionComponent } from "../../compartido/componentes/ventana-generar-pago-transaccion/ventana-generar-pago-transaccion.component";
+import { VentanaGenerarPenalidadComponent } from "src/app/compartido/componentes/ventana-generar-penalidad/ventana-generar-penalidad.component";
+import { ServiciosVentas } from "src/app/core/servicios/ventas";
 
 @Component({
   selector: 'app-ventas',
@@ -177,6 +179,13 @@ export class VentasComponent implements OnInit {
   public totales_total_pagadas : number = 0 ;
 
   public editar_documentos : boolean = false ;
+  public cumple_penalidad : number = 1 ;
+  public id_tipo_pago : number = 0 ;
+
+  public contrato_pdf_express : string = "" ;
+
+  public cuotas_penalidad : number = 0 ;
+  public cuotas_interes : number = 0 ;
 
   constructor(
     private _store : Store<EstadoSesion> ,
@@ -196,6 +205,7 @@ export class VentasComponent implements OnInit {
     private CServicio : CreditosService,
     private SServicio : SeguimientosService,
     private _judiciales : CobranzaJudicialService ,
+    private _ventas : ServiciosVentas ,
   ) { }
 
   ngOnInit() {
@@ -441,6 +451,12 @@ export class VentasComponent implements OnInit {
 
     this.Servicio.SeleccionarVenta(id_venta).subscribe(res=>{
       this.Cargando.next(false);
+
+      this.cumple_penalidad = res.cumple_penalidad ;
+      this.id_tipo_pago = res.idtipopago ;
+      this.cuotas_penalidad = res.cuotas_penalidad ;
+      this.cuotas_interes = res.cuotas_interes ;
+
       this.talonario=res.talonario_serie+" - "+res.talonario_contrato;
 
       this.VentasForm.get('id_cliente').setValue(res.id_cliente);
@@ -602,7 +618,8 @@ export class VentasComponent implements OnInit {
       }
 
       if (this.idventa_editar) {
-
+        this.CrearCronograma() ;
+        
         if( res['courier'].id ){
           this.VentasForm.get('papeles_courier').setValue(res['courier'].id_courier);
           this.papeles_antiguo=res['courier'].foto;
@@ -621,8 +638,8 @@ export class VentasComponent implements OnInit {
         this.VentasForm.get('observaciones').setValue(res.observacion);
         this.VentasForm.get('tipopago').setValue(res.idtipopago);
 
-        this.Cronograma=res.cronograma.cronograma;
-        this.CalcularTotalPagado(this.Cronograma) ;
+        // this.Cronograma=res.cronograma.cronograma ;
+        // this.CalcularTotalPagado(this.Cronograma) ;
         
         this.ListadoVentas.Informacion.next(this.Cronograma);
         this.edicion_productos=res.productos.productos;
@@ -1252,6 +1269,16 @@ export class VentasComponent implements OnInit {
     this.VentasForm.get('contrato').setValue('');
   }
 
+  VerificarAdjuntoExpress() {
+    if ( !this.id_venta ) {
+      this._ventas.ListarAdjuntosTalonario(
+        this.VentasForm.get('contrato').value
+      ).subscribe(res =>{
+        this.contrato_pdf_express = res.pdf_contrato ;
+      })
+    }
+  }
+
   ListarVendedor(nombre: string) {
     this.ServiciosGenerales.ListarVendedor("",nombre,"",1,5).subscribe( res => {
       this.LstVendedor=res;
@@ -1647,6 +1674,8 @@ export class VentasComponent implements OnInit {
       this.ListadoVentas.Informacion.next(this.Cronograma)
       this.CalcularTotalCronograma();
 
+      this.CrearCronograma() ;
+
       this.ProductosComprados=res.productos;
 
       if(res.id_vendedor){
@@ -1774,20 +1803,21 @@ export class VentasComponent implements OnInit {
     let dni = this.VentasForm.value.dni ;
     let fecha = moment(this.VentasForm.value.fechaventa).format("DD_MM_YYYY") ;
 
-    return forkJoin(
-      this.ServiciosGenerales.RenameFile(this.foto, dni + '_FOTO_' + fecha, identificador, "venta"),
-      this.ServiciosGenerales.RenameFile(this.dni, dni + '_DNI_' + fecha, identificador, "venta"),
-      this.ServiciosGenerales.RenameFile(this.cip, dni + '_CIP_' + fecha, identificador, "venta"),
-      this.ServiciosGenerales.RenameFile(this.contrato, dni + '_CONTRATO_' + fecha, identificador, "venta"),
-      this.ServiciosGenerales.RenameFile(this.transaccion, dni + '_TRANSACCION_' + fecha, identificador, "venta"),
-      this.ServiciosGenerales.RenameFile(this.planilla, dni + '_PLANILLA_' + fecha, identificador, "venta"),
-      this.ServiciosGenerales.RenameFile(this.letra, dni + '_LETRA_' + fecha, identificador, "venta"),
-      this.ServiciosGenerales.RenameFile(this.autorizacion, dni + '_AUTORIZACION_' + fecha, identificador, "venta"),
-      this.ServiciosGenerales.RenameFile(this.oficio, dni + '_OFICIO_' + fecha, identificador, "venta"),
-      this.ServiciosGenerales.RenameFile(this.otros, dni + '_OTROS_' + fecha, identificador, "venta"),
-      this.ServiciosGenerales.RenameFile(this.papeles, dni + '_PAPELES_' + fecha, identificador, "venta")
-    ).subscribe(resultado=>{
-      console.log(resultado)
+    let carpeta : string = "venta" ;
+
+    return forkJoin([
+      this.ServiciosGenerales.RenameFile(this.foto, dni + '_FOTO_' + fecha, identificador, carpeta),
+      this.ServiciosGenerales.RenameFile(this.dni, dni + '_DNI_' + fecha, identificador, carpeta),
+      this.ServiciosGenerales.RenameFile(this.cip, dni + '_CIP_' + fecha, identificador, carpeta),
+      this.ServiciosGenerales.RenameFile(this.contrato, dni + '_CONTRATO_' + fecha, identificador, carpeta),
+      this.ServiciosGenerales.RenameFile(this.transaccion, dni + '_TRANSACCION_' + fecha, identificador, carpeta),
+      this.ServiciosGenerales.RenameFile(this.planilla, dni + '_PLANILLA_' + fecha, identificador, carpeta),
+      this.ServiciosGenerales.RenameFile(this.letra, dni + '_LETRA_' + fecha, identificador, carpeta),
+      this.ServiciosGenerales.RenameFile(this.autorizacion, dni + '_AUTORIZACION_' + fecha, identificador, carpeta),
+      this.ServiciosGenerales.RenameFile(this.oficio, dni + '_OFICIO_' + fecha, identificador, carpeta),
+      this.ServiciosGenerales.RenameFile(this.otros, dni + '_OTROS_' + fecha, identificador, carpeta),
+      this.ServiciosGenerales.RenameFile(this.papeles, dni + '_PAPELES_' + fecha, identificador, carpeta)
+    ]).subscribe(resultado=>{
       this.Servicio.CrearVenta(
         formulario.value.fechaventa,
         formulario.value.sucursal,
@@ -1810,7 +1840,7 @@ export class VentasComponent implements OnInit {
         resultado[0].mensaje,
         resultado[1].mensaje,
         resultado[2].mensaje,
-        resultado[3].mensaje,
+        this.contrato_pdf_express ? this.contrato_pdf_express : resultado[3].mensaje,
         resultado[4].mensaje,
         resultado[5].mensaje,
         resultado[6].mensaje,
@@ -1868,13 +1898,13 @@ export class VentasComponent implements OnInit {
         if( this.VentasForm.value.garante ){
 
           this.VentasForm['controls'].garantes['controls'].forEach((item, index)=>{
-            return forkJoin(
+            return forkJoin([
               this.ServiciosGenerales.RenameFile(item.value.dni_pdf,`DNI_GARANTE_+${index+1}`,random.toString(),"venta"),
               this.ServiciosGenerales.RenameFile(item.value.cip_pdf,`CIP_GARANTE_+${index+1}`,random.toString(),"venta"),
               this.ServiciosGenerales.RenameFile(item.value.planilla_pdf,`PLANILLA_GARANTE_+${index+1}`,random.toString(),"venta"),
               this.ServiciosGenerales.RenameFile(item.value.letra_pdf,`LETRA_GARANTE_+${index+1}`,random.toString(),"venta"),
               this.ServiciosGenerales.RenameFile(item.value.transaccion_pdf,`TRANSACCION_GARANTE_+${index+1}`,random.toString(),"venta"),
-            ).subscribe(response=>{
+            ]).subscribe(response=>{
               this.Servicio.CrearVentaGarante(
                 res['data'],
                 item.value.id_cliente,
@@ -1914,7 +1944,7 @@ export class VentasComponent implements OnInit {
     let dni = this.VentasForm.value.dni ;
     let fecha = moment(this.VentasForm.value.fechaventa).format("DD_MM_YYYY") ;
     
-    return forkJoin(
+    forkJoin([
       this.ServiciosGenerales.RenameFile(this.foto_nuevo, dni + '_FOTO_' + fecha, identificador, "venta"),
       this.ServiciosGenerales.RenameFile(this.dni_nuevo, dni + '_DNI_' + fecha, identificador, "venta"),
       this.ServiciosGenerales.RenameFile(this.cip_nuevo, dni + '_CIP_' + fecha, identificador, "venta"),
@@ -1926,7 +1956,7 @@ export class VentasComponent implements OnInit {
       this.ServiciosGenerales.RenameFile(this.oficio_nuevo, dni + '_OFICIO' + fecha, identificador, "venta"),
       this.ServiciosGenerales.RenameFile(this.otros_nuevo, dni + '_OTROS_' + fecha, identificador, "venta"),
       this.ServiciosGenerales.RenameFile(this.papeles_nuevo, dni + '_PAPELES_' + fecha, identificador, "venta")
-    ).subscribe(resultado=>{
+    ]).subscribe(resultado=>{
       // console.log(resultado)
 
       // Cuando se actualiza la venta, en el procedimiento
@@ -1997,13 +2027,13 @@ export class VentasComponent implements OnInit {
         if( this.VentasForm.value.garante ){
 
           this.VentasForm['controls'].garantes['controls'].forEach((item, index)=>{
-            return forkJoin(
+            return forkJoin([
               this.ServiciosGenerales.RenameFile(item.value.dni_pdf_nuevo,'DNI_GARANTE_'+(index+1),random.toString(),"venta"),
               this.ServiciosGenerales.RenameFile(item.value.cip_pdf_nuevo,'CIP_GARANTE_'+(index+1),random.toString(),"venta"),
               this.ServiciosGenerales.RenameFile(item.value.planilla_pdf_nuevo,'PLANILLA_GARANTE_'+(index+1),random.toString(),"venta"),
               this.ServiciosGenerales.RenameFile(item.value.letra_pdf_nuevo,'LETRA_GARANTE_'+(index+1),random.toString(),"venta"),
               this.ServiciosGenerales.RenameFile(item.value.transaccion_pdf_nuevo,'TRANSACCION_GARANTE_'+(index+1),random.toString(),"venta"),
-            ).subscribe(response=>{
+            ]).subscribe(response=>{
               this.Servicio.CrearVentaGarante(
                 res['data'],
                 item.value.id_cliente,
@@ -2053,7 +2083,7 @@ export class VentasComponent implements OnInit {
     let dni = this.VentasForm.value.dni ;
     let fecha = moment(this.VentasForm.value.fechaventa).format("DD_MM_YYYY") ;
     
-    return forkJoin(
+    forkJoin([
       this.ServiciosGenerales.RenameFile(this.foto_nuevo, dni + '_FOTO_' + fecha, identificador, "venta"),
       this.ServiciosGenerales.RenameFile(this.dni_nuevo, dni + '_DNI_' + fecha, identificador, "venta"),
       this.ServiciosGenerales.RenameFile(this.cip_nuevo, dni + '_CIP_' + fecha, identificador, "venta"),
@@ -2064,7 +2094,7 @@ export class VentasComponent implements OnInit {
       this.ServiciosGenerales.RenameFile(this.autorizacion_nuevo, dni + '_AUTORIZACION_' + fecha, identificador, "venta"),
       this.ServiciosGenerales.RenameFile(this.oficio_nuevo, dni + '_OFICIO_' + fecha, identificador, "venta"),
       this.ServiciosGenerales.RenameFile(this.otros_nuevo, dni + '_OTROS_' + fecha, identificador, "venta"),
-    ).subscribe(resultado=>{
+    ]).subscribe(resultado=>{
       this.Servicio.ActualizarVentaDocumentos(
         this.idventa,
         this.foto_editar ? resultado[0].mensaje : this.foto_antiguo,
@@ -2180,6 +2210,28 @@ export class VentasComponent implements OnInit {
     }
   }
 
+  EstablecerPenalidad() {
+    let Ventana = this.Dialogo.open(VentanaGenerarPenalidadComponent,{
+      data : {
+        id_venta : this.id_venta ,
+        monto_total : +this.VentasForm.get('montototal').value - +this.VentasForm.get('inicial').value ,
+        numero_cuotas : this.VentasForm.get('cuotas').value ,
+        tipo_pago : this.id_tipo_pago
+      } ,
+      width: '900px' ,
+      maxHeight: '80vh'
+    })
+    
+    Ventana.afterClosed().subscribe(res =>{
+      if ( res ) {
+        this.SeleccionarVentaxId(this.id_venta) ;
+        this.Notificacion.Snack("Se crearon las cuotas de la penalidad satisfactoriamente","")
+      }
+      if(res===false) {
+        this.Notificacion.Snack("Ocurrió un error al crear las cuotas de la penalidad","")
+      }
+    })
+  }
 }
 
 export class VentaDataSource implements DataSource<any>{

@@ -1,26 +1,27 @@
 Nuevos
-sp_listarprocesojudicialcontarV2 |||
+drop procedure if exists sp_crearpenalidadcredito ;
+drop procedure if exists sp_crearpenalidadventa ;
+drop procedure if exists sp_actualizarcooperativadireccionorden ;
+drop procedure if exists sp_listartalonarioadjuntoxId ;
+drop procedure if exists sp_creartalonariosadjuntos ;
+drop procedure if exists sp_crearcreditocronogramainteres ;
 
 Actualizar
-drop procedure if exists sp_actualizarafiliacioncuotasalpresente ;
-drop procedure if exists sp_actualizarcredito ;
-drop procedure if exists sp_actualizarcreditodocumentos ;
-drop procedure if exists sp_actualizarventa ;
-drop procedure if exists sp_actualizarventadocumentos;
-drop procedure if exists sp_actualizartipoproducto ;
-drop procedure if exists sp_crearcredito ;
-drop procedure if exists sp_creartipoproducto ;
-drop procedure if exists sp_crearventa ;
-drop procedure if exists sp_listarcreditoxId;
-drop procedure if exists sp_listarprocesojudicialdistritos ;
-drop procedure if exists sp_listarprocesojudicialinstancias ;
-drop procedure if exists sp_listarprocesojudicialV3 ;
-drop procedure if exists sp_listartipoproducto;
-drop procedure if exists sp_listartipoproducto2;
-drop procedure if exists sp_listartipoproductoxId;
-drop procedure if exists sp_listarventaxId;
+drop procedure if exists sp_listarcredito ;
+drop procedure if exists sp_listarcreditoxid ;
+drop procedure if exists sp_listarventa ;
+drop procedure if exists sp_listarventaxid ;
+drop procedure if exists sp_listarventasalidaxid ;
+drop procedure if exists sp_listarplantilladirecciontransaccion ;
+drop procedure if exists sp_listarcooperativadireccion ;
+drop procedure if exists sp_listarcooperativadireccioncontar ;
+drop procedure if exists sp_listarventacronograma ;
+drop procedure if exists sp_listarcreditocronograma ;
+drop procedure if exists sp_listarcronogramaventaspagosxmes ;
+drop procedure if exists sp_listarcronogramacreditospagosxmes ;
 
 TABLAS
-credito
-ventas
-tipo_producto
+credito_cronograma
+venta_cronograma
+cooperativa_direccion
+talonarios_adjunto

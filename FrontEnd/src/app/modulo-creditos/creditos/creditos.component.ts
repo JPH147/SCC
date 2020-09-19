@@ -33,6 +33,7 @@ import { VentanaGenerarPagoTransaccionComponent } from '../../compartido/compone
 import * as moment from 'moment';
 import {default as _rollupMoment, Moment} from 'moment';
 import { MatDatepicker } from '@angular/material/datepicker';
+import { VentanaGenerarPenalidadComponent } from 'src/app/compartido/componentes/ventana-generar-penalidad/ventana-generar-penalidad.component';
 
 @Component({
   selector: 'app-creditos',
@@ -172,6 +173,11 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   public totales_total_pagadas : number ;
 
   public editar_documentos : boolean = false ;
+  public cumple_penalidad : number = 1 ;
+  public id_tipo_pago : number = 0 ;
+
+  public cuotas_penalidad : number = 0 ;
+  public cuotas_interes : number = 0 ;
 
   constructor(
     private _store : Store<EstadoSesion> ,
@@ -285,7 +291,6 @@ export class CreditosComponent implements OnInit, AfterViewInit {
        this.NuevoCredito();
       }
     })
-
   }
 
   ngAfterViewInit(): void {
@@ -585,7 +590,11 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         codigo_string = "0" + codigo_string;
       }
       
-      this.id_tipo=res.id_tipo;
+      this.id_tipo=res.id_tipo ;
+      this.cumple_penalidad = res.cumple_penalidad ;
+      this.id_tipo_pago = res.id_tipo_pago ;
+      this.cuotas_penalidad = res.cuotas_penalidad ;
+      this.cuotas_interes = res.cuotas_interes ;
 
       if(this.id_tipo==1){
         this.CreditosForm.get('codigo').setValue(res.codigo)
@@ -759,9 +768,10 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         this.CreditosForm.get('observaciones').setValue(res.observaciones);
 
         this.ColumnasCronograma= ['numero', 'fecha_vencimiento_ver', 'monto_cuota_ver'];
-        this.Cronograma = res.cronograma;
-        this.CalcularTotalPagado(this.Cronograma) ;
-        this.ListadoCronograma.AsignarInformacion(this.Cronograma);
+        this.CrearCronograma() ;
+        // this.Cronograma = res.cronograma;
+        // this.CalcularTotalPagado(this.Cronograma) ;
+        // this.ListadoCronograma.AsignarInformacion(this.Cronograma);
 
         this.foto_antiguo=res.pdf_foto;
         this.dni_antiguo=res.pdf_dni;
@@ -1559,9 +1569,9 @@ export class CreditosComponent implements OnInit, AfterViewInit {
 
     let random=(new Date()).getTime()
 
-    return forkJoin(
+    return forkJoin([
       this.ServiciosGenerales.RenameFile(this.tarjeta_nuevo,'TARJETA',random.toString(),"credito")
-    ).subscribe(resultado=>{
+    ]).subscribe(resultado=>{
 
       // console.log(resultado)
 
@@ -1625,7 +1635,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     let dni = this.CreditosForm.value.dni ;
     let fecha = moment(this.CreditosForm.value.fechaventa).format("DD_MM_YYYY") ;
 
-    return forkJoin(
+    return forkJoin([
       this.ServiciosGenerales.RenameFile(this.foto, dni + '_FOTO_' + fecha, identificador ,"credito"),
       this.ServiciosGenerales.RenameFile(this.dni, dni + '_DNI_' + fecha, identificador ,"credito"),
       this.ServiciosGenerales.RenameFile(this.cip, dni + '_CIP_' + fecha, identificador ,"credito"),
@@ -1642,7 +1652,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       this.ServiciosGenerales.RenameFile(this.oficio, dni + '_OFICIO_' + fecha, identificador ,"credito"),
       this.ServiciosGenerales.RenameFile(this.otros, dni + '_OTROS_' + fecha, identificador ,"credito"),
       this.ServiciosGenerales.RenameFile(this.papeles, dni + '_PAPELES_' + fecha, identificador ,"credito"),
-    ).subscribe(resultado=>{
+    ]).subscribe(resultado=>{
 
       if( this.cliente_afiliado === false ){
         this.CrearAfiliacion(
@@ -1718,11 +1728,11 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         // Si el crédito tiene garante, se los agrega
         if( this.CreditosForm.value.garante ){
           this.CreditosForm['controls'].garantes['controls'].forEach((item, index)=>{
-            return forkJoin(
+            return forkJoin([
               this.ServiciosGenerales.RenameFile(item.value.dni_pdf,`DNI_GARANTE_+${index+1}`,random.toString(),"credito"),
               this.ServiciosGenerales.RenameFile(item.value.cip_pdf,`CIP_GARANTE_+${index+1}`,random.toString(),"credito"),
               this.ServiciosGenerales.RenameFile(item.value.planilla_pdf,`PLANILLA_GARANTE_+${index+1}`,random.toString(),"credito"),
-            ).subscribe(response=>{
+            ]).subscribe(response=>{
               this.Servicio.CrearGarante(
                 res['data'],
                 item.value.id_cliente,
@@ -1771,7 +1781,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     let dni = this.CreditosForm.value.dni ;
     let fecha = moment(this.CreditosForm.value.fechaventa).format("DD_MM_YYYY") ;
 
-    return forkJoin(
+    return forkJoin([
       this.ServiciosGenerales.RenameFile(this.foto_nuevo, dni + '_FOTO_' + fecha, identificador ,"credito"),
       this.ServiciosGenerales.RenameFile(this.dni_nuevo, dni + '_DNI_' + fecha, identificador ,"credito"),
       this.ServiciosGenerales.RenameFile(this.cip_nuevo, dni + '_CIP_' + fecha, identificador ,"credito"),
@@ -1788,7 +1798,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       this.ServiciosGenerales.RenameFile(this.oficio_nuevo, dni + '_OTROS_' + fecha, identificador ,"credito"),
       this.ServiciosGenerales.RenameFile(this.otros_nuevo, dni + '_OTROS_' + fecha, identificador ,"credito"),
       this.ServiciosGenerales.RenameFile(this.papeles_nuevo, dni + '_PAPELES_' + fecha, identificador ,"credito"),
-    ).subscribe(resultado=>{
+    ]).subscribe(resultado=>{
 
       // console.log(resultado)
 
@@ -1845,11 +1855,11 @@ export class CreditosComponent implements OnInit, AfterViewInit {
           // Si el crédito tiene garante, se los agrega
           if( this.CreditosForm.value.garante ){
             this.CreditosForm['controls'].garantes['controls'].forEach((item, index)=>{
-              return forkJoin(
+              return forkJoin([
                 this.ServiciosGenerales.RenameFile(item.value.dni_pdf_nuevo,`DNI_GARANTE_+${index+1}`,random.toString(),"credito"),
                 this.ServiciosGenerales.RenameFile(item.value.cip_pdf_nuevo,`CIP_GARANTE_+${index+1}`,random.toString(),"credito"),
                 this.ServiciosGenerales.RenameFile(item.value.planilla_pdf_nuevo,`PLANILLA_GARANTE_+${index+1}`,random.toString(),"credito"),
-              ).subscribe(response=>{
+              ]).subscribe(response=>{
                 this.Servicio.CrearGarante(
                   res['data'],
                   item.value.id_cliente,
@@ -1908,7 +1918,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     let dni = this.CreditosForm.value.dni ;
     let fecha = moment(this.CreditosForm.value.fechaventa).format("DD_MM_YYYY") ;
 
-    return forkJoin(
+    return forkJoin([
       this.ServiciosGenerales.RenameFile(this.foto_nuevo, dni + '_FOTO_' + fecha, identificador ,"credito"),
       this.ServiciosGenerales.RenameFile(this.dni_nuevo, dni + '_DNI_' + fecha, identificador ,"credito"),
       this.ServiciosGenerales.RenameFile(this.cip_nuevo, dni + '_CIP_' + fecha, identificador ,"credito"),
@@ -1924,7 +1934,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       this.ServiciosGenerales.RenameFile(this.ddjj_nuevo, dni + '_DDJJ_' + fecha, identificador ,"credito"),
       this.ServiciosGenerales.RenameFile(this.oficio_nuevo, dni + '_OFICIO_' + fecha, identificador ,"credito"),
       this.ServiciosGenerales.RenameFile(this.otros_nuevo, dni + '_OTROS_' + fecha, identificador ,"credito"),
-    ).subscribe(resultado=>{
+    ]).subscribe(resultado=>{
       this.Servicio.ActualizarDocumentos(
         this.id_credito,
         this.foto_editar ? resultado[0].mensaje : this.foto_antiguo,
@@ -2041,6 +2051,48 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     }
   }
 
+  EstablecerPenalidad() {
+    let Ventana = this.Dialogo.open(VentanaGenerarPenalidadComponent, {
+      data : {
+        id_credito : this.id_credito_estandar ,
+        monto_total : this.CreditosForm.get('total').value - +this.CreditosForm.get('interes_diario_monto').value  ,
+        numero_cuotas : this.CreditosForm.get('cuotas').value ,
+        tipo_pago : this.id_tipo_pago
+      } ,
+      width: '900px' ,
+      maxHeight: '80vh'
+    })
+    
+    Ventana.afterClosed().subscribe(res =>{
+      if ( res ) {
+        this.SeleccionarCredito(this.id_credito_estandar) ;
+        this.Notificacion.Snack("Se crearon las cuotas de la penalidad satisfactoriamente","")
+      }
+      if(res===false) {
+        this.Notificacion.Snack("Ocurrió un error al crear las cuotas de la penalidad","")
+      }
+    })
+  }
+
+  GenerarInteres() {
+    let Ventana = this.Dialogo.open(VentanaGenerarPenalidadComponent, {
+      data : {
+        id_credito : this.id_credito_estandar ,
+      } ,
+      width: '900px' ,
+      maxHeight: '80vh'
+    })
+    
+    Ventana.afterClosed().subscribe(res =>{
+      if ( res ) {
+        this.SeleccionarCredito(this.id_credito_estandar) ;
+        this.Notificacion.Snack("Se generó el interés satisfactoriamente","")
+      }
+      if(res===false) {
+        this.Notificacion.Snack("Ocurrió un error al generar el interés","")
+      }
+    })
+  }
 }
 
 export class CronogramaDataSource implements DataSource<any>{

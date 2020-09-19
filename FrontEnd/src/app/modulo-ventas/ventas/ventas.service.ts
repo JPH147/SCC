@@ -78,8 +78,6 @@ export class VentaService {
       .set('prpdfotros',pdfotros)
       .set('probservaciones',observaciones)
 
-    console.log(params);
-
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'venta/create.php', params, {headers: headers});
@@ -512,4 +510,32 @@ export class VentaService {
     return this.http.post(this.url + 'venta/update-producto-salida.php', params, {headers: headers});
   }
 
+  CrearPenalidad(
+    id_venta : number ,
+    cuota_penalidad : number ,
+    numero_cuotas : number ,
+    fecha_inicio : Date ,
+    tipo_pago : number ,
+  ) : Observable<boolean> {
+    let params = new HttpParams()
+      .set('prventa',id_venta.toString())
+      .set('prcuotapenalidad',cuota_penalidad.toString())
+      .set('prnumerocuotas',numero_cuotas.toString())
+      .set('prfechainicio', moment(fecha_inicio).format("YYYY-MM-DD") )
+      .set('prtipopago',tipo_pago.toString())
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'venta/crear-penalidad.php', params, {headers: headers})
+    .pipe(
+      map((res)=>{
+        if ( res['codigo'] === 0) {
+          return true ;
+        } else {
+          console.log(res) ;
+          return false ;
+        }
+      })
+    );
+  }
 }

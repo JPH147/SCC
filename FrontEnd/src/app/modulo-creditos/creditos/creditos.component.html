@@ -140,14 +140,6 @@
             <input matInput type="text" placeholder="Cuota de asociado" formControlName="afiliacion_monto">
           </mat-form-field>
         </mat-grid-tile>
-<!-- 
-        <mat-grid-tile>
-          <mat-form-field>
-            <input matInput type="number" placeholder="Tiempo mínimo de afiliación" formControlName="afiliacion_tiempo">
-            <mat-hint *ngIf="!id_credito && !id_credito_editar"> Total de cuotas {{ numero_cuotas }} </mat-hint>
-            <span matSuffix> &nbsp; años </span>
-          </mat-form-field>
-        </mat-grid-tile> -->
 
         <mat-grid-tile>
           <mat-form-field>
@@ -1281,7 +1273,7 @@
         <ng-container>
           <mat-grid-tile *ngIf="!CreditosForm.value.fecha_fin_mes">
             <mat-form-field class="columnas-1">
-              <input matInput [matDatepicker]="InputFechaPago" placeholder="Inicio de pagos" [min]="CreditosForm.value.fecha_credito" formControlName="fecha_pago" (dateChange)="FechaPagoSeleccionada()" [readonly]="id_credito || id_tipo==1 || id_presupuesto || cliente_refinanciado">
+              <input matInput [matDatepicker]="InputFechaPago" placeholder="Inicio de pagos" formControlName="fecha_pago" (dateChange)="FechaPagoSeleccionada()" [readonly]="id_credito || id_tipo==1 || id_presupuesto || cliente_refinanciado">
               <mat-datepicker-toggle matSuffix [for]="InputFechaPago"></mat-datepicker-toggle>
               <mat-datepicker #InputFechaPago [disabled]="id_credito || id_presupuesto || cliente_refinanciado"></mat-datepicker>
             </mat-form-field>
@@ -1289,7 +1281,7 @@
   
           <mat-grid-tile *ngIf="CreditosForm.value.fecha_fin_mes">
             <mat-form-field class="columnas-1">
-              <input matInput [matDatepicker]="FFin" placeholder="Inicio de pagos" [min]="CreditosForm.value.fecha_credito" formControlName="fecha_pago" readonly>
+              <input matInput [matDatepicker]="FFin" placeholder="Inicio de pagos" formControlName="fecha_pago" readonly>
               <mat-datepicker-toggle matSuffix [for]="FFin"></mat-datepicker-toggle>
               <mat-datepicker #FFin startView="year"
                               [disabled]="id_credito || id_presupuesto || cliente_refinanciado"
@@ -1372,10 +1364,24 @@
       </mat-card-subtitle>
 
       <ng-container *ngIf="id_credito">
-        <mat-grid-list cols="2" rowHeight="50px">
+        <mat-grid-list cols="4" rowHeight="50px">
           <mat-grid-tile>
             <ng-container *ngIf="permiso?.creditos?.listado_creditos?.agregar_pagos_masivos">
               <button mat-raised-button color="accent" (click)="AgregarPagos()" [disabled]="(Cargando | async) || totales_monto_pendiente==0"> Agregar pagos </button>
+            </ng-container>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <ng-container *ngIf="permiso?.creditos?.listado_creditos?.generar_interes && cuotas_interes==0">
+              <button mat-raised-button color="accent" (click)="GenerarInteres()" [disabled]="(Cargando | async)">
+                Generar interés </button>
+            </ng-container>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <ng-container *ngIf="permiso?.creditos?.listado_creditos?.establecer_penalidad && cumple_penalidad == 1 && cuotas_penalidad==0">
+              <button mat-raised-button color="warn" (click)="EstablecerPenalidad()" [disabled]="(Cargando | async)">
+                Establecer penalidad </button>
             </ng-container>
           </mat-grid-tile>
 

@@ -26,7 +26,8 @@ mat-card{
   justify-content: center;
 }
 
-.mat-column-numero{
+.mat-column-numero ,
+.mat-column-stars {
   max-width: 5%;
 }
 

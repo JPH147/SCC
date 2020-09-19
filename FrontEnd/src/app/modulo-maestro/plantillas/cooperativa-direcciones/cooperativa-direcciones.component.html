@@ -35,21 +35,20 @@
       </mat-grid-tile>
 
       <mat-grid-tile>
-        <mat-icon>search</mat-icon>
         <mat-form-field class="columnas-1">
-          <mat-select placeholder="Transaccion" formControlName="relevancia">
+          <mat-select placeholder="Estado" formControlName="estado">
             <mat-option [value]="0"> Todas </mat-option>
+            <mat-option [value]="1"> Utilizadas </mat-option>
+            <mat-option [value]="2"> Inactivas </mat-option>
           </mat-select>
         </mat-form-field>
       </mat-grid-tile>
 
+      <mat-grid-tile></mat-grid-tile>
+      <mat-grid-tile></mat-grid-tile>
+
       <mat-grid-tile>
-        <mat-icon>search</mat-icon>
-        <mat-form-field class="columnas-1">
-          <mat-select placeholder="Principal" formControlName="principal">
-            <mat-option [value]="0"> Todas </mat-option>
-          </mat-select>
-        </mat-form-field>
+        <button mat-raised-button color="primary" (click)="Agregar()"> Agregar </button>
       </mat-grid-tile>
     </mat-grid-list>
   </form>
@@ -87,11 +86,17 @@
         <mat-cell *matCellDef="let direccion"> {{direccion.cooperativa_direccion}} </mat-cell>
       </ng-container>
 
+      <ng-container matColumnDef="numero_orden">
+        <mat-header-cell *matHeaderCellDef> Número de orden </mat-header-cell>
+        <mat-cell *matCellDef="let direccion"> {{direccion.numero_orden}} </mat-cell>
+      </ng-container>
+
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let direccion">
-          <button mat-icon-button color="primary" (click)="Editar(direccion)" matTooltip="Editar" matTooltip="Editar"><mat-icon> edit </mat-icon></button>
-          <!-- <button mat-icon-button color="primary" (click)="Eliminar(direccion)" matTooltip="Eliminar" matTooltip="Eliminar"><mat-icon> delete </mat-icon></button> -->
+          <button mat-icon-button color="primary" (click)="Editar(direccion)" matTooltip="Editar"><mat-icon> edit </mat-icon></button>
+          <button mat-icon-button color="primary" (click)="ActualizarNumerOrden(direccion)" matTooltip="Cambiar orden"><mat-icon> reorder </mat-icon></button>
+          <button mat-icon-button color="primary" (click)="Eliminar(direccion)" [disabled]="direccion.numero_orden>0" matTooltip="Eliminar"><mat-icon> delete </mat-icon></button>
         </mat-cell>
       </ng-container>
 

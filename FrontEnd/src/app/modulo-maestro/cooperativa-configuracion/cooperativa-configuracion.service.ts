@@ -20,8 +20,7 @@ export class CooperativaConfiguracionService {
     provincia : string ,
     distrito : string ,
     direccion : string ,
-    relevancia : number ,
-    principal : number ,
+    estado : number ,
     numero_pagina : number ,
     total_pagina : number ,
   ): Observable<any> {
@@ -31,8 +30,7 @@ export class CooperativaConfiguracionService {
       .set('prprovincia',provincia )
       .set('prdistrito',distrito )
       .set('prdireccion',direccion )
-      .set('prrelevancia',relevancia.toString() )
-      .set('prprincipal',principal.toString() )
+      .set('prestado',estado.toString() )
       .set('prpagina',numero_pagina.toString() )
       .set('prtotalpagina',total_pagina.toString() ) ;
 
@@ -84,7 +82,30 @@ export class CooperativaConfiguracionService {
     return this.http.post(this.url + 'cooperativa-configuracion/update-direccion.php', params , { headers : headers })
     .pipe(
       map(respuesta=>{
-        console.log(respuesta) ;
+        if ( respuesta['codigo'] == 0 ) {
+          return true ;
+        } else {
+          return false ;
+        }
+      })
+    )
+  }
+
+  ActualizarDireccionOrden(
+    id_direccion : number ,
+    numero_orden_antigua : number ,
+    numero_orden_nueva : number ,
+  ): Observable<any> {
+    let params = new HttpParams()
+      .set('prdireccion',id_direccion.toString() )
+      .set('prordenactual',numero_orden_antigua.toString() )
+      .set('prordennueva',numero_orden_nueva.toString() ) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'cooperativa-configuracion/update-direccion-orden.php', params , { headers : headers })
+    .pipe(
+      map(respuesta=>{
         if ( respuesta['codigo'] == 0 ) {
           return true ;
         } else {

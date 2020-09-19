@@ -82,6 +82,25 @@
     </div>
 
     <mat-table [dataSource]="ListadoCreditos" class="mat-elevation-z8" matSort matSortActive="fecha" matSortDirection="desc" matSortDisableClear>
+      <ng-container matColumnDef="stars">
+        <mat-header-cell *matHeaderCellDef> <mat-icon> stars </mat-icon> </mat-header-cell>
+        <mat-cell *matCellDef="let credito"> 
+          <ng-container>
+            <ng-container *ngIf="credito.cumple_penalidad == 0">
+              <ng-container *ngIf="credito.monto_pendiente_hasta_hoy == 0">
+                <mat-icon matTooltip="Está al día con los pagos" class="icono-verde"> check_circle_outline </mat-icon>
+              </ng-container>
+
+              <ng-container *ngIf="credito.monto_pendiente_hasta_hoy > 0">
+                <mat-icon matTooltip="Tiene cuotas atrasadas" class="icono-ambar"> error_outline </mat-icon>
+              </ng-container>
+            </ng-container>
+            <ng-container *ngIf="credito.cumple_penalidad == 1">
+              <mat-icon matTooltip="Aplica penalidad" class="icono-anaranjado"> highlight_off </mat-icon>
+            </ng-container>
+          </ng-container>
+        </mat-cell>
+      </ng-container>
 
       <ng-container matColumnDef="numero">
         <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
@@ -137,10 +156,10 @@
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let credito">
           <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="['ver', credito.id]"><mat-icon> visibility </mat-icon></button>
-          <ng-container *ngIf="permiso?.creditos?.listado_creditos?.editar">
+          <!-- <ng-container *ngIf="permiso?.creditos?.listado_creditos?.editar">
             <button mat-icon-button color="primary" matTooltip="Editar" [routerLink]="['editar', credito.id]"
               [disabled]="credito.monto_pagado>0 || credito.estado!=1 || credito.numero_procesos > 0 || credito.monto_pagado>0"><mat-icon> edit </mat-icon></button>
-          </ng-container>
+          </ng-container> -->
           <ng-container *ngIf="permiso?.creditos?.listado_creditos?.abrir_procesos">
             <button mat-icon-button color="primary" [matMenuTriggerFor]="menu3" (click)="ListarProcesos(credito.id)"
               [disabled]="credito.estado!=1">

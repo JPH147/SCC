@@ -184,17 +184,18 @@ export class EvaluacionExpressComponent implements OnInit {
       this.cooperativa_cuenta_banco=this.informacion_cooperativa['cuenta'].banco;
       this.cooperativa_cuenta_numero=this.informacion_cooperativa['cuenta'].cuenta;
       this.cooperativa_contacto=this.informacion_cooperativa['contacto'];
-      let array_comodin = this.informacion_cooperativa['direccion_transaccion'].filter(e=>e.id_tipo==2);
-      this.cooperativa_direccion_1=array_comodin[0].direccion;
-      this.cooperativa_direccion_2=array_comodin[1].direccion;
-      this.cooperativa_direccion_3=array_comodin[2].direccion;
-      this.cooperativa_direccion_4=array_comodin[3].direccion;
+
+      this.cooperativa_direccion_1=this.informacion_cooperativa['direccion_transaccion'].filter(e=>e.numero_orden==1)[0].direccion;
+      this.cooperativa_direccion_2=this.informacion_cooperativa['direccion_transaccion'].filter(e=>e.numero_orden==2)[0].direccion;
+      this.cooperativa_direccion_3=this.informacion_cooperativa['direccion_transaccion'].filter(e=>e.numero_orden==3)[0].direccion;
+      this.cooperativa_direccion_4=this.informacion_cooperativa['direccion_transaccion'].filter(e=>e.numero_orden==4)[0].direccion;
 
       this.informacion_cooperativa['direccion_transaccion'].forEach((item,index)=>{
         if(item.id_tipo=1) {
           this.cooperativa_direccion=item.direccion;
         }
       });
+
       this.presidente_nombre = this.informacion_cooperativa['presidente'].nombre;
       this.presidente_dni = this.informacion_cooperativa['presidente'].documento;
       this.presidente_direccion = this.informacion_cooperativa['presidente'].direccion;
@@ -575,7 +576,6 @@ export class EvaluacionExpressComponent implements OnInit {
 
   GenerarArchivos(){
     let ahora = (new Date()).getTime();
-    // console.log(this.cronograma);
     this.generados = false ;
 
     this.ddjj = "" ;

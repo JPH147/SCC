@@ -88,6 +88,12 @@ Class Venta{
     public $total_pagadas;
     public $estado_pagos;
 
+    public $cuota_estandar;
+    public $cuotas_pendientes_hasta_hoy;
+    public $cumple_penalidad;
+    public $cuotas_penalidad ;
+    public $cuotas_interes ;
+
     public function __construct($db){
         $this->conn = $db;
         $this->Seguimiento = new Seguimiento($db);
@@ -133,12 +139,16 @@ Class Venta{
                 "fecha_inicio"=>$fecha_inicio,
                 "monto_inicial"=>$monto_inicial,
                 "numero_cuotas"=>$numero_cuotas,
+                "cuota_estandar"=>$cuota_estandar,
                 "tipo_pago"=>$tipo_pago,
                 "monto_total"=>$monto_total,
                 "monto_pagado"=>$monto_pagado,
+                "monto_pendiente"=>$monto_pendiente,
+                "monto_pendiente_hasta_hoy"=>$monto_pendiente_hasta_hoy,
                 "tipo_venta"=>$tipo_venta,
                 "observaciones"=>$observaciones,
                 "cuotas_pendientes"=>$cuotas_pendientes,
+                "cumple_penalidad"=>$cumple_penalidad,
                 "cuotas_pagadas"=>$cuotas_pagadas,
                 "numero_procesos"=>$numero_procesos,
                 "ultima_fecha_pago"=>$ultima_fecha_pago,
@@ -499,6 +509,7 @@ Class Venta{
         $this->oficio_pdf=$row['oficio_pdf'];
         $this->otros_pdf=$row['otros_pdf'];
         $this->observacion=$row['observacion'];
+        $this->cuota_estandar=$row['cuota_estandar'];
         $this->lugar_venta=$row['lugar_venta'];
         $this->estado=$row['estado'];
         $this->id_venta_canje=$row['id_venta_canje'];
@@ -512,11 +523,15 @@ Class Venta{
         $this->interes_generado = $row['interes_generado'] ;
         $this->monto_pagado = $row['monto_pagado'] ;
         $this->monto_pendiente = $row['monto_pendiente'] ;
+        $this->monto_pendiente_hasta_hoy=$row['monto_pendiente_hasta_hoy'];
+        $this->cumple_penalidad=$row['cumple_penalidad'];
         $this->total_cuotas = $row['total_cuotas'] ;
         $this->total_pendiente = $row['total_pendiente'] ;
         $this->total_pagadas = $row['total_pagadas'] ;
+        $this->cuotas_penalidad = $row['cuotas_penalidad'];
+        $this->cuotas_interes = $row['cuotas_interes'];
         $this->courier = $Courier;
-        $this->cronograma=$Cronograma;
+        // $this->cronograma=$Cronograma;
         $this->productos=$Productos;
         $this->garantes=$Garantes;
     }
@@ -568,6 +583,7 @@ Class Venta{
         $this->oficio_pdf=$row['oficio_pdf'];
         $this->otros_pdf=$row['otros_pdf'];
         $this->observacion=$row['observacion'];
+        $this->cuota_estandar=$row['cuota_estandar'];
         $this->lugar_venta=$row['lugar_venta'];
         $this->estado=$row['estado'];
         $this->id_venta_canje=$row['id_venta_canje'];
@@ -579,11 +595,15 @@ Class Venta{
         $this->interes_generado = $row['interes_generado'] ;
         $this->monto_pagado = $row['monto_pagado'] ;
         $this->monto_pendiente = $row['monto_pendiente'] ;
+        $this->monto_pendiente_hasta_hoy=$row['monto_pendiente_hasta_hoy'];
+        $this->cumple_penalidad=$row['cumple_penalidad'];
         $this->total_cuotas = $row['total_cuotas'] ;
         $this->total_pendiente = $row['total_pendiente'] ;
         $this->total_pagadas = $row['total_pagadas'] ;
+        $this->cuotas_penalidad = $row['cuotas_penalidad'];
+        $this->cuotas_interes = $row['cuotas_interes'];
         $this->courier = $Courier;
-        $this->cronograma=$Cronograma;
+        // $this->cronograma=$Cronograma;
         $this->productos=$Productos;
         $this->garantes=$Garantes;
     }
@@ -1171,6 +1191,36 @@ Class Venta{
         }
   
         return $cronograma_list;
+    }
+
+    function crear_penalidad_venta () {
+        $query = "CALL sp_crearpenalidadventa(
+            :prventa ,
+            :prcuotapenalidad ,
+            :prnumerocuotas ,
+            :prfechainicio ,
+            :prtipopago
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prventa", $this->id_venta);
+        $result->bindParam(":prcuotapenalidad", $this->cuota_penalidad);
+        $result->bindParam(":prnumerocuotas", $this->numero_cuotas);
+        $result->bindParam(":prfechainicio", $this->fecha_inicio);
+        $result->bindParam(":prtipopago", $this->tipo_pago);
+
+        $this->id_venta=htmlspecialchars(strip_tags($this->id_venta));
+        $this->cuota_penalidad=htmlspecialchars(strip_tags($this->cuota_penalidad));
+        $this->numero_cuotas=htmlspecialchars(strip_tags($this->numero_cuotas));
+        $this->fecha_inicio=htmlspecialchars(strip_tags($this->fecha_inicio));
+        $this->tipo_pago=htmlspecialchars(strip_tags($this->tipo_pago));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
     }
 }
 ?>

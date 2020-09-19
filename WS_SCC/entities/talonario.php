@@ -11,6 +11,9 @@ class Talonario{
 	public $total_pagina;
 	public $total_resultado;
 
+	public $id_talonario ;
+	public $pdf_contrato ;
+
 	public function __construct($db){
 		$this->conn = $db;
 	}
@@ -168,21 +171,21 @@ class Talonario{
 	}
 
     function readxId() {
-        $query ="call sp_listartalonarioxId(?)";
-        
-        $result = $this->conn->prepare($query);
-        
-        $result->bindParam(1, $this->id);
-        
-        $result->execute();
-    
-        $row = $result->fetch(PDO::FETCH_ASSOC);
-      
-        $this->id=$row['id'];
-        $this->serie=$row['serie'];
-        $this->numero=$row['numero'];
-        $this->salida=$row['salida'];
-        $this->estado=$row['estado'];
+			$query ="call sp_listartalonarioxId(?)";
+			
+			$result = $this->conn->prepare($query);
+			
+			$result->bindParam(1, $this->id);
+			
+			$result->execute();
+	
+			$row = $result->fetch(PDO::FETCH_ASSOC);
+		
+			$this->id=$row['id'];
+			$this->serie=$row['serie'];
+			$this->numero=$row['numero'];
+			$this->salida=$row['salida'];
+			$this->estado=$row['estado'];
     }
 
     function update_estado(){
@@ -201,19 +204,54 @@ class Talonario{
     }
 
 	function verificar_serie(){
-        $query = "CALL sp_verificartalonarioserie(?)";
+		$query = "CALL sp_verificartalonarioserie(?)";
 
 		$result = $this->conn->prepare($query);
 		
 		$result->bindParam(1, $this->serie);
 
-        $result->execute();
+		$result->execute();
 
-        $row = $result->fetch(PDO::FETCH_ASSOC);
+		$row = $result->fetch(PDO::FETCH_ASSOC);
 
-        $this->total_resultado=$row['total'];
+		$this->total_resultado=$row['total'];
 
-        return $this->total_resultado;
+		return $this->total_resultado;
+	}
+
+	function read_talonario_adjuntoxId() {
+		$query ="call sp_listartalonarioadjuntoxId(?)";
+		
+		$result = $this->conn->prepare($query);
+		
+		$result->bindParam(1, $this->id_talonario);
+		
+		$result->execute();
+
+		$row = $result->fetch(PDO::FETCH_ASSOC);
+	
+		$talonario_list = array(
+			"id_talonario_adjuntos"=>$row['id_talonario_adjuntos'] ,
+			"id_talonario"=>$row['id_talonario'] ,
+			"pdf_contrato"=>$row['pdf_contrato'] ,
+		);
+
+		return $talonario_list ;
+	}
+
+	function crear_talonario_adjunto(){
+		$query = "CALL sp_creartalonariosadjuntos(?,?)";
+
+		$result = $this->conn->prepare($query);
+		
+		$result->bindParam(1, $this->id_talonario);
+		$result->bindParam(2, $this->pdf_contrato);
+
+		if ($result->execute() ) {
+			return true ;
+		} else {
+			return false ;
+		}
 	}
 
 }

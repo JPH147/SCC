@@ -9,6 +9,7 @@ import { VentanaConfirmarComponent } from '../../../compartido/componentes/venta
 import { VentanaCooperativaDireccionesComponent } from './ventana-cooperativa-direcciones/ventana-cooperativa-direcciones.component';
 import { Notificaciones } from 'src/app/core/servicios/notificacion';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { VentanaCambiarOrdenComponent } from './ventana-cambiar-orden/ventana-cambiar-orden.component';
 
 @Component({
   selector: 'app-cooperativa-direcciones',
@@ -20,7 +21,7 @@ export class CooperativaDireccionesComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   public ListadoDirecciones: DireccionDataSource;
-  public Columnas: string[] = [ "numero" ,"departamento" ,"provincia" ,"distrito" ,"cooperativa_direccion" ,"opciones" ];
+  public Columnas: string[] = [ "numero" ,"departamento" ,"provincia" ,"distrito" ,"cooperativa_direccion", "numero_orden" ,"opciones" ];
 
   public fecha_inicio: Date;
   public fecha_fin: Date;
@@ -38,7 +39,7 @@ export class CooperativaDireccionesComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.CrearFormulario() ;
     this.ListadoDirecciones = new DireccionDataSource(this.Servicio) ;
-    this.ListadoDirecciones.CargarInformacion("","","","",0,0,1,10) ;
+    this.ListadoDirecciones.CargarInformacion("","","","",0,1,10) ;
   }
 
   ngAfterViewInit () {
@@ -53,8 +54,7 @@ export class CooperativaDireccionesComponent implements OnInit, AfterViewInit {
       this.DireccionForm.get('provincia').valueChanges ,
       this.DireccionForm.get('distrito').valueChanges ,
       this.DireccionForm.get('direccion').valueChanges ,
-      this.DireccionForm.get('relevancia').valueChanges ,
-      this.DireccionForm.get('principal').valueChanges ,
+      this.DireccionForm.get('estado').valueChanges ,
     )
     .pipe(
         debounceTime(200),
@@ -76,9 +76,7 @@ export class CooperativaDireccionesComponent implements OnInit, AfterViewInit {
       ] ] ,
       direccion : [ { value : '' , disabled : false },[
       ] ] ,
-      relevancia : [ { value : '' , disabled : false },[
-      ] ] ,
-      principal : [ { value : '' , disabled : false },[
+      estado : [ { value : 0 , disabled : false },[
       ] ] ,
     })
   }
@@ -89,8 +87,7 @@ export class CooperativaDireccionesComponent implements OnInit, AfterViewInit {
       this.DireccionForm.get('provincia').value ,
       this.DireccionForm.get('distrito').value ,
       this.DireccionForm.get('direccion').value ,
-      this.DireccionForm.get('relevancia').value ,
-      this.DireccionForm.get('principal').value ,
+      this.DireccionForm.get('estado').value ,
       this.paginator.pageIndex+1 ,
       this.paginator.pageSize
     );
@@ -133,6 +130,25 @@ export class CooperativaDireccionesComponent implements OnInit, AfterViewInit {
     })
   }
 
+  ActualizarNumerOrden(direccion){
+    let Ventana = this.Dialogo.open( VentanaCambiarOrdenComponent, {
+      data: { id_direccion : direccion.id_cooperativa_direccion, numero_orden : direccion.numero_orden } ,
+      width: '400px',
+    })
+
+    Ventana.afterClosed().subscribe(res=>{
+      if(res){
+        if(res){
+          this._notificacion.Snack("Se actualizó el orden de la dirección","");
+          this.CargarData();
+        }
+        if(res===false){
+          this._notificacion.Snack("Ocurrió un error al actualizar el orden de la dirección","")
+        }
+      }
+    })
+  }
+
   Eliminar(direccion) {
     const VentanaConfirmar = this.Dialogo.open(VentanaConfirmarComponent, {
       width: '400px',
@@ -140,11 +156,11 @@ export class CooperativaDireccionesComponent implements OnInit, AfterViewInit {
     });
 
     VentanaConfirmar.afterClosed().subscribe(res => {
-      // if (res === true) {
-      //   this.Servicio.EliminarInstitucion(direccion.id).subscribe(res => {
-      //     this.CargarData();
-      //   });
-      // }
+      if (res === true) {
+        this.Servicio.EliminarDireccion(direccion.id_cooperativa_direccion).subscribe(() => {
+          this.CargarData();
+        });
+      }
     });
   }
 
@@ -175,14 +191,13 @@ export class DireccionDataSource implements DataSource<any> {
     provincia : string ,
     distrito : string ,
     direccion : string ,
-    relevancia : number ,
-    principal : number ,
+    estado : number ,
     numero_pagina : number ,
     total_pagina : number ,
   ) {
     this.CargandoInformacion.next(true);
 
-    this.Servicio.ListarDirecciones( departamento , provincia , distrito , direccion , relevancia , principal , numero_pagina , total_pagina
+    this.Servicio.ListarDirecciones( departamento , provincia , distrito , direccion , estado , numero_pagina , total_pagina
     )
     .pipe(
       catchError(() => of([])),

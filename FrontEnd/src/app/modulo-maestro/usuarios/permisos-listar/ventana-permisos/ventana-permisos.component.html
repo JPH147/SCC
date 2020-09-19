@@ -284,6 +284,15 @@
                       {{ Permiso.ventas.listado_ventas.agregar_pagos_masivos ? 'check' : 'close' }} </mat-icon> &nbsp; Agregar pagos
                   </ng-container>
                 </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.ventas.listado_ventas.establecer_penalidad"> Establecer penalidad </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.ventas.listado_ventas.establecer_penalidad ? 'accent' : 'warn'">
+                      {{ Permiso.ventas.listado_ventas.establecer_penalidad ? 'check' : 'close' }} </mat-icon> &nbsp; Establecer penalidad
+                  </ng-container>
+                </mat-grid-tile>
               </mat-grid-list>
             </ng-container>
           </ng-container>
@@ -601,6 +610,25 @@
                       {{ Permiso.creditos.listado_creditos.agregar_pagos_masivos ? 'check' : 'close' }} </mat-icon> &nbsp; Agregar pagos
                   </ng-container>
                 </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.creditos.listado_creditos.establecer_penalidad"> Establecer penalidad </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.creditos.listado_creditos.establecer_penalidad ? 'accent' : 'warn'">
+                      {{ Permiso.creditos.listado_creditos.establecer_penalidad ? 'check' : 'close' }} </mat-icon> &nbsp; Establecer penalidad
+                  </ng-container>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.creditos.listado_creditos.generar_interes"> Generar interés </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.creditos.listado_creditos.generar_interes ? 'accent' : 'warn'">
+                      {{ Permiso.creditos.listado_creditos.generar_interes ? 'check' : 'close' }} </mat-icon> &nbsp; Generar interés
+                  </ng-container>
+                </mat-grid-tile>
+                
               </mat-grid-list>
             </ng-container>
           </ng-container>
@@ -642,11 +670,11 @@
                 </mat-grid-tile>
                 <mat-grid-tile>
                   <ng-container *ngIf="!data.ver">
-                    <mat-checkbox [(ngModel)]="Permiso.creditos.afiliaciones.eliminar"> Elimianr </mat-checkbox>
+                    <mat-checkbox [(ngModel)]="Permiso.creditos.afiliaciones.eliminar"> Eliminar </mat-checkbox>
                   </ng-container>
                   <ng-container *ngIf="data.ver">
                     <mat-icon [color]="Permiso.creditos.afiliaciones.eliminar ? 'accent' : 'warn'">
-                      {{ Permiso.creditos.afiliaciones.eliminar ? 'check' : 'close' }} </mat-icon> &nbsp; Elimianr
+                      {{ Permiso.creditos.afiliaciones.eliminar ? 'check' : 'close' }} </mat-icon> &nbsp; Eliminar
                   </ng-container>
                 </mat-grid-tile>
                 <mat-grid-tile>

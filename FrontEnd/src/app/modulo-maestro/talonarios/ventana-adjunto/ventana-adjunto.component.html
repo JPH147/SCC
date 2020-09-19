@@ -1,0 +1,54 @@
+<mat-card class="card">
+
+  <mat-toolbar color="primary">
+    <mat-toolbar-row><h4> Adjuntar contrato </h4></mat-toolbar-row>
+  </mat-toolbar>
+
+  <form [formGroup]="TalonarioAdjuntosForm">
+    <mat-card-content>
+      <mat-grid-list cols="2" rowHeight="70px">
+
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <mat-select placeholder='Talonario' formControlName="talonario" (selectionChange)="ListarTalonarioNumero()">
+              <mat-option *ngFor="let talonarioserie of ListadoSeries" [value] = "talonarioserie.serie"> {{talonarioserie.serie}} </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <mat-select placeholder='Contrato' formControlName="contrato" (selectionChange)="VerificarArchivo()">
+              <mat-option *ngFor="let contrato of ListadoContratos" [value] = "contrato.id"> {{contrato.numero}} </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan=2>
+          <ng-container *ngIf="!archivo">
+            <input hidden #uploader type="file" (change)="SubirArchivo($event.target.files)">
+            <button mat-raised-button type="button" (click)="uploader.click()"> Seleccionar archivo </button>
+          </ng-container>
+          <ng-container *ngIf="archivo">
+            <span> {{ archivo_nombre }} </span>
+            &nbsp;
+            <button type="button" mat-icon-button color="primary" (click)="RemoverArchivo()"> <mat-icon> remove_circle_outline </mat-icon> </button>
+          </ng-container>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <mat-grid-list cols=1 rowHeight="40px">
+        <mat-grid-tile *ngIf="tiene_archivo">
+          <span class="texto-accent"> Este contrato ya tiene un archivo, se reemplazará por el que se adunte. </span>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <button type="button" mat-raised-button color="primary"
+            [disabled]="(Cargando | async) || TalonarioAdjuntosForm.invalid || !archivo" (click)="Guardar()"> Guardar </button>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-card-actions>
+
+  </form>
+</mat-card>

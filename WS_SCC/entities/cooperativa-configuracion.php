@@ -11,16 +11,20 @@ class Cooperativa{
   public $direccion ;
   public $relevancia ;
   public $principal ;
+  public $estado ;
   public $numero_pagina ;
   public $total_pagina ;
   public $total_resultado ;
+
+  public $numero_orden_antigua ;
+  public $numero_orden_nueva ;
 
   public function __construct($db){
     $this->conn = $db;
   }
 
   function read(){
-    $query = "CALL sp_listarcooperativadireccion(?,?,?,?,?,?,?,?)";
+    $query = "CALL sp_listarcooperativadireccion(?,?,?,?,?,?,?)";
 
     $result = $this->conn->prepare($query);
 
@@ -28,10 +32,9 @@ class Cooperativa{
     $result->bindParam(2, $this->provincia ) ;
     $result->bindParam(3, $this->distrito ) ;
     $result->bindParam(4, $this->direccion ) ;
-    $result->bindParam(5, $this->relevancia ) ;
-    $result->bindParam(6, $this->principal ) ;
-    $result->bindParam(7, $this->numero_pagina ) ;
-    $result->bindParam(8, $this->total_pagina ) ;
+    $result->bindParam(5, $this->estado ) ;
+    $result->bindParam(6, $this->numero_pagina ) ;
+    $result->bindParam(7, $this->total_pagina ) ;
 
     $result->execute();
 
@@ -56,6 +59,7 @@ class Cooperativa{
         "cooperativa_direccion" => $cooperativa_direccion ,
         "relevancia" => $relevancia ,
         "principal" => $principal ,
+        "numero_orden" => $numero_orden ,
       );
       array_push($direccion_list["direccion"],$item);
     }
@@ -63,7 +67,7 @@ class Cooperativa{
   }
 
   function contar(){
-    $query = "CALL sp_listarcooperativadireccioncontar(?,?,?,?,?,?)";
+    $query = "CALL sp_listarcooperativadireccioncontar(?,?,?,?,?)";
 
     $result = $this->conn->prepare($query);
 
@@ -71,8 +75,7 @@ class Cooperativa{
     $result->bindParam(2, $this->provincia ) ;
     $result->bindParam(3, $this->distrito ) ;
     $result->bindParam(4, $this->direccion ) ;
-    $result->bindParam(5, $this->relevancia ) ;
-    $result->bindParam(6, $this->principal ) ;
+    $result->bindParam(5, $this->estado ) ;
 
     $result->execute();
 
@@ -145,6 +148,30 @@ class Cooperativa{
 		}
 		return false;
 	}
+
+  function actualizar_orden() {
+    $query = "CALL sp_actualizarcooperativadireccionorden(
+      :prdireccion,
+      :prordenactual,
+			:prordennueva
+		)";
+  
+		$result = $this->conn->prepare($query);
+  
+    $result->bindParam(":prdireccion", $this->id_cooperativa);
+    $result->bindParam(":prordenactual", $this->numero_orden_antigua);
+		$result->bindParam(":prordennueva", $this->numero_orden_nueva);
+  
+    $this->id_cooperativa=htmlspecialchars(strip_tags($this->id_cooperativa));
+    $this->numero_orden_antigua=htmlspecialchars(strip_tags($this->numero_orden_antigua));
+		$this->numero_orden_nueva=htmlspecialchars(strip_tags($this->numero_orden_nueva));
+  
+		if($result->execute())
+		{
+		  return true;
+		}
+		return false;
+  }
 
 }
 ?>

@@ -18,6 +18,8 @@ import { VentanaFotoComponent } from './componentes/ventana-foto/ventana-foto.co
 import { VentanaPagosComponent } from './componentes/ventana-pagos/ventana-pagos.component';
 import { VentanaCobranzaClienteComponent } from './componentes/ventana-cobranza-cliente/ventana-cobranza-cliente.component';
 import { VentanaCobranzaClienteVencidasComponent } from './componentes/ventana-cobranza-cliente-vencidas/ventana-cobranza-cliente-vencidas.component';
+import { VentanaGenerarPenalidadComponent } from './componentes/ventana-generar-penalidad/ventana-generar-penalidad.component';
+import { VentanaGenerarInteresComponent } from './componentes/ventana-generar-interes/ventana-generar-interes.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,9 @@ import { VentanaCobranzaClienteVencidasComponent } from './componentes/ventana-c
     VentanaFotoComponent ,
     VentanaPagosComponent ,
     VentanaCobranzaClienteComponent ,
-    VentanaCobranzaClienteVencidasComponent ,
+    VentanaCobranzaClienteVencidasComponent,
+    VentanaGenerarPenalidadComponent,
+    VentanaGenerarInteresComponent ,
   ],
   imports: [
     CommonModule ,

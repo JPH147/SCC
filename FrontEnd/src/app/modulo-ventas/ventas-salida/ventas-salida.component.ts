@@ -32,6 +32,7 @@ import * as moment from 'moment';
 import {default as _rollupMoment, Moment} from 'moment';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { VentanaGenerarPagoTransaccionComponent } from "../../compartido/componentes/ventana-generar-pago-transaccion/ventana-generar-pago-transaccion.component";
+import { VentanaGenerarPenalidadComponent } from "src/app/compartido/componentes/ventana-generar-penalidad/ventana-generar-penalidad.component";
 
 @Component({
   selector: 'app-ventas-salida',
@@ -136,6 +137,10 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   public totales_total_pagadas : number = 0 ;
 
   public editar_documentos : boolean = false ;
+  public cumple_penalidad : number = 1 ;
+  public id_tipo_pago : number = 0 ;
+  public cuotas_penalidad : number = 0 ;
+  public cuotas_interes : number = 0 ;
 
   constructor(
     private _store : Store<EstadoSesion> ,
@@ -314,6 +319,11 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
 
       this.id_salida = res.id_salida;
 
+      this.cumple_penalidad = res.cumple_penalidad ;
+      this.id_tipo_pago = res.idtipopago ;
+      this.cuotas_penalidad = res.cuotas_penalidad ;
+      this.cuotas_interes = res.cuotas_interes ;
+
       this.numero_contrato=res.contrato;
 
       this.VentasSalidaForm.get('id_salida').setValue(res.id_salida);
@@ -355,8 +365,8 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
 
       this.Productos=res.productos.productos
       
-      this.Cronograma=res.cronograma.cronograma;
-      this.CalcularTotalPagado( this.Cronograma ) ;
+      // this.Cronograma=res.cronograma.cronograma;
+      // this.CalcularTotalPagado( this.Cronograma ) ;
       
       this.ListadoVentas.Informacion.next(this.Cronograma);
       
@@ -472,6 +482,8 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       }
 
       if(this.id_venta_editar){
+        this.CrearCronograma() ;
+        
         if( res['courier'].id ){
           this.VentasSalidaForm.get('papeles_courier').setValue(res['courier'].id_courier);
           this.papeles_antiguo=res['courier'].foto;
@@ -1206,7 +1218,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
     this.Cargando.next(true) ;
     let random=(new Date()).getTime();
 
-    return forkJoin(
+    return forkJoin([
       this.ServiciosGenerales.RenameFile(this.foto_nuevo,'DNI',random.toString(),"venta"),
       this.ServiciosGenerales.RenameFile(this.dni_nuevo,'DNI',random.toString(),"venta"),
       this.ServiciosGenerales.RenameFile(this.cip_nuevo,'CIP',random.toString(),"venta"),
@@ -1218,7 +1230,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       this.ServiciosGenerales.RenameFile(this.otros_nuevo,'AUTORIZACION',random.toString(),"venta"),
       this.ServiciosGenerales.RenameFile(this.oficio_nuevo,'AUTORIZACION',random.toString(),"venta"),
       this.ServiciosGenerales.RenameFile(this.papeles_nuevo,'PAPELES',random.toString(),"venta"),
-    ).subscribe(resultado=>{
+    ]).subscribe(resultado=>{
 
       // Cuando se actualiza la venta, en el procedimiento
       // se eliminan el cronograma actual y los garantes
@@ -1297,13 +1309,13 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
         if( this.VentasSalidaForm.value.garante ){
 
           this.VentasSalidaForm['controls'].garantes['controls'].forEach((item, index)=>{
-            return forkJoin(
+            return forkJoin([
               this.ServiciosGenerales.RenameFile(item.value.dni_pdf_nuevo,'DNI_GARANTE_'+(index+1),random.toString(),"venta"),
               this.ServiciosGenerales.RenameFile(item.value.cip_pdf_nuevo,'CIP_GARANTE_'+(index+1),random.toString(),"venta"),
               this.ServiciosGenerales.RenameFile(item.value.planilla_pdf_nuevo,'PLANILLA_GARANTE_'+(index+1),random.toString(),"venta"),
               this.ServiciosGenerales.RenameFile(item.value.letra_pdf_nuevo,'LETRA_GARANTE_'+(index+1),random.toString(),"venta"),
               this.ServiciosGenerales.RenameFile(item.value.transaccion_pdf_nuevo,'TRANSACCION_GARANTE_'+(index+1),random.toString(),"venta"),
-            ).subscribe(response=>{
+            ]).subscribe(response=>{
               this.Servicio.CrearVentaGarante(
                 res['data'],
                 item.value.id_cliente,
@@ -1339,7 +1351,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
     this.Cargando.next(true) ;
     let random=(new Date()).getTime();
 
-    return forkJoin(
+    return forkJoin([
       this.ServiciosGenerales.RenameFile(this.foto_nuevo,'DNI',random.toString(),"venta"),
       this.ServiciosGenerales.RenameFile(this.dni_nuevo,'DNI',random.toString(),"venta"),
       this.ServiciosGenerales.RenameFile(this.cip_nuevo,'CIP',random.toString(),"venta"),
@@ -1350,7 +1362,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       this.ServiciosGenerales.RenameFile(this.autorizacion_nuevo,'AUTORIZACION',random.toString(),"venta"),
       this.ServiciosGenerales.RenameFile(this.oficio_nuevo,'OFICIO',random.toString(),"venta"),
       this.ServiciosGenerales.RenameFile(this.otros_nuevo,'OTROS',random.toString(),"venta"),
-    ).subscribe(resultado=>{
+    ]).subscribe(resultado=>{
       this.Servicio.ActualizarVentaDocumentos(
         this.id_venta,
         this.foto_editar ? resultado[0].mensaje : this.foto_antiguo,
@@ -1452,6 +1464,28 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
     }
   }
 
+  EstablecerPenalidad() {
+    let Ventana = this.Dialogo.open(VentanaGenerarPenalidadComponent,{
+      data : {
+        id_venta : this.id_venta ,
+        monto_total : +this.VentasSalidaForm.get('montototal').value - +this.VentasSalidaForm.get('inicial').value ,
+        numero_cuotas : this.VentasSalidaForm.get('cuotas').value ,
+        tipo_pago : this.id_tipo_pago
+      } ,
+      width: '900px' ,
+      maxHeight: '80vh'
+    })
+    
+    Ventana.afterClosed().subscribe(res =>{
+      if ( res ) {
+        this.SeleccionarVentaxId(this.id_venta) ;
+        this.Notificacion.Snack("Se crearon las cuotas de la penalidad satisfactoriamente","")
+      }
+      if(res===false) {
+        this.Notificacion.Snack("Ocurrió un error al crear las cuotas de la penalidad","")
+      }
+    })
+  }
 }
 
 export class VentaDataSource implements DataSource<any>{

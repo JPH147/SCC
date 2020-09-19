@@ -1,15 +1,13 @@
-import {Component, OnInit, ViewChild, AfterViewInit, ElementRef} from '@angular/core';
+import {Component, OnInit, ViewChild, ElementRef, AfterViewInit} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSelect } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
 import {merge, fromEvent} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
-import {ProductoService} from '../../modulo-inventarios/detalleproductos/productos/productos.service';
 import {VentaDataSource} from './ventas-listar.dataservice';
 import {VentanaConfirmarComponent} from '../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';
 import {VentasServicio} from './ventas-listar.service'
-import { ClienteService } from '../../modulo-clientes/clientes/clientes.service';
 import { VentaService } from '../ventas/ventas.service';
 import { CobranzaJudicialService } from '../../modulo-cobranzas/cobranza-judicial/cobranza-judicial.service';
 import { Store } from '@ngrx/store';
@@ -22,7 +20,7 @@ import { Rol } from 'src/app/compartido/modelos/login.modelos';
   templateUrl: './ventas-listar.component.html',
   styleUrls: ['./ventas-listar.component.css'],
 })
-export class VentasListarComponent implements OnInit {
+export class VentasListarComponent implements OnInit, AfterViewInit {
 
   public fecha_inicio: Date;
   public fecha_fin: Date;
@@ -30,7 +28,7 @@ export class VentasListarComponent implements OnInit {
   public permiso : Rol ;
 
   ListadoVentas: VentaDataSource;
-  Columnas: string[] = ['numero', 'fecha', 'contrato', 'cliente_nombre', 'tipo_venta', 'monto_total', 'cuotas_pagadas' , 'ultima_fecha_pago', 'opciones'];
+  Columnas: string[] = ['stars', 'numero', 'fecha', 'contrato', 'cliente_nombre', 'tipo_venta', 'monto_total', 'cuotas_pagadas' , 'ultima_fecha_pago', 'opciones'];
 
   @ViewChild('InputDocumentos', { static: true }) FiltroDocumentos: MatSelect;
   @ViewChild('InputCliente', { static: true }) FiltroCliente: ElementRef;

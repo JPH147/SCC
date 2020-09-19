@@ -54,7 +54,7 @@ export class SeguimientosService {
     let params = new HttpParams()
       .set("prid", id.toString())
 
-    return this.http.get(this.url + 'seguimiento/readxid.php', { params })
+    return this.http.get(this.url + 'seguimiento/readxId.php', { params })
     .pipe(map(res=>{
       if (res['codigo'] === 0) {
         return res['data'];

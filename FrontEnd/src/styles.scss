@@ -167,6 +167,18 @@ mat-row:nth-child(even){
 	color: mat-color($warn) !important
 }
 
+.texto-primary {
+  color: mat-color($primary) !important
+}
+
+.texto-accent {
+  color: mat-color($accent) !important
+}
+
+.texto-warn {
+  color: mat-color($warn) !important
+}
+
 .cargar-imagen {
   background-color: white !important;
   width: 90% !important;

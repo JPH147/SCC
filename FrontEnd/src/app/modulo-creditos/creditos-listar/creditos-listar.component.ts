@@ -30,7 +30,7 @@ export class CreditosListarComponent implements OnInit {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   public ListadoCreditos: CreditosDataSource;
-  public Columnas: string[] = ['numero', 'fecha', 'codigo', 'cliente_nombre', 'documentos_adjuntos', 'monto_total', 'cuotas_pagadas' , 'ultima_fecha_pago', 'opciones'];
+  public Columnas: string[] = ['stars', 'numero', 'fecha', 'codigo', 'cliente_nombre', 'documentos_adjuntos', 'monto_total', 'cuotas_pagadas' , 'ultima_fecha_pago', 'opciones'];
   
   public fecha_inicio: Date;
   public fecha_fin: Date;

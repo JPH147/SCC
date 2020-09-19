@@ -407,6 +407,7 @@ Class Plantillas{
                 "direccion"=>$direccion,
                 "id_tipo"=>$id_tipo,
                 "tipo"=>$tipo,
+                "numero_orden"=>$numero_orden
             );
             array_push($listado, $item);
         }

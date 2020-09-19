@@ -86,6 +86,26 @@
     </div>
 
     <mat-table [dataSource]="ListadoVentas" class="mat-elevation-z8" matSort matSortActive="fecha" matSortDirection="desc" matSortDisableClear>
+      
+      <ng-container matColumnDef="stars">
+        <mat-header-cell *matHeaderCellDef> <mat-icon> stars </mat-icon> </mat-header-cell>
+        <mat-cell *matCellDef="let venta"> 
+          <ng-container>
+            <ng-container *ngIf="venta.cumple_penalidad == 0">
+              <ng-container *ngIf="venta.monto_pendiente_hasta_hoy == 0">
+                <mat-icon matTooltip="Está al día con los pagos" class="icono-verde"> check_circle_outline </mat-icon>
+              </ng-container>
+
+              <ng-container *ngIf="venta.monto_pendiente_hasta_hoy > 0">
+                <mat-icon matTooltip="Tiene cuotas atrasadas" class="icono-ambar"> error_outline </mat-icon>
+              </ng-container>
+            </ng-container>
+            <ng-container *ngIf="venta.cumple_penalidad == 1">
+              <mat-icon matTooltip="Aplica penalidad" class="icono-anaranjado"> highlight_off </mat-icon>
+            </ng-container>
+          </ng-container>
+        </mat-cell>
+      </ng-container>
 
       <ng-container matColumnDef="numero">
         <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
@@ -171,11 +191,11 @@
             <ng-container>
               <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="['salida',venta.id]"><mat-icon> visibility </mat-icon></button>
             </ng-container>
-            <ng-container  *ngIf="permiso?.ventas?.listado_ventas?.editar">
+            <!-- <ng-container  *ngIf="permiso?.ventas?.listado_ventas?.editar">
               <button mat-icon-button color="primary" matTooltip="Editar" [routerLink]="['salida', 'editar', venta.id]"
                 [disabled]="venta.monto_pagado>0 || venta.estado!=1 || venta.numero_procesos>0"><mat-icon> edit </mat-icon></button>
-            </ng-container>
-            <button mat-icon-button color="primary" matTooltip="Canjear" [disabled]="true"><mat-icon> import_export </mat-icon></button>
+            </ng-container> -->
+            <!-- <button mat-icon-button color="primary" matTooltip="Canjear" [disabled]="true"><mat-icon> import_export </mat-icon></button> -->
             <ng-container  *ngIf="permiso?.ventas?.listado_ventas?.abrir_procesos">
               <button mat-icon-button color="primary" matTooltip="Abrir proceso judicial" [matMenuTriggerFor]="menu3" (click)="ListarProcesos(venta.id)"
                 [disabled]="venta.estado!=1">

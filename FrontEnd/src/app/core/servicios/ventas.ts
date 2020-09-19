@@ -320,4 +320,34 @@ export class ServiciosVentas{
 		return this.http.post(this.url + 'talonario/update.php', params, {headers: headers});
 	}
 
+	ListarAdjuntosTalonario(
+		id_talonario : number ,
+	) :Observable<any> {
+	
+		let params = new HttpParams()
+		  .set("prtalonario", id_talonario.toString()) ;
+	
+    return this.http.get(this.url+'talonario/read-adjuntoxtalonario.php', {params})
+    .pipe(map(res=>{
+      if(res['codigo']===0){
+        return res['data'];
+      }else{
+				console.log('No hay datos que mostrar') ;
+				return false ;
+      }
+    }))
+  }
+
+	CrearAdjuntosTalonario(
+		id_talonario : number ,
+		pdf_contrato : string ,
+	): Observable<any>{
+		let params = new HttpParams()
+			.set('prtalonario',id_talonario.toString() )
+			.set('prpdfcontrato',pdf_contrato ) ;
+	
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+	
+		return this.http.post(this.url + 'talonario/create-adjunto.php', params, {headers: headers});
+	}
 }

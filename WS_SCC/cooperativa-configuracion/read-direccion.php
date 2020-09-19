@@ -20,8 +20,7 @@
         $cooperativa->provincia = !empty($_GET['prprovincia']) ? trim($_GET['prprovincia']) :'';
         $cooperativa->distrito = !empty($_GET['prdistrito']) ? trim($_GET['prdistrito']) : '';
         $cooperativa->direccion = !empty($_GET['prdireccion']) ? trim($_GET['prdireccion']) : '';
-        $cooperativa->relevancia = !empty($_GET['prrelevancia']) ? trim($_GET['prrelevancia']) : 0;
-        $cooperativa->principal = !empty($_GET['prprincipal']) ? trim($_GET['prprincipal']) : 0;
+        $cooperativa->estado = !empty($_GET['prestado']) ? trim($_GET['prestado']) : 0;
         $cooperativa->numero_pagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : 1;
         $cooperativa->total_pagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : 20;
 

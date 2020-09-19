@@ -604,7 +604,7 @@
         <ng-container>
           <mat-grid-tile *ngIf="!VentasSalidaForm.value.fecha_fin_mes">
             <mat-form-field class="columnas-1">
-               <input matInput [matDatepicker]="InputFechaPago" placeholder="Inicio de pagos" [min]="VentasSalidaForm.value.fechaventa" formControlName="fechapago" (dateChange)="FechaPagoSeleccionada()"  readonly>
+               <input matInput [matDatepicker]="InputFechaPago" placeholder="Inicio de pagos" formControlName="fechapago" (dateChange)="FechaPagoSeleccionada()"  readonly>
                <mat-datepicker-toggle matSuffix [for]="InputFechaPago"></mat-datepicker-toggle>
                <mat-datepicker #InputFechaPago [disabled]="id_venta"></mat-datepicker>
             </mat-form-field>
@@ -612,7 +612,7 @@
           
           <mat-grid-tile *ngIf="VentasSalidaForm.value.fecha_fin_mes">
             <mat-form-field class="columnas-1">
-              <input matInput [matDatepicker]="FFin" placeholder="Inicio de pagos" [min]="VentasSalidaForm.value.fechaventa" formControlName="fechapago" readonly>
+              <input matInput [matDatepicker]="FFin" placeholder="Inicio de pagos" formControlName="fechapago" readonly>
               <mat-datepicker-toggle matSuffix [for]="FFin"></mat-datepicker-toggle>
               <mat-datepicker #FFin startView="year"
                               [disabled]="id_venta"
@@ -1021,10 +1021,19 @@
       </mat-card-subtitle>
 
       <ng-container *ngIf="id_venta">
-        <mat-grid-list cols="2" rowHeight="50px">
+        <mat-grid-list cols="4" rowHeight="50px">
           <mat-grid-tile>
             <ng-container *ngIf="permiso?.ventas?.listado_ventas?.agregar_pagos_masivos">
               <button mat-raised-button color="accent" (click)="AgregarPagos()" [disabled]="(Cargando | async) || totales_monto_pendiente==0"> Agregar pagos </button>
+            </ng-container>
+          </mat-grid-tile>
+
+          <mat-grid-tile></mat-grid-tile>
+
+          <mat-grid-tile>
+            <ng-container *ngIf="permiso?.ventas?.listado_ventas?.establecer_penalidad && cumple_penalidad == 1 && cuotas_penalidad==0">
+              <button mat-raised-button color="warn" (click)="EstablecerPenalidad()" [disabled]="(Cargando | async)">
+                Establecer penalidad </button>
             </ng-container>
           </mat-grid-tile>
 

@@ -8,6 +8,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import {VentanaConfirmarComponent} from '../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';
 import {Notificaciones} from 'src/app/core/servicios/notificacion';
 import {VentanaTalonarioComponent} from './ventana-talonario/ventana-talonario.component'
+import { VentanaAdjuntoComponent } from './ventana-adjunto/ventana-adjunto.component';
 
 @Component({
   selector: 'app-talonarios',
@@ -107,7 +108,22 @@ export class TalonariosComponent implements OnInit {
         this.notificacion.Snack("Ocurrió un error al crear al talonario","")
       }
     })
+  }
 
+  AdjuntarContrato() {
+    let Ventana = this.Dialogo.open(VentanaAdjuntoComponent,{
+      width: '900px'
+    })
+
+    Ventana.afterClosed().subscribe(res=>{
+      if(res){
+        this.CargarData();
+        this.notificacion.Snack("Se adjuntó el archivo satisfactoriamente","")
+      }
+      if(res === false){
+        this.notificacion.Snack("Ocurrió un error al adjuntar el archivo","")
+      }
+    })
   }
 
 }

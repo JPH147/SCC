@@ -71,6 +71,14 @@ Class Creditos{
     public $orden;
     public $numero_pagina;
     public $total_pagina;
+    public $cuota_estandar ;
+    public $monto_pendiente_hasta_hoy ;
+    public $cumple_penalidad ;
+    public $cuota_penalidad ;
+    public $numero_cuotas ;
+
+    public $cuotas_penalidad ;
+    public $cuotas_interes ;
 
     public function __construct($db){
         $this->conn = $db;
@@ -120,6 +128,9 @@ Class Creditos{
                 "numero_cuotas"=>$numero_cuotas,
                 "monto_total"=>$monto_total,
                 "monto_pagado"=>$monto_pagado,
+                "cuota_estandar"=>$cuota_estandar,
+                "monto_pendiente_hasta_hoy"=>$monto_pendiente_hasta_hoy,
+                "cumple_penalidad"=>$cumple_penalidad,
                 "id_tipo_credito"=>$id_tipo_credito,
                 "tipo_credito"=>$tipo_credito,
                 "observaciones"=>$observaciones,
@@ -220,19 +231,24 @@ Class Creditos{
         $this->pdf_otros = $row['pdf_otros'];
         $this->observaciones = $row['observaciones'];
         $this->id_credito_refinanciado = $row['id_credito_refinanciado'];
+        $this->cuota_estandar = $row['cuota_estandar'];
         $this->credito_refinanciado = $row['credito_refinanciado'];
         $this->monto_total = $row['monto_total'] ;
         $this->interes_generado = $row['interes_generado'] ;
         $this->monto_pagado = $row['monto_pagado'] ;
         $this->monto_pendiente = $row['monto_pendiente'] ;
+        $this->monto_pendiente_hasta_hoy = $row['monto_pendiente_hasta_hoy'] ;
         $this->total_cuotas = $row['total_cuotas'] ;
         $this->total_pendiente = $row['total_pendiente'] ;
         $this->total_pagadas = $row['total_pagadas'] ;
+        $this->cumple_penalidad = $row['cumple_penalidad'] ;
         $this->id_estado = $row['id_estado'];
         $this->estado = $row['estado'];
+        $this->cuotas_penalidad = $row['cuotas_penalidad'];
+        $this->cuotas_interes = $row['cuotas_interes'];
         $this->courier = $Courier;
         $this->garante = $Garantes;
-        $this->cronograma = $Cronograma;
+        // $this->cronograma = $Cronograma;
     }
 
     function read_garantes(){
@@ -334,6 +350,7 @@ Class Creditos{
                 "capital" => $capital ,
                 "interes" => $interes ,
                 "monto" => $monto ,
+                "monto_cuota" => $monto ,
                 "interes_generado" => $interes_generado ,
                 "monto_pagado" => $monto_pagado ,
                 "fecha_cancelacion" => $fecha_cancelacion ,
@@ -1121,6 +1138,54 @@ Class Creditos{
         return $cronograma_list;
     }
 
+    function crear_penalidad_credito () {
+        $query = "CALL sp_crearpenalidadcredito(
+            :prcredito ,
+            :prcuotapenalidad ,
+            :prnumerocuotas ,
+            :prfechainicio ,
+            :prtipopago
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prcredito", $this->id_credito);
+        $result->bindParam(":prcuotapenalidad", $this->cuota_penalidad);
+        $result->bindParam(":prnumerocuotas", $this->numero_cuotas);
+        $result->bindParam(":prfechainicio", $this->fecha_inicio);
+        $result->bindParam(":prtipopago", $this->tipo_pago);
+
+        $this->id_credito=htmlspecialchars(strip_tags($this->id_credito));
+        $this->cuota_penalidad=htmlspecialchars(strip_tags($this->cuota_penalidad));
+        $this->numero_cuotas=htmlspecialchars(strip_tags($this->numero_cuotas));
+        $this->fecha_inicio=htmlspecialchars(strip_tags($this->fecha_inicio));
+        $this->tipo_pago=htmlspecialchars(strip_tags($this->tipo_pago));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    function crear_interes_credito() {
+        $query = "CALL sp_crearcreditocronogramainteres(
+            :prcredito
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prcredito", $this->id_credito);
+
+        $this->id_credito=htmlspecialchars(strip_tags($this->id_credito));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
+    }
+    
 }
 
 ?>

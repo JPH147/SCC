@@ -31,7 +31,7 @@ export class VentanaCooperativaDireccionesComponent implements OnInit {
   ngOnInit() {
     this.CrearFormulario() ;
     
-    // console.log(this.data) ;
+    this.ListarDepartamento();
 
     if( this.data ) {
       this.DireccionesForm.get('id_direccion').setValue(this.data.id_cooperativa_direccion) ;
@@ -39,17 +39,16 @@ export class VentanaCooperativaDireccionesComponent implements OnInit {
       this.DireccionesForm.get('departamento').setValue(this.data.departamento) ;
       this.DireccionesForm.get('provincia').setValue(this.data.provincia) ;
       this.DireccionesForm.get('distrito').setValue(this.data.id_distrito) ;
+
+      this.ListarProvincia();
+      this.ListarDistrito();
     }
     
-    this.ListarDepartamento();
-    this.ListarProvincia();
-    this.ListarDistrito();
   }
 
   CrearFormulario(){
     this.DireccionesForm = this._builder.group({
       id_direccion : [{ value: null, disabled : false }, [
-        Validators.required
       ]] ,
       direccion: [null,[
         Validators.required
@@ -102,13 +101,23 @@ export class VentanaCooperativaDireccionesComponent implements OnInit {
   Guardar(){
     this.Cargando.next(true) ;
 
-    this._cooperativa.ActualizarDireccion(
-      this.DireccionesForm.get('id_direccion').value ,
-      this.DireccionesForm.get('distrito').value ,
-      this.DireccionesForm.get('direccion').value ,
-    ).subscribe(res=>{
-      this.Cargando.next(false) ;
-      this.ventana.close(res) ;
-    }) ;
+    if ( this.data ) {
+      this._cooperativa.ActualizarDireccion(
+        this.DireccionesForm.get('id_direccion').value ,
+        this.DireccionesForm.get('distrito').value ,
+        this.DireccionesForm.get('direccion').value ,
+      ).subscribe(res=>{
+        this.Cargando.next(false) ;
+        this.ventana.close(res) ;
+      }) ;
+    } else {
+      this._cooperativa.CrearDireccion(
+        this.DireccionesForm.get('distrito').value ,
+        this.DireccionesForm.get('direccion').value ,
+      ).subscribe(res=>{
+        this.Cargando.next(false) ;
+        this.ventana.close(res) ;
+      }) ;
+    }
   }
 }

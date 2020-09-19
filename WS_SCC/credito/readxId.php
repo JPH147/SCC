@@ -74,11 +74,16 @@
             "total_cuotas" => $credito->total_cuotas,
             "total_pendiente" => $credito->total_pendiente,
             "total_pagadas" => $credito->total_pagadas,
+            "cuota_estandar" => $credito->cuota_estandar ,
+            "monto_pendiente_hasta_hoy" => $credito->monto_pendiente_hasta_hoy ,
+            "cumple_penalidad" => $credito->cumple_penalidad ,
             "id_estado" => $credito->id_estado,
             "estado" => $credito->estado,
+            "cuotas_penalidad" => $credito->cuotas_penalidad,
+            "cuotas_interes" => $credito->cuotas_interes,
             "courier" => $credito->courier,
             "garantes" => $credito->garante,
-            "cronograma" => $credito->cronograma,
+            // "cronograma" => $credito->cronograma,
 	    );
 
         if ((trim($credito->id_credito)!= ''))

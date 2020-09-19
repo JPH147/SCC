@@ -1,0 +1,19 @@
+<mat-card class="card">
+  <mat-toolbar color="primary">
+    <mat-toolbar-row>
+      Generar penalidad
+    </mat-toolbar-row>
+  </mat-toolbar>
+
+  <div class = "spinner-container-emergente" *ngIf = "Cargando| async">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <mat-card-actions>
+    <mat-grid-list cols="1" rowHeight="70px">
+      <mat-grid-tile>
+        <button mat-raised-button color="primary" [disabled]="(Cargando | async)" (click)="Guardar()"> Confirmar </button>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-card-actions>
+</mat-card>
