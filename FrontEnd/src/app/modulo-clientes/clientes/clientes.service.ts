@@ -314,7 +314,7 @@ export class ClienteService {
       .set('prcuenta', cuenta)
       .set('prcci', cci)
 
-    console.log(params)
+    // console.log(params)
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     return this.http.post(this.url + 'clientecuenta/update.php', params, {headers: headers})

@@ -270,11 +270,30 @@ export class ServiciosVentas{
       if(res['codigo']===0){
         return res;
       }else{
-        console.log('No hay datos que mostrar')
+				console.log('No hay datos que mostrar')
+				return false ;
       }
     }))
   }
-  
+	
+	ListarTalonariosDetalle(
+		serie : string ,
+	  ) : Observable<any> {
+	
+		let params = new HttpParams()
+		  .set("prserie", serie) ;
+	
+    return this.http.get(this.url+'talonario/read-detalle.php', {params})
+    .pipe(map(res=>{
+      if(res['codigo']===0){
+        return res['data']['talonarios'] ;
+      }else{
+				console.log('No hay datos que mostrar') ;
+				return [] ;
+      }
+    }))
+	}
+	
   VerificarTalonario(
 		serie : string 
 	  ){

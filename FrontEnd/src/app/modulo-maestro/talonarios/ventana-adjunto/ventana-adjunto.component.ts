@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BehaviorSubject } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { ServiciosGenerales } from 'src/app/core/servicios/servicios';
@@ -25,6 +25,7 @@ export class VentanaAdjuntoComponent implements OnInit {
   public archivo_nombre : string = "";
 
   constructor(
+    @Inject(MAT_DIALOG_DATA) public data : any ,
     private ventana : MatDialogRef<VentanaAdjuntoComponent>,
     private _builder : FormBuilder ,
     private _generales : ServiciosGenerales ,
@@ -34,12 +35,15 @@ export class VentanaAdjuntoComponent implements OnInit {
   ngOnInit(): void {
     this.ListarTalonarioSerie() ;
     this.CrearFormulario() ;
+
+    if ( this.data ) {
+      this.TalonarioAdjuntosForm.get('contrato').setValue(this.data) ;
+    }
   }
 
   private CrearFormulario() {
     this.TalonarioAdjuntosForm = this._builder.group({
       talonario : [{ value : "", disabled : false },[
-        Validators.required
       ]] ,
       contrato : [{ value : "", disabled : false },[
         Validators.required

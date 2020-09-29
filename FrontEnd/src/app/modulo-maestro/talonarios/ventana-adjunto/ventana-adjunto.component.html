@@ -7,22 +7,23 @@
   <form [formGroup]="TalonarioAdjuntosForm">
     <mat-card-content>
       <mat-grid-list cols="2" rowHeight="70px">
-
-        <mat-grid-tile>
-          <mat-form-field class="columnas-1">
-            <mat-select placeholder='Talonario' formControlName="talonario" (selectionChange)="ListarTalonarioNumero()">
-              <mat-option *ngFor="let talonarioserie of ListadoSeries" [value] = "talonarioserie.serie"> {{talonarioserie.serie}} </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          <mat-form-field class="columnas-1">
-            <mat-select placeholder='Contrato' formControlName="contrato" (selectionChange)="VerificarArchivo()">
-              <mat-option *ngFor="let contrato of ListadoContratos" [value] = "contrato.id"> {{contrato.numero}} </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </mat-grid-tile>
+        <ng-container *ngIf="!this.data ">
+          <mat-grid-tile>
+            <mat-form-field class="columnas-1">
+              <mat-select placeholder='Talonario' formControlName="talonario" (selectionChange)="ListarTalonarioNumero()">
+                <mat-option *ngFor="let talonarioserie of ListadoSeries" [value] = "talonarioserie.serie"> {{talonarioserie.serie}} </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-grid-tile>
+  
+          <mat-grid-tile>
+            <mat-form-field class="columnas-1">
+              <mat-select placeholder='Contrato' formControlName="contrato" (selectionChange)="VerificarArchivo()">
+                <mat-option *ngFor="let contrato of ListadoContratos" [value] = "contrato.id"> {{contrato.numero}} </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-grid-tile>
+        </ng-container>
 
         <mat-grid-tile colspan=2>
           <ng-container *ngIf="!archivo">

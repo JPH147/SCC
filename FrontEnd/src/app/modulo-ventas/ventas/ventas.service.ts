@@ -538,4 +538,27 @@ export class VentaService {
       })
     );
   }
+
+  ActualizarEstadoPenalidad(
+    id_venta : number ,
+    estado_penalidad : number ,
+  ) : Observable<boolean> {
+    let params = new HttpParams()
+      .set('prventa', id_venta.toString())
+      .set('prestadopenalidad', estado_penalidad.toString()) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'venta/actualizar-estado-penalidad.php', params, {headers: headers})
+    .pipe(
+      map((res)=>{
+        if ( res['codigo'] === 0) {
+          return true ;
+        } else {
+          console.log(res) ;
+          return false ;
+        }
+      })
+    );
+  }
 }

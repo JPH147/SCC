@@ -79,8 +79,10 @@
 				"cumple_penalidad"=>$venta->cumple_penalidad,
 				"cuotas_penalidad" => $venta->cuotas_penalidad ,
 				"cuotas_interes" => $venta->cuotas_interes ,
+				"monto_limite_penalidad" => $venta->monto_limite_penalidad ,
+				"monto_penalidad" => $venta->monto_penalidad ,
+				"estado_penalidad" => $venta->estado_penalidad ,
 				"courier"=>$venta->courier,
-				// "cronograma"=>$venta->cronograma,
 				"productos"=>$venta->productos,
 				"garantes"=>$venta->garantes,
 	    );

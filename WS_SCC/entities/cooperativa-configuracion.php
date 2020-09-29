@@ -173,5 +173,20 @@ class Cooperativa{
 		return false;
   }
 
+  function obtener_ultimo_orden() {
+    $query = "CALL sp_listarcooperativadireccionultimonumeroorden()";
+  
+		$result = $this->conn->prepare($query);
+  
+    $result->execute();
+
+    $row = $result->fetch(PDO::FETCH_ASSOC);
+
+    $this->numero_orden=$row['numero_orden'];
+
+    return $this->numero_orden ;
+  }
+  
+
 }
 ?>

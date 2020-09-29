@@ -191,12 +191,22 @@ Class Plantillas{
 
         $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('../plantillas/archivos/transaccion_X.docx');
 
+        $direccion_totales = $this->consultar_direccion_transaccion() ;
+        
+        forEach($direccion_totales as $direccion) {
+            $etiqueta = "cooperativa_direccion_" . $direccion['numero_orden'] ;
+            // ob_start();
+            // echo($etiqueta);
+            // error_log(ob_get_clean(), 4) ;
+            $templateProcessor->setValue($etiqueta, $direccion['direccion']) ;    
+        }
+
         $templateProcessor->setValue('cooperativa', $this->cooperativa);
-        $templateProcessor->setValue('cooperativa_direccion', $this->cooperativa_direccion);
-        $templateProcessor->setValue('cooperativa_direccion_1', $this->cooperativa_direccion_1);
-        $templateProcessor->setValue('cooperativa_direccion_2', $this->cooperativa_direccion_2);
-        $templateProcessor->setValue('cooperativa_direccion_3', $this->cooperativa_direccion_3);
-        $templateProcessor->setValue('cooperativa_direccion_4', $this->cooperativa_direccion_4);
+        // $templateProcessor->setValue('cooperativa_direccion', $this->cooperativa_direccion);
+        // $templateProcessor->setValue('cooperativa_direccion_1', $this->cooperativa_direccion_1);
+        // $templateProcessor->setValue('cooperativa_direccion_2', $this->cooperativa_direccion_2);
+        // $templateProcessor->setValue('cooperativa_direccion_3', $this->cooperativa_direccion_3);
+        // $templateProcessor->setValue('cooperativa_direccion_4', $this->cooperativa_direccion_4);
         $templateProcessor->setValue('cooperativa_cuenta_banco', $this->cooperativa_cuenta_banco);
         $templateProcessor->setValue('cooperativa_cuenta_numero', $this->cooperativa_cuenta_numero);
         $templateProcessor->setValue('presidente', $this->presidente);
@@ -285,6 +295,11 @@ Class Plantillas{
         forEach ($cronograma as $valor){
             $valor->monto = number_format($valor->monto, 2);
         }
+
+        // ob_start();
+        // var_dump($cronograma);
+        // error_log(ob_get_clean(), 4) ;
+
         $templateProcessor->cloneBlock('block_name', 0, true, false, $cronograma);
         $templateProcessor->cloneBlock('block_name_1', 0, true, false, $cronograma);
         $templateProcessor->cloneBlock('block_name_2', 0, true, false, $cronograma);
@@ -303,7 +318,6 @@ Class Plantillas{
         $templateProcessor->saveAs('../uploads/autogenerados/' . $this->nombre_archivo . '.docx');
 
         return file_exists ( '../uploads/autogenerados/' . $this->nombre_archivo . '.docx' );
-        
     }
 
     function generar_compromiso(){

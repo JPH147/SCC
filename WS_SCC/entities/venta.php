@@ -94,6 +94,10 @@ Class Venta{
     public $cuotas_penalidad ;
     public $cuotas_interes ;
 
+    public $monto_limite_penalidad ;
+    public $monto_penalidad ;
+    public $estado_penalidad ;
+
     public function __construct($db){
         $this->conn = $db;
         $this->Seguimiento = new Seguimiento($db);
@@ -153,6 +157,7 @@ Class Venta{
                 "numero_procesos"=>$numero_procesos,
                 "ultima_fecha_pago"=>$ultima_fecha_pago,
                 "estado"=>$estado,
+                "estado_penalidad"=>$estado_penalidad,
             );
             array_push($venta_list["ventas"],$venta_item);
         }
@@ -530,8 +535,10 @@ Class Venta{
         $this->total_pagadas = $row['total_pagadas'] ;
         $this->cuotas_penalidad = $row['cuotas_penalidad'];
         $this->cuotas_interes = $row['cuotas_interes'];
+        $this->monto_limite_penalidad = $row['monto_limite_penalidad'] ;
+        $this->monto_penalidad = $row['monto_penalidad'] ;
+        $this->estado_penalidad = $row['estado_penalidad'] ;
         $this->courier = $Courier;
-        // $this->cronograma=$Cronograma;
         $this->productos=$Productos;
         $this->garantes=$Garantes;
     }
@@ -602,8 +609,10 @@ Class Venta{
         $this->total_pagadas = $row['total_pagadas'] ;
         $this->cuotas_penalidad = $row['cuotas_penalidad'];
         $this->cuotas_interes = $row['cuotas_interes'];
+        $this->monto_limite_penalidad = $row['monto_limite_penalidad'] ;
+        $this->monto_penalidad = $row['monto_penalidad'] ;
+        $this->estado_penalidad = $row['estado_penalidad'] ;
         $this->courier = $Courier;
-        // $this->cronograma=$Cronograma;
         $this->productos=$Productos;
         $this->garantes=$Garantes;
     }
@@ -1222,5 +1231,27 @@ Class Venta{
         }
         return false;
     }
+     
+    function actualizar_venta_estado_penalidad() {
+        $query = "CALL sp_actualizarventaestadopenalidad(
+            :prventa ,
+            :prestadopenalidad
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prventa", $this->id_venta);
+        $result->bindParam(":prestadopenalidad", $this->estado_penalidad);
+
+        $this->id_venta=htmlspecialchars(strip_tags($this->id_venta));
+        $this->estado_penalidad=htmlspecialchars(strip_tags($this->estado_penalidad));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
+    }
+
 }
 ?>

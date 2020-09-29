@@ -1,0 +1,15 @@
+mat-card-content {
+  position: relative;
+  width: 90%;
+  margin-right: auto ;
+  margin-left: auto ;
+  margin-bottom: 30px !important ;
+}
+
+.mat-column-opciones{
+  max-width: 10%;
+}
+
+.mat-column-numero{
+  max-width: 5%; 
+}

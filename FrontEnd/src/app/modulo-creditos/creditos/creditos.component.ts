@@ -34,6 +34,7 @@ import * as moment from 'moment';
 import {default as _rollupMoment, Moment} from 'moment';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { VentanaGenerarPenalidadComponent } from 'src/app/compartido/componentes/ventana-generar-penalidad/ventana-generar-penalidad.component';
+import { VentanaGenerarInteresComponent } from 'src/app/compartido/componentes/ventana-generar-interes/ventana-generar-interes.component';
 
 @Component({
   selector: 'app-creditos',
@@ -178,6 +179,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
 
   public cuotas_penalidad : number = 0 ;
   public cuotas_interes : number = 0 ;
+  public editar_penalidad : boolean = false ;
 
   constructor(
     private _store : Store<EstadoSesion> ,
@@ -476,6 +478,14 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       // 1. Ver cuotas, 2. Ver periodos
       vista_cronograma: [{ value : 2, disabled : false },[
       ]],
+      deuda_hasta_hoy: [{ value : null, disabled : false },[
+      ]],
+      monto_limite_penalidad: [{ value : null, disabled : false },[
+      ]],
+      monto_penalidad: [{ value : null, disabled : false },[
+      ]],
+      estado_penalidad: [{ value : null, disabled : false },[
+      ]],
     })
   }
 
@@ -573,6 +583,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   }
 
   SeleccionarCredito(id_credito) {
+    this.Cargando.next(true) ;
     this.ListarProcesos(id_credito) ;
     let observacion_corregida : string;
     let codigo_string : string;
@@ -581,6 +592,15 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     this.Servicio.Seleccionar(id_credito).subscribe(res=>{
       this.Cargando.next(false);
       
+      this.CreditosForm.get('deuda_hasta_hoy').setValue(res.deuda_hasta_hoy) ;
+      this.CreditosForm.get('monto_limite_penalidad').setValue(res.monto_limite_penalidad) ;
+      this.CreditosForm.get('monto_penalidad').setValue(res.monto_penalidad) ;
+      this.CreditosForm.get('estado_penalidad').setValue(res.estado_penalidad) ;
+
+      if ( this.CreditosForm.get('estado_penalidad').value == 3 ) {
+        this.CreditosForm.get('estado_penalidad').disable() ;
+      }
+
       /////////////////////////////////////////////////////////
       // Se da el formato al código
       codigo_string=res.numero.toString();
@@ -1316,12 +1336,14 @@ export class CreditosComponent implements OnInit, AfterViewInit {
 
       // Se calcula el monto de las cuotas normales
       let monto : number = Math.round((total)*100/this.FiltroCuota.nativeElement.value)/100
-  
+      let nueva_fecha : Date = this.CreditosForm.value.fecha_pago ;
       for (let j = 1; j<=this.FiltroCuota.nativeElement.value; j++) {
-        fecha=moment(fecha_corregida).add(j-1, 'months').toDate();
+        // fecha=moment(fecha_corregida).add(j-1, 'months').toDate();
+        let fecha_cronograma = this.AgregarMes(nueva_fecha, j-1) ;
+
         this.Cronograma.push({
           numero: i+j-1,
-          fecha_vencimiento: fecha,
+          fecha_vencimiento: fecha_cronograma,
           monto_cuota: monto ,
           interes : interes,
           capital : monto-interes
@@ -1337,7 +1359,22 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       this.CalcularTotalCronograma();
       this.ListadoCronograma.AsignarInformacion(this.Cronograma);
     }
+  }
 
+  AgregarMes(fecha: Date, numero_meses: number) : Date {
+    let fecha_corregida : Date ;
+
+    let ultimo_dia : Date = moment(fecha).endOf('month').toDate() ;
+
+    let diferencia = moment(fecha).diff(ultimo_dia, 'days') ;
+
+    if ( diferencia == 0 ) {
+      fecha_corregida = moment(fecha).add(numero_meses,'month').endOf('month').toDate() ;
+    } else {
+      fecha_corregida = moment(fecha).add(numero_meses,'month').toDate() ;
+    }
+
+    return fecha_corregida ;
   }
 
   CalcularTotalCronograma(){
@@ -2075,11 +2112,11 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   }
 
   GenerarInteres() {
-    let Ventana = this.Dialogo.open(VentanaGenerarPenalidadComponent, {
+    let Ventana = this.Dialogo.open(VentanaGenerarInteresComponent, {
       data : {
         id_credito : this.id_credito_estandar ,
       } ,
-      width: '900px' ,
+      width: '300px' ,
       maxHeight: '80vh'
     })
     
@@ -2092,6 +2129,27 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         this.Notificacion.Snack("Ocurrió un error al generar el interés","")
       }
     })
+  }
+
+  EditarPenalidad( estado_actual : number ) {
+    if ( estado_actual == 1 ) {
+      this.editar_penalidad = true ;
+    }
+    if ( estado_actual == 2 ) {
+      this.editar_penalidad = false ;
+      this.Servicio.ActualizarEstadoPenalidad(
+        this.id_credito ,
+        this.CreditosForm.get('estado_penalidad').value ,
+      ).subscribe((respuesta =>{
+        if ( respuesta ) {
+          this.SeleccionarCredito(this.id_credito) ;
+          this.Notificacion.Snack("Se actualizó el estado de la penalidad","")
+        }
+        if( !respuesta ) {
+          this.Notificacion.Snack("Ocurrió un error al actualizar el estado de la penalidad","")
+        }
+      }))
+    }
   }
 }
 

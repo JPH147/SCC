@@ -3,7 +3,6 @@ import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, ViewChildren, 
 import {FormArray, FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {VentaService} from '../ventas/ventas.service';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSort } from '@angular/material/sort';
 import {ServiciosTipoDocumento } from 'src/app/core/servicios/tipodocumento';
 import {ServiciosTipoPago } from 'src/app/core/servicios/tipopago';
 import {ClienteService } from '../../modulo-clientes/clientes/clientes.service';
@@ -70,7 +69,6 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   @ViewChild('InputInicial', { static: true }) FiltroInicial: ElementRef;
   @ViewChild('InputCuota', { static: true }) FiltroCuota: ElementRef;
   @ViewChildren('InputPrecio') FiltroPrecio:QueryList<any>;
-  @ViewChild(MatSort) sort: MatSort;
 
   public foto: string;
   public dni: string;
@@ -139,8 +137,10 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   public editar_documentos : boolean = false ;
   public cumple_penalidad : number = 1 ;
   public id_tipo_pago : number = 0 ;
+
   public cuotas_penalidad : number = 0 ;
   public cuotas_interes : number = 0 ;
+  public editar_penalidad : boolean = false ;
 
   constructor(
     private _store : Store<EstadoSesion> ,
@@ -306,6 +306,14 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       // 1. Ver cuotas, 2. Ver periodos
       vista_cronograma: [{ value : 2, disabled : false },[
       ]],
+      deuda_hasta_hoy: [{ value : null, disabled : false },[
+      ]],
+      monto_limite_penalidad: [{ value : null, disabled : false },[
+      ]],
+      monto_penalidad: [{ value : null, disabled : false },[
+      ]],
+      estado_penalidad: [{ value : null, disabled : false },[
+      ]],
     });
   }
 
@@ -323,6 +331,11 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       this.id_tipo_pago = res.idtipopago ;
       this.cuotas_penalidad = res.cuotas_penalidad ;
       this.cuotas_interes = res.cuotas_interes ;
+
+      this.VentasSalidaForm.get('deuda_hasta_hoy').setValue(res.monto_pendiente_hasta_hoy) ;
+      this.VentasSalidaForm.get('monto_limite_penalidad').setValue(res.monto_limite_penalidad) ;
+      this.VentasSalidaForm.get('monto_penalidad').setValue(res.monto_penalidad) ;
+      this.VentasSalidaForm.get('estado_penalidad').setValue(res.estado_penalidad) ;
 
       this.numero_contrato=res.contrato;
 
@@ -1485,6 +1498,27 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
         this.Notificacion.Snack("Ocurrió un error al crear las cuotas de la penalidad","")
       }
     })
+  }
+
+  EditarPenalidad( estado_actual : number ) {
+    if ( estado_actual == 1 ) {
+      this.editar_penalidad = true ;
+    }
+    if ( estado_actual == 2 ) {
+      this.editar_penalidad = false ;
+      this.Servicio.ActualizarEstadoPenalidad(
+        this.id_venta ,
+        this.VentasSalidaForm.get('estado_penalidad').value ,
+      ).subscribe((respuesta =>{
+        if ( respuesta ) {
+          this.SeleccionarVentaxId(this.id_venta) ;
+          this.Notificacion.Snack("Se actualizó el estado de la penalidad","")
+        }
+        if( !respuesta ) {
+          this.Notificacion.Snack("Ocurrió un error al actualizar el estado de la penalidad","")
+        }
+      }))
+    }
   }
 }
 

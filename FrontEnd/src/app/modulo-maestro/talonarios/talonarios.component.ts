@@ -9,6 +9,7 @@ import {VentanaConfirmarComponent} from '../../compartido/componentes/ventana-co
 import {Notificaciones} from 'src/app/core/servicios/notificacion';
 import {VentanaTalonarioComponent} from './ventana-talonario/ventana-talonario.component'
 import { VentanaAdjuntoComponent } from './ventana-adjunto/ventana-adjunto.component';
+import { VentanaDetalleTalonarioComponent } from './ventana-detalle-talonario/ventana-detalle-talonario.component';
 
 @Component({
   selector: 'app-talonarios',
@@ -62,6 +63,14 @@ export class TalonariosComponent implements OnInit {
       this.paginator.pageIndex+1,
       this.paginator.pageSize
     )
+  }
+
+  VerDetalle(talonario) {
+    let Ventana = this.Dialogo.open(VentanaDetalleTalonarioComponent, {
+      width: '1200px' ,
+      data : talonario.serie ,
+      maxHeight : '80vh' ,
+    })
   }
 
   Editar(talonario) {
@@ -125,7 +134,6 @@ export class TalonariosComponent implements OnInit {
       }
     })
   }
-
 }
 
 export class TalonariosDataSource implements DataSource<any>{

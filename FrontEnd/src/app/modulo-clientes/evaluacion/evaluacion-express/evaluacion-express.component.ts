@@ -613,6 +613,7 @@ export class EvaluacionExpressComponent implements OnInit {
       this.ExpressForm.value.lugar,
       this.ExpressForm.value.fecha_letras
     ).subscribe(res=>{
+      console.log(res)
       if(res['codigo']==0){
         this.generados=true;
         this.ddjj=res['data'];
@@ -708,7 +709,7 @@ export class EvaluacionExpressComponent implements OnInit {
       (this.InformacionForm.value.hay_garante && this.InformacionForm.value.dni_garante)? this.InformacionForm.value.nombre_garante : "0",
       (this.InformacionForm.value.hay_garante && this.InformacionForm.value.dni_garante) ? this.InformacionForm.value.dni_garante : "0",
     ).subscribe(res=>{
-      // console.log(res)
+      console.log(res)
       this.generados=true;
       this.transaccion=res['data'];
     })

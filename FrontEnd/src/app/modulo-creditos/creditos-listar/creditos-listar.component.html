@@ -85,18 +85,24 @@
       <ng-container matColumnDef="stars">
         <mat-header-cell *matHeaderCellDef> <mat-icon> stars </mat-icon> </mat-header-cell>
         <mat-cell *matCellDef="let credito"> 
-          <ng-container>
+          <ng-container *ngIf="credito.estado_penalidad < 3">
             <ng-container *ngIf="credito.cumple_penalidad == 0">
               <ng-container *ngIf="credito.monto_pendiente_hasta_hoy == 0">
                 <mat-icon matTooltip="Está al día con los pagos" class="icono-verde"> check_circle_outline </mat-icon>
               </ng-container>
 
-              <ng-container *ngIf="credito.monto_pendiente_hasta_hoy > 0">
+              <ng-container *ngIf="credito.monto_pendiente_hasta_hoy > 0 || credito.estado_penalidad == 2">
                 <mat-icon matTooltip="Tiene cuotas atrasadas" class="icono-ambar"> error_outline </mat-icon>
               </ng-container>
             </ng-container>
+            <ng-container *ngIf="credito.cumple_penalidad == 1 && credito.estado_penalidad == 1">
+              <mat-icon matTooltip="Aplica penalidad" class="icono-anaranjado"> error_outline </mat-icon>
+            </ng-container>
+          </ng-container>
+
+          <ng-container *ngIf="credito.estado_penalidad == 3">
             <ng-container *ngIf="credito.cumple_penalidad == 1">
-              <mat-icon matTooltip="Aplica penalidad" class="icono-anaranjado"> highlight_off </mat-icon>
+              <mat-icon matTooltip="Tiene penalidad" class="icono-rojo"> highlight_off </mat-icon>
             </ng-container>
           </ng-container>
         </mat-cell>

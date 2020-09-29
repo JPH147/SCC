@@ -76,7 +76,7 @@
             $archivo->nombre_aval = trim($_POST["prnombreaval"]);
             $archivo->dni_aval = trim($_POST["prdniaval"]);
 
-            if($archivo->generar_transaccion())
+            if( $archivo->generar_transaccion() )
             {
                 print_json("0000", "Se creó el archivo satisfactoriamente.", $archivo->nombre_archivo);
             }

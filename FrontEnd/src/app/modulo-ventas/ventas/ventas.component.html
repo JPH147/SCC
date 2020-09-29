@@ -1203,6 +1203,66 @@
       </mat-grid-list>
     </div>
 
+    <!-- Estado de la penalidad -->
+    <div class="seccion" *ngIf="idventa">
+      <mat-card-subtitle class="titulo-seccion">
+        ESTADO DE LA PENALIDAD
+        <ng-container>
+          <button mat-icon-button type="button" class="icono" *ngIf="!editar_penalidad" (click)="EditarPenalidad(1)"><mat-icon>edit</mat-icon></button>
+          <button mat-icon-button type="button" class="icono" *ngIf="editar_penalidad" (click)="EditarPenalidad(2)"><mat-icon>save</mat-icon></button>
+        </ng-container>
+      </mat-card-subtitle>
+  
+      <mat-grid-list cols="4" rowHeight="70px">
+        <mat-grid-tile>
+          <mat-form-field appearance="fill" class="columnas-1">
+            <mat-label> Monto límite para aplicar </mat-label>
+            <input matInput placeholder="Monto límite para aplicar" formControlName="monto_limite_penalidad" readonly>
+            <span matPrefix>S/. &nbsp;</span>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field appearance="fill" class="columnas-1">
+            <mat-label> Deuda hasta hoy </mat-label>
+            <input matInput placeholder="Deuda hasta hoy" formControlName="deuda_hasta_hoy" readonly>
+            <span matPrefix>S/. &nbsp;</span>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field appearance="fill" class="columnas-1">
+            <mat-label> Monto de penalidad </mat-label>
+            <input matInput placeholder="Monto de penalidad" formControlName="monto_penalidad" readonly>
+            <span matPrefix>S/. &nbsp;</span>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          Aplica penalidad: &nbsp;
+          <ng-container *ngIf="editar_penalidad">
+            <mat-radio-group aria-label="Penalidad" formControlName="estado_penalidad">
+              <mat-radio-button [value]="1"> <mat-icon class="icono-verde"> check </mat-icon> </mat-radio-button>
+              &nbsp;
+              <mat-radio-button [value]="2"> <mat-icon class="icono-rojo"> close </mat-icon> </mat-radio-button>
+            </mat-radio-group>
+          </ng-container>
+          <ng-container *ngIf="!editar_penalidad">
+            <ng-container *ngIf="VentasForm.get('estado_penalidad').value == 1">
+              <mat-icon class="icono-verde"> check </mat-icon>
+            </ng-container>
+            <ng-container *ngIf="VentasForm.get('estado_penalidad').value == 2">
+              <mat-icon class="icono-rojo"> close </mat-icon>
+            </ng-container>
+          </ng-container>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan="4" *ngIf="VentasForm.get('estado_penalidad').value == 3">
+          <mat-error> Ya se ha aplicado penalidad </mat-error>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </div>
+
     <!-- Cronograma -->
     <div class="seccion">
 
@@ -1231,7 +1291,8 @@
           <mat-grid-tile></mat-grid-tile>
 
           <mat-grid-tile>
-            <ng-container *ngIf="permiso?.ventas?.listado_ventas?.establecer_penalidad && cumple_penalidad == 1 && cuotas_penalidad==0">
+            <ng-container *ngIf="permiso?.ventas?.listado_ventas?.establecer_penalidad && cumple_penalidad == 1
+              && cuotas_penalidad==0">
               <button mat-raised-button color="warn" (click)="EstablecerPenalidad()" [disabled]="(Cargando | async)">
                 Establecer penalidad </button>
             </ng-container>
@@ -1411,6 +1472,24 @@
             <ng-container *ngIf="VentasForm.get('vista_cronograma').value == 1">
               ({{totales_total_pendiente}} cuotas)
             </ng-container>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <strong> Monto límite para penalidad: </strong>
+            &nbsp;
+            {{ VentasForm.get('monto_limite_penalidad').value | currency:'S/.' }}
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <strong> Deuda hasta hoy: </strong>
+            &nbsp;
+            {{ VentasForm.get('deuda_hasta_hoy').value | currency:'S/.' }}
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <strong> Monto de penalidad: </strong>
+            &nbsp;
+            {{ VentasForm.get('monto_penalidad').value | currency:'S/.' }}
           </mat-grid-tile>
         </mat-grid-list>
       </ng-container>

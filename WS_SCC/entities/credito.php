@@ -76,9 +76,12 @@ Class Creditos{
     public $cumple_penalidad ;
     public $cuota_penalidad ;
     public $numero_cuotas ;
-
+    public $monto_limite_penalidad ;
+    public $monto_penalidad ;
+    public $deuda_hasta_hoy ;
     public $cuotas_penalidad ;
     public $cuotas_interes ;
+    public $estado_penalidad ;
 
     public function __construct($db){
         $this->conn = $db;
@@ -140,6 +143,7 @@ Class Creditos{
                 "cuotas_pendientes"=>$cuotas_pendientes,
                 "cuotas_pagadas"=>$cuotas_pagadas,
                 "ultima_fecha_pago"=>$ultima_fecha_pago,
+                "estado_penalidad"=>$estado_penalidad,
                 "estado"=>$estado,
             );
             array_push($credito_list["creditos"],$items);
@@ -246,6 +250,10 @@ Class Creditos{
         $this->estado = $row['estado'];
         $this->cuotas_penalidad = $row['cuotas_penalidad'];
         $this->cuotas_interes = $row['cuotas_interes'];
+        $this->deuda_hasta_hoy = $row['deuda_hasta_hoy'] ;
+        $this->monto_limite_penalidad = $row['monto_limite_penalidad'];
+        $this->monto_penalidad = $row['monto_penalidad'];
+        $this->estado_penalidad = $row['estado_penalidad'];
         $this->courier = $Courier;
         $this->garante = $Garantes;
         // $this->cronograma = $Cronograma;
@@ -1185,7 +1193,28 @@ Class Creditos{
         }
         return false;
     }
-    
+ 
+    function actualizar_credito_estado_penalidad() {
+        $query = "CALL sp_actualizarcreditoestadopenalidad(
+            :prcredito ,
+            :prestadopenalidad
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prcredito", $this->id_credito);
+        $result->bindParam(":prestadopenalidad", $this->estado_penalidad);
+
+        $this->id_credito=htmlspecialchars(strip_tags($this->id_credito));
+        $this->estado_penalidad=htmlspecialchars(strip_tags($this->estado_penalidad));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
+    }
+
 }
 
 ?>

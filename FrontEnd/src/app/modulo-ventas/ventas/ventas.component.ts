@@ -186,6 +186,7 @@ export class VentasComponent implements OnInit {
 
   public cuotas_penalidad : number = 0 ;
   public cuotas_interes : number = 0 ;
+  public editar_penalidad : boolean = false ;
 
   constructor(
     private _store : Store<EstadoSesion> ,
@@ -372,6 +373,104 @@ export class VentasComponent implements OnInit {
     }
   }
 
+  CrearFormulario(){
+
+    this.VentasForm = this.FormBuilder.group({
+      'talonario': [null, [
+        Validators.required
+      ]],
+      'contrato': [null, [
+        Validators.required
+      ]],
+      'id_cliente': [null, [
+        Validators.required
+      ]],
+      'cliente': ["", [
+        Validators.required
+      ]],
+      'dni': ["", [
+        Validators.required
+      ]],
+      'cargo': ["", [
+      ]],
+      'trabajo': ["", [
+      ]],
+      'direccion': ["", [
+      ]],
+      'telefono': ["", [
+      ]],
+      'garante': [false, [
+        Validators.required
+      ]],
+      'sucursal': [null, [
+        Validators.required
+      ]],
+      'lugar': ["", [
+      ]],
+      'id_autorizador': [null, [
+      ]],
+      'autorizador': [null, [
+      ]],
+      'id_vendedor': [null, [
+        // Validators.required
+      ]],
+      'vendedor': [null, [
+        // Validators.required
+      ]],
+      'fechaventa': [{value: new Date(), disabled: false}, [
+        Validators.required
+      ]],
+      'fechapago': [{value: moment(new Date()).add(1,'months').endOf('month').toDate(), disabled: false}, [
+        Validators.required
+      ]],
+      'tipopago': [null, [
+        Validators.required
+      ]],
+      'montototal': [0, [
+        Validators.required,
+        Validators.pattern('[0-9- ]+')
+      ]],
+      'cuotas': [null, [
+        Validators.required,
+        Validators.pattern('[0-9- ]+')
+      ]],
+      'inicial': [0, [
+        Validators.required,
+        Validators.pattern('[0-9- ]+')
+      ]],
+      'observaciones': ["", [
+      ]],
+      // Refente al envío de papeles
+      papeles: [{value: false, disabled: false},[
+      ]],
+      papeles_id: [{value: false, disabled: false},[
+      ]],
+      papeles_fecha_envio: [{value: new Date(), disabled: false},[
+      ]],
+      papeles_courier: [{value: "", disabled: false},[
+      ]],
+      papeles_seguimiento: [{value: "", disabled: false},[
+      ]],
+      papeles_observaciones: [{value: "", disabled: false},[
+      ]],
+      fecha_fin_mes: [{value: true, disabled: false},[
+      ]],
+      productos: this.FormBuilder.array([]),
+      garantes: this.FormBuilder.array([]),
+      // 1. Ver cuotas, 2. Ver periodos
+      vista_cronograma: [{ value : 2, disabled : false },[
+      ]],
+      deuda_hasta_hoy: [{ value : null, disabled : false },[
+      ]],
+      monto_limite_penalidad: [{ value : null, disabled : false },[
+      ]],
+      monto_penalidad: [{ value : null, disabled : false },[
+      ]],
+      estado_penalidad: [{ value : null, disabled : false },[
+      ]],
+    });
+  }
+
   ActualizarObservables() {
     fromEvent(this.VendedorAutoComplete.nativeElement, 'keyup')
     .pipe(
@@ -456,6 +555,17 @@ export class VentasComponent implements OnInit {
       this.id_tipo_pago = res.idtipopago ;
       this.cuotas_penalidad = res.cuotas_penalidad ;
       this.cuotas_interes = res.cuotas_interes ;
+
+      console.log(this.permiso, this.cumple_penalidad, this.cuotas_penalidad) ;
+
+      this.VentasForm.get('deuda_hasta_hoy').setValue(res.monto_pendiente_hasta_hoy) ;
+      this.VentasForm.get('monto_limite_penalidad').setValue(res.monto_limite_penalidad) ;
+      this.VentasForm.get('monto_penalidad').setValue(res.monto_penalidad) ;
+      this.VentasForm.get('estado_penalidad').setValue(res.estado_penalidad) ;
+
+      if ( this.VentasForm.get('estado_penalidad').value == 3 ) {
+        this.VentasForm.get('estado_penalidad').disable() ;
+      }
 
       this.talonario=res.talonario_serie+" - "+res.talonario_contrato;
 
@@ -732,96 +842,6 @@ export class VentasComponent implements OnInit {
     })
   }
 
-  CrearFormulario(){
-
-    this.VentasForm = this.FormBuilder.group({
-      'talonario': [null, [
-        Validators.required
-      ]],
-      'contrato': [null, [
-        Validators.required
-      ]],
-      'id_cliente': [null, [
-        Validators.required
-      ]],
-      'cliente': ["", [
-        Validators.required
-      ]],
-      'dni': ["", [
-        Validators.required
-      ]],
-      'cargo': ["", [
-      ]],
-      'trabajo': ["", [
-      ]],
-      'direccion': ["", [
-      ]],
-      'telefono': ["", [
-      ]],
-      'garante': [false, [
-        Validators.required
-      ]],
-      'sucursal': [null, [
-        Validators.required
-      ]],
-      'lugar': ["", [
-      ]],
-      'id_autorizador': [null, [
-      ]],
-      'autorizador': [null, [
-      ]],
-      'id_vendedor': [null, [
-        // Validators.required
-      ]],
-      'vendedor': [null, [
-        // Validators.required
-      ]],
-      'fechaventa': [{value: new Date(), disabled: false}, [
-        Validators.required
-      ]],
-      'fechapago': [{value: moment(new Date()).add(1,'months').endOf('month').toDate(), disabled: false}, [
-        Validators.required
-      ]],
-      'tipopago': [null, [
-        Validators.required
-      ]],
-      'montototal': [0, [
-        Validators.required,
-        Validators.pattern('[0-9- ]+')
-      ]],
-      'cuotas': [null, [
-        Validators.required,
-        Validators.pattern('[0-9- ]+')
-      ]],
-      'inicial': [0, [
-        Validators.required,
-        Validators.pattern('[0-9- ]+')
-      ]],
-      'observaciones': ["", [
-      ]],
-      // Refente al envío de papeles
-      papeles: [{value: false, disabled: false},[
-      ]],
-      papeles_id: [{value: false, disabled: false},[
-      ]],
-      papeles_fecha_envio: [{value: new Date(), disabled: false},[
-      ]],
-      papeles_courier: [{value: "", disabled: false},[
-      ]],
-      papeles_seguimiento: [{value: "", disabled: false},[
-      ]],
-      papeles_observaciones: [{value: "", disabled: false},[
-      ]],
-      fecha_fin_mes: [{value: true, disabled: false},[
-      ]],
-      productos: this.FormBuilder.array([]),
-      garantes: this.FormBuilder.array([]),
-      // 1. Ver cuotas, 2. Ver periodos
-      vista_cronograma: [{ value : 2, disabled : false },[
-      ]],
-    });
-  }
-
   CrearProducto(): FormGroup{
     return this.FormBuilder.group({
       'id_producto': [{value: null, disabled: false}, [
@@ -1023,7 +1043,7 @@ export class VentasComponent implements OnInit {
 
     let fecha_corregida:Date = new Date(year, month, day);
 
-    let fecha:Date;
+    let fecha : Date = this.VentasForm.value.fechapago ;
 
     if (this.VentasForm.value.inicial>0) {
       this.Cronograma.push({
@@ -1037,19 +1057,35 @@ export class VentasComponent implements OnInit {
 
     for (var i = 1; i<=this.FiltroCuota.nativeElement.value; i++) {
 
-      fecha=moment(fecha_corregida).add(i-1, 'months').toDate();
+      // fecha=moment(fecha_corregida).add(i-1, 'months').toDate();
+      let fecha_nueva : Date = this.AgregarMes(fecha, i-1) ;
 
       this.Cronograma.push({
         numero: i,
-        fecha_vencimiento: fecha,
+        fecha_vencimiento: fecha_nueva,
         monto_cuota: monto
       })
 
       this.ListadoVentas.AsignarCuotas(this.Cronograma) ;
     }
-    
+   
     this.CalcularTotalCronograma()
+  }
 
+  AgregarMes(fecha: Date, numero_meses: number) : Date {
+    let fecha_corregida : Date ;
+
+    let ultimo_dia : Date = moment(fecha).endOf('month').toDate() ;
+
+    let diferencia = moment(fecha).diff(ultimo_dia, 'days') ;
+
+    if ( diferencia == 0 ) {
+      fecha_corregida = moment(fecha).add(numero_meses,'month').endOf('month').toDate() ;
+    } else {
+      fecha_corregida = moment(fecha).add(numero_meses,'month').toDate() ;
+    }
+
+    return fecha_corregida ;
   }
 
   EditarCronograma(estado){
@@ -2231,6 +2267,27 @@ export class VentasComponent implements OnInit {
         this.Notificacion.Snack("Ocurrió un error al crear las cuotas de la penalidad","")
       }
     })
+  }
+
+  EditarPenalidad( estado_actual : number ) {
+    if ( estado_actual == 1 ) {
+      this.editar_penalidad = true ;
+    }
+    if ( estado_actual == 2 ) {
+      this.editar_penalidad = false ;
+      this.Servicio.ActualizarEstadoPenalidad(
+        this.idventa ,
+        this.VentasForm.get('estado_penalidad').value ,
+      ).subscribe((respuesta =>{
+        if ( respuesta ) {
+          this.SeleccionarVentaxId(this.idventa) ;
+          this.Notificacion.Snack("Se actualizó el estado de la penalidad","")
+        }
+        if( !respuesta ) {
+          this.Notificacion.Snack("Ocurrió un error al actualizar el estado de la penalidad","")
+        }
+      }))
+    }
   }
 }
 

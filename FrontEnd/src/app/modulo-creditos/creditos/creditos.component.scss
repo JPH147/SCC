@@ -62,6 +62,11 @@ mat-card{
   width: 95%
 }
 
+.icono{
+  float: right;
+  transform: translate(-20px, -12.5px);
+}
+
 .readonly-wrapper {
   cursor: not-allowed !important;
   color: red !important;

@@ -12,9 +12,8 @@
       <mat-grid-list cols=1 rowHeight="70px">
         <mat-grid-tile colspan=1>
           <mat-form-field class="columnas-3">
-            <mat-select placeholder="Número de orden" formControlName="numero_orden">
-              <mat-option *ngFor="let orden of PosiblesNumeroOrden" [value]="orden"> {{orden}} </mat-option>
-            </mat-select>
+            <input matInput type=number min=1 [max]="maximo_numero" placeholder="Número de orden" formControlName="numero_orden">
+            <mat-hint> Debe ingresar un número entre 1 y {{maximo_numero}}</mat-hint>
           </mat-form-field>
         </mat-grid-tile>
       </mat-grid-list>

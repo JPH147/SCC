@@ -69,6 +69,7 @@ import { FileUploadVendedores } from './vendedores/vendedores-listado/file-uploa
 import { VentanaParametrosPlantillasComponent } from './instituciones/sede/ventana-parametros-plantillas/ventana-parametros-plantillas.component';
 import { VentanaCambiarOrdenComponent } from './plantillas/cooperativa-direcciones/ventana-cambiar-orden/ventana-cambiar-orden.component';
 import { VentanaAdjuntoComponent } from './talonarios/ventana-adjunto/ventana-adjunto.component';
+import { VentanaDetalleTalonarioComponent } from './talonarios/ventana-detalle-talonario/ventana-detalle-talonario.component';
 
 @NgModule({
   declarations: [
@@ -132,7 +133,8 @@ import { VentanaAdjuntoComponent } from './talonarios/ventana-adjunto/ventana-ad
     VentanaVendedorComponent ,
     FileUploadVendedores,
     VentanaCambiarOrdenComponent,
-    VentanaAdjuntoComponent ,
+    VentanaAdjuntoComponent,
+    VentanaDetalleTalonarioComponent ,
   ],
   imports: [
     ModuloMaestroRoutingModule ,

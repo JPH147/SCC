@@ -15,6 +15,7 @@ export class VentanaCambiarOrdenComponent implements OnInit {
   public Cargando = new BehaviorSubject<boolean>(false) ;
   public NumeroOrdenForm : FormGroup ;
   public PosiblesNumeroOrden : Array<number> = [1,2,3,4] ;
+  public maximo_numero : number = 0 ;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private data : any ,
@@ -25,6 +26,7 @@ export class VentanaCambiarOrdenComponent implements OnInit {
 
   ngOnInit(): void {
     this.CrearFormulario() ;
+    this.ObtenerMaximoNumero() ;
   }
 
   private CrearFormulario() {
@@ -32,6 +34,12 @@ export class VentanaCambiarOrdenComponent implements OnInit {
       numero_orden : [ { value : this.data.numero_orden, disabled : false }, [
         Validators.required
       ]]
+    })
+  }
+
+  private ObtenerMaximoNumero() {
+    this._configuracion.ObtenerUltimoNumero().subscribe(respuesta =>{
+      this.maximo_numero = respuesta ;
     })
   }
 

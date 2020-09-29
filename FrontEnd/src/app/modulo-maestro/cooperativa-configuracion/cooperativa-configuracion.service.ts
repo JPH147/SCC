@@ -134,4 +134,18 @@ export class CooperativaConfiguracionService {
       })
     )
   }
+
+  ObtenerUltimoNumero(): Observable<number> {
+    return this.http.get(this.url + 'cooperativa-configuracion/read-ultimo-numero.php')
+    .pipe(
+      map(respuesta=>{
+        if ( respuesta['codigo'] == 0 ) {
+          return respuesta['data'] ;
+        } else {
+          console.log(respuesta) ;
+          return 0 ;
+        }
+      })
+    )
+  }
 }

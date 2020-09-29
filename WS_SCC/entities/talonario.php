@@ -58,67 +58,67 @@ class Talonario{
 
 	function contar(){
 
-        $query = "CALL sp_listartalonarioscontar(?,?)";
+		$query = "CALL sp_listartalonarioscontar(?,?)";
 
 		$result = $this->conn->prepare($query);
 		
 		$result->bindParam(1, $this->serie);
 		$result->bindParam(2, $this->numero);
 
-        $result->execute();
+		$result->execute();
 
-        $row = $result->fetch(PDO::FETCH_ASSOC);
+		$row = $result->fetch(PDO::FETCH_ASSOC);
 
-        $this->total_resultado=$row['total'];
+		$this->total_resultado=$row['total'];
 
-        return $this->total_resultado;
+		return $this->total_resultado;
 	}
 
 	function create(){
-        $query = "CALL sp_creartalonarios(
-            :prserie,
-            :prnumeroinicio,
-            :prnumerofin
-        )";
+		$query = "CALL sp_creartalonarios(
+			:prserie,
+			:prnumeroinicio,
+			:prnumerofin
+		)";
 
-        $result = $this->conn->prepare($query);
+		$result = $this->conn->prepare($query);
 
-        $result->bindParam(":prserie", $this->serie);
-        $result->bindParam(":prnumeroinicio", $this->numero_inicio);
-        $result->bindParam(":prnumerofin", $this->numero_fin);
+		$result->bindParam(":prserie", $this->serie);
+		$result->bindParam(":prnumeroinicio", $this->numero_inicio);
+		$result->bindParam(":prnumerofin", $this->numero_fin);
 
-        $this->serie=htmlspecialchars(strip_tags($this->serie));
-        $this->numero_inicio=htmlspecialchars(strip_tags($this->numero_inicio));
-        $this->numero_fin=htmlspecialchars(strip_tags($this->numero_fin));
+		$this->serie=htmlspecialchars(strip_tags($this->serie));
+		$this->numero_inicio=htmlspecialchars(strip_tags($this->numero_inicio));
+		$this->numero_fin=htmlspecialchars(strip_tags($this->numero_fin));
 
-        if($result->execute())
-        {
-            return true;
-        }
-        
-        return false;
+		if($result->execute())
+		{
+				return true;
+		}
+		
+		return false;
 	}
 
 	function update(){
-        $query = "CALL sp_actualizartalonarios(
-            :prserie,
-            :prestado
-        )";
+		$query = "CALL sp_actualizartalonarios(
+			:prserie,
+			:prestado
+		)";
 
-        $result = $this->conn->prepare($query);
+		$result = $this->conn->prepare($query);
 
-        $result->bindParam(":prserie", $this->serie);
-        $result->bindParam(":prestado", $this->estado);
+		$result->bindParam(":prserie", $this->serie);
+		$result->bindParam(":prestado", $this->estado);
 
-        $this->serie=htmlspecialchars(strip_tags($this->serie));
-        $this->estado=htmlspecialchars(strip_tags($this->estado));
+		$this->serie=htmlspecialchars(strip_tags($this->serie));
+		$this->estado=htmlspecialchars(strip_tags($this->estado));
 
-        if($result->execute())
-        {
-            return true;
-        }
-        
-        return false;
+		if($result->execute())
+		{
+				return true;
+		}
+		
+		return false;
 	}
 
 	function read_serie(){
@@ -170,38 +170,38 @@ class Talonario{
 		return $talonario_list;
 	}
 
-    function readxId() {
-			$query ="call sp_listartalonarioxId(?)";
+	function readxId() {
+		$query ="call sp_listartalonarioxId(?)";
+		
+		$result = $this->conn->prepare($query);
+		
+		$result->bindParam(1, $this->id);
+		
+		$result->execute();
+
+		$row = $result->fetch(PDO::FETCH_ASSOC);
+	
+		$this->id=$row['id'];
+		$this->serie=$row['serie'];
+		$this->numero=$row['numero'];
+		$this->salida=$row['salida'];
+		$this->estado=$row['estado'];
+	}
+
+	function update_estado(){
+			$query ="call sp_actualizartalonarioestado(?,?)";
 			
 			$result = $this->conn->prepare($query);
 			
 			$result->bindParam(1, $this->id);
-			
-			$result->execute();
-	
-			$row = $result->fetch(PDO::FETCH_ASSOC);
-		
-			$this->id=$row['id'];
-			$this->serie=$row['serie'];
-			$this->numero=$row['numero'];
-			$this->salida=$row['salida'];
-			$this->estado=$row['estado'];
-    }
+			$result->bindParam(2, $this->estado);
 
-    function update_estado(){
-        $query ="call sp_actualizartalonarioestado(?,?)";
-        
-        $result = $this->conn->prepare($query);
-        
-        $result->bindParam(1, $this->id);
-        $result->bindParam(2, $this->estado);
-
-        if($result->execute())
-        {
-					return true;
-        }
-        return false;
-    }
+			if($result->execute())
+			{
+				return true;
+			}
+			return false;
+	}
 
 	function verificar_serie(){
 		$query = "CALL sp_verificartalonarioserie(?)";
@@ -254,6 +254,45 @@ class Talonario{
 		}
 	}
 
+	function read_detalle(){
+		$query = "CALL sp_listartalonariodetalle(?)";
+
+		$result = $this->conn->prepare($query);
+
+		$result->bindParam(1, $this->serie);
+
+		$result->execute();
+
+		$contador = $this->total_pagina*($this->numero_pagina-1);
+		
+		$talonario_list=array();
+		$talonario_list["talonarios"]=array();
+		
+		while($row = $result->fetch(PDO::FETCH_ASSOC))
+		{
+			extract($row);
+			$contador=$contador+1;
+			
+			$talonario_fila = array(
+				"contador"=>$contador ,
+				"id_talonario"=>$id_talonario ,
+				"serie"=>$serie ,
+				"numero"=>$numero ,
+				"id_venta"=>$id_venta ,
+				"tipo_venta"=>$tipo_venta ,
+				"id_cliente"=>$id_cliente ,
+				"cliente_nombre"=>$cliente_nombre ,
+				"id_salida_vendedor"=>$id_salida_vendedor ,
+				"salida_codigo"=>$salida_codigo ,
+				"pdf_contrato"=>$pdf_contrato ,
+				"estado"=>$estado ,
+				"id_estado"=>$id_estado
+			);
+			array_push($talonario_list["talonarios"],$talonario_fila);
+		}
+
+		return $talonario_list;
+	}
 }
 
 ?>

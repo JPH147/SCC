@@ -1,0 +1,68 @@
+<mat-card class="card">
+  <mat-toolbar color="primary">
+    <mat-toolbar-row> Detalle de talonarios </mat-toolbar-row>
+  </mat-toolbar>
+  <mat-card-content>
+
+    <div class="spinner-container-emergente" *ngIf="ListadoTalonarios.Cargando| async">
+      <mat-spinner></mat-spinner>
+    </div>
+
+    <mat-table [dataSource]="ListadoTalonarios" matSort matSortActive="descripcion">
+
+      <ng-container matColumnDef="numero">
+        <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+        <mat-cell *matCellDef="let talonario"> {{talonario.contador}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="talonario">
+        <mat-header-cell *matHeaderCellDef> Talonario </mat-header-cell>
+        <mat-cell *matCellDef="let talonario"> {{talonario.serie}}-{{talonario.numero}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="estado">
+        <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
+        <mat-cell *matCellDef="let talonario"> {{talonario.estado}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="detalle">
+        <mat-header-cell *matHeaderCellDef> Detalle </mat-header-cell>
+        <mat-cell *matCellDef="let talonario">
+          <ng-container *ngIf="talonario.id_venta">
+            {{talonario.cliente_nombre}}
+          </ng-container>
+          <ng-container *ngIf="talonario.id_salida_vendedor">
+            Pecosa {{talonario.salida_codigo}}
+          </ng-container>
+          <ng-container *ngIf="talonario.id_estado == 0 || talonario.id_estado == 1">
+            -
+          </ng-container>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="opciones">
+        <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
+        <mat-cell *matCellDef="let talonario">
+          <ng-container *ngIf="talonario.id_estado == 2 || talonario.id_estado == 3">
+            <button mat-icon-button color="primary" (click)="Ver(talonario)" matTooltip="Ver">
+              <mat-icon> visibility </mat-icon> </button>
+          </ng-container>
+
+          <ng-container *ngIf="talonario.id_estado == 1">
+            <ng-container>
+              <button mat-icon-button color="accent" (click)="SubirAdjunto(talonario)" matTooltip="Subir contrato adjunto">
+                <mat-icon> cloud_upload </mat-icon> </button>
+              </ng-container>
+            </ng-container>
+            <ng-container *ngIf="talonario.pdf_contrato">
+              <button mat-icon-button color="primary" (click)="Descargar(talonario.pdf_contrato)" matTooltip="Descargar contrato adjunto">
+                <mat-icon> cloud_download </mat-icon> </button>
+            </ng-container>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: Columnas;"></mat-row>
+    </mat-table>
+  </mat-card-content>
+</mat-card>

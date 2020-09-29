@@ -1,27 +1,19 @@
 Nuevos
-drop procedure if exists sp_crearpenalidadcredito ;
-drop procedure if exists sp_crearpenalidadventa ;
-drop procedure if exists sp_actualizarcooperativadireccionorden ;
-drop procedure if exists sp_listartalonarioadjuntoxId ;
-drop procedure if exists sp_creartalonariosadjuntos ;
-drop procedure if exists sp_crearcreditocronogramainteres ;
+drop procedure if exists sp_listartalonariodetalle ;
+drop procedure if exists sp_listarcooperativadireccionultimonumeroorden ;
+drop procedure if exists sp_actualizarcreditoestadopenalidad ;
+drop procedure if exists sp_actualizarventaestadopenalidad ;
+
 
 Actualizar
-drop procedure if exists sp_listarcredito ;
-drop procedure if exists sp_listarcreditoxid ;
-drop procedure if exists sp_listarventa ;
-drop procedure if exists sp_listarventaxid ;
-drop procedure if exists sp_listarventasalidaxid ;
-drop procedure if exists sp_listarplantilladirecciontransaccion ;
-drop procedure if exists sp_listarcooperativadireccion ;
-drop procedure if exists sp_listarcooperativadireccioncontar ;
-drop procedure if exists sp_listarventacronograma ;
-drop procedure if exists sp_listarcreditocronograma ;
-drop procedure if exists sp_listarcronogramaventaspagosxmes ;
-drop procedure if exists sp_listarcronogramacreditospagosxmes ;
+// drop procedure if exists sp_crearcooperativadireccion ;
+// drop procedure if exists sp_listarcronogramacreditopagosxmes ;
+// drop procedure if exists sp_listarcronogramaventaspagosxmes ;
+// drop procedure if exists sp_listarcreditoxId ;       
+// drop procedure if exists sp_listarcredito ;
+// drop procedure if exists sp_crearpenalidadcredito ;
+// drop procedure if exists sp_listarventaxId ;
+// drop procedure if exists sp_listarventa ;
+// drop procedure if exists sp_crearpenalidadventa ;
 
 TABLAS
-credito_cronograma
-venta_cronograma
-cooperativa_direccion
-talonarios_adjunto
