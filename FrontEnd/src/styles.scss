@@ -9,11 +9,11 @@ $primary: map-get($theme, primary);
 
 body{
 	margin: 0px;
-	min-width: 1500px;
+	min-width: 1200px;
 }
 
 mat-card.principal{
-  width: 95%;
+  width: 90%;
   position: relative;
   margin-left: auto;
   margin-right: auto;
@@ -48,7 +48,7 @@ mat-card.card{
   justify-content: center;
 }
 
-.seccion-secundaria{
+.seccion{
   margin-top: 20px;
   margin-bottom: 20px;
   border-color: mat-color($primary);
@@ -57,10 +57,28 @@ mat-card.card{
   border-radius: 5px;
 }
 
-.titulo-seccion-secundaria{
+.titulo-seccion{
   height: 30px;
   font-size: 16px;
   background-color: mat-color($primary);
+  color: white !important;
+  padding-top: 15px;
+  padding-left: 2.5%;
+}
+
+.seccion-secundaria{
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border-color: mat-color($accent);
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 5px;
+}
+
+.titulo-seccion-secundaria{
+  height: 30px;
+  font-size: 16px;
+  background-color: mat-color($accent);
   color: white !important;
   padding-top: 15px;
   padding-left: 2.5%;
@@ -119,6 +137,13 @@ mat-header-cell,
 mat-grid-tile-header {
   font-size: 16px !important;
   background-color: mat-color($primary) !important;
+  color: #fff !important;
+}
+
+.tabla-secundaria
+mat-header-cell,
+mat-grid-tile-header {
+  background-color: mat-color($accent) !important;
   color: #fff !important;
 }
 

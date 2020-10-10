@@ -4,8 +4,9 @@ import { FormArray, FormGroup, FormBuilder, Validators, ValidatorFn, AbstractCon
 import { BehaviorSubject, Subject, merge, Observable, forkJoin } from 'rxjs';
 import { CobranzasService } from '../../../modulo-cobranzas/cobranzas-listar/cobranzas.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { debounceTime, distinctUntilChanged, takeUntil, map } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, takeUntil, map, finalize } from 'rxjs/operators';
 import * as moment from 'moment';
+import { ɵELEMENT_PROBE_PROVIDERS } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-ventana-generar-pago-transaccion',
@@ -15,15 +16,20 @@ import * as moment from 'moment';
 export class VentanaGenerarPagoTransaccionComponent implements OnInit, AfterViewInit {
 
   private changesUnsubscribe = new Subject() ;
+  public VerificandoVoucher = new BehaviorSubject<boolean>(false) ;
 
   public Cargando = new BehaviorSubject<boolean>(false) ;
   public PagosForm : FormGroup ;
   public PagoArrayForm : FormArray ;
 
+  public tipo_pagos : number = 0 ;
+
   public total_pagos : number = 0 ;
   public total_pagos_directos : number = 0 ;
   public total_pagos_judiciales : number = 0 ;
   public total_pagos_planilla : number = 0 ;
+
+  public ListadoCuentas : Array<any> = [] ;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data : any ,
@@ -34,6 +40,8 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit, AfterView
 
   ngOnInit(): void {
     this.CrearFormulario() ;
+
+    this.ListarCuentas() ;
   }
 
   ngAfterViewInit() {
@@ -56,8 +64,8 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit, AfterView
         )
       )
     )
-    .subscribe(() => {
-      this.CalcularTotalPagosDirectos() ;
+    .subscribe((respuesta) => {
+      this.CalcularTotalPagosDirectos(respuesta.valor, respuesta.index) ;
     });
 
     merge(
@@ -92,6 +100,23 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit, AfterView
     )
     .subscribe(() => {
       this.CalcularTotalPagosJudiciales() ;
+    });
+
+    merge(
+      ...this.PagoArrayForm.controls.map( (control: AbstractControl, index: number) =>
+        control.get('numero_operacion').valueChanges.pipe(
+          debounceTime(200) ,
+          distinctUntilChanged() ,
+          takeUntil(this.changesUnsubscribe),
+          map( value => ({
+            index : index ,
+            valor : value
+          }))
+        )
+      )
+    )
+    .subscribe((valores) => {
+      this.VerificarVoucherUnico(valores.valor, valores.index) ;
     });
   }
 
@@ -128,6 +153,16 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit, AfterView
       // 2. Creado por el usuario
       tipo : [ { value : tipo, disabled : false },[
       ] ] ,
+      cuenta_bancaria : [ { value : "", disabled: false },[
+      ] ] ,
+      numero_operacion : [ { value : "", disabled: false },[
+      ] ] ,
+    })
+  }
+
+  ListarCuentas(){
+    this._cobranzas.ListarCuentas().subscribe(res=>{
+      this.ListadoCuentas = res['data'].cuentas;
     })
   }
 
@@ -195,12 +230,17 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit, AfterView
     this.PagoArrayForm.removeAt(index) ;
   }
 
-  CalcularTotalPagosDirectos() {
-    this.total_pagos_directos = 0 ;
-    this.PagoArrayForm.value.forEach(elemento => {
-      this.total_pagos_directos = this.total_pagos_directos + elemento.pago_directo*1 ;
-    });
-    this.CalcularTotalGeneral() ;
+  CalcularTotalPagosDirectos(valor, indice) {
+    if ( valor > 0 ) {
+      this.PagoArrayForm.controls[indice].get('cuenta_bancaria').setValidators([Validators.required]) ;
+      this.PagoArrayForm.controls[indice].get('numero_operacion').setValidators([Validators.required]) ;
+
+      this.total_pagos_directos = 0 ;
+      this.PagoArrayForm.value.forEach(elemento => {
+        this.total_pagos_directos = this.total_pagos_directos + elemento.pago_directo*1 ;
+      });
+      this.CalcularTotalGeneral() ;
+    }
   }
 
   CalcularTotalPagosJudiciales() {
@@ -223,32 +263,95 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit, AfterView
     this.total_pagos = this.total_pagos_directos + this.total_pagos_judiciales + this.total_pagos_planilla ;
   }
 
+  TipoPagoSeleccionado(tipo) {
+    if ( tipo == 1 ) {
+      this.tipo_pagos = 1 ;
+    }
+    if ( tipo == 2 ) {
+      this.tipo_pagos = 2 ;
+      // this.PagoArrayForm.controls.forEach(elemento => {
+      //   elemento.get('cuenta_bancaria').setValidators([Validators.required]) ;
+      //   elemento.get('numero_operacion').setValidators([Validators.required]) ;
+      // });
+    }
+  }
+
+  VerificarVoucherUnico(valor, indice){
+    this.VerificandoVoucher.next(true) ;
+    this._cobranzas.BuscarNumeroOperacion(valor)
+    .pipe(
+      finalize(()=>{
+        this.VerificandoVoucher.next(false) ;
+      })
+    )
+    .subscribe(resultado=>{
+      if ( resultado ) {
+        this.PagoArrayForm.controls[indice].get('numero_operacion').setErrors({'repetido':true}) ;
+      } else {
+        this.PagoArrayForm.controls[indice].get('numero_operacion').setErrors(null) ;
+      }
+    })
+  }
+
   Guardar() {
     let pagos = this.PagoArrayForm.value ;
     let array_obserables : Array<Observable<any>> = [] ;
 
-    pagos.map(elemento => {
-      if ( elemento.pago_directo > 0 ) {
-        array_obserables.push( this.CrearPagoManual(1,elemento.pago_directo, elemento.fecha_pago) ) ;
-      }
-      if ( elemento.pago_planilla > 0 ) {
-        array_obserables.push( this.CrearPagoManual(2,elemento.pago_planilla, elemento.fecha_pago) ) ;
-      }
-      if ( elemento.pago_judicial > 0 ) {
-        array_obserables.push( this.CrearPagoManual(3,elemento.pago_judicial, elemento.fecha_pago) ) ;
-      }
-      return elemento ;
-    }) ;
+    if ( this.tipo_pagos == 1 ) {
+      pagos.map(elemento => {
+        // if ( elemento.pago_directo > 0 ) {
+        //   array_obserables.push( this.CrearPagoManual(1,elemento.pago_directo, elemento.fecha_pago) ) ;
+        // }
+        if ( elemento.pago_planilla > 0 ) {
+          array_obserables.push( this.CrearPagoManual(2,elemento.pago_planilla, elemento.fecha_pago) ) ;
+        }
+        if ( elemento.pago_judicial > 0 ) {
+          array_obserables.push( this.CrearPagoManual(3,elemento.pago_judicial, elemento.fecha_pago) ) ;
+        }
+        return elemento ;
+      }) ;
+  
+      this.Cargando.next(true) ;
+      forkJoin(array_obserables)
+      .pipe(
+        finalize(()=>{
+          this.Cargando.next(false) ;
+        })
+      )
+      .subscribe(() =>{
+        this.ventana.close(true) ;
+      })
+    }
 
-    forkJoin(array_obserables)
-    .subscribe(() =>{
-      this.ventana.close(true) ;
-    })
+    if ( this.tipo_pagos == 2 ) {
+      pagos.map(elemento => {
+        if ( elemento.pago_directo > 0 ) {
+          array_obserables.push(
+            this.CrearPagoMasivo(
+              elemento.pago_directo , 
+              elemento.fecha_pago , 
+              elemento.numero_operacion ,
+              elemento.cuenta_bancaria
+            )
+          ) ;
+        }
+        return elemento ;
+      }) ;
+  
+      this.Cargando.next(true) ;
+      forkJoin(array_obserables)
+      .pipe(
+        finalize(()=>{
+          this.Cargando.next(false) ;
+        })
+      )
+      .subscribe(() =>{
+        this.ventana.close(true) ;
+      })
+    }
   }
 
   CrearPagoManual( tipo : number , monto_pagado : number, fecha: Date ) : Observable<any> {
-    this.Cargando.next(true) ;
-
     let tipo_pago : string ;
     
     switch (tipo) {
@@ -289,6 +392,19 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit, AfterView
         "Regularización de pago " + tipo_pago ,
       )
     }
+  }
+
+  CrearPagoMasivo(monto : number, fecha : Date, numero_operacion : string, cuenta_bancaria : number) : Observable<boolean> {
+    return this._cobranzas.CrearCobranzaDirectaMasivo(
+      fecha ,
+      this.data.cliente ,
+      cuenta_bancaria ,
+      numero_operacion ,
+      monto ,
+      this.data.tipo ,
+      this.data.tipo == 1 ? this.data.id_credito : this.data.id_venta ,
+      "Regularización de pago masivo"
+    )
   }
 
 }

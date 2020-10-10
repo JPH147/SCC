@@ -1,17 +1,26 @@
-<mat-card>
+<mat-card class="principal">
 
   <button mat-mini-fab type="button" color="primary" (click)="Atras()"><mat-icon>keyboard_arrow_left</mat-icon></button>
 
   <ng-container *ngIf="idventa">
     <ng-container *ngIf="permiso?.ventas?.listado_ventas?.eliminar">
       <button mat-mini-fab type="button" color="primary" matTooltip="Anular" class="derecha"
-        [disabled]="(Cargando|async) || monto_pagado>0 || estado!=1 || numero_procesos>0"
+        [disabled]="(Cargando|async) || monto_pagado>0 || estado!=1 || numero_procesos>0
+          || VentasSalidaForm.get('pagado').value == 1"
         (click)="AnularVenta()"><mat-icon> delete </mat-icon></button>
+    </ng-container>
+
+    <ng-container *ngIf="permiso?.ventas?.listado_ventas?.liquidar">
+      <button mat-mini-fab type="button" color="primary" matTooltip="Liquidar venta" class="derecha"
+        [disabled]="(Cargando|async) || totales_monto_pendiente==0 || estado!=1 || !id_venta ||
+          VentasSalidaForm.get('pagado').value == 1"
+        (click)="LiquidarVenta()"><mat-icon> money_off </mat-icon></button>
     </ng-container>
 
     <ng-container *ngIf="permiso?.ventas?.listado_ventas?.abrir_procesos">
       <button mat-mini-fab type="button" color="primary" matTooltip="Abrir proceso judicial"
-        [matMenuTriggerFor]="menu3" [disabled]="(Cargando|async) || estado!=1" class="derecha">
+        [matMenuTriggerFor]="menu3" [disabled]="(Cargando|async) || estado!=1 || VentasSalidaForm.get('pagado').value == 1"
+        class="derecha">
         <mat-icon [matBadge]="numero_procesos" [matBadgeHidden]="numero_procesos==0 || estado!=1"
           matBadgeColor="accent"> gavel </mat-icon>
       </button>
@@ -22,6 +31,7 @@
           <ng-container *ngIf="proceso.id_tipo_documento==2"> <mat-icon class="icono-ambar" matTooltip="Se presentó un escrito"> info </mat-icon> </ng-container>
           <ng-container *ngIf="proceso.id_tipo_documento==3"> <mat-icon class="icono-rojo" matTooltip="Se emitió una resolución"> error </mat-icon> </ng-container>
           <ng-container *ngIf="proceso.id_tipo_documento==4"> <mat-icon class="icono-verde" matTooltip="Se emitió el oficio"> check_circle </mat-icon> </ng-container>
+          <ng-container *ngIf="proceso.id_tipo_documento==6"> <mat-icon class="icono-anaranjado" matTooltip="Se emitió una nota"> info </mat-icon> </ng-container>
           {{proceso.expediente}}
         </button>
         <button mat-menu-item [routerLink]="['/cobranzas','cobranza-judicial','nueva-venta','salida',idventa]" > <mat-icon> add </mat-icon> Nuevo proceso </button>
@@ -29,29 +39,40 @@
     </ng-container>
 
     <ng-container *ngIf="permiso?.ventas?.listado_ventas?.realizar_canjes">
-      <button mat-mini-fab type="button" [color]="editar_documentos ? 'accent' : 'primary'" matTooltip="Canjear" [disabled]="true" class="derecha"
+      <button mat-mini-fab type="button" [color]="editar_documentos ? 'accent' : 'primary'" matTooltip="Canjear"
+        [disabled]="true || VentasSalidaForm.get('pagado').value == 1" class="derecha"
         [routerLink]="['/ventas','ventas','nueva', idventa, this.VentasSalidaForm.get('id_cliente').value]"><mat-icon> import_export </mat-icon></button>
     </ng-container>
 
     <ng-container *ngIf="permiso?.ventas?.listado_ventas?.editar">
       <button mat-mini-fab type="button" color="primary" (click)="CambiarTipoVista('editar_documentos')" class="derecha"
-        [disabled]="(Cargando | async)" matTooltip="Editar documentos adjuntos"><mat-icon>attach_file</mat-icon></button>
+        [disabled]="(Cargando | async) || VentasSalidaForm.get('pagado').value == 1" matTooltip="Editar documentos adjuntos"><mat-icon>attach_file</mat-icon></button>
     </ng-container>
 
     <ng-container *ngIf="permiso?.ventas?.listado_ventas?.editar">
       <ng-container *ngIf="id_venta">
         <button mat-mini-fab type="button" color="primary" (click)="CambiarTipoVista('editar')" class="derecha"
-          [disabled]="(Cargando|async) || monto_pagado>0 || estado!=1 || numero_procesos>0" matTooltip="Editar documento"><mat-icon>edit</mat-icon></button>
+          [disabled]="(Cargando|async) || monto_pagado>0 || estado!=1 || numero_procesos>0
+            || VentasSalidaForm.get('pagado').value == 1" matTooltip="Editar documento"><mat-icon>edit</mat-icon></button>
       </ng-container>
     </ng-container>
 
     <ng-container *ngIf="id_venta_editar">
       <button mat-mini-fab type="button" color="primary" (click)="CambiarTipoVista('ver')" class="derecha"
-        [disabled]="(Cargando|async)" matTooltip="Ver documento"><mat-icon> visibility </mat-icon></button>
+        [disabled]="(Cargando|async) || VentasSalidaForm.get('pagado').value == 1" matTooltip="Ver documento"><mat-icon> visibility </mat-icon></button>
     </ng-container>
   </ng-container>
 
   <mat-card-title class="tituloProd"> Contrato de venta {{numero_contrato}} </mat-card-title>
+
+  <mat-card-subtitle *ngIf="VentasSalidaForm.get('pagado').value == 1">
+    <ng-container *ngIf="VentasSalidaForm.get('id_liquidacion').value">
+      La venta se ha liquidado
+    </ng-container>
+    <ng-container *ngIf="!VentasSalidaForm.get('id_liquidacion').value">
+      La venta ya se ha cancelado. Todas las cuotas se han pagado
+    </ng-container>
+  </mat-card-subtitle>
 
   <form [formGroup]="VentasSalidaForm">
 
@@ -1011,11 +1032,11 @@
       </mat-grid-list>
     </div>
 
-    <!-- Estado de la penalidad -->
+    <!-- Detalles de incumplimiento -->
     <div class="seccion" *ngIf="idventa">
       <mat-card-subtitle class="titulo-seccion">
-        ESTADO DE LA PENALIDAD
-        <ng-container>
+        DETALLES DE INCUMPLIMIENTO
+        <ng-container *ngIf="!(VentasSalidaForm.get('pagado').value == 1)">
           <button mat-icon-button type="button" class="icono" *ngIf="!editar_penalidad" (click)="EditarPenalidad(1)"><mat-icon>edit</mat-icon></button>
           <button mat-icon-button type="button" class="icono" *ngIf="editar_penalidad" (click)="EditarPenalidad(2)"><mat-icon>save</mat-icon></button>
         </ng-container>
@@ -1023,50 +1044,39 @@
   
       <mat-grid-list cols="4" rowHeight="70px">
         <mat-grid-tile>
-          <mat-form-field appearance="fill" class="columnas-1">
-            <mat-label> Monto límite para aplicar </mat-label>
-            <input matInput placeholder="Monto límite para aplicar" formControlName="monto_limite_penalidad" readonly>
-            <span matPrefix>S/. &nbsp;</span>
-          </mat-form-field>
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          <mat-form-field appearance="fill" class="columnas-1">
-            <mat-label> Deuda hasta hoy </mat-label>
-            <input matInput placeholder="Deuda hasta hoy" formControlName="deuda_hasta_hoy" readonly>
-            <span matPrefix>S/. &nbsp;</span>
-          </mat-form-field>
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          <mat-form-field appearance="fill" class="columnas-1">
-            <mat-label> Monto de penalidad </mat-label>
-            <input matInput placeholder="Monto de penalidad" formControlName="monto_penalidad" readonly>
-            <span matPrefix>S/. &nbsp;</span>
-          </mat-form-field>
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          Aplica penalidad: &nbsp;
-          <ng-container *ngIf="editar_penalidad">
-            <mat-radio-group aria-label="Penalidad" formControlName="estado_penalidad">
-              <mat-radio-button [value]="1"> <mat-icon class="icono-verde"> check </mat-icon> </mat-radio-button>
-              &nbsp;
-              <mat-radio-button [value]="2"> <mat-icon class="icono-rojo"> close </mat-icon> </mat-radio-button>
-            </mat-radio-group>
-          </ng-container>
-          <ng-container *ngIf="!editar_penalidad">
-            <ng-container *ngIf="VentasSalidaForm.get('estado_penalidad').value == 1">
-              <mat-icon class="icono-verde"> check </mat-icon>
+          <ng-container *ngIf="VentasSalidaForm.get('estado_penalidad').value < 3">
+            Aplica penalidad: &nbsp;
+            <ng-container *ngIf="editar_penalidad">
+              <mat-radio-group aria-label="Penalidad" formControlName="estado_penalidad">
+                <mat-radio-button [value]="1"> <mat-icon class="icono-verde"> check </mat-icon> </mat-radio-button>
+                &nbsp;
+                <mat-radio-button [value]="2"> <mat-icon class="icono-rojo"> close </mat-icon> </mat-radio-button>
+              </mat-radio-group>
             </ng-container>
-            <ng-container *ngIf="VentasSalidaForm.get('estado_penalidad').value == 2">
-              <mat-icon class="icono-rojo"> close </mat-icon>
+            <ng-container *ngIf="!editar_penalidad">
+              <ng-container *ngIf="VentasSalidaForm.get('estado_penalidad').value == 1">
+                <mat-icon class="icono-verde"> check </mat-icon>
+              </ng-container>
+              <ng-container *ngIf="VentasSalidaForm.get('estado_penalidad').value == 2">
+                <mat-icon class="icono-rojo"> close </mat-icon>
+              </ng-container>
             </ng-container>
           </ng-container>
-        </mat-grid-tile>
 
-        <mat-grid-tile colspan="4" *ngIf="VentasSalidaForm.get('estado_penalidad').value == 3">
-          <mat-error> Ya se ha aplicado penalidad </mat-error>
+          <ng-container *ngIf="VentasSalidaForm.get('estado_penalidad').value == 3">
+            <ng-container *ngIf="!editar_penalidad">
+              <mat-error> Tiene penalidad </mat-error>
+            </ng-container>
+            <ng-container *ngIf="editar_penalidad">
+              <ng-container *ngIf="totales_monto_pagado == 0">
+                <button mat-stroked-button color="warn" (click)="RetirarPenalidad()"> Retirar penalidad </button>
+              </ng-container>
+
+              <ng-container *ngIf="totales_monto_pagado > 0">
+                <mat-error> No se puede retirar la penalidad porque han habido pagos </mat-error>
+              </ng-container>
+            </ng-container>
+          </ng-container>
         </mat-grid-tile>
       </mat-grid-list>
     </div>
@@ -1084,7 +1094,8 @@
         <mat-grid-list cols="4" rowHeight="50px">
           <mat-grid-tile>
             <ng-container *ngIf="permiso?.ventas?.listado_ventas?.agregar_pagos_masivos">
-              <button mat-raised-button color="accent" (click)="AgregarPagos()" [disabled]="(Cargando | async) || totales_monto_pendiente==0"> Agregar pagos </button>
+              <button mat-raised-button color="accent" (click)="AgregarPagos()"
+                [disabled]="(Cargando | async) || totales_monto_pendiente==0 || VentasSalidaForm.get('pagado').value == 1"> Agregar pagos </button>
             </ng-container>
           </mat-grid-tile>
 
@@ -1092,7 +1103,8 @@
 
           <mat-grid-tile>
             <ng-container *ngIf="permiso?.ventas?.listado_ventas?.establecer_penalidad && cumple_penalidad == 1 && cuotas_penalidad==0">
-              <button mat-raised-button color="warn" (click)="EstablecerPenalidad()" [disabled]="(Cargando | async)">
+              <button mat-raised-button color="warn" (click)="EstablecerPenalidad()"
+                [disabled]="(Cargando | async) || VentasSalidaForm.get('pagado').value == 1">
                 Establecer penalidad </button>
             </ng-container>
           </mat-grid-tile>
@@ -1252,7 +1264,11 @@
               ({{totales_total_pendiente}} cuotas)
             </ng-container>
           </mat-grid-tile>
+        </mat-grid-list>
+        
+        <mat-divider> </mat-divider>
 
+        <mat-grid-list cols="2" rowHeight="70px">
           <mat-grid-tile>
             <strong> Monto límite para penalidad: </strong>
             &nbsp;
@@ -1263,6 +1279,12 @@
             <strong> Deuda hasta hoy: </strong>
             &nbsp;
             {{ VentasSalidaForm.get('deuda_hasta_hoy').value | currency:'S/.' }}
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <strong> Adicional por penalidad: </strong>
+            &nbsp;
+            {{ VentasSalidaForm.get('adicional_penalidad').value | currency:'S/.' }}
           </mat-grid-tile>
 
           <mat-grid-tile>
@@ -1305,11 +1327,113 @@
         </mat-table>
       </ng-container>
 
-
       <mat-error class="error-monto" *ngIf="diferencia>0.05 && editar_cronograma<3">
         Las cuotas deben sumar {{VentasSalidaForm.value.montototal}}.  {{ VentasSalidaForm.value.montototal>this.total_cronograma_editado ? 'Falta:' : 'Excede en:' }} {{diferencia}}.
       </mat-error>
 
+    </div>
+
+    <!-- Cronograma antiguo -->
+    <div class="seccion-secundaria" *ngIf="VentasSalidaForm.get('estado_penalidad').value == 3">
+      <mat-card-subtitle class="titulo-seccion-secundaria">
+        CRONOGRAMA ANTERIOR
+      </mat-card-subtitle>
+
+      <mat-table [dataSource]="ListadoVentasAntiguo" class="mat-elevation-z8 tabla-secundaria">
+
+        <ng-container matColumnDef="numero">
+          <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+          <mat-cell *matCellDef="let cronograma"> {{cronograma.numero}} </mat-cell>
+          <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tipo_pago">
+          <mat-header-cell *matHeaderCellDef> Tipo de pago </mat-header-cell>
+          <mat-cell *matCellDef="let cronograma"> {{cronograma.tipo_pago}} </mat-cell>
+          <mat-footer-cell *matFooterCellDef> TOTALES </mat-footer-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fecha_vencimiento">
+          <mat-header-cell *matHeaderCellDef> Vencimiento </mat-header-cell>
+          <mat-cell *matCellDef="let cronograma"> {{cronograma.fecha_vencimiento | date: 'dd/MM/yyyy'}} </mat-cell>
+          <mat-footer-cell *matFooterCellDef> - </mat-footer-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="monto_cuota">
+          <mat-header-cell *matHeaderCellDef> Monto </mat-header-cell>
+          <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_cuota | currency:'S/.' }} </mat-cell>
+          <mat-footer-cell *matFooterCellDef> {{ ListadoVentasAntiguo.totales_monto_total | currency:'S/.' }} </mat-footer-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="monto_interes">
+          <mat-header-cell *matHeaderCellDef> Interés generado </mat-header-cell>
+          <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_interes | currency:'S/.'}}</mat-cell>
+          <mat-footer-cell *matFooterCellDef> {{ ListadoVentasAntiguo.totales_interes_generado | currency:'S/.' }} </mat-footer-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="monto_pagado">
+          <mat-header-cell *matHeaderCellDef> Total pagado </mat-header-cell>
+          <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_pagado | currency:'S/.'}}</mat-cell>
+          <mat-footer-cell *matFooterCellDef> {{ ListadoVentasAntiguo.totales_monto_pagado | currency:'S/.' }} </mat-footer-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fecha_cancelacion">
+          <mat-header-cell *matHeaderCellDef> Fecha de pago </mat-header-cell>
+          <mat-cell *matCellDef="let cronograma">
+            <ng-container *ngIf="cronograma.fecha_cancelacion">
+              {{ cronograma.fecha_cancelacion | date: 'dd/MM/yyyy' }} </ng-container>
+            <ng-container *ngIf="!cronograma.fecha_cancelacion"> - </ng-container>
+          </mat-cell>
+          <mat-footer-cell *matFooterCellDef> - </mat-footer-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="estado">
+          <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
+          <mat-cell *matCellDef="let cronograma"> {{cronograma.estado==1 ? "Por pagar" : "Pagado" }} </mat-cell>
+          <mat-footer-cell *matFooterCellDef> {{ ListadoVentasAntiguo.totales_total_pagadas }} / {{ ListadoVentasAntiguo.totales_total_cuotas }}
+          </mat-footer-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="opciones">
+          <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
+          <mat-cell *matCellDef="let cronograma">
+            <button mat-icon-button color="primary" [disabled]="cronograma.monto_pagado==0"
+              (click)="VerDetallePagos(cronograma)">
+              <mat-icon> visibility </mat-icon>
+            </button>
+          </mat-cell>
+          <mat-footer-cell *matFooterCellDef> - </mat-footer-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="Columnas; sticky: true"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: Columnas;"></mat-row>
+        <ng-container *ngIf="idventa">
+          <mat-footer-row *matFooterRowDef="Columnas"></mat-footer-row>
+        </ng-container>
+      </mat-table>
+
+      <mat-grid-list cols="3" rowHeight="70px">
+        <mat-grid-tile>
+          <strong> Total: </strong>
+          &nbsp;
+          {{ ListadoVentasAntiguo.totales_monto_total | currency:'S/.' }}
+          ({{ListadoVentasAntiguo.totales_total_cuotas}} cuotas)
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <strong> Pagado: </strong>
+          &nbsp;
+          {{ ListadoVentasAntiguo.totales_monto_pagado | currency:'S/.' }}
+          ({{ListadoVentasAntiguo.totales_total_pagadas}} cuotas)
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <strong> Pendiente: </strong>
+          &nbsp;
+          {{ ListadoVentasAntiguo.totales_monto_pendiente | currency:'S/.' }}
+          ({{ListadoVentasAntiguo.totales_total_pendiente}} cuotas)
+        </mat-grid-tile>
+      </mat-grid-list>
     </div>
 
     <mat-card-actions *ngIf="id_venta_editar">

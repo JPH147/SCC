@@ -13,26 +13,22 @@ import { usuario } from './compartido/modelos/login.modelos';
 })
 export class AppComponent {
 
-  public estado: boolean; // El estado del menú true=abierto, false=cerrado
   public usuario: usuario ;
 
   constructor(
-    public _login : LoginService ,
+    private _login : LoginService ,
     private _cookie : CookieService ,
     private router : Router ,
     private _store : Store<EstadosGlobales> ,
   ) { }
 
   ngOnInit() {
-    // Estado debe ser TRUE cuando es para PC y FALSE cuando es para móviles
-    this.estado=true;
     this.usuario = null ;
 
-    this._store.select('usuario').subscribe(usuario =>{
-      if( usuario ) {
+    this._store.select('usuario').subscribe(usuario => {
+      // if( usuario ) {
         this.usuario = usuario ;
-        // this._cookie.set('usuario', JSON.stringify(usuario))
-      }
+      // }
     })
 
     this.VerificarUsuario() ;
@@ -43,16 +39,13 @@ export class AppComponent {
     if ( this._cookie.check('usuario') ) {
       let usuario : usuario = JSON.parse( this._cookie.get('usuario') ) ;
       this._login.AsignarUsuario( usuario ) ;
-      // this.router.navigate(['inicio']) ;
     } else {
       this.router.navigate(['login']) ;
-      this.estado = false ;
     }
   }
 
   CerrarSesion(){
     this._login.LogOut() ;
     this.router.navigate(['login']) ;
-    this.estado = false ;
   }
 }

@@ -42,6 +42,7 @@ export type Rol = {
       abrir_procesos : boolean ,
       agregar_pagos_masivos : boolean ,
       establecer_penalidad : boolean ,
+      liquidar : boolean
     } ,
     salida_ventas : {
       general : boolean ,
@@ -87,6 +88,7 @@ export type Rol = {
       agregar_pagos_masivos : boolean ,
       establecer_penalidad : boolean ,
       generar_interes : boolean ,
+      liquidar : boolean
     } ,
     afiliaciones : {
       general : boolean ,

@@ -27,11 +27,11 @@
 
         if($credito->crear_penalidad_credito())
         {
-          print_json("0000", "Se crearon los intereses satisfactoriamente.", true);
+          print_json("0000", "Se creó la penalidad satisfactoriamente.", true);
         }
         else
         {
-          print_json("9999", "Ocurrió un error al crear los intereses.", false);
+          print_json("9999", "Ocurrió un error al crear la penalidad.", false);
         }
       }
       else
@@ -41,7 +41,7 @@
     }
     catch(Exception $exception)
     {
-        print_json("9999", "Ocurrió un error al eliminar el crédito.", $exception->getMessage());
+        print_json("9999", "Ocurrió un error al crear la penalidad.", $exception->getMessage());
     }
 
 ?>

@@ -204,8 +204,6 @@ export class CreditosService {
       .set('prpdfotros',pdf_otros)
       .set('probservacion',observacion) ;
 
-    console.log(params)
-
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'credito/create.php', params, {headers: headers});
@@ -476,21 +474,37 @@ export class CreditosService {
 
   ObtenerCrongrama(
     id_credito: number,
-    orden: string
+    tipo_cuota: number
   ) : Observable <any> {
 
     let params = new HttpParams()
-    .set('prcredito', id_credito.toString())
-    .set('prorden', orden)
-
-    // console.log(params)
+      .set('prcredito', id_credito.toString())
+      .set('prtipocuota', tipo_cuota.toString()) ;
 
     return this.http.get(this.url + 'credito/read-cronograma.php', {params})
     .pipe(map(res=>{
       if(res['codigo'] === 0){
         return res['data']
-      }else{
-        console.log('No hay datos que mostrar');
+      } else {
+        return [];
+      }
+    }))
+  }
+
+  ListarCronogramaResumen(
+    id_credito: number,
+    tipo_cuota: number
+  ) : Observable <any> {
+
+    let params = new HttpParams()
+      .set('prcredito', id_credito.toString())
+      .set('prtipocuota', tipo_cuota.toString()) ;
+
+    return this.http.get(this.url + 'credito/read-cronograma-resumen.php', {params})
+    .pipe(map(res=>{
+      if(res['codigo'] === 0 && res['data']){
+        return res['data'][0]
+      } else {
         return [];
       }
     }))
@@ -646,6 +660,71 @@ export class CreditosService {
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'credito/actualizar-estado-penalidad.php', params, {headers: headers})
+    .pipe(
+      map((res)=>{
+        if ( res['codigo'] === 0) {
+          return true ;
+        } else {
+          console.log(res) ;
+          return false ;
+        }
+      })
+    );
+  }
+
+  ActualizarEstadoInteres(
+    id_credito : number ,
+    estado_interes : number ,
+  ) : Observable<boolean> {
+    let params = new HttpParams()
+      .set('prcredito', id_credito.toString())
+      .set('prestadointeres', estado_interes.toString()) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'credito/actualizar-estado-interes.php', params, {headers: headers})
+    .pipe(
+      map((res)=>{
+        if ( res['codigo'] === 0) {
+          return true ;
+        } else {
+          console.log(res) ;
+          return false ;
+        }
+      })
+    );
+  }
+
+  EliminarPenalidad(
+    id_credito : number ,
+  ) : Observable<boolean> {
+    let params = new HttpParams()
+      .set('prcredito', id_credito.toString()) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'credito/eliminar-penalidad.php', params, {headers: headers})
+    .pipe(
+      map((res)=>{
+        if ( res['codigo'] === 0) {
+          return true ;
+        } else {
+          console.log(res) ;
+          return false ;
+        }
+      })
+    );
+  }
+
+  EliminarInteres(
+    id_credito : number ,
+  ) : Observable<boolean> {
+    let params = new HttpParams()
+      .set('prcredito', id_credito.toString()) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'credito/eliminar-interes.php', params, {headers: headers})
     .pipe(
       map((res)=>{
         if ( res['codigo'] === 0) {

@@ -435,13 +435,13 @@ export class VentaService {
   }
 
   ListarCronograma(
-    id_venta:number,
-    orden:string,
+    id_venta : number,
+    tipo_cuota : number,
   ){
     return this.http.get(this.url + 'venta/read-cronograma.php', {
       params: new HttpParams()
-      .set('prventa',id_venta.toString())
-      .set('prorden',orden)
+      .set('prventa', id_venta.toString() )
+      .set('prtipocuota', tipo_cuota.toString() )
     })
     .pipe(map(res => {
       if (res['codigo'] === 0) {
@@ -449,6 +449,24 @@ export class VentaService {
       }  else {
         console.log('No hay datos que mostrar');
         return res;
+      }
+    }));
+  }
+
+  ListarCronogramaResumen(
+    id_venta : number,
+    tipo_cuota : number,
+  ){
+    return this.http.get(this.url + 'venta/read-cronograma-resumen.php', {
+      params: new HttpParams()
+      .set('prventa', id_venta.toString() )
+      .set('prtipocuota', tipo_cuota.toString() )
+    })
+    .pipe(map(res => {
+      if ( res['codigo'] === 0 && res['data'] ) {
+        return res['data'][0];
+      } else {
+        return [];
       }
     }));
   }
@@ -550,6 +568,27 @@ export class VentaService {
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'venta/actualizar-estado-penalidad.php', params, {headers: headers})
+    .pipe(
+      map((res)=>{
+        if ( res['codigo'] === 0) {
+          return true ;
+        } else {
+          console.log(res) ;
+          return false ;
+        }
+      })
+    );
+  }
+
+  EliminarPenalidad(
+    id_venta : number ,
+  ) : Observable<boolean> {
+    let params = new HttpParams()
+      .set('prventa', id_venta.toString()) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'venta/eliminar-penalidad.php', params, {headers: headers})
     .pipe(
       map((res)=>{
         if ( res['codigo'] === 0) {

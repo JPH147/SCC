@@ -274,7 +274,7 @@ export class CobranzasService {
         return res;
       } else {
         console.log('No hay datos que mostrar');
-        return [];
+        return false;
       }
     }));
   }
@@ -450,6 +450,40 @@ export class CobranzasService {
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'cobranza/create-directa.php', params, {headers: headers});
+  }
+
+  CrearCobranzaDirectaMasivo(
+    fecha : Date,
+    cliente : number,
+    cuenta : number,
+    operacion : string,
+    monto : number,
+    tipo_transaccion : number ,
+    id_transaccion : number ,
+    observaciones : string,
+  ) :Observable<boolean> {
+    let params = new HttpParams()
+      .set('prfecha', moment(fecha).format("YYYY-MM-DD"))
+      .set('prcliente', cliente.toString())
+      .set('prcuenta', cuenta.toString())
+      .set('properacion', operacion)
+      .set('prmonto', monto.toString())
+      .set('prtipotransaccion', tipo_transaccion.toString() )
+      .set('prtransaccion', id_transaccion.toString() )
+      .set('probservaciones', observaciones) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'cobranza/create-directa-masivo.php', params, {headers: headers})
+    .pipe(
+      map(resultado => {
+        if ( resultado['codigo'] == 0 ) {
+          return true ;
+        } else {
+          return false ;
+        }
+      })
+    );
   }
 
   ActualizarCobranzaDirecta(
@@ -853,23 +887,6 @@ export class CobranzasService {
     }));
   }
 
-  CrearRegularizacionPagoCredito(
-    cobranza_manual : number ,
-    credito : number ,
-    monto : number ,
-    fecha : Date ,
-  ){
-    let params = new HttpParams()
-      .set('prcobranzamanual', cobranza_manual.toString() )
-      .set('prcredito', credito.toString() )
-      .set('prmonto', monto.toString() )
-      .set('prfecha', moment(fecha).format("YYYY-MM-DD") ) ;
-
-    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-
-    return this.http.post(this.url + 'cobranza/create-regularizacion-pago-credito.php', params, {headers: headers});
-  }
-
   CrearCobranzaManualCredito(
     credito : number ,
     tipo_cobranza : number ,
@@ -877,7 +894,7 @@ export class CobranzasService {
     comprobante : string ,
     total : number ,
     observacion : string ,
-  ){
+  ) : Observable<any> {
     let params = new HttpParams()
       .set('prcredito', credito.toString() )
       .set('prtipocobranza', tipo_cobranza.toString() )
@@ -898,7 +915,7 @@ export class CobranzasService {
     comprobante : string ,
     total : number ,
     observacion : string ,
-  ){
+  ) : Observable<any> {
     let params = new HttpParams()
       .set('prventa', venta.toString() )
       .set('prtipocobranza', tipo_cobranza.toString() )
@@ -910,6 +927,37 @@ export class CobranzasService {
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'cobranza/create-manual-venta.php', params, {headers: headers});
+  }
+
+  CrearLiquidacionTransaccion(
+    tipo : number ,
+    transaccion : number ,
+    fecha : Date ,
+    monto : number ,
+    usuario : number ,
+    observacion : string
+  ) : Observable<any> {
+    let params = new HttpParams()
+      .set('prtipo', tipo.toString() )
+      .set('prtransaccion', transaccion.toString() )
+      .set('prfecha', moment(fecha).format("YYYY-MM-DD") )
+      .set('prmonto', monto.toString() )
+      .set('prusuario', usuario.toString() )
+      .set('probservacion', observacion ) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'cobranza/create-liquidacion.php', params, {headers: headers})
+    .pipe(
+      map(resultado => {
+        if ( resultado['codigo'] === 0 ) {
+          return resultado['data'] ;
+        } else {
+          return false ;
+        }
+      })
+    )
+
   }
 
 }

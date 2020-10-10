@@ -7,8 +7,8 @@ import { MatSort } from '@angular/material/sort';
 import { ServiciosTipoPago } from 'src/app/core/servicios/tipopago';
 import { ClienteService  } from '../../modulo-clientes/clientes/clientes.service';
 import { forkJoin,fromEvent, merge, BehaviorSubject} from 'rxjs';
-import { debounceTime, distinctUntilChanged, tap, map } from 'rxjs/operators';
-import { ActivatedRoute, Router, NavigationStart } from '@angular/router';
+import { debounceTime, distinctUntilChanged, tap, map, finalize } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ServiciosTelefonos } from 'src/app/core/servicios/telefonos';
 import { ServiciosDirecciones } from 'src/app/core/servicios/direcciones';
 import { ServiciosGenerales } from 'src/app/core/servicios/servicios';
@@ -35,6 +35,7 @@ import {default as _rollupMoment, Moment} from 'moment';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { VentanaGenerarPenalidadComponent } from 'src/app/compartido/componentes/ventana-generar-penalidad/ventana-generar-penalidad.component';
 import { VentanaGenerarInteresComponent } from 'src/app/compartido/componentes/ventana-generar-interes/ventana-generar-interes.component';
+import { VentanaLiquidacionComponent } from 'src/app/compartido/componentes/ventana-liquidacion/ventana-liquidacion.component';
 
 @Component({
   selector: 'app-creditos',
@@ -70,6 +71,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   public codigo_credito : string ;
 
   public ListadoCronograma: CronogramaDataSource;
+  public ListadoCronogramaAntiguo: CronogramaAntiguoDataSource;
+
   public ColumnasCronograma: Array<string>;
   public ColumnasCronogramaPeriodo: Array<string> = ["numero", "periodo", "monto_cuota", "monto_pago_manual" ,"total_planilla" ,"total_directo" ,"total_judicial" ] ;
   public Cronograma: Array<any> = [];
@@ -226,6 +229,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
 
     this.editar_cronograma = 3;
     this.ListadoCronograma = new CronogramaDataSource();
+    this.ListadoCronogramaAntiguo = new CronogramaAntiguoDataSource(this.Servicio) ;
 
     this.cliente_afiliado = true;
     this.numero_cuotas = 1;
@@ -484,7 +488,19 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       ]],
       monto_penalidad: [{ value : null, disabled : false },[
       ]],
+      adicional_penalidad: [{ value : null, disabled : false },[
+      ]],
+      // Sobre los intereses y penalidades
       estado_penalidad: [{ value : null, disabled : false },[
+      ]],
+      estado_interes: [{ value : null, disabled : false },[
+      ]],
+      pagado_interes: [{ value : null, disabled : false },[
+      ]],
+      // Para saber si el crédito ya ha sido cancelado
+      id_liquidacion: [{ value : null, disabled : false },[
+      ]],
+      pagado: [{ value : null, disabled : false },[
       ]],
     })
   }
@@ -595,12 +611,23 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       this.CreditosForm.get('deuda_hasta_hoy').setValue(res.deuda_hasta_hoy) ;
       this.CreditosForm.get('monto_limite_penalidad').setValue(res.monto_limite_penalidad) ;
       this.CreditosForm.get('monto_penalidad').setValue(res.monto_penalidad) ;
+      this.CreditosForm.get('adicional_penalidad').setValue(res.adicional_penalidad) ;
+      
       this.CreditosForm.get('estado_penalidad').setValue(res.estado_penalidad) ;
-
       if ( this.CreditosForm.get('estado_penalidad').value == 3 ) {
-        this.CreditosForm.get('estado_penalidad').disable() ;
+        // this.CreditosForm.get('estado_penalidad').disable() ;
+        this.ConsultarInfomacionAnterior() ;
       }
 
+      this.CreditosForm.get('pagado_interes').setValue(res.pagado_interes) ;
+      this.CreditosForm.get('estado_interes').setValue(res.estado_interes) ;
+      if ( this.CreditosForm.get('estado_interes').value == 3 ) {
+        // this.CreditosForm.get('estado_interes').disable() ;
+      }
+
+      this.CreditosForm.get('id_liquidacion').setValue(res.id_liquidacion) ;
+      this.CreditosForm.get('pagado').setValue(res.pagado) ;
+      
       /////////////////////////////////////////////////////////
       // Se da el formato al código
       codigo_string=res.numero.toString();
@@ -719,7 +746,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         this.CreditosForm.get('observaciones').setValue(observacion_corregida);
 
         this.ColumnasCronograma = ['numero', 'tipo_pago','fecha_vencimiento', 'monto', 'interes_generado','monto_pagado', 'fecha_cancelacion','estado', 'opciones'];
-        this.ObtenerCronograma(this.id_credito, "fecha_vencimiento asc");
+        this.ObtenerCronograma(this.id_credito, 0);
 
         if(res['garantes'].garantes.length>0){
           res['garantes'].garantes.forEach((item,index)=>{
@@ -852,10 +879,10 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     })
   }
 
-  ObtenerCronograma(id_credito, orden){
+  ObtenerCronograma(id_credito: number, tipo_cuota : number){
     this.Cargando.next(true) ;
 
-    this.Servicio.ObtenerCrongrama(id_credito, orden).subscribe(res=>{
+    this.Servicio.ObtenerCrongrama(id_credito, tipo_cuota).subscribe(res=>{
       this.Cargando.next(false) ;
       this.Cronograma = res;
       this.CalcularTotalPagado(this.Cronograma) ;
@@ -1526,7 +1553,13 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     let ventana = this.Dialogo.open(VentanaGenerarPagoTransaccionComponent,{
       width: '1200px' ,
       maxHeight: '80vh' ,
-      data : { tipo : 1, id_credito : this.id_credito, cronograma : this.Cronograma, pendiente : this.totales_monto_pendiente }
+      data : { 
+        tipo : 1,
+        id_credito : this.id_credito,
+        cliente : this.CreditosForm.get('id_cliente').value ,
+        cronograma : this.Cronograma,
+        pendiente : this.totales_monto_pendiente
+      }
     })
 
     ventana.afterClosed().subscribe( resultado=>{
@@ -2013,7 +2046,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     Ventana.afterClosed().subscribe(res=>{
       if(res) {
         this.Notificacion.Snack("Se registró el pago satisfactoriamente", "") ;
-        this.ObtenerCronograma(this.id_credito, "fecha_vencimiento asc") ;
+        this.ObtenerCronograma(this.id_credito, 0) ;
       }
       if(res===false) {
         this.Notificacion.Snack("Ocurrió un error al registrar el pago", "") ;
@@ -2131,16 +2164,30 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     })
   }
 
-  EditarPenalidad( estado_actual : number ) {
+  EditarIncumplimiento( estado_actual : number ) {
     if ( estado_actual == 1 ) {
       this.editar_penalidad = true ;
     }
     if ( estado_actual == 2 ) {
       this.editar_penalidad = false ;
-      this.Servicio.ActualizarEstadoPenalidad(
-        this.id_credito ,
-        this.CreditosForm.get('estado_penalidad').value ,
-      ).subscribe((respuesta =>{
+
+      this.Cargando.next(true) ;
+      forkJoin([
+        this.Servicio.ActualizarEstadoPenalidad(
+          this.id_credito ,
+          this.CreditosForm.get('estado_penalidad').value ,
+        ) ,
+        this.Servicio.ActualizarEstadoInteres(
+          this.id_credito ,
+          this.CreditosForm.get('estado_interes').value ,
+        )
+      ])
+      .pipe(
+        finalize(()=>{
+          this.Cargando.next(false) ;
+        })
+      )
+      .subscribe(respuesta =>{
         if ( respuesta ) {
           this.SeleccionarCredito(this.id_credito) ;
           this.Notificacion.Snack("Se actualizó el estado de la penalidad","")
@@ -2148,8 +2195,73 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         if( !respuesta ) {
           this.Notificacion.Snack("Ocurrió un error al actualizar el estado de la penalidad","")
         }
-      }))
+      })
     }
+  }
+
+  LiquidarCredito() {
+    let Ventana = this.Dialogo.open(VentanaLiquidacionComponent, {
+      data : { tipo: 1, id_transaccion: this.id_credito } ,
+      width : '900px' ,
+      maxHeight : '80vh'
+    })
+
+    Ventana.afterClosed().subscribe(resultado => {
+      if ( resultado ) {
+        this.SeleccionarCredito(this.id_credito) ;
+        this.Notificacion.Snack("Se generó la liquidación satisfactoriamente","")
+      }
+      if( resultado === false ) {
+        this.Notificacion.Snack("Ocurrió un error al generar la liquidación","")
+      }
+    })
+  }
+
+  RetirarPenalidad() {
+    this.Cargando.next(true) ;
+
+    this.Servicio.EliminarPenalidad(this.id_credito)
+    .pipe(
+      finalize(()=>{
+        this.Cargando.next(false) ;
+      })
+    )
+    .subscribe(respuesta =>{
+      if ( respuesta ) {
+        this.editar_penalidad = false ;
+        this.SeleccionarCredito(this.id_credito) ;
+        this.Notificacion.Snack("Se retiró la penalidad","") ;
+      }
+      if( !respuesta ) {
+        this.Notificacion.Snack("Ocurrió un error al retirar la penalidad","") ;
+      }
+    })
+  }
+
+  RetirarInteres() {
+    this.Cargando.next(true) ;
+
+    this.Servicio.EliminarInteres(this.id_credito)
+    .pipe(
+      finalize(()=>{
+        this.Cargando.next(false) ;
+      })
+    )
+    .subscribe(respuesta =>{
+      if ( respuesta ) {
+        this.editar_penalidad = false ;
+        this.SeleccionarCredito(this.id_credito) ;
+        this.Notificacion.Snack("Se retiró el interés","") ;
+      }
+      if( !respuesta ) {
+        this.Notificacion.Snack("Ocurrió un error al retirar el interés","") ;
+      }
+    })
+  }
+
+  // Cuando al crédito se le aplicó una penalidad, se ejecuta esta función
+  ConsultarInfomacionAnterior() {
+    this.ListadoCronogramaAntiguo.CargarInformacion(this.id_credito) ;
   }
 }
 
@@ -2165,11 +2277,51 @@ export class CronogramaDataSource implements DataSource<any>{
   }
 
   disconnect(){
-    // this.Informacion.complete()
   }
 
   AsignarInformacion(array){
     this.Informacion.next(array);
   }
+}
 
+export class CronogramaAntiguoDataSource implements DataSource<any>{
+  private Informacion = new BehaviorSubject<any>([])
+
+  public totales_monto_total : number = 0 ;
+  public totales_total_cuotas : number = 0 ;
+  public totales_monto_pagado : number = 0 ;
+  public totales_total_pagadas : number = 0 ;
+  public totales_monto_pendiente : number = 0 ;
+  public totales_total_pendiente : number = 0 ;
+  public totales_interes_generado : number = 0 ;
+  
+  constructor(
+    private _creditos : CreditosService ,
+  ){ }
+
+  connect(collectionViewer: CollectionViewer){
+    return this.Informacion.asObservable() ;
+  }
+
+  disconnect(){
+  }
+
+  CargarInformacion(
+    id_credito : number
+  ){
+    this._creditos.ObtenerCrongrama(id_credito, 2)
+    .subscribe(resultado =>{
+      this.Informacion.next(resultado) ;
+    }) ;
+
+    this._creditos.ListarCronogramaResumen(id_credito, 2).subscribe(resultado => {
+      this.totales_monto_total = resultado.monto_total ;
+      this.totales_interes_generado = resultado.interes ;
+      this.totales_monto_pagado = resultado.monto_pagado ;
+      this.totales_total_pagadas = resultado.total_pagadas ;
+      this.totales_total_cuotas = resultado.total_cuotas ;
+      this.totales_monto_pendiente = resultado.monto_pendiente ;
+      this.totales_total_pendiente = resultado.total_pendiente ;
+    })
+  }
 }

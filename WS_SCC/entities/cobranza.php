@@ -58,9 +58,12 @@
     public $comprobante;
     public $vendedor;
     public $cliente_dni ;
+    public $usuario;
+    public $orden ;
 
     public $credito ;
     public $venta ;
+    public $id_liquidacion ;
 
     public function __construct($db){
       $this->conn = $db;
@@ -829,6 +832,56 @@
           $this->id_cobranza=$row['id'];
           $this->create_detalle_array(1);
           return true;
+      }
+      return false;
+    }
+
+    function create_directa_masivo(){
+      $query = "CALL sp_crearcobranzadirectamasivo(
+        :prfecha,
+        :prcliente,
+        :prcuenta,
+        :properacion,
+        :prmonto,
+        :prtipo,
+        :prtransaccion,
+        :probservaciones
+      )";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(":prfecha", $this->fecha);
+      $result->bindParam(":prcliente", $this->cliente);
+      $result->bindParam(":prcuenta", $this->cuenta);
+      $result->bindParam(":properacion", $this->operacion);
+      $result->bindParam(":prmonto", $this->monto);
+      $result->bindParam(":prtipo", $this->tipo_transaccion);
+      $result->bindParam(":prtransaccion", $this->transaccion);
+      $result->bindParam(":probservaciones", $this->observaciones);
+      
+      $this->fecha=htmlspecialchars(strip_tags($this->fecha));
+      $this->cliente=htmlspecialchars(strip_tags($this->cliente));
+      $this->cuenta=htmlspecialchars(strip_tags($this->cuenta));
+      $this->operacion=htmlspecialchars(strip_tags($this->operacion));
+      $this->monto=htmlspecialchars(strip_tags($this->monto));
+      $this->tipo_transaccion=htmlspecialchars(strip_tags($this->tipo_transaccion));
+      $this->transaccion=htmlspecialchars(strip_tags($this->transaccion));
+      $this->observaciones=htmlspecialchars(strip_tags($this->observaciones));
+      
+            ob_start();
+            echo($this->fecha) ;
+            echo($this->cliente) ;
+            echo($this->cuenta) ;
+            echo($this->operacion) ;
+            echo($this->monto) ;
+            echo($this->tipo_transaccion) ;
+            echo($this->transaccion) ;
+            echo($this->observaciones) ;
+            error_log(ob_get_clean(), 4) ;
+
+      if($result->execute())
+      {
+        return true;
       }
       return false;
     }
@@ -1724,6 +1777,9 @@
       return $cuentas;
     }
 
+    // DEPRECIADO
+    // Esta función asigna el cronograma en el mismo campo de cuota
+    // esta es la forma 'antigua' 
     function actualizar_interes_cronograma(){
       $query = "CALL sp_actualizarinterescronograma(
         :prtipo,
@@ -1751,10 +1807,12 @@
       return false;
     }
 
+    // DEPRECIADO
     // Esta función se utiliza cuando se sube un pago masivo, el procedimiento
     // calcula y paga la cuota correspondiente
+    // Luego este procedimiento se reemplazó por los dos que siguen ------>
     function crear_regularizacion_pago_credito(){
-      $query = "CALL sp_actualizarinterescronograma(
+      $query = "CALL sp_crearpagocredito(
         :prcobranzamanual,
         :prcredito,
         :prmonto,
@@ -1781,6 +1839,7 @@
     }
 
     // Esta función crea una cobranza manual desde pagos pasivos
+    // Aquí se recalculan los intereses luego de que se hace el pago
     function create_cobranza_manual_credito(){
       $query = "CALL sp_crearcobranzamanualcredito(
         :prcredito,
@@ -1843,6 +1902,112 @@
 
       if($result->execute())
       {
+        return true;
+      }
+      return false;
+    }
+
+    function read_liquidaciones() {
+      $query = "CALL sp_listarliquidaciones(?,?,?,?,?,?,?,?,?,?)";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(1, $this->tipo_transaccion);
+      $result->bindParam(2, $this->codigo);
+      $result->bindParam(3, $this->cliente_dni);
+      $result->bindParam(4, $this->cliente);
+      $result->bindParam(5, $this->fecha_inicio);
+      $result->bindParam(6, $this->fecha_fin);
+      $result->bindParam(7, $this->usuario);
+      $result->bindParam(8, $this->numero_pagina);
+      $result->bindParam(9, $this->total_pagina);
+      $result->bindParam(10, $this->orden);
+
+      $result->execute();
+      
+      $cronograma=array();
+      $cronograma["cobranzas"]=array();
+
+      $contador = $this->total_pagina*($this->numero_pagina-1);
+      
+      while($row = $result->fetch(PDO::FETCH_ASSOC))
+      {
+        extract($row);
+        $contador=$contador+1;
+        $items = array (
+          "numero" => $contador ,
+          "id_liquidacion" => $id_liquidacion ,
+          "id_tipo" => $id_tipo ,
+          "tipo" => $tipo ,
+          "codigo" => $codigo ,
+          "cliente_dni" => $cliente_dni ,
+          "cliente_nombre" => $cliente_nombre ,
+          "id_transaccion" => $id_transaccion ,
+          "monto" => $monto ,
+          "fecha" => $fecha ,
+          "id_usuario" => $id_usuario ,
+          "usuario" => $usuario ,
+          "total_pagado" => $total_pagado ,
+        );
+        array_push($cronograma["cobranzas"],$items);
+      }
+
+      return $cronograma;
+    }
+
+    function read_liquidaciones_contar(){
+
+      $query = "CALL sp_listarliquidacionescontar(?,?,?,?,?,?,?)";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(1, $this->tipo_transaccion);
+      $result->bindParam(2, $this->codigo);
+      $result->bindParam(3, $this->cliente_dni);
+      $result->bindParam(4, $this->cliente);
+      $result->bindParam(5, $this->fecha_inicio);
+      $result->bindParam(6, $this->fecha_fin);
+      $result->bindParam(7, $this->usuario);
+
+      $result->execute();
+
+      $row = $result->fetch(PDO::FETCH_ASSOC);
+
+      $this->total_resultado=$row['total'];
+
+      return $this->total_resultado;
+    }
+
+    function create_liquidacion() {
+      $query = "CALL sp_crearliquidacion(
+        :prtipo,
+        :prtransaccion,
+        :prmonto,
+        :prfecha,
+        :prusuario,
+        :probservacion
+      )";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(":prtipo", $this->tipo) ;
+      $result->bindParam(":prtransaccion", $this->transaccion) ;
+      $result->bindParam(":prmonto", $this->monto) ;
+      $result->bindParam(":prfecha", $this->fecha) ;
+      $result->bindParam(":prusuario", $this->usuario) ;
+      $result->bindParam(":probservacion", $this->observaciones) ;
+
+      $this->tipo = htmlspecialchars(strip_tags($this->tipo)) ;
+      $this->transaccion = htmlspecialchars(strip_tags($this->transaccion)) ;
+      $this->monto = htmlspecialchars(strip_tags($this->monto)) ;
+      $this->fecha = htmlspecialchars(strip_tags($this->fecha)) ;
+      $this->usuario = htmlspecialchars(strip_tags($this->usuario)) ;
+      $this->observaciones = htmlspecialchars(strip_tags($this->observaciones)) ;
+
+      if($result->execute())
+      {
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+        $this->id_liquidacion=$row['id'];
         return true;
       }
       return false;

@@ -18,7 +18,7 @@ export function EstablecerUsuario( state : usuario = null, action : AccionesPerm
       return null ;
 
     default :
-      return null ;
+      return state ;
   }
 }
 

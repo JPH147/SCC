@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -19,6 +19,7 @@ import { ReducersGlobales } from './compartido/reducers/estados';
 
 /* Imports del software */
 import { AppComponent } from './app.component';
+import { ControlCacheInterceptor } from './core/interceptores/control-cache.interceptor';
 
 @NgModule({
   exports:[
@@ -43,6 +44,11 @@ import { AppComponent } from './app.component';
   bootstrap: [AppComponent],
   providers: [
     CookieService ,
+    {
+      provide: HTTP_INTERCEPTORS ,
+      useClass : ControlCacheInterceptor ,
+      multi : true
+    }
   ]
 })
 

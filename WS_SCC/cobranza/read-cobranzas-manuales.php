@@ -22,8 +22,8 @@
         $cobranza->tipo = !empty($_GET['prtipo']) ? trim($_GET['prtipo']) : 0 ;
         $cobranza->fecha_inicio = !empty($_GET['prfechainicio']) ? trim($_GET['prfechainicio']) : null ;
         $cobranza->fecha_fin = !empty($_GET['prfechafin']) ? trim($_GET['prfechafin']) : null ;
-        $cobranza->numero_pagina = !empty($_GET['prnumeropagina']) ? trim($_GET['prnumeropagina']) :  die() ;
-        $cobranza->total_pagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) :  die() ;
+        $cobranza->numero_pagina = !empty($_GET['prnumeropagina']) ? trim($_GET['prnumeropagina']) : 1 ;
+        $cobranza->total_pagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : 10 ;
 
         $cobranza_list = $cobranza->read_cobranzas_manuales();
         $cobranza_contar = $cobranza->contar_cobranzas_manuales();

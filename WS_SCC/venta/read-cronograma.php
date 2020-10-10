@@ -14,8 +14,8 @@
     try{
         $venta = new Venta($db);
 
-        $venta->id_venta = !empty($_GET['prventa']) ? trim($_GET['prventa']) :'';
-        $venta->orden = !empty($_GET['prorden']) ? trim($_GET['prorden']) : 1;
+        $venta->id_venta = !empty($_GET['prventa']) ? trim($_GET['prventa']) : die() ;
+        $venta->tipo_cuota = !empty($_GET['prtipocuota']) ? trim($_GET['prtipocuota']) : 0;
 
         $venta_list = $venta->read_cronograma_externo();
 

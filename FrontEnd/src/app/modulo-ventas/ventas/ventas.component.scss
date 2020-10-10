@@ -2,26 +2,6 @@
 
 $primary: map-get($theme, primary);
 
-mat-card{
-  width: 80%;
-  position: relative;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 20px;
-  margin-bottom: 10px;
-  min-height: 100px;
-}
-
-.spinner-container{
-  position: absolute;
-  top: 200px;
-  left: 0;
-  right: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .documentos{
   width: 100%;
   margin: 0;
@@ -70,25 +50,6 @@ mat-card{
 .readonly-wrapper .readonly-block {
   pointer-events: none !important;
 }
-
-.seccion{
-  margin-top: 20px;
-  margin-bottom: 20px;
-  border-color: mat-color($primary);
-  border-width: 1px;
-  border-style: solid;
-  border-radius: 5px;
-}
-
-.titulo-seccion{
-  height: 30px;
-  font-size: 16px;
-  background-color: mat-color($primary);
-  color: white !important;
-  padding-top: 15px;
-  padding-left: 2.5%;
-}
-
 
 .mat-column-numero{
   max-width: 5%

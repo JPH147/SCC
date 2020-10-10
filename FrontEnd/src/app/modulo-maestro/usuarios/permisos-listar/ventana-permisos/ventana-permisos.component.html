@@ -293,6 +293,15 @@
                       {{ Permiso.ventas.listado_ventas.establecer_penalidad ? 'check' : 'close' }} </mat-icon> &nbsp; Establecer penalidad
                   </ng-container>
                 </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.ventas.listado_ventas.liquidar"> Realizar liquidación </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.ventas.listado_ventas.liquidar ? 'accent' : 'warn'">
+                      {{ Permiso.ventas.listado_ventas.liquidar ? 'check' : 'close' }} </mat-icon> &nbsp; Realizar liquidación
+                  </ng-container>
+                </mat-grid-tile>
               </mat-grid-list>
             </ng-container>
           </ng-container>
@@ -628,7 +637,15 @@
                       {{ Permiso.creditos.listado_creditos.generar_interes ? 'check' : 'close' }} </mat-icon> &nbsp; Generar interés
                   </ng-container>
                 </mat-grid-tile>
-                
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.creditos.listado_creditos.liquidar"> Realizar liquidación </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.creditos.listado_creditos.liquidar ? 'accent' : 'warn'">
+                      {{ Permiso.creditos.listado_creditos.liquidar ? 'check' : 'close' }} </mat-icon> &nbsp; Realizar liquidación
+                  </ng-container>
+                </mat-grid-tile>
               </mat-grid-list>
             </ng-container>
           </ng-container>

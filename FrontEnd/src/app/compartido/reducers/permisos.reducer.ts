@@ -18,7 +18,7 @@ export function PermisosSesion( state : Rol = null, action : AccionesPermitidas 
       return null ;
 
     default :
-      return null ;
+      return state ;
   }
 }
 

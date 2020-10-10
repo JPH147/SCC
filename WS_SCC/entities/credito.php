@@ -81,7 +81,13 @@ Class Creditos{
     public $deuda_hasta_hoy ;
     public $cuotas_penalidad ;
     public $cuotas_interes ;
+    public $adicional_penalidad ;
+    public $pagado_interes ;
     public $estado_penalidad ;
+    public $estado_interes ;
+    public $tipo_cuota ;
+    public $id_liquidacion ;
+    public $pagado ;
 
     public function __construct($db){
         $this->conn = $db;
@@ -144,6 +150,8 @@ Class Creditos{
                 "cuotas_pagadas"=>$cuotas_pagadas,
                 "ultima_fecha_pago"=>$ultima_fecha_pago,
                 "estado_penalidad"=>$estado_penalidad,
+                "id_liquidacion"=>$id_liquidacion,
+                "pagado"=>$pagado,
                 "estado"=>$estado,
             );
             array_push($credito_list["creditos"],$items);
@@ -253,7 +261,12 @@ Class Creditos{
         $this->deuda_hasta_hoy = $row['deuda_hasta_hoy'] ;
         $this->monto_limite_penalidad = $row['monto_limite_penalidad'];
         $this->monto_penalidad = $row['monto_penalidad'];
+        $this->adicional_penalidad = $row['adicional_penalidad'];
+        $this->pagado_interes = $row['pagado_interes'];
         $this->estado_penalidad = $row['estado_penalidad'];
+        $this->estado_interes = $row['estado_interes'];
+        $this->id_liquidacion = $row['id_liquidacion'] ;
+        $this->pagado = $row['pagado'] ;
         $this->courier = $Courier;
         $this->garante = $Garantes;
         // $this->cronograma = $Cronograma;
@@ -339,7 +352,7 @@ Class Creditos{
       $result = $this->conn->prepare($query);
 
       $result->bindParam(1, $this->id_credito);
-      $result->bindParam(2, $this->orden);
+      $result->bindParam(2, $this->tipo_cuota);
 
       $result->execute();
       
@@ -371,6 +384,39 @@ Class Creditos{
       return $cronograma_list;
     }
 
+    function read_cronograma_resumen(){
+        $query = "CALL sp_listarcreditocronogramaresumen(?,?)";
+  
+        $result = $this->conn->prepare($query) ;
+ 
+        $result->bindParam(1, $this->id_credito) ;
+        $result->bindParam(2, $this->tipo_cuota) ;
+  
+        $result->execute() ;
+        
+        $cronograma_list=array() ;
+        $contador = 0 ;
+  
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $contador=$contador+1;
+            $cronograma_item = array (
+                "id_credito" => $id_credito,
+                "monto_total" => $row['monto_total'] ,
+                "interes" => $row['interes'] ,
+                "monto_pagado" => $row['monto_pagado'] ,
+                "monto_pendiente" => $row['monto_pendiente'] ,
+                "monto_pendiente_hasta_hoy" => $row['monto_pendiente_hasta_hoy'] ,
+                "total_cuotas" => $row['total_cuotas'] ,
+                "total_pendiente" => $row['total_pendiente'] ,
+                "total_pagadas" => $row['total_pagadas'] ,
+            );
+            array_push($cronograma_list,$cronograma_item);
+        }
+        return $cronograma_list;
+    }
+
     function read_cronograma_simple($id_credito){
 
       $query = "CALL sp_listarcreditocronograma(?,?)";
@@ -380,7 +426,7 @@ Class Creditos{
       $orden = "fecha asc" ;
 
       $result->bindParam(1, $id_credito);
-      $result->bindParam(2, $orden);
+      $result->bindParam(2, $this->tipo_cuota);
 
       $result->execute();
       
@@ -1176,8 +1222,47 @@ Class Creditos{
         return false;
     }
 
+    function actualizar_credito_estado_penalidad() {
+        $query = "CALL sp_actualizarcreditoestadopenalidad(
+            :prcredito ,
+            :prestadopenalidad
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prcredito", $this->id_credito);
+        $result->bindParam(":prestadopenalidad", $this->estado_penalidad);
+
+        $this->id_credito=htmlspecialchars(strip_tags($this->id_credito));
+        $this->estado_penalidad=htmlspecialchars(strip_tags($this->estado_penalidad));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    function eliminar_penalidad_credito () {
+        $query = "CALL sp_eliminarpenalidadcredito(
+            :prcredito
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prcredito", $this->id_credito);
+
+        $this->id_credito=htmlspecialchars(strip_tags($this->id_credito));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
+    }
+
     function crear_interes_credito() {
-        $query = "CALL sp_crearcreditocronogramainteres(
+        $query = "CALL sp_crearcreditocronogramainteres1(
             :prcredito
         )";
 
@@ -1194,19 +1279,37 @@ Class Creditos{
         return false;
     }
  
-    function actualizar_credito_estado_penalidad() {
-        $query = "CALL sp_actualizarcreditoestadopenalidad(
+    function actualizar_credito_estado_interes() {
+        $query = "CALL sp_actualizarcreditoestadointeres(
             :prcredito ,
-            :prestadopenalidad
+            :prestado
         )";
 
         $result = $this->conn->prepare($query);
 
         $result->bindParam(":prcredito", $this->id_credito);
-        $result->bindParam(":prestadopenalidad", $this->estado_penalidad);
+        $result->bindParam(":prestado", $this->estado_interes);
 
         $this->id_credito=htmlspecialchars(strip_tags($this->id_credito));
-        $this->estado_penalidad=htmlspecialchars(strip_tags($this->estado_penalidad));
+        $this->estado_interes=htmlspecialchars(strip_tags($this->estado_interes));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
+    }
+ 
+    function eliminar_interes_credito() {
+        $query = "CALL sp_eliminarcreditocronogramainteres(
+            :prcredito
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prcredito", $this->id_credito);
+
+        $this->id_credito=htmlspecialchars(strip_tags($this->id_credito));
 
         if($result->execute())
         {

@@ -163,8 +163,13 @@ export class CobranzaDataSource implements DataSource<any> {
       finalize(() => this.CargandoInformacion.next(false))
     )
     .subscribe(res => {
-      this.TotalResultados.next(res['mensaje']);
-      this.InformacionCobranzas.next(res['data'].cobranzas);
+      if (res) {
+        this.TotalResultados.next(res['mensaje']);
+        this.InformacionCobranzas.next(res['data'].cobranzas); 
+      } else {
+        this.TotalResultados.next(0);
+        this.InformacionCobranzas.next([]); 
+      }
     });
   }
 

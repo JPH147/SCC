@@ -7,7 +7,7 @@ import {ServiciosTipoDocumento } from 'src/app/core/servicios/tipodocumento';
 import {ServiciosTipoPago } from 'src/app/core/servicios/tipopago';
 import {ClienteService } from '../../modulo-clientes/clientes/clientes.service';
 import { forkJoin,fromEvent, merge, BehaviorSubject} from 'rxjs';
-import {debounceTime, distinctUntilChanged, tap, delay} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, tap, delay, finalize} from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import {ServiciosTelefonos} from 'src/app/core/servicios/telefonos';
 import {ServiciosDirecciones} from 'src/app/core/servicios/direcciones';
@@ -32,6 +32,7 @@ import {default as _rollupMoment, Moment} from 'moment';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { VentanaGenerarPagoTransaccionComponent } from "../../compartido/componentes/ventana-generar-pago-transaccion/ventana-generar-pago-transaccion.component";
 import { VentanaGenerarPenalidadComponent } from "src/app/compartido/componentes/ventana-generar-penalidad/ventana-generar-penalidad.component";
+import { VentanaLiquidacionComponent } from "src/app/compartido/componentes/ventana-liquidacion/ventana-liquidacion.component";
 
 @Component({
   selector: 'app-ventas-salida',
@@ -52,7 +53,9 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   public Cronograma: Array<any>;
   public Cronograma_Periodos: Array<any>;  
   public VentasSalidaForm:FormGroup;
-  public ListadoVentas: VentaDataSource;
+
+  public ListadoVentas: VentaDataSource ;
+  public ListadoVentasAntiguo: VentaAntiguoDataSource ;
   public Columnas: string[];
   public ColumnasCronogramaPeriodo: Array<string> = ["numero", "periodo", "monto_cuota", "monto_pago_manual" ,"total_planilla" ,"total_directo" ,"total_judicial" ] ;
   
@@ -177,7 +180,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       if(params['idventa']){
         this.idventa = +params['idventa'];
         this.id_venta = +params['idventa'];
-        this.Columnas= ['numero', 'monto_cuota','fecha_vencimiento', 'monto_interes','monto_pagado', 'fecha_cancelacion', 'monto_pendiente','estado', 'opciones'];
+        this.Columnas= ['numero', 'monto_cuota','fecha_vencimiento', 'monto_interes','monto_pagado', 'fecha_cancelacion','estado', 'opciones'];
         this.SeleccionarVentaxId(this.id_venta);
       }
       if(params['idventaeditar']){
@@ -190,6 +193,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
 
     this.CrearFormulario();
     this.ListadoVentas = new VentaDataSource(this.Servicio)
+    this.ListadoVentasAntiguo = new VentaAntiguoDataSource(this.Servicio) ;
   }
 
   ngAfterViewInit(): void {
@@ -312,7 +316,14 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       ]],
       monto_penalidad: [{ value : null, disabled : false },[
       ]],
+      adicional_penalidad: [{ value : null, disabled : false },[
+      ]],
       estado_penalidad: [{ value : null, disabled : false },[
+      ]],
+      // Para saber si el crédito ya ha sido cancelado
+      id_liquidacion: [{ value : null, disabled : false },[
+      ]],
+      pagado: [{ value : null, disabled : false },[
       ]],
     });
   }
@@ -335,9 +346,18 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       this.VentasSalidaForm.get('deuda_hasta_hoy').setValue(res.monto_pendiente_hasta_hoy) ;
       this.VentasSalidaForm.get('monto_limite_penalidad').setValue(res.monto_limite_penalidad) ;
       this.VentasSalidaForm.get('monto_penalidad').setValue(res.monto_penalidad) ;
+      this.VentasSalidaForm.get('adicional_penalidad').setValue(res.adicional_penalidad) ;
       this.VentasSalidaForm.get('estado_penalidad').setValue(res.estado_penalidad) ;
 
-      this.numero_contrato=res.contrato;
+      if ( this.VentasSalidaForm.get('estado_penalidad').value == 3 ) {
+        this.VentasSalidaForm.get('estado_penalidad').disable() ;
+        this.ConsultarInfomacionAnterior() ;
+      }
+
+      this.VentasSalidaForm.get('id_liquidacion').setValue(res.id_liquidacion) ;
+      this.VentasSalidaForm.get('pagado').setValue(res.pagado) ;
+
+      this.numero_contrato=res.contrato ;
 
       this.VentasSalidaForm.get('id_salida').setValue(res.id_salida);
       this.VentasSalidaForm.get('id_cliente').setValue(res.id_cliente);
@@ -418,7 +438,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
         // Datos diferentes
         this.VentasSalidaForm.get('tipopago').setValue(res.tipo_pago);
 
-        this.ActualizarOrdenCronograma(this.id_venta,"fecha_vencimiento asc");
+        this.ActualizarOrdenCronograma(this.id_venta, 0);
 
         this.foto = res.foto!="" ? URLIMAGENES.carpeta+'venta/'+res.foto : null;
         this.dni = res.dni_pdf!="" ? URLIMAGENES.carpeta+'venta/'+res.dni_pdf : null;
@@ -880,10 +900,9 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
     this.CalcularTotalCronograma();
   }
 
-  // Cuando se cambia el orden del cronograma
-  ActualizarOrdenCronograma(id, orden){
+  ActualizarOrdenCronograma(id: number, tipo_cuota: number){
     this.Cargando.next(true) ;
-    this.Servicio.ListarCronograma(id, orden).subscribe(res=>{
+    this.Servicio.ListarCronograma(id, tipo_cuota).subscribe(res=>{
       this.Cargando.next(false) ;
       this.Cronograma = res['data'].cronograma ;
       this.CalcularTotalPagado( this.Cronograma ) ;
@@ -1148,13 +1167,13 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       this.id_venta = this.idventa ;
       this.id_venta_editar = null ;
       this.editar_documentos = false ;
-      this.Columnas= ['numero', 'monto_cuota','fecha_vencimiento', 'monto_interes','monto_pagado', 'fecha_cancelacion', 'monto_pendiente','estado', 'opciones'];
+      this.Columnas= ['numero', 'monto_cuota','fecha_vencimiento', 'monto_interes','monto_pagado', 'fecha_cancelacion','estado', 'opciones'];
     }
     if( tipo == 'editar_documentos' ) {
       this.id_venta = this.idventa ;
       this.id_venta_editar = null ;
       this.editar_documentos = true ;
-      this.Columnas= ['numero', 'monto_cuota','fecha_vencimiento', 'monto_interes','monto_pagado', 'fecha_cancelacion', 'monto_pendiente','estado', 'opciones'];
+      this.Columnas= ['numero', 'monto_cuota','fecha_vencimiento', 'monto_interes','monto_pagado', 'fecha_cancelacion','estado', 'opciones'];
     }
     if( tipo == 'editar' ) {
       this.id_venta = null ;
@@ -1183,7 +1202,13 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
     let ventana = this.Dialogo.open(VentanaGenerarPagoTransaccionComponent,{
       width: '1200px' ,
       maxHeight: '80vh' ,
-      data : { tipo : 2, id_venta : this.idventa, cronograma : this.Cronograma, pendiente : this.totales_monto_pendiente }
+      data : { 
+        tipo : 2,
+        id_venta : this.idventa,
+        cliente : this.VentasSalidaForm.get('id_cliente').value ,
+        cronograma : this.Cronograma,
+        pendiente : this.totales_monto_pendiente 
+      }
     })
 
     ventana.afterClosed().subscribe( resultado=>{
@@ -1412,7 +1437,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
     Ventana.afterClosed().subscribe(res=>{
       if(res) {
         this.Notificacion.Snack("Se registró el pago satisfactoriamente", "") ;
-        this.ActualizarOrdenCronograma(this.id_venta, "fecha_vencimiento asc") ;
+        this.ActualizarOrdenCronograma(this.id_venta, 0) ;
       }
       if(res===false) {
         this.Notificacion.Snack("Ocurrió un error al registrar el pago", "") ;
@@ -1506,10 +1531,18 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
     }
     if ( estado_actual == 2 ) {
       this.editar_penalidad = false ;
+
+      this.Cargando.next(true) ;
       this.Servicio.ActualizarEstadoPenalidad(
         this.id_venta ,
         this.VentasSalidaForm.get('estado_penalidad').value ,
-      ).subscribe((respuesta =>{
+      )
+      .pipe(
+        finalize(()=>{
+          this.Cargando.next(false) ;
+        })
+      )
+      .subscribe(respuesta =>{
         if ( respuesta ) {
           this.SeleccionarVentaxId(this.id_venta) ;
           this.Notificacion.Snack("Se actualizó el estado de la penalidad","")
@@ -1517,8 +1550,52 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
         if( !respuesta ) {
           this.Notificacion.Snack("Ocurrió un error al actualizar el estado de la penalidad","")
         }
-      }))
+      })
     }
+  }
+
+  RetirarPenalidad() {
+    this.Cargando.next(true) ;
+
+    this.Servicio.EliminarPenalidad(this.id_venta)
+    .pipe(
+      finalize(()=>{
+        this.Cargando.next(false) ;
+      })
+    )
+    .subscribe(respuesta =>{
+      if ( respuesta ) {
+        this.editar_penalidad = false ;
+        this.SeleccionarVentaxId(this.id_venta) ;
+        this.Notificacion.Snack("Se retiró la penalidad","") ;
+      }
+      if( !respuesta ) {
+        this.Notificacion.Snack("Ocurrió un error al retirar la penalidad","") ;
+      }
+    })
+  }
+
+  // Cuando al crédito sele aplicó una penalidad, se ejecuta esta función
+  ConsultarInfomacionAnterior() {
+    this.ListadoVentasAntiguo.CargarInformacion(this.id_venta) ;
+  }
+
+  LiquidarVenta() {
+    let Ventana = this.Dialogo.open(VentanaLiquidacionComponent, {
+      data : { tipo: 2, id_transaccion: this.id_venta } ,
+      width : '900px' ,
+      maxHeight : '80vh'
+    })
+
+    Ventana.afterClosed().subscribe(resultado => {
+      if ( resultado ) {
+        this.SeleccionarVentaxId(this.id_venta) ;
+        this.Notificacion.Snack("Se generó la liquidación satisfactoriamente","")
+      }
+      if( resultado === false ) {
+        this.Notificacion.Snack("Ocurrió un error al generar la liquidación","")
+      }
+    })
   }
 }
 
@@ -1546,3 +1623,45 @@ export class VentaDataSource implements DataSource<any>{
 
 }
 
+export class VentaAntiguoDataSource implements DataSource<any>{
+
+  public Informacion = new BehaviorSubject<any>([])
+
+  public totales_monto_total : number = 0 ;
+  public totales_total_cuotas : number = 0 ;
+  public totales_monto_pagado : number = 0 ;
+  public totales_total_pagadas : number = 0 ;
+  public totales_monto_pendiente : number = 0 ;
+  public totales_total_pendiente : number = 0 ;
+  public totales_interes_generado : number = 0 ;
+
+  constructor(
+    private _ventas: VentaService
+  ){ }
+
+  connect(collectionViewer: CollectionViewer){
+    return this.Informacion.asObservable()
+  }
+
+  disconnect(){
+  }
+
+  CargarInformacion(
+    id_venta : number
+  ) {
+    this._ventas.ListarCronograma(id_venta, 2)
+    .subscribe( resultado => {
+      this.Informacion.next(resultado['data'].cronograma) ;
+    })
+
+    this._ventas.ListarCronogramaResumen(id_venta, 2).subscribe(resultado => {
+      this.totales_monto_total = resultado.monto_total ;
+      this.totales_interes_generado = resultado.interes ;
+      this.totales_monto_pagado = resultado.monto_pagado ;
+      this.totales_total_pagadas = resultado.total_pagadas ;
+      this.totales_total_cuotas = resultado.total_cuotas ;
+      this.totales_monto_pendiente = resultado.monto_pendiente ;
+      this.totales_total_pendiente = resultado.total_pendiente ;
+    })
+  }
+}

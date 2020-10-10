@@ -599,7 +599,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
         this.CreditosForm.get('observaciones').setValue(observacion_corregida);
 
         this.ColumnasCronograma = ['numero', 'tipo_pago','fecha_vencimiento', 'monto', 'interes_generado','monto_pagado', 'fecha_cancelacion','estado', 'opciones'];
-        this.ObtenerCronograma(this.id_credito, "fecha_vencimiento asc");
+        this.ObtenerCronograma(this.id_credito, 0);
         
         if(res['garantes'].garantes.length>0){
           res['garantes'].garantes.forEach((item,index)=>{
@@ -640,9 +640,10 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
         this.CreditosForm.get('observaciones').setValue(res.observaciones);
 
         this.ColumnasCronograma= ['numero', 'fecha_vencimiento_ver', 'monto_cuota_ver'];
-        this.Cronograma = res.cronograma;
-        this.CalcularTotalPagado(this.Cronograma) ;
-        this.ListadoCronograma.AsignarInformacion(this.Cronograma);
+        this.CrearCronograma() ;
+        // this.Cronograma = res.cronograma;
+        // this.CalcularTotalPagado(this.Cronograma) ;
+        // this.ListadoCronograma.AsignarInformacion(this.Cronograma);
 
         this.foto_antiguo=res.pdf_foto;
         this.dni_antiguo=res.pdf_dni;
@@ -659,20 +660,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
         this.ddjj_antiguo=res.pdf_ddjj;
         this.otros_antiguo=res.pdf_otros;
 
-        res.pdf_foto!="" ? this.foto_editar=false : this.foto_editar=true;
-        res.pdf_dni!="" ? this.dni_editar=false : this.dni_editar=true;
-        res.pdf_cip!="" ? this.cip_editar=false : this.cip_editar=true;
-        res.pdf_planilla!="" ? this.planilla_editar=false : this.planilla_editar=true;
-        res.pdf_voucher!="" ? this.voucher_editar=false : this.voucher_editar=true;
-        res.pdf_recibo!="" ? this.recibo_editar=false : this.recibo_editar=true;
-        res.pdf_casilla!="" ? this.casilla_editar=false : this.casilla_editar=true;
-        res.pdf_transaccion!="" ? this.transaccion_editar=false : this.transaccion_editar=true;
-        res.pdf_autorizacion!="" ? this.autorizacion_editar=false : this.autorizacion_editar=true;
-        res.pdf_tarjeta!="" ? this.tarjeta_editar=false : this.tarjeta_editar=true;
-        res.pdf_compromiso!="" ? this.compromiso_editar=false : this.compromiso_editar=true;
-        res.pdf_letra!="" ? this.letra_editar=false : this.letra_editar=true;
-        res.pdf_ddjj!="" ? this.ddjj_editar=false : this.ddjj_editar=true;
-        res.pdf_otros!="" ? this.otros_editar=false : this.otros_editar=true;
+        res.pdf_tarjeta !="" ? this.tarjeta_editar=false : this.tarjeta_editar=true ;
 
         if(res['garantes'].garantes.length>0){
           res['garantes'].garantes.forEach((item,index)=>{
@@ -701,10 +689,10 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
     })
   }
 
-  ObtenerCronograma(id_credito, orden){
+  ObtenerCronograma(id_credito: number, tipo_cuota: number){
     this.Cargando.next(true) ;
 
-    this.Servicio.ObtenerCrongrama(id_credito, orden).subscribe(res=>{
+    this.Servicio.ObtenerCrongrama(id_credito, tipo_cuota).subscribe(res=>{
       this.Cargando.next(false) ;
       this.Cronograma = res;
       this.CalcularTotalPagado(this.Cronograma) ;
@@ -1118,7 +1106,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
     })
   }
 
-  CalcularTotalPagado( cronograma : Array<any> ) {
+  CalcularTotalPagado ( cronograma : Array<any> ) {
     this.monto_pagado = cronograma.reduce((acumulador, elemento)=>{
       return acumulador + elemento.monto_pagado*1 ;
     }, 0) ;
@@ -1312,7 +1300,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
     Ventana.afterClosed().subscribe(res=>{
       if(res) {
         this.Notificacion.Snack("Se registró el pago satisfactoriamente", "") ;
-        this.ObtenerCronograma(this.id_credito, "fecha_vencimiento asc") ;
+        this.ObtenerCronograma(this.id_credito, 0) ;
       }
       if(res===false) {
         this.Notificacion.Snack("Ocurrió un error al registrar el pago", "") ;

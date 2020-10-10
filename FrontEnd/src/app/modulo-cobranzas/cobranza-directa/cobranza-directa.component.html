@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card class="principal">
   
   <button mat-mini-fab type="button" color="primary" (click)="Atras()"><mat-icon>keyboard_arrow_left</mat-icon></button>
   
@@ -81,9 +81,9 @@
           <mat-checkbox color="primary" formControlName="solo_directas" (change)="ListarPosiblesCuotas()">Solo modo de pago directo</mat-checkbox>
         </mat-grid-tile>
 
-        <mat-grid-tile>
+        <!-- <mat-grid-tile>
           <mat-checkbox color="primary" formControlName="interes" (change)="InteresSeleccionado()"> Interés a la fecha </mat-checkbox>
-        </mat-grid-tile>
+        </mat-grid-tile> -->
 
         <mat-grid-tile colspan="1">
           <mat-form-field class="columnas-1">
@@ -92,6 +92,8 @@
             <mat-datepicker #fechareferencia [disabled]="id_cobranza || !CobranzaDirectaForm.value.interes"></mat-datepicker>
           </mat-form-field>
         </mat-grid-tile>
+
+        <ng-container></ng-container>
 
         <ng-container>
           <mat-grid-tile colspan="2" *ngIf="!id_cobranza && !id_cobranza_editar">

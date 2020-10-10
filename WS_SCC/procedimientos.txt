@@ -1,19 +1,26 @@
 Nuevos
-drop procedure if exists sp_listartalonariodetalle ;
-drop procedure if exists sp_listarcooperativadireccionultimonumeroorden ;
-drop procedure if exists sp_actualizarcreditoestadopenalidad ;
-drop procedure if exists sp_actualizarventaestadopenalidad ;
-
+drop procedure if exists sp_eliminarpenalidadcredito ;
+drop procedure if exists sp_eliminarpenalidadventa ;
+drop procedure if exists sp_crearcreditocronogramainteres1 ;
+drop procedure if exists sp_crearcreditocronogramainteres2 ;
+drop procedure if exists sp_actualizarcreditoestadointeres ;
+drop procedure if exists sp_eliminarcreditocronogramainteres ;
 
 Actualizar
-// drop procedure if exists sp_crearcooperativadireccion ;
-// drop procedure if exists sp_listarcronogramacreditopagosxmes ;
-// drop procedure if exists sp_listarcronogramaventaspagosxmes ;
-// drop procedure if exists sp_listarcreditoxId ;       
-// drop procedure if exists sp_listarcredito ;
-// drop procedure if exists sp_crearpenalidadcredito ;
-// drop procedure if exists sp_listarventaxId ;
-// drop procedure if exists sp_listarventa ;
-// drop procedure if exists sp_crearpenalidadventa ;
+drop procedure if exists sp_crearcreditocronogramainteres ;
+drop procedure if exists sp_listarcreditoxId ;
+drop procedure if exists sp_listarventaxId ;
+drop procedure if exists sp_listarventasalidaxId ;
+drop procedure if exists sp_listarcredito ;
+drop procedure if exists sp_listarventa ;
+drop procedure if exists sp_crearpagocredito ;
+drop procedure if exists sp_crearcobranzamanualcredito ;
+drop procedure if exists sp_crearcobranzamanualventa ;
+drop procedure if exists sp_crearpagoventa ;
+drop procedure if exists sp_crearcobranzadirectamasivo ;
 
 TABLAS
+liquidaciones
+liquidaciones_pagos
+ALTER TABLE `creditos` ADD `estado_interes` INT NOT NULL DEFAULT '1' COMMENT '1. Puede tener, 2. Desactivada, 3. Se aplicó penalidad ' AFTER `estado_penalidad`;
+ALTER TABLE `venta` ADD `estado_interes` INT NOT NULL DEFAULT '1' COMMENT '1. Puede tener, 2. Desactivada, 3. Se aplicó penalidad ' AFTER `estado_penalidad`;

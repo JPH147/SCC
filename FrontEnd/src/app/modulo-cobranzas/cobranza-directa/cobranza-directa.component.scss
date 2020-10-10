@@ -2,16 +2,6 @@
 
 $primary: map-get($theme, primary);
 
-mat-card{
-  width: 80%;
-  position: relative;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 20px;
-  margin-bottom: 10px;
-  min-height: 100px;
-}
-
 .spinner-container{
   position: absolute;
   top: 200px;
@@ -20,10 +10,6 @@ mat-card{
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.principal{
-  top: 300px;
 }
 
 #tituloProd {

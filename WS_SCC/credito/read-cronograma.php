@@ -16,8 +16,8 @@
     try{
         $credito = new Creditos($db);
 
-        $credito->id_credito = !empty($_GET['prcredito']) ? trim($_GET['prcredito']) : null;
-        $credito->orden = !empty($_GET['prorden']) ? trim($_GET['prorden']) : 'fecha_vencimiento asc';
+        $credito->id_credito = !empty($_GET['prcredito']) ? trim($_GET['prcredito']) : die ;
+        $credito->tipo_cuota = !empty($_GET['prtipocuota']) ? trim($_GET['prtipocuota']) : 0 ;
 
         $credito_list = $credito->read_cronograma();
 

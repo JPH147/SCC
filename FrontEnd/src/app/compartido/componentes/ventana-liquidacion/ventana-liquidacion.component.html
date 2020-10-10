@@ -1,0 +1,38 @@
+<mat-card class="card">
+  <mat-toolbar color="primary">
+    <mat-toolbar-row>
+      Confirmar liquidación  {{ this.data.tipo == 1 ? 'del crédito' : 'de la venta' }}
+    </mat-toolbar-row>
+  </mat-toolbar>
+
+  <div class = "spinner-container-emergente" *ngIf = "Cargando| async">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <mat-card-content>
+    <form [formGroup]="LiquidacionForm">
+      <mat-grid-list cols=3 rowHeight="70px">
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput formControlName="monto" placeholder="Monto de liquidación">
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan="2">
+          <mat-form-field class="columnas-2">
+            <input matInput formControlName="observacion" placeholder="Observación">
+          </mat-form-field>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </form>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <mat-grid-list cols="1" rowHeight="70px">
+      <mat-grid-tile>
+        <button mat-raised-button color="primary" [disabled]="(Cargando | async) || LiquidacionForm.invalid"
+          (click)="LiquidarTransaccion()"> Confirmar </button>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-card-actions>
+</mat-card>

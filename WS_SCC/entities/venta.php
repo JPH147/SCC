@@ -96,7 +96,12 @@ Class Venta{
 
     public $monto_limite_penalidad ;
     public $monto_penalidad ;
+    public $adicional_penalidad ;
+    public $tipo_cuota ;
     public $estado_penalidad ;
+    public $estado_interes ;
+    public $id_liquidacion ;
+    public $pagado ;
 
     public function __construct($db){
         $this->conn = $db;
@@ -156,8 +161,10 @@ Class Venta{
                 "cuotas_pagadas"=>$cuotas_pagadas,
                 "numero_procesos"=>$numero_procesos,
                 "ultima_fecha_pago"=>$ultima_fecha_pago,
-                "estado"=>$estado,
                 "estado_penalidad"=>$estado_penalidad,
+                "id_liquidacion"=>$id_liquidacion,
+                "pagado"=>$pagado,
+                "estado"=>$estado,
             );
             array_push($venta_list["ventas"],$venta_item);
         }
@@ -537,7 +544,11 @@ Class Venta{
         $this->cuotas_interes = $row['cuotas_interes'];
         $this->monto_limite_penalidad = $row['monto_limite_penalidad'] ;
         $this->monto_penalidad = $row['monto_penalidad'] ;
+        $this->adicional_penalidad = $row['adicional_penalidad'] ;
         $this->estado_penalidad = $row['estado_penalidad'] ;
+        $this->estado_interes = $row['estado_interes'] ;
+        $this->id_liquidacion = $row['id_liquidacion'] ;
+        $this->pagado = $row['pagado'] ;
         $this->courier = $Courier;
         $this->productos=$Productos;
         $this->garantes=$Garantes;
@@ -611,7 +622,11 @@ Class Venta{
         $this->cuotas_interes = $row['cuotas_interes'];
         $this->monto_limite_penalidad = $row['monto_limite_penalidad'] ;
         $this->monto_penalidad = $row['monto_penalidad'] ;
+        $this->adicional_penalidad = $row['adicional_penalidad'] ;
         $this->estado_penalidad = $row['estado_penalidad'] ;
+        $this->estado_interes = $row['estado_interes'] ;
+        $this->id_liquidacion = $row['id_liquidacion'] ;
+        $this->pagado = $row['pagado'] ;
         $this->courier = $Courier;
         $this->productos=$Productos;
         $this->garantes=$Garantes;
@@ -692,7 +707,7 @@ Class Venta{
         $result = $this->conn->prepare($query);
 
         $result->bindParam(1, $this->id_venta);
-        $result->bindParam(2, $this->orden);
+        $result->bindParam(2, $this->tipo_cuota);
 
         $result->execute();
         
@@ -720,6 +735,39 @@ Class Venta{
         }
 
         return $venta_list;
+    }
+
+    function read_cronograma_resumen(){
+        $query = "CALL sp_listarventacronogramaresumen(?,?)";
+  
+        $result = $this->conn->prepare($query) ;
+ 
+        $result->bindParam(1, $this->id_venta) ;
+        $result->bindParam(2, $this->tipo_cuota) ;
+  
+        $result->execute() ;
+        
+        $cronograma_list=array() ;
+        $contador = 0 ;
+  
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $contador=$contador+1;
+            $cronograma_item = array (
+                "id_venta" => $id_venta,
+                "monto_total" => $row['monto_total'] ,
+                "interes" => $row['interes'] ,
+                "monto_pagado" => $row['monto_pagado'] ,
+                "monto_pendiente" => $row['monto_pendiente'] ,
+                "monto_pendiente_hasta_hoy" => $row['monto_pendiente_hasta_hoy'] ,
+                "total_cuotas" => $row['total_cuotas'] ,
+                "total_pendiente" => $row['total_pendiente'] ,
+                "total_pagadas" => $row['total_pagadas'] ,
+            );
+            array_push($cronograma_list,$cronograma_item);
+        }
+        return $cronograma_list;
     }
 
     function read_cronograma_pagos(){
@@ -1232,6 +1280,24 @@ Class Venta{
         return false;
     }
      
+    function eliminar_penalidad_venta () {
+        $query = "CALL sp_eliminarpenalidadventa(
+            :prventa
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prventa", $this->id_venta);
+
+        $this->id_venta=htmlspecialchars(strip_tags($this->id_venta));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
+    }
+
     function actualizar_venta_estado_penalidad() {
         $query = "CALL sp_actualizarventaestadopenalidad(
             :prventa ,

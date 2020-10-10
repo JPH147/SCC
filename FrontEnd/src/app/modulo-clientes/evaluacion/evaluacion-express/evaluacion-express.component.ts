@@ -156,7 +156,11 @@ export class EvaluacionExpressComponent implements OnInit {
   }
   
   CorregirFecha(){
-    this.fecha_inicio = moment(new Date()).add(1,'month').endOf('month').toDate() ;
+    if ( moment(this.ExpressForm.value.fecha_letras).date() > 15 ) {
+      this.fecha_inicio = moment(this.ExpressForm.value.fecha_letras).add(1,'month').endOf('month').toDate() ;
+    } else {
+      this.fecha_inicio = moment(this.ExpressForm.value.fecha_letras).endOf('month').toDate() ;
+    }
   }
 
   CrearFormularios(){
@@ -234,10 +238,19 @@ export class EvaluacionExpressComponent implements OnInit {
       this.interes = 15 ;
       this.aporte = 20 ;
       this.interes_por_dia = false ;
-      this.fecha_inicio=moment(new Date()).add(1,'month').endOf('month').toDate();
+      // this.fecha_inicio=moment(new Date()).add(1,'month').endOf('month').toDate();
       this.CorregirFecha();
       this.ExpressForm.get('lugar').setValue("Ate Vitarte")
-      this.ExpressForm.get('fecha_letras').setValue(new Date())
+      this.ExpressForm.get('fecha_letras').setValue(new Date()) ;
+      this.EstablecerFechaInicio() ;
+    }
+  }
+
+  EstablecerFechaInicio() {
+    if ( moment(this.ExpressForm.value.fecha_letras).date() > 15 ) {
+      this.fecha_inicio = moment(this.ExpressForm.value.fecha_letras).add(1,'month').endOf('month').toDate() ;
+    } else {
+      this.fecha_inicio = moment(this.ExpressForm.value.fecha_letras).endOf('month').toDate() ;
     }
   }
 
@@ -312,7 +325,7 @@ export class EvaluacionExpressComponent implements OnInit {
       this.cronograma.push({
         numero: 0,
         fecha: fecha_1,
-        fecha_formato: moment(fecha).locale('es').format('LL'),
+        fecha_formato: moment(fecha_1).locale('es').format('LL'),
         monto: interes_truncado,
         capital : 0,
         interes : interes_truncado,
