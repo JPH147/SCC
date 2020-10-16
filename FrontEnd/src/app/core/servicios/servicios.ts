@@ -720,7 +720,7 @@ EditarModelo(
           return res;
         } else {
           console.log ('No hay datos que mostrar');
-          return [];
+          return {mensaje: ''};
         }
       }));
     }

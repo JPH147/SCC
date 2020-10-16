@@ -11,6 +11,7 @@ import { VentanaConfirmarComponent } from '../../compartido/componentes/ventana-
 import { Rol } from 'src/app/compartido/modelos/login.modelos';
 import { Store } from '@ngrx/store';
 import { EstadoSesion } from '../../compartido/reducers/permisos.reducer';
+import { CooperativaConfiguracionService } from 'src/app/modulo-maestro/cooperativa-configuracion/cooperativa-configuracion.service';
 
 @Component({
   selector: 'app-cobranza-directa-listar',
@@ -38,7 +39,8 @@ export class CobranzaDirectaListarComponent implements OnInit {
   constructor(
     private _store : Store<EstadoSesion> ,
     private Servicio: CobranzasService,
-    private Dialogo : MatDialog
+    private Dialogo : MatDialog ,
+    private _configuracion : CooperativaConfiguracionService
   ) { }
 
   ngOnInit() {
@@ -85,7 +87,7 @@ export class CobranzaDirectaListarComponent implements OnInit {
   }
 
   ListarCuentas(){
-    this.Servicio.ListarCuentas().subscribe(res=>{
+    this._configuracion.ListarCuentas(0,"",1,100).subscribe(res=>{
       this.Cuentas = res['data'].cuentas ;
     })
   }

@@ -45,14 +45,7 @@
                   <mat-error> Debe ingresar un número </mat-error>
                 </mat-form-field>
               </mat-grid-tile>
-  
-              <!-- <mat-grid-tile>
-                <mat-form-field class="columnas-1">
-                  <input matInput formControlName="pago_directo" placeholder="Pago directo">
-                  <mat-error> Debe ingresar un número </mat-error>
-                </mat-form-field>
-              </mat-grid-tile> -->
-              
+                
               <mat-grid-tile>
                 <mat-form-field class="columnas-1">
                   <input matInput formControlName="pago_planilla" placeholder="Pago planilla">
@@ -66,10 +59,6 @@
                   <mat-error> Debe ingresar un número </mat-error>
                 </mat-form-field>
               </mat-grid-tile>
-                          
-              <!-- <mat-grid-tile>
-                <button type="button" mat-icon-button color="primary" [disabled]="Pago.get('tipo').value==1" (click)="EliminarPago(i)"> <mat-icon> delete </mat-icon>  </button>
-              </mat-grid-tile> -->
             </mat-grid-list>
           </div>
         </div>
@@ -92,9 +81,10 @@
   
               <mat-grid-tile>
                 <mat-form-field class="columnas-1">
-                  <mat-select placeholder="Cuenta de depósito" formControlName="cuenta_bancaria">
-                    <mat-option *ngFor="let cuenta of ListadoCuentas" [value]="cuenta.id"> {{cuenta.banco}} </mat-option>
+                  <mat-select placeholder="Cuenta de depósito" formControlName="cuenta_bancaria" (selectionChange)="CuentaSeleccionada(i)">
+                    <mat-option *ngFor="let cuenta of ListadoCuentas" [value]="cuenta.id"> {{cuenta.alias}} </mat-option>
                   </mat-select>
+                  <mat-hint> {{Pago.get('numero_cuenta').value}} </mat-hint>
                 </mat-form-field>
               </mat-grid-tile>
   

@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { Observable, BehaviorSubject, of, fromEvent, merge } from 'rxjs';
 import { catchError, finalize, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { CooperativaConfiguracionService } from '../../cooperativa-configuracion/cooperativa-configuracion.service';
+import { CooperativaConfiguracionService } from '../cooperativa-configuracion.service';
 import { VentanaConfirmarComponent } from '../../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';
 import { VentanaCooperativaDireccionesComponent } from './ventana-cooperativa-direcciones/ventana-cooperativa-direcciones.component';
 import { Notificaciones } from 'src/app/core/servicios/notificacion';
@@ -21,7 +21,7 @@ export class CooperativaDireccionesComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   public ListadoDirecciones: DireccionDataSource;
-  public Columnas: string[] = [ "numero" ,"departamento" ,"provincia" ,"distrito" ,"cooperativa_direccion", "numero_orden" ,"opciones" ];
+  public Columnas: string[] = [ "numero_orden", "departamento" ,"provincia" ,"distrito" ,"cooperativa_direccion" ,"opciones" ];
 
   public fecha_inicio: Date;
   public fecha_fin: Date;

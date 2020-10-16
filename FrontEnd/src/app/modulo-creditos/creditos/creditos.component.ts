@@ -254,7 +254,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
           this.ObtenerClientexId(this.id_cliente);
           this.ObtenerDireccion(this.id_cliente);
           this.ObtenerTelefono(this.id_cliente);
-          this.VerificarAfiliacion(this.id_cliente);
+          this.VerificarAfiliacion(this.id_cliente, true);
         }
 
         if(params['idcredito']){
@@ -519,7 +519,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     this.ObtenerClientexId(id);
     this.ObtenerDireccion(id);
     this.ObtenerTelefono(id);
-    this.VerificarAfiliacion(id);
+    this.VerificarAfiliacion(id, true);
     this.Servicio.SeleccionarPresupuesto(id).subscribe(res=>{
       this.CreditosForm.get('capital').setValue(res.capital);
       this.CreditosForm.get('cuotas').setValue(res.cuotas);
@@ -711,6 +711,22 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       res.pdf_ddjj!="" ? this.ddjj=URLIMAGENES.carpeta+'credito/'+res.pdf_ddjj : null;
       res.pdf_otros!="" ? this.otros=URLIMAGENES.carpeta+'credito/'+res.pdf_otros : null;
       res.pdf_oficio!="" ? this.oficio=URLIMAGENES.carpeta+'credito/'+res.pdf_oficio : null;
+
+      this.foto_editar = false ;
+      this.dni_editar = false ;
+      this.cip_editar = false ;
+      this.planilla_editar = false ;
+      this.voucher_editar = false ;
+      this.recibo_editar = false ;
+      this.casilla_editar = false ;
+      this.transaccion_editar = false ;
+      this.autorizacion_editar = false ;
+      this.tarjeta_editar = false ;
+      this.compromiso_editar = false ;
+      this.letra_editar = false ;
+      this.ddjj_editar = false ;
+      this.oficio_editar = false ;
+      this.otros_editar = false ;
 
       if( res.id_credito_refinanciado ) {
         this.credito_refinanciado = true ;
@@ -939,18 +955,20 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         this.ObtenerClientexId(res.id);
         this.ObtenerDireccion(res.id);
         this.ObtenerTelefono(res.id);
-        this.VerificarAfiliacion(res.id);
+        this.VerificarAfiliacion(res.id, true);
       }
     })
   }
 
-  VerificarAfiliacion(id_cliente){
+  VerificarAfiliacion(id_cliente, actualizar_interes : boolean){
     // console.log(id_cliente);
     this.Servicio.Verificar_Afiliacion(id_cliente).subscribe(res=>{
       // console.log(res)
       if(res['codigo_afiliacion']){
         this.numero_afiliacion=res['codigo_afiliacion'];
-        this.VerificarInteres(res['total_pagado']);
+        if ( actualizar_interes ) {
+          this.VerificarInteres(res['total_pagado']);
+        }
         this.cliente_afiliado=true;
       }else{
         this.VerificarInteres(0);
@@ -1326,13 +1344,17 @@ export class CreditosComponent implements OnInit, AfterViewInit {
 
       // Se calcula el interés por día
       let interes_truncado : number = 0 ;
-      if( this.CreditosForm.value.interes_diario ) {
-        if ( this.CreditosForm.get('interes_diario_monto').value > 0 ) {
-          interes_truncado = this.CreditosForm.get('interes_diario_monto').value ;
-
-        } else {
-          interes_truncado = Math.round( ((dias_mes - dia_credito) / dias_mes) * interes * 100 ) / 100 ;
-          this.CreditosForm.get('interes_diario_monto').setValue(interes_truncado) ;
+      if ( this.CreditosForm.value.interes == 0 ) {
+        this.CreditosForm.get('interes_diario_monto').setValue(0) ;
+        interes_truncado = 0 ;
+      } else {
+        if( this.CreditosForm.value.interes_diario ) {
+          if ( this.CreditosForm.get('interes_diario_monto').value > 0 ) {
+            interes_truncado = this.CreditosForm.get('interes_diario_monto').value ;
+          } else {
+            interes_truncado = Math.round( ((dias_mes - dia_credito) / dias_mes) * interes * 100 ) / 100 ;
+            this.CreditosForm.get('interes_diario_monto').setValue(interes_truncado) ;
+          }
         }
       }
 
@@ -1579,7 +1601,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         this.ActualizarCredito();
       }
     }else{
-      this.VerificarAfiliacion(this.CreditosForm.value.id_cliente);
+      this.VerificarAfiliacion(this.CreditosForm.value.id_cliente, false);
       this.CrearCredito();
     }
   }
@@ -1714,7 +1736,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       this.ServiciosGenerales.RenameFile(this.recibo, dni + '_RECIBO_' + fecha, identificador ,"credito"),
       this.ServiciosGenerales.RenameFile(this.casilla, dni + '_CASILLA_' + fecha, identificador ,"credito"),
       this.ServiciosGenerales.RenameFile(this.transaccion, dni + '_TRANSACCION_' + fecha, identificador ,"credito"),
-      this.ServiciosGenerales.RenameFile(this.autorizacion, dni + '_AUTORIAZACION_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.autorizacion, dni + '_AUTORIZACION_' + fecha, identificador ,"credito"),
       this.ServiciosGenerales.RenameFile(this.tarjeta, dni + '_TARJETA_' + fecha, identificador ,"credito"),
       this.ServiciosGenerales.RenameFile(this.compromiso, dni + '_COMPROMISO_' + fecha, identificador ,"credito"),
       this.ServiciosGenerales.RenameFile(this.letra, dni + '_LETRA_' + fecha, identificador ,"credito"),
@@ -1860,7 +1882,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       this.ServiciosGenerales.RenameFile(this.recibo_nuevo, dni + '_RECIBO_' + fecha, identificador ,"credito"),
       this.ServiciosGenerales.RenameFile(this.casilla_nuevo, dni + '_CASILLA_' + fecha, identificador ,"credito"),
       this.ServiciosGenerales.RenameFile(this.transaccion_nuevo, dni + '_TRANSACCION_' + fecha, identificador ,"credito"),
-      this.ServiciosGenerales.RenameFile(this.autorizacion_nuevo, dni + '_AUTORIAZACION_' + fecha, identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.autorizacion_nuevo, dni + '_AUTORIZACION_' + fecha, identificador ,"credito"),
       this.ServiciosGenerales.RenameFile(this.tarjeta_nuevo, dni + '_TARJETA_' + fecha, identificador ,"credito"),
       this.ServiciosGenerales.RenameFile(this.compromiso_nuevo, dni + '_COMPROMISO_' + fecha, identificador ,"credito"),
       this.ServiciosGenerales.RenameFile(this.letra_nuevo, dni + '_LETRA_' + fecha, identificador ,"credito"),
@@ -2110,7 +2132,45 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   }
 
   Imprimir(){
-    console.log(this.CreditosForm)
+    let identificador = new Date().getTime().toString() ;
+    console.log({
+      foto: this.foto ,
+      dni: this.dni ,
+      cip: this.cip ,
+      planilla: this.planilla ,
+      voucher: this.voucher ,
+      recibo: this.recibo ,
+      casilla: this.casilla ,
+      transaccion: this.transaccion ,
+      autorizacion: this.autorizacion ,
+      tarjeta: this.tarjeta ,
+      compromiso: this.compromiso ,
+      letra: this.letra ,
+      ddjj: this.ddjj ,
+      oficio: this.oficio ,
+      otros: this.otros ,
+      papeles: this.papeles ,
+    })
+    return forkJoin([
+      this.ServiciosGenerales.RenameFile(this.foto, "JP" + '_FOTO_' + "fecha", identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.dni, "JP" + '_DNI_' + "fecha", identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.cip, "JP" + '_CIP_' + "fecha", identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.planilla, "JP" + '_PLANILLA_' + "fecha", identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.voucher, "JP" + '_VOUCHER_' + "fecha", identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.recibo, "JP" + '_RECIBO_' + "fecha", identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.casilla, "JP" + '_CASILLA_' + "fecha", identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.transaccion, "JP" + '_TRANSACCION_' + "fecha", identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.autorizacion, "JP" + '_AUTORIZACION_' + "fecha", identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.tarjeta, "JP" + '_TARJETA_' + "fecha", identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.compromiso, "JP" + '_COMPROMISO_' + "fecha", identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.letra, "JP" + '_LETRA_' + "fecha", identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.ddjj, "JP" + '_DDJJ_' + "fecha", identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.oficio, "JP" + '_OFICIO_' + "fecha", identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.otros, "JP" + '_OTROS_' + "fecha", identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.papeles, "JP" + '_PAPELES_' + "fecha", identificador ,"credito"),
+    ]).subscribe(resultado=>{
+      console.log(resultado) ;
+    })
   }
 
   CambiarVistaCronograma() {

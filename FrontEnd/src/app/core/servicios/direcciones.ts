@@ -265,7 +265,6 @@ export class ServiciosDirecciones{
     
 		return this.http.post(this.url + 'clientedireccion/update.php', params, {headers: headers})
 		.pipe(map(res=>{
-			console.log(res)
 			if( res['codigo'] == 0 ) {
 				return true ;
 			} else {

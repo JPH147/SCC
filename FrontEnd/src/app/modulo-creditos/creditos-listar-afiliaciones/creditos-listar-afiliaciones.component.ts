@@ -50,7 +50,7 @@ export class CreditosListarAfiliacionesComponent implements OnInit {
     this.fecha_fin = null ;
 
     this.ListadoCreditos = new CreditosDataSource(this.Servicio);
-    this.ListadoCreditos.CargarCreditos("","",1,0,this.fecha_inicio,this.fecha_fin,1,1,10,"fecha desc");
+    this.ListadoCreditos.CargarCreditos("","",1,0,this.fecha_inicio,this.fecha_fin,1,1,10,"fecha desc",new Date().getTime());
   }
 
   ngAfterViewInit () {
@@ -96,7 +96,8 @@ export class CreditosListarAfiliacionesComponent implements OnInit {
       1,
       this.paginator.pageIndex+1,
       this.paginator.pageSize,
-      this.sort.active +" " + this.sort.direction
+      this.sort.active +" " + this.sort.direction ,
+      new Date().getTime()
     );
   }
 

@@ -319,7 +319,6 @@ export class ClienteService {
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     return this.http.post(this.url + 'clientecuenta/update.php', params, {headers: headers})
     .pipe(map(res=>{
-      console.log(res)
       if( res['codigo'] == 0 ) {
         return true ;
       } else {

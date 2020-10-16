@@ -43,9 +43,10 @@
 
         <mat-grid-tile colspan="1" *ngIf="!id_cobranza">
           <mat-form-field class="columnas-1">
-            <mat-select placeholder="Cuenta de depósito" formControlName="cuenta_bancaria">
-              <mat-option *ngFor="let cuenta of cuentas" [value]="cuenta.id"> {{cuenta.banco}} </mat-option>
+            <mat-select placeholder="Cuenta de depósito" formControlName="cuenta_bancaria" (selectionChange)="CuentaSeleccionada()">
+              <mat-option *ngFor="let cuenta of cuentas" [value]="cuenta.id"> {{cuenta.alias}} </mat-option>
             </mat-select>
+            <mat-hint> {{numero_cuenta}} </mat-hint>
           </mat-form-field>
         </mat-grid-tile>
 

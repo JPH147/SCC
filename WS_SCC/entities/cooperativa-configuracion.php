@@ -5,6 +5,7 @@ class Cooperativa{
   private $conn;
 
   public $id_cooperativa ;
+  public $id_cooperativa_cuenta ;
   public $departamento ;
   public $provincia ;
   public $distrito ;
@@ -15,6 +16,11 @@ class Cooperativa{
   public $numero_pagina ;
   public $total_pagina ;
   public $total_resultado ;
+  public $banco ;
+  public $titular ;
+  public $cuenta ;
+  public $cci ;
+  public $alias ;
 
   public $numero_orden_antigua ;
   public $numero_orden_nueva ;
@@ -187,6 +193,137 @@ class Cooperativa{
     return $this->numero_orden ;
   }
   
+  function read_cuenta(){
+    $query = "CALL sp_listarcooperativacuenta(?,?,?,?)";
 
+    $result = $this->conn->prepare($query);
+
+    $result->bindParam(1, $this->banco ) ;
+    $result->bindParam(2, $this->titular ) ;
+    $result->bindParam(3, $this->numero_pagina ) ;
+    $result->bindParam(4, $this->total_pagina ) ;
+
+    $result->execute();
+
+    $cuentas_list=array();
+    $cuentas_list["cuentas"]=array();
+
+    $contador = $this->total_pagina*($this->numero_pagina-1);
+
+    while($row = $result->fetch(PDO::FETCH_ASSOC))
+    {
+      extract($row);
+      $contador = $contador+1;
+      $item = array(
+        "numero" => $contador,
+        "id" => $id ,
+        "id_banco" => $id_banco ,
+        "banco" => $banco ,
+        "numero_cuenta" => $numero_cuenta ,
+        "cci" => $cci ,
+        "titular" => $titular ,
+        "alias" => $alias ,
+      );
+      array_push($cuentas_list["cuentas"],$item);
+    }
+    return $cuentas_list;
+  }
+
+  function contar_cuenta(){
+    $query = "CALL sp_listarcooperativacuentacontar(?,?)";
+
+    $result = $this->conn->prepare($query);
+
+    $result->bindParam(1, $this->banco ) ;
+    $result->bindParam(2, $this->titular ) ;
+
+    $result->execute();
+
+    $row = $result->fetch(PDO::FETCH_ASSOC);
+
+    $this->total_resultado=$row['total'];
+
+    return $this->total_resultado;
+  }
+
+	function create_cuenta(){
+		$query = "CALL sp_crearcooperativacuenta(
+      :prbanco,
+      :prtitular,
+      :prnumero,
+      :prcci,
+			:pralias
+		)";
+  
+		$result = $this->conn->prepare($query);
+  
+		$result->bindParam(":prbanco", $this->banco);
+    $result->bindParam(":prtitular", $this->titular);
+    $result->bindParam(":prnumero", $this->numero);
+    $result->bindParam(":prcci", $this->cci);
+    $result->bindParam(":pralias", $this->alias);
+  
+		$this->banco=htmlspecialchars(strip_tags($this->banco));
+    $this->titular=htmlspecialchars(strip_tags($this->titular));
+    $this->numero=htmlspecialchars(strip_tags($this->numero));
+    $this->cci=htmlspecialchars(strip_tags($this->cci));
+    $this->alias=htmlspecialchars(strip_tags($this->alias));
+  
+		if($result->execute())
+		{
+		  return true;
+		}
+		return false;
+	}
+
+	function update_cuenta(){
+		$query = "CALL sp_actualizarcooperativacuenta(
+      :prid,
+      :prbanco,
+      :prtitular,
+      :prnumero,
+      :prcci,
+			:pralias
+		)";
+  
+		$result = $this->conn->prepare($query);
+  
+    $result->bindParam(":prid", $this->id_cooperativa_cuenta);
+    $result->bindParam(":prbanco", $this->banco);
+    $result->bindParam(":prtitular", $this->titular);
+    $result->bindParam(":prnumero", $this->numero);
+    $result->bindParam(":prcci", $this->cci);
+    $result->bindParam(":pralias", $this->alias);
+  
+		$this->id_cooperativa_cuenta=htmlspecialchars(strip_tags($this->id_cooperativa_cuenta));
+    $this->titular=htmlspecialchars(strip_tags($this->titular));
+    $this->numero=htmlspecialchars(strip_tags($this->numero));
+    $this->cci=htmlspecialchars(strip_tags($this->cci));
+    $this->alias=htmlspecialchars(strip_tags($this->alias));
+  
+		if($result->execute())
+		{
+		  return true;
+		}
+		return false;
+  }
+  
+	function delete_cuenta(){
+		$query = "CALL sp_eliminarcooperativacuenta(
+      :prid
+		)";
+  
+		$result = $this->conn->prepare($query);
+  
+    $result->bindParam(":prid", $this->id_cooperativa_cuenta);
+  
+    $this->id_cooperativa_cuenta=htmlspecialchars(strip_tags($this->id_cooperativa_cuenta));
+  
+		if($result->execute())
+		{
+		  return true;
+		}
+		return false;
+	}
 }
 ?>

@@ -29,8 +29,8 @@ import { VentanaSedeComponent } from './instituciones/sede/ventana-sede/ventana-
 import { SubsedeComponent } from './instituciones/subsede/subsede.component';
 import { VentanaSubsedeComponent } from './instituciones/subsede/ventana-subsede/ventana-subsede.component';
 import { PlantillasComponent } from './plantillas/plantillas.component';
-import { CooperativaDireccionesComponent } from './plantillas/cooperativa-direcciones/cooperativa-direcciones.component';
-import { VentanaCooperativaDireccionesComponent } from './plantillas/cooperativa-direcciones/ventana-cooperativa-direcciones/ventana-cooperativa-direcciones.component';
+import { CooperativaDireccionesComponent } from './cooperativa-configuracion/cooperativa-direcciones/cooperativa-direcciones.component';
+import { VentanaCooperativaDireccionesComponent } from './cooperativa-configuracion/cooperativa-direcciones/ventana-cooperativa-direcciones/ventana-cooperativa-direcciones.component';
 import { DocumentoAutorizacionComponent } from './plantillas/documento-autorizacion/documento-autorizacion.component';
 import { DocumentoCartaComponent } from './plantillas/documento-carta/documento-carta.component';
 import { DocumentoCompromisoComponent } from './plantillas/documento-compromiso/documento-compromiso.component';
@@ -67,9 +67,11 @@ import { VendedoresListadoComponent } from './vendedores/vendedores-listado/vend
 import { VentanaVendedorComponent } from './vendedores/vendedores-listado/ventana-vendedor/ventana-vendedor';
 import { FileUploadVendedores } from './vendedores/vendedores-listado/file-upload/fileupload';
 import { VentanaParametrosPlantillasComponent } from './instituciones/sede/ventana-parametros-plantillas/ventana-parametros-plantillas.component';
-import { VentanaCambiarOrdenComponent } from './plantillas/cooperativa-direcciones/ventana-cambiar-orden/ventana-cambiar-orden.component';
+import { VentanaCambiarOrdenComponent } from './cooperativa-configuracion/cooperativa-direcciones/ventana-cambiar-orden/ventana-cambiar-orden.component';
 import { VentanaAdjuntoComponent } from './talonarios/ventana-adjunto/ventana-adjunto.component';
 import { VentanaDetalleTalonarioComponent } from './talonarios/ventana-detalle-talonario/ventana-detalle-talonario.component';
+import { CooperativaCuentasComponent } from './cooperativa-configuracion/cooperativa-cuentas/cooperativa-cuentas.component';
+import { VentanaCooperativaCuentaComponent } from './cooperativa-configuracion/cooperativa-cuentas/ventana-cooperativa-cuenta/ventana-cooperativa-cuenta.component';
 
 @NgModule({
   declarations: [
@@ -134,7 +136,9 @@ import { VentanaDetalleTalonarioComponent } from './talonarios/ventana-detalle-t
     FileUploadVendedores,
     VentanaCambiarOrdenComponent,
     VentanaAdjuntoComponent,
-    VentanaDetalleTalonarioComponent ,
+    VentanaDetalleTalonarioComponent,
+    CooperativaCuentasComponent,
+    VentanaCooperativaCuentaComponent ,
   ],
   imports: [
     ModuloMaestroRoutingModule ,

@@ -27,7 +27,8 @@ export class CreditosService {
     estado:number,
     pagina_inicio:number,
     pagina_final:number,
-    orden:string
+    orden:string ,
+    tiempo_consulta : number
   ): Observable<any> {
 
     let params = new HttpParams()
@@ -58,6 +59,8 @@ export class CreditosService {
 
           item.numero_credito = numero_credito
         });
+
+        res['tiempo'] = tiempo_consulta ;
         return res;
       } else {
         console.log('No hay datos que mostrar');

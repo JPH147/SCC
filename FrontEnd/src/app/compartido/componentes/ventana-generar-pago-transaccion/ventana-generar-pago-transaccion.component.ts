@@ -6,7 +6,7 @@ import { CobranzasService } from '../../../modulo-cobranzas/cobranzas-listar/cob
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { debounceTime, distinctUntilChanged, takeUntil, map, finalize } from 'rxjs/operators';
 import * as moment from 'moment';
-import { ɵELEMENT_PROBE_PROVIDERS } from '@angular/platform-browser';
+import { CooperativaConfiguracionService } from 'src/app/modulo-maestro/cooperativa-configuracion/cooperativa-configuracion.service';
 
 @Component({
   selector: 'app-ventana-generar-pago-transaccion',
@@ -36,6 +36,7 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit, AfterView
     private ventana : MatDialogRef<VentanaGenerarPagoTransaccionComponent> ,
     private _builder : FormBuilder ,
     private _cobranzas : CobranzasService ,
+    private _configuracion : CooperativaConfiguracionService ,
   ) { }
 
   ngOnInit(): void {
@@ -155,15 +156,24 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit, AfterView
       ] ] ,
       cuenta_bancaria : [ { value : "", disabled: false },[
       ] ] ,
+      // El número de cuenta solo se utiliza para mostrarlo en el hint del formulario
+      numero_cuenta : [ { value : "", disabled: false },[
+      ] ] ,
       numero_operacion : [ { value : "", disabled: false },[
       ] ] ,
     })
   }
 
   ListarCuentas(){
-    this._cobranzas.ListarCuentas().subscribe(res=>{
+    this._configuracion.ListarCuentas(0,"",1,100).subscribe(res=>{
       this.ListadoCuentas = res['data'].cuentas;
     })
+  }
+
+  CuentaSeleccionada(index) {
+    let cuenta : number = this.PagoArrayForm.controls[index].get('cuenta_bancaria').value ;
+    let cuenta_seleccionada = this.ListadoCuentas.filter(e => e.id == cuenta)[0] ;
+    this.PagoArrayForm.controls[index].get('numero_cuenta').setValue(cuenta_seleccionada.numero_cuenta) ;
   }
 
   AgregarPagoForm(tipo : number) {
@@ -234,13 +244,20 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit, AfterView
     if ( valor > 0 ) {
       this.PagoArrayForm.controls[indice].get('cuenta_bancaria').setValidators([Validators.required]) ;
       this.PagoArrayForm.controls[indice].get('numero_operacion').setValidators([Validators.required]) ;
-
-      this.total_pagos_directos = 0 ;
-      this.PagoArrayForm.value.forEach(elemento => {
-        this.total_pagos_directos = this.total_pagos_directos + elemento.pago_directo*1 ;
-      });
-      this.CalcularTotalGeneral() ;
+      this.PagoArrayForm.controls[indice].get('cuenta_bancaria').updateValueAndValidity() ;
+      this.PagoArrayForm.controls[indice].get('numero_operacion').updateValueAndValidity() ;
+    } else {
+      this.PagoArrayForm.controls[indice].get('cuenta_bancaria').clearValidators() ;
+      this.PagoArrayForm.controls[indice].get('numero_operacion').clearValidators() ;
+      this.PagoArrayForm.controls[indice].get('cuenta_bancaria').updateValueAndValidity() ;
+      this.PagoArrayForm.controls[indice].get('numero_operacion').updateValueAndValidity() ;
     }
+
+    this.total_pagos_directos = 0 ;
+    this.PagoArrayForm.value.forEach(elemento => {
+      this.total_pagos_directos = this.total_pagos_directos + elemento.pago_directo*1 ;
+    });
+    this.CalcularTotalGeneral() ;
   }
 
   CalcularTotalPagosJudiciales() {
@@ -272,6 +289,8 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit, AfterView
       // this.PagoArrayForm.controls.forEach(elemento => {
       //   elemento.get('cuenta_bancaria').setValidators([Validators.required]) ;
       //   elemento.get('numero_operacion').setValidators([Validators.required]) ;
+      //   elemento.get('cuenta_bancaria').updateValueAndValidity() ;
+      //   elemento.get('numero_operacion').updateValueAndValidity() ;
       // });
     }
   }
@@ -285,6 +304,7 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit, AfterView
       })
     )
     .subscribe(resultado=>{
+      console.log(resultado) ;
       if ( resultado ) {
         this.PagoArrayForm.controls[indice].get('numero_operacion').setErrors({'repetido':true}) ;
       } else {

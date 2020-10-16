@@ -148,4 +148,107 @@ export class CooperativaConfiguracionService {
       })
     )
   }
+
+  ListarCuentas(
+    banco : number ,
+    titular : string ,
+    numero_pagina : number ,
+    total_pagina : number ,
+  ): Observable<any> {
+
+    let params = new HttpParams()
+      .set('prbanco', banco.toString() )
+      .set('prtitular', titular )
+      .set('prpagina', numero_pagina.toString() )
+      .set('prtotalpagina', total_pagina.toString() ) ;
+
+    return this.http.get(this.url + 'cooperativa-configuracion/read-cuenta.php', {params})
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res;
+      } else {
+        console.log('No hay datos que mostrar');
+        return false ;
+      }
+    }));
+  }
+
+  CrearCuenta(
+    banco : number ,
+    titular : string ,
+    numero : string ,
+    cci : string ,
+    alias : string ,
+  ): Observable<any> {
+    let params = new HttpParams()
+      .set("prbanco", banco.toString())
+      .set("prtitular", titular)
+      .set("prnumero", numero)
+      .set("prcci", cci)
+      .set("pralias", alias) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'cooperativa-configuracion/create-cuenta.php', params , { headers : headers })
+    .pipe(
+      map(respuesta=>{
+        if ( respuesta['codigo'] == 0 ) {
+          return true ;
+        } else {
+          return false ;
+        }
+      })
+    )
+  }
+
+  ActualizarCuenta(
+    id_cuenta : number ,
+    banco : number ,
+    titular : string ,
+    numero : string ,
+    cci : string ,
+    alias : string ,
+  ): Observable<any> {
+    let params = new HttpParams()
+      .set('prid',id_cuenta.toString() )
+      .set("prbanco", banco.toString())
+      .set("prtitular", titular)
+      .set("prnumero", numero)
+      .set("prcci", cci)
+      .set("pralias", alias) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'cooperativa-configuracion/update-cuenta.php', params , { headers : headers })
+    .pipe(
+      map(respuesta=>{
+        if ( respuesta['codigo'] == 0 ) {
+          return true ;
+        } else {
+          return false ;
+        }
+      })
+    )
+  }
+
+  EliminarCuenta(
+    id_cuenta : number ,
+  ): Observable<any> {
+    let params = new HttpParams()
+      .set('prid',id_cuenta.toString() ) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'cooperativa-configuracion/delete-cuenta.php', params , { headers : headers })
+    .pipe(
+      map(respuesta=>{
+        if ( respuesta['codigo'] == 0 ) {
+          return true ;
+        } else {
+          return false ;
+        }
+      })
+    )
+  }
+
 }

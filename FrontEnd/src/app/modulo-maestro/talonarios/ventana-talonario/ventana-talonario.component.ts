@@ -95,6 +95,15 @@ export class VentanaTalonarioComponent implements OnInit, AfterViewInit {
   }
 
   CrearTalonario(){
+    // this.Servicios.VerificarTalonario(this.FiltroSerie.nativeElement.value)
+    // .subscribe(resultado=>{
+    //   if(resultado){
+    //     this.repetido=true ;
+    //   } else {
+    //     this.repetido = false ;
+    //   }
+    // })
+
     this.Servicios.CrearTalonarios(
       this.TalonariosForm.value.serie,
       this.TalonariosForm.value.numero_inicio,

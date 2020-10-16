@@ -59,7 +59,7 @@ export class CreditosListarComponent implements OnInit {
     this.fecha_fin = null
 
     this.ListadoCreditos = new CreditosDataSource(this.Servicio);
-    this.ListadoCreditos.CargarCreditos("","",99 ,0,this.fecha_inicio,this.fecha_fin,1,1,10,"fecha desc");
+    this.ListadoCreditos.CargarCreditos("","",99 ,0,this.fecha_inicio,this.fecha_fin,1,1,10,"fecha desc",new Date().getTime());
   }
 
   ngAfterViewInit () {
@@ -107,7 +107,8 @@ export class CreditosListarComponent implements OnInit {
       this.FiltroEstado.value,
       this.paginator.pageIndex+1,
       this.paginator.pageSize,
-      this.sort.active +" " + this.sort.direction
+      this.sort.active +" " + this.sort.direction ,
+      new Date().getTime()
     );
   }
 
@@ -146,6 +147,7 @@ export class CreditosDataSource implements DataSource<any> {
   private CargandoInformacion = new BehaviorSubject<boolean>(false);
   public Cargando = this.CargandoInformacion.asObservable();
   public TotalResultados = new BehaviorSubject<number>(0);
+  private tiempo_consulta = new BehaviorSubject<number>(0) ;
 
   constructor(
     private Servicio: CreditosService
@@ -170,18 +172,22 @@ export class CreditosDataSource implements DataSource<any> {
     estado:number,
     pagina_inicio:number,
     pagina_final:number,
-    orden:string
+    orden:string ,
+    tiempo_consulta : number 
   ) {
     this.CargandoInformacion.next(true);
+    this.tiempo_consulta.next(tiempo_consulta) ;
 
-    this.Servicio.Listar( cliente, documento, tipo_credito, estado_documentos, fecha_inicio, fecha_fin, estado, pagina_inicio, pagina_final, orden )
+    this.Servicio.Listar( cliente, documento, tipo_credito, estado_documentos, fecha_inicio, fecha_fin, estado, pagina_inicio, pagina_final, orden, tiempo_consulta )
     .pipe(
       catchError(() => of([])),
       finalize(() => this.CargandoInformacion.next(false))
     )
     .subscribe(res => {
-      this.TotalResultados.next(res['mensaje']);
-      this.InformacionCreditos.next(res['data'].creditos);
+      if ( res['tiempo'] = this.tiempo_consulta.value ) {
+        this.TotalResultados.next(res['mensaje']);
+        this.InformacionCreditos.next(res['data'].creditos);
+      }
     });
   }
 

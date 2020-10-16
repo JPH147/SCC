@@ -781,10 +781,11 @@
             [buttonCaption]="'Otros'"
             [extensions]="['png, jpg, jpeg']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
-            (uploadFinished)="SubirArchivo($event, 16)">
+            (uploadFinished)="SubirArchivo($event, 14)">
           </image-upload>  
         </mat-grid-tile>
       </mat-grid-list>
+
 
       <mat-grid-list cols=8 rowHeight="60px" *ngIf="(id_credito_editar || editar_documentos) && id_tipo>1">
 
@@ -1049,7 +1050,7 @@
         <mat-divider></mat-divider>
       </mat-list>
 
-      <mat-grid-list cols=8 rowHeight="60px" *ngIf="id_credito_editar || editar_documentos">
+      <mat-grid-list cols=8 rowHeight="60px" *ngIf="(id_credito_editar || editar_documentos) && id_tipo>1">
         <mat-grid-tile *ngIf="id_tipo>1">
           <button mat-icon-button color="primary"  (click)="autorizacion_editar = true" [disabled]="!autorizacion" *ngIf="!autorizacion_editar">
             <mat-icon class="icono-documentos"> edit </mat-icon>
@@ -1114,7 +1115,7 @@
         </mat-grid-tile>
       </mat-grid-list>
 
-      <mat-grid-list cols=8 rowHeight="20px" *ngIf="id_credito || id_credito_editar || editar_documentos">
+      <mat-grid-list cols=8 rowHeight="20px" *ngIf="(id_credito || id_credito_editar || editar_documentos) && id_tipo>1">
         <mat-grid-tile *ngIf="id_tipo>1">
           Autorizacion
         </mat-grid-tile>
@@ -1144,7 +1145,7 @@
         </mat-grid-tile>
       </mat-grid-list>
 
-      <mat-grid-list cols=8 rowHeight="60px" *ngIf="id_credito || id_credito_editar || editar_documentos">
+      <mat-grid-list cols=8 rowHeight="60px" *ngIf="(id_credito || id_credito_editar || editar_documentos) && id_tipo>1">
         <mat-grid-tile *ngIf="id_tipo>1">
 
           <button mat-icon-button color="primary" [disabled]="!autorizacion" *ngIf="!autorizacion_editar">

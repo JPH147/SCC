@@ -13,6 +13,7 @@ import { SeleccionarClienteComponent } from '../../compartido/componentes/selecc
 import { VentaService } from '../../modulo-ventas/ventas/ventas.service';
 
 import * as moment from 'moment' ;
+import { CooperativaConfiguracionService } from 'src/app/modulo-maestro/cooperativa-configuracion/cooperativa-configuracion.service';
 
 @Component({
   selector: 'app-cobranza-directa',
@@ -44,6 +45,7 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
   public archivo_editar : boolean = false ;
   public archivo_antiguo : string ;
   public archivo_nuevo : string = "" ;
+  public numero_cuenta : string = "" ;
 
   public Documentos : Array<any> = [] ; // Esta variable contiene los documentos por cliente
 
@@ -57,6 +59,7 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
     private Notificacion : Notificaciones ,
     private Servicio : CobranzasService ,
     private _ventas : VentaService ,
+    private _configuracion : CooperativaConfiguracionService
   ) { }
 
   ngOnInit() {
@@ -207,9 +210,15 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
   }
 
   ListarCuentas(){
-    this.Servicio.ListarCuentas().subscribe(res=>{
-      this.cuentas = res['data'].cuentas;
+    this._configuracion.ListarCuentas(0,"",1,100).subscribe(res=>{
+      this.cuentas = res['data'].cuentas ;
     })
+  }
+
+  CuentaSeleccionada() {
+    let cuenta : number = this.CobranzaDirectaForm.get('cuenta_bancaria').value ;
+    let cuenta_seleccionada = this.cuentas.filter(e => e.id == cuenta)[0] ;
+    this.numero_cuenta = cuenta_seleccionada.numero_cuenta ;
   }
 
   SeleccionarCliente(){

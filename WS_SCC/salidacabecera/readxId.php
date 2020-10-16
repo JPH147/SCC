@@ -21,25 +21,25 @@
 	    $venta->readxId();
 
 	    $venta_list = array(
-            "id"=>$venta->id,
-			"pecosa"=>$venta->pecosa,
-			"sucursal"=>$venta->sucursal,
-			"id_sucursal"=>$venta->id_sucursal,
-			"almacen"=>$venta->almacen,
-			"id_almacen"=>$venta->id_almacen,
-			"fecha"=>$venta->fecha,
-			"destino"=>$venta->destino,
-			"guia"=>$venta->guia,
-			"vehiculo_placa"=>$venta->vehiculo_placa,
-			"chofer_dni"=>$venta->chofer_dni,
-			"chofer_nombre"=>$venta->chofer_nombre,
-			"observacion"=>$venta->observacion,
-			"id_estado"=>$venta->id_estado,
-			"estado"=>$venta->estado,
-			"talonarios"=>$venta->talonarios,
-			"vendedores"=>$venta->vendedores,
-			"productos"=>$venta->productos,
-			"viaticos"=>$venta->viaticos
+				"id"=>$venta->id,
+				"pecosa"=>$venta->pecosa,
+				"sucursal"=>$venta->sucursal,
+				"id_sucursal"=>$venta->id_sucursal,
+				"almacen"=>$venta->almacen,
+				"id_almacen"=>$venta->id_almacen,
+				"fecha"=>$venta->fecha,
+				"destino"=>$venta->destino,
+				"guia"=>$venta->guia,
+				"vehiculo_placa"=>$venta->vehiculo_placa,
+				"chofer_dni"=>$venta->chofer_dni,
+				"chofer_nombre"=>$venta->chofer_nombre,
+				"observacion"=>$venta->observacion,
+				"id_estado"=>$venta->id_estado,
+				"estado"=>$venta->estado,
+				"talonarios"=>$venta->talonarios,
+				"vendedores"=>$venta->vendedores,
+				"productos"=>$venta->productos,
+				"viaticos"=>$venta->viaticos
 	    );
 
 	    if(trim($venta->id)!= ''){

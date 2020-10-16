@@ -1,0 +1,56 @@
+<mat-card class="card">
+  <mat-toolbar color="primary">
+    <mat-toolbar-row> Editar dirección </mat-toolbar-row>
+  </mat-toolbar>
+
+  <div class = "spinner-container-emergente" *ngIf = "Cargando | async">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <form [formGroup]="CuentasForm">
+    <mat-card-content>
+      <mat-grid-list cols=3 rowHeight="70px">
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <mat-select placeholder="Banco" formControlName="banco">
+              <mat-option *ngFor="let banco of Bancos" [value]="banco.id"> {{ banco.nombre }} </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput placeholder="Número de cuenta" formControlName="numero_cuenta">
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput placeholder="CCI" formControlName="cci">
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput placeholder="Titular" formControlName="titular">
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan=1>
+          <mat-form-field class="columnas-1">
+            <input matInput placeholder="Alias" formControlName="alias">
+          </mat-form-field>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <mat-grid-list cols=1 rowHeight="40px">
+        <mat-grid-tile>
+          <button mat-raised-button color="primary" type="button" [disabled]="CuentasForm.invalid || (Cargando | async)"
+            (click)="Guardar()"> Guardar </button>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-card-actions>
+  </form>
+</mat-card>  
