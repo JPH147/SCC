@@ -10,6 +10,7 @@ import {ServiciosTelefonos} from 'src/app/core/servicios/telefonos';
 import {ServiciosVentas} from 'src/app/core/servicios/ventas';
 import { debounceTime, distinctUntilChanged, tap, finalize } from 'rxjs/operators';
 import { SeleccionarClienteComponent } from 'src/app/compartido/componentes/seleccionar-cliente/seleccionar-cliente.component';
+import { BancosService } from 'src/app/modulo-maestro/bancos/bancos.service';
 
 @Component({
   selector: 'app-ventanaemergenteprovisional',
@@ -58,6 +59,7 @@ export class VentanaEmergenteProvisionalClientes {
     private ClienteServicios: ClienteService,
     private ServicioDireccion: ServiciosDirecciones,
     private ServicioTelefono: ServiciosTelefonos,
+    private _bancos : BancosService
   ) {}
 
   onNoClick(): void {
@@ -260,6 +262,7 @@ export class VentanaEmergenteProvisionalClientes {
       plantilla_transaccion : ["transaccion_1.docx", []],
       plantilla_compromiso : ["compromiso_1.docx", []],
       plantilla_tarjeta : ["tarjeta_1.docx", []],
+      fecha_afiliacion : [null, []],
       parametro_condicion : ["", []],
       parametro_domicilio_laboral : ["", []],
       parametro_autorizacion_1 : ["", []],
@@ -323,6 +326,12 @@ export class VentanaEmergenteProvisionalClientes {
           this.ClientesForm.get('plantilla_transaccion').setValue(res['data'].plantilla_transaccion);
           this.ClientesForm.get('plantilla_compromiso').setValue(res['data'].plantilla_compromiso);
           this.ClientesForm.get('plantilla_tarjeta').setValue(res['data'].plantilla_tarjeta);
+
+          if ( res['data'].fecha_afiliacion ) {
+            this.ClientesForm.get('fecha_afiliacion').setValue(res['data'].fecha_afiliacion) ;
+          } else {
+            this.ClientesForm.get('fecha_afiliacion').setValue(false) ;
+          }
 
           this.ObtenerDireccion(res['data'].id);
           this.ObtenerTelefono(res['data'].id);
@@ -625,8 +634,8 @@ export class VentanaEmergenteProvisionalClientes {
   }
 
   ListarBancos(){
-    this.SVentas.ListarBancos().subscribe(res=>{
-      this.Bancos=res
+    this._bancos.ListarBancos("",1,50).subscribe(res=>{
+      this.Bancos=res['data'].bancos ;
     })
   }
 

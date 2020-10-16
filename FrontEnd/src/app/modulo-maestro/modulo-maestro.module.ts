@@ -72,6 +72,8 @@ import { VentanaAdjuntoComponent } from './talonarios/ventana-adjunto/ventana-ad
 import { VentanaDetalleTalonarioComponent } from './talonarios/ventana-detalle-talonario/ventana-detalle-talonario.component';
 import { CooperativaCuentasComponent } from './cooperativa-configuracion/cooperativa-cuentas/cooperativa-cuentas.component';
 import { VentanaCooperativaCuentaComponent } from './cooperativa-configuracion/cooperativa-cuentas/ventana-cooperativa-cuenta/ventana-cooperativa-cuenta.component';
+import { BancosComponent } from './bancos/bancos.component';
+import { VentanaBancosComponent } from './bancos/ventana-bancos/ventana-bancos.component';
 
 @NgModule({
   declarations: [
@@ -138,7 +140,9 @@ import { VentanaCooperativaCuentaComponent } from './cooperativa-configuracion/c
     VentanaAdjuntoComponent,
     VentanaDetalleTalonarioComponent,
     CooperativaCuentasComponent,
-    VentanaCooperativaCuentaComponent ,
+    VentanaCooperativaCuentaComponent,
+    BancosComponent,
+    VentanaBancosComponent ,
   ],
   imports: [
     ModuloMaestroRoutingModule ,

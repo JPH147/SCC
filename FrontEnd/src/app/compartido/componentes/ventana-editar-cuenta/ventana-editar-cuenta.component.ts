@@ -3,6 +3,7 @@ import { ServiciosVentas } from 'src/app/core/servicios/ventas';
 import { ClienteService } from '../../../modulo-clientes/clientes/clientes.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { BancosService } from 'src/app/modulo-maestro/bancos/bancos.service';
 
 @Component({
   selector: 'app-ventana-editar-cuenta',
@@ -19,7 +20,7 @@ export class VentanaEditarCuentaComponent implements OnInit {
     private ventana : MatDialogRef<VentanaEditarCuentaComponent> ,
     private _builder : FormBuilder ,
     private _clientes : ClienteService ,
-    private _ventas : ServiciosVentas
+    private _bancos : BancosService
   ) { }
 
   ngOnInit() {
@@ -53,8 +54,8 @@ export class VentanaEditarCuentaComponent implements OnInit {
   }
  
   ListarBancos(){
-    this._ventas.ListarBancos().subscribe(res=>{
-      this.Bancos = res
+    this._bancos.ListarBancos("",1,50).subscribe(res=>{
+      this.Bancos=res['data'].bancos ;
     })
   }
 

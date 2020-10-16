@@ -488,6 +488,10 @@ export class EvaluacionService {
     fecha : Date ,
     parametro_autorizacion_1 : string ,
     parametro_autorizacion_2 : string ,
+    total_prestamo : number ,
+    numero_cuotas : number ,
+    cuota_mensual : number ,
+    fecha_afiliacion : Date ,
   ) :Observable <any> {
 
     let params = new HttpParams()
@@ -507,7 +511,11 @@ export class EvaluacionService {
       .set('prcuentanumero' , cuenta_numero)
       .set('prfecha' , moment(fecha).format("DD/MM/YYYY"))
       .set('prparametroautorizacion1', parametro_autorizacion_1 )
-      .set('prparametroautorizacion2', parametro_autorizacion_2 ) ;
+      .set('prparametroautorizacion2', parametro_autorizacion_2 )
+      .set('prtotalprestamo' , total_prestamo.toString() )
+      .set('prnumerocuotas' , numero_cuotas.toString() )
+      .set('prcuotamensual' , cuota_mensual.toString() )
+      .set('prfechaafiliacion' , moment(fecha_afiliacion).format("DD/MM/YYYY") );
 
     // console.log(params);
 

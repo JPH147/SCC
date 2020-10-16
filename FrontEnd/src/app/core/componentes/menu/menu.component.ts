@@ -275,6 +275,11 @@ export class MenuComponent implements OnInit{
             mostrar : permiso.tablas_maestras.usuarios ,
           },
           {
+            nombre: "Bancos",
+            path: "bancos",
+            mostrar : permiso.tablas_maestras.cooperativa ,
+          },
+          {
             nombre: "Departamentos",
             path: "direcciones",
             mostrar : permiso.tablas_maestras.direcciones ,

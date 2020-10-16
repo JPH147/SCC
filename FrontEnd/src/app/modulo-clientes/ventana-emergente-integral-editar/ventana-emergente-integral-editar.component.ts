@@ -14,6 +14,7 @@ import { ServiciosVentas } from 'src/app/core/servicios/ventas';
 import { VentanaEditarTelefonoComponent } from '../../compartido/componentes/ventana-editar-telefono/ventana-editar-telefono.component';
 import { VentanaEditarDireccionComponent } from '../../compartido/componentes/ventana-editar-direccion/ventana-editar-direccion.component';
 import { VentanaEditarCuentaComponent } from '../../compartido/componentes/ventana-editar-cuenta/ventana-editar-cuenta.component';
+import { BancosService } from 'src/app/modulo-maestro/bancos/bancos.service';
 
 @Component({
   selector: 'app-ventana-emergente-integral-editar',
@@ -71,7 +72,8 @@ export class VentanaEmergenteIntegralEditarComponent implements OnInit {
     private SVentas: ServiciosVentas,
     private ServicioDireccion: ServiciosDirecciones,
     private ServicioTelefono: ServiciosTelefonos,
-    private Dialogo: MatDialog
+    private Dialogo: MatDialog,
+    private _bancos : BancosService
   ) {}
 
   onNoClick(): void {
@@ -677,8 +679,8 @@ export class VentanaEmergenteIntegralEditarComponent implements OnInit {
   }
 
   ListarBancos(){
-    this.SVentas.ListarBancos().subscribe(res=>{
-      this.Bancos=res
+    this._bancos.ListarBancos("",1,50).subscribe(res=>{
+      this.Bancos=res['data'].bancos ;
     })
   }
 

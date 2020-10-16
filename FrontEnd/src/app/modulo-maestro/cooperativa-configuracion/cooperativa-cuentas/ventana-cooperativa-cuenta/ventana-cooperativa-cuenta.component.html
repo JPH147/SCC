@@ -1,6 +1,6 @@
 <mat-card class="card">
   <mat-toolbar color="primary">
-    <mat-toolbar-row> Editar dirección </mat-toolbar-row>
+    <mat-toolbar-row> {{data ? 'Editar cuenta' : 'Agregar cuenta'}} </mat-toolbar-row>
   </mat-toolbar>
 
   <div class = "spinner-container-emergente" *ngIf = "Cargando | async">

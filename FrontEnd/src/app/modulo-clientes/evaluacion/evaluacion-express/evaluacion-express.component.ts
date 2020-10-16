@@ -545,20 +545,8 @@ export class EvaluacionExpressComponent implements OnInit {
             return producto ;
           }
         }) ;
-        this.CalcularTotales() ;
       }
     })
-  }
-
-  CalcularTotales(){
-    // let total = 0 ;
-
-    // this.VentasForm['controls'].productos['controls'].map((item)=>{
-    //   if(item.value.precio && item.value.estado!=3){
-        
-    //   }
-    //   return item
-    // })
   }
 
   GenerarEmail() : string {
@@ -769,7 +757,11 @@ export class EvaluacionExpressComponent implements OnInit {
       this.InformacionForm.value.cuenta_numero,
       this.ExpressForm.value.fecha_letras,
       this.InformacionForm.value.parametro_autorizacion_1 ,
-      this.InformacionForm.value.parametro_autorizacion_2
+      this.InformacionForm.value.parametro_autorizacion_2 ,
+      this.prestamo ,
+      this.cuotas ,
+      this.cuota_mensual_estandar ,
+      this.InformacionForm.get('fecha_afiliacion').value ? this.InformacionForm.get('fecha_afiliacion').value : this.ExpressForm.value.fecha_letras
     ).subscribe(res=>{
       if(res['codigo']==0){
         this.generados=true;

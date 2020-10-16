@@ -9,6 +9,7 @@ import { ServiciosDirecciones } from 'src/app/core/servicios/direcciones';
 import { debounceTime, distinctUntilChanged, tap, finalize } from 'rxjs/operators';
 import { ServiciosVentas } from 'src/app/core/servicios/ventas';
 import { ServiciosTelefonos } from 'src/app/core/servicios/telefonos';
+import { BancosService } from 'src/app/modulo-maestro/bancos/bancos.service';
 
 @Component({
   selector: 'app-ventana-emergente-integral-agregar',
@@ -62,7 +63,8 @@ export class VentanaEmergenteIntegralAgregarComponent implements OnInit, AfterVi
     private ClienteServicios: ClienteService,
     private ServicioDireccion: ServiciosDirecciones,
     private ServicioTelefono: ServiciosTelefonos,
-    private VServicios : ServiciosVentas
+    private VServicios : ServiciosVentas,
+    private _bancos : BancosService
   ) { }
 
   ngOnInit() {
@@ -443,8 +445,8 @@ export class VentanaEmergenteIntegralAgregarComponent implements OnInit, AfterVi
   }
 
   ListarBancos(){
-    this.VServicios.ListarBancos().subscribe(res=>{
-      this.Bancos=res
+    this._bancos.ListarBancos("",1,50).subscribe(res=>{
+      this.Bancos=res['data'].bancos ;
     })
   }
 

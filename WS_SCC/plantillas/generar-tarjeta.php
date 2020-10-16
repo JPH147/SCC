@@ -38,6 +38,11 @@
             $archivo->parametro_autorizacion_1 = trim($_POST["prparametroautorizacion1"]);
             $archivo->parametro_autorizacion_2 = trim($_POST["prparametroautorizacion2"]);
 
+            $archivo->total_prestamo = trim($_POST["prtotalprestamo"]);
+            $archivo->numero_cuotas = trim($_POST["prnumerocuotas"]);
+            $archivo->cuota_mensual = trim($_POST["prcuotamensual"]);
+            $archivo->fecha_afiliacion = trim($_POST["prfechaafiliacion"]);
+
             if($archivo->generar_tarjeta_socio())
             {
                 print_json("0000", "Se creó el archivo satisfactoriamente.", $archivo->nombre_archivo);

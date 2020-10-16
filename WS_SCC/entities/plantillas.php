@@ -82,6 +82,9 @@ Class Plantillas{
     public $relevancia ;
     public $id_plantilla ;
 
+    public $total_prestamo ;
+    public $fecha_afiliacion ;
+
     public $path_originales = '../plantillas/archivos/';
     public $path_estandar = '../plantillas/estaticos/';
     public $path_nuevo = '../uploads/plantillas/';
@@ -95,7 +98,7 @@ Class Plantillas{
 
         $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('../plantillas/archivos/tarjeta_X.docx');
 
-        $templateProcessor->setValue('nombre', $this->convertir_formato($this->nombre) );
+        $templateProcessor->setValue('nombre', $this->convertir_formato($this->numero_cuotas) );
         $templateProcessor->setValue('dni', str_pad( str_pad($this->dni, 8 ,"0" ,STR_PAD_LEFT) , 15) );
         if( $this->cip ) {
             $templateProcessor->setValue('cip', 'CIP: ' . str_pad($this->cip, 15) );
@@ -110,14 +113,12 @@ Class Plantillas{
         $templateProcessor->setValue('distrito', $this->distrito);
         $templateProcessor->setValue('trabajo', str_pad($this->trabajo,40) );
         $templateProcessor->setValue('cuenta', $this->cuenta_numero);
-        // $templateProcessor->setValue('lugar', str_pad($this->lugar, 15) );
         $templateProcessor->setValue('celular', str_pad($this->celular, 15) );
-        // $templateProcessor->setValue('monto_afiliacion', $this->monto_afiliacion);
+        $templateProcessor->setValue('fecha', $this->fecha ) ;
 
         $templateProcessor->saveAs('../uploads/autogenerados/' . $this->nombre_archivo . '.docx');
 
         return file_exists ( '../uploads/autogenerados/' . $this->nombre_archivo . '.docx' );
-        
     }
 
     function generar_ddjj(){
@@ -362,6 +363,11 @@ Class Plantillas{
         $templateProcessor->setValue('fecha', $this->fecha);
         $templateProcessor->setValue('autorizacion1', $this->parametro_autorizacion_1);
         $templateProcessor->setValue('autorizacion2', $this->parametro_autorizacion_2);
+        
+        $templateProcessor->setValue('total_prestamo', $this->total_prestamo ) ;
+        $templateProcessor->setValue('numero_cuotas', $this->numero_cuotas ) ;
+        $templateProcessor->setValue('cuota_mensual', $this->cuota_mensual ) ;
+        $templateProcessor->setValue('fecha_afiliacion', $this->fecha_afiliacion ) ;
 
         $templateProcessor->saveAs('../uploads/autogenerados/' . $this->nombre_archivo . '.docx');
 

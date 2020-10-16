@@ -12,6 +12,7 @@ import {ServiciosVentas} from 'src/app/core/servicios/ventas';
 import {catchError, finalize, debounceTime, distinctUntilChanged, tap} from 'rxjs/operators'
 import {VentanaConfirmarComponent} from 'src/app/compartido/componentes/ventana-confirmar/ventana-confirmar.component';
 import { BehaviorSubject } from 'rxjs';
+import { BancosService } from 'src/app/modulo-maestro/bancos/bancos.service';
 
 @Component({
   selector: 'app-ventanaemergentecontacto',
@@ -57,7 +58,8 @@ export class VentanaEmergenteContacto {
     private FormBuilder: FormBuilder,
     private ServicioTelefono: ServiciosTelefonos,
     private ServicioDireccion: ServiciosDirecciones,
-    private Dialogo: MatDialog
+    private Dialogo: MatDialog,
+    private _bancos : BancosService
   ) { }
 
   ngOnInit() {
@@ -255,8 +257,8 @@ export class VentanaEmergenteContacto {
   }
 
   ListarBancos(){
-    this.SVentas.ListarBancos().subscribe(res=>{
-      this.Bancos=res
+    this._bancos.ListarBancos("",1,50).subscribe(res=>{
+      this.Bancos=res['data'].bancos ;
     })
   }
 

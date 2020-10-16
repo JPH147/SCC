@@ -16,21 +16,24 @@
     try{
     	$banco = new Bancos($db);
         
-        $banco->banco = !empty($_GET['prbanco']) ? trim($_GET['prbanco']) : '';
-        $banco->numero_pagina = !empty($_GET['prpagina']) ? trim($_GET['prpagina']) : 1;
-        $banco->total_pagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : 20;
+        if (($_POST["prbanco"])!=null)
+        {
 
-        $bancos = $banco->read() ;
-        $total = $banco->contar() ;
+            $banco->banco=trim($_POST["prbanco"]);
 
-    	if (count(array_filter($bancos))>0)
-    	{
-    		print_json("0000", $total, $bancos);
-    	}
-    	else
-    	{
-    		print_json("0001", "No existen tipos de producto registrados", null);
-    	}
+            if($banco->create())
+            {
+                print_json("0000", "Se creó el banco satisfactoriamente.", true);
+            }
+            else
+            {
+                print_json("9999", "Ocurrió un error al crear el banco.", "");
+            }
+        }
+        else
+        {
+            print_json("9999", "Los campos no pueden estar vacíos.", "");
+        }
     }
     catch(Exception $exception)
     {

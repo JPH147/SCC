@@ -638,7 +638,8 @@ Class Cliente{
             "trabajo_provincia" => $row['trabajo_provincia'] ,
             "id_trabajo_departamento" => $row['id_trabajo_departamento'] ,
             "trabajo_departamento" => $row['trabajo_departamento'] ,
-            "foto" => $row['foto']
+            "foto" => $row['foto'] ,
+            "fecha_afiliacion" => $row['fecha_afiliacion'] ,
         );
 
         return $cliente;

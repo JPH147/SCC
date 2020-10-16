@@ -11,12 +11,14 @@ import { ProcesoJudicialVinculadosComponent } from './proceso-judicial-vinculado
 import { UsuariosComponent } from './usuarios/usuarios.component';
 import { ReglasEvaluacionComponent } from './reglas-evaluacion/reglas-evaluacion.component';
 import { CooperativaConfiguracionComponent } from './cooperativa-configuracion/cooperativa-configuracion.component';
+import { BancosComponent } from './bancos/bancos.component';
 
 
 const routes: Routes = [
   {path: '', redirectTo: 'configuracion', pathMatch: 'full'} ,
   {path: 'plantillas', component: PlantillasComponent} ,
   {path: 'configuracion', component: CooperativaConfiguracionComponent} ,
+  {path: 'bancos', component: BancosComponent} ,
   {path: 'trabajadores', component: VendedoresComponent} ,
   {path: 'talonarios', component: TalonariosComponent} ,
   {path: 'proveedores', component: ProveedoresComponent} ,

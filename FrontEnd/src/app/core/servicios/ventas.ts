@@ -54,17 +54,6 @@ export class ServiciosVentas{
 		}))
 	}
 
-	ListarBancos(){
-		return this.http.get(this.url+'banco/read.php')
-		.pipe(map(res=>{
-			if(res['codigo']===0){
-				return res=res['data'].bancos
-			}else{
-				console.log('No hay datos que mostrar')
-			}
-		}))
-	}
-
 	ListarComisionRetenida(){
 		return this.http.get(this.url+'comision-retenida/read.php')
 		.pipe(map(res=>{

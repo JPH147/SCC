@@ -4,6 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CooperativaConfiguracionService } from '../../cooperativa-configuracion.service';
 import { BehaviorSubject } from 'rxjs';
 import { ServiciosVentas } from 'src/app/core/servicios/ventas';
+import { BancosService } from 'src/app/modulo-maestro/bancos/bancos.service';
 
 @Component({
   selector: 'app-ventana-cooperativa-cuenta',
@@ -22,7 +23,7 @@ export class VentanaCooperativaCuentaComponent implements OnInit {
     private ventana : MatDialogRef<VentanaCooperativaCuentaComponent> ,
     private _builder : FormBuilder ,
     private _cooperativa : CooperativaConfiguracionService ,
-    private VServicios : ServiciosVentas
+    private _bancos : BancosService
   ) { }
 
   ngOnInit() {
@@ -40,8 +41,8 @@ export class VentanaCooperativaCuentaComponent implements OnInit {
   }
 
   ListarBancos() {
-    this.VServicios.ListarBancos().subscribe(res=>{
-      this.Bancos=res ;
+    this._bancos.ListarBancos("",1,50).subscribe(res=>{
+      this.Bancos=res['data'].bancos ;
     })
   }
 

@@ -10,6 +10,7 @@ import { VentanaCooperativaCuentaComponent } from './ventana-cooperativa-cuenta/
 import { Notificaciones } from 'src/app/core/servicios/notificacion';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ServiciosVentas } from 'src/app/core/servicios/ventas';
+import { BancosService } from '../../bancos/bancos.service';
 
 @Component({
   selector: 'app-cooperativa-cuentas',
@@ -35,7 +36,7 @@ export class CooperativaCuentasComponent implements OnInit, AfterViewInit {
     private Dialogo : MatDialog ,
     private _notificacion : Notificaciones ,
     private _builder : FormBuilder ,
-    private VServicios : ServiciosVentas
+    private _bancos : BancosService
   ) { }
 
   ngOnInit() {
@@ -77,8 +78,8 @@ export class CooperativaCuentasComponent implements OnInit, AfterViewInit {
   }
 
   ListarBancos() {
-    this.VServicios.ListarBancos().subscribe(res=>{
-      this.Bancos=res ;
+    this._bancos.ListarBancos("",1,50).subscribe(res=>{
+      this.Bancos=res['data'].bancos ;
     })
   }
 
