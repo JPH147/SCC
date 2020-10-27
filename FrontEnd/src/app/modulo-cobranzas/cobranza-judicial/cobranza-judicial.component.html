@@ -35,8 +35,8 @@
       </div>
 
       <!-- Datos del cliente -->
-      <div class="seccion-secundaria">
-        <mat-card-subtitle class="titulo-seccion-secundaria">
+      <div class="seccion">
+        <mat-card-subtitle class="titulo-seccion">
           INFORMACION DE LA DEMANDA
         </mat-card-subtitle>
         <mat-grid-list cols=3 rowHeight="70px">
@@ -323,8 +323,8 @@
       </div>
 
       <!-- Datos del juzgado -->
-      <div class="seccion-secundaria">
-        <mat-card-subtitle class="titulo-seccion-secundaria">
+      <div class="seccion">
+        <mat-card-subtitle class="titulo-seccion">
           DATOS DEL JUZGADO
           <ng-container *ngIf="this.id_proceso_editar">
             <button mat-icon-button type="button" class="icono" *ngIf="editar_juzgado>1" (click)="EditarJuzgado(1)"><mat-icon>edit</mat-icon></button>
@@ -393,8 +393,8 @@
       </div>
 
       <!-- Reporte del expediente -->
-      <div class="seccion-secundaria">
-        <mat-card-subtitle class="titulo-seccion-secundaria">
+      <div class="seccion">
+        <mat-card-subtitle class="titulo-seccion">
           DATOS DEL EXPEDIENTE
           <ng-container *ngIf="this.id_proceso_editar">
             <button mat-icon-button type="button" class="icono" *ngIf="editar_expediente>1" (click)="EditarExpediente(1)"><mat-icon>edit</mat-icon></button>
@@ -453,8 +453,8 @@
 
       <!-- Detalle -->
       <ng-container *ngIf="id_venta==0 && id_credito==0">
-        <div class="seccion-secundaria">
-          <mat-card-subtitle class="titulo-seccion-secundaria">
+        <div class="seccion">
+          <mat-card-subtitle class="titulo-seccion">
             SEGUIMIENTO DE EXPEDIENTES
           </mat-card-subtitle>
   
@@ -567,8 +567,8 @@
 
       <!-- Detalle antiguo-->
       <ng-container *ngIf="!id_proceso_agregar && DocumentosAnteriores.length>0">
-        <div class="seccion-secundaria">
-          <mat-card-subtitle class="titulo-seccion-secundaria">
+        <div class="seccion">
+          <mat-card-subtitle class="titulo-seccion">
             EXPEDIENTE ANTERIOR - {{expediente_anterior}} / {{juzgado_distrito_anterior}} - {{juzgado_instancia_anterior}}
           </mat-card-subtitle>
           

@@ -1,0 +1,165 @@
+<mat-card class="principal">
+
+  <!-- Encabezado -->
+  <mat-card-title>
+    <div class = "tituloProd"> Listado de liquidaciones </div>
+  </mat-card-title>
+
+  <form [formGroup]="LiquidacionesForm">
+    <mat-grid-list cols= "4" rowHeight="70px">
+      <mat-grid-tile>
+        <mat-icon>search</mat-icon>
+        <mat-form-field>
+          <mat-select placeholder="Tipo de transacción" formControlName="tipo_transaccion">
+            <mat-option [value]="0"> Todos </mat-option>
+            <mat-option [value]="1"> Préstamos </mat-option>
+            <mat-option [value]="2"> Ventas </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-grid-tile>
+  
+      <mat-grid-tile>
+       <!--  <mat-icon>search</mat-icon>
+        <mat-form-field>
+          <input matInput formControlName="codigo" placeholder="Código de la transacción">
+        </mat-form-field> -->
+        <mat-icon>search</mat-icon>
+        <mat-form-field>
+          <input matInput formControlName="usuario" placeholder="Liquidador">
+        </mat-form-field>
+      </mat-grid-tile>
+  
+      <mat-grid-tile>
+        <mat-form-field>
+          <input matInput [matDatepicker]="inicio" placeholder="Fecha de inicio" formControlName="fecha_inicio">
+          <mat-datepicker-toggle matSuffix [for]="inicio"></mat-datepicker-toggle>
+          <mat-datepicker #inicio disabled="false"></mat-datepicker>
+        </mat-form-field>
+      </mat-grid-tile>
+  
+      <mat-grid-tile>
+        <mat-form-field>
+          <input matInput [matDatepicker]="fin" placeholder="Fecha de fin" formControlName="fecha_fin">
+          <mat-datepicker-toggle matSuffix [for]="fin"></mat-datepicker-toggle>
+          <mat-datepicker #fin disabled="false"></mat-datepicker>
+        </mat-form-field>
+      </mat-grid-tile>
+  
+      <mat-grid-tile>
+        <mat-icon>search</mat-icon>
+        <mat-form-field>
+          <input matInput formControlName="cliente_dni" placeholder="DNI del cliente">
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <mat-icon>search</mat-icon>
+        <mat-form-field>
+          <input matInput formControlName="cliente" placeholder="Nombre del cliente">
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <!-- <mat-icon>search</mat-icon>
+        <mat-form-field>
+          <input matInput formControlName="usuario" placeholder="Liquidador">
+        </mat-form-field> -->
+      </mat-grid-tile>
+      
+      <mat-grid-tile>
+        <!-- <ng-container *ngIf="permiso?.cobranzas?.cobranzas_directas?.agregar">
+          <button mat-raised-button color="primary" [routerLink]="['nueva']"> Nuevo </button>
+        </ng-container> -->
+      </mat-grid-tile>
+  
+    </mat-grid-list>
+  </form>
+
+  <mat-card-content>
+
+    <div class = "spinner-container" *ngIf = "ListadoLiquidaciones.Cargando| async">
+      <mat-spinner></mat-spinner>
+    </div>
+
+    <mat-table [dataSource]="ListadoLiquidaciones" class="mat-elevation-z8"
+      matSort matSortActive="fecha" matSortDirection="desc" matSortDisableClear>
+
+      <ng-container matColumnDef="numero">
+        <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+        <mat-cell *matCellDef="let cobranza"> {{cobranza.numero}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="fecha">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </mat-header-cell>
+        <mat-cell *matCellDef="let cobranza"> {{cobranza.fecha | date:'dd/MM/yyyy'}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="tipo">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </mat-header-cell>
+        <mat-cell *matCellDef="let cobranza"> {{cobranza.tipo}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="codigo">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Código </mat-header-cell>
+        <mat-cell *matCellDef="let cobranza"> {{cobranza.codigo}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="cliente_dni">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> DNI </mat-header-cell>
+        <mat-cell *matCellDef="let cobranza"> {{cobranza.cliente_dni}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="cliente_nombre">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Cliente </mat-header-cell>
+        <mat-cell *matCellDef="let cobranza"> {{cobranza.cliente_nombre}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="monto">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Monto </mat-header-cell>
+        <mat-cell *matCellDef="let cobranza"> {{cobranza.monto | currency:'S/.'}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="usuario">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Liquidador </mat-header-cell>
+        <mat-cell *matCellDef="let cobranza"> {{cobranza.usuario}} </mat-cell>
+      </ng-container>
+
+      <!-- <ng-container matColumnDef="opciones">
+        <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
+        <mat-cell *matCellDef="let cobranza">
+          <ng-container>
+            <ng-container *ngIf="permiso?.cobranzas?.cobranzas_directas?.validar">
+              <button mat-icon-button color="primary" [matTooltip]="cobranza.validado ? 'Retirar validación' : 'Validar'" (click)="Validar(cobranza)">
+                <ng-container *ngIf="cobranza.validado"> <mat-icon> star </mat-icon> </ng-container>
+                <ng-container *ngIf="!cobranza.validado"> <mat-icon> star_border </mat-icon> </ng-container>
+              </button>
+            </ng-container>
+
+            <ng-container *ngIf="!permiso?.cobranzas?.cobranzas_directas?.validar">
+              <ng-container *ngIf="cobranza.validado"> <mat-icon matTooltip="Verificado" class="icono-verde"> check </mat-icon> </ng-container>
+              <ng-container *ngIf="!cobranza.validado"> <mat-icon matTooltip="Pendiente de verificación" class="icono-rojo"> close </mat-icon> </ng-container>
+            </ng-container>
+          </ng-container>
+
+          <ng-container>
+            <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="['ver', cobranza.id]"><mat-icon> visibility </mat-icon></button>
+          </ng-container>
+
+          <ng-container *ngIf="permiso?.cobranzas?.cobranzas_directas?.editar">
+            <button mat-icon-button color="primary" matTooltip="Editar" [routerLink]="['editar', cobranza.id]" [disabled]="cobranza.fecha_referencia"><mat-icon> edit </mat-icon></button>
+          </ng-container>
+          <ng-container *ngIf="permiso?.cobranzas?.cobranzas_directas?.eliminar">
+            <button mat-icon-button color="primary" matTooltip="Eliminar" (click)="EliminarCobranza(cobranza)" [disabled]="cobranza.fecha_referencia"><mat-icon> delete </mat-icon></button>
+          </ng-container>
+        </mat-cell>
+      </ng-container> -->
+
+      <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: Columnas;"></mat-row>
+    </mat-table>
+
+    <mat-paginator [length]="ListadoLiquidaciones.TotalResultados | async" [pageSize]="10" [pageSizeOptions]="[10,15,20]"></mat-paginator>
+
+  </mat-card-content>
+
+</mat-card>

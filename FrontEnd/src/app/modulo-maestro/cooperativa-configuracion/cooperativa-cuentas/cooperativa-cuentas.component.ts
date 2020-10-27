@@ -9,8 +9,9 @@ import { VentanaConfirmarComponent } from '../../../compartido/componentes/venta
 import { VentanaCooperativaCuentaComponent } from './ventana-cooperativa-cuenta/ventana-cooperativa-cuenta.component';
 import { Notificaciones } from 'src/app/core/servicios/notificacion';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { ServiciosVentas } from 'src/app/core/servicios/ventas';
 import { BancosService } from '../../bancos/bancos.service';
+import { ArchivosService } from 'src/app/core/servicios/archivos';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-cooperativa-cuentas',
@@ -36,7 +37,8 @@ export class CooperativaCuentasComponent implements OnInit, AfterViewInit {
     private Dialogo : MatDialog ,
     private _notificacion : Notificaciones ,
     private _builder : FormBuilder ,
-    private _bancos : BancosService
+    private _bancos : BancosService ,
+    private AServicio : ArchivosService,
   ) { }
 
   ngOnInit() {
@@ -144,12 +146,45 @@ export class CooperativaCuentasComponent implements OnInit, AfterViewInit {
     });
   }
 
+  DescargarReporte(cuenta) {
+    this.ListadoCuentas.CargandoInformacion.next(true) ;
+    let nombre_archivo : string = "reporte_cuentas_" + new Date().getTime();
+    
+    this.Servicio.ListarCuentasUnlimited(
+      cuenta.id ,
+      nombre_archivo
+    )
+    .subscribe(res=>{
+      if(res){
+        this.AbrirArchivo(nombre_archivo,res);
+      } else {
+        this._notificacion.Snack("Ocurrió un error al generar el reporte","")
+      }
+    })
+  }
+
+  AbrirArchivo(nombre_archivo,path){
+    this.AServicio.ObtenerArchivo(path)
+    .pipe(
+      finalize(()=>{
+        this.ListadoCuentas.CargandoInformacion.next(false) ;
+      })
+    )
+    .subscribe((res)=>{
+      if (res) {
+        saveAs(res, nombre_archivo+'.xlsx');
+        this._notificacion.Snack("Se descargará el archivo en un momento","")
+      } else {
+        this._notificacion.Snack("Ocurrió un error al encontrar el archivo","")
+      }
+    })
+  }
 }
 
 export class CuentaDataSource implements DataSource<any> {
 
   private Informacion = new BehaviorSubject<any[]>([]);
-  private CargandoInformacion = new BehaviorSubject<boolean>(false);
+  public CargandoInformacion = new BehaviorSubject<boolean>(false);
   public Cargando = this.CargandoInformacion.asObservable();
   public TotalResultados = new BehaviorSubject<number>(0);
 

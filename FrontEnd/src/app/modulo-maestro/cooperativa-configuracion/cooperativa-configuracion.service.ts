@@ -173,6 +173,28 @@ export class CooperativaConfiguracionService {
     }));
   }
 
+  ListarCuentasUnlimited(
+    cooperativa_cuenta : number ,
+    nombre_archivo : string ,
+  ): Observable<string | false> {
+
+    let params = new HttpParams()
+      .set('prcuenta', cooperativa_cuenta.toString() )
+      .set('prarchivo', nombre_archivo ) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'cooperativa-configuracion/read-cuenta-unlimited.php',params , {headers: headers})
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res['data'] ;
+      } else {
+        console.log('No hay datos que mostrar');
+        return false ;
+      }
+    }));
+  }
+
   CrearCuenta(
     banco : number ,
     titular : string ,

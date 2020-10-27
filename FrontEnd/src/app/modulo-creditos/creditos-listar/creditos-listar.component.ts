@@ -184,7 +184,7 @@ export class CreditosDataSource implements DataSource<any> {
       finalize(() => this.CargandoInformacion.next(false))
     )
     .subscribe(res => {
-      if ( res['tiempo'] = this.tiempo_consulta.value ) {
+      if ( res['tiempo'] == this.tiempo_consulta.value ) {
         this.TotalResultados.next(res['mensaje']);
         this.InformacionCreditos.next(res['data'].creditos);
       }

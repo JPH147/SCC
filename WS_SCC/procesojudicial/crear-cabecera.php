@@ -7,16 +7,16 @@
 
   include_once '../config/database.php';
   include_once '../entities/procesojudicial.php';
+  include_once '../entities/log.php';
   include_once '../shared/utilities.php';
 
   $database = new Database();
   $db = $database->getConnection();
-
+  
   try
   {
+    $log = new Log($db);
     $proceso = new Proceso($db);
-    // $data = json_decode(file_get_contents('php://input'), true);
-
     
     if (($_POST["prcredito"])!=null)
     {
@@ -32,8 +32,12 @@
       $proceso->numero_cuotas=trim($_POST["prnumerocuotas"]);
       $proceso->total=trim($_POST["prtotal"]);
 
+      $usuario_alvis = trim($_GET["usuario_alvis"]) ;
+
       if($proceso->create_proceso_judicial())
       {
+        $log->create($usuario_alvis, 1, 1, $proceso->id_proceso) ;
+
         print_json("0000", "Se creó el proceso satisfactoriamente.", $proceso->id_proceso);
       }
       else

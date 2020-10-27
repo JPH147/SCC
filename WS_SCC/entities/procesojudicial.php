@@ -215,6 +215,41 @@ Class Proceso{
     return $resultado;
   }
 
+  function read_proceso_detallexId(){
+    $query = "CALL sp_listarprocesojudicialdetallexId(?)";
+
+    $result = $this->conn->prepare($query);
+
+    $result->bindParam(1, $this->id_proceso);
+
+    $result->execute();
+    
+    $procesos_list=array();
+    $procesos_list["procesos"]=array();
+    
+    while($row = $result->fetch(PDO::FETCH_ASSOC))
+    {
+        extract($row);
+        $items = array (
+          "id"=>$id,
+          "id_tipo_documento"=>$id_tipo_documento,
+          "tipo_documento"=>$tipo_documento,
+          "fecha"=>$fecha,
+          "id_trabajador"=>$id_trabajador,
+          "trabajador"=>$trabajador,
+          "id_estado"=>$id_estado,
+          "estado"=>$estado,
+          "numero"=>$numero,
+          "sumilla"=>$sumilla,
+          "archivo"=>$archivo,
+          "comentarios"=>$comentarios
+        );
+        array_push($procesos_list["procesos"],$items);
+    }
+
+    return $procesos_list;
+  }
+
   function read_proceso_detalle(){
     $query = "CALL sp_listarprocesojudicialdetalle(?)";
 
@@ -328,6 +363,7 @@ Class Proceso{
         extract($row);
         $this->id_proceso=$id;
       }
+
       return true;
     }
     
@@ -483,7 +519,10 @@ Class Proceso{
 
     if($result->execute())
     {
-      return true;
+      $row = $result->fetch(PDO::FETCH_ASSOC) ;
+    
+      return $row['id'] ;
+      // return true;
     }
     
     return false;

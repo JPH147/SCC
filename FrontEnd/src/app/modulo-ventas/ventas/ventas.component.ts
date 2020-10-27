@@ -38,6 +38,7 @@ import { VentanaGenerarPagoTransaccionComponent } from "../../compartido/compone
 import { VentanaGenerarPenalidadComponent } from "src/app/compartido/componentes/ventana-generar-penalidad/ventana-generar-penalidad.component";
 import { ServiciosVentas } from "src/app/core/servicios/ventas";
 import { VentanaLiquidacionComponent } from "src/app/compartido/componentes/ventana-liquidacion/ventana-liquidacion.component";
+import { VentanaGenerarInteresComponent } from "src/app/compartido/componentes/ventana-generar-interes/ventana-generar-interes.component";
 
 @Component({
   selector: 'app-ventas',
@@ -474,6 +475,10 @@ export class VentasComponent implements OnInit {
       ]],
       estado_penalidad: [{ value : null, disabled : false },[
       ]],
+      estado_interes: [{ value : null, disabled : false },[
+      ]],
+      pagado_interes: [{ value : null, disabled : false },[
+      ]],
       // Para saber si el crédito ya ha sido cancelado
       id_liquidacion: [{ value : null, disabled : false },[
       ]],
@@ -577,6 +582,9 @@ export class VentasComponent implements OnInit {
         this.VentasForm.get('estado_penalidad').disable() ;
         this.ConsultarInfomacionAnterior() ;
       }
+      
+      this.VentasForm.get('pagado_interes').setValue(res.pagado_interes) ;
+      this.VentasForm.get('estado_interes').setValue(res.estado_interes) ;
 
       this.VentasForm.get('id_liquidacion').setValue(res.id_liquidacion) ;
       this.VentasForm.get('pagado').setValue(res.pagado) ;
@@ -2266,6 +2274,26 @@ export class VentasComponent implements OnInit {
     }
   }
 
+  GenerarInteres() {
+    let Ventana = this.Dialogo.open(VentanaGenerarInteresComponent, {
+      data : {
+        id_venta : this.id_venta ,
+      } ,
+      width: '300px' ,
+      maxHeight: '80vh'
+    })
+    
+    Ventana.afterClosed().subscribe(res =>{
+      if ( res ) {
+        this.SeleccionarVentaxId(this.id_venta) ;
+        this.Notificacion.Snack("Se generó el interés satisfactoriamente","")
+      }
+      if(res===false) {
+        this.Notificacion.Snack("Ocurrió un error al generar el interés","")
+      }
+    })
+  }
+
   EstablecerPenalidad() {
     let Ventana = this.Dialogo.open(VentanaGenerarPenalidadComponent,{
       data : {
@@ -2327,6 +2355,27 @@ export class VentasComponent implements OnInit {
       }
       if( !respuesta ) {
         this.Notificacion.Snack("Ocurrió un error al retirar la penalidad","") ;
+      }
+    })
+  }
+
+  RetirarInteres() {
+    this.Cargando.next(true) ;
+
+    this.Servicio.EliminarInteres(this.id_venta)
+    .pipe(
+      finalize(()=>{
+        this.Cargando.next(false) ;
+      })
+    )
+    .subscribe(respuesta =>{
+      if ( respuesta ) {
+        this.editar_penalidad = false ;
+        this.SeleccionarVentaxId(this.id_venta) ;
+        this.Notificacion.Snack("Se retiró el interés","") ;
+      }
+      if( !respuesta ) {
+        this.Notificacion.Snack("Ocurrió un error al retirar el interés","") ;
       }
     })
   }

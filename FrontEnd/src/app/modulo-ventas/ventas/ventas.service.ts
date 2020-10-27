@@ -557,6 +557,27 @@ export class VentaService {
     );
   }
 
+  GenerarInteres(
+    id_venta : number
+  ) : Observable<boolean> {
+    let params = new HttpParams()
+      .set('prventa',id_venta.toString()) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'venta/crear-interes.php', params, {headers: headers})
+    .pipe(
+      map((res)=>{
+        if ( res['codigo'] === 0) {
+          return true ;
+        } else {
+          console.log(res) ;
+          return false ;
+        }
+      })
+    );
+  }
+
   ActualizarEstadoPenalidad(
     id_venta : number ,
     estado_penalidad : number ,
@@ -589,6 +610,27 @@ export class VentaService {
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'venta/eliminar-penalidad.php', params, {headers: headers})
+    .pipe(
+      map((res)=>{
+        if ( res['codigo'] === 0) {
+          return true ;
+        } else {
+          console.log(res) ;
+          return false ;
+        }
+      })
+    );
+  }
+
+  EliminarInteres(
+    id_venta : number ,
+  ) : Observable<boolean> {
+    let params = new HttpParams()
+      .set('prventa', id_venta.toString()) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'venta/eliminar-interes.php', params, {headers: headers})
     .pipe(
       map((res)=>{
         if ( res['codigo'] === 0) {

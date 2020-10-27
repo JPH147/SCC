@@ -48,50 +48,54 @@
     </div>
 
     <div class="venta-contenedor">
-      <div class="venta-contenido" *ngFor="let transaccion of (ListadoVentas.Informacion | async)">
-        <mat-list role="list">
-          <mat-list-item role="listitem" class="titulo">
-            <span class="centrar"> {{ transaccion.tipo }} </span>
-          </mat-list-item>
-          <mat-list-item role="listitem">
-            <strong> Documento </strong>
-            <span class="espacio"></span>
-            <span> {{ transaccion.documento }} </span>
-          </mat-list-item>
-          <mat-divider></mat-divider>
-          <mat-list-item role="listitem">
-            <strong> Estado </strong>
-            <span class="espacio"></span>
-            <span> {{ transaccion.estado }} </span>
-          </mat-list-item>
-          <mat-divider></mat-divider>
-          <mat-list-item role="listitem">
-            <strong> Fecha </strong>
-            <span class="espacio"></span>
-            <span> {{ transaccion.fecha | date :'dd/MM/yyyy' }} </span>
-          </mat-list-item>
-          <mat-divider></mat-divider>
-          <mat-list-item role="listitem">
-            <strong> Total de cuotas </strong>
-            <span class="espacio"></span>
-            <span> {{ transaccion.total_cuotas }} </span>
-          </mat-list-item>          <mat-divider></mat-divider>
-          <mat-list-item role="listitem">
-            <strong> Cuotas pagadas </strong>
-            <span class="espacio"></span>
-            <span> {{ transaccion.cuotas_pagadas }} </span>
-          </mat-list-item>
-          <mat-divider></mat-divider>
-          <mat-list-item role="listitem">
-            <strong> Total </strong>
-            <span class="espacio"></span>
-            <span> {{ transaccion.total | currency:'S/.' }} </span>
-          </mat-list-item>
-          <mat-list-item role="listitem">
-            <button mat-button color="accent" class="centrar" (click)="VerVenta(transaccion)"> Ver documento </button>
-          </mat-list-item>
-        </mat-list>
-      </div>
+      <ng-container *ngFor="let transaccion of (ListadoVentas.Informacion | async)">
+        <div [ngClass]="(transaccion.id_liquidacion ? 'venta-contenido-primary' : 'venta-contenido')">
+          <mat-list role="list">
+            <mat-list-item role="listitem"
+              [ngClass]="(transaccion.id_liquidacion ? 'titulo-primary' : 'titulo')">
+              <span class="centrar"> {{ transaccion.tipo }} </span>
+            </mat-list-item>
+            <mat-list-item role="listitem">
+              <strong> Documento </strong>
+              <span class="espacio"></span>
+              <span> {{ transaccion.documento }} </span>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item role="listitem">
+              <strong> Estado </strong>
+              <span class="espacio"></span>
+              <span> {{ transaccion.id_liquidacion ? 'LIQUIDADO' : transaccion.estado }} </span>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item role="listitem">
+              <strong> Fecha </strong>
+              <span class="espacio"></span>
+              <span> {{ transaccion.fecha | date :'dd/MM/yyyy' }} </span>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item role="listitem">
+              <strong> Total de cuotas </strong>
+              <span class="espacio"></span>
+              <span> {{ transaccion.id_liquidacion ? '-' : transaccion.total_cuotas }} </span>
+            </mat-list-item>          <mat-divider></mat-divider>
+            <mat-list-item role="listitem">
+              <strong> Cuotas pagadas </strong>
+              <span class="espacio"></span>
+              <span> {{ transaccion.id_liquidacion ? '-' : transaccion.cuotas_pagadas }} </span>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item role="listitem">
+              <strong> Total </strong>
+              <span class="espacio"></span>
+              <span> {{  transaccion.id_liquidacion ? '-' : transaccion.total | currency:'S/.' }} </span>
+            </mat-list-item>
+            <mat-list-item role="listitem">
+              <button mat-button [color]="transaccion.id_liquidacion ? 'primary' : 'accent'"
+                class="centrar" (click)="VerVenta(transaccion)"> Ver documento </button>
+            </mat-list-item>
+          </mat-list>
+        </div>
+      </ng-container>
     </div>
 
 	</mat-card-content>

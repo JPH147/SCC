@@ -94,6 +94,7 @@ export class VentanaPermisosComponent implements OnInit {
           abrir_procesos : permisos.ventas?.listado_ventas?.abrir_procesos || false ,
           agregar_pagos_masivos : permisos.ventas?.listado_ventas?.agregar_pagos_masivos || false ,
           establecer_penalidad : permisos.ventas?.listado_ventas?.establecer_penalidad || false ,
+          generar_interes : permisos.ventas?.listado_ventas?.generar_interes || false ,
           liquidar : permisos.ventas?.listado_ventas?.liquidar || false ,
         } ,
         salida_ventas : {
@@ -180,6 +181,7 @@ export class VentanaPermisosComponent implements OnInit {
           agregar : permisos.cobranzas?.cobranzas_directas?.agregar || false ,
           editar : permisos.cobranzas?.cobranzas_directas?.editar || false ,
           eliminar : permisos.cobranzas?.cobranzas_directas?.eliminar || false ,
+          validar : permisos.cobranzas?.cobranzas_directas?.validar || false ,
         } ,
         cobranzas_planilla : {
           general : permisos.cobranzas?.cobranzas_planilla?.general || false ,
@@ -198,6 +200,7 @@ export class VentanaPermisosComponent implements OnInit {
       tablas_maestras : {
         general : permisos.tablas_maestras?.general || false ,
         cooperativa : permisos.tablas_maestras?.cooperativa || false ,
+        bancos : permisos.tablas_maestras?.bancos || false ,
         usuarios : permisos.tablas_maestras?.usuarios || false ,
         direcciones : permisos.tablas_maestras?.direcciones || false ,
         instituciones : permisos.tablas_maestras?.instituciones || false ,
@@ -247,6 +250,7 @@ export class VentanaPermisosComponent implements OnInit {
           abrir_procesos : false ,
           agregar_pagos_masivos : false ,
           establecer_penalidad : false ,
+          generar_interes : false ,
           liquidar : false ,
         } ,
         salida_ventas : {
@@ -333,6 +337,7 @@ export class VentanaPermisosComponent implements OnInit {
           agregar : false ,
           editar : false ,
           eliminar : false ,
+          validar : false ,
         } ,
         cobranzas_planilla : {
           general : false ,
@@ -351,6 +356,7 @@ export class VentanaPermisosComponent implements OnInit {
       tablas_maestras : {
         general : false ,
         cooperativa : false ,
+        bancos : false ,
         usuarios : false ,
         direcciones : false ,
         instituciones : false ,

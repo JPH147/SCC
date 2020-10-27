@@ -42,6 +42,7 @@ export type Rol = {
       abrir_procesos : boolean ,
       agregar_pagos_masivos : boolean ,
       establecer_penalidad : boolean ,
+      generar_interes : boolean ,
       liquidar : boolean
     } ,
     salida_ventas : {
@@ -127,6 +128,7 @@ export type Rol = {
       agregar : boolean ,
       editar : boolean ,
       eliminar : boolean ,
+      validar : boolean ,
     } ,
     cobranzas_planilla : {
       general : boolean ,
@@ -145,6 +147,7 @@ export type Rol = {
   tablas_maestras : {
     general : boolean ,
     cooperativa : boolean ,
+    bancos : boolean ,
     usuarios : boolean ,
     direcciones : boolean ,
     instituciones : boolean ,

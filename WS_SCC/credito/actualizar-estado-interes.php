@@ -6,7 +6,7 @@
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
  
     include_once '../config/database.php';
-    include_once '../entities/credito.php';
+    include_once '../entities/venta.php';
     include_once '../shared/utilities.php';
 
     $database = new Database();
@@ -14,15 +14,15 @@
 
     try
     {
-      $credito = new Creditos($db);
+      $venta = new Venta($db);
       $data = json_decode(file_get_contents('php://input'), true);
       
-      if (($_POST["prcredito"])!=null)
+      if (($_POST["prventa"])!=null)
       {
-        $credito->id_credito=trim($_POST["prcredito"]);
-        $credito->estado_interes=trim($_POST["prestadointeres"]);
+        $venta->id_venta=trim($_POST["prventa"]);
+        $venta->estado_interes=trim($_POST["prestadointeres"]);
 
-        if( $credito->actualizar_credito_estado_interes() )
+        if( $venta->actualizar_venta_estado_interes() )
         {
           print_json("0000", "Se actualizó el estado satisfactoriamente.", true);
         }

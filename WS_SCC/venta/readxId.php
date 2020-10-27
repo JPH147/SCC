@@ -84,6 +84,7 @@
 				"adicional_penalidad" => $venta->adicional_penalidad ,
 				"estado_penalidad" => $venta->estado_penalidad ,
 				"estado_interes" => $venta->estado_interes ,
+				"pagado_interes" => $venta->pagado_interes ,
 				"id_liquidacion" => $venta->id_liquidacion ,
 				"pagado" => $venta->pagado ,
 				"courier"=>$venta->courier,

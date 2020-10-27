@@ -1,5 +1,11 @@
 <?php 
 
+require '../vendor/autoload.php';
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
+date_default_timezone_set('America/Lima');
+
 class Cooperativa{
 
   private $conn;
@@ -24,6 +30,9 @@ class Cooperativa{
 
   public $numero_orden_antigua ;
   public $numero_orden_nueva ;
+
+  public $archivo ; // Guarda el nombre del archivo 
+  public $path_reporte = '../uploads/reporte-clientes/';
 
   public function __construct($db){
     $this->conn = $db;
@@ -324,6 +333,62 @@ class Cooperativa{
 		  return true;
 		}
 		return false;
-	}
+  }
+
+  function read_cuenta_unlimited() {
+
+    $spreadsheet = new Spreadsheet();
+    $sheet = $spreadsheet->getActiveSheet();
+
+    $query = "CALL sp_listarcooperativacuentadepositosunlimited(?)";
+
+    $result = $this->conn->prepare($query);
+
+    $result->bindParam(1, $this->id_cooperativa_cuenta);
+
+    $result->execute();
+    
+    $archivo = "" ;
+    $cobranza=array();
+    $cobranza["clientes"]=array();
+
+    $contador = 1;
+
+    $sheet->setCellValue('A1', 'N°');
+    $sheet->setCellValue('B1', 'Fecha');
+    $sheet->setCellValue('C1', 'DNI');
+    $sheet->setCellValue('D1', 'Nombre');
+    $sheet->setCellValue('E1', 'Número de operación');
+    $sheet->setCellValue('F1', 'Monto');
+    $sheet->setCellValue('G1', 'Validado');
+    $sheet->setCellValue('H1', 'Tiene voucher');
+
+    while($row = $result->fetch(PDO::FETCH_ASSOC))
+    {
+        extract($row);
+        $contador=$contador+1;
+
+        $sheet->setCellValue('A' . $contador, $contador-1 );
+        $sheet->setCellValue('B' . $contador, $fecha );
+        $sheet->setCellValue('C' . $contador, $cliente_dni );
+        $sheet->setCellValue('D' . $contador, $cliente_nombre );
+        $sheet->setCellValue('E' . $contador, $numero_operacion );
+        $sheet->setCellValue('F' . $contador, $monto );
+        $sheet->setCellValue('G' . $contador, $validado == 1 ? 'SI' : 'NO' );
+        $sheet->setCellValue('H' . $contador, $voucher == 1 ? 'SI' : 'NO' );
+    }
+
+    $writer = new Xlsx($spreadsheet);
+
+    $archivo = $this->path_reporte.$this->archivo.'.xlsx';
+
+    $writer->save($archivo);
+    
+    if( file_exists ( $archivo ) ){
+      return $archivo;
+    } else {
+      return false;
+    };
+}
 }
 ?>

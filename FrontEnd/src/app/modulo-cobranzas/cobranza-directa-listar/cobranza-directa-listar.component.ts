@@ -12,6 +12,7 @@ import { Rol } from 'src/app/compartido/modelos/login.modelos';
 import { Store } from '@ngrx/store';
 import { EstadoSesion } from '../../compartido/reducers/permisos.reducer';
 import { CooperativaConfiguracionService } from 'src/app/modulo-maestro/cooperativa-configuracion/cooperativa-configuracion.service';
+import { Notificaciones } from 'src/app/core/servicios/notificacion';
 
 @Component({
   selector: 'app-cobranza-directa-listar',
@@ -26,7 +27,7 @@ export class CobranzaDirectaListarComponent implements OnInit {
   public Cuentas : Array<any>;
 
   public ListadoCobranzas: CobranzaDataSource;
-  public Columnas: string[] = ['numero', 'fecha', 'cliente', 'banco', 'numero_operacion', 'monto', 'opciones'];
+  public Columnas: string[] = ['numero', 'fecha', 'cliente', 'cooperativa_cuenta_alias', 'numero_operacion', 'monto', 'opciones'];
 
   @ViewChild('InputCliente', { static: true }) FiltroCliente: ElementRef;
   @ViewChild('InputOperacion', { static: true }) FiltroOperacion: ElementRef;
@@ -40,7 +41,8 @@ export class CobranzaDirectaListarComponent implements OnInit {
     private _store : Store<EstadoSesion> ,
     private Servicio: CobranzasService,
     private Dialogo : MatDialog ,
-    private _configuracion : CooperativaConfiguracionService
+    private _configuracion : CooperativaConfiguracionService ,
+    private _notificaciones : Notificaciones
   ) { }
 
   ngOnInit() {
@@ -118,13 +120,23 @@ export class CobranzaDirectaListarComponent implements OnInit {
     Ventana.afterClosed().subscribe(res=>{
       if (res) {
         this.Servicio.EliminarCobranzaDirecta(cobranza.id).subscribe(res=>{
-          // console.log(res);
           this.CargarData();
         });
       }
     })
   }
  
+  Validar(cobranza){
+    let nueva_validacion : number = cobranza.validado ==1 ? 0 : 1 ;
+    this.Servicio.ActualizarCobranzaValidacion(cobranza.id, nueva_validacion).subscribe(res=>{
+      if (res) {
+        this._notificaciones.Snack("Se actualizó la validación de la cobranza","") ;
+        this.CargarData() ;
+      } else {
+        this._notificaciones.Snack("Ocurrió un error al actualizar la validación de la cobranza","") ;
+      }
+    });
+  }
 }
 
 export class CobranzaDataSource implements DataSource<any> {

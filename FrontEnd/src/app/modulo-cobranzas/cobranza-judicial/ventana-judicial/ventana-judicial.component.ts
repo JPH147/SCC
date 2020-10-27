@@ -25,6 +25,7 @@ export class VentanaJudicialComponent implements OnInit {
   public TipoDocumentos : Array<any> ;
   public Trabajadores : Array<any> ;
   public Estados : Array<any> ;
+  public ver : boolean = false ;
   public editar : boolean = false ;
   public editar_archivo : boolean = false ;
   public primer_documento : boolean ;
@@ -41,16 +42,22 @@ export class VentanaJudicialComponent implements OnInit {
 
   ngOnInit() {
     this.CrearFormulario();
-    this.ListarTipoDocumentos();
-    this.ListarTrabajadores();
-    this.VerificarDocumentos();
 
-    if(this.data.proceso_detalle){
-      this.editar = true ;
-      this.EditarProceso();
+    if  (this.data.ver_proceso_detalle) {
+      this.ver = true ;
+      this.SeleccionarProceso(this.data.ver_proceso_detalle) ;
     } else {
-      this.VentanaJudicialForm.get('tipo_documento').setValue(this.data.tipo_documento) ;
-      this.TipoDocumentoSeleccionado( this.data.tipo_documento ) ;
+      this.ListarTipoDocumentos();
+      this.ListarTrabajadores();
+      this.VerificarDocumentos();
+  
+      if(this.data.proceso_detalle){
+        this.editar = true ;
+        this.EditarProceso();
+      } else {
+        this.VentanaJudicialForm.get('tipo_documento').setValue(this.data.tipo_documento) ;
+        this.TipoDocumentoSeleccionado( this.data.tipo_documento ) ;
+      }
     }
   }
 
@@ -74,7 +81,7 @@ export class VentanaJudicialComponent implements OnInit {
       ] ],
       sumilla : [ { value: "", disabled : false }, [
       ] ],
-      trabajador : [ { value: 0, disabled : false }, [
+      trabajador : [ { value: "", disabled : false }, [
       ] ],
       comentarios : [ { value: "", disabled : false }, [
       ] ],
@@ -82,10 +89,10 @@ export class VentanaJudicialComponent implements OnInit {
   }
 
   VerificarDocumentos(){
-    forkJoin(
+    forkJoin([
       this._judiciales.ListarDetallexProceso( this.data.proceso ) ,
       this._judiciales.ListarDetalleAnteriorxProceso( this.data.proceso )
-    ).subscribe(res=>{
+    ]).subscribe(res=>{
       console.log(res)
       if( res[0] || res[1] ) {
       } else {
@@ -137,6 +144,32 @@ export class VentanaJudicialComponent implements OnInit {
     this.archivo_nombre_antiguo = this.data.proceso_detalle.archivo_antiguo ;
     this.archivo_nombre_antiguo_enlace = this.data.proceso_detalle.archivo ;
     this.editar_archivo = this.data.proceso_detalle.archivo_antiguo ? false : true ;
+  }
+
+  SeleccionarProceso(id_proceso){
+    this.Cargando.next(true) ;
+
+    this._judiciales.ListarDetallexProcesoxId(id_proceso)
+    .pipe(
+      finalize(()=> {
+        this.Cargando.next(false) ;
+      })
+    )
+    .subscribe(resultado => {
+      if (resultado) {
+        this.VentanaJudicialForm.get('id_proceso').setValue(resultado.id) ;
+        this.VentanaJudicialForm.get('tipo_documento').setValue(resultado.id_tipo_documento) ;
+        this.VentanaJudicialForm.get('tipo_documento_nombre').setValue(resultado.tipo_documento) ;
+        this.VentanaJudicialForm.get('fecha').setValue(resultado.fecha) ;
+        this.VentanaJudicialForm.get('numero_resolucion').setValue(resultado.numero) ;
+        this.VentanaJudicialForm.get('sumilla').setValue(resultado.sumilla) ;
+        this.VentanaJudicialForm.get('comentarios').setValue(resultado.comentarios) ;
+        this.VentanaJudicialForm.get('trabajador').setValue(resultado.trabajador) ;
+        this.VentanaJudicialForm.get('estado').setValue(resultado.estado) ;
+
+        this.archivo_nombre_antiguo_enlace = resultado.archivo ;
+      }
+    })
   }
 
   SubirArchivo(archivo: FileList) {

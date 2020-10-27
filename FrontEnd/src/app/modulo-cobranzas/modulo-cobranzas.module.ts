@@ -28,6 +28,7 @@ import { CobranzasListarComponent } from './cobranzas-listar/cobranzas-listar.co
 import { VentanaEditarPagoComponent } from './cobranzas-listar/ventana-editar-pago/ventana-editar-pago.component';
 import { VentanaTipoReporteComponent } from './cobranzas-listar/ventana-tipo-reporte/ventana-tipo-reporte.component';
 import { VentanaEditarCuotasComponent } from './cobranza-archivos/cobranza-pnp/ventana-editar-cuotas/ventana-editar-cuotas.component';
+import { LiquidacionesComponent } from './liquidaciones/liquidaciones.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { VentanaEditarCuotasComponent } from './cobranza-archivos/cobranza-pnp/v
     CobranzaManualListarComponent ,
     CobranzasListarComponent ,
     VentanaEditarPagoComponent ,
-    VentanaTipoReporteComponent ,
+    VentanaTipoReporteComponent,
+    LiquidacionesComponent ,
   ],
   imports: [
     ModuloCobranzasRoutingModule ,

@@ -52,9 +52,7 @@ export class VentanaVentasComponent implements OnInit {
     this.estado=0;
     this.fecha = new Date();
     this.ListadoVentas = new VentasClienteDataSource(this.Servicio);
-    this.ListadoVentas.CargarVentas(this.data.id, "", this.fecha, 0, 1, 5);
-
-    console.log(this.data.cliente)
+    this.ListadoVentas.CargarVentas(this.data.id, "", this.fecha, 0, 1, 50);
   }
 
   ngAfterViewInit(){

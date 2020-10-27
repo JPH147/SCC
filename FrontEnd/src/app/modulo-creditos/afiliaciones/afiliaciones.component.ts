@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSort } from '@angular/material/sort';
 import { ServiciosTipoPago } from 'src/app/core/servicios/tipopago';
 import { ClienteService  } from '../../modulo-clientes/clientes/clientes.service';
-import { merge, BehaviorSubject} from 'rxjs';
+import { merge, BehaviorSubject, fromEvent} from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap, map, finalize } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ServiciosTelefonos } from 'src/app/core/servicios/telefonos';
@@ -144,8 +144,8 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
   @ViewChild('InputCapital', { static: true }) FiltroCapital: ElementRef;
   // @ViewChild('InputCuota', { static: true }) FiltroCuota: ElementRef;
   // @ViewChild('InputInteres', { static: true }) FiltroInteres: ElementRef;
-  // @ViewChild('Vendedor') VendedorAutoComplete : ElementRef;
-  // @ViewChild('Autorizador') AutorizadorAutoComplete: ElementRef;
+  @ViewChild('Vendedor') VendedorAutoComplete : ElementRef;
+  @ViewChild('Autorizador') AutorizadorAutoComplete: ElementRef;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
 
   public ListadoVendedores: Array<any>;
@@ -286,6 +286,28 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     if(!this.id_credito && !this.id_presupuesto){
+      fromEvent(this.VendedorAutoComplete.nativeElement, 'keyup')
+      .pipe(
+        debounceTime(10),
+        distinctUntilChanged(),
+        tap(() => {
+          if( this.VendedorAutoComplete.nativeElement.value ){
+            this.ListarVendedor(this.VendedorAutoComplete.nativeElement.value);
+          }
+        })
+        ).subscribe();
+    
+      fromEvent(this.AutorizadorAutoComplete.nativeElement, 'keyup')
+      .pipe(
+      debounceTime(10),
+      distinctUntilChanged(),
+      tap(() => {
+        if( this.AutorizadorAutoComplete.nativeElement.value ){
+          this.ListarAutorizador(this.AutorizadorAutoComplete.nativeElement.value);
+        }
+      })
+      ).subscribe();
+
       merge(
         this.CreditosForm.get('monto_cuota').valueChanges ,
         this.CreditosForm.get('cuotas').valueChanges ,
@@ -307,6 +329,28 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
   }
 
   ActualizarObservables() {
+    fromEvent(this.VendedorAutoComplete.nativeElement, 'keyup')
+    .pipe(
+      debounceTime(10),
+      distinctUntilChanged(),
+      tap(() => {
+        if( this.VendedorAutoComplete.nativeElement.value ){
+          this.ListarVendedor(this.VendedorAutoComplete.nativeElement.value);
+        }
+      })
+      ).subscribe();
+  
+    fromEvent(this.AutorizadorAutoComplete.nativeElement, 'keyup')
+    .pipe(
+    debounceTime(10),
+    distinctUntilChanged(),
+    tap(() => {
+      if( this.AutorizadorAutoComplete.nativeElement.value ){
+        this.ListarAutorizador(this.AutorizadorAutoComplete.nativeElement.value);
+      }
+    })
+    ).subscribe();
+
     merge(
       this.CreditosForm.get('monto_cuota').valueChanges ,
       this.CreditosForm.get('cuotas').valueChanges ,
@@ -1165,8 +1209,8 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
         this.CreditosForm.value.fecha_credito,
         this.numero_afiliacion,
         0,
-        0,
-        0,
+        this.CreditosForm.value.id_autorizador ? this.CreditosForm.value.id_autorizador : 0,
+        this.CreditosForm.value.id_vendedor ? this.CreditosForm.value.id_vendedor : 0,
         this.CreditosForm.value.id_cliente,
         this.CreditosForm.value.direccion,
         this.CreditosForm.value.telefono,
@@ -1235,8 +1279,8 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
         this.id_credito_editar,
         this.CreditosForm.value.sucursal,
         this.CreditosForm.value.fecha_credito,
-        0,
-        0,
+        this.CreditosForm.value.id_autorizador ? this.CreditosForm.value.id_autorizador : 0,
+        this.CreditosForm.value.id_vendedor ? this.CreditosForm.value.id_vendedor : 0,
         this.CreditosForm.value.id_cliente,
         this.CreditosForm.value.direccion,
         this.CreditosForm.value.telefono,

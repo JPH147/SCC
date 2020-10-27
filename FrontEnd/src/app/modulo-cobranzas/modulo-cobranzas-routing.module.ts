@@ -14,6 +14,7 @@ import { CobranzaJudicialMultipleComponent } from './cobranza-judicial-multiple/
 import { CobranzaJudicialGenerarComponent } from './cobranza-judicial-generar/cobranza-judicial-generar.component';
 import { CobranzaManualListarComponent } from './cobranza-manual-listar/cobranza-manual-listar.component';
 import { CobranzaManualComponent } from './cobranza-manual/cobranza-manual.component';
+import { LiquidacionesComponent } from './liquidaciones/liquidaciones.component';
 
 const routes: Routes = [
   {path: '', redirectTo: 'listado', pathMatch: 'full'} ,
@@ -39,6 +40,7 @@ const routes: Routes = [
   {path: 'cobranza-judicial/generar/ver/:idprocesover', component: CobranzaJudicialGenerarComponent},
   {path: 'cobranza-manual', component: CobranzaManualListarComponent},
   {path: 'cobranza-manual/ver/:idcobranza', component: CobranzaManualComponent},
+  {path: 'liquidaciones', component: LiquidacionesComponent},
 ];
 
 @NgModule({

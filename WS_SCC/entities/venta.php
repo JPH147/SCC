@@ -100,6 +100,8 @@ Class Venta{
     public $tipo_cuota ;
     public $estado_penalidad ;
     public $estado_interes ;
+    public $pagado_interes ;
+    
     public $id_liquidacion ;
     public $pagado ;
 
@@ -547,6 +549,7 @@ Class Venta{
         $this->adicional_penalidad = $row['adicional_penalidad'] ;
         $this->estado_penalidad = $row['estado_penalidad'] ;
         $this->estado_interes = $row['estado_interes'] ;
+        $this->pagado_interes = $row['pagado_interes'] ;
         $this->id_liquidacion = $row['id_liquidacion'] ;
         $this->pagado = $row['pagado'] ;
         $this->courier = $Courier;
@@ -625,6 +628,7 @@ Class Venta{
         $this->adicional_penalidad = $row['adicional_penalidad'] ;
         $this->estado_penalidad = $row['estado_penalidad'] ;
         $this->estado_interes = $row['estado_interes'] ;
+        $this->pagado_interes = $row['pagado_interes'] ;
         $this->id_liquidacion = $row['id_liquidacion'] ;
         $this->pagado = $row['pagado'] ;
         $this->courier = $Courier;
@@ -1055,6 +1059,7 @@ Class Venta{
                 "cuotas_pagadas"=>$cuotas_pagadas,
                 "total"=>$total,
                 "estado"=>$estado,
+                "id_liquidacion"=>$id_liquidacion,
             );
             array_push($venta_list["ventas"],$venta_item);
         }
@@ -1311,6 +1316,63 @@ Class Venta{
 
         $this->id_venta=htmlspecialchars(strip_tags($this->id_venta));
         $this->estado_penalidad=htmlspecialchars(strip_tags($this->estado_penalidad));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    function crear_interes_venta() {
+        $query = "CALL sp_crearventacronogramainteres1(
+            :prventa
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prventa", $this->id_venta);
+
+        $this->id_venta=htmlspecialchars(strip_tags($this->id_venta));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    function actualizar_venta_estado_interes() {
+        $query = "CALL sp_actualizarventaestadointeres(
+            :prventa ,
+            :prestado
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prventa", $this->id_venta);
+        $result->bindParam(":prestado", $this->estado_interes);
+
+        $this->id_venta=htmlspecialchars(strip_tags($this->id_venta));
+        $this->estado_interes=htmlspecialchars(strip_tags($this->estado_interes));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
+    }
+ 
+    function eliminar_interes_venta() {
+        $query = "CALL sp_eliminarventacronogramainteres(
+            :prventa
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prventa", $this->id_venta);
+
+        $this->id_venta=htmlspecialchars(strip_tags($this->id_venta));
 
         if($result->execute())
         {

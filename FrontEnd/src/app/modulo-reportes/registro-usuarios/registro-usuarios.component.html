@@ -1,0 +1,92 @@
+<mat-card class="principal">
+  <mat-card-title>
+    <div class="tituloProd"> Registro de uso del sistema </div>
+  </mat-card-title>
+
+  <form [formGroup]="RegistroForm">
+    <mat-grid-list cols= "4" rowHeight="70px">
+      <mat-grid-tile>
+        <mat-icon>search</mat-icon>
+        <mat-form-field>
+          <input matInput placeholder="Usuario" formControlName="usuario">
+        </mat-form-field>
+      </mat-grid-tile>
+  
+      <mat-grid-tile>
+        <mat-form-field>
+          <mat-select #InputTipoPago placeholder="Acción" formControlName="accion">
+            <mat-option [value]="-1"> Todos </mat-option>
+            <mat-option [value]="0"> Ingreso al sistema </mat-option>
+            <mat-option [value]="1"> Crear </mat-option>
+            <mat-option [value]="2"> Actualizar </mat-option>
+            <mat-option [value]="3"> Eliminar </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-grid-tile>
+  
+      <mat-grid-tile>
+        <mat-form-field>
+          <input matInput [matDatepicker]="inicio" placeholder="Fecha de inicio" formControlName="fecha_inicio">
+          <mat-datepicker-toggle matSuffix [for]="inicio"></mat-datepicker-toggle>
+          <mat-datepicker #inicio disabled="false"></mat-datepicker>
+        </mat-form-field>
+      </mat-grid-tile>
+  
+      <mat-grid-tile>
+        <mat-form-field>
+          <input matInput [matDatepicker]="fin" placeholder="Fecha de fin" formControlName="fecha_fin">
+          <mat-datepicker-toggle matSuffix [for]="fin"></mat-datepicker-toggle>
+          <mat-datepicker #fin disabled="false"></mat-datepicker>
+        </mat-form-field>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </form>
+
+  <mat-card-content>
+
+    <div class = "spinner-container" *ngIf = "ListadoRegistro.Cargando| async">
+      <mat-spinner></mat-spinner>
+    </div>
+
+    <mat-table [dataSource]="ListadoRegistro" class="mat-elevation-z8">
+
+      <ng-container matColumnDef="numero">
+        <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+        <mat-cell *matCellDef="let registro"> {{ registro.numero }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="usuario">
+        <mat-header-cell *matHeaderCellDef> Usuario </mat-header-cell>
+        <mat-cell *matCellDef="let registro"> {{ registro.usuario }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="fecha">
+        <mat-header-cell *matHeaderCellDef> Fecha </mat-header-cell>
+        <mat-cell *matCellDef="let registro"> {{ registro.fecha | date:'dd-MM-yyyy HH:mm' }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="accion">
+        <mat-header-cell *matHeaderCellDef> Acción </mat-header-cell>
+        <mat-cell *matCellDef="let registro"> {{ registro.accion }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="referencia">
+        <mat-header-cell *matHeaderCellDef> Referencia </mat-header-cell>
+        <mat-cell *matCellDef="let registro"> {{ registro.referencia }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="opciones">
+        <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
+        <mat-cell *matCellDef="let registro">
+          <button mat-icon-button color="primary" matTooltip="Ver detalle"
+            [disabled]="registro.id_referencia == 0" (click)="VerDetalle(registro)"><mat-icon> visibility </mat-icon></button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: Columnas;"></mat-row>
+    </mat-table>
+
+    <mat-paginator [length]="ListadoRegistro.TotalResultados | async" [pageSize]="10" [pageSizeOptions]="[10,15,20]"></mat-paginator>
+  </mat-card-content>
+</mat-card>

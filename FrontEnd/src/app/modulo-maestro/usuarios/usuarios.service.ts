@@ -6,6 +6,8 @@ import {URL} from 'src/app/core/servicios/url';
 import { LoginService } from 'src/app/core/servicios/login.service';
 import { Rol } from 'src/app/compartido/modelos/login.modelos';
 
+import * as moment from 'moment' ;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -226,6 +228,36 @@ export class UsuariosService {
       map(respuesta=>{
         if ( respuesta['codigo'] == 0 ) {
           return respuesta['data'] ;
+        } else {
+          return false ;
+        }
+      })
+    )
+  }
+
+  ListarLogs(
+    usuario : string ,
+    accion : number ,
+    fecha_inicio : Date ,
+    fecha_fin : Date ,
+    numero_pagina : number ,
+    total_pagina : number ,
+  ) : Observable<any> {
+    let params = new HttpParams()
+      .set('prusuario', usuario )
+      .set('praccion', accion.toString() )
+      .set('prfechainicio', moment(fecha_inicio).format("YYYY-MM-DD") )
+      .set('prfechafin', moment(fecha_fin).format("YYYY-MM-DD") )
+      .set('prpagina', numero_pagina.toString() )
+      .set('prtotalpagina', total_pagina.toString() );
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.get(this.url + 'log/read.php', { params : params, headers : headers })
+    .pipe(
+      map(respuesta=>{
+        if ( respuesta['codigo'] == 0 ) {
+          return respuesta ;
         } else {
           return false ;
         }

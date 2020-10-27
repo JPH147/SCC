@@ -519,6 +519,29 @@ export class CobranzasService {
     return this.http.post(this.url + 'cobranza/update-directa.php', params, {headers: headers});
   }
 
+  ActualizarCobranzaValidacion(
+    id_cobranza : number,
+    validado : number,
+  ) :Observable<boolean> { 
+    let params = new HttpParams()
+      .set('prid', id_cobranza.toString())
+      .set('prvalidado', validado.toString()) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'cobranza/update-directa-validacion.php', params, {headers: headers})
+    .pipe(
+      map(respuesta => {
+        if ( respuesta['codigo']===0 ) {
+          return true ;
+        } else {
+          return false ;
+        }
+      })
+    )
+    ;
+  }
+
   ActualizarInteresCronograma(
     tipo : number ,
     id_transaccion : number ,
@@ -929,6 +952,44 @@ export class CobranzasService {
     return this.http.post(this.url + 'cobranza/create-manual-venta.php', params, {headers: headers});
   }
 
+  ListarLiquidacionTransaccion(
+    tipo_transaccion : number ,
+    codigo : string ,
+    cliente_dni : string ,
+    cliente : string ,
+    usuario : string ,
+    fecha_inicio : Date ,
+    fecha_fin : Date ,
+    numero_pagina : number ,
+    total_pagina : number ,
+    orden : string
+  ) : Observable<any> {
+    let params = new HttpParams()
+      .set('prtipotransaccion', tipo_transaccion.toString() )
+      .set('prcodigo', codigo )
+      .set('prclientedni', cliente_dni )
+      .set('prcliente', cliente )
+      .set('prusuario',  usuario)
+      .set('prfechainicio', moment(fecha_inicio).format("YYYY-MM-DD") )
+      .set('prfechafin', moment(fecha_fin).format("YYYY-MM-DD") )
+      .set('prnumeropagina', numero_pagina.toString() )
+      .set('prtotalpagina', total_pagina.toString() )
+      .set('prorden', orden ) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.get(this.url + 'cobranza/read-liquidaciones.php', { params : params, headers: headers})
+    .pipe(
+      map(resultado => {
+        if ( resultado['codigo'] === 0 ) {
+          return resultado ;
+        } else {
+          return false ;
+        }
+      })
+    )
+  }
+
   CrearLiquidacionTransaccion(
     tipo : number ,
     transaccion : number ,
@@ -957,7 +1018,6 @@ export class CobranzasService {
         }
       })
     )
-
   }
 
 }

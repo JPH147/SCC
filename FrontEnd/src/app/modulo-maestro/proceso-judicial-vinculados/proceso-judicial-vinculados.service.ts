@@ -312,7 +312,7 @@ export class ProcesoJudicialVinculadosService {
     total_pagina : number,
   ) :Observable<any> {
     let params = new HttpParams()
-      .set("pridinstanciajuzgado", id_instancia_juzgado.toString())
+      .set("pridinstanciajuzgado", id_instancia_juzgado ? id_instancia_juzgado.toString() : "0")
       .set("prinstanciajuzgado", instancia_juzgado)
       .set("prdistritojuzgado", distrito_juzgado)
       .set("prtipo", tipo)

@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BehaviorSubject } from 'rxjs';
 import { CreditosService } from 'src/app/modulo-creditos/creditos/creditos.service';
+import { VentaService } from 'src/app/modulo-ventas/ventas/ventas.service';
 
 @Component({
   selector: 'app-ventana-generar-interes',
@@ -16,6 +17,7 @@ export class VentanaGenerarInteresComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) private data : any ,
     private ventana : MatDialogRef<VentanaGenerarInteresComponent> ,
     private _creditos : CreditosService ,
+    private _ventas : VentaService ,
   ) { }
 
   ngOnInit(): void {
@@ -24,6 +26,11 @@ export class VentanaGenerarInteresComponent implements OnInit {
   public Guardar() {
     if ( this.data.id_credito ) {
       this._creditos.GenerarInteres(this.data.id_credito).subscribe( res => {
+        this.ventana.close(res) ;
+      })
+    }
+    if ( this.data.id_venta ) {
+      this._ventas.GenerarInteres(this.data.id_venta).subscribe( res => {
         this.ventana.close(res) ;
       })
     }

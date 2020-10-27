@@ -215,6 +215,11 @@ export class MenuComponent implements OnInit{
             path: "" ,
             mostrar : permiso.procesos_judiciales.listado_procesos.general ,
           },
+          {
+            nombre: "Liquidaciones",
+            path: "liquidaciones" ,
+            mostrar : permiso.cobranzas.cobranzas_directas.general ,
+          },
         ]
       },
       // Reportes
@@ -233,6 +238,11 @@ export class MenuComponent implements OnInit{
             nombre: "Clientes muy morosos II",
             path: "listado-cliente-morosos" ,
             mostrar : permiso.cobranzas.clientes_morosos.general ,
+          },
+          {
+            nombre: "Registro usuarios",
+            path: "registro-usuarios" ,
+            mostrar : permiso.tablas_maestras.usuarios ,
           },
         ]
       },
@@ -277,7 +287,7 @@ export class MenuComponent implements OnInit{
           {
             nombre: "Bancos",
             path: "bancos",
-            mostrar : permiso.tablas_maestras.cooperativa ,
+            mostrar : permiso.tablas_maestras.bancos ,
           },
           {
             nombre: "Departamentos",

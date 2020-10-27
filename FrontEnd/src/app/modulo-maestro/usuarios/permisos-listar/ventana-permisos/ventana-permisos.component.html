@@ -295,6 +295,15 @@
                 </mat-grid-tile>
                 <mat-grid-tile>
                   <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.ventas.listado_ventas.generar_interes"> Generar interés </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.ventas.listado_ventas.generar_interes ? 'accent' : 'warn'">
+                      {{ Permiso.ventas.listado_ventas.generar_interes ? 'check' : 'close' }} </mat-icon> &nbsp; Generar interés
+                  </ng-container>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
                     <mat-checkbox [(ngModel)]="Permiso.ventas.listado_ventas.liquidar"> Realizar liquidación </mat-checkbox>
                   </ng-container>
                   <ng-container *ngIf="data.ver">
@@ -926,6 +935,16 @@
                       {{ Permiso.cobranzas.cobranzas_directas.eliminar ? 'check' : 'close' }} </mat-icon> &nbsp; Eliminar
                   </ng-container>
                 </mat-grid-tile>
+
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.cobranzas.cobranzas_directas.validar"> Validar </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.cobranzas.cobranzas_directas.validar ? 'accent' : 'warn'">
+                      {{ Permiso.cobranzas.cobranzas_directas.validar ? 'check' : 'close' }} </mat-icon> &nbsp; Validar
+                  </ng-container>
+                </mat-grid-tile>
               </mat-grid-list>
             </ng-container>
           </ng-container>
@@ -1066,6 +1085,16 @@
               <ng-container *ngIf="data.ver">
                 <mat-icon [color]="Permiso.tablas_maestras.cooperativa ? 'accent' : 'warn'">
                   {{ Permiso.tablas_maestras.cooperativa ? 'check' : 'close' }} </mat-icon> &nbsp; Cooperativa
+              </ng-container>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+              <ng-container *ngIf="!data.ver">
+                <mat-checkbox [(ngModel)]="Permiso.tablas_maestras.bancos"> Bancos </mat-checkbox>
+              </ng-container>
+              <ng-container *ngIf="data.ver">
+                <mat-icon [color]="Permiso.tablas_maestras.bancos ? 'accent' : 'warn'">
+                  {{ Permiso.tablas_maestras.bancos ? 'check' : 'close' }} </mat-icon> &nbsp; Bancos
               </ng-container>
             </mat-grid-tile>
 

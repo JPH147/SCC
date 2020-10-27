@@ -7,6 +7,7 @@
 
   include_once '../config/database.php';
   include_once '../entities/procesojudicial.php';
+  include_once '../entities/log.php';
   include_once '../shared/utilities.php';
 
   $database = new Database();
@@ -14,6 +15,7 @@
 
   try
   {
+    $log = new Log($db);
     $proceso = new Proceso($db);
     $data = json_decode(file_get_contents('php://input'), true);
 
@@ -30,9 +32,13 @@
       $proceso->sumilla=trim($_POST["prsumilla"]);
       $proceso->archivo=trim($_POST["prarchivo"]);
       $proceso->comentarios=trim($_POST["prcomentarios"]);
+      
+      $usuario_alvis = trim($_GET["usuario_alvis"]) ;
 
       if($proceso->update_proceso_judicial_detalle())
       {
+        $log->create($usuario_alvis, 2, 2, $proceso->id_proceso) ;
+      
         print_json("0000", "Se actualizar el detalle del proceso satisfactoriamente.", $proceso->id_proceso);
       }
       else

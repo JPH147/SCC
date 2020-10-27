@@ -87,6 +87,23 @@ export class CobranzaJudicialService {
     }));
   }
 
+  ListarDetallexProcesoxId(
+    id_proceso : number
+  ){
+    let params = new HttpParams()
+      .set('prid',id_proceso.toString());
+
+    return this.http.get(this.url + 'procesojudicial/readdetallexprocesoxId.php', {params})
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res['data'].procesos[0];
+      } else {
+        console.log('No hay datos que mostrar',res);
+        return false;
+      }
+    }));
+  }
+
   ListarDetallexProceso(
     id_proceso : number
   ){

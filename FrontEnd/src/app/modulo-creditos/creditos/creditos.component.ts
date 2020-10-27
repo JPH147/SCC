@@ -621,9 +621,6 @@ export class CreditosComponent implements OnInit, AfterViewInit {
 
       this.CreditosForm.get('pagado_interes').setValue(res.pagado_interes) ;
       this.CreditosForm.get('estado_interes').setValue(res.estado_interes) ;
-      if ( this.CreditosForm.get('estado_interes').value == 3 ) {
-        // this.CreditosForm.get('estado_interes').disable() ;
-      }
 
       this.CreditosForm.get('id_liquidacion').setValue(res.id_liquidacion) ;
       this.CreditosForm.get('pagado').setValue(res.pagado) ;
@@ -1614,8 +1611,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       this.CreditosForm.value.afiliacion_fecha_afiliacion,
       this.numero_afiliacion,
       0,
-      0,
-      0,
+      this.CreditosForm.value.id_autorizador ? this.CreditosForm.value.id_autorizador : 0,
+      this.CreditosForm.value.id_vendedor ? this.CreditosForm.value.id_vendedor : 0,
       this.CreditosForm.value.id_cliente,
       this.CreditosForm.value.direccion,
       this.CreditosForm.value.telefono,
@@ -1671,8 +1668,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         this.id_credito_editar,
         this.CreditosForm.value.sucursal,
         this.CreditosForm.value.fecha_credito,
-        0,
-        0,
+        this.CreditosForm.value.id_autorizador ? this.CreditosForm.value.id_autorizador : 0,
+        this.CreditosForm.value.id_vendedor ? this.CreditosForm.value.id_vendedor : 0,
         this.CreditosForm.value.id_cliente,
         this.CreditosForm.value.direccion,
         this.CreditosForm.value.telefono,

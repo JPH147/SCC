@@ -1,7 +1,8 @@
 Nuevos
-
+sp_actualizarcobranzadirectavalidacion
 
 Actualizar
-
+drop procedure if exists sp_listarcobranzadirecta ;
+drop procedure if exists sp_listarcobranzadirectacontar ;
 
 TABLAS

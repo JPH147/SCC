@@ -60,6 +60,7 @@
     public $cliente_dni ;
     public $usuario;
     public $orden ;
+    public $validado ;
 
     public $credito ;
     public $venta ;
@@ -653,7 +654,7 @@
     }
 
     function read_cobranza_directa(){
-      $query = "CALL sp_listarcobranzadirecta(?,?,?,?,?,?,?,?)";
+      $query = "CALL sp_listarcobranzadirecta(?,?,?,?,?,?,?,?,?)";
 
       $result = $this->conn->prepare($query);
 
@@ -662,9 +663,10 @@
       $result->bindParam(3, $this->operacion);
       $result->bindParam(4, $this->fecha_inicio);
       $result->bindParam(5, $this->fecha_fin);
-      $result->bindParam(6, $this->numero_pagina);
-      $result->bindParam(7, $this->total_pagina);
-      $result->bindParam(8, $this->orden);
+      $result->bindParam(6, $this->validado);
+      $result->bindParam(7, $this->numero_pagina);
+      $result->bindParam(8, $this->total_pagina);
+      $result->bindParam(9, $this->orden);
 
       $result->execute();
 
@@ -685,9 +687,11 @@
             "cliente"=>$cliente,
             "cooperativa_cuenta"=>$cooperativa_cuenta,
             "banco"=>$banco,
+            "cooperativa_cuenta_alias"=>$cooperativa_cuenta_alias,
             "numero_operacion"=>$numero_operacion,
             "monto"=>$monto,
             "fecha_referencia"=>$fecha_referencia,
+            "validado"=>$validado,
           );
           array_push($cronograma["cobranzas"],$items);
       }
@@ -698,7 +702,7 @@
 
     function contar_cobranza_directa(){
 
-      $query = "CALL sp_listarcobranzadirectacontar(?,?,?,?,?)";
+      $query = "CALL sp_listarcobranzadirectacontar(?,?,?,?,?,?)";
       
       $result = $this->conn->prepare($query);
 
@@ -707,6 +711,7 @@
       $result->bindParam(3, $this->operacion);
       $result->bindParam(4, $this->fecha_inicio);
       $result->bindParam(5, $this->fecha_fin);
+      $result->bindParam(6, $this->validado);
 
       $result->execute();
 
@@ -935,6 +940,27 @@
       return false;
     }
 
+    function update_directa_validacion(){
+      $query = "CALL sp_actualizarcobranzadirectavalidacion(
+        :prid,
+        :prvalidado
+      )";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(":prid", $this->id_cobranza);
+      $result->bindParam(":prvalidado", $this->validado);
+
+      $this->id_cobranza=htmlspecialchars(strip_tags($this->id_cobranza));
+      $this->validado=htmlspecialchars(strip_tags($this->validado));
+
+      if($result->execute())
+      {
+        return true;
+      }
+      return false;
+    }
+    
     function search_cobranza_directa(){
       $query = "CALL sp_buscarcobranzadirecta(?)";
       

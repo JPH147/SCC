@@ -85,9 +85,9 @@
         <mat-cell *matCellDef="let cobranza"> {{cobranza.cliente}}</mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="banco">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Banco </mat-header-cell>
-        <mat-cell *matCellDef="let cobranza"> {{cobranza.banco}} </mat-cell>
+      <ng-container matColumnDef="cooperativa_cuenta_alias">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Cuenta </mat-header-cell>
+        <mat-cell *matCellDef="let cobranza"> {{cobranza.cooperativa_cuenta_alias}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="numero_operacion">
@@ -104,8 +104,23 @@
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let cobranza">
           <ng-container>
+            <ng-container *ngIf="permiso?.cobranzas?.cobranzas_directas?.validar">
+              <button mat-icon-button color="primary" [matTooltip]="cobranza.validado ? 'Retirar validación' : 'Validar'" (click)="Validar(cobranza)">
+                <ng-container *ngIf="cobranza.validado"> <mat-icon> star </mat-icon> </ng-container>
+                <ng-container *ngIf="!cobranza.validado"> <mat-icon> star_border </mat-icon> </ng-container>
+              </button>
+            </ng-container>
+
+            <ng-container *ngIf="!permiso?.cobranzas?.cobranzas_directas?.validar">
+              <ng-container *ngIf="cobranza.validado"> <mat-icon matTooltip="Verificado" class="icono-verde"> check </mat-icon> </ng-container>
+              <ng-container *ngIf="!cobranza.validado"> <mat-icon matTooltip="Pendiente de verificación" class="icono-rojo"> close </mat-icon> </ng-container>
+            </ng-container>
+          </ng-container>
+
+          <ng-container>
             <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="['ver', cobranza.id]"><mat-icon> visibility </mat-icon></button>
           </ng-container>
+
           <ng-container *ngIf="permiso?.cobranzas?.cobranzas_directas?.editar">
             <button mat-icon-button color="primary" matTooltip="Editar" [routerLink]="['editar', cobranza.id]" [disabled]="cobranza.fecha_referencia"><mat-icon> edit </mat-icon></button>
           </ng-container>

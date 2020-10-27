@@ -71,6 +71,8 @@
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let cuenta">
+          
+          <button mat-icon-button color="primary" (click)="DescargarReporte(cuenta)" matTooltip="Descargar reporte"><mat-icon> save_alt </mat-icon></button>
           <button mat-icon-button color="primary" (click)="Editar(cuenta)" matTooltip="Editar"><mat-icon> edit </mat-icon></button>
           <button mat-icon-button color="primary" (click)="Eliminar(cuenta)" matTooltip="Eliminar"><mat-icon> delete </mat-icon></button>
         </mat-cell>

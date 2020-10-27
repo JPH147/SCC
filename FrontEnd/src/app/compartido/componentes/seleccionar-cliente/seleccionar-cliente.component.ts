@@ -33,7 +33,7 @@ export class SeleccionarClienteComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.ListadoCliente = new ClienteDataSource(this.Servicio);
-    this.ListadoCliente.CargarClientes('','', '','',1);
+    this.ListadoCliente.CargarClientes('','', '','',1,new Date().getTime());
 
     if(this.data) {
       this.id_cliente = this.data.cliente
@@ -70,7 +70,8 @@ export class SeleccionarClienteComponent implements OnInit, AfterViewInit {
       "",
 			this.FiltroDni.nativeElement.value,
 			this.FiltroNombre.nativeElement.value,
-    	this.paginator.pageIndex+1
+      this.paginator.pageIndex+1,
+      new Date().getTime()
   	)
   }
 }
@@ -101,13 +102,14 @@ export class ClienteDataSource implements DataSource<any> {
     cip:string,
     dni: string,
     nombre: string,
-    prpagina: number
+    prpagina: number,
+    tiempo_consulta : number 
   ){
     this.CargandoInformacion.next(true);
 
     this.tiempo_consulta.next(new Date().getTime()) ;
 
-    this.Servicio.Listado( codigo, cip, dni, nombre,0,0, prpagina, 5,1, this.tiempo_consulta.value)
+    this.Servicio.Listado( codigo, cip, dni, nombre,0,0, prpagina, 5,1, tiempo_consulta)
     .pipe(catchError(() => of([])),
       finalize(() => this.CargandoInformacion.next(false))
     ).subscribe(res => {

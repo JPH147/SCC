@@ -207,50 +207,43 @@
           </mat-form-field>
         </mat-grid-tile>
 
-        <!-- <ng-container *ngIf="id_tipo==1"> -->
-          <div #Vendedor></div>
-          <div #Autorizador></div>
-        <!-- </ng-container> -->
+        <mat-grid-tile colspan=2 *ngIf="!id_credito">
+          <mat-form-field class="columnas-2">
+            <input placeholder="Vendedor" matInput [matAutocomplete]="auto" formControlName="vendedor" #Vendedor [readonly]="CreditosForm.value.id_vendedor">
+            <mat-icon color="primary" matSuffix (click)="RemoverVendedor()" *ngIf="CreditosForm.value.id_vendedor && !hay_presupuesto_vendedor && !this.cliente_refinanciado"> remove_circle </mat-icon>
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="VendedorSeleccionado()">
+              <mat-option *ngFor="let vendedor of ListadoVendedores" [value]="vendedor">
+                {{vendedor.nombre}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </mat-grid-tile>
 
-        <!-- <ng-container *ngIf="id_tipo>1">
-          <mat-grid-tile colspan=2 *ngIf="!id_credito">
-            <mat-form-field class="columnas-2">
-              <input placeholder="Vendedor" matInput [matAutocomplete]="auto" formControlName="vendedor" #Vendedor [readonly]="CreditosForm.value.id_vendedor">
-              <mat-icon color="primary" matSuffix (click)="RemoverVendedor()" *ngIf="CreditosForm.value.id_vendedor && !hay_presupuesto_vendedor && !this.cliente_refinanciado"> remove_circle </mat-icon>
-              <mat-autocomplete #auto="matAutocomplete" (optionSelected)="VendedorSeleccionado()">
-                <mat-option *ngFor="let vendedor of ListadoVendedores" [value]="vendedor">
-                  {{vendedor.nombre}}
-                </mat-option>
-              </mat-autocomplete>
-            </mat-form-field>
-          </mat-grid-tile>
+        <mat-grid-tile colspan=2 *ngIf="id_credito">
+          <mat-form-field class="columnas-2">
+            <input matInput type="text" placeholder="Vendedor" formControlName="vendedor" #Vendedor readonly>
+            <mat-icon color="primary" matSuffix (click)="RemoverVendedor()" *ngIf="!id_credito"> remove_circle </mat-icon>
+          </mat-form-field>
+        </mat-grid-tile>
 
-          <mat-grid-tile colspan=2 *ngIf="id_credito">
-            <mat-form-field class="columnas-2">
-              <input matInput type="text" placeholder="Vendedor" formControlName="vendedor" readonly>
-              <mat-icon color="primary" matSuffix (click)="RemoverVendedor()" *ngIf="!id_credito"> remove_circle </mat-icon>
-            </mat-form-field>
-          </mat-grid-tile>
+        <mat-grid-tile colspan=2 *ngIf="!id_credito">
+          <mat-form-field class="columnas-2">
+            <input placeholder="Autorizador" matInput [matAutocomplete]="auto3" formControlName=autorizador #Autorizador [readonly]="CreditosForm.value.id_autorizador">
+            <mat-icon color="primary" matSuffix (click)="RemoverAutorizador()" *ngIf="CreditosForm.value.id_autorizador"> remove_circle </mat-icon>
+            <mat-autocomplete #auto3="matAutocomplete" (optionSelected)="AutorizadorSeleccionado()">
+              <mat-option *ngFor="let autorizador of ListadoAudorizadores" [value]="autorizador">
+                {{autorizador.nombre}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </mat-grid-tile>
 
-          <mat-grid-tile colspan=2 *ngIf="!id_credito">
-            <mat-form-field class="columnas-2">
-              <input placeholder="Autorizador" matInput [matAutocomplete]="auto3" formControlName=autorizador #Autorizador [readonly]="CreditosForm.value.id_autorizador">
-              <mat-icon color="primary" matSuffix (click)="RemoverAutorizador()" *ngIf="CreditosForm.value.id_autorizador"> remove_circle </mat-icon>
-              <mat-autocomplete #auto3="matAutocomplete" (optionSelected)="AutorizadorSeleccionado()">
-                <mat-option *ngFor="let autorizador of ListadoAudorizadores" [value]="autorizador">
-                  {{autorizador.nombre}}
-                </mat-option>
-              </mat-autocomplete>
-            </mat-form-field>
-          </mat-grid-tile>
-
-          <mat-grid-tile colspan=2 *ngIf="id_credito">
-            <mat-form-field class="columnas-2">
-              <input matInput type="text" placeholder="Autorizador" formControlName="autorizador" readonly>
-              <mat-icon color="primary" matSuffix (click)="RemoverAutorizador()" *ngIf="!id_credito"> remove_circle </mat-icon>
-            </mat-form-field>
-          </mat-grid-tile>
-        </ng-container> -->
+        <mat-grid-tile colspan=2 *ngIf="id_credito">
+          <mat-form-field class="columnas-2">
+            <input matInput type="text" placeholder="Autorizador" formControlName="autorizador" #Autorizador readonly>
+            <mat-icon color="primary" matSuffix (click)="RemoverAutorizador()" *ngIf="!id_credito"> remove_circle </mat-icon>
+          </mat-form-field>
+        </mat-grid-tile>
 
         <mat-grid-tile colspan="3">
           <mat-form-field class="columnas-3">
