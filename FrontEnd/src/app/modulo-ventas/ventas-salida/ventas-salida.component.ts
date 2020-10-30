@@ -409,7 +409,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       // this.Cronograma=res.cronograma.cronograma;
       // this.CalcularTotalPagado( this.Cronograma ) ;
       
-      this.ListadoVentas.Informacion.next(this.Cronograma);
+      // this.ListadoVentas.Informacion.next(this.Cronograma);
       
       this.SServicio.ListarComisiones(res.id_salida).subscribe(res=>{
         this.Vendedores=res;
@@ -477,7 +477,6 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
           })
         }
       }
-
 
       if ( this.editar_documentos ) {
         this.foto_antiguo=res.foto;
@@ -1661,7 +1660,7 @@ export class VentaDataSource implements DataSource<any>{
   }
 
   disconnect(){
-    this.Informacion.complete()
+    // this.Informacion.complete()
   }
 
   CargarInformacion(id_venta, orden){

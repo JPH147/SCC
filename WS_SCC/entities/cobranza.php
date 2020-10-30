@@ -873,16 +873,16 @@
       $this->transaccion=htmlspecialchars(strip_tags($this->transaccion));
       $this->observaciones=htmlspecialchars(strip_tags($this->observaciones));
       
-            ob_start();
-            echo($this->fecha) ;
-            echo($this->cliente) ;
-            echo($this->cuenta) ;
-            echo($this->operacion) ;
-            echo($this->monto) ;
-            echo($this->tipo_transaccion) ;
-            echo($this->transaccion) ;
-            echo($this->observaciones) ;
-            error_log(ob_get_clean(), 4) ;
+            // ob_start();
+            // echo($this->fecha) ;
+            // echo($this->cliente) ;
+            // echo($this->cuenta) ;
+            // echo($this->operacion) ;
+            // echo($this->monto) ;
+            // echo($this->tipo_transaccion) ;
+            // echo($this->transaccion) ;
+            // echo($this->observaciones) ;
+            // error_log(ob_get_clean(), 4) ;
 
       if($result->execute())
       {

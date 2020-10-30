@@ -184,7 +184,7 @@
                     <button mat-icon-button [matMenuTriggerFor]="menu2" color="primary" matTooltip="Editar expediente" ><mat-icon> edit </mat-icon></button>
                     <mat-menu #menu2="matMenu">
                       <button mat-menu-item color="primary" (click)="AgregarDocumentos(proceso)" *ngIf="proceso.id_tipo_documento>0 && proceso.id_tipo_documento!=4" [disabled]="proceso.id_tipo_documento==5"> Agregar documentos </button>
-                      <button mat-menu-item color="primary" (click)="CambiarSede(proceso)" [disabled]="proceso.id_tipo_documento!=3"> Registrar traslado </button>
+                      <button mat-menu-item color="primary" (click)="CambiarSede(proceso)" [disabled]="proceso.id_tipo_documento!=3 && proceso.id_tipo_documento!=6"> Registrar traslado </button>
                     </mat-menu>
                   </ng-container>
                   <ng-container *ngIf="permiso?.procesos_judiciales?.listado_procesos?.ver_cronograma">

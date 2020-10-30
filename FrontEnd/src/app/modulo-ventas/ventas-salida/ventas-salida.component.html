@@ -1080,41 +1080,39 @@
         </mat-grid-tile>
 
         <mat-grid-tile>
-          <mat-grid-tile>
-            <ng-container *ngIf="VentasSalidaForm.get('estado_interes').value < 3">
-              Aplica interés: &nbsp;
-              <ng-container *ngIf="editar_penalidad">
-                <mat-radio-group aria-label="Interés" formControlName="estado_interes">
-                  <mat-radio-button [value]="1"> <mat-icon class="icono-verde"> check </mat-icon> </mat-radio-button>
-                  &nbsp;
-                  <mat-radio-button [value]="2"> <mat-icon class="icono-rojo"> close </mat-icon> </mat-radio-button>
-                </mat-radio-group>
+          <ng-container *ngIf="VentasSalidaForm.get('estado_interes').value < 3">
+            Aplica interés: &nbsp;
+            <ng-container *ngIf="editar_penalidad">
+              <mat-radio-group aria-label="Interés" formControlName="estado_interes">
+                <mat-radio-button [value]="1"> <mat-icon class="icono-verde"> check </mat-icon> </mat-radio-button>
+                &nbsp;
+                <mat-radio-button [value]="2"> <mat-icon class="icono-rojo"> close </mat-icon> </mat-radio-button>
+              </mat-radio-group>
+            </ng-container>
+            <ng-container *ngIf="!editar_penalidad">
+              <ng-container *ngIf="VentasSalidaForm.get('estado_interes').value == 1">
+                <mat-icon class="icono-verde"> check </mat-icon>
               </ng-container>
-              <ng-container *ngIf="!editar_penalidad">
-                <ng-container *ngIf="VentasSalidaForm.get('estado_interes').value == 1">
-                  <mat-icon class="icono-verde"> check </mat-icon>
-                </ng-container>
-                <ng-container *ngIf="VentasSalidaForm.get('estado_interes').value == 2">
-                  <mat-icon class="icono-rojo"> close </mat-icon>
-                </ng-container>
+              <ng-container *ngIf="VentasSalidaForm.get('estado_interes').value == 2">
+                <mat-icon class="icono-rojo"> close </mat-icon>
               </ng-container>
             </ng-container>
-  
-            <ng-container *ngIf="VentasSalidaForm.get('estado_interes').value == 3">
-              <ng-container *ngIf="!editar_penalidad">
-                <mat-error> Tiene interés </mat-error>
+          </ng-container>
+
+          <ng-container *ngIf="VentasSalidaForm.get('estado_interes').value == 3">
+            <ng-container *ngIf="!editar_penalidad">
+              <mat-error> Tiene interés </mat-error>
+            </ng-container>
+            <ng-container *ngIf="editar_penalidad">
+              <ng-container *ngIf="VentasSalidaForm.get('pagado_interes').value == 0">
+                <button mat-stroked-button color="warn" (click)="RetirarInteres()"> Retirar interés </button>
               </ng-container>
-              <ng-container *ngIf="editar_penalidad">
-                <ng-container *ngIf="VentasSalidaForm.get('pagado_interes').value == 0">
-                  <button mat-stroked-button color="warn" (click)="RetirarInteres()"> Retirar interés </button>
-                </ng-container>
-  
-                <ng-container *ngIf="VentasSalidaForm.get('pagado_interes').value > 0">
-                  <mat-error> No se puede retirar el interés porque han habido pagos </mat-error>
-                </ng-container>
+
+              <ng-container *ngIf="VentasSalidaForm.get('pagado_interes').value > 0">
+                <mat-error> No se puede retirar el interés porque han habido pagos </mat-error>
               </ng-container>
             </ng-container>
-          </mat-grid-tile>
+          </ng-container>
         </mat-grid-tile>
       </mat-grid-list>
     </div>
