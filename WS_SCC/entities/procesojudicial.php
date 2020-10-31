@@ -242,7 +242,7 @@ Class Proceso{
           "numero"=>$numero,
           "sumilla"=>$sumilla,
           "archivo"=>$archivo,
-          "comentarios"=>$comentarios
+          "comentarios"=>$comentarios,
         );
         array_push($procesos_list["procesos"],$items);
     }
@@ -277,7 +277,8 @@ Class Proceso{
           "numero"=>$numero,
           "sumilla"=>$sumilla,
           "archivo"=>$archivo,
-          "comentarios"=>$comentarios
+          "comentarios"=>$comentarios,
+          "fecha_creacion"=>$fecha_creacion,
         );
         array_push($procesos_list["procesos"],$items);
     }
@@ -310,7 +311,8 @@ Class Proceso{
           "numero"=>$numero,
           "sumilla"=>$sumilla,
           "archivo"=>$archivo,
-          "comentarios"=>$comentarios
+          "comentarios"=>$comentarios,
+          "fecha_creacion"=>$fecha_creacion,
         );
         array_push($procesos_list["procesos"],$items);
     }

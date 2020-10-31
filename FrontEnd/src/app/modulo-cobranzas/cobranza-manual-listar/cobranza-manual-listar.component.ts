@@ -7,6 +7,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { Rol } from 'src/app/compartido/modelos/login.modelos';
 import { Store } from '@ngrx/store';
 import { EstadoSesion } from '../../compartido/reducers/permisos.reducer';
+import { VentanaConfirmarComponent } from 'src/app/compartido/componentes/ventana-confirmar/ventana-confirmar.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-cobranza-manual-listar',
@@ -32,6 +34,7 @@ export class CobranzaManualListarComponent implements OnInit, AfterViewInit {
 
   constructor(
     private _store : Store<EstadoSesion> ,
+    private _dialogo : MatDialog ,
     private _cobranzas : CobranzasService ,
   ) { }
 
@@ -60,12 +63,12 @@ export class CobranzaManualListarComponent implements OnInit, AfterViewInit {
       debounceTime(200) ,
       distinctUntilChanged() ,
       tap(()=>{
-        this.CambioFiltro() ;
+        this.CargarData() ;
       })
     ).subscribe()
   }
 
-  CambioFiltro(){
+  CargarData(){
     this.ListadoCobranza.CargarCronograma(
       this.FiltroCliente.nativeElement.value ,
       this.FiltroDNI.nativeElement.value ,
@@ -76,6 +79,20 @@ export class CobranzaManualListarComponent implements OnInit, AfterViewInit {
       this.paginator.pageIndex + 1 ,
       this.paginator.pageSize ,
     )
+  }
+  
+  EliminarCobranza(cobranza){
+    let Ventana = this._dialogo.open(VentanaConfirmarComponent,{
+      data: { objeto: "la cobranza", valor: "con fecha "+cobranza.fecha }
+    })
+
+    Ventana.afterClosed().subscribe(res=>{
+      if (res) {
+        this._cobranzas.EliminarCobranzaManual(cobranza.id).subscribe(res=>{
+          this.CargarData();
+        });
+      }
+    })
   }
 }
 

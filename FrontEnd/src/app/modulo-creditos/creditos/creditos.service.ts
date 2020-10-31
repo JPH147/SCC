@@ -301,6 +301,7 @@ export class CreditosService {
 
   Actualizar(
     id_credito:number,
+    tipo_credito : number ,
     sucursal:number,
     fecha_credito:Date,
     autorizador:number,
@@ -337,6 +338,7 @@ export class CreditosService {
 
     let params = new HttpParams()
       .set('prcredito',id_credito.toString())
+      .set('prtipocredito',tipo_credito.toString())
       .set('prsucursal',sucursal.toString())
       .set('prfecha',moment(fecha_credito).format("YYYY-MM-DD"))
       .set('prautorizador',autorizador ? autorizador.toString() : "0")
@@ -574,10 +576,12 @@ export class CreditosService {
   }
 
   EliminarCredito(
-    id_credito : number
+    id_credito : number ,
+    tipo : number ,
   ){
     let params = new HttpParams()
       .set('prcredito',id_credito.toString())
+      .set('prtipo',id_credito.toString()) ;
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 

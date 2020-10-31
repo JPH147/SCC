@@ -50,6 +50,7 @@ Class Usuario{
                 "fecha_creacion"=>$row['usr_ultimologueo'],
                 "ultimo_logueo"=>$row['usr_fechacreacion'],
                 "id_perfil"=>$row['id_perfil'],
+                "pss"=>$row['pss'],
                 "perfil"=>$row['perfil'],
             );
 

@@ -33,14 +33,14 @@
       $proceso->archivo=trim($_POST["prarchivo"]);
       $proceso->comentarios=trim($_POST["prcomentarios"]);
 
-      $usuario_alvis = trim($_GET["usuario_alvis"]) ;
+      $usuario_alvis = trim($_POST["usuario_alvis"]) ;
 
       $resultado = $proceso->create_proceso_judicial_detalle() ;
       if($resultado)
       {
         $log->create($usuario_alvis, 2, 1, $resultado) ;
 
-        print_json("0000", "Se creó el detalle del proceso satisfactoriamente.", $proceso->id_proceso);
+        print_json("0000", "Se creó el detalle del proceso satisfactoriamente.", $resultado);
       }
       else
       {

@@ -6,6 +6,7 @@
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
  
     include_once '../config/database.php';
+    include_once '../entities/log.php';
     include_once '../entities/venta.php';
     include_once '../shared/utilities.php';
 
@@ -14,13 +15,12 @@
 
     try
     {
+        $log = new Log($db);
         $venta = new Venta($db);
         $data = json_decode(file_get_contents('php://input'), true);
 
-        
         if (($_POST["prid"])!=null)
         {
-
             $venta->id_venta=trim($_POST["prid"]);
             $venta->fecha=trim($_POST["prfecha"]);
             $venta->sucursal=trim($_POST["prsucursal"]);
@@ -52,8 +52,11 @@
             $venta->vnt_otros_pdf=trim($_POST["prpdfotros"]);
             $venta->observaciones=trim($_POST["probservaciones"]);
 
+            $usuario_alvis = trim($_POST["usuario_alvis"]) ;
+
             if($venta->update())
             {
+                $log->create($usuario_alvis, 6, 2, $venta->id_venta) ;
                 print_json("0000", "Se actualizó la venta satisfactoriamente.", $venta->id_venta);
             }
             else

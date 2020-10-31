@@ -6,6 +6,7 @@
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
  
     include_once '../config/database.php';
+    include_once '../entities/log.php';
     include_once '../entities/cobranza.php';
     include_once '../shared/utilities.php';
 
@@ -14,6 +15,7 @@
 
     try
     {
+        $log = new Log($db);
         $cobranza = new Cobranzas($db);
 
         if (($_POST["prid"])!=null)
@@ -31,8 +33,11 @@
             $cobranza->observaciones=trim($_POST["probservaciones"]);
             $cobranza->detalle_cabecera = json_decode( trim($_POST["prdetalle"]) );
 
+            $usuario_alvis = trim($_POST["usuario_alvis"]) ;
+
             if($cobranza->update_directa())
             {
+                $log->create($usuario_alvis, 16, 2, $cobranza->id_cobranza) ;
                 print_json("0000", "Se actualizó la cobranza satisfactoriamente.", $cobranza->id_cobranza);
             }
             else

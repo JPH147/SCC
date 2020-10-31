@@ -6,6 +6,7 @@
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
  
     include_once '../config/database.php';
+    include_once '../entities/log.php';
     include_once '../entities/salidacabecera.php';
     include_once '../shared/utilities.php';
 
@@ -14,6 +15,7 @@
 
     try
     {
+        $log = new Log($db);
         $salida = new SalidaCabecera($db);
         $data = json_decode(file_get_contents('php://input'), true);
 
@@ -23,8 +25,11 @@
             $salida->fecha = trim($_POST["prfecha"]);
             $salida->observacion = trim($_POST["probservacion"]);
 
+            $usuario_alvis = trim($_POST["usuario_alvis"]) ;
+            
             if($salida->create_llegada())
             {
+                $log->create($usuario_alvis, 7, 4, $salida->id_salida) ;
                 print_json("0000", "Se creó la llegada satisfactoriamente.", "");
             }
             else

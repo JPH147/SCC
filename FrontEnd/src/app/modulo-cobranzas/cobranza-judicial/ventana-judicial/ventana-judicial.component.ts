@@ -93,7 +93,6 @@ export class VentanaJudicialComponent implements OnInit {
       this._judiciales.ListarDetallexProceso( this.data.proceso ) ,
       this._judiciales.ListarDetalleAnteriorxProceso( this.data.proceso )
     ]).subscribe(res=>{
-      console.log(res)
       if( res[0] || res[1] ) {
       } else {
         this.primer_documento = true ;

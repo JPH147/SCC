@@ -55,6 +55,7 @@ class Log{
         "accion" => $accion ,
         "id_referencia" => $id_referencia ,
         "id_log_referencia" => $id_log_referencia ,
+        "tabla_referenciada" => $tabla_referenciada ,
         "referencia" => $referencia ,
       );
       array_push($log_list["logs"],$item);

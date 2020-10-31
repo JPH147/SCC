@@ -223,7 +223,9 @@ class Seguimiento{
 
         if($result->execute())
         {
-            return true;
+            $row = $result->fetch(PDO::FETCH_ASSOC) ;
+    
+            return $row['id'] ;
         }
         return false; 
     }

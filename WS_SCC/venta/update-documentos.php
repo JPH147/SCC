@@ -6,6 +6,7 @@
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
  
     include_once '../config/database.php';
+    include_once '../entities/log.php';
     include_once '../entities/venta.php';
     include_once '../shared/utilities.php';
 
@@ -14,6 +15,7 @@
 
     try
     {
+        $log = new Log($db);
         $venta = new Venta($db);
         $data = json_decode(file_get_contents('php://input'), true);
 
@@ -33,8 +35,11 @@
             $venta->pdf_oficio=trim($_POST["prpdfoficio"]);
             $venta->vnt_otros_pdf=trim($_POST["prpdfotros"]);
 
+            $usuario_alvis = trim($_POST["usuario_alvis"]) ;
+
             if($venta->update_documentos())
             {
+                $log->create($usuario_alvis, 6, 8, $credito->id_venta) ;
                 print_json("0000", "Se actualizó la venta satisfactoriamente.", $venta->id_venta);
             }
             else

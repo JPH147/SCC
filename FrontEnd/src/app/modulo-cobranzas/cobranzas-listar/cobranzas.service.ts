@@ -862,6 +862,19 @@ export class CobranzasService {
     return this.http.post(this.url + 'cobranza/create-manual.php', params, {headers: headers});
   }
 
+  EliminarCobranzaManual(
+    id_cobranza_manual : number 
+  ) :Observable<any> {
+
+    let params = new HttpParams()
+      .set("prid", id_cobranza_manual.toString())
+
+    let headers = new HttpHeaders()
+      .set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + "cobranza/delete-cobranza-manual.php" , params , { headers : headers } );
+  }
+
   ListarCobranzasManuales(
     cliente : string ,
     cliente_dni : string ,

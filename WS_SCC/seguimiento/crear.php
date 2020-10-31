@@ -7,6 +7,7 @@
  
     include_once '../config/database.php';
     include_once '../entities/seguimiento.php';
+    include_once '../entities/log.php';
     include_once '../shared/utilities.php';
 
     $database = new Database();
@@ -14,9 +15,9 @@
 
     try
     {
+        $log = new Log($db);
         $seguimiento = new Seguimiento($db);
         $data = json_decode(file_get_contents('php://input'), true);
-
         
         if (($_POST["prseguimiento"])!=null)
         {
@@ -29,9 +30,14 @@
             $seguimiento->pdf_foto=trim($_POST["prpdffoto"]);
             $seguimiento->observacion=trim($_POST["probservacion"]);
 
-            if($seguimiento->crear())
+            $usuario_alvis = trim($_POST["usuario_alvis"]) ;
+
+            $id_seguimiento = $seguimiento->crear() ;
+            if( $id_seguimiento )
             {
-                print_json("0000", "Se creó el seguimiento satisfactoriamente.", $seguimiento->id_seguimiento);
+                $log->create($usuario_alvis, 5, 1, $id_seguimiento) ;
+
+                print_json("0000", "Se creó el seguimiento satisfactoriamente.", $id_seguimiento );
             }
             else
             {

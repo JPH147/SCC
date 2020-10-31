@@ -4,6 +4,8 @@
   use PhpOffice\PhpSpreadsheet\Spreadsheet;
   use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
+  date_default_timezone_set("America/Lima") ;
+
   Class Cobranzas{
     
     private $conn;
@@ -65,6 +67,7 @@
     public $credito ;
     public $venta ;
     public $id_liquidacion ;
+    public $usuario_alvis ;
 
     public function __construct($db){
       $this->conn = $db;
@@ -851,10 +854,13 @@
         :prtipo,
         :prtransaccion,
         :probservaciones
+        :prusuarioalvis,
+        :prfechaactual
       )";
 
       $result = $this->conn->prepare($query);
 
+      $momento = date("Y-m-d H:i:s");
       $result->bindParam(":prfecha", $this->fecha);
       $result->bindParam(":prcliente", $this->cliente);
       $result->bindParam(":prcuenta", $this->cuenta);
@@ -863,6 +869,8 @@
       $result->bindParam(":prtipo", $this->tipo_transaccion);
       $result->bindParam(":prtransaccion", $this->transaccion);
       $result->bindParam(":probservaciones", $this->observaciones);
+      $result->bindParam(":prusuarioalvis", $this->usuario_alvis);
+      $result->bindParam(":prfechaactual", $momento);
       
       $this->fecha=htmlspecialchars(strip_tags($this->fecha));
       $this->cliente=htmlspecialchars(strip_tags($this->cliente));
@@ -872,6 +880,7 @@
       $this->tipo_transaccion=htmlspecialchars(strip_tags($this->tipo_transaccion));
       $this->transaccion=htmlspecialchars(strip_tags($this->transaccion));
       $this->observaciones=htmlspecialchars(strip_tags($this->observaciones));
+      $this->usuario_alvis=htmlspecialchars(strip_tags($this->usuario_alvis));
       
             // ob_start();
             // echo($this->fecha) ;
@@ -1803,6 +1812,24 @@
       return $cuentas;
     }
 
+    function delete_cobranza_manual(){
+      $query = "CALL sp_eliminarcobranzamanual(
+        :prcobranzamanual
+      )";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(":prcobranzamanual", $this->cobranza_manual);
+
+      $this->cobranza_manual=htmlspecialchars(strip_tags($this->cobranza_manual));
+
+      if($result->execute())
+      {
+        return true;
+      }
+      return false;
+    }
+
     // DEPRECIADO
     // Esta función asigna el cronograma en el mismo campo de cuota
     // esta es la forma 'antigua' 
@@ -1873,10 +1900,14 @@
         :prfecha,
         :prcomprobante,
         :prtotal,
-        :probservacion
+        :probservacion,
+        :prusuarioalvis,
+        :prfechaactual
       )";
 
       $result = $this->conn->prepare($query);
+
+      $momento = date("Y-m-d H:i:s");
 
       $result->bindParam(":prcredito", $this->credito);
       $result->bindParam(":prtipocobranza", $this->tipo_cobranza);
@@ -1884,6 +1915,8 @@
       $result->bindParam(":prcomprobante", $this->comprobante);
       $result->bindParam(":prtotal", $this->total);
       $result->bindParam(":probservacion", $this->observacion);
+      $result->bindParam(":prusuarioalvis", $this->usuario_alvis);
+      $result->bindParam(":prfechaactual", $momento);
 
       $this->credito=htmlspecialchars(strip_tags($this->credito));
       $this->tipo_cobranza=htmlspecialchars(strip_tags($this->tipo_cobranza));
@@ -1891,6 +1924,7 @@
       $this->comprobante=htmlspecialchars(strip_tags($this->comprobante));
       $this->total=htmlspecialchars(strip_tags($this->total));
       $this->observacion=htmlspecialchars(strip_tags($this->observacion));
+      $this->usuario_alvis=htmlspecialchars(strip_tags($this->usuario_alvis));
 
       if($result->execute())
       {
@@ -1907,10 +1941,14 @@
         :prfecha,
         :prcomprobante,
         :prtotal,
-        :probservacion
+        :probservacion,
+        :prusuarioalvis,
+        :prfechaactual
       )";
 
       $result = $this->conn->prepare($query);
+
+      $momento = date("Y-m-d H:i:s");
 
       $result->bindParam(":prventa", $this->venta);
       $result->bindParam(":prtipocobranza", $this->tipo_cobranza);
@@ -1918,6 +1956,8 @@
       $result->bindParam(":prcomprobante", $this->comprobante);
       $result->bindParam(":prtotal", $this->total);
       $result->bindParam(":probservacion", $this->observacion);
+      $result->bindParam(":prusuarioalvis", $this->usuario_alvis);
+      $result->bindParam(":prfechaactual", $momento);
 
       $this->venta=htmlspecialchars(strip_tags($this->venta));
       $this->tipo_cobranza=htmlspecialchars(strip_tags($this->tipo_cobranza));
@@ -1925,6 +1965,7 @@
       $this->comprobante=htmlspecialchars(strip_tags($this->comprobante));
       $this->total=htmlspecialchars(strip_tags($this->total));
       $this->observacion=htmlspecialchars(strip_tags($this->observacion));
+      $this->usuario_alvis=htmlspecialchars(strip_tags($this->usuario_alvis));
 
       if($result->execute())
       {

@@ -32,7 +32,7 @@
       $proceso->numero_cuotas=trim($_POST["prnumerocuotas"]);
       $proceso->total=trim($_POST["prtotal"]);
 
-      $usuario_alvis = trim($_GET["usuario_alvis"]) ;
+      $usuario_alvis = trim($_POST["usuario_alvis"]) ;
 
       if($proceso->create_proceso_judicial())
       {

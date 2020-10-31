@@ -6,6 +6,7 @@
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
  
     include_once '../config/database.php';
+    include_once '../entities/log.php';
     include_once '../entities/cobranza.php';
     include_once '../shared/utilities.php';
 
@@ -14,6 +15,7 @@
 
     try
     {
+        $log = new Log($db);
         $cobranza = new Cobranzas($db);
 
         if (($_POST["prtransaccion"])!=null)
@@ -25,8 +27,10 @@
             $cobranza->usuario = trim($_POST["prusuario"]) ;
             $cobranza->observaciones = trim($_POST["probservacion"]) ;
   
+            $usuario_alvis = trim($_POST["usuario_alvis"]) ;
             if($cobranza->create_liquidacion())
             {
+                $log->create($usuario_alvis, 19, 1, $cobranza->id_liquidacion) ;
                 print_json("0000", "Se creó la liquidacion satisfactoriamente.", $cobranza->id_liquidacion);
             }
             else

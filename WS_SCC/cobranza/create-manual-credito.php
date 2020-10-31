@@ -25,6 +25,8 @@
             $cobranza->total=trim($_POST["prtotal"]);
             $cobranza->observacion=trim($_POST["probservacion"]);
             
+            $cobranza->usuario_alvis=trim($_POST["usuario_alvis"]);
+
             if($cobranza->create_cobranza_manual_credito())
             {
               print_json("0000", "Se creó la cobranza satisfactoriamente.", $cobranza->id_cobranza);

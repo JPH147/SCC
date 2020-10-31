@@ -6,6 +6,7 @@
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
  
     include_once '../config/database.php';
+    include_once '../entities/log.php';
     include_once '../entities/cobranza.php';
     include_once '../shared/utilities.php';
 
@@ -14,14 +15,18 @@
 
     try
     {
+        $log = new Log($db);
         $cobranza = new Cobranzas($db);
 
         if ( ($_POST["prid"])!=null )
         {
             $cobranza->id_cobranza=trim($_POST["prid"]);
 
+            $usuario_alvis = trim($_POST["usuario_alvis"]) ;
+            
             if($cobranza->delete_archivos_cabecera())
             {
+                $log->create($usuario_alvis, 15, 1, $cobranza->id_cobranza) ;
                 print_json("0000", "Se eliminó la cobranza satisfactoriamente.", true);
             }
             else

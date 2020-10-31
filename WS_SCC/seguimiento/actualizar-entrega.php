@@ -6,6 +6,7 @@
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
  
     include_once '../config/database.php';
+    include_once '../entities/log.php';
     include_once '../entities/seguimiento.php';
     include_once '../shared/utilities.php';
 
@@ -14,6 +15,7 @@
 
     try
     {
+        $log = new Log($db);
         $seguimiento = new Seguimiento($db);
         $data = json_decode(file_get_contents('php://input'), true);
 
@@ -24,8 +26,11 @@
             $seguimiento->fecha=trim($_POST["prfecha"]);
             $seguimiento->usuario=trim($_POST["prusuario"]);
 
+            $usuario_alvis = trim($_POST["usuario_alvis"]) ;
+
             if($seguimiento->registrar_entrega())
             {
+                $log->create($usuario_alvis, 5, 4, $seguimiento->id_seguimiento) ;
                 print_json("0000", "Se actualizó el seguimiento satisfactoriamente.", $seguimiento->id_seguimiento);
             }
             else

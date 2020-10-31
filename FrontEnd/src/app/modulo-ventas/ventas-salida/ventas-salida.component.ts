@@ -1560,10 +1560,16 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       this.editar_penalidad = false ;
 
       this.Cargando.next(true) ;
-      this.Servicio.ActualizarEstadoPenalidad(
-        this.id_venta ,
-        this.VentasSalidaForm.get('estado_penalidad').value ,
-      )
+      forkJoin([
+        this.Servicio.ActualizarEstadoInteres(
+          this.id_venta ,
+          this.VentasSalidaForm.get('estado_interes').value ,
+        ),
+        this.Servicio.ActualizarEstadoPenalidad(
+          this.id_venta ,
+          this.VentasSalidaForm.get('estado_penalidad').value ,
+        )
+      ])
       .pipe(
         finalize(()=>{
           this.Cargando.next(false) ;
@@ -1572,10 +1578,10 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       .subscribe(respuesta =>{
         if ( respuesta ) {
           this.SeleccionarVentaxId(this.id_venta) ;
-          this.Notificacion.Snack("Se actualizó el estado de la penalidad","")
+          this.Notificacion.Snack("Se actualizaron las condiciones de incumplimiento","")
         }
         if( !respuesta ) {
-          this.Notificacion.Snack("Ocurrió un error al actualizar el estado de la penalidad","")
+          this.Notificacion.Snack("Ocurrió un error al actualizar las condiciones","")
         }
       })
     }

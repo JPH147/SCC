@@ -6,6 +6,7 @@
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
  
     include_once '../config/database.php';
+    include_once '../entities/log.php';
     include_once '../entities/cobranza.php';
     include_once '../shared/utilities.php';
 
@@ -14,11 +15,11 @@
 
     try
     {
+        $log = new Log($db);
         $cobranza = new Cobranzas($db);
 
         if ( ($_POST["prsede"])!=null && ($_POST["prdetalle"])!=null )
         {
-            // $cobranza->institucion=trim($_POST["prinstitucion"]);
             $cobranza->sede=trim($_POST["prsede"]);
             $cobranza->tipo_pago=trim($_POST["prtipopago"]);
             $cobranza->fecha_inicio=null;
@@ -28,8 +29,11 @@
             $cobranza->archivo=trim($_POST["prarchivo"]);
             $cobranza->detalle_cabecera=json_decode( trim($_POST["prdetalle"]) );
 
+            $usuario_alvis = trim($_POST["usuario_alvis"]) ;
+
             if($cobranza->create_archivos_cabecera())
             {
+                $log->create($usuario_alvis, 15, 1, $cobranza->id_cobranza) ;
                 print_json("0000", "Se creó la cobranza satisfactoriamente.", $cobranza->id_cobranza);
             }
             else

@@ -1561,7 +1561,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     Dialogo.afterClosed().subscribe(res=>{
       this.Cargando.next(true) ;
       if (res) {
-        this.Servicio.EliminarCredito(this.id_credito_estandar).subscribe(res=>{
+        this.Servicio.EliminarCredito(this.id_credito_estandar,2).subscribe(res=>{
           this.router.navigate(['/creditos','creditos']) ;
         });
       }
@@ -1666,6 +1666,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
 
       this.Servicio.Actualizar(
         this.id_credito_editar,
+        1,
         this.CreditosForm.value.sucursal,
         this.CreditosForm.value.fecha_credito,
         this.CreditosForm.value.id_autorizador ? this.CreditosForm.value.id_autorizador : 0,
@@ -1893,6 +1894,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
 
       this.Servicio.Actualizar(
         this.id_credito_editar,
+        2 ,
         this.CreditosForm.value.sucursal,
         this.CreditosForm.value.fecha_credito,
         this.CreditosForm.value.id_autorizador ? this.CreditosForm.value.id_autorizador : 0,
@@ -2247,10 +2249,10 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       .subscribe(respuesta =>{
         if ( respuesta ) {
           this.SeleccionarCredito(this.id_credito) ;
-          this.Notificacion.Snack("Se actualizó el estado de la penalidad","")
+          this.Notificacion.Snack("Se actualizaron las condiciones de incumplimiento","")
         }
         if( !respuesta ) {
-          this.Notificacion.Snack("Ocurrió un error al actualizar el estado de la penalidad","")
+          this.Notificacion.Snack("Ocurrió un error al actualizar las condiciones","")
         }
       })
     }

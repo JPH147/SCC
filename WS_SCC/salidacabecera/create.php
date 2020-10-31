@@ -7,6 +7,7 @@
  
     include_once '../config/database.php';
     include_once '../entities/salidacabecera.php';
+    include_once '../entities/log.php';
     include_once '../shared/utilities.php';
 
     $database = new Database();
@@ -14,6 +15,7 @@
 
     try
     {
+        $log = new Log($db);
         $salida = new SalidaCabecera($db);
         $data = json_decode(file_get_contents('php://input'), true);
 
@@ -30,8 +32,11 @@
             $salida->chofer_nombre = trim($_POST["prchofernombre"]);
             $salida->observacion = trim($_POST["probservacion"]);
 
+            $usuario_alvis = trim($_POST["usuario_alvis"]) ;
+
             if($salida->create())
             {
+                $log->create($usuario_alvis, 7, 1, $salida->id) ;
                 print_json("0000", "Se creó la salida satisfactoriamente.", $salida->id);
             }
             else

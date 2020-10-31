@@ -20,7 +20,7 @@
 
     <mat-grid-tile>
       <mat-form-field class="columnas-1">
-        <input matInput [matDatepicker]="inicio" placeholder="Fecha de inicio" [(ngModel)]="fecha_inicio" (dateChange)="CambioFiltro()">
+        <input matInput [matDatepicker]="inicio" placeholder="Fecha de inicio" [(ngModel)]="fecha_inicio" (dateChange)="CargarData()">
         <mat-datepicker-toggle matSuffix [for]="inicio"></mat-datepicker-toggle>
         <mat-datepicker #inicio disabled="false"></mat-datepicker>
       </mat-form-field>
@@ -28,7 +28,7 @@
 
     <mat-grid-tile>
       <mat-form-field class="columnas-1">
-        <input matInput [matDatepicker]="fin" placeholder="Fecha de fin" [(ngModel)]="fecha_fin" (dateChange)="CambioFiltro()">
+        <input matInput [matDatepicker]="fin" placeholder="Fecha de fin" [(ngModel)]="fecha_fin" (dateChange)="CargarData()">
         <mat-datepicker-toggle matSuffix [for]="fin"></mat-datepicker-toggle>
         <mat-datepicker #fin disabled="false"></mat-datepicker>
       </mat-form-field>
@@ -36,7 +36,7 @@
 
     <mat-grid-tile>
       <mat-form-field class="columnas-1">
-        <mat-select placeholder="Tipo" [(ngModel)]="tipo_cobranza" (selectionChange)="CambioFiltro()">
+        <mat-select placeholder="Tipo" [(ngModel)]="tipo_cobranza" (selectionChange)="CargarData()">
           <mat-option [value]="0"> Todos </mat-option>
           <mat-option *ngFor="let tipo of Tipos" [value]="tipo.id"> {{tipo.nombre}} </mat-option>
         </mat-select>
@@ -98,6 +98,7 @@
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let cobranza">
           <button mat-icon-button color="primary" matTooltip="Ver" [routerLink]="['ver', cobranza.id]"><mat-icon> visibility </mat-icon></button>
+          <button mat-icon-button color="primary" matTooltip="Eliminar" (click)="EliminarCobranza(cobranza)"><mat-icon> delete </mat-icon></button>
         </mat-cell>
       </ng-container>
 

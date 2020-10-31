@@ -124,7 +124,7 @@ export class CreditosListarComponent implements OnInit {
 
     Ventana.afterClosed().subscribe(res=>{
       if (res) {
-        this.Servicio.EliminarCredito(credito.id).subscribe(res=>{
+        this.Servicio.EliminarCredito(credito.id,2).subscribe(res=>{
           this.CargarData()
         });
       }

@@ -6,6 +6,7 @@
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
  
     include_once '../config/database.php';
+    // include_once '../entities/log.php';
     include_once '../entities/vendedor.php';
     include_once '../shared/utilities.php';
 
@@ -14,6 +15,7 @@
 
     try
     {
+        // $log = new Log($db);
         $vendedor = new Vendedor($db);
         $data = json_decode(file_get_contents('php://input'), true);
 
@@ -25,6 +27,8 @@
             $vendedor->comision_efectiva = trim($_POST["prcomisionefectiva"]);
             $vendedor->comision_retenida_porcentaje = trim($_POST["prcomisionretenidaporcentaje"]);
             $vendedor->comision_retenida = trim($_POST["prcomisionretenida"]);
+
+            // $usuario_alvis = trim($_POST["usuario_alvis"]) ;
 
             if($vendedor->create_comision())
             {

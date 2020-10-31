@@ -601,6 +601,29 @@ export class VentaService {
     );
   }
 
+  ActualizarEstadoInteres(
+    id_venta : number ,
+    estado_interes : number ,
+  ) : Observable<boolean> {
+    let params = new HttpParams()
+      .set('prventa', id_venta.toString())
+      .set('prestadointeres', estado_interes.toString()) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'venta/actualizar-estado-interes.php', params, {headers: headers})
+    .pipe(
+      map((res)=>{
+        if ( res['codigo'] === 0) {
+          return true ;
+        } else {
+          console.log(res) ;
+          return false ;
+        }
+      })
+    );
+  }
+
   EliminarPenalidad(
     id_venta : number ,
   ) : Observable<boolean> {

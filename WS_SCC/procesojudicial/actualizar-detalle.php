@@ -18,7 +18,6 @@
     $log = new Log($db);
     $proceso = new Proceso($db);
     $data = json_decode(file_get_contents('php://input'), true);
-
     
     if (($_POST["prproceso"])!=null)
     {
@@ -33,7 +32,7 @@
       $proceso->archivo=trim($_POST["prarchivo"]);
       $proceso->comentarios=trim($_POST["prcomentarios"]);
       
-      $usuario_alvis = trim($_GET["usuario_alvis"]) ;
+      $usuario_alvis = trim($_POST["usuario_alvis"]) ;
 
       if($proceso->update_proceso_judicial_detalle())
       {

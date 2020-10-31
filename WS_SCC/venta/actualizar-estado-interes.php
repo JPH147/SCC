@@ -6,7 +6,8 @@
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
  
     include_once '../config/database.php';
-    include_once '../entities/credito.php';
+    include_once '../entities/log.php';
+    include_once '../entities/venta.php';
     include_once '../shared/utilities.php';
 
     $database = new Database();
@@ -14,16 +15,23 @@
 
     try
     {
-      $credito = new Creditos($db);
+      $venta = new Venta($db);
+      $log = new Log($db);
       $data = json_decode(file_get_contents('php://input'), true);
       
-      if (($_POST["prcredito"])!=null)
+      if (($_POST["prventa"])!=null)
       {
-        $credito->id_credito=trim($_POST["prcredito"]);
-        $credito->estado_interes=trim($_POST["prestadointeres"]);
+        $venta->id_venta=trim($_POST["prventa"]);
+        $venta->estado_interes=trim($_POST["prestadointeres"]);
 
-        if( $credito->actualizar_credito_estado_interes() )
+        $usuario_alvis = trim($_POST["usuario_alvis"]) ;
+        
+        if( $venta->actualizar_venta_estado_interes() )
         {
+          // Si el estado de la penalidad que se envía es 1 (tiene penalidad)
+          // la acción es 5 (activar). Si es 2 (no tiene penalidad), se envía 6 (desactivar).
+          $accion = $venta->estado_interes == 1 ? 5 : 6 ;
+          $log->create($usuario_alvis, 11, $accion, $venta->id_venta) ;
           print_json("0000", "Se actualizó el estado satisfactoriamente.", true);
         }
         else

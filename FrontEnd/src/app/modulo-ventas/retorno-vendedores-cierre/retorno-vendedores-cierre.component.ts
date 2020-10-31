@@ -158,16 +158,16 @@ export class RetornoVendedoresCierreComponent implements OnInit {
   }
 
   CerrarSalida(){
-
+    this.Cargando.next(true) ;
     this.Servicio.CrearLlegada(
       this.id_salida,
       this.fecha_retorno,
       this.observacion_llegada
     ).subscribe(res=>{
-      
+      this.Cargando.next(false) ;
       // Se crean las comisiones para el vendedor
       this.Vendedores.forEach((item)=>{
-        console.log(item)
+        // console.log(item)
         if(item.total_pagar>0){
           this.VServicios.CrearComisionVendedor(
             this.id_salida,

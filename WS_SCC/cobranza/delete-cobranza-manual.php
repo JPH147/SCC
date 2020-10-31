@@ -7,7 +7,7 @@
  
     include_once '../config/database.php';
     include_once '../entities/log.php';
-    include_once '../entities/credito.php';
+    include_once '../entities/cobranza.php';
     include_once '../shared/utilities.php';
 
     $database = new Database();
@@ -16,25 +16,22 @@
     try
     {
         $log = new Log($db);
-        $credito = new Creditos($db);
-        $data = json_decode(file_get_contents('php://input'), true);
-        
-        if (($_POST["prcredito"])!=null)
+        $cobranza = new Cobranzas($db);
+
+        if ( ($_POST["prid"])!=null )
         {
-            $credito->id_credito=trim($_POST["prcredito"]);
-            $credito->tipo_credito=trim($_POST["prtipo"]);
+            $cobranza->cobranza_manual=trim($_POST["prid"]);
 
             $usuario_alvis = trim($_POST["usuario_alvis"]) ;
 
-            if($credito->eliminar_credito())
+            if($cobranza->delete_cobranza_manual())
             {
-                $referencia = $credito->tipo_credito == 1 ? 8 : 9 ;
-                $log->create($usuario_alvis, $referencia, 3, $credito->id_credito) ;
-                print_json("0000", "Se eliminó el crédito satisfactoriamente.", $credito->id_credito);
+              $log->create($usuario_alvis, 17, 3, $cobranza->id_cobranza) ;
+              print_json("0000", "Se eliminó la cobranza satisfactoriamente.", true);
             }
             else
             {
-                print_json("9999", "Ocurrió un error al eliminar el crédito.", "");
+                print_json("9999", "Ocurrió un error al eliminar la cobranza.", "");
             }
         }
         else
@@ -44,7 +41,7 @@
     }
     catch(Exception $exception)
     {
-        print_json("9999", "Ocurrió un error al eliminar el crédito.", $exception->getMessage());
+        print_json("9999", "Ocurrió un error al eliminar la cobranza.", $exception->getMessage());
     }
 
 ?>

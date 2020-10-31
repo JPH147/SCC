@@ -299,7 +299,8 @@
   <mat-card-actions>
     <mat-grid-list cols=1 rowHeight="40px">
       <mat-grid-tile>
-        <button mat-raised-button color="primary" (click)="CerrarSalida()" [disabled]="!almacen_retorno && hay_productos"> Guardar </button>
+        <button mat-raised-button color="primary" (click)="CerrarSalida()"
+          [disabled]="(!almacen_retorno && hay_productos) || (Cargando | async)"> Guardar </button>
       </mat-grid-tile>
     </mat-grid-list>
   </mat-card-actions>

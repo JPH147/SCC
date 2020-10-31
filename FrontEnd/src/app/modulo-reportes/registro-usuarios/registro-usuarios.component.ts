@@ -9,6 +9,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { VentanaJudicialComponent } from 'src/app/modulo-cobranzas/cobranza-judicial/ventana-judicial/ventana-judicial.component';
 import { MatDialog } from '@angular/material/dialog';
+import { VentanaSeguimientosComponent } from 'src/app/modulo-clientes/ventana-seguimientos/ventana-seguimientos.component';
 
 @Component({
   selector: 'app-registro-usuarios',
@@ -86,15 +87,50 @@ export class RegistroUsuariosComponent implements OnInit {
   }
 
   VerDetalle(log) {
-    if ( log.id_log_referencia == 1 ) {
+    if ( log.tabla_referenciada == 'proceso_judicial' ) {
       this._router.navigate(['/cobranzas','cobranza-judicial','ver',log.id_referencia])
     }
 
-    if ( log.id_log_referencia == 2 ) {
+    if ( log.tabla_referenciada == 'proceso_judicial_detalle' ) {
       this._dialogo.open(VentanaJudicialComponent,{
         data: { ver_proceso_detalle : log.id_referencia } ,
         width: '900px'
       });
+    }
+
+    if ( log.tabla_referenciada == 'venta' ) {
+      this._router.navigate(['/ventas','ventas',log.id_referencia])
+    }
+
+    if ( log.tabla_referenciada == 'seguimiento_documentos' ) {
+      this._dialogo.open( VentanaSeguimientosComponent ,{
+        data : { ver: true , id : log.id_referencia },
+        width : '900px'
+      } )
+    }
+
+    if ( log.tabla_referenciada == 'salida_cabecera' ) {
+      this._router.navigate(['/ventas','salidavendedores','ver',log.id_referencia])
+    }
+
+    if ( log.tabla_referenciada == 'creditos' ) {
+      this._router.navigate(['/creditos','creditos','ver',log.id_referencia])
+    }
+
+    if ( log.tabla_referenciada == 'creditos-afiliaciones' ) {
+      this._router.navigate(['/creditos','afiliaciones','ver',log.id_referencia])
+    }
+
+    if ( log.tabla_referenciada == 'cobranza_archivos_cabecera' ) {
+      this._router.navigate(['/cobranzas','cobranza-archivos','ver',log.id_referencia])
+    }
+
+    if ( log.tabla_referenciada == 'cobranza_directa' ) {
+      this._router.navigate(['/cobranzas','cobranza-directa','ver',log.id_referencia])
+    }
+
+    if ( log.tabla_referenciada == 'cobranza_manual' ) {
+      this._router.navigate(['/cobranzas','cobranza-manual','ver',log.id_referencia])
     }
   }
 }

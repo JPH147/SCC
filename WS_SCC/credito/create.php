@@ -6,6 +6,7 @@
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
  
     include_once '../config/database.php';
+    include_once '../entities/log.php';
     include_once '../entities/credito.php';
     include_once '../shared/utilities.php';
 
@@ -14,6 +15,7 @@
 
     try
     {
+        $log = new Log($db);
         $credito = new Creditos($db);
         
         if (($_POST["prtipo"])!=null)
@@ -55,8 +57,12 @@
             $credito->pdf_otros=trim($_POST["prpdfotros"]);
             $credito->observacion=trim($_POST["probservacion"]);
 
+            $usuario_alvis = trim($_POST["usuario_alvis"]) ;
+
             if($credito->crear())
             {
+                $referencia = $credito->tipo_credito == 1 ? 8 : 9 ;
+                $log->create($usuario_alvis, $referencia, 1, $credito->id_credito) ;
                 print_json("0000", "Se creó el credito satisfactoriamente.", $credito->id_credito);
             }
             else

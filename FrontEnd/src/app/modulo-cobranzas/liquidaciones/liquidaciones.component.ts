@@ -181,7 +181,7 @@ export class LiquidacionDataSource implements DataSource<any> {
     .subscribe(res => {
       if (res) {
         this.TotalResultados.next(res['mensaje']);
-        this.InformacionLiquidaciones.next(res['data'].Liquidaciones); 
+        this.InformacionLiquidaciones.next(res['data'].cobranzas); 
       } else {
         this.TotalResultados.next(0);
         this.InformacionLiquidaciones.next([]); 

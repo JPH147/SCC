@@ -6,6 +6,7 @@
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
  
     include_once '../config/database.php';
+    include_once '../entities/log.php';
     include_once '../entities/credito.php';
     include_once '../shared/utilities.php';
 
@@ -14,6 +15,7 @@
 
     try
     {
+        $log = new Log($db);
         $credito = new Creditos($db);
         $data = json_decode(file_get_contents('php://input'), true);
 
@@ -38,8 +40,11 @@
             $credito->pdf_oficio=trim($_POST["prpdfoficio"]);
             $credito->pdf_otros=trim($_POST["prpdfotros"]);
 
+            $usuario_alvis = trim($_POST["usuario_alvis"]) ;
+
             if($credito->actualizar_documentos())
             {
+                $log->create($usuario_alvis, 8, 8, $credito->id_credito) ;
                 print_json("0000", "Se actualizó el credito satisfactoriamente.", $credito->id_credito);
             }
             else

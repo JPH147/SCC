@@ -6,6 +6,7 @@
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
  
     include_once '../config/database.php';
+    include_once '../entities/log.php';
     include_once '../entities/salidacabecera.php';
     include_once '../shared/utilities.php';
 
@@ -14,6 +15,7 @@
 
     try
     {
+        $log = new Log($db);
         $salida = new SalidaCabecera($db);
         $data = json_decode(file_get_contents('php://input'), true);
 
@@ -28,8 +30,11 @@
             $salida->chofer_nombre = trim($_POST["prchofernombre"]);
             $salida->observacion = trim($_POST["probservacion"]);
 
+            $usuario_alvis = trim($_POST["usuario_alvis"]) ;
+
             if($salida->update())
             {
+                $log->create($usuario_alvis, 7, 2, $salida->cabecera) ;
                 print_json("0000", "Se actualizó la salida satisfactoriamente.", $salida->cabecera);
             }
             else

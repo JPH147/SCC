@@ -27,6 +27,8 @@
             $cobranza->transaccion=trim($_POST["prtransaccion"]);
             $cobranza->observaciones=trim($_POST["probservaciones"]);
 
+            $cobranza->usuario_alvis=trim($_POST["usuario_alvis"]);
+            
             if($cobranza->create_directa_masivo())
             {
                 print_json("0000", "Se creó la cobranza satisfactoriamente.", true);

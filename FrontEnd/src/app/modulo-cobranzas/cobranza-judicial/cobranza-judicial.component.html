@@ -560,6 +560,16 @@
                   <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="1" cdkAutosizeMaxRows="50" type="text" placeholder="Sumilla" [(ngModel)]="documento.sumilla" [ngModelOptions]="{standalone:true}" readonly> </textarea>
                 </mat-form-field>
               </div>
+
+              <mat-grid-list cols=3 rowHeight="40px" *ngIf="documento.fecha_creacion">
+                <mat-grid-tile></mat-grid-tile>
+                <mat-grid-tile></mat-grid-tile>
+                <mat-grid-tile>
+                  <mat-card-subtitle>
+                    Fecha de creación: {{documento.fecha_creacion | date : 'dd/MM/yyyy HH:mm'}}
+                  </mat-card-subtitle>
+                </mat-grid-tile>
+              </mat-grid-list>
             </div>
           </div>
         </div>
@@ -660,6 +670,15 @@
                   <mat-form-field class="columnas-3">
                     <input matInput type="text" placeholder="Comentarios" [(ngModel)]="documento.comentarios" [ngModelOptions]="{standalone:true}" readonly>
                   </mat-form-field>
+                </mat-grid-tile>
+              </mat-grid-list>
+              <mat-grid-list cols=3 rowHeight="40px" *ngIf="documento.fecha_creacion">
+                <mat-grid-tile></mat-grid-tile>
+                <mat-grid-tile></mat-grid-tile>
+                <mat-grid-tile>
+                  <mat-card-subtitle>
+                    Fecha de creación: {{documento.fecha_creacion | date : 'dd/MM/yyyy HH:mm'}}
+                  </mat-card-subtitle>
                 </mat-grid-tile>
               </mat-grid-list>
             </div>

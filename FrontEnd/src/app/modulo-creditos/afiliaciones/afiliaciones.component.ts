@@ -1164,7 +1164,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
     Dialogo.afterClosed().subscribe(res=>{
       this.Cargando.next(true) ;
       if (res) {
-        this.Servicio.EliminarCredito(this.id_credito_estandar).subscribe(res=>{
+        this.Servicio.EliminarCredito(this.id_credito_estandar,1).subscribe(res=>{
           this.router.navigate(['/creditos','creditos']) ;
         });
       }
@@ -1277,6 +1277,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
 
       this.Servicio.Actualizar(
         this.id_credito_editar,
+        1 ,
         this.CreditosForm.value.sucursal,
         this.CreditosForm.value.fecha_credito,
         this.CreditosForm.value.id_autorizador ? this.CreditosForm.value.id_autorizador : 0,

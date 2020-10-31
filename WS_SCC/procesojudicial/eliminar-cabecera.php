@@ -23,7 +23,7 @@
 
       $proceso->id_proceso=trim($_POST["prid"]);
 
-      $usuario_alvis = trim($_GET["usuario_alvis"]) ;
+      $usuario_alvis = trim($_POST["usuario_alvis"]) ;
 
       if($proceso->delete_proceso_judicial())
       {

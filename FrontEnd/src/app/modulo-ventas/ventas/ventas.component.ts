@@ -2323,16 +2323,29 @@ export class VentasComponent implements OnInit {
     }
     if ( estado_actual == 2 ) {
       this.editar_penalidad = false ;
-      this.Servicio.ActualizarEstadoPenalidad(
-        this.idventa ,
-        this.VentasForm.get('estado_penalidad').value ,
-      ).subscribe((respuesta =>{
+      this.Cargando.next(true) ;
+      forkJoin([
+        this.Servicio.ActualizarEstadoPenalidad(
+          this.idventa ,
+          this.VentasForm.get('estado_penalidad').value ,
+        ),
+        this.Servicio.ActualizarEstadoInteres(
+          this.idventa ,
+          this.VentasForm.get('estado_interes').value ,
+        )
+      ])
+      .pipe(
+        finalize(()=>{
+          this.Cargando.next(false) ;
+        })
+      )
+      .subscribe((respuesta =>{
         if ( respuesta ) {
           this.SeleccionarVentaxId(this.idventa) ;
-          this.Notificacion.Snack("Se actualizó el estado de la penalidad","")
+          this.Notificacion.Snack("Se actualizaron las condiciones de incumplimiento","")
         }
         if( !respuesta ) {
-          this.Notificacion.Snack("Ocurrió un error al actualizar el estado de la penalidad","")
+          this.Notificacion.Snack("Ocurrió un error al actualizar las condiciones","")
         }
       }))
     }
