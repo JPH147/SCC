@@ -58,7 +58,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   public ListadoVentas: VentaDataSource ;
   public ListadoVentasAntiguo: VentaAntiguoDataSource ;
   public Columnas: string[];
-  public ColumnasCronogramaPeriodo: Array<string> = ["numero", "periodo", "monto_cuota", "monto_pago_manual" ,"total_planilla" ,"total_directo" ,"total_judicial" ] ;
+  public ColumnasCronogramaPeriodo: Array<string> = ["numero", "periodo", "monto_cuota" ,"total_planilla" ,"total_directo" ,"total_judicial" ] ;
   
   public ruta:string;
   public ProductosComprados: Array<any>;
@@ -1214,6 +1214,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
         id_venta : this.idventa,
         cliente : this.VentasSalidaForm.get('id_cliente').value ,
         cronograma : this.Cronograma,
+        cronograma_periodos : this.Cronograma_Periodos,
         pendiente : this.totales_monto_pendiente 
       }
     })

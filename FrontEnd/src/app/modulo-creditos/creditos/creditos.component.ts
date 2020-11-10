@@ -74,7 +74,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   public ListadoCronogramaAntiguo: CronogramaAntiguoDataSource;
 
   public ColumnasCronograma: Array<string>;
-  public ColumnasCronogramaPeriodo: Array<string> = ["numero", "periodo", "monto_cuota", "monto_pago_manual" ,"total_planilla" ,"total_directo" ,"total_judicial" ] ;
+  public ColumnasCronogramaPeriodo: Array<string> = ["numero", "periodo", "monto_cuota" ,"total_planilla" ,"total_directo" ,"total_judicial" ] ;
   public Cronograma: Array<any> = [];
   public Cronograma_Periodos: Array<any> = [];
   public total_cronograma_editado: number;
@@ -1577,6 +1577,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         id_credito : this.id_credito,
         cliente : this.CreditosForm.get('id_cliente').value ,
         cronograma : this.Cronograma,
+        cronograma_periodos : this.Cronograma_Periodos,
         pendiente : this.totales_monto_pendiente
       }
     })
@@ -2268,10 +2269,10 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     Ventana.afterClosed().subscribe(resultado => {
       if ( resultado ) {
         this.SeleccionarCredito(this.id_credito) ;
-        this.Notificacion.Snack("Se generó la liquidación satisfactoriamente","")
+        this.Notificacion.Snack("Se generó la liquidación satisfactoriamente","") ;
       }
       if( resultado === false ) {
-        this.Notificacion.Snack("Ocurrió un error al generar la liquidación","")
+        this.Notificacion.Snack("Ocurrió un error al generar la liquidación","") ;
       }
     })
   }

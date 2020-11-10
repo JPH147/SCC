@@ -1175,7 +1175,13 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
     let ventana = this.Dialogo.open(VentanaGenerarPagoTransaccionComponent,{
       width: '1200px' ,
       maxHeight: '80vh' ,
-      data : { tipo : 1, id_credito : this.id_credito, cronograma : this.Cronograma, pendiente : this.totales_monto_pendiente }
+      data : { 
+        tipo : 1,
+        id_credito : this.id_credito,
+        cronograma : this.Cronograma,
+        cronograma_periodos : this.Cronograma_Periodos,
+        pendiente : this.totales_monto_pendiente
+      }
     })
 
     ventana.afterClosed().subscribe( resultado=>{

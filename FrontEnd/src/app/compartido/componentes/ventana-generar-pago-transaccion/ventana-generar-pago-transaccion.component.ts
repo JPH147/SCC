@@ -127,8 +127,6 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit, AfterView
     }) ;
 
     this.PagoArrayForm = this.PagosForm.get('PagoArrayForm') as FormArray ;
-
-    this.EstablecerControlesArray() ;
   }
 
   CrearFormArray( tipo : number ) : FormGroup {
@@ -146,9 +144,13 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit, AfterView
         this.NumeroDecimal ,
         Validators.required
       ] ] ,
+      pago_planilla_antiguo : [ { value : 0, disabled : false },[
+      ] ] ,
       pago_judicial : [ { value : 0, disabled : false },[
         this.NumeroDecimal ,
         Validators.required
+      ] ] ,
+      pago_judicial_antiguo : [ { value : 0, disabled : false },[
       ] ] ,
       // 1. Generado para que coincida con el mes de la cuota
       // 2. Creado por el usuario
@@ -198,13 +200,28 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit, AfterView
     this.PagoArrayForm.controls[longitud_form].get('fecha_pago').setValue(proxima_fecha) ;
   }
 
-  EstablecerControlesArray() {
-    this.data.cronograma.map( (item, index) =>{
-      this.AgregarPagoForm(1) ;
-      this.PagoArrayForm.controls[index].get('fecha_pago').setValue(item.fecha_vencimiento) ;
-      this.PagoArrayForm.controls[index].get('monto_cuota').setValue(this.data.tipo == 1 ? item.monto : item.monto_cuota) ;
-      return item ;
-    })
+  // 1. Se utilizan las fechas del cronograma por periodos
+  // 2. Se utilizan las fechas del cronograma normal
+  EstablecerControlesArray(tipo : number) {
+    if ( tipo == 1 ) {
+      this.data.cronograma_periodos.map( (item, index) =>{
+        this.AgregarPagoForm(1) ;
+        this.PagoArrayForm.controls[index].get('fecha_pago').setValue(moment(item.periodo, "MM/YYYY").endOf('month').toDate()) ;
+        this.PagoArrayForm.controls[index].get('monto_cuota').setValue(item.monto_cuota) ;
+        this.PagoArrayForm.controls[index].get('pago_planilla').setValue(item.monto_pago_manual_planilla) ;
+        this.PagoArrayForm.controls[index].get('pago_planilla_antiguo').setValue(item.monto_pago_manual_planilla) ;
+        this.PagoArrayForm.controls[index].get('pago_judicial').setValue(item.monto_pago_manual_judicial) ;
+        this.PagoArrayForm.controls[index].get('pago_judicial_antiguo').setValue(item.monto_pago_manual_judicial) ;
+        return item ;
+      })
+    } else {
+      this.data.cronograma.map( (item, index) =>{
+        this.AgregarPagoForm(1) ;
+        this.PagoArrayForm.controls[index].get('fecha_pago').setValue(item.fecha_vencimiento) ;
+        this.PagoArrayForm.controls[index].get('monto_cuota').setValue(this.data.tipo == 1 ? item.monto : item.monto_cuota) ;
+        return item ;
+      })
+    }
 
     this.AgregarContolesFechaActual() ;
   }
@@ -286,13 +303,8 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit, AfterView
     }
     if ( tipo == 2 ) {
       this.tipo_pagos = 2 ;
-      // this.PagoArrayForm.controls.forEach(elemento => {
-      //   elemento.get('cuenta_bancaria').setValidators([Validators.required]) ;
-      //   elemento.get('numero_operacion').setValidators([Validators.required]) ;
-      //   elemento.get('cuenta_bancaria').updateValueAndValidity() ;
-      //   elemento.get('numero_operacion').updateValueAndValidity() ;
-      // });
     }
+    this.EstablecerControlesArray(tipo) ;
   }
 
   VerificarVoucherUnico(valor, indice){
@@ -304,7 +316,6 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit, AfterView
       })
     )
     .subscribe(resultado=>{
-      console.log(resultado) ;
       if ( resultado ) {
         this.PagoArrayForm.controls[indice].get('numero_operacion').setErrors({'repetido':true}) ;
       } else {
@@ -313,26 +324,102 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit, AfterView
     })
   }
 
+  // Guardar() {
+  //   let pagos = this.PagoArrayForm.value ;
+  //   let array_obserables : Array<Observable<any>> = [] ;
+
+  //   if ( this.tipo_pagos == 1 ) {
+  //     pagos.map(elemento => {
+  //       if ( elemento.pago_planilla > 0 || elemento.pago_planilla_antiguo > 0 ) {
+  //         array_obserables.push( this.CrearPagoManual(2,elemento.pago_planilla, elemento.fecha_pago) ) ;
+  //       }
+  //       if ( elemento.pago_judicial > 0 || elemento.pago_judicial_antiguo > 0 ) {
+  //         array_obserables.push( this.CrearPagoManual(3,elemento.pago_judicial, elemento.fecha_pago) ) ;
+  //       }
+  //       return elemento ;
+  //     }) ;
+  
+  //     this.Cargando.next(true) ;
+  //     forkJoin(array_obserables)
+  //     .pipe(
+  //       finalize(()=>{
+  //         this.Cargando.next(false) ;
+  //       })
+  //     )
+  //     .subscribe(() =>{
+  //       this.ventana.close(true) ;
+  //     })
+  //   }
+
+  //   if ( this.tipo_pagos == 2 ) {
+  //     pagos.map(elemento => {
+  //       if ( elemento.pago_directo > 0 ) {
+  //         array_obserables.push(
+  //           this.CrearPagoMasivo(
+  //             elemento.pago_directo , 
+  //             elemento.fecha_pago , 
+  //             elemento.numero_operacion ,
+  //             elemento.cuenta_bancaria
+  //           )
+  //         ) ;
+  //       }
+  //       return elemento ;
+  //     }) ;
+  
+  //     this.Cargando.next(true) ;
+  //     forkJoin(array_obserables)
+  //     .pipe(
+  //       finalize(()=>{
+  //         this.Cargando.next(false) ;
+  //       })
+  //     )
+  //     .subscribe(() =>{
+  //       this.ventana.close(true) ;
+  //     })
+  //   }
+  // }
+
   Guardar() {
     let pagos = this.PagoArrayForm.value ;
     let array_obserables : Array<Observable<any>> = [] ;
+    let informacion : Array<any> = [] ;
 
     if ( this.tipo_pagos == 1 ) {
+      // pagos.map(elemento => {
+      //   if ( elemento.pago_planilla > 0 || elemento.pago_planilla_antiguo > 0 ) {
+      //     array_obserables.push( this.CrearPagoManual(2,elemento.pago_planilla, elemento.fecha_pago) ) ;
+      //   }
+      //   if ( elemento.pago_judicial > 0 || elemento.pago_judicial_antiguo > 0 ) {
+      //     array_obserables.push( this.CrearPagoManual(3,elemento.pago_judicial, elemento.fecha_pago) ) ;
+      //   }
+      //   return elemento ;
+      // }) ;
       pagos.map(elemento => {
-        // if ( elemento.pago_directo > 0 ) {
-        //   array_obserables.push( this.CrearPagoManual(1,elemento.pago_directo, elemento.fecha_pago) ) ;
-        // }
-        if ( elemento.pago_planilla > 0 ) {
-          array_obserables.push( this.CrearPagoManual(2,elemento.pago_planilla, elemento.fecha_pago) ) ;
+        if ( elemento.pago_planilla > 0 || elemento.pago_planilla_antiguo > 0 ) {
+          let detalle = {
+            "tipo_cobranza": 4 ,
+            "fecha": moment(elemento.fecha_pago).format("YYYY-MM-DD") ,
+            "comprobante": (new Date()).getTime().toString() ,
+            "total": Math.round(100*elemento.pago_planilla)/100 ,
+            "observacion": "Regularización de pago por planilla" ,
+          }
+          informacion.push(detalle) ;
         }
-        if ( elemento.pago_judicial > 0 ) {
-          array_obserables.push( this.CrearPagoManual(3,elemento.pago_judicial, elemento.fecha_pago) ) ;
+        if ( elemento.pago_judicial > 0 || elemento.pago_judicial_antiguo > 0 ) {
+          let detalle = {
+            "tipo_cobranza": 5 ,
+            "fecha": moment(elemento.fecha_pago).format("YYYY-MM-DD") ,
+            "comprobante": (new Date()).getTime().toString() ,
+            "total": Math.round(100*elemento.pago_judicial)/100 ,
+            "observacion": "Regularización de pago judicial" ,
+          }
+          informacion.push(detalle) ;
         }
         return elemento ;
-      }) ;
-  
+      })
+
       this.Cargando.next(true) ;
-      forkJoin(array_obserables)
+      this._cobranzas.CrearCobranzaManualCreditoArray(this.data.id_credito,informacion)
       .pipe(
         finalize(()=>{
           this.Cargando.next(false) ;

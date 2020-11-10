@@ -162,7 +162,7 @@ export class VentasComponent implements OnInit {
   public ListadoVentasAntiguo : VentaAntiguoDataSource ;
 
   public Columnas: string[];
-  public ColumnasCronogramaPeriodo: Array<string> = ["numero", "periodo", "monto_cuota", "monto_pago_manual" ,"total_planilla" ,"total_directo" ,"total_judicial" ] ;
+  public ColumnasCronogramaPeriodo: Array<string> = ["numero", "periodo", "monto_cuota" ,"total_planilla" ,"total_directo" ,"total_judicial" ] ;
 
   public id_presupuesto : number ;
   public hay_presupuesto_vendedor : boolean ;
@@ -1838,6 +1838,7 @@ export class VentasComponent implements OnInit {
         id_venta : this.idventa,
         cliente : this.VentasForm.get('id_cliente').value ,
         cronograma : this.Cronograma,
+        cronograma_periodos : this.Cronograma_Periodos,
         pendiente : this.totales_monto_pendiente
       }
     })

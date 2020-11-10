@@ -944,6 +944,19 @@ export class CobranzasService {
     return this.http.post(this.url + 'cobranza/create-manual-credito.php', params, {headers: headers});
   }
 
+  CrearCobranzaManualCreditoArray(
+    credito : number ,
+    informacion : Array<any> ,
+  ) : Observable<any> {
+    let params = new HttpParams()
+      .set('prcredito', credito.toString() )
+      .set('prinformacion', JSON.stringify(informacion) ) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'cobranza/create-manual-credito-array.php', params, {headers: headers});
+  }
+
   CrearCobranzaManualVenta(
     venta : number ,
     tipo_cobranza : number ,

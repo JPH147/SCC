@@ -19,6 +19,7 @@ class Database {
 
         $this->conn = null;
         $this->conn = new PDO("mysql:host=" . $this->server . ";port=" . $this->port. ";dbname=" . $this->db_name, $this->username, $this->password);
+        $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $this->conn->exec("set names UTF8");
         set_time_limit(0);
         return $this->conn;

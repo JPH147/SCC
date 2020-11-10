@@ -69,6 +69,8 @@
     public $id_liquidacion ;
     public $usuario_alvis ;
 
+    public $informacion;
+
     public function __construct($db){
       $this->conn = $db;
     }
@@ -1931,6 +1933,65 @@
         return true;
       }
       return false;
+    }
+
+    // Esta función crea una cobranza manual desde pagos pasivos
+    // Aquí se recalculan los intereses luego de que se hace el pago
+    function create_cobranza_manual_credito_array(){
+      $query = "CALL sp_crearcobranzamanualcredito(
+        :prcredito,
+        :prtipocobranza,
+        :prfecha,
+        :prcomprobante,
+        :prtotal,
+        :probservacion,
+        :prusuarioalvis,
+        :prfechaactual
+      )";
+
+      $exito = 0;
+      $error = 0;
+      
+      $detalle = json_decode($this->informacion) ;
+
+      foreach($detalle as $elemento) {
+        $momento = date("Y-m-d H:i:s");
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prcredito", $this->credito);
+        $result->bindParam(":prtipocobranza", $elemento->tipo_cobranza);
+        $result->bindParam(":prfecha", $elemento->fecha);
+        $result->bindParam(":prcomprobante", $elemento->comprobante);
+        $result->bindParam(":prtotal", $elemento->total);
+        $result->bindParam(":probservacion", $elemento->observacion);
+        $result->bindParam(":prusuarioalvis", $this->usuario_alvis);
+        $result->bindParam(":prfechaactual", $momento);
+          
+        // ob_start();
+        // echo($elemento->tipo_cobranza) ;
+        // echo($elemento->fecha) ;
+        // echo($elemento->comprobante) ;
+        // echo($elemento->total) ;
+        // echo($elemento->observacion) ;
+        // error_log(ob_get_clean(), 4) ;
+
+        $elemento->tipo_cobranza=htmlspecialchars(strip_tags($elemento->tipo_cobranza));
+        $elemento->fecha=htmlspecialchars(strip_tags($elemento->fecha));
+        $elemento->comprobante=htmlspecialchars(strip_tags($elemento->comprobante));
+        $elemento->total=htmlspecialchars(strip_tags($elemento->total));
+        $elemento->observacion=htmlspecialchars(strip_tags($elemento->observacion));
+        $this->credito=htmlspecialchars(strip_tags($this->credito));
+        $this->usuario_alvis=htmlspecialchars(strip_tags($this->usuario_alvis));
+
+        if ( $result->execute() ) {
+          $exito = $exito + 1 ;
+        } else {
+          $error = $error + 1 ;
+        }
+      } ;
+
+      return array("exito"=> $exito, "error"=> $error);
     }
 
     // Esta función crea una cobranza manual desde pagos pasivos
