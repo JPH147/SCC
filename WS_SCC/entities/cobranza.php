@@ -855,7 +855,7 @@
         :prmonto,
         :prtipo,
         :prtransaccion,
-        :probservaciones
+        :probservaciones,
         :prusuarioalvis,
         :prfechaactual
       )";
@@ -1909,17 +1909,6 @@
 
       $result = $this->conn->prepare($query);
 
-      $momento = date("Y-m-d H:i:s");
-
-      $result->bindParam(":prcredito", $this->credito);
-      $result->bindParam(":prtipocobranza", $this->tipo_cobranza);
-      $result->bindParam(":prfecha", $this->fecha);
-      $result->bindParam(":prcomprobante", $this->comprobante);
-      $result->bindParam(":prtotal", $this->total);
-      $result->bindParam(":probservacion", $this->observacion);
-      $result->bindParam(":prusuarioalvis", $this->usuario_alvis);
-      $result->bindParam(":prfechaactual", $momento);
-
       $this->credito=htmlspecialchars(strip_tags($this->credito));
       $this->tipo_cobranza=htmlspecialchars(strip_tags($this->tipo_cobranza));
       $this->fecha=htmlspecialchars(strip_tags($this->fecha));
@@ -1928,11 +1917,72 @@
       $this->observacion=htmlspecialchars(strip_tags($this->observacion));
       $this->usuario_alvis=htmlspecialchars(strip_tags($this->usuario_alvis));
 
-      if($result->execute())
-      {
-        return true;
+      
+      if ( $this->delete_cobranzas_manualesxtransaccion(1, $this->credito) ) {
+        $momento = date("Y-m-d H:i:s");
+        $result->bindParam(":prcredito", $this->credito);
+        $result->bindParam(":prtipocobranza", $this->tipo_cobranza);
+        $result->bindParam(":prfecha", $this->fecha);
+        $result->bindParam(":prcomprobante", $this->comprobante);
+        $result->bindParam(":prtotal", $this->total);
+        $result->bindParam(":probservacion", $this->observacion);
+        $result->bindParam(":prusuarioalvis", $this->usuario_alvis);
+        $result->bindParam(":prfechaactual", $momento);
+
+        if($result->execute())
+        {
+          return true;
+        }
+        return false;
+      } else {
+        return false;
       }
-      return false;
+    }
+
+    // Esta función crea una cobranza manual desde pagos pasivos
+    // Aquí se recalculan los intereses luego de que se hace el pago
+    function create_cobranza_manual_venta(){
+      $query = "CALL sp_crearcobranzamanualventa(
+        :prventa,
+        :prtipocobranza,
+        :prfecha,
+        :prcomprobante,
+        :prtotal,
+        :probservacion,
+        :prusuarioalvis,
+        :prfechaactual
+      )";
+
+      $result = $this->conn->prepare($query);
+
+      $this->venta=htmlspecialchars(strip_tags($this->venta));
+      $this->tipo_cobranza=htmlspecialchars(strip_tags($this->tipo_cobranza));
+      $this->fecha=htmlspecialchars(strip_tags($this->fecha));
+      $this->comprobante=htmlspecialchars(strip_tags($this->comprobante));
+      $this->total=htmlspecialchars(strip_tags($this->total));
+      $this->observacion=htmlspecialchars(strip_tags($this->observacion));
+      $this->usuario_alvis=htmlspecialchars(strip_tags($this->usuario_alvis));
+
+      
+      if ( $this->delete_cobranzas_manualesxtransaccion(1, $this->venta) ) {
+        $momento = date("Y-m-d H:i:s");
+        $result->bindParam(":prventa", $this->venta);
+        $result->bindParam(":prtipocobranza", $this->tipo_cobranza);
+        $result->bindParam(":prfecha", $this->fecha);
+        $result->bindParam(":prcomprobante", $this->comprobante);
+        $result->bindParam(":prtotal", $this->total);
+        $result->bindParam(":probservacion", $this->observacion);
+        $result->bindParam(":prusuarioalvis", $this->usuario_alvis);
+        $result->bindParam(":prfechaactual", $momento);
+
+        if($result->execute())
+        {
+          return true;
+        }
+        return false;
+      } else {
+        return false;
+      }
     }
 
     // Esta función crea una cobranza manual desde pagos pasivos
@@ -1954,48 +2004,53 @@
       
       $detalle = json_decode($this->informacion) ;
 
-      foreach($detalle as $elemento) {
-        $momento = date("Y-m-d H:i:s");
+      $this->credito=htmlspecialchars(strip_tags($this->credito));
+      $this->usuario_alvis=htmlspecialchars(strip_tags($this->usuario_alvis));
 
-        $result = $this->conn->prepare($query);
-
-        $result->bindParam(":prcredito", $this->credito);
-        $result->bindParam(":prtipocobranza", $elemento->tipo_cobranza);
-        $result->bindParam(":prfecha", $elemento->fecha);
-        $result->bindParam(":prcomprobante", $elemento->comprobante);
-        $result->bindParam(":prtotal", $elemento->total);
-        $result->bindParam(":probservacion", $elemento->observacion);
-        $result->bindParam(":prusuarioalvis", $this->usuario_alvis);
-        $result->bindParam(":prfechaactual", $momento);
-          
-        // ob_start();
-        // echo($elemento->tipo_cobranza) ;
-        // echo($elemento->fecha) ;
-        // echo($elemento->comprobante) ;
-        // echo($elemento->total) ;
-        // echo($elemento->observacion) ;
-        // error_log(ob_get_clean(), 4) ;
-
-        $elemento->tipo_cobranza=htmlspecialchars(strip_tags($elemento->tipo_cobranza));
-        $elemento->fecha=htmlspecialchars(strip_tags($elemento->fecha));
-        $elemento->comprobante=htmlspecialchars(strip_tags($elemento->comprobante));
-        $elemento->total=htmlspecialchars(strip_tags($elemento->total));
-        $elemento->observacion=htmlspecialchars(strip_tags($elemento->observacion));
-        $this->credito=htmlspecialchars(strip_tags($this->credito));
-        $this->usuario_alvis=htmlspecialchars(strip_tags($this->usuario_alvis));
-
-        if ( $result->execute() ) {
-          $exito = $exito + 1 ;
-        } else {
-          $error = $error + 1 ;
-        }
-      } ;
-
-      return array("exito"=> $exito, "error"=> $error);
+      if ( $this->delete_cobranzas_manualesxtransaccion(1, $this->credito) ) {
+        foreach($detalle as $elemento) {
+          $momento = date("Y-m-d H:i:s");
+  
+          $result = $this->conn->prepare($query);
+  
+          $result->bindParam(":prcredito", $this->credito);
+          $result->bindParam(":prtipocobranza", $elemento->tipo_cobranza);
+          $result->bindParam(":prfecha", $elemento->fecha);
+          $result->bindParam(":prcomprobante", $elemento->comprobante);
+          $result->bindParam(":prtotal", $elemento->total);
+          $result->bindParam(":probservacion", $elemento->observacion);
+          $result->bindParam(":prusuarioalvis", $this->usuario_alvis);
+          $result->bindParam(":prfechaactual", $momento);
+            
+          // ob_start();
+          // echo($elemento->tipo_cobranza) ;
+          // echo($elemento->fecha) ;
+          // echo($elemento->comprobante) ;
+          // echo($elemento->total) ;
+          // echo($elemento->observacion) ;
+          // error_log(ob_get_clean(), 4) ;
+  
+          $elemento->tipo_cobranza=htmlspecialchars(strip_tags($elemento->tipo_cobranza));
+          $elemento->fecha=htmlspecialchars(strip_tags($elemento->fecha));
+          $elemento->comprobante=htmlspecialchars(strip_tags($elemento->comprobante));
+          $elemento->total=htmlspecialchars(strip_tags($elemento->total));
+          $elemento->observacion=htmlspecialchars(strip_tags($elemento->observacion));
+  
+          if ( $result->execute() ) {
+            $exito = $exito + 1 ;
+          } else {
+            $error = $error + 1 ;
+          }
+        } ;
+  
+        return array("exito"=> $exito, "error"=> $error);
+      } else {
+        return false ;
+      }
     }
 
     // Esta función crea una cobranza manual desde pagos pasivos
-    function create_cobranza_manual_venta(){
+    function create_cobranza_manual_venta_array(){
       $query = "CALL sp_crearcobranzamanualventa(
         :prventa,
         :prtipocobranza,
@@ -2007,34 +2062,80 @@
         :prfechaactual
       )";
 
-      $result = $this->conn->prepare($query);
-
-      $momento = date("Y-m-d H:i:s");
-
-      $result->bindParam(":prventa", $this->venta);
-      $result->bindParam(":prtipocobranza", $this->tipo_cobranza);
-      $result->bindParam(":prfecha", $this->fecha);
-      $result->bindParam(":prcomprobante", $this->comprobante);
-      $result->bindParam(":prtotal", $this->total);
-      $result->bindParam(":probservacion", $this->observacion);
-      $result->bindParam(":prusuarioalvis", $this->usuario_alvis);
-      $result->bindParam(":prfechaactual", $momento);
+      $exito = 0;
+      $error = 0;
+      
+      $detalle = json_decode($this->informacion) ;
 
       $this->venta=htmlspecialchars(strip_tags($this->venta));
-      $this->tipo_cobranza=htmlspecialchars(strip_tags($this->tipo_cobranza));
-      $this->fecha=htmlspecialchars(strip_tags($this->fecha));
-      $this->comprobante=htmlspecialchars(strip_tags($this->comprobante));
-      $this->total=htmlspecialchars(strip_tags($this->total));
-      $this->observacion=htmlspecialchars(strip_tags($this->observacion));
       $this->usuario_alvis=htmlspecialchars(strip_tags($this->usuario_alvis));
+
+      if ( $this->delete_cobranzas_manualesxtransaccion(2, $this->venta) ) {
+        foreach($detalle as $elemento) {
+          $momento = date("Y-m-d H:i:s");
+  
+          $result = $this->conn->prepare($query);
+  
+          $result->bindParam(":prventa", $this->venta);
+          $result->bindParam(":prtipocobranza", $elemento->tipo_cobranza);
+          $result->bindParam(":prfecha", $elemento->fecha);
+          $result->bindParam(":prcomprobante", $elemento->comprobante);
+          $result->bindParam(":prtotal", $elemento->total);
+          $result->bindParam(":probservacion", $elemento->observacion);
+          $result->bindParam(":prusuarioalvis", $this->usuario_alvis);
+          $result->bindParam(":prfechaactual", $momento);
+
+          $elemento->tipo_cobranza=htmlspecialchars(strip_tags($elemento->tipo_cobranza));
+          $elemento->fecha=htmlspecialchars(strip_tags($elemento->fecha));
+          $elemento->comprobante=htmlspecialchars(strip_tags($elemento->comprobante));
+          $elemento->total=htmlspecialchars(strip_tags($elemento->total));
+          $elemento->observacion=htmlspecialchars(strip_tags($elemento->observacion));
+  
+          if ( $result->execute() ) {
+            $exito = $exito + 1 ;
+          } else {
+            $error = $error + 1 ;
+          }
+        } ;
+  
+        return array("exito"=> $exito, "error"=> $error);
+      } else {
+        return false ;
+      }
+    }
+   
+    function delete_cobranzas_manualesxtransaccion(
+      $tipo_transaccion ,
+      $id_transaccion
+    ){
+      $query = "CALL sp_eliminarcobranzasmasivasxtransaccion(
+        :prtipotransaccion,
+        :prtransaccion
+      )";
+
+      $result = $this->conn->prepare($query);
+      
+      // ob_start();
+      // echo($tipo_transaccion) ;
+      // echo($id_transaccion) ;
+      // error_log(ob_get_clean(), 4) ;
+
+      $result->bindParam(":prtipotransaccion", $tipo_transaccion);
+      $result->bindParam(":prtransaccion", $id_transaccion);
 
       if($result->execute())
       {
+        // ob_start();
+        // echo(1) ;
+        // error_log(ob_get_clean(), 4) ;
         return true;
       }
+      // ob_start();
+      // echo(2) ;
+      // error_log(ob_get_clean(), 4) ;
       return false;
     }
-
+ 
     function read_liquidaciones() {
       $query = "CALL sp_listarliquidaciones(?,?,?,?,?,?,?,?,?,?)";
 

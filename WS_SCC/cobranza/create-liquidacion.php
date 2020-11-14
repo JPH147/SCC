@@ -22,8 +22,8 @@
         {
             $cobranza->tipo = trim($_POST["prtipo"]) ;
             $cobranza->transaccion = trim($_POST["prtransaccion"]) ;
-            $cobranza->monto = trim($_POST["prmonto"]) ;
             $cobranza->fecha = trim($_POST["prfecha"]) ;
+            $cobranza->monto = trim($_POST["prmonto"]) ;
             $cobranza->usuario = trim($_POST["prusuario"]) ;
             $cobranza->observaciones = trim($_POST["probservacion"]) ;
   

@@ -1317,7 +1317,6 @@ Class Creditos{
         }
         return false;
     }
-
 }
 
 ?>

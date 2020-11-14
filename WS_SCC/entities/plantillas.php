@@ -301,11 +301,23 @@ Class Plantillas{
         // var_dump($cronograma);
         // error_log(ob_get_clean(), 4) ;
 
-        $templateProcessor->cloneBlock('block_name', 0, true, false, $cronograma);
+        $templateProcessor->cloneBlock('cronograma', 0, true, false, $cronograma);
         $templateProcessor->cloneBlock('block_name_1', 0, true, false, $cronograma);
         $templateProcessor->cloneBlock('block_name_2', 0, true, false, $cronograma);
         $templateProcessor->cloneBlock('block_name_3', 0, true, false, $cronograma);
         $templateProcessor->cloneBlock('block_name_4', 0, true, false, $cronograma);
+        $templateProcessor->cloneBlock('block_name_5', 0, true, false, $cronograma);
+        $templateProcessor->cloneBlock('block_name_6', 0, true, false, $cronograma);
+        $templateProcessor->cloneBlock('block_name_7', 0, true, false, $cronograma);
+        $templateProcessor->cloneBlock('block_name_8', 0, true, false, $cronograma);
+        $templateProcessor->cloneBlock('block_name_9', 0, true, false, $cronograma);
+        $templateProcessor->cloneBlock('block_name_10', 0, true, false, $cronograma);
+        $templateProcessor->cloneBlock('block_name_11', 0, true, false, $cronograma);
+
+        // forEach($direccion_totales as $direccion) {
+        //     $etiqueta = "block_name_" . $direccion['numero_orden'] ;
+        //     $templateProcessor->cloneBlock($etiqueta, 0, true, false, $cronograma) ;    
+        // }
 
         // Para las hojas 2 y 3, se evalúa que no se repitan las direcciones
         $this->direccion_cliente = filter_var($this->direccion_cliente, FILTER_VALIDATE_BOOLEAN);
