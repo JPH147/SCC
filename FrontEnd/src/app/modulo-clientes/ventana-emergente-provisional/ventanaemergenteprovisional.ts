@@ -19,9 +19,7 @@ import { BancosService } from 'src/app/modulo-maestro/bancos/bancos.service';
   providers: [ServiciosGenerales, ClienteService, ServiciosDirecciones,ServiciosTelefonos,ServiciosVentas]
 })
 
-// tslint:disable-next-line:component-class-suffix
 export class VentanaEmergenteProvisionalClientes {
-  
   @Input() public reseteoFormularios = new BehaviorSubject<boolean>(false) ;
 
   public Cargando = new BehaviorSubject<boolean>(false) ;
@@ -48,6 +46,8 @@ export class VentanaEmergenteProvisionalClientes {
   public LstProvincia: any;
   public LstDistrito: any;
   public Bancos: Array<any>;
+
+  public id_cliente_encontrado : number ;
 
   constructor(
     @Optional() @Inject(MAT_DIALOG_DATA) public data,
@@ -286,6 +286,7 @@ export class VentanaEmergenteProvisionalClientes {
       if(res['codigo']==1){
         this.cliente_nuevo = 1;
         this.ClientesForm.get("cliente_nuevo").setValue(true);
+        // this.id_cliente_encontrado = null ;
       } else {
         this.cliente_nuevo = 2;
         this.ClientesForm.get("cliente_nuevo").setValue(false);
@@ -333,11 +334,31 @@ export class VentanaEmergenteProvisionalClientes {
             this.ClientesForm.get('fecha_afiliacion').setValue(false) ;
           }
 
+          // this.id_cliente_encontrado = res['data'].id ;
+
           this.ObtenerDireccion(res['data'].id);
           this.ObtenerTelefono(res['data'].id);
           this.ObtenerCuenta(res['data'].id);
           this.ObtenerNumeroCelular(res['data'].id);
         }
+      }
+    })
+  }
+
+  SeleccionarCliente() {
+    let Ventana = this.Dialogo.open(SeleccionarClienteComponent,{
+      width: "1200px"
+    })
+
+    Ventana.afterClosed().subscribe(res=>{
+      if(res){
+        this.ClientesForm.get('dni').setValue(res.dni) ;
+        this.VerificarDNI(res.dni) ;
+        // this.CreditosForm.get('id_cliente').setValue(res.id);
+        // this.ObtenerClientexId(res.id);
+        // this.ObtenerDireccion(res.id);
+        // this.ObtenerTelefono(res.id);
+        // this.VerificarAfiliacion(res.id, true);
       }
     })
   }

@@ -742,6 +742,10 @@ class TemplateProcessor
             $matches
         );
 
+        ob_start();
+        var_dump($matches);
+        error_log(ob_get_clean(), 4) ;
+
         if (isset($matches[3])) {
             $xmlBlock = $matches[3];
             if ($indexVariables) {

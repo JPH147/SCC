@@ -48,6 +48,7 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
   public numero_cuenta : string = "" ;
 
   public Documentos : Array<any> = [] ; // Esta variable contiene los documentos por cliente
+  public Vendedores: Array<any> = [] ;
 
   constructor(
     private Builder : FormBuilder ,
@@ -59,12 +60,14 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
     private Notificacion : Notificaciones ,
     private Servicio : CobranzasService ,
     private _ventas : VentaService ,
-    private _configuracion : CooperativaConfiguracionService
+    private _configuracion : CooperativaConfiguracionService ,
+    private _generales : ServiciosGenerales ,
   ) { }
 
   ngOnInit() {
     this.CrearFormulario() ;
     this.ListarCuentas() ;
+    this.ListarVendedor() ;
 
     this.route.params.subscribe(params=>{
       if(Object.keys(params).length>0){
@@ -124,6 +127,9 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
       cuenta_bancaria: [ { value : 1 , disabled : false } , [
         Validators.required
       ] ],
+      referente: [ { value : 0 , disabled : false } , [
+        Validators.required
+      ] ],
       numero_operacion: [ { value : null , disabled : false } , [
         Validators.required
       ] ],
@@ -175,12 +181,15 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
         this.CobranzaDirectaForm.get('interes').disable() ;
         this.CobranzaDirectaForm.get('fecha_referencia').disable() ;
         this.CobranzaDirectaForm.get('documento').disable() ;
-
+        
         this.Cuotas = res.detalle ;
+        this.CobranzaDirectaForm.get('referente').setValue(res.vendedor) ;
       }
 
       if( this.id_cobranza_editar ) {
         this.CobranzaDirectaForm.get('cuenta_bancaria').setValue(res.cooperativa_cuenta);
+        this.CobranzaDirectaForm.get('referente').setValue(res.id_vendedor) ;
+        this.CobranzaDirectaForm.get('documento').setValue(res.id_transaccion) ;
 
         this.archivo_antiguo = res.archivo;
         res.archivo != "" ? this.archivo_editar=false : this.archivo_editar=true ;
@@ -371,6 +380,13 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
     })
   }
 
+
+  ListarVendedor() {
+    this._generales.ListarVendedor("","","",1,50).subscribe( res => {
+      this.Vendedores = res ;
+    });
+  }
+
   Atras(){
     this.location.back();
   }
@@ -390,10 +406,10 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
     this.enviado = true ;
     let random = (new Date()).getTime();
 
-    forkJoin(
+    forkJoin([
       this.Servicio.BuscarNumeroOperacion(this.FiltroOperacion.nativeElement.value),
       this.ServiciosGenerales.RenameFile(this.archivo,'VOUCHER',random.toString(),"cobranza")
-    )
+    ])
     .subscribe(respuesta=>{
       if( respuesta[0] ) {
         this.voucher_repetido=respuesta[0];
@@ -404,6 +420,7 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
           this.CobranzaDirectaForm.value.id_cliente ,
           this.CobranzaDirectaForm.value.cuenta_bancaria ,
           this.CobranzaDirectaForm.value.numero_operacion ,
+          this.CobranzaDirectaForm.value.referente ,
           this.CobranzaDirectaForm.value.monto ,
           this.CobranzaDirectaForm.value.documento ,
           this.CobranzaDirectaForm.value.solo_directas ,
@@ -457,6 +474,7 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
           this.CobranzaDirectaForm.value.id_cliente ,
           this.CobranzaDirectaForm.value.cuenta_bancaria ,
           this.CobranzaDirectaForm.value.numero_operacion ,
+          this.CobranzaDirectaForm.value.referente ,
           this.CobranzaDirectaForm.value.monto ,
           this.CobranzaDirectaForm.value.documento ,
           this.CobranzaDirectaForm.value.solo_directas ,

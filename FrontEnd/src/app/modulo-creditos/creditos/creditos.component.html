@@ -1470,8 +1470,8 @@
         <mat-grid-list cols="4" rowHeight="50px">
           <mat-grid-tile>
             <ng-container *ngIf="permiso?.creditos?.listado_creditos?.agregar_pagos_masivos">
-              <button mat-raised-button color="accent" (click)="AgregarPagos()" [disabled]="(Cargando | async) ||
-                totales_monto_pendiente==0 || CreditosForm.get('pagado').value == 1"> Agregar pagos </button>
+              <button mat-raised-button color="accent" (click)="AgregarPagos()"
+                [disabled]="(Cargando | async)"> Agregar pagos </button>
             </ng-container>
           </mat-grid-tile>
 

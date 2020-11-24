@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http'
-import {map} from 'rxjs/operators';
+import {map, retry} from 'rxjs/operators';
 import {URL} from 'src/app/core/servicios/url';
 import * as moment from 'moment';
 
@@ -479,7 +479,9 @@ export class CobranzaJudicialService {
       .set('prorden',orden);
 
     return this.http.get(this.url + 'procesojudicial/readV2.php', {params})
-    .pipe(map(res => {
+    .pipe(
+      retry(5),
+      map(res => {
       if (res['codigo'] === 0) {
         return res;
       } else {

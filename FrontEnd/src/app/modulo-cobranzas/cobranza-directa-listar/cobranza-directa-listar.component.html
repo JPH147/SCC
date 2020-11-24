@@ -122,10 +122,10 @@
           </ng-container>
 
           <ng-container *ngIf="permiso?.cobranzas?.cobranzas_directas?.editar">
-            <button mat-icon-button color="primary" matTooltip="Editar" [routerLink]="['editar', cobranza.id]" [disabled]="cobranza.fecha_referencia"><mat-icon> edit </mat-icon></button>
+            <button mat-icon-button color="primary" matTooltip="Editar" [routerLink]="['editar', cobranza.id]"><mat-icon> edit </mat-icon></button>
           </ng-container>
           <ng-container *ngIf="permiso?.cobranzas?.cobranzas_directas?.eliminar">
-            <button mat-icon-button color="primary" matTooltip="Eliminar" (click)="EliminarCobranza(cobranza)" [disabled]="cobranza.fecha_referencia"><mat-icon> delete </mat-icon></button>
+            <button mat-icon-button color="primary" matTooltip="Eliminar" (click)="EliminarCobranza(cobranza)"><mat-icon> delete </mat-icon></button>
           </ng-container>
         </mat-cell>
       </ng-container>

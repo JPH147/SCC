@@ -426,6 +426,7 @@ export class CobranzasService {
     cliente : number,
     cuenta : string,
     operacion : string,
+    referente : number,
     monto : number,
     id_transaccion : number ,
     considerar_solo_directas : boolean ,
@@ -439,6 +440,7 @@ export class CobranzasService {
       .set('prcliente', cliente.toString())
       .set('prcuenta', cuenta)
       .set('properacion', operacion)
+      .set('prreferente', referente.toString())
       .set('prmonto', monto.toString())
       .set('prtransaccion', id_transaccion.toString() )
       .set('prsolodirectas', considerar_solo_directas ? "1" : "0" )
@@ -457,6 +459,7 @@ export class CobranzasService {
     cliente : number,
     cuenta : number,
     operacion : string,
+    referente : number,
     monto : number,
     tipo_transaccion : number ,
     id_transaccion : number ,
@@ -467,6 +470,7 @@ export class CobranzasService {
       .set('prcliente', cliente.toString())
       .set('prcuenta', cuenta.toString())
       .set('properacion', operacion)
+      .set('prreferente', referente.toString())
       .set('prmonto', monto.toString())
       .set('prtipotransaccion', tipo_transaccion.toString() )
       .set('prtransaccion', id_transaccion.toString() )
@@ -477,6 +481,7 @@ export class CobranzasService {
     return this.http.post(this.url + 'cobranza/create-directa-masivo.php', params, {headers: headers})
     .pipe(
       map(resultado => {
+        // console.log(resultado) ;
         if ( resultado['codigo'] == 0 ) {
           return true ;
         } else {
@@ -492,6 +497,7 @@ export class CobranzasService {
     cliente : number,
     cuenta : string,
     operacion : string,
+    referente : number,
     monto : number,
     id_transaccion : number ,
     considerar_solo_directas : boolean ,
@@ -506,6 +512,7 @@ export class CobranzasService {
       .set('prcliente', cliente.toString())
       .set('prcuenta', cuenta)
       .set('properacion', operacion)
+      .set('prreferente', referente.toString())
       .set('prmonto', monto.toString())
       .set('prtransaccion', id_transaccion.toString() )
       .set('prsolodirectas', considerar_solo_directas ? "1" : "0" )
@@ -630,10 +637,9 @@ export class CobranzasService {
 
     return this.http.get(this.url + 'cobranza/buscar-operacion.php', { params } )
     .pipe(map(res => {
-      if (res['data'] == 1) {
+      if (res['data'] > 0) {
         return true;
       } else {
-        // console.log('No hay datos que mostrar');
         return false;
       }
     }));
@@ -976,6 +982,19 @@ export class CobranzasService {
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.url + 'cobranza/create-manual-venta.php', params, {headers: headers});
+  }
+
+  CrearCobranzaManualVentaArray(
+    venta : number ,
+    informacion : Array<any> ,
+  ) : Observable<any> {
+    let params = new HttpParams()
+      .set('prventa', venta.toString() )
+      .set('prinformacion', JSON.stringify(informacion) ) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'cobranza/create-manual-venta-array.php', params, {headers: headers});
   }
 
   ListarLiquidacionTransaccion(

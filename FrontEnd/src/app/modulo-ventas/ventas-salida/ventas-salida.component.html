@@ -1131,7 +1131,7 @@
           <mat-grid-tile>
             <ng-container *ngIf="permiso?.ventas?.listado_ventas?.agregar_pagos_masivos">
               <button mat-raised-button color="accent" (click)="AgregarPagos()"
-                [disabled]="(Cargando | async) || totales_monto_pendiente==0 || VentasSalidaForm.get('pagado').value == 1"> Agregar pagos </button>
+                [disabled]="(Cargando | async)"> Agregar pagos </button>
             </ng-container>
           </mat-grid-tile>
 
@@ -1311,18 +1311,18 @@
         
         <mat-divider> </mat-divider>
 
-        <mat-grid-list cols="2" rowHeight="70px">
+        <mat-grid-list cols="3" rowHeight="70px">
           <mat-grid-tile>
             <strong> Monto límite para penalidad: </strong>
             &nbsp;
             {{ VentasSalidaForm.get('monto_limite_penalidad').value | currency:'S/.' }}
           </mat-grid-tile>
 
-          <mat-grid-tile>
+          <!-- <mat-grid-tile>
             <strong> Deuda hasta hoy: </strong>
             &nbsp;
             {{ VentasSalidaForm.get('deuda_hasta_hoy').value | currency:'S/.' }}
-          </mat-grid-tile>
+          </mat-grid-tile> -->
 
           <mat-grid-tile>
             <strong> Adicional por penalidad: </strong>

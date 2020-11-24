@@ -42,16 +42,15 @@ export class VentanaJudicialComponent implements OnInit {
 
   ngOnInit() {
     this.CrearFormulario();
+    this.ListarTipoDocumentos();
+    this.ListarTrabajadores();
 
     if  (this.data.ver_proceso_detalle) {
       this.ver = true ;
       this.SeleccionarProceso(this.data.ver_proceso_detalle) ;
     } else {
-      this.ListarTipoDocumentos();
-      this.ListarTrabajadores();
       this.VerificarDocumentos();
-  
-      if(this.data.proceso_detalle){
+        if(this.data.proceso_detalle){
         this.editar = true ;
         this.EditarProceso();
       } else {

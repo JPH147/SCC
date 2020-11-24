@@ -69,7 +69,7 @@
       <form [formGroup]="PagosForm">
         <div formArrayName="PagoArrayForm" *ngFor="let Pago of PagosForm['controls'].PagoArrayForm['controls']; let i = index">
           <div [formGroupName]="i">
-            <mat-grid-list cols="4" rowHeight="70px">
+            <mat-grid-list cols="5" rowHeight="70px">
               <mat-grid-tile>
                 <mat-form-field class="columnas-1">
                   <mat-label> Fecha de pago </mat-label>
@@ -94,7 +94,16 @@
                   <mat-error *ngIf="Pago.get('numero_operacion').hasError('repetido')"> El voucher ya existe </mat-error>
                 </mat-form-field>
               </mat-grid-tile>
-  
+    
+              <mat-grid-tile>
+                <mat-form-field class="columnas-1">
+                  <mat-select placeholder="Receptor" formControlName="referente">
+                    <mat-option [value]="0"> Sin especificar </mat-option>
+                    <mat-option *ngFor="let vendedor of Vendedores" [value]="vendedor.id"> {{vendedor.nombre}} </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </mat-grid-tile>
+
               <mat-grid-tile>
                 <mat-form-field class="columnas-1">
                   <input matInput formControlName="pago_directo" placeholder="Pago directo">
@@ -111,15 +120,15 @@
   <ng-container *ngIf="tipo_pagos > 0">
     <mat-card-actions>
       <mat-grid-list cols="1" rowHeight="50px">
-        <mat-grid-tile *ngIf="data.pendiente < total_pagos">
+        <!-- <mat-grid-tile *ngIf="data.pendiente < total_pagos">
           <mat-error> El total de pagos ({{total_pagos}}) es mayor que el monto pendiente ({{data.pendiente}}) </mat-error>
-        </mat-grid-tile>
-        <mat-grid-tile *ngIf="(VerificandoVoucher | async)">
-          Se están verificando algunos vouchers
+        </mat-grid-tile> -->
+        <mat-grid-tile *ngIf="duplicados_vista">
+          <mat-error> Hay vouchers duplicados </mat-error>
         </mat-grid-tile>
         <mat-grid-tile colspan="1">
           <button mat-raised-button color="primary" (click)="Guardar()" type="button"
-            [disabled]="PagosForm.invalid || data.pendiente < total_pagos || (Cargando | async)"> Guardar </button>
+            [disabled]="PagosForm.invalid || (Cargando | async) || duplicados_vista"> Guardar </button>
         </mat-grid-tile>
       </mat-grid-list>
     </mat-card-actions>

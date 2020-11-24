@@ -282,7 +282,7 @@ export class VentasComponent implements OnInit {
         if(params['idventa']){
           this.id_venta = +params['idventa'] ;
           this.idventa = +params['idventa'] ;
-          this.Columnas= ['numero','tipo_pago','fecha_vencimiento', 'monto_cuota', 'monto_interes','monto_pagado', 'fecha_cancelacion','estado', 'opciones'];
+          this.Columnas= ['numero','tipo_pago','fecha_vencimiento', 'monto_cuota', 'monto_interes','monto_pagado','estado', 'opciones'];
           // this.idventa=77;
           this.SeleccionarVentaxId(this.idventa);
         }
@@ -561,7 +561,7 @@ export class VentasComponent implements OnInit {
       this.Columnas = ['numero', 'fecha_vencimiento_ver', 'monto_cuota_ver'];
     }
     if (this.idventa) {
-      this.Columnas= ['numero','tipo_pago','fecha_vencimiento', 'monto_cuota', 'monto_interes','monto_pagado', 'fecha_cancelacion','estado', 'opciones'];
+      this.Columnas= ['numero','tipo_pago','fecha_vencimiento', 'monto_cuota', 'monto_interes','monto_pagado','estado', 'opciones'];
     }
 
     this.Servicio.SeleccionarVenta(id_venta).subscribe(res=>{
@@ -1765,13 +1765,13 @@ export class VentasComponent implements OnInit {
       this.idventa = this.id_venta ;
       this.idventa_editar = null ;
       this.editar_documentos = false ;
-      this.Columnas= ['numero','tipo_pago','fecha_vencimiento', 'monto_cuota', 'monto_interes','monto_pagado', 'fecha_cancelacion','estado', 'opciones'];
+      this.Columnas= ['numero','tipo_pago','fecha_vencimiento', 'monto_cuota', 'monto_interes','monto_pagado','estado', 'opciones'];
     }
     if( tipo == 'editar_documentos' ) {
       this.idventa = this.id_venta ;
       this.idventa_editar = null ;
       this.editar_documentos = true ;
-      this.Columnas= ['numero','tipo_pago','fecha_vencimiento', 'monto_cuota', 'monto_interes','monto_pagado', 'fecha_cancelacion','estado', 'opciones'];
+      this.Columnas= ['numero','tipo_pago','fecha_vencimiento', 'monto_cuota', 'monto_interes','monto_pagado','estado', 'opciones'];
     }
     if( tipo == 'editar' ) {
       this.idventa = null ;

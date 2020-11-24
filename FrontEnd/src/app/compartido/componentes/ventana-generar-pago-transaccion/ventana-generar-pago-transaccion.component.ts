@@ -8,6 +8,9 @@ import { debounceTime, distinctUntilChanged, takeUntil, map, finalize } from 'rx
 import * as moment from 'moment';
 import { CooperativaConfiguracionService } from 'src/app/modulo-maestro/cooperativa-configuracion/cooperativa-configuracion.service';
 
+import { Validadores } from '../../utilitarios/validadores' ;
+import { ServiciosGenerales } from 'src/app/core/servicios/servicios';
+
 @Component({
   selector: 'app-ventana-generar-pago-transaccion',
   templateUrl: './ventana-generar-pago-transaccion.component.html',
@@ -30,6 +33,9 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit, AfterView
   public total_pagos_planilla : number = 0 ;
 
   public ListadoCuentas : Array<any> = [] ;
+  public duplicados_vista : boolean = false ;
+
+  public Vendedores : Array<any> = [] ;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data : any ,
@@ -37,12 +43,14 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit, AfterView
     private _builder : FormBuilder ,
     private _cobranzas : CobranzasService ,
     private _configuracion : CooperativaConfiguracionService ,
+    private _generales : ServiciosGenerales ,
   ) { }
 
   ngOnInit(): void {
     this.CrearFormulario() ;
 
     this.ListarCuentas() ;
+    this.ListarVendedor() ;
   }
 
   ngAfterViewInit() {
@@ -117,7 +125,7 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit, AfterView
       )
     )
     .subscribe((valores) => {
-      this.VerificarVoucherUnico(valores.valor, valores.index) ;
+      this.VerificarVoucherUnicoVista() ;
     });
   }
 
@@ -138,16 +146,19 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit, AfterView
       ] ] ,
       pago_directo : [ { value : 0, disabled : false },[
         this.NumeroDecimal ,
+        Validators.min(0) ,
         Validators.required
       ] ] ,
       pago_planilla : [ { value : 0, disabled : false },[
         this.NumeroDecimal ,
+        Validators.min(0) ,
         Validators.required
       ] ] ,
       pago_planilla_antiguo : [ { value : 0, disabled : false },[
       ] ] ,
       pago_judicial : [ { value : 0, disabled : false },[
         this.NumeroDecimal ,
+        Validators.min(0) ,
         Validators.required
       ] ] ,
       pago_judicial_antiguo : [ { value : 0, disabled : false },[
@@ -158,11 +169,15 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit, AfterView
       ] ] ,
       cuenta_bancaria : [ { value : "", disabled: false },[
       ] ] ,
+      referente : [ { value : 0, disabled: false },[
+      ] ] ,
       // El número de cuenta solo se utiliza para mostrarlo en el hint del formulario
       numero_cuenta : [ { value : "", disabled: false },[
       ] ] ,
       numero_operacion : [ { value : "", disabled: false },[
-      ] ] ,
+      ], [
+        Validadores.VoucherUnicioValidador(this._cobranzas)
+      ]] ,
     })
   }
 
@@ -201,7 +216,7 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit, AfterView
   }
 
   // 1. Se utilizan las fechas del cronograma por periodos
-  // 2. Se utilizan las fechas del cronograma normal
+  // 2. Se utilizan las fechas del cronograma normal (Todo es por periodos ahora)
   EstablecerControlesArray(tipo : number) {
     if ( tipo == 1 ) {
       this.data.cronograma_periodos.map( (item, index) =>{
@@ -215,18 +230,19 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit, AfterView
         return item ;
       })
     } else {
-      this.data.cronograma.map( (item, index) =>{
+      // this.data.cronograma.map( (item, index) =>{
+      this.data.cronograma_periodos.map( (item, index) =>{
         this.AgregarPagoForm(1) ;
-        this.PagoArrayForm.controls[index].get('fecha_pago').setValue(item.fecha_vencimiento) ;
-        this.PagoArrayForm.controls[index].get('monto_cuota').setValue(this.data.tipo == 1 ? item.monto : item.monto_cuota) ;
+        this.PagoArrayForm.controls[index].get('fecha_pago').setValue(moment(item.periodo, "MM/YYYY").endOf('month').toDate()) ;
+        this.PagoArrayForm.controls[index].get('monto_cuota').setValue(item.monto_cuota) ;
         return item ;
       })
     }
 
-    this.AgregarContolesFechaActual() ;
+    // this.AgregarControlesFechaActual() ;
   }
 
-  AgregarContolesFechaActual() {
+  AgregarControlesFechaActual() {
     let longitud_form = this.PagoArrayForm.value.length ;
     let ultima_fecha = this.PagoArrayForm.controls[longitud_form-1].get('fecha_pago').value ;
 
@@ -261,6 +277,7 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit, AfterView
     if ( valor > 0 ) {
       this.PagoArrayForm.controls[indice].get('cuenta_bancaria').setValidators([Validators.required]) ;
       this.PagoArrayForm.controls[indice].get('numero_operacion').setValidators([Validators.required]) ;
+      this.PagoArrayForm.controls[indice].get('numero_operacion').setAsyncValidators([Validadores.VoucherUnicioValidador(this._cobranzas)]) ;
       this.PagoArrayForm.controls[indice].get('cuenta_bancaria').updateValueAndValidity() ;
       this.PagoArrayForm.controls[indice].get('numero_operacion').updateValueAndValidity() ;
     } else {
@@ -305,24 +322,44 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit, AfterView
       this.tipo_pagos = 2 ;
     }
     this.EstablecerControlesArray(tipo) ;
+    this.SuscribirFormArray() ;
   }
 
-  VerificarVoucherUnico(valor, indice){
-    this.VerificandoVoucher.next(true) ;
-    this._cobranzas.BuscarNumeroOperacion(valor)
-    .pipe(
-      finalize(()=>{
-        this.VerificandoVoucher.next(false) ;
-      })
-    )
-    .subscribe(resultado=>{
-      if ( resultado ) {
-        this.PagoArrayForm.controls[indice].get('numero_operacion').setErrors({'repetido':true}) ;
-      } else {
-        this.PagoArrayForm.controls[indice].get('numero_operacion').setErrors(null) ;
+  VerificarVoucherUnicoVista(){
+    let valores_form_array : Array<any> = this.PagoArrayForm.value ;
+    let numeros_operacion : Array<string> = [] ;
+    
+    valores_form_array.map(elemento => {
+      if (elemento.numero_operacion) {
+        numeros_operacion.push(elemento.numero_operacion) ;
       }
+      return elemento ;
+    })
+
+    this.duplicados_vista = numeros_operacion.some((elemento, index) => {
+      return numeros_operacion.indexOf(elemento) !== index ;
     })
   }
+
+  ListarVendedor() {
+    this._generales.ListarVendedor("","","",1,50).subscribe( res => {
+      this.Vendedores = res ;
+    });
+  }
+
+  // VerificarVoucherUnicoVista(valor, indice){
+  //   let valores_form_array : Array<any> = this.PagoArrayForm.value ;
+  //   let valores_sin_actual = valores_form_array.splice(indice) ;
+
+  //   console.log(valores_sin_actual) ;
+  //   let duplicados = valores_sin_actual.some(elemento => elemento.numero_operacion == valor) ;
+  //   if ( duplicados ) {
+  //     this.PagoArrayForm.controls[indice].get('numero_operacion').setErrors({repetido_vista : true}) ;
+  //   } else {
+  //     this.PagoArrayForm.controls[indice].get('numero_operacion').setErrors({repetido_vista : null}) ;
+  //   }
+  //   this.PagoArrayForm.controls[indice].get('numero_operacion').updateValueAndValidity() ;
+  // }
 
   // Guardar() {
   //   let pagos = this.PagoArrayForm.value ;
@@ -385,15 +422,6 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit, AfterView
     let informacion : Array<any> = [] ;
 
     if ( this.tipo_pagos == 1 ) {
-      // pagos.map(elemento => {
-      //   if ( elemento.pago_planilla > 0 || elemento.pago_planilla_antiguo > 0 ) {
-      //     array_obserables.push( this.CrearPagoManual(2,elemento.pago_planilla, elemento.fecha_pago) ) ;
-      //   }
-      //   if ( elemento.pago_judicial > 0 || elemento.pago_judicial_antiguo > 0 ) {
-      //     array_obserables.push( this.CrearPagoManual(3,elemento.pago_judicial, elemento.fecha_pago) ) ;
-      //   }
-      //   return elemento ;
-      // }) ;
       pagos.map(elemento => {
         if ( elemento.pago_planilla > 0 || elemento.pago_planilla_antiguo > 0 ) {
           let detalle = {
@@ -419,15 +447,30 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit, AfterView
       })
 
       this.Cargando.next(true) ;
-      this._cobranzas.CrearCobranzaManualCreditoArray(this.data.id_credito,informacion)
-      .pipe(
-        finalize(()=>{
-          this.Cargando.next(false) ;
+
+      if ( this.data.tipo == 1 ) {
+        this._cobranzas.CrearCobranzaManualCreditoArray(this.data.id_credito,informacion)
+        .pipe(
+          finalize(()=>{
+            this.Cargando.next(false) ;
+          })
+        )
+        .subscribe(() =>{
+          this.ventana.close(true) ;
         })
-      )
-      .subscribe(() =>{
-        this.ventana.close(true) ;
-      })
+      }
+
+      if ( this.data.tipo == 2 ) {
+        this._cobranzas.CrearCobranzaManualVentaArray(this.data.id_venta,informacion)
+        .pipe(
+          finalize(()=>{
+            this.Cargando.next(false) ;
+          })
+        )
+        .subscribe(() =>{
+          this.ventana.close(true) ;
+        })
+      }
     }
 
     if ( this.tipo_pagos == 2 ) {
@@ -438,6 +481,7 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit, AfterView
               elemento.pago_directo , 
               elemento.fecha_pago , 
               elemento.numero_operacion ,
+              elemento.referente ,
               elemento.cuenta_bancaria
             )
           ) ;
@@ -501,12 +545,13 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit, AfterView
     }
   }
 
-  CrearPagoMasivo(monto : number, fecha : Date, numero_operacion : string, cuenta_bancaria : number) : Observable<boolean> {
+  CrearPagoMasivo(monto : number, fecha : Date, numero_operacion : string, referente : number, cuenta_bancaria : number) : Observable<boolean> {
     return this._cobranzas.CrearCobranzaDirectaMasivo(
       fecha ,
       this.data.cliente ,
       cuenta_bancaria ,
       numero_operacion ,
+      referente ,
       monto ,
       this.data.tipo ,
       this.data.tipo == 1 ? this.data.id_credito : this.data.id_venta ,

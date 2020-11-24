@@ -17,22 +17,21 @@
           Información de las cuotas
         </mat-card-subtitle>
 
-        <mat-grid-list cols=4 rowHeight="70px">
-
+        <mat-grid-list cols=3 rowHeight="70px">
           <mat-grid-tile>
-            <mat-form-field>
+            <mat-form-field class="columnas-1">
               <input type="number" class="resaltado" matInput placeholder="Capital" [(ngModel)]="capital" [ngModelOptions]="{standalone:true}" #InputCapital>
             </mat-form-field>
           </mat-grid-tile>
     
           <mat-grid-tile>
-            <mat-form-field>
+            <mat-form-field class="columnas-1">
               <input type="number" class="resaltado" matInput placeholder="Número de cuotas" [(ngModel)]="cuotas" [ngModelOptions]="{standalone:true}" #InputCuotas>
             </mat-form-field>
           </mat-grid-tile>
     
           <mat-grid-tile>
-            <mat-form-field appearance="fill">
+            <mat-form-field appearance="fill" class="columnas-1">
               <mat-label>Total a pagar</mat-label>
               <input type="text" class="resaltado" matInput placeholder="Total a pagar" [(ngModel)]="prestamo" [ngModelOptions]="{standalone:true}" readonly>
             </mat-form-field>
@@ -47,13 +46,13 @@
           </mat-grid-tile>
     
           <mat-grid-tile>
-            <mat-form-field>
+            <mat-form-field class="columnas-1">
               <input type="number" class="resaltado" matInput placeholder="Interés" [(ngModel)]="interes" [ngModelOptions]="{standalone:true}" #InputInteres>
             </mat-form-field>
           </mat-grid-tile>
 
           <mat-grid-tile>
-            <mat-form-field>
+            <mat-form-field class="columnas-1">
               <input type="number" class="resaltado" matInput placeholder="Aporte" [(ngModel)]="aporte" [ngModelOptions]="{standalone:true}" #InputAporte>
             </mat-form-field>
           </mat-grid-tile>
@@ -70,12 +69,31 @@
           </ng-container>
     
           <mat-grid-tile>
-            <mat-form-field>
-              <input matInput [matDatepicker]="FInicio" placeholder="Fecha de inicio de pagos" [(ngModel)]="fecha_inicio" [ngModelOptions]="{standalone:true}" readonly (dateChange)="CambioFechaInicio()"> 
-              <mat-datepicker-toggle matSuffix [for]="FInicio"></mat-datepicker-toggle>
-              <mat-datepicker #FInicio [disabled]="false"></mat-datepicker>
-            </mat-form-field>
+            <mat-checkbox color="primary" formControlName="fin_mes"
+              (change)="CambioInteresDiario($event)">Fin de mes</mat-checkbox>
           </mat-grid-tile>
+
+          <ng-container>
+            <mat-grid-tile *ngIf="!ExpressForm.get('fin_mes').value">
+              <mat-form-field class="columnas-1">
+                <input matInput [matDatepicker]="FInicio" placeholder="Fecha de inicio de pagos"
+                  formControlName="fecha_pago" readonly (dateChange)="CambioFechaInicio()"> 
+                <mat-datepicker-toggle matSuffix [for]="FInicio"></mat-datepicker-toggle>
+                <mat-datepicker #FInicio [disabled]="false"></mat-datepicker>
+              </mat-form-field>
+            </mat-grid-tile>
+            
+            <mat-grid-tile *ngIf="ExpressForm.get('fin_mes').value">
+              <mat-form-field class="columnas-1">
+                <input matInput [matDatepicker]="FFin" placeholder="Fecha de inicio de pagos"
+                  formControlName="fecha_pago" readonly>
+                <mat-datepicker-toggle matSuffix [for]="FFin"></mat-datepicker-toggle>
+                <mat-datepicker #FFin startView="year"
+                (yearSelected)="AnoElegido($event)"
+                (monthSelected)="MesElegido($event, FFin)"></mat-datepicker>
+              </mat-form-field>
+            </mat-grid-tile>
+          </ng-container>
         </mat-grid-list>
       </div>
 
@@ -134,7 +152,7 @@
 
           <mat-grid-tile>
             <mat-form-field class="columnas-1">
-              <input matInput [matDatepicker]="picker3" placeholder="Fecha" [max]="fecha_inicio" formControlName="fecha_letras" (dateChange)="CambioFechaLetras()" readonly>
+              <input matInput [matDatepicker]="picker3" placeholder="Fecha" formControlName="fecha_letras" (dateChange)="CambioFechaLetras()" readonly>
               <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
               <mat-datepicker #picker3 [disabled]="false"></mat-datepicker>
             </mat-form-field>

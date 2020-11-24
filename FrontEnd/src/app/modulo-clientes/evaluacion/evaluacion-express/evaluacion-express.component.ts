@@ -14,6 +14,9 @@ import { Notificaciones } from 'src/app/core/servicios/notificacion';
 import { MatDialog } from '@angular/material/dialog';
 import { VentanaProductosComponent } from '../../../modulo-ventas/ventas/ventana-productos/ventana-productos.component';
 
+import {default as _rollupMoment, Moment} from 'moment';
+import { MatDatepicker } from '@angular/material/datepicker';
+
 @Component({
   selector: 'app-evaluacion-express',
   templateUrl: './evaluacion-express.component.html',
@@ -41,7 +44,6 @@ export class EvaluacionExpressComponent implements OnInit {
   public fecha_prestamo : Date ;
   public interes_por_dia : boolean ;
   public interes_diario : number ;
-  public fecha_inicio : Date ;
   public cronograma : Array<any> = [];
   public Columnas: string[] = ['numero','fecha','monto','aporte','total'] ;
   public ListadoCronograma : EvaluacionCoutasDataSource ;
@@ -107,7 +109,6 @@ export class EvaluacionExpressComponent implements OnInit {
     this.interes_por_dia=false;
     this.interes_diario=0;
     this.fecha_prestamo=new Date();
-    this.fecha_inicio=moment(new Date()).toDate();
     this.CorregirFecha();
 
     this.InformacionForm = this.Builder.group({});
@@ -156,11 +157,13 @@ export class EvaluacionExpressComponent implements OnInit {
   }
   
   CorregirFecha(){
+    let fecha_inicio ;
     if ( moment(this.ExpressForm.value.fecha_letras).date() > 15 ) {
-      this.fecha_inicio = moment(this.ExpressForm.value.fecha_letras).add(1,'month').endOf('month').toDate() ;
+      fecha_inicio = moment(this.ExpressForm.value.fecha_letras).add(1,'month').endOf('month').toDate() ;
     } else {
-      this.fecha_inicio = moment(this.ExpressForm.value.fecha_letras).endOf('month').toDate() ;
+      fecha_inicio = moment(this.ExpressForm.value.fecha_letras).endOf('month').toDate() ;
     }
+    this.ExpressForm.get('fecha_pago').setValue(fecha_inicio) ;
   }
 
   CrearFormularios(){
@@ -169,6 +172,8 @@ export class EvaluacionExpressComponent implements OnInit {
       id_vendedor : [ null,[Validators.required] ],
       vendedor_dni : [ "",[] ],
       vendedor : [ "",[] ],
+      fin_mes : [ true ],
+      fecha_pago : [ new Date(),[Validators.required] ],
       fecha_letras : [ new Date(),[Validators.required] ],
       productos: this.Builder.array([]),
     }) ;
@@ -247,23 +252,56 @@ export class EvaluacionExpressComponent implements OnInit {
   }
 
   EstablecerFechaInicio() {
+    let fecha_inicio ;
     if ( moment(this.ExpressForm.value.fecha_letras).date() > 15 ) {
-      this.fecha_inicio = moment(this.ExpressForm.value.fecha_letras).add(1,'month').endOf('month').toDate() ;
+      fecha_inicio = moment(this.ExpressForm.value.fecha_letras).add(1,'month').endOf('month').toDate() ;
     } else {
-      this.fecha_inicio = moment(this.ExpressForm.value.fecha_letras).endOf('month').toDate() ;
+      fecha_inicio = moment(this.ExpressForm.value.fecha_letras).endOf('month').toDate() ;
     }
+    this.ExpressForm.get('fecha_pago').setValue(fecha_inicio) ;
+  }
+
+  AnoElegido(ano_normalizado: Moment) {
+    let ano_seleccionado : moment.Moment ;
+    // Se colocó este 'if' para que cuando el valor inicial de 'fecha_fin' sea null, no haya errores en consola
+    if( this.ExpressForm.value.fecha_pago ) {
+      ano_seleccionado = moment(this.ExpressForm.value.fecha_pago) ;
+    } else {
+      ano_seleccionado = moment() ;
+    }
+    ano_seleccionado.year(ano_normalizado.year());
+    this.ExpressForm.get('fecha_pago').setValue(ano_seleccionado);
+  }
+
+  MesElegido(mes_normalizado: Moment, datepicker: MatDatepicker<Moment>) {
+    let mes_seleccionado : moment.Moment ;
+    // Se colocó este 'if' para que cuando el valor inicial de 'fecha_fin' sea null, no haya errores en consola
+    if( this.ExpressForm.value.fecha_pago ) {
+      mes_seleccionado = moment(this.ExpressForm.value.fecha_pago) ;
+    } else {
+      mes_seleccionado = moment() ;
+    }
+
+    mes_seleccionado.year(mes_normalizado.year()) ;
+    mes_seleccionado.month(mes_normalizado.month());
+    
+    this.ExpressForm.get('fecha_pago').setValue(moment(mes_seleccionado).endOf('month').toDate());
+    datepicker.close();
+    this.CambioFechaInicio() ;
   }
 
   CambioFechaInicio(){
     let fecha_letras = this.ExpressForm.value.fecha_letras ;
-    if( this.fecha_inicio < fecha_letras ) {
-      this.ExpressForm.get('fecha_letras').setValue( this.fecha_inicio ) ;
+    let fecha_inicio = this.ExpressForm.value.fecha_pago ;
+    if( fecha_inicio < fecha_letras ) {
+      this.ExpressForm.get('fecha_letras').setValue( fecha_inicio ) ;
     }
     this.CambioFechaLetras();
   }
 
   CambioFechaLetras(){
-    let mes_inicio_pagos = moment(this.fecha_inicio).month() ;
+    let fecha_inicio = this.ExpressForm.value.fecha_pago ;
+    let mes_inicio_pagos = moment(fecha_inicio).month() ;
     let mes_firma = moment(this.ExpressForm.value.fecha_letras).month() ;
     if( mes_inicio_pagos == mes_firma ) {
       this.interes_diario_deshabilitado = true ;
@@ -297,10 +335,12 @@ export class EvaluacionExpressComponent implements OnInit {
     // Se considera la fecha de inicio la fecha de firma del préstamo
     this.fecha_prestamo = this.ExpressForm.value.fecha_letras ;
 
+    let fecha_inicio = this.ExpressForm.value.fecha_pago ;
+
     // Se calculan las fechas de las cuotas
-    let ano_pago = moment(this.fecha_inicio).year();
-    let mes_pago = moment(this.fecha_inicio).month();
-    let dia_pago = moment(this.fecha_inicio).date();
+    let ano_pago = moment(fecha_inicio).year();
+    let mes_pago = moment(fecha_inicio).month();
+    let dia_pago = moment(fecha_inicio).date();
     let fecha_corregida : Date = new Date(ano_pago, mes_pago, dia_pago);
     let fecha : Date;
 
@@ -311,7 +351,7 @@ export class EvaluacionExpressComponent implements OnInit {
     let dias_mes : number = moment(this.fecha_prestamo).daysInMonth();
     let interes_truncado = Math.round( ((dias_mes - dia_credito) / dias_mes) * interes * 100 ) / 100;
 
-    let numero_cuotas = +moment(this.fecha_inicio).diff(moment(this.fecha_prestamo), 'months') ;
+    let numero_cuotas = +moment(fecha_inicio).diff(moment(this.fecha_prestamo), 'months') ;
 
     this.numero_cuotas_estandar = +this.cuotas ;
     this.cuota_estandar = total/+this.cuotas ;
@@ -687,7 +727,7 @@ export class EvaluacionExpressComponent implements OnInit {
       this.InformacionForm.value.cip,
       true,
       this.InformacionForm.value.direccion_completa ? this.InformacionForm.value.direccion_completa : direccion_completa,
-      this.InformacionForm.value.casilla ? this.InformacionForm.value.casilla : ( Math.floor(Math.random() * 89999) + 10000 ),
+      this.InformacionForm.value.casilla ,
       this.InformacionForm.value.subsede_nombre,
       this.ExpressForm.value.fecha_letras,
       this.dias_contrato_premura,

@@ -68,6 +68,7 @@
     public $venta ;
     public $id_liquidacion ;
     public $usuario_alvis ;
+    public $referente ;
 
     public $informacion;
 
@@ -693,7 +694,7 @@
             "cooperativa_cuenta"=>$cooperativa_cuenta,
             "banco"=>$banco,
             "cooperativa_cuenta_alias"=>$cooperativa_cuenta_alias,
-            "numero_operacion"=>$numero_operacion,
+            "numero_operacion"=>$numero_operacion . " ",
             "monto"=>$monto,
             "fecha_referencia"=>$fecha_referencia,
             "validado"=>$validado,
@@ -755,6 +756,8 @@
         "solo_directas" => $row['solo_directas'] ,
         "archivo" => $row['archivo'] ,
         "observaciones" => $row['observaciones'] ,
+        "id_vendedor" => $row['id_vendedor'] ,
+        "vendedor" => $row['vendedor'] ,
         "detalle" => $Detalle
       );
       return $resultado;
@@ -799,6 +802,7 @@
         :prcliente,
         :prcuenta,
         :properacion,
+        :prreferente,
         :prmonto,
         :prtransaccion,
         :prestricto,
@@ -813,6 +817,7 @@
       $result->bindParam(":prcliente", $this->cliente);
       $result->bindParam(":prcuenta", $this->cuenta);
       $result->bindParam(":properacion", $this->operacion);
+      $result->bindParam(":prreferente", $this->referente);
       $result->bindParam(":prmonto", $this->monto);
       $result->bindParam(":prtransaccion", $this->transaccion);
       $result->bindParam(":prestricto", $this->solo_directas);
@@ -824,6 +829,7 @@
       $this->cliente=htmlspecialchars(strip_tags($this->cliente));
       $this->cuenta=htmlspecialchars(strip_tags($this->cuenta));
       $this->operacion=htmlspecialchars(strip_tags($this->operacion));
+      $this->referente=htmlspecialchars(strip_tags($this->referente));
       $this->monto=htmlspecialchars(strip_tags($this->monto));
       $this->transaccion=htmlspecialchars(strip_tags($this->transaccion));
       $this->solo_directas=htmlspecialchars(strip_tags($this->solo_directas));
@@ -852,6 +858,7 @@
         :prcliente,
         :prcuenta,
         :properacion,
+        :prreferente,
         :prmonto,
         :prtipo,
         :prtransaccion,
@@ -867,6 +874,7 @@
       $result->bindParam(":prcliente", $this->cliente);
       $result->bindParam(":prcuenta", $this->cuenta);
       $result->bindParam(":properacion", $this->operacion);
+      $result->bindParam(":prreferente", $this->referente);
       $result->bindParam(":prmonto", $this->monto);
       $result->bindParam(":prtipo", $this->tipo_transaccion);
       $result->bindParam(":prtransaccion", $this->transaccion);
@@ -878,23 +886,13 @@
       $this->cliente=htmlspecialchars(strip_tags($this->cliente));
       $this->cuenta=htmlspecialchars(strip_tags($this->cuenta));
       $this->operacion=htmlspecialchars(strip_tags($this->operacion));
+      $this->referente=htmlspecialchars(strip_tags($this->referente));
       $this->monto=htmlspecialchars(strip_tags($this->monto));
       $this->tipo_transaccion=htmlspecialchars(strip_tags($this->tipo_transaccion));
       $this->transaccion=htmlspecialchars(strip_tags($this->transaccion));
       $this->observaciones=htmlspecialchars(strip_tags($this->observaciones));
       $this->usuario_alvis=htmlspecialchars(strip_tags($this->usuario_alvis));
       
-            // ob_start();
-            // echo($this->fecha) ;
-            // echo($this->cliente) ;
-            // echo($this->cuenta) ;
-            // echo($this->operacion) ;
-            // echo($this->monto) ;
-            // echo($this->tipo_transaccion) ;
-            // echo($this->transaccion) ;
-            // echo($this->observaciones) ;
-            // error_log(ob_get_clean(), 4) ;
-
       if($result->execute())
       {
         return true;
@@ -909,11 +907,11 @@
         :prcliente,
         :prcuenta,
         :properacion,
+        :prreferente,
         :prmonto,
         :prtransaccion,
         :prestricto,
         :prarchivo,
-        :prfechareferencia,
         :probservaciones
       )";
 
@@ -924,11 +922,11 @@
       $result->bindParam(":prcliente", $this->cliente);
       $result->bindParam(":prcuenta", $this->cuenta);
       $result->bindParam(":properacion", $this->operacion);
+      $result->bindParam(":prreferente", $this->referente);
       $result->bindParam(":prmonto", $this->monto);
-      $result->bindParam(":prtransaccion", $this->transaccion);
+      $result->bindParam(":prtransaccion", $this->id_transaccion);
       $result->bindParam(":prestricto", $this->solo_directas);
       $result->bindParam(":prarchivo", $this->archivo);
-      $result->bindParam(":prfechareferencia", $this->fecha_referencia);
       $result->bindParam(":probservaciones", $this->observaciones);
 
       $this->id_cobranza=htmlspecialchars(strip_tags($this->id_cobranza));
@@ -936,11 +934,11 @@
       $this->cliente=htmlspecialchars(strip_tags($this->cliente));
       $this->cuenta=htmlspecialchars(strip_tags($this->cuenta));
       $this->operacion=htmlspecialchars(strip_tags($this->operacion));
+      $this->referente=htmlspecialchars(strip_tags($this->referente));
       $this->monto=htmlspecialchars(strip_tags($this->monto));
-      $this->transaccion=htmlspecialchars(strip_tags($this->transaccion));
+      $this->id_transaccion=htmlspecialchars(strip_tags($this->id_transaccion));
       $this->solo_directas=htmlspecialchars(strip_tags($this->solo_directas));
       $this->archivo=htmlspecialchars(strip_tags($this->archivo));
-      $this->fecha_referencia=htmlspecialchars(strip_tags($this->fecha_referencia));
       $this->observaciones=htmlspecialchars(strip_tags($this->observaciones));
 
       if($result->execute())

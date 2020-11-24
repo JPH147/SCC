@@ -52,7 +52,7 @@
 
         <mat-grid-tile colspan="1" *ngIf="id_cobranza">
           <mat-form-field class="columnas-1">
-            <input matInput placeholder="Cuenta de depósito" formControlName="cuenta_bancaria" [readonly]="id_cobranza">
+            <input matInput placeholder="Cuenta de depósito" formControlName="cuenta_bancaria" readonly>
           </mat-form-field>
         </mat-grid-tile>
 
@@ -61,6 +61,23 @@
             <input matInput #InputOperacion placeholder="Número de operación" formControlName="numero_operacion" [readonly]="id_cobranza">
           </mat-form-field>
         </mat-grid-tile>
+
+        <ng-container>
+          <mat-grid-tile *ngIf="!id_cobranza">
+            <mat-form-field class="columnas-1">
+              <mat-select placeholder="Receptor" formControlName="referente">
+                <mat-option [value]="0"> Sin especificar </mat-option>
+                <mat-option *ngFor="let vendedor of Vendedores" [value]="vendedor.id"> {{vendedor.nombre}} </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile *ngIf="id_cobranza">
+            <mat-form-field class="columnas-1">
+              <input matInput placeholder="Receptor" formControlName="referente" readonly>
+            </mat-form-field>
+          </mat-grid-tile>
+        </ng-container>
 
         <mat-grid-tile colspan="1">
           <span matPrefix>S/. &nbsp;</span>
@@ -86,13 +103,13 @@
           <mat-checkbox color="primary" formControlName="interes" (change)="InteresSeleccionado()"> Interés a la fecha </mat-checkbox>
         </mat-grid-tile> -->
 
-        <mat-grid-tile colspan="1">
+        <!-- <mat-grid-tile colspan="1">
           <mat-form-field class="columnas-1">
             <input matInput [matDatepicker]="fechareferencia" placeholder="Fecha de referencia" formControlName="fecha_referencia" (dateChange)="ListarPosiblesCuotas()" readonly>
             <mat-datepicker-toggle matSuffix [for]="fechareferencia"></mat-datepicker-toggle>
             <mat-datepicker #fechareferencia [disabled]="id_cobranza || !CobranzaDirectaForm.value.interes"></mat-datepicker>
           </mat-form-field>
-        </mat-grid-tile>
+        </mat-grid-tile> -->
 
         <ng-container></ng-container>
 

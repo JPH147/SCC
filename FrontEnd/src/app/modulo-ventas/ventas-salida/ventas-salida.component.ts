@@ -181,7 +181,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       if(params['idventa']){
         this.idventa = +params['idventa'];
         this.id_venta = +params['idventa'];
-        this.Columnas= ['numero', 'monto_cuota','fecha_vencimiento', 'monto_interes','monto_pagado', 'fecha_cancelacion','estado', 'opciones'];
+        this.Columnas= ['numero', 'monto_cuota','fecha_vencimiento', 'monto_interes','monto_pagado','estado', 'opciones'];
         this.SeleccionarVentaxId(this.id_venta);
       }
       if(params['idventaeditar']){
@@ -1174,13 +1174,13 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       this.id_venta = this.idventa ;
       this.id_venta_editar = null ;
       this.editar_documentos = false ;
-      this.Columnas= ['numero', 'monto_cuota','fecha_vencimiento', 'monto_interes','monto_pagado', 'fecha_cancelacion','estado', 'opciones'];
+      this.Columnas= ['numero', 'monto_cuota','fecha_vencimiento', 'monto_interes','monto_pagado','estado', 'opciones'];
     }
     if( tipo == 'editar_documentos' ) {
       this.id_venta = this.idventa ;
       this.id_venta_editar = null ;
       this.editar_documentos = true ;
-      this.Columnas= ['numero', 'monto_cuota','fecha_vencimiento', 'monto_interes','monto_pagado', 'fecha_cancelacion','estado', 'opciones'];
+      this.Columnas= ['numero', 'monto_cuota','fecha_vencimiento', 'monto_interes','monto_pagado','estado', 'opciones'];
     }
     if( tipo == 'editar' ) {
       this.id_venta = null ;

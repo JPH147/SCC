@@ -758,7 +758,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         this.CreditosForm.get('tipo_pago').setValue(res.tipo_pago);
         this.CreditosForm.get('observaciones').setValue(observacion_corregida);
 
-        this.ColumnasCronograma = ['numero', 'tipo_pago','fecha_vencimiento', 'monto', 'interes_generado','monto_pagado', 'fecha_cancelacion','estado', 'opciones'];
+        this.ColumnasCronograma = ['numero', 'tipo_pago','fecha_vencimiento', 'monto', 'interes_generado','monto_pagado','estado', 'opciones'];
         this.ObtenerCronograma(this.id_credito, 0);
 
         if(res['garantes'].garantes.length>0){
@@ -809,6 +809,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       }
 
       if ( this.id_credito_editar ) {
+        this.CreditosForm.get('interes_diario').enable() ;
         if( res['courier'].id ){
           this.CreditosForm.get('papeles_courier').setValue(res['courier'].id_courier);
           this.papeles_antiguo=res['courier'].foto;
@@ -1521,13 +1522,13 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       this.id_credito = this.id_credito_estandar ;
       this.id_credito_editar = null ;
       this.editar_documentos = false ;
-      this.ColumnasCronograma = ['numero', 'tipo_pago','fecha_vencimiento', 'monto', 'interes_generado','monto_pagado', 'fecha_cancelacion','estado', 'opciones'];
+      this.ColumnasCronograma = ['numero', 'tipo_pago','fecha_vencimiento', 'monto', 'interes_generado','monto_pagado','estado', 'opciones'];
     }
     if( tipo == 'editar_documentos' ) {
       this.id_credito = this.id_credito_estandar ;
       this.id_credito_editar = null ;
       this.editar_documentos = true ;
-      this.ColumnasCronograma = ['numero', 'tipo_pago','fecha_vencimiento', 'monto', 'interes_generado','monto_pagado', 'fecha_cancelacion','estado', 'opciones'];
+      this.ColumnasCronograma = ['numero', 'tipo_pago','fecha_vencimiento', 'monto', 'interes_generado','monto_pagado','estado', 'opciones'];
     }
     if( tipo == 'editar' ) {
       this.id_credito = null ;

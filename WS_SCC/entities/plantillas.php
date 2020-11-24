@@ -1,6 +1,7 @@
 <?php
 
 include_once '../vendor/phpoffice/phpword/bootstrap.php';
+ini_set("pcre.backtrack_limit", "-1");
 
 Class Plantillas{
 
@@ -301,7 +302,7 @@ Class Plantillas{
         // var_dump($cronograma);
         // error_log(ob_get_clean(), 4) ;
 
-        $templateProcessor->cloneBlock('cronograma', 0, true, false, $cronograma);
+        // $templateProcessor->cloneBlock('cronograma', 0, true, false, $cronograma);
         $templateProcessor->cloneBlock('block_name_1', 0, true, false, $cronograma);
         $templateProcessor->cloneBlock('block_name_2', 0, true, false, $cronograma);
         $templateProcessor->cloneBlock('block_name_3', 0, true, false, $cronograma);

@@ -37,8 +37,12 @@
           <mat-grid-tile colspan="1">
             <mat-form-field class="columnas-1">
               <input matInput placeholder="DNI"  formControlName="dni" maxlength="8" #InputCliente>
-              <mat-error *ngIf="ClientesForm.get('dni').invalid">Debes escribir 8 dígitos</mat-error>
+              <mat-error *ngIf="ClientesForm.get('dni').invalid">Debe escribir 8 dígitos</mat-error>
               <mat-hint align="end">{{ClientesForm.value.dni?.length || 0}}/8</mat-hint>
+              <button mat-icon-button type="button" *ngIf="!this.ventana && ClientesForm.value.dni?.length < 8"
+                matSuffix color="primary" (click)="SeleccionarCliente()">
+                <mat-icon> person_add </mat-icon>
+              </button>
             </mat-form-field>
           </mat-grid-tile>
 

@@ -22,6 +22,7 @@
             $cobranza->cliente=trim($_POST["prcliente"]);
             $cobranza->cuenta=trim($_POST["prcuenta"]);
             $cobranza->operacion=trim($_POST["properacion"]);
+            $cobranza->referente=trim($_POST["prreferente"]);
             $cobranza->monto=trim($_POST["prmonto"]);
             $cobranza->tipo_transaccion=trim($_POST["prtipotransaccion"]);
             $cobranza->transaccion=trim($_POST["prtransaccion"]);
