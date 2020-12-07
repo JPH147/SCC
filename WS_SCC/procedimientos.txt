@@ -1,8 +1,14 @@
 Nuevos
-sp_actualizarcobranzadirectavalidacion
+sp_crearcreditovendedores ;
+sp_listarcreditovendedorxcredito ;
+
+sp_crearventavendedores;
+sp_listarventavendedorxventa;
 
 Actualizar
-drop procedure if exists sp_listarcobranzadirecta ;
-drop procedure if exists sp_listarcobranzadirectacontar ;
+sp_actualizarcredito
+sp_actualizarventa
 
 TABLAS
+credito_vendedores
+venta_vendedores

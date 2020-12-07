@@ -1,0 +1,18 @@
+mat-table {
+  width: 95% ;
+  position: relative ;
+  margin-left: auto ;
+  margin-right: auto ;
+}
+
+.mat-column-opciones {
+  max-width: 10%;
+}
+
+.mat-column-dni {
+  max-width: 20%;
+}
+
+mat-card-actions{
+	margin-bottom: 10px !important;
+}

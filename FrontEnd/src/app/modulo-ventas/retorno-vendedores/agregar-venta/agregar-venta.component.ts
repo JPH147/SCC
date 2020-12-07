@@ -349,7 +349,8 @@ export class AgregarVentaComponent implements OnInit {
       "",
       "",
       "",
-      this.VentaForm.value.observaciones
+      this.VentaForm.value.observaciones,
+      []
     ).subscribe(res=>{
       // console.log(res)
 

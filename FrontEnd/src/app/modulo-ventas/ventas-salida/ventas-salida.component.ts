@@ -34,6 +34,7 @@ import { VentanaGenerarPagoTransaccionComponent } from "../../compartido/compone
 import { VentanaGenerarPenalidadComponent } from "src/app/compartido/componentes/ventana-generar-penalidad/ventana-generar-penalidad.component";
 import { VentanaLiquidacionComponent } from "src/app/compartido/componentes/ventana-liquidacion/ventana-liquidacion.component";
 import { VentanaGenerarInteresComponent } from "src/app/compartido/componentes/ventana-generar-interes/ventana-generar-interes.component";
+import { VentanaPagosComponent } from "src/app/compartido/componentes/ventana-pagos/ventana-pagos.component";
 
 @Component({
   selector: 'app-ventas-salida',
@@ -58,7 +59,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   public ListadoVentas: VentaDataSource ;
   public ListadoVentasAntiguo: VentaAntiguoDataSource ;
   public Columnas: string[];
-  public ColumnasCronogramaPeriodo: Array<string> = ["numero", "periodo", "monto_cuota" ,"total_planilla" ,"total_directo" ,"total_judicial" ] ;
+  public ColumnasCronogramaPeriodo: Array<string> = ["numero", "periodo", "monto_cuota" ,"total_planilla" ,"total_directo" ,"total_judicial", 'opciones' ] ;
   
   public ruta:string;
   public ProductosComprados: Array<any>;
@@ -1141,9 +1142,16 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   }
 
   VerDetallePagos(cronograma){
-    let Ventana = this.Dialogo.open(VentanaCronogramaComponent,{
+    let Ventana = this.Dialogo.open(VentanaPagosComponent,{
       width: '900px',
       data: {numero: cronograma.numero, id:cronograma.id_cronograma}
+    })
+  }
+
+  VerDetallePagosPeriodos(periodo){
+    let Ventana = this.Dialogo.open(VentanaPagosComponent,{
+      width: '900px',
+      data: { tipo: 2 , transaccion: this.id_venta, periodo : periodo }
     })
   }
 
@@ -1311,7 +1319,8 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
         this.autorizacion_editar ? resultado[7].mensaje : this.autorizacion_antiguo,
         this.otros_editar ? resultado[8].mensaje : this.otros_antiguo,
         this.oficio_editar ? resultado[9].mensaje : this.oficio_antiguo,
-        formulario.value.observaciones
+        formulario.value.observaciones,
+        []
       ).subscribe(res=>{
         // Productos antiguos
         this.Productos.forEach((item)=>{

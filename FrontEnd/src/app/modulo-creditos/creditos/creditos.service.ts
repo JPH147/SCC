@@ -167,7 +167,8 @@ export class CreditosService {
     pdf_ddjj:string,
     pdf_oficio:string,
     pdf_otros:string,
-    observacion:string
+    observacion:string,
+    vendedores_array : Array<any> ,
   ) :Observable<any> {
 
     let params = new HttpParams()
@@ -205,7 +206,8 @@ export class CreditosService {
       .set('prpdfddjj',pdf_ddjj)
       .set('prpdfoficio',pdf_oficio)
       .set('prpdfotros',pdf_otros)
-      .set('probservacion',observacion) ;
+      .set('probservacion',observacion)
+      .set('prvendedoresarray', JSON.stringify(vendedores_array)) ;
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -333,7 +335,8 @@ export class CreditosService {
     pdf_ddjj:string,
     pdf_oficio:string,
     pdf_otros:string,
-    observacion:string
+    observacion:string,
+    vendedores_array:Array<any>
   ) :Observable<any> {
 
     let params = new HttpParams()
@@ -371,6 +374,7 @@ export class CreditosService {
       .set('prpdfoficio',pdf_oficio)
       .set('prpdfotros',pdf_otros)
       .set('probservacion',observacion)
+      .set('prvendedoresarray', JSON.stringify(vendedores_array)) ;
 
     // console.log(params);
 
@@ -591,7 +595,6 @@ export class CreditosService {
   ListarCronogramaxCliente(
     cliente:number
   ): Observable<any> {
-
     let params = new HttpParams()
       .set('prcliente',cliente.toString());
 
@@ -742,5 +745,21 @@ export class CreditosService {
         }
       })
     );
+  }
+
+  ListarCreditoVendedores(
+    id_credito : number
+  ) : Observable<any> {
+    let params = new HttpParams()
+      .set('prcredito',id_credito.toString());
+
+    return this.http.get(this.url + 'credito/read-vendedores.php', {params})
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res['data'];
+      } else {
+        return [];
+      }
+    }));
   }
 }

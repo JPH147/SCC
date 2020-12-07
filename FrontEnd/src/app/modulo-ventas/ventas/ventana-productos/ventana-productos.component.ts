@@ -34,7 +34,7 @@ export class VentanaProductosComponent implements OnInit, AfterViewInit {
   	this.ListadoProductos.CargarInformacion(this.data.series,this.data.sucursal,"","",1) ;
     if ( this.data.productos.length > 0 ) {
       this.data.productos.forEach(( item ) => {
-        let producto = {
+        let vendedor = {
           id_producto : item.id_producto ,
           producto : item.nombre ,
           id_serie : item.id_serie ,
@@ -42,7 +42,7 @@ export class VentanaProductosComponent implements OnInit, AfterViewInit {
           precio : item.precio ,
           estado : item.estado
         } ;
-        this.SeriesSeleccionadas.push(producto) ;
+        this.SeriesSeleccionadas.push(vendedor) ;
       })
       // this.SeriesSeleccionadas = this.data.producos ;
     }
@@ -138,7 +138,6 @@ export class AgregarProductosDataSource {
       this.Cargando.next(false);
       // Si la serie ya ha sido agregada, no se permite ingresarla dos veces.
       // En este caso, se está utilizado "número" como "utilizado"
-      // console.log(res['data'].producto_series,series_registradas)
       res['data'].producto_series.map((producto)=>{
         producto.numero=false;
         series_registradas.map((serie)=>{

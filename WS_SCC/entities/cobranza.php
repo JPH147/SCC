@@ -69,6 +69,7 @@
     public $id_liquidacion ;
     public $usuario_alvis ;
     public $referente ;
+    public $periodo ;
 
     public $informacion;
 
@@ -231,6 +232,67 @@
 
       $result->bindParam(1, $this->tipo) ;
       $result->bindParam(2, $this->cuota) ;
+
+      $result->execute();
+
+      $row = $result->fetch(PDO::FETCH_ASSOC);
+
+      $this->total_resultado=$row['total'];
+
+      return $this->total_resultado;
+    }
+
+    function read_pagos_cuotas_periodos(){
+      
+      $query = "CALL sp_listarcobranzasxcuotaperiodos(?,?,?,?,?)";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(1, $this->tipo_transaccion) ;
+      $result->bindParam(2, $this->transaccion) ;
+      $result->bindParam(3, $this->periodo) ;
+      $result->bindParam(4, $this->numero_pagina) ;
+      $result->bindParam(5, $this->total_pagina) ;
+
+      $result->execute();
+
+      $cronograma=array();
+      $cronograma["pagos"]=array();
+
+      $contador = $this->total_pagina*($this->numero_pagina-1);
+
+      while($row = $result->fetch(PDO::FETCH_ASSOC))
+      {
+          extract($row);
+          $contador=$contador+1;
+          $items = array (
+            "numero" => $contador ,
+            "id_detalle" => $id_detalle ,
+            "id_cobranza_directa" => $id_cobranza_directa ,
+            "id_cobranza_archivos" => $id_cobranza_archivos ,
+            "id_cobranza_judicial" => $id_cobranza_judicial ,
+            "id_cobranza_manual" => $id_cobranza_manual ,
+            "monto" => $monto ,
+            "fecha_pago" => $fecha_pago ,
+            "documento" => $documento ,
+            "id_tipo" => $id_tipo ,
+            "tipo" => $tipo
+          );
+          array_push($cronograma["pagos"],$items);
+      }
+
+      return $cronograma;
+    }
+
+    function contar_pagos_cuotas_periodos(){
+      
+      $query = "CALL sp_listarcobranzasxcuotaperiodoscontar(?,?,?)";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(1, $this->tipo_transaccion) ;
+      $result->bindParam(2, $this->transaccion) ;
+      $result->bindParam(3, $this->periodo) ;
 
       $result->execute();
 

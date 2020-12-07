@@ -51,11 +51,13 @@
             $venta->pdf_oficio=trim($_POST["prpdfoficio"]);
             $venta->vnt_otros_pdf=trim($_POST["prpdfotros"]);
             $venta->observaciones=trim($_POST["probservaciones"]);
+            $venta->vendedores_array= json_decode( trim($_POST["prvendedoresarray"]) );
 
             $usuario_alvis = trim($_POST["usuario_alvis"]) ;
 
             if($venta->create())
             {
+                $venta->crear_vendedor_array();
                 $log->create($usuario_alvis, 6, 1, $venta->id_venta) ;
                 print_json("0000", "Se creó la venta satisfactoriamente.", $venta->id_venta);
             }

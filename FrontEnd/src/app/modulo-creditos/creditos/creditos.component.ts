@@ -36,6 +36,7 @@ import { MatDatepicker } from '@angular/material/datepicker';
 import { VentanaGenerarPenalidadComponent } from 'src/app/compartido/componentes/ventana-generar-penalidad/ventana-generar-penalidad.component';
 import { VentanaGenerarInteresComponent } from 'src/app/compartido/componentes/ventana-generar-interes/ventana-generar-interes.component';
 import { VentanaLiquidacionComponent } from 'src/app/compartido/componentes/ventana-liquidacion/ventana-liquidacion.component';
+import { SeleccionarVendedorComponent } from 'src/app/compartido/componentes/seleccionar-vendedor/seleccionar-vendedor.component';
 
 @Component({
   selector: 'app-creditos',
@@ -53,6 +54,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   public id_cliente: number;
   public id_tipo : number;
   public garantes: FormArray;
+  public vendedoresForm: FormArray; 
   public editar_cronograma:number;
   public Reglas : Array<any>;
   public Couriers : Array<any>;
@@ -74,7 +76,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   public ListadoCronogramaAntiguo: CronogramaAntiguoDataSource;
 
   public ColumnasCronograma: Array<string>;
-  public ColumnasCronogramaPeriodo: Array<string> = ["numero", "periodo", "monto_cuota" ,"total_planilla" ,"total_directo" ,"total_judicial" ] ;
+  public ColumnasCronogramaPeriodo: Array<string> = ["numero", "periodo", "monto_cuota" ,"total_planilla" ,"total_directo" ,"total_judicial", 'opciones' ] ;
   public Cronograma: Array<any> = [];
   public Cronograma_Periodos: Array<any> = [];
   public total_cronograma_editado: number;
@@ -152,8 +154,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   @ViewChild('InputCapital', { static: true }) FiltroCapital: ElementRef;
   @ViewChild('InputCuota', { static: true }) FiltroCuota: ElementRef;
   @ViewChild('InputInteres', { static: true }) FiltroInteres: ElementRef;
-  @ViewChild('Vendedor', { static: false }) VendedorAutoComplete : ElementRef;
-  @ViewChild('Autorizador', { static: false }) AutorizadorAutoComplete: ElementRef;
+  // @ViewChild('Vendedor', { static: false }) VendedorAutoComplete : ElementRef;
+  // @ViewChild('Autorizador', { static: false }) AutorizadorAutoComplete: ElementRef;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
 
   public ListadoVendedores: Array<any>;
@@ -302,29 +304,29 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     if(!this.id_credito && !this.id_presupuesto){
 
-      if(this.id_tipo>1){
-        fromEvent(this.VendedorAutoComplete.nativeElement, 'keyup')
-        .pipe(
-          debounceTime(10),
-          distinctUntilChanged(),
-          tap(() => {
-            if( this.VendedorAutoComplete.nativeElement.value ){
-              this.ListarVendedor(this.VendedorAutoComplete.nativeElement.value);
-            }
-          })
-         ).subscribe();
+      // if(this.id_tipo>1){
+      //   fromEvent(this.VendedorAutoComplete.nativeElement, 'keyup')
+      //   .pipe(
+      //     debounceTime(10),
+      //     distinctUntilChanged(),
+      //     tap(() => {
+      //       if( this.VendedorAutoComplete.nativeElement.value ){
+      //         this.ListarVendedor(this.VendedorAutoComplete.nativeElement.value);
+      //       }
+      //     })
+      //    ).subscribe();
     
-         fromEvent(this.AutorizadorAutoComplete.nativeElement, 'keyup')
-        .pipe(
-          debounceTime(10),
-          distinctUntilChanged(),
-          tap(() => {
-            if( this.AutorizadorAutoComplete.nativeElement.value ){
-              this.ListarAutorizador(this.AutorizadorAutoComplete.nativeElement.value);
-            }
-          })
-         ).subscribe();
-      }
+      //    fromEvent(this.AutorizadorAutoComplete.nativeElement, 'keyup')
+      //   .pipe(
+      //     debounceTime(10),
+      //     distinctUntilChanged(),
+      //     tap(() => {
+      //       if( this.AutorizadorAutoComplete.nativeElement.value ){
+      //         this.ListarAutorizador(this.AutorizadorAutoComplete.nativeElement.value);
+      //       }
+      //     })
+      //    ).subscribe();
+      // }
   
       merge(
         fromEvent(this.FiltroCuota.nativeElement,'keyup') ,
@@ -479,6 +481,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       fecha_fin_mes: [{ value : true, disabled : false },[
       ]],
       garantes: this.Builder.array([]),
+      vendedoresForm: this.Builder.array([]),
       // 1. Ver cuotas, 2. Ver periodos
       vista_cronograma: [{ value : 2, disabled : false },[
       ]],
@@ -502,7 +505,36 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       ]],
       pagado: [{ value : null, disabled : false },[
       ]],
-    })
+    }) ;
+
+    this.vendedoresForm = this.CreditosForm.get('vendedoresForm') as FormArray;
+  }
+
+  CrearVendedor(): FormGroup{
+    return this.Builder.group({
+      id_vendedor: [{value: null, disabled: false}, [
+        Validators.required
+      ]],
+      vendedor_nombre: [{value: null, disabled: false}, [
+        Validators.required
+      ]],
+      estado: [{value:1, disabled: false}, [
+      ]],
+    }) ;
+  }
+
+  AgregarVendedor():void{
+    this.vendedoresForm.push(this.CrearVendedor());
+  };
+
+  EliminarVendedor(index){
+    this.vendedoresForm.removeAt(index);
+  }
+
+  ResetearVendedoresFormArray(){
+    while (this.vendedoresForm.length !== 0) {
+      this.vendedoresForm.removeAt(0) ;
+    }
   }
 
   NuevoCredito(){
@@ -601,6 +633,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   SeleccionarCredito(id_credito) {
     this.Cargando.next(true) ;
     this.ListarProcesos(id_credito) ;
+    this.ListarVendedores(id_credito) ;
     let observacion_corregida : string;
     let codigo_string : string;
     let codigo_largo : number;
@@ -1459,6 +1492,13 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     })
   }
 
+  VerDetallePagosPeriodos(periodo){
+    let Ventana = this.Dialogo.open(VentanaPagosComponent,{
+      width: '900px',
+      data: { tipo: 1 , transaccion: this.id_credito_estandar, periodo : periodo }
+    })
+  }
+
   Atras(){
     this.location.back()
   }
@@ -1642,7 +1682,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       "",
       "",
       "",
-      ""
+      "",
+      this.vendedoresForm.value
     ).subscribe(res=>{
 
       this.Servicio.CrearCronogramaAfiliacion(
@@ -1700,7 +1741,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         "",
         "",
         "",
-        this.CreditosForm.value.observaciones
+        this.CreditosForm.value.observaciones,
+        this.vendedoresForm.value
       ).subscribe(res=>{  
         this.Servicio.CrearCronogramaAfiliacion(
           res['data'],
@@ -1787,7 +1829,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         resultado[12].mensaje,
         resultado[13].mensaje,
         resultado[14].mensaje,
-        this.CreditosForm.value.observaciones
+        this.CreditosForm.value.observaciones ,
+        this.vendedoresForm.value ,
       ).subscribe(res=>{
         
         // Se agrega el cronograma
@@ -1928,7 +1971,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         this.ddjj_editar ? resultado[12].mensaje : this.ddjj_antiguo,
         this.oficio_editar ? resultado[13].mensaje : this.oficio_antiguo,
         this.otros_editar ? resultado[14].mensaje : this.otros_antiguo,
-        this.CreditosForm.value.observaciones
+        this.CreditosForm.value.observaciones,
+        this.vendedoresForm.value
       ).subscribe(res=>{
         // console.log(res)
   
@@ -2323,6 +2367,36 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   // Cuando al crédito se le aplicó una penalidad, se ejecuta esta función
   ConsultarInfomacionAnterior() {
     this.ListadoCronogramaAntiguo.CargarInformacion(this.id_credito) ;
+  }
+
+  SeleccionarVendedores() {
+    let Ventana = this.Dialogo.open(SeleccionarVendedorComponent,{
+      width: '1200px',
+      data: {vendedores: this.vendedoresForm.value}
+    })
+
+    Ventana.afterClosed().subscribe(res=>{
+      if (res) {
+        this.ResetearVendedoresFormArray() ;
+        res.forEach((vendedor, index) => {
+          this.AgregarVendedor() ;
+          this.vendedoresForm.controls[index].get('id_vendedor').setValue( vendedor.id );
+          this.vendedoresForm.controls[index].get('vendedor_nombre').setValue( vendedor.nombre );
+        } ) ;
+      }
+    })
+  }
+
+  ListarVendedores(id_credito){
+    this.ResetearVendedoresFormArray() ;
+    this.Servicio.ListarCreditoVendedores(id_credito)
+    .subscribe(resultado => {
+      resultado.forEach((item, index) => {
+        this.AgregarVendedor() ;
+        this.vendedoresForm.controls[index].get('id_vendedor').setValue( item.id_vendedor );
+        this.vendedoresForm.controls[index].get('vendedor_nombre').setValue( item.vendedor_nombre );
+      })
+    })
   }
 }
 

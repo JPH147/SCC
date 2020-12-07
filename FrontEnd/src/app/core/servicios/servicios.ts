@@ -524,6 +524,34 @@ EditarModelo(
       );
     }
 
+    ListarVendedor2(
+      dni:string,
+      nombre: string,
+      pagina: number,
+      total_pagina:number
+    ): Observable <any> {
+
+      let params = new HttpParams()
+        .set('prdocumento',dni)
+        .set('prnombre',nombre)
+        .set('prpagina',pagina.toString())
+        .set('prtotalpagina',total_pagina.toString())
+
+      return this.http.get(this.url + 'vendedor/read.php', {params})
+        .pipe(map(res => {
+            if (res['codigo'] === 0) {
+              res['data'].vendedores = res['data'].vendedores.map(item=>{
+                item.dni = item.dni.substring(1);
+                return item;
+              })
+              return res ;
+            } else {
+              return false ;
+            }
+        })
+      );
+    }
+
     ListarProductos(
       nombre: string
       ): Observable <any> {

@@ -21,6 +21,7 @@ import { VentanaCobranzaClienteVencidasComponent } from './componentes/ventana-c
 import { VentanaGenerarPenalidadComponent } from './componentes/ventana-generar-penalidad/ventana-generar-penalidad.component';
 import { VentanaGenerarInteresComponent } from './componentes/ventana-generar-interes/ventana-generar-interes.component';
 import { VentanaLiquidacionComponent } from './componentes/ventana-liquidacion/ventana-liquidacion.component';
+import { SeleccionarVendedorComponent } from './componentes/seleccionar-vendedor/seleccionar-vendedor.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { VentanaLiquidacionComponent } from './componentes/ventana-liquidacion/v
     VentanaCobranzaClienteVencidasComponent,
     VentanaGenerarPenalidadComponent,
     VentanaGenerarInteresComponent,
-    VentanaLiquidacionComponent ,
+    VentanaLiquidacionComponent,
+    SeleccionarVendedorComponent ,
   ],
   imports: [
     CommonModule ,

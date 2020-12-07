@@ -45,6 +45,7 @@ export class VentaService {
     pdf_oficio:string,
     pdfotros:string,
     observaciones:string,
+    array_vendedores: Array<any>,
   ): Observable<any> {
 
     let params = new HttpParams()
@@ -77,6 +78,7 @@ export class VentaService {
       .set('prpdfoficio', pdf_oficio)
       .set('prpdfotros',pdfotros)
       .set('probservaciones',observaciones)
+      .set('prvendedoresarray', JSON.stringify(array_vendedores)) ;
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -116,6 +118,7 @@ export class VentaService {
     pdf_oficio:string,
     pdfotros:string,
     observaciones:string,
+    array_vendedores: Array<any>,
   ): Observable<any> {
     let params = new HttpParams()
     .set('prid',id.toString())
@@ -148,6 +151,7 @@ export class VentaService {
     .set('prpdfoficio', pdf_oficio)
     .set('prpdfotros',pdfotros)
     .set('probservaciones',observaciones)
+    .set('prvendedoresarray', JSON.stringify(array_vendedores)) ;
 
     // console.log(params)
 
@@ -664,5 +668,21 @@ export class VentaService {
         }
       })
     );
+  }
+
+  ListarVentaVendedores(
+    id_venta : number
+  ) : Observable<any> {
+    let params = new HttpParams()
+      .set('prventa',id_venta.toString());
+
+    return this.http.get(this.url + 'venta/read-vendedores.php', {params})
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res['data'];
+      } else {
+        return [];
+      }
+    }));
   }
 }

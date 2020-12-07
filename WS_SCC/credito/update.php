@@ -57,11 +57,13 @@
             $credito->pdf_oficio=trim($_POST["prpdfoficio"]);
             $credito->pdf_otros=trim($_POST["prpdfotros"]);
             $credito->observacion=trim($_POST["probservacion"]);
+            $credito->vendedores_array= json_decode( trim($_POST["prvendedoresarray"]) );
 
             $usuario_alvis = trim($_POST["usuario_alvis"]) ;
 
             if($credito->actualizar())
             {
+                $credito->crear_vendedor_array() ;
                 $referencia = $credito->tipo_credito == 1 ? 8 : 9 ;
                 $log->create($usuario_alvis, $referencia, 2, $credito->id_credito) ;
                 print_json("0000", "Se actualizó el credito satisfactoriamente.", $credito->id_credito);

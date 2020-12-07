@@ -197,6 +197,30 @@ Class Venta{
         return $this->total_resultado;
     }
 
+    function read_venta_vendedores(){
+        $query = "CALL sp_listarventavendedorxventa(?)";
+
+        $result = $this->conn->prepare($query);
+          
+        $result->bindParam(1, $this->id_venta);
+  
+        $result->execute();
+
+        $vendedores=array();
+  
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $vendedor = array (
+                "id_vendedor" => $id_vendedor ,
+                "vendedor_nombre" => $vendedor_nombre ,
+            );
+            array_push($vendedores, $vendedor);
+        }
+  
+        return $vendedores;
+    }
+
     function create(){
 
         $query = "CALL sp_crearventa(
@@ -406,14 +430,32 @@ Class Venta{
 
         if($result->execute())
         {
-            while($row = $result->fetch(PDO::FETCH_ASSOC))
-            {
-                extract($row);
-                $this->id_venta=$id;
-            }
             return true;
         }
         return false;
+    }
+
+    function crear_vendedor_array() {
+        $query = "CALL sp_crearventavendedores(
+            :prventa,
+            :prvendedor
+        )" ;
+
+        $contador = 0 ;
+        forEach($this->vendedores_array as $vendedor) {
+            $result = $this->conn->prepare($query) ;
+
+            $result->bindParam(":prventa", $this->id_venta) ;
+            $result->bindParam(":prvendedor", $vendedor->id_vendedor) ;
+
+            $this->id_venta=htmlspecialchars(strip_tags($this->id_venta)) ;
+            $vendedor->id_vendedor=htmlspecialchars(strip_tags($vendedor->id_vendedor)) ;
+
+            $result->execute() ;
+            $contador++ ;
+        }
+
+        return $contador ;  
     }
 
     function update_documentos(){

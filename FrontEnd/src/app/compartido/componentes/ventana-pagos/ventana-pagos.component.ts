@@ -28,7 +28,7 @@ export class VentanaPagosComponent implements OnInit {
 
   ngOnInit() {
    this.ListadoPagos = new PagosDataSource(this.Servicio);
-   this.ListadoPagos.CargarPagos( this.data.tipo , this.data.cuota , 1 , 5 );
+   this.CargarData() ;
   }
 
   ngAfterViewInit(){
@@ -43,7 +43,22 @@ export class VentanaPagosComponent implements OnInit {
   }
 
   CargarData(){
-  	this.ListadoPagos.CargarPagos( this.data.tipo , this.data.cuota , this.paginator.pageIndex+1 , this.paginator.pageSize )
+    if ( this.data.periodo ) {
+      this.ListadoPagos.CargarPagosPeriodos(
+        this.data.tipo ,
+        this.data.transaccion ,
+        this.data.periodo ,
+        this.paginator?.pageIndex + 1 || 1 ,
+        this.paginator?.pageSize || 5
+      )
+    } else {
+      this.ListadoPagos.CargarPagos(
+        this.data.tipo ,
+        this.data.cuota ,
+        this.paginator?.pageIndex + 1 || 1 ,
+        this.paginator?.pageSize || 5
+      )
+    }
   }
 
   onNoClick(): void {
@@ -98,8 +113,37 @@ export class PagosDataSource implements DataSource<any> {
       finalize(() => this.CargandoInformacion.next(false))
     )
     .subscribe(res => {
-      this.InformacionClientes.next(res['data'].pagos);
-  		this.TotalResultados.next(res['mensaje']);
+      if ( res ) {
+        this.InformacionClientes.next(res['data'].pagos);
+        this.TotalResultados.next(res['mensaje']);
+      } else {
+        this.InformacionClientes.next([]);
+        this.TotalResultados.next(0);
+      }
+  	});
+  }
+
+  CargarPagosPeriodos(
+    tipo_transaccion : number ,
+    transaccion : number ,
+    periodo : string , 
+    pagina: number ,
+    total_pagina: number
+  ){
+    this.CargandoInformacion.next(true);
+
+    this.Servicio.ListarPagosxCuotaPeriodos(tipo_transaccion, transaccion, periodo, pagina , total_pagina)
+    .pipe( catchError(() => of([]) ),
+      finalize(() => this.CargandoInformacion.next(false))
+    )
+    .subscribe(res => {
+      if ( res ) {
+        this.InformacionClientes.next(res['data'].pagos);
+        this.TotalResultados.next(res['mensaje']);
+      } else {
+        this.InformacionClientes.next([]);
+        this.TotalResultados.next(0);
+      }
   	});
   }
 

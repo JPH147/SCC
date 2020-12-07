@@ -33,6 +33,7 @@ import * as moment from 'moment';
 import {default as _rollupMoment, Moment} from 'moment';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { VentanaGenerarPagoTransaccionComponent } from '../../compartido/componentes/ventana-generar-pago-transaccion/ventana-generar-pago-transaccion.component';
+import { SeleccionarVendedorComponent } from 'src/app/compartido/componentes/seleccionar-vendedor/seleccionar-vendedor.component';
 
 @Component({
   selector: 'app-afiliaciones',
@@ -51,6 +52,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
   public id_cliente: number;
   public id_tipo : number;
   public garantes: FormArray;
+  public vendedoresForm: FormArray; 
   public editar_cronograma:number;
   public Reglas : Array<any>;
   public Couriers : Array<any>;
@@ -70,7 +72,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
 
   public ListadoCronograma: CronogramaDataSource;
   public ColumnasCronograma: Array<string>;
-  public ColumnasCronogramaPeriodo: Array<string> = ["numero", "periodo", "monto_cuota", "monto_pago_manual" ,"total_planilla" ,"total_directo" ,"total_judicial" ] ;
+  public ColumnasCronogramaPeriodo: Array<string> = ["numero", "periodo", "monto_cuota", "monto_pago_manual" ,"total_planilla" ,"total_directo" ,"total_judicial", 'opciones' ] ;
   public Cronograma : Array<any> = [] ;
   public Cronograma_Periodos : Array<any> = [] ;
   public total_cronograma_editado: number;
@@ -142,10 +144,6 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
   public papeles_editar : boolean = false;
 
   @ViewChild('InputCapital', { static: true }) FiltroCapital: ElementRef;
-  // @ViewChild('InputCuota', { static: true }) FiltroCuota: ElementRef;
-  // @ViewChild('InputInteres', { static: true }) FiltroInteres: ElementRef;
-  @ViewChild('Vendedor') VendedorAutoComplete : ElementRef;
-  @ViewChild('Autorizador') AutorizadorAutoComplete: ElementRef;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
 
   public ListadoVendedores: Array<any>;
@@ -286,28 +284,6 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     if(!this.id_credito && !this.id_presupuesto){
-      fromEvent(this.VendedorAutoComplete.nativeElement, 'keyup')
-      .pipe(
-        debounceTime(10),
-        distinctUntilChanged(),
-        tap(() => {
-          if( this.VendedorAutoComplete.nativeElement.value ){
-            this.ListarVendedor(this.VendedorAutoComplete.nativeElement.value);
-          }
-        })
-        ).subscribe();
-    
-      fromEvent(this.AutorizadorAutoComplete.nativeElement, 'keyup')
-      .pipe(
-      debounceTime(10),
-      distinctUntilChanged(),
-      tap(() => {
-        if( this.AutorizadorAutoComplete.nativeElement.value ){
-          this.ListarAutorizador(this.AutorizadorAutoComplete.nativeElement.value);
-        }
-      })
-      ).subscribe();
-
       merge(
         this.CreditosForm.get('monto_cuota').valueChanges ,
         this.CreditosForm.get('cuotas').valueChanges ,
@@ -329,28 +305,6 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
   }
 
   ActualizarObservables() {
-    fromEvent(this.VendedorAutoComplete.nativeElement, 'keyup')
-    .pipe(
-      debounceTime(10),
-      distinctUntilChanged(),
-      tap(() => {
-        if( this.VendedorAutoComplete.nativeElement.value ){
-          this.ListarVendedor(this.VendedorAutoComplete.nativeElement.value);
-        }
-      })
-      ).subscribe();
-  
-    fromEvent(this.AutorizadorAutoComplete.nativeElement, 'keyup')
-    .pipe(
-    debounceTime(10),
-    distinctUntilChanged(),
-    tap(() => {
-      if( this.AutorizadorAutoComplete.nativeElement.value ){
-        this.ListarAutorizador(this.AutorizadorAutoComplete.nativeElement.value);
-      }
-    })
-    ).subscribe();
-
     merge(
       this.CreditosForm.get('monto_cuota').valueChanges ,
       this.CreditosForm.get('cuotas').valueChanges ,
@@ -465,7 +419,37 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
       // 1. Ver cuotas, 2. Ver periodos
       vista_cronograma: [{ value : 2, disabled : false },[
       ]],
-    })
+      vendedoresForm: this.Builder.array([]),
+    }) ;
+
+    this.vendedoresForm = this.CreditosForm.get('vendedoresForm') as FormArray;
+  }
+
+  CrearVendedor(): FormGroup{
+    return this.Builder.group({
+      id_vendedor: [{value: null, disabled: false}, [
+        Validators.required
+      ]],
+      vendedor_nombre: [{value: null, disabled: false}, [
+        Validators.required
+      ]],
+      estado: [{value:1, disabled: false}, [
+      ]],
+    }) ;
+  }
+
+  AgregarVendedor():void{
+    this.vendedoresForm.push(this.CrearVendedor());
+  };
+
+  EliminarVendedor(index){
+    this.vendedoresForm.removeAt(index);
+  }
+
+  ResetearVendedoresFormArray(){
+    while (this.vendedoresForm.length !== 0) {
+      this.vendedoresForm.removeAt(0) ;
+    }
   }
 
   NuevoCredito(){
@@ -549,6 +533,8 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
     this.Cargando.next(true);
 
     this.ListarProcesos(id_credito) ;
+    this.ListarVendedores(id_credito) ;
+    
     let observacion_corregida : string;
     let codigo_string : string;
     let codigo_largo : number;
@@ -1081,6 +1067,13 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
     })
   }
 
+  VerDetallePagosPeriodos(periodo){
+    let Ventana = this.Dialogo.open(VentanaPagosComponent,{
+      width: '900px',
+      data: { tipo: 1 , transaccion: this.id_credito_estandar, periodo : periodo }
+    })
+  }
+
   Atras(){
     this.location.back()
   }
@@ -1245,7 +1238,8 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
         "",
         "",
         "",
-        ""
+        "",
+        this.vendedoresForm.value
       ).subscribe(res=>{
         this.Servicio.CrearCronogramaAfiliacion(
           res['data'],
@@ -1316,7 +1310,8 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
         "",
         "",
         "",
-        this.CreditosForm.value.observaciones
+        this.CreditosForm.value.observaciones,
+        this.vendedoresForm.value
       ).subscribe(res=>{  
         this.Servicio.CrearCronogramaAfiliacion(
           res['data'],
@@ -1435,5 +1430,35 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
     } else {
       this.ListadoCronograma.AsignarInformacion(this.Cronograma_Periodos);
     }
+  }
+
+  SeleccionarVendedores() {
+    let Ventana = this.Dialogo.open(SeleccionarVendedorComponent, {
+      width: '1200px',
+      data: {vendedores: this.vendedoresForm.value}
+    })
+
+    Ventana.afterClosed().subscribe(res=>{
+      if (res) {
+        this.ResetearVendedoresFormArray() ;
+        res.forEach((vendedor, index) => {
+          this.AgregarVendedor() ;
+          this.vendedoresForm.controls[index].get('id_vendedor').setValue( vendedor.id );
+          this.vendedoresForm.controls[index].get('vendedor_nombre').setValue( vendedor.nombre );
+        } ) ;
+      }
+    })
+  }
+
+  ListarVendedores(id_credito){
+    this.ResetearVendedoresFormArray() ;
+    this.Servicio.ListarCreditoVendedores(id_credito)
+    .subscribe(resultado => {
+      resultado.forEach((item, index) => {
+        this.AgregarVendedor() ;
+        this.vendedoresForm.controls[index].get('id_vendedor').setValue( item.id_vendedor );
+        this.vendedoresForm.controls[index].get('vendedor_nombre').setValue( item.vendedor_nombre );
+      })
+    })
   }
 }

@@ -88,6 +88,7 @@ Class Creditos{
     public $tipo_cuota ;
     public $id_liquidacion ;
     public $pagado ;
+    public $vendedores_array ;
 
     public function __construct($db){
         $this->conn = $db;
@@ -423,8 +424,6 @@ Class Creditos{
 
       $result = $this->conn->prepare($query);
 
-      $orden = "fecha asc" ;
-
       $result->bindParam(1, $id_credito);
       $result->bindParam(2, $this->tipo_cuota);
 
@@ -477,6 +476,30 @@ Class Creditos{
         }
   
         return $tipo_credito;
+    }
+
+    function read_credito_vendedores(){
+        $query = "CALL sp_listarcreditovendedorxcredito(?)";
+
+        $result = $this->conn->prepare($query);
+          
+        $result->bindParam(1, $this->id_credito);
+  
+        $result->execute();
+
+        $vendedores=array();
+  
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $vendedor = array (
+                "id_vendedor" => $id_vendedor ,
+                "vendedor_nombre" => $vendedor_nombre ,
+            );
+            array_push($vendedores, $vendedor);
+        }
+  
+        return $vendedores;
     }
 
     function crear(){
@@ -591,6 +614,10 @@ Class Creditos{
         $this->pdf_oficio=htmlspecialchars(strip_tags($this->pdf_oficio));
         $this->pdf_otros=htmlspecialchars(strip_tags($this->pdf_otros));
         $this->observacion=htmlspecialchars(strip_tags($this->observacion));
+        
+        // ob_start();
+        // print_r($this->vendedores_array) ;
+        // error_log(ob_get_clean(), 4) ;
 
         if($result->execute())
         {
@@ -599,6 +626,14 @@ Class Creditos{
                 extract($row);
                 $this->id_credito=$id;
             }
+            
+                // ob_start();
+                // print_r($vendedor) ;
+                // error_log(ob_get_clean(), 4) ;
+
+                // $this->crear_vendedor_array($this->id_credito, $vendedor->id_vendedor) ;
+            // }
+            
             return true;
         }
         return false;
@@ -711,17 +746,75 @@ Class Creditos{
         $this->pdf_otros=htmlspecialchars(strip_tags($this->pdf_otros));
         $this->observacion=htmlspecialchars(strip_tags($this->observacion));
 
+        // ob_start();
+        // echo 'id_credito' . $this->id_credito ;
+        // echo 'sucursal' . $this->sucursal ;
+        // echo 'fecha_credito' . $this->fecha_credito ;
+        // echo 'autorizador' . $this->autorizador ;
+        // echo 'vendedor' . $this->vendedor ;
+        // echo 'cliente' . $this->cliente ;
+        // echo 'cliente_direccion' . $this->cliente_direccion ;
+        // echo 'cliente_telefono' . $this->cliente_telefono ;
+        // echo 'cliente_cargo' . $this->cliente_cargo ;
+        // echo 'cliente_trabajo' . $this->cliente_trabajo ;
+        // echo 'tipo_pago' . $this->tipo_pago ;
+        // echo 'fecha_pago' . $this->fecha_pago ;
+        // echo 'interes_diario' . $this->interes_diario ;
+        // echo 'interes' . $this->interes ;
+        // echo 'capital' . $this->capital ;
+        // echo 'cuotas' . $this->cuotas ;
+        // echo 'total' . $this->total ;
+        // echo 'pdf_foto' . $this->pdf_foto ;
+        // echo 'pdf_dni' . $this->pdf_dni ;
+        // echo 'pdf_cip' . $this->pdf_cip ;
+        // echo 'pdf_planilla' . $this->pdf_planilla ;
+        // echo 'pdf_voucher' . $this->pdf_voucher ;
+        // echo 'pdf_recibo' . $this->pdf_recibo ;
+        // echo 'pdf_casilla' . $this->pdf_casilla ;
+        // echo 'pdf_transaccion' . $this->pdf_transaccion ;
+        // echo 'pdf_autorizacion' . $this->pdf_autorizacion ;
+        // echo 'pdf_tarjeta' . $this->pdf_tarjeta ;
+        // echo 'pdf_compromiso' . $this->pdf_compromiso ;
+        // echo 'pdf_letra' . $this->pdf_letra ;
+        // echo 'pdf_ddjj' . $this->pdf_ddjj ;
+        // echo 'pdf_oficio' . $this->pdf_oficio ;
+        // echo 'pdf_otros' . $this->pdf_otros ;
+        // echo 'observacion' . $this->observacion ;
+        // error_log(ob_get_clean(), 4) ;
 
         if($result->execute())
         {
-            while($row = $result->fetch(PDO::FETCH_ASSOC))
-            {
-                extract($row);
-                $this->id_credito=$id;
-            }
+            // while($row = $result->fetch(PDO::FETCH_ASSOC))
+            // {
+            //     extract($row);
+            //     $this->id_credito=$id;
+            // }
             return true;
         }
         return false;
+    }
+
+    function crear_vendedor_array() {
+        $query = "CALL sp_crearcreditovendedores(
+            :prcredito,
+            :prvendedor
+        )" ;
+
+        $contador = 0 ;
+        forEach($this->vendedores_array as $vendedor) {
+            $result = $this->conn->prepare($query) ;
+
+            $result->bindParam(":prcredito", $this->id_credito) ;
+            $result->bindParam(":prvendedor", $vendedor->id_vendedor) ;
+
+            $this->id_credito=htmlspecialchars(strip_tags($this->id_credito)) ;
+            $vendedor->id_vendedor=htmlspecialchars(strip_tags($vendedor->id_vendedor)) ;
+
+            $result->execute() ;
+            $contador++ ;
+        }
+
+        return $contador ;  
     }
 
     function actualizar_documentos(){

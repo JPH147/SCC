@@ -207,7 +207,7 @@
           </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile colspan=2 *ngIf="!id_credito">
+        <!-- <mat-grid-tile colspan=2 *ngIf="!id_credito">
           <mat-form-field class="columnas-2">
             <input placeholder="Vendedor" matInput [matAutocomplete]="auto" formControlName="vendedor" #Vendedor [readonly]="CreditosForm.value.id_vendedor">
             <mat-icon color="primary" matSuffix (click)="RemoverVendedor()" *ngIf="CreditosForm.value.id_vendedor && !hay_presupuesto_vendedor && !this.cliente_refinanciado"> remove_circle </mat-icon>
@@ -236,7 +236,7 @@
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
-        </mat-grid-tile>
+        </mat-grid-tile> -->
 
         <mat-grid-tile colspan=2 *ngIf="id_credito">
           <mat-form-field class="columnas-2">
@@ -251,6 +251,44 @@
           </mat-form-field>
         </mat-grid-tile>
       </mat-grid-list>
+    </div>
+
+    <!-- Datos de los vendedores -->
+    <div class="seccion">
+      <mat-card-subtitle class="titulo-seccion">
+        DATOS DE VENDEDORES
+      </mat-card-subtitle>
+
+      <mat-grid-list cols="1" rowHeight="50px" *ngIf="!id_credito">
+        <mat-grid-tile colspan="1">
+          <button mat-mini-fab color="primary" (click)="SeleccionarVendedores()" matTooltip="Seleccionar vendedores"
+            type="button" [disabled]="id_credito">
+            <mat-icon>playlist_add</mat-icon>
+          </button>
+        </mat-grid-tile>
+      </mat-grid-list>
+
+      <ng-container *ngIf="vendedoresForm['controls'].length > 0">
+        <mat-grid-list cols=2 rowHeight="70px">
+          <div formArrayName="vendedoresForm" *ngFor="let vendedor of vendedoresForm['controls']; let i = index">
+            <div [formGroupName]="i">
+              <mat-grid-tile>
+                <mat-form-field class="columnas-2">
+                  <input matInput [placeholder]="'Vendedor ' + i+1" formControlName="vendedor_nombre"> 
+                </mat-form-field>
+              </mat-grid-tile>
+            </div>
+          </div>
+        </mat-grid-list>
+      </ng-container>
+      
+      <ng-container *ngIf="vendedoresForm['controls'].length == 0">
+        <mat-grid-list cols="1" rowHeight="50px">
+          <mat-grid-tile>
+            <span class="texto-accent"> No hay vendedores en esta afiliación </span>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </ng-container>
     </div>
 
     <!-- Adjuntos -->
@@ -442,10 +480,12 @@
             <ng-container matColumnDef="opciones">
               <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
               <mat-cell *matCellDef="let cronograma">
-                <button mat-icon-button color="primary" [disabled]="cronograma.monto_pagado==0" (click)="VerDetallePagos(cronograma)"> <mat-icon> visibility </mat-icon> </button>
-                <ng-container *ngIf="permiso?.cobranzas?.cobranzas_manuales?.agregar">
+                <button mat-icon-button color="primary" [disabled]="cronograma.monto_pagado==0"
+                  (click)="VerDetallePagos(cronograma)">
+                  <mat-icon> visibility </mat-icon> </button>
+                <!-- <ng-container *ngIf="permiso?.cobranzas?.cobranzas_manuales?.agregar">
                   <button mat-icon-button color="primary" [disabled]="cronograma.estado == 'Pagado'" (click)="RegistrarPago(cronograma)"> <mat-icon> payment </mat-icon> </button>
-                </ng-container>
+                </ng-container> -->
               </mat-cell>
               <mat-footer-cell *matFooterCellDef> - </mat-footer-cell>
             </ng-container>
@@ -498,10 +538,9 @@
             <ng-container matColumnDef="opciones">
               <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
               <mat-cell *matCellDef="let cronograma">
-                <button mat-icon-button color="primary" [disabled]="cronograma.monto_pagado==0" (click)="VerDetallePagos(cronograma)"> <mat-icon> visibility </mat-icon> </button>
-                <ng-container *ngIf="permiso?.cobranzas?.cobranzas_manuales?.agregar">
-                  <button mat-icon-button color="primary" [disabled]="cronograma.estado == 'Pagado'" (click)="RegistrarPago(cronograma)"> <mat-icon> payment </mat-icon> </button>
-                </ng-container>
+                <button mat-icon-button color="primary" [disabled]="cronograma.monto_pagado==0"
+                  (click)="VerDetallePagosPeriodos(cronograma.periodo)">
+                  <mat-icon> visibility </mat-icon> </button>
               </mat-cell>
             </ng-container>
   
@@ -512,7 +551,7 @@
 
         <mat-grid-list cols="3" rowHeight="70px">
           <mat-grid-tile>
-            <strong > Total: </strong>
+            <strong > Monto factura: </strong>
             &nbsp;
             {{ totales_monto_total | currency:'S/.' }}
             <ng-container *ngIf="CreditosForm.get('vista_cronograma').value == 1">
@@ -521,7 +560,7 @@
           </mat-grid-tile>
           
           <mat-grid-tile>
-            <strong > Pagado: </strong>
+            <strong > Total pagado: </strong>
             &nbsp;
             {{ totales_monto_pagado | currency:'S/.' }}
             <ng-container *ngIf="CreditosForm.get('vista_cronograma').value == 1">
@@ -530,7 +569,7 @@
           </mat-grid-tile>
 
           <mat-grid-tile>
-            <strong > Pendiente: </strong>
+            <strong > Saldo a pagar: </strong>
             &nbsp;
             {{ totales_monto_pendiente | currency:'S/.' }}
             <ng-container *ngIf="CreditosForm.get('vista_cronograma').value == 1">

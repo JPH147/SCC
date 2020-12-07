@@ -611,7 +611,32 @@ export class CobranzasService {
         return res;
       } else {
         console.log('No hay datos que mostrar');
-        return [];
+        return false;
+      }
+    }));
+  }
+
+  ListarPagosxCuotaPeriodos(
+    tipo_transaccion : number ,
+    transaccion : number ,
+    periodo : string ,
+    numero_pagina : number ,
+    total_pagina : number
+  ){
+    let params = new HttpParams()
+      .set('prtipotransaccion', tipo_transaccion.toString() )
+      .set('prtransaccion', transaccion.toString() )
+      .set('prperiodo', periodo.toString() )
+      .set('prpagina', numero_pagina.toString() )
+      .set('prtotalpagina', total_pagina.toString() );
+
+    return this.http.get(this.url + 'cobranza/read-pagos-transacciones-periodos.php', { params } )
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res;
+      } else {
+        console.log('No hay datos que mostrar');
+        return false;
       }
     }));
   }

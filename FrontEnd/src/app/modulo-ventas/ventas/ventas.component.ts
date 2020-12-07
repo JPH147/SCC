@@ -39,6 +39,7 @@ import { VentanaGenerarPenalidadComponent } from "src/app/compartido/componentes
 import { ServiciosVentas } from "src/app/core/servicios/ventas";
 import { VentanaLiquidacionComponent } from "src/app/compartido/componentes/ventana-liquidacion/ventana-liquidacion.component";
 import { VentanaGenerarInteresComponent } from "src/app/compartido/componentes/ventana-generar-interes/ventana-generar-interes.component";
+import { SeleccionarVendedorComponent } from "src/app/compartido/componentes/seleccionar-vendedor/seleccionar-vendedor.component";
 
 @Component({
   selector: 'app-ventas',
@@ -75,6 +76,7 @@ export class VentasComponent implements OnInit {
   public sucursal: number;
   public productos: FormArray;
   public garantes: FormArray;
+  public vendedoresForm: FormArray; 
   public Producto:Array<any>;
   public Cronograma: Array<any>;
   public Cronograma_Periodos : Array<any> ;
@@ -152,8 +154,8 @@ export class VentasComponent implements OnInit {
   @ViewChild('InputInicial', { static: true }) FiltroInicial: ElementRef;
   @ViewChild('InputCuota', { static: true }) FiltroCuota: ElementRef;
   @ViewChild('Cliente') ClienteAutoComplete: ElementRef;
-  @ViewChild('Vendedor') VendedorAutoComplete: ElementRef;
-  @ViewChild('Autorizador') AutorizadorAutoComplete: ElementRef;
+  // @ViewChild('Vendedor') VendedorAutoComplete: ElementRef;
+  // @ViewChild('Autorizador') AutorizadorAutoComplete: ElementRef;
   @ViewChildren('InputProducto') FiltroProducto:QueryList<any>;
   @ViewChildren('InputPrecio') FiltroPrecio:QueryList<any>;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
@@ -162,7 +164,7 @@ export class VentasComponent implements OnInit {
   public ListadoVentasAntiguo : VentaAntiguoDataSource ;
 
   public Columnas: string[];
-  public ColumnasCronogramaPeriodo: Array<string> = ["numero", "periodo", "monto_cuota" ,"total_planilla" ,"total_directo" ,"total_judicial" ] ;
+  public ColumnasCronogramaPeriodo: Array<string> = ["numero", "periodo", "monto_cuota" ,"total_planilla" ,"total_directo" ,"total_judicial", 'opciones' ] ;
 
   public id_presupuesto : number ;
   public hay_presupuesto_vendedor : boolean ;
@@ -303,27 +305,27 @@ export class VentasComponent implements OnInit {
   ngAfterViewInit() {
 
     if (!this.idventa) {
-      fromEvent(this.VendedorAutoComplete.nativeElement, 'keyup')
-      .pipe(
-        debounceTime(10),
-        distinctUntilChanged(),
-        tap(() => {
-          if( this.VentasForm.value.vendedor ){
-            this.ListarVendedor(this.VentasForm.value.vendedor);
-          }
-        })
-      ).subscribe();
+      // fromEvent(this.VendedorAutoComplete.nativeElement, 'keyup')
+      // .pipe(
+      //   debounceTime(10),
+      //   distinctUntilChanged(),
+      //   tap(() => {
+      //     if( this.VentasForm.value.vendedor ){
+      //       this.ListarVendedor(this.VentasForm.value.vendedor);
+      //     }
+      //   })
+      // ).subscribe();
 
-      fromEvent(this.AutorizadorAutoComplete.nativeElement, 'keyup')
-      .pipe(
-        debounceTime(10),
-        distinctUntilChanged(),
-        tap(() => {
-          if( this.VentasForm.value.autorizador ){
-            this.ListarAutorizador(this.VentasForm.value.autorizador);
-          }
-        })
-      ).subscribe();
+      // fromEvent(this.AutorizadorAutoComplete.nativeElement, 'keyup')
+      // .pipe(
+      //   debounceTime(10),
+      //   distinctUntilChanged(),
+      //   tap(() => {
+      //     if( this.VentasForm.value.autorizador ){
+      //       this.ListarAutorizador(this.VentasForm.value.autorizador);
+      //     }
+      //   })
+      // ).subscribe();
       
       this.FiltroProducto.changes.subscribe(res=>{
         for (let i in this.FiltroProducto['_results']) {
@@ -417,10 +419,8 @@ export class VentasComponent implements OnInit {
       'autorizador': [null, [
       ]],
       'id_vendedor': [null, [
-        // Validators.required
       ]],
       'vendedor': [null, [
-        // Validators.required
       ]],
       'fechaventa': [{value: new Date(), disabled: false}, [
         Validators.required
@@ -462,6 +462,7 @@ export class VentasComponent implements OnInit {
       ]],
       productos: this.FormBuilder.array([]),
       garantes: this.FormBuilder.array([]),
+      vendedoresForm: this.FormBuilder.array([]),
       // 1. Ver cuotas, 2. Ver periodos
       vista_cronograma: [{ value : 2, disabled : false },[
       ]],
@@ -485,30 +486,59 @@ export class VentasComponent implements OnInit {
       pagado: [{ value : null, disabled : false },[
       ]],
     });
+
+    this.vendedoresForm = this.VentasForm.get('vendedoresForm') as FormArray;
+  }
+
+  CrearVendedor(): FormGroup{
+    return this.FormBuilder.group({
+      id_vendedor: [{value: null, disabled: false}, [
+        Validators.required
+      ]],
+      vendedor_nombre: [{value: null, disabled: false}, [
+        Validators.required
+      ]],
+      estado: [{value:1, disabled: false}, [
+      ]],
+    }) ;
+  }
+
+  AgregarVendedor():void{
+    this.vendedoresForm.push(this.CrearVendedor());
+  };
+
+  EliminarVendedor(index){
+    this.vendedoresForm.removeAt(index);
+  }
+
+  ResetearVendedoresFormArray(){
+    while (this.vendedoresForm.length !== 0) {
+      this.vendedoresForm.removeAt(0) ;
+    }
   }
 
   ActualizarObservables() {
-    fromEvent(this.VendedorAutoComplete.nativeElement, 'keyup')
-    .pipe(
-      debounceTime(10),
-      distinctUntilChanged(),
-      tap(() => {
-        if( this.VentasForm.value.vendedor ){
-          this.ListarVendedor(this.VentasForm.value.vendedor);
-        }
-      })
-    ).subscribe();
+    // fromEvent(this.VendedorAutoComplete.nativeElement, 'keyup')
+    // .pipe(
+    //   debounceTime(10),
+    //   distinctUntilChanged(),
+    //   tap(() => {
+    //     if( this.VentasForm.value.vendedor ){
+    //       this.ListarVendedor(this.VentasForm.value.vendedor);
+    //     }
+    //   })
+    // ).subscribe();
 
-    fromEvent(this.AutorizadorAutoComplete.nativeElement, 'keyup')
-    .pipe(
-      debounceTime(10),
-      distinctUntilChanged(),
-      tap(() => {
-        if( this.VentasForm.value.autorizador ){
-          this.ListarAutorizador(this.VentasForm.value.autorizador);
-        }
-      })
-    ).subscribe();
+    // fromEvent(this.AutorizadorAutoComplete.nativeElement, 'keyup')
+    // .pipe(
+    //   debounceTime(10),
+    //   distinctUntilChanged(),
+    //   tap(() => {
+    //     if( this.VentasForm.value.autorizador ){
+    //       this.ListarAutorizador(this.VentasForm.value.autorizador);
+    //     }
+    //   })
+    // ).subscribe();
 
     this.FiltroPrecio.changes.subscribe(res=>{
       for (let i in this.FiltroPrecio['_results']) {
@@ -555,6 +585,7 @@ export class VentasComponent implements OnInit {
 
   SeleccionarVentaxId(id_venta){
     this.ListarProcesos(id_venta) ;
+    this.ListarVendedores(id_venta) ;
     this.Cargando.next(true) ;
 
     if (!this.idventa) {
@@ -1607,6 +1638,13 @@ export class VentasComponent implements OnInit {
     })
   }
 
+  VerDetallePagosPeriodos(periodo){
+    let Ventana = this.Dialogo.open(VentanaPagosComponent,{
+      width: '900px',
+      data: { tipo: 2 , transaccion: this.id_venta, periodo : periodo }
+    })
+  }
+
   SeleccionarCliente(){
     let Ventana = this.Dialogo.open(SeleccionarClienteComponent,{
       width: "1200px"
@@ -1913,6 +1951,7 @@ export class VentasComponent implements OnInit {
         resultado[8].mensaje,
         resultado[9].mensaje,
         formulario.value.observaciones,
+        this.vendedoresForm.value
       ).subscribe(res=>{
         
         // Se crean los productos y se generan los documentos en almacén para cuadrar
@@ -2058,6 +2097,7 @@ export class VentasComponent implements OnInit {
         this.oficio_editar ? resultado[8].mensaje : this.oficio_antiguo,
         this.otros_editar ? resultado[9].mensaje : this.otros_antiguo,
         formulario.value.observaciones,
+        this.vendedoresForm.value
       ).subscribe(res=>{
 
         if (formulario.value.contrato!=this.id_talonario_editar) {
@@ -2414,6 +2454,36 @@ export class VentasComponent implements OnInit {
       if( resultado === false ) {
         this.Notificacion.Snack("Ocurrió un error al generar la liquidación","")
       }
+    })
+  }
+
+  SeleccionarVendedores() {
+    let Ventana = this.Dialogo.open(SeleccionarVendedorComponent,{
+      width: '1200px',
+      data: {vendedores: this.vendedoresForm.value}
+    })
+
+    Ventana.afterClosed().subscribe(res=>{
+      if (res) {
+        this.ResetearVendedoresFormArray() ;
+        res.forEach((vendedor, index) => {
+          this.AgregarVendedor() ;
+          this.vendedoresForm.controls[index].get('id_vendedor').setValue( vendedor.id );
+          this.vendedoresForm.controls[index].get('vendedor_nombre').setValue( vendedor.nombre );
+        } ) ;
+      }
+    })
+  }
+
+  ListarVendedores(idventa){
+    this.ResetearVendedoresFormArray() ;
+    this.Servicio.ListarVentaVendedores(idventa)
+    .subscribe(resultado => {
+      resultado.forEach((item, index) => {
+        this.AgregarVendedor() ;
+        this.vendedoresForm.controls[index].get('id_vendedor').setValue( item.id_vendedor );
+        this.vendedoresForm.controls[index].get('vendedor_nombre').setValue( item.vendedor_nombre );
+      })
     })
   }
 }
