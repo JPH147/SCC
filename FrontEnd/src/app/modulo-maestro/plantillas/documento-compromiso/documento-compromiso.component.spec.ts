@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { DocumentoCompromisoComponent } from './documento-compromiso.component';
 
@@ -6,7 +6,7 @@ describe('DocumentoCompromisoComponent', () => {
   let component: DocumentoCompromisoComponent;
   let fixture: ComponentFixture<DocumentoCompromisoComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ DocumentoCompromisoComponent ]
     })

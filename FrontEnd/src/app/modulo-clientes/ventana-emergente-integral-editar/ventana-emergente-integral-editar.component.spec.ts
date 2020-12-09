@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { VentanaEmergenteIntegralEditarComponent } from './ventana-emergente-integral-editar.component';
 
@@ -6,7 +6,7 @@ describe('VentanaEmergenteIntegralComponent', () => {
   let component: VentanaEmergenteIntegralEditarComponent;
   let fixture: ComponentFixture<VentanaEmergenteIntegralEditarComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ VentanaEmergenteIntegralEditarComponent ]
     })

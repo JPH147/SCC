@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { VentanaCrearCobranzaManualComponent } from './ventana-crear-cobranza-manual.component';
 
@@ -6,7 +6,7 @@ describe('VentanaCrearCobranzaManualComponent', () => {
   let component: VentanaCrearCobranzaManualComponent;
   let fixture: ComponentFixture<VentanaCrearCobranzaManualComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ VentanaCrearCobranzaManualComponent ]
     })
