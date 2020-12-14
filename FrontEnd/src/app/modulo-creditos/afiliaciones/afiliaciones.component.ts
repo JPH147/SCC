@@ -1204,6 +1204,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
     this.ServiciosGenerales.RenameFile(this.tarjeta, dni + '_TARJETA_' + fecha, identificador.toString() ,"credito")
     .subscribe( tarjeta =>{
       this.Servicio.Crear(
+        0,
         1,
         this.CreditosForm.value.sucursal,
         this.CreditosForm.value.fecha_credito,
@@ -1278,6 +1279,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
 
       this.Servicio.Actualizar(
         this.id_credito_editar,
+        0,
         1 ,
         this.CreditosForm.value.sucursal,
         this.CreditosForm.value.fecha_credito,

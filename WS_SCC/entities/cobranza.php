@@ -962,6 +962,75 @@
       return false;
     }
 
+    function create_directa_masivo_array(){
+      $query = "CALL sp_crearcobranzadirectamasivo(
+        :prfecha,
+        :prcliente,
+        :prcuenta,
+        :properacion,
+        :prreferente,
+        :prmonto,
+        :prtipo,
+        :prtransaccion,
+        :probservaciones,
+        :prusuarioalvis,
+        :prfechaactual
+      )";
+
+      $exito = 0;
+      $error = 0;
+      
+      $detalle = json_decode($this->informacion) ;
+
+      $this->cliente=htmlspecialchars(strip_tags($this->cliente));
+      $this->tipo_transaccion=htmlspecialchars(strip_tags($this->tipo_transaccion));
+      $this->transaccion=htmlspecialchars(strip_tags($this->transaccion));
+      $momento = date("Y-m-d H:i:s");
+
+      foreach($detalle as $elemento) {
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prcliente", $this->cliente);
+        $result->bindParam(":prtipo", $this->tipo_transaccion);
+        $result->bindParam(":prtransaccion", $this->transaccion);
+
+        $result->bindParam(":prfecha", $elemento->fecha);
+        $result->bindParam(":prcuenta", $elemento->cuenta);
+        $result->bindParam(":properacion", $elemento->operacion);
+        $result->bindParam(":prreferente", $elemento->referente);
+        $result->bindParam(":prmonto", $elemento->monto);
+        $result->bindParam(":probservaciones", $elemento->observacion);
+        
+        ob_start();
+        echo($elemento->fecha) ;
+        echo($elemento->cuenta) ;
+        echo($elemento->operacion) ;
+        echo($elemento->referente) ;
+        echo($elemento->monto) ;
+        echo($elemento->observacion) ;
+        error_log(ob_get_clean(), 4) ;
+
+        $elemento->fecha=htmlspecialchars(strip_tags($elemento->fecha));
+        $elemento->cuenta=htmlspecialchars(strip_tags($elemento->cuenta));
+        $elemento->operacion=htmlspecialchars(strip_tags($elemento->operacion));
+        $elemento->referente=htmlspecialchars(strip_tags($elemento->referente));
+        $elemento->monto=htmlspecialchars(strip_tags($elemento->monto));
+        $elemento->observacion=htmlspecialchars(strip_tags($elemento->observacion));
+        
+        $result->bindParam(":prusuarioalvis", $this->usuario_alvis);
+        $this->usuario_alvis=htmlspecialchars(strip_tags($this->usuario_alvis));
+        $result->bindParam(":prfechaactual", $momento);
+
+        if ( $result->execute() ) {
+          $exito = $exito + 1 ;
+        } else {
+          $error = $error + 1 ;
+        }
+      } ;
+
+      return array("exito"=> $exito, "error"=> $error);
+    }
+
     function update_directa(){
       $query = "CALL sp_actualizarcobranzadirecta(
         :prid,

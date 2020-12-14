@@ -22,6 +22,7 @@
         if (($_POST["prid"])!=null)
         {
             $venta->id_venta=trim($_POST["prid"]);
+            $venta->id_acreedor=trim($_POST["pracreedor"]);
             $venta->fecha=trim($_POST["prfecha"]);
             $venta->sucursal=trim($_POST["prsucursal"]);
             $venta->talonario=trim($_POST["prtalonario"]);

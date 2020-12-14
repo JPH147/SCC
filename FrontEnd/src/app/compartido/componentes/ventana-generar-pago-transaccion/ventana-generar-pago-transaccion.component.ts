@@ -474,24 +474,29 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit, AfterView
     }
 
     if ( this.tipo_pagos == 2 ) {
+      this.Cargando.next(true) ;
+
       pagos.map(elemento => {
-        if ( elemento.pago_directo > 0 ) {
-          array_obserables.push(
-            this.CrearPagoMasivo(
-              elemento.pago_directo , 
-              elemento.fecha_pago , 
-              elemento.numero_operacion ,
-              elemento.referente ,
-              elemento.cuenta_bancaria
-            )
-          ) ;
+        if ( elemento.pago_directo > 0) {
+          let detalle = {
+            "fecha": moment(elemento.fecha_pago).format("YYYY-MM-DD") ,
+            "cuenta": elemento.cuenta_bancaria ,
+            "operacion": elemento.numero_operacion ,
+            "monto": elemento.pago_directo ,
+            "referente": elemento.referente ,
+            "observacion": "Regularización de pago por planilla" ,
+          }
+          informacion.push(detalle) ;
         }
         return elemento ;
-      }) ;
+      })
   
-      this.Cargando.next(true) ;
-      forkJoin(array_obserables)
-      .pipe(
+      this._cobranzas.CrearCobranzaDirectaMasivoArray(
+        this.data.cliente ,
+        this.data.tipo ,
+        this.data.tipo == 1 ? this.data.id_credito : this.data.id_venta ,
+        informacion
+      ).pipe(
         finalize(()=>{
           this.Cargando.next(false) ;
         })
@@ -545,18 +550,18 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit, AfterView
     }
   }
 
-  CrearPagoMasivo(monto : number, fecha : Date, numero_operacion : string, referente : number, cuenta_bancaria : number) : Observable<boolean> {
-    return this._cobranzas.CrearCobranzaDirectaMasivo(
-      fecha ,
-      this.data.cliente ,
-      cuenta_bancaria ,
-      numero_operacion ,
-      referente ,
-      monto ,
-      this.data.tipo ,
-      this.data.tipo == 1 ? this.data.id_credito : this.data.id_venta ,
-      "Regularización de pago masivo"
-    )
-  }
+  // CrearPagoMasivo(monto : number, fecha : Date, numero_operacion : string, referente : number, cuenta_bancaria : number) : Observable<boolean> {
+  //   return this._cobranzas.CrearCobranzaDirectaMasivo(
+  //     fecha ,
+  //     this.data.cliente ,
+  //     cuenta_bancaria ,
+  //     numero_operacion ,
+  //     referente ,
+  //     monto ,
+  //     this.data.tipo ,
+  //     this.data.tipo == 1 ? this.data.id_credito : this.data.id_venta ,
+  //     "Regularización de pago masivo"
+  //   )
+  // }
 
 }

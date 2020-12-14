@@ -21,6 +21,7 @@
 
 	    $venta_list = array(
 				"id"=>$venta->id,
+				"id_acreedor" => $venta->id_acreedor,
 				"tipo_venta"=>$venta->tipo_venta,
 				"fecha"=>$venta->fecha,
 				"id_salida"=>$venta->id_salida,

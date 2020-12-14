@@ -164,7 +164,7 @@ export class VentasComponent implements OnInit {
   public ListadoVentasAntiguo : VentaAntiguoDataSource ;
 
   public Columnas: string[];
-  public ColumnasCronogramaPeriodo: Array<string> = ["numero", "periodo", "monto_cuota" ,"total_planilla" ,"total_directo" ,"total_judicial", 'opciones' ] ;
+  public ColumnasCronogramaPeriodo: Array<string> = ["numero", "periodo", "monto_cuota" ,"total_planilla" ,"total_directo", "identificador_directo" ,"total_judicial", 'opciones' ] ;
 
   public id_presupuesto : number ;
   public hay_presupuesto_vendedor : boolean ;
@@ -255,6 +255,7 @@ export class VentasComponent implements OnInit {
         if(params['idcliente']){
           this.papeles_editar = true;
           this.idcliente = +params['idcliente'];
+          this.VentasForm.get('id_acreedor').enable() ;
           this.ObtenerClientexId(this.idcliente);
           this.ObtenerDireccion(this.idcliente);
           this.ObtenerTelefono(this.idcliente);
@@ -275,6 +276,7 @@ export class VentasComponent implements OnInit {
         // Si viene de un presupuesto
         if(params['idpresupuesto']){
           this.id_presupuesto=params['idpresupuesto'];
+          this.VentasForm.get('id_acreedor').enable() ;
           this.papeles_editar=true;
           // this.id_presupuesto = 17 ;
           this.NuevoCreditoPresupuesto(this.id_presupuesto);
@@ -383,6 +385,8 @@ export class VentasComponent implements OnInit {
   CrearFormulario(){
 
     this.VentasForm = this.FormBuilder.group({
+      'id_acreedor': [{value:0, disabled:true}, [
+      ]],
       'talonario': [null, [
         Validators.required
       ]],
@@ -598,6 +602,8 @@ export class VentasComponent implements OnInit {
     this.Servicio.SeleccionarVenta(id_venta).subscribe(res=>{
       this.Cargando.next(false);
 
+      this.VentasForm.get('id_acreedor').setValue(res.id_acreedor) ;
+
       this.cumple_penalidad = res.cumple_penalidad ;
       this.id_tipo_pago = res.idtipopago ;
       this.cuotas_penalidad = res.cuotas_penalidad ;
@@ -700,6 +706,7 @@ export class VentasComponent implements OnInit {
 
       if (this.idventa) {
 
+        this.VentasForm.get('id_acreedor').disable() ;
         this.ActualizarOrdenCronograma(this.idventa, 0);
 
         this.VentasForm.get('sucursal').setValue(res.nombre_sucursal);
@@ -739,6 +746,7 @@ export class VentasComponent implements OnInit {
       }
 
       if ( this.editar_documentos ) {
+        this.VentasForm.get('id_acreedor').disable() ;
         this.foto_antiguo=res.foto;
         res.foto!="" ? this.foto=URLIMAGENES.carpeta+'venta/'+res.foto : null;
         res.foto!="" ? this.foto_editar=false : this.foto_editar=true;
@@ -781,6 +789,7 @@ export class VentasComponent implements OnInit {
       }
 
       if (this.idventa_editar) {
+        this.VentasForm.get('id_acreedor').enable() ;
         this.CrearCronograma() ;
         
         if( res['courier'].id ){
@@ -1369,7 +1378,7 @@ export class VentasComponent implements OnInit {
   }
 
   ListarVendedor(nombre: string) {
-    this.ServiciosGenerales.ListarVendedor("",nombre,"",1,5).subscribe( res => {
+    this.ServiciosGenerales.ListarVendedor("",nombre,"",1,500).subscribe( res => {
       this.LstVendedor=res;
     });
   }
@@ -1922,6 +1931,7 @@ export class VentasComponent implements OnInit {
       this.ServiciosGenerales.RenameFile(this.papeles, dni + '_PAPELES_' + fecha, identificador, carpeta)
     ]).subscribe(resultado=>{
       this.Servicio.CrearVenta(
+        this.VentasForm.get('id_acreedor').value,
         formulario.value.fechaventa,
         formulario.value.sucursal,
         formulario.value.contrato,
@@ -2068,6 +2078,7 @@ export class VentasComponent implements OnInit {
 
       this.Servicio.ActualizarVenta(
         this.idventa_editar,
+        this.VentasForm.get('id_acreedor').value,
         formulario.value.fechaventa,
         formulario.value.sucursal,
         formulario.value.contrato,

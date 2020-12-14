@@ -79,7 +79,20 @@
     <div class = "spinner-container" *ngIf = "Cargando| async">
       <mat-spinner></mat-spinner>
     </div>
-    
+
+    <ng-container *ngIf="permiso?.ventas?.listado_ventas?.cambiar_acreedor">
+      <mat-grid-list cols=4 rowHeight="70px">
+        <mat-grid-tile colspan=2>
+          <mat-form-field class="columnas-2">
+            <mat-select placeholder="Acreedor" formControlName="id_acreedor">
+              <mat-option [value]="0"> COOPERATIVA ALVIS </mat-option>
+              <mat-option *ngFor="let vendedor of LstVendedor" [value]="vendedor.id"> {{ vendedor.nombre }} </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </ng-container>
+
     <!-- Cliente -->
     <div class="seccion">
 
@@ -1260,6 +1273,11 @@
               <mat-cell *matCellDef="let cronograma"> {{cronograma.total_directo | currency:'S/.'}}</mat-cell>
             </ng-container>
   
+            <ng-container matColumnDef="identificador_directo">
+              <mat-header-cell *matHeaderCellDef> Cuentas de pago </mat-header-cell>
+              <mat-cell *matCellDef="let cronograma"> {{cronograma.identificador_directo }}</mat-cell>
+            </ng-container>
+            
             <ng-container matColumnDef="total_judicial">
               <mat-header-cell *matHeaderCellDef> Pagos judiciales </mat-header-cell>
               <mat-cell *matCellDef="let cronograma"> {{cronograma.total_judicial | currency:'S/.'}}</mat-cell>

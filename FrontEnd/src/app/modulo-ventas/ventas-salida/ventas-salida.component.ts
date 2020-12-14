@@ -55,11 +55,12 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   public Cronograma: Array<any>;
   public Cronograma_Periodos: Array<any>;  
   public VentasSalidaForm:FormGroup;
+  public LstVendedor : Array<any> ;
 
   public ListadoVentas: VentaDataSource ;
   public ListadoVentasAntiguo: VentaAntiguoDataSource ;
   public Columnas: string[];
-  public ColumnasCronogramaPeriodo: Array<string> = ["numero", "periodo", "monto_cuota" ,"total_planilla" ,"total_directo" ,"total_judicial", 'opciones' ] ;
+  public ColumnasCronogramaPeriodo: Array<string> = ["numero", "periodo", "monto_cuota" ,"total_planilla" ,"total_directo", "identificador_directo" ,"total_judicial", 'opciones' ] ;
   
   public ruta:string;
   public ProductosComprados: Array<any>;
@@ -242,6 +243,8 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   CrearFormulario(){
 
     this.VentasSalidaForm = this.FormBuilder.group({
+      'id_acreedor': [{value:0, disabled:true}, [
+      ]],
       'id_salida': [{value: null, disabled: false}, [
       ]],
       'id_contrato': [{value: null, disabled: false}, [
@@ -340,6 +343,8 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
 
     this.Servicio.SeleccionarVentaSalida(id_venta).subscribe(res=>{
 
+      this.VentasSalidaForm.get('id_acreedor').setValue(res.id_acreedor) ;
+
       this.Cargando.next(false) ;
 
       this.id_salida = res.id_salida;
@@ -416,6 +421,10 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
         this.Vendedores=res;
       })
 
+      this.ServiciosGenerales.ListarVendedor("",'',"",1,500).subscribe( res => {
+        this.LstVendedor=res;
+      });
+      
       if(res['garantes'].garantes.length>0){
         
         this.VentasSalidaForm.get('garante').setValue(true);
@@ -440,7 +449,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       }
 
       if (this.id_venta) {
-
+        this.VentasSalidaForm.get('id_acreedor').disable() ;
         // Ajustes visuales
         this.VentasSalidaForm.get('observaciones').setValue(res.observacion=="" ? "No hay observaciones" : res.observacion);
 
@@ -480,6 +489,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       }
 
       if ( this.editar_documentos ) {
+        this.VentasSalidaForm.get('id_acreedor').disable() ;
         this.foto_antiguo=res.foto;
         res.foto!="" ? this.foto=URLIMAGENES.carpeta+'venta/'+res.foto : null;
         res.foto!="" ? this.foto_editar=false : this.foto_editar=true;
@@ -523,6 +533,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       }
 
       if(this.id_venta_editar){
+        this.VentasSalidaForm.get('id_acreedor').enable() ;
         this.CrearCronograma() ;
         
         if( res['courier'].id ){
@@ -1291,6 +1302,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
 
       this.Servicio.ActualizarVenta(
         this.id_venta_editar,
+        formulario.value.id_acreedor,
         formulario.value.fechaventa,
         0,
         formulario.value.id_contrato,

@@ -76,7 +76,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   public ListadoCronogramaAntiguo: CronogramaAntiguoDataSource;
 
   public ColumnasCronograma: Array<string>;
-  public ColumnasCronogramaPeriodo: Array<string> = ["numero", "periodo", "monto_cuota" ,"total_planilla" ,"total_directo" ,"total_judicial", 'opciones' ] ;
+  public ColumnasCronogramaPeriodo: Array<string> = ["numero", "periodo", "monto_cuota" ,"total_planilla" ,"total_directo", "identificador_directo" ,"total_judicial", 'opciones' ] ;
   public Cronograma: Array<any> = [];
   public Cronograma_Periodos: Array<any> = [];
   public total_cronograma_editado: number;
@@ -381,6 +381,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
 
   CrearFormulario(){
     this.CreditosForm = this.Builder.group({
+      id_acreedor :[{value: 0, disabled: true},[
+      ]],
       id_cliente :[{value: null, disabled: false},[
         Validators.required
       ]],
@@ -541,7 +543,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     this.changeDetector.detectChanges();
     this.papeles_editar=true;
     this.ColumnasCronograma= ['numero', 'fecha_vencimiento_ver', 'monto_cuota_ver'];
-    // this.VerificarCondicionesAfiliacion();
+    this.CreditosForm.get('id_acreedor').enable() ;
   }
 
   NuevoCreditoPresupuesto(id){
@@ -641,6 +643,8 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     this.Servicio.Seleccionar(id_credito).subscribe(res=>{
       this.Cargando.next(false);
       
+      this.CreditosForm.get('id_acreedor').setValue(res.id_acreedor) ;
+
       this.CreditosForm.get('deuda_hasta_hoy').setValue(res.deuda_hasta_hoy) ;
       this.CreditosForm.get('monto_limite_penalidad').setValue(res.monto_limite_penalidad) ;
       this.CreditosForm.get('monto_penalidad').setValue(res.monto_penalidad) ;
@@ -785,6 +789,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       }
 
       if( this.id_credito ) {
+        this.CreditosForm.get('id_acreedor').disable() ;
         this.CreditosForm.get('interes_diario').disable();
         this.CreditosForm.get('tipo_credito').setValue(res.tipo);
         this.CreditosForm.get('sucursal').setValue(res.sucursal);
@@ -808,6 +813,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       }
 
       if ( this.editar_documentos ) {
+        this.CreditosForm.get('id_acreedor').disable() ;
         this.foto_antiguo=res.pdf_foto;
         this.dni_antiguo=res.pdf_dni;
         this.cip_antiguo=res.pdf_cip;
@@ -842,6 +848,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       }
 
       if ( this.id_credito_editar ) {
+        this.CreditosForm.get('id_acreedor').enable() ;
         this.CreditosForm.get('interes_diario').enable() ;
         if( res['courier'].id ){
           this.CreditosForm.get('papeles_courier').setValue(res['courier'].id_courier);
@@ -1245,8 +1252,9 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     });
   }
 
+  // Se utiliza para elegir al acreedor del credito
   ListarVendedor(nombre: string) {
-    this.ServiciosGenerales.ListarVendedor("",nombre,"",1,50).subscribe( res => {
+    this.ServiciosGenerales.ListarVendedor("",nombre,"",1,500).subscribe( res => {
       this.ListadoVendedores=res;
     });
   }
@@ -1648,6 +1656,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   CrearAfiliacion( tarjeta: string){
 
     this.Servicio.Crear(
+      0,
       1,
       this.CreditosForm.value.sucursal,
       this.CreditosForm.value.afiliacion_fecha_afiliacion,
@@ -1709,6 +1718,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
 
       this.Servicio.Actualizar(
         this.id_credito_editar,
+        0,
         1,
         this.CreditosForm.value.sucursal,
         this.CreditosForm.value.fecha_credito,
@@ -1795,6 +1805,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       }
 
       this.Servicio.Crear(
+        this.CreditosForm.value.id_acreedor,
         2,
         this.CreditosForm.value.sucursal,
         this.CreditosForm.value.fecha_credito,
@@ -1934,11 +1945,9 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       this.ServiciosGenerales.RenameFile(this.otros_nuevo, dni + '_OTROS_' + fecha, identificador ,"credito"),
       this.ServiciosGenerales.RenameFile(this.papeles_nuevo, dni + '_PAPELES_' + fecha, identificador ,"credito"),
     ]).subscribe(resultado=>{
-
-      // console.log(resultado)
-
       this.Servicio.Actualizar(
         this.id_credito_editar,
+        this.CreditosForm.value.id_acreedor,
         2 ,
         this.CreditosForm.value.sucursal,
         this.CreditosForm.value.fecha_credito,
@@ -2072,6 +2081,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       this.ServiciosGenerales.RenameFile(this.oficio_nuevo, dni + '_OFICIO_' + fecha, identificador ,"credito"),
       this.ServiciosGenerales.RenameFile(this.otros_nuevo, dni + '_OTROS_' + fecha, identificador ,"credito"),
     ]).subscribe(resultado=>{
+      console.log(resultado) ;
       this.Servicio.ActualizarDocumentos(
         this.id_credito,
         this.foto_editar ? resultado[0].mensaje : this.foto_antiguo,

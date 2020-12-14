@@ -89,6 +89,7 @@ Class Creditos{
     public $id_liquidacion ;
     public $pagado ;
     public $vendedores_array ;
+    public $id_acreedor ;
 
     public function __construct($db){
         $this->conn = $db;
@@ -200,6 +201,7 @@ Class Creditos{
     
         $row = $result->fetch(PDO::FETCH_ASSOC);
 
+        $this->id_acreedor=$row['id_acreedor'];
         $this->id_tipo = $row['id_tipo'];
         $this->tipo = $row['tipo'];
         $this->id_sucursal = $row['id_sucursal'];
@@ -504,6 +506,7 @@ Class Creditos{
 
     function crear(){
         $query = "CALL sp_crearcredito(
+            :pracreedor,
             :prtipo,
             :prsucursal,
             :prfecha,
@@ -543,6 +546,7 @@ Class Creditos{
 
         $result = $this->conn->prepare($query);
 
+        $result->bindParam(":pracreedor", $this->id_acreedor);
         $result->bindParam(":prtipo", $this->tipo_credito);
         $result->bindParam(":prsucursal", $this->sucursal);
         $result->bindParam(":prfecha", $this->fecha_credito);
@@ -579,6 +583,7 @@ Class Creditos{
         $result->bindParam(":pdfotros", $this->pdf_otros);
         $result->bindParam(":probservacion", $this->observacion);
 
+        $this->id_acreedor=htmlspecialchars(strip_tags($this->id_acreedor));
         $this->tipo_credito=htmlspecialchars(strip_tags($this->tipo_credito));
         $this->sucursal=htmlspecialchars(strip_tags($this->sucursal));
         $this->fecha_credito=htmlspecialchars(strip_tags($this->fecha_credito));
@@ -642,6 +647,7 @@ Class Creditos{
     function actualizar(){
         $query = "CALL sp_actualizarcredito(
             :prcredito,
+            :pracreedor,
             :prsucursal,
             :prfecha,
             :prautorizador,
@@ -678,6 +684,7 @@ Class Creditos{
 
         $result = $this->conn->prepare($query);
 
+        $result->bindParam(":pracreedor", $this->id_acreedor);
         $result->bindParam(":prcredito", $this->id_credito);
         $result->bindParam(":prsucursal", $this->sucursal);
         $result->bindParam(":prfecha", $this->fecha_credito);
@@ -712,6 +719,7 @@ Class Creditos{
         $result->bindParam(":prpdfotros", $this->pdf_otros);
         $result->bindParam(":probservacion", $this->observacion);
 
+        $this->id_acreedor=htmlspecialchars(strip_tags($this->id_acreedor));
         $this->id_credito=htmlspecialchars(strip_tags($this->id_credito));
         $this->sucursal=htmlspecialchars(strip_tags($this->sucursal));
         $this->fecha_credito=htmlspecialchars(strip_tags($this->fecha_credito));
@@ -1274,6 +1282,7 @@ Class Creditos{
                   "monto_pago_manual_planilla" => $monto_pago_manual_planilla ,
                   "monto_pago_manual_judicial" => $monto_pago_manual_judicial ,
                   "monto_directo" => $monto_directo ,
+                  "identificador_directo" => $identificador_directo ,
                   "monto_planilla" => $monto_planilla ,
                   "total_planilla" => $total_planilla ,
                   "total_directo" => $total_directo ,

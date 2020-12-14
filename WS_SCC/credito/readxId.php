@@ -22,6 +22,7 @@
 
 	    $credito_list = array(
             "id" => $credito->id_credito,
+            "id_acreedor" => $credito->id_acreedor,
             "id_tipo" => $credito->id_tipo,
             "tipo" => $credito->tipo,
             "id_sucursal" => $credito->id_sucursal,

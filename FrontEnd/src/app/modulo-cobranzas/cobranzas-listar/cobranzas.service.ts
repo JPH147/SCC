@@ -491,6 +491,32 @@ export class CobranzasService {
     );
   }
 
+  CrearCobranzaDirectaMasivoArray(
+    cliente : number,
+    tipo_transaccion : number ,
+    id_transaccion : number ,
+    informacion : Array<any>
+  ) :Observable<boolean> {
+    let params = new HttpParams()
+      .set('prcliente', cliente.toString())
+      .set('prtipotransaccion', tipo_transaccion.toString() )
+      .set('prtransaccion', id_transaccion.toString() )
+      .set('prinformacion', JSON.stringify(informacion)) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'cobranza/create-directa-masivo-array.php', params, {headers: headers})
+    .pipe(
+      map(resultado => {
+        if ( resultado['codigo'] == 0 ) {
+          return true ;
+        } else {
+          return false ;
+        }
+      })
+    );
+  }
+
   ActualizarCobranzaDirecta(
     id_cobranza : number,
     fecha : Date,

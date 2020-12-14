@@ -21,7 +21,7 @@
         
         if (($_POST["prfecha"])!=null)
         {
-
+            $venta->id_acreedor=trim($_POST["pracreedor"]);
             $venta->fecha=trim($_POST["prfecha"]);
             $venta->sucursal=trim($_POST["prsucursal"]);
             $venta->salida_venta=trim($_POST["prsalida"]);

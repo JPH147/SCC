@@ -104,6 +104,7 @@ Class Venta{
     
     public $id_liquidacion ;
     public $pagado ;
+    public $id_acreedor ;
 
     public function __construct($db){
         $this->conn = $db;
@@ -224,6 +225,7 @@ Class Venta{
     function create(){
 
         $query = "CALL sp_crearventa(
+            :pracreedor,
             :prfecha,
             :prtipoventa,
             :prsucursal,
@@ -257,6 +259,7 @@ Class Venta{
 
         $result = $this->conn->prepare($query);
 
+        $result->bindParam(":pracreedor", $this->id_acreedor);
         $result->bindParam(":prfecha", $this->fecha);
         $result->bindParam(":prsucursal", $this->sucursal);
         $result->bindParam(":prtalonario", $this->talonario);
@@ -287,6 +290,7 @@ Class Venta{
         $result->bindParam(":prpdfotros", $this->vnt_otros_pdf);
         $result->bindParam(":probservaciones", $this->observaciones);
 
+        $this->id_acreedor=htmlspecialchars(strip_tags($this->id_acreedor));
         $this->fecha=htmlspecialchars(strip_tags($this->fecha));
         $this->sucursal=htmlspecialchars(strip_tags($this->sucursal));
         $this->talonario=htmlspecialchars(strip_tags($this->talonario));
@@ -333,6 +337,7 @@ Class Venta{
 
         $query = "CALL sp_actualizarventa(
             :prid,
+            :pracreedor,
             :prfecha,
             :prtipoventa,
             :prsucursal,
@@ -366,6 +371,7 @@ Class Venta{
 
         $result = $this->conn->prepare($query);
 
+        $result->bindParam(":pracreedor", $this->id_acreedor);
         $result->bindParam(":prid", $this->id_venta);
         $result->bindParam(":prfecha", $this->fecha);
         $result->bindParam(":prsucursal", $this->sucursal);
@@ -397,6 +403,7 @@ Class Venta{
         $result->bindParam(":prpdfotros", $this->vnt_otros_pdf);
         $result->bindParam(":probservaciones", $this->observaciones);
 
+        $this->id_acreedor=htmlspecialchars(strip_tags($this->id_acreedor));
         $this->id_venta=htmlspecialchars(strip_tags($this->id_venta));
         $this->fecha=htmlspecialchars(strip_tags($this->fecha));
         $this->sucursal=htmlspecialchars(strip_tags($this->sucursal));
@@ -529,6 +536,7 @@ Class Venta{
         $row = $result->fetch(PDO::FETCH_ASSOC);
       
         $this->id=$row['id'];
+        $this->id_acreedor=$row['id_acreedor'];
         $this->tipo_venta=$row['tipo_venta'];
         $this->fecha=$row['fecha'];
         $this->id_sucursal=$row['id_sucursal'];
@@ -616,6 +624,7 @@ Class Venta{
         $row = $result->fetch(PDO::FETCH_ASSOC);
       
         $this->id=$row['id'];
+        $this->id_acreedor=$row['id_acreedor'];
         $this->tipo_venta=$row['tipo_venta'];
         $this->fecha=$row['fecha'];
         $this->id_salida=$row['id_salida'];
@@ -1286,10 +1295,11 @@ Class Venta{
                   "monto_pago_manual_planilla" => $monto_pago_manual_planilla ,
                   "monto_pago_manual_judicial" => $monto_pago_manual_judicial ,
                   "monto_directo" => $monto_directo ,
+                  "identificador_directo" => $identificador_directo ,
                   "monto_planilla" => $monto_planilla ,
                   "total_planilla" => $total_planilla ,
                   "total_directo" => $total_directo ,
-                  "total_judicial" => $total_judicial
+                  "total_judicial" => $total_judicial ,
             );
             array_push($cronograma_list,$cronograma_item);
         }

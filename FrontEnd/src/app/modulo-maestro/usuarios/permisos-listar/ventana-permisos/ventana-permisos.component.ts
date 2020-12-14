@@ -96,6 +96,7 @@ export class VentanaPermisosComponent implements OnInit {
           establecer_penalidad : permisos.ventas?.listado_ventas?.establecer_penalidad || false ,
           generar_interes : permisos.ventas?.listado_ventas?.generar_interes || false ,
           liquidar : permisos.ventas?.listado_ventas?.liquidar || false ,
+          cambiar_acreedor : permisos.ventas?.listado_ventas?.cambiar_acreedor || false ,
         } ,
         salida_ventas : {
           general : permisos.ventas?.salida_ventas?.general || false ,
@@ -142,7 +143,8 @@ export class VentanaPermisosComponent implements OnInit {
           agregar_pagos_masivos : permisos.creditos?.listado_creditos?.agregar_pagos_masivos || false ,
           establecer_penalidad : permisos.creditos?.listado_creditos?.establecer_penalidad || false ,
           generar_interes : permisos.creditos?.listado_creditos?.generar_interes || false ,
-          liquidar : permisos.ventas?.listado_ventas?.liquidar || false ,
+          liquidar : permisos.creditos?.listado_creditos?.liquidar || false ,
+          cambiar_acreedor : permisos.creditos?.listado_creditos?.cambiar_acreedor || false ,
         } ,
         afiliaciones : {
           general : permisos.creditos?.afiliaciones?.general || false ,
@@ -252,6 +254,7 @@ export class VentanaPermisosComponent implements OnInit {
           establecer_penalidad : false ,
           generar_interes : false ,
           liquidar : false ,
+          cambiar_acreedor : false ,
         } ,
         salida_ventas : {
           general : false ,
@@ -299,6 +302,7 @@ export class VentanaPermisosComponent implements OnInit {
           establecer_penalidad : false ,
           generar_interes : false ,
           liquidar : false ,
+          cambiar_acreedor : false ,
         } ,
         afiliaciones : {
           general : false ,

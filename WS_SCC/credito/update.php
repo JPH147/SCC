@@ -23,6 +23,7 @@
         if (($_POST["prcredito"])!=null)
         {
 
+            $credito->id_acreedor=trim($_POST["pracreedor"]);
             $credito->id_credito=trim($_POST["prcredito"]);
             $credito->tipo_credito=trim($_POST["prtipocredito"]);
             $credito->sucursal=trim($_POST["prsucursal"]);

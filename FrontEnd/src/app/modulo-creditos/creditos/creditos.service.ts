@@ -133,6 +133,7 @@ export class CreditosService {
   }
 
   Crear(
+    id_acreedor: number ,
     tipo_credito:number,
     sucursal:number,
     fecha_credito:Date,
@@ -172,6 +173,7 @@ export class CreditosService {
   ) :Observable<any> {
 
     let params = new HttpParams()
+      .set('pracreedor',id_acreedor.toString())
       .set('prtipo',tipo_credito.toString())
       .set('prsucursal',sucursal.toString())
       .set('prfecha',moment(fecha_credito).format("YYYY-MM-DD"))
@@ -303,6 +305,7 @@ export class CreditosService {
 
   Actualizar(
     id_credito:number,
+    id_acreedor: number ,
     tipo_credito : number ,
     sucursal:number,
     fecha_credito:Date,
@@ -340,6 +343,7 @@ export class CreditosService {
   ) :Observable<any> {
 
     let params = new HttpParams()
+      .set('pracreedor',id_acreedor.toString())
       .set('prcredito',id_credito.toString())
       .set('prtipocredito',tipo_credito.toString())
       .set('prsucursal',sucursal.toString())

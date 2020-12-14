@@ -321,6 +321,7 @@ export class AgregarVentaComponent implements OnInit {
     this.CrearCronograma();
 
     this.VentaServicio.CrearVenta(
+      0,
       this.VentaForm.value.fecha,
       0,
       this.VentaForm.value.id_contrato,

@@ -16,6 +16,7 @@ export class VentaService {
   constructor(private http: HttpClient) {}
 
   CrearVenta(
+    id_acreedor:number,
     fecha:Date,
     sucursal:number,
     talonario:number,
@@ -49,6 +50,7 @@ export class VentaService {
   ): Observable<any> {
 
     let params = new HttpParams()
+      .set('pracreedor',id_acreedor.toString())
       .set('prfecha',moment(fecha).format("YYYY-MM-DD"))
       .set('prsucursal',sucursal.toString())
       .set('prtalonario',talonario.toString())
@@ -89,6 +91,7 @@ export class VentaService {
   // se eliminan el cronograma actual y los garantes
   ActualizarVenta(
     id:number,
+    id_acreedor:number,
     fecha:Date,
     sucursal:number,
     talonario:number,
@@ -122,6 +125,7 @@ export class VentaService {
   ): Observable<any> {
     let params = new HttpParams()
     .set('prid',id.toString())
+    .set('pracreedor',id_acreedor.toString())
     .set('prfecha',moment(fecha).format("YYYY-MM-DD"))
     .set('prsucursal',sucursal.toString())
     .set('prtalonario',talonario.toString())
