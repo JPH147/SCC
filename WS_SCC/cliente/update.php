@@ -36,6 +36,7 @@
             $cliente->clt_calificacion_personal = trim($_POST["clt_calificacion_personal"]);
             $cliente->clt_aporte = trim($_POST["clt_aporte"]);
             $cliente->clt_estado = trim($_POST["prestado"]);
+            $cliente->id_centro_trabajo = trim($_POST["prcentrotrabajo"]);
 
 	    	if($cliente->update())
 	        {

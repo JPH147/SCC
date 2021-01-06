@@ -300,6 +300,11 @@ export class MenuComponent implements OnInit{
             mostrar : permiso.tablas_maestras.instituciones ,
           },
           {
+            nombre: "Centros de trabajo",
+            path: "centros-trabajo",
+            mostrar : permiso.tablas_maestras.direcciones ,
+          },
+          {
             nombre: "Procesos judiciales",
             path: "proceso-judicial-vinculados",
             mostrar : permiso.tablas_maestras.procesos_judiciales ,

@@ -4,8 +4,8 @@ import { MatSelect } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormGroup, FormBuilder, Validators} from '@angular/forms';
 import { ServiciosGenerales } from 'src/app/core/servicios/servicios';
-import {fromEvent,merge} from 'rxjs';
-import {debounceTime, tap, distinctUntilChanged} from 'rxjs/operators'
+import {BehaviorSubject, fromEvent,merge} from 'rxjs';
+import {debounceTime, tap, distinctUntilChanged, finalize} from 'rxjs/operators'
 
 @Component({
   selector: 'app-ventanaemergentemodelo',
@@ -17,6 +17,8 @@ import {debounceTime, tap, distinctUntilChanged} from 'rxjs/operators'
 // tslint:disable-next-line:component-class-suffix
 export class VentanaEmergenteModelo {
 
+  public Cargando = new BehaviorSubject<boolean>(false) ;
+  
   @ViewChild('InputModelo', { static: true }) FiltroModelo: ElementRef;
   @ViewChild('InputMarca', { static: true }) FiltroMarca: MatSelect;
   public selectedValue: string;
@@ -150,21 +152,27 @@ export class VentanaEmergenteModelo {
   Guardar(formulario) {
     if (this.data) {
       if (this.data.productos) {
-        this.mensaje = 'Modelo creado satisfactoriamente';
-        this.Servicios.CrearModelo(formulario.value.idmarca, formulario.value.nombre).subscribe(res=>{
+        this.Servicios.CrearModelo(formulario.value.idmarca, formulario.value.nombre)
+        .pipe(finalize(()=>this.Cargando.next(false)))
+        .subscribe(res=>{
+          this.mensaje = 'Modelo creado satisfactoriamente';
           this.ventana.close(res['data']);
         });
       } else {
-        this.mensaje = 'Datos actualizados satisfactoriamente';
-        this.Servicios.EditarModelo(this.data.id, formulario.value.idmarca, formulario.value.nombre).subscribe(res=>{
+        this.Servicios.EditarModelo(this.data.id, formulario.value.idmarca, formulario.value.nombre)
+        .pipe(finalize(()=>this.Cargando.next(false)))
+        .subscribe(res=>{
+          this.mensaje = 'Datos actualizados satisfactoriamente';
           this.ventana.close()
         });
       }
     }
 
     if (!this.data) {
-      this.mensaje = 'Modelo creado satisfactoriamente';
-      this.Servicios.CrearModelo(formulario.value.idmarca, formulario.value.nombre).subscribe(res=>{
+      this.Servicios.CrearModelo(formulario.value.idmarca, formulario.value.nombre)
+      .pipe(finalize(()=>this.Cargando.next(false)))
+      .subscribe(res=>{
+        this.mensaje = 'Modelo creado satisfactoriamente';
         this.ventana.close()
       });
     }

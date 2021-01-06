@@ -1,6 +1,6 @@
 import {Component, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ServiciosGenerales, Institucion, Sede, Subsede } from 'src/app/core/servicios/servicios';
 import { fromEvent, BehaviorSubject, Observable, forkJoin } from 'rxjs';
@@ -10,6 +10,7 @@ import { debounceTime, distinctUntilChanged, tap, finalize } from 'rxjs/operator
 import { ServiciosVentas } from 'src/app/core/servicios/ventas';
 import { ServiciosTelefonos } from 'src/app/core/servicios/telefonos';
 import { BancosService } from 'src/app/modulo-maestro/bancos/bancos.service';
+import { CentroTrabajoPnpComponent } from 'src/app/modulo-maestro/centros-trabajo/centro-trabajo-pnp/centro-trabajo-pnp.component';
 
 @Component({
   selector: 'app-ventana-emergente-integral-agregar',
@@ -64,6 +65,7 @@ export class VentanaEmergenteIntegralAgregarComponent implements OnInit, AfterVi
     private ServicioDireccion: ServiciosDirecciones,
     private ServicioTelefono: ServiciosTelefonos,
     private VServicios : ServiciosVentas,
+    private Dialogo: MatDialog,
     private _bancos : BancosService
   ) { }
 
@@ -154,6 +156,16 @@ export class VentanaEmergenteIntegralAgregarComponent implements OnInit, AfterVi
       'cuenta': [null, [
       ]],
       'trabajo': ["", [
+      ]],
+      'centro_trabajo': [0, [
+      ]],
+      'centro_trabajo_comisaria': ['', [
+      ]],
+      'centro_trabajo_division': ['', [
+      ]],
+      'centro_trabajo_telefono': ['', [
+      ]],
+      'centro_trabajo_direccion': ['', [
       ]],
       'cargo': [null, [
         Validators.required
@@ -492,7 +504,8 @@ export class VentanaEmergenteIntegralAgregarComponent implements OnInit, AfterVi
       this.ClientesForm.value.descuento_maximo,
       this.ClientesForm.value.calificacion_personal,
       this.ClientesForm.value.aporte,
-      1
+      1,
+      this.ClientesForm.get('centro_trabajo').value
     )
     .pipe(
       finalize(()=>{
@@ -541,6 +554,26 @@ export class VentanaEmergenteIntegralAgregarComponent implements OnInit, AfterVi
       // console.log(res)
       this.ventana.close(true);
     })
+  }
+
+  ElegirCentroTrabajo() {
+    let Ventana = this.Dialogo.open(CentroTrabajoPnpComponent, {
+      maxHeight: '80vh' ,
+      width: '1200px' ,
+      data: true
+    }) ;
+
+    Ventana.afterClosed().subscribe(resultado => {
+      this.ClientesForm.get('centro_trabajo').setValue(resultado.id_centro_trabajo_pnp) ;
+      this.ClientesForm.get('centro_trabajo_comisaria').setValue(resultado.comisaria) ;
+      this.ClientesForm.get('centro_trabajo_division').setValue(resultado.division) ;
+      this.ClientesForm.get('centro_trabajo_telefono').setValue(resultado.telefono) ;
+      this.ClientesForm.get('centro_trabajo_direccion').setValue(resultado.direccion) ;
+    })
+  }
+
+  EliminarCentroTrabajo() {
+    this.ClientesForm.get('centro_trabajo').setValue(0) ;
   }
 }
 

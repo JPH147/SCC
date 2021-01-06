@@ -138,6 +138,7 @@ export class ClienteService {
     clt_calificacion_personal: string,
     clt_aporte: number,
     estado: number,
+    centro_trabajo : number
   ): Observable<any> {
 
     let params = new HttpParams()
@@ -158,6 +159,7 @@ export class ClienteService {
       .set('clt_aporte',clt_aporte.toString())
       .set('clt_fecharegistro', moment(new Date()).format("YYYY-MM-DD"))
       .set('prestado',estado.toString())
+      .set('prcentrotrabajo',centro_trabajo.toString())
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     return this.http.post(this.url + 'cliente/create.php', params, {headers: headers})
@@ -185,7 +187,8 @@ export class ClienteService {
     maximo_descuento: number,
     clt_calificacion_personal: string,
     clt_aporte: number,
-    estado : number
+    estado : number,
+    centro_trabajo : number
   ): Observable<any> {
 
     let params = new HttpParams()
@@ -206,6 +209,7 @@ export class ClienteService {
     .set('clt_calificacion_personal',clt_calificacion_personal)
     .set('clt_aporte',clt_aporte.toString())
     .set('prestado',estado.toString())
+    .set('prcentrotrabajo',centro_trabajo.toString())
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     return this.http.post(this.url + 'cliente/update.php', params, {headers: headers});

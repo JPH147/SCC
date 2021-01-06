@@ -58,6 +58,15 @@ Class Cliente{
     public $prpagina;
     public $prtotalpagina;
 
+    public $distrito;
+    public $comisaria;
+    public $division;
+    public $telefono;
+    public $direccion;
+    public $pagina;
+    public $total_pagina;
+    public $id_centro_trabajo;
+
     public $path_reporte = '../uploads/reporte-clientes/';
 
     public function __construct($db){
@@ -324,7 +333,8 @@ Class Cliente{
             :clt_calificacion_personal,
             :clt_aporte,
             :clt_fecharegistro,
-            :clt_estado
+            :clt_estado,
+            :prcentrotrabajo
         )"; 
 
         $result = $this->conn->prepare($query);
@@ -421,6 +431,7 @@ Class Cliente{
         $this->plantilla_autorizacion=$row['plantilla_autorizacion'];
         $this->plantilla_transaccion=$row['plantilla_transaccion'];
         $this->plantilla_compromiso=$row['plantilla_compromiso'];
+        $this->id_centro_trabajo=$row['id_centro_trabajo'];
     }
 
     function update(){
@@ -442,7 +453,8 @@ Class Cliente{
             :clt_maximo_descuento,
             :clt_calificacion_personal,
             :clt_aporte,
-            :prestado
+            :prestado,
+            :prcentrotrabajo
         )"; 
 
         $result = $this->conn->prepare($query);
@@ -464,6 +476,7 @@ Class Cliente{
         $this->clt_calificacion_personal=htmlspecialchars(strip_tags($this->clt_calificacion_personal));
         $this->clt_aporte=htmlspecialchars(strip_tags($this->clt_aporte));
         $this->clt_estado=htmlspecialchars(strip_tags($this->clt_estado));
+        $this->id_centro_trabajo=htmlspecialchars(strip_tags($this->id_centro_trabajo));
 
         $result->bindParam(":idcliente", $this->idcliente);
         $result->bindParam(":id_subsede", $this->id_subsede);
@@ -482,6 +495,7 @@ Class Cliente{
         $result->bindParam(":clt_calificacion_personal", $this->clt_calificacion_personal);
         $result->bindParam(":clt_aporte", $this->clt_aporte);
         $result->bindParam(":prestado", $this->clt_estado);
+        $result->bindParam(":prcentrotrabajo", $this->id_centro_trabajo);
         
 
         if($result->execute())
@@ -870,6 +884,162 @@ Class Cliente{
         } else {
             return false ;
         }
+    }
+
+    function read_centro_trabajoxId(){
+        
+        $query ="CALL sp_listarcentrotrabajopnpxId(?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam( 1 , $this->id_centro_trabajo );
+
+        $result->execute();
+    
+        $centro_list=array();
+        $contador = $this->prtotalpagina*($this->prpagina-1);
+
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $contador=$contador+1;
+            $cliente_item = array (
+                "id_centro_trabajo_pnp" => $row['id_centro_trabajo_pnp'] ,
+                "id_distrito" => $row['id_distrito'] ,
+                "distrito" => $row['distrito'] ,
+                "id_provincia" => $row['id_provincia'] ,
+                "provincia" => $row['provincia'] ,
+                "id_departamento" => $row['id_departamento'] ,
+                "departamento" => $row['departamento'] ,
+                "comisaria" => $row['comisaria'] ,
+                "division" => $row['division'] ,
+                "telefono" => $row['telefono'] ,
+                "direccion" => $row['direccion'] ,
+            );
+
+            array_push($centro_list,$cliente_item);
+        }
+        return $centro_list;
+    }
+
+    function read_centro_trabajo(){
+        
+        $query ="CALL sp_listarcentrotrabajopnp(?,?,?,?,?,?,?,?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam( 1 , $this->departamento );
+        $result->bindParam( 2 , $this->provincia );
+        $result->bindParam( 3 , $this->distrito );
+        $result->bindParam( 4 , $this->comisaria );
+        $result->bindParam( 5 , $this->division );
+        $result->bindParam( 6 , $this->telefono );
+        $result->bindParam( 7 , $this->direccion );
+        $result->bindParam( 8 , $this->pagina );
+        $result->bindParam( 9 , $this->total_pagina );
+
+        $result->execute();
+    
+        $centro_list=array();
+        $centro_list["centro_trabajo"]=array();
+        $contador = $this->prtotalpagina*($this->prpagina-1);
+
+        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
+            $contador=$contador+1;
+            $cliente_item = array (
+                "numero"=>$contador,
+                "id_centro_trabajo_pnp" => $row['id_centro_trabajo_pnp'] ,
+                "id_distrito" => $row['id_distrito'] ,
+                "distrito" => $row['distrito'] ,
+                "id_provincia" => $row['id_provincia'] ,
+                "provincia" => $row['provincia'] ,
+                "id_departamento" => $row['id_departamento'] ,
+                "departamento" => $row['departamento'] ,
+                "comisaria" => $row['comisaria'] ,
+                "division" => $row['division'] ,
+                "telefono" => $row['telefono'] ,
+                "direccion" => $row['direccion'] ,
+            );
+
+            array_push($centro_list["centro_trabajo"],$cliente_item);
+        }
+        return $centro_list;
+    }
+
+    function read_centro_trabajo_contar(){
+        
+        $query ="CALL sp_listarcentrotrabajopnpcontar(?,?,?,?,?,?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam( 1 , $this->departamento );
+        $result->bindParam( 2 , $this->provincia );
+        $result->bindParam( 3 , $this->distrito );
+        $result->bindParam( 4 , $this->comisaria );
+        $result->bindParam( 5 , $this->division );
+        $result->bindParam( 6 , $this->telefono );
+        $result->bindParam( 7 , $this->direccion );
+
+        $result->execute();
+
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        $this->total_resultado=$row['total'];
+
+        return $this->total_resultado;
+    }
+
+    function create_centro_trabajo(){
+        
+        $query ="CALL sp_crearcentrotrabajopnp(?,?,?,?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam( 1 , $this->id_distrito );
+        $result->bindParam( 2 , $this->comisaria );
+        $result->bindParam( 3 , $this->division );
+        $result->bindParam( 4 , $this->telefono );
+        $result->bindParam( 5 , $this->direccion );
+
+        if ( $result->execute() ) {
+            return true ;
+        }
+        return false ;
+    }
+
+    function update_centro_trabajo(){
+        
+        $query ="CALL sp_crearcentrotrabajopnp(?,?,?,?,?,?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam( 1 , $this->id_centro_trabajo );
+        $result->bindParam( 2 , $this->id_distrito );
+        $result->bindParam( 3 , $this->comisaria );
+        $result->bindParam( 4 , $this->division );
+        $result->bindParam( 5 , $this->telefono );
+        $result->bindParam( 6 , $this->direccion );
+
+        if ( $result->execute() ) {
+            return true ;
+        }
+        return false ;
+    }
+
+    function delete_centro_trabajo(){
+        
+        $query ="CALL sp_eliminarcentrotrabajopnp(?)";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam( 1 , $this->id_centro_trabajo );
+
+        if ( $result->execute() ) {
+            return true ;
+        }
+        return false ;
     }
 }
 ?>

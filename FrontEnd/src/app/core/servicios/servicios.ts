@@ -90,7 +90,13 @@ export class ServiciosGenerales {
             .set('prtieneserie', tiene_serie.toString())
 						.set('idunidadmedida', id_unidad_medida.toString());
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-		return this.http.post(this.url+'productotipo/create.php',params,{headers:headers});
+    return this.http.post(this.url+'productotipo/create.php',params,{headers:headers})
+    .pipe(
+      map(respuesta=> {
+        console.log(respuesta) ;
+        return respuesta ;
+      })
+    );
   }
   
   EditarTipoProducto(id:number,
@@ -748,6 +754,7 @@ EditarModelo(
           return res;
         } else {
           console.log ('No hay datos que mostrar');
+          console.log(res) ;
           return {mensaje: ''};
         }
       }));

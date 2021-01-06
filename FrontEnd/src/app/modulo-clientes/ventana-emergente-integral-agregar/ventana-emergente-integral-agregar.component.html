@@ -148,11 +148,41 @@
                 </mat-form-field>
               </mat-grid-tile>
 
-              <mat-grid-tile colspan="2">
+              <ng-container *ngIf="this.ClientesForm.get('sede').value == 3">
+                <ng-container *ngIf="this.ClientesForm.get('centro_trabajo').value == 0">
+                <mat-grid-tile colspan="3">
+                    <button type="button" mat-icon-button color="primary" (click)="ElegirCentroTrabajo()"> <mat-icon> add_circle </mat-icon> </button>
+                  </mat-grid-tile>
+                </ng-container>
+                <ng-container *ngIf="this.ClientesForm.get('centro_trabajo').value > 0">
+                  <mat-grid-tile colspan=3>
+                    <mat-form-field class="columnas-3">
+                      <input matInput placeholder="Comisaria" formControlName="centro_trabajo_comisaria" readonly>
+                      <button mat-icon-button matSuffix color="accent" (click)="EliminarCentroTrabajo()"> <mat-icon> remove_circle </mat-icon> </button>
+                    </mat-form-field>
+                  </mat-grid-tile>
+                  <mat-grid-tile colspan=2>
+                    <mat-form-field class="columnas-2">
+                      <input matInput placeholder="Division" formControlName="centro_trabajo_division" readonly>
+                    </mat-form-field>
+                  </mat-grid-tile>
+                  <mat-grid-tile>
+                    <mat-form-field class="columnas-1">
+                      <input matInput placeholder="Telefono" formControlName="centro_trabajo_telefono" readonly>
+                    </mat-form-field>
+                  </mat-grid-tile>
+                  <mat-grid-tile colspan=3>
+                    <mat-form-field class="columnas-3">
+                      <input matInput placeholder="Direccion" formControlName="centro_trabajo_direccion" readonly>
+                    </mat-form-field>
+                  </mat-grid-tile>
+                </ng-container>
+              </ng-container>
+              <!-- <mat-grid-tile colspan="2">
                 <mat-form-field class="input-ventanac">
                   <input matInput placeholder="Dirección" formControlName="trabajo">
                 </mat-form-field>
-              </mat-grid-tile>
+              </mat-grid-tile> -->
 
             </mat-grid-list>
           </ng-container>

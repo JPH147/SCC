@@ -3,8 +3,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormGroup, FormBuilder, Validators} from '@angular/forms';
 import { ServiciosGenerales } from 'src/app/core/servicios/servicios';
-import {fromEvent} from 'rxjs';
-import {debounceTime, tap, distinctUntilChanged} from 'rxjs/operators'
+import {BehaviorSubject, fromEvent} from 'rxjs';
+import {debounceTime, tap, distinctUntilChanged, finalize} from 'rxjs/operators'
 
 @Component({
   selector: 'app-ventanaemergentetipo',
@@ -13,9 +13,10 @@ import {debounceTime, tap, distinctUntilChanged} from 'rxjs/operators'
   providers: [ServiciosGenerales]
 })
 
-// tslint:disable-next-line:component-class-suffix
 export class VentanaEmergenteTipo {
-  
+
+  public Cargando = new BehaviorSubject<boolean>(false) ;
+
   @ViewChild('InputTipo', { static: true }) FiltroTipo: ElementRef;
   public selectedValue: string;
   public TipoForm: FormGroup;
@@ -103,17 +104,22 @@ export class VentanaEmergenteTipo {
   }
 
   Guardar(formulario){
+    this.Cargando.next(true) ;
 
     let tiene_serie : number = this.TipoForm.get('tiene_serie').value ? 1 : 2 ;
     if(this.data){
       if (this.data.productos) {
-        this.mensaje='Tipo de Producto creado satisfactoriamente';
-        this.Servicios.CrearTipoProducto(formulario.value.nombre, tiene_serie, formulario.value.idunidadmedida).subscribe(res=>{
+        this.Servicios.CrearTipoProducto(formulario.value.nombre, tiene_serie, formulario.value.idunidadmedida)
+        .pipe(finalize(()=>this.Cargando.next(false)))
+        .subscribe(res=>{
+          this.mensaje='Tipo de Producto creado satisfactoriamente';
           this.ventana.close()
         });
       } else {
-        this.mensaje='Datos actualizados satisfactoriamente';
-        this.Servicios.EditarTipoProducto(this.data.id,formulario.value.nombre, tiene_serie, formulario.value.idunidadmedida).subscribe(res=>{
+        this.Servicios.EditarTipoProducto(this.data.id,formulario.value.nombre, tiene_serie, formulario.value.idunidadmedida)
+        .pipe(finalize(()=>this.Cargando.next(false)))
+        .subscribe(res=>{
+          this.mensaje='Datos actualizados satisfactoriamente';
           this.ventana.close()
         });
       }
@@ -121,7 +127,9 @@ export class VentanaEmergenteTipo {
 
     if(!this.data){
       this.mensaje='Tipo de Producto creado satisfactoriamente';
-      this.Servicios.CrearTipoProducto(formulario.value.nombre, tiene_serie, formulario.value.idunidadmedida).subscribe(res=>{
+      this.Servicios.CrearTipoProducto(formulario.value.nombre, tiene_serie, formulario.value.idunidadmedida)
+      .pipe(finalize(()=>this.Cargando.next(false)))
+      .subscribe(res=>{
         this.ventana.close(res['data']);
       });
     }

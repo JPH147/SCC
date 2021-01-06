@@ -529,7 +529,12 @@
               <mat-header-cell *matHeaderCellDef> Pagos directos </mat-header-cell>
               <mat-cell *matCellDef="let cronograma"> {{cronograma.total_directo | currency:'S/.'}}</mat-cell>
             </ng-container>
-  
+    
+            <ng-container matColumnDef="identificador_directo">
+              <mat-header-cell *matHeaderCellDef> Cuentas de pago </mat-header-cell>
+              <mat-cell *matCellDef="let cronograma"> {{cronograma.identificador_directo }}</mat-cell>
+            </ng-container>
+
             <ng-container matColumnDef="total_judicial">
               <mat-header-cell *matHeaderCellDef> Pagos judiciales </mat-header-cell>
               <mat-cell *matCellDef="let cronograma"> {{cronograma.total_judicial | currency:'S/.'}}</mat-cell>

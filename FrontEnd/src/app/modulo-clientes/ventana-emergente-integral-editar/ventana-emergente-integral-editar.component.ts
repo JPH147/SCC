@@ -15,6 +15,8 @@ import { VentanaEditarTelefonoComponent } from '../../compartido/componentes/ven
 import { VentanaEditarDireccionComponent } from '../../compartido/componentes/ventana-editar-direccion/ventana-editar-direccion.component';
 import { VentanaEditarCuentaComponent } from '../../compartido/componentes/ventana-editar-cuenta/ventana-editar-cuenta.component';
 import { BancosService } from 'src/app/modulo-maestro/bancos/bancos.service';
+import { CentroTrabajoPnpComponent } from 'src/app/modulo-maestro/centros-trabajo/centro-trabajo-pnp/centro-trabajo-pnp.component';
+import { CentrosTrabajoService } from 'src/app/modulo-maestro/centros-trabajo/centros-trabajo.service';
 
 @Component({
   selector: 'app-ventana-emergente-integral-editar',
@@ -73,6 +75,7 @@ export class VentanaEmergenteIntegralEditarComponent implements OnInit {
     private ServicioDireccion: ServiciosDirecciones,
     private ServicioTelefono: ServiciosTelefonos,
     private Dialogo: MatDialog,
+    private _centroTrabajo : CentrosTrabajoService ,
     private _bancos : BancosService
   ) {}
 
@@ -256,6 +259,16 @@ export class VentanaEmergenteIntegralEditarComponent implements OnInit {
       ]],
       'trabajo': ["", [
       ]],
+      'centro_trabajo': [0, [
+      ]],
+      'centro_trabajo_comisaria': ['', [
+      ]],
+      'centro_trabajo_division': ['', [
+      ]],
+      'centro_trabajo_telefono': ['', [
+      ]],
+      'centro_trabajo_direccion': ['', [
+      ]],
       'cargo': [null, [
         Validators.required
       ]],
@@ -320,6 +333,18 @@ export class VentanaEmergenteIntegralEditarComponent implements OnInit {
       if( objeto.trabajo ) {
         this.ClientesForm.get('trabajo').setValue(objeto.trabajo);
       }
+    }
+    
+    this.ClientesForm.get('centro_trabajo').setValue(objeto.id_centro_trabajo) ;
+    if ( objeto.id_centro_trabajo > 0 ) {
+      this._centroTrabajo.ListarCentroTrabajoxID(objeto.id_centro_trabajo).subscribe(resultado => {
+        if ( resultado ) {
+          this.ClientesForm.get('centro_trabajo_comisaria').setValue(resultado.comisaria) ;
+          this.ClientesForm.get('centro_trabajo_division').setValue(resultado.division) ;
+          this.ClientesForm.get('centro_trabajo_telefono').setValue(resultado.telefono) ;
+          this.ClientesForm.get('centro_trabajo_direccion').setValue(resultado.direccion) ;
+        }
+      })
     }
 
     this.ClientesForm.get('capacidad_pago').setValue(objeto.capacidad_pago);
@@ -456,7 +481,8 @@ export class VentanaEmergenteIntegralEditarComponent implements OnInit {
         formulario.value.descuento_maximo,
         formulario.value.calificacion_personal,
         formulario.value.aporte,
-        this.data.confirmar ? 1 : formulario.value.estado
+        this.data.confirmar ? 1 : formulario.value.estado,
+        this.ClientesForm.get('centro_trabajo').value
       ).subscribe(res =>{
         // this.ClientesForm.reset();
         this.Cargando.next(false) ;
@@ -481,7 +507,8 @@ export class VentanaEmergenteIntegralEditarComponent implements OnInit {
         formulario.value.descuento_maximo,
         formulario.value.calificacion_personal,
         formulario.value.aporte,
-        1
+        1,
+        this.ClientesForm.get('centro_trabajo').value
       ).subscribe(res =>{
         // this.ClientesForm.reset();
         this.Cargando.next(false) ;
@@ -739,5 +766,25 @@ export class VentanaEmergenteIntegralEditarComponent implements OnInit {
       this.LstDistrito = res['data'].distritos
     });
     this.DireccionesForm.get('distrito').setValue('');
+  }
+
+  ElegirCentroTrabajo() {
+    let Ventana = this.Dialogo.open(CentroTrabajoPnpComponent, {
+      maxHeight: '80vh' ,
+      width: '1200px' ,
+      data: true
+    }) ;
+
+    Ventana.afterClosed().subscribe(resultado => {
+      this.ClientesForm.get('centro_trabajo').setValue(resultado.id_centro_trabajo_pnp) ;
+      this.ClientesForm.get('centro_trabajo_comisaria').setValue(resultado.comisaria) ;
+      this.ClientesForm.get('centro_trabajo_division').setValue(resultado.division) ;
+      this.ClientesForm.get('centro_trabajo_telefono').setValue(resultado.telefono) ;
+      this.ClientesForm.get('centro_trabajo_direccion').setValue(resultado.direccion) ;
+    })
+  }
+
+  EliminarCentroTrabajo() {
+    this.ClientesForm.get('centro_trabajo').setValue(0) ;
   }
 }

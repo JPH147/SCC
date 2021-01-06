@@ -6,8 +6,8 @@ import {FormControl, FormGroup, FormBuilder,FormGroupDirective, NgForm, Validato
 import {ErrorStateMatcher} from '@angular/material/core';
 import { NgControl } from '@angular/forms';
 import { ServiciosGenerales } from 'src/app/core/servicios/servicios';
-import {fromEvent,merge} from 'rxjs';
-import {debounceTime, tap, distinctUntilChanged} from 'rxjs/operators'
+import {BehaviorSubject, fromEvent,merge} from 'rxjs';
+import {debounceTime, tap, distinctUntilChanged, finalize} from 'rxjs/operators'
 
 @Component({
   selector: 'app-ventanaemergentemarca',
@@ -19,6 +19,8 @@ import {debounceTime, tap, distinctUntilChanged} from 'rxjs/operators'
 // tslint:disable-next-line:component-class-suffix
 export class VentanaEmergenteMarca {
 
+  public Cargando = new BehaviorSubject<boolean>(false) ;
+  
   @ViewChild('InputMarca', { static: true }) FiltroMarca: ElementRef;
   @ViewChild('InputTipo', { static: true }) FiltroTipo: MatSelect;
   public selectedValue: string;
@@ -114,21 +116,27 @@ export class VentanaEmergenteMarca {
   Guardar(formulario) {
     if (this.data) {
       if (this.data.productos) {
-        this.mensaje = 'Marca creada satisfactoriamente';
-        this.Servicios.CrearMarca(formulario.value.idtipo, formulario.value.nombre).subscribe(res=>{
+        this.Servicios.CrearMarca(formulario.value.idtipo, formulario.value.nombre)
+        .pipe(finalize(()=>this.Cargando.next(false)))
+        .subscribe(res=>{
+          this.mensaje = 'Marca creada satisfactoriamente';
           this.ventana.close(res['data']);
         });
       } else {
-        this.mensaje = 'Datos actualizados satisfactoriamente';
-        this.Servicios.EditarMarca(this.data.id, formulario.value.idtipo, formulario.value.nombre).subscribe(res=>{
+        this.Servicios.EditarMarca(this.data.id, formulario.value.idtipo, formulario.value.nombre)
+        .pipe(finalize(()=>this.Cargando.next(false)))
+        .subscribe(res=>{
+          this.mensaje = 'Datos actualizados satisfactoriamente';
           this.ventana.close()
         });
       }
     }
 
     if (!this.data) {
-      this.mensaje = 'Marca creada satisfactoriamente';
-      this.Servicios.CrearMarca(formulario.value.idtipo, formulario.value.nombre).subscribe(res=>{
+      this.Servicios.CrearMarca(formulario.value.idtipo, formulario.value.nombre)
+      .pipe(finalize(()=>this.Cargando.next(false)))
+      .subscribe(res=>{
+        this.mensaje = 'Marca creada satisfactoriamente';
         this.ventana.close()
       });
     }

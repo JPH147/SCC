@@ -72,7 +72,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
 
   public ListadoCronograma: CronogramaDataSource;
   public ColumnasCronograma: Array<string>;
-  public ColumnasCronogramaPeriodo: Array<string> = ["numero", "periodo", "monto_cuota", "monto_pago_manual" ,"total_planilla" ,"total_directo" ,"total_judicial", 'opciones' ] ;
+  public ColumnasCronogramaPeriodo: Array<string> = ["numero", "periodo", "monto_cuota", "monto_pago_manual" ,"total_planilla" ,"total_directo", "identificador_directo" ,"total_judicial", 'opciones' ] ;
   public Cronograma : Array<any> = [] ;
   public Cronograma_Periodos : Array<any> = [] ;
   public total_cronograma_editado: number;

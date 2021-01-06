@@ -6,20 +6,20 @@
   <mat-grid-list cols= "4" rowHeight="70px">
     <mat-grid-tile>
       <mat-icon>search</mat-icon>
-      <mat-form-field>
+      <mat-form-field class="columnas-1">
         <input matInput placeholder="Cliente" #InputCliente>
       </mat-form-field>
     </mat-grid-tile>
 
     <mat-grid-tile>
       <mat-icon>search</mat-icon>
-      <mat-form-field>
+      <mat-form-field class="columnas-1">
         <input matInput placeholder="DNI" #InputDNI>
       </mat-form-field>
     </mat-grid-tile>
 
     <mat-grid-tile>
-      <mat-form-field>
+      <mat-form-field class="columnas-1">
         <input matInput [matDatepicker]="inicio" placeholder="Fecha de inicio" [(ngModel)]="fecha_inicio" (dateChange)="CambioFiltro()">
         <mat-datepicker-toggle matSuffix [for]="inicio"></mat-datepicker-toggle>
         <mat-datepicker #inicio disabled="false"></mat-datepicker>
@@ -27,7 +27,7 @@
     </mat-grid-tile>
 
     <mat-grid-tile>
-      <mat-form-field>
+      <mat-form-field class="columnas-1">
         <input matInput [matDatepicker]="fin" placeholder="Fecha de fin" [(ngModel)]="fecha_fin" (dateChange)="CambioFiltro()">
         <mat-datepicker-toggle matSuffix [for]="fin"></mat-datepicker-toggle>
         <mat-datepicker #fin disabled="false"></mat-datepicker>
@@ -35,8 +35,7 @@
     </mat-grid-tile>
 
     <mat-grid-tile>
-      <mat-icon>search</mat-icon>
-      <mat-form-field>
+      <mat-form-field class="columnas-1">
         <mat-select #InputTipo placeholder="Tipo de crédito" (selectionChange)="CambioFiltro()" [value]=99>
           <mat-option [value]=99> Todos </mat-option>
           <mat-option *ngFor="let tipo of Tipos" [value]="tipo.id"> {{tipo.nombre}} </mat-option>
@@ -45,7 +44,7 @@
     </mat-grid-tile>
 
     <mat-grid-tile>
-      <mat-form-field>
+      <mat-form-field class="columnas-1">
         <mat-select #InputEstado placeholder="Estado del crédito" [value]=1 (selectionChange)="CambioFiltro()">
           <mat-option [value]=0>Todos</mat-option>
           <mat-option [value]=1>Activos</mat-option>
@@ -56,7 +55,7 @@
     </mat-grid-tile>
 
     <mat-grid-tile>
-      <mat-form-field>
+      <mat-form-field class="columnas-1">
         <mat-select #InputDocumentos placeholder="Estado de los pagos" [value]=0 (selectionChange)="CambioFiltro()">
           <mat-option [value]=0>Todos</mat-option>
           <mat-option [value]=1>En curso y al día</mat-option>

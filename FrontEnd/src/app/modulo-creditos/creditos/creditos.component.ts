@@ -1290,6 +1290,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   }
 
   SubirArchivo(evento, orden){
+    console.log(evento) ;
     if(this.id_credito_editar || this.editar_documentos){
       if ( orden == 1 ) this.foto_nuevo = evento.serverResponse.response.body.data;
       if ( orden == 2 ) this.dni_nuevo = evento.serverResponse.response.body.data;
@@ -2081,7 +2082,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       this.ServiciosGenerales.RenameFile(this.oficio_nuevo, dni + '_OFICIO_' + fecha, identificador ,"credito"),
       this.ServiciosGenerales.RenameFile(this.otros_nuevo, dni + '_OTROS_' + fecha, identificador ,"credito"),
     ]).subscribe(resultado=>{
-      console.log(resultado) ;
+      // console.log(resultado) ;
       this.Servicio.ActualizarDocumentos(
         this.id_credito,
         this.foto_editar ? resultado[0].mensaje : this.foto_antiguo,
@@ -2100,14 +2101,15 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         this.oficio_editar ? resultado[13].mensaje : this.oficio_antiguo,
         this.otros_editar ? resultado[14].mensaje : this.otros_antiguo
       ).subscribe(res=>{
-        setTimeout(()=>{
-          this.router.navigate(['/creditos','creditos']);
-          if(res['codigo']==0){
-            this.Notificacion.Snack("Se actualizó el crédito con éxito!","");
-          }else{
-            this.Notificacion.Snack("Ocurrió un error al actualizar el crédito","");
-          }
-        }, 300)
+        // setTimeout(()=>{
+          // this.router.navigate(['/creditos','creditos']);
+          this.CambiarTipoVista( 'ver' ) ;
+          // if(res['codigo']==0){
+            this.Notificacion.Snack("Se actualizaron las imagenes!","") ;
+          // }else{
+          //   this.Notificacion.Snack("Ocurrió un error al actualizar el crédito","");
+          // }
+        // }, 300)
       })
     })
 
@@ -2189,40 +2191,40 @@ export class CreditosComponent implements OnInit, AfterViewInit {
   Imprimir(){
     let identificador = new Date().getTime().toString() ;
     console.log({
-      foto: this.foto ,
-      dni: this.dni ,
-      cip: this.cip ,
-      planilla: this.planilla ,
-      voucher: this.voucher ,
-      recibo: this.recibo ,
-      casilla: this.casilla ,
-      transaccion: this.transaccion ,
-      autorizacion: this.autorizacion ,
-      tarjeta: this.tarjeta ,
-      compromiso: this.compromiso ,
-      letra: this.letra ,
-      ddjj: this.ddjj ,
-      oficio: this.oficio ,
-      otros: this.otros ,
-      papeles: this.papeles ,
+      foto: this.foto + this.foto_nuevo ,
+      dni: this.dni + this.dni_nuevo ,
+      cip: this.cip + this.cip_nuevo ,
+      planilla: this.planilla + this.planilla_nuevo ,
+      voucher: this.voucher + this.voucher_nuevo ,
+      recibo: this.recibo + this.recibo_nuevo ,
+      casilla: this.casilla + this.casilla_nuevo ,
+      transaccion: this.transaccion + this.transaccion_nuevo ,
+      autorizacion: this.autorizacion + this.autorizacion_nuevo ,
+      tarjeta: this.tarjeta + this.tarjeta_nuevo ,
+      compromiso: this.compromiso + this.compromiso_nuevo ,
+      letra: this.letra + this.letra_nuevo ,
+      ddjj: this.ddjj + this.ddjj_nuevo ,
+      oficio: this.oficio + this.oficio_nuevo ,
+      otros: this.otros + this.otros_nuevo ,
+      papeles: this.papeles + this.papeles_nuevo ,
     })
     return forkJoin([
-      this.ServiciosGenerales.RenameFile(this.foto, "JP" + '_FOTO_' + "fecha", identificador ,"credito"),
-      this.ServiciosGenerales.RenameFile(this.dni, "JP" + '_DNI_' + "fecha", identificador ,"credito"),
-      this.ServiciosGenerales.RenameFile(this.cip, "JP" + '_CIP_' + "fecha", identificador ,"credito"),
-      this.ServiciosGenerales.RenameFile(this.planilla, "JP" + '_PLANILLA_' + "fecha", identificador ,"credito"),
-      this.ServiciosGenerales.RenameFile(this.voucher, "JP" + '_VOUCHER_' + "fecha", identificador ,"credito"),
-      this.ServiciosGenerales.RenameFile(this.recibo, "JP" + '_RECIBO_' + "fecha", identificador ,"credito"),
-      this.ServiciosGenerales.RenameFile(this.casilla, "JP" + '_CASILLA_' + "fecha", identificador ,"credito"),
-      this.ServiciosGenerales.RenameFile(this.transaccion, "JP" + '_TRANSACCION_' + "fecha", identificador ,"credito"),
-      this.ServiciosGenerales.RenameFile(this.autorizacion, "JP" + '_AUTORIZACION_' + "fecha", identificador ,"credito"),
-      this.ServiciosGenerales.RenameFile(this.tarjeta, "JP" + '_TARJETA_' + "fecha", identificador ,"credito"),
-      this.ServiciosGenerales.RenameFile(this.compromiso, "JP" + '_COMPROMISO_' + "fecha", identificador ,"credito"),
-      this.ServiciosGenerales.RenameFile(this.letra, "JP" + '_LETRA_' + "fecha", identificador ,"credito"),
-      this.ServiciosGenerales.RenameFile(this.ddjj, "JP" + '_DDJJ_' + "fecha", identificador ,"credito"),
-      this.ServiciosGenerales.RenameFile(this.oficio, "JP" + '_OFICIO_' + "fecha", identificador ,"credito"),
-      this.ServiciosGenerales.RenameFile(this.otros, "JP" + '_OTROS_' + "fecha", identificador ,"credito"),
-      this.ServiciosGenerales.RenameFile(this.papeles, "JP" + '_PAPELES_' + "fecha", identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.foto_nuevo, "JP" + '_FOTO_' + "fecha", identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.dni_nuevo, "JP" + '_DNI_' + "fecha", identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.cip_nuevo, "JP" + '_CIP_' + "fecha", identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.planilla_nuevo, "JP" + '_PLANILLA_' + "fecha", identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.voucher_nuevo, "JP" + '_VOUCHER_' + "fecha", identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.recibo_nuevo, "JP" + '_RECIBO_' + "fecha", identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.casilla_nuevo, "JP" + '_CASILLA_' + "fecha", identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.transaccion_nuevo, "JP" + '_TRANSACCION_' + "fecha", identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.autorizacion_nuevo, "JP" + '_AUTORIZACION_' + "fecha", identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.tarjeta_nuevo, "JP" + '_TARJETA_' + "fecha", identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.compromiso_nuevo, "JP" + '_COMPROMISO_' + "fecha", identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.letra_nuevo, "JP" + '_LETRA_' + "fecha", identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.ddjj_nuevo, "JP" + '_DDJJ_' + "fecha", identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.oficio_nuevo, "JP" + '_OFICIO_' + "fecha", identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.otros_nuevo, "JP" + '_OTROS_' + "fecha", identificador ,"credito"),
+      this.ServiciosGenerales.RenameFile(this.papeles_nuevo, "JP" + '_PAPELES_' + "fecha", identificador ,"credito"),
     ]).subscribe(resultado=>{
       console.log(resultado) ;
     })

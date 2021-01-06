@@ -656,11 +656,10 @@
         <mat-grid-tile>
           <image-upload
             class="cargar-imagen"
-            [max]="1"
+            [max]="100"
             url="{{ruta}}"
             [buttonCaption]="'Foto'"
             [extensions]="['png, jpg, jpeg']"
-            [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
             (uploadFinished)="SubirArchivo($event, 1)">
           </image-upload>
         </mat-grid-tile>
@@ -1322,6 +1321,7 @@
 
       <mat-grid-list cols=1 rowHeight="50px" *ngIf="editar_documentos">
         <mat-grid-tile>
+          <!-- <button  mat-raised-button color="warn" (click)="Imprimir()"> Print </button> -->
           <button mat-raised-button type="button" color="primary"
             [disabled]="Cargando | async" (click)="GuardarNuevosDocumentos()"> Actualizar documentos </button>
         </mat-grid-tile>
@@ -1889,7 +1889,7 @@
                       vendedoresForm.value.length == 0 ||
                       diferencia>0.2"
           > Guardar </button>
-          <!-- <button  mat-raised-button (click)="Imprimir()"> Print </button> -->
+          <button  mat-raised-button (click)="Imprimir()"> Print </button>
         </mat-grid-tile>
       </mat-grid-list>
     </mat-card-actions>

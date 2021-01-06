@@ -74,6 +74,9 @@ import { CooperativaCuentasComponent } from './cooperativa-configuracion/coopera
 import { VentanaCooperativaCuentaComponent } from './cooperativa-configuracion/cooperativa-cuentas/ventana-cooperativa-cuenta/ventana-cooperativa-cuenta.component';
 import { BancosComponent } from './bancos/bancos.component';
 import { VentanaBancosComponent } from './bancos/ventana-bancos/ventana-bancos.component';
+import { CentrosTrabajoComponent } from './centros-trabajo/centros-trabajo.component';
+import { CentroTrabajoPnpComponent } from './centros-trabajo/centro-trabajo-pnp/centro-trabajo-pnp.component';
+import { VentanaCentroTrabajoPnpComponent } from './centros-trabajo/centro-trabajo-pnp/ventana-centro-trabajo-pnp/ventana-centro-trabajo-pnp.component';
 
 @NgModule({
   declarations: [
@@ -142,7 +145,10 @@ import { VentanaBancosComponent } from './bancos/ventana-bancos/ventana-bancos.c
     CooperativaCuentasComponent,
     VentanaCooperativaCuentaComponent,
     BancosComponent,
-    VentanaBancosComponent ,
+    VentanaBancosComponent,
+    CentrosTrabajoComponent,
+    CentroTrabajoPnpComponent,
+    VentanaCentroTrabajoPnpComponent ,
   ],
   imports: [
     ModuloMaestroRoutingModule ,
