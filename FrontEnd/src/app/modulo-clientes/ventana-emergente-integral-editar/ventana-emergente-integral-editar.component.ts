@@ -251,6 +251,9 @@ export class VentanaEmergenteIntegralEditarComponent implements OnInit {
       'distrito': [null, [
         // Validators.required
       ]],
+      'distrito_nombre': [null, [
+        // Validators.required
+      ]],
       'direccion': [null, [
       ]],
       'telefono': [null, [
@@ -343,6 +346,10 @@ export class VentanaEmergenteIntegralEditarComponent implements OnInit {
           this.ClientesForm.get('centro_trabajo_division').setValue(resultado.division) ;
           this.ClientesForm.get('centro_trabajo_telefono').setValue(resultado.telefono) ;
           this.ClientesForm.get('centro_trabajo_direccion').setValue(resultado.direccion) ;
+
+          this.ClientesForm.get('departamento').setValue(resultado.departamento) ;
+          this.ClientesForm.get('provincia').setValue(resultado.provincia) ;
+          this.ClientesForm.get('distrito_nombre').setValue(resultado.distrito) ;
         }
       })
     }
@@ -776,15 +783,30 @@ export class VentanaEmergenteIntegralEditarComponent implements OnInit {
     }) ;
 
     Ventana.afterClosed().subscribe(resultado => {
-      this.ClientesForm.get('centro_trabajo').setValue(resultado.id_centro_trabajo_pnp) ;
-      this.ClientesForm.get('centro_trabajo_comisaria').setValue(resultado.comisaria) ;
-      this.ClientesForm.get('centro_trabajo_division').setValue(resultado.division) ;
-      this.ClientesForm.get('centro_trabajo_telefono').setValue(resultado.telefono) ;
-      this.ClientesForm.get('centro_trabajo_direccion').setValue(resultado.direccion) ;
+      if (resultado) {
+        this.ClientesForm.get('centro_trabajo').setValue(resultado.id_centro_trabajo_pnp) ;
+        this.ClientesForm.get('centro_trabajo_comisaria').setValue(resultado.comisaria) ;
+        this.ClientesForm.get('centro_trabajo_division').setValue(resultado.division) ;
+        this.ClientesForm.get('centro_trabajo_telefono').setValue(resultado.telefono) ;
+        this.ClientesForm.get('centro_trabajo_direccion').setValue(resultado.direccion) ;
+  
+        this.ClientesForm.get('departamento').setValue(resultado.departamento) ;
+        this.ClientesForm.get('provincia').setValue(resultado.provincia) ;
+        this.ClientesForm.get('distrito_nombre').setValue(resultado.distrito) ;
+        this.ClientesForm.get('distrito').setValue(resultado.id_distrito) ;
+      }
     })
   }
 
   EliminarCentroTrabajo() {
     this.ClientesForm.get('centro_trabajo').setValue(0) ;
+    this.ClientesForm.get('centro_trabajo_comisaria').setValue('') ;
+    this.ClientesForm.get('centro_trabajo_division').setValue('') ;
+    this.ClientesForm.get('centro_trabajo_telefono').setValue('') ;
+    this.ClientesForm.get('centro_trabajo_direccion').setValue('') ;
+    this.ClientesForm.get('departamento').setValue('') ;
+    this.ClientesForm.get('provincia').setValue('') ;
+    this.ClientesForm.get('distrito_nombre').setValue('') ;
+    this.ClientesForm.get('distrito').setValue(0) ;
   }
 }

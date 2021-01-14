@@ -10,7 +10,7 @@
   </div>
 
   <form [formGroup]="UsuariosForm">
-    <ng-container *ngIf="!this.data?.pss">
+    <ng-container *ngIf="!this.data?.cambiar_pss">
       <mat-card-content>
         <mat-grid-list [cols]="this.data ? 3 : 2" rowHeight="70px">
           <mat-grid-tile colspan=1>
@@ -42,7 +42,7 @@
       </mat-card-content>
     </ng-container>
     
-    <ng-container *ngIf="this.data?.pss">
+    <ng-container *ngIf="this.data?.cambiar_pss">
       <mat-card-content>
         <mat-grid-list cols=2 rowHeight="70px">
           <mat-grid-tile colspan=1>

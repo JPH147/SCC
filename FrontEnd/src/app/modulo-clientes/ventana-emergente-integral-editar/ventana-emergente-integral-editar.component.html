@@ -140,38 +140,37 @@
               </mat-card-subtitle>
 
               <mat-grid-list cols="3" rowHeight="70px">
-
-                <mat-grid-tile colspan="1">
-                  <mat-form-field class="input-ventanaa">
-                    <mat-select placeholder='Departamento' formControlName="departamento" (selectionChange)="DepartamentoSeleccionado($event)" >
-                      <mat-option *ngFor="let departamento of Departamentos" [value]="departamento.nombre">
-                        {{ departamento.nombre | uppercase }}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </mat-grid-tile>
-
-                <mat-grid-tile colspan="1">
-                  <mat-form-field class="input-ventanaa">
-                    <mat-select placeholder='Provincia' formControlName="provincia" (selectionChange)="ProvinciaSeleccionada($event)">
-                      <mat-option *ngFor="let provincia of Provincias" [value]="provincia.nombre">
-                        {{ provincia.nombre | uppercase }}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </mat-grid-tile>
-
-                <mat-grid-tile colspan="1">
-                  <mat-form-field class="input-ventanaa">
-                    <mat-select placeholder='Distrito' formControlName="distrito" >
-                      <mat-option *ngFor="let distrito of Distritos" [value]="distrito.id">
-                        {{ distrito.nombre | uppercase }}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </mat-grid-tile>
-
                 <ng-container *ngIf="this.ClientesForm.get('sede').value != 3">
+                  <mat-grid-tile colspan="1">
+                    <mat-form-field class="input-ventanaa">
+                      <mat-select placeholder='Departamento' formControlName="departamento" (selectionChange)="DepartamentoSeleccionado($event)" >
+                        <mat-option *ngFor="let departamento of Departamentos" [value]="departamento.nombre">
+                          {{ departamento.nombre | uppercase }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </mat-grid-tile>
+
+                  <mat-grid-tile colspan="1">
+                    <mat-form-field class="input-ventanaa">
+                      <mat-select placeholder='Provincia' formControlName="provincia" (selectionChange)="ProvinciaSeleccionada($event)">
+                        <mat-option *ngFor="let provincia of Provincias" [value]="provincia.nombre">
+                          {{ provincia.nombre | uppercase }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </mat-grid-tile>
+
+                  <mat-grid-tile colspan="1">
+                    <mat-form-field class="input-ventanaa">
+                      <mat-select placeholder='Distrito' formControlName="distrito" >
+                        <mat-option *ngFor="let distrito of Distritos" [value]="distrito.id">
+                          {{ distrito.nombre | uppercase }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </mat-grid-tile>
+
                   <mat-grid-tile colspan="3">
                     <mat-form-field class="input-ventanac">
                       <input matInput placeholder="Dirección" formControlName="trabajo">
@@ -181,11 +180,29 @@
                 
                 <ng-container *ngIf="this.ClientesForm.get('sede').value == 3">
                   <ng-container *ngIf="this.ClientesForm.get('centro_trabajo').value == 0">
-                  <mat-grid-tile colspan="3">
+                    <mat-grid-tile colspan="3">
                       <button type="button" mat-icon-button color="primary" (click)="ElegirCentroTrabajo()"> <mat-icon> add_circle </mat-icon> </button>
                     </mat-grid-tile>
                   </ng-container>
                   <ng-container *ngIf="this.ClientesForm.get('centro_trabajo').value > 0">
+                    <mat-grid-tile colspan="1">
+                      <mat-form-field class="input-ventanaa">
+                        <input matInput placeholder="Departamento" formControlName="departamento" readonly>
+                      </mat-form-field>
+                    </mat-grid-tile>
+  
+                    <mat-grid-tile colspan="1">
+                      <mat-form-field class="input-ventanaa">
+                        <input matInput placeholder="Provincia" formControlName="provincia" readonly>
+                      </mat-form-field>
+                    </mat-grid-tile>
+  
+                    <mat-grid-tile colspan="1">
+                      <mat-form-field class="input-ventanaa">
+                        <input matInput placeholder="Distrito" formControlName="distrito_nombre" readonly>
+                      </mat-form-field>
+                    </mat-grid-tile>
+
                     <mat-grid-tile colspan=3>
                       <mat-form-field class="columnas-3">
                         <input matInput placeholder="Comisaria" formControlName="centro_trabajo_comisaria" readonly>

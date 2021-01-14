@@ -75,8 +75,7 @@
     <ng-container *ngIf="permiso?.ventas?.listado_ventas?.editar">
       <ng-container *ngIf="idventa">
         <button mat-mini-fab type="button" color="primary" (click)="CambiarTipoVista('editar')" class="derecha"
-          [disabled]="(Cargando|async) || monto_pagado>0 || estado!=1 || numero_procesos>0
-            || VentasForm.get('pagado').value == 1"
+          [disabled]="(Cargando|async) || monto_pagado>0 || estado!=1 || VentasForm.get('pagado').value == 1"
           matTooltip="Editar documento">
           <mat-icon>edit</mat-icon>
         </button>

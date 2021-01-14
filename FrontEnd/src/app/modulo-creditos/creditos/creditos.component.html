@@ -46,8 +46,8 @@
     <ng-container *ngIf="permiso?.creditos?.listado_creditos?.editar">
       <ng-container *ngIf="id_credito">
         <button mat-mini-fab type="button" color="primary" (click)="CambiarTipoVista('editar')" class="derecha"
-          [disabled]="(Cargando|async) || monto_pagado>0 || estado!=1 || numero_procesos>0 ||
-          CreditosForm.get('pagado').value == 1" matTooltip="Editar documento"><mat-icon>edit</mat-icon></button>
+          [disabled]="(Cargando|async) || monto_pagado>0 || estado!=1 || CreditosForm.get('pagado').value == 1"
+          matTooltip="Editar documento"><mat-icon>edit</mat-icon></button>
       </ng-container>
     </ng-container>
 
@@ -531,7 +531,7 @@
       <mat-grid-list cols="4" rowHeight="70px">
 
         <mat-grid-tile colspan="1">
-          <mat-form-field>
+          <mat-form-field class="columnas-1">
             <input matInput [matDatepicker]="fechaenvio" placeholder="Fecha de envío" formControlName="papeles_fecha_envio" [readonly]="id_credito">
             <mat-datepicker-toggle matSuffix [for]="fechaenvio"></mat-datepicker-toggle>
             <mat-datepicker #fechaenvio [disabled]="id_credito"></mat-datepicker>
@@ -539,7 +539,7 @@
         </mat-grid-tile>
 
         <mat-grid-tile colspan=1 *ngIf="!id_credito">
-          <mat-form-field>
+          <mat-form-field class="columnas-1">
             <mat-select placeholder="Courier" formControlName="papeles_courier">
               <mat-option *ngFor="let courier of Couriers" [value]="courier.id"> {{courier.nombre}} </mat-option>
             </mat-select>
@@ -547,13 +547,13 @@
         </mat-grid-tile>
 
         <mat-grid-tile colspan=1 *ngIf="id_credito">
-          <mat-form-field>
+          <mat-form-field class="columnas-1">
             <input matInput type="text" placeholder="Courier" formControlName="papeles_courier">
           </mat-form-field>
         </mat-grid-tile>
 
         <mat-grid-tile colspan=1>
-          <mat-form-field>
+          <mat-form-field class="columnas-1">
             <input matInput type="text" placeholder="Número de seguimiento" formControlName="papeles_seguimiento" [readonly]="id_credito">
           </mat-form-field>
         </mat-grid-tile>

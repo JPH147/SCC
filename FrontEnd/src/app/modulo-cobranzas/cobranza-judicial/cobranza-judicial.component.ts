@@ -226,11 +226,11 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
 
   SeleccionarProceso(id_proceso){
     this.Cargando.next(true);
-    forkJoin(
+    forkJoin([
       this._judicial.ListarxId( id_proceso ) ,
       this._judicial.ListarDetallexProceso( id_proceso ) ,
       this._judicial.ListarDocumentosTransaccionxProceso( id_proceso )
-    )
+    ])
     .pipe(
       finalize(()=>this.Cargando.next(false))
     )

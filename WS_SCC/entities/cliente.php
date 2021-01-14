@@ -357,6 +357,7 @@ Class Cliente{
         $this->clt_aporte=htmlspecialchars(strip_tags($this->clt_aporte));
         $this->clt_fecharegistro=htmlspecialchars(strip_tags($this->clt_fecharegistro));
         $this->clt_estado=htmlspecialchars(strip_tags($this->clt_estado));
+        $this->id_centro_trabajo=htmlspecialchars(strip_tags($this->id_centro_trabajo));
 
         $result->bindParam(":id_sub_sede", $this->id_sub_sede);
         $result->bindParam(":id_cargo", $this->id_cargo);
@@ -376,6 +377,7 @@ Class Cliente{
         $result->bindParam(":clt_aporte", $this->clt_aporte);
         $result->bindParam(":clt_fecharegistro", $this->clt_fecharegistro);
         $result->bindParam(":clt_estado", $this->clt_estado);
+        $result->bindParam(":prcentrotrabajo", $this->id_centro_trabajo);
 
         if($result->execute())
         {
@@ -508,7 +510,6 @@ Class Cliente{
     }
 
     function update_parcial(){
-
         $query = "CALL sp_actualizarclienteparcial (
             :idcliente,
             :id_subsede,
@@ -562,13 +563,13 @@ Class Cliente{
         $result->bindParam(1, $this->idcliente);
 
         if($result->execute())
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
     
     function delete_pendientes(){
@@ -1011,7 +1012,7 @@ Class Cliente{
 
     function update_centro_trabajo(){
         
-        $query ="CALL sp_crearcentrotrabajopnp(?,?,?,?,?,?)";
+        $query ="CALL sp_actualizarcentrotrabajopnp(?,?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 

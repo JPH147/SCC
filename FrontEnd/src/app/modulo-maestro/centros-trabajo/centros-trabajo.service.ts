@@ -56,7 +56,7 @@ export class CentrosTrabajoService {
 
 		return this._http.get(this.url+'cliente/read-centro-trabajoxId.php',{ params : params })
 		.pipe(map(res=>{
-			if(res['codigo']===0 && res['data']?.lenght > 0){
+			if(res['codigo']===0){
 				return res['data'][0] ;
 			}else{
         return false ;

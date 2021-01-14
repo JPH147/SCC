@@ -100,7 +100,7 @@ export class UsuariosListarComponent implements OnInit {
   EditarPss( id_usuario ){
     let Ventana = this.Dialogo.open( VentanaUsuariosComponent, {
       width: '900px' ,
-      data : { id_usuario: id_usuario, pss : true }
+      data : { id_usuario: id_usuario, cambiar_pss : true }
     } ) ;
 
     Ventana.afterClosed().subscribe(res=>{

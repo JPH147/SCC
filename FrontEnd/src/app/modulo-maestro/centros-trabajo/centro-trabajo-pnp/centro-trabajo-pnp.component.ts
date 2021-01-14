@@ -35,9 +35,9 @@ export class CentroTrabajoPnpComponent implements OnInit {
 
   ngOnInit() {
     if ( !this.data ) {
-      this.Columnas = ['numero', 'comisaria', 'division', 'direccion', 'telefono', 'opciones']
+      this.Columnas = ['numero', 'departamento', 'provincia', 'distrito', 'comisaria', 'division', 'direccion', 'opciones']
     } else {
-      this.Columnas = ['numero', 'comisaria', 'division', 'opciones2']
+      this.Columnas = ['numero', 'departamento', 'provincia', 'distrito', 'comisaria', 'division', 'opciones2']
     }
 
    this.ListadoCentrosTrabajo = new CentrosTrabajoDataSource(this._centrosTrabajo);
@@ -115,7 +115,7 @@ export class CentroTrabajoPnpComponent implements OnInit {
 
     Ventana.afterClosed().subscribe(res=>{
       if(res==true){
-        this._centrosTrabajo.EliminarCentroTrabajo(centro_trabajo.id).subscribe(res=>{
+        this._centrosTrabajo.EliminarCentroTrabajo(centro_trabajo.id_centro_trabajo_pnp).subscribe(res=>{
           this.CargarData();
         })
       }

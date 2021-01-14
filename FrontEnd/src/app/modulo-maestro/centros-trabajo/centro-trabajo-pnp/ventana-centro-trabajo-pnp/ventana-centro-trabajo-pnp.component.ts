@@ -4,6 +4,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormGroup, FormBuilder,Validators} from '@angular/forms';
 import { ServiciosDirecciones, Departamento, Provincia } from 'src/app/core/servicios/direcciones'
 import { CentrosTrabajoService } from '../../centros-trabajo.service';
+import { BehaviorSubject } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-ventana-centro-trabajo-pnp',
@@ -12,6 +14,7 @@ import { CentrosTrabajoService } from '../../centros-trabajo.service';
 })
 export class VentanaCentroTrabajoPnpComponent implements OnInit {  
 
+  public Cargando = new BehaviorSubject<boolean>(false) ;
   public CentroTrabajoForm: FormGroup;
   
   public Departamentos : Array<any> = [] ;
@@ -59,6 +62,7 @@ export class VentanaCentroTrabajoPnpComponent implements OnInit {
     })
 
     if(this.data){
+      console.log(this.data) ;
       this.CentroTrabajoForm.get('departamento').setValue(this.data.departamento);
       this.CentroTrabajoForm.get('provincia').setValue(this.data.provincia);
       if ( this.data.id_distrito > 0 ) {
@@ -112,19 +116,29 @@ export class VentanaCentroTrabajoPnpComponent implements OnInit {
 
 
   Guardar(){
+    this.Cargando.next(true) ;
+
     if(this.data){
       this._centrosTrabajo.ActualizarCentroTrabajo(
-        this.data.id,
+        this.data.id_centro_trabajo_pnp,
         this.CentroTrabajoForm.get('distrito').value ,
         this.CentroTrabajoForm.get('comisaria').value ,
         this.CentroTrabajoForm.get('division').value ,
         this.CentroTrabajoForm.get('telefono').value ,
         this.CentroTrabajoForm.get('direccion').value ,
-      ).subscribe(res=>{
+      )
+      .pipe(
+        finalize(()=> {
+          this.Cargando.next(false) ;
+        })
+      )
+      .subscribe(res=>{
+        // console.log(res) ;
         if(res['codigo']==0){
-          this.Notificacion("Se actualizó el distrito satisfactoriamente","")
+          this.Notificacion("Se actualizó el centro de trabajo satisfactoriamente","")
+          this.ventana.close() ;
         } else {
-          this.Notificacion("Ocurrió un error al actualizar el distrito","")
+          this.Notificacion("Ocurrió un error al actualizar el centro de trabajo","")
         }
       })
     }
@@ -136,11 +150,18 @@ export class VentanaCentroTrabajoPnpComponent implements OnInit {
         this.CentroTrabajoForm.get('division').value ,
         this.CentroTrabajoForm.get('telefono').value ,
         this.CentroTrabajoForm.get('direccion').value ,
-      ).subscribe(res=>{
+      )
+      .pipe(
+        finalize(()=> {
+          this.Cargando.next(false) ;
+        })
+      )
+      .subscribe(res=>{
         if(res['codigo']==0){
-          this.Notificacion("Se actualizó el distrito satisfactoriamente","")
+          this.Notificacion("Se creo el centro de trabajo satisfactoriamente","")
+          this.ventana.close() ;
         } else {
-          this.Notificacion("Ocurrió un error al actualizar el distrito","")
+          this.Notificacion("Ocurrió un error al crear el centro de trabajo","")
         }
       }) ;
     }

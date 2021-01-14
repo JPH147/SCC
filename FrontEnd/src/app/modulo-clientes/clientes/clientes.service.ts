@@ -114,8 +114,8 @@ export class ClienteService {
   Eliminar(
    idcliente: number
   ): Observable<any>  {
-
-    let params = 'idcliente=' + idcliente;
+    let params = new HttpParams()
+      .set('idcliente', idcliente.toString()) ;
 
     let headers = new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded');
     return this.http.post(this.url + 'cliente/delete.php', params, {headers: headers});

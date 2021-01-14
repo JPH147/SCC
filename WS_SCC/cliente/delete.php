@@ -23,11 +23,11 @@
 
 	    	if($cliente->delete())
 	        {
-	                print_json("0000", "Se eliminó el cliente satisfactoriamente.", "");
+						print_json("0000", "Se eliminó el cliente satisfactoriamente.", "");
 	        }
 	        else
 	        {
-	                print_json("9999", "Ocurrió un error al eliminar el cliente.", "");
+						print_json("9999", "Ocurrió un error al eliminar el cliente.", "");
 	        }
 	    }
     	else

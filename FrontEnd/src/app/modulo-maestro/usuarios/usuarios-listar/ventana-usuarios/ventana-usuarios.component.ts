@@ -27,8 +27,9 @@ export class VentanaUsuariosComponent implements OnInit {
     this.CrearFormulario();
     this.ListarPerfiles();
 
+    console.log(this.data) ;
     if( this.data ) {
-      if( this.data.pss ) {
+      if( this.data.cambiar_pss ) {
         this.UsuariosForm.get('id_usuario').setValue(this.data.id_usuario);
         this.UsuariosForm.get('nombre').setValue(true);
         this.UsuariosForm.get('usuario').setValue(true);
@@ -113,7 +114,7 @@ export class VentanaUsuariosComponent implements OnInit {
         if ( !this.data ) {
           this.CrearUsuario() ;
         } else {
-          if( this.data.pss ) {
+          if( this.data.cambiar_pss ) {
             this.ActualizarPss() ;
           } else {
             this.ActualizarUsuario() ;

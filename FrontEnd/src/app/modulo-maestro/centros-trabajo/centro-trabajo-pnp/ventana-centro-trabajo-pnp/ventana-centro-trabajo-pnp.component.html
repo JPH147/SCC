@@ -1,31 +1,34 @@
 <mat-card class="card">
-
   <mat-toolbar color="primary">
     <mat-card-title *ngIf="!data">Agregar centro de trabajo</mat-card-title>
     <mat-card-title *ngIf="data">Editar centro de trabajo</mat-card-title>
   </mat-toolbar>
 
   <form [formGroup]="CentroTrabajoForm">
+    <div class = "spinner-container" *ngIf = "Cargando | async">
+      <mat-spinner></mat-spinner>
+    </div>
+
     <mat-card-content>
       <mat-grid-list cols="3" rowHeight="80px">
         <mat-grid-tile colspan=3>
           <mat-form-field class="columnas-3">
             <mat-select placeholder="Departamento" formControlName="departamento" (selectionChange)="DepartamentoSeleccionado($event)">
-              <mat-option *ngFor="let departamento of Departamentos" [value]="departamento.nombre">{{departamento.nombre | uppercase }}</mat-option>
+              <mat-option *ngFor="let departamento of Departamentos" [value]="departamento.nombre"> {{departamento.nombre}} </mat-option>
             </mat-select>
           </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile colspan=3>
           <mat-form-field class="columnas-3">
-            <mat-select placeholder="Provincia" formControlName="provincia">
-              <mat-option *ngFor="let provincia of Provincias" [value]="provincia.nombre">{{provincia.nombre | uppercase }}</mat-option>
+            <mat-select placeholder="Provincia" formControlName="provincia" (selectionChange)="ProvinciaSeleccionada($event)">
+              <mat-option *ngFor="let provincia of Provincias" [value]="provincia.nombre">{{provincia.nombre }}</mat-option>
             </mat-select>
           </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile colspan=3>
           <mat-form-field class="columnas-3">
             <mat-select placeholder="Distrito" formControlName="distrito">
-              <mat-option *ngFor="let distrito of Distritos" [value]="distrito.id">{{distrito.nombre | uppercase }}</mat-option>
+              <mat-option *ngFor="let distrito of Distritos" [value]="distrito.id">{{distrito.nombre }}</mat-option>
             </mat-select>
           </mat-form-field>
         </mat-grid-tile>
@@ -55,8 +58,8 @@
     <mat-card-actions>
       <mat-grid-list cols=1 rowHeight="40px">
         <mat-grid-tile>
-          <button type="submit" mat-raised-button color="primary" [disabled]="CentroTrabajoForm.invalid"
-           (click)="Guardar()">Guardar</button>
+          <button type="submit" mat-raised-button color="primary" [disabled]="CentroTrabajoForm.invalid || (Cargando | async)"
+            (click)="Guardar()">Guardar</button>
         </mat-grid-tile>
       </mat-grid-list>
     </mat-card-actions>
