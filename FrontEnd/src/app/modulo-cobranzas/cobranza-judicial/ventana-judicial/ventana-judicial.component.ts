@@ -7,6 +7,7 @@ import { finalize } from 'rxjs/operators';
 import { ServiciosVentas } from 'src/app/core/servicios/ventas';
 import { ServiciosGenerales } from 'src/app/core/servicios/servicios';
 import { ProcesoJudicialVinculadosService } from '../../../modulo-maestro/proceso-judicial-vinculados/proceso-judicial-vinculados.service';
+import { URLIMAGENES } from 'src/app/core/servicios/url';
 
 @Component({
   selector: 'app-ventana-judicial',
@@ -165,7 +166,7 @@ export class VentanaJudicialComponent implements OnInit {
         this.VentanaJudicialForm.get('trabajador').setValue(resultado.trabajador) ;
         this.VentanaJudicialForm.get('estado').setValue(resultado.estado) ;
 
-        this.archivo_nombre_antiguo_enlace = resultado.archivo ;
+        this.archivo_nombre_antiguo_enlace = URLIMAGENES.carpeta + 'proceso judicial/' + resultado.archivo ;
       }
     })
   }

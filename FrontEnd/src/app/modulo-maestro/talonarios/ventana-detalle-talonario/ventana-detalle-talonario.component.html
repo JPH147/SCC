@@ -35,7 +35,12 @@
             Pecosa {{talonario.salida_codigo}}
           </ng-container>
           <ng-container *ngIf="talonario.id_estado == 0 || talonario.id_estado == 1">
-            -
+            <ng-container *ngIf="talonario.id_cliente_adjunto >= 0">
+              {{talonario.cliente_adjunto}}
+            </ng-container>
+            <ng-container *ngIf="talonario.id_cliente_adjunto < 0">
+              -
+            </ng-container>
           </ng-container>
         </mat-cell>
       </ng-container>

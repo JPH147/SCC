@@ -19,6 +19,7 @@ class Talonario{
 	public $fecha ;
 	public $monto ;
 	public $cuotas ;
+	public $observacion ;
 
 	public function __construct($db){
 		$this->conn = $db;
@@ -251,7 +252,7 @@ class Talonario{
 	}
 
 	function crear_talonario_adjunto(){
-		$query = "CALL sp_creartalonariosadjuntos(?,?,?,?,?,?,?)";
+		$query = "CALL sp_creartalonariosadjuntos(?,?,?,?,?,?,?,?)";
 
 		$result = $this->conn->prepare($query);
 		
@@ -262,6 +263,7 @@ class Talonario{
 		$result->bindParam(5, $this->fecha);
 		$result->bindParam(6, $this->monto);
 		$result->bindParam(7, $this->cuotas);
+		// $result->bindParam(8, $this->observacion);
 
 		if ($result->execute() ) {
 			return true ;
@@ -305,6 +307,7 @@ class Talonario{
 				"tipo_pago_adjunto"=>$tipo_pago_adjunto,
 				"fecha_adjunto"=>$fecha_adjunto,
 				"monto_adjunto"=>$monto_adjunto,
+				"cliente_adjunto"=>$cliente_adjunto,
 				"cuotas_adjunto"=>$cuotas_adjunto,
 				"estado"=>$estado ,
 				"id_estado"=>$id_estado

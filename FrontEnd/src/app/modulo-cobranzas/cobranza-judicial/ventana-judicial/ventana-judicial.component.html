@@ -95,9 +95,11 @@
         </mat-grid-tile>
 
         <ng-container *ngIf="ver">
-          <button mat-icon-button color="primary" type="button" [disabled]="!archivo_nombre_antiguo_enlace" *ngIf="!editar_archivo && archivo_nombre_antiguo">
-            <mat-icon class="icono-documentos" (click)="AbrirDocumento(archivo_nombre_antiguo_enlace)"> visibility </mat-icon>
-          </button>
+          <mat-grid-tile>
+            <button mat-icon-button color="primary" type="button">
+              <mat-icon class="icono-documentos" (click)="AbrirDocumento(archivo_nombre_antiguo_enlace)"> visibility </mat-icon>
+            </button>
+          </mat-grid-tile>
         </ng-container>
 
         <ng-container *ngIf="!ver">

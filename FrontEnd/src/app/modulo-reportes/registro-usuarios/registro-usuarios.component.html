@@ -75,6 +75,11 @@
         <mat-cell *matCellDef="let registro"> {{ registro.referencia }} </mat-cell>
       </ng-container>
 
+      <ng-container matColumnDef="nombre_referencia">
+        <mat-header-cell *matHeaderCellDef> Documento de referencia </mat-header-cell>
+        <mat-cell *matCellDef="let registro"> {{ registro.nombre_referencia }} </mat-cell>
+      </ng-container>
+
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let registro">

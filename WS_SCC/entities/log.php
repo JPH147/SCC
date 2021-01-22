@@ -1,6 +1,9 @@
 <?php 
 
 date_default_timezone_set("America/Lima") ;
+
+include_once '../entities/procesojudicial.php';
+
 class Log{
 
   private $conn;
@@ -19,6 +22,7 @@ class Log{
   public $numero_pagina ;
   public $total_pagina ;
   public $total_resultado ;
+
   public function __construct($db){
     $this->conn = $db;
   }
@@ -46,6 +50,7 @@ class Log{
     {
       extract($row);
       $contador = $contador+1;
+
       $item = array(
         "numero" => $contador,
         "ig_log" => $ig_log ,
@@ -57,6 +62,7 @@ class Log{
         "id_log_referencia" => $id_log_referencia ,
         "tabla_referenciada" => $tabla_referenciada ,
         "referencia" => $referencia ,
+        "nombre_referencia" => $nombre_referencia ,
       );
       array_push($log_list["logs"],$item);
     }

@@ -19,7 +19,7 @@ import { VentanaSeguimientosComponent } from 'src/app/modulo-clientes/ventana-se
 export class RegistroUsuariosComponent implements OnInit {
 
   public ListadoRegistro: RegistroDataSource;
-  public Columnas: string[] = ['numero', 'usuario', 'fecha', 'accion', 'referencia', 'opciones'];
+  public Columnas: string[] = ['numero', 'usuario', 'fecha', 'accion', 'referencia', 'nombre_referencia', 'opciones'];
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
