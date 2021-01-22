@@ -16,7 +16,7 @@ import { ReporteMorosidadComponent } from './inicio/reporte-morosidad/reporte-mo
   declarations: [
     InicioComponent ,
     LoginComponent ,
-    ReporteMorosidadComponent ,
+    ReporteMorosidadComponent,
   ],
   imports: [
     ModuloHomeRoutingModule ,

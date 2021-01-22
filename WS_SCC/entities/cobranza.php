@@ -1527,7 +1527,17 @@
       $sheet->setCellValue('F1', 'Subsede');
       $sheet->setCellValue('G1', 'Sede');
       $sheet->setCellValue('H1', 'Institución');
-      $sheet->setCellValue('I1', 'Monto pendiente');
+      $sheet->setCellValue('I1', 'Cargo');
+      $sheet->setCellValue('J1', 'Situacion');
+      $sheet->setCellValue('K1', 'Monto pendiente');
+      $sheet->setCellValue('L1', 'Distrito');
+      $sheet->setCellValue('M1', 'Provincia');
+      $sheet->setCellValue('N1', 'Departamento');
+      $sheet->setCellValue('O1', 'Centro de trabajo');
+      $sheet->setCellValue('P1', 'Direccion centro de trabajo');
+      $sheet->setCellValue('Q1', 'Telefono_centro de trabajo');
+      $sheet->setCellValue('R1', 'Direccion');
+      $sheet->setCellValue('S1', 'Telefono');
 
       while($row = $result->fetch(PDO::FETCH_ASSOC))
       {
@@ -1542,7 +1552,17 @@
           $sheet->setCellValue('F' . $contador, $subsede );
           $sheet->setCellValue('G' . $contador, $sede );
           $sheet->setCellValue('H' . $contador, $institucion );
-          $sheet->setCellValue('I' . $contador, $monto_pendiente );
+          $sheet->setCellValue('I' . $contador, $cargo );
+          $sheet->setCellValue('J' . $contador, $cargo_estado );
+          $sheet->setCellValue('K' . $contador, $monto_pendiente );
+          $sheet->setCellValue('L' . $contador, $distrito );
+          $sheet->setCellValue('M' . $contador, $provincia );
+          $sheet->setCellValue('N' . $contador, $departamento );
+          $sheet->setCellValue('O' . $contador, $centro_trabajo );
+          $sheet->setCellValue('P' . $contador, $direccion_centro_trabajo );
+          $sheet->setCellValue('Q' . $contador, $telefono_centro_trabajo );
+          $sheet->setCellValue('R' . $contador, $direccion );
+          $sheet->setCellValue('S' . $contador, $telefono );
       }
 
       $writer = new Xlsx($spreadsheet);

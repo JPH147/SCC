@@ -4,6 +4,8 @@ import {URL, URLIMAGENES} from './url'
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators'
 
+import * as moment from 'moment' ;
+
 @Injectable({
 	providedIn: 'root'
 })
@@ -349,10 +351,21 @@ export class ServiciosVentas{
 	CrearAdjuntosTalonario(
 		id_talonario : number ,
 		pdf_contrato : string ,
+		tipo_pago : number ,
+		id_cliente : number ,
+		fecha : Date ,
+		monto : number ,
+		cuotas : number ,
 	): Observable<any>{
 		let params = new HttpParams()
 			.set('prtalonario',id_talonario.toString() )
-			.set('prpdfcontrato',pdf_contrato ) ;
+			.set('prpdfcontrato',pdf_contrato )
+			.set('prtipopago', tipo_pago.toString())
+			.set('prcliente', id_cliente.toString())
+			.set('prfecha', fecha ? moment(fecha).format("YYYY-MM-DD") : "0" ) 
+			.set('prmonto', monto.toString())
+			.set('prcuotas', cuotas.toString());
+			;
 	
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 	

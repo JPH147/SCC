@@ -20,8 +20,13 @@
       
       if (($_POST["prtalonario"])!=null)
       {
-        $talonario->id_talonario=trim($_POST["prtalonario"]);
-        $talonario->pdf_contrato=trim($_POST["prpdfcontrato"]);
+        $talonario->id_talonario=trim($_POST["prtalonario"]) ;
+        $talonario->pdf_contrato=trim($_POST["prpdfcontrato"]) ;
+        $talonario->id_cliente = trim($_POST["prcliente"]) ;
+        $talonario->tipo_pago = trim($_POST["prtipopago"]) ;
+        $talonario->fecha = trim($_POST["prfecha"])=="0" ? null : trim($_POST["prfecha"]) ;
+        $talonario->monto = trim($_POST["prmonto"]) ;
+        $talonario->cuotas = trim($_POST["prcuotas"]) ;
 
         if($talonario->crear_talonario_adjunto())
         {

@@ -225,7 +225,7 @@ export class VentanaJudicialComponent implements OnInit {
   Guardar(){
     let random=(new Date()).getTime() ;
 
-    let documento =  this.TipoDocumentos.filter(e=>e.id=this.VentanaJudicialForm.value.tipo_documento)[0].nombre.toLowerCase() ;
+    let documento = this.TipoDocumentos.filter(e=>e.id=this.VentanaJudicialForm.value.tipo_documento)[0].nombre.toLowerCase() ;
 
     this.Cargando.next(true);
     if( !this.editar ) {

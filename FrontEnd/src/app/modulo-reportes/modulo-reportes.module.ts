@@ -11,12 +11,14 @@ import { ModuloReportesRoutingModule } from './modulo-reportes-routing.module';
 import { CobranzaClienteListarComponent } from './cobranza-cliente-listar/cobranza-cliente-listar.component';
 import { CobranzaClienteListarMorososComponent } from './cobranza-cliente-listar-morosos/cobranza-cliente-listar-morosos.component';
 import { RegistroUsuariosComponent } from './registro-usuarios/registro-usuarios.component';
+import { VentanaAuxiliarProvisionalComponent } from './ventana-auxiliar-provisional/ventana-auxiliar-provisional.component';
 
 @NgModule({
   declarations: [
     CobranzaClienteListarComponent ,
     CobranzaClienteListarMorososComponent,
     RegistroUsuariosComponent ,
+    VentanaAuxiliarProvisionalComponent ,
   ],
   imports: [
     ModuloReportesRoutingModule ,

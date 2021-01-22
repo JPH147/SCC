@@ -62,7 +62,7 @@ export class VentanaDetalleTalonarioComponent implements OnInit {
   SubirAdjunto(talonario) {
     let Ventana = this._dialogo.open(VentanaAdjuntoComponent,{
       width: '900px' ,
-      data : talonario.id_talonario ,
+      data : talonario ,
     })
 
     Ventana.afterClosed().subscribe(res=>{
@@ -106,7 +106,6 @@ export class TalonariosDataSource implements DataSource<any>{
       })
     )
     .subscribe(res=>{
-      console.log(res) ;
       this.Informacion.next(res) ;
     })
   }

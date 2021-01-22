@@ -1,5 +1,6 @@
-<x-chartist
+<x-chartist #Grafico
   [type]="type"
   [data]="data | async "
   [options]="options"
+  (click)="VerDetalle($event)"
 ></x-chartist>

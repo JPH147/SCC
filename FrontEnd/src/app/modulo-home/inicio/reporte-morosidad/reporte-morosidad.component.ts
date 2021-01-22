@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 import {
   IBarChartOptions,
@@ -9,6 +9,8 @@ import {
 import { ChartEvent, ChartType } from 'ng-chartist';
 import { CobranzasService } from 'src/app/modulo-cobranzas/cobranzas-listar/cobranzas.service';
 import { BehaviorSubject } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { VentanaAuxiliarProvisionalComponent } from '../../../modulo-reportes/ventana-auxiliar-provisional/ventana-auxiliar-provisional.component';
 
 @Component({
   selector: 'app-reporte-morosidad',
@@ -17,20 +19,10 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class ReporteMorosidadComponent implements OnInit {
 
-  public chart: IChartistBarChart;
+  @ViewChild('Grafico', { static: true }) private chart: IChartistBarChart;
 
   public type: ChartType = 'Bar';
   public data = new BehaviorSubject<IChartistData>({labels: ['Morosos','Muy morosos'],series: [[0,0]]});
-
-  // public data: IChartistData = {
-  //   labels: [
-  //     'Morosos',
-  //     'Muy morosos'
-  //   ],
-  //   series: [
-  //     [0,0],
-  //   ]
-  // };
 
   public options: IBarChartOptions = {
     axisX: {
@@ -55,7 +47,8 @@ export class ReporteMorosidadComponent implements OnInit {
   };
 
   constructor(
-    private _cobranzas : CobranzasService
+    private _cobranzas : CobranzasService ,
+    private _dialogo : MatDialog ,
   ) { }
 
   ngOnInit() {
@@ -67,7 +60,7 @@ export class ReporteMorosidadComponent implements OnInit {
       if(res) {
         let morosos1 = res['data'].morosos ;
         let morosos2 = res['data'].muy_morosos ;
-        let informacion = { labels:["Morosos", "Muy morosos"], series: [[morosos1,morosos2]]}
+        let informacion = { labels:["Morosos", "Muy morosos"], series: [[morosos1,morosos2]], click: this.VerDetalle }
         this.ActualizarInformacion(informacion) ;
       }
     })
@@ -75,6 +68,13 @@ export class ReporteMorosidadComponent implements OnInit {
 
   ActualizarInformacion(informacion){
     this.data.next(informacion);
+  }
+
+  VerDetalle($evento) {
+    this._dialogo.open(VentanaAuxiliarProvisionalComponent, {
+      width: '90%' ,
+      maxHeight : '80vh'
+    })
   }
 
 }

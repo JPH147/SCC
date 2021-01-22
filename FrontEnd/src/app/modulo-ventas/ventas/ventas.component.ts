@@ -1373,6 +1373,7 @@ export class VentasComponent implements OnInit {
         this.VentasForm.get('contrato').value
       ).subscribe(res =>{
         this.contrato_pdf_express = res.pdf_contrato ;
+        this.VentasForm.get('tipopago').setValue(res.pdf_contrato) ;
       })
     }
   }

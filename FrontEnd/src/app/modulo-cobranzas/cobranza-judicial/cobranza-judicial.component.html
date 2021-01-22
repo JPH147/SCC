@@ -561,12 +561,30 @@
                 </mat-form-field>
               </div>
 
-              <mat-grid-list cols=3 rowHeight="40px" *ngIf="documento.fecha_creacion">
-                <mat-grid-tile></mat-grid-tile>
+              <mat-grid-list cols=3 rowHeight="30px" *ngIf="documento.fecha_creacion">
                 <mat-grid-tile></mat-grid-tile>
                 <mat-grid-tile>
                   <mat-card-subtitle>
                     Fecha de creación: {{documento.fecha_creacion | date : 'dd/MM/yyyy HH:mm'}}
+                  </mat-card-subtitle>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <mat-card-subtitle>
+                    Creado por: {{documento.usuario_creacion}}
+                  </mat-card-subtitle>
+                </mat-grid-tile>
+              </mat-grid-list>
+
+              <mat-grid-list cols=3 rowHeight="30px" *ngIf="documento.fecha_edicion">
+                <mat-grid-tile></mat-grid-tile>
+                <mat-grid-tile>
+                  <mat-card-subtitle>
+                    Fecha de edición: {{documento.fecha_edicion | date : 'dd/MM/yyyy HH:mm'}}
+                  </mat-card-subtitle>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <mat-card-subtitle>
+                    Editado por: {{documento.usuario_edicion}}
                   </mat-card-subtitle>
                 </mat-grid-tile>
               </mat-grid-list>
@@ -672,12 +690,31 @@
                   </mat-form-field>
                 </mat-grid-tile>
               </mat-grid-list>
-              <mat-grid-list cols=3 rowHeight="40px" *ngIf="documento.fecha_creacion">
-                <mat-grid-tile></mat-grid-tile>
+
+              <mat-grid-list cols=3 rowHeight="30px" *ngIf="documento.fecha_creacion">
                 <mat-grid-tile></mat-grid-tile>
                 <mat-grid-tile>
                   <mat-card-subtitle>
                     Fecha de creación: {{documento.fecha_creacion | date : 'dd/MM/yyyy HH:mm'}}
+                  </mat-card-subtitle>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <mat-card-subtitle>
+                    Creado por: {{documento.usuario_creacion}}
+                  </mat-card-subtitle>
+                </mat-grid-tile>
+              </mat-grid-list>
+
+              <mat-grid-list cols=3 rowHeight="30px" *ngIf="documento.fecha_edicion">
+                <mat-grid-tile></mat-grid-tile>
+                <mat-grid-tile>
+                  <mat-card-subtitle>
+                    Fecha de edición: {{documento.fecha_edicion | date : 'dd/MM/yyyy HH:mm'}}
+                  </mat-card-subtitle>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <mat-card-subtitle>
+                    Editado por: {{documento.usuario_edicion}}
                   </mat-card-subtitle>
                 </mat-grid-tile>
               </mat-grid-list>

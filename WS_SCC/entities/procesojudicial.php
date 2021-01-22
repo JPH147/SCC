@@ -279,6 +279,9 @@ Class Proceso{
           "archivo"=>$archivo,
           "comentarios"=>$comentarios,
           "fecha_creacion"=>$fecha_creacion,
+          "usuario_creacion"=>$usuario_creacion,
+          "fecha_edicion"=>$fecha_edicion,
+          "usuario_edicion"=>$usuario_edicion,
         );
         array_push($procesos_list["procesos"],$items);
     }
@@ -313,6 +316,9 @@ Class Proceso{
           "archivo"=>$archivo,
           "comentarios"=>$comentarios,
           "fecha_creacion"=>$fecha_creacion,
+          "usuario_creacion"=>$usuario_creacion,
+          "fecha_edicion"=>$fecha_edicion,
+          "usuario_edicion"=>$usuario_edicion,
         );
         array_push($procesos_list["procesos"],$items);
     }

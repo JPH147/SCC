@@ -127,10 +127,10 @@ export class TalonariosComponent implements OnInit {
     Ventana.afterClosed().subscribe(res=>{
       if(res){
         this.CargarData();
-        this.notificacion.Snack("Se adjuntó el archivo satisfactoriamente","")
+        this.notificacion.Snack("Se editaron los datos satisfactoriamente","")
       }
       if(res === false){
-        this.notificacion.Snack("Ocurrió un error al adjuntar el archivo","")
+        this.notificacion.Snack("Ocurrió un error al editar los datos","")
       }
     })
   }

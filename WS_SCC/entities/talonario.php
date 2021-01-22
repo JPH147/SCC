@@ -14,6 +14,12 @@ class Talonario{
 	public $id_talonario ;
 	public $pdf_contrato ;
 
+	public $tipo_pago;
+	public $id_cliente ;
+	public $fecha ;
+	public $monto ;
+	public $cuotas ;
+
 	public function __construct($db){
 		$this->conn = $db;
 	}
@@ -91,9 +97,9 @@ class Talonario{
 		$this->numero_inicio=htmlspecialchars(strip_tags($this->numero_inicio));
 		$this->numero_fin=htmlspecialchars(strip_tags($this->numero_fin));
 
-		if($result->execute())
+		if( $result->execute() )
 		{
-				return true;
+			return true;
 		}
 		
 		return false;
@@ -181,11 +187,11 @@ class Talonario{
 
 		$row = $result->fetch(PDO::FETCH_ASSOC);
 	
-		$this->id=$row['id'];
-		$this->serie=$row['serie'];
-		$this->numero=$row['numero'];
-		$this->salida=$row['salida'];
-		$this->estado=$row['estado'];
+		$this->id=$row['id'] ;
+		$this->serie=$row['serie'] ;
+		$this->numero=$row['numero'] ;
+		$this->salida=$row['salida'] ;
+		$this->estado=$row['estado'] ;
 	}
 
 	function update_estado(){
@@ -234,18 +240,28 @@ class Talonario{
 			"id_talonario_adjuntos"=>$row['id_talonario_adjuntos'] ,
 			"id_talonario"=>$row['id_talonario'] ,
 			"pdf_contrato"=>$row['pdf_contrato'] ,
+			"tipo_pago" => $row['tipo_pago'] ,
+			"id_cliente" => $row['id_cliente'] ,
+			"fecha" => $row['fecha'] ,
+			"monto" => $row['monto'] ,
+			"cuota" => $row['cuota'] ,
 		);
 
 		return $talonario_list ;
 	}
 
 	function crear_talonario_adjunto(){
-		$query = "CALL sp_creartalonariosadjuntos(?,?)";
+		$query = "CALL sp_creartalonariosadjuntos(?,?,?,?,?,?,?)";
 
 		$result = $this->conn->prepare($query);
 		
 		$result->bindParam(1, $this->id_talonario);
 		$result->bindParam(2, $this->pdf_contrato);
+		$result->bindParam(3, $this->tipo_pago);
+		$result->bindParam(4, $this->id_cliente);
+		$result->bindParam(5, $this->fecha);
+		$result->bindParam(6, $this->monto);
+		$result->bindParam(7, $this->cuotas);
 
 		if ($result->execute() ) {
 			return true ;
@@ -285,6 +301,11 @@ class Talonario{
 				"id_salida_vendedor"=>$id_salida_vendedor ,
 				"salida_codigo"=>$salida_codigo ,
 				"pdf_contrato"=>$pdf_contrato ,
+				"id_cliente_adjunto"=>$id_cliente_adjunto,
+				"tipo_pago_adjunto"=>$tipo_pago_adjunto,
+				"fecha_adjunto"=>$fecha_adjunto,
+				"monto_adjunto"=>$monto_adjunto,
+				"cuotas_adjunto"=>$cuotas_adjunto,
 				"estado"=>$estado ,
 				"id_estado"=>$id_estado
 			);

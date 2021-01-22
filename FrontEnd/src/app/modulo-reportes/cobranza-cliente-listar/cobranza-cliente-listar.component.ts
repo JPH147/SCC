@@ -20,6 +20,8 @@ import { VentanaCobranzaClienteComponent } from '../../compartido/componentes/ve
 })
 export class CobranzaClienteListarComponent implements OnInit {
 
+  public Cargando = new BehaviorSubject<boolean>(false) ;
+
   public fecha_inicio: Date;
   public fecha_fin: Date;
   public ListadoTipoPago: Array<any>;
@@ -102,6 +104,8 @@ export class CobranzaClienteListarComponent implements OnInit {
   }
 
   ExportToExcel(){
+    this.Cargando.next(true) ;
+
     let nombre_archivo : string = "reporte_cobranzas_" + new Date().getTime();
 
     this.Servicio.ListarCobranzasxclienteUnlimited(
@@ -114,7 +118,13 @@ export class CobranzaClienteListarComponent implements OnInit {
       this.fecha_inicio,
       this.fecha_fin,
       1
-    ).subscribe(res=>{
+    )
+    .pipe(
+      finalize(()=> {
+        this.Cargando.next(false) ;
+      })
+    )
+    .subscribe(res=>{
       if(res){
         this.AbrirArchivo(nombre_archivo,res);
       }
