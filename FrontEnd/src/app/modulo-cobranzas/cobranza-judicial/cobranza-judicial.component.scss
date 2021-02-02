@@ -28,6 +28,10 @@
   border-left-color: mat-color($mat_naranja);
 }
 
+.tipo-7{
+  border-left-color: mat-color($mat_morado);
+}
+
 .icono{
   float: right;
   transform: translate(-20px, -12.5px);
@@ -85,6 +89,11 @@ textarea{
   background-color: mat-color($mat_naranja);
 }
 
+.tipo-tercero-7{
+  background-color: mat-color($mat_morado);
+  color: white !important;
+}
+
 span.derecha{
   position: absolute;
   right: 20px;
@@ -124,4 +133,8 @@ span.derecha{
 
 .boton-tipo-5{
   color: mat-color($mat_naranja);
+}
+
+.boton-tipo-7{
+  color: mat-color($mat_morado);
 }

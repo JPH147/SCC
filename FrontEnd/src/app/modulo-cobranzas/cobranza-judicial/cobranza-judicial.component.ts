@@ -19,6 +19,7 @@ import { ProcesoJudicialVinculadosService } from '../../modulo-maestro/proceso-j
 import { Store } from '@ngrx/store';
 import { EstadoSesion } from '../../compartido/reducers/permisos.reducer';
 import { Rol } from 'src/app/compartido/modelos/login.modelos';
+import { UsuariosService } from 'src/app/modulo-maestro/usuarios/usuarios.service';
 
 @Component({
   selector: 'app-cobranza-judicial',
@@ -63,7 +64,8 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
     private _evaluacion : EvaluacionService ,
     private _judicial : CobranzaJudicialService ,
     private _creditos : CreditosService ,
-    private _ventas : VentaService
+    private _ventas : VentaService ,
+    private _usuarios : UsuariosService
   ) { }
 
   ngOnInit() {
@@ -91,6 +93,7 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
           this.id_proceso_ver = params['idprocesover'];
           // this.id_proceso_ver = 8 ;
           this.SeleccionarProceso(this.id_proceso_ver);
+          this.RegistrarVisita(this.id_proceso_ver) ;
         }
       
         if(params['idprocesoeditar']){
@@ -161,6 +164,12 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
         })
       ).subscribe() ;
     }
+  }
+
+  private RegistrarVisita(id_proceso : number) {
+    this._usuarios.CrearLog(1, 11, id_proceso).subscribe(resultado => {
+      // console.log(resultado) ;
+    })
   }
 
   CrearFormulario(){
@@ -371,10 +380,10 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
   }
 
   CargarDetalleAnterior( id_proceso ){
-    forkJoin(
+    forkJoin([
       this._judicial.ListarAnteriorxId( id_proceso ) ,
       this._judicial.ListarDetalleAnteriorxProceso( id_proceso )
-    )
+    ])
     .pipe(
       finalize(()=>this.Cargando.next(false))
     )

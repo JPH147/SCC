@@ -470,6 +470,8 @@
                 <button type="button" mat-raised-button (click)="AgregarDocumento(5)"> Devolución </button>
                 &nbsp;
                 <button type="button" mat-raised-button (click)="AgregarDocumento(6)"> Nota </button>
+                &nbsp;
+                <button type="button" mat-raised-button (click)="AgregarDocumento(7)"> Queja </button>
             </mat-grid-tile>
           </mat-grid-list>
   
@@ -479,13 +481,15 @@
                             'tipo-1': documento.tipo_documento=='Escrito',
                             'tipo-2': documento.tipo_documento=='Resolución',
                             'tipo-3': documento.tipo_documento=='Oficio',
-                            'tipo-5': documento.tipo_documento=='Nota'
+                            'tipo-5': documento.tipo_documento=='Nota',
+                            'tipo-7': documento.tipo_documento=='Queja'
                           }">
               <div [ngClass]="{ 'titulo-seccion-tercera': true,
                                 'tipo-tercero-1': documento.tipo_documento=='Escrito',
                                 'tipo-tercero-2': documento.tipo_documento=='Resolución',
                                 'tipo-tercero-3': documento.tipo_documento=='Oficio',
-                                'tipo-tercero-5': documento.tipo_documento=='Nota'
+                                'tipo-tercero-5': documento.tipo_documento=='Nota',
+                                'tipo-tercero-7': documento.tipo_documento=='Queja'
                               }">
                 {{ documento.tipo_documento }}&nbsp;{{ documento.numero }}
                 <span class="espacio"></span>
@@ -605,13 +609,15 @@
                           'tipo-1': documento.tipo_documento=='Escrito',
                           'tipo-2': documento.tipo_documento=='Resolución',
                           'tipo-3': documento.tipo_documento=='Oficio',
-                          'tipo-5': documento.tipo_documento=='Nota'
+                          'tipo-5': documento.tipo_documento=='Nota',
+                          'tipo-7': documento.tipo_documento=='Queja'
                         }">
               <div [ngClass]="{ 'titulo-seccion-tercera': true,
                               'tipo-tercero-1': documento.tipo_documento=='Escrito',
                               'tipo-tercero-2': documento.tipo_documento=='Resolución',
                               'tipo-tercero-3': documento.tipo_documento=='Oficio',
-                              'tipo-tercero-5': documento.tipo_documento=='Nota'
+                              'tipo-tercero-5': documento.tipo_documento=='Nota',
+                              'tipo-tercero-7': documento.tipo_documento=='Queja'
                             }">
                 {{ documento.tipo_documento }}&nbsp;{{ documento.numero }}
                 <span class="espacio"></span>

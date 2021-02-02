@@ -356,6 +356,7 @@ export class ServiciosVentas{
 		fecha : Date ,
 		monto : number ,
 		cuotas : number ,
+		observacion : string ,
 	): Observable<any>{
 		let params = new HttpParams()
 			.set('prtalonario',id_talonario.toString() )
@@ -364,7 +365,8 @@ export class ServiciosVentas{
 			.set('prcliente', id_cliente.toString())
 			.set('prfecha', fecha ? moment(fecha).format("YYYY-MM-DD") : "0" ) 
 			.set('prmonto', monto.toString())
-			.set('prcuotas', cuotas.toString());
+			.set('prcuotas', cuotas.toString())
+			.set('probservacion', observacion );
 			;
 	
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');

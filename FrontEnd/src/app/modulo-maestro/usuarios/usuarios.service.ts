@@ -264,4 +264,28 @@ export class UsuariosService {
       })
     )
   }
+
+  CrearLog(
+    id_referencia : number ,
+    id_accion : number ,
+    documento_referencia : number ,
+  ) : Observable<any> {
+    let params = new HttpParams()
+      .set('prreferencia', id_referencia.toString() )
+      .set('praccion', id_accion.toString() )
+      .set('prdocumentoreferencia', documento_referencia.toString() ) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'log/create.php', params, { headers : headers })
+    .pipe(
+      map(respuesta=>{
+        if ( respuesta['codigo'] == 0 ) {
+          return respuesta ;
+        } else {
+          return false ;
+        }
+      })
+    )
+  }
 }

@@ -27,7 +27,7 @@
         $talonario->fecha = trim($_POST["prfecha"])=="0" ? null : trim($_POST["prfecha"]) ;
         $talonario->monto = trim($_POST["prmonto"]) ;
         $talonario->cuotas = trim($_POST["prcuotas"]) ;
-        // $talonario->observacion = trim($_POST["probservacion"]) ;
+        $talonario->observacion = !empty($_POST["probservacion"]) ? trim($_POST["probservacion"]) : '' ;
 
         if($talonario->crear_talonario_adjunto())
         {

@@ -45,7 +45,8 @@ class Talonario{
 		while($row = $result->fetch(PDO::FETCH_ASSOC))
 		{
 			extract($row);
-            $contador=$contador+1;
+			$contador=$contador+1;
+			
 			$talonario_fila = array(
 				"numero"=>$contador,
 				"serie"=>$serie,
@@ -246,6 +247,7 @@ class Talonario{
 			"fecha" => $row['fecha'] ,
 			"monto" => $row['monto'] ,
 			"cuota" => $row['cuota'] ,
+			"observacion" => $row['observacion'] ,
 		);
 
 		return $talonario_list ;
@@ -263,7 +265,7 @@ class Talonario{
 		$result->bindParam(5, $this->fecha);
 		$result->bindParam(6, $this->monto);
 		$result->bindParam(7, $this->cuotas);
-		// $result->bindParam(8, $this->observacion);
+		$result->bindParam(8, $this->observacion);
 
 		if ($result->execute() ) {
 			return true ;

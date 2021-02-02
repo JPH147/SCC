@@ -380,7 +380,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
       ]],
       monto_cuota: [{value: 0, disabled: false},[
         Validators.required ,
-        Validators.min(1) ,
+        Validators.min(0) ,
       ]],
       cuotas: [{value: 1, disabled: false},[
         Validators.required,

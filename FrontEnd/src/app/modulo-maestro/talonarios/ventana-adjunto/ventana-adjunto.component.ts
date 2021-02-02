@@ -53,6 +53,7 @@ export class VentanaAdjuntoComponent implements OnInit, AfterViewInit {
     this.data.monto_adjunto ? this.TalonarioAdjuntosForm.get('monto').setValue( this.data.monto_adjunto ) : null ;
     this.data.fecha_adjunto ? this.TalonarioAdjuntosForm.get('fecha_inicio').setValue( this.data.fecha_adjunto ) : null ;
     this.data.cuotas_adjunto ? this.TalonarioAdjuntosForm.get('cuotas').setValue( this.data.cuotas_adjunto ) : null ;
+    this.data.observacion ? this.TalonarioAdjuntosForm.get('observacion').setValue( this.data.observacion ) : null ;
   }
 
   ngAfterViewInit() {
@@ -86,6 +87,8 @@ export class VentanaAdjuntoComponent implements OnInit, AfterViewInit {
       fecha_inicio : [{ value : null, disabled : false },[
       ]] ,
       cuotas : [{ value : 0, disabled : false },[
+      ]] ,
+      observacion : [{ value : 0, disabled : false },[
       ]] ,
     })
   }
@@ -167,6 +170,7 @@ export class VentanaAdjuntoComponent implements OnInit, AfterViewInit {
           this.TalonarioAdjuntosForm.get('fecha_inicio').value ,
           this.TalonarioAdjuntosForm.get('monto').value ,
           this.TalonarioAdjuntosForm.get('cuotas').value ,
+          this.TalonarioAdjuntosForm.get('observacion').value ,
         )
         .pipe(
           finalize(()=>this.Cargando.next(false))

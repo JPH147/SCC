@@ -26,6 +26,8 @@
           <button type="button" mat-raised-button class="boton-tipo-4" *ngIf="VentanaJudicialForm.value.tipo_documento == 5"> Devolución </button>
           &nbsp;
           <button type="button" mat-raised-button class="boton-tipo-5" *ngIf="VentanaJudicialForm.value.tipo_documento == 6"> Nota </button>
+          &nbsp;
+          <button type="button" mat-raised-button class="boton-tipo-7" *ngIf="VentanaJudicialForm.value.tipo_documento == 7"> Queja </button>
         </mat-grid-tile>
 
         <mat-grid-tile *ngIf="!ver">
@@ -38,6 +40,8 @@
           <button type="button" mat-raised-button [ngClass]="{'boton-tipo-4' : VentanaJudicialForm.value.tipo_documento == 5}" (click)="TipoDocumentoSeleccionado(5)"> Devolución </button>
           &nbsp;
           <button type="button" mat-raised-button [ngClass]="{'boton-tipo-5' : VentanaJudicialForm.value.tipo_documento == 6}" (click)="TipoDocumentoSeleccionado(6)"> Nota </button>
+          &nbsp;
+          <button type="button" mat-raised-button [ngClass]="{'boton-tipo-7' : VentanaJudicialForm.value.tipo_documento == 7}" (click)="TipoDocumentoSeleccionado(7)"> Queja </button>
         </mat-grid-tile>
       </mat-grid-list>
 
