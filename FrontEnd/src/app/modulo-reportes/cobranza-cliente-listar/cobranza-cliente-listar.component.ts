@@ -27,7 +27,7 @@ export class CobranzaClienteListarComponent implements OnInit {
   public ListadoTipoPago: Array<any>;
 
   public ListadoCobranza: CobranzaDataSource;
-  public Columnas: string[] = ['numero', 'cliente_dni', 'cliente', 'tipo_pago', 'monto_pendiente', 'opciones'];
+  public Columnas: string[] = ['numero', 'cliente_dni', 'cliente', 'tipo_pago', 'identificador','meses_sin_pagar', 'opciones'];
 
   @ViewChild('InputCliente', { static: true }) FiltroCliente: ElementRef;
   @ViewChild('InputSubsede', { static: true }) FiltroSubSede: ElementRef;
@@ -108,8 +108,8 @@ export class CobranzaClienteListarComponent implements OnInit {
 
     let nombre_archivo : string = "reporte_cobranzas_" + new Date().getTime();
 
-    this.Servicio.ListarCobranzasxclienteUnlimited(
-      nombre_archivo,
+    this.Servicio.ListarCobranzasxClientePeriodosUnlimited(
+      nombre_archivo ,
       this.FiltroCliente.nativeElement.value,
       this.FiltroSubSede.nativeElement.value,
       this.FiltroSede.nativeElement.value,
@@ -117,7 +117,8 @@ export class CobranzaClienteListarComponent implements OnInit {
       this.FiltroTipo.value,
       this.fecha_inicio,
       this.fecha_fin,
-      1
+      1 ,
+      2
     )
     .pipe(
       finalize(()=> {
@@ -126,7 +127,7 @@ export class CobranzaClienteListarComponent implements OnInit {
     )
     .subscribe(res=>{
       if(res){
-        this.AbrirArchivo(nombre_archivo,res);
+        this.AbrirArchivo(nombre_archivo,res) ;
       }
     })
   }
@@ -140,7 +141,13 @@ export class CobranzaClienteListarComponent implements OnInit {
   VerDetallePagos(id_cliente){
     let Ventana = this.Dialogo.open( VentanaCobranzaClienteComponent,{
       width: '900px' ,
-      data: { cliente: id_cliente, fecha_inicio : this.fecha_inicio, fecha_fin: this.fecha_fin }
+      data: {
+        cliente: id_cliente,
+        tipo_comparacion : 1, 
+        limite : 2,
+        fecha_inicio : this.fecha_inicio,
+        fecha_fin: this.fecha_fin
+      }
     } )
   }
 
@@ -179,7 +186,7 @@ export class CobranzaDataSource implements DataSource<any> {
   ) {
     this.CargandoInformacion.next(true);
 
-    this.Servicio.ListarCobranzasxcliente( cliente, sede, subsede, institucion, tipo_pago, fecha_inicio, fecha_fin, 1,numero_pagina, total_pagina )
+    this.Servicio.ListarCobranzasxClientePeriodos( cliente, sede, subsede, institucion, tipo_pago, fecha_inicio, fecha_fin, 1,2,numero_pagina, total_pagina )
     .pipe(
       catchError(() => of([])),
       finalize(() => this.CargandoInformacion.next(false))

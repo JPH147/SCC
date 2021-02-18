@@ -134,25 +134,43 @@ export class VentanaGenerarPenalidadComponent implements OnInit, AfterViewInit {
   Guardar() {
     this.Cargando.next(true) ;
     if ( this.data.id_credito ) {
-      this._creditos.CrearPenalidad(
-        this.data.id_credito ,
-        this.PenalidadForm.get('monto_cuota').value ,
-        this.PenalidadForm.get('numero_cuotas').value ,
-        this.PenalidadForm.get('fecha_inicio').value ,
-        this.PenalidadForm.get('tipo_pago').value ,
-      )
-      .pipe(
-        finalize(()=>{
-          this.Cargando.next(false) ;
+      // if ( this.data.forzar ) {
+        this._creditos.CrearPenalidadNueva(
+          this.data.id_credito ,
+          this.PenalidadForm.get('monto_cuota').value ,
+          this.PenalidadForm.get('numero_cuotas').value ,
+          this.PenalidadForm.get('fecha_inicio').value ,
+          this.PenalidadForm.get('tipo_pago').value ,
+        )
+        .pipe(
+          finalize(()=>{
+            this.Cargando.next(false) ;
+          })
+        )
+        .subscribe( resultado =>{
+          this.ventana.close(resultado) ;
         })
-      )
-      .subscribe( resultado =>{
-        this.ventana.close(resultado) ;
-      })
+      // } else {
+      //   this._creditos.CrearPenalidad(
+      //     this.data.id_credito ,
+      //     this.PenalidadForm.get('monto_cuota').value ,
+      //     this.PenalidadForm.get('numero_cuotas').value ,
+      //     this.PenalidadForm.get('fecha_inicio').value ,
+      //     this.PenalidadForm.get('tipo_pago').value ,
+      //   )
+      //   .pipe(
+      //     finalize(()=>{
+      //       this.Cargando.next(false) ;
+      //     })
+      //   )
+      //   .subscribe( resultado =>{
+      //     this.ventana.close(resultado) ;
+      //   })
+      // }
     }
 
     if ( this.data.id_venta ) {
-      this._ventas.CrearPenalidad(
+      this._ventas.CrearPenalidadNueva(
         this.data.id_venta ,
         this.PenalidadForm.get('monto_cuota').value ,
         this.PenalidadForm.get('numero_cuotas').value ,

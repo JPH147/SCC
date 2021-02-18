@@ -66,6 +66,7 @@ class ComposerStaticIniteb9cc952f954357efb5ed9f3d91d87ae
         'aa53dcba601214d17ad405b7c291b7e8' => __DIR__ . '/..' . '/markbaker/matrix/classes/src/operations/multiply.php',
         '75c79eb1b25749b05a47976f32b0d8a2' => __DIR__ . '/..' . '/markbaker/matrix/classes/src/operations/divideby.php',
         '6ab8ad87a734f276a6bcd5a0fe1289be' => __DIR__ . '/..' . '/markbaker/matrix/classes/src/operations/divideinto.php',
+        '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -117,8 +118,8 @@ class ComposerStaticIniteb9cc952f954357efb5ed9f3d91d87ae
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -150,6 +151,16 @@ class ComposerStaticIniteb9cc952f954357efb5ed9f3d91d87ae
         ),
     );
 
+    public static $prefixesPsr0 = array (
+        'H' => 
+        array (
+            'HTMLPurifier' => 
+            array (
+                0 => __DIR__ . '/..' . '/ezyang/htmlpurifier/library',
+            ),
+        ),
+    );
+
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'PclZip' => __DIR__ . '/..' . '/pclzip/pclzip/pclzip.lib.php',
@@ -160,6 +171,7 @@ class ComposerStaticIniteb9cc952f954357efb5ed9f3d91d87ae
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticIniteb9cc952f954357efb5ed9f3d91d87ae::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticIniteb9cc952f954357efb5ed9f3d91d87ae::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticIniteb9cc952f954357efb5ed9f3d91d87ae::$prefixesPsr0;
             $loader->classMap = ComposerStaticIniteb9cc952f954357efb5ed9f3d91d87ae::$classMap;
 
         }, null, ClassLoader::class);

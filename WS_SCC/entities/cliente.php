@@ -222,7 +222,7 @@ Class Cliente{
 
     function contar_comercial(){
 
-        $query = "CALL sp_listarclienteestrictocontar(?,?,?,?,?,?,?,?,?)";
+        $query = "CALL sp_listarclienteestrictocontar(?,?,?,?,?,?,?)";
 
         $result = $this->conn->prepare($query);
 
@@ -233,8 +233,6 @@ Class Cliente{
         $result->bindParam(5, $this->inst_nombre);
         $result->bindParam(6, $this->sd_nombre);
         $result->bindParam(7, $this->prpagina);
-        $result->bindParam(8, $this->prtotalpagina);
-        $result->bindParam(9, $this->clt_estado);
 
         $result->execute();
 

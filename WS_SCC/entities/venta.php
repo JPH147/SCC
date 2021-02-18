@@ -1290,6 +1290,7 @@ Class Venta{
                   "numero" => $contador,
                   "periodo" => $periodo ,
                   "monto_cuota" => $monto_cuota ,
+                  "monto_cuota_anterior" => $monto_cuota_anterior ,
                   "monto_pago_manual" => $monto_pago_manual ,
                   "monto_pago_manual_directo" => $monto_pago_manual_directo ,
                   "monto_pago_manual_planilla" => $monto_pago_manual_planilla ,
@@ -1337,8 +1338,56 @@ Class Venta{
         return false;
     }
      
+    function crear_penalidad_venta_nueva () {
+        $query = "CALL sp_crearpenalidadventanueva(
+            :prventa ,
+            :prcuotapenalidad ,
+            :prnumerocuotas ,
+            :prfechainicio ,
+            :prtipopago
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prventa", $this->id_venta);
+        $result->bindParam(":prcuotapenalidad", $this->cuota_penalidad);
+        $result->bindParam(":prnumerocuotas", $this->numero_cuotas);
+        $result->bindParam(":prfechainicio", $this->fecha_inicio);
+        $result->bindParam(":prtipopago", $this->tipo_pago);
+
+        $this->id_venta=htmlspecialchars(strip_tags($this->id_venta));
+        $this->cuota_penalidad=htmlspecialchars(strip_tags($this->cuota_penalidad));
+        $this->numero_cuotas=htmlspecialchars(strip_tags($this->numero_cuotas));
+        $this->fecha_inicio=htmlspecialchars(strip_tags($this->fecha_inicio));
+        $this->tipo_pago=htmlspecialchars(strip_tags($this->tipo_pago));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
+    }
+
     function eliminar_penalidad_venta () {
         $query = "CALL sp_eliminarpenalidadventa(
+            :prventa
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prventa", $this->id_venta);
+
+        $this->id_venta=htmlspecialchars(strip_tags($this->id_venta));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    function eliminar_penalidad_venta_nueva () {
+        $query = "CALL sp_eliminarpenalidadventanueva(
             :prventa
         )";
 

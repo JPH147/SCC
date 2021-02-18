@@ -85,6 +85,12 @@ export class VentanaJudicialComponent implements OnInit {
       ] ],
       comentarios : [ { value: "", disabled : false }, [
       ] ],
+      fecha_notificacion_demandado : [ { value: null, disabled : false }, [
+      ] ],
+      fecha_notificacion_cooperativa : [ { value: null, disabled : false }, [
+      ] ],
+      fecha_notificacion_retorno : [ { value: null, disabled : false }, [
+      ] ],
     })
   }
 
@@ -130,6 +136,11 @@ export class VentanaJudicialComponent implements OnInit {
     this.VentanaJudicialForm.get('comentarios').setValue(this.data.proceso_detalle.comentarios) ;
     this.VentanaJudicialForm.get('trabajador').setValue(this.data.proceso_detalle.id_trabajador) ;
     this.VentanaJudicialForm.get('estado').setValue(this.data.proceso_detalle.id_estado) ;
+
+    this.VentanaJudicialForm.get('fecha_notificacion_demandado').setValue(this.data.proceso_detalle.fecha_notificacion_demandado) ;
+    this.VentanaJudicialForm.get('fecha_notificacion_cooperativa').setValue(this.data.proceso_detalle.fecha_notificacion_cooperativa) ;
+    this.VentanaJudicialForm.get('fecha_notificacion_retorno').setValue(this.data.proceso_detalle.fecha_notificacion_retorno) ;
+
     this.ListarEstados() ;
     if( this.VentanaJudicialForm.value.tipo_documento == 2 ) {
       this.VentanaJudicialForm.get('trabajador').enable();
@@ -234,15 +245,18 @@ export class VentanaJudicialComponent implements OnInit {
         this._generales.RenameFile(path_archivo['data'], documento, "_" + random, "proceso judicial")
         .subscribe(archivo_nombre=>{
           this._judiciales.CrearProcesoDetalle(
-            this.data.proceso,
-            this.VentanaJudicialForm.value.tipo_documento,
-            this.VentanaJudicialForm.value.fecha,
-            this.VentanaJudicialForm.value.trabajador || 0,
-            this.VentanaJudicialForm.value.estado || 0,
-            this.VentanaJudicialForm.value.numero_resolucion,
-            this.VentanaJudicialForm.value.sumilla,
-            archivo_nombre.mensaje,
-            this.VentanaJudicialForm.value.comentarios
+            this.data.proceso ,
+            this.VentanaJudicialForm.value.tipo_documento ,
+            this.VentanaJudicialForm.value.fecha ,
+            this.VentanaJudicialForm.value.trabajador || 0 ,
+            this.VentanaJudicialForm.value.estado || 0 ,
+            this.VentanaJudicialForm.value.numero_resolucion ,
+            this.VentanaJudicialForm.value.sumilla ,
+            archivo_nombre.mensaje ,
+            this.VentanaJudicialForm.value.comentarios ,
+            this.VentanaJudicialForm.value.tipo_documento == 8 ? this.VentanaJudicialForm.get('fecha_notificacion_demandado').value : null ,
+            this.VentanaJudicialForm.value.tipo_documento == 8 ? this.VentanaJudicialForm.get('fecha_notificacion_cooperativa').value : null ,
+            this.VentanaJudicialForm.value.tipo_documento == 8 ? this.VentanaJudicialForm.get('fecha_notificacion_retorno').value : null ,
           )
           .pipe(
             finalize(()=>this.Cargando.next(false))
@@ -268,7 +282,10 @@ export class VentanaJudicialComponent implements OnInit {
               this.VentanaJudicialForm.value.numero_resolucion,
               this.VentanaJudicialForm.value.sumilla,
               archivo_nombre.mensaje,
-              this.VentanaJudicialForm.value.comentarios
+              this.VentanaJudicialForm.value.comentarios ,
+              this.VentanaJudicialForm.value.tipo_documento == 8 ? this.VentanaJudicialForm.get('fecha_notificacion_demandado').value : null ,
+              this.VentanaJudicialForm.value.tipo_documento == 8 ? this.VentanaJudicialForm.get('fecha_notificacion_cooperativa').value : null ,
+              this.VentanaJudicialForm.value.tipo_documento == 8 ? this.VentanaJudicialForm.get('fecha_notificacion_retorno').value : null ,
             )
             .pipe(
               finalize(()=>this.Cargando.next(false))
@@ -288,7 +305,10 @@ export class VentanaJudicialComponent implements OnInit {
           this.VentanaJudicialForm.value.numero_resolucion,
           this.VentanaJudicialForm.value.sumilla,
           this.archivo_nombre_antiguo,
-          this.VentanaJudicialForm.value.comentarios
+          this.VentanaJudicialForm.value.comentarios ,
+          this.VentanaJudicialForm.value.tipo_documento == 8 ? this.VentanaJudicialForm.get('fecha_notificacion_demandado').value : null ,
+          this.VentanaJudicialForm.value.tipo_documento == 8 ? this.VentanaJudicialForm.get('fecha_notificacion_cooperativa').value : null ,
+          this.VentanaJudicialForm.value.tipo_documento == 8 ? this.VentanaJudicialForm.get('fecha_notificacion_retorno').value : null ,
         )
         .pipe(
           finalize(()=>this.Cargando.next(false))

@@ -70,6 +70,8 @@
     public $usuario_alvis ;
     public $referente ;
     public $periodo ;
+    public $tipo_comparacion ;
+    public $limite ;
 
     public $informacion;
 
@@ -1577,6 +1579,232 @@
         return false;
       };
 
+    }
+
+    function read_cobranzasxclienteperiodos() {
+      $query = "CALL sp_listarcobranzasxclienteperiodos(?,?,?,?,?,?,?,?,?,?,?)";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(1, $this->cliente);
+      $result->bindParam(2, $this->sede);
+      $result->bindParam(3, $this->subsede);
+      $result->bindParam(4, $this->institucion);
+      $result->bindParam(5, $this->tipo_pago);
+      $result->bindParam(6, $this->fecha_inicio);
+      $result->bindParam(7, $this->fecha_fin);
+      $result->bindParam(8, $this->tipo_comparacion);
+      $result->bindParam(9, $this->limite);
+      $result->bindParam(10, $this->numero_pagina);
+      $result->bindParam(11, $this->total_pagina);
+
+      $result->execute();
+      
+      $cobranza=array();
+      $cobranza["cobranza"]=array();
+
+      $contador = $this->total_pagina*($this->numero_pagina-1);
+      
+      while($row = $result->fetch(PDO::FETCH_ASSOC))
+      {
+          extract($row);
+          $contador=$contador+1;
+          $items = array (
+              "numero"=>$contador,
+              "id_cliente"=>$id_cliente,
+              "cliente"=>$cliente,
+              "cliente_dni"=>$cliente_dni,
+              "tipo_pago"=>$tipo_pago,
+              "subsede"=>$subsede,
+              "sede"=>$sede,
+              "institucion"=>$institucion,
+              "monto_pendiente"=>$monto_pendiente,
+              "primera_fecha_vencimiento"=>$primera_fecha_vencimiento,
+              "ultima_fecha_pago"=>$ultima_fecha_pago,
+              "meses_sin_pagar"=>$meses_sin_pagar,
+              "identificador"=>$identificador,
+          );
+          array_push($cobranza["cobranza"],$items);
+      }
+
+      return $cobranza;
+    }
+
+    // Estas funciones retornan la deuda acumulada de los clientes
+    function contar_cobranzasxclienteperiodos(){
+
+      $query = "CALL sp_listarcobranzasxclienteperiodoscontar(?,?,?,?,?,?,?,?,?)";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(1, $this->cliente);
+      $result->bindParam(2, $this->sede);
+      $result->bindParam(3, $this->subsede);
+      $result->bindParam(4, $this->institucion);
+      $result->bindParam(5, $this->tipo_pago);
+      $result->bindParam(6, $this->fecha_inicio);
+      $result->bindParam(7, $this->fecha_fin);
+      $result->bindParam(8, $this->tipo_comparacion);
+      $result->bindParam(9, $this->limite);
+
+      $result->execute();
+
+      $row = $result->fetch(PDO::FETCH_ASSOC);
+
+      $this->total_resultado=$row['total'];
+
+      return $this->total_resultado;
+    }
+
+    function read_cobranzasxclienteperiodosunlimited() {
+
+      $spreadsheet = new Spreadsheet();
+      $sheet = $spreadsheet->getActiveSheet();
+
+      $query = "CALL sp_listarcobranzasxclienteperiodosunlimited(?,?,?,?,?,?,?,?,?)";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(1, $this->cliente);
+      $result->bindParam(2, $this->sede);
+      $result->bindParam(3, $this->subsede);
+      $result->bindParam(4, $this->institucion);
+      $result->bindParam(5, $this->tipo_pago);
+      $result->bindParam(6, $this->fecha_inicio);
+      $result->bindParam(7, $this->fecha_fin);
+      $result->bindParam(8, $this->tipo_comparacion);
+      $result->bindParam(9, $this->limite);
+
+      $result->execute();
+      
+      $archivo = "" ;
+      $cobranza=array();
+      $cobranza["cobranza"]=array();
+
+      $contador = 1;
+
+      $sheet->setCellValue('A1', 'N°');
+      $sheet->setCellValue('B1', 'DNI');
+      $sheet->setCellValue('C1', 'Codigo');
+      $sheet->setCellValue('D1', 'Cliente');
+      $sheet->setCellValue('E1', 'Tipo de pago');
+      $sheet->setCellValue('F1', 'Subsede');
+      $sheet->setCellValue('G1', 'Sede');
+      $sheet->setCellValue('H1', 'Institución');
+      $sheet->setCellValue('I1', 'Ultima fecha de pago');
+      $sheet->setCellValue('J1', 'Meses sin pagar');
+      $sheet->setCellValue('K1', 'Transacciones');
+      $sheet->setCellValue('L1', 'Cargo');
+      $sheet->setCellValue('M1', 'Situacion');
+      $sheet->setCellValue('N1', 'Monto pendiente');
+      $sheet->setCellValue('O1', 'Distrito');
+      $sheet->setCellValue('P1', 'Provincia');
+      $sheet->setCellValue('Q1', 'Departamento');
+      $sheet->setCellValue('R1', 'Centro de trabajo');
+      $sheet->setCellValue('S1', 'Direccion centro de trabajo');
+      $sheet->setCellValue('T1', 'Telefono_centro de trabajo');
+      $sheet->setCellValue('U1', 'Direccion');
+      $sheet->setCellValue('V1', 'Telefono');
+
+      while($row = $result->fetch(PDO::FETCH_ASSOC))
+      {
+          extract($row);
+          $contador=$contador+1;
+
+          $sheet->setCellValue('A' . $contador, $contador-1 );
+          $sheet->setCellValue('B' . $contador, $cliente_dni );
+          $sheet->setCellValue('C' . $contador, $cliente_codigo );
+          $sheet->setCellValue('D' . $contador, $cliente );
+          $sheet->setCellValue('E' . $contador, $tipo_pago );
+          $sheet->setCellValue('F' . $contador, $subsede );
+          $sheet->setCellValue('G' . $contador, $sede );
+          $sheet->setCellValue('H' . $contador, $institucion );
+          $sheet->setCellValue('I' . $contador, $ultima_fecha_pago );
+          $sheet->setCellValue('J' . $contador, $meses_sin_pagar );
+          $sheet->setCellValue('K' . $contador, $identificador );
+          $sheet->setCellValue('L' . $contador, $cargo );
+          $sheet->setCellValue('M' . $contador, $cargo_estado );
+          $sheet->setCellValue('N' . $contador, $monto_pendiente );
+          $sheet->setCellValue('O' . $contador, $distrito );
+          $sheet->setCellValue('P' . $contador, $provincia );
+          $sheet->setCellValue('Q' . $contador, $departamento );
+          $sheet->setCellValue('R' . $contador, $centro_trabajo );
+          $sheet->setCellValue('S' . $contador, $direccion_centro_trabajo );
+          $sheet->setCellValue('T' . $contador, $telefono_centro_trabajo );
+          $sheet->setCellValue('U' . $contador, $direccion );
+          $sheet->setCellValue('V' . $contador, $telefono );
+      }
+
+      $writer = new Xlsx($spreadsheet);
+
+      $archivo = $this->path_reporte . $this->archivo .'.xlsx';
+
+      $writer->save($archivo);
+      
+      if( file_exists ( $archivo ) ){
+        return $archivo;
+      } else {
+        return false;
+      };
+    }
+
+    function read_cobranzasxclienteperiodosdetallado() {
+      $query = "CALL sp_listarcobranzasxclienteperiodosdetallado(?,?,?,?,?)";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(1, $this->cliente);
+      $result->bindParam(2, $this->tipo_comparacion);
+      $result->bindParam(3, $this->limite);
+      $result->bindParam(4, $this->numero_pagina);
+      $result->bindParam(5, $this->total_pagina);
+
+      $result->execute();
+      
+      $cobranza=array();
+      $cobranza["cobranza"]=array();
+
+      $contador = $this->total_pagina*($this->numero_pagina-1);
+      
+      while($row = $result->fetch(PDO::FETCH_ASSOC))
+      {
+          extract($row);
+          $contador=$contador+1;
+          $items = array (
+              "numero"=>$contador,
+              "tipo_transaccion"=>$tipo_transaccion,
+              "id_transaccion"=>$id_transaccion,
+              "identificador"=>$identificador,
+              "fecha_transaccion"=>$fecha_transaccion,
+              "monto_pendiente"=>$monto_pendiente,
+              "primera_fecha_vencimiento"=>$primera_fecha_vencimiento,
+              "ultima_fecha_pago"=>$ultima_fecha_pago,
+              "meses_sin_pagar"=>$meses_sin_pagar,
+          );
+          array_push($cobranza["cobranza"],$items);
+      }
+
+      return $cobranza;
+    }
+
+    // Estas funciones retornan la deuda acumulada de los clientes
+    function contar_cobranzasxclienteperiodosdetallado(){
+
+      $query = "CALL sp_listarcobranzasxclienteperiodosdetalladocontar(?,?,?)";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(1, $this->cliente);
+      $result->bindParam(2, $this->tipo_comparacion);
+      $result->bindParam(3, $this->limite);
+
+      $result->execute();
+
+      $row = $result->fetch(PDO::FETCH_ASSOC);
+
+      $this->total_resultado=$row['total'];
+
+      return $this->total_resultado;
     }
 
     // Estas funciones retornan las cuotas por cliente

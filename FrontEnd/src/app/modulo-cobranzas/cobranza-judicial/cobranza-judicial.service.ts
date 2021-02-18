@@ -186,7 +186,10 @@ export class CobranzaJudicialService {
     numero: number,
     sumilla: string,
     archivo: string,
-    comentarios: string
+    comentarios: string,
+    fecha_notificacion_demandado : Date ,
+    fecha_notificacion_cooperativa : Date ,
+    fecha_notificacion_retorno : Date ,
   ){
     let params = new HttpParams()
       .set('prproceso', id_proceso.toString())
@@ -198,6 +201,9 @@ export class CobranzaJudicialService {
       .set('prsumilla', sumilla)
       .set('prarchivo', archivo)
       .set('prcomentarios', comentarios )
+      .set('prfechanotificaciondemandado', fecha_notificacion_demandado ? moment(fecha_notificacion_demandado).format("YYYY-MM-DD") : "0")
+      .set('prfechanotificacioncooperativa', fecha_notificacion_cooperativa ? moment(fecha_notificacion_cooperativa).format("YYYY-MM-DD") : "0")
+      .set('prfechanotificacionretorno', fecha_notificacion_retorno ? moment(fecha_notificacion_retorno).format("YYYY-MM-DD") : "0")
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -327,7 +333,10 @@ export class CobranzaJudicialService {
     numero: number,
     sumilla: string,
     archivo: string,
-    comentarios: string
+    comentarios: string,
+    fecha_notificacion_demandado : Date ,
+    fecha_notificacion_cooperativa : Date ,
+    fecha_notificacion_retorno : Date ,
   ){
     let params = new HttpParams()
       .set('prproceso', id_proceso_detalle.toString())
@@ -339,6 +348,9 @@ export class CobranzaJudicialService {
       .set('prsumilla', sumilla)
       .set('prarchivo', archivo)
       .set('prcomentarios', comentarios )
+      .set('prfechanotificaciondemandado', fecha_notificacion_demandado ? moment(fecha_notificacion_demandado).format("YYYY-MM-DD") : "0")
+      .set('prfechanotificacioncooperativa', fecha_notificacion_cooperativa ? moment(fecha_notificacion_cooperativa).format("YYYY-MM-DD") : "0")
+      .set('prfechanotificacionretorno', fecha_notificacion_retorno ? moment(fecha_notificacion_retorno).format("YYYY-MM-DD") : "0")
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 

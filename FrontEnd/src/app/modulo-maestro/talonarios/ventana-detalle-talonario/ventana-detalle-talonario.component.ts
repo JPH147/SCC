@@ -43,7 +43,7 @@ export class VentanaDetalleTalonarioComponent implements OnInit {
   }
 
   Descargar(archivo : string) {
-    console.log(URL.url, URLIMAGENES.carpeta, archivo) ;
+    // console.log(URL.url, URLIMAGENES.carpeta, archivo) ;
     let path : string = URLIMAGENES.carpeta + "venta/" + archivo ;
     window.open(path, "_blank");
   }
@@ -67,8 +67,8 @@ export class VentanaDetalleTalonarioComponent implements OnInit {
 
     Ventana.afterClosed().subscribe(res=>{
       if(res){
-        this.CargarData() ;
         this._notificacion.Snack("Se adjuntó el archivo satisfactoriamente","")
+        this.CargarData() ;
       }
       if(res === false){
         this._notificacion.Snack("Ocurrió un error al adjuntar el archivo","")

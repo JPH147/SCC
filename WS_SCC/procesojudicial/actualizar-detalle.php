@@ -31,6 +31,9 @@
       $proceso->sumilla=trim($_POST["prsumilla"]);
       $proceso->archivo=trim($_POST["prarchivo"]);
       $proceso->comentarios=trim($_POST["prcomentarios"]);
+      $proceso->fecha_notificacion_demandado=trim($_POST["prfechanotificaciondemandado"]) == 0 ? null : $_POST["prfechanotificaciondemandado"] ;
+      $proceso->fecha_notificacion_cooperativa=trim($_POST["prfechanotificacioncooperativa"]) == 0 ? null : $_POST["prfechanotificacioncooperativa"] ;
+      $proceso->fecha_notificacion_retorno=trim($_POST["prfechanotificacionretorno"]) == 0 ? null : $_POST["prfechanotificacionretorno"] ;
       
       $usuario_alvis = trim($_POST["usuario_alvis"]) ;
 

@@ -25,6 +25,7 @@ export class VentanaAdjuntoComponent implements OnInit, AfterViewInit {
 
   public archivo : File ;
   public archivo_nombre : string = "";
+  public archivo_nombre_anterior : string = "";
 
   public Estados : Array<any> = tipos_estado ;
 
@@ -49,11 +50,17 @@ export class VentanaAdjuntoComponent implements OnInit, AfterViewInit {
       this.ObtenerClientexId(this.data.id_cliente_adjunto) ;
     }
 
+    console.log(this.data) ;
+
+    this.data.id_estado ? this.TalonarioAdjuntosForm.get('tipo_pago').setValue( this.data.id_estado ) : null ;
     this.data.tipo_pago_adjunto ? this.TalonarioAdjuntosForm.get('tipo_pago').setValue( this.data.tipo_pago_adjunto ) : null ;
     this.data.monto_adjunto ? this.TalonarioAdjuntosForm.get('monto').setValue( this.data.monto_adjunto ) : null ;
     this.data.fecha_adjunto ? this.TalonarioAdjuntosForm.get('fecha_inicio').setValue( this.data.fecha_adjunto ) : null ;
     this.data.cuotas_adjunto ? this.TalonarioAdjuntosForm.get('cuotas').setValue( this.data.cuotas_adjunto ) : null ;
     this.data.observacion ? this.TalonarioAdjuntosForm.get('observacion').setValue( this.data.observacion ) : null ;
+    
+    this.archivo_nombre_anterior = this.data.pdf_contrato ;
+    this.archivo_nombre = this.data.pdf_contrato ;
   }
 
   ngAfterViewInit() {
@@ -161,10 +168,12 @@ export class VentanaAdjuntoComponent implements OnInit, AfterViewInit {
 
     this._generales.SubirArchivo(this.archivo).subscribe(path_archivo=>{
       this._generales.RenameFile(path_archivo['data'], random.toString() , "adjunto_express" , "venta")
-      .subscribe(archivo_nombre=>{
+      .subscribe(path_archivo=>{
+        const nombre_archivo = path_archivo.mensaje ? path_archivo.mensaje : this.archivo_nombre_anterior ;
+
         this._ventas.CrearAdjuntosTalonario(
           this.TalonarioAdjuntosForm.get('contrato').value ,
-          archivo_nombre.mensaje ,
+          nombre_archivo ,
           this.TalonarioAdjuntosForm.get('tipo_pago').value ,
           this.TalonarioAdjuntosForm.get('id_cliente').value ,
           this.TalonarioAdjuntosForm.get('fecha_inicio').value ,

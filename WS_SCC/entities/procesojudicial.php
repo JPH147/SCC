@@ -39,6 +39,10 @@ Class Proceso{
   public $orden ;
   public $arreglo ;
 
+  public $fecha_notificacion_demandado ;
+  public $fecha_notificacion_cooperativa ;
+  public $fecha_notificacion_retorno ;
+
   public function __construct($db){
     $this->conn = $db;
   }
@@ -278,6 +282,9 @@ Class Proceso{
           "sumilla"=>$sumilla,
           "archivo"=>$archivo,
           "comentarios"=>$comentarios,
+          "fecha_notificacion_demandado" => $fecha_notificacion_demandado ,
+          "fecha_notificacion_cooperativa" => $fecha_notificacion_cooperativa ,
+          "fecha_notificacion_retorno" => $fecha_notificacion_retorno ,
           "fecha_creacion"=>$fecha_creacion,
           "usuario_creacion"=>$usuario_creacion,
           "fecha_edicion"=>$fecha_edicion,
@@ -500,7 +507,10 @@ Class Proceso{
       :prnumero,
       :prsumilla,
       :prarchivo,
-      :prcomentarios
+      :prcomentarios,
+      :prfechanotificaciondemandado,
+      :prfechanotificacioncooperativa,
+      :prfechanotificacionretorno
     )";
 
     $result = $this->conn->prepare($query);
@@ -514,6 +524,9 @@ Class Proceso{
     $result->bindParam(":prsumilla", $this->sumilla);
     $result->bindParam(":prarchivo", $this->archivo);
     $result->bindParam(":prcomentarios", $this->comentarios);
+    $result->bindParam(":prfechanotificaciondemandado", $this->fecha_notificacion_demandado);
+    $result->bindParam(":prfechanotificacioncooperativa", $this->fecha_notificacion_cooperativa);
+    $result->bindParam(":prfechanotificacionretorno", $this->fecha_notificacion_retorno);
 
     $this->id_proceso=htmlspecialchars(strip_tags($this->id_proceso));
     $this->tipo_documento=htmlspecialchars(strip_tags($this->tipo_documento));
@@ -546,7 +559,10 @@ Class Proceso{
       :prnumero,
       :prsumilla,
       :prarchivo,
-      :prcomentarios
+      :prcomentarios,
+      :prfechanotificaciondemandado,
+      :prfechanotificacioncooperativa,
+      :prfechanotificacionretorno
     )";
 
     $result = $this->conn->prepare($query);
@@ -560,6 +576,9 @@ Class Proceso{
     $result->bindParam(":prsumilla", $this->sumilla);
     $result->bindParam(":prarchivo", $this->archivo);
     $result->bindParam(":prcomentarios", $this->comentarios);
+    $result->bindParam(":prfechanotificaciondemandado", $this->fecha_notificacion_demandado);
+    $result->bindParam(":prfechanotificacioncooperativa", $this->fecha_notificacion_cooperativa);
+    $result->bindParam(":prfechanotificacionretorno", $this->fecha_notificacion_retorno);
 
     $this->id_proceso=htmlspecialchars(strip_tags($this->id_proceso));
     $this->tipo_documento=htmlspecialchars(strip_tags($this->tipo_documento));

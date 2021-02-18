@@ -1182,6 +1182,21 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
     }
   }
 
+  EliminarPenalidad() {
+    let Dialogo = this.Dialogo.open(VentanaConfirmarComponent,{
+      data: {objeto: "la penalidad", valor: '' }
+    })
+
+    Dialogo.afterClosed().subscribe(res=>{
+      this.Cargando.next(true) ;
+      if (res) {
+        this.Servicio.EliminarPenalidadNueva(this.idventa).subscribe(res=>{
+          this.CambiarTipoVista("ver") ;
+        });
+      }
+    })
+  }
+
   GuardarVenta(formulario){
     if(this.id_venta_editar){
       this.ActualizarVenta(formulario)

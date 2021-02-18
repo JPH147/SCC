@@ -1533,11 +1533,28 @@
 
           <!-- Solo se muestra cuando no hay penalidad y no hay interés -->
           <mat-grid-tile>
-            <ng-container *ngIf="permiso?.creditos?.listado_creditos?.establecer_penalidad && cumple_penalidad == 1 &&
-               cuotas_penalidad==0 && cuotas_interes==0 && CreditosForm.get('estado_penalidad').value == 1">
-              <button mat-raised-button color="warn" (click)="EstablecerPenalidad()" [disabled]="(Cargando | async) ||
-                CreditosForm.get('pagado').value == 1">
-                Establecer penalidad </button>
+            <ng-container *ngIf="cuotas_penalidad==0">
+              <!-- Este boton se utiliza de forma provisional para forzar la generacion de la penalidad -->
+              <ng-container *ngIf="permiso?.creditos?.listado_creditos?.establecer_penalidad &&
+                  CreditosForm.get('estado_penalidad').value == 1">
+                <button mat-raised-button color="warn" (click)="EstablecerPenalidad(true)" [disabled]="(Cargando | async) ||
+                  CreditosForm.get('pagado').value == 1">
+                  Establecer penalidad </button>
+              </ng-container>
+
+              <!-- Este boton es el utilizado para generar penalidad de forma estandar -->
+              <!-- <ng-container *ngIf="permiso?.creditos?.listado_creditos?.establecer_penalidad && cumple_penalidad == 1 &&
+                  cuotas_interes==0 && CreditosForm.get('estado_penalidad').value == 1">
+                <button mat-raised-button color="warn" (click)="EstablecerPenalidad(true)" [disabled]="(Cargando | async) ||
+                  CreditosForm.get('pagado').value == 1">
+                  Establecer penalidad </button>
+              </ng-container> -->
+            </ng-container>
+
+            <ng-container *ngIf="CreditosForm.get('estado_penalidad').value == 3">
+              <button mat-stroked-button color="warn" (click)="EliminarPenalidad()" [disabled]="(Cargando | async) ||
+                  CreditosForm.get('pagado').value == 1">
+                  Eliminar penalidad </button>
             </ng-container>
           </mat-grid-tile>
 
@@ -1634,8 +1651,13 @@
               <mat-cell *matCellDef="let cronograma"> {{cronograma.periodo}} </mat-cell>
             </ng-container>
     
+            <ng-container matColumnDef="monto_cuota_anterior">
+              <mat-header-cell *matHeaderCellDef> Cuota anterior </mat-header-cell>
+              <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_cuota_anterior | currency:'S/.'}} </mat-cell>
+            </ng-container>
+
             <ng-container matColumnDef="monto_cuota">
-              <mat-header-cell *matHeaderCellDef> Monto de la cuota </mat-header-cell>
+              <mat-header-cell *matHeaderCellDef> Cuota actual </mat-header-cell>
               <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_cuota | currency:'S/.'}} </mat-cell>
             </ng-container>
 

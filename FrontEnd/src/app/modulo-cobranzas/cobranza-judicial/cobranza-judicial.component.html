@@ -472,6 +472,8 @@
                 <button type="button" mat-raised-button (click)="AgregarDocumento(6)"> Nota </button>
                 &nbsp;
                 <button type="button" mat-raised-button (click)="AgregarDocumento(7)"> Queja </button>
+                &nbsp;
+                <button type="button" mat-raised-button (click)="AgregarDocumento(8)"> Notificación </button>
             </mat-grid-tile>
           </mat-grid-list>
   
@@ -482,14 +484,16 @@
                             'tipo-2': documento.tipo_documento=='Resolución',
                             'tipo-3': documento.tipo_documento=='Oficio',
                             'tipo-5': documento.tipo_documento=='Nota',
-                            'tipo-7': documento.tipo_documento=='Queja'
+                            'tipo-7': documento.tipo_documento=='Queja',
+                            'tipo-8': documento.tipo_documento=='Notificación'
                           }">
               <div [ngClass]="{ 'titulo-seccion-tercera': true,
                                 'tipo-tercero-1': documento.tipo_documento=='Escrito',
                                 'tipo-tercero-2': documento.tipo_documento=='Resolución',
                                 'tipo-tercero-3': documento.tipo_documento=='Oficio',
                                 'tipo-tercero-5': documento.tipo_documento=='Nota',
-                                'tipo-tercero-7': documento.tipo_documento=='Queja'
+                                'tipo-tercero-7': documento.tipo_documento=='Queja',
+                                'tipo-tercero-8': documento.tipo_documento=='Notificación'
                               }">
                 {{ documento.tipo_documento }}&nbsp;{{ documento.numero }}
                 <span class="espacio"></span>
@@ -552,6 +556,35 @@
                   </ng-container>
                 </mat-grid-tile>
 
+                <ng-container *ngIf="documento.id_tipo_documento==8">
+                  <mat-grid-tile colspan="1">
+                    <mat-form-field class="columnas-1">
+                      <input matInput type="text" [matDatepicker]="FechaNotificacionDemandado" placeholder="Fecha de notificación al demandado"
+                        [(ngModel)]="documento.fecha_notificacion_demandado" [ngModelOptions]="{standalone:true}" readonly>
+                      <mat-datepicker-toggle matSuffix [for]="FechaNotificacionDemandado"></mat-datepicker-toggle>
+                      <mat-datepicker #FechaNotificacionDemandado disabled></mat-datepicker>
+                    </mat-form-field>
+                  </mat-grid-tile>
+          
+                  <mat-grid-tile colspan="1">
+                    <mat-form-field class="columnas-1">
+                      <input matInput type="text" [matDatepicker]="FechaNotificacionCooperativa" placeholder="Fecha de notificación a la cooperativa"
+                        [(ngModel)]="documento.fecha_notificacion_cooperativa" [ngModelOptions]="{standalone:true}" readonly>
+                      <mat-datepicker-toggle matSuffix [for]="FechaNotificacionCooperativa"></mat-datepicker-toggle>
+                      <mat-datepicker #FechaNotificacionCooperativa disabled></mat-datepicker>
+                    </mat-form-field>
+                  </mat-grid-tile>
+          
+                  <mat-grid-tile colspan="1">
+                    <mat-form-field class="columnas-1">
+                      <input matInput type="text" [matDatepicker]="FechaNotificacionRetorno" placeholder="Fecha de retorno de la notificación"
+                        [(ngModel)]="documento.fecha_notificacion_retorno" [ngModelOptions]="{standalone:true}" readonly>
+                      <mat-datepicker-toggle matSuffix [for]="FechaNotificacionRetorno"></mat-datepicker-toggle>
+                      <mat-datepicker #FechaNotificacionRetorno disabled></mat-datepicker>
+                    </mat-form-field>
+                  </mat-grid-tile>
+                </ng-container>
+
                 <mat-grid-tile colspan=3 *ngIf="documento.comentarios">
                   <mat-form-field class="columnas-3">
                     <input matInput type="text" placeholder="Comentarios" [(ngModel)]="documento.comentarios" [ngModelOptions]="{standalone:true}" readonly>
@@ -610,14 +643,16 @@
                           'tipo-2': documento.tipo_documento=='Resolución',
                           'tipo-3': documento.tipo_documento=='Oficio',
                           'tipo-5': documento.tipo_documento=='Nota',
-                          'tipo-7': documento.tipo_documento=='Queja'
+                          'tipo-7': documento.tipo_documento=='Queja',
+                          'tipo-8': documento.tipo_documento=='Notificación'
                         }">
               <div [ngClass]="{ 'titulo-seccion-tercera': true,
                               'tipo-tercero-1': documento.tipo_documento=='Escrito',
                               'tipo-tercero-2': documento.tipo_documento=='Resolución',
                               'tipo-tercero-3': documento.tipo_documento=='Oficio',
                               'tipo-tercero-5': documento.tipo_documento=='Nota',
-                              'tipo-tercero-7': documento.tipo_documento=='Queja'
+                              'tipo-tercero-7': documento.tipo_documento=='Queja',
+                              'tipo-tercero-8': documento.tipo_documento=='Notificación'
                             }">
                 {{ documento.tipo_documento }}&nbsp;{{ documento.numero }}
                 <span class="espacio"></span>
@@ -666,8 +701,34 @@
                 <mat-grid-tile *ngIf="documento.id_trabajador<=0">
                 </mat-grid-tile>
   
-                <mat-grid-tile *ngIf="documento.id_estado<=0">
-                </mat-grid-tile>
+                <ng-container *ngIf="documento.id_tipo_documento==8">
+                  <mat-grid-tile colspan="1">
+                    <mat-form-field class="columnas-1">
+                      <input matInput type="text" [matDatepicker]="FechaNotificacionDemandado" placeholder="Fecha de notificación al demandado"
+                        [(ngModel)]="fecha_notificacion_demandado" readonly>
+                      <mat-datepicker-toggle matSuffix [for]="FechaNotificacionDemandado"></mat-datepicker-toggle>
+                      <mat-datepicker #FechaNotificacionDemandado disabled></mat-datepicker>
+                    </mat-form-field>
+                  </mat-grid-tile>
+          
+                  <mat-grid-tile colspan="1">
+                    <mat-form-field class="columnas-1">
+                      <input matInput type="text" [matDatepicker]="FechaNotificacionCooperativa" placeholder="Fecha de notificación a la cooperativa"
+                        [(ngModel)]="fecha_notificacion_cooperativa" readonly>
+                      <mat-datepicker-toggle matSuffix [for]="FechaNotificacionCooperativa"></mat-datepicker-toggle>
+                      <mat-datepicker #FechaNotificacionCooperativa disabled></mat-datepicker>
+                    </mat-form-field>
+                  </mat-grid-tile>
+          
+                  <mat-grid-tile colspan="1">
+                    <mat-form-field class="columnas-1">
+                      <input matInput type="text" [matDatepicker]="FechaNotificacionRetorno" placeholder="Fecha de retorno de la notificación"
+                        [(ngModel)]="fecha_notificacion_retorno" readonly>
+                      <mat-datepicker-toggle matSuffix [for]="FechaNotificacionRetorno"></mat-datepicker-toggle>
+                      <mat-datepicker #FechaNotificacionRetorno disabled></mat-datepicker>
+                    </mat-form-field>
+                  </mat-grid-tile>
+                </ng-container>
 
                 <mat-grid-tile colspan=1>
                   <ng-container *ngIf="!id_proceso_editar">

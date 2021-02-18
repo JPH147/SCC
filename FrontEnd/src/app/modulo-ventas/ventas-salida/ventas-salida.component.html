@@ -1156,12 +1156,29 @@
             </ng-container>
           </mat-grid-tile>
 
-          <mat-grid-tile>
+          <!-- <mat-grid-tile>
             <ng-container *ngIf="permiso?.ventas?.listado_ventas?.establecer_penalidad && cumple_penalidad == 1
               && cuotas_penalidad==0 && cuotas_interes==0 && this.VentasSalidaForm.get('estado_penalidad').value">
               <button mat-raised-button color="warn" (click)="EstablecerPenalidad()"
                 [disabled]="(Cargando | async) || VentasSalidaForm.get('pagado').value == 1">
                 Establecer penalidad </button>
+            </ng-container>
+          </mat-grid-tile> -->
+
+          <mat-grid-tile>
+            <ng-container *ngIf="cuotas_penalidad==0">
+              <ng-container *ngIf="permiso?.ventas?.listado_ventas?.establecer_penalidad &&
+                this.VentasSalidaForm.get('estado_penalidad').value == 1">
+                <button mat-raised-button color="warn" (click)="EstablecerPenalidad()" [disabled]="(Cargando | async)
+                  || VentasSalidaForm.get('pagado').value == 1">
+                  Establecer penalidad </button>
+              </ng-container>
+            </ng-container>
+
+            <ng-container *ngIf="VentasSalidaForm.get('estado_penalidad').value == 3">
+              <button mat-stroked-button color="warn" (click)="EliminarPenalidad()" [disabled]="(Cargando | async) ||
+              VentasSalidaForm.get('pagado').value == 1">
+                  Eliminar penalidad </button>
             </ng-container>
           </mat-grid-tile>
 
@@ -1183,6 +1200,11 @@
               <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
             </ng-container>
   
+            <ng-container matColumnDef="monto_cuota_anterior">
+              <mat-header-cell *matHeaderCellDef> Cuota anterior </mat-header-cell>
+              <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_cuota_anterior | currency:'S/.'}} </mat-cell>
+            </ng-container>
+
             <ng-container matColumnDef="monto_cuota">
               <mat-header-cell *matHeaderCellDef> Monto </mat-header-cell>
               <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_cuota | currency:'S/.' }} </mat-cell>

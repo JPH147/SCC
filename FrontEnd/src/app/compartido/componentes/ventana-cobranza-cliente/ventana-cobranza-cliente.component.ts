@@ -16,7 +16,7 @@ export class VentanaCobranzaClienteComponent implements OnInit {
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   public ListadoCronograma: CronogramaDataSource;
-  public Columnas: string[] = [ 'numero', 'tipo', 'codigo', 'fecha', 'monto_total'];
+  public Columnas: string[] = [ 'numero', 'identificador', 'fecha_transaccion', 'ultima_fecha_pago', 'meses_sin_pagar', 'opciones'];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
@@ -27,7 +27,7 @@ export class VentanaCobranzaClienteComponent implements OnInit {
 
   ngOnInit() {
     this.ListadoCronograma = new CronogramaDataSource(this.Servicio);
-    this.ListadoCronograma.CargarCronograma(this.data.cliente, this.data.fecha_inicio, this.data.fecha_fin, 1, 5);
+    this.ListadoCronograma.CargarCronograma(this.data.cliente, this.data.tipo_comparacion, this.data.limite, 1, 5);
   }
 
   ngAfterViewInit(){
@@ -44,10 +44,26 @@ export class VentanaCobranzaClienteComponent implements OnInit {
   CargarData(){
   	this.ListadoCronograma.CargarCronograma(
       this.data.cliente,
-      this.data.fecha_inicio,
-      this.data.fecha_fin,
+      this.data.tipo_comparacion,
+      this.data.limite,
       this.paginator.pageIndex+1,
       this.paginator.pageSize)
+  }
+
+  VerTransaccion(transaccion) {
+    if(transaccion.tipo_transaccion==1){
+      this.router.navigate(['/creditos','afiliaciones','ver', transaccion.id_transaccion] );
+    }
+    if(transaccion.tipo_transaccion==2){
+      this.router.navigate(['/creditos','creditos','ver', transaccion.id_transaccion] );
+    }
+    if(transaccion.tipo_transaccion==3){
+      this.router.navigate(['/ventas','ventas', transaccion.id_transaccion] );
+    }
+    if(transaccion.tipo_transaccion==4){
+      this.router.navigate(['/ventas','ventas','salida', transaccion.id_transaccion] );
+    }
+    this.ventana.close();
   }
 
   onNoClick(): void {
@@ -74,18 +90,20 @@ export class CronogramaDataSource implements DataSource<any> {
   }
 
   CargarCronograma(
-    id_cliente: number,
-    fecha_inicio:Date,
-    fecha_fin:Date,
-    pagina: number,
-    total_pagina: number
+    cliente : number,
+    tipo_comparacion : number,
+    limite : number,
+    numero_pagina : number,
+    total_pagina : number,
   ){
   	this.CargandoInformacion.next(true);
-  	this.Servicio.ListarCronogramaxCliente(
-  		id_cliente,
-  		fecha_inicio,
-  		fecha_fin,
-  		pagina ,
+  	this.Servicio.ListarCobranzasxClientePeriodosDetallado(
+      cliente,
+      // Se coloca 0 porque se deben mostrar todas las transacciones del cliente, 
+      // idenpendientemente si algunas sean morosas y otras muy morosas
+  		0 ,
+  		0 ,
+  		numero_pagina ,
   		total_pagina
   	)
   	.pipe(catchError(() => of([])),
@@ -93,7 +111,7 @@ export class CronogramaDataSource implements DataSource<any> {
   	)
   	.subscribe(res => {
   		if (res['data']) {
-  			this.InformacionClientes.next(res['data'].cronograma);
+  			this.InformacionClientes.next(res['data'].cobranza);
   		}else{
   			this.InformacionClientes.next([])
   		}

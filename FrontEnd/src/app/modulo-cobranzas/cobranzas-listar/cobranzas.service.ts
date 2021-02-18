@@ -764,6 +764,103 @@ export class CobranzasService {
     }));
   }
 
+  ListarCobranzasxClientePeriodos(
+    cliente : string,
+    sede : string,
+    subsede : string,
+    institucion : string,
+    tipo_pago : number,
+    fecha_inicio : Date,
+    fecha_fin : Date,
+    tipo_comparacion : number,
+    limite : number,
+    numero_pagina : number,
+    total_pagina : number,
+  ) : Observable <any> {
+    let params = new HttpParams()
+      .set('prcliente', cliente)
+      .set('prsede', sede)
+      .set('prsubsede', subsede)
+      .set('prinstitucion', institucion)
+      .set('prtipopago', tipo_pago.toString())
+      .set('prfechainicio', fecha_inicio ? moment(fecha_inicio).format("YYYY-MM-DD") : "")
+      .set('prfechafin', fecha_fin ? moment(fecha_fin).format("YYYY-MM-DD") : "")
+      .set('prtipocomparacion', tipo_comparacion.toString())
+      .set('prlimite', limite.toString())
+      .set('prpagina', numero_pagina.toString())
+      .set('prtotalpagina', total_pagina.toString())
+
+    return this.http.get(this.url + 'cobranza/read-cobranzasxclienteperiodos.php', {params})
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res;
+      } else {
+        console.log('No hay datos que mostrar');
+        return res;
+      }
+    }));
+  }
+
+  ListarCobranzasxClientePeriodosDetallado(
+    cliente : number,
+    tipo_comparacion : number,
+    limite : number,
+    numero_pagina : number,
+    total_pagina : number,
+  ) : Observable <any> {
+    let params = new HttpParams()
+      .set('prcliente', cliente.toString())
+      .set('prtipocomparacion', tipo_comparacion.toString())
+      .set('prlimite', limite.toString())
+      .set('prpagina', numero_pagina.toString())
+      .set('prtotalpagina', total_pagina.toString())
+
+    return this.http.get(this.url + 'cobranza/read-cobranzasxclienteperiodosdetallado.php', {params})
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res;
+      } else {
+        console.log('No hay datos que mostrar', res);
+        return res;
+      }
+    }));
+  }
+
+  ListarCobranzasxClientePeriodosUnlimited(
+    nombre_archivo : string ,
+    cliente : string,
+    sede : string,
+    subsede : string,
+    institucion : string,
+    tipo_pago : number,
+    fecha_inicio : Date,
+    fecha_fin : Date,
+    tipo_comparacion : number,
+    limite : number,
+  ) : Observable <any> {
+    let params = new HttpParams()
+      .set('prarchivo',nombre_archivo)
+      .set('prcliente', cliente)
+      .set('prsede', sede)
+      .set('prsubsede', subsede)
+      .set('prinstitucion', institucion)
+      .set('prtipopago', tipo_pago.toString())
+      .set('prfechainicio', fecha_inicio ? moment(fecha_inicio).format("YYYY-MM-DD") : "")
+      .set('prfechafin', fecha_fin ? moment(fecha_fin).format("YYYY-MM-DD") : "")
+      .set('prtipocomparacion', tipo_comparacion.toString())
+      .set('prlimite', limite.toString()) ;
+
+    return this.http.get(this.url + 'cobranza/read-cobranzasxclienteperiodos-unlimited.php', {params})
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res['data'] ;
+      } else {
+        console.log('No hay datos que mostrar');
+        return false ;
+      }
+    }));
+  }
+
   ListarCobranzasxclienteUnlimited(
     nombre_archivo : string,
     cliente : string,

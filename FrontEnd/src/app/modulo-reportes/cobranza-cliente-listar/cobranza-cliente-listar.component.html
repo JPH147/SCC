@@ -7,13 +7,13 @@
 
     <mat-grid-tile>
       <mat-icon>search</mat-icon>
-      <mat-form-field>
+      <mat-form-field class="columnas-1">
         <input matInput placeholder="Cliente" #InputCliente>
       </mat-form-field>
     </mat-grid-tile>
 
     <mat-grid-tile>
-      <mat-form-field>
+      <mat-form-field class="columnas-1">
         <mat-select #InputTipoPago placeholder="Tipo de pago" (selectionChange)="CambioFiltro()" [value]="0">
           <mat-option [value]="0"> Todos </mat-option>
           <mat-option *ngFor="let tipo of ListadoTipoPago" [value] = "tipo.id"> {{tipo.nombre}} </mat-option>
@@ -22,7 +22,7 @@
     </mat-grid-tile>
 
     <mat-grid-tile>
-      <mat-form-field>
+      <mat-form-field class="columnas-1">
         <input matInput [matDatepicker]="inicio" placeholder="Fecha de inicio" [(ngModel)]="fecha_inicio" (dateChange)="CambioFiltro()">
         <mat-datepicker-toggle matSuffix [for]="inicio"></mat-datepicker-toggle>
         <mat-datepicker #inicio disabled="false"></mat-datepicker>
@@ -30,7 +30,7 @@
     </mat-grid-tile>
 
     <mat-grid-tile>
-      <mat-form-field>
+      <mat-form-field class="columnas-1">
         <input matInput [matDatepicker]="fin" placeholder="Fecha de fin" [(ngModel)]="fecha_fin" (dateChange)="CambioFiltro()">
         <mat-datepicker-toggle matSuffix [for]="fin"></mat-datepicker-toggle>
         <mat-datepicker #fin disabled="false"></mat-datepicker>
@@ -39,21 +39,21 @@
 
     <mat-grid-tile>
       <mat-icon>search</mat-icon>
-      <mat-form-field>
+      <mat-form-field class="columnas-1">
         <input matInput placeholder="Sub sede" #InputSubsede>
       </mat-form-field>
     </mat-grid-tile>
 
     <mat-grid-tile>
       <mat-icon>search</mat-icon>
-      <mat-form-field>
+      <mat-form-field class="columnas-1">
         <input matInput placeholder="Sede" #InputSede>
       </mat-form-field>
     </mat-grid-tile>
 
     <mat-grid-tile>
       <mat-icon>search</mat-icon>
-      <mat-form-field>
+      <mat-form-field class="columnas-1">
         <input matInput placeholder="Institucion" #InputInstitución>
       </mat-form-field>
     </mat-grid-tile>
@@ -98,9 +98,14 @@
         <mat-cell *matCellDef="let cobranza"> {{ cobranza.tipo_pago }} </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="monto_pendiente">
-        <mat-header-cell *matHeaderCellDef> Monto </mat-header-cell>
-        <mat-cell *matCellDef="let cobranza"> {{ cobranza.monto_pendiente | currency:'S/.' }} </mat-cell>
+      <ng-container matColumnDef="identificador">
+        <mat-header-cell *matHeaderCellDef> Transacciones </mat-header-cell>
+        <mat-cell *matCellDef="let cobranza"> {{ cobranza.identificador }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="meses_sin_pagar">
+        <mat-header-cell *matHeaderCellDef> Meses sin pagar </mat-header-cell>
+        <mat-cell *matCellDef="let cobranza"> {{ cobranza.meses_sin_pagar }} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="opciones">

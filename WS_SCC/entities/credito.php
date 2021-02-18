@@ -1276,6 +1276,7 @@ Class Creditos{
             $cronograma_item = array (
                   "numero" => $contador,
                   "periodo" => $periodo ,
+                  "monto_cuota_anterior" => $monto_cuota_anterior ,
                   "monto_cuota" => $monto_cuota ,
                   "monto_pago_manual" => $monto_pago_manual ,
                   "monto_pago_manual_directo" => $monto_pago_manual_directo ,
@@ -1296,6 +1297,36 @@ Class Creditos{
 
     function crear_penalidad_credito () {
         $query = "CALL sp_crearpenalidadcredito(
+            :prcredito ,
+            :prcuotapenalidad ,
+            :prnumerocuotas ,
+            :prfechainicio ,
+            :prtipopago
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prcredito", $this->id_credito);
+        $result->bindParam(":prcuotapenalidad", $this->cuota_penalidad);
+        $result->bindParam(":prnumerocuotas", $this->numero_cuotas);
+        $result->bindParam(":prfechainicio", $this->fecha_inicio);
+        $result->bindParam(":prtipopago", $this->tipo_pago);
+
+        $this->id_credito=htmlspecialchars(strip_tags($this->id_credito));
+        $this->cuota_penalidad=htmlspecialchars(strip_tags($this->cuota_penalidad));
+        $this->numero_cuotas=htmlspecialchars(strip_tags($this->numero_cuotas));
+        $this->fecha_inicio=htmlspecialchars(strip_tags($this->fecha_inicio));
+        $this->tipo_pago=htmlspecialchars(strip_tags($this->tipo_pago));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    function crear_penalidad_credito_nueva () {
+        $query = "CALL sp_crearpenalidadcreditonueva(
             :prcredito ,
             :prcuotapenalidad ,
             :prnumerocuotas ,
@@ -1347,6 +1378,24 @@ Class Creditos{
 
     function eliminar_penalidad_credito () {
         $query = "CALL sp_eliminarpenalidadcredito(
+            :prcredito
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prcredito", $this->id_credito);
+
+        $this->id_credito=htmlspecialchars(strip_tags($this->id_credito));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    function eliminar_penalidad_credito_nueva () {
+        $query = "CALL sp_eliminarpenalidadcreditonueva(
             :prcredito
         )";
 
@@ -1420,5 +1469,4 @@ Class Creditos{
         return false;
     }
 }
-
 ?>

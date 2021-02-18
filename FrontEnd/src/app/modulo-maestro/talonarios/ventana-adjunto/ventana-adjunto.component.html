@@ -82,11 +82,11 @@
         </mat-grid-tile>
 
         <mat-grid-tile colspan=3>
-          <ng-container *ngIf="!archivo">
+          <ng-container *ngIf="!archivo_nombre">
             <input hidden #uploader type="file" (change)="SubirArchivo($event.target.files)">
             <button mat-raised-button type="button" (click)="uploader.click()"> Seleccionar archivo </button>
           </ng-container>
-          <ng-container *ngIf="archivo">
+          <ng-container *ngIf="archivo_nombre">
             <span> {{ archivo_nombre }} </span>
             &nbsp;
             <button type="button" mat-icon-button color="primary" (click)="RemoverArchivo()"> <mat-icon> remove_circle_outline </mat-icon> </button>

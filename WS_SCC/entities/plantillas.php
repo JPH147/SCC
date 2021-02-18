@@ -379,7 +379,7 @@ Class Plantillas{
         
         $templateProcessor->setValue('total_prestamo', number_format($this->total_prestamo,2) ) ;
         $templateProcessor->setValue('numero_cuotas', $this->numero_cuotas ) ;
-        $templateProcessor->setValue('cuota_mensual', number_format($this->cuota_mensual,2) ) ;
+        $templateProcessor->setValue('cuota_mensual', number_format($this->total_prestamo / $this->numero_cuotas, 2) ) ;
         $templateProcessor->setValue('fecha_afiliacion', $this->fecha_afiliacion ) ;
 
         $templateProcessor->saveAs('../uploads/autogenerados/' . $this->nombre_archivo . '.docx');

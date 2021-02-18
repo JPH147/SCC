@@ -651,9 +651,12 @@ export class CreditosComponent implements OnInit, AfterViewInit {
       this.CreditosForm.get('adicional_penalidad').setValue(res.adicional_penalidad) ;
       
       this.CreditosForm.get('estado_penalidad').setValue(res.estado_penalidad) ;
+      
       if ( this.CreditosForm.get('estado_penalidad').value == 3 ) {
-        // this.CreditosForm.get('estado_penalidad').disable() ;
+        this.ColumnasCronogramaPeriodo = ["numero", "periodo", "monto_cuota_anterior", "monto_cuota" ,"total_planilla" ,"total_directo", "identificador_directo" ,"total_judicial", 'opciones' ] ;
         this.ConsultarInfomacionAnterior() ;
+      } else {
+        this.ColumnasCronogramaPeriodo = ["numero", "periodo", "monto_cuota" ,"total_planilla" ,"total_directo", "identificador_directo" ,"total_judicial", 'opciones' ] ;
       }
 
       this.CreditosForm.get('pagado_interes').setValue(res.pagado_interes) ;
@@ -930,7 +933,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
           })
         }
       }
-    })
+    }) ;
   }
 
   ObtenerCronograma(id_credito: number, tipo_cuota : number){
@@ -1640,6 +1643,21 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     } )
   }
 
+  EliminarPenalidad() {
+    let Dialogo = this.Dialogo.open(VentanaConfirmarComponent,{
+      data: {objeto: "la penalidad", valor: '' }
+    })
+
+    Dialogo.afterClosed().subscribe(res=>{
+      this.Cargando.next(true) ;
+      if (res) {
+        this.Servicio.EliminarPenalidadNueva(this.id_credito_estandar).subscribe(res=>{
+          this.CambiarTipoVista("ver") ;
+        });
+      }
+    })
+  }
+
   Guardar(){
     // console.log(this.Cronograma);
     if(this.id_credito_editar){
@@ -2238,13 +2256,14 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     }
   }
 
-  EstablecerPenalidad() {
+  EstablecerPenalidad(forzar : boolean) {
     let Ventana = this.Dialogo.open(VentanaGenerarPenalidadComponent, {
       data : {
         id_credito : this.id_credito_estandar ,
         monto_total : this.CreditosForm.get('total').value - +this.CreditosForm.get('interes_diario_monto').value  ,
         numero_cuotas : this.CreditosForm.get('cuotas').value ,
-        tipo_pago : this.id_tipo_pago
+        tipo_pago : this.id_tipo_pago ,
+        forzar : forzar
       } ,
       width: '900px' ,
       maxHeight: '80vh'

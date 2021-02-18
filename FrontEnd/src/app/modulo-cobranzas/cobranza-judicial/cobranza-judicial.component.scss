@@ -32,6 +32,10 @@
   border-left-color: mat-color($mat_morado);
 }
 
+.tipo-8{
+  border-left-color: mat-color($mat_celeste);
+}
+
 .icono{
   float: right;
   transform: translate(-20px, -12.5px);
@@ -94,6 +98,10 @@ textarea{
   color: white !important;
 }
 
+.tipo-tercero-8{
+  background-color: mat-color($mat_celeste);
+}
+
 span.derecha{
   position: absolute;
   right: 20px;
@@ -137,4 +145,8 @@ span.derecha{
 
 .boton-tipo-7{
   color: mat-color($mat_morado);
+}
+
+.boton-tipo-8{
+  color: mat-color($mat_celeste);
 }

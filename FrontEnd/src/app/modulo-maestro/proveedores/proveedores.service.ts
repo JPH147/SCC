@@ -80,12 +80,11 @@ export class ProveedorService {
   Eliminar(
     idproveedor: number
   ): Observable<any>  {
-    // tslint:disable-next-line:prefer-const
-    let params = '&idproveedor=' + idproveedor;
-    // tslint:disable-next-line:prefer-const
-    let headers = new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded');
+    let params = new HttpParams()
+      .set("idproveedor", idproveedor.toString() )
+
+      let headers = new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded');
     return this.http.post(this.url + 'proveedor/delete.php', params, {headers: headers});
-  // tslint:disable-next-line:indent
   }
 
   Seleccionar(
@@ -109,23 +108,32 @@ export class ProveedorService {
     pprv_representante_legal: string,
     pprv_observacion: string
     ): Observable<any> {
-      let params =  '&prv_idtipodocumento=' + pprv_idtipodocumento + '&prv_documento=' + pprv_documento
-      + '&prv_nombre=' + pprv_nombre + '&prv_representante_legal=' + pprv_representante_legal
-      + '&prv_observacion=' + pprv_observacion ; 
+      let params = new HttpParams()
+        .set("prv_idtipodocumento", pprv_idtipodocumento.toString() )
+        .set("prv_documento", pprv_documento)
+        .set("prv_nombre", pprv_nombre)
+        .set("prv_representante_legal", pprv_representante_legal)
+        .set("prv_observacion", pprv_observacion) ;
+
       let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
       return this.http.post(this.url + 'proveedor/create.php', params, {headers: headers});
   }
 
-  Actualizar(idproveedor: number,
+  Actualizar(
+    idproveedor: number,
     pprv_idtipodocumento: number,
     pprv_documento: string,
     pprv_nombre: string,
     pprv_representante_legal: string,
     pprv_observacion: string,
-    ): Observable<any> {
-      let params = 'idproveedor=' + idproveedor + '&prv_tipo_documento=' + pprv_idtipodocumento + '&prv_documento=' + pprv_documento
-      + '&prv_nombre=' + pprv_nombre + '&prv_representante_legal=' + pprv_representante_legal
-      + '&prv_observacion=' + pprv_observacion; 
+  ): Observable<any> {
+      let params = new HttpParams()
+        .set("idproveedor", idproveedor.toString() )
+        .set("prv_tipo_documento", pprv_idtipodocumento.toString() )
+        .set("prv_documento", pprv_documento)
+        .set("prv_nombre", pprv_nombre)
+        .set("prv_representante_legal", pprv_representante_legal)
+        .set("prv_observacion", pprv_observacion) ;
 
       // console.log(params);
       // tslint:disable-next-line:prefer-const

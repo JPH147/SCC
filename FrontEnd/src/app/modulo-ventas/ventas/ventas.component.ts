@@ -616,8 +616,10 @@ export class VentasComponent implements OnInit {
       this.VentasForm.get('adicional_penalidad').setValue(res.adicional_penalidad) ;
 
       if ( this.VentasForm.get('estado_penalidad').value == 3 ) {
-        this.VentasForm.get('estado_penalidad').disable() ;
+        this.ColumnasCronogramaPeriodo = ["numero", "periodo", "monto_cuota_anterior", "monto_cuota" ,"total_planilla" ,"total_directo", "identificador_directo" ,"total_judicial", 'opciones' ] ;
         this.ConsultarInfomacionAnterior() ;
+      } else {
+        this.ColumnasCronogramaPeriodo = ["numero", "periodo", "monto_cuota" ,"total_planilla" ,"total_directo", "identificador_directo" ,"total_judicial", 'opciones' ] ;
       }
       
       this.VentasForm.get('pagado_interes').setValue(res.pagado_interes) ;
@@ -1900,6 +1902,21 @@ export class VentasComponent implements OnInit {
     } )
   }
   
+  EliminarPenalidad() {
+    let Dialogo = this.Dialogo.open(VentanaConfirmarComponent,{
+      data: {objeto: "la penalidad", valor: '' }
+    })
+
+    Dialogo.afterClosed().subscribe(res=>{
+      this.Cargando.next(true) ;
+      if (res) {
+        this.Servicio.EliminarPenalidadNueva(this.id_venta).subscribe(res=>{
+          this.CambiarTipoVista("ver") ;
+        });
+      }
+    })
+  }
+
   Guardar(formulario){
     this.Cargando.next(true);
 
