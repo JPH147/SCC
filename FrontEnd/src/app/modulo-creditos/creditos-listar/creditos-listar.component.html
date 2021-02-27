@@ -3,79 +3,79 @@
     <div id = "tituloProd"> Listado de créditos</div>
   </mat-card-title>
 
-  <mat-grid-list cols= "4" rowHeight="70px">
-    <mat-grid-tile>
-      <mat-icon>search</mat-icon>
-      <mat-form-field class="columnas-1">
-        <input matInput placeholder="Cliente" #InputCliente>
-      </mat-form-field>
-    </mat-grid-tile>
-
-    <mat-grid-tile>
-      <mat-icon>search</mat-icon>
-      <mat-form-field class="columnas-1">
-        <input matInput placeholder="DNI" #InputDNI>
-      </mat-form-field>
-    </mat-grid-tile>
-
-    <mat-grid-tile>
-      <mat-form-field class="columnas-1">
-        <input matInput [matDatepicker]="inicio" placeholder="Fecha de inicio" [(ngModel)]="fecha_inicio" (dateChange)="CambioFiltro()">
-        <mat-datepicker-toggle matSuffix [for]="inicio"></mat-datepicker-toggle>
-        <mat-datepicker #inicio disabled="false"></mat-datepicker>
-      </mat-form-field>
-    </mat-grid-tile>
-
-    <mat-grid-tile>
-      <mat-form-field class="columnas-1">
-        <input matInput [matDatepicker]="fin" placeholder="Fecha de fin" [(ngModel)]="fecha_fin" (dateChange)="CambioFiltro()">
-        <mat-datepicker-toggle matSuffix [for]="fin"></mat-datepicker-toggle>
-        <mat-datepicker #fin disabled="false"></mat-datepicker>
-      </mat-form-field>
-    </mat-grid-tile>
-
-    <mat-grid-tile>
-      <mat-form-field class="columnas-1">
-        <mat-select #InputTipo placeholder="Tipo de crédito" (selectionChange)="CambioFiltro()" [value]=99>
-          <mat-option [value]=99> Todos </mat-option>
-          <mat-option *ngFor="let tipo of Tipos" [value]="tipo.id"> {{tipo.nombre}} </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </mat-grid-tile>
-
-    <mat-grid-tile>
-      <mat-form-field class="columnas-1">
-        <mat-select #InputEstado placeholder="Estado del crédito" [value]=1 (selectionChange)="CambioFiltro()">
-          <mat-option [value]=0>Todos</mat-option>
-          <mat-option [value]=1>Activos</mat-option>
-          <mat-option [value]=4>Refinanciados</mat-option>
-          <mat-option [value]=3>Anulados</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </mat-grid-tile>
-
-    <mat-grid-tile>
-      <mat-form-field class="columnas-1">
-        <mat-select #InputDocumentos placeholder="Estado de los pagos" [value]=0 (selectionChange)="CambioFiltro()">
-          <mat-option [value]=0>Todos</mat-option>
-          <mat-option [value]=1>En curso y al día</mat-option>
-          <mat-option [value]=2>En curso y atrasados</mat-option>
-          <mat-option [value]=3>Finalizado y cancelados</mat-option>
-          <mat-option [value]=4>Finalizado y pendientes</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </mat-grid-tile>
-    
-    <mat-grid-tile>
-      <ng-container *ngIf="permiso?.creditos?.listado_creditos?.agregar">
-        <button mat-raised-button color="primary" [routerLink]="['nuevo']"> Nuevo </button>
-      </ng-container>
-    </mat-grid-tile>
-
-  </mat-grid-list>
+  <form [formGroup]="CreditosForm">
+    <mat-grid-list cols= "4" rowHeight="70px">
+      <mat-grid-tile>
+        <mat-icon>search</mat-icon>
+        <mat-form-field class="columnas-1">
+          <input matInput placeholder="Cliente" formControlName="cliente">
+        </mat-form-field>
+      </mat-grid-tile>
+  
+      <mat-grid-tile>
+        <mat-icon>search</mat-icon>
+        <mat-form-field class="columnas-1">
+          <input matInput placeholder="DNI" formControlName="dni">
+        </mat-form-field>
+      </mat-grid-tile>
+  
+      <mat-grid-tile>
+        <mat-form-field class="columnas-1">
+          <input matInput [matDatepicker]="inicio" placeholder="Fecha de inicio" formControlName="fecha_inicio">
+          <mat-datepicker-toggle matSuffix [for]="inicio"></mat-datepicker-toggle>
+          <mat-datepicker #inicio disabled="false"></mat-datepicker>
+        </mat-form-field>
+      </mat-grid-tile>
+  
+      <mat-grid-tile>
+        <mat-form-field class="columnas-1">
+          <input matInput [matDatepicker]="fin" placeholder="Fecha de fin" formControlName="fecha_fin">
+          <mat-datepicker-toggle matSuffix [for]="fin"></mat-datepicker-toggle>
+          <mat-datepicker #fin disabled="false"></mat-datepicker>
+        </mat-form-field>
+      </mat-grid-tile>
+  
+      <mat-grid-tile>
+        <mat-form-field class="columnas-1">
+          <mat-select formControlName="tipo_credito" placeholder="Tipo de crédito">
+            <mat-option [value]=99> Todos </mat-option>
+            <mat-option *ngFor="let tipo of Tipos" [value]="tipo.id"> {{tipo.nombre}} </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-grid-tile>
+  
+      <mat-grid-tile>
+        <mat-form-field class="columnas-1">
+          <mat-select formControlName="estado_credito" placeholder="Estado del crédito">
+            <mat-option [value]=0>Todos</mat-option>
+            <mat-option [value]=1>Activos</mat-option>
+            <mat-option [value]=4>Refinanciados</mat-option>
+            <mat-option [value]=3>Anulados</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-grid-tile>
+  
+      <mat-grid-tile>
+        <mat-form-field class="columnas-1">
+          <mat-select formControlName="estado_pagos" placeholder="Estado de los pagos">
+            <mat-option [value]=0>Todos</mat-option>
+            <mat-option [value]=1>En curso y al día</mat-option>
+            <mat-option [value]=2>En curso y atrasados</mat-option>
+            <mat-option [value]=3>Finalizado y cancelados</mat-option>
+            <mat-option [value]=4>Finalizado y pendientes</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-grid-tile>
+      
+      <mat-grid-tile>
+        <ng-container *ngIf="permiso?.creditos?.listado_creditos?.agregar">
+          <button mat-raised-button color="primary" [routerLink]="['nuevo']"> Nuevo </button>
+        </ng-container>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </form>  
 
   <mat-card-content>
-
     <div class = "spinner-container" *ngIf = "ListadoCreditos.Cargando| async">
       <mat-spinner></mat-spinner>
     </div>
@@ -186,14 +186,14 @@
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let credito">
-          <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="['ver', credito.id]"><mat-icon> visibility </mat-icon></button>
+          <button mat-icon-button color="primary" matTooltip="Ver documento" (click)="VerCredito(credito.id)"><mat-icon> visibility </mat-icon></button>
           <ng-container *ngIf="permiso?.creditos?.listado_creditos?.abrir_procesos">
             <button mat-icon-button color="primary" [matMenuTriggerFor]="menu3" (click)="ListarProcesos(credito.id)"
               [disabled]="credito.estado!=1 || credito.pagado == 1">
               <mat-icon [matBadge]="credito.numero_procesos" [matBadgeHidden]="credito.numero_procesos==0 || credito.estado!=1" matBadgeSize="small" matBadgeColor="accent"> gavel </mat-icon>
             </button>
             <mat-menu #menu3="matMenu">
-              <button mat-menu-item *ngFor="let proceso of ListadoProcesos" [routerLink]="['/cobranzas','cobranza-judicial','ver',proceso.id_proceso]">
+              <button mat-menu-item *ngFor="let proceso of ListadoProcesos" (click)="VerProcesoJudicial(proceso.id_proceso)">
                 <ng-container *ngIf="proceso.id_tipo_documento==0"> <mat-icon class="icono-primario" matTooltip="Ya tiene cronograma"> star </mat-icon> </ng-container>
                 <ng-container *ngIf="proceso.id_tipo_documento==1"> <mat-icon matTooltip="Aún no hay documentos"> fiber_manual_record </mat-icon> </ng-container>
                 <ng-container *ngIf="proceso.id_tipo_documento==2"> <mat-icon class="icono-ambar" matTooltip="Se presentó un escrito"> info </mat-icon> </ng-container>
@@ -202,7 +202,7 @@
                 <ng-container *ngIf="proceso.id_tipo_documento==6"> <mat-icon class="icono-anaranjado" matTooltip="Se emitió una nota"> info </mat-icon> </ng-container>
                 {{proceso.expediente}}
               </button>
-              <button mat-menu-item [routerLink]="['/cobranzas','cobranza-judicial','nueva-credito',credito.id]" > <mat-icon> add </mat-icon> Nuevo proceso </button>
+              <button mat-menu-item (click)="NuevoProcesoJudicial(credito.id)"> <mat-icon> add </mat-icon> Nuevo proceso </button>
             </mat-menu>
           </ng-container>
           <ng-container *ngIf="permiso?.creditos?.listado_creditos?.eliminar">

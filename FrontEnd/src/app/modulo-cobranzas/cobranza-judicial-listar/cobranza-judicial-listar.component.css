@@ -1,4 +1,4 @@
-.mat-column-numero,
+/* .mat-column-numero,
 .mat-column-id_tipo_documento{
   max-width: 5%;
 }
@@ -18,12 +18,12 @@
 .mat-column-total ,
 .mat-column-fecha_ultimo_documento {
   max-width: 10%;
-}
+} */
 
-.toolbar-titulo2{
+/* .toolbar-titulo2{
   background-color: #424242;
   color: white;
-}
+} */
 
 .centrar{
   justify-content: center;

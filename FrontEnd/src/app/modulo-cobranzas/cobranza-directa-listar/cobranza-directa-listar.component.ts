@@ -13,6 +13,7 @@ import { Store } from '@ngrx/store';
 import { EstadoSesion } from '../../compartido/reducers/permisos.reducer';
 import { CooperativaConfiguracionService } from 'src/app/modulo-maestro/cooperativa-configuracion/cooperativa-configuracion.service';
 import { Notificaciones } from 'src/app/core/servicios/notificacion';
+import { VentanaCobranzaDirectaListarComponent } from './ventana-cobranza-directa-listar/ventana-cobranza-directa-listar.component';
 
 @Component({
   selector: 'app-cobranza-directa-listar',
@@ -62,7 +63,6 @@ export class CobranzaDirectaListarComponent implements OnInit {
   }
 
   ngAfterViewInit () {
-
     this.sort.sortChange.subscribe(res => {
       this.paginator.pageIndex = 0;
     });
@@ -126,6 +126,19 @@ export class CobranzaDirectaListarComponent implements OnInit {
     })
   }
  
+  EditarVoucher(id_cobranza) {
+    let Ventana = this.Dialogo.open(VentanaCobranzaDirectaListarComponent, {
+      data : id_cobranza ,
+      maxHeight: '80vh' ,
+      width: '600px'
+    })
+
+    Ventana.afterClosed().subscribe(resultado => {
+      this._notificaciones.Snack("Se actualizó el voucher con exito","") ;
+      this.CargarData() ;
+    })
+  }
+
   Validar(cobranza){
     let nueva_validacion : number = cobranza.validado ==1 ? 0 : 1 ;
     this.Servicio.ActualizarCobranzaValidacion(cobranza.id, nueva_validacion).subscribe(res=>{

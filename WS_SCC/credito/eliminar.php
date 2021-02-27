@@ -23,13 +23,16 @@
         {
             $credito->id_credito=trim($_POST["prcredito"]);
             $credito->tipo_credito=trim($_POST["prtipo"]);
+            $crear_registro=trim($_POST["prcrearregistro"]) ? trim($_POST["prcrearregistro"]) : "1" ;
 
             $usuario_alvis = trim($_POST["usuario_alvis"]) ;
 
             if($credito->eliminar_credito())
             {
-                $referencia = $credito->tipo_credito == 1 ? 8 : 9 ;
-                $log->create($usuario_alvis, $referencia, 3, $credito->id_credito) ;
+                if ( $crear_registro == "0" ) {
+                    $referencia = $credito->tipo_credito == "1" ? 8 : 9 ;
+                    $log->create($usuario_alvis, $referencia, 3, $credito->id_credito) ;
+                }
                 print_json("0000", "Se eliminó el crédito satisfactoriamente.", $credito->id_credito);
             }
             else

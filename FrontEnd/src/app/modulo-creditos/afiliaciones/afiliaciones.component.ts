@@ -34,6 +34,7 @@ import {default as _rollupMoment, Moment} from 'moment';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { VentanaGenerarPagoTransaccionComponent } from '../../compartido/componentes/ventana-generar-pago-transaccion/ventana-generar-pago-transaccion.component';
 import { SeleccionarVendedorComponent } from 'src/app/compartido/componentes/seleccionar-vendedor/seleccionar-vendedor.component';
+import { VentanaGenerarPagoTransaccionUnitariaComponent } from 'src/app/compartido/componentes/ventana-generar-pago-transaccion-unitaria/ventana-generar-pago-transaccion-unitaria.component';
 
 @Component({
   selector: 'app-afiliaciones',
@@ -43,7 +44,7 @@ import { SeleccionarVendedorComponent } from 'src/app/compartido/componentes/sel
 export class AfiliacionesComponent implements OnInit, AfterViewInit {
 
   public Cargando = new BehaviorSubject<boolean>(false);
-  
+
   public Hoy : Date = new Date();
   public CreditosForm: FormGroup
   public id_credito: number;
@@ -52,7 +53,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
   public id_cliente: number;
   public id_tipo : number;
   public garantes: FormArray;
-  public vendedoresForm: FormArray; 
+  public vendedoresForm: FormArray;
   public editar_cronograma:number;
   public Reglas : Array<any>;
   public Couriers : Array<any>;
@@ -72,7 +73,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
 
   public ListadoCronograma: CronogramaDataSource;
   public ColumnasCronograma: Array<string>;
-  public ColumnasCronogramaPeriodo: Array<string> = ["numero", "periodo", "monto_cuota", "monto_pago_manual" ,"total_planilla" ,"total_directo", "identificador_directo" ,"total_judicial", 'opciones' ] ;
+  public ColumnasCronogramaPeriodo: Array<string> = ["numero", "periodo", "monto_cuota" ,"total_planilla" ,"total_directo", "identificador_directo" ,"total_judicial", 'opciones' ] ;
   public Cronograma : Array<any> = [] ;
   public Cronograma_Periodos : Array<any> = [] ;
   public total_cronograma_editado: number;
@@ -354,7 +355,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
       // ]],
       // afiliacion_fecha_vencimiento :[{value: moment(new Date()).add(1, 'months').endOf('month').toDate(), disabled: false},[
       // ]],
-      /////////////////////////////////////////////////////////////// 
+      ///////////////////////////////////////////////////////////////
       fecha_credito: [{value: new Date(), disabled: false},[
         Validators.required
       ]],
@@ -534,14 +535,14 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
 
     this.ListarProcesos(id_credito) ;
     this.ListarVendedores(id_credito) ;
-    
+
     let observacion_corregida : string;
     let codigo_string : string;
     let codigo_largo : number;
 
     this.Servicio.Seleccionar(id_credito).subscribe(res=>{
       this.Cargando.next(false);
-      
+
       /////////////////////////////////////////////////////////
       // Se da el formato al código
       codigo_string=res.numero.toString();
@@ -550,7 +551,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
       for(let i = codigo_largo; i < 3; i++){
         codigo_string = "0" + codigo_string;
       }
-      
+
       this.id_tipo=res.id_tipo;
 
       if(this.id_tipo==1){
@@ -583,7 +584,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
       this.CreditosForm.get('monto_cuota').setValue(res.capital);
       this.CreditosForm.get('cuotas').setValue(res.numero_cuotas);
       this.CreditosForm.get('total').setValue(res.total);
-      
+
       this.CreditosForm.get('vendedor').setValue(res.id_vendedor >0 ? res.vendedor : null);
       this.CreditosForm.get('id_vendedor').setValue(res.id_vendedor > 0 ? res.id_vendedor : null);
       this.CreditosForm.get('autorizador').setValue(res.id_autorizador> 0 ? res.autorizador : null);
@@ -630,7 +631,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
 
         this.ColumnasCronograma = ['numero', 'tipo_pago','fecha_vencimiento', 'monto', 'interes_generado','monto_pagado','estado', 'opciones'];
         this.ObtenerCronograma(this.id_credito, 0);
-        
+
         if(res['garantes'].garantes.length>0){
           res['garantes'].garantes.forEach((item,index)=>{
             let dni = item.dni_pdf !="" ? URLIMAGENES.carpeta+'venta/'+ item.dni_pdf : null ;
@@ -796,7 +797,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
           // this.numero_afiliacion=res['codigo_afiliacion'];
           this.cliente_afiliado=false;
         }
-  
+
         this.VerificarCondicionesAfiliacion(id_cliente);
       })
     }
@@ -883,7 +884,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
     this.CreditosForm.get('codigo').setValue(null);
     // this.cliente_afiliado=true;
   }
-  
+
   EditarCliente(){
     let id_cliente : number = this.CreditosForm.value.id_cliente ;
     let VentanaClientes = this.Dialogo.open(VentanaEmergenteClientes, {
@@ -934,7 +935,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
     this.CreditosForm.get('id_vendedor').setValue(this.CreditosForm.value.vendedor.id);
     this.CreditosForm.get('vendedor').setValue(nombre_vendedor);
   }
-  
+
   RemoverVendedor(){
     this.CreditosForm.get('id_vendedor').setValue(null);
     this.CreditosForm.get('vendedor').setValue("");
@@ -982,7 +983,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
   /*Cronograma */
   CrearCronograma(){
     if(this.CreditosForm.get('cuotas').valid && this.CreditosForm.value.interes>=0 && !this.cliente_refinanciado){
-      
+
       this.Cronograma=[];
       let i = 1;
 
@@ -1008,7 +1009,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
 
       // Se calcula el monto de las cuotas normales
       let monto : number = this.CreditosForm.value.monto_cuota*1 ;
-  
+
       for (let j = 1; j<=this.CreditosForm.get('cuotas').value; j++) {
         fecha=moment(fecha_corregida).add(j-1, 'months').toDate();
         this.Cronograma.push({
@@ -1019,7 +1020,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
           capital : monto
         })
       }
-  
+
       this.CreditosForm.get('total').setValue(
         this.Cronograma.reduce( (acumulador, item)=>{
           return Math.round( ( acumulador + item.monto_cuota ) * 100 ) / 100
@@ -1033,9 +1034,9 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
   }
 
   CalcularTotalCronograma(){
-    
+
     this.total_cronograma_editado=0;
-    
+
     this.Cronograma.forEach((item)=>{
       this.total_cronograma_editado=this.total_cronograma_editado+item.monto_cuota*1;
     })
@@ -1102,7 +1103,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
   FechaPagoSeleccionada() {
     let fecha_credito = this.CreditosForm.get('fecha_credito').value ;
     let fecha_pago = this.CreditosForm.get('fecha_pago').value ;
-    
+
     let diferencia = moment(fecha_pago).diff(fecha_credito, 'days') ;
     if ( diferencia < 0 ) {
       this.CreditosForm.get('fecha_pago').setErrors({'fecha_adelantada': true}) ;
@@ -1133,7 +1134,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
       this.ActualizarObservables() ;
     }
     this.SeleccionarCredito(this.id_credito_estandar)
-  }  
+  }
 
   ListarProcesos( id_venta : number ) {
     this.ListadoProcesos = [] ;
@@ -1157,7 +1158,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
     Dialogo.afterClosed().subscribe(res=>{
       this.Cargando.next(true) ;
       if (res) {
-        this.Servicio.EliminarCredito(this.id_credito_estandar,1).subscribe(res=>{
+        this.Servicio.EliminarCredito(this.id_credito_estandar,1,true).subscribe(res=>{
           this.router.navigate(['/creditos','creditos']) ;
         });
       }
@@ -1168,7 +1169,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
     let ventana = this.Dialogo.open(VentanaGenerarPagoTransaccionComponent,{
       width: '1200px' ,
       maxHeight: '80vh' ,
-      data : { 
+      data : {
         tipo : 1,
         id_credito : this.id_credito,
         cliente : this.CreditosForm.get('id_cliente').value ,
@@ -1185,7 +1186,27 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
       }
     } )
   }
-  
+
+  AgregarPagosUnitarios(){
+    let ventana = this.Dialogo.open(VentanaGenerarPagoTransaccionUnitariaComponent,{
+      width: '1200px' ,
+      maxHeight: '80vh' ,
+      data : {
+        tipo : 1,
+        id_credito : this.id_credito,
+        cliente : this.CreditosForm.get('id_cliente').value ,
+        pendiente : this.totales_monto_pendiente
+      }
+    })
+
+    ventana.afterClosed().subscribe( resultado=>{
+      if ( resultado === true ) {
+        this.Notificacion.Snack("Se crearán los pagos","") ;
+        this.SeleccionarCredito(this.id_credito) ;
+      }
+    } )
+  }
+
   Guardar(){
     if(this.id_credito_editar){
       this.ActualizarAfiliacion() ;
@@ -1314,7 +1335,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
         "",
         this.CreditosForm.value.observaciones,
         this.vendedoresForm.value
-      ).subscribe(res=>{  
+      ).subscribe(res=>{
         this.Servicio.CrearCronogramaAfiliacion(
           res['data'],
           this.CreditosForm.value.tipo_pago,
@@ -1384,7 +1405,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
         "",
         "",
         "",
-      ).subscribe(res=>{  
+      ).subscribe(res=>{
         this.router.navigate(['/creditos','afiliaciones']);
         if(res['codigo']==0){
           this.Notificacion.Snack("Se actualizó la afiliación con éxito!","");
@@ -1394,7 +1415,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
       })
     })
   }
-  
+
   AnoElegido(ano_normalizado: Moment) {
     let ano_seleccionado : moment.Moment ;
     if( this.CreditosForm.value.fecha_pago ) {
@@ -1416,7 +1437,7 @@ export class AfiliacionesComponent implements OnInit, AfterViewInit {
 
     mes_seleccionado.year(mes_normalizado.year()) ;
     mes_seleccionado.month(mes_normalizado.month()) ;
-    
+
     this.CreditosForm.get('fecha_pago').setValue(moment(mes_seleccionado).endOf('month').toDate());
     datepicker.close();
     this.FechaPagoSeleccionada() ;

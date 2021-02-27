@@ -122,7 +122,8 @@
           </ng-container>
 
           <ng-container *ngIf="permiso?.cobranzas?.cobranzas_directas?.editar">
-            <button mat-icon-button color="primary" matTooltip="Editar" [routerLink]="['editar', cobranza.id]"><mat-icon> edit </mat-icon></button>
+            <!-- <button mat-icon-button color="primary" matTooltip="Editar" [routerLink]="['editar', cobranza.id]"><mat-icon> edit </mat-icon></button> -->
+            <button mat-icon-button color="primary" matTooltip="Editar" (click)="EditarVoucher(cobranza.id)"><mat-icon> attach_file </mat-icon></button>
           </ng-container>
           <ng-container *ngIf="permiso?.cobranzas?.cobranzas_directas?.eliminar">
             <button mat-icon-button color="primary" matTooltip="Eliminar" (click)="EliminarCobranza(cobranza)"><mat-icon> delete </mat-icon></button>

@@ -77,7 +77,7 @@
     <div class = "spinner-container" *ngIf = "Cargando | async">
       <mat-spinner></mat-spinner>
     </div>
-    
+
     <ng-container *ngIf="permiso?.creditos?.listado_creditos?.cambiar_acreedor">
       <mat-grid-list cols=4 rowHeight="70px">
         <mat-grid-tile colspan=2>
@@ -153,11 +153,16 @@
           </mat-form-field>
         </mat-grid-tile>
 
+        <ng-container *ngIf="!cliente_afiliado && permiso.creditos.listado_creditos.exonerar_afiliacion">
+          <mat-grid-tile>
+            Agregar afiliación: &nbsp;<mat-checkbox formControlName="agregar_afiliacion">  </mat-checkbox>
+          </mat-grid-tile>
+        </ng-container>
       </mat-grid-list>
     </div>
 
     <!-- Afiliación -->
-    <div class="seccion" *ngIf="!cliente_afiliado">
+    <div class="seccion" *ngIf=" !cliente_afiliado && CreditosForm.get('agregar_afiliacion').value ">
 
       <mat-card-subtitle class="titulo-seccion especial">
         AFILIACIÓN N° {{numero_afiliacion}}
@@ -166,14 +171,14 @@
       <mat-grid-list cols="4" rowHeight="70px">
 
         <mat-grid-tile>
-          <mat-form-field>
+          <mat-form-field class="columnas-1">
             <span matPrefix> S/. &nbsp; </span>
             <input matInput type="text" placeholder="Cuota de asociado" formControlName="afiliacion_monto">
           </mat-form-field>
         </mat-grid-tile>
 
         <mat-grid-tile>
-          <mat-form-field>
+          <mat-form-field class="columnas-1">
             <mat-select placeholder='Tipo de pago' formControlName="afiliacion_tipo_pago">
               <mat-option *ngFor="let tipopago of ListadoTipoPago" [value] = "tipopago.id"> {{tipopago.nombre}} </mat-option>
             </mat-select>
@@ -181,7 +186,7 @@
         </mat-grid-tile>
 
         <mat-grid-tile>
-          <mat-form-field>
+          <mat-form-field class="columnas-1">
             <input matInput [matDatepicker]="afiliacion2" placeholder="Fecha de afiliación"  formControlName="afiliacion_fecha_afiliacion" (dateChange)="CorregirFechaAfiliacion()" [readonly]="id_credito || id_tipo==1">
             <mat-datepicker-toggle matSuffix [for]="afiliacion2"></mat-datepicker-toggle>
             <mat-datepicker #afiliacion2 [disabled]="id_credito"></mat-datepicker>
@@ -189,7 +194,7 @@
         </mat-grid-tile>
 
         <mat-grid-tile>
-          <mat-form-field>
+          <mat-form-field class="columnas-1">
             <input matInput [matDatepicker]="afiliacion" placeholder="Fecha de pago" [min]="CreditosForm.value.afiliacion_fecha_afiliacion" formControlName="afiliacion_fecha_vencimiento" [readonly]="id_credito || id_tipo==1" readonly>
             <mat-datepicker-toggle matSuffix [for]="afiliacion"></mat-datepicker-toggle>
             <mat-datepicker #afiliacion  startView="year"
@@ -203,7 +208,7 @@
 
     <!-- Garante -->
     <div class="seccion" *ngIf="CreditosForm.value.garante">
-      
+
       <mat-card-subtitle class="titulo-seccion">
         DATOS DEL GARANTE
       </mat-card-subtitle>
@@ -215,7 +220,7 @@
       </mat-grid-list>
 
       <div formArrayName="garantes" *ngFor="let garante of CreditosForm['controls'].garantes['controls']; let i = index">
-                  
+
         <mat-list *ngIf="i>0">
           <mat-divider></mat-divider>
         </mat-list>
@@ -267,7 +272,7 @@
                 [extensions]="['png, jpg, jpeg']"
                 [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
                 (uploadFinished)="SubirArchivoAval($event, i, 1)">
-              </image-upload>  
+              </image-upload>
             </mat-grid-tile>
 
             <mat-grid-tile>
@@ -279,7 +284,7 @@
                 [extensions]="['png, jpg, jpeg']"
                 [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
                 (uploadFinished)="SubirArchivoAval($event, i, 2)">
-              </image-upload>  
+              </image-upload>
             </mat-grid-tile>
 
             <mat-grid-tile>
@@ -291,7 +296,7 @@
                 [extensions]="['png, jpg, jpeg']"
                 [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
                 (uploadFinished)="SubirArchivoAval($event, i, 3)">
-              </image-upload>  
+              </image-upload>
             </mat-grid-tile>
 
           </mat-grid-list>
@@ -306,7 +311,7 @@
                 <mat-icon class="icono-documentos"> close </mat-icon>
               </button>
             </mat-grid-tile>
-    
+
             <mat-grid-tile>
               <button mat-icon-button color="primary" (click)="garante.get('cip_editar').setValue(true)" [disabled]="!garante.value.cip_pdf" *ngIf="!garante.value.cip_editar">
                 <mat-icon class="icono-documentos"> edit </mat-icon>
@@ -315,7 +320,7 @@
                 <mat-icon class="icono-documentos"> close </mat-icon>
               </button>
             </mat-grid-tile>
-    
+
             <mat-grid-tile>
               <button mat-icon-button color="primary" (click)="garante.get('planilla_editar').setValue(true)" [disabled]="!garante.value.planilla_pdf" *ngIf="!garante.value.planilla_editar">
                 <mat-icon class="icono-documentos"> edit </mat-icon>
@@ -331,21 +336,21 @@
             <mat-grid-tile>
               DNI
             </mat-grid-tile>
-    
+
             <mat-grid-tile>
               CIP
             </mat-grid-tile>
-    
+
             <mat-grid-tile>
               Planilla
             </mat-grid-tile>
-    
+
           </mat-grid-list>
-    
+
           <mat-grid-list cols=5 rowHeight="60px" *ngIf="id_credito || id_credito_editar">
-    
+
             <mat-grid-tile>
-    
+
               <button mat-icon-button color="primary" [disabled]="!garante.value.dni_pdf" *ngIf="!garante.value.dni_editar">
                 <mat-icon class="icono-documentos" (click)="AbrirDocumento(garante.value.dni_pdf)"> visibility </mat-icon>
               </button>
@@ -358,12 +363,12 @@
                 [extensions]="['png, jpg, jpeg']"
                 [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
                 (uploadFinished)="SubirArchivoAval($event, i, 1)">
-              </image-upload>  
+              </image-upload>
 
             </mat-grid-tile>
-    
+
             <mat-grid-tile>
-    
+
               <button mat-icon-button color="primary" [disabled]="!garante.value.cip_pdf" *ngIf="!garante.value.cip_editar">
                 <mat-icon class="icono-documentos" (click)="AbrirDocumento(garante.value.cip_pdf)"> visibility </mat-icon>
               </button>
@@ -376,12 +381,12 @@
                 [extensions]="['png, jpg, jpeg']"
                 [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
                 (uploadFinished)="SubirArchivoAval($event, i, 2)">
-              </image-upload>  
+              </image-upload>
 
             </mat-grid-tile>
-    
+
             <mat-grid-tile>
-    
+
               <button mat-icon-button color="primary" [disabled]="!garante.value.planilla_pdf" *ngIf="!garante.value.planilla_editar">
                 <mat-icon class="icono-documentos" (click)="AbrirDocumento(garante.value.planilla_pdf)"> visibility </mat-icon>
               </button>
@@ -394,7 +399,7 @@
                 [extensions]="['png, jpg, jpeg']"
                 [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
                 (uploadFinished)="SubirArchivoAval($event, i, 3)">
-              </image-upload>  
+              </image-upload>
 
             </mat-grid-tile>
 
@@ -583,7 +588,7 @@
               [extensions]="['png, jpg, jpeg']"
               [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
               (uploadFinished)="SubirArchivo($event, 15)">
-            </image-upload>  
+            </image-upload>
           </mat-grid-tile>
 
         </ng-container>
@@ -601,7 +606,7 @@
             <input matInput type="text" placeholder="Observaciones" formControlName="papeles_observaciones" [readonly]="id_credito">
           </mat-form-field>
         </mat-grid-tile>
-        
+
       </mat-grid-list>
 
     </div>
@@ -627,7 +632,7 @@
             <div [formGroupName]="i">
               <mat-grid-tile>
                 <mat-form-field class="columnas-2">
-                  <input matInput placeholder="Vendedor" formControlName="vendedor_nombre" readonly> 
+                  <input matInput placeholder="Vendedor" formControlName="vendedor_nombre" readonly>
                 </mat-form-field>
               </mat-grid-tile>
             </div>
@@ -646,7 +651,7 @@
 
     <!-- Adjuntos -->
     <div class="seccion">
- 
+
       <mat-card-subtitle class="titulo-seccion">
         DOCUMENTOS ADJUNTOS
       </mat-card-subtitle>
@@ -673,7 +678,7 @@
             [extensions]="['png, jpg, jpeg']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
             (uploadFinished)="SubirArchivo($event, 2)">
-          </image-upload>  
+          </image-upload>
         </mat-grid-tile>
 
         <mat-grid-tile>
@@ -685,7 +690,7 @@
             [extensions]="['png, jpg, jpeg']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
             (uploadFinished)="SubirArchivo($event, 3)">
-          </image-upload>  
+          </image-upload>
         </mat-grid-tile>
 
         <mat-grid-tile>
@@ -697,7 +702,7 @@
             [extensions]="['png, jpg, jpeg']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
             (uploadFinished)="SubirArchivo($event, 4)">
-          </image-upload>  
+          </image-upload>
         </mat-grid-tile>
 
         <mat-grid-tile>
@@ -709,7 +714,7 @@
             [extensions]="['png, jpg, jpeg']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
             (uploadFinished)="SubirArchivo($event, 5)">
-          </image-upload>  
+          </image-upload>
         </mat-grid-tile>
 
         <mat-grid-tile>
@@ -721,7 +726,7 @@
             [extensions]="['png, jpg, jpeg']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
             (uploadFinished)="SubirArchivo($event, 6)">
-          </image-upload>  
+          </image-upload>
         </mat-grid-tile>
 
         <mat-grid-tile>
@@ -733,7 +738,7 @@
             [extensions]="['png, jpg, jpeg']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
             (uploadFinished)="SubirArchivo($event, 7)">
-          </image-upload>  
+          </image-upload>
         </mat-grid-tile>
 
         <mat-grid-tile>
@@ -745,7 +750,7 @@
             [extensions]="['png, jpg, jpeg']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
             (uploadFinished)="SubirArchivo($event, 8)">
-          </image-upload>  
+          </image-upload>
         </mat-grid-tile>
 
         <mat-grid-tile>
@@ -757,7 +762,7 @@
             [extensions]="['png, jpg, jpeg']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
             (uploadFinished)="SubirArchivo($event, 9)">
-          </image-upload>  
+          </image-upload>
         </mat-grid-tile>
 
         <mat-grid-tile>
@@ -769,7 +774,7 @@
             [extensions]="['png, jpg, jpeg']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
             (uploadFinished)="SubirArchivo($event, 10)">
-          </image-upload>  
+          </image-upload>
         </mat-grid-tile>
 
         <mat-grid-tile>
@@ -781,7 +786,7 @@
             [extensions]="['png, jpg, jpeg']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
             (uploadFinished)="SubirArchivo($event, 11)">
-          </image-upload>  
+          </image-upload>
         </mat-grid-tile>
 
         <mat-grid-tile>
@@ -793,7 +798,7 @@
             [extensions]="['png, jpg, jpeg']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
             (uploadFinished)="SubirArchivo($event, 12)">
-          </image-upload>  
+          </image-upload>
         </mat-grid-tile>
 
         <mat-grid-tile>
@@ -805,7 +810,7 @@
             [extensions]="['png, jpg, jpeg']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
             (uploadFinished)="SubirArchivo($event, 13)">
-          </image-upload>  
+          </image-upload>
         </mat-grid-tile>
 
         <mat-grid-tile>
@@ -817,7 +822,7 @@
             [extensions]="['png, jpg, jpeg']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
             (uploadFinished)="SubirArchivo($event, 16)">
-          </image-upload>  
+          </image-upload>
         </mat-grid-tile>
 
         <mat-grid-tile>
@@ -829,7 +834,7 @@
             [extensions]="['png, jpg, jpeg']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
             (uploadFinished)="SubirArchivo($event, 14)">
-          </image-upload>  
+          </image-upload>
         </mat-grid-tile>
       </mat-grid-list>
 
@@ -898,7 +903,7 @@
             <mat-icon class="icono-documentos"> close </mat-icon>
           </button>
         </mat-grid-tile>
-   
+
         <mat-grid-tile *ngIf="id_tipo>1">
           <button mat-icon-button color="primary"  (click)="transaccion_editar = true" [disabled]="!transaccion" *ngIf="!transaccion_editar">
             <mat-icon class="icono-documentos"> edit </mat-icon>
@@ -906,7 +911,7 @@
           <button mat-icon-button color="primary"  (click)="transaccion_editar = false" [disabled]="!transaccion" *ngIf="transaccion_editar">
             <mat-icon class="icono-documentos"> close </mat-icon>
           </button>
-        </mat-grid-tile>     
+        </mat-grid-tile>
       </mat-grid-list>
 
       <mat-grid-list cols=8 rowHeight="20px" *ngIf="(id_credito || id_credito_editar || editar_documentos) && id_tipo>1">
@@ -960,7 +965,7 @@
             [extensions]="['png, jpg, jpeg']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
             (uploadFinished)="SubirArchivo($event, 1)">
-          </image-upload>  
+          </image-upload>
 
         </mat-grid-tile>
 
@@ -978,7 +983,7 @@
             [extensions]="['pdf']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
             (uploadFinished)="SubirArchivo($event, 2)">
-          </image-upload>  
+          </image-upload>
 
         </mat-grid-tile>
 
@@ -997,7 +1002,7 @@
             [extensions]="['pdf']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
             (uploadFinished)="SubirArchivo($event, 3)">
-          </image-upload>  
+          </image-upload>
 
         </mat-grid-tile>
 
@@ -1033,7 +1038,7 @@
             [extensions]="['pdf']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
             (uploadFinished)="SubirArchivo($event, 5)">
-          </image-upload>  
+          </image-upload>
 
         </mat-grid-tile>
 
@@ -1041,7 +1046,7 @@
 
           <button mat-icon-button color="primary" [disabled]="!recibo" *ngIf="!recibo_editar">
             <mat-icon class="icono-documentos" (click)="AbrirDocumento(recibo)"> visibility </mat-icon>
-          </button> 
+          </button>
 
           <image-upload *ngIf="recibo_editar"
             class="cargar-imagen"
@@ -1051,7 +1056,7 @@
             [extensions]="['pdf']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
             (uploadFinished)="SubirArchivo($event, 6)">
-          </image-upload>  
+          </image-upload>
 
         </mat-grid-tile>
 
@@ -1069,7 +1074,7 @@
             [extensions]="['pdf']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
             (uploadFinished)="SubirArchivo($event, 7)">
-          </image-upload>  
+          </image-upload>
 
         </mat-grid-tile>
 
@@ -1334,7 +1339,7 @@
       <mat-card-subtitle class="titulo-seccion">
         DATOS DEL DOCUMENTO
       </mat-card-subtitle>
-  
+
       <mat-grid-list cols="4" rowHeight="70px">
 
         <ng-container>
@@ -1345,7 +1350,7 @@
               <mat-datepicker #InputFechaPago [disabled]="id_credito || id_presupuesto || cliente_refinanciado"></mat-datepicker>
             </mat-form-field>
           </mat-grid-tile>
-  
+
           <mat-grid-tile *ngIf="CreditosForm.value.fecha_fin_mes">
             <mat-form-field class="columnas-1">
               <input matInput [matDatepicker]="FFin" placeholder="Inicio de pagos" formControlName="fecha_pago" readonly>
@@ -1366,7 +1371,7 @@
               </mat-select>
             </mat-form-field>
           </mat-grid-tile>
-  
+
           <mat-grid-tile *ngIf="id_credito">
             <mat-form-field class="columnas-1">
               <input matInput type="text" placeholder="Tipo de pago" formControlName="tipo_pago" [readonly]="id_credito">
@@ -1394,7 +1399,7 @@
             <span matPrefix>S/. &nbsp;</span>
           </mat-form-field>
         </mat-grid-tile>
-        
+
         <mat-grid-tile>
           <mat-form-field class="columnas-1">
             <input matInput type="number" placeholder="N° de cuotas" max=100 min=0 formControlName="cuotas" #InputCuota [readonly]="id_credito || id_tipo==1 || id_presupuesto || cliente_refinanciado">
@@ -1431,7 +1436,7 @@
           <button mat-icon-button type="button" class="icono" *ngIf="editar_penalidad" (click)="EditarIncumplimiento(2)"><mat-icon>save</mat-icon></button>
         </ng-container>
       </mat-card-subtitle>
-  
+
       <mat-grid-list cols="2" rowHeight="70px">
         <mat-grid-tile>
           <ng-container *ngIf="CreditosForm.get('estado_penalidad').value < 3">
@@ -1516,11 +1521,15 @@
 
       <ng-container *ngIf="id_credito">
         <mat-grid-list cols="4" rowHeight="50px">
-          <mat-grid-tile>
-            <ng-container *ngIf="permiso?.creditos?.listado_creditos?.agregar_pagos_masivos">
-              <button mat-raised-button color="accent" (click)="AgregarPagos()"
-                [disabled]="(Cargando | async)"> Agregar pagos </button>
-            </ng-container>
+          <mat-grid-tile *ngIf="permiso?.creditos?.listado_creditos?.agregar_pagos_masivos">
+            <button mat-raised-button type="button" color="accent" matTooltip="Agregar pagos"
+              [matMenuTriggerFor]="menuPagos" [disabled]="(Cargando | async)">
+              Agregar pagos
+            </button>
+            <mat-menu #menuPagos="matMenu">
+              <button mat-menu-item (click)="AgregarPagos()"> Masivos </button>
+              <button mat-menu-item (click)="AgregarPagosUnitarios()"> Unitario </button>
+            </mat-menu>
           </mat-grid-tile>
 
           <mat-grid-tile>
@@ -1574,37 +1583,37 @@
               <mat-cell *matCellDef="let cronograma"> {{cronograma.numero}} </mat-cell>
               <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
             </ng-container>
-  
+
             <ng-container matColumnDef="tipo_pago">
               <mat-header-cell *matHeaderCellDef> Tipo de pago </mat-header-cell>
               <mat-cell *matCellDef="let cronograma"> {{cronograma.tipo_pago}} </mat-cell>
               <mat-footer-cell *matFooterCellDef> TOTALES </mat-footer-cell>
             </ng-container>
-  
+
             <ng-container matColumnDef="fecha_vencimiento">
               <mat-header-cell *matHeaderCellDef> Vencimiento </mat-header-cell>
               <mat-cell *matCellDef="let cronograma"> {{cronograma.fecha_vencimiento | date: 'dd/MM/yyyy'}} </mat-cell>
               <mat-footer-cell *matFooterCellDef> - </mat-footer-cell>
             </ng-container>
-  
+
             <ng-container matColumnDef="monto">
               <mat-header-cell *matHeaderCellDef> Monto </mat-header-cell>
               <mat-cell *matCellDef="let cronograma"> {{cronograma.monto | currency:'S/.' }} </mat-cell>
               <mat-footer-cell *matFooterCellDef> {{ totales_monto_total | currency:'S/.' }} </mat-footer-cell>
             </ng-container>
-  
+
             <ng-container matColumnDef="interes_generado">
               <mat-header-cell *matHeaderCellDef> Interés generado </mat-header-cell>
               <mat-cell *matCellDef="let cronograma"> {{cronograma.interes_generado | currency:'S/.'}}</mat-cell>
               <mat-footer-cell *matFooterCellDef> {{ totales_interes_generado | currency:'S/.' }} </mat-footer-cell>
             </ng-container>
-  
+
             <ng-container matColumnDef="monto_pagado">
               <mat-header-cell *matHeaderCellDef> Total pagado </mat-header-cell>
               <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_pagado | currency:'S/.'}}</mat-cell>
               <mat-footer-cell *matFooterCellDef> {{ totales_monto_pagado | currency:'S/.' }} </mat-footer-cell>
             </ng-container>
-  
+
             <ng-container matColumnDef="fecha_cancelacion">
               <mat-header-cell *matHeaderCellDef> Fecha de pago </mat-header-cell>
               <mat-cell *matCellDef="let cronograma">
@@ -1613,13 +1622,13 @@
               </mat-cell>
               <mat-footer-cell *matFooterCellDef> - </mat-footer-cell>
             </ng-container>
-  
+
             <ng-container matColumnDef="estado">
               <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
               <mat-cell *matCellDef="let cronograma"> {{ cronograma.estado }} </mat-cell>
               <mat-footer-cell *matFooterCellDef> {{ totales_total_pagadas }} / {{ totales_total_cuotas }} </mat-footer-cell>
             </ng-container>
-  
+
             <ng-container matColumnDef="opciones">
               <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
               <mat-cell *matCellDef="let cronograma">
@@ -1630,7 +1639,7 @@
               </mat-cell>
               <mat-footer-cell *matFooterCellDef> - </mat-footer-cell>
             </ng-container>
-  
+
             <mat-header-row *matHeaderRowDef="ColumnasCronograma; sticky: true"></mat-header-row>
             <mat-row *matRowDef="let row; columns: ColumnasCronograma"></mat-row>
             <ng-container *ngIf="id_credito">
@@ -1645,12 +1654,12 @@
               <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
               <mat-cell *matCellDef="let cronograma"> {{cronograma.numero}} </mat-cell>
             </ng-container>
-  
+
             <ng-container matColumnDef="periodo">
               <mat-header-cell *matHeaderCellDef> Periodo </mat-header-cell>
               <mat-cell *matCellDef="let cronograma"> {{cronograma.periodo}} </mat-cell>
             </ng-container>
-    
+
             <ng-container matColumnDef="monto_cuota_anterior">
               <mat-header-cell *matHeaderCellDef> Cuota anterior </mat-header-cell>
               <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_cuota_anterior | currency:'S/.'}} </mat-cell>
@@ -1665,17 +1674,17 @@
               <mat-header-cell *matHeaderCellDef> Pagos manuales </mat-header-cell>
               <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_pago_manual | currency:'S/.'}} </mat-cell>
             </ng-container>
-  
+
             <ng-container matColumnDef="total_planilla">
               <mat-header-cell *matHeaderCellDef> Pagos por planilla </mat-header-cell>
               <mat-cell *matCellDef="let cronograma"> {{cronograma.total_planilla | currency:'S/.' }} </mat-cell>
             </ng-container>
-  
+
             <ng-container matColumnDef="total_directo">
               <mat-header-cell *matHeaderCellDef> Pagos directos </mat-header-cell>
               <mat-cell *matCellDef="let cronograma"> {{cronograma.total_directo | currency:'S/.'}}</mat-cell>
             </ng-container>
-  
+
             <ng-container matColumnDef="identificador_directo">
               <mat-header-cell *matHeaderCellDef> Cuentas de pago </mat-header-cell>
               <mat-cell *matCellDef="let cronograma"> {{cronograma.identificador_directo }}</mat-cell>
@@ -1685,7 +1694,7 @@
               <mat-header-cell *matHeaderCellDef> Pagos judiciales </mat-header-cell>
               <mat-cell *matCellDef="let cronograma"> {{cronograma.total_judicial | currency:'S/.'}}</mat-cell>
             </ng-container>
-  
+
             <ng-container matColumnDef="opciones">
               <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
               <mat-cell *matCellDef="let cronograma">
@@ -1697,7 +1706,7 @@
                 </ng-container> -->
               </mat-cell>
             </ng-container>
-  
+
             <mat-header-row *matHeaderRowDef="ColumnasCronogramaPeriodo; sticky: true"></mat-header-row>
             <mat-row *matRowDef="let row; columns: ColumnasCronogramaPeriodo"></mat-row>
           </mat-table>
@@ -1712,7 +1721,7 @@
               ({{totales_total_cuotas}} cuotas)
             </ng-container>
           </mat-grid-tile>
-          
+
           <mat-grid-tile>
             <strong > Total pagado: </strong>
             &nbsp;
@@ -1779,7 +1788,7 @@
               </ng-container>
             </mat-cell>
           </ng-container>
-          
+
           <ng-container matColumnDef="fecha_vencimiento_ver">
             <mat-header-cell *matHeaderCellDef> Vencimiento </mat-header-cell>
             <mat-cell *matCellDef="let cronograma">
@@ -1906,7 +1915,7 @@
           <button mat-raised-button color="primary"
           (click)="Guardar()"
           [disabled]="( Cargando | async ) ||
-                      CreditosForm.invalid || 
+                      CreditosForm.invalid ||
                       editar_cronograma==1 ||
                       vendedoresForm.value.length == 0 ||
                       diferencia>0.2"

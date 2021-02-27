@@ -145,6 +145,7 @@ export class VentanaPermisosComponent implements OnInit {
           generar_interes : permisos.creditos?.listado_creditos?.generar_interes || false ,
           liquidar : permisos.creditos?.listado_creditos?.liquidar || false ,
           cambiar_acreedor : permisos.creditos?.listado_creditos?.cambiar_acreedor || false ,
+          exonerar_afiliacion : permisos.creditos?.listado_creditos?.exonerar_afiliacion || false ,
         } ,
         afiliaciones : {
           general : permisos.creditos?.afiliaciones?.general || false ,
@@ -303,6 +304,7 @@ export class VentanaPermisosComponent implements OnInit {
           generar_interes : false ,
           liquidar : false ,
           cambiar_acreedor : false ,
+          exonerar_afiliacion : false ,
         } ,
         afiliaciones : {
           general : false ,

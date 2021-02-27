@@ -69,7 +69,7 @@
       <form [formGroup]="PagosForm">
         <div formArrayName="PagoArrayForm" *ngFor="let Pago of PagosForm['controls'].PagoArrayForm['controls']; let i = index">
           <div [formGroupName]="i">
-            <mat-grid-list cols="6" rowHeight="70px">
+            <mat-grid-list cols="5" rowHeight="70px">
               <mat-grid-tile>
                 <mat-form-field class="columnas-1">
                   <mat-label> Fecha de pago </mat-label>

@@ -1003,14 +1003,14 @@
         $result->bindParam(":prmonto", $elemento->monto);
         $result->bindParam(":probservaciones", $elemento->observacion);
         
-        ob_start();
-        echo($elemento->fecha) ;
-        echo($elemento->cuenta) ;
-        echo($elemento->operacion) ;
-        echo($elemento->referente) ;
-        echo($elemento->monto) ;
-        echo($elemento->observacion) ;
-        error_log(ob_get_clean(), 4) ;
+        // ob_start();
+        // echo($elemento->fecha) ;
+        // echo($elemento->cuenta) ;
+        // echo($elemento->operacion) ;
+        // echo($elemento->referente) ;
+        // echo($elemento->monto) ;
+        // echo($elemento->observacion) ;
+        // error_log(ob_get_clean(), 4) ;
 
         $elemento->fecha=htmlspecialchars(strip_tags($elemento->fecha));
         $elemento->cuenta=htmlspecialchars(strip_tags($elemento->cuenta));
@@ -1077,6 +1077,27 @@
       if($result->execute())
       {
         $this->create_detalle_array(1);
+        return true;
+      }
+      return false;
+    }
+
+    function update_directa_voucher(){
+      $query = "CALL sp_actualizarcobranzadirectavoucher(
+        :prid,
+        :prarchivo
+      )";
+
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(":prid", $this->id_cobranza);
+      $result->bindParam(":prarchivo", $this->archivo);
+
+      $this->id_cobranza=htmlspecialchars(strip_tags($this->id_cobranza));
+      $this->archivo=htmlspecialchars(strip_tags($this->archivo));
+
+      if($result->execute())
+      {
         return true;
       }
       return false;
@@ -2295,7 +2316,7 @@
       $this->usuario_alvis=htmlspecialchars(strip_tags($this->usuario_alvis));
 
       
-      if ( $this->delete_cobranzas_manualesxtransaccion(1, $this->credito) ) {
+      // if ( $this->delete_cobranzas_manualesxtransaccion(1, $this->credito) ) {
         $momento = date("Y-m-d H:i:s");
         $result->bindParam(":prcredito", $this->credito);
         $result->bindParam(":prtipocobranza", $this->tipo_cobranza);
@@ -2311,9 +2332,9 @@
           return true;
         }
         return false;
-      } else {
-        return false;
-      }
+      // } else {
+      //   return false;
+      // }
     }
 
     // Esta función crea una cobranza manual desde pagos pasivos
@@ -2341,7 +2362,7 @@
       $this->usuario_alvis=htmlspecialchars(strip_tags($this->usuario_alvis));
 
       
-      if ( $this->delete_cobranzas_manualesxtransaccion(1, $this->venta) ) {
+      // if ( $this->delete_cobranzas_manualesxtransaccion(1, $this->venta) ) {
         $momento = date("Y-m-d H:i:s");
         $result->bindParam(":prventa", $this->venta);
         $result->bindParam(":prtipocobranza", $this->tipo_cobranza);
@@ -2357,9 +2378,9 @@
           return true;
         }
         return false;
-      } else {
-        return false;
-      }
+      // } else {
+      //   return false;
+      // }
     }
 
     // Esta función crea una cobranza manual desde pagos pasivos

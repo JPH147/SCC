@@ -35,6 +35,7 @@ import { VentanaGenerarPenalidadComponent } from "src/app/compartido/componentes
 import { VentanaLiquidacionComponent } from "src/app/compartido/componentes/ventana-liquidacion/ventana-liquidacion.component";
 import { VentanaGenerarInteresComponent } from "src/app/compartido/componentes/ventana-generar-interes/ventana-generar-interes.component";
 import { VentanaPagosComponent } from "src/app/compartido/componentes/ventana-pagos/ventana-pagos.component";
+import { VentanaGenerarPagoTransaccionUnitariaComponent } from "src/app/compartido/componentes/ventana-generar-pago-transaccion-unitaria/ventana-generar-pago-transaccion-unitaria.component";
 
 @Component({
   selector: 'app-ventas-salida',
@@ -388,7 +389,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
       this.VentasSalidaForm.get('fechapago').setValue(moment(res.fecha_inicio_pago).toDate());
       this.VentasSalidaForm.get('inicial').setValue(res.monto_inicial);
       this.VentasSalidaForm.get('cuotas').setValue(res.numero_cuotas);
-      this.VentasSalidaForm.get('montototal').setValue(res.monto_total);
+      this.VentasSalidaForm.get('montototal').setValue(res.total_venta);
       this.VentasSalidaForm.get('contrato').setValue(res.contrato);
 
       // Si la fecha de pago es el último día del mes, se activa el control 'fecha_fin_mes'
@@ -1259,6 +1260,26 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
         this.SeleccionarVentaxId(this.id_venta);
       }
     })
+  }
+
+  AgregarPagosUnitarios(){
+    let ventana = this.Dialogo.open(VentanaGenerarPagoTransaccionUnitariaComponent,{
+      width: '1200px' ,
+      maxHeight: '80vh' ,
+      data : { 
+        tipo : 2,
+        id_venta : this.idventa,
+        cliente : this.VentasSalidaForm.get('id_cliente').value ,
+        pendiente : this.totales_monto_pendiente
+      }
+    })
+
+    ventana.afterClosed().subscribe( resultado=>{
+      if ( resultado === true ) {
+        this.Notificacion.Snack("Se crearon los pagos satisfactoriamente","") ;
+        this.SeleccionarVentaxId(this.idventa);
+      }
+    } )
   }
 
   AnularVenta(){

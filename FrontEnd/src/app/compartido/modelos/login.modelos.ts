@@ -92,6 +92,7 @@ export type Rol = {
       generar_interes : boolean ,
       liquidar : boolean,
       cambiar_acreedor : boolean ,
+      exonerar_afiliacion : boolean ,
     } ,
     afiliaciones : {
       general : boolean ,

@@ -64,7 +64,7 @@
             if($credito->crear())
             {
                 $credito->crear_vendedor_array() ;
-                $referencia = $credito->tipo_credito == 1 ? 8 : 9 ;
+                $referencia = $credito->tipo_credito == 1 ? "8" : "9" ;
                 $log->create($usuario_alvis, $referencia, 1, $credito->id_credito) ;
                 print_json("0000", "Se creó el credito satisfactoriamente.", $credito->id_credito);
             }

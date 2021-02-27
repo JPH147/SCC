@@ -31,7 +31,6 @@ import { EstadoSesion } from '../../compartido/reducers/permisos.reducer';
   selector: 'app-clientes',
   templateUrl: './clientes.component.html',
   styleUrls: ['./clientes.component.css'],
-  providers: [ClienteService, ServiciosTelefonos, ServiciosDirecciones, Notificaciones]
 })
 
 export class ClientesComponent implements OnInit, AfterViewInit {
@@ -291,10 +290,10 @@ export class ClientesComponent implements OnInit, AfterViewInit {
   }
 
   HacerVenta(id){
-    forkJoin(
+    forkJoin([
       this.STelefonos.ListarTelefono(id,"1",1,50),
       this.SDirecciones.ListarDireccion(id,"1",1,50)
-    )
+    ])
     .subscribe(res=>{
       if (res[0].mensaje==0 || res[1].mensaje==0) {
         this.snackBar.open("Debe agregar los datos de contacto para el cliente", "Entendido", {

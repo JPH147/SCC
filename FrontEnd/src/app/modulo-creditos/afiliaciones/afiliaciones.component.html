@@ -28,13 +28,13 @@
   </ng-container>
 
   <mat-card-title class="tituloProd"> Afiliación N° {{CreditosForm.getRawValue().codigo}} </mat-card-title>
-  
+
   <form [formGroup]="CreditosForm">
 
     <div class = "spinner-container" *ngIf = "Cargando | async">
       <mat-spinner></mat-spinner>
     </div>
-    
+
     <!-- Cliente -->
     <div class="seccion">
 
@@ -274,14 +274,14 @@
             <div [formGroupName]="i">
               <mat-grid-tile>
                 <mat-form-field class="columnas-2">
-                  <input matInput [placeholder]="'Vendedor ' + i+1" formControlName="vendedor_nombre"> 
+                  <input matInput [placeholder]="'Vendedor ' + i+1" formControlName="vendedor_nombre">
                 </mat-form-field>
               </mat-grid-tile>
             </div>
           </div>
         </mat-grid-list>
       </ng-container>
-      
+
       <ng-container *ngIf="vendedoresForm['controls'].length == 0">
         <mat-grid-list cols="1" rowHeight="50px">
           <mat-grid-tile>
@@ -293,7 +293,7 @@
 
     <!-- Adjuntos -->
     <div class="seccion">
- 
+
       <mat-card-subtitle class="titulo-seccion">
         DOCUMENTOS ADJUNTOS
       </mat-card-subtitle>
@@ -308,7 +308,7 @@
             [extensions]="['png, jpg, jpeg']"
             [fileTooLargeMessage]="'El archivo debe pesar menos de 1MB'"
             (uploadFinished)="SubirArchivo($event, 10)">
-          </image-upload>  
+          </image-upload>
         </mat-grid-tile>
       </mat-grid-list>
 
@@ -361,7 +361,7 @@
       <mat-card-subtitle class="titulo-seccion">
         DATOS DEL DOCUMENTO
       </mat-card-subtitle>
-  
+
       <mat-grid-list cols="4" rowHeight="70px">
 
         <mat-grid-tile *ngIf="!CreditosForm.value.fecha_fin_mes">
@@ -408,11 +408,15 @@
 
       <ng-container *ngIf="id_credito">
         <mat-grid-list cols="2" rowHeight="50px">
-          <mat-grid-tile>
-            <ng-container *ngIf="permiso?.creditos?.afiliaciones?.agregar_pagos_masivos">
-              <button mat-raised-button color="accent" (click)="AgregarPagos()"
-                [disabled]="(Cargando | async)"> Agregar pagos </button>
-            </ng-container>
+          <mat-grid-tile *ngIf="permiso?.creditos?.afiliaciones?.agregar_pagos_masivos">
+            <button mat-raised-button type="button" color="accent" matTooltip="Agregar pagos"
+              [matMenuTriggerFor]="menuPagos" [disabled]="(Cargando | async)">
+              Agregar pagos
+            </button>
+            <mat-menu #menuPagos="matMenu">
+              <button mat-menu-item (click)="AgregarPagos()"> Masivos </button>
+              <button mat-menu-item (click)="AgregarPagosUnitarios()"> Unitario </button>
+            </mat-menu>
           </mat-grid-tile>
 
           <mat-grid-tile>
@@ -423,7 +427,7 @@
             </mat-radio-group>
           </mat-grid-tile>
         </mat-grid-list>
-        
+
         <ng-container *ngIf="CreditosForm.get('vista_cronograma').value == 1">
           <mat-table [dataSource]="ListadoCronograma" class="mat-elevation-z8">
             <ng-container matColumnDef="numero">
@@ -431,37 +435,37 @@
               <mat-cell *matCellDef="let cronograma"> {{cronograma.numero}} </mat-cell>
               <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
             </ng-container>
-  
+
             <ng-container matColumnDef="tipo_pago">
               <mat-header-cell *matHeaderCellDef> Tipo de pago </mat-header-cell>
               <mat-cell *matCellDef="let cronograma"> {{cronograma.tipo_pago}} </mat-cell>
               <mat-footer-cell *matFooterCellDef> TOTALES </mat-footer-cell>
             </ng-container>
-  
+
             <ng-container matColumnDef="fecha_vencimiento">
               <mat-header-cell *matHeaderCellDef> Vencimiento </mat-header-cell>
               <mat-cell *matCellDef="let cronograma"> {{cronograma.fecha_vencimiento | date: 'dd/MM/yyyy'}} </mat-cell>
               <mat-footer-cell *matFooterCellDef> - </mat-footer-cell>
             </ng-container>
-  
+
             <ng-container matColumnDef="monto">
               <mat-header-cell *matHeaderCellDef> Monto </mat-header-cell>
               <mat-cell *matCellDef="let cronograma"> {{cronograma.monto | currency:'S/.' }} </mat-cell>
               <mat-footer-cell *matFooterCellDef> {{ totales_monto_total | currency:'S/.' }} </mat-footer-cell>
             </ng-container>
-  
+
             <ng-container matColumnDef="interes_generado">
               <mat-header-cell *matHeaderCellDef> Interés generado </mat-header-cell>
               <mat-cell *matCellDef="let cronograma"> {{cronograma.interes_generado | currency:'S/.'}}</mat-cell>
               <mat-footer-cell *matFooterCellDef> {{ totales_interes_generado | currency:'S/.' }} </mat-footer-cell>
             </ng-container>
-  
+
             <ng-container matColumnDef="monto_pagado">
               <mat-header-cell *matHeaderCellDef> Total pagado </mat-header-cell>
               <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_pagado | currency:'S/.'}}</mat-cell>
               <mat-footer-cell *matFooterCellDef> {{ totales_monto_pagado | currency:'S/.' }} </mat-footer-cell>
             </ng-container>
-  
+
             <ng-container matColumnDef="fecha_cancelacion">
               <mat-header-cell *matHeaderCellDef> Fecha de pago </mat-header-cell>
               <mat-cell *matCellDef="let cronograma">
@@ -470,13 +474,13 @@
               </mat-cell>
               <mat-footer-cell *matFooterCellDef> - </mat-footer-cell>
             </ng-container>
-  
+
             <ng-container matColumnDef="estado">
               <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
               <mat-cell *matCellDef="let cronograma"> {{ cronograma.estado }} </mat-cell>
               <mat-footer-cell *matFooterCellDef> {{ totales_total_pagadas }} / {{ totales_total_cuotas }} </mat-footer-cell>
             </ng-container>
-  
+
             <ng-container matColumnDef="opciones">
               <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
               <mat-cell *matCellDef="let cronograma">
@@ -489,7 +493,7 @@
               </mat-cell>
               <mat-footer-cell *matFooterCellDef> - </mat-footer-cell>
             </ng-container>
-  
+
             <mat-header-row *matHeaderRowDef="ColumnasCronograma; sticky: true"></mat-header-row>
             <mat-row *matRowDef="let row; columns: ColumnasCronograma"></mat-row>
             <ng-container *ngIf="id_credito">
@@ -504,12 +508,12 @@
               <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
               <mat-cell *matCellDef="let cronograma"> {{cronograma.numero}} </mat-cell>
             </ng-container>
-  
+
             <ng-container matColumnDef="periodo">
               <mat-header-cell *matHeaderCellDef> Periodo </mat-header-cell>
               <mat-cell *matCellDef="let cronograma"> {{cronograma.periodo}} </mat-cell>
             </ng-container>
-    
+
             <ng-container matColumnDef="monto_cuota">
               <mat-header-cell *matHeaderCellDef> Monto de la cuota </mat-header-cell>
               <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_cuota | currency:'S/.'}} </mat-cell>
@@ -519,17 +523,17 @@
               <mat-header-cell *matHeaderCellDef> Pagos manuales </mat-header-cell>
               <mat-cell *matCellDef="let cronograma"> {{cronograma.monto_pago_manual | currency:'S/.'}} </mat-cell>
             </ng-container>
-  
+
             <ng-container matColumnDef="total_planilla">
               <mat-header-cell *matHeaderCellDef> Pagos por planilla </mat-header-cell>
               <mat-cell *matCellDef="let cronograma"> {{cronograma.total_planilla | currency:'S/.' }} </mat-cell>
             </ng-container>
-  
+
             <ng-container matColumnDef="total_directo">
               <mat-header-cell *matHeaderCellDef> Pagos directos </mat-header-cell>
               <mat-cell *matCellDef="let cronograma"> {{cronograma.total_directo | currency:'S/.'}}</mat-cell>
             </ng-container>
-    
+
             <ng-container matColumnDef="identificador_directo">
               <mat-header-cell *matHeaderCellDef> Cuentas de pago </mat-header-cell>
               <mat-cell *matCellDef="let cronograma"> {{cronograma.identificador_directo }}</mat-cell>
@@ -539,7 +543,7 @@
               <mat-header-cell *matHeaderCellDef> Pagos judiciales </mat-header-cell>
               <mat-cell *matCellDef="let cronograma"> {{cronograma.total_judicial | currency:'S/.'}}</mat-cell>
             </ng-container>
-  
+
             <ng-container matColumnDef="opciones">
               <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
               <mat-cell *matCellDef="let cronograma">
@@ -548,7 +552,7 @@
                   <mat-icon> visibility </mat-icon> </button>
               </mat-cell>
             </ng-container>
-  
+
             <mat-header-row *matHeaderRowDef="ColumnasCronogramaPeriodo; sticky: true"></mat-header-row>
             <mat-row *matRowDef="let row; columns: ColumnasCronogramaPeriodo"></mat-row>
           </mat-table>
@@ -563,7 +567,7 @@
               ({{totales_total_cuotas}} cuotas)
             </ng-container>
           </mat-grid-tile>
-          
+
           <mat-grid-tile>
             <strong > Total pagado: </strong>
             &nbsp;
@@ -602,7 +606,7 @@
               </ng-container>
             </mat-cell>
           </ng-container>
-          
+
           <ng-container matColumnDef="fecha_vencimiento_ver">
             <mat-header-cell *matHeaderCellDef> Vencimiento </mat-header-cell>
             <mat-cell *matCellDef="let cronograma">

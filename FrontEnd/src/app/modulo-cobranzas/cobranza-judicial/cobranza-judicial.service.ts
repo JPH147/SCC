@@ -492,7 +492,7 @@ export class CobranzaJudicialService {
 
     return this.http.get(this.url + 'procesojudicial/readV2.php', {params})
     .pipe(
-      retry(10),
+      retry(20),
       map(res => {
       if (res['codigo'] === 0) {
         return res;

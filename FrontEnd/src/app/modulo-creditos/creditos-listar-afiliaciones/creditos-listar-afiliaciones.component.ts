@@ -10,6 +10,9 @@ import { CreditosDataSource } from '../creditos-listar/creditos-listar.component
 import { EstadoSesion } from '../../compartido/reducers/permisos.reducer';
 import { Store } from '@ngrx/store';
 import { Rol } from 'src/app/compartido/modelos/login.modelos';
+import { FormGroup, FormBuilder } from '@angular/forms';
+import { CobranzaJudicialService } from 'src/app/modulo-cobranzas/cobranza-judicial/cobranza-judicial.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-creditos-listar-afiliaciones',
@@ -20,37 +23,52 @@ import { Rol } from 'src/app/compartido/modelos/login.modelos';
 
 export class CreditosListarAfiliacionesComponent implements OnInit {
   
-  @ViewChild('InputCliente', { static: true }) FiltroCliente: ElementRef;
-  @ViewChild('InputDNI', { static: true }) FiltroDNI: ElementRef;
-  @ViewChild('InputDocumentos', { static: true }) FiltroDocumentos: MatSelect;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   public ListadoCreditos: CreditosDataSource;
   public Columnas: string[] = ['numero', 'fecha', 'codigo', 'cliente_nombre', 'documentos_adjuntos', 'monto_total', 'cuotas_pagadas' , 'ultima_fecha_pago', 'opciones'];
 
-  public fecha_inicio: Date;
-  public fecha_fin: Date;
   public Tipos : Array<any>;
   public permiso : Rol ;
 
+  public CreditosForm : FormGroup ;
+
   constructor(
     private _store : Store<EstadoSesion> ,
-    private Servicio: CreditosService
+    private Servicio: CreditosService ,
+    private _builder : FormBuilder ,
+    private _route : ActivatedRoute ,
+    private _router : Router ,
   ) { }
 
   ngOnInit() {
+    this.CrearFormulario() ;
+    this.ListadoCreditos = new CreditosDataSource(this.Servicio);
+
+    this.ListarTiposCredito();
+
     this._store.select('permisos').subscribe(permiso =>{
       if( permiso ) {
         this.permiso = permiso ;
       }
     })
-    
-    this.fecha_inicio = null ;
-    this.fecha_fin = null ;
 
-    this.ListadoCreditos = new CreditosDataSource(this.Servicio);
-    this.ListadoCreditos.CargarCreditos("","",1,0,this.fecha_inicio,this.fecha_fin,1,1,10,"fecha desc",new Date().getTime());
+    this._route.queryParams.subscribe(params => {
+      params.cliente ? this.CreditosForm.get('cliente').setValue(params.cliente) : null ;
+      params.dni ? this.CreditosForm.get('dni').setValue(params.dni) : null ;
+      params.tipo_credito ? this.CreditosForm.get('tipo_credito').setValue(params.tipo_credito) : null ;
+      params.estado_pagos ? this.CreditosForm.get('estado_pagos').setValue(params.estado_pagos) : null ;
+      params.fecha_inicio ? this.CreditosForm.get('fecha_inicio').setValue(params.fecha_inicio) : null ;
+      params.fecha_fin ? this.CreditosForm.get('fecha_fin').setValue(params.fecha_fin) : null ;
+      params.estado_credito ? this.CreditosForm.get('estado_credito').setValue(params.estado_credito) : null ;
+      params.pagina_inicio ? this.paginator.pageIndex = params.pagina_inicio : null ;
+      params.tamano_pagina ? this.paginator.pageSize = params.tamano_pagina : null ;
+      params.sort_active ? this.sort.active = params.sort_active : null ;
+      params.sort_direction ? this.sort.direction = params.sort_direction : null ;
+      
+      this.CargarData() ;
+    });
   }
 
   ngAfterViewInit () {
@@ -59,24 +77,28 @@ export class CreditosListarAfiliacionesComponent implements OnInit {
     });
 
     merge(
+      this.CreditosForm.valueChanges ,
       this.paginator.page,
-      this.sort.sortChange
-    ).pipe(
-      tap(() => this.CargarData())
-    ).subscribe();
-
-    merge(
-      fromEvent(this.FiltroCliente.nativeElement, 'keyup') ,
-      fromEvent(this.FiltroDNI.nativeElement, 'keyup') ,
     )
     .pipe(
        debounceTime(200),
        distinctUntilChanged(),
        tap(() => {
-         this.paginator.pageIndex = 0;
          this.CargarData();
        })
     ).subscribe();
+  }
+
+  CrearFormulario() {
+    this.CreditosForm = this._builder.group({
+      cliente : '' ,
+      dni : '' ,
+      tipo_credito : 99 ,
+      estado_pagos : 0 ,
+      fecha_inicio : null ,
+      fecha_fin : null ,
+      estado_credito : 0
+    })
   }
 
   ListarTiposCredito(){
@@ -87,16 +109,16 @@ export class CreditosListarAfiliacionesComponent implements OnInit {
 
   CargarData() {
     this.ListadoCreditos.CargarCreditos(
-      this.FiltroCliente.nativeElement.value,
-      this.FiltroDNI.nativeElement.value,
+      this.CreditosForm.get('cliente').value ,
+      this.CreditosForm.get('dni').value ,
       1,
-      this.FiltroDocumentos.value,
-      this.fecha_inicio,
-      this.fecha_fin,
+      this.CreditosForm.get('estado_pagos').value ,
+      this.CreditosForm.get('fecha_inicio').value ,
+      this.CreditosForm.get('fecha_fin').value ,
       1,
-      this.paginator.pageIndex+1,
-      this.paginator.pageSize,
-      this.sort.active +" " + this.sort.direction ,
+      this.paginator?.pageIndex ? this.paginator.pageIndex + 1 : 1 ,
+      this.paginator?.pageSize ? this.paginator.pageSize : 10 ,
+      this.sort ? this.sort.active +" " + this.sort.direction : "fecha desc" ,
       new Date().getTime()
     );
   }
@@ -106,4 +128,50 @@ export class CreditosListarAfiliacionesComponent implements OnInit {
     this.CargarData()
   }
 
+  VerCredito(id_credito) {
+    this._router.navigate(['.'], {
+      relativeTo: this._route,
+      queryParams: {
+        cliente : this.CreditosForm.get('cliente').value ,
+        dni : this.CreditosForm.get('dni').value ,
+        tipo_credito : this.CreditosForm.get('tipo_credito').value ,
+        estado_pagos : this.CreditosForm.get('estado_pagos').value ,
+        fecha_inicio : this.CreditosForm.get('fecha_inicio').value ,
+        fecha_fin : this.CreditosForm.get('fecha_fin').value ,
+        estado_credito : this.CreditosForm.get('estado_credito').value ,
+        pagina_inicio : this.paginator.pageIndex ,
+        tamano_pagina : this.paginator.pageSize ,
+        sort_active : this.sort.active ,
+        sort_direction : this.sort.direction ,
+      }
+    })
+    .finally(() => {
+      this._router.navigate(['./ver', id_credito], {
+        relativeTo: this._route
+      }) ;
+    });
+
+  }
+
+  VerProcesosJudiciales(id_credito) {
+    this._router.navigate(['.'], {
+      relativeTo: this._route,
+      queryParams: {
+        cliente : this.CreditosForm.get('cliente').value ,
+        dni : this.CreditosForm.get('dni').value ,
+        tipo_credito : this.CreditosForm.get('tipo_credito').value ,
+        estado_pagos : this.CreditosForm.get('estado_pagos').value ,
+        fecha_inicio : this.CreditosForm.get('fecha_inicio').value ,
+        fecha_fin : this.CreditosForm.get('fecha_fin').value ,
+        estado_credito : this.CreditosForm.get('estado_credito').value ,
+        pagina_inicio : this.paginator.pageIndex ,
+        tamano_pagina : this.paginator.pageSize ,
+        sort_active : this.sort.active ,
+        sort_direction : this.sort.direction ,
+      }
+    })
+    .finally(() => {
+      this._router.navigate(['/cobranzas','cobranza-judicial','nueva-credito',id_credito]) ;
+    })
+  }
 }

@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { fromEvent, BehaviorSubject, forkJoin, Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, finalize, tap } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { Notificaciones } from 'src/app/core/servicios/notificacion';
 import { URLIMAGENES } from 'src/app/core/servicios/url';
@@ -136,7 +136,6 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
       monto: [ { value : null , disabled : false } , [
         Validators.required,
         Validators.min(1),
-        Validators.pattern ('[0-9- ]+')
       ] ],
       solo_directas: [ { value : true , disabled : false } , [
       ] ],
@@ -202,6 +201,16 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
       }
 
     })
+
+    // console.log({
+    //   'enviado' : this.enviado ,
+    //   'voucher_repetido' : this.voucher_repetido ,
+    //   'no_hay_cuotas' : this.no_hay_cuotas ,
+    //   'pago_excedente' : this.pago_excedente ,
+    //   'CobranzaDirectaForm' : this.CobranzaDirectaForm ,
+    //   'editar_cuotas' : this.editar_cuotas ,
+    //   'diferencia' : this.diferencia
+    // })
   }
 
   ListarTransacciones(){
@@ -403,13 +412,18 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
 
   CrearCobranza() {
 
-    this.enviado = true ;
+    this.Cargando.next(true) ;
     let random = (new Date()).getTime();
 
     forkJoin([
       this.Servicio.BuscarNumeroOperacion(this.FiltroOperacion.nativeElement.value),
       this.ServiciosGenerales.RenameFile(this.archivo,'VOUCHER',random.toString(),"cobranza")
     ])
+    .pipe(
+      finalize(() => {
+        this.Cargando.next(false) ;
+      })
+    )
     .subscribe(respuesta=>{
       if( respuesta[0] ) {
         this.voucher_repetido=respuesta[0];
@@ -462,7 +476,7 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
 
   ActualizarCobranza(){
 
-    this.enviado = true ;
+    this.Cargando.next(true) ;
 
     let random = (new Date()).getTime();
 
@@ -482,7 +496,13 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
           this.CobranzaDirectaForm.get('interes').value ? this.CobranzaDirectaForm.get('fecha_referencia').value : null ,
           this.CobranzaDirectaForm.value.observaciones,
           this.Cuotas
-        ).subscribe(res=>{
+        )
+        .pipe(
+          finalize(() => {
+            this.Cargando.next(false) ;
+          })
+        )
+        .subscribe(res=>{
           if(res['codigo']==0){
             // En caso haya habido un cambio en el interés, se deben actualizar las cuotas para que todo cuadre
             let cuotas_actualizar : Array<Observable<any>> = [] ;
@@ -503,7 +523,7 @@ export class CobranzaDirectaComponent implements OnInit, AfterViewInit {
             setTimeout(()=>{
               this.router.navigate(['/cobranzas','cobranza-directa']);
               this.Notificacion.Snack("Se actualizó la cobranza con éxito!","");
-            }, 500)
+            }, 100)
           } else {
             this.router.navigate(['/cobranzas','cobranza-directa']);
             this.Notificacion.Snack("Ocurrió un error al actualizar la cobranza.", "")

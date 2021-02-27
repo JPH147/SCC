@@ -552,6 +552,19 @@ export class CobranzasService {
     return this.http.post(this.url + 'cobranza/update-directa.php', params, {headers: headers});
   }
 
+  ActualizarCobranzaDirectaVoucher(
+    id_cobranza : number,
+    archivo : string,
+  ){
+    let params = new HttpParams()
+      .set('prid', id_cobranza.toString())
+      .set('prarchivo', archivo) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'cobranza/update-directa-voucher.php', params, {headers: headers});
+  }
+
   ActualizarCobranzaValidacion(
     id_cobranza : number,
     validado : number,

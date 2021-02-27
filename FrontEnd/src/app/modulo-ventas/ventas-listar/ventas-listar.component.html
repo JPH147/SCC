@@ -5,78 +5,76 @@
     <div id = "tituloProd"> Listado de ventas</div>
   </mat-card-title>
 
-  <!-- Filtros Productos, tipo  Marca Modelo -->
-  <mat-grid-list cols= "4" rowHeight="70px">
+  <form [formGroup]="VentasForm">
+    <mat-grid-list cols= "4" rowHeight="70px">
+      <mat-grid-tile>
+        <mat-icon>search</mat-icon>
+        <mat-form-field class="columnas-1">
+          <input matInput placeholder="Cliente" formControlName="cliente">
+        </mat-form-field>
+      </mat-grid-tile>
+  
+      <mat-grid-tile>
+        <mat-icon>search</mat-icon>
+        <mat-form-field class="columnas-1">
+          <input matInput placeholder="DNI" formControlName="dni">
+        </mat-form-field>
+      </mat-grid-tile>
+  
+      <mat-grid-tile>
+        <mat-form-field class="columnas-1">
+          <input matInput [matDatepicker]="inicio" placeholder="Fecha de inicio" formControlName="fecha_inicio">
+          <mat-datepicker-toggle matSuffix [for]="inicio"></mat-datepicker-toggle>
+          <mat-datepicker #inicio disabled="false"></mat-datepicker>
+        </mat-form-field>
+      </mat-grid-tile>
+  
+      <mat-grid-tile>
+        <mat-form-field class="columnas-1">
+          <input matInput [matDatepicker]="fin" placeholder="Fecha de fin" formControlName="fecha_fin">
+          <mat-datepicker-toggle matSuffix [for]="fin"></mat-datepicker-toggle>
+          <mat-datepicker #fin disabled="false"></mat-datepicker>
+        </mat-form-field>
+      </mat-grid-tile>
+  
+      <mat-grid-tile>
+        <mat-form-field class="columnas-1">
+          <mat-select formControlName="tipo_venta" placeholder="Tipo de venta">
+            <mat-option [value]=0>Todas</mat-option>
+            <mat-option [value]="1">Directa</mat-option>
+            <mat-option [value]="2">Salida de vendedores</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-grid-tile>
 
-    <mat-grid-tile>
-      <mat-icon>search</mat-icon>
-      <mat-form-field class="columnas-1">
-        <input matInput placeholder="Cliente" #InputCliente>
-      </mat-form-field>
-    </mat-grid-tile>
-
-    <mat-grid-tile>
-      <mat-icon>search</mat-icon>
-      <mat-form-field class="columnas-1">
-        <input matInput placeholder="DNI" #InputDNI>
-      </mat-form-field>
-    </mat-grid-tile>
-
-    <mat-grid-tile>
-      <mat-form-field class="columnas-1">
-        <input matInput [matDatepicker]="inicio" placeholder="Fecha de inicio" [(ngModel)]="fecha_inicio" (dateChange)="CambioFiltro()">
-        <mat-datepicker-toggle matSuffix [for]="inicio"></mat-datepicker-toggle>
-        <mat-datepicker #inicio disabled="false"></mat-datepicker>
-      </mat-form-field>
-    </mat-grid-tile>
-
-    <mat-grid-tile>
-      <mat-form-field class="columnas-1">
-        <input matInput [matDatepicker]="fin" placeholder="Fecha de fin" [(ngModel)]="fecha_fin" (dateChange)="CambioFiltro()">
-        <mat-datepicker-toggle matSuffix [for]="fin"></mat-datepicker-toggle>
-        <mat-datepicker #fin disabled="false"></mat-datepicker>
-      </mat-form-field>
-    </mat-grid-tile>
-
-    <mat-grid-tile>
-      <mat-form-field class="columnas-1">
-        <mat-select #InputTipo placeholder="Tipo de venta" (selectionChange)="CambioFiltro()" [value]=0>
-          <mat-option [value]=0>Todas</mat-option>
-          <mat-option [value]="1">Directa</mat-option>
-          <mat-option [value]="2">Salida de vendedores</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </mat-grid-tile>
-
-    <mat-grid-tile>
-      <mat-form-field class="columnas-1">
-        <mat-select #InputEstado placeholder="Estado" [value]=1 (selectionChange)="CambioFiltro()">
-          <mat-option [value]="0">Todas</mat-option>
-          <mat-option [value]="1">Activas</mat-option>
-          <mat-option [value]="3">Canjeadas</mat-option>
-          <mat-option [value]="4">Refinanciadas</mat-option>
-          <mat-option [value]="2">Anuladas</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </mat-grid-tile>
-
-    <mat-grid-tile>
-      <mat-form-field class="columnas-1">
-        <mat-select #InputDocumentos placeholder="Estado de los pagos" [value]=0 (selectionChange)="CambioFiltro()">
-          <mat-option [value]=0>Todos</mat-option>
-          <mat-option [value]=1>En curso y al día</mat-option>
-          <mat-option [value]=2>En curso y atrasados</mat-option>
-          <mat-option [value]=3>Finalizado y cancelados</mat-option>
-          <mat-option [value]=4>Finalizado y pendientes</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </mat-grid-tile>
+      <mat-grid-tile>
+        <mat-form-field class="columnas-1">
+          <mat-select formControlName="estado_venta" placeholder="Estado de la venta">
+            <mat-option [value]=0>Todos</mat-option>
+            <mat-option [value]=1>Activos</mat-option>
+            <mat-option [value]=4>Refinanciados</mat-option>
+            <mat-option [value]=3>Anulados</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-grid-tile>
+  
+      <mat-grid-tile>
+        <mat-form-field class="columnas-1">
+          <mat-select formControlName="estado_pagos" placeholder="Estado de los pagos">
+            <mat-option [value]=0>Todos</mat-option>
+            <mat-option [value]=1>En curso y al día</mat-option>
+            <mat-option [value]=2>En curso y atrasados</mat-option>
+            <mat-option [value]=3>Finalizado y cancelados</mat-option>
+            <mat-option [value]=4>Finalizado y pendientes</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-grid-tile>
     
-    <mat-grid-tile *ngIf="permiso?.ventas?.listado_ventas?.agregar">
-      <button mat-raised-button color="primary" [routerLink]="['nueva']">Nueva</button>
-    </mat-grid-tile>
-
-  </mat-grid-list>
+      <mat-grid-tile *ngIf="permiso?.ventas?.listado_ventas?.agregar">
+        <button mat-raised-button color="primary" [routerLink]="['nueva']">Nueva</button>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </form>
 
   <mat-card-content>
 
@@ -172,7 +170,7 @@
         <mat-cell *matCellDef="let venta">
           <ng-container *ngIf="venta.tipo_venta!='Salida'">
             <ng-container>
-              <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="[venta.id]"><mat-icon> visibility </mat-icon></button>
+              <button mat-icon-button color="primary" matTooltip="Ver documento" (click)="VerVenta(1,venta.id)"><mat-icon> visibility </mat-icon></button>
             </ng-container>
             <ng-container  *ngIf="permiso?.ventas?.listado_ventas?.abrir_procesos">
               <button mat-icon-button color="primary" matTooltip="Abrir proceso judicial" [matMenuTriggerFor]="menu3" (click)="ListarProcesos(venta.id)"
@@ -180,7 +178,7 @@
                 <mat-icon [matBadge]="venta.numero_procesos" [matBadgeHidden]="venta.numero_procesos==0 || venta.estado!=1" matBadgeSize="small" matBadgeColor="accent"> gavel </mat-icon>
               </button>
               <mat-menu #menu3="matMenu">
-                <button mat-menu-item *ngFor="let proceso of ListadoProcesos" [routerLink]="['/cobranzas','cobranza-judicial','ver',proceso.id_proceso]">
+                <button mat-menu-item *ngFor="let proceso of ListadoProcesos" (click)="VerProcesoJudicial(proceso.id_proceso)">
                   <ng-container *ngIf="proceso.id_tipo_documento==0"> <mat-icon class="icono-primario" matTooltip="Ya tiene cronograma"> star </mat-icon> </ng-container>
                   <ng-container *ngIf="proceso.id_tipo_documento==1"> <mat-icon matTooltip="Aún no hay documentos"> fiber_manual_record </mat-icon> </ng-container>
                   <ng-container *ngIf="proceso.id_tipo_documento==2"> <mat-icon class="icono-ambar" matTooltip="Se presentó un escrito"> info </mat-icon> </ng-container>
@@ -189,7 +187,7 @@
                   <ng-container *ngIf="proceso.id_tipo_documento==6"> <mat-icon class="icono-anaranjado" matTooltip="Se emitió una nota"> info </mat-icon> </ng-container>
                   {{proceso.expediente}}
                 </button>
-                <button mat-menu-item [routerLink]="['/cobranzas','cobranza-judicial','nueva-venta','venta',venta.id]" > <mat-icon> add </mat-icon> Nuevo proceso </button>
+                <button mat-menu-item (click)="NuevoProcesoJudicial(1,venta.id)"> <mat-icon> add </mat-icon> Nuevo proceso </button>
               </mat-menu>
             </ng-container>
             <ng-container  *ngIf="permiso?.ventas?.listado_ventas?.eliminar">
@@ -201,7 +199,7 @@
           
           <ng-container *ngIf="venta.tipo_venta=='Salida'">
             <ng-container>
-              <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="['salida',venta.id]"><mat-icon> visibility </mat-icon></button>
+              <button mat-icon-button color="primary" matTooltip="Ver documento" (click)="VerVenta(2,venta.id)"><mat-icon> visibility </mat-icon></button>
             </ng-container>
             <ng-container  *ngIf="permiso?.ventas?.listado_ventas?.abrir_procesos">
               <button mat-icon-button color="primary" matTooltip="Abrir proceso judicial" [matMenuTriggerFor]="menu3" (click)="ListarProcesos(venta.id)"
@@ -209,7 +207,7 @@
                 <mat-icon [matBadge]="venta.numero_procesos" [matBadgeHidden]="venta.numero_procesos==0 || venta.estado!=1" matBadgeSize="small" matBadgeColor="accent"> gavel </mat-icon>
               </button>
               <mat-menu #menu3="matMenu">
-                <button mat-menu-item *ngFor="let proceso of ListadoProcesos" [routerLink]="['/cobranzas','cobranza-judicial','ver',proceso.id_proceso]">
+                <button mat-menu-item *ngFor="let proceso of ListadoProcesos" (click)="VerProcesoJudicial(proceso.id_proceso)">
                   <ng-container *ngIf="proceso.id_tipo_documento==0"> <mat-icon class="icono-primario" matTooltip="Ya tiene cronograma"> star </mat-icon> </ng-container>
                   <ng-container *ngIf="proceso.id_tipo_documento==1"> <mat-icon matTooltip="Aún no hay documentos"> fiber_manual_record </mat-icon> </ng-container>
                   <ng-container *ngIf="proceso.id_tipo_documento==2"> <mat-icon class="icono-ambar" matTooltip="Se presentó un escrito"> info </mat-icon> </ng-container>
@@ -218,7 +216,7 @@
                   <ng-container *ngIf="proceso.id_tipo_documento==6"> <mat-icon class="icono-anaranjado" matTooltip="Se emitió una nota"> info </mat-icon> </ng-container>
                   {{proceso.expediente}}
                 </button>
-                <button mat-menu-item [routerLink]="['/cobranzas','cobranza-judicial','nueva-venta','salida',venta.id]" > <mat-icon> add </mat-icon> Nuevo proceso </button>
+                <button mat-menu-item (click)="NuevoProcesoJudicial(2,venta.id)"> <mat-icon> add </mat-icon> Nuevo proceso </button>
               </mat-menu>
             </ng-container>
             <ng-container  *ngIf="permiso?.ventas?.listado_ventas?.eliminar">

@@ -7,7 +7,7 @@
     <div id="tituloProd"> Registro de cobranzas directas </div>
   </mat-card-title>
 
-  <div class = "spinner-container principal" *ngIf = "enviado">
+  <div class = "spinner-container principal" *ngIf = "(Cargando | async)">
     <mat-spinner></mat-spinner>
   </div>
 
@@ -87,7 +87,7 @@
         </mat-grid-tile>
 
         <mat-grid-tile>
-          <mat-form-field>
+          <mat-form-field class="columnas-1">
             <mat-select placeholder="Documento" formControlName="documento" (selectionChange)="DocumentoSeleccionado()">
               <mat-option [value]=0> Todos </mat-option>
               <mat-option *ngFor="let documento of Documentos" [value]="documento.id"> {{documento.documento}} </mat-option>
@@ -266,7 +266,7 @@
         <mat-grid-tile>
           <button mat-raised-button color="primary"
           (click)="Guardar()"
-          [disabled]="enviado ||
+          [disabled]="(Cargando | async) ||
                       voucher_repetido ||
                       no_hay_cuotas ||
                       pago_excedente ||

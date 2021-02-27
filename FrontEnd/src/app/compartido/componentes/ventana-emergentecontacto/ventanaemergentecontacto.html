@@ -15,7 +15,7 @@
           <mat-grid-list cols=4 rowHeight="70px">
 
             <mat-grid-tile>
-              <mat-form-field>
+              <mat-form-field class="columnas-1">
                 <mat-select placeholder="Tipo" formControlName="tipo">
                   <mat-option *ngFor="let tipo of Tipos" [value]="tipo.id">{{tipo.viewValue}}</mat-option>
                 </mat-select>
@@ -91,7 +91,7 @@
           <mat-grid-list cols=4 rowHeight="70px">
 
             <mat-grid-tile>
-              <mat-form-field>
+              <mat-form-field class="columnas-1">
                 <mat-select placeholder="Departamento" formControlName="departamento" (selectionChange)="DepartamentoSeleccionado($event)">
                   <mat-option *ngFor="let departamento of LstDepartamento" [value]="departamento.nombre">{{departamento.nombre  | uppercase }}</mat-option>
                 </mat-select>
@@ -100,7 +100,7 @@
             </mat-grid-tile>
 
             <mat-grid-tile>
-              <mat-form-field>
+              <mat-form-field class="columnas-1">
                 <mat-select placeholder="Provincia" formControlName="provincia" (selectionChange)="ProvinciaSeleccionada($event)">
                   <mat-option *ngFor="let provincia of LstProvincia" [value]="provincia.nombre">{{provincia.nombre  | uppercase }}</mat-option>
                 </mat-select>
@@ -109,7 +109,7 @@
             </mat-grid-tile>
 
             <mat-grid-tile>
-              <mat-form-field>
+              <mat-form-field class="columnas-1">
                 <mat-select placeholder="Distrito" formControlName="distrito">
                   <mat-option *ngFor="let distrito of LstDistrito" [value]="distrito.id">{{distrito.nombre  | uppercase }}</mat-option>
                 </mat-select>
@@ -118,7 +118,7 @@
             </mat-grid-tile>
 
             <mat-grid-tile colspan=3>
-              <mat-form-field class="grande">
+              <mat-form-field  class="columnas-3">
                 <input matInput placeholder="Dirección" formControlName="nombre">
                 <mat-error>Este campo es obligatorio</mat-error>
               </mat-form-field>
@@ -174,7 +174,7 @@
           <mat-grid-list cols=4 rowHeight="70px">
 
             <mat-grid-tile>
-              <mat-form-field>
+              <mat-form-field class="columnas-1">
                 <mat-select placeholder="Banco" formControlName="banco">
                   <mat-option *ngFor="let banco of Bancos" [value]="banco.id">{{banco.nombre}}</mat-option>
                 </mat-select>
@@ -183,14 +183,14 @@
             </mat-grid-tile>
 
             <mat-grid-tile>
-              <mat-form-field>
+              <mat-form-field class="columnas-1">
                 <input matInput placeholder="Número" formControlName="cuenta">
                 <mat-error>Este campo es obligatorio</mat-error>
               </mat-form-field>
             </mat-grid-tile>
 
             <mat-grid-tile>
-              <mat-form-field>
+              <mat-form-field class="columnas-1">
                 <input matInput placeholder="CCI" formControlName="cci">
                 <mat-error>El CCI debe tener 20 dígitos</mat-error>
               </mat-form-field>

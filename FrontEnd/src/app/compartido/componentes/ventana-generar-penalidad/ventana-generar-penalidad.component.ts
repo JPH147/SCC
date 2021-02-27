@@ -6,10 +6,13 @@ import { BehaviorSubject, merge } from 'rxjs';
 import { EvaluacionService } from 'src/app/modulo-clientes/evaluacion/evaluacion.service';
 import { debounceTime, distinctUntilChanged, finalize, tap } from 'rxjs/operators';
 
-import * as moment from 'moment' ;
 import { ServiciosTipoPago } from 'src/app/core/servicios/tipopago';
 import { CreditosService } from 'src/app/modulo-creditos/creditos/creditos.service';
 import { VentaService } from 'src/app/modulo-ventas/ventas/ventas.service';
+
+import * as moment from 'moment';
+import {default as _rollupMoment, Moment} from 'moment';
+import { MatDatepicker } from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-ventana-generar-penalidad',
@@ -129,6 +132,34 @@ export class VentanaGenerarPenalidadComponent implements OnInit, AfterViewInit {
     monto_cuotas_penalidad = Math.round( monto_cuotas_penalidad *100 ) / 100 ;
 
     this.PenalidadForm.get('monto_cuota').setValue(monto_cuotas_penalidad) ;
+  }
+
+  AnoElegido(ano_normalizado: Moment) {
+    let ano_seleccionado : moment.Moment ;
+    // Se colocó este 'if' para que cuando el valor inicial de 'fecha_fin' sea null, no haya errores en consola
+    if( this.PenalidadForm.value.fecha_inicio ) {
+      ano_seleccionado = moment(this.PenalidadForm.value.fecha_inicio) ;
+    } else {
+      ano_seleccionado = moment() ;
+    }
+    ano_seleccionado.year(ano_normalizado.year());
+    this.PenalidadForm.get('fecha_inicio').setValue(ano_seleccionado);
+  }
+
+  MesElegido(mes_normalizado: Moment, datepicker: MatDatepicker<Moment>) {
+    let mes_seleccionado : moment.Moment ;
+    // Se colocó este 'if' para que cuando el valor inicial de 'fecha_fin' sea null, no haya errores en consola
+    if( this.PenalidadForm.value.fecha_inicio ) {
+      mes_seleccionado = moment(this.PenalidadForm.value.fecha_inicio) ;
+    } else {
+      mes_seleccionado = moment() ;
+    }
+
+    mes_seleccionado.year(mes_normalizado.year()) ;
+    mes_seleccionado.month(mes_normalizado.month());
+    
+    this.PenalidadForm.get('fecha_inicio').setValue(moment(mes_seleccionado).endOf('month').toDate());
+    datepicker.close();
   }
 
   Guardar() {

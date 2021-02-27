@@ -560,7 +560,7 @@ Class Venta{
         $this->tipo_pago=$row['tipo_pago'];
         $this->monto_inicial=$row['monto_inicial'];
         $this->numero_cuotas=$row['numero_cuotas'];
-        $this->monto_total=$row['monto_total'];
+        $this->total_venta=$row['total_venta'];
         $this->fecha_inicio_pago=$row['fecha_inicio_pago'];
         $this->foto=$row['foto'];
         $this->contrato_pdf=$row['contrato_pdf'];
@@ -642,7 +642,7 @@ Class Venta{
         $this->tipo_pago=$row['tipo_pago'];
         $this->monto_inicial=$row['monto_inicial'];
         $this->numero_cuotas=$row['numero_cuotas'];
-        $this->monto_total=$row['monto_total'];
+        $this->total_venta=$row['total_venta'];
         $this->fecha_inicio_pago=$row['fecha_inicio_pago'];
         $this->foto=$row['foto'];
         $this->contrato_pdf=$row['contrato_pdf'];

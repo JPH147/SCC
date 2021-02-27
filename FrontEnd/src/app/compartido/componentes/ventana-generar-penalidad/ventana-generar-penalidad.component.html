@@ -35,7 +35,9 @@
           <mat-form-field class="columnas-1">
             <input matInput [matDatepicker]="afiliacion" placeholder="Fecha de inicio"  formControlName="fecha_inicio">
             <mat-datepicker-toggle matSuffix [for]="afiliacion"></mat-datepicker-toggle>
-            <mat-datepicker #afiliacion></mat-datepicker>
+            <mat-datepicker #afiliacion startView="year"
+              (yearSelected)="AnoElegido($event)"
+              (monthSelected)="MesElegido($event, afiliacion)"></mat-datepicker>
           </mat-form-field>
         </mat-grid-tile>
 

@@ -1379,11 +1379,15 @@
 
       <ng-container *ngIf="idventa">
         <mat-grid-list cols="4" rowHeight="50px">
-          <mat-grid-tile>
-            <ng-container *ngIf="permiso?.ventas?.listado_ventas?.agregar_pagos_masivos">
-              <button mat-raised-button color="accent" (click)="AgregarPagos()"
-                [disabled]="(Cargando | async)"> Agregar pagos </button>
-            </ng-container>
+          <mat-grid-tile *ngIf="permiso?.ventas?.listado_ventas?.agregar_pagos_masivos">
+            <button mat-raised-button type="button" color="accent" matTooltip="Agregar pagos"
+              [matMenuTriggerFor]="menuPagos" [disabled]="(Cargando | async)">
+              Agregar pagos
+            </button>
+            <mat-menu #menuPagos="matMenu">
+              <button mat-menu-item (click)="AgregarPagos()"> Masivos </button>
+              <button mat-menu-item (click)="AgregarPagosUnitarios()"> Unitario </button>
+            </mat-menu>
           </mat-grid-tile>
 
           <mat-grid-tile>

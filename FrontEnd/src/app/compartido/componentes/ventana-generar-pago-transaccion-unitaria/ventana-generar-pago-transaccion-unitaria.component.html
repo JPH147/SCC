@@ -1,0 +1,123 @@
+<mat-card class="card">
+  <mat-toolbar color="primary">
+    <mat-toolbar-row>
+      Agregar pago
+    </mat-toolbar-row>
+  </mat-toolbar>
+
+  <div class = "spinner-container-emergente" *ngIf = "Cargando | async">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <mat-card-content>
+    <ng-container *ngIf="tipo_pagos == 0">
+      <mat-grid-list cols=2 rowHeight="70px">
+        <mat-grid-tile>
+          <button mat-flat-button color="accent" (click)="TipoPagoSeleccionado(1)"> Pago por planilla y judicial </button>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <button mat-flat-button color="accent" (click)="TipoPagoSeleccionado(2)"> Pago directo </button>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </ng-container>
+
+    <ng-container *ngIf="tipo_pagos == 1">
+      <form [formGroup]="PagosForm">
+        <div formArrayName="PagoArrayForm" *ngFor="let Pago of PagosForm['controls'].PagoArrayForm['controls']; let i = index">
+          <div [formGroupName]="i">
+            <mat-grid-list cols="3" rowHeight="70px">    
+              <mat-grid-tile>
+                <mat-form-field class="columnas-1" appearance="fill">
+                  <mat-label> Fecha de pago </mat-label>
+                  <input matInput [matDatepicker]="picker" placeholder="Fecha de pago" formControlName="fecha_pago" readonly>
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker startView="year"
+                            (yearSelected)="AnoElegido($event)"
+                            (monthSelected)="MesElegido($event, picker)"></mat-datepicker>
+                </mat-form-field>
+              </mat-grid-tile>
+                
+              <mat-grid-tile>
+                <mat-form-field class="columnas-1">
+                  <input matInput formControlName="pago_planilla" placeholder="Pago planilla">
+                  <mat-error> Debe ingresar un número </mat-error>
+                </mat-form-field>
+              </mat-grid-tile>
+              
+              <mat-grid-tile>
+                <mat-form-field class="columnas-1">
+                  <input matInput formControlName="pago_judicial" placeholder="Pago judicial">
+                  <mat-error> Debe ingresar un número </mat-error>
+                </mat-form-field>
+              </mat-grid-tile>
+            </mat-grid-list>
+          </div>
+        </div>
+      </form>
+    </ng-container>
+    
+    <ng-container *ngIf="tipo_pagos == 2">
+      <form [formGroup]="PagosForm">
+        <div formArrayName="PagoArrayForm" *ngFor="let Pago of PagosForm['controls'].PagoArrayForm['controls']; let i = index">
+          <div [formGroupName]="i">
+            <mat-grid-list cols="5" rowHeight="70px">
+              <mat-grid-tile>
+                <mat-form-field class="columnas-1">
+                  <mat-label> Fecha de pago </mat-label>
+                  <input matInput [matDatepicker]="picker" placeholder="Fecha de pago" formControlName="fecha_pago" readonly>
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+               </mat-form-field>
+              </mat-grid-tile>
+  
+              <mat-grid-tile>
+                <mat-form-field class="columnas-1">
+                  <mat-select placeholder="Cuenta de depósito" formControlName="cuenta_bancaria" (selectionChange)="CuentaSeleccionada(i)">
+                    <mat-option *ngFor="let cuenta of ListadoCuentas" [value]="cuenta.id"> {{cuenta.alias}} </mat-option>
+                  </mat-select>
+                  <mat-hint> {{Pago.get('numero_cuenta').value}} </mat-hint>
+                </mat-form-field>
+              </mat-grid-tile>
+  
+              <mat-grid-tile>
+                <mat-form-field class="columnas-1">
+                  <input matInput formControlName="numero_operacion" placeholder="Número de operación">
+                  <mat-error *ngIf="Pago.get('numero_operacion').hasError('repetido')"> El voucher ya existe </mat-error>
+                </mat-form-field>
+              </mat-grid-tile>
+    
+              <mat-grid-tile>
+                <mat-form-field class="columnas-1">
+                  <mat-select placeholder="Receptor" formControlName="referente">
+                    <mat-option [value]="0"> Sin especificar </mat-option>
+                    <mat-option *ngFor="let vendedor of Vendedores" [value]="vendedor.id"> {{vendedor.nombre}} </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </mat-grid-tile>
+
+              <mat-grid-tile>
+                <mat-form-field class="columnas-1">
+                  <input matInput formControlName="pago_directo" placeholder="Pago directo">
+                  <mat-error> Debe ingresar un número </mat-error>
+                </mat-form-field>
+              </mat-grid-tile>
+            </mat-grid-list>
+          </div>
+        </div>
+      </form>
+    </ng-container>
+  </mat-card-content>
+
+  <ng-container *ngIf="tipo_pagos > 0">
+    <mat-card-actions>
+      <mat-grid-list cols="1" rowHeight="50px">
+        <mat-grid-tile colspan="1">
+          <button mat-raised-button color="primary" (click)="Guardar()" type="button"
+            [disabled]="PagosForm.invalid || (Cargando | async)"> Guardar </button>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-card-actions>
+  </ng-container>
+
+</mat-card>

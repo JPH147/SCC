@@ -64,7 +64,7 @@ export class CreditosService {
         return res;
       } else {
         console.log('No hay datos que mostrar');
-        return res;
+        return false;
       }
     }));
   }
@@ -586,10 +586,12 @@ export class CreditosService {
   EliminarCredito(
     id_credito : number ,
     tipo : number ,
+    crear_registro : boolean ,
   ){
     let params = new HttpParams()
       .set('prcredito',id_credito.toString())
-      .set('prtipo',id_credito.toString()) ;
+      .set('prtipo',tipo.toString())
+      .set('prcrearregistro',crear_registro ? "1" : "0" ) ;
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 

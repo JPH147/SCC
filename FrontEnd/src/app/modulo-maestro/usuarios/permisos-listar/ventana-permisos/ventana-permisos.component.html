@@ -673,6 +673,16 @@
                       {{ Permiso.creditos.listado_creditos.cambiar_acreedor ? 'check' : 'close' }} </mat-icon> &nbsp; Cambiar acreedor
                   </ng-container>
                 </mat-grid-tile>
+
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.creditos.listado_creditos.exonerar_afiliacion"> Exonerar de afiliación </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.creditos.listado_creditos.exonerar_afiliacion ? 'accent' : 'warn'">
+                      {{ Permiso.creditos.listado_creditos.exonerar_afiliacion ? 'check' : 'close' }} </mat-icon> &nbsp; Exonerar de afiliación
+                  </ng-container>
+                </mat-grid-tile>
               </mat-grid-list>
             </ng-container>
           </ng-container>

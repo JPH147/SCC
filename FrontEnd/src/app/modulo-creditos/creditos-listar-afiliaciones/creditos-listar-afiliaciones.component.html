@@ -4,58 +4,57 @@
     <div id = "tituloProd"> Listado de afiliaciones </div>
   </mat-card-title>
 
-  <!-- Filtros Productos, tipo  Marca Modelo -->
-  <mat-grid-list cols= "4" rowHeight="70px">
+  <form [formGroup]="CreditosForm">
+    <mat-grid-list cols= "4" rowHeight="70px">
+      <mat-grid-tile>
+        <mat-icon>search</mat-icon>
+        <mat-form-field class="columnas-1">
+          <input matInput placeholder="Cliente" formControlName="cliente">
+        </mat-form-field>
+      </mat-grid-tile>
+  
+      <mat-grid-tile>
+        <mat-icon>search</mat-icon>
+        <mat-form-field class="columnas-1">
+          <input matInput placeholder="DNI" formControlName="dni">
+        </mat-form-field>
+      </mat-grid-tile>
+  
+      <mat-grid-tile>
+        <mat-form-field class="columnas-1">
+          <input matInput [matDatepicker]="inicio" placeholder="Fecha de inicio" formControlName="fecha_inicio">
+          <mat-datepicker-toggle matSuffix [for]="inicio"></mat-datepicker-toggle>
+          <mat-datepicker #inicio disabled="false"></mat-datepicker>
+        </mat-form-field>
+      </mat-grid-tile>
+  
+      <mat-grid-tile>
+        <mat-form-field class="columnas-1">
+          <input matInput [matDatepicker]="fin" placeholder="Fecha de fin" formControlName="fecha_fin">
+          <mat-datepicker-toggle matSuffix [for]="fin"></mat-datepicker-toggle>
+          <mat-datepicker #fin disabled="false"></mat-datepicker>
+        </mat-form-field>
+      </mat-grid-tile>
+  
+      <mat-grid-tile>
+        <mat-form-field class="columnas-1">
+          <mat-select formControlName="tipo_credito" placeholder="Tipo de crédito">
+            <mat-option [value]=99> Todos </mat-option>
+            <mat-option *ngFor="let tipo of Tipos" [value]="tipo.id"> {{tipo.nombre}} </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-grid-tile>
 
-    <mat-grid-tile>
-      <mat-icon>search</mat-icon>
-      <mat-form-field class="columnas-1">
-        <input matInput placeholder="Cliente" #InputCliente>
-      </mat-form-field>
-    </mat-grid-tile>
+      <mat-grid-tile></mat-grid-tile>
+      <mat-grid-tile></mat-grid-tile>
 
-    <mat-grid-tile>
-      <mat-icon>search</mat-icon>
-      <mat-form-field class="columnas-1">
-        <input matInput placeholder="DNI" #InputDNI>
-      </mat-form-field>
-    </mat-grid-tile>
-
-    <mat-grid-tile>
-      <mat-form-field class="columnas-1">
-        <input matInput [matDatepicker]="inicio" placeholder="Fecha de inicio" [(ngModel)]="fecha_inicio" (dateChange)="CambioFiltro()" readonly>
-        <mat-datepicker-toggle matSuffix [for]="inicio"></mat-datepicker-toggle>
-        <mat-datepicker #inicio disabled="false"></mat-datepicker>
-      </mat-form-field>
-    </mat-grid-tile>
-
-    <mat-grid-tile>
-      <mat-form-field class="columnas-1">
-        <input matInput [matDatepicker]="fin" placeholder="Fecha de fin" [(ngModel)]="fecha_fin" (dateChange)="CambioFiltro()" readonly>
-        <mat-datepicker-toggle matSuffix [for]="fin"></mat-datepicker-toggle>
-        <mat-datepicker #fin disabled="false"></mat-datepicker>
-      </mat-form-field>
-    </mat-grid-tile>
-
-    <mat-grid-tile>
-      <mat-form-field class="columnas-1">
-        <mat-select #InputDocumentos placeholder="Documentos adjuntos" [value]=0 (selectionChange)="CambioFiltro()">
-          <mat-option [value]=0>Todos</mat-option>
-          <mat-option [value]=1>Pendientes</mat-option>
-          <mat-option [value]=2>Completados</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </mat-grid-tile>
-
-    <mat-grid-tile></mat-grid-tile>
-    <mat-grid-tile></mat-grid-tile>
-
-    <mat-grid-tile>
-      <ng-container *ngIf="permiso?.creditos?.afiliaciones?.editar">
-        <button mat-raised-button color="primary" [routerLink]="['nueva']"> Nueva </button>
-      </ng-container>
-    </mat-grid-tile>
-  </mat-grid-list>
+      <mat-grid-tile>
+        <ng-container *ngIf="permiso?.creditos?.afiliaciones?.editar">
+          <button mat-raised-button color="primary" [routerLink]="['nueva']"> Nueva </button>
+        </ng-container>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </form>
 
   <mat-card-content>
 
@@ -118,10 +117,10 @@
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let credito">
-          <button mat-icon-button color="primary" matTooltip="Ver documento" [routerLink]="['ver', credito.id]"><mat-icon> visibility </mat-icon></button>
-          <ng-container *ngIf="permiso?.creditos?.afiliaciones?.editar">
+          <button mat-icon-button color="primary" matTooltip="Ver documento" (click)="VerCredito(credito.id)"><mat-icon> visibility </mat-icon></button>
+          <!-- <ng-container *ngIf="permiso?.creditos?.afiliaciones?.editar">
             <button mat-icon-button color="primary" matTooltip="Editar" [disabled]="credito.estado==2 || credito.tipo_credito == 'Aporte de socio' || credito.monto_pagado>0" [routerLink]="['editar', credito.id]"><mat-icon> edit </mat-icon></button>
-          </ng-container>
+          </ng-container> -->
         </mat-cell>
       </ng-container>
 
