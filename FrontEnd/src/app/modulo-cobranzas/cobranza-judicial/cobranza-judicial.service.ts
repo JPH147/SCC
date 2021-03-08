@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http'
-import {map, retry} from 'rxjs/operators';
+import {delay, map, retry, retryWhen, take} from 'rxjs/operators';
 import {URL} from 'src/app/core/servicios/url';
 import * as moment from 'moment';
 
@@ -685,7 +685,10 @@ export class CobranzaJudicialService {
       .set('prestado',estado.toString()) ;
 
     return this.http.get(this.url + 'procesojudicial/read-total.php', {params})
-    .pipe(map(res => {
+    .pipe(
+      retryWhen(errors => errors.pipe(delay(1000), take(10))),
+      map(res => {
+      console.log(res) ;
       if (res['codigo'] === 0) {
         return (res['mensaje'] as number);
       } else {

@@ -198,7 +198,14 @@ export class VentanaPermisosComponent implements OnInit {
           agregar : permisos.cobranzas?.cobranzas_manuales?.agregar || false ,
           editar : permisos.cobranzas?.cobranzas_manuales?.editar || false ,
           eliminar : permisos.cobranzas?.cobranzas_manuales?.eliminar || false ,
-        }
+        } ,
+        cobranzas_judiciales : {
+          general : permisos.cobranzas?.cobranzas_judiciales?.general || false ,
+        } ,
+        liquidaciones : {
+          general : permisos.cobranzas?.liquidaciones?.general || false ,
+          eliminar : permisos.cobranzas?.liquidaciones?.eliminar || false ,
+        } ,
       } ,
       tablas_maestras : {
         general : permisos.tablas_maestras?.general || false ,
@@ -357,7 +364,14 @@ export class VentanaPermisosComponent implements OnInit {
           agregar : false ,
           editar : false ,
           eliminar : false ,
-        }
+        } ,
+        cobranzas_judiciales : {
+          general : false ,
+        } ,
+        liquidaciones : {
+          general : false ,
+          eliminar : false ,
+        } ,
       } ,
       tablas_maestras : {
         general : false ,

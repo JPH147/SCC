@@ -14,6 +14,7 @@ import { EstadoSesion } from '../../compartido/reducers/permisos.reducer';
 import { CooperativaConfiguracionService } from 'src/app/modulo-maestro/cooperativa-configuracion/cooperativa-configuracion.service';
 import { Notificaciones } from 'src/app/core/servicios/notificacion';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { VentanaLiquidacionesComponent } from './ventana-liquidaciones/ventana-liquidaciones.component';
 
 @Component({
   selector: 'app-liquidaciones',
@@ -23,7 +24,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 export class LiquidacionesComponent implements OnInit, AfterViewInit {
 
   public ListadoLiquidaciones: LiquidacionDataSource;
-  public Columnas: string[] = ['numero', 'fecha', 'tipo', 'cliente_dni', 'monto', 'usuario'];
+  public Columnas: string[] = ['numero', 'fecha', 'tipo', 'documento', 'cliente_dni', 'cliente_nombre', 'monto', 'usuario'];
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -45,6 +46,9 @@ export class LiquidacionesComponent implements OnInit, AfterViewInit {
     this._store.select('permisos').subscribe(permiso =>{
       if( permiso ) {
         this.permiso = permiso ;
+        if ( permiso.cobranzas.liquidaciones.eliminar ) {
+          this.Columnas.push('opciones') ;
+        }
       }
     })
 
@@ -88,7 +92,7 @@ export class LiquidacionesComponent implements OnInit, AfterViewInit {
       cliente_dni : [""] ,
       cliente : [""] ,
       usuario : [""] ,
-      fecha_inicio : [ new Date((new Date()).valueOf() - 1000*60*60*24*60) ] ,
+      fecha_inicio : [ new Date((new Date()).valueOf() - 1000*60*60*24*30*12) ] ,
       fecha_fin : [ new Date() ] ,
     })
   }
@@ -113,19 +117,26 @@ export class LiquidacionesComponent implements OnInit, AfterViewInit {
     this.CargarData()
   }
 
-  // EliminarLiquidacion(Liquidacion){
-  //   let Ventana = this.Dialogo.open(VentanaConfirmarComponent,{
-  //     data: { objeto: "la Liquidacion", valor: Liquidacion.numero_operacion+" en el banco "+Liquidacion.banco }
-  //   })
+  VerLiquidacion(liquidacion) {
+    this.Dialogo.open(VentanaLiquidacionesComponent, {
+      width: '1200px' ,
+      data: { tipo: 'ver' , liquidacion : liquidacion }
+    })
+  }
 
-  //   Ventana.afterClosed().subscribe(res=>{
-  //     if (res) {
-  //       this.Servicio.EliminarLiquidacionDirecta(Liquidacion.id).subscribe(res=>{
-  //         this.CargarData();
-  //       });
-  //     }
-  //   })
-  // }
+  EliminarLiquidacion(Liquidacion){
+    let Ventana = this.Dialogo.open(VentanaConfirmarComponent,{
+      data: { objeto: "la Liquidacion", valor: Liquidacion.numero_operacion+" en el banco "+Liquidacion.banco }
+    })
+
+    Ventana.afterClosed().subscribe(res=>{
+      if (res) {
+        this._cobranzas.EliminarLiquidacion(Liquidacion.id_liquidacion).subscribe(res=>{
+          this.CargarData();
+        });
+      }
+    })
+  }
 }
 
 export class LiquidacionDataSource implements DataSource<any> {

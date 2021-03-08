@@ -1,13 +1,8 @@
 Nuevos
-sp_crearcreditovendedores ;
-sp_listarcreditovendedorxcredito ;
-
-sp_crearventavendedores;
-sp_listarventavendedorxventa;
+sp_eliminarliquidacion
 
 Actualizar
-sp_actualizarcredito
-sp_actualizarventa
+sp_listarliquidaciones
 
 TABLAS
 credito_vendedores

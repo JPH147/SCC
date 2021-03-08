@@ -46,7 +46,7 @@
 				"tipo_pago"=>$venta->tipo_pago,
 				"monto_inicial"=>$venta->monto_inicial,
 				"numero_cuotas"=>$venta->numero_cuotas,
-				"monto_total"=>$venta->monto_total,
+				"total_venta"=>$venta->total_venta,
 				"fecha_inicio_pago"=>$venta->fecha_inicio_pago,
 				"foto"=>$venta->foto,
 				"contrato_pdf"=>$venta->contrato_pdf,

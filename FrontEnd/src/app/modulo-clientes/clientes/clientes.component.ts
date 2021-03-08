@@ -78,7 +78,7 @@ export class ClientesComponent implements OnInit, AfterViewInit {
     this.CrearFormulario() ;
 
     this.ListadoCliente = new ClienteDataSource(this.Servicio);
-    this.ListadoCliente.CargarClientes(false,'','', '','',4,3,1,10,1);
+    // this.ListadoCliente.CargarClientes(false,'','', '','',4,3,1,10,1);
     this.estado=1;
     this.Columnas = this.ColumnasGeneral ;
 
@@ -87,21 +87,36 @@ export class ClientesComponent implements OnInit, AfterViewInit {
 
     this.route.queryParams
     .subscribe(params => {
-      if( !this.nueva_consulta ) {
-        if( params.documento && !this.nueva_consulta ) {
-          this.ClienteForm.get('dni').setValue( params.documento ) ;
-          this.ClienteForm.get('institucion').setValue(0) ;
-          this.ClienteForm.get('sede').setValue(0) ;
-          this.nueva_consulta = true ;
+      // if( !this.nueva_consulta ) {
+      //   if( params.documento && !this.nueva_consulta ) {
+      //     this.ClienteForm.get('dni').setValue( params.documento ) ;
+      //     this.ClienteForm.get('institucion').setValue(0) ;
+      //     this.ClienteForm.get('sede').setValue(0) ;
+      //     this.nueva_consulta = true ;
 
-          this.ListadoCliente.CargarClientes(false,'','',this.ClienteForm.get('dni').value,'',0,0,1,10,1) ;
-          if( params.ventana && this.Dialogo.openDialogs.length == 0 ) {
-            this.VerVentas(params.ventana, params.nombre, false) ;
-          }
-        } else {
-          this.ListadoCliente.CargarClientes(false,'','', '','',4,3,1,10,1);
-        }
+      //     this.ListadoCliente.CargarClientes(false,'','',this.ClienteForm.get('dni').value,'',0,0,1,10,1) ;
+      //     if( params.ventana && this.Dialogo.openDialogs.length == 0 ) {
+      //       this.VerVentas(params.ventana, params.nombre, false) ;
+      //     }
+      //   } else {
+      //     this.ListadoCliente.CargarClientes(false,'','', '','',4,3,1,10,1);
+      //   }
+      // }
+      params.relacion ? this.ClienteForm.get('relacion').value : null ;
+      params.codigo ? this.ClienteForm.get('codigo').value : null ;
+      params.cip ? this.ClienteForm.get('cip').value : null ;
+      params.dni ? this.ClienteForm.get('dni').value : null ;
+      params.nombre ? this.ClienteForm.get('nombre').value : null ;
+      params.institucion ? this.ClienteForm.get('institucion').value : null ;
+      params.sede ? this.ClienteForm.get('sede').value : null ;
+      params.pagina_inicio ? this.paginator.pageIndex = params.pagina_inicio : null ;
+      params.tamano_pagina ? this.paginator.pageSize = params.tamano_pagina : null ;
+
+      if( params.ventana > 0 && this.Dialogo.openDialogs.length == 0 ) {
+        this.VerVentas(params.ventana, params.nombre, false) ;
       }
+
+      this.CargarData() ;
     });
   }
 
@@ -124,15 +139,6 @@ export class ClientesComponent implements OnInit, AfterViewInit {
         this.nueva_consulta = true ;
         this.paginator.pageIndex=0 ;
         this.CargarData() ;
-      })
-     ).subscribe();
-
-     this.ClienteForm.get('dni').valueChanges
-     .pipe(
-      debounceTime(200),
-      distinctUntilChanged(),
-      tap(() => {
-        this.AsignarQuery(0,"") ;
       })
      ).subscribe();
 
@@ -181,10 +187,10 @@ export class ClientesComponent implements OnInit, AfterViewInit {
       this.ClienteForm.get('cip').value ,
       this.ClienteForm.get('dni').value ,
       this.ClienteForm.get('nombre').value ,
-      this.nueva_consulta ? this.ClienteForm.get('institucion').value : 4 ,
-      this.nueva_consulta ? (this.ClienteForm.get('sede').value || 0) : 3 ,
-      this.paginator.pageIndex+1 ,
-      this.paginator.pageSize ,
+      this.ClienteForm.get('institucion').value ,
+      this.ClienteForm.get('sede').value ,
+      this.paginator?.pageIndex ? this.paginator.pageIndex + 1 : 1 ,
+      this.paginator?.pageSize ? this.paginator.pageSize : 10 ,
       this.estado
     );
   }
@@ -262,17 +268,20 @@ export class ClientesComponent implements OnInit, AfterViewInit {
   }
 
   VerVentas( id_cliente, nombre, cliente ){
-    this.AsignarQuery( id_cliente, nombre ) ;
     let Ventana = this.Dialogo.open(VentanaVentasComponent, {
       width: '900px',
       data: {id: id_cliente, nombre: nombre, cliente: cliente}
     });
+    
+    Ventana.afterOpened().subscribe(res => {
+      this.AsignarQuery( id_cliente ) ;
+    })
 
     Ventana.afterClosed().subscribe(res=>{
       if(res) {
 
       } else {
-        this.AsignarQuery(0,"") ;
+        this.AsignarQuery(0) ;
       }
     })
   }
@@ -408,21 +417,23 @@ export class ClientesComponent implements OnInit, AfterViewInit {
   }
 
   // Esto se utiliza para estalecer los params de la URL
-  AsignarQuery( id_cliente : number, nombre : string ) {
-    if( this.ClienteForm.get('dni').value.length == 8 ) {
-      if( id_cliente > 0 ) {
-        this.router.navigate(['.'], {
-          relativeTo: this.route,
-          queryParams: { documento : this.ClienteForm.get('dni').value, ventana : id_cliente, nombre : nombre } ,
-        });
-      } else {
-        this.router.navigate(['.'], {
-          relativeTo: this.route,
-          queryParams: { documento : this.ClienteForm.get('dni').value } ,
-        });
-      }
-    } else {
-      this.router.navigate(['.'], { relativeTo: this.route });
+  AsignarQuery( id_cliente : number ) {
+    if ( id_cliente > 0 ) {
+      this.router.navigate(['.'], {
+        relativeTo: this.route,
+        queryParams: {
+          relacion : this.ClienteForm.get('relacion').value,
+          codigo : this.ClienteForm.get('codigo').value ,
+          cip : this.ClienteForm.get('cip').value ,
+          dni : this.ClienteForm.get('dni').value ,
+          nombre : this.ClienteForm.get('nombre').value ,
+          institucion : this.ClienteForm.get('institucion').value ,
+          sede : this.ClienteForm.get('sede').value ,
+          pagina_inicio : this.paginator.pageIndex ,
+          tamano_pagina : this.paginator.pageSize ,
+          ventana : id_cliente ,
+        } ,
+      });
     }
   }
 

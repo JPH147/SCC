@@ -14,6 +14,7 @@ import { EstadoSesion } from '../../compartido/reducers/permisos.reducer';
 import { CooperativaConfiguracionService } from 'src/app/modulo-maestro/cooperativa-configuracion/cooperativa-configuracion.service';
 import { Notificaciones } from 'src/app/core/servicios/notificacion';
 import { VentanaCobranzaDirectaListarComponent } from './ventana-cobranza-directa-listar/ventana-cobranza-directa-listar.component';
+import * as moment from 'moment' ;
 
 @Component({
   selector: 'app-cobranza-directa-listar',
@@ -53,8 +54,8 @@ export class CobranzaDirectaListarComponent implements OnInit {
       }
     })
 
-    this.fecha_inicio= new Date((new Date()).valueOf() - 1000*60*60*24*60)
-    this.fecha_fin=new Date()
+    this.fecha_fin = new Date()
+    this.fecha_inicio = moment(this.fecha_fin).subtract(1,'year').toDate() ;
 
     this.ListarCuentas();
 

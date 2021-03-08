@@ -145,6 +145,13 @@ export type Rol = {
       agregar : boolean ,
       editar : boolean ,
       eliminar : boolean ,
+    } ,
+    cobranzas_judiciales : {
+      general : boolean ,
+    } ,
+    liquidaciones : {
+      general : boolean ,
+      eliminar : boolean ,
     }
   } ,
   tablas_maestras : {

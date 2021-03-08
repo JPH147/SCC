@@ -213,12 +213,12 @@ export class MenuComponent implements OnInit{
           {
             nombre: "Cobranzas judiciales",
             path: "" ,
-            mostrar : permiso.procesos_judiciales.listado_procesos.general ,
+            mostrar : permiso.cobranzas?.cobranzas_judiciales?.general ,
           },
           {
             nombre: "Liquidaciones",
             path: "liquidaciones" ,
-            mostrar : permiso.cobranzas.cobranzas_directas.general ,
+            mostrar : permiso?.cobranzas?.liquidaciones?.general ,
           },
         ]
       },

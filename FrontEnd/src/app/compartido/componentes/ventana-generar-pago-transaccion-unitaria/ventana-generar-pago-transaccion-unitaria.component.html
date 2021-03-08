@@ -23,6 +23,12 @@
     </ng-container>
 
     <ng-container *ngIf="tipo_pagos == 1">
+      <mat-grid-list cols="1" rowHeight="50px">
+        <mat-grid-tile>
+          <button mat-mini-fab type="button" color="accent" (click)="AgregarCuota(tipo_pagos)" [disabled]="Cargando | async">
+            <mat-icon> add </mat-icon> </button>
+        </mat-grid-tile>
+      </mat-grid-list>
       <form [formGroup]="PagosForm">
         <div formArrayName="PagoArrayForm" *ngFor="let Pago of PagosForm['controls'].PagoArrayForm['controls']; let i = index">
           <div [formGroupName]="i">
@@ -33,8 +39,8 @@
                   <input matInput [matDatepicker]="picker" placeholder="Fecha de pago" formControlName="fecha_pago" readonly>
                   <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                   <mat-datepicker #picker startView="year"
-                            (yearSelected)="AnoElegido($event)"
-                            (monthSelected)="MesElegido($event, picker)"></mat-datepicker>
+                            (yearSelected)="AnoElegido($event, i)"
+                            (monthSelected)="MesElegido($event, picker, i)"></mat-datepicker>
                 </mat-form-field>
               </mat-grid-tile>
                 

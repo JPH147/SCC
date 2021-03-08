@@ -1086,6 +1086,52 @@
               </mat-grid-list>
             </ng-container>
           </ng-container>
+
+          <!-- Cobranzas judiciales -->
+          <ng-container>
+            <mat-card-subtitle class="subtitulo-categoria">
+              Cobranzas Judiciales
+              <span class="espacio"></span>
+              <ng-container *ngIf="!data.ver">
+                <mat-slide-toggle color="accent" [(ngModel)]="Permiso.cobranzas.cobranzas_judiciales.general"
+                  (change)="VerificarAtributosHijo('cobranzas','cobranzas_judiciales', $event.checked)"></mat-slide-toggle>
+              </ng-container>
+              <ng-container *ngIf="data.ver">
+                <mat-icon [color]="Permiso.cobranzas.cobranzas_manuales.general ? 'accent' : 'warn' ">
+                  {{ Permiso.cobranzas.cobranzas_judiciales.general ? 'check' : 'close' }} </mat-icon>
+              </ng-container>
+            </mat-card-subtitle>
+          </ng-container>
+
+          <!-- Liquidaciones -->
+          <ng-container>
+            <mat-card-subtitle class="subtitulo-categoria">
+              Liquidaciones
+              <span class="espacio"></span>
+              <ng-container *ngIf="!data.ver">
+                <mat-slide-toggle color="accent" [(ngModel)]="Permiso.cobranzas.liquidaciones.general"
+                  (change)="VerificarAtributosHijo('cobranzas','liquidaciones', $event.checked)"></mat-slide-toggle>
+              </ng-container>
+              <ng-container *ngIf="data.ver">
+                <mat-icon [color]="Permiso.cobranzas.liquidaciones.general ? 'accent' : 'warn' ">
+                  {{ Permiso.cobranzas.liquidaciones.general ? 'check' : 'close' }} </mat-icon>
+              </ng-container>
+            </mat-card-subtitle>
+        
+            <ng-container *ngIf="Permiso.cobranzas.liquidaciones.general">
+              <mat-grid-list cols="4" rowHeight="45px">
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.cobranzas.liquidaciones.eliminar"> Eliminar </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.cobranzas.liquidaciones.eliminar ? 'accent' : 'warn'">
+                      {{ Permiso.cobranzas.liquidaciones.eliminar ? 'check' : 'close' }} </mat-icon> &nbsp; Eliminar
+                  </ng-container>
+                </mat-grid-tile>
+              </mat-grid-list>
+            </ng-container>
+          </ng-container>
         </ng-container>
       </ng-container>
 

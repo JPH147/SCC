@@ -1,0 +1,59 @@
+<mat-card class="card">
+  <mat-toolbar color="primary">
+    <mat-toolbar-row> Detalle de la liquidacion </mat-toolbar-row>
+  </mat-toolbar>
+
+  <mat-card-content>
+    <form [formGroup]="LiquidacionesForm">
+      <mat-grid-list cols=3 rowHeight="70px">
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput formControlName="tipo" placeholder="Tipo de transaccion" readonly>
+          </mat-form-field>
+        </mat-grid-tile>
+  
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput formControlName="documento" placeholder="Documento" readonly>
+          </mat-form-field>
+        </mat-grid-tile>
+  
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput formControlName="monto" placeholder="Monto" readonly>
+          </mat-form-field>
+        </mat-grid-tile>
+  
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput formControlName="cliente_dni" placeholder="DNI del cliente" readonly>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput formControlName="cliente_nombre" placeholder="Nombre de cliente" readonly>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput formControlName="fecha" placeholder="Fecha" readonly>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput formControlName="usuario" placeholder="Liquidador" readonly>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan=2>
+          <mat-form-field class="columnas-2">
+            <input matInput formControlName="observacion" placeholder="Observacion" readonly>
+          </mat-form-field>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </form>
+  </mat-card-content>
+</mat-card>

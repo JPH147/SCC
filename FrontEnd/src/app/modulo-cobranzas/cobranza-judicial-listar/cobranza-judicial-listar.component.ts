@@ -15,6 +15,8 @@ import { EstadoSesion } from '../../compartido/reducers/permisos.reducer';
 import { Rol } from 'src/app/compartido/modelos/login.modelos';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
+import * as moment from 'moment' ;
+
 @Component({
   selector: 'app-cobranza-judicial-listar',
   templateUrl: './cobranza-judicial-listar.component.html',
@@ -25,8 +27,6 @@ export class CobranzaJudicialListarComponent implements OnInit {
 
   public Cargando = new BehaviorSubject<boolean>(false) ;
 
-  public fecha_inicio: Date;
-  public fecha_fin: Date;
   public TipoDocumentos : Array<any> ;
   public Cuentas : Array<any> = [];
   public Distritos : Array<any> = [];
@@ -61,8 +61,6 @@ export class CobranzaJudicialListarComponent implements OnInit {
     this.ListarTipoDocumentos();
     this.EncontrarFecha();
     this.ListarDistritos();
-    this.fecha_inicio = new Date() ;
-    this.fecha_fin = new Date() ;
   }
 
   ngAfterViewInit () {
@@ -75,9 +73,7 @@ export class CobranzaJudicialListarComponent implements OnInit {
       })
     ).subscribe();
 
-    merge(
-      this.ProcesosJudicialesForm.valueChanges
-    )
+    this.ProcesosJudicialesForm.valueChanges
     .pipe(
        debounceTime(200),
        distinctUntilChanged(),
@@ -93,7 +89,7 @@ export class CobranzaJudicialListarComponent implements OnInit {
       expediente : '' ,
       dni : '' ,
       cliente : '' ,
-      fecha_inicio : null ,
+      fecha_inicio : new Date() ,
       fecha_fin : new Date() ,
       estado : -1
     })
@@ -139,8 +135,8 @@ export class CobranzaJudicialListarComponent implements OnInit {
 
   CalcularTotal() {
     this._judicial.ContarProcesosJudiciales(
-      this.fecha_inicio,
-      this.fecha_fin,
+      this.ProcesosJudicialesForm.get('fecha_inicio').value ,
+      this.ProcesosJudicialesForm.get('fecha_fin').value ,
       this.ProcesosJudicialesForm.get('estado').value ,
     ).subscribe( total =>{
       this.total_procesos = total ;

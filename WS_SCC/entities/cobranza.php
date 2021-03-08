@@ -2566,15 +2566,17 @@
           "id_liquidacion" => $id_liquidacion ,
           "id_tipo" => $id_tipo ,
           "tipo" => $tipo ,
-          "codigo" => $codigo ,
-          "cliente_dni" => $cliente_dni ,
-          "cliente_nombre" => $cliente_nombre ,
           "id_transaccion" => $id_transaccion ,
+          // "codigo" => $codigo ,
+          "documento" => $documento ,
+          "cliente_dni" => " " .$cliente_dni,
+          "cliente_nombre" => $cliente_nombre ,
           "monto" => $monto ,
           "fecha" => $fecha ,
           "id_usuario" => $id_usuario ,
           "usuario" => $usuario ,
           "total_pagado" => $total_pagado ,
+          "observacion" => $observacion ,
         );
         array_push($cronograma["cobranzas"],$items);
       }
@@ -2639,6 +2641,22 @@
       }
       return false;
     }
-  }
+    function delete_liquidacion() {
+      $query = "CALL sp_eliminarliquidacion(
+        :prliquidacion
+      )";
 
+      $result = $this->conn->prepare($query);
+
+      $result->bindParam(":prliquidacion", $this->id_liquidacion) ;
+
+      $this->id_liquidacion = htmlspecialchars(strip_tags($this->id_liquidacion)) ;
+
+      if($result->execute())
+      {
+        return true;
+      }
+      return false;
+    }
+  }
 ?>

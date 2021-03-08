@@ -1226,4 +1226,24 @@ export class CobranzasService {
     )
   }
 
+  EliminarLiquidacion(
+    id_liquidacion : number
+  ) : Observable<boolean> {
+    let params = new HttpParams()
+      .set("prliquidacion", id_liquidacion.toString()) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'cobranza/delete-liquidacion.php', params, {headers: headers})
+    .pipe(
+      map(resultado => {
+        if ( resultado['codigo'] === 0 ) {
+          return resultado['data'] ;
+        } else {
+          return false ;
+        }
+      })
+    )
+  }
+
 }

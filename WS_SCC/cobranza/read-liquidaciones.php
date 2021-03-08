@@ -25,7 +25,7 @@
         $cobranza->usuario = !empty($_GET['prusuario']) ? trim($_GET['prusuario']) : "" ;
         $cobranza->numero_pagina = !empty($_GET['prnumeropagina']) ? trim($_GET['prnumeropagina']) :  1 ;
         $cobranza->total_pagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) :  20 ;
-        $cobranza->orden = !empty($_GET['prorden']) ? trim($_GET['prorden']) : "id_liquidacion asc" ;
+        $cobranza->orden = !empty($_GET['prorden']) ? trim($_GET['prorden']) : "id_liquidacion desc" ;
         
         $cobranza_list = $cobranza->read_liquidaciones();
         $cobranza_contar = $cobranza->read_liquidaciones_contar();

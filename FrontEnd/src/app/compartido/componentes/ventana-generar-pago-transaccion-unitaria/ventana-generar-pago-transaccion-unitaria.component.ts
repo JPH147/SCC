@@ -190,30 +190,30 @@ export class VentanaGenerarPagoTransaccionUnitariaComponent implements OnInit, A
     this.PagoArrayForm.push(this.CrearFormArray(tipo)) ;
   }
 
-  CrearPago() {
-    // Calculamos el index del último elemento
-    // El index será la longitud del form actual -1
-    let longitud_form : number = this.PagoArrayForm.length ;
+  // CrearPago() {
+  //   // Calculamos el index del último elemento
+  //   // El index será la longitud del form actual -1
+  //   let longitud_form : number = this.PagoArrayForm.length ;
 
-    // Obtenemos la fecha del último elemento
-    let ultima_fecha : Date = this.PagoArrayForm.controls[longitud_form-1].get('fecha_pago').value ;
+  //   // Obtenemos la fecha del último elemento
+  //   let ultima_fecha : Date = this.PagoArrayForm.controls[longitud_form-1].get('fecha_pago').value ;
 
-    // Agregamos un mes a la última fecha
-    let proxima_fecha = moment(ultima_fecha).add(1, 'month').toDate() ;
+  //   // Agregamos un mes a la última fecha
+  //   let proxima_fecha = moment(ultima_fecha).add(1, 'month').toDate() ;
 
-    // Creamos un nuevo elemento
-    this.AgregarPagoForm(2) ;
+  //   // Creamos un nuevo elemento
+  //   this.AgregarPagoForm(2) ;
 
-    // Cambiamos la fecha del último elemento creado
-    this.PagoArrayForm.controls[longitud_form].get('fecha_pago').setValue(proxima_fecha) ;
-  }
+  //   // Cambiamos la fecha del último elemento creado
+  //   this.PagoArrayForm.controls[longitud_form].get('fecha_pago').setValue(proxima_fecha) ;
+  // }
 
   // 1. Se utilizan las fechas del cronograma por periodos
   // 2. Se utilizan las fechas del cronograma normal (Todo es por periodos ahora)
   EstablecerControlesArray(tipo : number) {
+    this.AgregarPagoForm(tipo) ;
     if ( tipo == 1 ) {
       // this.data.cronograma_periodos.map( (item, index) =>{
-        this.AgregarPagoForm(1) ;
         this.PagoArrayForm.controls[0].get('fecha_pago').setValue(moment(new Date()).endOf('month').toDate() ) ;
         this.PagoArrayForm.controls[0].get('monto_cuota').setValue(0) ;
         this.PagoArrayForm.controls[0].get('pago_planilla').setValue(0) ;
@@ -224,7 +224,6 @@ export class VentanaGenerarPagoTransaccionUnitariaComponent implements OnInit, A
       // })
     } else {
       // this.data.cronograma_periodos.map( (item, index) =>{
-        this.AgregarPagoForm(1) ;
         this.PagoArrayForm.controls[0].get('fecha_pago').setValue(new Date()) ;
         this.PagoArrayForm.controls[0].get('monto_cuota').setValue(0) ;
         this.PagoArrayForm.controls[0].get('cuenta_bancaria').setValidators([Validators.required]) ;
@@ -232,25 +231,53 @@ export class VentanaGenerarPagoTransaccionUnitariaComponent implements OnInit, A
         // return item ;
       // })
     }
-
-    // this.AgregarControlesFechaActual() ;
   }
 
-  AgregarControlesFechaActual() {
-    let longitud_form = this.PagoArrayForm.value.length ;
-    let ultima_fecha = this.PagoArrayForm.controls[longitud_form-1].get('fecha_pago').value ;
+  AgregarCuota(tipo : number) {
+    let siguiente_fecha : Date ;
+    let total_pagos : number = this.PagoArrayForm.length ;
+    let ultima_fecha : Date = this.PagoArrayForm.controls[total_pagos-1].get('fecha_pago').value ;
 
-    let meses_hasta_hoy = moment(new Date()).diff(moment(ultima_fecha), 'months') ;
-
-    for (let index = 0; index < meses_hasta_hoy; index++) {
-      let fecha_nueva = moment(ultima_fecha).add(index+1, 'months').toDate() ;
-
-      this.AgregarPagoForm(2) ;
-      this.PagoArrayForm.controls[longitud_form+index].get('fecha_pago').setValue(fecha_nueva) ;
-      this.PagoArrayForm.controls[longitud_form+index].get('monto_cuota').setValue(0) ;
+    siguiente_fecha = moment(ultima_fecha).add(1,'month').toDate() ;
+    
+    this.AgregarPagoForm(tipo) ;
+    if ( tipo == 1 ) {
+      // this.data.cronograma_periodos.map( (item, index) =>{
+        this.PagoArrayForm.controls[total_pagos].get('fecha_pago').setValue(siguiente_fecha) ;
+        this.PagoArrayForm.controls[total_pagos].get('monto_cuota').setValue(0) ;
+        this.PagoArrayForm.controls[total_pagos].get('pago_planilla').setValue(0) ;
+        // this.PagoArrayForm.controls[0].get('pago_planilla_antiguo').setValue(0) ;
+        this.PagoArrayForm.controls[total_pagos].get('pago_judicial').setValue(0) ;
+        // this.PagoArrayForm.controls[0].get('pago_judicial_antiguo').setValue(0) ;
+      //   return item ;
+      // })
+    } else {
+      // this.data.cronograma_periodos.map( (item, index) =>{
+        // this.AgregarPagoForm(1) ;
+        this.PagoArrayForm.controls[total_pagos].get('fecha_pago').setValue(siguiente_fecha) ;
+        this.PagoArrayForm.controls[total_pagos].get('monto_cuota').setValue(0) ;
+        this.PagoArrayForm.controls[total_pagos].get('cuenta_bancaria').setValidators([Validators.required]) ;
+        this.PagoArrayForm.controls[total_pagos].get('numero_operacion').setValidators([Validators.required]) ;
+        // return item ;
+      // })
     }
-
   }
+
+  // AgregarControlesFechaActual() {
+  //   let longitud_form = this.PagoArrayForm.value.length ;
+  //   let ultima_fecha = this.PagoArrayForm.controls[longitud_form-1].get('fecha_pago').value ;
+
+  //   let meses_hasta_hoy = moment(new Date()).diff(moment(ultima_fecha), 'months') ;
+
+  //   for (let index = 0; index < meses_hasta_hoy; index++) {
+  //     let fecha_nueva = moment(ultima_fecha).add(index+1, 'months').toDate() ;
+
+  //     this.AgregarPagoForm(2) ;
+  //     this.PagoArrayForm.controls[longitud_form+index].get('fecha_pago').setValue(fecha_nueva) ;
+  //     this.PagoArrayForm.controls[longitud_form+index].get('monto_cuota').setValue(0) ;
+  //   }
+
+  // }
 
   NumeroDecimal(): ValidatorFn {
     return  (c: AbstractControl): {[key: string]: boolean} | null => {
@@ -267,23 +294,23 @@ export class VentanaGenerarPagoTransaccionUnitariaComponent implements OnInit, A
     this.PagoArrayForm.removeAt(index) ;
   }
 
-  AnoElegido(ano_normalizado: Moment) {
+  AnoElegido(ano_normalizado: Moment, index : number) {
     let ano_seleccionado : moment.Moment ;
     // Se colocó este 'if' para que cuando el valor inicial de 'fecha_fin' sea null, no haya errores en consola
-    if( this.PagoArrayForm.controls[0].get('fecha_pago').value ) {
-      ano_seleccionado = moment(this.PagoArrayForm.controls[0].get('fecha_pago').value) ;
+    if( this.PagoArrayForm.controls[index].get('fecha_pago').value ) {
+      ano_seleccionado = moment(this.PagoArrayForm.controls[index].get('fecha_pago').value) ;
     } else {
       ano_seleccionado = moment() ;
     }
     ano_seleccionado.year(ano_normalizado.year());
-    this.PagoArrayForm.controls[0].get('fecha_pago').setValue(ano_seleccionado);
+    this.PagoArrayForm.controls[index].get('fecha_pago').setValue(ano_seleccionado);
   }
 
-  MesElegido(mes_normalizado: Moment, datepicker: MatDatepicker<Moment>) {
+  MesElegido(mes_normalizado: Moment, datepicker: MatDatepicker<Moment>, index : number) {
     let mes_seleccionado : moment.Moment ;
     // Se colocó este 'if' para que cuando el valor inicial de 'fecha_fin' sea null, no haya errores en consola
-    if( this.PagoArrayForm.controls[0].get('fecha_pago').value ) {
-      mes_seleccionado = moment( this.PagoArrayForm.controls[0].get('fecha_pago').value ) ;
+    if( this.PagoArrayForm.controls[index].get('fecha_pago').value ) {
+      mes_seleccionado = moment( this.PagoArrayForm.controls[index].get('fecha_pago').value ) ;
     } else {
       mes_seleccionado = moment() ;
     }
@@ -291,7 +318,7 @@ export class VentanaGenerarPagoTransaccionUnitariaComponent implements OnInit, A
     mes_seleccionado.year(mes_normalizado.year()) ;
     mes_seleccionado.month(mes_normalizado.month());
 
-    this.PagoArrayForm.controls[0].get('fecha_pago').setValue(moment(mes_seleccionado).endOf('month').toDate());
+    this.PagoArrayForm.controls[index].get('fecha_pago').setValue(moment(mes_seleccionado).endOf('month').toDate());
     datepicker.close();
   }
 
@@ -313,65 +340,66 @@ export class VentanaGenerarPagoTransaccionUnitariaComponent implements OnInit, A
   }
 
   Guardar() {
-    let pagos = this.PagoArrayForm.value ;
+    let Pagos = this.PagoArrayForm.value ;
     let array_obserables : Array<Observable<any>> = [] ;
     let informacion : Array<any> = [] ;
 
     if ( this.tipo_pagos == 1 ) {
-      if ( this.data.tipo == 1 ) {
-        if ( pagos[0].pago_planilla > 0 ) {
-          array_obserables.push(
-            this._cobranzas.CrearCobranzaManualCredito(
-              this.data.id_credito ,
-              4 ,
-              pagos[0].fecha_pago ,
-              (new Date()).getTime().toString() ,
-              Math.round(100*pagos[0].pago_planilla)/100 ,
-              "Regularización de pago por planilla" ,
+      Pagos.forEach((elemento, index) => {
+        if ( this.data.tipo == 1 ) {
+          if ( elemento.pago_planilla > 0 ) {
+            array_obserables.push(
+              this._cobranzas.CrearCobranzaManualCredito(
+                this.data.id_credito ,
+                4 ,
+                elemento.fecha_pago ,
+                (new Date()).getTime().toString() ,
+                Math.round(100*elemento.pago_planilla)/100 ,
+                "Regularización de pago por planilla" ,
+              )
             )
-          )
-        }
-        if ( pagos[0].pago_judicial > 0 ) {
-          array_obserables.push(
-            this._cobranzas.CrearCobranzaManualCredito(
-              this.data.id_credito ,
-              5 ,
-              pagos[0].fecha_pago ,
-              (new Date()).getTime().toString() ,
-              Math.round(100*pagos[0].pago_judicial)/100 ,
-              "Regularización de pago judicial" ,
+          }
+          if ( elemento.pago_judicial > 0 ) {
+            array_obserables.push(
+              this._cobranzas.CrearCobranzaManualCredito(
+                this.data.id_credito ,
+                5 ,
+                elemento.fecha_pago ,
+                (new Date()).getTime().toString() ,
+                Math.round(100*elemento.pago_judicial)/100 ,
+                "Regularización de pago judicial" ,
+              )
             )
-          )
+          }
         }
-      }
-      
-      if ( this.data.tipo == 2 ) {
-        if ( pagos[0].pago_planilla > 0 ) {
-          array_obserables.push(
-            this._cobranzas.CrearCobranzaManualVenta(
-              this.data.id_venta ,
-              4 ,
-              pagos[0].fecha_pago ,
-              (new Date()).getTime().toString() ,
-              Math.round(100*pagos[0].pago_planilla)/100 ,
-              "Regularización de pago por planilla" ,
+        
+        if ( this.data.tipo == 2 ) {
+          if ( elemento.pago_planilla > 0 ) {
+            array_obserables.push(
+              this._cobranzas.CrearCobranzaManualVenta(
+                this.data.id_venta ,
+                4 ,
+                elemento.fecha_pago ,
+                (new Date()).getTime().toString() ,
+                Math.round(100*elemento.pago_planilla)/100 ,
+                "Regularización de pago por planilla" ,
+              )
             )
-          )
-        }
-        if ( pagos[0].pago_judicial > 0 ) {
-          array_obserables.push(
-            this._cobranzas.CrearCobranzaManualVenta(
-              this.data.id_venta ,
-              5 ,
-              pagos[0].fecha_pago ,
-              (new Date()).getTime().toString() ,
-              Math.round(100*pagos[0].pago_judicial)/100 ,
-              "Regularización de pago judicial" ,
+          }
+          if ( elemento.pago_judicial > 0 ) {
+            array_obserables.push(
+              this._cobranzas.CrearCobranzaManualVenta(
+                this.data.id_venta ,
+                5 ,
+                elemento.fecha_pago ,
+                (new Date()).getTime().toString() ,
+                Math.round(100*elemento.pago_judicial)/100 ,
+                "Regularización de pago judicial" ,
+              )
             )
-          )
+          }
         }
-      }
-
+      });
       this.Cargando.next(true) ;
 
       forkJoin(
@@ -388,17 +416,24 @@ export class VentanaGenerarPagoTransaccionUnitariaComponent implements OnInit, A
 
     if ( this.tipo_pagos == 2 ) {
       this.Cargando.next(true) ;
+      Pagos.forEach(elemento => {
+        array_obserables.push(
+          this._cobranzas.CrearCobranzaDirectaMasivo(
+            elemento.fecha_pago ,
+            this.data.cliente ,
+            elemento.cuenta_bancaria ,
+            elemento.numero_operacion ,
+            elemento.referente ,
+            elemento.pago_directo ,
+            this.data.tipo ,
+            this.data.tipo == 1 ? this.data.id_credito : this.data.id_venta ,
+            "Regularización de pago directo"
+          )
+        )
+      });
 
-      this._cobranzas.CrearCobranzaDirectaMasivo(
-        pagos[0].fecha_pago ,
-        this.data.cliente ,
-        pagos[0].cuenta_bancaria ,
-        pagos[0].numero_operacion ,
-        pagos[0].referente ,
-        pagos[0].pago_directo ,
-        this.data.tipo ,
-        this.data.tipo == 1 ? this.data.id_credito : this.data.id_venta ,
-        "Regularización de pago directo"
+      forkJoin(
+        array_obserables
       ).pipe(
         finalize(()=>{
           this.Cargando.next(false) ;
