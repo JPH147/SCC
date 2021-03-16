@@ -1156,7 +1156,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   VerDetallePagos(cronograma){
     let Ventana = this.Dialogo.open(VentanaPagosComponent,{
       width: '900px',
-      data: {numero: cronograma.numero, id:cronograma.id_cronograma}
+      data: { cuota: cronograma.id_cronograma, tipo: 2 }
     })
   }
 

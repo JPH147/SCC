@@ -7,20 +7,20 @@
       
     <mat-grid-tile>
       <mat-icon>search</mat-icon>
-      <mat-form-field>
+      <mat-form-field class="columnas-1">
         <input matInput placeholder="Pecosa" #InputPecosa>
       </mat-form-field>
     </mat-grid-tile>
       
     <mat-grid-tile>
       <mat-icon>search</mat-icon>
-      <mat-form-field>
+      <mat-form-field class="columnas-1">
         <input matInput placeholder="Destino" #InputDestino>
       </mat-form-field>
     </mat-grid-tile>
 
     <mat-grid-tile>
-      <mat-form-field>
+      <mat-form-field class="columnas-1">
         <mat-select placeholder="Sucursal" (selectionChange)="CargarData()" #InputSucursal [value]=0>
           <mat-option [value]=0>Todas</mat-option>
           <mat-option *ngFor="let Sucursal of Sucursales" [value]="Sucursal.id" >{{Sucursal.nombre}}</mat-option>
@@ -29,7 +29,7 @@
     </mat-grid-tile>
 
     <mat-grid-tile>
-      <mat-form-field>
+      <mat-form-field class="columnas-1">
         <mat-select placeholder="Estado" (selectionChange)="CargarData()" #InputEstado [value]=0>
           <mat-option [value]=0>Todos</mat-option>
           <mat-option [value]=1>Pendiente</mat-option>
@@ -41,13 +41,13 @@
 
     <mat-grid-tile>
       <mat-icon>search</mat-icon>
-      <mat-form-field>
+      <mat-form-field class="columnas-1">
         <input matInput placeholder="Vendedor" #InputVendedor>
       </mat-form-field>
     </mat-grid-tile>
 
     <mat-grid-tile>
-      <mat-form-field>
+      <mat-form-field class="columnas-1">
         <input matInput [matDatepicker]="fechainicio" placeholder="Fecha de inicio" (dateChange)="CargarData()" [(ngModel)]="fecha_inicio" readonly>
         <mat-datepicker-toggle matSuffix [for]="fechainicio"></mat-datepicker-toggle>
         <mat-datepicker #fechainicio></mat-datepicker>
@@ -55,7 +55,7 @@
     </mat-grid-tile>
 
     <mat-grid-tile>
-      <mat-form-field>
+      <mat-form-field class="columnas-1">
         <input matInput [matDatepicker]="fechafin" placeholder="Fecha de fin" (dateChange)="CargarData()" [(ngModel)]="fecha_fin" readonly>
         <mat-datepicker-toggle matSuffix [for]="fechafin"></mat-datepicker-toggle>
         <mat-datepicker #fechafin></mat-datepicker>
@@ -63,7 +63,7 @@
     </mat-grid-tile>
 
     <mat-grid-tile>
-      <button mat-raised-button [routerLink]="['ingreso']" color="primary"> Agregar </button>
+      <button mat-raised-button type="button" [routerLink]="['ingreso']" color="primary"> Agregar </button>
     </mat-grid-tile>
 
   </mat-grid-list>

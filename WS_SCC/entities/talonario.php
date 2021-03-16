@@ -311,6 +311,12 @@ class Talonario{
 				"monto_adjunto"=>$monto_adjunto,
 				"cliente_adjunto"=>$cliente_adjunto,
 				"cuotas_adjunto"=>$cuotas_adjunto,
+				"cuotas_adjunto"=>$cuotas_adjunto,
+				"fecha" => $fecha ,
+				"observacion" => $observacion ,
+				"venta_pagado" => $venta_pagado ,
+				"venta_liquidado" => $venta_liquidado ,
+				"talonario_adjuntos_tipo_pago" => $talonario_adjuntos_tipo_pago ,
 				"estado"=>$estado ,
 				"id_estado"=>$id_estado
 			);

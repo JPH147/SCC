@@ -740,9 +740,9 @@ Class Cliente{
             $sheet->setCellValue('G' . $contador, $cargo );
             $sheet->setCellValue('H' . $contador, $cargo_estado );
             $sheet->setCellValue('I' . $contador, $casilla );
-            $sheet->setCellValue('J' . $contador, $subsede );
-            $sheet->setCellValue('K' . $contador, $institucion );
-            $sheet->setCellValue('L' . $contador, $sede );
+            $sheet->setCellValue('J' . $contador, $institucion );
+            $sheet->setCellValue('K' . $contador, $sede );
+            $sheet->setCellValue('L' . $contador, $subsede );
             $sheet->setCellValue('M' . $contador, $trabajo );
             $sheet->setCellValue('N' . $contador, $distrito );
             $sheet->setCellValue('O' . $contador, $provincia );

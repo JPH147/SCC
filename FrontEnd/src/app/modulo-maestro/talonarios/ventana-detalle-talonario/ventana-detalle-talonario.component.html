@@ -45,6 +45,33 @@
         </mat-cell>
       </ng-container>
 
+      <ng-container matColumnDef="fecha">
+        <mat-header-cell *matHeaderCellDef> Fecha de venta </mat-header-cell>
+        <mat-cell *matCellDef="let talonario"> {{talonario.fecha}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="estado_venta">
+        <mat-header-cell *matHeaderCellDef> Estado de la venta </mat-header-cell>
+        <mat-cell *matCellDef="let talonario"> 
+          <ng-container *ngIf="talonario.venta_liquidado == 1">
+            Liquidado
+          </ng-container>
+          <ng-container *ngIf="talonario.venta_liquidado == 0">
+            <ng-container *ngIf="talonario.venta_pagado == 1">
+              Cancelado
+            </ng-container>
+            <ng-container *ngIf="talonario.venta_pagado == 0">
+              Pendiente
+            </ng-container>
+          </ng-container>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="observacion">
+        <mat-header-cell *matHeaderCellDef> Observacion </mat-header-cell>
+        <mat-cell *matCellDef="let talonario"> {{talonario.observacion}} </mat-cell>
+      </ng-container>
+
       <ng-container matColumnDef="opciones">
         <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
         <mat-cell *matCellDef="let talonario">

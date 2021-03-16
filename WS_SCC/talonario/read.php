@@ -16,7 +16,7 @@
         $talonario = new Talonario($db);
 
         $talonario->serie = !empty($_GET['prserie']) ? trim($_GET['prserie']) : "";
-        $talonario->numero = !empty($_GET['prnumero']) ? trim($_GET['prnumero']) : 0;
+        $talonario->numero = !empty($_GET['prnumero']) ? trim($_GET['prnumero']) : "";
         $talonario->numero_pagina = !empty($_GET['prnumeropagina']) ? trim($_GET['prnumeropagina']) : 1;
         $talonario->total_pagina = !empty($_GET['prtotalpagina']) ? trim($_GET['prtotalpagina']) : 20;
 

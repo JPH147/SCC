@@ -51,6 +51,9 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
   public editar_juzgado : number = 3 ;
   public DocumentosTransaccion : Array<any> = [] ;
   public permiso : Rol ;
+  public fecha_notificacion_demandado : Date ;
+  public fecha_notificacion_cooperativa : Date ;
+  public fecha_notificacion_retorno : Date ;
 
   constructor(
     private _store : Store<EstadoSesion> ,

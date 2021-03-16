@@ -135,8 +135,13 @@ export class CobranzaDirectaListarComponent implements OnInit {
     })
 
     Ventana.afterClosed().subscribe(resultado => {
-      this._notificaciones.Snack("Se actualizó el voucher con exito","") ;
-      this.CargarData() ;
+      if ( resultado === true ) {
+        this._notificaciones.Snack("Se actualizó el voucher con exito","") ;
+        this.CargarData() ;
+      }
+      if ( resultado === false ) {
+        this._notificaciones.Snack("Ocurrió un error al actualizar el voucher","") ;
+      }
     })
   }
 

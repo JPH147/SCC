@@ -843,6 +843,7 @@
         extract($row);
         $items = array (
           "id_detalle" => $row['id_detalle'] ,
+          "id_tipo" => $row['id_tipo'] ,
           "tipo" => $row['tipo'] ,
           "codigo" => $row['codigo'] ,
           "id_cronograma" => $row['id_cronograma'] ,
@@ -875,7 +876,7 @@
         :probservaciones
       )";
 
-      $result = $this->conn->prepare($query);
+      $result = $this->conn->prepare($query,array(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true));
 
       $result->bindParam(":prfecha", $this->fecha);
       $result->bindParam(":prcliente", $this->cliente);
@@ -910,6 +911,7 @@
       {
           $row = $result->fetch(PDO::FETCH_ASSOC);
           $this->id_cobranza=$row['id'];
+          $result->closeCursor() ;
           $this->create_detalle_array(1);
           return true;
       }
@@ -931,7 +933,7 @@
         :prfechaactual
       )";
 
-      $result = $this->conn->prepare($query);
+      $result = $this->conn->prepare($query,array(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true));
 
       $momento = date("Y-m-d H:i:s");
       $result->bindParam(":prfecha", $this->fecha);

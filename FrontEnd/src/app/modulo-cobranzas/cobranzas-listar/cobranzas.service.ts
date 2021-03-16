@@ -562,7 +562,16 @@ export class CobranzasService {
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-    return this.http.post(this.url + 'cobranza/update-directa-voucher.php', params, {headers: headers});
+    return this.http.post(this.url + 'cobranza/update-directa-voucher.php', params, {headers: headers})
+    .pipe(
+      map(res => {
+        if ( res['codigo'] === 0 ) {
+          return true ;
+        } else {
+          return false ;
+        }
+      })
+    );
   }
 
   ActualizarCobranzaValidacion(

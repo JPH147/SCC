@@ -1,8 +1,8 @@
 import {Component, OnInit, ViewChild, AfterViewInit, ElementRef, Inject} from '@angular/core';
 import {ClienteService} from 'src/app/modulo-clientes/clientes/clientes.service';
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
-import {BehaviorSubject, Observable, of, merge, fromEvent} from 'rxjs';
-import {catchError, finalize,debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
+import {BehaviorSubject, Observable, of, merge, fromEvent, Subject} from 'rxjs';
+import {catchError, finalize,debounceTime, distinctUntilChanged, tap, takeUntil} from 'rxjs/operators';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 
@@ -83,6 +83,7 @@ export class ClienteDataSource implements DataSource<any> {
   public Cargando = this.CargandoInformacion.asObservable();
   public TotalResultados = new BehaviorSubject<number>(0);
   private tiempo_consulta = new BehaviorSubject<number>(0)
+  private terminar$ = new Subject() ;
 
   constructor(
     private Servicio: ClienteService
@@ -105,13 +106,16 @@ export class ClienteDataSource implements DataSource<any> {
     prpagina: number,
     tiempo_consulta : number 
   ){
+    this.terminar$.next() ;
     this.CargandoInformacion.next(true);
 
     this.tiempo_consulta.next(new Date().getTime()) ;
 
     this.Servicio.Listado( codigo, cip, dni, nombre,0,0, prpagina, 5,1, tiempo_consulta)
-    .pipe(catchError(() => of([])),
-      finalize(() => this.CargandoInformacion.next(false))
+    .pipe(
+      catchError(() => of([])),
+      finalize(() => this.CargandoInformacion.next(false)) ,
+      takeUntil(this.terminar$)
     ).subscribe(res => {
       if(res['data']){
         if( res['tiempo'] == this.tiempo_consulta.value ) {

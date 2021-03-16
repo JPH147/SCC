@@ -19,11 +19,12 @@ import { VentanaDetalleTalonarioComponent } from './ventana-detalle-talonario/ve
 })
 export class TalonariosComponent implements OnInit {
 
+  @ViewChild('InputSerie', { static: true }) FiltroSerie : ElementRef ;
+  @ViewChild('InputNumero', { static: true }) FiltroNumero : ElementRef ;
+  @ViewChild(MatPaginator, { static: true }) paginator : MatPaginator ;
+
   public ListadoTalonarios : TalonariosDataSource ;
   public Columnas : Array <string> = [ "numero" , "serie" , "numero_inicio" , "numero_fin" , "disponibles" , "utilizados" , "consignacion" , "anulados"  , "total" , "opciones" ];
-
-  @ViewChild('InputSerie', { static: true }) FiltroSerie : ElementRef ;
-  @ViewChild(MatPaginator, { static: true }) paginator : MatPaginator ;
 
   constructor(
     private Servicio : ServiciosVentas ,
@@ -32,20 +33,18 @@ export class TalonariosComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
     this.ListadoTalonarios = new TalonariosDataSource(this.Servicio);
-    this.ListadoTalonarios.CargarInformacion("",0,1,10)
-
+    this.ListadoTalonarios.CargarInformacion("","",1,10)
   }
 
   ngAfterViewInit(){
-
     this.paginator.page.subscribe(()=>{
       this.CargarData()
     })
 
     merge(
       fromEvent(this.FiltroSerie.nativeElement, 'keyup'),
+      fromEvent(this.FiltroNumero.nativeElement, 'keyup'),
     ).pipe(
       debounceTime(200),
       distinctUntilChanged(),
@@ -59,7 +58,7 @@ export class TalonariosComponent implements OnInit {
   CargarData(){
     this.ListadoTalonarios.CargarInformacion(
       this.FiltroSerie.nativeElement.value ,
-      0,
+      this.FiltroNumero.nativeElement.value ,
       this.paginator.pageIndex+1,
       this.paginator.pageSize
     )
@@ -82,9 +81,10 @@ export class TalonariosComponent implements OnInit {
     Ventana.afterClosed().subscribe(res=>{
       if(res){
         this.CargarData();
-        this.notificacion.Snack("Se creó el talonario satisfactoriamente","")
-      }else{
-        this.notificacion.Snack("Ocurrió un error al crear al talonario","")
+        this.notificacion.Snack("Se actualizó el talonario satisfactoriamente","")
+      }
+      if(res === false) {
+        this.notificacion.Snack("Ocurrió un error al actualizar al talonario","")
       }
     })
   }
@@ -110,10 +110,11 @@ export class TalonariosComponent implements OnInit {
     })
 
     Ventana.afterClosed().subscribe(res=>{
-      if(res){
+      if(res === true) {
         this.CargarData();
         this.notificacion.Snack("Se creó el talonario satisfactoriamente","")
-      }else{
+      }
+      if(res === false) {
         this.notificacion.Snack("Ocurrió un error al crear al talonario","")
       }
     })
@@ -156,7 +157,7 @@ export class TalonariosDataSource implements DataSource<any>{
 
   CargarInformacion(
     serie : string ,
-    numero : number ,
+    numero : string ,
     pagina : number ,
     total_pagina : number
   ){

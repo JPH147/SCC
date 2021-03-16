@@ -4,25 +4,26 @@
   </mat-card-title>
 
   <mat-grid-list cols= "4" rowHeight="90px">
-
     <mat-grid-tile>
       <mat-icon>search</mat-icon>
-      <mat-form-field>
+      <mat-form-field class="columnas-1">
         <input matInput placeholder="Serie" #InputSerie>
       </mat-form-field>
     </mat-grid-tile>
 
     <mat-grid-tile>
+      <mat-icon>search</mat-icon>
+      <mat-form-field class="columnas-1">
+        <input matInput placeholder="Numero" #InputNumero>
+      </mat-form-field>
     </mat-grid-tile>
 
     <mat-grid-tile>
-      <!-- <button mat-raised-button (click)="AdjuntarContrato()"> Adjuntar contrato </button> -->
     </mat-grid-tile>
   
     <mat-grid-tile>
       <button mat-raised-button (click)="Agregar()" color="primary">Agregar</button>
     </mat-grid-tile>
-
   </mat-grid-list>
 
   <mat-card-content>

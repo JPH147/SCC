@@ -245,14 +245,14 @@ export class ServiciosVentas{
 
 	ListarTalonarios(
 		serie : string ,
-		numero : number ,
+		numero : string ,
 		pagina : number ,
 		total_pagina : number
 	  ){
 	
 		let params = new HttpParams()
 		  .set("prserie", serie)
-		  .set("prnumero", numero.toString())
+		  .set("prnumero", numero)
 		  .set("prnumeropagina", pagina.toString())
 		  .set("prtotalpagina", total_pagina.toString())
 	

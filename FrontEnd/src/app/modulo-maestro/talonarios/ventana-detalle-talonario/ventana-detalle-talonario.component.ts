@@ -18,7 +18,7 @@ import { VentanaAdjuntoComponent } from '../ventana-adjunto/ventana-adjunto.comp
 export class VentanaDetalleTalonarioComponent implements OnInit {
 
   public ListadoTalonarios : TalonariosDataSource ;
-  public Columnas : Array <string> = [ "numero" , "talonario" , "estado" , "detalle" , "opciones" ];
+  public Columnas : Array <string> = [ "numero" , "talonario" , "estado" , "detalle" ,  "fecha" , "estado_venta" , "observacion" ,"opciones" ];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private data : any ,

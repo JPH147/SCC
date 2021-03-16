@@ -4,7 +4,7 @@ import { DataSource } from '@angular/cdk/table';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { VentanaConfirmarComponent } from 'src/app/compartido/componentes/ventana-confirmar/ventana-confirmar.component';
 import { Rol } from 'src/app/compartido/modelos/login.modelos';
 import { EstadoSesion } from 'src/app/compartido/reducers/permisos.reducer';
@@ -12,7 +12,7 @@ import { Notificaciones } from 'src/app/core/servicios/notificacion';
 import { CobranzaJudicialService } from '../../cobranza-judicial/cobranza-judicial.service';
 import { VentanaCambioDistritoComponent } from '../ventana-cambio-distrito/ventana-cambio-distrito.component';
 import { ChangeDetectionStrategy } from '@angular/core';
-import { finalize } from 'rxjs/operators';
+import { finalize, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-cobranza-judicial-instancias',
@@ -121,6 +121,7 @@ export class ProcesosDataSource implements DataSource<any> {
 
   private Cargando = new BehaviorSubject<boolean>(false) ;
   public Cargando$ = this.Cargando.asObservable() ;
+  private terminado$ = new Subject() ;
 
   constructor(
     private _judicial : CobranzaJudicialService
@@ -132,6 +133,7 @@ export class ProcesosDataSource implements DataSource<any> {
 
   disconnect(){
     this.ListadoExpedientes.complete();
+    this.terminado$.next() ;
   }
 
   CargarInformacion( 
@@ -145,6 +147,7 @@ export class ProcesosDataSource implements DataSource<any> {
     orden : string ,
    ){
     this.Cargando.next(true) ;
+    this.terminado$.next() ;
 
     this._judicial.ListarV2(
       id_instancia ,
@@ -157,6 +160,7 @@ export class ProcesosDataSource implements DataSource<any> {
       orden
     )
     .pipe(
+      takeUntil(this.terminado$) ,
       finalize(()=> {
         this.Cargando.next(false) ;
       })

@@ -507,48 +507,48 @@ export class VentanaGenerarPagoTransaccionComponent implements OnInit, AfterView
     }
   }
 
-  CrearPagoManual( tipo : number , monto_pagado : number, fecha: Date ) : Observable<any> {
-    let tipo_pago : string ;
+  // CrearPagoManual( tipo : number , monto_pagado : number, fecha: Date ) : Observable<any> {
+  //   let tipo_pago : string ;
     
-    switch (tipo) {
-      case 1:
-        tipo_pago = "directo" ;
-        break;
+  //   switch (tipo) {
+  //     case 1:
+  //       tipo_pago = "directo" ;
+  //       break;
 
-      case 2:
-        tipo_pago = "por planilla" ;
-        break;
+  //     case 2:
+  //       tipo_pago = "por planilla" ;
+  //       break;
 
-      case 3:
-        tipo_pago = "judicial" ;
-        break;
+  //     case 3:
+  //       tipo_pago = "judicial" ;
+  //       break;
     
-      default:
-        break;
-    }
+  //     default:
+  //       break;
+  //   }
 
-    if ( this.data.tipo == 1 ) {
-      return this._cobranzas.CrearCobranzaManualCredito(
-        this.data.id_credito ,
-        tipo + 2 ,
-        fecha ,
-        (new Date()).getTime().toString() ,
-        Math.round(100*monto_pagado)/100 ,
-        "Regularización de pago " + tipo_pago ,
-      )
-    }
+  //   if ( this.data.tipo == 1 ) {
+  //     return this._cobranzas.CrearCobranzaManualCredito(
+  //       this.data.id_credito ,
+  //       tipo + 2 ,
+  //       fecha ,
+  //       (new Date()).getTime().toString() ,
+  //       Math.round(100*monto_pagado)/100 ,
+  //       "Regularización de pago " + tipo_pago ,
+  //     )
+  //   }
 
-    if ( this.data.tipo == 2 ) {
-      return this._cobranzas.CrearCobranzaManualVenta(
-        this.data.id_venta ,
-        tipo + 2 ,
-        fecha ,
-        (new Date()).getTime().toString() ,
-        Math.round(100*monto_pagado)/100 ,
-        "Regularización de pago " + tipo_pago ,
-      )
-    }
-  }
+  //   if ( this.data.tipo == 2 ) {
+  //     return this._cobranzas.CrearCobranzaManualVenta(
+  //       this.data.id_venta ,
+  //       tipo + 2 ,
+  //       fecha ,
+  //       (new Date()).getTime().toString() ,
+  //       Math.round(100*monto_pagado)/100 ,
+  //       "Regularización de pago " + tipo_pago ,
+  //     )
+  //   }
+  // }
 
   // CrearPagoMasivo(monto : number, fecha : Date, numero_operacion : string, referente : number, cuenta_bancaria : number) : Observable<boolean> {
   //   return this._cobranzas.CrearCobranzaDirectaMasivo(
