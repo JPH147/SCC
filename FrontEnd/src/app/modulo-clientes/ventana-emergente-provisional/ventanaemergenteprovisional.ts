@@ -273,6 +273,22 @@ export class VentanaEmergenteProvisionalClientes {
       ]],
       dni_garante: ["",[
       ]],
+      cip_garante: ["",[
+      ]],
+      cargo_estado_garante: ["",[
+      ]],
+      codigo_garante: ["",[
+      ]],
+      direccion_garante: ["",[
+      ]],
+      telefono_numero_garante: ["",[
+      ]],
+      telefono_tipo_garante: ["",[
+      ]],
+      email_garante: ["",[
+      ]],
+      subsede_garante: ["",[
+      ]],
     });
   }
 
@@ -363,6 +379,26 @@ export class VentanaEmergenteProvisionalClientes {
     })
   }
 
+  SeleccionarClienteGarante() {
+    let Ventana = this.Dialogo.open(SeleccionarClienteComponent,{
+      width: "1200px"
+    })
+
+    Ventana.afterClosed().subscribe(res=>{
+      if(res){
+        this.ClientesForm.get('dni_garante').setValue(res.dni) ;
+        this.ClientesForm.get('nombre_garante').setValue(res.nombre) ;
+        this.ClientesForm.get('cip_garante').setValue(res.cip) ;
+        this.ClientesForm.get('cargo_estado_garante').setValue(res.cargo) ;
+        this.ClientesForm.get('codigo_garante').setValue(res.codigo) ;
+        this.ClientesForm.get('email_garante').setValue(res.email) ;
+        this.ClientesForm.get('subsede_garante').setValue(res.subsede) ;
+        this.ObtenerDireccionGarante(res.id) ;
+        this.ObtenerTelefonoGarante(res.id) ;
+      }
+    })
+  }
+
   AsignarInformacion(){
       // console.log(this.data);
     this.ClientesForm.get('institucion').setValue(this.data.objeto.institucion);
@@ -417,6 +453,25 @@ export class VentanaEmergenteProvisionalClientes {
     });
   }
 
+  ObtenerDireccionGarante(id) {
+    this.ServicioDireccion.ListarDireccion( id, '1',1,1).subscribe(res => {
+      if (res['data']) {
+        // this.ClientesForm.get('id_direccion').setValue(res['data'].direcciones[0].id); // Para el editar en la vista de evaluación
+        // this.ListarDepartamento();
+        // this.ListarProvincia(res['data'].direcciones[0].departamento);
+        // this.ClientesForm.get('direccion_departamento').setValue(res['data'].direcciones[0].departamento);
+        // this.ListarDistrito(res['data'].direcciones[0].provincia);
+        // this.ClientesForm.get('direccion_provincia').setValue(res['data'].direcciones[0].provincia);
+        // this.ClientesForm.get('direccion_distrito').setValue(res['data'].direcciones[0].id_distrito);
+        // this.ClientesForm.get('direccion_distrito_nombre').setValue(res['data'].direcciones[0].distrito);
+        // this.ClientesForm.get('direccion_nombre').setValue(res['data'].direcciones[0].direccion);
+        this.ClientesForm.get('direccion_garante').setValue(res['data'].direcciones[0].direccion_formateada);
+      }else{
+        // this.ClientesForm.get('direccion_nombre').setValue("No registra")
+      }
+    });
+  }
+
   ObtenerTelefono(id) {
     this.ServicioTelefono.ListarTelefono( id, '1',1,1).subscribe(res => {
       if(res['codigo']==0){
@@ -439,6 +494,27 @@ export class VentanaEmergenteProvisionalClientes {
         this.ClientesForm.get('telefono_numero').setValue(" No registra ")
         this.ClientesForm.get('telefono_tipo').setValue(null);
         this.ClientesForm.get('telefono_tipo_nombre').setValue(" No registra ")
+      }
+    });
+  }
+
+  ObtenerTelefonoGarante(id) {
+    this.ServicioTelefono.ListarTelefono( id, '1',1,1).subscribe(res => {
+      if(res['codigo']==0){
+        if (res['data']) {
+          this.ClientesForm.get('telefono_numero_garante').setValue(res['data'].telefonos[0].tlf_numero);
+          if( res['data'].telefonos[0].id_tipo ) {
+            if(res['data'].telefonos[0].id_tipo==1){
+              this.ClientesForm.get('telefono_tipo_nombre').setValue("Celular de trabajo");
+            } else {
+              this.ClientesForm.get('telefono_tipo_garante').setValue("Teléfono de " + res['data'].telefonos[0].tipo);
+            }
+          } else {
+            this.ClientesForm.get('telefono_tipo_garante').setValue("Teléfono");
+          }
+        }else{
+        }
+      }else{
       }
     });
   }
@@ -748,8 +824,10 @@ export class VentanaEmergenteProvisionalClientes {
       finalize(()=>this.Cargando.next(false))
     )
     .subscribe(res=>{
+      // console.log(res) ;
       if(res['codigo']==0){
         this.ClientesForm.get('nombre_garante').setValue(res['data'].nombre); 
+        this.ObtenerDireccionGarante(res['data'].id) ;
       }
     })
   }

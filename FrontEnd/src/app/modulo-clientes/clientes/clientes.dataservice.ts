@@ -11,6 +11,7 @@ export class ClienteDataSource implements DataSource<any> {
   public TotalResultados = new BehaviorSubject<number>(0);
   private tiempo_consulta = new BehaviorSubject<number>(0) ; // Se coloca esto para asegurarnos que solo se muestre
                                                              // el último valor consultado
+  private terminado$ = new Subject() ;
 
   constructor(
     private Servicio: ClienteService
@@ -23,6 +24,7 @@ export class ClienteDataSource implements DataSource<any> {
   disconnect(){
     this.InformacionClientes.complete();
     this.CargandoInformacion.complete();
+    this.terminado$.next() ;
   }
 
   CargarClientes(
@@ -38,13 +40,15 @@ export class ClienteDataSource implements DataSource<any> {
     estado : number
   ){
     this.CargandoInformacion.next(true);
-    this.tiempo_consulta.next(new Date().getTime()) ;
+    // this.tiempo_consulta.next(new Date().getTime()) ;
+    this.terminado$.next() ;
 
     if( relacion ) {
       this.Servicio.ListadoComercial( codigo, cip, dni, nombre, institucion, sede, prpagina, prtotalpagina, estado)
       .pipe(
         catchError(() => of([])),
         finalize(() => this.CargandoInformacion.next(false)),
+        takeUntil(this.terminado$)
       )
       .subscribe(res => {
         this.TotalResultados.next(res['mensaje']);
@@ -55,6 +59,7 @@ export class ClienteDataSource implements DataSource<any> {
       .pipe(
         catchError(() => of([])),
         finalize(() => this.CargandoInformacion.next(false)),
+        takeUntil(this.terminado$)
       )
       .subscribe(res => {
         if( res['tiempo'] == this.tiempo_consulta.value ) {

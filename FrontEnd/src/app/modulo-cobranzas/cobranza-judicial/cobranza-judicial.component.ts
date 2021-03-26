@@ -1,6 +1,6 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Optional, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SeleccionarClienteComponent } from '../../compartido/componentes/seleccionar-cliente/seleccionar-cliente.component';
 import { VentanaJudicialComponent } from './ventana-judicial/ventana-judicial.component';
 import { CobranzaJudicialService } from './cobranza-judicial.service';
@@ -56,6 +56,7 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
   public fecha_notificacion_retorno : Date ;
 
   constructor(
+    @Optional() @Inject(MAT_DIALOG_DATA) public data : number ,
     private _store : Store<EstadoSesion> ,
     private router : Router ,
     private route : ActivatedRoute ,
@@ -81,49 +82,56 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
     this.CrearFormulario() ;
     this.ListarDistritosJudiciales() ;
 
-    this.route.params.subscribe(params => {
-      // Verifica si 'params' tiene datos
-      if(Object.keys(params).length>0){
-        if(params['idprocesoagregar']){
-          this.id_proceso = params['idprocesoagregar'] ;
-          this.id_proceso_agregar = params['idprocesoagregar'];
-          // this.id_proceso_agregar = 8 ;
-          this.SeleccionarProceso(this.id_proceso_agregar);
-        }
-    
-        if(params['idprocesover']){
-          this.id_proceso = params['idprocesover'] ;
-          this.id_proceso_ver = params['idprocesover'];
-          // this.id_proceso_ver = 8 ;
-          this.SeleccionarProceso(this.id_proceso_ver);
-          this.RegistrarVisita(this.id_proceso_ver) ;
-        }
+
+    if ( this.data ) {
+      this.id_proceso = this.data ;
+      this.id_proceso_ver = this.data ;
+      this.SeleccionarProceso(this.id_proceso_ver) ;
+      this.RegistrarVisita(this.id_proceso_ver) ;
+    } else {
+      this.route.params.subscribe(params => {
+        // Verifica si 'params' tiene datos
+        if(Object.keys(params).length>0){
+          if(params['idprocesoagregar']){
+            this.id_proceso = params['idprocesoagregar'] ;
+            this.id_proceso_agregar = params['idprocesoagregar'];
+            // this.id_proceso_agregar = 8 ;
+            this.SeleccionarProceso(this.id_proceso_agregar);
+          }
       
-        if(params['idprocesoeditar']){
-          this.id_proceso = params['idprocesoeditar'] ;
-          this.id_proceso_editar = params['idprocesoeditar'];
-          this.SeleccionarProceso(this.id_proceso_editar);
+          if(params['idprocesover']){
+            this.id_proceso = params['idprocesover'] ;
+            this.id_proceso_ver = params['idprocesover'];
+            this.SeleccionarProceso(this.id_proceso_ver);
+            this.RegistrarVisita(this.id_proceso_ver) ;
+          }
+        
+          if(params['idprocesoeditar']){
+            this.id_proceso = params['idprocesoeditar'] ;
+            this.id_proceso_editar = params['idprocesoeditar'];
+            this.SeleccionarProceso(this.id_proceso_editar);
+          }
+  
+          if(params['idcredito']){
+            this.id_credito=params['idcredito'] ;
+            this.SeleccionarCredito();
+            this.ObtenerDatosCooperativa();
+          }
+  
+          if(params['idventa']){
+            this.id_venta=params['idventa'] ;
+            this.SeleccionarVenta();
+            this.ObtenerDatosCooperativa();
+          }
+  
+          if(params['idventasalida']){
+            this.id_venta=params['idventasalida'] ;
+            this.SeleccionarVentaSalida();
+            this.ObtenerDatosCooperativa();
+          }
         }
-
-        if(params['idcredito']){
-          this.id_credito=params['idcredito'] ;
-          this.SeleccionarCredito();
-          this.ObtenerDatosCooperativa();
-        }
-
-        if(params['idventa']){
-          this.id_venta=params['idventa'] ;
-          this.SeleccionarVenta();
-          this.ObtenerDatosCooperativa();
-        }
-
-        if(params['idventasalida']){
-          this.id_venta=params['idventasalida'] ;
-          this.SeleccionarVentaSalida();
-          this.ObtenerDatosCooperativa();
-        }
-      }
-    })
+      })
+    }
   }
 
   ngAfterViewInit(): void {
@@ -166,6 +174,12 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
           this.VerificarExpedienteDuplicado() ;
         })
       ).subscribe() ;
+    }
+  }
+
+  public VerEnNuevaVentana() {
+    if ( this.data ) {
+      this.router.navigate(['ver', this.data], { relativeTo: this.route } ) ;
     }
   }
 

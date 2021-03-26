@@ -44,6 +44,7 @@ export class VentanaGenerarPenalidadComponent implements OnInit, AfterViewInit {
     this.ObtenerInformacion() ;
 
     this.CrearFormulario() ;
+    this.data.fecha_inicio ? this.PenalidadForm.get('fecha_inicio').setValue( this.data.fecha_inicio ) : null ;
   }
 
   ngAfterViewInit() {

@@ -2392,6 +2392,7 @@ export class VentasComponent implements OnInit {
         id_venta : this.id_venta ,
         monto_total : +this.VentasForm.get('montototal').value - +this.VentasForm.get('inicial').value ,
         numero_cuotas : this.VentasForm.get('cuotas').value ,
+        fecha_inicio : this.VentasForm.get('fechapago').value ,
         tipo_pago : this.id_tipo_pago
       } ,
       width: '900px' ,

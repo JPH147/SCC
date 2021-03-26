@@ -204,11 +204,6 @@ Class Plantillas{
         }
 
         $templateProcessor->setValue('cooperativa', $this->cooperativa);
-        // $templateProcessor->setValue('cooperativa_direccion', $this->cooperativa_direccion);
-        // $templateProcessor->setValue('cooperativa_direccion_1', $this->cooperativa_direccion_1);
-        // $templateProcessor->setValue('cooperativa_direccion_2', $this->cooperativa_direccion_2);
-        // $templateProcessor->setValue('cooperativa_direccion_3', $this->cooperativa_direccion_3);
-        // $templateProcessor->setValue('cooperativa_direccion_4', $this->cooperativa_direccion_4);
         $templateProcessor->setValue('cooperativa_cuenta_banco', $this->cooperativa_cuenta_banco);
         $templateProcessor->setValue('cooperativa_cuenta_numero', $this->cooperativa_cuenta_numero);
         $templateProcessor->setValue('presidente', $this->presidente);

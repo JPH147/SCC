@@ -34,11 +34,12 @@ export class VentanaCooperativaDireccionesComponent implements OnInit {
     this.ListarDepartamento();
 
     if( this.data ) {
-      this.DireccionesForm.get('id_direccion').setValue(this.data.id_cooperativa_direccion) ;
-      this.DireccionesForm.get('direccion').setValue(this.data.cooperativa_direccion) ;
-      this.DireccionesForm.get('departamento').setValue(this.data.departamento) ;
-      this.DireccionesForm.get('provincia').setValue(this.data.provincia) ;
-      this.DireccionesForm.get('distrito').setValue(this.data.id_distrito) ;
+      console.log(this.data) ;
+      this.DireccionesForm.get('id_direccion').setValue(this.data.id_cooperativa_direccion ) ;
+      this.DireccionesForm.get('direccion').setValue(this.data.cooperativa_direccion ) ;
+      this.DireccionesForm.get('departamento').setValue(this.data.departamento.toUpperCase() ) ;
+      this.DireccionesForm.get('provincia').setValue(this.data.provincia.toUpperCase() ) ;
+      this.DireccionesForm.get('distrito').setValue(this.data.id_distrito ) ;
 
       this.ListarProvincia();
       this.ListarDistrito();
@@ -67,13 +68,13 @@ export class VentanaCooperativaDireccionesComponent implements OnInit {
   
   ListarDepartamento() {
     this._direcciones.ListarDepartamentos('', 1, 50).subscribe( res => {
-      this.LstDepartamento = res['data'].departamentos;
+      this.LstDepartamento = res['data'].departamentos ;
     });
   }
 
   ListarProvincia() {
     this._direcciones.ListarProvincias(this.DireccionesForm.get('departamento').value, '' , 1, 30).subscribe( res => {
-      this.LstProvincia = res['data'].provincias;
+      this.LstProvincia = res['data'].provincias ;
     });
   }
 

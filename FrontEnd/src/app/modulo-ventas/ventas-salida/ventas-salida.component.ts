@@ -1593,6 +1593,7 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
         id_venta : this.id_venta ,
         monto_total : +this.VentasSalidaForm.get('montototal').value - +this.VentasSalidaForm.get('inicial').value ,
         numero_cuotas : this.VentasSalidaForm.get('cuotas').value ,
+        fecha_inicio : this.VentasSalidaForm.get('fecha_pago').value ,
         tipo_pago : this.id_tipo_pago
       } ,
       width: '900px' ,

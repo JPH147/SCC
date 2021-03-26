@@ -96,6 +96,7 @@ export class ClienteDataSource implements DataSource<any> {
   disconnect(){
     this.InformacionClientes.complete();
     this.CargandoInformacion.complete();
+    this.terminar$.next() ;
   }
 
   CargarClientes(
@@ -109,7 +110,7 @@ export class ClienteDataSource implements DataSource<any> {
     this.terminar$.next() ;
     this.CargandoInformacion.next(true);
 
-    this.tiempo_consulta.next(new Date().getTime()) ;
+    // this.tiempo_consulta.next(new Date().getTime()) ;
 
     this.Servicio.Listado( codigo, cip, dni, nombre,0,0, prpagina, 5,1, tiempo_consulta)
     .pipe(

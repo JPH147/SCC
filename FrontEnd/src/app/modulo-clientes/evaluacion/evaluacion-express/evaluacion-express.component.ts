@@ -54,6 +54,9 @@ export class EvaluacionExpressComponent implements OnInit {
   public compromiso : string ;
   public transaccion : string ;
   public tarjeta : string ;
+  public carta_aval : string ;
+  public autorizacion_aval : string ;
+  public compromiso_aval : string ;
   public generados : boolean ;
   public ExpressForm : FormGroup;
   public ListadoVendedores : Array<any>;
@@ -501,10 +504,10 @@ export class EvaluacionExpressComponent implements OnInit {
     this.CalcularInteresDiario();
   }
 
-  Print(){
-    console.log("Express",this.ExpressForm);
-    console.log("Informacion",this.InformacionForm);
-  }
+  // Print(){
+  //   console.log("Express",this.ExpressForm);
+  //   console.log("Informacion",this.InformacionForm);
+  // }
   
   CrearProducto(): FormGroup{
     return this.Builder.group({
@@ -624,6 +627,9 @@ export class EvaluacionExpressComponent implements OnInit {
     this.compromiso = "" ;
     this.transaccion = "" ;
     this.tarjeta = "" ;
+    this.carta_aval = "" ;
+    this.autorizacion_aval = "" ;
+    this.compromiso_aval = "" ;
 
     if( this.nueva_infomacion && this.InformacionForm.value.cliente_nuevo ){
       this.CrearCliente(this.InformacionForm);
@@ -637,6 +643,12 @@ export class EvaluacionExpressComponent implements OnInit {
     this.GenerarAutorizacion("Autorizacion_"+ahora);
     this.GenerarTarjeta("Tarjeta_"+ahora);
     this.GenerarTransaccion("Transaccion_"+ahora);
+
+    if ( this.InformacionForm.value.hay_garante ) {
+      this.GenerarCartaAval("CartaAval_"+ahora) ;
+      this.GenerarAutorizacionAval("AutorizacionAval_"+ahora) ;
+      this.GenerarCompromisoAval("CompromisoAval_"+ahora) ;
+    }
   }
 
   GenerarDDJJ(nombre_archivo){
@@ -806,6 +818,77 @@ export class EvaluacionExpressComponent implements OnInit {
       if(res['codigo']==0){
         this.generados=true;
         this.tarjeta=res['data'];
+      }
+    })
+  }
+  
+  GenerarCartaAval(nombre_archivo){
+    this.Servicios.GenerarCarta(
+      nombre_archivo,
+      this.InformacionForm.value.nombre_garante ,
+      this.InformacionForm.value.dni_garante ,
+      this.InformacionForm.value.direccion_garante ,
+      this.InformacionForm.value.nombre ,
+      this.InformacionForm.value.dni ,
+      this.ExpressForm.value.lugar ,
+      this.InformacionForm.value.fecha_letras ,
+    ).subscribe(res=>{
+      // console.log(res)
+      if(res['codigo']==0){
+        this.generados=true;
+        this.carta_aval=res['data'];
+      }
+    })
+  }
+
+  GenerarAutorizacionAval(nombre_archivo){
+    this.Servicios.GenerarAutorizacion(
+      this.InformacionForm.value.plantilla_autorizacion,
+      nombre_archivo,
+      this.cooperativa_nombre,
+      "2",
+      this.InformacionForm.value.nombre_garante,
+      this.InformacionForm.value.cargo_estado_garante,
+      this.InformacionForm.value.dni_garante,
+      this.InformacionForm.value.cip_garante,
+      this.InformacionForm.value.codigo_garante,
+      this.InformacionForm.value.direccion_garante,
+      this.InformacionForm.value.telefono_tipo__garante,
+      this.InformacionForm.value.telefono_numero_garante,
+      this.InformacionForm.value.email_garante,
+      this.InformacionForm.value.subsede_garante,
+      this.aporte,
+      +this.cuota_mensual_estandar,
+      this.cuotas,
+      this.ExpressForm.value.lugar,
+      this.ExpressForm.value.fecha_letras,
+      this.InformacionForm.value.parametro_autorizacion_1 ,
+      this.InformacionForm.value.parametro_autorizacion_2 ,
+    ).subscribe(res=>{
+      if(res['codigo']==0){
+        this.generados=true;
+        this.autorizacion_aval=res['data'];
+      }
+    })
+  }
+  
+  GenerarCompromisoAval(nombre_archivo){
+    this.Servicios.GenerarCompromiso(
+      this.InformacionForm.value.plantilla_compromiso,
+      nombre_archivo,
+      this.cooperativa_nombre,
+      this.InformacionForm.value.nombre_garante,
+      this.InformacionForm.value.dni_garante,
+      this.InformacionForm.value.cip_garante,
+      this.cooperativa_cuenta_banco,
+      this.cooperativa_cuenta_numero,
+      this.cooperativa_contacto,
+      this.InformacionForm.value.fecha_letras
+    ).subscribe(res=>{
+      // console.log(res)
+      if(res['codigo']==0){
+        this.generados=true;
+        this.compromiso_aval=res['data'];
       }
     })
   }

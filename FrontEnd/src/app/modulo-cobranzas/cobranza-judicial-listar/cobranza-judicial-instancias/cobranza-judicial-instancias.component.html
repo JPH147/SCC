@@ -83,7 +83,7 @@
     <ng-container matColumnDef="opciones">
       <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
       <mat-cell *matCellDef="let proceso">
-        <button mat-icon-button color="primary" matTooltip="Ver seguimiento de documentos" [routerLink]="['ver',proceso.id]"><mat-icon> visibility </mat-icon></button>
+        <button mat-icon-button color="primary" matTooltip="Ver seguimiento de documentos" (click)="VerProceso(proceso.id)"><mat-icon> visibility </mat-icon></button>
         <ng-container *ngIf="permiso?.procesos_judiciales?.listado_procesos?.editar">
           <button mat-icon-button [matMenuTriggerFor]="menu2" color="primary" matTooltip="Editar expediente" ><mat-icon> edit </mat-icon></button>
           <mat-menu #menu2="matMenu">

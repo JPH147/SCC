@@ -212,7 +212,6 @@
           Generar
         </button>
         <button mat-raised-button type="button" (click)="ResetearFormularios()"> Limpiar </button>
-        <!-- <button mat-raised-button type="button" (click)="Print()"> Print </button> -->
       </mat-grid-tile>
     </mat-grid-list>
   </mat-card-actions>
@@ -239,25 +238,60 @@
 
     <mat-grid-list cols=5 rowHeight="45px">
       <mat-grid-tile>
-        <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(autorizacion)" [disabled]="!autorizacion"> <mat-icon> arrow_circle_down </mat-icon> </button>
+        <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(autorizacion)"
+          [disabled]="!autorizacion"> <mat-icon> arrow_circle_down </mat-icon> </button>
       </mat-grid-tile>
 
       <mat-grid-tile>
-        <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(ddjj)" [disabled]="!ddjj"> <mat-icon> arrow_circle_down </mat-icon> </button>
+        <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(ddjj)"
+          [disabled]="!ddjj"> <mat-icon> arrow_circle_down </mat-icon> </button>
       </mat-grid-tile>
 
       <mat-grid-tile>
-        <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(transaccion)" [disabled]="!transaccion"> <mat-icon> arrow_circle_down </mat-icon> </button>
+        <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(transaccion)"
+          [disabled]="!transaccion"> <mat-icon> arrow_circle_down </mat-icon> </button>
       </mat-grid-tile>
 
       <mat-grid-tile>
-        <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(tarjeta)" [disabled]="!tarjeta"> <mat-icon> arrow_circle_down </mat-icon> </button>
+        <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(tarjeta)"
+          [disabled]="!tarjeta"> <mat-icon> arrow_circle_down </mat-icon> </button>
       </mat-grid-tile>
 
       <mat-grid-tile>
-        <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(compromiso)" [disabled]="!compromiso"> <mat-icon> arrow_circle_down </mat-icon> </button>
+        <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(compromiso)"
+          [disabled]="!compromiso"> <mat-icon> arrow_circle_down </mat-icon> </button>
       </mat-grid-tile>
     </mat-grid-list>
   </ng-container>
+  
+  <ng-container *ngIf="InformacionForm.value.hay_garante">
+    <mat-divider></mat-divider>
+    
+    <mat-grid-list cols=5 rowHeight="60px">
+      <mat-grid-tile>
+        Carta aval
+      </mat-grid-tile>
+      <mat-grid-tile>
+        Autorizacion
+      </mat-grid-tile>
+      <mat-grid-tile>
+        Compromiso
+      </mat-grid-tile>
+    </mat-grid-list>
 
+    <mat-grid-list cols=5 rowHeight="60px">
+      <mat-grid-tile>
+        <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(carta_aval)"
+          [disabled]="!carta_aval"> <mat-icon> arrow_circle_down </mat-icon> </button>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(autorizacion_aval)"
+          [disabled]="!autorizacion_aval"> <mat-icon> arrow_circle_down </mat-icon> </button>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <button mat-icon-button color="primary" matTooltip="Descargar" (click)="AbrirArchivo(compromiso_aval)"
+          [disabled]="!compromiso_aval"> <mat-icon> arrow_circle_down </mat-icon> </button>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </ng-container>
 </mat-card>

@@ -13,6 +13,7 @@ import { CobranzaJudicialService } from '../../cobranza-judicial/cobranza-judici
 import { VentanaCambioDistritoComponent } from '../ventana-cambio-distrito/ventana-cambio-distrito.component';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { finalize, takeUntil } from 'rxjs/operators';
+import { CobranzaJudicialComponent } from '../../cobranza-judicial/cobranza-judicial.component';
 
 @Component({
   selector: 'app-cobranza-judicial-instancias',
@@ -62,6 +63,20 @@ export class CobranzaJudicialInstanciasComponent implements OnInit, OnChanges {
     if ( cambio.currentValue && this.ListadoProcesos) {
       this.CargarData() ;
     }
+  }
+
+  VerProceso(id_proceso){
+    this.Dialogo.open(CobranzaJudicialComponent, {
+      data : id_proceso ,
+      width : '95vw' ,
+      maxHeight : '80vh' ,
+    })
+    .afterClosed().subscribe(resultado => {
+      if ( resultado === true ) {
+        this.router.navigate(['ver', id_proceso], { relativeTo: this.route } ) ;
+      }
+    })
+    
   }
 
   AgregarDocumentos(proceso){
@@ -166,6 +181,7 @@ export class ProcesosDataSource implements DataSource<any> {
       })
     )
     .subscribe(res=>{
+      console.log(res) ;
       this.ListadoExpedientes.next(res['data'].procesos) ;
       this.TotalExpedientes.next(res['data'].procesos.length) ;
     })

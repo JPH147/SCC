@@ -2269,6 +2269,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
         monto_total : this.CreditosForm.get('total').value - +this.CreditosForm.get('interes_diario_monto').value  ,
         numero_cuotas : this.CreditosForm.get('cuotas').value ,
         tipo_pago : this.id_tipo_pago ,
+        fecha_inicio : this.CreditosForm.get('fecha_pago').value ,
         forzar : forzar
       } ,
       width: '900px' ,
