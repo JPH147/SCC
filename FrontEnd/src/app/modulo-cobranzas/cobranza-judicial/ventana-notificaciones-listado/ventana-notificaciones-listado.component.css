@@ -1,0 +1,11 @@
+mat-table {
+  width: 95% ;
+  position: relative ;
+  margin-left: auto ;
+  margin-right: auto ;
+  margin-bottom: 10px !important ;
+}
+
+.mat-column-numero {
+  max-width: 5%;
+}

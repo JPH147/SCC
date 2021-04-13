@@ -1,0 +1,155 @@
+<mat-card class="card">
+  <mat-toolbar color="primary">
+    <mat-toolbar-row>
+      {{ data.tipo === 'crear' ? "Nueva notificacion" : "Actualizar notificacion"}}
+    </mat-toolbar-row>
+  </mat-toolbar>
+
+  <div class = "spinner-container-emergente" *ngIf = " Cargando | async">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <mat-card-content>
+    <form [formGroup]="NotificacionForm">
+      <mat-grid-list cols=1 rowHeight="70px">
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput formControlName="codigo" placeholder="Notificacion">
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput formControlName="destinatario" placeholder="Destinatario">
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput formControlName="anexos" placeholder="Anexos">
+          </mat-form-field>
+        </mat-grid-tile>
+      </mat-grid-list>
+      
+      <div class="seccion">
+        <mat-card-subtitle class="titulo-seccion">
+          DIAS EN JUZGADO
+        </mat-card-subtitle>
+        <mat-grid-list cols=1 rowHeight="70px">
+          <mat-grid-tile>
+            <mat-form-field class="columnas-1">
+              <input matInput [matDatepicker]="InputJuzgadoFechaResolucion" formControlName="juzgado_fecha_resolucion" placeholder="Fecha de resolucion">
+              <mat-datepicker-toggle matSuffix [for]="InputJuzgadoFechaResolucion"></mat-datepicker-toggle>
+              <mat-datepicker #InputJuzgadoFechaResolucion></mat-datepicker>
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field class="columnas-1">
+              <input matInput [matDatepicker]="InputJuzgadoFechaNotificacion" formControlName="juzgado_fecha_notificacion" placeholder="Fecha de notificacion impresa">
+              <mat-datepicker-toggle matSuffix [for]="InputJuzgadoFechaNotificacion"></mat-datepicker-toggle>
+              <mat-datepicker #InputJuzgadoFechaNotificacion></mat-datepicker>
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field class="columnas-1">
+              <input matInput [matDatepicker]="InputJuzgadoFechaEnvio" formControlName="juzgado_fecha_envio" placeholder="Fecha de envio a la casilla electronica">
+              <mat-datepicker-toggle matSuffix [for]="InputJuzgadoFechaEnvio"></mat-datepicker-toggle>
+              <mat-datepicker #InputJuzgadoFechaEnvio></mat-datepicker>
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field class="columnas-1">
+              <input matInput [matDatepicker]="InputJuzgadoFechaRecepcion" formControlName="juzgado_fecha_recepcion" placeholder="Fecha de recepcion en la central">
+              <mat-datepicker-toggle matSuffix [for]="InputJuzgadoFechaRecepcion"></mat-datepicker-toggle>
+              <mat-datepicker #InputJuzgadoFechaRecepcion></mat-datepicker>
+            </mat-form-field>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </div>
+
+      <div class="seccion">
+        <mat-card-subtitle class="titulo-seccion">
+          DIAS EN CENTRAL DE NOTIFICACION
+        </mat-card-subtitle>
+        <mat-grid-list cols=1 rowHeight="70px">
+          <mat-grid-tile>
+            <mat-form-field class="columnas-1">
+              <input matInput [matDatepicker]="InputCargoFechaNotificacion" formControlName="central_fecha_notificacion" placeholder="Fecha de notificacion al destinatario">
+              <mat-datepicker-toggle matSuffix [for]="InputCargoFechaNotificacion"></mat-datepicker-toggle>
+              <mat-datepicker #InputCargoFechaNotificacion></mat-datepicker>
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field class="columnas-1">
+              <input matInput [matDatepicker]="InputCargoFechaCargo" formControlName="central_fecha_cargo" placeholder="Fecha de devolucion al juzgado">
+              <mat-datepicker-toggle matSuffix [for]="InputCargoFechaCargo"></mat-datepicker-toggle>
+              <mat-datepicker #InputCargoFechaCargo></mat-datepicker>
+            </mat-form-field>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </div>
+<!--       
+      <mat-card-title class="texto-accent titulo">
+        Otros detalles
+      </mat-card-title> -->
+      <mat-grid-list cols=1 rowHeight="70px">
+        <mat-grid-tile>
+          <mat-form-field class="columnas-1">
+            <input matInput formControlName="comentarios" placeholder="Forma de entrega">
+          </mat-form-field>
+        </mat-grid-tile>
+        <!-- <mat-grid-tile colspan=2>
+          <mat-form-field class="columnas-2">
+            <input matInput formControlName="observacion" placeholder="Observacion">
+          </mat-form-field>
+        </mat-grid-tile> -->
+      </mat-grid-list>
+    </form>
+    <mat-grid-list cols=1 rowHeight="60px">
+      <mat-grid-tile colspan=1 *ngIf="data.tipo == 'crear'">
+        <ng-container *ngIf="!archivo">
+          <input hidden #uploader type="file" (change)="SubirArchivo($event.target.files)">
+          <button mat-raised-button type="button" (click)="uploader.click()"> Seleccionar archivo </button>
+        </ng-container>
+        <ng-container *ngIf="archivo">
+          <span> {{ archivo_nombre }} </span>
+          &nbsp;
+          <button type="button" mat-icon-button color="primary" (click)="RemoverArchivo()"> <mat-icon> remove_circle_outline </mat-icon> </button>
+        </ng-container>
+      </mat-grid-tile>
+  
+      <mat-grid-tile colspan=1 *ngIf="data.tipo == 'editar'">
+        <button mat-icon-button color="primary" type="button" (click)="editar_archivo = !editar_archivo"
+          [disabled]="!archivo_nombre_antiguo" *ngIf="!editar_archivo">
+          <mat-icon class="icono-documentos"> edit </mat-icon>
+        </button>
+        <button mat-icon-button color="primary" type="button" (click)="editar_archivo = !editar_archivo"
+          [disabled]="!archivo_nombre_antiguo" *ngIf="editar_archivo">
+          <mat-icon class="icono-documentos"> close </mat-icon>
+        </button>
+  
+        <button mat-icon-button color="primary" type="button" [disabled]="!archivo_nombre_antiguo_enlace"
+          *ngIf="!editar_archivo && archivo_nombre_antiguo">
+          <mat-icon class="icono-documentos" (click)="AbrirDocumento(archivo_nombre_antiguo_enlace)"> visibility </mat-icon>
+        </button>
+        
+        <ng-container *ngIf="!archivo_nombre && editar_archivo">
+          <input hidden #uploader type="file" (change)="SubirArchivo($event.target.files)">
+          <button mat-raised-button type="button" (click)="uploader.click()"> Seleccionar archivo </button>
+        </ng-container>
+        <ng-container *ngIf="archivo_nombre">
+          <span> {{ archivo_nombre }} </span>
+          &nbsp;
+          <button type="button" mat-icon-button color="primary" (click)="RemoverArchivo()"> <mat-icon> remove_circle_outline </mat-icon> </button>
+        </ng-container>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <mat-grid-list cols=1 rowHeight="45px">
+      <mat-grid-tile>
+        <button mat-raised-button color="primary" [disabled]="NotificacionForm.invalid || (Cargando | async)"
+          (click)="Guardar()"> Guardar </button>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-card-actions>
+</mat-card>

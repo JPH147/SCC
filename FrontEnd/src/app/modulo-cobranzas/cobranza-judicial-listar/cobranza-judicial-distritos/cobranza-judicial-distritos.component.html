@@ -3,12 +3,7 @@
     <mat-toolbar-row>
       {{ distrito.distrito }}
       <span class="espacio"></span>
-      <ng-container *ngIf="(Cargando | async)">
-        <mat-spinner [diameter]="30"></mat-spinner>
-      </ng-container>
-      <ng-container *ngIf="!(Cargando | async)">
-        {{ total_expedientes }}
-      </ng-container>
+      {{ total_expedientes }}
     </mat-toolbar-row>
   </mat-toolbar>
 </mat-card-title>
@@ -18,8 +13,8 @@
     <app-cobranza-judicial-instancias
       *ngFor="let instancia of Instancias; let i = index"
       [instancia]="instancia"
-      [filtros]="filtros"
-      (total_expedientes)="AsignarElemento(i, $event)">
+      >
+    <!-- [ProcesosCompletos]="Procesos" -->
     </app-cobranza-judicial-instancias>
   <!-- </mat-card> -->
 </ng-container>

@@ -14,6 +14,8 @@ import { VentanaCambioDistritoComponent } from '../ventana-cambio-distrito/venta
 import { ChangeDetectionStrategy } from '@angular/core';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { CobranzaJudicialComponent } from '../../cobranza-judicial/cobranza-judicial.component';
+import { DbService } from 'src/app/core/servicios/db.service';
+import { VentanaDevolverAnexosComponent } from '../../cobranza-judicial/ventana-devolver-anexos/ventana-devolver-anexos.component';
 
 @Component({
   selector: 'app-cobranza-judicial-instancias',
@@ -21,16 +23,17 @@ import { CobranzaJudicialComponent } from '../../cobranza-judicial/cobranza-judi
   styleUrls: ['./cobranza-judicial-instancias.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush ,
 })
-export class CobranzaJudicialInstanciasComponent implements OnInit, OnChanges {
+export class CobranzaJudicialInstanciasComponent implements OnInit {
 
   @Input() instancia : any ;
-  @Input() filtros : any ;
-  @Output() total_expedientes = new EventEmitter<number>() ;
+  @Input() ProcesosCompletos : Array<any> ;
 
+  private Procesos : Array<any> ;
   public ListadoProcesos : ProcesosDataSource ;
   public Columnas: string[] = ['id_tipo_documento', 'fecha_inicio', 'cliente_nombre', 'expediente', 'vendedor', 'total_documentos','fecha_ultimo_documento','fecha_ultimo_documento_diferencia', 'opciones'];
 
   public permiso : Rol ;
+  public total_expedientes : number ;
 
   constructor(
     private _store : Store<EstadoSesion> ,
@@ -39,10 +42,11 @@ export class CobranzaJudicialInstanciasComponent implements OnInit, OnChanges {
     private route : ActivatedRoute ,
     private _judicial: CobranzaJudicialService,
     private Notificaciones : Notificaciones ,
+    private _db : DbService ,
   ) { }
 
   ngOnInit(): void {
-    this.ListadoProcesos = new ProcesosDataSource(this._judicial) ;
+    this.ListadoProcesos = new ProcesosDataSource(this._db) ;
 
     this._store.select('permisos').subscribe(permiso =>{
       if( permiso ) {
@@ -50,19 +54,7 @@ export class CobranzaJudicialInstanciasComponent implements OnInit, OnChanges {
       }
     })
 
-    this.ListadoProcesos.TotalExpedientes$.subscribe(resultado => {
-      this.total_expedientes.emit(resultado) ;
-    })
-
     this.CargarData() ;
-  }
-
-  ngOnChanges(changes : SimpleChanges) {
-    let cambio = changes['filtros'] ;
-
-    if ( cambio.currentValue && this.ListadoProcesos) {
-      this.CargarData() ;
-    }
   }
 
   VerProceso(id_proceso){
@@ -115,16 +107,21 @@ export class CobranzaJudicialInstanciasComponent implements OnInit, OnChanges {
   }
   
   CargarData() {
-    this.ListadoProcesos.CargarInformacion(
-      this.instancia.id_instancia ,
-      this.filtros.expediente ,
-      this.filtros.dni ,
-      this.filtros.cliente ,
-      this.filtros.fecha_inicio ,
-      this.filtros.fecha_fin ,
-      this.filtros.estado ,
-      "fecha_inicio desc"
-    );
+    this.ListadoProcesos.CargarInformacion(this.instancia.id_instancia) ;
+    // this._db.ListarProcesosxInstancia(this.instancia.id_instancia)
+    // .then()
+    // this.Procesos = this.ProcesosCompletos.filter(elemento => elemento.id_instancia = this.instancia.id_instancia) ;
+    // this.total_expedientes = this.Procesos.length ;
+
+    // this.ListadoProcesos.AsignarInformacion(this.Procesos) ;
+  }
+
+  DevolverAnexos(id_proceso) {
+    this.Dialogo.open(VentanaDevolverAnexosComponent, {
+      data : { tipo : "crear", id_proceso : id_proceso } ,
+      width : '1200px' ,
+      maxHeight : '80vh'
+    })
   }
 }
 
@@ -139,7 +136,7 @@ export class ProcesosDataSource implements DataSource<any> {
   private terminado$ = new Subject() ;
 
   constructor(
-    private _judicial : CobranzaJudicialService
+    private _db : DbService
   ) { }
 
   connect(collectionViewer: CollectionViewer): Observable<any> {
@@ -152,40 +149,37 @@ export class ProcesosDataSource implements DataSource<any> {
   }
 
   CargarInformacion( 
-    id_instancia : number ,
-    expediente : string ,
-    dni : string ,
-    nombre : string ,
-    fecha_inicio : Date ,
-    fecha_fin : Date ,
-    estado : number ,
-    orden : string ,
+    id_instancia : number 
    ){
     this.Cargando.next(true) ;
     this.terminado$.next() ;
 
-    this._judicial.ListarV2(
+    this._db.ListarProcesosxInstancia(
       id_instancia ,
-      expediente ,
-      dni ,
-      nombre ,
-      fecha_inicio ,
-      fecha_fin ,
-      estado ,
-      orden
     )
-    .pipe(
-      takeUntil(this.terminado$) ,
-      finalize(()=> {
-        this.Cargando.next(false) ;
-      })
-    )
-    .subscribe(res=>{
-      console.log(res) ;
-      this.ListadoExpedientes.next(res['data'].procesos) ;
-      this.TotalExpedientes.next(res['data'].procesos.length) ;
+    .finally(() => {
+      this.Cargando.next(false) ;
+    })
+    .then(res=>{
+      this.ListadoExpedientes.next(res) ;
+      this.CalcularTotales(id_instancia) ;
     })
   }
-
   
+  CalcularTotales( 
+    id_instancia : number 
+   ){
+    this.Cargando.next(true) ;
+    this.terminado$.next() ;
+
+    this._db.ContarProcesosxInstancia(
+      id_instancia ,
+    )
+    .finally(() => {
+      this.Cargando.next(false) ;
+    })
+    .then(res=>{
+      this.TotalExpedientes.next(res) ;
+    })
+  }
 }

@@ -20,6 +20,7 @@ import { Store } from '@ngrx/store';
 import { EstadoSesion } from '../../compartido/reducers/permisos.reducer';
 import { Rol } from 'src/app/compartido/modelos/login.modelos';
 import { UsuariosService } from 'src/app/modulo-maestro/usuarios/usuarios.service';
+import { VentanaNotificacionesListadoComponent } from './ventana-notificaciones-listado/ventana-notificaciones-listado.component';
 
 @Component({
   selector: 'app-cobranza-judicial',
@@ -54,6 +55,11 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
   public fecha_notificacion_demandado : Date ;
   public fecha_notificacion_cooperativa : Date ;
   public fecha_notificacion_retorno : Date ;
+
+  public devolucion_anexos_fecha : Date ;
+  public devolucion_anexos_comentarios : string ;
+  public devolucion_anexos_archivo : string ;
+  public estado_proceso : number ;
 
   constructor(
     @Optional() @Inject(MAT_DIALOG_DATA) public data : number ,
@@ -295,6 +301,11 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
                         }
       this.CargarDetalleAnterior(id_proceso);
       this.DocumentosTransaccion = res[2];
+
+      this.devolucion_anexos_fecha = res[0].devolucion_anexos_fecha ;
+      this.devolucion_anexos_comentarios = res[0].devolucion_anexos_comentarios ;
+      this.devolucion_anexos_archivo = URLIMAGENES.carpeta + 'proceso judicial/' + res[0].devolucion_anexos_archivo ;
+      this.estado_proceso = res[0].estado ;
     })
   }
 
@@ -557,6 +568,14 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
     if(archivo){
       window.open(archivo, "_blank");
     }
+  }
+
+  AbrirNotificaciones(id_documento_judicial) {
+    this.Dialogo.open(VentanaNotificacionesListadoComponent,{
+      data : id_documento_judicial ,
+      width : '1200px' ,
+      maxHeight : '80vh'
+    })
   }
 
   AbrirDocumentoTransaccion(archivo, indicador){

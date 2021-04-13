@@ -9,11 +9,13 @@
   </ng-container>
 
   <ng-container *ngIf="!this.data">
-    <ng-container *ngIf="permiso?.procesos_judiciales?.listado_procesos?.editar">
-      <button mat-mini-fab type="button" color="accent" (click)="CambiarTipoVista(1)" class="derecha" [disabled]="id_proceso_editar" matTooltip="Editar documento"><mat-icon>edit</mat-icon></button>
-    </ng-container>
-    <ng-container *ngIf="permiso?.procesos_judiciales?.listado_procesos?.agregar_documentos">
-      <button mat-mini-fab type="button" color="accent" (click)="CambiarTipoVista(2)" class="derecha" [disabled]="id_proceso_agregar" matTooltip="Agregar documento"><mat-icon>note_add</mat-icon></button>
+    <ng-container *ngIf="estado_proceso !==6 ">
+      <ng-container *ngIf="permiso?.procesos_judiciales?.listado_procesos?.editar">
+        <button mat-mini-fab type="button" color="accent" (click)="CambiarTipoVista(1)" class="derecha" [disabled]="id_proceso_editar" matTooltip="Editar documento"><mat-icon>edit</mat-icon></button>
+      </ng-container>
+      <ng-container *ngIf="permiso?.procesos_judiciales?.listado_procesos?.agregar_documentos">
+        <button mat-mini-fab type="button" color="accent" (click)="CambiarTipoVista(2)" class="derecha" [disabled]="id_proceso_agregar" matTooltip="Agregar documento"><mat-icon>note_add</mat-icon></button>
+      </ng-container>
     </ng-container>
     <ng-container>
       <button mat-mini-fab type="button" color="accent" (click)="CambiarTipoVista(3)" class="derecha" [disabled]="id_proceso_ver" matTooltip="Ver documento"><mat-icon> visibility </mat-icon></button>
@@ -34,6 +36,19 @@
       <mat-card-title class="tituloProd"> Ver documento judicial </mat-card-title>
     </ng-container>
   </ng-container>
+
+  <mat-grid-list cols=4 rowHeight="40px" *ngIf="devolucion_anexos_fecha">
+    <mat-grid-tile>
+      Los anexos se devolvieron el {{devolucion_anexos_fecha | date : 'dd-MM-yyyy'}}
+    </mat-grid-tile>
+    <mat-grid-tile>
+      {{devolucion_anexos_comentarios}}
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <button mat-icon-button color="primary" type="button" [disabled]="!devolucion_anexos_archivo"
+        (click)="AbrirDocumento(devolucion_anexos_archivo)"> <mat-icon> visibility </mat-icon> </button>
+    </mat-grid-tile>
+  </mat-grid-list>
 
   <form [formGroup]="JudicialForm">
     <mat-card-content>
@@ -479,8 +494,8 @@
                 <button type="button" mat-raised-button (click)="AgregarDocumento(6)"> Nota </button>
                 &nbsp;
                 <button type="button" mat-raised-button (click)="AgregarDocumento(7)"> Queja </button>
-                &nbsp;
-                <button type="button" mat-raised-button (click)="AgregarDocumento(8)"> Notificación </button>
+                <!-- &nbsp;
+                <button type="button" mat-raised-button (click)="AgregarDocumento(8)"> Notificación </button> -->
             </mat-grid-tile>
           </mat-grid-list>
   
@@ -552,6 +567,9 @@
                   <ng-container *ngIf="!id_proceso_editar">
                     <button mat-icon-button color="primary" [disabled]="!documento.archivo" (click)="AbrirDocumento(documento.archivo)">
                       <mat-icon> visibility </mat-icon>
+                    </button>
+                    <button mat-icon-button color="primary" (click)="AbrirNotificaciones(documento.id)">
+                      <mat-icon> notifications </mat-icon>
                     </button>
                   </ng-container>
                   <ng-container *ngIf="id_proceso_editar">

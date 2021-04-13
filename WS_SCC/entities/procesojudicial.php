@@ -43,6 +43,18 @@ Class Proceso{
   public $fecha_notificacion_cooperativa ;
   public $fecha_notificacion_retorno ;
 
+  public $id_proceso_notificacion ;
+  public $codigo ;
+  public $destinatario ;
+  public $anexos ;
+  public $juzgado_fecha_resolucion ;
+  public $juzgado_fecha_notificacion ;
+  public $juzgado_fecha_envio ;
+  public $juzgado_fecha_recepcion ;
+  public $central_fecha_notificacion ;
+  public $central_fecha_cargo ;
+  public $observacion ;
+
   public function __construct($db){
     $this->conn = $db;
   }
@@ -177,6 +189,9 @@ Class Proceso{
       "total" => $row['total'] ,
       "monto_cuota" => $row['monto_cuota'] ,
       "estado" => $row['estado'] ,
+      "devolucion_anexos_fecha" => $row['devolucion_anexos_fecha'] ,
+      "devolucion_anexos_comentarios" => $row['devolucion_anexos_comentarios'] ,
+      "devolucion_anexos_archivo" => $row['devolucion_anexos_archivo'] ,
     );
 
     return $resultado;
@@ -764,13 +779,137 @@ Class Proceso{
     return $procesos_list;
   }
 
+  function readV4(){
+    $query = "CALL sp_listarprocesojudicialV4(?,?,?,?,?,?,?,?,?)";
+
+    $result = $this->conn->prepare($query);
+
+    $result->bindParam(1, $this->distrito);
+    $result->bindParam(2, $this->instancia);
+    $result->bindParam(3, $this->expediente);
+    $result->bindParam(4, $this->dni);
+    $result->bindParam(5, $this->nombre);
+    $result->bindParam(6, $this->fecha_inicio);
+    $result->bindParam(7, $this->fecha_fin);
+    $result->bindParam(8, $this->estado);
+    $result->bindParam(9, $this->orden);
+
+    $result->execute();
+    
+    $procesos_list=array();
+
+    $contador = $this->total_pagina*($this->numero_pagina-1);
+    
+    while($row = $result->fetch(PDO::FETCH_ASSOC))
+    {
+      extract($row);
+      $contador=$contador+1;
+      $items = array (
+        "numero"=>$contador,
+        "id"=>$id,
+        "ultimo_documento"=>$ultimo_documento,
+        "id_tipo_documento"=>$id_tipo_documento,
+        "expediente"=>$expediente,
+        "id_distrito"=>$id_distrito,
+        "distrito"=>$distrito,
+        "id_instancia"=>$id_instancia,
+        "instancia"=>$instancia,
+        "vendedor"=>$vendedor,
+        "fecha_inicio"=>$fecha_inicio,
+        "fecha_ultimo_documento"=>$fecha_ultimo_documento,
+        "fecha_ultimo_documento_diferencia"=>$fecha_ultimo_documento_diferencia,
+        "sumilla"=>$sumilla,
+        "id_cliente"=>$id_cliente,
+        "cliente_dni"=>$cliente_dni,
+        "cliente_nombre"=>$cliente_nombre,
+        "total"=>$total,
+        "estado"=>$estado,
+        "total_documentos"=>$total_documentos,
+      );
+      array_push($procesos_list,$items);
+    }
+    return $procesos_list;
+  }
+
+  function read_procesos_instanciasV4(){
+    $query = "CALL sp_listarprocesojudicialinstanciasV4(?,?,?,?,?,?,?,?)";
+
+    $result = $this->conn->prepare($query);
+
+    $result->bindParam(1, $this->distrito);
+    $result->bindParam(2, $this->instancia);
+    $result->bindParam(3, $this->expediente);
+    $result->bindParam(4, $this->dni);
+    $result->bindParam(5, $this->nombre);
+    $result->bindParam(6, $this->fecha_inicio);
+    $result->bindParam(7, $this->fecha_fin);
+    $result->bindParam(8, $this->estado);
+
+    $result->execute();
+    
+    $procesos_list=array();
+
+    $contador = $this->total_pagina*($this->numero_pagina-1);
+    
+    while($row = $result->fetch(PDO::FETCH_ASSOC))
+    {
+      extract($row);
+      $contador=$contador+1;
+      $items = array (
+        "numero"=>$contador,
+        "id_distrito"=>$id_distrito,
+        "distrito"=>$distrito,
+        "id_instancia"=>$id_instancia,
+        "instancia"=>$instancia,
+      );
+      array_push($procesos_list,$items);
+    }
+    return $procesos_list;
+  }
+
+  function read_procesos_distritosV4(){
+    $query = "CALL sp_listarprocesojudicialdistritosV4(?,?,?,?,?,?,?,?)";
+
+    $result = $this->conn->prepare($query);
+
+    $result->bindParam(1, $this->distrito);
+    $result->bindParam(2, $this->instancia);
+    $result->bindParam(3, $this->expediente);
+    $result->bindParam(4, $this->dni);
+    $result->bindParam(5, $this->nombre);
+    $result->bindParam(6, $this->fecha_inicio);
+    $result->bindParam(7, $this->fecha_fin);
+    $result->bindParam(8, $this->estado);
+
+    $result->execute();
+    
+    $procesos_list=array();
+
+    $contador = $this->total_pagina*($this->numero_pagina-1);
+    
+    $row = $result->fetchAll(PDO::FETCH_ASSOC) ;
+    $result->closeCursor() ;
+    // print_r($row) ;
+    foreach($row as $item)
+    {
+      $contador=$contador+1;
+      $items = array (
+        "numero"=>$contador,
+        "id_distrito"=>$item['id_distrito'],
+        "distrito"=>$item['distrito'],
+      );
+      array_push($procesos_list,$items);
+    }
+    return $procesos_list;
+  }
+
   function read_procesos_instancias(){
     $query = "CALL sp_listarprocesojudicialinstancias(?,?,?,?,?,?,?,?)";
 
     $result = $this->conn->prepare($query);
 
     $result->bindParam(1, $this->distrito_judicial);
-    $result->bindParam(2, $this->juzgado);
+    $result->bindParam(2, $this->instancia);
     $result->bindParam(3, $this->expediente);
     $result->bindParam(4, $this->dni);
     $result->bindParam(5, $this->nombre);
@@ -785,16 +924,18 @@ Class Proceso{
 
     $contador = $this->total_pagina*($this->numero_pagina-1);
     
-    while($row = $result->fetch(PDO::FETCH_ASSOC))
+    $row = $result->fetchAll(PDO::FETCH_ASSOC) ;
+    $result->closeCursor() ;
+    
+    foreach($row as $item)
     {
-      extract($row);
       $contador=$contador+1;
       $items = array (
         "numero"=>$contador,
-        "id_instancia"=>$id_instancia,
-        "instancia"=>$instancia,
-        "id_distrito"=>$id_distrito,
-        "distrito"=>$distrito,
+        "id_instancia"=>$item['id_instancia'],
+        "instancia"=>$item['instancia'],
+        "id_distrito"=>$item['id_distrito'],
+        "distrito"=>$item['distrito'],
       );
       array_push($procesos_list["instancias"],$items);
     }
@@ -1057,6 +1198,203 @@ Class Proceso{
     $this->total_resultado=$row['total'];
 
     return $this->total_resultado;
+  }
+
+  function read_procesosjudicialesnotificacionxproceso(){
+    $query = "CALL sp_listarprocesojudicialnotificacionxproceso(?)";
+
+    $result = $this->conn->prepare($query);
+
+    $result->bindParam(1, $this->id_proceso);
+
+    $result->execute();
+    
+    $procesos_list=array();
+    $procesos_list["notificaciones"]=array();
+
+    $contador = $this->total_pagina*($this->numero_pagina-1);
+    
+    while($row = $result->fetch(PDO::FETCH_ASSOC))
+    {
+      extract($row);
+      $contador=$contador+1;
+      $items = array (
+        "numero"=>$contador,
+        "id_proceso_judicial_notificacion" => $id_proceso_judicial_notificacion ,
+        "codigo" => $codigo ,
+        "destinatario" => $destinatario ,
+        "anexos" => $anexos ,
+        "juzgado_fecha_resolucion" => $juzgado_fecha_resolucion ,
+        "juzgado_fecha_notificacion" => $juzgado_fecha_notificacion ,
+        "juzgado_fecha_envio" => $juzgado_fecha_envio ,
+        "juzgado_fecha_recepcion" => $juzgado_fecha_recepcion ,
+        "central_fecha_notificacion" => $central_fecha_notificacion ,
+        "central_fecha_cargo" => $central_fecha_cargo ,
+        "comentarios" => $comentarios ,
+        "observacion" => $observacion ,
+        "archivo" => $archivo
+      );
+      array_push($procesos_list["notificaciones"],$items);
+    }
+
+    return $procesos_list;
+  }
+
+  function create_proceso_judicial_notificacion() {
+    $query = "call sp_crearprocesojudicialnotificacion(
+      :prproceso ,
+      :prcodigo ,
+      :prdestinatario ,
+      :pranexos ,
+      :prjuzgado_fecha_resolucion ,
+      :prjuzgado_fecha_notificacion ,
+      :prjuzgado_fecha_envio ,
+      :prjuzgado_fecha_recepcion ,
+      :prcentral_fecha_notificacion ,
+      :prcentral_fecha_cargo ,
+      :prcomentarios ,
+      :probservacion ,
+      :prarchivo
+    )";
+
+    $result = $this->conn->prepare($query);
+
+    $result->bindParam(":prproceso", $this->id_proceso ) ;
+    $result->bindParam(":prcodigo", $this->codigo ) ;
+    $result->bindParam(":prdestinatario", $this->destinatario ) ;
+    $result->bindParam(":pranexos", $this->anexos ) ;
+    $result->bindParam(":prjuzgado_fecha_resolucion", $this->juzgado_fecha_resolucion ) ;
+    $result->bindParam(":prjuzgado_fecha_notificacion", $this->juzgado_fecha_notificacion ) ;
+    $result->bindParam(":prjuzgado_fecha_envio", $this->juzgado_fecha_envio ) ;
+    $result->bindParam(":prjuzgado_fecha_recepcion", $this->juzgado_fecha_recepcion ) ;
+    $result->bindParam(":prcentral_fecha_notificacion", $this->central_fecha_notificacion ) ;
+    $result->bindParam(":prcentral_fecha_cargo", $this->central_fecha_cargo ) ;
+    $result->bindParam(":prcomentarios", $this->comentarios ) ;
+    $result->bindParam(":probservacion", $this->observacion ) ;
+    $result->bindParam(":prarchivo", $this->archivo ) ;
+
+    $this->id_proceso = htmlspecialchars(strip_tags($this->id_proceso)) ;
+    $this->codigo = htmlspecialchars(strip_tags($this->codigo)) ;
+    $this->destinatario = htmlspecialchars(strip_tags($this->destinatario)) ;
+    $this->anexos = htmlspecialchars(strip_tags($this->anexos)) ;
+
+    $this->juzgado_fecha_resolucion == "0" ? $this->juzgado_fecha_resolucion = null : null ;
+    $this->juzgado_fecha_notificacion == "0" ? $this->juzgado_fecha_notificacion = null : null ;
+    $this->juzgado_fecha_envio == "0" ? $this->juzgado_fecha_envio = null : null ;
+    $this->juzgado_fecha_recepcion == "0" ? $this->juzgado_fecha_recepcion = null : null ;
+    $this->central_fecha_notificacion == "0" ? $this->central_fecha_notificacion = null : null ;
+    $this->central_fecha_cargo == "0" ? $this->central_fecha_cargo = null : null ;
+
+    $this->comentarios = htmlspecialchars(strip_tags($this->comentarios)) ;
+    $this->observacion = htmlspecialchars(strip_tags($this->observacion)) ;
+    $this->archivo = htmlspecialchars(strip_tags($this->archivo)) ;
+
+    if($result->execute())
+    {
+      return true;
+    }
+    return false;
+  }
+
+  function update_proceso_judicial_notificacion() {
+    $query = "call sp_actualizarprocesojudicialnotificacion(
+      :prprocesojudicialnotificacion ,
+      :prcodigo ,
+      :prdestinatario ,
+      :pranexos ,
+      :prjuzgado_fecha_resolucion ,
+      :prjuzgado_fecha_notificacion ,
+      :prjuzgado_fecha_envio ,
+      :prjuzgado_fecha_recepcion ,
+      :prcentral_fecha_notificacion ,
+      :prcentral_fecha_cargo ,
+      :prcomentarios ,
+      :probservacion ,
+      :prarchivo
+    )";
+
+    $result = $this->conn->prepare($query);
+
+    $result->bindParam(":prprocesojudicialnotificacion", $this->id_proceso_notificacion ) ;
+    $result->bindParam(":prcodigo", $this->codigo ) ;
+    $result->bindParam(":prdestinatario", $this->destinatario ) ;
+    $result->bindParam(":pranexos", $this->anexos ) ;
+    $result->bindParam(":prjuzgado_fecha_resolucion", $this->juzgado_fecha_resolucion ) ;
+    $result->bindParam(":prjuzgado_fecha_notificacion", $this->juzgado_fecha_notificacion ) ;
+    $result->bindParam(":prjuzgado_fecha_envio", $this->juzgado_fecha_envio ) ;
+    $result->bindParam(":prjuzgado_fecha_recepcion", $this->juzgado_fecha_recepcion ) ;
+    $result->bindParam(":prcentral_fecha_notificacion", $this->central_fecha_notificacion ) ;
+    $result->bindParam(":prcentral_fecha_cargo", $this->central_fecha_cargo ) ;
+    $result->bindParam(":prcomentarios", $this->comentarios ) ;
+    $result->bindParam(":probservacion", $this->observacion ) ;
+    $result->bindParam(":prarchivo", $this->archivo ) ;
+
+    $this->id_proceso_notificacion = htmlspecialchars(strip_tags($this->id_proceso_notificacion)) ;
+    $this->codigo = htmlspecialchars(strip_tags($this->codigo)) ;
+    $this->destinatario = htmlspecialchars(strip_tags($this->destinatario)) ;
+    $this->anexos = htmlspecialchars(strip_tags($this->anexos)) ;
+
+    $this->juzgado_fecha_resolucion == "0" ? $this->juzgado_fecha_resolucion = null : null ;
+    $this->juzgado_fecha_notificacion == "0" ? $this->juzgado_fecha_notificacion = null : null ;
+    $this->juzgado_fecha_envio == "0" ? $this->juzgado_fecha_envio = null : null ;
+    $this->juzgado_fecha_recepcion == "0" ? $this->juzgado_fecha_recepcion = null : null ;
+    $this->central_fecha_notificacion == "0" ? $this->central_fecha_notificacion = null : null ;
+    $this->central_fecha_cargo == "0" ? $this->central_fecha_cargo = null : null ;
+    
+    $this->comentarios = htmlspecialchars(strip_tags($this->comentarios)) ;
+    $this->observacion = htmlspecialchars(strip_tags($this->observacion)) ;
+    $this->archivo = htmlspecialchars(strip_tags($this->archivo)) ;
+
+    if($result->execute())
+    {
+      return true;
+    }
+    return false;
+  }
+
+  function delete_proceso_judicial_notificacion() {
+    $query = "call sp_eliminarprocesojudicialnotificacion(
+      :prprocesojudicialnotificacion
+    )";
+
+    $result = $this->conn->prepare($query);
+
+    $result->bindParam(":prprocesojudicialnotificacion", $this->id_proceso_notificacion ) ;
+    
+    $this->id_proceso_notificacion = htmlspecialchars(strip_tags($this->id_proceso_notificacion)) ;
+    
+    if($result->execute())
+    {
+      return true;
+    }
+    return false;
+  }
+
+  function update_proceso_judicial_devolucion_anexos() {
+    $query = "call sp_actualizarprocesojudicialdevolucionanexos(
+      :prproceso ,
+      :prfecha ,
+      :prcomentarios ,
+      :prcarchivo
+    )";
+
+    $result = $this->conn->prepare($query);
+
+    $result->bindParam(":prproceso", $this->id_proceso ) ;
+    $result->bindParam(":prfecha", $this->fecha ) ;
+    $result->bindParam(":prcomentarios", $this->comentarios ) ;
+    $result->bindParam(":prcarchivo", $this->archivo ) ;
+
+    $this->id_proceso = htmlspecialchars(strip_tags($this->id_proceso)) ;
+    $this->fecha = htmlspecialchars(strip_tags($this->fecha)) ;
+    $this->comentarios = htmlspecialchars(strip_tags($this->comentarios)) ;
+    $this->archivo = htmlspecialchars(strip_tags($this->archivo)) ;
+
+    if($result->execute())
+    {
+      return true;
+    }
+    return false;
   }
 }
 ?>

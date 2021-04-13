@@ -1,0 +1,65 @@
+<mat-card class="card">
+  <mat-toolbar color="primary">
+    <mat-toolbar-row>
+      Listado de notificaciones
+    </mat-toolbar-row>
+  </mat-toolbar>
+
+  <div class = "spinner-container-emergente" *ngIf = " ListadoNotificaciones.Cargando$ | async">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <mat-card-content>
+    <mat-grid-list cols=1 rowHeight="45px">
+      <mat-grid-tile>
+        <ng-container *ngIf="permiso?.procesos_judiciales?.listado_procesos?.agregar_documentos">
+          <button type="button" mat-raised-button color="primary" [disabled]="ListadoNotificaciones.Cargando$ | async"
+            (click)="AgregarNotificacion()"> Agregar </button>
+        </ng-container>
+      </mat-grid-tile>
+    </mat-grid-list>
+
+    <mat-table [dataSource]="ListadoNotificaciones" class="mat-elevation-z8">
+      <ng-container matColumnDef="numero">
+        <mat-header-cell *matHeaderCellDef> N° </mat-header-cell>
+        <mat-cell *matCellDef="let proceso"> {{proceso.numero}} </mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="codigo">
+        <mat-header-cell *matHeaderCellDef> Notificacion </mat-header-cell>
+        <mat-cell *matCellDef="let proceso"> {{proceso.codigo}} </mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="destinatario">
+        <mat-header-cell *matHeaderCellDef> Destinatario </mat-header-cell>
+        <mat-cell *matCellDef="let proceso"> {{proceso.destinatario}}</mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="anexos">
+        <mat-header-cell *matHeaderCellDef> Anexos   </mat-header-cell>
+        <mat-cell *matCellDef="let proceso"> {{proceso.anexos}} </mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="juzgado_fecha_envio">
+        <mat-header-cell *matHeaderCellDef> Fecha de envio </mat-header-cell>
+        <mat-cell *matCellDef="let proceso"> {{proceso.juzgado_fecha_envio | date:'dd/MM/yyyy'}} </mat-cell>
+      </ng-container>
+    
+      <ng-container matColumnDef="opciones">
+        <mat-header-cell *matHeaderCellDef> Opciones </mat-header-cell>
+        <mat-cell *matCellDef="let proceso">
+          <button mat-icon-button color="primary" matTooltip="Ver detalle" (click)="Ver(proceso)"><mat-icon> visibility </mat-icon></button>
+          <ng-container *ngIf="permiso?.procesos_judiciales?.listado_procesos?.editar">
+            <button mat-icon-button color="primary" matTooltip="Editar" (click)="Editar(proceso)"><mat-icon> edit </mat-icon></button>
+          </ng-container>
+          <ng-container *ngIf="permiso?.procesos_judiciales?.listado_procesos?.eliminar">
+            <button mat-icon-button color="primary" matTooltip="Eliminar" (click)="EliminarNotificacion(proceso)" [disabled]="proceso.id_tipo_documento>=4"><mat-icon> delete </mat-icon></button>
+          </ng-container>
+        </mat-cell>
+      </ng-container>
+  
+      <mat-header-row *matHeaderRowDef="Columnas"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: Columnas;"></mat-row>
+    </mat-table>
+  </mat-card-content>
+</mat-card>

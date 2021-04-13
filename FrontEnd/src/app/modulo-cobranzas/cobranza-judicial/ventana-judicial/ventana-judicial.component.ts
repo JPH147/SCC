@@ -185,13 +185,11 @@ export class VentanaJudicialComponent implements OnInit {
   SubirArchivo(archivo: FileList) {
     this.archivo = archivo.item(0);
     this.archivo_nombre = this.archivo.name ;
-    // this.VentanaJudicialForm.get('archivo').setValue(true);
   }
 
   RemoverArchivo(){
     this.archivo = null ;
     this.archivo_nombre = "" ;
-    // this.VentanaJudicialForm.get('archivo').setValue(null);
   }
 
   TipoDocumentoSeleccionado( tipo : number ){

@@ -7,18 +7,17 @@ class Database {
     // private $username = "u437250555_alvis";
     // private $password = "47498650";
 
-    // private $server = "107.180.40.35";
-    // private $port = "3306";
-    // private $db_name = "GENUS_SCC";
-    // private $username = "genus_jph";
-    // private $password = "JP2953116*";
-
-
-    private $server = "localhost";
+    private $server = "107.180.40.35";
     private $port = "3306";
-    private $db_name = "genus_scc";
-    private $username = "jeanpierre";
+    private $db_name = "GENUS_SCC";
+    private $username = "genus_jph";
     private $password = "JP2953116*";
+
+    // private $server = "localhost";
+    // private $port = "3306";
+    // private $db_name = "genus_scc";
+    // private $username = "jeanpierre";
+    // private $password = "JP2953116*";
 
     public $conn;
 

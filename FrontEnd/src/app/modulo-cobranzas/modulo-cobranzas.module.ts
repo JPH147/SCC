@@ -33,6 +33,10 @@ import { VentanaCobranzaDirectaListarComponent } from './cobranza-directa-listar
 import { CobranzaJudicialInstanciasComponent } from './cobranza-judicial-listar/cobranza-judicial-instancias/cobranza-judicial-instancias.component';
 import { CobranzaJudicialDistritosComponent } from './cobranza-judicial-listar/cobranza-judicial-distritos/cobranza-judicial-distritos.component';
 import { VentanaLiquidacionesComponent } from './liquidaciones/ventana-liquidaciones/ventana-liquidaciones.component';
+import { VentanaNotificacionesComponent } from './cobranza-judicial/ventana-notificaciones/ventana-notificaciones.component';
+import { VentanaNotificacionesListadoComponent } from './cobranza-judicial/ventana-notificaciones-listado/ventana-notificaciones-listado.component';
+import { VentanaNotificacionesDetalleComponent } from './cobranza-judicial/ventana-notificaciones-detalle/ventana-notificaciones-detalle.component';
+import { VentanaDevolverAnexosComponent } from './cobranza-judicial/ventana-devolver-anexos/ventana-devolver-anexos.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +65,11 @@ import { VentanaLiquidacionesComponent } from './liquidaciones/ventana-liquidaci
     VentanaCobranzaDirectaListarComponent,
     CobranzaJudicialInstanciasComponent,
     CobranzaJudicialDistritosComponent,
-    VentanaLiquidacionesComponent ,
+    VentanaLiquidacionesComponent,
+    VentanaNotificacionesComponent,
+    VentanaNotificacionesListadoComponent,
+    VentanaNotificacionesDetalleComponent,
+    VentanaDevolverAnexosComponent ,
   ],
   imports: [
     ModuloCobranzasRoutingModule ,

@@ -49,13 +49,14 @@
             <mat-option [value]=-1> En trámite </mat-option>
             <mat-option [value]=1> Sin documentos </mat-option>
             <mat-option *ngFor="let tipo of TipoDocumentos" [value]="tipo.id"> {{tipo.nombre}} </mat-option>
+            <mat-option [value]=-4> Anexos devueltos </mat-option>
           </mat-select>
         </mat-form-field>
       </mat-grid-tile>
   
       <mat-grid-tile>
         <mat-form-field class="columnas-1">
-          <input matInput [matDatepicker]="inicio" placeholder="Fecha de inicio" formControlName="fecha_inicio">
+          <input matInput [matDatepicker]="inicio" placeholder="Fecha de inicio" formControlName="fecha_inicio" (dateChange)="CargarData()">
           <mat-datepicker-toggle matSuffix [for]="inicio"></mat-datepicker-toggle>
           <mat-datepicker #inicio disabled="false"></mat-datepicker>
         </mat-form-field>
@@ -63,7 +64,7 @@
   
       <mat-grid-tile>
         <mat-form-field class="columnas-1">
-          <input matInput [matDatepicker]="fin" placeholder="Fecha de fin" formControlName="fecha_fin">
+          <input matInput [matDatepicker]="fin" placeholder="Fecha de fin" formControlName="fecha_fin" (dateChange)="CargarData()">
           <mat-datepicker-toggle matSuffix [for]="fin"></mat-datepicker-toggle>
           <mat-datepicker #fin disabled="false"></mat-datepicker>
         </mat-form-field>
@@ -82,14 +83,14 @@
       <mat-spinner></mat-spinner>
     </div>
 
-    <!-- <mat-card > -->
+    
       <app-cobranza-judicial-distritos
         *ngFor="let distrito of InformacionDistritosArray"
         [distrito]="distrito"
-        [filtros]="ProcesosJudicialesForm.value"
         >
+        <!-- [InstanciasCompletas]="InformacionInstanciasArray"
+        [ProcesosCompletos]="InformacionProcesosArray" -->
       </app-cobranza-judicial-distritos>
-    <!-- </mat-card> -->
   </mat-card-content>
 
 </mat-card>

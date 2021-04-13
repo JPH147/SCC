@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSelect } from '@angular/material/select';
-import { Observable, BehaviorSubject, of, fromEvent, merge } from 'rxjs';
-import { catchError, finalize, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { Observable, BehaviorSubject, of, fromEvent, merge, forkJoin, Subject } from 'rxjs';
+import { catchError, finalize, tap, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { CobranzaJudicialService } from '../cobranza-judicial/cobranza-judicial.service';
 import { VentanaConfirmarComponent } from '../../compartido/componentes/ventana-confirmar/ventana-confirmar.component';
@@ -16,6 +16,7 @@ import { Rol } from 'src/app/compartido/modelos/login.modelos';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 import * as moment from 'moment' ;
+import { DbService } from 'src/app/core/servicios/db.service';
 
 @Component({
   selector: 'app-cobranza-judicial-listar',
@@ -26,6 +27,7 @@ import * as moment from 'moment' ;
 export class CobranzaJudicialListarComponent implements OnInit {
 
   public Cargando = new BehaviorSubject<boolean>(false) ;
+  public Subject$ = new Subject<boolean>() ;
 
   public TipoDocumentos : Array<any> ;
   public Cuentas : Array<any> = [];
@@ -37,6 +39,8 @@ export class CobranzaJudicialListarComponent implements OnInit {
   public ProcesosJudicialesForm : FormGroup ;
 
   public InformacionDistritosArray : Array<any> ;
+  // public InformacionInstanciasArray : Array<any> ;
+  // public InformacionProcesosArray : Array<any> ;
 
   constructor(
     private _store : Store<EstadoSesion> ,
@@ -47,6 +51,7 @@ export class CobranzaJudicialListarComponent implements OnInit {
     private _judicial: CobranzaJudicialService,
     private _vinculados : ProcesoJudicialVinculadosService ,
     private _builder : FormBuilder ,
+    private db : DbService ,
   ) { }
 
   ngOnInit() {
@@ -59,6 +64,7 @@ export class CobranzaJudicialListarComponent implements OnInit {
     })
 
     this.ListarTipoDocumentos();
+    this.CargarData();
     this.EncontrarFecha();
     this.ListarDistritos();
   }
@@ -73,7 +79,14 @@ export class CobranzaJudicialListarComponent implements OnInit {
       })
     ).subscribe();
 
-    this.ProcesosJudicialesForm.valueChanges
+    merge(
+      this.ProcesosJudicialesForm.get('distrito').valueChanges ,
+      this.ProcesosJudicialesForm.get('instancia').valueChanges ,
+      this.ProcesosJudicialesForm.get('expediente').valueChanges ,
+      this.ProcesosJudicialesForm.get('dni').valueChanges ,
+      this.ProcesosJudicialesForm.get('cliente').valueChanges ,
+      this.ProcesosJudicialesForm.get('estado').valueChanges ,
+    )
     .pipe(
        debounceTime(200),
        distinctUntilChanged(),
@@ -86,10 +99,11 @@ export class CobranzaJudicialListarComponent implements OnInit {
   CrearFormulario() {
     this.ProcesosJudicialesForm = this._builder.group({
       distrito : '' ,
+      instancia : '' ,
       expediente : '' ,
       dni : '' ,
       cliente : '' ,
-      fecha_inicio : new Date() ,
+      fecha_inicio : new Date(2010,0,1,0,0,0,0) ,
       fecha_fin : new Date() ,
       estado : -1
     })
@@ -104,15 +118,16 @@ export class CobranzaJudicialListarComponent implements OnInit {
   CargarData() {
     this.CalcularTotal() ;
 
-    this.CargarDistritos(
+    this.CargarInformacion(
       this.ProcesosJudicialesForm.get('distrito').value ,
-      "",
+      this.ProcesosJudicialesForm.get('instancia').value ,
       this.ProcesosJudicialesForm.get('expediente').value ,
       this.ProcesosJudicialesForm.get('dni').value ,
       this.ProcesosJudicialesForm.get('cliente').value ,
       this.ProcesosJudicialesForm.get('fecha_inicio').value ,
       this.ProcesosJudicialesForm.get('fecha_fin').value ,
       this.ProcesosJudicialesForm.get('estado').value ,
+      "fecha_inicio desc" ,
     );
   }
 
@@ -184,5 +199,47 @@ export class CobranzaJudicialListarComponent implements OnInit {
       this.InformacionDistritosArray = res['data'].distritos;
       // console.log(this.InformacionDistritosArray.length)
     })
+  }
+
+  CargarInformacion(
+    distrito : string ,
+    instancia : string ,
+    expediente : string ,
+    dni : string ,
+    nombre : string ,
+    fecha_inicio : Date ,
+    fecha_fin : Date ,
+    estado : number ,
+    orden : string ,
+  ) {
+    this.Cargando.next(true) ;
+    this.Subject$.next() ;    
+
+    forkJoin([
+      this._judicial.ListarDistritosV4( distrito , instancia , expediente , dni , nombre , fecha_inicio , fecha_fin , estado ) ,
+      this._judicial.ListarInstanciasV4( distrito , instancia , expediente , dni , nombre , fecha_inicio , fecha_fin , estado ) ,
+      this._judicial.ListarV4( distrito , instancia , expediente , dni , nombre , fecha_inicio , fecha_fin , estado , orden ) ,
+    ])
+    .pipe(
+      catchError(() => of([])),
+      finalize(() => {
+        this.Cargando.next(false) ;
+      }),
+      takeUntil(this.Subject$)
+    )
+    .subscribe(resultados => {
+      this.InformacionDistritosArray = resultados[0] ;
+      this.GuardarInformacionDexie(resultados[1], resultados[2]) ;
+      // this.InformacionInstanciasArray = resultados[1] ;
+      // this.InformacionProcesosArray = resultados[2] ;
+    })
+  }
+
+  GuardarInformacionDexie(
+    instancias : Array<any> ,
+    procesos : Array<any> ,
+  ) {
+    this.db.GuardarInstanciasOffline(instancias) ;
+    this.db.GuardarProcesosOffline(procesos) ;
   }
 }

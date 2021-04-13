@@ -1,0 +1,185 @@
+<mat-card class="card">
+  <mat-toolbar color="primary">
+    <mat-toolbar-row>
+      NOTIFICACION {{data.codigo}}
+    </mat-toolbar-row>
+  </mat-toolbar>
+
+  <div class = "spinner-container-emergente" *ngIf = " Cargando | async">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <mat-card-content>
+    <!-- <div class="seccion">
+      <mat-card-subtitle class="titulo-seccion">
+        DATOS DEL DOCUMENTO
+      </mat-card-subtitle> -->
+
+      <mat-grid-list cols=2 rowHeight="50px">
+        <mat-grid-tile>
+          <div class="izquierda">
+            <strong> Destinatario </strong>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="1">
+          <div class="izquierda">
+            {{data.destinatario}}
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="izquierda">
+            <strong> Anexos </strong>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="1">
+          <div class="izquierda">
+            {{data.anexos}}
+          </div>
+        </mat-grid-tile>
+       
+      </mat-grid-list>
+    <!-- </div> -->
+    
+    <div class="seccion">
+      <mat-card-subtitle class="titulo-seccion">
+        DIAS EN JUZGADO
+      </mat-card-subtitle>
+
+      <mat-grid-list cols=4 rowHeight="50px">
+      <ng-container>
+        <mat-grid-tile colspan="2">
+          <div class="izquierda">
+            <strong> Fecha de resolucion </strong>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="izquierda" *ngIf="data.juzgado_fecha_resolucion">
+            {{ data.juzgado_fecha_resolucion | date : 'dd-MM-yyyy' }}
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <!-- <div class="izquierda">
+            {{ DiasHastaHoy(data.juzgado_fecha_resolucion) }} dias
+          </div> -->
+        </mat-grid-tile>
+      </ng-container>
+      <ng-container>
+        <mat-grid-tile colspan="2">
+          <div class="izquierda">
+            <strong> Notiticacion impresa el </strong>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="izquierda" *ngIf="data.juzgado_fecha_notificacion">
+            {{ data.juzgado_fecha_notificacion | date : 'dd-MM-yyyy' }}
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="izquierda" *ngIf="data.juzgado_fecha_notificacion">
+            ({{ DiasHastaHoy(data.juzgado_fecha_notificacion) }}) dias
+          </div>
+        </mat-grid-tile>
+      </ng-container>
+      <ng-container >
+        <mat-grid-tile colspan="2">
+          <div class="izquierda">
+            <strong> Enviada a la central de notificacion o casilla electronica </strong>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="izquierda" *ngIf="data.juzgado_fecha_envio">
+            {{ data.juzgado_fecha_envio | date : 'dd-MM-yyyy' }}
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="izquierda" *ngIf="data.juzgado_fecha_envio">
+            ({{ DiasHastaHoy(data.juzgado_fecha_envio) }}) dias
+          </div>
+        </mat-grid-tile>
+      </ng-container>
+      <ng-container>
+        <mat-grid-tile colspan="2">
+          <div class="izquierda">
+            <strong> Recepcionada en la central de notificacion el </strong>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="izquierda" *ngIf="data.juzgado_fecha_recepcion">
+            {{ data.juzgado_fecha_recepcion | date : 'dd-MM-yyyy' }}
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="izquierda" *ngIf="data.juzgado_fecha_recepcion">
+            ({{ DiasHastaHoy(data.juzgado_fecha_recepcion) }}) dias
+          </div>
+        </mat-grid-tile>
+      </ng-container>
+      </mat-grid-list>
+    </div>
+
+    <div class="seccion">
+      <mat-card-subtitle class="titulo-seccion">
+        DIAS EN CENTRAL DE NOTIFICACION
+      </mat-card-subtitle>
+
+      <mat-grid-list cols=4 rowHeight="50px">
+        <ng-container>
+          <mat-grid-tile colspan="2">
+            <div class="izquierda">
+              <strong> Notificacion al destinatario el </strong>
+            </div>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <div class="izquierda" *ngIf="data.central_fecha_notificacion">
+              {{ data.central_fecha_notificacion | date : 'dd-MM-yyyy' }}
+            </div>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <!-- <div class="izquierda">
+              {{ DiasHastaHoy(data.central_fecha_notificacion) }} dias
+            </div> -->
+          </mat-grid-tile>
+        </ng-container>
+        <ng-container>
+          <mat-grid-tile colspan="2">
+            <div class="izquierda">
+              <strong> Cargo devuelto al juzgado el </strong>
+            </div>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <div class="izquierda" *ngIf="data.central_fecha_cargo">
+              {{ data.central_fecha_cargo | date : 'dd-MM-yyyy' }}
+            </div>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <!-- <div class="izquierda">
+              {{ DiasHastaHoy(data.central_fecha_cargo) }} dias
+            </div> -->
+          </mat-grid-tile>
+        </ng-container>
+      </mat-grid-list>
+    </div>
+
+    <!-- <mat-card-title class="texto-accent titulo">
+      Otros detalles
+    </mat-card-title> -->
+    <mat-grid-list cols=3 rowHeight="50px">
+      <mat-grid-tile>
+        <div class="izquierda">
+          <strong> Forma de entrega: </strong> &nbsp; {{ data.comentarios }}
+        </div>
+      </mat-grid-tile>
+      <!-- <mat-grid-tile *ngIf="data.observacion">
+        <div class="izquierda">
+          <strong> Observacion: </strong> &nbsp; {{ data.observacion }}
+        </div>
+      </mat-grid-tile> -->
+      <mat-grid-tile colspan=3 *ngIf="data.archivo">
+        Archivo adjunto :
+        <button mat-icon-button color="primary" type="button" [disabled]="!data.archivo" (click)="AbrirDocumento(enalace_archivo)">
+          <mat-icon> visibility </mat-icon>
+        </button>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-card-content>
+</mat-card>

@@ -132,7 +132,7 @@ export class CobranzaJudicialService {
       if (res['codigo'] === 0 && res['data'].procesos) {
         return res['data'].procesos;
       } else {
-        console.log('No hay datos que mostrar',res);
+        // console.log('No hay datos que mostrar',res);
         return false;
       }
     }));
@@ -503,6 +503,107 @@ export class CobranzaJudicialService {
     }));
   }
 
+  ListarV4(
+    distrito:string,
+    instancia:string,
+    expediente:string,
+    dni:string,
+    nombre:string,
+    fecha_inicio:Date,
+    fecha_fin:Date,
+    estado:number,
+    orden:string
+  ): Observable<any> {
+    let params = new HttpParams()
+      .set('prdistrito',distrito )
+      .set('prinstancia',instancia )
+      .set('prexpediente',expediente )
+      .set('prdni',dni )
+      .set('prnombre',nombre )
+      .set('prfechainicio', moment(fecha_inicio).format('YYYY-MM-DD') )
+      .set('prfechafin',moment(fecha_fin).format('YYYY-MM-DD') )
+      .set('prestado',estado.toString() )
+      .set('prorden',orden ) ;
+
+    return this.http.get(this.url + 'procesojudicial/readV4.php', {params})
+    .pipe(
+      retry(20),
+      map(res => {
+      if (res['codigo'] === 0) {
+        return res['data'];
+      } else {
+        console.log('No hay datos que mostrar', res);
+        return res;
+      }
+    }));
+  }
+
+  ListarInstanciasV4(
+    distrito:string,
+    instancia:string,
+    expediente:string,
+    dni:string,
+    nombre:string,
+    fecha_inicio:Date,
+    fecha_fin:Date,
+    estado:number,
+  ): Observable<any> {
+    let params = new HttpParams()
+      .set('prdistrito',distrito )
+      .set('prinstancia',instancia )
+      .set('prexpediente',expediente )
+      .set('prdni',dni )
+      .set('prnombre',nombre )
+      .set('prfechainicio', moment(fecha_inicio).format('YYYY-MM-DD') )
+      .set('prfechafin',moment(fecha_fin).format('YYYY-MM-DD') )
+      .set('prestado',estado.toString() ) ;
+
+    return this.http.get(this.url + 'procesojudicial/read-instanciasV4.php', {params})
+    .pipe(
+      retry(20),
+      map(res => {
+      if (res['codigo'] === 0) {
+        return res['data'];
+      } else {
+        console.log('No hay datos que mostrar', res);
+        return [];
+      }
+    }));
+  }
+  
+  ListarDistritosV4(
+    distrito:string,
+    instancia:string,
+    expediente:string,
+    dni:string,
+    nombre:string,
+    fecha_inicio:Date,
+    fecha_fin:Date,
+    estado:number,
+  ): Observable<any> {
+    let params = new HttpParams()
+      .set('prdistrito',distrito )
+      .set('prinstancia',instancia )
+      .set('prexpediente',expediente )
+      .set('prdni',dni )
+      .set('prnombre',nombre )
+      .set('prfechainicio', moment(fecha_inicio).format('YYYY-MM-DD') )
+      .set('prfechafin',moment(fecha_fin).format('YYYY-MM-DD') )
+      .set('prestado',estado.toString() ) ;
+
+    return this.http.get(this.url + 'procesojudicial/read-distritosV4.php', {params})
+    .pipe(
+      retry(20),
+      map(res => {
+      if (res['codigo'] === 0) {
+        return res['data'] ;
+      } else {
+        console.log('No hay datos que mostrar', res);
+        return [];
+      }
+    }));
+  }
+
   ListarInstancias(
     distrito:number,
     juzgado:string,
@@ -688,7 +789,6 @@ export class CobranzaJudicialService {
     .pipe(
       retryWhen(errors => errors.pipe(delay(1000), take(10))),
       map(res => {
-      console.log(res) ;
       if (res['codigo'] === 0) {
         return (res['mensaje'] as number);
       } else {
@@ -698,4 +798,146 @@ export class CobranzaJudicialService {
     }));
   }
 
+  ListarProcesosJudicialesNotificacionesxProceo(
+    id_proceso : number ,
+  ) :Observable<any> {
+    let params = new HttpParams()
+      .set('prproceso',id_proceso.toString()) ;
+
+    return this.http.get(this.url + 'procesojudicial/read-notificacionesxproceso.php', {params})
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return res;
+      } else {
+        console.log('No hay datos que mostrar', res);
+        return null;
+      }
+    }));
+  }
+
+  CrearNotificaciones(
+    proceso : number ,
+    codigo : string ,
+    destinatario : string ,
+    anexos : string ,
+    juzgado_fecha_resolucion : Date ,
+    juzgado_fecha_notificacion : Date ,
+    juzgado_fecha_envio : Date ,
+    juzgado_fecha_recepcion : Date ,
+    central_fecha_notificacion : Date ,
+    central_fecha_cargo : Date ,
+    comentarios : string ,
+    observacion : string ,
+    archivo : string ,
+  ) :Observable<any> {
+    let params = new HttpParams()
+      .set("prproceso", proceso.toString() )
+      .set("prcodigo", codigo )
+      .set("prdestinatario", destinatario )
+      .set("pranexos", anexos )
+      .set("prjuzgadofecharesolucion", juzgado_fecha_resolucion ? moment(juzgado_fecha_resolucion).format("YYYY-MM-DD") : null )
+      .set("prjuzgadofechanotificacion", juzgado_fecha_notificacion ? moment(juzgado_fecha_notificacion).format("YYYY-MM-DD") : null )
+      .set("prjuzgadofechaenvio", juzgado_fecha_envio ? moment(juzgado_fecha_envio).format("YYYY-MM-DD") : null )
+      .set("prjuzgadofecharecepcion", juzgado_fecha_recepcion ? moment(juzgado_fecha_recepcion).format("YYYY-MM-DD") : null )
+      .set("prcentralfechanotificacion", central_fecha_notificacion ? moment(central_fecha_notificacion).format("YYYY-MM-DD") : null )
+      .set("prcentralfechacargo", central_fecha_cargo ? moment(central_fecha_cargo).format("YYYY-MM-DD") : null )
+      .set("prcomentarios", comentarios )
+      .set("probservacion", observacion )
+      .set("prarchivo", archivo ) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'procesojudicial/crear-notificacion.php', params, {headers: headers})
+    .pipe(map(resultado => {
+      if (resultado['codigo']=== 0) {
+        return true ;
+      } else {
+        return false ;
+      }
+    })) ;
+  } 
+
+  ActualizarNotificaciones(
+    id_proceso_notificacion : number ,
+    codigo : string ,
+    destinatario : string ,
+    anexos : string ,
+    juzgado_fecha_resolucion : Date ,
+    juzgado_fecha_notificacion : Date ,
+    juzgado_fecha_envio : Date ,
+    juzgado_fecha_recepcion : Date ,
+    central_fecha_notificacion : Date ,
+    central_fecha_cargo : Date ,
+    comentarios : string ,
+    observacion : string ,
+    archivo : string ,
+  ) :Observable<any> {
+    let params = new HttpParams()
+      .set("prprocesonotificacion", id_proceso_notificacion.toString() )
+      .set("prcodigo", codigo )
+      .set("prdestinatario", destinatario )
+      .set("pranexos", anexos )
+      .set("prjuzgadofecharesolucion", juzgado_fecha_resolucion ? moment(juzgado_fecha_resolucion).format("YYYY-MM-DD") : "0" )
+      .set("prjuzgadofechanotificacion", juzgado_fecha_notificacion ? moment(juzgado_fecha_notificacion).format("YYYY-MM-DD") : "0" )
+      .set("prjuzgadofechaenvio", juzgado_fecha_envio ? moment(juzgado_fecha_envio).format("YYYY-MM-DD") : "0" )
+      .set("prjuzgadofecharecepcion", juzgado_fecha_recepcion ? moment(juzgado_fecha_recepcion).format("YYYY-MM-DD") : "0" )
+      .set("prcentralfechanotificacion", central_fecha_notificacion ? moment(central_fecha_notificacion).format("YYYY-MM-DD") : "0" )
+      .set("prcentralfechacargo", central_fecha_cargo ? moment(central_fecha_cargo).format("YYYY-MM-DD") : "0" )
+      .set("prcomentarios", comentarios )
+      .set("probservacion", observacion )
+      .set("prarchivo", archivo ) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'procesojudicial/actualizar-notificacion.php', params, {headers: headers})
+    .pipe(map(resultado => {
+      if (resultado['codigo']=== 0) {
+        return true ;
+      } else {
+        return false ;
+      }
+    })) ;
+  } 
+
+  EliminarNotificaciones(
+    id_proceso_notificacion : number ,
+  ) :Observable<any> {
+    let params = new HttpParams()
+      .set("prprocesonotificacion", id_proceso_notificacion.toString() ) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'procesojudicial/eliminar-notificacion.php', params, {headers: headers})
+    .pipe(map(resultado => {
+      if (resultado['codigo']=== 0) {
+        return true ;
+      } else {
+        return false ;
+      }
+    })) ;
+  } 
+
+  DevolverAnexosProceso(
+    proceso : number ,
+    fecha : Date ,
+    comentarios : string ,
+    archivo : string ,
+  ) :Observable<any> {
+    let params = new HttpParams()
+      .set('prproceso', proceso.toString() )
+      .set('prfecha', moment(fecha).format("YYYY-MM-DD") )
+      .set('prcomentarios', comentarios )
+      .set('prarchivo', archivo ) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'procesojudicial/actualizar-devolucion-anexos.php', params, {headers: headers})
+    .pipe(map(resultado => {
+      if (resultado['codigo']=== 0) {
+        return true ;
+      } else {
+        return false ;
+      }
+    })) ;
+  } 
 }
