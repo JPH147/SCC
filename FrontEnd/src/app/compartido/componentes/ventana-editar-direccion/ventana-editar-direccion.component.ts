@@ -32,6 +32,7 @@ export class VentanaEditarDireccionComponent implements OnInit {
       this.DireccionesForm.get('departamento').setValue(this.data.direccion.departamento) ;
       this.DireccionesForm.get('provincia').setValue(this.data.direccion.provincia) ;
       this.DireccionesForm.get('distrito').setValue(this.data.direccion.id_distrito) ;
+      this.DireccionesForm.get('referencia').setValue(this.data.direccion.referencia) ;
     }
     
     this.ListarDepartamento();
@@ -54,6 +55,9 @@ export class VentanaEditarDireccionComponent implements OnInit {
         Validators.required
       ]],
       distrito: [null,[
+        Validators.required
+      ]],
+      referencia: ['',[
         Validators.required
       ]],
     })
@@ -97,6 +101,7 @@ export class VentanaEditarDireccionComponent implements OnInit {
       this.DireccionesForm.get('id_direccion').value ,
       this.DireccionesForm.get('direccion').value ,
       this.DireccionesForm.get('distrito').value ,
+      this.DireccionesForm.get('referencia').value ,
     ).subscribe(res=>{
       this.ventana.close(res)
     }) ;

@@ -206,6 +206,7 @@ export class VentanaEmergenteProvisionalClientes {
       direccion_nombre: [null,[
         Validators.required
       ]],
+      direccion_referencia : '' ,
       direccion_departamento: [null,[
         Validators.required
       ]],
@@ -446,6 +447,7 @@ export class VentanaEmergenteProvisionalClientes {
         this.ClientesForm.get('direccion_distrito').setValue(res['data'].direcciones[0].id_distrito);
         this.ClientesForm.get('direccion_distrito_nombre').setValue(res['data'].direcciones[0].distrito);
         this.ClientesForm.get('direccion_nombre').setValue(res['data'].direcciones[0].direccion);
+        this.ClientesForm.get('direccion_referencia').setValue(res['data'].direcciones[0].referencia);
         this.ClientesForm.get('direccion_completa').setValue(res['data'].direcciones[0].direccion_formateada);
       }else{
         this.ClientesForm.get('direccion_nombre').setValue("No registra")
@@ -947,7 +949,7 @@ export class VentanaEmergenteProvisionalClientes {
           // console.log(resultado)
         })
 
-        this.ServicioDireccion.CrearDireccion(res['data'], this.ClientesForm.value.direccion_nombre, this.ClientesForm.value.direccion_distrito).subscribe(resultado=>{
+        this.ServicioDireccion.CrearDireccion(res['data'], this.ClientesForm.value.direccion_nombre, this.ClientesForm.value.direccion_distrito, this.ClientesForm.value.direccion_referencia).subscribe(resultado=>{
           // console.log(resultado)
         })
 

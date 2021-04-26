@@ -52,9 +52,17 @@
 
   <form [formGroup]="JudicialForm">
     <mat-card-content>
-      <div class = "spinner-container" *ngIf = "Cargando| async">
-        <mat-spinner></mat-spinner>
-      </div>
+      <ng-container *ngIf="this.data">
+        <div class = "spinner-container" *ngIf = "Cargando | async">
+          <mat-spinner></mat-spinner>
+        </div>
+      </ng-container>
+      
+      <ng-container *ngIf="!this.data">
+        <div class = "spinner-container-especial" *ngIf = "Cargando | async">
+          <mat-spinner></mat-spinner>
+        </div>
+      </ng-container>
 
       <!-- Datos del cliente -->
       <div class="seccion">
@@ -525,26 +533,6 @@
               </div>
 
               <mat-grid-list cols=3 rowHeight="70px">
-                <!-- <mat-grid-tile colspan=1>
-                  <mat-form-field class="columnas-1">
-                    <input matInput type="text" placeholder="Tipo de documento" [(ngModel)]="documento.tipo_documento" [ngModelOptions]="{standalone:true}" readonly>
-                  </mat-form-field>
-                </mat-grid-tile>
-  
-                <mat-grid-tile colspan=1>
-                  <mat-form-field class="columnas-1">
-                    <input matInput [matDatepicker]="FechaInicio" placeholder="Fecha" [(ngModel)]="documento.fecha" [ngModelOptions]="{standalone:true}" readonly>
-                    <mat-datepicker-toggle matSuffix [for]="FechaInicio"></mat-datepicker-toggle>
-                    <mat-datepicker #FechaInicio disabled></mat-datepicker>
-                  </mat-form-field>
-                </mat-grid-tile>
-  
-                <mat-grid-tile colspan=1>
-                  <mat-form-field class="columnas-1">
-                    <input matInput type="text" placeholder="Número" [(ngModel)]="documento.numero" [ngModelOptions]="{standalone:true}" readonly>
-                  </mat-form-field>
-                </mat-grid-tile> -->
-  
                 <mat-grid-tile colspan=1 *ngIf="documento.id_trabajador>0">
                   <mat-form-field class="columnas-1">
                     <input matInput type="text" placeholder="Abogado" [(ngModel)]="documento.trabajador" [ngModelOptions]="{standalone:true}" readonly>
@@ -568,9 +556,11 @@
                     <button mat-icon-button color="primary" [disabled]="!documento.archivo" (click)="AbrirDocumento(documento.archivo)">
                       <mat-icon> visibility </mat-icon>
                     </button>
-                    <button mat-icon-button color="primary" (click)="AbrirNotificaciones(documento.id)">
-                      <mat-icon> notifications </mat-icon>
-                    </button>
+                    <ng-container *ngIf="documento?.notificaciones?.length == 0">
+                      <button mat-icon-button color="primary" (click)="AgregarNotificacion(documento.id)">
+                        <mat-icon> notification_add </mat-icon>
+                      </button>
+                    </ng-container>
                   </ng-container>
                   <ng-container *ngIf="id_proceso_editar">
                     <button mat-icon-button color="primary" [disabled]="!documento.archivo" (click)="AbrirDocumento(documento.archivo)">
@@ -650,6 +640,61 @@
                   </mat-card-subtitle>
                 </mat-grid-tile>
               </mat-grid-list>
+
+              <ng-container *ngIf="documento?.notificaciones?.length > 0">
+                <div class="contenedor tipo-8">
+                  <div class="titulo-seccion-tercera tipo-tercero-8">
+                    Notificaciones
+                  </div>
+                  <button mat-mini-fab color="accent" (click)="AgregarNotificacion(documento.id)" class="derecha boton-agregar-notificacion">
+                    <mat-icon> notification_add </mat-icon>
+                  </button>
+                  <ng-container *ngFor="let notificacion of documento.notificaciones">
+                    <mat-grid-list cols="3" rowHeight="40px">
+                      <mat-grid-tile colspan="3">
+                        <div class="izquierda">
+                          <strong class="texto-primary"> {{ notificacion.codigo }} </strong>
+                        </div>
+                      </mat-grid-tile>
+                      <mat-grid-tile colspan="1">
+                        <div class="izquierda">
+                          <strong> Destinatario: </strong> &nbsp;
+                          {{ notificacion.destinatario }}
+                        </div>
+                      </mat-grid-tile>
+                      <mat-grid-tile colspan="1">
+                        <div class="izquierda">
+                          <strong> Anexos: </strong> &nbsp;
+                          {{ notificacion.anexos }}
+                        </div>
+                      </mat-grid-tile>
+                      <mat-grid-tile rowspan="2">
+                        <button mat-icon-button color="primary" matTooltip="Ver detalle" (click)="VerNotificacion(notificacion)"><mat-icon> visibility </mat-icon></button>
+                        <ng-container *ngIf="id_proceso_editar">
+                          <ng-container *ngIf="permiso?.procesos_judiciales?.listado_procesos?.editar">
+                            <button mat-icon-button color="primary" matTooltip="Editar" (click)="EditarNotificacion(notificacion)"><mat-icon> edit </mat-icon></button>
+                          </ng-container>
+                          <ng-container *ngIf="permiso?.procesos_judiciales?.listado_procesos?.eliminar">
+                            <button mat-icon-button color="primary" matTooltip="Eliminar" (click)="EliminarNotificacion(notificacion)"><mat-icon> delete </mat-icon></button>
+                          </ng-container>
+                        </ng-container>
+                      </mat-grid-tile>
+                      <mat-grid-tile colspan="1">
+                        <div class="izquierda">
+                          <strong> Fecha de envio: </strong> &nbsp;
+                          {{ notificacion.juzgado_fecha_envio ? (notificacion.juzgado_fecha_envio | date : 'dd/MM/yyyy') : '-' }}
+                        </div>
+                      </mat-grid-tile>
+                      <mat-grid-tile colspan="1">
+                        <div class="izquierda">
+                          <strong> Forma de entrega: </strong> &nbsp;
+                          {{ notificacion.comentarios }}
+                        </div>
+                      </mat-grid-tile>
+                    </mat-grid-list>
+                  </ng-container>
+                </div>
+              </ng-container>
             </div>
           </div>
         </div>

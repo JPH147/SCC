@@ -24,12 +24,12 @@
       $proceso->codigo=trim($_POST["prcodigo"]);
       $proceso->destinatario=trim($_POST["prdestinatario"]);
       $proceso->anexos=trim($_POST["pranexos"]);
-      $proceso->juzgado_fecha_resolucion=$_POST["prjuzgadofecharesolucion"];
-      $proceso->juzgado_fecha_notificacion=$_POST["prjuzgadofechanotificacion"];
-      $proceso->juzgado_fecha_envio=$_POST["prjuzgadofechaenvio"];
-      $proceso->juzgado_fecha_recepcion=$_POST["prjuzgadofecharecepcion"];
-      $proceso->central_fecha_notificacion=$_POST["prcentralfechanotificacion"];
-      $proceso->central_fecha_cargo=$_POST["prcentralfechacargo"];
+      $proceso->juzgado_fecha_resolucion=$_POST["prjuzgadofecharesolucion"] == "0" ? null : $_POST["prjuzgadofecharesolucion"] ;
+      $proceso->juzgado_fecha_notificacion=$_POST["prjuzgadofechanotificacion"] == "0" ? null : $_POST["prjuzgadofechanotificacion"] ;
+      $proceso->juzgado_fecha_envio=$_POST["prjuzgadofechaenvio"] == "0" ? null : $_POST["prjuzgadofechaenvio"] ;
+      $proceso->juzgado_fecha_recepcion=$_POST["prjuzgadofecharecepcion"] == "0" ? null : $_POST["prjuzgadofecharecepcion"] ;
+      $proceso->central_fecha_notificacion=$_POST["prcentralfechanotificacion"] == "0" ? null : $_POST["prcentralfechanotificacion"] ;
+      $proceso->central_fecha_cargo=$_POST["prcentralfechacargo"] == "0" ? null : $_POST["prcentralfechacargo"] ;
       $proceso->comentarios=trim($_POST["prcomentarios"]);
       $proceso->observacion=trim($_POST["probservacion"]);
       $proceso->archivo=trim($_POST["prarchivo"]);

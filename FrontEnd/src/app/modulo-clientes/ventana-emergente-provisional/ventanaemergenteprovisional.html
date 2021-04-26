@@ -192,14 +192,16 @@
             </mat-form-field>
           </mat-grid-tile>
 
-          <mat-grid-tile colspan="4">
-            <mat-form-field class="columnas-4">
+          <mat-grid-tile colspan="2">
+            <mat-form-field class="columnas-2">
               <input matInput placeholder="Dirección" formControlName="direccion_nombre">
               <mat-error>Este campo es obligatorio</mat-error>
-              <!-- <ng-container *ngIf="!ventana" matSuffix>
-                <button mat-icon-button color="accent" type="button" (click)="ConsiderarDireccion(false)" *ngIf="ClientesForm.value.considerar_direccion" matTooltip="Nueva dirección"> <mat-icon> star </mat-icon> </button>
-                <button mat-icon-button type="button" (click)="ConsiderarDireccion(true)" *ngIf="!ClientesForm.value.considerar_direccion" matTooltip="No es una nueva dirección"> <mat-icon> star_border </mat-icon> </button>
-              </ng-container> -->
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile colspan="2">
+            <mat-form-field class="columnas-2">
+              <input matInput placeholder="Referencia" formControlName="direccion_referencia">
             </mat-form-field>
           </mat-grid-tile>
 

@@ -15,5 +15,6 @@ $mat_rojo : mat-palette($mat-red, 500);
 $mat_naranja : mat-palette($mat-orange, 600);
 $mat_morado : mat-palette($mat-purple, 600);
 $mat_celeste : mat-palette($mat-light-blue, 500);
+$mat_rojo_oscuro : mat-palette($mat-red, 900);
 
 @include angular-material-theme($theme);

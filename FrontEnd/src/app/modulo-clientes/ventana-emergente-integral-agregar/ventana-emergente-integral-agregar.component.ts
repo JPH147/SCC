@@ -208,6 +208,9 @@ export class VentanaEmergenteIntegralAgregarComponent implements OnInit, AfterVi
       distrito: [null,[
         Validators.required
       ]],  
+      referencia: [null,[
+        Validators.required
+      ]],  
     })
 
     this.TelefonosForm = this.FormBuilder.group({})
@@ -527,7 +530,7 @@ export class VentanaEmergenteIntegralAgregarComponent implements OnInit, AfterVi
 
     this.Direcciones.forEach(item=>{
       relacionados.push(
-        this.ServicioDireccion.CrearDireccion( id_cliente, item.nombre, item.distrito)
+        this.ServicioDireccion.CrearDireccion( id_cliente, item.nombre, item.distrito, item.referencia)
       )
     }) ;
 

@@ -47,7 +47,7 @@ export class VentanaNotificacionesListadoComponent implements OnInit {
     this.ListadoNotificaciones.CargarInformacion(this.data)
   }
 
-  Ver(notificacion) {
+  public VerNotificacion(notificacion) {
     this.Dialogo.open(VentanaNotificacionesDetalleComponent, {
       data : notificacion ,
       width : '900px' ,
@@ -80,8 +80,7 @@ export class VentanaNotificacionesListadoComponent implements OnInit {
     })
   }
 
-
-  Editar(notificacion) {
+  public EditarNotificacion(notificacion) {
     let informacion = {
       tipo : 'editar' ,
       documento_proceso : this.data ,
@@ -107,7 +106,7 @@ export class VentanaNotificacionesListadoComponent implements OnInit {
     })
   }
 
-  EliminarNotificacion(notificacion) {
+  public EliminarNotificacion(notificacion) {
     const VentanaConfirmar = this.Dialogo.open(VentanaConfirmarComponent, {
       width: '400px',
       data: {objeto: 'la notificacion', valor: notificacion.codigo}

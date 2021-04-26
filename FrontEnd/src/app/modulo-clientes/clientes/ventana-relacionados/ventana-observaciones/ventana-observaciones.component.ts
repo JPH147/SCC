@@ -98,6 +98,7 @@ export class VentanaObservacionesComponent implements OnInit {
   }
 
   Guardar(){
+    this.ListadoObservaciones.CargandoInformacion.next(true) ;
     let random = (new Date()).getTime();
     this.ServiciosGenerales.SubirArchivo(this.archivo)
     .subscribe(archivo=>{
@@ -109,7 +110,8 @@ export class VentanaObservacionesComponent implements OnInit {
           this.ObservacionesForm.value.observacion,
           path_archivo.mensaje
         ).subscribe(res=>{
-          this.ventana.close(res) ;
+          this.ListadoObservaciones.CargandoInformacion.next(false) ;
+          this.CargarData() ;
         })
       })
     })
@@ -129,7 +131,7 @@ export class VentanaObservacionesComponent implements OnInit {
 export class ObservacionesDataSource implements DataSource<any> {
 
   private InformacionClientes = new BehaviorSubject<any[]>([]);
-  private CargandoInformacion = new BehaviorSubject<boolean>(false);
+  public CargandoInformacion = new BehaviorSubject<boolean>(false);
   public Cargando = this.CargandoInformacion.asObservable();
   public TotalResultados = new BehaviorSubject<number>(0);
 

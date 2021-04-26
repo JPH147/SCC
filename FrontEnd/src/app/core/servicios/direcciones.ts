@@ -240,11 +240,13 @@ export class ServiciosDirecciones{
 		id_cliente: number,
 		nombre: string,
 		iddistrito: number,
+		referencia : string ,
 	): Observable<any> {
 		let params = new HttpParams()
 		.set('id_cliente', id_cliente.toString())
 		.set('drc_nombre', nombre)
 		.set('pid_distrito', iddistrito.toString())
+		.set('prreferencia', referencia)
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 		return this.http.post(this.url + 'clientedireccion/create.php', params, {headers: headers});
 	}
@@ -253,11 +255,13 @@ export class ServiciosDirecciones{
 		id_direccion: number,
 		nombre: string,
 		iddistrito: number,
+		referencia : string ,
 	): Observable<any> {
 		let params = new HttpParams()
       .set('priddireccion', id_direccion.toString())
       .set('drc_nombre', nombre)
       .set('pid_distrito', iddistrito.toString())
+			.set('prreferencia', referencia)
     
     // console.log(params) ;
 

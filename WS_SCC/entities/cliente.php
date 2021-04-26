@@ -123,6 +123,7 @@ Class Cliente{
                 "total_creditos"=>$row['total_creditos'],
                 "total_ventas"=>$row['total_ventas'],
                 "total_transacciones"=>$row['total_transacciones'],
+                "total_observaciones"=>$row['total_observaciones'],
             );
 
             array_push($cliente_list["clientes"],$cliente_item);
@@ -213,6 +214,7 @@ Class Cliente{
                 "total_creditos"=>$row['total_creditos'],
                 "total_ventas"=>$row['total_ventas'],
                 "total_transacciones"=>$row['total_transacciones'],
+                "total_observaciones"=>$row['total_observaciones'],
             );
 
             array_push($cliente_list["clientes"],$cliente_item);

@@ -137,7 +137,9 @@
                 matBadgeSize="small" matBadgeColor="accent"> monetization_on </mat-icon></button>
             </ng-container>
             <ng-container *ngIf="permiso?.maestro_general?.clientes?.crear_observaciones">
-              <button mat-icon-button matTooltip="Ver observaciones" color="primary" (click)="AgregarObservaciones(cliente)"><mat-icon> assignment</mat-icon></button>
+              <button mat-icon-button matTooltip="Ver comentarios" color="primary" (click)="AgregarObservaciones(cliente)">
+                <mat-icon [matBadge]="cliente.total_observaciones" [matBadgeHidden]="cliente.total_observaciones == 0" matBadgeSize="small"
+                  matBadgeColor="accent"> assignment</mat-icon></button>
             </ng-container>
             <ng-container *ngIf="permiso?.maestro_general?.clientes?.editar">
               <button mat-icon-button matTooltip="Editar" color="primary" (click)="Editar(cliente.id, false)"><mat-icon> edit </mat-icon></button>

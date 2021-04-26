@@ -144,6 +144,9 @@ export class VentanaEmergenteIntegralEditarComponent implements OnInit {
       distrito: [null,[
         Validators.required
       ]],
+      referencia: [null,[
+        Validators.required
+      ]],
     })
 
     //Cuentas
@@ -596,7 +599,7 @@ export class VentanaEmergenteIntegralEditarComponent implements OnInit {
 
   AgregarDireccion(){
     this.Cargando.next(true) ;
-    this.ServicioDireccion.CrearDireccion(this.data.id, this.DireccionesForm.value.nombre, this.DireccionesForm.value.distrito).subscribe(res=>{
+    this.ServicioDireccion.CrearDireccion(this.data.id, this.DireccionesForm.value.nombre, this.DireccionesForm.value.distrito, this.DireccionesForm.value.referencia).subscribe(res=>{
       this.Cargando.next(false) ;
       this.CargarDataDirecciones();
       this.DireccionesForm.reset() ;

@@ -103,6 +103,7 @@ export class VentanaEmergenteContacto {
       distrito: [null,[
         Validators.required
       ]],
+      referencia : ''
     })
 
     //Cuentas
@@ -179,7 +180,7 @@ export class VentanaEmergenteContacto {
 
   AgregarDireccion(){
     this.Cargando.next(true) ;
-    this.ServicioDireccion.CrearDireccion(this.data, this.DireccionesForm.value.nombre, this.DireccionesForm.value.distrito).subscribe(res=>{
+    this.ServicioDireccion.CrearDireccion(this.data, this.DireccionesForm.value.nombre, this.DireccionesForm.value.distrito, this.DireccionesForm.value.referencia).subscribe(res=>{
       this.Cargando.next(false) ;
       this.CargarDataDirecciones();
     })

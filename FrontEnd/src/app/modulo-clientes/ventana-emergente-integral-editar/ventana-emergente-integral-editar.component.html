@@ -374,10 +374,10 @@
       <mat-card-content>
         
         <form [formGroup]="DireccionesForm">
-          <mat-grid-list cols=4 rowHeight="70px">
+          <mat-grid-list cols=3 rowHeight="70px">
 
             <mat-grid-tile>
-              <mat-form-field>
+              <mat-form-field class="columnas-1">
                 <mat-select placeholder="Departamento" formControlName="departamento" (selectionChange)="DepartamentoSeleccionado2($event)">
                   <mat-option *ngFor="let departamento of LstDepartamento" [value]="departamento.nombre">{{departamento.nombre  | uppercase }}</mat-option>
                 </mat-select>
@@ -386,7 +386,7 @@
             </mat-grid-tile>
 
             <mat-grid-tile>
-              <mat-form-field>
+              <mat-form-field class="columnas-1">
                 <mat-select placeholder="Provincia" formControlName="provincia" (selectionChange)="ProvinciaSeleccionada2($event)">
                   <mat-option *ngFor="let provincia of LstProvincia" [value]="provincia.nombre">{{provincia.nombre  | uppercase }}</mat-option>
                 </mat-select>
@@ -395,7 +395,7 @@
             </mat-grid-tile>
 
             <mat-grid-tile>
-              <mat-form-field>
+              <mat-form-field class="columnas-1">
                 <mat-select placeholder="Distrito" formControlName="distrito">
                   <mat-option *ngFor="let distrito of LstDistrito" [value]="distrito.id">{{distrito.nombre  | uppercase }}</mat-option>
                 </mat-select>
@@ -404,9 +404,15 @@
             </mat-grid-tile>
 
             <mat-grid-tile colspan=3>
-              <mat-form-field class="grande">
+              <mat-form-field class="columnas-3">
                 <input matInput placeholder="Dirección" formControlName="nombre">
                 <mat-error>Este campo es obligatorio</mat-error>
+              </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile colspan=2>
+              <mat-form-field class="columnas-2">
+                <input matInput placeholder="Referencia" formControlName="referencia">
               </mat-form-field>
             </mat-grid-tile>
 

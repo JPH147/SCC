@@ -21,6 +21,8 @@ import { EstadoSesion } from '../../compartido/reducers/permisos.reducer';
 import { Rol } from 'src/app/compartido/modelos/login.modelos';
 import { UsuariosService } from 'src/app/modulo-maestro/usuarios/usuarios.service';
 import { VentanaNotificacionesListadoComponent } from './ventana-notificaciones-listado/ventana-notificaciones-listado.component';
+import { VentanaNotificacionesDetalleComponent } from './ventana-notificaciones-detalle/ventana-notificaciones-detalle.component';
+import { VentanaNotificacionesComponent } from './ventana-notificaciones/ventana-notificaciones.component';
 
 @Component({
   selector: 'app-cobranza-judicial',
@@ -691,4 +693,77 @@ export class CobranzaJudicialComponent implements OnInit, AfterViewInit {
     })
   }
 
+  VerNotificacion(notificacion) {
+    this.Dialogo.open(VentanaNotificacionesDetalleComponent, {
+      data : notificacion ,
+      width : '900px' ,
+      maxHeight : '80vh'
+    })
+  }
+
+  public AgregarNotificacion(id_notificacion) {
+    let informacion = {
+      tipo : 'crear' ,
+      documento_proceso : id_notificacion
+    }
+
+    let Ventana = this.Dialogo.open(VentanaNotificacionesComponent ,{
+      data : informacion ,
+      width : '600px' ,
+      maxHeight : '80vh' ,
+    })
+
+    Ventana.afterClosed().subscribe(resultado => {
+      if(resultado){
+        if ( resultado === true ) {
+          this.Notificacion.Snack("Se creó la notificación satisfactoriamente","");
+          this.SeleccionarProceso(this.id_proceso);
+        }
+        if ( resultado===false ) {
+          this.Notificacion.Snack("Ocurrió un error al crear la notificación","")
+        }
+      }
+    })
+  }
+
+  EditarNotificacion(notificacion) {
+    let informacion = {
+      tipo : 'editar' ,
+      documento_proceso : notificacion.id_proceso_judicial_notificacion ,
+      notificacion : notificacion
+    }
+
+    let Ventana = this.Dialogo.open(VentanaNotificacionesComponent ,{
+      data : informacion ,
+      width : '600px' ,
+      maxHeight : '80vh' ,
+    })
+
+    Ventana.afterClosed().subscribe(resultado => {
+      if(resultado){
+        if ( resultado === true ) {
+          this.Notificacion.Snack("Se actualizó la notificación satisfactoriamente","");
+          this.SeleccionarProceso(this.id_proceso);
+        }
+        if ( resultado===false ) {
+          this.Notificacion.Snack("Ocurrió un error al actualizar la notificación","")
+        }
+      }
+    })
+  }
+
+  EliminarNotificacion(notificacion) {
+    const VentanaConfirmar = this.Dialogo.open(VentanaConfirmarComponent, {
+      width: '400px',
+      data: {objeto: 'la notificacion', valor: notificacion.codigo}
+    });
+
+    VentanaConfirmar.afterClosed().subscribe(res => {
+      if (res === true) {
+        this._judicial.EliminarNotificaciones(notificacion.id_proceso_judicial_notificacion).subscribe(res => {
+          this.SeleccionarProceso(this.id_proceso);
+        });
+      }
+    });
+  }
 }

@@ -938,7 +938,7 @@ export class EvaluacionExpressComponent implements OnInit {
         console.log(resultado)
       })
 
-      this.ServicioDireccion.CrearDireccion(res['data'], this.InformacionForm.value.direccion_nombre, this.InformacionForm.value.direccion_distrito).subscribe(resultado=>{
+      this.ServicioDireccion.CrearDireccion(res['data'], this.InformacionForm.value.direccion_nombre, this.InformacionForm.value.direccion_distrito, '').subscribe(resultado=>{
         console.log(resultado)
       })
     });
@@ -995,14 +995,16 @@ export class EvaluacionExpressComponent implements OnInit {
         this.ServicioDireccion.CrearDireccion(
           this.InformacionForm.value.id_cliente,
           this.InformacionForm.value.direccion_nombre,
-          this.InformacionForm.value.direccion_distrito
+          this.InformacionForm.value.direccion_distrito,
+          ''
         ).subscribe(res=>{
         })
       } else {
         this.ServicioDireccion.ActualizarDireccion(
           this.InformacionForm.value.id_direccion,
           this.InformacionForm.value.direccion_nombre,
-          this.InformacionForm.value.direccion_distrito
+          this.InformacionForm.value.direccion_distrito,
+          ''
         ).subscribe(res=>{
         })
       }

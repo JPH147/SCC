@@ -43,21 +43,21 @@
           </mat-grid-tile>
           <mat-grid-tile>
             <mat-form-field class="columnas-1">
-              <input matInput [matDatepicker]="InputJuzgadoFechaNotificacion" formControlName="juzgado_fecha_notificacion" placeholder="Fecha de notificacion impresa">
+              <input matInput [matDatepicker]="InputJuzgadoFechaNotificacion" formControlName="juzgado_fecha_notificacion" placeholder="Notificacion impresa el">
               <mat-datepicker-toggle matSuffix [for]="InputJuzgadoFechaNotificacion"></mat-datepicker-toggle>
               <mat-datepicker #InputJuzgadoFechaNotificacion></mat-datepicker>
             </mat-form-field>
           </mat-grid-tile>
           <mat-grid-tile>
             <mat-form-field class="columnas-1">
-              <input matInput [matDatepicker]="InputJuzgadoFechaEnvio" formControlName="juzgado_fecha_envio" placeholder="Fecha de envio a la casilla electronica">
+              <input matInput [matDatepicker]="InputJuzgadoFechaEnvio" formControlName="juzgado_fecha_envio" placeholder="Enviada a la central de notificacion o casilla electronica">
               <mat-datepicker-toggle matSuffix [for]="InputJuzgadoFechaEnvio"></mat-datepicker-toggle>
               <mat-datepicker #InputJuzgadoFechaEnvio></mat-datepicker>
             </mat-form-field>
           </mat-grid-tile>
           <mat-grid-tile>
             <mat-form-field class="columnas-1">
-              <input matInput [matDatepicker]="InputJuzgadoFechaRecepcion" formControlName="juzgado_fecha_recepcion" placeholder="Fecha de recepcion en la central">
+              <input matInput [matDatepicker]="InputJuzgadoFechaRecepcion" formControlName="juzgado_fecha_recepcion" placeholder="Recepcionada en la central de notificacion el">
               <mat-datepicker-toggle matSuffix [for]="InputJuzgadoFechaRecepcion"></mat-datepicker-toggle>
               <mat-datepicker #InputJuzgadoFechaRecepcion></mat-datepicker>
             </mat-form-field>
@@ -72,14 +72,14 @@
         <mat-grid-list cols=1 rowHeight="70px">
           <mat-grid-tile>
             <mat-form-field class="columnas-1">
-              <input matInput [matDatepicker]="InputCargoFechaNotificacion" formControlName="central_fecha_notificacion" placeholder="Fecha de notificacion al destinatario">
+              <input matInput [matDatepicker]="InputCargoFechaNotificacion" formControlName="central_fecha_notificacion" placeholder="Notificacion al destinatario el">
               <mat-datepicker-toggle matSuffix [for]="InputCargoFechaNotificacion"></mat-datepicker-toggle>
               <mat-datepicker #InputCargoFechaNotificacion></mat-datepicker>
             </mat-form-field>
           </mat-grid-tile>
           <mat-grid-tile>
             <mat-form-field class="columnas-1">
-              <input matInput [matDatepicker]="InputCargoFechaCargo" formControlName="central_fecha_cargo" placeholder="Fecha de devolucion al juzgado">
+              <input matInput [matDatepicker]="InputCargoFechaCargo" formControlName="central_fecha_cargo" placeholder="Cargo devuelto al juzgado el">
               <mat-datepicker-toggle matSuffix [for]="InputCargoFechaCargo"></mat-datepicker-toggle>
               <mat-datepicker #InputCargoFechaCargo></mat-datepicker>
             </mat-form-field>

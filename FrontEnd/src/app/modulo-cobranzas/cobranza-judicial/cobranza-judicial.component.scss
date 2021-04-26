@@ -33,7 +33,7 @@
 }
 
 .tipo-8{
-  border-left-color: mat-color($mat_celeste);
+  border-left-color: mat-color($mat_rojo_oscuro);
 }
 
 .icono{
@@ -99,7 +99,8 @@ textarea{
 }
 
 .tipo-tercero-8{
-  background-color: mat-color($mat_celeste);
+  background-color: mat-color($mat_rojo_oscuro);
+  color: white !important;
 }
 
 span.derecha{
@@ -148,5 +149,25 @@ span.derecha{
 }
 
 .boton-tipo-8{
-  color: mat-color($mat_celeste);
+  color: mat-color($mat_rojo_oscuro);
+}
+
+.izquierda {
+  width: 100% ;
+  padding-left: 20px;
+}
+
+.boton-agregar-notificacion {
+  z-index : 2 ,
+}
+
+.spinner-container-especial {
+  position: fixed;
+  top: 30vh;
+  left: 300px;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
 }

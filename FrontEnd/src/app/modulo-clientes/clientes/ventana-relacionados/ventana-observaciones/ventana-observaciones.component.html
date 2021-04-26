@@ -8,7 +8,7 @@
       <mat-grid-list cols=4 rowHeight="70px">
         <mat-grid-tile colspan=4>
           <mat-form-field class="columnas-4">
-            <input matInput placeholder="Observacion" formControlName="observacion">
+            <input matInput placeholder="Comentario" formControlName="observacion">
           </mat-form-field>
         </mat-grid-tile>
   
@@ -58,7 +58,7 @@
         </ng-container>
   
         <ng-container matColumnDef="observacion">
-          <mat-header-cell *matHeaderCellDef> Observación </mat-header-cell>
+          <mat-header-cell *matHeaderCellDef> Comentario </mat-header-cell>
           <mat-cell *matCellDef="let observacion"> {{observacion.observacion}} </mat-cell>
         </ng-container>
     

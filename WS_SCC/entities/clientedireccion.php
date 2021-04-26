@@ -14,6 +14,7 @@ Class ClienteDireccion{
     public $drc_estado;
     public $prpagina;
     public $prtotalpagina;
+    public $referencia;
     
     public function __construct($db){
         $this->conn = $db;
@@ -23,7 +24,8 @@ Class ClienteDireccion{
         $query = "CALL sp_crearclientedireccion(
             :id_cliente,
             :drc_nombre,
-            :pid_distrito
+            :pid_distrito,
+            :prreferencia
         )";
 
         $result = $this->conn->prepare($query);
@@ -31,10 +33,12 @@ Class ClienteDireccion{
         $result->bindParam(":id_cliente", $this->id_cliente);
         $result->bindParam(":drc_nombre", $this->drc_nombre);
         $result->bindParam(":pid_distrito", $this->id_distrito);
+        $result->bindParam(":prreferencia", $this->referencia);
 
         $this->id_cliente=htmlspecialchars(strip_tags($this->id_cliente));
         $this->drc_nombre=htmlspecialchars(strip_tags($this->drc_nombre));
         $this->id_distrito=htmlspecialchars(strip_tags($this->id_distrito));
+        $this->referencia=htmlspecialchars(strip_tags($this->referencia));
 
         if($result->execute())
         {
@@ -47,7 +51,8 @@ Class ClienteDireccion{
         $query = "CALL sp_actualizarclientedireccion(
             :id_direccion,
             :drc_nombre,
-            :pid_distrito
+            :pid_distrito,
+            :prreferencia
         )";
 
         $result = $this->conn->prepare($query);
@@ -55,10 +60,12 @@ Class ClienteDireccion{
         $result->bindParam(":id_direccion", $this->idcliente_direccion);
         $result->bindParam(":drc_nombre", $this->drc_nombre);
         $result->bindParam(":pid_distrito", $this->id_distrito);
+        $result->bindParam(":prreferencia", $this->referencia);
 
         $this->idcliente_direccion=htmlspecialchars(strip_tags($this->idcliente_direccion));
         $this->drc_nombre=htmlspecialchars(strip_tags($this->drc_nombre));
         $this->id_distrito=htmlspecialchars(strip_tags($this->id_distrito));
+        $this->referencia=htmlspecialchars(strip_tags($this->referencia));
 
         if($result->execute())
         {
@@ -116,6 +123,7 @@ Class ClienteDireccion{
                 "direccioncompleta"=> $row['direccioncompleta'],
                 "direccion_formateada"=> $row['direccion_formateada'],
                 "relevancia"=>$row['drc_relevancia'],
+                "referencia"=>$row['referencia'],
             );
 
             array_push($direccion_list["direcciones"],$direccion_item);

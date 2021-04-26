@@ -281,29 +281,32 @@ Class Proceso{
     $procesos_list=array();
     $procesos_list["procesos"]=array();
     
-    while($row = $result->fetch(PDO::FETCH_ASSOC))
+    $row = $result->fetchAll(PDO::FETCH_ASSOC);
+    $result->closeCursor();
+    foreach( $row as $item )
     {
         extract($row);
         $items = array (
-          "id"=>$id,
-          "id_tipo_documento"=>$id_tipo_documento,
-          "tipo_documento"=>$tipo_documento,
-          "fecha"=>$fecha,
-          "id_trabajador"=>$id_trabajador,
-          "trabajador"=>$trabajador,
-          "id_estado"=>$id_estado,
-          "estado"=>$estado,
-          "numero"=>$numero,
-          "sumilla"=>$sumilla,
-          "archivo"=>$archivo,
-          "comentarios"=>$comentarios,
-          "fecha_notificacion_demandado" => $fecha_notificacion_demandado ,
-          "fecha_notificacion_cooperativa" => $fecha_notificacion_cooperativa ,
-          "fecha_notificacion_retorno" => $fecha_notificacion_retorno ,
-          "fecha_creacion"=>$fecha_creacion,
-          "usuario_creacion"=>$usuario_creacion,
-          "fecha_edicion"=>$fecha_edicion,
-          "usuario_edicion"=>$usuario_edicion,
+          "id"=>$item['id'],
+          "id_tipo_documento"=>$item['id_tipo_documento'],
+          "tipo_documento"=>$item['tipo_documento'],
+          "fecha"=>$item['fecha'],
+          "id_trabajador"=>$item['id_trabajador'],
+          "trabajador"=>$item['trabajador'],
+          "id_estado"=>$item['id_estado'],
+          "estado"=>$item['estado'],
+          "numero"=>$item['numero'],
+          "sumilla"=>$item['sumilla'],
+          "archivo"=>$item['archivo'],
+          "comentarios"=>$item['comentarios'],
+          "fecha_notificacion_demandado" => $item['fecha_notificacion_demandado '],
+          "fecha_notificacion_cooperativa" => $item['fecha_notificacion_cooperativa '],
+          "fecha_notificacion_retorno" => $item['fecha_notificacion_retorno '],
+          "fecha_creacion"=>$item['fecha_creacion'],
+          "usuario_creacion"=>$item['usuario_creacion'],
+          "fecha_edicion"=>$item['fecha_edicion'],
+          "usuario_edicion"=>$item['usuario_edicion'],
+          "notificaciones"=>$this->read_procesosjudicialesnotificacionxproceso_parametros($item['id']),
         );
         array_push($procesos_list["procesos"],$items);
     }
@@ -323,24 +326,26 @@ Class Proceso{
     $procesos_list=array();
     $procesos_list["procesos"]=array();
     
-    while($row = $result->fetch(PDO::FETCH_ASSOC))
+    $row = $result->fetchAll(PDO::FETCH_ASSOC);
+    $result->closeCursor();
+    foreach( $row as $item )
     {
         extract($row);
         $items = array (
-          "id"=>$id,
-          "id_tipo_documento"=>$id_tipo_documento,
-          "tipo_documento"=>$tipo_documento,
-          "fecha"=>$fecha,
-          "id_trabajador"=>$id_trabajador,
-          "trabajador"=>$trabajador,
-          "numero"=>$numero,
-          "sumilla"=>$sumilla,
-          "archivo"=>$archivo,
-          "comentarios"=>$comentarios,
-          "fecha_creacion"=>$fecha_creacion,
-          "usuario_creacion"=>$usuario_creacion,
-          "fecha_edicion"=>$fecha_edicion,
-          "usuario_edicion"=>$usuario_edicion,
+          "id"=>$item['id'],
+          "id_tipo_documento"=>$item['id_tipo_documento'],
+          "tipo_documento"=>$item['tipo_documento'],
+          "fecha"=>$item['fecha'],
+          "id_trabajador"=>$item['id_trabajador'],
+          "trabajador"=>$item['trabajador'],
+          "numero"=>$item['numero'],
+          "sumilla"=>$item['sumilla'],
+          "archivo"=>$item['archivo'],
+          "comentarios"=>$item['comentarios'],
+          "fecha_creacion"=>$item['fecha_creacion'],
+          "usuario_creacion"=>$item['usuario_creacion'],
+          "fecha_edicion"=>$item['fecha_edicion'],
+          "usuario_edicion"=>$item['usuario_edicion'],
         );
         array_push($procesos_list["procesos"],$items);
     }
@@ -889,7 +894,6 @@ Class Proceso{
     
     $row = $result->fetchAll(PDO::FETCH_ASSOC) ;
     $result->closeCursor() ;
-    // print_r($row) ;
     foreach($row as $item)
     {
       $contador=$contador+1;
@@ -1235,6 +1239,46 @@ Class Proceso{
         "archivo" => $archivo
       );
       array_push($procesos_list["notificaciones"],$items);
+    }
+
+    return $procesos_list;
+  }
+
+  function read_procesosjudicialesnotificacionxproceso_parametros($proceso){
+    $query = "CALL sp_listarprocesojudicialnotificacionxproceso(?)";
+
+    $result = $this->conn->prepare($query);
+
+    $result->bindParam(1, $proceso);
+
+    $result->execute();
+    
+    $procesos_list=array();
+
+    $contador = 0;
+    
+    $row = $result->fetchAll(PDO::FETCH_ASSOC);
+    $result->closeCursor() ;
+    foreach($row as $item)
+    {
+      $contador=$contador+1;
+      $items = array (
+        "numero"=>$contador,
+        "id_proceso_judicial_notificacion" => $item['id_proceso_judicial_notificacion'] ,
+        "codigo" => $item['codigo'] ,
+        "destinatario" => $item['destinatario'] ,
+        "anexos" => $item['anexos'] ,
+        "juzgado_fecha_resolucion" => $item['juzgado_fecha_resolucion'] ,
+        "juzgado_fecha_notificacion" => $item['juzgado_fecha_notificacion'] ,
+        "juzgado_fecha_envio" => $item['juzgado_fecha_envio'] ,
+        "juzgado_fecha_recepcion" => $item['juzgado_fecha_recepcion'] ,
+        "central_fecha_notificacion" => $item['central_fecha_notificacion'] ,
+        "central_fecha_cargo" => $item['central_fecha_cargo'] ,
+        "comentarios" => $item['comentarios'] ,
+        "observacion" => $item['observacion'] ,
+        "archivo" => $item['archivo']
+      );
+      array_push($procesos_list,$items);
     }
 
     return $procesos_list;
