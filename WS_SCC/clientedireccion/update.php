@@ -22,6 +22,7 @@
             $clientedir->idcliente_direccion = trim($_POST["priddireccion"]);
             $clientedir->drc_nombre = trim($_POST["drc_nombre"]);
             $clientedir->id_distrito = trim($_POST["pid_distrito"]);
+            $clientedir->referencia = trim($_POST["prreferencia"]);
 
             if($clientedir->update())
             {

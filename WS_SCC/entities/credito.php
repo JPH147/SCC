@@ -1468,5 +1468,27 @@ Class Creditos{
         }
         return false;
     }
+
+     
+    function actualizar_credito_estado() {
+        $query = "CALL sp_actualizarcreditoestado(
+            :prcredito ,
+            :prestado
+        )";
+
+        $result = $this->conn->prepare($query);
+
+        $result->bindParam(":prcredito", $this->id_credito);
+        $result->bindParam(":prestado", $this->estado);
+
+        $this->id_credito=htmlspecialchars(strip_tags($this->id_credito));
+        $this->estado_interes=htmlspecialchars(strip_tags($this->estado_interes));
+
+        if($result->execute())
+        {
+            return true;
+        }
+        return false;
+    }
 }
 ?>

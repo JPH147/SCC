@@ -1,5 +1,9 @@
 <?php
 
+require '../vendor/autoload.php';
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 Class Proceso{
 
   private $conn;
@@ -54,6 +58,8 @@ Class Proceso{
   public $central_fecha_notificacion ;
   public $central_fecha_cargo ;
   public $observacion ;
+
+  public $path_reporte = '../uploads/reporte-judiciales/';
 
   public function __construct($db){
     $this->conn = $db;
@@ -1440,5 +1446,92 @@ Class Proceso{
     }
     return false;
   }
+
+  function readV4_unlimited() {
+
+    $spreadsheet = new Spreadsheet();
+    $sheet = $spreadsheet->getActiveSheet();
+
+    $query = "CALL sp_listarprocesojudicialunlimitedV4(?,?,?,?,?,?,?,?,?)";
+
+    $result = $this->conn->prepare($query);
+
+    $result->bindParam(1, $this->distrito);
+    $result->bindParam(2, $this->instancia);
+    $result->bindParam(3, $this->expediente);
+    $result->bindParam(4, $this->dni);
+    $result->bindParam(5, $this->nombre);
+    $result->bindParam(6, $this->fecha_inicio);
+    $result->bindParam(7, $this->fecha_fin);
+    $result->bindParam(8, $this->estado);
+    $result->bindParam(9, $this->orden);
+    
+    $result->execute();
+
+    $archivo = "" ;
+
+    $contador = 0;
+
+    $sheet->setCellValue('A1', 'Contador');
+    $sheet->setCellValue('B1', 'Expediente');
+    $sheet->setCellValue('C1', 'Distrito');
+    $sheet->setCellValue('D1', 'Instancia');
+    $sheet->setCellValue('E1', 'Cliente');
+    $sheet->setCellValue('F1', 'DNI');
+    $sheet->setCellValue('G1', 'CIP');
+    $sheet->setCellValue('H1', 'Sede');
+    $sheet->setCellValue('I1', 'Situacion');
+    $sheet->setCellValue('J1', 'Fecha de inicio');
+    $sheet->setCellValue('K1', 'Sumilla');
+    $sheet->setCellValue('L1', 'Total');
+    $sheet->setCellValue('M1', 'Juez');
+    $sheet->setCellValue('N1', 'Especialista');
+    $sheet->setCellValue('O1', 'Abogado');
+    $sheet->setCellValue('P1', 'Fecha del ultimo documento');
+    $sheet->setCellValue('Q1', 'Diferencia de dias respecto al ultimo documento');
+    $sheet->setCellValue('R1', 'Total de documentos');
+    $sheet->setCellValue('S1', 'Ultimo documento');
+
+    $row = $result->fetchAll(PDO::FETCH_ASSOC);
+    $result->closeCursor();
+    foreach( $row as $item )
+    {
+        extract($row);
+        $contador=$contador+1;
+
+        $sheet->setCellValue('A' . $contador, $contador );
+        $sheet->setCellValue('B' . $contador, $item['expediente'] );
+        $sheet->setCellValue('C' . $contador, $item['distrito'] );
+        $sheet->setCellValue('D' . $contador, $item['instancia'] );
+        $sheet->setCellValue('E' . $contador, $item['cliente_nombre'] );
+        $sheet->setCellValue('F' . $contador, $item['cliente_dni'] );
+        $sheet->setCellValue('G' . $contador, $item['cip'] );
+        $sheet->setCellValue('H' . $contador, $item['sede'] );
+        $sheet->setCellValue('I' . $contador, $item['situacion'] );
+        $sheet->setCellValue('J' . $contador, $item['fecha_inicio'] );
+        $sheet->setCellValue('K' . $contador, $item['sumilla'] );
+        $sheet->setCellValue('L' . $contador, $item['total'] );
+        $sheet->setCellValue('M' . $contador, $item['juez'] );
+        $sheet->setCellValue('N' . $contador, $item['especialista'] );
+        $sheet->setCellValue('O' . $contador, $item['vendedor'] );
+        $sheet->setCellValue('P' . $contador, $item['fecha_ultimo_documento'] );
+        $sheet->setCellValue('Q' . $contador, $item['fecha_ultimo_documento_diferencia'] );
+        $sheet->setCellValue('R' . $contador, $item['total_documentos'] );
+        $sheet->setCellValue('S' . $contador, $item['ultimo_documento'] . " " . $item['numero_ultimo_documento'] );
+    }
+
+    $writer = new Xlsx($spreadsheet);
+
+    $archivo = $this->path_reporte.$this->archivo.'.xlsx';
+
+    $writer->save($archivo);
+    
+    if( file_exists ( $archivo ) ){
+      return $archivo;
+    } else {
+      return false;
+    };
+}
+
 }
 ?>
