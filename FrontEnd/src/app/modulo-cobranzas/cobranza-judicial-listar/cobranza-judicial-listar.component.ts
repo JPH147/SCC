@@ -17,6 +17,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 
 import * as moment from 'moment' ;
 import { DbService } from 'src/app/core/servicios/db.service';
+import { ArchivosService } from 'src/app/core/servicios/archivos';
+import { saveAs } from 'file-saver' ;
 
 @Component({
   selector: 'app-cobranza-judicial-listar',
@@ -52,6 +54,7 @@ export class CobranzaJudicialListarComponent implements OnInit {
     private _vinculados : ProcesoJudicialVinculadosService ,
     private _builder : FormBuilder ,
     private db : DbService ,
+    private AServicio : ArchivosService,
   ) { }
 
   ngOnInit() {
@@ -242,4 +245,40 @@ export class CobranzaJudicialListarComponent implements OnInit {
     this.db.GuardarInstanciasOffline(instancias) ;
     this.db.GuardarProcesosOffline(procesos) ;
   }
+
+  ExportToExcel(){
+    this.Cargando.next(true) ;
+
+    const nombre_archivo : string = "reporte_procesos_" + new Date().getTime();
+
+    this._judicial.ListarV4Unlimited(
+      nombre_archivo ,
+      this.ProcesosJudicialesForm.get('distrito').value ,
+      this.ProcesosJudicialesForm.get('instancia').value ,
+      this.ProcesosJudicialesForm.get('expediente').value ,
+      this.ProcesosJudicialesForm.get('dni').value ,
+      this.ProcesosJudicialesForm.get('cliente').value ,
+      this.ProcesosJudicialesForm.get('fecha_inicio').value ,
+      this.ProcesosJudicialesForm.get('fecha_fin').value ,
+      this.ProcesosJudicialesForm.get('estado').value ,
+      "fecha_inicio desc" ,
+    )
+    .pipe(
+      finalize(() => {
+        this.Cargando.next(false) ;
+      })
+    )
+    .subscribe(res=>{
+      if(res){
+        this.AbrirArchivo(nombre_archivo,res);
+      }
+    })
+  }
+
+  AbrirArchivo(nombre_archivo,path){
+    this.AServicio.ObtenerArchivo(path).subscribe(res=>{
+      saveAs(res, nombre_archivo+'.xlsx');
+    })
+  }
+
 }

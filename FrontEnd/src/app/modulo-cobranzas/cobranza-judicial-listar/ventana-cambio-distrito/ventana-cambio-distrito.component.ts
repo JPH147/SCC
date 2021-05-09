@@ -85,14 +85,14 @@ export class VentanaCambioDistritoComponent implements OnInit {
 
   DistritoJudicialSeleccionado(){
     this.ListarInstanciasJudiciales();
-    this.VerificarDevolucionADistritoAnterior() ;
+    // this.VerificarDevolucionADistritoAnterior() ;
 
     if( this.TrasladoJudicialForm.value.distrito_judicial == this.data.id_distrito ) {
       this.TrasladoJudicialForm.get('expediente').setValue(this.data.expediente) ;
-      this.mismo_distrito = true ;
+      // this.mismo_distrito = true ;
     } else {
       this.TrasladoJudicialForm.get('expediente').setValue("") ;
-      this.mismo_distrito = false ;
+      // this.mismo_distrito = false ;
     }
   }
 
@@ -107,27 +107,27 @@ export class VentanaCambioDistritoComponent implements OnInit {
     this.ListarEspecialistas() ;
   }
 
-  VerificarDevolucionADistritoAnterior(){
-    if( this.proceso_anterior ) {
-      if( this.TrasladoJudicialForm.value.distrito_judicial == this.proceso_anterior.id_juzgado_distrito ) {
-        this.proceso_igual = true ;
-        this.TrasladoJudicialForm.get('instancia_judicial').setValue(this.proceso_anterior.id_juzgado_instancia) ;
-        this.ListarJueces() ;
-        this.ListarEspecialistas() ;
-        // this.TrasladoJudicialForm.get('juez').setValue(this.proceso_anterior.juez) ;
-        // this.TrasladoJudicialForm.get('especialista').setValue(this.proceso_anterior.especialista) ;
-        this.TrasladoJudicialForm.get('expediente').setValue(this.proceso_anterior.expediente) ;
-        this.TrasladoJudicialForm.get('sumilla').setValue(this.proceso_anterior.sumilla) ;
-      } else {
-        this.proceso_igual = false ;
-        this.TrasladoJudicialForm.get('instancia_judicial').setValue(null) ;
-        this.TrasladoJudicialForm.get('juez').setValue("") ;
-        this.TrasladoJudicialForm.get('especialista').setValue("") ;
-        this.TrasladoJudicialForm.get('expediente').setValue("") ;
-        this.TrasladoJudicialForm.get('sumilla').setValue("") ;
-      }
-    }
-  }
+  // VerificarDevolucionADistritoAnterior(){
+  //   if( this.proceso_anterior ) {
+  //     if( this.TrasladoJudicialForm.value.distrito_judicial == this.proceso_anterior.id_juzgado_distrito ) {
+  //       this.proceso_igual = true ;
+  //       this.TrasladoJudicialForm.get('instancia_judicial').setValue(this.proceso_anterior.id_juzgado_instancia) ;
+  //       this.ListarJueces() ;
+  //       this.ListarEspecialistas() ;
+  //       // this.TrasladoJudicialForm.get('juez').setValue(this.proceso_anterior.juez) ;
+  //       // this.TrasladoJudicialForm.get('especialista').setValue(this.proceso_anterior.especialista) ;
+  //       this.TrasladoJudicialForm.get('expediente').setValue(this.proceso_anterior.expediente) ;
+  //       this.TrasladoJudicialForm.get('sumilla').setValue(this.proceso_anterior.sumilla) ;
+  //     } else {
+  //       this.proceso_igual = false ;
+  //       this.TrasladoJudicialForm.get('instancia_judicial').setValue(null) ;
+  //       this.TrasladoJudicialForm.get('juez').setValue("") ;
+  //       this.TrasladoJudicialForm.get('especialista').setValue("") ;
+  //       this.TrasladoJudicialForm.get('expediente').setValue("") ;
+  //       this.TrasladoJudicialForm.get('sumilla').setValue("") ;
+  //     }
+  //   }
+  // }
 
   ListarInstanciasJudiciales(){
     this._vinculados.ListarInstanciasJudiciales(this.TrasladoJudicialForm.value.distrito_judicial,"","",1,50).subscribe(res=>{
@@ -168,7 +168,9 @@ export class VentanaCambioDistritoComponent implements OnInit {
   }
 
   Guardar(){
-    if( this.proceso_igual ) {
+    const proceso_igual = this.TrasladoJudicialForm.value.expediente.trim() === this.data.expediente.trim() ;
+
+    if( proceso_igual ) {
       this._judiciales.ActualizarProcesoTraslado(
         this.proceso_anterior.id ,
         this.data.id

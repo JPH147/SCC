@@ -100,6 +100,7 @@ export type Rol = {
       editar : boolean ,
       eliminar : boolean ,
       agregar_pagos_masivos : boolean ,
+      desafiliar : boolean ,
     } ,
     refinanciamientos : {
       general : boolean ,

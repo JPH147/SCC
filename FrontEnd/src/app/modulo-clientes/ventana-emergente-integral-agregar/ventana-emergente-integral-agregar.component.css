@@ -22,7 +22,14 @@
 	max-width: 10%
 }
 
-.mat-column-direccion-numero,
+.mat-column-direccion-numero {
+	max-width: 5%
+}
+
+.mat-column-direccion-referencia {
+	max-width: 30%
+}
+
 .mat-column-direccion-opciones,
 .mat-column-direccion-relevancia{
 	max-width: 10%

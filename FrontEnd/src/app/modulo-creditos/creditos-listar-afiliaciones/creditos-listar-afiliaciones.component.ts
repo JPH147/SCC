@@ -13,6 +13,10 @@ import { Rol } from 'src/app/compartido/modelos/login.modelos';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { CobranzaJudicialService } from 'src/app/modulo-cobranzas/cobranza-judicial/cobranza-judicial.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { informacion_ventana_desafiliar, VentanaDesafiliarComponent } from './ventana-desafiliar/ventana-desafiliar.component';
+import { VentanaDevolverAnexosComponent } from 'src/app/modulo-cobranzas/cobranza-judicial/ventana-devolver-anexos/ventana-devolver-anexos.component';
+import { MatDialog } from '@angular/material/dialog';
+import { Notificaciones } from 'src/app/core/servicios/notificacion';
 
 @Component({
   selector: 'app-creditos-listar-afiliaciones',
@@ -40,6 +44,8 @@ export class CreditosListarAfiliacionesComponent implements OnInit {
     private _builder : FormBuilder ,
     private _route : ActivatedRoute ,
     private _router : Router ,
+    private _dialogo : MatDialog ,
+    private _notificacion : Notificaciones ,
   ) { }
 
   ngOnInit() {
@@ -97,7 +103,7 @@ export class CreditosListarAfiliacionesComponent implements OnInit {
       estado_pagos : 0 ,
       fecha_inicio : null ,
       fecha_fin : null ,
-      estado_credito : 0
+      estado_credito : 1
     })
   }
 
@@ -115,7 +121,7 @@ export class CreditosListarAfiliacionesComponent implements OnInit {
       this.CreditosForm.get('estado_pagos').value ,
       this.CreditosForm.get('fecha_inicio').value ,
       this.CreditosForm.get('fecha_fin').value ,
-      1,
+      this.CreditosForm.get('estado_credito').value,
       this.paginator?.pageIndex ? this.paginator.pageIndex + 1 : 1 ,
       this.paginator?.pageSize ? this.paginator.pageSize : 10 ,
       this.sort ? this.sort.active +" " + this.sort.direction : "fecha desc" ,
@@ -172,6 +178,52 @@ export class CreditosListarAfiliacionesComponent implements OnInit {
     })
     .finally(() => {
       this._router.navigate(['/cobranzas','cobranza-judicial','nueva-credito',id_credito]) ;
+    })
+  }
+
+  Desafiliar(id_credito) {
+    const informacion : informacion_ventana_desafiliar = {
+      id_credito : id_credito ,
+      tipo : 'desafiliar'
+    }
+
+    const Ventana = this._dialogo.open(VentanaDesafiliarComponent, {
+      data : informacion ,
+      width : '900px' ,
+      maxHeight : '80vh'
+    })
+
+    Ventana.afterClosed().subscribe(resultado => {
+      if ( resultado ) {
+        this._notificacion.Snack("Se desafilió al cliente","") ;
+        this.CargarData() ;
+      }
+      if( !resultado ) {
+        this._notificacion.Snack("Ocurrió un error desafiliando al cliente","") ;
+      }
+    })
+  }
+
+  Reafiliar(id_credito) {
+    const informacion : informacion_ventana_desafiliar = {
+      id_credito : id_credito ,
+      tipo : 'reafiliar'
+    }
+
+    const Ventana = this._dialogo.open(VentanaDesafiliarComponent, {
+      data : informacion ,
+      width : '900px' ,
+      maxHeight : '80vh'
+    })
+
+    Ventana.afterClosed().subscribe(resultado => {
+      if ( resultado ) {
+        this._notificacion.Snack("Se reafilió al cliente","") ;
+        this.CargarData() ;
+      }
+      if( !resultado ) {
+        this._notificacion.Snack("Ocurrió un error reafiliando al cliente","") ;
+      }
     })
   }
 }

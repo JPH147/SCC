@@ -984,7 +984,7 @@ export class CreditosComponent implements OnInit, AfterViewInit {
     // console.log(id_cliente);
     this.Servicio.Verificar_Afiliacion(id_cliente).subscribe(res=>{
       // console.log(res)
-      if(res['codigo_afiliacion']){
+      if(res.codigo_afiliacion){
         this.numero_afiliacion=res['codigo_afiliacion'];
         if ( actualizar_interes ) {
           this.VerificarInteres(res['total_pagado']);

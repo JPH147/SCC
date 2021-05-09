@@ -15,6 +15,7 @@ import { CreditosComponent } from './creditos/creditos.component';
 import { CreditosListarComponent } from './creditos-listar/creditos-listar.component';
 import { CreditosListarAfiliacionesComponent } from './creditos-listar-afiliaciones/creditos-listar-afiliaciones.component';
 import { RefinanciamientoComponent } from './refinanciamiento/refinanciamiento.component';
+import { VentanaDesafiliarComponent } from './creditos-listar-afiliaciones/ventana-desafiliar/ventana-desafiliar.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { RefinanciamientoComponent } from './refinanciamiento/refinanciamiento.c
     CreditosComponent ,
     CreditosListarComponent ,
     CreditosListarAfiliacionesComponent ,
-    RefinanciamientoComponent ,
+    RefinanciamientoComponent,
+    VentanaDesafiliarComponent ,
   ],
   imports: [
     ModuloCreditosRoutingModule ,

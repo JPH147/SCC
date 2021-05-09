@@ -25,6 +25,10 @@
 }
 
 .tipo-5{
+  border-left-color: darkslategray;
+}
+
+.tipo-6{
   border-left-color: mat-color($mat_naranja);
 }
 
@@ -90,6 +94,11 @@ textarea{
 }
 
 .tipo-tercero-5{
+  background-color: darkslategray;
+  color: white;
+}
+
+.tipo-tercero-6{
   background-color: mat-color($mat_naranja);
 }
 
@@ -141,6 +150,10 @@ span.derecha{
 }
 
 .boton-tipo-5{
+  color: darkslategray;
+}
+
+.boton-tipo-6{
   color: mat-color($mat_naranja);
 }
 

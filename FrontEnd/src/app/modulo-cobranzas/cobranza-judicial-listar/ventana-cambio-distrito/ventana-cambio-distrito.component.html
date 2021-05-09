@@ -68,12 +68,12 @@
 
           <mat-grid-tile colspan=2>
             <mat-form-field class="columnas-2">
-              <input matInput type="text" placeholder="Expediente" formControlName="expediente" [readonly]="proceso_igual || mismo_distrito">
+              <input matInput type="text" placeholder="Expediente" formControlName="expediente">
             </mat-form-field>
           </mat-grid-tile>
 
           <mat-grid-tile *ngIf="mismo_distrito">
-            Si es un traslado entre instancias, el expediente es el mismo.
+            <!-- Si es un traslado entre instancias, el expediente es el mismo. -->
           </mat-grid-tile>
 
           <mat-grid-tile colspan=2>
@@ -87,12 +87,13 @@
 
     <mat-card-actions>
       <mat-grid-list cols=1 rowHeight="40px">
-        <mat-grid-tile *ngIf="misma_instancia">
+        <!-- <mat-grid-tile *ngIf="misma_instancia">
           <mat-error> El distrito judicial debe se distinto </mat-error>
-        </mat-grid-tile>
+        </mat-grid-tile> -->
 
         <mat-grid-tile>
-          <button type="button" mat-raised-button color="primary" (click)="Guardar()" [disabled]=" misma_instancia || TrasladoJudicialForm.invalid || ( Cargando | async )"> Guardar </button>
+          <!-- misma_instancia ||  -->
+          <button type="button" mat-raised-button color="primary" (click)="Guardar()" [disabled]="TrasladoJudicialForm.invalid || ( Cargando | async )"> Guardar </button>
         </mat-grid-tile>
       </mat-grid-list>
     </mat-card-actions>

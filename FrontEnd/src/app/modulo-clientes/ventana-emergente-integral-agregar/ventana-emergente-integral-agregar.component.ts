@@ -209,7 +209,6 @@ export class VentanaEmergenteIntegralAgregarComponent implements OnInit, AfterVi
         Validators.required
       ]],  
       referencia: [null,[
-        Validators.required
       ]],  
     })
 

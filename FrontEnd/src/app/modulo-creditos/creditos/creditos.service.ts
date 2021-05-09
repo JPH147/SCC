@@ -818,4 +818,24 @@ export class CreditosService {
       }
     }));
   }
+
+  ActualizarEstadoCredito(
+    id_credito : number ,
+    estado : number
+  ) :Observable<boolean> {
+    let params = new HttpParams()
+      .set('prcredito',id_credito.toString())
+      .set('prestado',estado.toString()) ;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.url + 'credito/update-estado.php', params, { headers : headers } )
+    .pipe(map(res => {
+      if (res['codigo'] === 0) {
+        return true;
+      } else {
+        return false;
+      }
+    }));
+  }
 }

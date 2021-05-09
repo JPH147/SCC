@@ -1,0 +1,36 @@
+<mat-card class="card">
+	  <mat-toolbar color="primary">
+    <mat-toolbar-row><h4> {{data.tipo === 'desafiliar' ? 'Confirmar desafiliacion' : 'Confirmar reafiliacion' }} </h4></mat-toolbar-row>
+  </mat-toolbar>
+
+  <div class = "spinner-container-emergente" *ngIf = "Cargando| async">
+    <mat-spinner></mat-spinner>
+  </div>
+  
+	<mat-card-content>
+    <ng-container *ngIf="data.tipo === 'desafiliar'">
+      <mat-grid-list cols="1" rowHeight="70px">
+        <mat-grid-tile>
+          ¿Esta seguro que desea desafiliar al cliente?
+        </mat-grid-tile>
+      </mat-grid-list>
+    </ng-container>
+
+    <ng-container *ngIf="data.tipo === 'reafiliar'">
+      <mat-grid-list cols="1" rowHeight="70px">
+        <mat-grid-tile>
+          ¿Esta seguro que desea desafiliar al cliente?
+        </mat-grid-tile>
+      </mat-grid-list>
+    </ng-container>
+	</mat-card-content>
+
+	<mat-card-actions>
+    <mat-grid-list cols="1" rowHeight="70px">
+      <mat-grid-tile>
+        <button mat-raised-button type="button" color="primary" [disabled]="(Cargando | async)"
+          (click)="ConfirmarAfiliacion()"> Confirmar </button>
+      </mat-grid-tile>
+    </mat-grid-list>
+	</mat-card-actions>
+</mat-card>

@@ -740,6 +740,15 @@
                       {{ Permiso.creditos.afiliaciones.agregar_pagos_masivos ? 'check' : 'close' }} </mat-icon> &nbsp; Agregar pagos
                   </ng-container>
                 </mat-grid-tile>
+                <mat-grid-tile>
+                  <ng-container *ngIf="!data.ver">
+                    <mat-checkbox [(ngModel)]="Permiso.creditos.afiliaciones.desafiliar"> Desafiliar </mat-checkbox>
+                  </ng-container>
+                  <ng-container *ngIf="data.ver">
+                    <mat-icon [color]="Permiso.creditos.afiliaciones.desafiliar ? 'accent' : 'warn'">
+                      {{ Permiso.creditos.afiliaciones.desafiliar ? 'check' : 'close' }} </mat-icon> &nbsp; Desafiliar
+                  </ng-container>
+                </mat-grid-tile>
               </mat-grid-list>
             </ng-container>
           </ng-container>

@@ -27,6 +27,7 @@
           	<mat-option [value]="0">Todas</mat-option>
           	<mat-option [value]="1">Pagadas</mat-option>
           	<mat-option [value]="2">Pendientes</mat-option>
+          	<mat-option [value]="3">Pasadas</mat-option>
           </mat-select>
         </mat-form-field>
       </mat-grid-tile>
@@ -49,10 +50,18 @@
 
     <div class="venta-contenedor">
       <ng-container *ngFor="let transaccion of (ListadoVentas.Informacion | async)">
-        <div [ngClass]="(transaccion.id_liquidacion ? 'venta-contenido-primary' : 'venta-contenido')">
+        <div [ngClass]="{
+            'venta-contenido-primary' : transaccion.id_liquidacion > 0,
+            'venta-contenido' : transaccion.id_liquidacion == null , 
+            'venta-anterior' : transaccion.id_tipo == 0
+          }">
           <mat-list role="list">
             <mat-list-item role="listitem"
-              [ngClass]="(transaccion.id_liquidacion ? 'titulo-primary' : 'titulo')">
+              [ngClass]="{
+                'titulo-primary' : transaccion.id_liquidacion > 0,
+                'titulo' : transaccion.id_liquidacion == null , 
+                'titulo-anterior' : transaccion.id_tipo == 0
+              }">
               <span class="centrar"> {{ transaccion.tipo }} </span>
             </mat-list-item>
             <mat-list-item role="listitem">
@@ -91,7 +100,7 @@
             </mat-list-item>
             <mat-list-item role="listitem">
               <button mat-button [color]="transaccion.id_liquidacion ? 'primary' : 'accent'"
-                class="centrar" (click)="VerVenta(transaccion)"> Ver documento </button>
+                class="centrar" (click)="VerVenta(transaccion)" [disabled]="transaccion.id_tipo == 0"> Ver documento </button>
             </mat-list-item>
           </mat-list>
         </div>

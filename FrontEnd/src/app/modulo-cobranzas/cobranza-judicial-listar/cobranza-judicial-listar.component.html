@@ -1,6 +1,7 @@
 <mat-card class="principal">
+  <button mat-fab type="button" color="accent" (click)="ExportToExcel()" matTooltip="Descargar reporte"
+    class="derecha"><mat-icon>save_alt</mat-icon></button>
 
-  <!-- Encabezado -->
   <mat-card-title>
     <div class = "tituloProd"> Listado de procesos judiciales ({{total_procesos}}) </div>
   </mat-card-title>

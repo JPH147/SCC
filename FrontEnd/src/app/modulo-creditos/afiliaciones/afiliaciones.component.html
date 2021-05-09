@@ -29,6 +29,10 @@
 
   <mat-card-title class="tituloProd"> Afiliación N° {{CreditosForm.getRawValue().codigo}} </mat-card-title>
 
+  <mat-card-subtitle *ngIf="estado == 2">
+    El cliente ha sido desafiliado
+  </mat-card-subtitle>
+
   <form [formGroup]="CreditosForm">
 
     <div class = "spinner-container" *ngIf = "Cargando | async">
@@ -407,7 +411,7 @@
       </mat-card-subtitle>
 
       <ng-container *ngIf="id_credito">
-        <mat-grid-list cols="2" rowHeight="50px">
+        <mat-grid-list cols="2" rowHeight="50px" *ngIf="estado == 1">
           <mat-grid-tile *ngIf="permiso?.creditos?.afiliaciones?.agregar_pagos_masivos">
             <button mat-raised-button type="button" color="accent" matTooltip="Agregar pagos"
               [matMenuTriggerFor]="menuPagos" [disabled]="(Cargando | async)">

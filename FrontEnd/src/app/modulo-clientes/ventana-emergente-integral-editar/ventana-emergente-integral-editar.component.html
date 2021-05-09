@@ -439,6 +439,11 @@
             <mat-cell *matCellDef="let direccion"> {{direccion.direccioncompleta}} </mat-cell>
           </ng-container>
 
+          <ng-container matColumnDef="direccion-referencia">
+            <mat-header-cell *matHeaderCellDef> Referencia </mat-header-cell>
+            <mat-cell *matCellDef="let direccion"> {{direccion.referencia}} </mat-cell>
+          </ng-container>
+
           <ng-container matColumnDef="direccion-relevancia">
             <mat-header-cell *matHeaderCellDef> Relevancia </mat-header-cell>
             <mat-cell *matCellDef="let direccion">

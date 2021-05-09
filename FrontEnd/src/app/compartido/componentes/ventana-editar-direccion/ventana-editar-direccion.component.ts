@@ -58,7 +58,6 @@ export class VentanaEditarDireccionComponent implements OnInit {
         Validators.required
       ]],
       referencia: ['',[
-        Validators.required
       ]],
     })
   }

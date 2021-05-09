@@ -153,6 +153,7 @@ export class VentanaPermisosComponent implements OnInit {
           editar : permisos.creditos?.afiliaciones?.editar || false ,
           eliminar : permisos.creditos?.afiliaciones?.eliminar || false ,
           agregar_pagos_masivos : permisos.creditos?.afiliaciones?.agregar_pagos_masivos || false ,
+          desafiliar : permisos.creditos?.afiliaciones?.desafiliar || false ,
         } ,
         refinanciamientos : {
           general : permisos.creditos?.refinanciamientos?.general || false ,
@@ -319,6 +320,7 @@ export class VentanaPermisosComponent implements OnInit {
           editar : false ,
           eliminar : false ,
           agregar_pagos_masivos : false ,
+          desafiliar : false ,
         } ,
         refinanciamientos : {
           general : false ,

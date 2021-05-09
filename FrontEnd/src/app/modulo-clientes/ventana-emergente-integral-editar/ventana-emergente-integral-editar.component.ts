@@ -50,7 +50,7 @@ export class VentanaEmergenteIntegralEditarComponent implements OnInit {
   
     // Direcciones
     public ListadoDirecciones: ClienteDireccionDataSource;
-    public ColumnasDirecciones: string[] = [ 'direccion-numero', 'direccion-nombre', 'direccion-relevancia', 'direccion-opciones']; 
+    public ColumnasDirecciones: string[] = [ 'direccion-numero', 'direccion-nombre', 'direccion-referencia', 'direccion-relevancia','direccion-opciones']; 
     public DireccionesForm: FormGroup;
     public RelevanciaDireccion: any;
     public LstDepartamento: any;
@@ -145,7 +145,6 @@ export class VentanaEmergenteIntegralEditarComponent implements OnInit {
         Validators.required
       ]],
       referencia: [null,[
-        Validators.required
       ]],
     })
 

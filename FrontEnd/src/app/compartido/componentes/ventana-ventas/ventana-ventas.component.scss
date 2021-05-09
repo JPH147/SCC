@@ -40,6 +40,11 @@ mat-table{
   color: white !important;
 }
 
+.titulo-anterior{
+  background-color: darkslategray;
+  color: white !important;
+}
+
 .venta-contenedor{
   overflow-x: scroll;
   white-space: nowrap;
@@ -61,6 +66,17 @@ mat-table{
   display: inline-block ;
   width: 272px ;
   border-color: mat-color($primary);
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 5px;
+  margin: 0 10px ;
+  margin-bottom: 10px;
+}
+
+.venta-anterior{
+  display: inline-block ;
+  width: 272px ;
+  border-color: darkslategray;
   border-width: 1px;
   border-style: solid;
   border-radius: 5px;

@@ -940,4 +940,41 @@ export class CobranzaJudicialService {
       }
     })) ;
   } 
+
+  ListarV4Unlimited(
+    archivo:string,
+    distrito:string,
+    instancia:string,
+    expediente:string,
+    dni:string,
+    nombre:string,
+    fecha_inicio:Date,
+    fecha_fin:Date,
+    estado:number,
+    orden:string
+  ): Observable<any> {
+    let params = new HttpParams()
+      .set('prarchivo',archivo)
+      .set('prdistrito',distrito )
+      .set('prinstancia',instancia )
+      .set('prexpediente',expediente )
+      .set('prdni',dni )
+      .set('prnombre',nombre )
+      .set('prfechainicio', moment(fecha_inicio).format('YYYY-MM-DD') )
+      .set('prfechafin',moment(fecha_fin).format('YYYY-MM-DD') )
+      .set('prestado',estado.toString() )
+      .set('prorden',orden ) ;
+
+    return this.http.get(this.url + 'procesojudicial/readV4-unlimited.php', {params})
+    .pipe(
+      retry(20),
+      map(res => {
+      if (res['codigo'] === 0) {
+        return res['data'];
+      } else {
+        console.log('No hay datos que mostrar', res);
+        return res;
+      }
+    }));
+  }
 }

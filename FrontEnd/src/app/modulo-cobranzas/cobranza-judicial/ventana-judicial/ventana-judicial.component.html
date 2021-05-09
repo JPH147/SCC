@@ -23,9 +23,9 @@
           &nbsp;
           <button type="button" mat-raised-button class="boton-tipo-3" *ngIf="VentanaJudicialForm.value.tipo_documento == 4"> Oficio </button>
           &nbsp;
-          <button type="button" mat-raised-button class="boton-tipo-4" *ngIf="VentanaJudicialForm.value.tipo_documento == 5"> Devolución </button>
+          <button type="button" mat-raised-button class="boton-tipo-5" *ngIf="VentanaJudicialForm.value.tipo_documento == 5"> Devolución </button>
           &nbsp;
-          <button type="button" mat-raised-button class="boton-tipo-5" *ngIf="VentanaJudicialForm.value.tipo_documento == 6"> Nota </button>
+          <button type="button" mat-raised-button class="boton-tipo-6" *ngIf="VentanaJudicialForm.value.tipo_documento == 6"> Nota </button>
           &nbsp;
           <button type="button" mat-raised-button class="boton-tipo-7" *ngIf="VentanaJudicialForm.value.tipo_documento == 7"> Queja </button>
           <!-- &nbsp;
@@ -42,10 +42,10 @@
           <button type="button" mat-raised-button [ngClass]="{'boton-tipo-3' : VentanaJudicialForm.value.tipo_documento == 4}"
             (click)="TipoDocumentoSeleccionado(4)"> Oficio </button>
           &nbsp;
-          <button type="button" mat-raised-button [ngClass]="{'boton-tipo-4' : VentanaJudicialForm.value.tipo_documento == 5}"
+          <button type="button" mat-raised-button [ngClass]="{'boton-tipo-5' : VentanaJudicialForm.value.tipo_documento == 5}"
             (click)="TipoDocumentoSeleccionado(5)"> Devolución </button>
           &nbsp;
-          <button type="button" mat-raised-button [ngClass]="{'boton-tipo-5' : VentanaJudicialForm.value.tipo_documento == 6}"
+          <button type="button" mat-raised-button [ngClass]="{'boton-tipo-6' : VentanaJudicialForm.value.tipo_documento == 6}"
             (click)="TipoDocumentoSeleccionado(6)"> Nota </button>
           &nbsp;
           <button type="button" mat-raised-button [ngClass]="{'boton-tipo-7' : VentanaJudicialForm.value.tipo_documento == 7}"
