@@ -733,6 +733,7 @@ Class Cliente{
         $sheet->setCellValue('O1', 'Provincia');
         $sheet->setCellValue('P1', 'Departamento');
         $sheet->setCellValue('Q1', 'Cuotas vencidas');
+        $sheet->setCellValue('R1', 'Fecha de retiro');
   
         while($row = $result->fetch(PDO::FETCH_ASSOC))
         {
@@ -756,6 +757,7 @@ Class Cliente{
             $sheet->setCellValue('O' . $contador, $provincia );
             $sheet->setCellValue('P' . $contador, $departamento );
             $sheet->setCellValue('Q' . $contador, $cuotas_vencidas );
+            $sheet->setCellValue('R' . $contador, $fecha_retiro ? $fecha_retiro : '' );
         }
   
         $writer = new Xlsx($spreadsheet);
