@@ -4,7 +4,7 @@ import { ServiciosGenerales } from 'src/app/core/servicios/servicios';
 import { ventanaseriesalida } from './ventana-seriesalida/ventanaseriesalida';
 import { FormBuilder, FormGroup, Validators, FormArray} from '@angular/forms';
 import { fromEvent} from 'rxjs';
-import {  debounceTime, tap, distinctUntilChanged} from 'rxjs/operators';
+import { debounceTime, tap, distinctUntilChanged} from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import {StockService} from '../stock/stock.service'
@@ -12,6 +12,7 @@ import {ServiciosProductoSerie} from 'src/app/core/servicios/productoserie'
 import {IngresoProductoService} from '../ingreso-productos/ingreso-productos.service'
 import {ServiciosDocumentos} from 'src/app/core/servicios/documentos';
 import { Location } from '@angular/common';
+import * as moment from 'moment' ;
 
 @Component({
   selector: 'app-salida-productos',
@@ -77,6 +78,9 @@ export class SalidaProductosComponent implements OnInit {
     });
     this.CrearProducto();
 
+    const ahora = new Date() ;
+    const documento_generado : string = moment(ahora).format('YYYY') + moment(ahora).format('MM') + moment(ahora).format('DD') + moment(ahora).format('HH') ;
+    this.SalidaProductosForm.get('documento').setValue(documento_generado) ;
   }
 
   ngAfterViewInit(){

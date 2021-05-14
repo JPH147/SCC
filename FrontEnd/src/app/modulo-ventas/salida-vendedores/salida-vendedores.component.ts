@@ -260,6 +260,10 @@ export class SalidaVendedoresComponent implements OnInit {
       ]],
       productos: this.FormBuilder.array([this.CrearProducto()])
     });
+
+    const ahora = new Date() ;
+    const documento_generado : string = moment(ahora).format('YYYY') + moment(ahora).format('MM') + moment(ahora).format('DD') + moment(ahora).format('HH') ;
+    this.SalidaVendedoresForm.get('guia_remision').setValue(documento_generado) ;
   }
 
   NuevaSalida(){

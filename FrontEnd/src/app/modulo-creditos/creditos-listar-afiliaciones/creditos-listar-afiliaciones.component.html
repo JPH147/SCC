@@ -128,7 +128,7 @@
         <mat-cell *matCellDef="let credito">
           <button mat-icon-button color="primary" matTooltip="Ver documento" (click)="VerCredito(credito.id)"><mat-icon> visibility </mat-icon></button>
           <ng-container *ngIf="permiso?.creditos?.afiliaciones?.desafiliar">
-            <ng-container *ngIf="credito.g === 1">
+            <ng-container *ngIf="credito.estado === 1">
               <button mat-icon-button color="primary" matTooltip="Desafiliar" (click)="Desafiliar(credito.id)"><mat-icon> logout </mat-icon></button>
             </ng-container>
             <ng-container *ngIf="credito.estado === 2">

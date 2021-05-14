@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { ProcesoJudicialVinculadosService } from '../../../modulo-maestro/proceso-judicial-vinculados/proceso-judicial-vinculados.service';
 import { BehaviorSubject } from 'rxjs';
 import { CobranzaJudicialService } from '../../cobranza-judicial/cobranza-judicial.service';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-ventana-cambio-distrito',
@@ -170,11 +171,19 @@ export class VentanaCambioDistritoComponent implements OnInit {
   Guardar(){
     const proceso_igual = this.TrasladoJudicialForm.value.expediente.trim() === this.data.expediente.trim() ;
 
+    this.Cargando.next(true) ;
+
     if( proceso_igual ) {
       this._judiciales.ActualizarProcesoTraslado(
         this.proceso_anterior.id ,
         this.data.id
-      ).subscribe(res=>{
+      )
+      .pipe(
+        finalize(() => {
+          this.Cargando.next(false) ;
+        })
+      )
+      .subscribe(res=>{
         this.ventana.close(res) ;
       })
     } else {
@@ -185,7 +194,13 @@ export class VentanaCambioDistritoComponent implements OnInit {
         this.TrasladoJudicialForm.value.id_juez ,
         this.TrasladoJudicialForm.value.id_especialista ,
         this.TrasladoJudicialForm.value.sumilla
-      ).subscribe(res=>{
+      )
+      .pipe(
+        finalize(() => {
+          this.Cargando.next(false) ;
+        })
+      )
+      .subscribe(res=>{
         this.ventana.close(res) ;
       })
     }

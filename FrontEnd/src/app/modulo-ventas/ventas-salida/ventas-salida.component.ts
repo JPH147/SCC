@@ -242,7 +242,6 @@ export class VentasSalidaComponent implements OnInit, AfterViewInit {
   }
 
   CrearFormulario(){
-
     this.VentasSalidaForm = this.FormBuilder.group({
       'id_acreedor': [{value:0, disabled:true}, [
       ]],

@@ -77,23 +77,25 @@ Class TransaccionCabecera{
 
         $contador = $this->total_pagina*($this->numero_pagina-1);
 
-        while($row = $result->fetch(PDO::FETCH_ASSOC))
+        $resultados = $result->fetchAll(PDO::FETCH_ASSOC) ;
+        $result->closeCursor();
+
+        foreach($resultados as $item)
 		{
-            extract($row);
-            $TDetalle=$this->detalle->readxcabecera($id);
+            $TDetalle=$this->detalle->readxcabecera($item['id']);
             $contador=$contador+1;
             $transaccion_item = array (
                 "numero"=>$contador,
-                "id"=>$id,
-                "movimiento_serie"=>$movimiento_serie,
-                "movimiento_numero"=>$movimiento_numero,
-                "id_almacen"=>$id_almacen,
-                "almacen"=>$almacen,
-                "tipo"=>$tipo,
-                "referencia"=>$referencia,
-                "referente"=>$referente,
-                "fecha"=>$fecha,
-                "documento"=>$documento,
+                "id"=>$item['id'],
+                "movimiento_serie"=>$item['movimiento_serie'],
+                "movimiento_numero"=>$item['movimiento_numero'],
+                "id_almacen"=>$item['id_almacen'],
+                "almacen"=>$item['almacen'],
+                "tipo"=>$item['tipo'],
+                "referencia"=>$item['referencia'],
+                "referente"=>$item['referente'],
+                "fecha"=>$item['fecha'],
+                "documento"=>$item['documento'],
                 "detalle"=>$TDetalle
             );
             array_push($TCabecera_list["transacciones"],$transaccion_item);

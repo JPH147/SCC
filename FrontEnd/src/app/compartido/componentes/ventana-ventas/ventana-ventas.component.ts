@@ -12,6 +12,8 @@ import { Rol } from 'src/app/compartido/modelos/login.modelos';
 import { Store } from '@ngrx/store';
 import { EstadoSesion } from 'src/app/compartido/reducers/permisos.reducer';
 import { ClienteService } from '../../../modulo-clientes/clientes/clientes.service';
+import { URLIMAGENES } from 'src/app/core/servicios/url';
+import { Notificaciones } from 'src/app/core/servicios/notificacion';
 
 @Component({
   selector: 'app-ventana-ventas',
@@ -39,7 +41,8 @@ export class VentanaVentasComponent implements OnInit {
     public ventana: MatDialogRef<VentanaVentasComponent>,
     private Servicio: VentaService,
     private _clientes : ClienteService ,
-    private router: Router
+    private router: Router ,
+    private _notificaciones : Notificaciones
   ) { }
 
   ngOnInit() {
@@ -104,7 +107,14 @@ export class VentanaVentasComponent implements OnInit {
   }
 
   VerVenta(transaccion){
-    console.log(transaccion) ;
+    if (transaccion.id_tipo == 0) {
+      if ( transaccion.documento_pdf ) {
+        let archivo = URLIMAGENES.carpeta+'venta/'+transaccion.documento_pdf ;
+        window.open(archivo, "_blank");
+      } else {
+        this._notificaciones.Snack("No se ha adjuntado un archivo en este talonario", "") ;
+      }
+    }
     if(transaccion.id_tipo==1){
       this.router.navigate(['/creditos','afiliaciones','ver', transaccion.id], {queryParams: {}});
     }

@@ -95,7 +95,7 @@
 
               <mat-grid-tile colspan="2">
                 <mat-form-field class="input-ventanac">
-                  <mat-select placeholder='Situación' formControlName="cargo_estado" >
+                  <mat-select placeholder='Situación' formControlName="cargo_estado" (selectionChange)="SituacionSeleccionada($event)">
                     <mat-option *ngFor="let estado of Estados" [value] = "estado.id"> {{estado.nombre}} </mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -233,6 +233,16 @@
                   <input matInput placeholder="Calificación personal"  formControlName="calificacion_personal">
                 </mat-form-field>
               </mat-grid-tile>
+
+              <mat-grid-tile colspan="1" *ngIf="this.ClientesForm.get('cargo_estado').value === 427 ||
+                this.ClientesForm.get('cargo_estado').value === 216 || this.ClientesForm.get('cargo_estado').value === 380">
+                <mat-form-field class="input-ventanaa">
+                  <input matInput [matDatepicker]="retiro" placeholder="Fecha de retiro" formControlName="fecha_retiro">
+                  <mat-datepicker-toggle matSuffix [for]="retiro"></mat-datepicker-toggle>
+                  <mat-datepicker #retiro disabled="false"></mat-datepicker>
+                </mat-form-field>
+              </mat-grid-tile>
+
             </mat-grid-list>
           </ng-container>
         </mat-card-content>

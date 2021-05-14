@@ -66,6 +66,7 @@ Class Cliente{
     public $pagina;
     public $total_pagina;
     public $id_centro_trabajo;
+    public $fecha_retiro;
 
     public $path_reporte = '../uploads/reporte-clientes/';
 
@@ -334,7 +335,8 @@ Class Cliente{
             :clt_aporte,
             :clt_fecharegistro,
             :clt_estado,
-            :prcentrotrabajo
+            :prcentrotrabajo,
+            :pr_fecharetiro
         )"; 
 
         $result = $this->conn->prepare($query);
@@ -358,6 +360,7 @@ Class Cliente{
         $this->clt_fecharegistro=htmlspecialchars(strip_tags($this->clt_fecharegistro));
         $this->clt_estado=htmlspecialchars(strip_tags($this->clt_estado));
         $this->id_centro_trabajo=htmlspecialchars(strip_tags($this->id_centro_trabajo));
+        $this->fecha_retiro=htmlspecialchars(strip_tags($this->fecha_retiro));
 
         $result->bindParam(":id_sub_sede", $this->id_sub_sede);
         $result->bindParam(":id_cargo", $this->id_cargo);
@@ -378,6 +381,7 @@ Class Cliente{
         $result->bindParam(":clt_fecharegistro", $this->clt_fecharegistro);
         $result->bindParam(":clt_estado", $this->clt_estado);
         $result->bindParam(":prcentrotrabajo", $this->id_centro_trabajo);
+        $result->bindParam(":prfecharetiro", $this->fecha_retiro);
 
         if($result->execute())
         {
@@ -434,6 +438,7 @@ Class Cliente{
         $this->plantilla_transaccion=$row['plantilla_transaccion'];
         $this->plantilla_compromiso=$row['plantilla_compromiso'];
         $this->id_centro_trabajo=$row['id_centro_trabajo'];
+        $this->fecha_retiro=$row['fecha_retiro'];
     }
 
     function update(){
@@ -456,7 +461,8 @@ Class Cliente{
             :clt_calificacion_personal,
             :clt_aporte,
             :prestado,
-            :prcentrotrabajo
+            :prcentrotrabajo,
+            :pr_fecharetiro
         )"; 
 
         $result = $this->conn->prepare($query);
@@ -479,6 +485,7 @@ Class Cliente{
         $this->clt_aporte=htmlspecialchars(strip_tags($this->clt_aporte));
         $this->clt_estado=htmlspecialchars(strip_tags($this->clt_estado));
         $this->id_centro_trabajo=htmlspecialchars(strip_tags($this->id_centro_trabajo));
+        $this->fecha_retiro=htmlspecialchars(strip_tags($this->fecha_retiro));
 
         $result->bindParam(":idcliente", $this->idcliente);
         $result->bindParam(":id_subsede", $this->id_subsede);
@@ -498,15 +505,14 @@ Class Cliente{
         $result->bindParam(":clt_aporte", $this->clt_aporte);
         $result->bindParam(":prestado", $this->clt_estado);
         $result->bindParam(":prcentrotrabajo", $this->id_centro_trabajo);
+        $result->bindParam(":pr_fecharetiro", $this->fecha_retiro);
         
-
         if($result->execute())
         {
             return true;
         }
         
         return false;
-        // return $query;
     }
 
     function update_parcial(){

@@ -1111,6 +1111,7 @@ Class Venta{
                 "total"=>$total,
                 "estado"=>$estado,
                 "id_liquidacion"=>$id_liquidacion,
+                "documento_pdf"=>$documento_pdf,
             );
             array_push($venta_list["ventas"],$venta_item);
         }

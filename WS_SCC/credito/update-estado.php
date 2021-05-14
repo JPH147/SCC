@@ -28,8 +28,8 @@
 
             if($credito->actualizar_credito_estado())
             {
-                $referencia = $credito->tipo_credito == "1" ? 8 : 9 ;
-                $log->create($usuario_alvis, $referencia, 3, $credito->id_credito) ;
+                $accion = $credito->estado == "1" ? 13 : 12 ;
+                $log->create($usuario_alvis, 8, $accion, $credito->id_credito) ;
                 
                 print_json("0000", "Se actualizó el crédito satisfactoriamente.", $credito->id_credito);
             }

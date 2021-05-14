@@ -100,7 +100,8 @@
             </mat-list-item>
             <mat-list-item role="listitem">
               <button mat-button [color]="transaccion.id_liquidacion ? 'primary' : 'accent'"
-                class="centrar" (click)="VerVenta(transaccion)" [disabled]="transaccion.id_tipo == 0"> Ver documento </button>
+                class="centrar" (click)="VerVenta(transaccion)" [disabled]="transaccion.id_liquidacion == 0 && !transaccion.documento_pdf"
+                > Ver documento </button>
             </mat-list-item>
           </mat-list>
         </div>

@@ -11,6 +11,7 @@ import { ServiciosVentas } from 'src/app/core/servicios/ventas';
 import { ServiciosTelefonos } from 'src/app/core/servicios/telefonos';
 import { BancosService } from 'src/app/modulo-maestro/bancos/bancos.service';
 import { CentroTrabajoPnpComponent } from 'src/app/modulo-maestro/centros-trabajo/centro-trabajo-pnp/centro-trabajo-pnp.component';
+import { MatSelectChange } from '@angular/material/select';
 
 @Component({
   selector: 'app-ventana-emergente-integral-agregar',
@@ -186,6 +187,10 @@ export class VentanaEmergenteIntegralAgregarComponent implements OnInit, AfterVi
         // Validators.required
       ]],
       'aporte': [ 20, [
+        // Validators.required,
+        // Validators.pattern('[0-9- ]+')
+      ]],
+      'fecha_retiro': [ null, [
         // Validators.required,
         // Validators.pattern('[0-9- ]+')
       ]],
@@ -506,7 +511,8 @@ export class VentanaEmergenteIntegralAgregarComponent implements OnInit, AfterVi
       this.ClientesForm.value.calificacion_personal,
       this.ClientesForm.value.aporte,
       1,
-      this.ClientesForm.get('centro_trabajo').value
+      this.ClientesForm.get('centro_trabajo').value,
+      this.ClientesForm.get('fecha_retiro').value,
     )
     .pipe(
       finalize(()=>{
@@ -590,6 +596,14 @@ export class VentanaEmergenteIntegralAgregarComponent implements OnInit, AfterVi
     this.ClientesForm.get('provincia').setValue('') ;
     this.ClientesForm.get('distrito_nombre').setValue('') ;
     this.ClientesForm.get('distrito').setValue(0) ;
+  }
+
+  SituacionSeleccionada(evento : MatSelectChange) {
+    // 427 en el hosting de alvis
+    // 216 y 380 en el d GENUS
+    if ( evento.value === 427 || evento.value === 216 || evento.value === 380 ) {
+      this.ClientesForm.get('fecha_retiro').setValue(null) ;
+    }
   }
 }
 

@@ -335,7 +335,8 @@ export class VentanaEmergenteClientes {
         formulario.value.calificacion_personal,
         formulario.value.aporte,
         this.data.confirmar ? 1 : formulario.value.estado,
-        0
+        0,
+        null
       ).subscribe(res =>{
         // this.ClientesForm.reset();
         this.Cargando.next(false) ;
@@ -361,7 +362,8 @@ export class VentanaEmergenteClientes {
         formulario.value.calificacion_personal,
         formulario.value.aporte,
         1,
-        0
+        0,
+        null
       ).subscribe(res =>{
         // this.ClientesForm.reset();
         this.Cargando.next(false) ;

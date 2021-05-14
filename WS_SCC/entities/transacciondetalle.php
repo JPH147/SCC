@@ -95,25 +95,28 @@ Class TransaccionDetalle{
 
         $detalle_list=array();
 
-        $contador = 0;;
-        
-        while($row = $result->fetch(PDO::FETCH_ASSOC))
-        {   
+        $contador = 0;
+
+        $resultados = $result->fetchAll(PDO::FETCH_ASSOC) ;
+        $result->closeCursor();
+
+        foreach($resultados as $item)
+		{
             // echo "hola";
             extract($row);
             $contador=$contador+1;
             $detalle_items = array (
                 "numero"=>$contador,
-                "id"=>$id,
-                "producto"=>$producto,
-                "tiene_serie"=>$tiene_serie,
-                "serie"=>$serie . " ",
-                "id_serie"=>$id_serie,
-                "color"=>$color,
-                "almacenamiento"=>$almacenamiento,
-                "cantidad"=>$cantidad,
-                "precio"=>$precio,
-                "observacion"=>$observacion
+                "id"=>$item['id'],
+                "producto"=>$item['producto'],
+                "tiene_serie"=>$item['tiene_serie'],
+                "serie"=>$item['serie'] . " ",
+                "id_serie"=>$item['id_serie'],
+                "color"=>$item['color'],
+                "almacenamiento"=>$item['almacenamiento'],
+                "cantidad"=>$item['cantidad'],
+                "precio"=>$item['precio'],
+                "observacion"=>$item['observacion']
             );
             array_push($detalle_list,$detalle_items);
         }

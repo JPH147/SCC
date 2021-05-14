@@ -192,10 +192,10 @@
               <td class="detalle-columnas" id="detalle-color">{{detalle.documento}}</td>
               <td class="detalle-columnas" id="detalle-almacenamiento">{{detalle.almacen}}</td>
               <td class="detalle-columnas" id="detalle-observacion">
-                <button mat-icon-button color="primary" (click)="VerDetalle(detalle)" matTooltip="Ver detalle">
+                <button mat-icon-button color="primary" type="button" (click)="VerDetalle(detalle)" matTooltip="Ver detalle">
                   <mat-icon>visibility</mat-icon>
                 </button>
-                <button mat-icon-button color="primary" (click)="AgregarIngreso(detalle)" matTooltip="Aceptar transferencia">
+                <button mat-icon-button color="primary" type="button" (click)="AgregarIngreso(detalle)" matTooltip="Aceptar transferencia">
                   <mat-icon>check_circle</mat-icon>
                 </button>
               </td>

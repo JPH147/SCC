@@ -37,6 +37,7 @@
             $cliente->clt_aporte = trim($_POST["clt_aporte"]);
             $cliente->clt_estado = trim($_POST["prestado"]);
             $cliente->id_centro_trabajo = trim($_POST["prcentrotrabajo"]);
+            $cliente->fecha_retiro = $_POST["prfecharetiro"] == "0" ? null : $_POST["prfecharetiro"] ;
 
 	    	if($cliente->update())
 	        {

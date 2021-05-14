@@ -121,7 +121,7 @@ export class VentanaJudicialComponent implements OnInit {
   }
 
   ListarTrabajadores(){
-    this._ventas.ListarVendedores("","","",3,1,50).subscribe(res=>{
+    this._ventas.ListarVendedores("","","",0,1,50).subscribe(res=>{
       this.Trabajadores = res['data'].vendedores
     })
   }
@@ -198,14 +198,14 @@ export class VentanaJudicialComponent implements OnInit {
     this.ObtenerNombreDocumentoJudicial() ;
     this.ObtenerNumeroDocumento() ;
     this.ListarEstados() ;
-    if( this.VentanaJudicialForm.value.tipo_documento == 2 ) {
-      this.VentanaJudicialForm.get('trabajador').enable();
-      this.VentanaJudicialForm.get('trabajador').setValidators([Validators.required]) ;
-    } else {
-      this.VentanaJudicialForm.get('trabajador').setValue(0)
-      this.VentanaJudicialForm.get('trabajador').disable();
-      this.VentanaJudicialForm.get('trabajador').setValidators([]) ;
-    }
+    // if( this.VentanaJudicialForm.value.tipo_documento == 2 ) {
+    //   this.VentanaJudicialForm.get('trabajador').enable();
+    //   this.VentanaJudicialForm.get('trabajador').setValidators([Validators.required]) ;
+    // } else {
+    //   this.VentanaJudicialForm.get('trabajador').setValue(0)
+    //   this.VentanaJudicialForm.get('trabajador').disable();
+    //   this.VentanaJudicialForm.get('trabajador').setValidators([]) ;
+    // }
   }
 
   ObtenerNombreDocumentoJudicial() {

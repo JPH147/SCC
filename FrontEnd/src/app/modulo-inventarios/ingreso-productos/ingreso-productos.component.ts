@@ -423,7 +423,7 @@ import { Location } from '@angular/common';
 
   VerDetalle(transaccion){
     this.IngresoProductoservicios.ObtenerDetalle(transaccion.id).subscribe(res=>{
-      let detalle_ventana = this.DialogoSerie.open(VentanaDetalle, {
+      this.DialogoSerie.open(VentanaDetalle, {
         width: '800px',
         data: res
       });

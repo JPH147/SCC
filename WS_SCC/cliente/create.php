@@ -39,6 +39,7 @@
             $cliente->clt_fecharegistro = trim($_POST["clt_fecharegistro"]);
             $cliente->clt_estado = trim($_POST["prestado"]);
             $cliente->id_centro_trabajo = trim($_POST["prcentrotrabajo"]);
+            $cliente->fecha_retiro = $_POST["prfecharetiro"] == "0" ? null : $_POST["prfecharetiro"] ;
 
             if($cliente->create())
             {

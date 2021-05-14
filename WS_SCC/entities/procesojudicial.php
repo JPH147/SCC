@@ -1470,7 +1470,7 @@ Class Proceso{
 
     $archivo = "" ;
 
-    $contador = 0;
+    $contador = 1;
 
     $sheet->setCellValue('A1', 'Contador');
     $sheet->setCellValue('B1', 'Expediente');

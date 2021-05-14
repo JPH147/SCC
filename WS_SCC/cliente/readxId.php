@@ -56,6 +56,7 @@
 				"plantilla_compromiso" => $cliente->plantilla_compromiso,
 				"estado"=>$cliente->clt_estado,
 				"id_centro_trabajo"=>$cliente->id_centro_trabajo,
+				"fecha_retiro"=>$cliente->fecha_retiro,
 	    );
 
 	    if(trim($cliente->clt_dni)!= ''){

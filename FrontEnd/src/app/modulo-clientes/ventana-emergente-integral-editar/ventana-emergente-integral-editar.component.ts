@@ -17,6 +17,7 @@ import { VentanaEditarCuentaComponent } from '../../compartido/componentes/venta
 import { BancosService } from 'src/app/modulo-maestro/bancos/bancos.service';
 import { CentroTrabajoPnpComponent } from 'src/app/modulo-maestro/centros-trabajo/centro-trabajo-pnp/centro-trabajo-pnp.component';
 import { CentrosTrabajoService } from 'src/app/modulo-maestro/centros-trabajo/centros-trabajo.service';
+import { MatSelectChange } from '@angular/material/select';
 
 @Component({
   selector: 'app-ventana-emergente-integral-editar',
@@ -293,6 +294,8 @@ export class VentanaEmergenteIntegralEditarComponent implements OnInit {
         // Validators.required,
         // Validators.pattern('[0-9- ]+')
       ]],
+      'fecha_retiro': [ null, [
+      ]],
       'estado': [ 1, [
       ]],
     });
@@ -366,6 +369,9 @@ export class VentanaEmergenteIntegralEditarComponent implements OnInit {
     this.ObtenerDireccion(this.data.id);
     this.ObtenerTelefono(this.data.id);
     this.ObtenerCuenta(this.data.id);
+
+    this.ClientesForm.get('fecha_retiro').setValue(objeto.fecha_retiro);
+
   }
 
   ObtenerDireccion(id) {
@@ -491,7 +497,8 @@ export class VentanaEmergenteIntegralEditarComponent implements OnInit {
         formulario.value.calificacion_personal,
         formulario.value.aporte,
         this.data.confirmar ? 1 : formulario.value.estado,
-        this.ClientesForm.get('centro_trabajo').value
+        this.ClientesForm.get('centro_trabajo').value,
+        this.ClientesForm.get('fecha_retiro').value,
       ).subscribe(res =>{
         // this.ClientesForm.reset();
         this.Cargando.next(false) ;
@@ -517,7 +524,8 @@ export class VentanaEmergenteIntegralEditarComponent implements OnInit {
         formulario.value.calificacion_personal,
         formulario.value.aporte,
         1,
-        this.ClientesForm.get('centro_trabajo').value
+        this.ClientesForm.get('centro_trabajo').value,
+        this.ClientesForm.get('fecha_retiro').value,
       ).subscribe(res =>{
         // this.ClientesForm.reset();
         this.Cargando.next(false) ;
@@ -810,5 +818,13 @@ export class VentanaEmergenteIntegralEditarComponent implements OnInit {
     this.ClientesForm.get('provincia').setValue('') ;
     this.ClientesForm.get('distrito_nombre').setValue('') ;
     this.ClientesForm.get('distrito').setValue(0) ;
+  }
+
+  SituacionSeleccionada(evento : MatSelectChange) {
+    // 427 en el hosting de alvis
+    // 216 y 380 en el d GENUS
+    if ( evento.value === 427 || evento.value === 216 || evento.value === 380 ) {
+      this.ClientesForm.get('fecha_retiro').setValue(null) ;
+    }
   }
 }
