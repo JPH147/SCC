@@ -98,7 +98,8 @@ export class VentanaCambioDistritoComponent implements OnInit {
   }
 
   InstanciaJudicialSeleccionada(){
-    this.misma_instancia = ( this.TrasladoJudicialForm.value.instancia_judicial == this.data.id_instancia ) ;
+    this.VerificarDevolucionAInstanciaAnterior() ;
+    // this.misma_instancia = ( this.TrasladoJudicialForm.value.instancia_judicial == this.data.id_instancia ) ;
 
     this.TrasladoJudicialForm.get('id_juez').setValue(null) ;
     this.TrasladoJudicialForm.get('juez').setValue("") ;
@@ -129,6 +130,26 @@ export class VentanaCambioDistritoComponent implements OnInit {
   //     }
   //   }
   // }
+
+  VerificarDevolucionAInstanciaAnterior(){
+    if( this.proceso_anterior ) {
+      if( this.TrasladoJudicialForm.value.instancia_judicial == this.proceso_anterior.id_juzgado_instancia ) {
+        this.proceso_igual = true ;
+        // this.TrasladoJudicialForm.get('instancia_judicial').setValue(this.proceso_anterior.id_juzgado_instancia) ;
+        // this.ListarJueces() ;
+        // this.ListarEspecialistas() ;
+        this.TrasladoJudicialForm.get('expediente').setValue(this.proceso_anterior.expediente) ;
+        this.TrasladoJudicialForm.get('sumilla').setValue(this.proceso_anterior.sumilla) ;
+      } else {
+        this.proceso_igual = false ;
+        // this.TrasladoJudicialForm.get('instancia_judicial').setValue(null) ;
+        // this.TrasladoJudicialForm.get('juez').setValue("") ;
+        // this.TrasladoJudicialForm.get('especialista').setValue("") ;
+        this.TrasladoJudicialForm.get('expediente').setValue("") ;
+        this.TrasladoJudicialForm.get('sumilla').setValue("") ;
+      }
+    }
+  }
 
   ListarInstanciasJudiciales(){
     this._vinculados.ListarInstanciasJudiciales(this.TrasladoJudicialForm.value.distrito_judicial,"","",1,50).subscribe(res=>{
@@ -169,11 +190,11 @@ export class VentanaCambioDistritoComponent implements OnInit {
   }
 
   Guardar(){
-    const proceso_igual = this.TrasladoJudicialForm.value.expediente.trim() === this.data.expediente.trim() ;
+    // const proceso_igual = this.TrasladoJudicialForm.value.expediente.trim() === this.data.expediente.trim() ;
 
     this.Cargando.next(true) ;
 
-    if( proceso_igual ) {
+    if( this.proceso_igual ) {
       this._judiciales.ActualizarProcesoTraslado(
         this.proceso_anterior.id ,
         this.data.id

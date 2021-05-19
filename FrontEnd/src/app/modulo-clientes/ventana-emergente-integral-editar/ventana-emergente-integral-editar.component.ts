@@ -41,30 +41,33 @@ export class VentanaEmergenteIntegralEditarComponent implements OnInit {
   public Estados: Array<any>;
   public cliente_nuevo : number = 3;
 
-    // Telefonos
-    public ListadoTelefonos: ClienteTelefonoDataSource;
-    public ColumnasTelefonos: string[] = [ 'telefono-numero', 'telefono-tipo', 'telefono-numero_telefono', 'telefono-relevancia', 'telefono-opciones'];
-    public TelefonosForm: FormGroup;
-    public Tipos: any;
-    public Relevancias: any;
-    @ViewChild('PaginadorTelefonos', { static: true }) paginatorTelefonos: MatPaginator;
-  
-    // Direcciones
-    public ListadoDirecciones: ClienteDireccionDataSource;
-    public ColumnasDirecciones: string[] = [ 'direccion-numero', 'direccion-nombre', 'direccion-referencia', 'direccion-relevancia','direccion-opciones']; 
-    public DireccionesForm: FormGroup;
-    public RelevanciaDireccion: any;
-    public LstDepartamento: any;
-    public LstProvincia: any;
-    public LstDistrito: any;
-    @ViewChild('PaginadorDirecciones', { static: true }) paginatorDirecciones: MatPaginator;
-  
-    // Cuentas
-    public ListadoCuentas: ClienteCuentaDataSource;
-    public ColumnasCuentas: string[] = [ 'cuenta-numero', 'cuenta-banco', 'cuenta-cuenta', 'cuenta-cci', 'cuenta-relevancia', 'cuenta-opciones'];  
-    public CuentasForm: FormGroup;
-    public Bancos: Array<any>;
-    @ViewChild('PaginadorCuentas', { static: true }) paginatorCuentas: MatPaginator;
+  // Telefonos
+  public ListadoTelefonos: ClienteTelefonoDataSource;
+  public ColumnasTelefonos: string[] = [ 'telefono-numero', 'telefono-tipo', 'telefono-numero_telefono', 'telefono-relevancia', 'telefono-opciones'];
+  public TelefonosForm: FormGroup;
+  public Tipos: any;
+  public Relevancias: any;
+  @ViewChild('PaginadorTelefonos', { static: true }) paginatorTelefonos: MatPaginator;
+
+  // Direcciones
+  public ListadoDirecciones: ClienteDireccionDataSource;
+  public ColumnasDirecciones: string[] = [ 'direccion-numero', 'direccion-nombre', 'direccion-referencia', 'direccion-relevancia','direccion-opciones']; 
+  public DireccionesForm: FormGroup;
+  public RelevanciaDireccion: any;
+  public LstDepartamento: any;
+  public LstProvincia: any;
+  public LstDistrito: any;
+  @ViewChild('PaginadorDirecciones', { static: true }) paginatorDirecciones: MatPaginator;
+
+  // Cuentas
+  public ListadoCuentas: ClienteCuentaDataSource;
+  public ColumnasCuentas: string[] = [ 'cuenta-numero', 'cuenta-banco', 'cuenta-cuenta', 'cuenta-cci', 'cuenta-relevancia', 'cuenta-opciones'];  
+  public CuentasForm: FormGroup;
+  public Bancos: Array<any>;
+  @ViewChild('PaginadorCuentas', { static: true }) paginatorCuentas: MatPaginator;
+
+  public esta_retirado : boolean ;
+  public esta_disponible : boolean ;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
@@ -823,7 +826,9 @@ export class VentanaEmergenteIntegralEditarComponent implements OnInit {
   SituacionSeleccionada(evento : MatSelectChange) {
     // 427 en el hosting de alvis
     // 216 y 380 en el d GENUS
-    if ( evento.value === 427 || evento.value === 216 || evento.value === 380 ) {
+    this.esta_retirado = evento.value === 427 || evento.value === 307 ;
+    this.esta_disponible = evento.value === 422 ;
+    if ( this.esta_retirado || this.esta_disponible ) {
       this.ClientesForm.get('fecha_retiro').setValue(null) ;
     }
   }

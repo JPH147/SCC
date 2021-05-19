@@ -336,7 +336,7 @@ Class Cliente{
             :clt_fecharegistro,
             :clt_estado,
             :prcentrotrabajo,
-            :pr_fecharetiro
+            :prfecharetiro
         )"; 
 
         $result = $this->conn->prepare($query);

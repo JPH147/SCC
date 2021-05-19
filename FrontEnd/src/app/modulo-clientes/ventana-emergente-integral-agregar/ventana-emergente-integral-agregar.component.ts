@@ -58,6 +58,9 @@ export class VentanaEmergenteIntegralAgregarComponent implements OnInit, AfterVi
   public Bancos: Array<any>;
   public Cuentas: Array<any> = [];
 
+  public esta_retirado : boolean ;
+  public esta_disponible : boolean ;
+
   constructor(
     public ventana: MatDialogRef<VentanaEmergenteIntegralAgregarComponent>,
     private FormBuilder: FormBuilder,
@@ -599,9 +602,12 @@ export class VentanaEmergenteIntegralAgregarComponent implements OnInit, AfterVi
   }
 
   SituacionSeleccionada(evento : MatSelectChange) {
+    // console.log(evento) ;
     // 427 en el hosting de alvis
     // 216 y 380 en el d GENUS
-    if ( evento.value === 427 || evento.value === 216 || evento.value === 380 ) {
+    this.esta_retirado = evento.value === 427 || evento.value === 307 ;
+    this.esta_disponible = evento.value === 422 ;
+    if ( this.esta_retirado || this.esta_disponible ) {
       this.ClientesForm.get('fecha_retiro').setValue(null) ;
     }
   }

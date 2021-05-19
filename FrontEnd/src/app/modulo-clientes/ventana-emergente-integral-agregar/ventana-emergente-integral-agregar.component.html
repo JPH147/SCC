@@ -234,8 +234,7 @@
                 </mat-form-field>
               </mat-grid-tile>
 
-              <mat-grid-tile colspan="1" *ngIf="this.ClientesForm.get('cargo_estado').value === 427 ||
-                this.ClientesForm.get('cargo_estado').value === 216 || this.ClientesForm.get('cargo_estado').value === 380">
+              <mat-grid-tile colspan="1" *ngIf="esta_retirado || esta_disponible">
                 <mat-form-field class="input-ventanaa">
                   <input matInput [matDatepicker]="retiro" placeholder="Fecha de retiro" formControlName="fecha_retiro">
                   <mat-datepicker-toggle matSuffix [for]="retiro"></mat-datepicker-toggle>
